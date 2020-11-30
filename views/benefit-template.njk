@@ -1,0 +1,22 @@
+<details class="benefit" data-cy="{{ sectionId }}-benefit" open>
+  <summary class="benefit__header" id="{{ sectionId }}">
+    <h3>
+      {% block header %}{% endblock %}
+    </h3>
+  </summary>
+  
+  <div class="benefit__main">
+    <div class="benefit__preamble mb-4">
+      {% block preamble %}{% endblock %}
+    </div>
+    <ul class="benefit__featured_list">
+      {% block featured_list_items %}{% endblock %}
+    </ul>
+
+    <div class="benefit__body">
+      {% block body %}{% endblock %}
+    </div>
+
+    {% block info_link %}{% endblock %}
+  </div>
+</details>

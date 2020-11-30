@@ -1,0 +1,9 @@
+{% macro form(label, divClasses, attributes) %}
+  <form method="post"
+    novalidate
+    data-gc-analytics-formname="ESDC|EDSC:cp19-benefits"
+    data-gc-analytics-collect='[ {"value":"input[type=radio]","emptyField": "N/A"}]'
+    >
+    {{ caller() }}
+  </form>
+{% endmacro %}

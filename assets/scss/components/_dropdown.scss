@@ -1,0 +1,87 @@
+
+.autocomplete__wrapper {
+  @apply relative outline-none;
+}
+
+.autocomplete__hint,
+.autocomplete__input {
+  @apply mb-0 max-w-full appearance-none;
+}
+
+.autocomplete__input {
+  @apply relative bg-transparent;
+}
+
+.autocomplete__hint {
+  @apply absolute text-gray-600 mt-0;
+}
+
+.autocomplete__input--default {
+  @apply p-5;
+}
+
+.autocomplete__input--show-all-values {
+  @apply cursor-pointer;
+  padding: 5px 34px 5px 5px;
+}
+
+.autocomplete__dropdown-arrow-down{
+  @apply inline-block absolute -z-1;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  top: 10px;
+}
+
+.autocomplete__menu {
+  @apply border-2 border-black  m-0 max-w-full overflow-x-hidden pt-0 pb-0 px-2 border-t-0;
+}
+
+.autocomplete__menu--visible {
+  @apply block;
+}
+
+.autocomplete__menu--hidden {
+  @apply hidden;
+}
+
+.autocomplete__menu--overlay {
+  @apply absolute left-0 z-100;
+  top: 100%;
+}
+
+.autocomplete__menu--inline {
+  @apply relative;
+}
+
+.autocomplete__option {
+  @apply border-r-0 border-l-0  cursor-pointer block relative ;
+}
+
+.autocomplete__option > * {
+  @apply  pointer-events-none outline-none;
+}
+
+.autocomplete__option:focus,
+.autocomplete__option--focused,
+.autocomplete__option:hover {
+  @apply border-orange-700 border-2 outline-none border-solid -mx-2 px-2; 
+}
+
+.autocomplete__option--no-results {
+  @apply cursor-not-allowed;
+}
+
+.autocomplete__hint,
+.autocomplete__input,
+.autocomplete__option {
+  @apply leading-tight;
+}
+
+@media (min-width: 641px) {
+  .autocomplete__hint,
+  .autocomplete__input,
+  .autocomplete__option {
+    @apply leading-snug;
+  }
+}

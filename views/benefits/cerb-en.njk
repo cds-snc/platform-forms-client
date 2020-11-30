@@ -1,0 +1,30 @@
+{% extends "benefit-template.njk" %}
+
+{% set sectionId = 'cerb' %}
+
+{% block header %}
+  {{__("cerb.header")}}
+{% endblock %}
+
+{% block featured_list_items %}
+  {{ benefitLi("<strong>$500 per week</strong>") }}
+  {{ benefitLi("<strong>Up to 24 weeks</strong> if you keep  meeting the eligibility criteria") }}
+  {{ benefitLi("<strong>First payment within 10 days of applying</strong>") }}
+{% endblock %}
+
+{% block body %}
+  <strong>Next steps:</strong>
+  <ul>
+    <li>You’ll be asked some questions to direct you to apply through either the Canada Revenue Agency (CRA) or Service Canada.</li>
+    <li>The application will ask you to declare that you meet the eligibility criteria, so read the details carefully.</li>
+    <li>You’ll need to pay income tax on these payments in the future.</li>
+  </ul>
+{% endblock %}
+
+{% block info_link %}
+  {{ infoLink(
+      "cerb",
+      "https://www.canada.ca/en/services/benefits/ei/cerb-application.html",
+      "Find out where to apply"
+  )}}
+{% endblock %}

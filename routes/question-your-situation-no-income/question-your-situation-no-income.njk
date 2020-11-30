@@ -1,0 +1,29 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>{{ __('no_income.title') }}</h1>
+    <div>
+        {% call form() %}
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ radioButtons('no_income',
+                [
+                    { value: 'lost-job-employer-closed', text:__('your_situation.no_income.1')},
+                    { value: 'self-employed-closed', text:__('your_situation.no_income.2')},
+                    { value: 'unpaid-leave-to-care', text:__('your_situation.no_income.3')},
+                    { value: 'sick-or-quarantined', text:__('your_situation.no_income.4')},
+                    { value: 'parental-recently-cant-return', text:__('your_situation.no_income.5')},
+                    { value: 'student_2019_20', text:__('your_situation.no_income.6')},
+                    { value: 'ei-recently-claim-ended', text:__('your_situation.no_income.7')},
+                    { value: 'none-of-the-above', text:__('your_situation.no_income.none')}
+                ],
+                data.no_income,
+                __('form.your_situation.no_income'),
+                errors,
+                { required: true, safe: true })
+            }}
+            {{ formButtons() }}
+        {% endcall %}
+    </div>
+
+{% endblock %}

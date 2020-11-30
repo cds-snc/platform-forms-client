@@ -1,0 +1,28 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>{{ __('some_income.title') }}</h1>
+    <div>
+        {% call form() %}
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+            {{ radioButtons('some_income',
+                [
+                    { value: 'hours-reduced', text:__('your_situation.some_income.1')},
+                    { value: 'employed-lost-a-job', text:__('your_situation.some_income.2')},
+                    { value: 'selfemployed-some-income', text:__('your_situation.some_income.3')},
+                    { value: 'retired', text:__('your_situation.some_income.4')},
+                    { value: 'quarantine', text:__('your_situation.some_income.5')},
+                    { value: 'none-of-the-above', text:__('your_situation.some_income.none')}
+                ],
+                data.some_income,
+                __('form.your_situation.some_income'),
+                errors,
+                { required: true })
+            }}
+            {{ formButtons() }}
+        {% endcall %}
+    </div>
+
+{% endblock %}

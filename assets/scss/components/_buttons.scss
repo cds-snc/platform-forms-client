@@ -1,0 +1,90 @@
+%button-styles {
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.1875;
+  display: inline-block;
+  position: relative;
+  margin-top: 10px;
+  padding: 9px 12px;
+  border-radius: 0;
+  color: $color-white;
+  background-color: $color-green;
+  border: 1px solid $color-green-dark;
+  box-shadow: 0 2px 0 black;
+  text-align: center;
+  vertical-align: top;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-appearance: none;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    bottom: -4px;
+    left: -2px;
+    background: transparent;
+  }
+
+  &:focus {
+    @include focus();
+    outline-offset: 5px !important;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: darken($color-green, 10);
+  }
+
+  &:active {
+    top: 2px;
+    box-shadow: none;
+
+    &::before {
+      top: -4px;
+    }
+  }
+}
+
+form button {
+  @extend %button-styles;
+  font-family: 'Noto Sans', sans-serif;
+  width: 100%;
+}
+
+.start-button {
+  width: 100%;
+  max-width: 433px;
+
+  a.button-link {
+    width: 100%;
+  }
+}
+
+a.button-link {
+  @extend %button-styles;
+
+  img, span {
+    display: inline-block;
+  }
+
+  span {
+    margin-left: $space-xs;
+    text-decoration: inherit;
+  }
+
+  &.full-width {
+    display: inline-block;
+    width: 100%;
+  }
+
+  &.transparent {
+    color: $color-blue-dark;
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: underline;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,6 @@
+{% macro validationMessage(msg, id) %}
+    <span class="validation-message" id="{{ id }}-error" role="alert">
+        <span class="visually-hidden">{{ __('Error:') }}</span>
+        {{ __(msg) }}
+    </span>
+{% endmacro %}

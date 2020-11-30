@@ -1,0 +1,18 @@
+image:
+  repository: mtscontainers.azurecr.io/cv19benefits
+  tag: latest
+  pullPolicy: Always
+ingress:
+      enabled: true
+      hosts:
+      {{ if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") }}
+        - benefits.dts-stn.com
+      {{ end }}      
+        - benefits.{{ .Environment.Name }}.dts-stn.com
+      annotations: {}
+      # kubernetes.io/ingress.class: traefik
+port:
+  enabled: true
+  name: http
+  port: 3000
+  protocol: TCP

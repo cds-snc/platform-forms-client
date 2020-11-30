@@ -1,0 +1,97 @@
+.breakdown-table {
+  $table: &;
+
+  @include md {
+    max-width: 750px;
+  }
+
+  &-data {
+    @include md {
+      border-collapse: collapse; 
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+  }
+
+  h2#{$table}__heading {
+    text-align: left;
+    background: $color-grey-light;
+    padding: 28px;
+    font-size: 1em;
+    font-weight: 700;
+
+    @include md {
+      font-size: 1.3em;
+    }
+
+    span {
+      width: 60%;
+      display: inline-block;
+
+      &:last-child {
+        width: 39%;
+        text-align: right;
+      }
+    }
+  }
+
+  p#{$table}__subheading {
+    text-align: left;
+    font-weight: 400;
+    padding: 10px 28px;
+    padding-bottom: $space-md;
+    font-size: 0.9em;
+
+    @include md {
+      font-size: 1em;
+    }
+  }  
+}
+
+.breakdown-table__row {
+  border-top: 1px solid $color-grey-light;
+  padding: 10px 28px;
+
+  @include md {
+    padding: 0;
+    display: table-row;
+    border-top: 0;
+    border-left: 2px solid $color-grey-light;
+  }
+
+  &--summary {
+    font-weight: 700;
+  }
+
+  &-key,
+  &-value {
+    margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 0.9em;
+
+    @include md {
+      font-size: 1em;
+      display: table-cell;
+      padding: 10px 28px;
+    }
+  }
+
+  &-key {
+    margin-bottom: 5px;
+    font-weight: 700;
+    @include md {
+      font-weight: 400;
+      width: 60%;
+    }
+  }
+
+  &-value {
+    white-space: pre-wrap;
+    @include md {
+      text-align: right;
+      width: 40%;
+    }
+  }
+}

@@ -1,0 +1,3 @@
+resource_group     = ""
+container_registry = ""
+location           = ""

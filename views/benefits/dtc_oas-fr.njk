@@ -1,0 +1,33 @@
+
+
+{% extends "benefit-template.njk" %}
+
+{% set sectionId = 'dtc_oas' %}
+
+{% block header %}
+  {{__("dtc_oas.header")}}
+{% endblock %}
+
+{% block featured_list_items %}
+  {{ benefitLi("<ul>
+    <li class='mb-2'><strong>Paiement unique de 300 $, non imposable</strong> si vous recevez la <strong>pension de la Sécurité de vieillesse.</strong></li>
+    <li><strong>OU paiement unique de 100 $, non imposable</strong> si vous recevez le crédit d'impôt pour personnes handicapées et le <strong>supplément de revenu garanti.</strong> </li>
+  </ul>") }}
+  {{ benefitLi("<strong>Les paiements automatiques débutent le 10 août 2020</strong>") }}
+{% endblock %}
+
+{% block body %}
+  <strong>Bon à savoir :</strong>
+  <ul>
+    <li>Ce paiement peut aider si vous détenez un certificat valide pour le crédit d'impôt pour personnes handicapées.</li>
+    <li>Les paiements seront déposés automatiquement dès que possible. Vous n’avez pas à faire quoi que ce soit pour le recevoir. /li>
+  </ul>
+{% endblock %}
+
+{% block info_link %}
+  {{ infoLink(
+    "dtc_oas",
+    "https://www.canada.ca/fr/agence-revenu/services/impot/particuliers/segments/deductions-credits-impot-personnes-handicapees/credit-impot-personnes-handicapees.html",
+    "En savoir plus à propos du crédit d'impôt pour personnes handicapées"
+  )}}
+{% endblock %}

@@ -1,0 +1,40 @@
+{%- macro dropdown(key, values, selectedValue, question, errors, attributes) -%}
+    <div class="{{ 'has-error' if errors and errors[key] }} outline-none">
+      <label for="{{ key }}-select" id="{{ name }}__label">
+          {% if attributes.required %}
+              <strong aria-hidden="true" class="required font-normal">*</strong>
+          {% endif %}
+          {{ question }}
+          {% if attributes.required %}
+              <strong class="required font-normal">{{ __("required")}}</strong>
+          {% endif %}
+      </label>
+      {% if attributes.hint %}
+          <span class="form-message" id="{{ key }}-hint">
+              {% if attributes.safeHint %}
+                  {{attributes.hint | safe }}
+              {% else %}
+                  {{ attributes.hint }}
+              {% endif %}
+          </span>
+      {% endif %}
+      {% if errors and errors[key] %}
+          {{ validationMessage(errors[key].msg,key) }}
+      {% endif %}
+      <div id="{{ key }}">
+      <select id="{{ key }}-select" name="{{ key }}" class="no-focus">
+          <option id="default" value=""></option>
+          {%- for item in values | localizedSort("text", getLocale()) -%}
+
+            {% set itemId %}{{ key }}{{ item.value }}{%endset%}
+            <option name="{{ itemId }}"
+                value="{{ item.value }}"
+                {% if selectedValue === item.value %}
+                  selected="selected"
+                {% endif %}
+                >{% if attributes.safe %}{{- item.text | safe -}}{% else %}{{- item.text -}}{% endif %}</option>
+          {%- endfor -%}
+          </select>
+      </div>
+    </div>
+{%- endmacro -%}

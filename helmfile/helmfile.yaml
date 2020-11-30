@@ -1,0 +1,45 @@
+repositories:
+  - name: dts
+    url: https://helm.dts-stn.com
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+  - name: dynatrace
+    url: https://raw.githubusercontent.com/Dynatrace/helm-charts/master/repos/stable
+
+{{- if or (eq .Environment.Name "prod-blue") (eq .Environment.Name "prod-green") }}    
+context: EsDCDTSRG-K8S
+{{ else }}
+context: DTS-Dev-K8S
+{{ end }}
+
+#default values to set for args along with dedicated keys that can be set by contributers, cli args take precedence over these
+helmDefaults:
+  verify: false
+  wait: false
+
+environments:
+  benrd: 
+  kylerd:
+  adamrd:
+  marcusrd:
+  ericrd:
+  dev:
+  prod-blue:
+  prod-green: 
+
+releases:
+
+   # Benefits Finder
+  - name: benefits-{{ .Environment.Name }}
+    chart: dts/dts-generic
+    version: 0.1.0
+    values:
+      - overrides/benefits/values.yaml.gotmpl
+    labels:
+        category: covid
+        app: benefits
+        tier: full
+    namespace: benefits-{{ .Environment.Name }}
+    installed: true
+    wait: false
+    force: false

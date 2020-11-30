@@ -1,0 +1,21 @@
+/* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
+
+h1 {
+  @apply text-4xl mb-4 mt-4;
+}
+
+ol {
+    @apply list-decimal;
+}
+
+ul {
+  @apply list-disc;
+}
+
+a {
+  @apply underline;
+}
+
+.canada-wordmark img {
+  @apply inline;
+}

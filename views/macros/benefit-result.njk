@@ -1,0 +1,17 @@
+{% macro benefitLi(text) %}
+  <li>
+    <div>
+        <img src="{{ asset('/img/check-circle.svg') }}" alt="">
+         {% if text %}{{ text | safe }}{% endif %}
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro infoLink(id, url, text) %}
+  <a href="{{ url }}"
+    data-gc-analytics-customclick="ESDC|EDSC:Covid19 Benefits:{{id}} button click"
+    target="_blank"
+    class="no-underline text-white px-4 py-2 bg-blue-800 hover:bg-blue-900 rounded text-center block sm:inline-block">
+    {{ text }}
+  </a>
+{% endmacro %}

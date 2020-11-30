@@ -1,0 +1,15 @@
+<!-- Adobe Analytic tags -->
+<meta name="dcterms.title" content="{% if(title) %}{{ title }} — {% endif %}{{ __('app.title') }}" />
+<meta name="dcterms.language" content="{{ 'eng' if getLocale() === 'en' else 'fra' }}"/>
+<meta name="dcterms.creator" content="CDS"/>
+<meta name="dcterms.accessRights" content="2"/>
+<meta name="dcterms.service" content="ESDC-EDSC_c19b-c19p"/>
+
+{% if $env.NODE_ENV !== 'test' %}
+  {% if $env.ADOBE_ENV === 'production' %}
+    <script src="//assets.adobedtm.com/launch-EN0cf6c2810a2b48f8a4c36502a1b09541.min.js"></script>
+  {% else %}
+    <script src="//assets.adobedtm.com/launch-EN11c0261481f74c56b7656937bbd995e9-staging.min.js"></script>
+  {% endif %}
+{% endif %}
+<!-- End of Adobe analytic tags -->
