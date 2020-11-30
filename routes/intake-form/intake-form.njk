@@ -6,7 +6,7 @@
 
     <div>
 
-        <form novalidate method="post">
+        <form action="/{{ getLocale() }}/feedback" method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             
             {{ textInput('name', __('form.name')) }}
