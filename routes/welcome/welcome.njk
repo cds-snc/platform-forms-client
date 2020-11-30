@@ -1,7 +1,7 @@
 {% extends "base.njk" %}
 
 {% block content %}
-    <h1>{{ __('welcome.title') }}</h1>
+    <h1 class="my-3">{{ __('welcome.title') }}</h1>
 
     <div class="bg-red-100 border-l-4 border-red-800 p-4 mt-8 hidden cookie-warning">
         <h2 class="text-2xl">{{ __('start.enable_cookies_title') }}</h2>
@@ -12,7 +12,7 @@
 
     <div class="grid grid-cols-3 gap-6">
 
-        <div>
+        <div class="space-y-4">
             <h2>{{ __('welcome.product.title') }}</h2>
             <p>{{ __('welcome.product.text') }}</p>
             <p>
@@ -20,7 +20,7 @@
             </p>
         </div>
 
-        <div>
+        <div class="space-y-4">
             <h2>{{ __('welcome.design.title') }}</h2>
             <p>{{ __('welcome.design.text') }}</p>
             <p>
@@ -28,7 +28,7 @@
             </p>
         </div>
 
-        <div>
+        <div class="space-y-4">
             <h2>{{ __('welcome.technology.title') }}</h2>
             <p>{{ __('welcome.technology.text') }}</p>
             <p>

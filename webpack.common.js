@@ -7,7 +7,6 @@ module.exports = {
   entry: {
     styles: './assets/scss/app.scss',
     app: './assets/js/app.js',
-    province: './routes/question-province/js/question-province.js',
   },
   output: {
     filename: 'js/[name].js',

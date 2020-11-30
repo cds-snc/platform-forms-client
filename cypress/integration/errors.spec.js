@@ -18,10 +18,6 @@ describe('Error Pages', () => {
         process.env.COOKIE_SECRET = 'error_pages'
       })
 
-      it('Province', () => {
-        testError('question-province', lang)
-      })
-
       it('Lost Job', () => {
         testError('question-lost-job', lang)
       })
