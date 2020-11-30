@@ -1,0 +1,56 @@
+{% macro radioButtons(key, values, selectedValue, question, errors, attributes) %}
+    <div class="{{ 'has-error' if errors and errors[key] }}">
+        <fieldset class="fieldset">
+            <legend class="fieldset__legend">
+                {% if attributes.required %}<strong aria-hidden="true" class="required font-normal">*</strong>{% endif %} {{ question }} {% if attributes.required %} <strong class="required font-normal">{{ __("required")}}</strong>{% endif %}
+                {% if errors and errors[key] %}
+                    {{ validationMessage(errors[key].msg, key) }}
+                {% endif %}
+            </legend>
+            {% if attributes.hint %}
+                <span class="form-message" id="{{ key }}-hint">
+                    {% if attributes.safeHint %}
+                        {{attributes.hint | safe }}
+                    {% else %}
+                        {{ attributes.hint }}
+                    {% endif %}
+                </span>
+            {% endif %}
+            <div class="multiple-choice multiple-choice--radios" id="{{ key }}">
+                {% for item in values %}
+                {% set itemId %}{{ key }}{{ item.value }}{%endset%}
+                    <div class="multiple-choice__item">
+                        <input id="{{ itemId }}"
+                            {% if attributes.hint %}
+                                aria-describedby='{{ key }}-hint'
+                            {% endif %}
+                            {% if attributes.required and loop.index === 1 %}
+                                required
+                            {% endif %}
+                            name="{{ key }}"
+                            type="radio"
+                            value="{{ item.value }}"
+                            {% if selectedValue == item.value %}
+                                checked="checked"
+                            {% endif %}
+                            {% if errors and errors[key] %}
+                                aria-describedby="{{ key + '-error' }}"
+                                aria-invalid="true"
+                            {% endif %}
+                            {% if attributes.disabled %}
+                                disabled="disabled"
+                            {% endif %}
+                            >
+                        <label for="{{ itemId }}">
+                            {% if attributes.safe %}
+                                {{ item.text | safe }}
+                            {% else %}
+                                {{ item.text }}
+                            {% endif %}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+    </div>
+{% endmacro %}

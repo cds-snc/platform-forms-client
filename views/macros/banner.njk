@@ -1,0 +1,12 @@
+{% macro banner(variant, block) %}
+    <div class="banner banner--{{ variant }}">
+        {% if variant !== 'red' %}
+            <span class="banner__icon banner--{{ variant }}__icon" aria-hidden="true">i</span>
+        {% endif %}
+        {% if block %}
+            {{ block | safe}}
+        {% else %}
+            <p>{{ __('No content provided') }}</p>
+        {% endif %}
+    </div>
+{% endmacro %}

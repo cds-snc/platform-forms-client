@@ -1,0 +1,14 @@
+.footer-links {
+  @include md {
+    li {
+      &::before {
+        content: '\2022';
+        margin-right: .7em;
+      }
+
+      &:first-of-type::before {
+        content: none;
+      }
+    }
+  }
+}

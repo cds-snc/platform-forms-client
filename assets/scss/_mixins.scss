@@ -1,0 +1,59 @@
+@mixin focus($outline: 3px, $outlineOffset: 0) {
+  outline: $outline solid $color-yellow;
+  outline-offset: $outlineOffset;
+}
+
+@mixin visuallyHidden() {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+/*
+    media queries based on Pure CSS's breakpoints: https://purecss.io/grids/
+
+    usage example:
+
+    @include sm {
+      width: 100%;
+    }
+*/
+
+/* ≥ 332px */
+@mixin xs {
+  @media screen and (min-width: 23em) {
+    @content;
+  }
+}
+/* ≥ 526px */
+@mixin sm {
+  @media screen and (min-width: 36.5em) {
+    @content;
+  }
+}
+/* ≥ 768px */
+@mixin md {
+  @media screen and (min-width: 48em) {
+    @content;
+  }
+}
+/* ≥ 1024px */
+@mixin lg {
+  @media screen and (min-width: 64em) {
+    @content;
+  }
+}
+/* ≥ 1200px */
+@mixin xl {
+  @media screen and (min-width: 75em) {
+    @content;
+  }
+}

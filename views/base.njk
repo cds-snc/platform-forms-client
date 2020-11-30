@@ -1,0 +1,73 @@
+{%- from 'validationMessage.njk' import validationMessage as validationMessage with context -%}
+{%- from 'input-text.njk' import textInput as textInput with context -%}
+{%- from 'input-textarea.njk' import textArea as textArea with context -%}
+{%- from 'radios.njk' import radioButtons as radioButtons with context -%}
+{%- from 'dropdown.njk' import dropdown as dropdown with context -%}
+{%- from 'checkboxes.njk' import checkBoxes as checkBoxes with context -%}
+{%- from 'buttons.njk' import formButtons as formButtons with context -%}
+{%- from 'input-file.njk' import fileInput as fileInput with context -%}
+{%- from 'form.njk' import form as form with context -%}
+{%- from 'banner.njk' import banner as banner with context -%}
+
+<!DOCTYPE html>
+<html lang="{{ getLocale() }}">
+    <head>
+        <!-- Required meta tags-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="csrf-token" content="{{ csrfToken }}">
+
+        {% include "_includes/adobe.njk" %}
+
+        {% if GITHUB_SHA %}<meta name="github-sha" content="{{ GITHUB_SHA }}">{% endif %}
+        {% if TAG_VERSION %}<meta name="version" content="{{ TAG_VERSION }}">{% endif %}
+        <link rel="shortcut icon" href="{{ asset('/favicon.png') }}" type="image/x-icon" sizes="32x32">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CNoto+Sans:400,700&amp;display=fallback" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('/dist/css/styles.css') }}?{{ assetVersion() }}">
+        {% include "_includes/meta.njk" %}
+    </head>
+    <body>
+        <nav>
+            <div id="skip-link-container"><a href="#content" id="skip-link">{{ __('Skip to main content') }}</a></div>
+        </nav>
+
+        <div class="outer-container">
+            <header class="border-b-3 border-blue-900 pb-5 mb-10">
+                {% include "_includes/phaseBanner.njk" %}
+                {% include "_includes/fip.njk" %}
+            </header>
+            <main id="content">
+                <div class="-mt-6">
+                    {% if not hideBackButton %}
+                        {% include "_includes/back-link.njk" %}
+                    {% endif %}
+                    {% if showStartOver %}
+                        <a class="py-3 button-link transparent" href="/clear"><img src="{{ asset('/img/times-circle.svg') }}" class="h-6 w-6" alt="" /><span>{{ __('start_over') }}</span></a>
+                    {% endif %}
+                </div>
+                {% if errors %}
+                    {% include "_includes/errorList.njk" %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+
+                {% include "_includes/feedback.njk" %}
+
+                {% if LAST_UPDATED %}
+                    <dl class="text-base mt-16"><dt class="inline-block">{{ __('date_modified') }} </dt><dd class="inline-block ml-2"><time datetime="{{ LAST_UPDATED }}">{{ LAST_UPDATED }}</time></dd></dl>
+                {% endif %}
+            </main>
+            {% include "_includes/footer.njk" %}
+        </div>
+
+        {% if $env.NODE_ENV !== 'test' %}
+          <!-- Required for Adobe Analytics -->
+          <script >_satellite.pageBottom();</script>
+        {% endif %}
+
+        {%- block scripts -%}
+            <script  src="{{ asset('/dist/js/app.js') }}?{{ assetVersion() }}"></script>
+        {%- endblock -%}
+    </body>
+</html>

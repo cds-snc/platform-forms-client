@@ -1,0 +1,34 @@
+details:not(.benefit) {
+  margin-bottom: $space-lg;
+  font-size: 0.875em;
+
+  summary {
+    color: $color-blue-dark;
+    cursor: pointer;
+
+    // the summary element doesn't appear to accept underlined text
+    > span {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      @include focus();
+    }
+
+    & ~ * {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 0 0 $space-sm $space-md;
+      border-left: 5px solid $color-grey-light;
+
+      &:last-child {
+        margin-bottom: $space-md;
+        padding-bottom: $space-xxs;
+      }
+    }
+
+    & + * {
+      margin-top: $space-xs;
+    }
+  }
+}

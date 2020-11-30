@@ -1,0 +1,103 @@
+form{
+    .file-box{
+        max-width: 504px;
+
+        input.inputfile {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        input.inputfile + label {
+            max-width: 80%;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            display: inline-block;
+            overflow: hidden;
+            padding: 0.625rem 1.25rem;
+        }
+
+        input.inputfile:focus + label,
+        input.inputfile.has-focus + label {
+            outline: 1px dotted #000;
+            outline: -webkit-focus-ring-color auto 5px;
+        }
+
+        input.inputfile + label {
+            color: $color-blue-dark;
+            height:43px;
+        }
+
+        input.inputfile + label {
+            border: 2px solid $color-black;
+            background-color: $color-white;
+            padding: 0;
+        }
+
+        input.inputfile:focus + label,
+        input.inputfile.has-focus + label{
+            @include focus();
+        }
+
+        input.inputfile + label span.filename,
+        input.inputfile + label span.pick {
+            padding: 0.20rem 1.25rem;
+        }
+
+        input.inputfile + label span.filename {
+            width: 200px;
+            min-height: 2em;
+            display: inline-block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            vertical-align: top;
+        }
+
+        input.inputfile + label span.pick {
+            height: 100%;
+            color: $color-white;
+            background-color: $color-blue-light;
+            display: inline-block;
+        }
+        
+        input.inputfile:focus + label span.pick,
+        input.inputfile.has-focus + label span.pick,
+        input.inputfile + label:hover span.pick {
+            background-color: $color-blue-dark;
+        }
+    }
+}
+
+@media only screen and (max-width: 568px) {
+    form{
+        .file-box{
+            input.inputfile + label {
+                color: $color-blue-dark;
+                height:auto;
+            }
+
+            input.inputfile + label span.filename {
+                width: auto;
+                display:block;
+                text-align: center;
+            }
+
+            input.inputfile + label span.pick {
+                display:block;
+                text-align: center;
+            }
+            
+            input.inputfile+label{
+                width:100%;
+                max-width:100%;
+            }
+        }
+    }
+}

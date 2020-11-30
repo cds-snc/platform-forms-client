@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+}
+
+a[href],
+area[href],
+input,
+select textarea,
+button,
+iframe,
+[tabindex],
+[contentEditable="true"] {
+  &:not([disabled]):focus:not(.autocomplete__option) {
+    @include focus();
+  }
+}
+
+body {
+  margin: 0;
+  font-size: 1.05em;
+  font-family: "Noto Sans", sans-serif;
+  line-height: 1.65;
+
+  @include xs {
+    font-size: 1.2em;
+  }
+
+  @include sm {
+    font-size: 1.3em;
+  }
+}
+
+p,
+.multiple-choice__item p,
+ol,
+ul {
+  margin-top: 0;
+  margin-bottom: $space-xs;
+
+  @include xs {
+    margin-bottom: $space-sm;
+  }
+}
+
+p + ul {
+  margin-top: -$space-xs;
+
+  @include xs {
+    margin-top: -$space-sm;
+  }
+}
+
+ol,
+ul {
+  padding-left: $space-lg;
+
+  @include sm {
+    padding-left: $space-xl;
+  }
+}
+
+a, a:visited {
+  color: $color-blue-dark;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Lato", sans-serif;
+  line-height: 1.33;
+  font-weight: 600;
+}
+
+%page-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding-left: $space-md;
+  padding-right: $space-md;
+
+  @include xl {
+    max-width: 1170px;
+  }
+}
+
+main {
+  @extend %page-container;
+  padding: 0 $space-md;
+
+  h1 {
+    border-bottom: 1px solid $color-red;
+    margin: $space-md 0;
+  }
+}
+
+li:not(:last-of-type) {
+  padding-bottom: $space-xxs;
+
+  @include sm {
+    padding-bottom: 0;
+  }
+}
+
+.outer-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+.page--container {
+  @extend %page-container;
+}
+
+.hide--mobile {
+  display: none;
+
+  @include sm {
+    display: inherit;
+  }
+}
+
+.hide--desktop {
+  display: inherit;
+
+  @include sm {
+    display: none;
+  }
+}
+
+.pure-table {
+  width: 100%;
+  margin-bottom: $space-sm;
+
+  @include sm {
+    width: 80%;
+  }
+
+  th {
+    border-bottom: 3px solid $color-black;
+  }
+}
+
+.buttons-row {
+  a,
+  button {
+    margin-right: $space-sm;
+  }
+}
+
+.visually-hidden {
+  @include visuallyHidden();
+}
+
+.error {
+  background-color: #f5c6cb;
+  border: 1px solid #721c24;
+  font-size:0.8em;
+  padding:10px;
+}

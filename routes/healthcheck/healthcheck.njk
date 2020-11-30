@@ -1,0 +1,15 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>Health Check</h1>
+
+    <div>
+      <h2>Feature Flags</h2>
+    {% if featureFlags %}
+      <pre>{{ featureFlags | dump(2) }}</pre>
+    {% else %}
+      <p>featureFlags is undefined</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{#
+  - `name`: field name
+  - `label`: text for the label
+  - `attributes`: object of optional attributes: class, hint, divClasses, autocomplete
+#}
+{% if errors %}
+    {% set firstError = errors[errors.keys()[0]] %}
+{% endif %}
+
+{% macro textInput(name, label, attributes) %}
+    <div class="{{ 'has-error' if errors and errors[name] }} {{ attributes.divClasses }}">
+        <label for="{{ name }}" id="{{ name }}__label">
+            {% if attributes.required %}
+                <strong aria-hidden="true" class="required font-normal">*</strong>
+            {% endif %}
+            {{ __(label) }}
+            {% if attributes.required %}
+                <strong class="required font-normal">{{ __("required")}}</strong>
+            {% endif %}
+        </label>
+        {% if attributes.hint %}
+            <span class="form-message">{{ __(attributes.hint) }}</span>
+        {% endif %}
+        {% if errors and errors[name] %}
+            {{ validationMessage(errors[name].msg, name) }}
+        {% endif %}
+        <input class="{{ attributes.class if attributes.class else "w-3-4" }}" {% if attributes.autocomplete %}autocomplete="{{ attributes.autocomplete }}" {% endif %} type="text" id="{{ attributes.id if attributes.id else name }}" {% if errors and errors[name] %} aria-describedby="{{ name + '-error' }}" aria-invalid="true" {% endif %} {% if errors and firstError.param === name %} autofocus="true" {% endif %} name="{{ name }}" value="{{ data[name] }}"/>
+    </div>
+{% endmacro %}

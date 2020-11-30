@@ -1,0 +1,11 @@
+{
+  "name": "node-starter",
+  "description": "",
+  "formation": {},
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
