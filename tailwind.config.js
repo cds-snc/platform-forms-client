@@ -5,12 +5,17 @@ module.exports = {
     extend: {
       colors: {
         blue: {
-          ...colors.blue,
-          '200': '#E1F0F8',
+          ...colors.blue,     
+          default: "#26374A",     
           '800': '#194D7B',
           '900': '#38414d',
           'lighter': '#E1F0F8',
-          'darker': '#194D7B',
+          'darker': '#194D7B',          
+          '100': "#B2E3FF",
+          '200': "#DFF8FD",
+          '300': "#4B98B2",
+          '400': "#335075",
+          '500': "#75b9e0",          
         },
         gray: {
           ...colors.gray,
@@ -57,6 +62,13 @@ module.exports = {
       '-1': '-1,',
       '100': '100,',
     },
+    fontFamily: {
+      sans: ["lato"],
+      body: ["Noto Sans"],
+    },        
+    container: {
+      center: true,
+    },    
   },
   variants: {},
   plugins: [],

@@ -1,30 +1,24 @@
 {% extends "base.njk" %}
 
 {% block content %}
-    <h1>{{ __('start.title') }}</h1>
 
-    <div class="bg-red-100 border-l-4 border-red-800 p-4 mt-8 hidden cookie-warning">
-        <h2 class="text-2xl">{{ __('start.enable_cookies_title') }}</h2>
-        <p class="p-0">{{ __('start.enable_cookies_body') }}</p>
-    </div>
+    <h1>{{ __('intake-form.title') }}</h1>
 
     <div>
-        <p>{{ __('start.intro.2') }}</p>
-        <p>{{ __('start.intro.3') }}</p>
-    </div>
 
-    <div class="start-button">
-        <a class="font-semibold button-link py-6 px-5 border shadow" data-gc-analytics-customclick="ESDC|EDSC:Covid19 Benefits:Start button click" data-cy="start" href="{{ routePath(route.next) }}" role="button" draggable="false">
-            {{ __('start.submit') }}
-        </a>
+        <form action="/{{ getLocale() }}/feedback" method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            
+            {{ textInput('name', __('form.name')) }}
+            {{ textInput('email', __('form.email')) }}
+            {{ textInput('department', __('intake-form.questions.department')) }}
+            {{ textInput('service', __('intake-form.questions.service')) }}
+            {{ textArea('problem', __('intake-form.questions.problem'), { class: 'w-3/4' }) }}
+            {{ textInput('timeline', __('intake-form.questions.timeline')) }}
+            {{ textArea('aboutus', __('intake-form.questions.aboutus'), { class: 'w-3/4' }) }}
+            {{ formSubmitButton() }}
+        </form>
     </div>
-
-    <p class="mt-8">
-      {{ __('start.business') }}
-      <a href="{{ __('start.businesslink.url') }}"
-        target="_blank"
-        data-gc-analytics-customclick="ESDC|EDSC:Covid19 Benefits:businessHelp button click"
-        >{{__('start.businesslink.text')}}</a>
-    </p>
 
 {% endblock %}
+

@@ -63,6 +63,15 @@ form button {
   }
 }
 
+form button.submit-button {
+  @apply cursor-pointer border-b-4 border-black py-3 px-5 mr-2 font-bold text-lg no-underline text-white bg-blue outline-none;
+  width: 15rem;
+}
+
+form button.submit-button:hover {
+  @apply bg-blue-400;
+}  
+
 a.button-link {
   @extend %button-styles;
 
