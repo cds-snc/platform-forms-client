@@ -24,6 +24,6 @@
         {% if errors and errors[name] %}
             {{ validationMessage(errors[name].msg, name) }}
         {% endif %}
-        <textarea class="{{ attributes.class if attributes.class else "w-3-4" }}" id="{{ attributes.id if attributes.id else name }}" {% if errors and errors[name] %} aria-describedby="{{ name + '-error' }}" aria-invalid="true" {% endif %} {% if errors and firstError.param === name %} autofocus="true" {% endif %} name="{{ name }}">{{ data[name] }}</textarea>
+        <textarea rows="6" class="{{ attributes.class if attributes.class else "w-3-4" }}" id="{{ attributes.id if attributes.id else name }}" {% if errors and errors[name] %} aria-describedby="{{ name + '-error' }}" aria-invalid="true" {% endif %} {% if errors and firstError.param === name %} autofocus="true" {% endif %} name="{{ name }}">{{ data[name] }}</textarea>
     </div>
 {% endmacro %}

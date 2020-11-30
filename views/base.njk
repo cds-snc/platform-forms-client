@@ -5,6 +5,7 @@
 {%- from 'dropdown.njk' import dropdown as dropdown with context -%}
 {%- from 'checkboxes.njk' import checkBoxes as checkBoxes with context -%}
 {%- from 'buttons.njk' import formButtons as formButtons with context -%}
+{%- from 'buttons.njk' import formSubmitButton as formSubmitButton with context -%}
 {%- from 'input-file.njk' import fileInput as fileInput with context -%}
 {%- from 'form.njk' import form as form with context -%}
 {%- from 'banner.njk' import banner as banner with context -%}
@@ -33,12 +34,12 @@
         </nav>
 
         <div class="outer-container">
-            <header class="border-b-3 border-blue-900 pb-5 mb-10">
+            <header class="mb-20">
                 {% include "_includes/phaseBanner.njk" %}
                 {% include "_includes/fip.njk" %}
             </header>
             <main id="content">
-                <div class="-mt-6">
+                <div>
                     {% if not hideBackButton %}
                         {% include "_includes/back-link.njk" %}
                     {% endif %}
@@ -50,13 +51,7 @@
                     {% include "_includes/errorList.njk" %}
                 {% endif %}
 
-                {% block content %}{% endblock %}
-
-                {% include "_includes/feedback.njk" %}
-
-                {% if LAST_UPDATED %}
-                    <dl class="text-base mt-16"><dt class="inline-block">{{ __('date_modified') }} </dt><dd class="inline-block ml-2"><time datetime="{{ LAST_UPDATED }}">{{ LAST_UPDATED }}</time></dd></dl>
-                {% endif %}
+                {% block content %}{% endblock %}                
             </main>
             {% include "_includes/footer.njk" %}
         </div>
