@@ -9,10 +9,9 @@ module.exports = (app, route) => {
     .get((req, res) => {
       res.render(name, routeUtils.getViewData(req, {}))
     })
-    .post((req, res) => {
-      route.applySchema(Schema)
-
+    .post(route.applySchema(Schema), (req, res) => {
       const formData = req.body
+
       console.log(
         'INTAKE CONTROLLER stringify',
         JSON.stringify({ formData: formData }),
