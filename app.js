@@ -57,7 +57,7 @@ app.set('trust proxy', 1)
 app.use(headerConfig)
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser(process.env.app_session_secret))
 app.use(require('./config/i18n.config').init)
 
@@ -87,7 +87,6 @@ app.use(express.static(path.join(__dirname, 'public'), staticOptions))
 // add a request logger
 process.env.NODE_ENV !== 'test' && app.use(morgan(morganConfig))
 
-
 // dnsPrefetchControl controls browser DNS prefetching
 // frameguard to prevent clickjacking
 // hidePoweredBy to remove the X-Powered-By header
@@ -106,7 +105,6 @@ app.locals.GITHUB_SHA = process.env.GITHUB_SHA || null
 app.locals.TAG_VERSION = process.env.TAG_VERSION || null
 app.locals.LAST_UPDATED = process.env.LAST_UPDATED || null
 app.locals.hasData = hasData
-
 
 // add static asset management
 app.use(assetPath(app))

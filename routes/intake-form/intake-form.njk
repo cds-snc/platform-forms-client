@@ -4,21 +4,11 @@
 
     <h1>{{ __('intake-form.title') }}</h1>
 
-    <div>
+<form method="POST" action="/submit-form">
+  <input type="text" name="username" />
+  <input type="submit" />
+</form>
 
-        <form action="/{{ getLocale() }}/feedback" method="post">
-            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            
-            {{ textInput('name', __('form.name')) }}
-            {{ textInput('email', __('form.email')) }}
-            {{ textInput('department', __('intake-form.questions.department')) }}
-            {{ textInput('service', __('intake-form.questions.service')) }}
-            {{ textArea('problem', __('intake-form.questions.problem'), { class: 'w-3/4' }) }}
-            {{ textInput('timeline', __('intake-form.questions.timeline')) }}
-            {{ textArea('aboutus', __('intake-form.questions.aboutus'), { class: 'w-3/4' }) }}
-            {{ formSubmitButton() }}
-        </form>
-    </div>
 
 {% endblock %}
 
