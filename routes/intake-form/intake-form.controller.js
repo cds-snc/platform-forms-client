@@ -1,33 +1,48 @@
-const { routeUtils, getDomain } = require('../../utils/index')
+const { routeUtils } = require('./../../utils')
+const { Schema } = require('./schema.js')
 
 module.exports = (app, route) => {
   const name = route.name
 
-  // redirect from "/" → "/start"
-  app.get('/', (req, res) => {
-    const domain = getDomain(req)
+  route
+    .draw(app)
+    .get((req, res) => {
+      res.render(name, routeUtils.getViewData(req, {}))
+    })
+    .post(route.applySchema(Schema), (req, res) => {
+      const formData = req.body
 
-    // firefox keeps the session even after closing, so clear it here just in case
-    if (req.session.history !== undefined && req.session.history.length > 0) {
-      req.session.history = []
-    }
+      console.log(
+        'INTAKE CONTROLLER stringify',
+        JSON.stringify({ formData: formData }),
+      )
 
-    // if on the French domain, redirect to the /fr start page
-    // istanbul ignore next
-    if (domain.includes(process.env.DOMAIN_FR)) {
-      return res.redirect(`${domain}${route.path.fr}`)
-    }
+      sendNotification(formData)
 
-    res.redirect(route.path[req.locale])
-  })
+      return res.redirect(res.locals.routePath('confirmation'))
+    })
+}
 
-  app.get('/en', (req, res) => res.redirect(route.path.en))
-  app.get('/fr', (req, res) => res.redirect(route.path.fr))
+const sendNotification = (formData) => {
+  if (
+    !(
+      process.env.NOTIFY_API_KEY &&
+      process.env.FEEDBACK_EMAIL_TO &&
+      process.env.NOTIFY_ENDPOINT
+    )
+  ) {
+    return
+  }
 
-  route.draw(app).get(async (req, res) => {
-    req.session.formdata = null
-    res.render(name, routeUtils.getViewData(req, {
-      title: res.__('intake-form.title'),
-    }))
-  })
+  const NotifyClient = require('notifications-node-client').NotifyClient
+  const notify = new NotifyClient(
+    process.env.NOTIFY_ENDPOINT,
+    process.env.NOTIFY_API_KEY,
+  )
+  notify
+    .sendEmail(process.env.NOTIFY_TEMPLATE_ID, process.env.FEEDBACK_EMAIL_TO, {
+      personalisation: formData,
+    })
+    .then((response) => console.log('Sent by email'))
+    .catch((err) => console.error(err))
 }

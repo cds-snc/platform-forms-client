@@ -6,14 +6,14 @@
 
     <div>
 
-        <form action="/{{ getLocale() }}/feedback" method="post">
+        <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             
             {{ textInput('name', __('form.name')) }}
             {{ textInput('email', __('form.email')) }}
             {{ textInput('department', __('intake-form.questions.department')) }}
             {{ textInput('service', __('intake-form.questions.service')) }}
-            {{ textArea('problem', __('intake-form.questions.problem'), { class: 'w-3/4' }) }}
+            {{ textArea('description', __('intake-form.questions.description'), { class: 'w-3/4' }) }}
             {{ textInput('timeline', __('intake-form.questions.timeline')) }}
             {{ textArea('aboutus', __('intake-form.questions.aboutus'), { class: 'w-3/4' }) }}
             {{ formSubmitButton() }}
@@ -21,4 +21,3 @@
     </div>
 
 {% endblock %}
-

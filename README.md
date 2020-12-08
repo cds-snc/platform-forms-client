@@ -85,6 +85,7 @@ To send Feedback to an email address, you should configure the following environ
 ```sh
 NOTIFY_ENDPOINT=
 NOTIFY_API_KEY=
+NOTIFY_TEMPLATE_ID=
 FEEDBACK_EMAIL_TO=
 ```
 
