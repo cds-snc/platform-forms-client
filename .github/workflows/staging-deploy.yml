@@ -59,7 +59,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@7218b9c
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
-          service: form_viewer
+          service: form-viewer
           cluster: ${{ steps.cluster.outputs.name }}
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
