@@ -2,7 +2,7 @@ name: Staging — Push container to ECR
 
 on:
   push:
-    branches: [auto_build_deploy]
+    branches: [main]
 
 env:
   ECR_REPOSITORY: form_viewer_staging

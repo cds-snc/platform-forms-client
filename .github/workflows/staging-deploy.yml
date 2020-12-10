@@ -2,7 +2,7 @@ name: Deploy to Staging
 
 on:
   push:
-    branches: [auto_build_deploy]
+    branches: [main]
 
 jobs:
   deploy-form-viewer-service:
