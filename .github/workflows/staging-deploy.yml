@@ -38,7 +38,7 @@ jobs:
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
         run: |
-          aws ecs describe-task-definition --task-definition form_viewer --query taskDefinition > form_viewer.json
+          aws ecs describe-task-definition --task-definition form-viewer --query taskDefinition > form_viewer.json
           echo "##[set-output name=container_name;]$(jq -r '.containerDefinitions[0].name' form_viewer.json)"
       - name: Render image for form viewer service
         id: taskdef-form-viewer
@@ -59,7 +59,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@7218b9c
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
-          service: form-viewer
+          service: forms_viewer
           cluster: ${{ steps.cluster.outputs.name }}
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
