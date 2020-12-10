@@ -14,14 +14,14 @@ module.exports = (app, route) => {
       const formData = req.body
 
       console.log(
-        'INTAKE CONTROLLER stringify',
+        'SSC-TECH CONTROLLER stringify',
         JSON.stringify({ formData: formData }),
       )
 
       sendNotification(
         formData,
-        process.env.FEEDBACK_EMAIL_TO,
-        process.env.NOTIFY_TEMPLATE_ID,
+        process.env.SSC_EMAIL_TO,
+        process.env.NOTIFY_SSC_TEMPLATE_ID,
       )
 
       return res.redirect(res.locals.routePath('confirmation'))

@@ -2,6 +2,7 @@
 const routes = [
   { name: 'welcome', path: { en: '/welcome', fr: '/bienvenue' } },
   { name: 'intake-form', path: { en: '/intake', fr: '/admission' } },
+  { name: 'ssc-tech', path: { en: '/ssc-tech', fr: '/spc-tech' } },
   { name: 'confirmation', path: '/confirmation' },
 
   // Healthcheck

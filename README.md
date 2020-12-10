@@ -121,11 +121,11 @@ The `asset()` helper will return the path to the asset prefixed by the CDN_PREFI
 
 ## ---------------------------------------------------------------------
 
-# Trouver de l’aide financière pendant la COVID-19
+# Plate-forme - Formulaires GC 
 
 Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
 
-Consulter l’outil ici:  [https://platform-forms-node.herokuapp.com/](https://platform-forms-node.herokuapp.com//). 
+Explorez le ici : [https://platform-forms-node.herokuapp.com/](https://platform-forms-node.herokuapp.com//). 
 
 
 ## Contributions

@@ -1,0 +1,22 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>{{ __('ssc-tech.title') }}</h1>
+
+    <div>
+        <p>
+            {{ __('ssc-tech.intro') }}
+        </p>
+
+        <form novalidate method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            
+            {{ textInput('name', __('form.name')) }}
+            {{ textInput('email', __('form.email')) }}
+            {{ textArea('description', __('ssc-tech.questions.description'), { class: 'w-3/4' }) }}
+            {{ formSubmitButton() }}
+        </form>
+    </div>
+
+{% endblock %}

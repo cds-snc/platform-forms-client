@@ -64,6 +64,8 @@
   "Comment avez-vous entendu parler de nous?": "Comment avez-vous entendu parler de nous?",
   "Submit": "Submit",
   "wordmark.alt": "wordmark.alt",
-  "start.enable_cookies_title": "start.enable_cookies_title",
-  "start.enable_cookies_body": "start.enable_cookies_body"
+  "ssc-tech.title": "Bienvenue sur le formulaire d'exemption de SSC Tech",
+  "ssc-tech.intro": "La description...",
+  "ssc-tech.questions.description": "Description",
+  "start_over": "start_over"
 }
