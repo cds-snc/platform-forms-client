@@ -5,7 +5,7 @@ on:
     branches: [auto_build_deploy]
 
 env:
-  ECR_REPOSITORY: forms_viewer_staging
+  ECR_REPOSITORY: form_viewer_staging
   GITHUB_SHA: ${{ github.sha }}
 
 jobs:
