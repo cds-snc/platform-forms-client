@@ -33,7 +33,6 @@ jobs:
       - name: Tag Images for Staging
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-staging.outputs.registry }}
-          VERSION: ${{ steps.version.outputs.content }}
         run: |
           docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
           docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:latest
@@ -41,10 +40,8 @@ jobs:
       - name: Push containers to Staging Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-staging.outputs.registry }}
-          VERSION: ${{ steps.version.outputs.content }}
         run: |
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Logout of Staging Amazon ECR
