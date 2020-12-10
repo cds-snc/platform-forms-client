@@ -1,0 +1,69 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [auto_build_deploy]
+
+jobs:
+  deploy-form-viewer-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for container to be built and pushed
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-build
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: push-staging
+          ref: ${{ github.sha }}
+
+      - name: Checkout
+        if: steps.wait-for-build.outputs.conclusion == 'success'
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get Cluster Name
+        id: cluster
+        run: |
+          echo "##[set-output name=name;]$(aws ecs list-clusters | jq -r '.clusterArns[0]' | cut -f 2 -d "/" )"
+      - name: Download Form Viewer task definition
+        id: download-taskdef-form-viewer
+        run: |
+          aws ecs describe-task-definition --task-definition form_viewer --query taskDefinition > form_viewer.json
+          echo "##[set-output name=container_name;]$(jq -r '.containerDefinitions[0].name' form_viewer.json)"
+      - name: Render image for form viewer service
+        id: taskdef-form-viewer
+        uses: aws-actions/amazon-ecs-render-task-definition@9666dc9
+        with:
+          task-definition: form_viewer.json
+          container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
+          image: ${{ steps.login-ecr.outputs.registry }}/forms_viewer_staging:${{ github.sha }}
+
+      - name: Render appspec for form viewer service
+        run: |
+          CONTAINER_PORT=`jq '.containerDefinitions[0].portMappings[0].containerPort' form_viewer.json`
+          CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
+          TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
+          jq  --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
+      - name: Deploy image for Form Viewer
+        timeout-minutes: 10
+        uses: aws-actions/amazon-ecs-deploy-task-definition@7218b9c
+        with:
+          task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
+          service: form-viewer
+          cluster: ${{ steps.cluster.outputs.name }}
+          wait-for-service-stability: true
+          codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
+
+      - name: Logout of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
