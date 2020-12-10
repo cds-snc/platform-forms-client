@@ -36,7 +36,6 @@ jobs:
           VERSION: ${{ steps.version.outputs.content }}
         run: |
           docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
-          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
           docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Push containers to Staging Amazon ECR
