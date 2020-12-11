@@ -86,7 +86,7 @@ To send Feedback to an email address, you should configure the following environ
 NOTIFY_ENDPOINT=
 NOTIFY_API_KEY=
 NOTIFY_TEMPLATE_ID=
-FEEDBACK_EMAIL_TO=
+EMAIL_TO=
 ```
 
 ### Airtable integration
@@ -208,7 +208,7 @@ Pour envoyer la rétroaction à une adresse courriel, vous devez configurer les 
 ```sh
 NOTIFY_ENDPOINT=
 NOTIFY_API_KEY=
-FEEDBACK_EMAIL_TO=
+EMAIL_TO=
 ```
 
 ### Intégration avec Airtable

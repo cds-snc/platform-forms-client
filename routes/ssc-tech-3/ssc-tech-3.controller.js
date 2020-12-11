@@ -11,6 +11,6 @@ module.exports = (app, route) => {
     })
     .post(route.applySchema(Schema), (req, res) => {
       const formData = req.body
-      return res.redirect(res.locals.routePath('ssc-tech-2'))
+      return res.redirect(res.locals.routePath('ssc-tech-4'))
     })
 }

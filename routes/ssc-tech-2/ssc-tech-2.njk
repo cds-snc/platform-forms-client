@@ -1,0 +1,20 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>{{ __('ssc-tech-2.title') }}</h1>
+
+    <div>
+        <p>
+            {{ __('ssc-tech-2.intro') }}
+        </p>
+
+        <form novalidate method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            
+            {{ textInput('page2', "Page 2 value") }}                
+            {{ formSubmitButton() }}
+        </form>
+    </div>
+
+{% endblock %}
