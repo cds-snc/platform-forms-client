@@ -1,0 +1,95 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>{{ __('ssc-tech-2.title') }}</h1>
+
+    <div>
+        <p>
+            {{ __('ssc-tech-2.intro') }}
+        </p>
+
+        <form novalidate method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            
+            {{ textArea('department', __('ssc-tech.questions.1'), { class: 'w-3/4' }) }}
+            {{ textInput('branch', __('ssc-tech.questions.2')) }}
+            {{ textInput('subcontract', __('ssc-tech.questions.3')) }}            
+            {{ textInput('name_sub', __('ssc-tech.questions.4')) }}            
+            {{ textInput('description', __('ssc-tech.questions.5')) }}    
+           
+            {{ radioButtons('radio1_key',
+                [
+                    { value: 'radio1_yes', text:__('form.radio.yes')},
+                    { value: 'radio1_no', text:__('form.radio.no')}
+                ],
+                data.radio1_key,
+                __('ssc-tech-2.radio-1'),
+                errors,
+                { required: true })
+            }}
+
+            {{ radioButtons('radio2_key',
+                [
+                    { value: 'radio2_yes', text:__('form.radio.yes')},
+                    { value: 'radio2_no', text:__('form.radio.no')}
+                ],
+                data.radio2_key,
+                __('ssc-tech-2.radio-2'),
+                errors,
+                { required: true })
+            }}
+
+            {{ radioButtons('radio3_key',
+                [
+                    { value: 'radio3_yes', text:__('form.radio.yes')},
+                    { value: 'radio3_no', text:__('form.radio.no')}
+                ],
+                data.radio3_key,
+                __('ssc-tech-2.radio-3'),
+                errors,
+                { required: true })
+            }}
+
+            {{ radioButtons('radio4_key',
+                [
+                    { value: 'radio4_yes', text:__('form.radio.yes')},
+                    { value: 'radio4_no', text:__('form.radio.no')}
+                ],
+                data.radio4_key,
+                __('ssc-tech-2.radio-4'),
+                errors,
+                { required: true })
+            }}
+
+            {{ radioButtons('radio5_key',
+                [
+                    { value: 'radio5_yes', text:__('form.radio.yes')},
+                    { value: 'radio5_no', text:__('form.radio.no')}
+                ],
+                data.radio5_key,
+                __('ssc-tech-2.radio-5'),
+                errors,
+                { required: true })
+            }}                                                
+            
+            {{ checkBoxes('checkbox_key',
+                [
+                    { value: '1', text:__('ssc-tech-2.radio.1')},
+                    { value: '2', text:__('ssc-tech-2.radio.2')},
+                    { value: '3', text:__('ssc-tech-2.radio.3')},
+                    { value: '4', text:__('ssc-tech-2.radio.4')},
+                    { value: '5', text:__('ssc-tech-2.radio.5')},
+                    { value: 'none-of-the-above', text:__('ssc-tech-2.radio.none')}
+                ],
+                [],
+                __('ssc-tech-2.radio'),
+                errors,
+                { required: true })
+            }}                       
+
+            {{ formSubmitButton() }}
+        </form>
+    </div>
+
+{% endblock %}

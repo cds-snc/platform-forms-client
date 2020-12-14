@@ -4,21 +4,6 @@
 
   <div class="md:flex w-full" data-gc-analytics-error="404">
     <h1 class="sr-only">{{ __({ phrase: '404.title', locale: 'en'}) }} - {{ __({ phrase: '404.title', locale: 'fr'}) }}</h1>
-    <div class="flex-wrap mb-20 md:mb-0 sm:w-full md:flex-auto md:mr-10">
-      <h2 class="text-4xl lg:h-24 mb-5">{{ __({phrase: '404.title', locale: 'en'}) }}</h2>
-      <p>{{ __({ phrase: '404.error1', locale: 'en'}) }}</p>
-      <p>{{ __({ phrase: '404.error2', locale: 'en'}) }}</p>
-      <h2>{{ __({ phrase: "error-link.header", locale: 'en'}) }}</h2>
-      <a href="{{ simpleRoute('start', 'en') }}" class="text-2xl">{{__({ phrase: 'error-link.text', locale: 'en'}) }}</a>
-    </div>
-
-    <div class="flex-wrap sm:w-full md:flex-auto">
-      <h2 class="text-4xl lg:h-24 mb-5">{{ __({phrase: '404.title', locale: 'fr'}) }}</h2>
-      <p>{{ __({ phrase: '404.error1', locale: 'fr'}) }}</p>
-      <p>{{ __({ phrase: '404.error2', locale: 'fr'}) }}</p>
-      <h2>{{ __({ phrase: "error-link.header", locale: 'fr'}) }}</h2>
-      <a href="{{ simpleRoute('start', 'fr') }}" class="text-2xl">{{__({ phrase: 'error-link.text', locale: 'fr'}) }}</a>
-    </div>
   </div>
 
   {% if message and NODE_ENV !== 'production' %}

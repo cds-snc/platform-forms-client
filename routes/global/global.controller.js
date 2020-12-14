@@ -33,10 +33,9 @@ module.exports = (app, table) => {
 
     let message = false
 
-    const routePath = req.path
     /* istanbul ignore next */
     if (process.env.NODE_ENV !== 'production') {
-      message = `❌ Forgot to add this route? \n\nAdd the following to config/routes.config.js: \n\nconst routes = [{ name: "${routePath}", path: "${routePath}" }]\n ...\n configRoutes(app){\n  require("../routes${routePath}${routePath}.controller")(app);\n}`
+      message = `❌ 404 Not Found`
     }
 
     res.locals.simpleRoute = (name, locale) => simpleRoute(name, locale)

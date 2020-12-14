@@ -6,6 +6,7 @@ const validateHelpers = require('./validate.helpers.js')
 const viewHelpers = require('./view.helpers.js')
 const flashMessageHelpers = require('./flash.message.helpers')
 const loadHelpers = require('./load.helpers')
+const notificationHelpers = require('./notification.helpers')
 const history = require('./history.helpers')
 
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
   ...dataHelpers,
   ...loadHelpers,
   ...history,
+  ...notificationHelpers,
 }
 
 const { getRouteByName } = require('./route.helpers')
