@@ -1,3 +1,0 @@
-name             = "MyCDSService"
-docker_image     = "mycdsservice/node-app"
-docker_image_tag = "latest"

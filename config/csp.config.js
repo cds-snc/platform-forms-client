@@ -4,9 +4,7 @@ const scriptSrc = [
   "'self'",
   'cdnjs.cloudflare.com',
   '*.herokuapp.com',
-  'assets.adobedtm.com',
   "'unsafe-inline'",
-  'cv19-benefits-cdn.azureedge.net',
   'sitecatalyst.omniture.com',
 ]
 
@@ -22,7 +20,6 @@ module.exports = {
     "'self'",
     '*.omniture.com',
     '*.2o7.net',
-    '*.adobe.com',
   ],
   scriptSrc: scriptSrc,
   baseUri: ["'none'"],
@@ -39,10 +36,8 @@ module.exports = {
     'data:',
     '*.demdex.net',
     'cm.everesttech.net',
-    'assets.adobedtm.com',
     '*.omtrdc.net',
-    'cv19-benefits-cdn.azureedge.net',
   ],
-  styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'cv19-benefits-cdn.azureedge.net'],
+  styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
   upgradeInsecureRequests,
 }
