@@ -33,7 +33,6 @@ module.exports = (app, table) => {
 
     let message = false
 
-    const routePath = req.path
     /* istanbul ignore next */
     if (process.env.NODE_ENV !== 'production') {
       message = `❌ 404 Not Found`

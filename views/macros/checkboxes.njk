@@ -17,10 +17,10 @@
                 {% if errors and errors[key] %}
                     {{ validationMessage(errors[key].msg, key) }}
                 {% endif %}
-                {% for index, val in values %}
+                {% for item in values %}
                     <div class="multiple-choice__item">
-                        <input id="{{ key }}{{ val }}" name="{{ key }}" type="checkbox" value="{{ val }}" {% if selectedVals and val in selectedVals %} checked="checked" {% endif %} {% if errors and errors[key] %} aria-describedby="{{ key + '-error' }}" aria-invalid="true" {% endif %}>
-                        <label for="{{ key }}{{ val }}">{{ __(val) }}</label>
+                        <input id="{{ key }}{{ item.value }}" name="{{ key }}" type="checkbox" value="{{ item.value }}" {% if selectedVals and val in selectedVals %} checked="checked" {% endif %} {% if errors and errors[key] %} aria-describedby="{{ key + '-error' }}" aria-invalid="true" {% endif %}>
+                        <label for="{{ key }}{{ item.value }}">{{ __(item.text) }}</label>
                     </div>
                 {% endfor %}
             </div>

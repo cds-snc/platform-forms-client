@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
     <h1>{{ __('ssc-tech.title') }}</h1>
 
     <div>
@@ -12,9 +13,39 @@
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             
-            {{ textInput('name', __('form.name')) }}
-            {{ textInput('email', __('form.email')) }}
-            {{ textArea('description', __('ssc-tech.questions.description'), { class: 'w-3/4' }) }}
+            {{ textArea('exception', __('ssc-tech.questions.1'), { class: 'w-3/4' }) }}
+            {{ textInput('supplier', __('ssc-tech.questions.2')) }}
+            {{ textInput('date', __('ssc-tech.questions.3')) }}            
+            {{ textInput('quantity', __('ssc-tech.questions.4')) }}            
+            {{ textInput('cost', __('ssc-tech.questions.5')) }}            
+
+            <div>
+                <h3>Description</h3>
+                Should a requirement fall under the technical exception orders, a technical justification must be provided to SSC along with other details regarding the requirement. 
+
+                <h5>Examples could include:</h5>
+                <ul>
+                    <li>Inability to implement and interface/configure new equipment 
+                    with existing infrastructure (no-substitution requirement). Note that the image being built for a specific system will not be 
+                    deemed an acceptable justification. </li>
+                    <li>Security Requirement for specified project - No-Substitution Requirement. </li>
+                </ul>
+
+                <h5>A technical exception will not be granted if the following factors are involved:</h5>
+                <ol>
+                    <li>Devices that do not meet Canadian Security Establishment Canada's defined security baselines. </li>
+                    <li>Devices that do not carry two certifications required by law; Industry Canada ICES-003 and the Canadian Electrical Code Part 1.0 (e.g. CSA approval). </li>
+                    <li>A reflex prejudice for low-end Intel Core i7 or AMD Ryzen 7 Pro processors which cost significantly more yet deliver a minimal performance gain. </li>
+                    <li>Minor esthetic differences (slight variations on device weight, size, colour, etc.). </li>
+                    <li>Specific I/O ports that exclude other devices offering functional equivalents. </li>
+                </ol>
+                Technical exception justifications will be verified by SSC's technical authority to ensure the information is valid. SSC may contact you and/or your organization to further validate the justification. </p>
+                <p>When you place a new Technical Exception order, you MUST add, as attachments, a detailed technical justification document and, in most cases to avoid further delays, a valid vendor quote. </p>
+                <p>Those justifications must include a detailed technical explanation as to why similar NMSO products will not meet your requirements as defined by the needs of the application software being deployed. Requests, if granted, will be on a one-time basis. </p>
+                <p>Products purchased through this process cannot be positioned as the incumbent to be added to at a later date. Minimum required time to process a Technical Exception order is approx. 3 weeks. </p>
+                <p>Please be advised that failure to provide the requested information above may result in the cancellation of your order. </p>
+            </div>
+            
             {{ formSubmitButton() }}
         </form>
     </div>

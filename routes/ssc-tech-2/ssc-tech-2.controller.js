@@ -10,7 +10,6 @@ module.exports = (app, route) => {
       res.render(name, routeUtils.getViewData(req, {}))
     })
     .post(route.applySchema(Schema), (req, res) => {
-      const formData = req.body
       return res.redirect(res.locals.routePath('ssc-tech-3'))
     })
 }

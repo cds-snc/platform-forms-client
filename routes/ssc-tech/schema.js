@@ -1,20 +1,15 @@
 /* istanbul ignore file */
 
 const Schema = {
-  name: {
+  exception: {
     isLength: {
-      errorMessage: 'errors.firstname.length',
+      errorMessage: 'errors.exception.length',
       options: { min: 3, max: 200 },
     },
   },
-  email: {
-    isEmail: {
-      errorMessage: 'errors.email.length',
-    },
-  },
-  description: {
+  supplier: {
     isLength: {
-      errorMessage: 'errors.description.length',
+      errorMessage: 'errors.supplier.length',
       options: { min: 3, max: 1000 },
     },
   },
