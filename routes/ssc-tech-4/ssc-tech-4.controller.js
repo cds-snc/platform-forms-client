@@ -1,6 +1,5 @@
-const { routeUtils, getSessionData } = require('./../../utils')
+const { routeUtils } = require('./../../utils')
 const { Schema } = require('./schema.js')
-const { sendNotification } = require('../../utils/notification.helpers')
 
 module.exports = (app, route) => {
   const name = route.name
@@ -11,19 +10,6 @@ module.exports = (app, route) => {
       res.render(name, routeUtils.getViewData(req, {}))
     })
     .post(route.applySchema(Schema), (req, res) => {
-      const formData = getSessionData(req)
-
-      console.log(
-        'SSC-TECH CONTROLLER stringify',
-        JSON.stringify({ formData: formData }),
-      )
-
-      sendNotification(
-        formData,
-        process.env.SSC_EMAIL_TO,
-        process.env.NOTIFY_SSC_TEMPLATE_ID,
-      )
-
-      return res.redirect(res.locals.routePath('confirmation'))
+      return res.redirect(res.locals.routePath('ssc-tech-5'))
     })
 }

@@ -12,11 +12,11 @@
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             
-            {{ textArea('department', __('ssc-tech.questions.1'), { class: 'w-3/4' }) }}
-            {{ textInput('branch', __('ssc-tech.questions.2')) }}
-            {{ textInput('subcontract', __('ssc-tech.questions.3')) }}            
-            {{ textInput('name_sub', __('ssc-tech.questions.4')) }}            
-            {{ textInput('description', __('ssc-tech.questions.5')) }}    
+            {{ textArea('department', __('ssc-tech-2.questions.1'), { class: 'w-3/4' }) }}
+            {{ textInput('branch', __('ssc-tech-2.questions.2')) }}
+            {{ textInput('subcontract', __('ssc-tech-2.questions.3')) }}            
+            {{ textInput('name_sub', __('ssc-tech-2.questions.4')) }}            
+            {{ textInput('description', __('ssc-tech-2.questions.5')) }}    
            
             {{ radioButtons('radio1_key',
                 [
@@ -25,8 +25,7 @@
                 ],
                 data.radio1_key,
                 __('ssc-tech-2.radio-1'),
-                errors,
-                { required: true })
+                errors)
             }}
 
             {{ radioButtons('radio2_key',
@@ -36,9 +35,10 @@
                 ],
                 data.radio2_key,
                 __('ssc-tech-2.radio-2'),
-                errors,
-                { required: true })
+                errors)
             }}
+
+            <h2>{{ __('ssc-tech-2.subtitle-1') }}</h2>
 
             {{ radioButtons('radio3_key',
                 [
@@ -47,8 +47,7 @@
                 ],
                 data.radio3_key,
                 __('ssc-tech-2.radio-3'),
-                errors,
-                { required: true })
+                errors)
             }}
 
             {{ radioButtons('radio4_key',
@@ -58,8 +57,7 @@
                 ],
                 data.radio4_key,
                 __('ssc-tech-2.radio-4'),
-                errors,
-                { required: true })
+                errors)
             }}
 
             {{ radioButtons('radio5_key',
@@ -69,11 +67,12 @@
                 ],
                 data.radio5_key,
                 __('ssc-tech-2.radio-5'),
-                errors,
-                { required: true })
+                errors)
             }}                                                
             
-            {{ checkBoxes('checkbox_key',
+            <h2>{{ __('ssc-tech-2.subtitle-2') }}</h2>
+
+            {{ checkBoxes('checkbox_access',
                 [
                     { value: '1', text:__('ssc-tech-2.radio.1')},
                     { value: '2', text:__('ssc-tech-2.radio.2')},
@@ -84,10 +83,61 @@
                 ],
                 [],
                 __('ssc-tech-2.radio'),
-                errors,
-                { required: true })
+                errors)
             }}                       
 
+            <h2>{{ __('ssc-tech-2.subtitle-3') }}</h2>
+
+            {{ checkBoxes('checkbox_restrictions_canada',
+                [
+                    { value: '1', text:__('ssc-tech-2.radio.1')},
+                    { value: '2', text:__('ssc-tech-2.radio.2')},
+                    { value: '3', text:__('ssc-tech-2.radio.3')},
+                    { value: '4', text:__('ssc-tech-2.radio.4')},
+                    { value: '5', text:__('ssc-tech-2.radio.5')},
+                    { value: 'none-of-the-above', text:__('ssc-tech-2.radio.none')}
+                ],
+                [],
+                __('ssc-tech-2.radio'),
+                errors)
+            }}    
+            {{ textInput('country1', __('ssc-tech-2.questions.country')) }}
+
+            {{ checkBoxes('checkbox_restrictions_ nato',
+                [
+                    { value: '1', text:__('ssc-tech-2.radio.1')},
+                    { value: '2', text:__('ssc-tech-2.radio.2')},
+                    { value: '3', text:__('ssc-tech-2.radio.3')},
+                    { value: '4', text:__('ssc-tech-2.radio.4')},
+                    { value: '5', text:__('ssc-tech-2.radio.5')},
+                    { value: 'none-of-the-above', text:__('ssc-tech-2.radio.none')}
+                ],
+                [],
+                __('ssc-tech-2.radio'),
+                errors)
+            }}   
+            {{ textInput('country2', __('ssc-tech-2.questions.country')) }}
+
+            {{ checkBoxes('checkbox_restrictions_foreign',
+                [
+                    { value: '1', text:__('ssc-tech-2.radio.1')},
+                    { value: '2', text:__('ssc-tech-2.radio.2')},
+                    { value: '3', text:__('ssc-tech-2.radio.3')},
+                    { value: '4', text:__('ssc-tech-2.radio.4')},
+                    { value: '5', text:__('ssc-tech-2.radio.5')},
+                    { value: 'none-of-the-above', text:__('ssc-tech-2.radio.none')}
+                ],
+                [],
+                __('ssc-tech-2.radio'),
+                errors)
+            }}                   
+            {{ textInput('country3', __('ssc-tech-2.questions.country')) }}      
+
+
+
+            <h2>{{ __('ssc-tech-2.subtitle-4') }}</h2>
+
+            {{ protectedCheck("sectionA) }}
             {{ formSubmitButton() }}
         </form>
     </div>

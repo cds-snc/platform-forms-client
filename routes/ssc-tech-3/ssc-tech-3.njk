@@ -11,8 +11,45 @@
 
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            
-            {{ textInput('page3', "Page 3 value") }}                               
+                        
+
+           {{ checkBoxes('checkbox_screening',
+                [
+                    { value: '1', text:__('ssc-tech.protected.1')},
+                    { value: '2', text:__('ssc-tech.protected.2')},
+                    { value: '3', text:__('ssc-tech.protected.3')},
+                    { value: '4', text:__('ssc-tech.classified.1')},
+                    { value: '5', text:__('ssc-tech.classified.2')},
+                    { value: '5', text:__('ssc-tech.classified.3')}
+                ],
+                [],
+                __('ssc-tech.comsec'),
+                errors)
+            }}  
+
+            {{ textArea('screening_comments', __('ssc-tech.questions.1'), { class: 'w-3/4' }) }} 
+
+            {{ radioButtons('radio_unscreened',
+                [
+                    { value: 'radio_unscreened_yes', text:__('form.radio.yes')},
+                    { value: 'radio_unscreened_no', text:__('form.radio.no')}
+                ],
+                data.radio_unscreened,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+            {{ radioButtons('radio_escorted',
+                [
+                    { value: 'radio_escorted_yes', text:__('form.radio.yes')},
+                    { value: 'radio_escorted_no', text:__('form.radio.no')}
+                ],
+                data.radio_escorted,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+
             {{ formSubmitButton() }}
         </form>
     </div>

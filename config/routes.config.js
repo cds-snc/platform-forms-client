@@ -6,6 +6,7 @@ const routes = [
   { name: 'ssc-tech-2', path: { en: '/ssc-tech-2', fr: '/spc-tech-2' } },
   { name: 'ssc-tech-3', path: { en: '/ssc-tech-3', fr: '/spc-tech-3' } },
   { name: 'ssc-tech-4', path: { en: '/ssc-tech-4', fr: '/spc-tech-4' } },
+  { name: 'ssc-tech-5', path: { en: '/ssc-tech-5', fr: '/spc-tech-5' } },
   { name: 'confirmation', path: '/confirmation' },
 
   // Healthcheck

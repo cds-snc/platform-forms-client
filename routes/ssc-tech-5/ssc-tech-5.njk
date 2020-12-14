@@ -1,0 +1,45 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    <h1>{{ __('ssc-tech-5.title') }}</h1>
+
+    <div>
+        <p>
+            {{ __('ssc-tech-5.intro') }}
+        </p>
+
+        <form novalidate method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            
+            <h3>Organization Project Authority</h3>
+            {{ contactInfo("project") }}
+            <label for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
+            <div class="multiple-choice__item">
+                <input id="project_checkbox" name="project_checkbox" type="checkbox" value=""/>
+                <label for="project_checkbox">The Organization Project Authority certifies that the information disclosed within this application is true.</label>
+            </div>
+
+
+            <h3>Procurement Officer</h3>
+            {{ contactInfo("procurement") }}
+            <label for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
+            <div class="multiple-choice__item">
+                <input id="project_checkbox" name="project_checkbox" type="checkbox" value=""/>
+                <label for="project_checkbox">The Organization Project Authority certifies that the information disclosed within this application is true.</label>
+            </div>
+
+
+            <h3>Contracting Security Authority</h3>
+            {{ contactInfo("security") }}            
+            <label for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
+            <div class="multiple-choice__item">
+                <input id="project_checkbox" name="project_checkbox" type="checkbox" value=""/>
+                <label for="project_checkbox">The Organization Project Authority certifies that the information disclosed within this application is true.</label>
+            </div>
+
+            {{ formSubmitButton() }}
+        </form>
+    </div>
+
+{% endblock %}

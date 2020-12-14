@@ -1,0 +1,54 @@
+{% macro protectedCheck(section, errors, attributes) %}
+    <div class="{{ 'has-error' if errors and errors[key] }}">
+
+           {{ checkBoxes('checkbox_protected_{{section}}',
+                [
+                    { value: '1', text:__('ssc-tech.protected.1')},
+                    { value: '2', text:__('ssc-tech.protected.2')},
+                    { value: '3', text:__('ssc-tech.protected.3')}
+                ],
+                [],
+                __('ssc-tech.protected'),
+                errors)
+            }}   
+
+           {{ checkBoxes('checkbox_classified_{{section}}',
+                [
+                    { value: '1', text:__('ssc-tech.classified.1')},
+                    { value: '2', text:__('ssc-tech.classified.2')},
+                    { value: '3', text:__('ssc-tech.classified.3')}
+                ],
+                [],
+                __('ssc-tech.classified'),
+                errors)
+            }}     
+
+           {{ checkBoxes('checkbox_nato_{{section}}',
+                [
+                    { value: '1', text:__('ssc-tech.nato.1')},
+                    { value: '2', text:__('ssc-tech.nato.2')},
+                    { value: '3', text:__('ssc-tech.nato.3')},
+                    { value: '4', text:__('ssc-tech.nato.4')},
+                    { value: '5', text:__('ssc-tech.nato.5')}
+                ],
+                [],
+                __('ssc-tech.nato'),
+                errors)
+            }} 
+
+           {{ checkBoxes('checkbox_comsec_{{section}}',
+                [
+                    { value: '1', text:__('ssc-tech.protected.1')},
+                    { value: '2', text:__('ssc-tech.protected.2')},
+                    { value: '3', text:__('ssc-tech.protected.3')},
+                    { value: '4', text:__('ssc-tech.classified.1')},
+                    { value: '5', text:__('ssc-tech.classified.2')},
+                    { value: '5', text:__('ssc-tech.classified.3')}
+                ],
+                [],
+                __('ssc-tech.comsec'),
+                errors)
+            }}             
+
+    </div>
+{% endmacro %}
