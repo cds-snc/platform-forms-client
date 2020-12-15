@@ -3,7 +3,7 @@
 
 This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
 
-Explore it here: [https://platform-forms-node.herokuapp.com/](https://platform-forms-node.herokuapp.com//). 
+Explore it here: [https://platform-forms-node.herokuapp.com/](https://platform-forms-node.herokuapp.com/). 
 
 ## Built with
 
