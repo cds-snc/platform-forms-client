@@ -90,8 +90,9 @@ main {
   padding: 0 $space-md;
 
   h1 {
-    border-bottom: 1px solid $color-red;
-    margin: $space-md 0;
+    border-bottom: 1px solid $color-black;
+    margin: 0 0 5rem;
+    line-height: 3.5rem;
   }
 }
 

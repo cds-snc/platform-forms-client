@@ -2,18 +2,54 @@
 
 {% block content %}
 
+    {{ formSteps(3, 5) }}
     <h1>{{ __('ssc-tech-3.title') }}</h1>
 
     <div>
-        <p>
-            {{ __('ssc-tech-3.intro') }}
-        </p>
 
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-            
-            {{ textInput('page3', "Page 3 value") }}                               
-            {{ formSubmitButton() }}
+                        
+
+           {{ checkBoxes('checkbox_screening',
+                [
+                    { value: '1', text:__('ssc-tech.protected.1')},
+                    { value: '2', text:__('ssc-tech.protected.2')},
+                    { value: '3', text:__('ssc-tech.protected.3')},
+                    { value: '4', text:__('ssc-tech.classified.1')},
+                    { value: '5', text:__('ssc-tech.classified.2')},
+                    { value: '5', text:__('ssc-tech.classified.3')}
+                ],
+                [],
+                'Personnel security screening level',
+                errors)
+            }}  
+
+            {{ textArea('screening_comments', 'Special Comments', { class: 'w-3/4' }) }} 
+            <p>Note: If multiple levels of screening are identified, a Security Classification Guide must be provided.</p>
+
+            {{ radioButtons('radio_unscreened',
+                [
+                    { value: 'radio_unscreened_yes', text:__('form.radio.yes')},
+                    { value: 'radio_unscreened_no', text:__('form.radio.no')}
+                ],
+                data.radio_unscreened,
+                'May unscreened personnel be used for portions of the work?',
+                errors)
+            }} 
+
+            {{ radioButtons('radio_escorted',
+                [
+                    { value: 'radio_escorted_yes', text:__('form.radio.yes')},
+                    { value: 'radio_escorted_no', text:__('form.radio.no')}
+                ],
+                data.radio_escorted,
+               'If  Yes, will unscreened personnel be escorted?',
+                errors)
+            }} 
+
+
+            {{ formSubmitButton('Continue') }}
         </form>
     </div>
 

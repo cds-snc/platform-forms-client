@@ -9,6 +9,9 @@
 {%- from 'input-file.njk' import fileInput as fileInput with context -%}
 {%- from 'form.njk' import form as form with context -%}
 {%- from 'banner.njk' import banner as banner with context -%}
+{%- from 'protected.njk' import protectedCheck as protectedCheck with context -%}
+{%- from 'contactInfo.njk' import contactInfo as contactInfo with context -%}
+{%- from 'formSteps.njk' import formSteps as formSteps with context -%}
 
 <!DOCTYPE html>
 <html lang="{{ getLocale() }}">
@@ -38,9 +41,6 @@
             </header>
             <main id="content">
                 <div>
-                    {% if not hideBackButton %}
-                        {% include "_includes/back-link.njk" %}
-                    {% endif %}
                     {% if showStartOver %}
                         <a class="py-3 button-link transparent" href="/clear"><img src="{{ asset('/img/times-circle.svg') }}" class="h-6 w-6" alt="" /><span>{{ __('start_over') }}</span></a>
                     {% endif %}

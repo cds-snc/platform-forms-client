@@ -2,19 +2,107 @@
 
 {% block content %}
 
+    {{ formSteps(4, 5) }}
     <h1>{{ __('ssc-tech-4.title') }}</h1>
 
     <div>
-        <p>
-            {{ __('ssc-tech-4.intro') }}
-        </p>
-
 
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             
-            {{ textInput('page4', "Page 4 value") }}                
-            {{ formSubmitButton() }}
+            <h2 class="text-3xl my-5">Information / Assets</h2>
+            {{ radioButtons('radio_assets_1',
+                [
+                    { value: 'radio_assets_1_yes', text:__('form.radio.yes')},
+                    { value: 'radio_assets_1_no', text:__('form.radio.no')}
+                ],
+                data.radio_assets_1,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+            {{ radioButtons('radio_assets_2',
+                [
+                    { value: 'radio_assets_2_yes', text:__('form.radio.yes')},
+                    { value: 'radio_assets_2_no', text:__('form.radio.no')}
+                ],
+                data.radio_assets_2,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+
+            <h2 class="text-3xl my-5">Production</h2>
+            {{ radioButtons('radio_production',
+                [
+                    { value: 'radio_production_yes', text:__('form.radio.yes')},
+                    { value: 'radio_production_no', text:__('form.radio.no')}
+                ],
+                data.radio_production,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+
+            <h2 class="text-3xl my-5">Information Technology (IT) Media</h2>
+            {{ radioButtons('radio_it_1',
+                [
+                    { value: 'radio_it_1_yes', text:__('form.radio.yes')},
+                    { value: 'radio_it_1_no', text:__('form.radio.no')}
+                ],
+                data.radio_it_1,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+            {{ radioButtons('radio_it_2',
+                [
+                    { value: 'radio_it_2_yes', text:__('form.radio.yes')},
+                    { value: 'radio_it_2_no', text:__('form.radio.no')}
+                ],
+                data.radio_it_2,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+            <p class="mt-5">For users completing the form manually use the summary chart below to indicate the category(ies) and level(s) of safeguarding required at the supplier’s site(s) or premises.</p>
+            <p class="mt-5 mb-10">For users completing the form online (via the Internet), the summary chart is automatically populated by your responses to previous questions.</p>
+
+
+            <h2 class="text-3xl my-5">Summary Chart</h2>
+            <h3 class="text-2xl">Information / Assets Category</h3>
+            {{ protectedCheck("IT") }}
+
+            <h3 class="text-2xl">Production Category</h3>
+            {{ protectedCheck("production") }}
+
+            <h3 class="text-2xl">IT Media Category</h3>
+            {{ protectedCheck("ITMedia") }}
+
+            <h3 class="text-2xl">IT Link Category</h3>
+            {{ protectedCheck("ITLink") }}
+
+            {{ radioButtons('radio_it_2',
+                [
+                    { value: 'radio_it_2_yes', text:__('form.radio.yes')},
+                    { value: 'radio_it_2_no', text:__('form.radio.no')}
+                ],
+                data.radio_it_2,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+            {{ radioButtons('radio_it_2',
+                [
+                    { value: 'radio_it_2_yes', text:__('form.radio.yes')},
+                    { value: 'radio_it_2_no', text:__('form.radio.no')}
+                ],
+                data.radio_it_2,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }}             
+
+            {{ formSubmitButton('Continue') }}
         </form>
     </div>
 

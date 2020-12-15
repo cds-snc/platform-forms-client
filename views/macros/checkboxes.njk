@@ -1,7 +1,7 @@
 {% macro checkBoxes(key, values, selectedVals, question, errors, attributes) %}
     <div class="{{ 'has-error' if errors and errors[key] }}">
         <fieldset class="fieldset">
-            <legend class="fieldset__legend">
+            <legend class="fieldset__legend pt-5">
             {% if attributes.required %}
                 <strong aria-hidden="true" class="required font-normal">*</strong>
             {% endif %}

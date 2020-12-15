@@ -1,0 +1,67 @@
+{% extends "base.njk" %}
+
+{% block content %}
+
+    {{ formSteps(5, 5) }}
+    <h1>{{ __('ssc-tech-5.title') }}</h1>
+
+    <div>
+        <form novalidate method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            
+            <h2 class="text-3xl my-5">Organization Project Authority</h2>
+            
+            {{ contactInfo("project") }}
+
+            {{ checkBoxes('project_checkbox_authority',
+                [
+                    { value: '1', text: 'The Organization Project Authority certifies that the information disclosed within this application is true.'}
+                ],
+                [],
+                'Organization Project Authority Certification',
+                errors)
+            }}  
+
+
+            {{ radioButtons('radio_unscreened',
+                [
+                    { value: 'radio_unscreened_yes', text:__('form.radio.yes')},
+                    { value: 'radio_unscreened_no', text:__('form.radio.no')}
+                ],
+                data.radio_unscreened,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
+
+
+            <h2 class="text-3xl my-5">Procurement Officer</h2>
+            {{ contactInfo("procurement") }}
+
+            {{ checkBoxes('procurement_checkbox_disclosure',
+                [
+                    { value: '1', text: 'The Procurement Officer certifies that the information disclosed within this application is true.'}
+                ],
+                [],
+                'Procurement Officer Certification',
+                errors)
+            }} 
+
+
+            <h2 class="text-3xl my-5">Contracting Security Authority</h2>
+            {{ contactInfo("security") }}            
+
+            {{ checkBoxes('contracting_checkbox',
+                [
+                    { value: '1', text: 'The Contracting Security Authority certifies that the information disclosed within this application is true.'}
+                ],
+                [],
+                'Contracting Security Authority Certification',
+                errors)
+            }} 
+
+
+            {{ formSubmitButton() }}
+        </form>
+    </div>
+
+{% endblock %}
