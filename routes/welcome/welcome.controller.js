@@ -7,9 +7,12 @@ module.exports = (app, route) => {
   app.get('/', (req, res) => {
     const domain = getDomain(req)
 
-    // firefox keeps the session even after closing, so clear it here just in case
-    if (req.session.history !== undefined && req.session.history.length > 0) {
-      req.session.history = []
+    if (req.session && req.session.formdata) {
+      // Clear previous form submissions
+      if (req.session.history !== undefined && req.session.history.length > 0) {
+        req.session.history = []
+      }
+      req.session.formdata = null
     }
 
     // if on the French domain, redirect to the /fr welcome page
@@ -26,8 +29,11 @@ module.exports = (app, route) => {
 
   route.draw(app).get(async (req, res) => {
     req.session.formdata = null
-    res.render(name, routeUtils.getViewData(req, {
-      title: res.__('welcome.title'),
-    }))
+    res.render(
+      name,
+      routeUtils.getViewData(req, {
+        title: res.__('welcome.title'),
+      }),
+    )
   })
 }

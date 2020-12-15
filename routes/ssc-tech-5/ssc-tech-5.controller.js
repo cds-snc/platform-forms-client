@@ -8,14 +8,13 @@ module.exports = (app, route) => {
   route
     .draw(app)
     .get((req, res) => {
-      console.log('render step 5')
       res.render(name, routeUtils.getViewData(req, {}))
     })
     .post(route.applySchema(Schema), (req, res) => {
       const formData = getSessionData(req)
 
       console.log(
-        'SSC-TECH CONTROLLER stringify',
+        'SSC-TECH Fifth step submmitted formData',
         JSON.stringify({ formData: formData }),
       )
 

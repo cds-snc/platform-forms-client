@@ -1,10 +1,10 @@
 {% macro contactInfo(section, errors, attributes) %}
 
-    {{ textInput("{{section}}_name",  __('ssc-tech.contact.name')) }}                
-    {{ textInput("{{section}}_title", __('ssc-tech.contact.title')) }}                
-    {{ textInput("{{section}}_phone", __('ssc-tech.contact.phone')) }}                
-    {{ textInput("{{section}}_email", __('ssc-tech.contact.email')) }}                
-    {{ textInput("{{section}}_fax", __('ssc-tech.contact.fax')) }}     
-    {{ textInput("{{section}}_date", __('ssc-tech.contact.date')) }}                
+    {{ textInput(( section + '_name' ),  __('ssc-tech.contact.name')) }}                
+    {{ textInput(( section + '_title' ), __('ssc-tech.contact.title')) }}                
+    {{ textInput(( section + '_phone' ), __('ssc-tech.contact.phone')) }}                
+    {{ textInput(( section + '_email' ), __('ssc-tech.contact.email')) }}                
+    {{ textInput(( section + '_fax' ), __('ssc-tech.contact.fax')) }}     
+    {{ textInput(( section + '_date' ), __('ssc-tech.contact.date')) }}                
 
 {% endmacro %}
