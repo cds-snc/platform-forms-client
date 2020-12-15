@@ -46,7 +46,7 @@ module.exports = (app, table) => {
   app.use(function (err, req, res, next) {
     res.status(500)
 
-    console.error(`☠️ Error => ${err.message}`)
+    console.error(`☠️ Error => ${err.message} happened when requesting ${req.url}`)
 
     let message = false
 

@@ -18,8 +18,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="csrf-token" content="{{ csrfToken }}">
 
-        {% include "_includes/adobe.njk" %}
-
         {% if GITHUB_SHA %}<meta name="github-sha" content="{{ GITHUB_SHA }}">{% endif %}
         {% if TAG_VERSION %}<meta name="version" content="{{ TAG_VERSION }}">{% endif %}
         <link rel="shortcut icon" href="{{ asset('/favicon.png') }}" type="image/x-icon" sizes="32x32">
@@ -56,10 +54,6 @@
             {% include "_includes/footer.njk" %}
         </div>
 
-        {% if $env.NODE_ENV !== 'test' %}
-          <!-- Required for Adobe Analytics -->
-          <script >_satellite.pageBottom();</script>
-        {% endif %}
 
         {%- block scripts -%}
             <script  src="{{ asset('/dist/js/app.js') }}?{{ assetVersion() }}"></script>
