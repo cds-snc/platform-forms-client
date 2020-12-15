@@ -2,12 +2,10 @@
 
 {% block content %}
 
+    {{ formSteps(3, 5) }}
     <h1>{{ __('ssc-tech-3.title') }}</h1>
 
     <div>
-        <p>
-            {{ __('ssc-tech-3.intro') }}
-        </p>
 
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -23,11 +21,12 @@
                     { value: '5', text:__('ssc-tech.classified.3')}
                 ],
                 [],
-                __('ssc-tech.comsec'),
+                'Personnel security screening level',
                 errors)
             }}  
 
-            {{ textArea('screening_comments', __('ssc-tech.questions.1'), { class: 'w-3/4' }) }} 
+            {{ textArea('screening_comments', 'Special Comments', { class: 'w-3/4' }) }} 
+            <p>Note: If multiple levels of screening are identified, a Security Classification Guide must be provided.</p>
 
             {{ radioButtons('radio_unscreened',
                 [
@@ -35,7 +34,7 @@
                     { value: 'radio_unscreened_no', text:__('form.radio.no')}
                 ],
                 data.radio_unscreened,
-                __('ssc-tech-2.radio-5'),
+                'May unscreened personnel be used for portions of the work?',
                 errors)
             }} 
 
@@ -45,12 +44,12 @@
                     { value: 'radio_escorted_no', text:__('form.radio.no')}
                 ],
                 data.radio_escorted,
-                __('ssc-tech-2.radio-5'),
+               'If  Yes, will unscreened personnel be escorted?',
                 errors)
             }} 
 
 
-            {{ formSubmitButton() }}
+            {{ formSubmitButton('Continue') }}
         </form>
     </div>
 

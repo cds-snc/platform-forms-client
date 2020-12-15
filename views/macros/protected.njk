@@ -1,7 +1,8 @@
 {% macro protectedCheck(section, errors, attributes) %}
     <div class="{{ 'has-error' if errors and errors[key] }}">
 
-           {{ checkBoxes('checkbox_protected_{{section}}',
+        
+           {{ checkBoxes(('checkbox_protected_' + section),
                 [
                     { value: '1', text:__('ssc-tech.protected.1')},
                     { value: '2', text:__('ssc-tech.protected.2')},
@@ -12,7 +13,7 @@
                 errors)
             }}   
 
-           {{ checkBoxes('checkbox_classified_{{section}}',
+           {{ checkBoxes(('checkbox_classified_' + section),
                 [
                     { value: '1', text:__('ssc-tech.classified.1')},
                     { value: '2', text:__('ssc-tech.classified.2')},
@@ -23,7 +24,7 @@
                 errors)
             }}     
 
-           {{ checkBoxes('checkbox_nato_{{section}}',
+           {{ checkBoxes(('checkbox_nato_' + section),
                 [
                     { value: '1', text:__('ssc-tech.nato.1')},
                     { value: '2', text:__('ssc-tech.nato.2')},
@@ -36,7 +37,7 @@
                 errors)
             }} 
 
-           {{ checkBoxes('checkbox_comsec_{{section}}',
+           {{ checkBoxes(('checkbox_comsec_' + section),
                 [
                     { value: '1', text:__('ssc-tech.protected.1')},
                     { value: '2', text:__('ssc-tech.protected.2')},

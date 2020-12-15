@@ -1,5 +1,4 @@
 const sendNotification = (formData, emailRecipient, notifyTemplateId) => {
-  console.log('IN SEPARATE FILE SEND NOTIFICATION', emailRecipient)
   if (
     !(
       process.env.NOTIFY_API_KEY &&

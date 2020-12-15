@@ -80,6 +80,7 @@
   "ssc-tech.classified.1": "Confidential",
   "ssc-tech.classified.2": "Secret",
   "ssc-tech.classified.3": "Top Secret",
+  "ssc-tech.classified.4": "Top Secret (SIGINT)",
   "ssc-tech.nato": "NATO",
   "ssc-tech.nato.1": "NATO Unclassified",
   "ssc-tech.nato.2": "NATO Restricted",

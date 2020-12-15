@@ -2,40 +2,47 @@
 
 {% block content %}
 
+    {{ formSteps(5, 5) }}
     <h1>{{ __('ssc-tech-5.title') }}</h1>
 
     <div>
-        <p>
-            {{ __('ssc-tech-5.intro') }}
-        </p>
-
         <form novalidate method="post">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             
-            <h3>Organization Project Authority</h3>
+            <h2 class="text-3xl my-5">Organization Project Authority</h2>
             {{ contactInfo("project") }}
-            <label for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
+            <label class="my-5" for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
             <div class="multiple-choice__item">
                 <input id="project_checkbox" name="project_checkbox" type="checkbox" value=""/>
                 <label for="project_checkbox">The Organization Project Authority certifies that the information disclosed within this application is true.</label>
             </div>
 
+            {{ radioButtons('radio_unscreened',
+                [
+                    { value: 'radio_unscreened_yes', text:__('form.radio.yes')},
+                    { value: 'radio_unscreened_no', text:__('form.radio.no')}
+                ],
+                data.radio_unscreened,
+                __('ssc-tech-2.radio-5'),
+                errors)
+            }} 
 
-            <h3>Procurement Officer</h3>
+
+            <h2 class="text-3xl my-5">Procurement Officer</h2>
             {{ contactInfo("procurement") }}
-            <label for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
+            <label class="my-5" for="procurement_checkbox" id="procurement_checkbox__label">Procurement Officer Certification</label>
             <div class="multiple-choice__item">
-                <input id="project_checkbox" name="project_checkbox" type="checkbox" value=""/>
-                <label for="project_checkbox">The Organization Project Authority certifies that the information disclosed within this application is true.</label>
+                <input id="procurement_checkbox" name="procurement_checkbox" type="checkbox" value=""/>
+                <label for="procurement_checkbox">The Procurement Officer certifies that the information disclosed within this application is true.</label>
             </div>
 
 
-            <h3>Contracting Security Authority</h3>
+            <h2 class="text-3xl my-5">Contracting Security Authority</h2>
             {{ contactInfo("security") }}            
-            <label for="project_checkbox" id="project_checkbox__label">Organization Project Authority Certification</label>
+            <label class="my-5" for="contracting_checkbox" id="contracting_checkbox__label">Contracting Security Authority Certification</label>
             <div class="multiple-choice__item">
-                <input id="project_checkbox" name="project_checkbox" type="checkbox" value=""/>
-                <label for="project_checkbox">The Organization Project Authority certifies that the information disclosed within this application is true.</label>
+                <input id="contracting_checkbox" name="contracting_checkbox" type="checkbox" value=""/>
+                <label for="contracting_checkbox">The Contracting Security Authority certifies that the information disclosed within this application is true.</label>
             </div>
 
             {{ formSubmitButton() }}
