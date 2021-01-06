@@ -1,30 +1,118 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+[La version française suit.](#---------------------------------------------------------------------)
+# Platform - GC Forms 
 
-## Getting Started
+This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
 
-First, run the development server:
+Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/). 
 
-```bash
-npm run dev
-# or
-yarn dev
+## Built with
+
+This is a [Next.js](https://nextjs.org/) and is built with:
+
+* Next.js >= 10.x
+* Sass (Syntactically Awesome Style Sheets) for reusable styles
+* [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
+* [PostCSS](https://postcss.org/)
+
+## Running locally
+
+Clone this repository
+
+```sh
+git clone https://github.com/cds-snc/platform-forms-client.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Install dependencies
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```sh
+cd platform-forms-client
+yarn install // or // npm install
+```
 
-## Learn More
+Run in development mode:
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+yarn dev // or // npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Browse application on `http://localhost:3000`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Configuration
 
-## Deploy on Vercel
+There are some environment variables that can optionally be configured. You can see a list in  `.env.example`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Notify integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+To send a form submission to an email address, you should configure the following environment variables:
+
+```sh
+NOTIFY_ENDPOINT=
+NOTIFY_API_KEY=
+NOTIFY_TEMPLATE_ID=
+```
+
+
+## ---------------------------------------------------------------------
+
+# Plate-forme - Formulaires GC 
+
+Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
+
+Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/). 
+
+
+## Contributions
+
+Ce projet est conçu sur une de base [Next.js](https://nextjs.org/) et utilise les contributions suivantes :
+
+* Next.js >= 10.x
+* Feuilles de styles Sass (Syntactically Awesome Style Sheets)
+* [Tailwindcss](https://tailwindcss.com/) un environnement CSS modulaire accélérant la conception de pages web
+* [PostCSS](https://postcss.org/)
+
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) and is built with:
+
+* Next.js >= 10.x
+* Sass (Syntactically Awesome Style Sheets) for reusable styles
+* [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
+* [PostCSS](https://postcss.org/)
+
+
+## Exécuter localement
+
+Cloner ce référentiel
+
+```sh
+git clone https://github.com/cds-snc/platform-forms-client.git
+```
+
+Installer les dépendances
+
+```sh
+cd platform-forms-client
+yarn install // ou // npm install
+```
+
+
+Exécuter en mode développement
+
+```sh
+yarn dev // or // npm run dev
+```
+
+Accéder à l’application au `http://localhost:3000`
+
+## Configuration
+
+Certaines valeurs d'environnement peuvent être configurés. Cette étape est optionnelle. Consultez la liste des valeurs disponibles dans `.env.example`.
+
+
+### Intégration avec Notify
+
+Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez configurer les variables suivantes :
+
+```sh
+NOTIFY_ENDPOINT=
+NOTIFY_API_KEY=
+```
