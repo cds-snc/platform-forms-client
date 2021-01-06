@@ -15,6 +15,8 @@ WORKDIR /src
 RUN npm install --quiet --production
 RUN npm build
 
+ENV PORT 3000
+
 EXPOSE 3000
 
-ENTRYPOINT [ "npm", "start", "-p", "3000" ]
+ENTRYPOINT [ "npm", "start"]
