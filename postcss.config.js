@@ -1,12 +1,17 @@
-const cssnano = require('cssnano')
-
 module.exports = {
-  plugins: [
-    require('@csstools/postcss-sass'),
-    require('tailwindcss'),
-    require('autoprefixer'),
-    cssnano({
-      preset: 'default',
-    }),
-  ],
-}
+  plugins: {
+    "postcss-import": {},
+    autoprefixer: {},
+    tailwindcss: {},
+    "postcss-flexbugs-fixes": {},
+    "postcss-preset-env": {
+      autoprefixer: {
+        flexbox: "no-2009",
+      },
+      stage: 3,
+      features: {
+        "custom-properties": false,
+      },
+    },
+  },
+};
