@@ -13,6 +13,7 @@ COPY . /src
 WORKDIR /src
 
 RUN npm install --quiet --production
+RUN npm build
 
 EXPOSE 3000
 
