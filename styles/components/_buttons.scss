@@ -1,0 +1,80 @@
+%button-styles {
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1.1875;
+  display: inline-block;
+  position: relative;
+  margin-top: 10px;
+  padding: 9px 12px;
+  border-radius: 0;
+  color: $color-white;
+  background-color: $color-green;
+  border: 1px solid $color-green-dark;
+  box-shadow: 0 2px 0 black;
+  text-align: center;
+  vertical-align: top;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-appearance: none;
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    bottom: -4px;
+    left: -2px;
+    background: transparent;
+  }
+
+  &:focus {
+    @include focus();
+    outline-offset: 5px !important;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: darken($color-green, 10);
+  }
+
+  &:active {
+    top: 2px;
+    box-shadow: none;
+
+    &::before {
+      top: -4px;
+    }
+  }
+}
+
+form button {
+  @extend %button-styles;
+  font-family: "Noto Sans", sans-serif;
+  width: 100%;
+}
+
+.start-button {
+  width: 100%;
+  max-width: 433px;
+}
+
+form button.submit-button {
+  @apply cursor-pointer;
+  @apply border-b-4;
+  @apply border-black;
+  @apply py-3;
+  @apply px-5;
+  @apply mr-2;
+  @apply font-bold;
+  @apply text-lg;
+  @apply no-underline;
+  @apply text-white;
+  @apply bg-blue-400;
+  @apply outline-none;
+  width: 15rem;
+}
+
+form button.submit-button:hover {
+  @apply bg-blue-400;
+}
