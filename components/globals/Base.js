@@ -15,7 +15,7 @@ const Base = (props) => {
         />
         <link
           rel="shortcut icon"
-          href="/favicon.png"
+          href="/favicon.ico"
           type="image/x-icon"
           sizes="32x32"
         />

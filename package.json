@@ -3,30 +3,31 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT"
   },
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": false
-  },
   "dependencies": {
+    "eslint-plugin-prettier": "^3.3.1",
     "i18next-hmr": "^1.6.3",
     "json2md": "^1.9.2",
     "next": "10.0.4",
     "next-i18next": "^7.0.1",
     "notifications-node-client": "^5.0.2",
+    "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "17.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
     "autoprefixer": "^10.1.0",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
     "postcss": "^8.2.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.0.0",
