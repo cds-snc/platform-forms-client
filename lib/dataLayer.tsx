@@ -2,10 +2,10 @@ import Forms from "../forms/forms";
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-function getFormByID(formID : number) : object {
+function getFormByID(formID: number): Record<string, unknown> {
   // Need to get these forms from a DB or API in the future
-  var formToReturn = null;
-  for (let form of Object.values(Forms)) {
+  let formToReturn = null;
+  for (const form of Object.values(Forms)) {
     if (form.form.id == formID) {
       formToReturn = form.form;
       break;
@@ -16,9 +16,9 @@ function getFormByID(formID : number) : object {
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
-function getSubmissionByID(formID: number) : object {
-  var submissionFormat = null;
-  for (let submission of Object.values(Forms)) {
+function getSubmissionByID(formID: number): Record<string, unknown> {
+  let submissionFormat = null;
+  for (const submission of Object.values(Forms)) {
     if (submission.form.id == formID) {
       submissionFormat = submission.submission;
       break;

@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . ",
+    "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
     "i18next-hmr": "^1.6.3",
@@ -21,6 +22,8 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
     "autoprefixer": "^10.1.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
