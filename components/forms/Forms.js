@@ -1,3 +1,4 @@
+import React from "react";
 import { withTranslation } from "../../i18n";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -5,7 +6,7 @@ import PropTypes from "prop-types";
 import Input from "./Input";
 import TextArea from "./TextArea";
 
-const Form = ({ formModel, i18n, ...props }) => {
+const Form = ({ formModel, i18n }) => {
   const formToRender = formModel;
   const [state, setState] = useState({});
   const router = useRouter();
@@ -45,7 +46,7 @@ const Form = ({ formModel, i18n, ...props }) => {
       body: JSON.stringify(formResponseObject),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(() => {
         router.push("/confirmation");
       })
       .catch((error) => {
