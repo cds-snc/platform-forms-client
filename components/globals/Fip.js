@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../../i18n";
 import LanguageToggle from "./LanguageToggle";
@@ -20,6 +21,7 @@ const Fip = ({ t, i18n }) => (
 
 Fip.propTypes = {
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.object.isRequired,
 };
 
 export default withTranslation("common")(Fip);

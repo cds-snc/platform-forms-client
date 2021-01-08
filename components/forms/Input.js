@@ -5,7 +5,7 @@ import Label from "./Label";
 /**
  * Primary UI component for user interaction
  */
-export const Input = ({ label, name, value, onChange, ...props }) => {
+export const Input = ({ label, name, value, onChange }) => {
   return (
     <React.Fragment>
       <Label forInput={name} label={label} />
@@ -21,10 +21,13 @@ export const Input = ({ label, name, value, onChange, ...props }) => {
 };
 
 Input.propTypes = {
-  /**
-   * Button contents
-   */
   label: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  /**
+   * Optional click handler
+   */
+  onChange: PropTypes.func,
 };
 
 Input.defaultProps = {
