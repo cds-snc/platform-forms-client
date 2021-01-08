@@ -1,4 +1,4 @@
-function absoluteUrl(req, setLocalhost) {
+export function absoluteUrl(req: any, setLocalhost: string) {
   var protocol = "https:";
   var host = req
     ? req.headers["x-forwarded-host"] || req.headers["host"]
@@ -14,6 +14,3 @@ function absoluteUrl(req, setLocalhost) {
   };
 }
 
-module.exports = {
-  absoluteUrl,
-};

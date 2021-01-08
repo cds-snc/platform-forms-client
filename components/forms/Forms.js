@@ -2,9 +2,8 @@ import React from "react";
 import { withTranslation } from "../../i18n";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { getProperty, buildForm } from "../../lib/formBuilder";
 import PropTypes from "prop-types";
-import Input from "./Input";
-import TextArea from "./TextArea";
 
 const Form = ({ formModel, i18n }) => {
   const formToRender = formModel;
@@ -15,7 +14,8 @@ const Form = ({ formModel, i18n }) => {
     formToRender.elements.map((element) => {
       setState((prevState) => ({
         ...prevState,
-        [element.id]: element.properties[getProperty("placeholder")],
+        [element.id]:
+          element.properties[getProperty("placeholder", i18n.language)],
       }));
     });
   }, [formToRender]);
@@ -55,43 +55,19 @@ const Form = ({ formModel, i18n }) => {
       });
   };
 
-  function getProperty(field) {
-    const lang = i18n.language;
-    return field + lang.charAt(0).toUpperCase() + lang.slice(1);
-  }
-
-  function buildForm(element) {
-    if (element.type == "textField") {
-      return (
-        <Input
-          key={element.id}
-          name={element.id.toString()}
-          label={element.properties[getProperty("title")]}
-          value={state[element.id]}
-          onChange={handleChange}
-        />
-      );
-    }
-    if (element.type == "textArea") {
-      return (
-        <TextArea
-          key={element.id}
-          name={element.id.toString()}
-          label={element.properties[getProperty("title")]}
-          value={state[element.id]}
-          onChange={handleChange}
-        />
-      );
-    }
-  }
-
   return (
     <>
-      <h1>{formToRender[getProperty("title")]}</h1>
+      <h1>{formToRender[getProperty("title", i18n.language)]}</h1>
       <form id="form" onSubmit={handleSubmit} method="POST">
         {formToRender.layout.map((item) => {
+          const element = formToRender.elements.find(
+            (element) => element.id === item
+          );
           return buildForm(
-            formToRender.elements.find((element) => element.id === item)
+            element,
+            state[element.id],
+            i18n.language,
+            handleChange
           );
         })}
         <div className="buttons">
