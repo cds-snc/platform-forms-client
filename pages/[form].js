@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../i18n";
 import Form from "../components/forms/Forms";
@@ -5,6 +6,10 @@ import Form from "../components/forms/Forms";
 import { getFormByID } from "../lib/dataLayer";
 
 const DynamicForm = ({ formObject }) => <Form formModel={formObject} />;
+
+DynamicForm.defaultProps = {
+  i18nNamespaces: ["common"],
+};
 
 DynamicForm.propTypes = {
   t: PropTypes.func.isRequired,
