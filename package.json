@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p $PORT",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "i18next-hmr": "^1.6.3",
