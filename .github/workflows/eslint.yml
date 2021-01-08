@@ -1,11 +1,22 @@
-name: ESLint
-on: push
+name: Run ESLint on Pull Requests
+
+on:
+  - pull_request
+
 jobs:
   build:
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Install modules
-        run: yarn
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx,.json
+      # Check out the repository
+      - uses: actions/checkout@v1
+
+      # Install Node.js
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      # Install your dependencies
+      - run: yarn install
+      # Run ESLint
+      - run: yarn lint
