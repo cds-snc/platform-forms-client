@@ -5,7 +5,7 @@ import Label from "./Label";
 /**
  * Primary UI component for user interaction
  */
-export const TextArea = ({ label, name, value, onChange, ...props }) => {
+export const TextArea = ({ label, name, value, onChange }) => {
   return (
     <React.Fragment>
       <Label forInput={name} label={label} />
@@ -24,11 +24,9 @@ export const TextArea = ({ label, name, value, onChange, ...props }) => {
 };
 
 TextArea.propTypes = {
-  /**
-   * Button contents
-   */
   label: PropTypes.string.isRequired,
   name: PropTypes.string,
+  value: PropTypes.string,
   /**
    * Optional click handler
    */
