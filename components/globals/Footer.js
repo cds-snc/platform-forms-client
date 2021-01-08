@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../../i18n";
 
@@ -26,6 +27,7 @@ const Footer = ({ t }) => (
       </div>
       <div className="md:w-1/5 md:relative">
         <img
+          alt={t("fip.text")}
           src="/img/wmms-blk.svg"
           className="h-12 pt-2 md:absolute md:bottom-0 md:right-0"
         />
@@ -36,6 +38,7 @@ const Footer = ({ t }) => (
 
 Footer.propTypes = {
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.object.isRequired,
 };
 
 export default withTranslation("common")(Footer);

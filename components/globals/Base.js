@@ -1,10 +1,12 @@
+import React from "react";
+import PropTypes from "prop-types";
 import Head from "next/head";
 import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
 import Fip from "./Fip";
 
-const Base = (props) => {
+const Base = ({ children }) => {
   return (
     <>
       <Head>
@@ -35,11 +37,15 @@ const Base = (props) => {
           <PhaseBanner />
           <Fip />
         </header>
-        <main id="content">{props.children}</main>
+        <main id="content">{children}</main>
         <Footer />
       </div>
     </>
   );
+};
+
+Base.propTypes = {
+  children: PropTypes.object.isRequired,
 };
 
 export default Base;

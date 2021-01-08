@@ -1,6 +1,5 @@
 const path = require("path");
 const { nextI18NextRewrites } = require("next-i18next/rewrites");
-const { I18NextHMRPlugin } = require("i18next-hmr/plugin");
 const localeSubpaths = { en: "en", fr: "fr" };
 
 module.exports = {

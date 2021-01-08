@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import App from "next/app";
 import { appWithTranslation } from "../i18n";
 import Base from "../components/globals/Base";
@@ -23,4 +24,8 @@ MyApp.getInitialProps = async (appContext) => {
   };
 };
 
+MyApp.propTypes = {
+  Component: PropTypes.elementType.isRequired,
+  pageProps: PropTypes.object.isRequired,
+};
 export default appWithTranslation(MyApp);

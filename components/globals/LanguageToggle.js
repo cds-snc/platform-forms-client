@@ -1,3 +1,4 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../../i18n";
 
@@ -33,6 +34,7 @@ const LanguageToggle = ({ t, i18n }) => {
 };
 LanguageToggle.propTypes = {
   t: PropTypes.func.isRequired,
+  i18n: PropTypes.object.isRequired,
 };
 
 export default withTranslation("common")(LanguageToggle);
