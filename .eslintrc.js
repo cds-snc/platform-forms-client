@@ -1,4 +1,22 @@
 module.exports = {
+  overrides: [
+    {
+      files: ["*.{ts,tsx}"],
+      extends: [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:prettier/recommended",
+        "prettier/flowtype",
+        "prettier/react",
+      ],
+
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+      plugins: ["@typescript-eslint", "jsx-a11y", "prettier"],
+    },
+  ],
   env: {
     browser: true,
     es2021: true,
