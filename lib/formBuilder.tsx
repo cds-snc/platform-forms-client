@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Input, TextArea } from "../components/forms";
+import { Label, TextInput, TextArea } from "../components/forms";
 type callback = (event: Event) => void;
 interface FormElements {
   id: number;
@@ -37,26 +37,36 @@ function buildForm(
   lang: string,
   handleChange: callback
 ): ReactElement {
+
+  const inputProps = {
+    key: element.id,
+    name: element.id.toString(),
+    label: element.properties[getProperty("title", lang)]?.toString(),
+    value: value ? value.toString() : ""
+  };
+
+  const label = ( <Label key={`label-${element.id}`} htmlFor={inputProps.name} >{inputProps.label}</Label> );
+
   switch (element.type) {
     case "textField":
       return (
-        <Input
-          key={element.id}
-          name={element.id.toString()}
-          label={element.properties[getProperty("title", lang)]?.toString()}
-          value={value ? value.toString() : ""}
-          onChange={(event) => handleChange(event)}
-        />
+        <>
+          { label }
+          <TextInput
+            {...inputProps}
+            onChange={(event) => handleChange(event)}
+          />
+        </>
       );
     case "textArea":
       return (
-        <TextArea
-          key={element.id}
-          name={element.id.toString()}
-          label={element.properties[getProperty("title", lang)]?.toString()}
-          value={value ? value.toString() : ""}
-          onChange={(event) => handleChange(event)}
-        />
+        <>
+          { label }
+          <TextArea
+            {...inputProps}
+            onChange={(event) => handleChange(event)}
+          />
+        </>
       );
     default:
       return <></>;
