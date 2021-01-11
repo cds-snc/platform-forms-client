@@ -6,6 +6,9 @@
     "text": "Help government-users quickly and easily publish simple, accessible, online forms that the public can use to apply for or access the services or benefits they need."
   },
   "formList": {
+    "esdc": {
+      "title": "Grant Application for Funding – Supporting Black Canadian Communities (SBCC) Initiative"
+    },
     "intake": {
       "title": "CDS Intake Form"
     },
