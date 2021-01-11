@@ -11,7 +11,7 @@
 		"version": 1,
 		"titleEn": "SC Callback form",
 		"titleFr": "SC Demandes des Services",
-		"layout": [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12],
+		"layout": [1, 2, 3, 4, 6, 8, 9, 10, 11, 12],
 
 		"elements": [{
 				"id": 1,
@@ -122,19 +122,6 @@
 				}
 			},
 			{
-				"id": 5,
-				"type": "textArea",
-				"properties": {
-					"titleEn": "T",
-					"titleFr": "Quel est le problème auquel vous êtes confronté?",
-					"placeholderEn": "",
-					"placeholderFr": "",
-					"description": "",
-					"charLimit": 100,
-					"required": false
-				}
-			},
-			{
 				"id": 6,
 				"type": "textArea",
 				"properties": {
@@ -142,7 +129,8 @@
 					"titleFr": "Décrivez des problèmes d'accessibilité qui doivent être pris en considération",
 					"placeholderEn": "",
 					"placeholderFr": "",
-					"description": "Do not include any sensitive personal information in the questions/comments box, such as your social insurance number, date of birth, personal finance data, and medical or work history.",
+					"descriptionEn": "Do not include any sensitive personal information in the questions/comments box, such as your social insurance number, date of birth, personal finance data, and medical or work history.",
+					"descriptionFr": "Veuillez ne pas fournir de renseignements personnels de nature délicate dans la boîte questions/commentaires, comme votre numéro d'assurance sociale, date de naissance, des renseignements d'ordre financier ou médical, ou de l'information sur vos antécédents de travail.",
 					"charLimit": 200,
 					"required": false
 				}
