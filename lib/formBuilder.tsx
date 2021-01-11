@@ -33,6 +33,7 @@ interface ElementProperties {
 interface PropertyChoices {
   en: string;
   fr: string;
+  [key: string]: string;
 }
 
 // This function is used for the i18n change of form labels
@@ -44,7 +45,10 @@ function getProperty(field: string, lang: string): string {
 }
 
 // This function is used for select/radio/checkbox i18n change of form labels
-function getLocaleChoices(choices: Array<any> | undefined, lang: string) {
+function getLocaleChoices(
+  choices: Array<PropertyChoices> | undefined,
+  lang: string
+) {
   if (!choices || !choices.length) {
     return [];
   }
