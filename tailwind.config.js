@@ -68,6 +68,14 @@ module.exports = {
       sans: ["lato"],
       body: ["Noto Sans"],
     },
+    screens: {
+      xxs: "280px",
+      xs: "325px",
+      sm: "450px",
+      md: "550px",
+      lg: "768px",
+      xl: "1024px",
+    },
     container: {
       center: true,
     },
