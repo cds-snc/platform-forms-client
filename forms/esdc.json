@@ -1,0 +1,72 @@
+{
+  "form": {
+    "id": 2,
+    "version": 1,
+    "titleEn": "Grant Application for Funding – Supporting Black Canadian Communities (SBCC) Initiative",
+    "titleFr": "Demande de financement de subvention - Initiative pour appuyer les communautés noires du Canada (ACNC)",
+    "layout": [1,2,3,4],
+    "elements": [
+      {
+        "id": 1,
+        "type": "radioButton",
+        "properties": {
+          "titleEn": "Funding requested:",
+          "titleFr": "Financement demandé",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Equipment purchase for work or community space",
+              "fr": "Equipment purchase for work or community space"
+            },
+            {
+              "en": "Renovation or retrofit of an existing workspace or community space",
+              "fr": "Renovation or retrofit of an existing workspace or community space"
+            },
+            {
+              "en": "Both equipment purchase and renovation or retrofit",
+              "fr": "Both equipment purchase and renovation or retrofit"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Legal Name",
+          "titleFr": "Legal Name",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(Organization's full name, as it appears on legal documents)",
+          "required": false
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Operating Name",
+          "titleFr": "Operating Name",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(If different from legal name)",
+          "required": false
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Year Established",
+          "titleFr": "Year Established",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(Year the organization was originally created.)",
+          "required": false
+        }
+      }
+    ]
+  }
+}
