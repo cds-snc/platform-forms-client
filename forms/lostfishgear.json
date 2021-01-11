@@ -1,0 +1,282 @@
+{
+  "internalTitleEn": "Atlantic lost fishing gear form: Fixed gear, including crab and lobster traps",
+  "internalTitleFr": "Formulaire de déclaration de perte d'engin de pêche : Fixe, incluant les casiers à homard et à crabe (Atlantique)",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "mario.garneau@cds-snc.ca"
+  },
+  "form": {
+    "id": 5,
+    "version": 1,
+    "titleEn": "Atlantic lost fishing gear form: Fixed gear, including crab and lobster traps",
+    "titleFr": "Formulaire de déclaration de perte d'engin de pêche : Fixe, incluant les casiers à homard et à crabe (Atlantique)",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Date of report (DD/MM/YYYY)",
+          "titleFr": "Date de la déclaration (JJ/MM/AAAA)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name of fishing vessel operator",
+          "titleFr": "Nom de l'exploitant du bateau de pêche",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "FIN (Fisher Identification Number)",
+          "titleFr": "NIP (numéro d'identification du pêcheur)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Licence Number",
+          "titleFr": "Numéro de permis",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "VRN",
+          "titleFr": "NEB (numéro d'enregistrement du bateau)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Region of licence issue",
+          "titleFr": "Région de délivrance du permis",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 7,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Target Species",
+          "titleFr": "Espèces visées :",
+          "placehoderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Complete below fields: (including crab and lobster traps). if not applicable, fill is as '-'",
+          "descriptionFr": "Remplir les champs ci-dessous : (y compris les casiers à crabe et à homard) indiquez '0' si non applicable",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id":8,
+        "type":"checkbox",
+        "properties":{
+          "titleEn":"Gear (include all types of trawls",
+          "titleFr":"Type d'engin perdu",
+          "description":"",
+          "required":false,
+          "choices":[
+            {
+              "en":"Trap / Pot",
+              "fr":"Casier / Cage"
+            },
+            {
+              "en":"Longline",
+              "fr":"Palangre"
+            },
+            {
+              "en":"Net",
+              "fr":"Filet"
+            },
+            {
+              "en":"Other:",
+              "fr":"Autre :"
+            }
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "type": "textField",
+        "properties": {
+          "titleEn": " ",
+          "titleFr": " ",
+          "placeholderEn": "If Other",
+          "placeholderFr": "Si autre",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 10,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Description of part of gear that was lost: (e.g. Nets, vertical lines, anchor, gear, markers, etc.)",
+          "titleFr": "Description de la partie de l'envin qui a été perdue : (filets, lignes verticales, marqueurs, ancre, etc.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 11,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Number of units of gear lost: (if measured by fleets, indicate number of units in fleet. If nets, estimate length of net lost)",
+          "titleFr": "Nombre d'engins perdus : (Si les engins sont dénombrés en ligne, indiquer le nombre d'engins par ligne. Si l'engin est un filet, estimer la longueur de filet perdu)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 12,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Extimated length of netting lost (in ft):",
+          "titleFr": "Longueur estimée de filets perdus (en pieds) :",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 13,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Estimated length of rope lost (in ft):",
+          "titleFr": "Longueur estimée de corde perdue (en pieds) :",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 14,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Sequential number(s) of the tag(s) attached to the lost fishing gear(s): (if applicable)",
+          "titleFr": "Numéros séquentiels des étiquettes apposées sur le ou les engins de pêche perdus : (le cas échéant)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 15,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Description of buoy: (e.g. float, hi-flyer, colour etc.)",
+          "titleFr": "Description de la bouée : (numéro, flotteur, bouée à palangre, couleur, etc.)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 16,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Last known fishing area of the lost gear",
+          "titleFr": "Dernière zone de pêche connue de l'engin perdu",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 17,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Latitude: (Degrees, Minutes, Seconds)",
+          "titleFr": "Latitude : (degrés, minutes, secondes)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 18,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Longitude: (Degrees, Minutes, Seconds)",
+          "titleFr": "Longitude : (degrés, minutes, secondes)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 19,
+        "type": "textField",
+        "properties": {
+          "titleEn": "The last date the gear was known to be at this location (DD/MM/YYYY):",
+          "titleFr": "La date à laquelle l'engin a été repéré à cet endroit pour la dernière fois (JJ/MM/AAAA)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      }
+    ]
+  }
+}

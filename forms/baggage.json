@@ -1,0 +1,234 @@
+{
+  "internalTitleEn": "Delayed Baggage Report",
+  "internalTitleFr": "Rapport de bagages retardés",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "mario.garneau@cds-snc.ca"
+  },
+  "form": {
+    "id": 4,
+    "version": 1,
+    "titleEn": "Delayed Baggage Report",
+    "titleFr": "Rapport de bagages retardés",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name",
+          "titleFr": "Nom",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 2,
+        "type":"radio",
+        "properties":{
+          "titleEn":"Residential Status",
+          "titleFr":"Statut résidentiel",
+          "description":"",
+          "required":true,
+          "choices":[
+            {
+              "en":"Resident of Canada",
+              "fr":"Résident du Canada"
+            },
+            {
+              "en":"Non-resident of Canada",
+              "fr":"Non-résident du Canada"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Address in Canada",
+          "titleFr": "Adresse au Canada",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Telephone Number",
+          "titleFr": "Numéro de téléphone",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Home Address (if different from above)",
+          "titleFr": "Adresse résidentielle (si différente de celle ci-dessus)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Country",
+          "titleFr": "Pays",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 7,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Date of birth",
+          "titleFr": "Date de naissance",
+          "placeholderEn": "YYYY-MM-DD",
+          "placeholderFr": "AAAA-MM-JJ",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 8,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Where are you arriving from? (Country)",
+          "titleFr": "D'où arrivez-vous? (Pays)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 9,
+        "type": "textField",
+        "properties": {
+          "titleEn": "How long have you been absent from Canada or how long will you be staying in Canada?",
+          "titleFr": "Combien de temps avez0-vous été absent du Canada ou bombien de temps séjournerez-vous au Canada?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 10,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Missing baggages tag numbers?",
+          "titleFr": "Numéros d'étiquette des bagages manquants?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id":11,
+        "type":"checkbox",
+        "properties":{
+          "titleEn":"Do the missing bags contain any of the following?",
+          "titleFr":"Les bagages manquants renferment-ils les marchandises suivantes?",
+          "description":"",
+          "required":false,
+          "choices":[
+            {
+              "en":"Alcohol",
+              "fr":"Alcool"
+            },
+            {
+              "en":"Tobacco",
+              "fr":"Tabac"
+            },
+            {
+              "en":"Firearms or other weapons (e.g. switchblades, Mace or pepper spray)",
+              "fr":"Armes à feu ou autres armes (p. ex. couteaux à cran d'arrêt, Mace ou gaz poivré)"
+            },
+            {
+              "en":"Commercial goods, whether or not for resale (e.g. samples, tools, equipment)",
+              "fr":"Marchandises commerciales destinées ou non à la revente (p. ex. échantillons, outils, équipement)"
+            },
+            {
+              "en":"Meat, fish, seafood, eggs, dairy products, fruits, vegetables, seeds, nuts, plants, flowers, wood, animals, birds, insects, and any parts, products or by-products of any of the foregoing",
+              "fr":"Viande, poisson, fruits de mer, oeufs, produitsl laitiers, fruits, légumes, semences, noix, plantes, fleurs, bois, animaux, oiseaux, insectes, et des parties, produits, ou sous-produits quelconque de ce qui précède"
+            },
+            {
+              "en":"Currency and/or monetary instruments totalling CAN$10,000 or more per person",
+              "fr":"Espèces et/ou effets dont le montant total équivaut à 10 000 $CAN ou plus par personne"
+            }
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": "textField",
+        "properties": {
+          "titleEn": "For Returning Residents - What is the total value of all the goods you are bringing into Canada which were declared as having been purchased, received or acquired in any manner while outside Canada, including Duty Free shops purchases prior to departure from Canada or abroad?",
+          "titleFr": "Pour les résidents à leur retour - Quelle est la valeur totale des articles rapportés au Canada que vous avez déclarés comme ayant été achetés, reçus ou acquis, d'une façon ou d'une autre, à l'étranger, incluant les marchandises achetées dans les boutiques hors taxes au Canada ou à l'étranger?",
+          "placeholderEn": "Value",
+          "placeholderFr": "Valeur",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 13,
+        "type": "textField",
+        "properties": {
+          "titleEn": "For the non-residents - To the best of your knowledge, what is the total value of the above goods that are contained in the missing bags?",
+          "titleFr": "Pour les non-résidents - Au meilleur de votre connaissance, quelle est la valeur totale des marchandises susmentionnées qui sont contenues dans vos bagages manquants?",
+          "placeholderEn": "Value",
+          "placeholderFr": "Valeur",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id":14,
+        "type":"checkbox",
+        "properties":{
+          "titleEn":"Authorization - I certify that the information given above is true and complete and I authorize the carrier mentioned above to open my baggage on my behalf for customs examination",
+          "titleFr":"Autorisation - Je déclare que les renseignements ci-dessus sont exacts et complets, et j'autorise le transporteur indiqué ci-dessus à ouvrir mes bagages en mon nom pour l'examen des douanes",
+          "description":"",
+          "required":true,
+          "choices":[
+            {
+              "en":"Yes",
+              "fr":"Oui"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
