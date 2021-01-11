@@ -49,7 +49,7 @@ function getLocaleChoices(choices: Array<any> | undefined, lang: string) {
     return [];
   }
 
-  const localeChoices = choices.map((choice: any) => {
+  const localeChoices = choices.map((choice) => {
     return choice[lang];
   });
 
