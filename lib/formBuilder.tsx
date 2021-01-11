@@ -43,16 +43,16 @@ function getProperty(field: string, lang: string): string {
   return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }
 
-// This function is used for select/radio/checbox i18n change of form lables
-function getLocaleChoices(choices: Array<unknown>, lang: string) {
+// This function is used for select/radio/checkbox i18n change of form labels
+function getLocaleChoices(choices: Array<any> | undefined, lang: string) {
   if (!choices || !choices.length) {
     return [];
   }
-  let localeChoices: Array<unknown> = [];
-  const test = choices.forEach((choice: any) => {
-    return localeChoices.push(choice[getProperty("", lang)]);
+
+  const localeChoices = choices.map((choice: any) => {
+    return choice[lang];
   });
-console.log("LOCALE CHOICES TEST", test);
+
   return localeChoices;
 }
 
@@ -107,14 +107,16 @@ function buildForm(
         </>
       );
     case "checkbox": {
-      let checkboxItems: Array<JSX.Element> = [];
-      if (inputProps.choices && inputProps.choices.length) {
-        inputProps.choices.map((choice) => {
-          checkboxItems.push(
-            <Checkbox {...inputProps} id={`id-${choice}`} label={choice} />
-          );
-        });
-      }
+      const checkboxItems = inputProps.choices.map((choice) => {
+        return (
+          <Checkbox
+            {...inputProps}
+            key={`key-${choice}`}
+            id={`id-${choice}`}
+            label={choice}
+          />
+        );
+      });
 
       return (
         <FormGroup>
@@ -124,14 +126,16 @@ function buildForm(
       );
     }
     case "radio": {
-      let radioButtons: Array<JSX.Element> = [];
-      if (inputProps.choices && inputProps.choices.length) {
-        inputProps.choices.map((choice) => {
-          radioButtons.push(
-            <Radio {...inputProps} id={`id-${choice}`} label={choice} />
-          );
-        });
-      }
+      const radioButtons = inputProps.choices.map((choice) => {
+        return (
+          <Radio
+            {...inputProps}
+            key={`key-${choice}`}
+            id={`id-${choice}`}
+            label={choice}
+          />
+        );
+      });
 
       return (
         <FormGroup>
