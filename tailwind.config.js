@@ -6,41 +6,48 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        red: {
+          ...colors.red,
+          100: "#f3e9e8",
+          default: "#b10e1e",
+        },
+        white: {
+          ...colors.white,
+          default: "#FFF",
+        },
         blue: {
           ...colors.blue,
           default: "#26374A",
-          800: "#194D7B",
-          900: "#38414d",
-          lighter: "#E1F0F8",
-          darker: "#194D7B",
           100: "#B2E3FF",
           200: "#DFF8FD",
           300: "#4B98B2",
           400: "#335075",
           500: "#75b9e0",
+          600: "#007cba",
+          700: "#335075",
+          800: "#26374a",
         },
         gray: {
           ...colors.gray,
-          100: "#f8f8f8",
-          200: "#f7fafc",
-          300: "#e2e8f0",
-          400: "#cbcbcb",
-          600: "#808080",
-          700: "#666666",
+          default: "#EEE",
+          selected: "#e1e4e7",
+          500: "#a0aec0",
+          600: "#718096",
+          700: "#4a5568",
+          800: "#2d3748",
         },
-        red: {
-          ...colors.red,
-          lighter: "#FFE7E7",
-          darker: "#C80707",
+        yellow: {
+          ...colors.yellow,
+          default: "#ffbf47",
         },
         green: {
           ...colors.green,
-          lighter: "#DFF0D8",
-          darker: "#138A00",
+          default: "#00703C",
+          darker: "#002D18",
         },
-        orange: {
-          ...colors.orange,
-          700: "#C78100",
+        black: {
+          ...colors.black,
+          default: "#000",
         },
       },
       maxWidth: {

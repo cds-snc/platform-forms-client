@@ -11,7 +11,7 @@
     "version": 1,
     "titleEn": "CDS Contact Form",
     "titleFr": "SNC Formulaire de contact",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 
     "elements": [
       {
@@ -197,6 +197,17 @@
       },
       {
         "id": 9,
+        "type": "fileInput",
+        "properties": {
+          "titleEn": "Upload a supporting document",
+          "titleFr": "Upload a supporting document",
+          "description": "",
+          "fileType": "image/*,.pdf",
+          "required": false
+        }
+      },
+      {
+        "id": 10,
         "type": "checkbox",
         "properties": {
           "titleEn": "",
@@ -207,7 +218,7 @@
             {
               "en": "We can contact you for other inquiries",
               "fr": "Nous pourrons vous contacter"
-            }          
+            }
           ]
         }
       }

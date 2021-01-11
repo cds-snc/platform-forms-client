@@ -9,6 +9,7 @@ import {
   TextInput,
   TextArea,
   FormGroup,
+  FileInput,
 } from "../components/forms";
 type callback = (event: ChangeEvent) => void;
 interface FormElements {
@@ -27,6 +28,7 @@ interface ElementProperties {
   descriptionFr?: string;
   required: boolean;
   choices?: Array<PropertyChoices>;
+  fileType?: string | undefined;
   [key: string]: string | boolean | Array<PropertyChoices> | undefined;
 }
 
@@ -161,6 +163,13 @@ function buildForm(
           {label}
           {inputProps.description}
         </Fieldset>
+      );
+    case "fileInput":
+      return (
+        <>
+          {label}
+          <FileInput {...inputProps} fileType={element.properties.fileType} />
+        </>
       );
     default:
       return <></>;
