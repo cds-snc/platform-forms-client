@@ -1,252 +1,215 @@
-form {
-  margin-top: $space-md;
-  width: 100%;
-
-  .d--ib {
-    margin-bottom: $space-xs;
-  }
-
-  .required{
-    color: $color-red;
-  }
-
-  @include sm {
-    max-width: 500px;
-
-    .d--ib {
-      display: inline-block;
-      margin-bottom: 0;
-    }
-
-    .w-3-4 {
-      width: 75%;
-    }
-    .w-1-2 {
-      width: 50%;
-    }
-    .w-1-3 {
-      width: 50%;
-    }
-    .w-1-4 {
-      width: 25%;
-    }
-    .w-1-5 {
-      width: 20%;
-    }
-  }
-
-  @include md {
-    max-width: 800px;
-
-    .w-3-4 {
-      width: 75%;
-      max-width: 29ch;
-    }
-    .w-1-2 {
-      width: 50%;
-      max-width: 19.5ch;
-    }
-  }
+.gc-button {
+  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 font-bold text-lg no-underline text-gray-50 bg-blue-800 outline-none;
 }
 
-form.form--lg {
-
-  @include sm {
-    width: 110%;
-    max-width: 800px;
-  }
-
-  fieldset legend,
-  div:not(.multiple-choice__item) > label {
-    font-size: 1em;
-  }
-
+.gc-button:hover {
+  @apply bg-blue-700;
 }
 
-form {
-  > div:not(:last-of-type) {
-    margin-bottom: $space-xl;
-  }
-
-  div *:last-child:not(h1) {
-    margin-bottom: 0;
-  }
-
-  %form-element {
-    display: block;
-    margin: 0;
-    font-size: inherit;
-  }
-
-  .has-error {
-    padding-left: $space-sm;
-    border-left: $space-xxs solid $color-red;
-
-    input,
-    select {
-      border: 2px solid $color-red;
-    }
-  }
-
-  label,
-  .form-message,
-  .validation-message,
-  input,
-  select {
-    @extend %form-element;
-  }
-
-
-  fieldset legend,
-  div:not(.multiple-choice__item) > label {
-    font-family: "Lato", sans-serif;
-    font-weight: 700;
-    display: block;
-    font-size: 1.07em;
-    margin: 0;
-
-    span.required {
-      font-weight: 400;
-    }
-  }
-
-  .form-message {
-    color: $color-grey-dark;
-  }
-
-  .validation-message {
-    font-weight: 400;
-    color: $color-red;
-  }
-
-  .multiple-choice .validation-message {
-    margin-bottom: $space-sm;
-  }
-
-  input,
-  textarea,
-  select {
-    font-family: sans-serif;
-    font-size: 1em;
-    font-weight: 400;
-    width: 100%;
-    margin-top: 8px;
-    border-radius: 0;
-    display: block;
-    border: 2px solid $color-black;
-    padding: $space-xxs;
-
-    &:focus:not(.autocomplete__option){
-      @include focus();
-      border-color: $color-black;
-    }
-  }
-
-  input,
-  select {
-    height: 40px;
-  }
-
-  input {
-    -webkit-appearance: none;
-
-    &.input-with-unit {
-      position: relative;
-      background-color: transparent;
-      text-align: right;
-      display: inline-block;
-      padding-left: $space-xl;
-      margin-left: -$space-xl;
-      z-index: 20;
-    }
-  }
-
-  span.input-with-unit__unit {
-    display: inline-block;
-    background-color: $color-blue-dark;
-    color: $color-white;
-    line-height: 37px;
-    text-transform: none;
-    font-weight: 400;
-    width: $space-xl;
-    position: relative;
-    pointer-events: none;
-    text-align: center;
-    z-index: 10;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    max-width: 450px;
-
-    .buttons--left,
-    .buttons--right {
-      flex: 1;
-    }
-
-    .buttons--right {
-      margin-top: $space-sm;
-    }
-
-    @include sm {
-      flex-direction: row;
-
-      .buttons--left {
-        margin-right: $space-xs;
-      }
-      .buttons--right {
-        margin-left: $space-xs;
-        margin-top: 0;        
-      }
-    }
-  }
-
-  fieldset > div {
-    &.d--ib {
-      display: inline-block;
-      padding-right: $space-sm;
-      margin-bottom: 0;
-    }
-    &.w-1-2 {
-      width: 50%;
-      max-width: 19.5ch;
-    }
-    &.w-1-3 {
-      width: 50%;
-      max-width: 15ch;
-    }
-    &.w-1-4 {
-      width: 25%;
-      max-width: 7.5ch;
-    }
-  }
+.gc-label {
+  @apply block py-2 my-2 font-bold leading-5;
 }
 
-.fieldset {
-  border: 0;
-  padding: 0;
-
-  &__legend {
-    border-bottom: 0;
-
-    * {
-      margin: 0;
-    }
-
-    h1 {
-      margin-bottom: $space-xs;
-    }
-  }
-
-  .has-error &__legend {
-    margin-bottom: $space-xxs;
-  }
+.gc-textarea {
+  @apply border-solid border-2 py-3 px-2 border-gray-900  w-full lg:w-3/6;
 }
 
-.feedback-container {
-  &.no-js {
-    display: none;
-  }
+.gc-input-text {
+  @apply border-solid border-2 py-3 px-2 border-gray-900 mb-2;
 }
+
+.gc-dropdown {
+  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mb-2;
+}
+
+.gc-checkbox {
+  -webkit-appearance: none;
+  @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded;
+}
+
+.gc-checkbox:checked {
+  @apply text-gray-50 bg-blue-800;
+}
+
+.gc-input-radio {
+  @apply border-solid border-2 py-3 px-2 border-gray-900;
+}
+
+form input {
+  -webkit-appearance: none;
+}
+// form {
+//   > div:not(:last-of-type) {
+//     margin-bottom: $space-xl;
+//   }
+
+//   div *:last-child:not(h1) {
+//     margin-bottom: 0;
+//   }
+
+//   %form-element {
+//     display: block;
+//     margin: 0;
+//     font-size: inherit;
+//   }
+
+//   .has-error {
+//     padding-left: $space-sm;
+//     border-left: $space-xxs solid $color-red;
+
+//     input,
+//     select {
+//       border: 2px solid $color-red;
+//     }
+//   }
+
+//   label,
+//   .form-message,
+//   .validation-message,
+//   input,
+//   select {
+//     @extend %form-element;
+//   }
+
+//   fieldset legend,
+//   div:not(.multiple-choice__item) > label {
+//     font-family: "Lato", sans-serif;
+//     font-weight: 700;
+//     display: block;
+//     font-size: 1.07em;
+//     margin: 0;
+
+//     span.required {
+//       font-weight: 400;
+//     }
+//   }
+
+//   .form-message {
+//     color: $color-grey-dark;
+//   }
+
+//   .validation-message {
+//     font-weight: 400;
+//     color: $color-red;
+//   }
+
+//   .multiple-choice .validation-message {
+//     margin-bottom: $space-sm;
+//   }
+
+//   input,
+//   textarea,
+//   select {
+//     font-family: sans-serif;
+//     font-size: 1em;
+//     font-weight: 400;
+//     width: 100%;
+//     margin-top: 8px;
+//     border-radius: 0;
+//     display: block;
+//     border: 2px solid $color-black;
+//     padding: $space-xxs;
+
+//     &:focus:not(.autocomplete__option){
+//       @include focus();
+//       border-color: $color-black;
+//     }
+//   }
+
+//   input,
+//   select {
+//     height: 40px;
+//   }
+
+//   input {
+//     -webkit-appearance: none;
+
+//     &.input-with-unit {
+//       position: relative;
+//       background-color: transparent;
+//       text-align: right;
+//       display: inline-block;
+//       padding-left: $space-xl;
+//       margin-left: -$space-xl;
+//       z-index: 20;
+//     }
+//   }
+
+//   span.input-with-unit__unit {
+//     display: inline-block;
+//     background-color: $color-blue-dark;
+//     color: $color-white;
+//     line-height: 37px;
+//     text-transform: none;
+//     font-weight: 400;
+//     width: $space-xl;
+//     position: relative;
+//     pointer-events: none;
+//     text-align: center;
+//     z-index: 10;
+//   }
+
+//   .buttons {
+//     display: flex;
+//     justify-content: space-between;
+//     flex-direction: column;
+//     max-width: 450px;
+
+//     .buttons--left,
+//     .buttons--right {
+//       flex: 1;
+//     }
+
+//     .buttons--right {
+//       margin-top: $space-sm;
+//     }
+
+//     @include sm {
+//       flex-direction: row;
+
+//       .buttons--left {
+//         margin-right: $space-xs;
+//       }
+//       .buttons--right {
+//         margin-left: $space-xs;
+//         margin-top: 0;
+//       }
+//     }
+//   }
+
+//   fieldset > div {
+//     &.d--ib {
+//       display: inline-block;
+//       padding-right: $space-sm;
+//       margin-bottom: 0;
+//     }
+//     &.w-1-2 {
+//       width: 50%;
+//       max-width: 19.5ch;
+//     }
+//     &.w-1-3 {
+//       width: 50%;
+//       max-width: 15ch;
+//     }
+//     &.w-1-4 {
+//       width: 25%;
+//       max-width: 7.5ch;
+//     }
+//   }
+// }
+
+// .fieldset {
+//   border: 0;
+//   padding: 0;
+
+//   &__legend {
+//     border-bottom: 0;
+
+//     * {
+//       margin: 0;
+//     }
+
+//     h1 {
+//       margin-bottom: $space-xs;
+//     }
+//   }

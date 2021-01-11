@@ -40,7 +40,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
   } = props
 
   const classes = classnames(
-    'gc-input-label',
+    'gc-input-text',
     className
   )
 

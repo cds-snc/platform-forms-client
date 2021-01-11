@@ -102,7 +102,7 @@ export const withCTA = (): React.ReactElement => (
     type="warning"
     heading="Warning status"
     cta={
-      <Button type="button" outline>
+      <Button type="button">
         Click here
       </Button>
     }>

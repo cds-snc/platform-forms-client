@@ -1,0 +1,204 @@
+{
+  "internalTitleEn": "CDS Contact Form",
+  "internalTitleFr": "SNC Formulaire de contact",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "bryan.robitaille@cds-snc.ca"
+  },
+  "form": {
+    "id": 2,
+    "version": 1,
+    "titleEn": "CDS Contact Form",
+    "titleFr": "SNC Formulaire de contact",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Info",
+          "titleFr": "Info",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Please provide us with your contact information so that we can mail your documents to you.",
+          "descriptionFr": "Veuillez nous fournir vos coordonnées afin que nous puissions vous envoyer vos documents",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Full name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Email",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Street address",
+          "titleFr": "Quelle est votre adresse électronique?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "City",
+          "titleFr": "Pour quel service travaillez-vous?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "dropdown",
+        "properties": {
+          "titleEn": "Province",
+          "titleFr": "Province",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            },
+            {
+              "en": "Alberta",
+              "fr": "Alberta"
+            },
+            {
+              "en": "British Columbia",
+              "fr": "British Columbia"
+            },
+            {
+              "en": "Manitoba",
+              "fr": "Manitoba"
+            },
+            {
+              "en": "New Brunswick",
+              "fr": "New Brunswick"
+            },
+            {
+              "en": "Newfoundland and Labrador",
+              "fr": "Newfoundland and Labrador"
+            },
+            {
+              "en": "Northwest Territories",
+              "fr": "Northwest Territories"
+            },
+            {
+              "en": "Nova Scotia",
+              "fr": "Nova Scotia"
+            },
+            {
+              "en": "Nunavut",
+              "fr": "Nunavut"
+            },
+            {
+              "en": "Ontario",
+              "fr": "Ontario"
+            },
+            {
+              "en": "Prince Edward Island",
+              "fr": "Prince Edward Island"
+            },
+            {
+              "en": "Quebec",
+              "fr": "Quebec"
+            },
+            {
+              "en": "Saskatchewan",
+              "fr": "Saskatchewan"
+            },
+            {
+              "en": "Yukon",
+              "fr": "Yukon"
+            }
+          ],
+          "required": false
+        }
+      },
+      {
+        "id": 7,
+        "type": "textInput",
+        "properties": {
+          "titleEn": "ZIP Code",
+          "titleFr": "ZIP",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 8,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Are you a Canadian citizen?",
+          "titleFr": "Citoyen",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "We can contact you for other inquiries",
+              "fr": "Autre"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

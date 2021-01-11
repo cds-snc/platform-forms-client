@@ -19,7 +19,7 @@ export const Radio = (
 ): React.ReactElement => {
   const { id, name, className, label, inputRef, ...inputProps } = props
 
-  const classes = classnames('gc-radio', className)
+  const classes = classnames('gc-input-radio', className)
 
   return (
     <div data-testid="radio" className={classes}>

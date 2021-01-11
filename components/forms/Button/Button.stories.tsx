@@ -23,26 +23,8 @@ export const secondary = (): React.ReactElement => (
   </Button>
 )
 
-export const accent = (): React.ReactElement => (
-  <Button type="button" accent>
-    Click Me
-  </Button>
-)
-
 export const base = (): React.ReactElement => (
   <Button type="button" base>
-    Click Me
-  </Button>
-)
-
-export const outline = (): React.ReactElement => (
-  <Button type="button" outline>
-    Click Me
-  </Button>
-)
-
-export const inverse = (): React.ReactElement => (
-  <Button type="button" inverse>
     Click Me
   </Button>
 )
