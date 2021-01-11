@@ -1,0 +1,221 @@
+{
+  "internalTitleEn": "Public Service Award of Excellence 2020",
+  "internalTitleFr": "Prix d’excellence de la fonction publique 2020",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "mario.garneau@cds-snc.ca"
+  },
+  "form": {
+    "id": 3,
+    "version": 1,
+    "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
+    "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+
+    "elements": [
+      {
+        "id": 1,
+        "type":"radio",
+        "properties":{
+          "titleEn":"Category",
+          "titleFr":"Catégorie",
+          "description":"",
+          "required":true,
+          "choices":[
+            {
+              "en":"Excellence in Profession",
+              "fr":"Excellence en profession"
+            },
+            {
+              "en":"Exceptional Young Public Servant",
+              "fr":"Jeunes fonctionnaires exceptionnels"
+            },
+            {
+              "en":"Joan Atkinson Award for Public Sector Balues in the Workplace",
+              "fr":"Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
+            },
+            {
+              "en":"Outstanding Career",
+              "fr":"Carrière exceptionnelle"
+            },
+            {
+              "en":"60 Years of Service Special Award",
+              "fr":"Prix spécial récompensant 60 années de service"
+            }
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominator family name",
+          "titleFr": "Nom du proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominator given name",
+          "titleFr": "Prénom du proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominator department or organization",
+          "titleFr": "Ministère ou organisme du proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominator's title",
+          "titleFr": "Titre du proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominator's phone number",
+          "titleFr": "Numéro de téléphone du proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 7,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominator's email address",
+          "titleFr": "Adresse de courriel du proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 8,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominee's family name",
+          "titleFr": "Nom du candidat",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 9,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominee's given name",
+          "titleFr": "Prénom du candidat",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 10,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominee's department or organization",
+          "titleFr": "Ministère ou organisme du candidat",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 11,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominee's province",
+          "titleFr": "Province du candidat",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 12,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominee's preferred language",
+          "titleFr": "Langue préférée du candidat",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 13,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nominee's group and level",
+          "titleFr": "Groupe et niveau du candidat",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 14,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Annex A: Achievement Summary",
+          "titleFr": "Résumé des réalisations",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "required": false
+        }
+      }
+    ]
+  }
+}

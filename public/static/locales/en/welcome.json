@@ -5,8 +5,25 @@
     "title": "Product Vision",
     "text": "Help government-users quickly and easily publish simple, accessible, online forms that the public can use to apply for or access the services or benefits they need."
   },
-  "intake": {
-    "title": "Demo intake form"
+  "formList": {
+    "esdc": {
+      "title": "Grant Application for Funding – Supporting Black Canadian Communities (SBCC) Initiative"
+    },
+    "intake": {
+      "title": "CDS Intake Form"
+    },
+    "award": {
+      "title": "Public Service Award of Excellence 2020 Nominations"
+    },
+    "callback": {
+      "title": "Service Canada Callback form"
+    },
+    "lostfishgear": {
+      "title": "Atlantic lost fishing gear form: Fixed gear, including crab and lobster traps"
+    },
+    "baggage": {
+      "title": "Delayed Baggage Report"
+    }
   },
   "design": {
     "title": "Design",

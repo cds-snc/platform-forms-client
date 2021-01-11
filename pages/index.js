@@ -11,7 +11,19 @@ const Home = ({ t }) => (
         <h2 className="text-3xl mb-5">{t("product.title")}</h2>
         <p>{t("product.text")}</p>
         <p>
-          <Link href="/1">{t("intake.title")}</Link>
+          <Link href="/8">{t("formList.esdc.title")}</Link>
+        </p>
+        <p>
+          <Link href="/1">{t("formList.intake.title")}</Link>
+        </p>
+        <p>
+          <Link href="/3">{t("formList.award.title")}</Link>
+        </p>
+        <p>
+          <Link href="/4">{t("formList.baggage.title")}</Link>
+        </p>
+        <p>
+          <Link href="/5">{t("formList.lostfishgear.title")}</Link>
         </p>
       </div>
 
