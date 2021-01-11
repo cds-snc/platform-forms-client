@@ -1,0 +1,2538 @@
+{
+  "form": {
+    "id": 8,
+    "version": 1,
+    "titleEn": "Grant Application for Funding – Supporting Black Canadian Communities (SBCC) Initiative",
+    "titleFr": "Demande de financement de subvention - Initiative pour appuyer les communautés noires du Canada (ACNC)",
+    "layout": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145
+    ],
+    "elements": [
+      {
+        "id": 1,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Supporting Black Canadian Communities (SBCC) Initiative",
+          "titleFr": "Initiative pour appuyer les communautés noires du Canada",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "The program provides capital assistance to Black organizations in Canada to build capacity to better fulfill their missions and better serve Black communities in Canada.",
+          "descriptionFr": "Le programme fournit du financement aux immobilisations des organismes desservant des personnes noires au Canada pour accroître leur capacité de manière à mieux remplir leurs missions et de mieux servir les communautés noires au Canada.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 2,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Funding Requested",
+          "titleFr": "Financement demandé",
+          "required": false,
+          "choices": [
+            {
+              "en": "Equipment purchase for work or community space",
+              "fr": "Achat d’équipement pour un espace de travail ou communautaire"
+            },
+            {
+              "en": "Renovation or retrofit of an existing workspace or community space",
+              "fr": "Rénovation ou réaménagement d’un espace de travail ou d’un espace communautaire existant pour en améliorer la fonctionnalité"
+            },
+            {
+              "en": "Both equipment purchase and renovation or retrofit",
+              "fr": "Achat d’équipement et activité de rénovation ou de réaménagement"
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Legal Name",
+          "titleFr": "Nom légal",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(Organization's full name, as it appears on legal documents)",
+          "required": false
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Operating Name",
+          "titleFr": "Nom commercial",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(If different from legal name)",
+          "required": false
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Year Established",
+          "titleFr": "Année de fondation",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(Year the organization was originally created.)",
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Organization Type",
+          "titleFr": "Type d'organisme",
+          "required": false,
+          "choices": [
+            {
+              "en": "Not-for-profit",
+              "fr": "Sans but lucratif"
+            },
+            {
+              "en": "Private Sector",
+              "fr": "Secteur privé"
+            },
+            {
+              "en": "Public Sector",
+              "fr": "Secteur publique"
+            }
+          ]
+        }
+      },
+      {
+        "id": 7,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Organization Category",
+          "titleFr": "Catégorie d’organisme",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "For example: Sector councils; University; Municipal Government; etc. (see Applicant Guide for more examples)",
+          "required": false
+        }
+      },
+      {
+        "id": 8,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Canada Revenue Agency (CRA) Business Number",
+          "titleFr": "Numéro d’entreprise de l’Agence du revenu du Canada (ARC)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "(Unique 15-digit number that is assigned to your business or legal entity by CRA)",
+          "required": false
+        }
+      },
+      {
+        "id": 9,
+        "type": "plainText",
+        "properties": {
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If you do not have a CRA Business Number, provide one of the following:",
+          "descriptionFr": "Si vous ne possédez pas de numéro d’entreprise de l’ARC, veuillez fournir un des numéros suivants :",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 10,
+        "type": "plainText",
+        "properties": {
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "For example: Your provincial/territorial corporation number (i.e. number found on your Letters Patent) or your federal corporation number with Industry Canada (see Applicant Guide for further details).",
+          "descriptionFr": "Par exemple : Votre numéro d’entreprise provincial ou territorial (c.-à-d. le numéro qui se trouve dans vos lettres patentes) ou votre numéro d’entreprise fédéral auprès d’Industrie Canada (voir le Guide du demandeur pour en savoir plus).",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 11,
+        "type": "radio",
+        "properties": {
+          "titleEn": "CRA Business Number",
+          "titleFr": "Numéro d’entreprise de l’ARC",
+          "required": false,
+          "choices": [
+            {
+              "en": "I have a registration number",
+              "fr": "J'ai un numéro d’entreprise"
+            },
+            {
+              "en": "I have provided a separate document confirming the proof of operations for my organization.",
+              "fr": "J’ai fourni un document d’appui confirmant la preuve des activités de mon organisme."
+            }
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Specify documentation or registration number",
+          "titleFr": "spécifier le documentation ou numéro d’entreprise",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 13,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Organization Primary Address",
+          "titleFr": "Adresse principale de l’organisme",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 14,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Street number and name",
+          "titleFr": "Numéro et nom de rue",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 15,
+        "type": "textField",
+        "properties": {
+          "titleEn": "City or Town",
+          "titleFr": "Ville ou municipalité",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 16,
+        "type": "dropdown",
+        "properties": {
+          "titleEn": "Province or territory",
+          "titleFr": "Province ou territoire",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            },
+            {
+              "en": "Alberta",
+              "fr": "Alberta"
+            },
+            {
+              "en": "British Columbia",
+              "fr": "British Columbia"
+            },
+            {
+              "en": "Manitoba",
+              "fr": "Manitoba"
+            },
+            {
+              "en": "New Brunswick",
+              "fr": "New Brunswick"
+            },
+            {
+              "en": "Newfoundland and Labrador",
+              "fr": "Newfoundland and Labrador"
+            },
+            {
+              "en": "Northwest Territories",
+              "fr": "Northwest Territories"
+            },
+            {
+              "en": "Nova Scotia",
+              "fr": "Nova Scotia"
+            },
+            {
+              "en": "Nunavut",
+              "fr": "Nunavut"
+            },
+            {
+              "en": "Ontario",
+              "fr": "Ontario"
+            },
+            {
+              "en": "Prince Edward Island",
+              "fr": "Prince Edward Island"
+            },
+            {
+              "en": "Quebec",
+              "fr": "Quebec"
+            },
+            {
+              "en": "Saskatchewan",
+              "fr": "Saskatchewan"
+            },
+            {
+              "en": "Yukon",
+              "fr": "Yukon"
+            }
+          ],
+          "required": false
+        }
+      },
+      {
+        "id": 17,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Postal Code",
+          "titleFr": "Code postal",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 18,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Country",
+          "titleFr": "Pays",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 19,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Telephone Number and Ext.",
+          "titleFr": "Numéro de téléphone et de poste",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 20,
+        "type": "textField",
+        "properties": {
+          "titleEn": "E-mail address",
+          "titleFr": "Adresse de courriel",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 21,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Is your mailing address the same as the Organization Primary Address?",
+          "titleFr": "Votre adresse postale est-elle la même que l'adresse principale de l'organisation?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 22,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Organization's Primary Activities",
+          "titleFr": "Activités principales de l’organisme",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 500,
+          "required": false
+        }
+      },
+      {
+        "id": 23,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Select the target group(s) that best aligns with your organization’s primary activities",
+          "titleFr": "Sélectionnez le ou les groupes cibles qui cadrent le mieux avec les activités principales de votre organisme",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Select all groups",
+              "fr": "Sélectionnez tous les groupes"
+            },
+            {
+              "en": "Seniors",
+              "fr": "Aînés"
+            },
+            {
+              "en": "Newcomers",
+              "fr": "Nouveaux arrivants"
+            },
+            {
+              "en": "Visible Minorities",
+              "fr": "Minorités visibles"
+            },
+            {
+              "en": "Youth",
+              "fr": "Jeunes"
+            },
+            {
+              "en": "Women",
+              "fr": "Femmes"
+            },
+            {
+              "en": "LGBTQ2",
+              "fr": "LGBTQ2"
+            },
+            {
+              "en": "People with Disabilities",
+              "fr": "Personnes en situation de handicap"
+            },
+            {
+              "en": "Low Income",
+              "fr": "Faible revenu"
+            },
+            {
+              "en": "Remote / Rural",
+              "fr": "Région éloignée / rurale"
+            },
+            {
+              "en": "Individuals Experiencing Homelessness",
+              "fr": "Individus en situation d'itinérance"
+            },
+            {
+              "en": "Official Language Minority Communities",
+              "fr": "Collectivités de langue officielle en situation minoritaire"
+            },
+            {
+              "en": "Not Applicable",
+              "fr": "Non applicable"
+            }
+          ]
+        }
+      },
+      {
+        "id": 24,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Are you of indigenous decent?",
+          "titleFr": "Avez-vous un héritage autochtones?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 25,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Please specify",
+          "titleFr": "Veuillez préciser",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "First nations",
+              "fr": "Premières Nations"
+            },
+            {
+              "en": "Inuit",
+              "fr": "Inuits"
+            },
+            {
+              "en": "Metis",
+              "fr": "Métis"
+            },
+            {
+              "en": "Urban / Non Affiliated",
+              "fr": "Urbains / non affiliés"
+            },
+            {
+              "en": "Other",
+              "fr": "Autre"
+            },
+            {
+              "en": "Not Applicable",
+              "fr": "Non Applicable"
+            }
+          ]
+        }
+      },
+      {
+        "id": 26,
+        "type": "textField",
+        "properties": {
+          "titleEn": "If you selected 'other', please specify",
+          "titleFr": "Si vous avez sélectionné «autre», veuillez préciser",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 27,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Organization Contacts",
+          "titleFr": "Personnes-ressources de l'organisme",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 28,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Primary Contact",
+          "titleFr": "Personne-ressource principale",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "This should be your primary contact person with respect to this application for funding.",
+          "descriptionFr": "Il s’agira de votre principale personne-ressource en ce qui a trait à la présente demande de financement.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 28,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Given Name / Surname",
+          "titleFr": "Prénom et nom de famille",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 29,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name",
+          "titleFr": "Prénom",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 30,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Surname",
+          "titleFr": "Nom de famille",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 31,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Position Title",
+          "titleFr": "Titre du poste",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 32,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Preferred language of communication",
+          "titleFr": "Langue de communication préférée",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 33,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Written",
+          "titleFr": "Écrite",
+          "required": false,
+          "choices": [
+            {
+              "en": "English",
+              "fr": "Anglais"
+            },
+            {
+              "en": "French",
+              "fr": "Français"
+            }
+          ]
+        }
+      },
+      {
+        "id": 34,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Spoken",
+          "titleFr": "Parlée",
+          "required": false,
+          "choices": [
+            {
+              "en": "English",
+              "fr": "Anglais"
+            },
+            {
+              "en": "French",
+              "fr": "Français"
+            }
+          ]
+        }
+      },
+      {
+        "id": 35,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Primary Contact Address",
+          "titleFr": "Adresse du personne-ressource principale",
+          "required": false,
+          "choices": [
+            {
+              "en": "Same as Organization Primary Address",
+              "fr": "Même que l’adresse principale de l’organisme"
+            },
+            {
+              "en": "Same as Organization Primary Mailing Address",
+              "fr": "Même que l’adresse postale de l’organisme"
+            },
+            {
+              "en": "Different (include below)",
+              "fr": "Différente (veuillez l’inscrire ci-dessous)"
+            }
+          ]
+        }
+      },
+      {
+        "id": 36,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Secondary Contact",
+          "titleFr": "Deuxième personne-ressource",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "This should be your secondary contact person with respect to this application for funding in case we cannot reach the primary contact.",
+          "descriptionFr": "Il s’agira de votre deuxième personne-ressource en ce qui a trait à la présente demande de financement au cas où nous ne pouvons pas joindre la personne-ressource principale.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 37,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Given Name / Surname",
+          "titleFr": "Prénom et nom de famille",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 38,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name",
+          "titleFr": "Prénom",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 39,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Surname",
+          "titleFr": "Nom de famille",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 40,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Position Title",
+          "titleFr": "Titre du poste",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 41,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Preferred language of communication",
+          "titleFr": "Langue de communication préférée",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 42,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Written",
+          "titleFr": "Écrite",
+          "required": false,
+          "choices": [
+            {
+              "en": "English",
+              "fr": "Anglais"
+            },
+            {
+              "en": "French",
+              "fr": "Français"
+            }
+          ]
+        }
+      },
+      {
+        "id": 43,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Spoken",
+          "titleFr": "Parlée",
+          "required": false,
+          "choices": [
+            {
+              "en": "English",
+              "fr": "Anglais"
+            },
+            {
+              "en": "French",
+              "fr": "Français"
+            }
+          ]
+        }
+      },
+      {
+        "id": 44,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Primary Contact Address",
+          "titleFr": "Adresse du personne-ressource principale",
+          "required": false,
+          "choices": [
+            {
+              "en": "Same as Organization Primary Address",
+              "fr": "Même que l’adresse principale de l’organisme"
+            },
+            {
+              "en": "Same as Organization Primary Mailing Address",
+              "fr": "Même que l’adresse postale de l’organisme"
+            },
+            {
+              "en": "Different (include below)",
+              "fr": "Différente (veuillez l’inscrire ci-dessous)"
+            }
+          ]
+        }
+      },
+      {
+        "id": 45,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Does your organization owe any amounts of to the Government of Canada?",
+          "titleFr": "Est-ce que votre organisme doit des sommes au gouvernement du Canada?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 46,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If yes, complete the fields below for each amount owing.",
+          "descriptionFr": "Si oui, veuillez remplir les champs ci-dessous pour chaque somme due.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 47,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Entry 1",
+          "titleFr": "Entrée 1",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 48,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Amount Owing",
+          "titleFr": "Somme due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 49,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 50,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Department or agency to which amount is owed",
+          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 51,
+        "type": "radio",
+        "properties": {
+          "titleEn": "If an amount is owing, is a payment plan in place?",
+          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 52,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Entry 2",
+          "titleFr": "Entrée 2",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 53,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Amount Owing",
+          "titleFr": "Somme due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 54,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 55,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Department or agency to which amount is owed",
+          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 56,
+        "type": "radio",
+        "properties": {
+          "titleEn": "If an amount is owing, is a payment plan in place?",
+          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 57,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Entry 3",
+          "titleFr": "Entrée 3",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 58,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Amount Owing",
+          "titleFr": "Somme due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 59,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 60,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Department or agency to which amount is owed",
+          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 61,
+        "type": "radio",
+        "properties": {
+          "titleEn": "If an amount is owing, is a payment plan in place?",
+          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 62,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Entry 4",
+          "titleFr": "Entrée 4",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 63,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Amount Owing",
+          "titleFr": "Somme due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 64,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 65,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Department or agency to which amount is owed",
+          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 66,
+        "type": "radio",
+        "properties": {
+          "titleEn": "If an amount is owing, is a payment plan in place?",
+          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 67,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Project Proposal Identification",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 68,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Project Title",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 69,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Planned project Start Date (YYYY-MM-DD)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 70,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Planned project End Date (YYYY-MM-DD)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 71,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Amount requested from Employment and Social Development Canada",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 72,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Project Proposal Description",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 73,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "What does your project aim to achieve",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 500,
+          "required": false
+        }
+      },
+      {
+        "id": 74,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Project priorities and objectives",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 500,
+          "required": false
+        }
+      },
+      {
+        "id": 75,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Project Activities and Timelines",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Provide the activities and their timelines that will be taking place as part of this proposed project.)",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 76,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 1",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 77,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 1 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 78,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 1 Timeline",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 79,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 2",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 80,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 2 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 81,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 2 Timeline",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 82,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 3",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 83,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 3 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 84,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 3 Timeline",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 85,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 4",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 86,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 4 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 87,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 4 Timeline",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 88,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Will any of the proposed project activities be delivered at your organization’s primary address?",
+          "titleFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 89,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Will any of the proposed project activities be delivered in a different location from your organization’s primary address?",
+          "titleFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 90,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Will the project or any of its activities involve or benefit people in English or French linguistic minority communities in Canada, in some way?",
+          "titleFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            },
+            {
+              "en": "Not applicable",
+              "fr": "Non applicable"
+            }
+          ]
+        }
+      },
+      {
+        "id": 91,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Is your project targeting vulnerable groups?",
+          "titleFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 92,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "If yes, select the specific target group(s) that applies to your project.",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Select all groups",
+              "fr": "Sélectionnez tous les groupes"
+            },
+            {
+              "en": "Seniors",
+              "fr": "Aînés"
+            },
+            {
+              "en": "Newcomers",
+              "fr": "Nouveaux arrivants"
+            },
+            {
+              "en": "Visible Minorities",
+              "fr": "Minorités visibles"
+            },
+            {
+              "en": "Youth",
+              "fr": "Jeunes"
+            },
+            {
+              "en": "Women",
+              "fr": "Femmes"
+            },
+            {
+              "en": "LGBTQ2",
+              "fr": "LGBTQ2"
+            },
+            {
+              "en": "People with Disabilities",
+              "fr": "Personnes en situation de handicap"
+            },
+            {
+              "en": "Low Income",
+              "fr": "Faible revenu"
+            },
+            {
+              "en": "Remote / Rural",
+              "fr": "Région éloignée / rurale"
+            },
+            {
+              "en": "Individuals Experiencing Homelessness",
+              "fr": "Individus en situation d'itinérance"
+            },
+            {
+              "en": "Official Language Minority Communities",
+              "fr": "Collectivités de langue officielle en situation minoritaire"
+            },
+            {
+              "en": "Not Applicable",
+              "fr": "Non applicable"
+            }
+          ]
+        }
+      },
+      {
+        "id": 93,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Will your project target indiginous peoples?",
+          "titleFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 94,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Please specify",
+          "titleFr": "Veuillez préciser",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "First nations",
+              "fr": "Premières Nations"
+            },
+            {
+              "en": "Inuit",
+              "fr": "Inuits"
+            },
+            {
+              "en": "Metis",
+              "fr": "Métis"
+            },
+            {
+              "en": "Urban / Non Affiliated",
+              "fr": "Urbains / non affiliés"
+            },
+            {
+              "en": "Other",
+              "fr": "Autre"
+            },
+            {
+              "en": "Not Applicable",
+              "fr": "Non Applicable"
+            }
+          ]
+        }
+      },
+      {
+        "id": 95,
+        "type": "textField",
+        "properties": {
+          "titleEn": "If you selected 'other', please specify",
+          "titleFr": "Si vous avez sélectionné «autre», veuillez préciser",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 96,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Project Costs",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(expenses) for the eligible activities or services of the proposed object",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 97,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "List each eligible activity or service:",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 98,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 1",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 99,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 1 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 100,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 101,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 1 Cost ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 102,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 2",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 103,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 2 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 104,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 105,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 2 Cost ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 106,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 3",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 107,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 3 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 108,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 109,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 3 Cost ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 110,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Activity 4",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 111,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 4 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 112,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 113,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Activity 4 Cost ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 114,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Funding Sources",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(revenues) for the proposed project costs noted above",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 115,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "List Organization Name for each Funding Source (can be other governments, a private sector organization, or self-funded)",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 116,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Organization 1",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 117,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Organization 1 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 118,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            },
+            {
+              "en": "Confirmed (guaranteed)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 119,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Funding Amount from Organization 1 ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 120,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Organization 2",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 121,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Organization 2 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 122,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            },
+            {
+              "en": "Confirmed (guaranteed)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 123,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Funding Amount from Organization 2 ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 124,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Organization 3",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 125,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Organization 3 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 126,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            },
+            {
+              "en": "Confirmed (guaranteed)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 127,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Funding Amount from Organization 3 ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 128,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Organization 4",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 129,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Organization 4 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 130,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Cost is:",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Cash",
+              "fr": ""
+            },
+            {
+              "en": "Donation (in-kind)",
+              "fr": ""
+            },
+            {
+              "en": "Confirmed (guaranteed)",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 131,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Funding Amount from Organization 4 ($ value)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 132,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Budget Details",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 133,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Use this field to provide any further budget details that you may find necessary in describing your project.",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 500,
+          "required": false
+        }
+      },
+      {
+        "id": 132,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Program Specific Questions",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 133,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Select the origins of the Black Canadian communities in Canada your organization serves.",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Carribbean originas",
+              "fr": ""
+            },
+            {
+              "en": "African origins, including, Eastern, Central, Western and Southern",
+              "fr": ""
+            },
+            {
+              "en": "African Nova Scotians",
+              "fr": ""
+            },
+            {
+              "en": "All of the above",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 134,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Program Checklist",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Please review the following checklist carefully. Errors or incomplete applications will result in delayed processing and/or rejection.",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 135,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "I attest that the organization is Black-led (i.e. has Black leadership at all levels of management)",
+              "fr": ""
+            },
+            {
+              "en": "I attest I am the owner of a building",
+              "fr": ""
+            },
+            {
+              "en": "I attest that I have a lease and written approval of building owner to undertake the project",
+              "fr": ""
+            },
+            {
+              "en": "I attest that the project is not located on Government of Canada property, nor in a private home or dwelling.",
+              "fr": ""
+            },
+            {
+              "en": "I have provided a digital picture of the workspace or community space I want to improve, if my project is for a renovation.",
+              "fr": ""
+            },
+            {
+              "en": "I  provided one external estimate if my project is for renovation of an existing space.",
+              "fr": ""
+            },
+            {
+              "en": "I will attest to the contents in Section C – Part 5 of this application form",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 136,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Attestation",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "n order for your application to be eligible, an official representative who has the capacity and the authority to submit project proposals and enter into contracts and agreements on behalf of your organization must attest to the following:",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 135,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "description": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "I have the capacity and the authority to submit this Application for Funding on behalf of the applicant organization.",
+              "fr": ""
+            },
+            {
+              "en": "I certify and warrant on behalf of the organization and in my personal capacity that the information provided in this Application for Funding and any supporting documentation is true, accurate, and complete.",
+              "fr": ""
+            },
+            {
+              "en": "I have read the Applicant Guide and understand the program’s requirements.",
+              "fr": ""
+            }
+          ]
+        }
+      },
+      {
+        "id": 137,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Official Representative 1 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 138,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Title",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 139,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Date (YYYY-MM-DD)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 140,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Official Representative 2 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 141,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Title",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 142,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Date (YYYY-MM-DD)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 143,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Official Representative 3 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 144,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Title",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 145,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Date (YYYY-MM-DD)",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      }
+    ]
+  }
+}
