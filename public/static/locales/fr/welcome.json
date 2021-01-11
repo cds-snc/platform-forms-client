@@ -1,25 +1,37 @@
 {
-  "title": "Bienvenue aux formulaires GC",
-  "body": "[travaux en cours]",
-  "product": {
-    "title": "La vision du produit",
-    "text": "Aider les utilisateurs du gouvernement à publier rapidement et facilement des formulaires en ligne simples et accessibles que le public peut utiliser pour demander ou accéder aux services ou prestations dont il a besoin."
-  },
-  "intake": {
-    "title": "Demo formulaire d'admission"
-  },
-  "design": {
-    "title": "Design",
-    "text": "En savoir plus sur nos efforts en matière de conception, de recherche et d'accessibilité.",
-    "system": {
-      "title": "Système de conception sur Storybook"
-    }
-  },
-  "technology": {
-    "title": "Technologie",
-    "text": "Notre pile technologique fonctionne sur Next.js et utilise les services de cloud computing AWS",
-    "git": {
-      "title": "Formulaires GC sur github"
-    }
-  }
+	"title": "Bienvenue aux formulaires GC",
+	"body": "[travaux en cours]",
+	"product": {
+		"title": "La vision du produit",
+		"text": "Aider les utilisateurs du gouvernement à publier rapidement et facilement des formulaires en ligne simples et accessibles que le public peut utiliser pour demander ou accéder aux services ou prestations dont il a besoin."
+	},
+	"intake": {
+		"title": "Demo formulaire d'admission"
+	},
+	"award": {
+		"title": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature"
+	},
+	"callback": {
+		"title": "SC Demandes des Services"
+	},
+	"lostfishgear": {
+		"title": "Formulaire de déclaration de perte d'engin de pêche : Fixe, incluant les casiers à homard et à crabe (Atlantique)"
+	},
+	"baggage": {
+		"title": "Rapport de bagages retardés"
+	},
+	"design": {
+		"title": "Design",
+		"text": "En savoir plus sur nos efforts en matière de conception, de recherche et d'accessibilité.",
+		"system": {
+			"title": "Système de conception sur Storybook"
+		}
+	},
+	"technology": {
+		"title": "Technologie",
+		"text": "Notre pile technologique fonctionne sur Next.js et utilise les services de cloud computing AWS",
+		"git": {
+			"title": "Formulaires GC sur github"
+		}
+	}
 }

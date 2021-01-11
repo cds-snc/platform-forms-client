@@ -13,6 +13,15 @@ const Home = ({ t }) => (
         <p>
           <Link href="/1">{t("intake.title")}</Link>
         </p>
+        <p>
+          <Link href="/3">{t("formList.award.title")}</Link>
+        </p>
+        <p>
+          <Link href="/4">{t("formList.baggage.title")}</Link>
+        </p>
+        <p>
+          <Link href="/5">{t("formList.lostfishgear.title")}</Link>
+        </p>
       </div>
 
       <div className="mb-20">
