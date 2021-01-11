@@ -1,5 +1,5 @@
 .gc-button {
-  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 font-bold text-lg no-underline text-gray-50 bg-blue-800 outline-none;
+  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 my-5 font-bold text-lg no-underline text-gray-50 bg-blue-800 outline-none w-60;
 }
 
 .gc-button:hover {
@@ -28,7 +28,7 @@
   }
   .gc-checkbox__input,
   form input.gc-checkbox__input {
-    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-2 align-middle;
+    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-2 align-middle my-2;
   }
 
   &:checked {
@@ -45,4 +45,17 @@
   .gc-label {
     @apply inline font-normal;
   }
+}
+
+.error-list {
+  @apply px-5 bg-red-50 border-l-4 border-red-500 my-2;
+
+  &__header {
+    margin-top: $space-xs;
+    margin-bottom: $space-md;
+  }
+}
+
+.validation-message {
+  @apply text-red-500;
 }

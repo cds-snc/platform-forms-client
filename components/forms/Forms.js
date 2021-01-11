@@ -71,7 +71,7 @@ const Form = ({ formModel, i18n }) => {
           );
         })}
         <div className="buttons">
-          <button className="submit-button w-60" type="submit">
+          <button className="gc-button" type="submit">
             Submit
           </button>
         </div>
