@@ -1,3 +1,5 @@
+import json2md from "json2md";
+
 // Redo this interface and remember that that it's an Array and not an object.
 interface Response {
   form: {
@@ -22,16 +24,13 @@ export default (formResponse: Response): string => {
 
   const mdBody = formElements.map((element, index) => {
     // In future add validation to remove page elements
-    const qSequence = index + 1;
     const qTitle = element.properties.titleEn;
-    return `${qSequence.toString()}. ${qTitle}
-    ${responses[element.id]}
-    `;
+    return {
+      p: `${qTitle}${String.fromCharCode(13)} ${responses[element.id]}`,
+    };
   });
 
-  return `
-    # ${title}
+  const emailBody = json2md([{ h1: title }, mdBody]);
 
-    ${mdBody.join("")}
-    `;
+  return emailBody;
 };

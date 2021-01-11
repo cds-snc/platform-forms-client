@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "i18next-hmr": "^1.6.3",
+    "json2md": "^1.9.2",
     "next": "10.0.4",
     "next-i18next": "^7.0.1",
     "notifications-node-client": "^5.0.2",
