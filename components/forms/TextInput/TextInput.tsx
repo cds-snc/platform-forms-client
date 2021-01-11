@@ -1,48 +1,36 @@
-import React from 'react'
-import classnames from 'classnames'
+import React from "react";
+import classnames from "classnames";
 
 type TextInputRef =
   | string
   | ((instance: HTMLInputElement | null) => void)
   | React.RefObject<HTMLInputElement>
   | null
-  | undefined
+  | undefined;
 
 interface RequiredTextInputProps {
-  id: string
-  name: string
-  type: 'text' | 'email' | 'number' | 'password' | 'search' | 'tel' | 'url'
+  id: string;
+  name: string;
+  type: "text" | "email" | "number" | "password" | "search" | "tel" | "url";
 }
 
 interface CustomTextInputProps {
-  className?: string
-  validationStatus?: 'error' | 'success'
-  success?: boolean
-  inputSize?: 'small' | 'medium'
-  inputRef?: TextInputRef
+  className?: string;
+  validationStatus?: "error" | "success";
+  success?: boolean;
+  inputSize?: "small" | "medium";
+  inputRef?: TextInputRef;
 }
 
 export type OptionalTextInputProps = CustomTextInputProps &
-  JSX.IntrinsicElements['input']
+  JSX.IntrinsicElements["input"];
 
-export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps
+export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
 export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const {
-    id,
-    name,
-    type,
-    className,
-    validationStatus,
-    inputSize,
-    inputRef,
-    ...inputProps
-  } = props
+  const { id, name, type, className, inputRef, ...inputProps } = props;
 
-  const classes = classnames(
-    'gc-input-text',
-    className
-  )
+  const classes = classnames("gc-input-text", className);
 
   return (
     <input
@@ -54,7 +42,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
       ref={inputRef}
       {...inputProps}
     />
-  )
-}
+  );
+};
 
-export default TextInput
+export default TextInput;

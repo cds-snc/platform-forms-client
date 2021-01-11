@@ -1,5 +1,5 @@
-import React from 'react'
-import classnames from 'classnames'
+import React from "react";
+import classnames from "classnames";
 
 type TextAreaRef =
   | string
@@ -7,20 +7,20 @@ type TextAreaRef =
   | ((instance: HTMLTextAreaElement | null) => void)
   | React.RefObject<HTMLTextAreaElement>
   | null
-  | undefined
+  | undefined;
 
 export interface TextAreaProps {
-  id: string
-  name: string
-  className?: string
-  error?: boolean
-  success?: boolean
-  children?: React.ReactNode
-  inputRef?: TextAreaRef
+  id: string;
+  name: string;
+  className?: string;
+  error?: boolean;
+  success?: boolean;
+  children?: React.ReactNode;
+  inputRef?: TextAreaRef;
 }
 
 export const TextArea = (
-  props: TextAreaProps & JSX.IntrinsicElements['textarea']
+  props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
   const {
     id,
@@ -31,16 +31,16 @@ export const TextArea = (
     children,
     inputRef,
     ...inputProps
-  } = props
+  } = props;
 
   const classes = classnames(
-    'gc-textarea',
+    "gc-textarea",
     {
-      'gc-input--error': error,
-      'gc-input--success': success,
+      "gc-input--error": error,
+      "gc-input--success": success,
     },
     className
-  )
+  );
 
   return (
     <textarea
@@ -49,10 +49,11 @@ export const TextArea = (
       id={id}
       name={name}
       ref={inputRef}
-      {...inputProps}>
+      {...inputProps}
+    >
       {children}
     </textarea>
-  )
-}
+  );
+};
 
-export default TextArea
+export default TextArea;

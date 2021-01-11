@@ -1,16 +1,14 @@
-import React from 'react'
-import classnames from 'classnames'
-
-import styles from './Alert.module.css'
+import React from "react";
+import classnames from "classnames";
 
 interface AlertProps {
-  type: 'success' | 'warning' | 'error' | 'info'
-  heading?: React.ReactNode
-  children?: React.ReactNode
-  cta?: React.ReactNode
-  slim?: boolean
-  noIcon?: boolean
-  validation?: boolean
+  type: "success" | "warning" | "error" | "info";
+  heading?: React.ReactNode;
+  children?: React.ReactNode;
+  cta?: React.ReactNode;
+  slim?: boolean;
+  noIcon?: boolean;
+  validation?: boolean;
 }
 
 export const Alert = ({
@@ -25,19 +23,18 @@ export const Alert = ({
   ...props
 }: AlertProps & React.HTMLAttributes<HTMLDivElement>): React.ReactElement => {
   const classes = classnames(
-    'gc-alert',
+    "gc-alert",
     {
-      'gc-alert--success': type === 'success',
-      'gc-alert--warning': type === 'warning',
-      'gc-alert--error': type === 'error',
-      'gc-alert--info': type === 'info',
-      'gc-alert--slim': slim,
-      'gc-alert--no-icon': noIcon,
-      'gc-alert--validation': validation,
-      [styles.alertWithCTA]: !!cta,
+      "gc-alert--success": type === "success",
+      "gc-alert--warning": type === "warning",
+      "gc-alert--error": type === "error",
+      "gc-alert--info": type === "info",
+      "gc-alert--slim": slim,
+      "gc-alert--no-icon": noIcon,
+      "gc-alert--validation": validation,
     },
     className
-  )
+  );
 
   return (
     <div className={classes} data-testid="alert" {...props}>
@@ -52,7 +49,7 @@ export const Alert = ({
       </div>
       {cta && <div>{cta}</div>}
     </div>
-  )
-}
+  );
+};
 
-export default Alert
+export default Alert;

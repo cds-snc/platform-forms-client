@@ -8,6 +8,7 @@ import {
   Radio,
   TextInput,
   TextArea,
+  FormGroup,
 } from "../components/forms";
 type callback = (event: ChangeEvent) => void;
 interface FormElements {
@@ -36,22 +37,22 @@ interface PropertyChoices {
 
 // This function is used for the i18n change of form labels
 function getProperty(field: string, lang: string): string {
-  if(!field) {
+  if (!field) {
     return lang;
   }
   return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }
 
 // This function is used for select/radio/checbox i18n change of form lables
-function getLocaleChoices(choices: Array<any>, lang: string) {
-  let localeChoices: Array<any> = [];
+function getLocaleChoices(choices: Array<unknown>, lang: string) {
   if (!choices || !choices.length) {
-    return localeChoices;
+    return [];
   }
-  choices.forEach((choice: any) => {    
-    localeChoices.push(choice[getProperty("", lang)]);
+  let localeChoices: Array<unknown> = [];
+  const test = choices.forEach((choice: any) => {
+    return localeChoices.push(choice[getProperty("", lang)]);
   });
-  
+console.log("LOCALE CHOICES TEST", test);
   return localeChoices;
 }
 
@@ -75,11 +76,8 @@ function buildForm(
     description: element.properties[
       getProperty("description", lang)
     ]?.toString(),
-    onChange: (event) => handleChange(event),
+    onChange: (event: ChangeEvent) => handleChange(event),
   };
-
-  const choices =
-    element && element.properties ? element.properties.choices : [];
 
   const label = (
     <Label key={`label-${element.id}`} htmlFor={inputProps.name}>
@@ -88,6 +86,12 @@ function buildForm(
   );
 
   switch (element.type) {
+    case "alert":
+      return (
+        <Alert type="info" noIcon>
+          {inputProps.description}
+        </Alert>
+      );
     case "textField":
       return (
         <>
@@ -102,11 +106,41 @@ function buildForm(
           <TextArea {...inputProps} />
         </>
       );
-    case "checkbox":
-      return <Checkbox {...inputProps} />;
-    case "radio":
-      return <Radio {...inputProps} />;
-    case "dropdown":      
+    case "checkbox": {
+      let checkboxItems: Array<JSX.Element> = [];
+      if (inputProps.choices && inputProps.choices.length) {
+        inputProps.choices.map((choice) => {
+          checkboxItems.push(
+            <Checkbox {...inputProps} id={`id-${choice}`} label={choice} />
+          );
+        });
+      }
+
+      return (
+        <FormGroup>
+          {label}
+          {checkboxItems}
+        </FormGroup>
+      );
+    }
+    case "radio": {
+      let radioButtons: Array<JSX.Element> = [];
+      if (inputProps.choices && inputProps.choices.length) {
+        inputProps.choices.map((choice) => {
+          radioButtons.push(
+            <Radio {...inputProps} id={`id-${choice}`} label={choice} />
+          );
+        });
+      }
+
+      return (
+        <FormGroup>
+          {label}
+          {radioButtons}
+        </FormGroup>
+      );
+    }
+    case "dropdown":
       return (
         <>
           {label}

@@ -1,25 +1,25 @@
-import React from 'react'
-import classnames from 'classnames'
+import React from "react";
+import classnames from "classnames";
 
 interface RadioProps {
-  id: string
-  name: string
-  className?: string
-  label: React.ReactNode
+  id: string;
+  name: string;
+  className?: string;
+  label: React.ReactNode;
   inputRef?:
     | string
     | ((instance: HTMLInputElement | null) => void)
     | React.RefObject<HTMLInputElement>
     | null
-    | undefined
+    | undefined;
 }
 
 export const Radio = (
-  props: RadioProps & JSX.IntrinsicElements['input']
+  props: RadioProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, name, className, label, inputRef, ...inputProps } = props
+  const { id, name, className, label, inputRef, ...inputProps } = props;
 
-  const classes = classnames('gc-input-radio', className)
+  const classes = classnames("gc-input-radio", className);
 
   return (
     <div data-testid="radio" className={classes}>
@@ -31,11 +31,11 @@ export const Radio = (
         ref={inputRef}
         {...inputProps}
       />
-      <label className="gc-radio__label" htmlFor={id}>
+      <label className="gc-label" htmlFor={id}>
         {label}
       </label>
     </div>
-  )
-}
+  );
+};
 
-export default Radio
+export default Radio;

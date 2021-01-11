@@ -152,7 +152,7 @@
       },
       {
         "id": 7,
-        "type": "textInput",
+        "type": "textField",
         "properties": {
           "titleEn": "ZIP Code",
           "titleFr": "ZIP",
@@ -167,18 +167,30 @@
         "id": 8,
         "type": "radio",
         "properties": {
-          "titleEn": "Are you a Canadian citizen?",
-          "titleFr": "Citoyen",
+          "titleEn": "Status",
+          "titleFr": "Statut",
           "description": "",
           "required": false,
           "choices": [
             {
-              "en": "Yes",
-              "fr": "Oui"
+              "en": "Citizen",
+              "fr": "Cityoen"
             },
             {
-              "en": "No",
-              "fr": "Non"
+              "en": "Permanent Resident",
+              "fr": "Permanent Resident"
+            },
+            {
+              "en": "Student",
+              "fr": "Student"
+            },
+            {
+              "en": "Visitor",
+              "fr": "Visitor"
+            },
+            {
+              "en": "Other",
+              "fr": "Autre"
             }
           ]
         }
@@ -194,8 +206,8 @@
           "choices": [
             {
               "en": "We can contact you for other inquiries",
-              "fr": "Autre"
-            }
+              "fr": "Nous pourrons vous contacter"
+            }          
           ]
         }
       }

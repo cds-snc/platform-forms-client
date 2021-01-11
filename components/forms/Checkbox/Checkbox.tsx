@@ -1,25 +1,25 @@
-import React from 'react'
-import classnames from 'classnames'
+import React from "react";
+import classnames from "classnames";
 
 interface CheckboxProps {
-  id: string
-  name: string
-  className?: string
-  label: React.ReactNode
+  id: string;
+  name: string;
+  className?: string;
+  label: React.ReactNode;
   inputRef?:
     | string
     | ((instance: HTMLInputElement | null) => void)
     | React.RefObject<HTMLInputElement>
     | null
-    | undefined
+    | undefined;
 }
 
 export const Checkbox = (
-  props: CheckboxProps & JSX.IntrinsicElements['input']
+  props: CheckboxProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, name, className, label, inputRef, ...inputProps } = props
+  const { id, name, className, label, inputRef, ...inputProps } = props;
 
-  const classes = classnames('gc-checkbox', className)
+  const classes = classnames("gc-checkbox", className);
 
   return (
     <div data-testid="checkbox" className={classes}>
@@ -31,11 +31,11 @@ export const Checkbox = (
         ref={inputRef}
         {...inputProps}
       />
-      <label className="gc-checkbox__label" htmlFor={id}>
+      <label className="gc-label" htmlFor={id}>
         {label}
       </label>
     </div>
-  )
-}
+  );
+};
 
-export default Checkbox
+export default Checkbox;

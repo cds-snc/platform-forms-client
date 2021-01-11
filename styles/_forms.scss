@@ -15,7 +15,7 @@
 }
 
 .gc-input-text {
-  @apply border-solid border-2 py-3 px-2 border-gray-900 mb-2;
+  @apply border-solid border-2 py-3 px-2 my-2 border-gray-900 mb-2;
 }
 
 .gc-dropdown {
@@ -23,21 +23,27 @@
 }
 
 .gc-checkbox {
-  -webkit-appearance: none;
-  @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded;
-}
+  .gc-label {
+    @apply inline;
+  }
+  .gc-checkbox__input,
+  form input.gc-checkbox__input {
+    -webkit-appearance: none;
+    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded;
+  }
 
-.gc-checkbox:checked {
-  @apply text-gray-50 bg-blue-800;
+  &:checked {
+    @apply text-gray-50 bg-blue-800;
+  }
 }
-
 .gc-input-radio {
-  @apply border-solid border-2 py-3 px-2 border-gray-900;
+  @apply py-3 px-2;
+
+  .gc-label {
+    @apply inline;
+  }
 }
 
-form input {
-  -webkit-appearance: none;
-}
 // form {
 //   > div:not(:last-of-type) {
 //     margin-bottom: $space-xl;
