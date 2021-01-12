@@ -20,13 +20,14 @@ header {
   .language-link {
     text-align: left;
     margin-bottom: $space-sm;
-    font-size: .85em;
+    font-size: 0.85em;
 
     h2 {
       @include visuallyHidden();
     }
 
-    form, button {
+    form,
+    button {
       margin: 0;
       max-width: unset;
       width: auto;
@@ -47,7 +48,7 @@ header {
     }
 
     @include xs {
-      font-size: .9em;
+      font-size: 0.9em;
     }
 
     @include sm {

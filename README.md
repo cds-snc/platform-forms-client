@@ -1,18 +1,19 @@
 [La version française suit.](#---------------------------------------------------------------------)
-# Platform - GC Forms 
+
+# Platform - GC Forms
 
 This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
 
-Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/). 
+Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
 
 ## Built with
 
 This is a [Next.js](https://nextjs.org/) and is built with:
 
-* Next.js >= 10.x
-* Sass (Syntactically Awesome Style Sheets) for reusable styles
-* [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
-* [PostCSS](https://postcss.org/)
+- Next.js >= 10.x
+- Sass (Syntactically Awesome Style Sheets) for reusable styles
+- [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
+- [PostCSS](https://postcss.org/)
 
 ## Running locally
 
@@ -39,7 +40,7 @@ Browse application on `http://localhost:3000`
 
 ## Configuration
 
-There are some environment variables that can optionally be configured. You can see a list in  `.env.example`.
+There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
 
 ### Notify integration
 
@@ -51,33 +52,29 @@ NOTIFY_API_KEY=
 NOTIFY_TEMPLATE_ID=
 ```
 
-
 ## ---------------------------------------------------------------------
 
-# Plate-forme - Formulaires GC 
+# Plate-forme - Formulaires GC
 
 Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
 
-Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/). 
-
+Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
 
 ## Contributions
 
 Ce projet est conçu sur une de base [Next.js](https://nextjs.org/) et utilise les contributions suivantes :
 
-* Next.js >= 10.x
-* Feuilles de styles Sass (Syntactically Awesome Style Sheets)
-* [Tailwindcss](https://tailwindcss.com/) un environnement CSS modulaire accélérant la conception de pages web
-* [PostCSS](https://postcss.org/)
-
+- Next.js >= 10.x
+- Feuilles de styles Sass (Syntactically Awesome Style Sheets)
+- [Tailwindcss](https://tailwindcss.com/) un environnement CSS modulaire accélérant la conception de pages web
+- [PostCSS](https://postcss.org/)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) and is built with:
 
-* Next.js >= 10.x
-* Sass (Syntactically Awesome Style Sheets) for reusable styles
-* [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
-* [PostCSS](https://postcss.org/)
-
+- Next.js >= 10.x
+- Sass (Syntactically Awesome Style Sheets) for reusable styles
+- [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
+- [PostCSS](https://postcss.org/)
 
 ## Exécuter localement
 
@@ -94,7 +91,6 @@ cd platform-forms-client
 yarn install // ou // npm install
 ```
 
-
 Exécuter en mode développement
 
 ```sh
@@ -106,7 +102,6 @@ Accéder à l’application au `http://localhost:3000`
 ## Configuration
 
 Certaines valeurs d'environnement peuvent être configurés. Cette étape est optionnelle. Consultez la liste des valeurs disponibles dans `.env.example`.
-
 
 ### Intégration avec Notify
 
