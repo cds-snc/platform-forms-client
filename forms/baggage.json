@@ -29,20 +29,20 @@
       },
       {
         "id": 2,
-        "type":"radio",
-        "properties":{
-          "titleEn":"Residential Status",
-          "titleFr":"Statut résidentiel",
-          "description":"",
-          "required":true,
-          "choices":[
+        "type": "radio",
+        "properties": {
+          "titleEn": "Residential Status",
+          "titleFr": "Statut résidentiel",
+          "description": "",
+          "required": true,
+          "choices": [
             {
-              "en":"Resident of Canada",
-              "fr":"Résident du Canada"
+              "en": "Resident of Canada",
+              "fr": "Résident du Canada"
             },
             {
-              "en":"Non-resident of Canada",
-              "fr":"Non-résident du Canada"
+              "en": "Non-resident of Canada",
+              "fr": "Non-résident du Canada"
             }
           ]
         }
@@ -152,37 +152,37 @@
         }
       },
       {
-        "id":11,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Do the missing bags contain any of the following?",
-          "titleFr":"Les bagages manquants renferment-ils les marchandises suivantes?",
-          "description":"",
-          "required":false,
-          "choices":[
+        "id": 11,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Do the missing bags contain any of the following?",
+          "titleFr": "Les bagages manquants renferment-ils les marchandises suivantes?",
+          "description": "",
+          "required": false,
+          "choices": [
             {
-              "en":"Alcohol",
-              "fr":"Alcool"
+              "en": "Alcohol",
+              "fr": "Alcool"
             },
             {
-              "en":"Tobacco",
-              "fr":"Tabac"
+              "en": "Tobacco",
+              "fr": "Tabac"
             },
             {
-              "en":"Firearms or other weapons (e.g. switchblades, Mace or pepper spray)",
-              "fr":"Armes à feu ou autres armes (p. ex. couteaux à cran d'arrêt, Mace ou gaz poivré)"
+              "en": "Firearms or other weapons (e.g. switchblades, Mace or pepper spray)",
+              "fr": "Armes à feu ou autres armes (p. ex. couteaux à cran d'arrêt, Mace ou gaz poivré)"
             },
             {
-              "en":"Commercial goods, whether or not for resale (e.g. samples, tools, equipment)",
-              "fr":"Marchandises commerciales destinées ou non à la revente (p. ex. échantillons, outils, équipement)"
+              "en": "Commercial goods, whether or not for resale (e.g. samples, tools, equipment)",
+              "fr": "Marchandises commerciales destinées ou non à la revente (p. ex. échantillons, outils, équipement)"
             },
             {
-              "en":"Meat, fish, seafood, eggs, dairy products, fruits, vegetables, seeds, nuts, plants, flowers, wood, animals, birds, insects, and any parts, products or by-products of any of the foregoing",
-              "fr":"Viande, poisson, fruits de mer, oeufs, produitsl laitiers, fruits, légumes, semences, noix, plantes, fleurs, bois, animaux, oiseaux, insectes, et des parties, produits, ou sous-produits quelconque de ce qui précède"
+              "en": "Meat, fish, seafood, eggs, dairy products, fruits, vegetables, seeds, nuts, plants, flowers, wood, animals, birds, insects, and any parts, products or by-products of any of the foregoing",
+              "fr": "Viande, poisson, fruits de mer, oeufs, produitsl laitiers, fruits, légumes, semences, noix, plantes, fleurs, bois, animaux, oiseaux, insectes, et des parties, produits, ou sous-produits quelconque de ce qui précède"
             },
             {
-              "en":"Currency and/or monetary instruments totalling CAN$10,000 or more per person",
-              "fr":"Espèces et/ou effets dont le montant total équivaut à 10 000 $CAN ou plus par personne"
+              "en": "Currency and/or monetary instruments totalling CAN$10,000 or more per person",
+              "fr": "Espèces et/ou effets dont le montant total équivaut à 10 000 $CAN ou plus par personne"
             }
           ]
         }
@@ -214,17 +214,17 @@
         }
       },
       {
-        "id":14,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Authorization - I certify that the information given above is true and complete and I authorize the carrier mentioned above to open my baggage on my behalf for customs examination",
-          "titleFr":"Autorisation - Je déclare que les renseignements ci-dessus sont exacts et complets, et j'autorise le transporteur indiqué ci-dessus à ouvrir mes bagages en mon nom pour l'examen des douanes",
-          "description":"",
-          "required":true,
-          "choices":[
+        "id": 14,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Authorization - I certify that the information given above is true and complete and I authorize the carrier mentioned above to open my baggage on my behalf for customs examination",
+          "titleFr": "Autorisation - Je déclare que les renseignements ci-dessus sont exacts et complets, et j'autorise le transporteur indiqué ci-dessus à ouvrir mes bagages en mon nom pour l'examen des douanes",
+          "description": "",
+          "required": true,
+          "choices": [
             {
-              "en":"Yes",
-              "fr":"Oui"
+              "en": "Yes",
+              "fr": "Oui"
             }
           ]
         }

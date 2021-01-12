@@ -16,32 +16,32 @@
     "elements": [
       {
         "id": 1,
-        "type":"radio",
-        "properties":{
-          "titleEn":"Category",
-          "titleFr":"Catégorie",
-          "description":"",
-          "required":true,
-          "choices":[
+        "type": "radio",
+        "properties": {
+          "titleEn": "Category",
+          "titleFr": "Catégorie",
+          "description": "",
+          "required": true,
+          "choices": [
             {
-              "en":"Excellence in Profession",
-              "fr":"Excellence en profession"
+              "en": "Excellence in Profession",
+              "fr": "Excellence en profession"
             },
             {
-              "en":"Exceptional Young Public Servant",
-              "fr":"Jeunes fonctionnaires exceptionnels"
+              "en": "Exceptional Young Public Servant",
+              "fr": "Jeunes fonctionnaires exceptionnels"
             },
             {
-              "en":"Joan Atkinson Award for Public Sector Balues in the Workplace",
-              "fr":"Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
+              "en": "Joan Atkinson Award for Public Sector Balues in the Workplace",
+              "fr": "Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
             },
             {
-              "en":"Outstanding Career",
-              "fr":"Carrière exceptionnelle"
+              "en": "Outstanding Career",
+              "fr": "Carrière exceptionnelle"
             },
             {
-              "en":"60 Years of Service Special Award",
-              "fr":"Prix spécial récompensant 60 années de service"
+              "en": "60 Years of Service Special Award",
+              "fr": "Prix spécial récompensant 60 années de service"
             }
           ]
         }

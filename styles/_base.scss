@@ -59,7 +59,8 @@ ul {
   }
 }
 
-a, a:visited {
+a,
+a:visited {
   color: $color-blue-dark;
 }
 
@@ -119,4 +120,3 @@ li:not(:last-of-type) {
     display: inherit;
   }
 }
-
