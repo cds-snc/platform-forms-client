@@ -15,10 +15,16 @@ const Home = ({ t }) => (
           <Link href="/8">{t("formList.esdc")}</Link>
         </p>
         <p>
+          <Link href="/9">{t("formList.clearance")}</Link>
+        </p>
+        <p>
           <Link href="/18">{t("formList.callback")}</Link>
         </p>
         <p>
           <Link href="/1">{t("formList.intake")}</Link>
+        </p>
+        <p>
+          <Link href="/12">{t("formList.notifycontact")}</Link>
         </p>
         <p>
           <Link href="/3">{t("formList.award")}</Link>
