@@ -16,7 +16,7 @@
     "elements": [
       {
         "id": 1,
-        "type": "radioButton",
+        "type": "radio",
         "properties": {
           "titleEn": "Language of service",
           "titleFr": "Préférence linguistique",
