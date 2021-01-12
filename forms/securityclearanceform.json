@@ -11,7 +11,113 @@
     "version": 1,
     "titleEn": "Security Clearance Form",
     "titleFr": "Liste de vérification des exigences relatives à la sécurité (LVERS)",
-    "layout":[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 50, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122],
+    "layout": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      50,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122
+    ],
     "elements": [
       {
         "id": 1,
@@ -54,62 +160,62 @@
       },
       {
         "id": 4,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"ADMINISTRATIVE INFORMATION ",
-          "titleFr":"string",
-          "descriptionEn":"(To be completed by Department/Agency/Organization)",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "ADMINISTRATIVE INFORMATION ",
+          "titleFr": "string",
+          "descriptionEn": "(To be completed by Department/Agency/Organization)",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"New",
-              "fr":"string"
+              "en": "New",
+              "fr": "string"
             },
             {
-              "en":"Upgrade",
-              "fr":"string"
+              "en": "Upgrade",
+              "fr": "string"
             },
             {
-              "en":"Supplemental",
-              "fr":"string"
+              "en": "Supplemental",
+              "fr": "string"
             },
             {
-              "en":"Update",
-              "fr":"string"
+              "en": "Update",
+              "fr": "string"
             },
             {
-              "en":"Transfer",
-              "fr":"string"
+              "en": "Transfer",
+              "fr": "string"
             }
           ]
         }
       },
       {
         "id": 5,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"ADMINISTRATIVE INFORMATION ",
-          "titleFr":"string",
-          "descriptionEn":"Level",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "ADMINISTRATIVE INFORMATION ",
+          "titleFr": "string",
+          "descriptionEn": "Level",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"I (CONFIDENTIAL)",
-              "fr":"string"
+              "en": "I (CONFIDENTIAL)",
+              "fr": "string"
             },
             {
-              "en":"II (SECRET)",
-              "fr":"string"
+              "en": "II (SECRET)",
+              "fr": "string"
             },
             {
-              "en":"III (TOP SECRET)",
-              "fr":"string"
+              "en": "III (TOP SECRET)",
+              "fr": "string"
             },
             {
-              "en":"Other",
-              "fr":"string"
+              "en": "Other",
+              "fr": "string"
             }
           ]
         }
@@ -125,8 +231,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-          },
+        }
+      },
       {
         "id": 7,
         "type": "textField",
@@ -164,8 +270,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-          },
+        }
+      },
       {
         "id": 10,
         "type": "textField",
@@ -207,21 +313,21 @@
       },
       {
         "id": 13,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Sex",
-          "titleFr":"string",
-          "descriptionEn":"Level",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Sex",
+          "titleFr": "string",
+          "descriptionEn": "Level",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"Male",
-              "fr":"string"
+              "en": "Male",
+              "fr": "string"
             },
             {
-              "en":"Female",
-              "fr":"string"
+              "en": "Female",
+              "fr": "string"
             }
           ]
         }
@@ -263,8 +369,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 17,
         "type": "textField",
@@ -328,8 +434,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 22,
         "type": "textField",
@@ -345,37 +451,37 @@
       },
       {
         "id": 23,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"MARITAL STATUS/COMMON-LAW PARTNERSHIP",
-          "titleFr":"string",
-          "descriptionEn":"Level",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "MARITAL STATUS/COMMON-LAW PARTNERSHIP",
+          "titleFr": "string",
+          "descriptionEn": "Level",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"Married",
-              "fr":"string"
+              "en": "Married",
+              "fr": "string"
             },
             {
-              "en":"Common-Law Partnership",
-              "fr":"string"
+              "en": "Common-Law Partnership",
+              "fr": "string"
             },
             {
-              "en":"Separated",
-              "fr":"string"
+              "en": "Separated",
+              "fr": "string"
             },
             {
-              "en":"Widowed",
-              "fr":"string"
+              "en": "Widowed",
+              "fr": "string"
             },
             {
-              "en":"Divorced",
-              "fr":"string"
+              "en": "Divorced",
+              "fr": "string"
             },
             {
-              "en":"Single",
-              "fr":"string"
+              "en": "Single",
+              "fr": "string"
             }
           ]
         }
@@ -430,8 +536,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 28,
         "type": "textField",
@@ -495,8 +601,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 33,
         "type": "textField",
@@ -534,8 +640,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 36,
         "type": "textField",
@@ -599,8 +705,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 41,
         "type": "textField",
@@ -720,21 +826,21 @@
       },
       {
         "id": 67,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Have you ever been convicted of a criminal offence for which you have not been granted a pardon?",
-          "titleFr":"string",
-          "descriptionEn":"",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Have you ever been convicted of a criminal offence for which you have not been granted a pardon?",
+          "titleFr": "string",
+          "descriptionEn": "",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"Yes",
-              "fr":"string"
+              "en": "Yes",
+              "fr": "string"
             },
             {
-              "en":"No",
-              "fr":"string"
+              "en": "No",
+              "fr": "string"
             }
           ]
         }
@@ -750,8 +856,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-        },
+        }
+      },
       {
         "id": 69,
         "type": "textField",
@@ -845,21 +951,21 @@
       },
       {
         "id": 76,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"If you are not naturalized, have you applied for Canadiann citizenship? Please provide a copy of immigrant visa or recored of landing documentation ",
-          "titleFr":"string",
-          "descriptionEn":"",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "If you are not naturalized, have you applied for Canadiann citizenship? Please provide a copy of immigrant visa or recored of landing documentation ",
+          "titleFr": "string",
+          "descriptionEn": "",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"yes",
-              "fr":"string"
+              "en": "yes",
+              "fr": "string"
             },
             {
-              "en":"no",
-              "fr":"string"
+              "en": "no",
+              "fr": "string"
             }
           ]
         }
@@ -1048,21 +1154,21 @@
       },
       {
         "id": 91,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Would your employment be jeopardized if youor current supervisor, below, is contacted? ",
-          "titleFr":"string",
-          "descriptionEn":"",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Would your employment be jeopardized if youor current supervisor, below, is contacted? ",
+          "titleFr": "string",
+          "descriptionEn": "",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"yes",
-              "fr":"string"
+              "en": "yes",
+              "fr": "string"
             },
             {
-              "en":"no",
-              "fr":"string"
+              "en": "no",
+              "fr": "string"
             }
           ]
         }
@@ -1082,21 +1188,21 @@
       },
       {
         "id": 93,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Were you dismissed or asked to resign from any position(s) as listed below? ",
-          "titleFr":"string",
-          "descriptionEn":"",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Were you dismissed or asked to resign from any position(s) as listed below? ",
+          "titleFr": "string",
+          "descriptionEn": "",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"yes",
-              "fr":"string"
+              "en": "yes",
+              "fr": "string"
             },
             {
-              "en":"no",
-              "fr":"string"
+              "en": "no",
+              "fr": "string"
             }
           ]
         }
@@ -1259,21 +1365,21 @@
       },
       {
         "id": 106,
-        "type":"checkbox",
-        "properties":{
-          "titleEn":"Do you have any business, financial or personal assets outside Canada?",
-          "titleFr":"string",
-          "descriptionEn":"",
-          "descriptionFr":"string",
-          "required":false,
-          "choices":[
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Do you have any business, financial or personal assets outside Canada?",
+          "titleFr": "string",
+          "descriptionEn": "",
+          "descriptionFr": "string",
+          "required": false,
+          "choices": [
             {
-              "en":"yes",
-              "fr":"oui"
+              "en": "yes",
+              "fr": "oui"
             },
             {
-              "en":"no",
-              "fr":"non"
+              "en": "no",
+              "fr": "non"
             }
           ]
         }
@@ -1290,7 +1396,7 @@
           "charLimit": 100,
           "required": true
         }
-      }, 
+      },
       {
         "id": 108,
         "type": "textField",
