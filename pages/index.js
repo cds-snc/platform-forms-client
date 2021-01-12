@@ -10,20 +10,24 @@ const Home = ({ t }) => (
       <div className="mb-20">
         <h2 className="text-3xl mb-5">{t("product.title")}</h2>
         <p>{t("product.text")}</p>
+        <h2 className="text-3xl mb-5">{t("formList.title")}</h2>
         <p>
-          <Link href="/8">{t("formList.esdc.title")}</Link>
+          <Link href="/8">{t("formList.esdc")}</Link>
         </p>
         <p>
-          <Link href="/1">{t("formList.intake.title")}</Link>
+          <Link href="/18">{t("formList.callback")}</Link>
         </p>
         <p>
-          <Link href="/3">{t("formList.award.title")}</Link>
+          <Link href="/1">{t("formList.intake")}</Link>
         </p>
         <p>
-          <Link href="/4">{t("formList.baggage.title")}</Link>
+          <Link href="/3">{t("formList.award")}</Link>
         </p>
         <p>
-          <Link href="/5">{t("formList.lostfishgear.title")}</Link>
+          <Link href="/4">{t("formList.baggage")}</Link>
+        </p>
+        <p>
+          <Link href="/5">{t("formList.lostfishgear")}</Link>
         </p>
       </div>
 
