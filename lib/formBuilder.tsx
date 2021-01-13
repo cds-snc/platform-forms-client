@@ -113,13 +113,14 @@ function buildForm(
         </Fragment>
       );
     case "checkbox": {
-      const checkboxItems = inputProps.choices.map((choice) => {
+      const checkboxItems = inputProps.choices.map((choice, index) => {
         return (
           <Checkbox
             {...inputProps}
-            key={`key-${choice}`}
+            key={`key-${index}`}
             id={`id-${choice}`}
             label={choice}
+            value={choice}
           />
         );
       });
@@ -132,13 +133,14 @@ function buildForm(
       );
     }
     case "radio": {
-      const radioButtons = inputProps.choices.map((choice) => {
+      const radioButtons = inputProps.choices.map((choice, index) => {
         return (
           <Radio
             {...inputProps}
-            key={`key-${choice}`}
+            key={`key-${index}`}
             id={`id-${choice}`}
             label={choice}
+            value={choice}
           />
         );
       });
