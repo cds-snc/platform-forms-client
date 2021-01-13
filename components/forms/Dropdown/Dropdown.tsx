@@ -16,17 +16,12 @@ interface DropdownProps {
 }
 
 interface DropdownOptionProps {
-  key: string;
   name: string | number;
   value: string | number;
 }
 
 const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
-  return (
-    <option key={props.key} value={props.value}>
-      {props.name}
-    </option>
-  );
+  return <option value={props.value}>{props.name}</option>;
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
