@@ -1,41 +1,38 @@
-import React from "react";
+import React, { useRef } from "react";
 import { withTranslation } from "../../i18n";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { getProperty, buildForm } from "../../lib/formBuilder";
 import PropTypes from "prop-types";
+import { useFormik } from "formik";
 
 const Form = ({ formModel, i18n }) => {
   const formToRender = formModel;
-  const [state, setState] = useState({});
   const router = useRouter();
+  const initialState = useRef(null);
 
   useEffect(() => {
     formToRender.elements.map((element) => {
-      setState((prevState) => ({
-        ...prevState,
+      initialState.current = {
         [element.id]:
           element.properties[getProperty("placeholder", i18n.language)],
-      }));
+      };
     });
   }, [formToRender]);
 
-  const handleChange = (event) => {
-    const { target } = event;
-    // This triggers everytime the input is changed
+  const formik = useFormik({
+    initialValues: initialState,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
-    setState((prevState) => ({
-      ...prevState,
-      [target.name]: [target.value],
-    }));
-  };
-  const handleSubmit = (event) => {
+  const handleSubmit = (values) => {
     const formResponseObject = {
       form: formToRender,
-      responses: state,
+      responses: values,
     };
 
-    event.preventDefault();
     //making a post request to the submit API
     fetch("/api/submit", {
       method: "POST",
@@ -56,18 +53,18 @@ const Form = ({ formModel, i18n }) => {
   };
 
   return (
-    <>
+    <div>
       <h1>{formToRender[getProperty("title", i18n.language)]}</h1>
-      <form id="form" onSubmit={handleSubmit} method="POST">
+      <form id="form" onSubmit={formik.handleSubmit} method="POST">
         {formToRender.layout.map((item) => {
           const element = formToRender.elements.find(
             (element) => element.id === item
           );
           return buildForm(
             element,
-            state[element.id],
+            formik.values[element.id],
             i18n.language,
-            handleChange
+            formik.handleChange
           );
         })}
         <div className="buttons">
@@ -76,7 +73,7 @@ const Form = ({ formModel, i18n }) => {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 Form.propTypes = {

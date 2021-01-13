@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement } from "react";
+import React, { ChangeEvent, ReactElement, Fragment } from "react";
 import {
   Alert,
   Checkbox,
@@ -65,7 +65,7 @@ function getLocaleChoices(
 // This function renders the form elements with passed in properties.
 function buildForm(
   element: FormElements,
-  value: string | boolean,
+  value: string,
   lang: string,
   handleChange: callback
 ): ReactElement {
@@ -82,7 +82,7 @@ function buildForm(
     description: element.properties[
       getProperty("description", lang)
     ]?.toString(),
-    onChange: (event: ChangeEvent) => handleChange(event),
+    onChange: handleChange,
   };
 
   const label = (
@@ -100,17 +100,17 @@ function buildForm(
       );
     case "textField":
       return (
-        <>
+        <Fragment key={inputProps.id}>
           {label}
           <TextInput type="text" {...inputProps} />
-        </>
+        </Fragment>
       );
     case "textArea":
       return (
-        <>
+        <Fragment key={inputProps.id}>
           {label}
           <TextArea {...inputProps} />
-        </>
+        </Fragment>
       );
     case "checkbox": {
       const checkboxItems = inputProps.choices.map((choice) => {
@@ -125,7 +125,7 @@ function buildForm(
       });
 
       return (
-        <FormGroup>
+        <FormGroup key={`formGroup-${inputProps.id}`}>
           {label}
           {checkboxItems}
         </FormGroup>
@@ -144,7 +144,7 @@ function buildForm(
       });
 
       return (
-        <FormGroup>
+        <FormGroup key={`formGroup-${inputProps.id}`}>
           {label}
           {radioButtons}
         </FormGroup>
@@ -152,10 +152,10 @@ function buildForm(
     }
     case "dropdown":
       return (
-        <>
+        <Fragment key={inputProps.id}>
           {label}
           <Dropdown {...inputProps} />
-        </>
+        </Fragment>
       );
     case "plainText":
       return (
@@ -166,10 +166,10 @@ function buildForm(
       );
     case "fileInput":
       return (
-        <>
+        <Fragment key={inputProps.id}>
           {label}
           <FileInput {...inputProps} fileType={element.properties.fileType} />
-        </>
+        </Fragment>
       );
     default:
       return <></>;
