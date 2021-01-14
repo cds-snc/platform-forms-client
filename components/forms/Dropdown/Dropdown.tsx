@@ -21,11 +21,7 @@ interface DropdownOptionProps {
 }
 
 const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
-  return (
-    <option key={`${props.value}-key`} value={props.value}>
-      {props.name}
-    </option>
-  );
+  return <option value={props.value}>{props.name}</option>;
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
@@ -36,13 +32,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
   let options = null;
   if (choices && choices.length) {
     options = choices.map((choice, i) => {
-      return (
-        <DropdownOption
-          key={`${choice}-key-${i}`}
-          value={choice}
-          name={choice}
-        />
-      );
+      return <DropdownOption key={`key-${i}`} value={choice} name={choice} />;
     });
   }
 
