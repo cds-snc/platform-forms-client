@@ -23,34 +23,30 @@ const Form = ({ formModel, i18n }) => {
   const formik = useFormik({
     initialValues: initialState,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const formResponseObject = {
+        form: formToRender,
+        responses: values,
+      };
+
+      //making a post request to the submit API
+      fetch("/api/submit", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formResponseObject),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          router.push("/confirmation");
+        })
+        .catch((error) => {
+          console.log(error);
+          // Need to add more error handling here
+        });
     },
   });
-
-  const handleSubmit = (values) => {
-    const formResponseObject = {
-      form: formToRender,
-      responses: values,
-    };
-
-    //making a post request to the submit API
-    fetch("/api/submit", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formResponseObject),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        router.push("/confirmation");
-      })
-      .catch((error) => {
-        console.log(error);
-        // Need to add more error handling here
-      });
-  };
 
   return (
     <div>
