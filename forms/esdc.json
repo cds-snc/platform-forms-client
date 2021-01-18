@@ -149,7 +149,9 @@
       142,
       143,
       144,
-      145
+      145,
+      146,
+      147
     ],
     "elements": [
       {
@@ -2335,20 +2337,32 @@
       },
       {
         "id": 134,
+        "type": "fileInput",
+        "properties": {
+          "titleEn": "Please provide a digital picture of the workspace or community space to be improved",
+          "titleFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "fileType": "image/*",
+          "required": false
+        }
+      },
+      {
+        "id": 135,
         "type": "plainText",
         "properties": {
-          "titleEn": "Program Checklist",
+          "titleEn": "Program Specific Questions",
           "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "Please review the following checklist carefully. Errors or incomplete applications will result in delayed processing and/or rejection.",
+          "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
           "required": false
         }
       },
       {
-        "id": 135,
+        "id": 136,
         "type": "checkbox",
         "properties": {
           "titleEn": "",
@@ -2356,6 +2370,10 @@
           "description": "",
           "required": false,
           "choices": [
+            {
+              "en": "I have provided a digital picture of the workspace or community space I want to improve, if my project is for a renovation.",
+              "fr": ""
+            },
             {
               "en": "I attest that the organization is Black-led (i.e. has Black leadership at all levels of management)",
               "fr": ""
@@ -2373,10 +2391,6 @@
               "fr": ""
             },
             {
-              "en": "I have provided a digital picture of the workspace or community space I want to improve, if my project is for a renovation.",
-              "fr": ""
-            },
-            {
               "en": "I  provided one external estimate if my project is for renovation of an existing space.",
               "fr": ""
             },
@@ -2388,7 +2402,7 @@
         }
       },
       {
-        "id": 136,
+        "id": 137,
         "type": "plainText",
         "properties": {
           "titleEn": "Attestation",
@@ -2402,7 +2416,7 @@
         }
       },
       {
-        "id": 135,
+        "id": 138,
         "type": "checkbox",
         "properties": {
           "titleEn": "",
@@ -2426,7 +2440,7 @@
         }
       },
       {
-        "id": 137,
+        "id": 139,
         "type": "textField",
         "properties": {
           "titleEn": "Official Representative 1 Name",
@@ -2438,34 +2452,10 @@
         }
       },
       {
-        "id": 138,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 139,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Date (YYYY-MM-DD)",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
         "id": 140,
         "type": "textField",
         "properties": {
-          "titleEn": "Official Representative 2 Name",
+          "titleEn": "Title",
           "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -2477,7 +2467,7 @@
         "id": 141,
         "type": "textField",
         "properties": {
-          "titleEn": "Title",
+          "titleEn": "Date (YYYY-MM-DD)",
           "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -2489,7 +2479,7 @@
         "id": 142,
         "type": "textField",
         "properties": {
-          "titleEn": "Date (YYYY-MM-DD)",
+          "titleEn": "Official Representative 2 Name",
           "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -2501,7 +2491,7 @@
         "id": 143,
         "type": "textField",
         "properties": {
-          "titleEn": "Official Representative 3 Name",
+          "titleEn": "Title",
           "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -2513,7 +2503,7 @@
         "id": 144,
         "type": "textField",
         "properties": {
-          "titleEn": "Title",
+          "titleEn": "Date (YYYY-MM-DD)",
           "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -2523,6 +2513,30 @@
       },
       {
         "id": 145,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Official Representative 3 Name",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 146,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Title",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "required": false
+        }
+      },
+      {
+        "id": 147,
         "type": "textField",
         "properties": {
           "titleEn": "Date (YYYY-MM-DD)",

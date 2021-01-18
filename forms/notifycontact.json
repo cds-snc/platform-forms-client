@@ -11,7 +11,7 @@
     "version": 1,
     "titleEn": "Notify Contact Us",
     "titleFr": "Nous joindre - Notification",
-    "layout":[1,2,3,4],
+    "layout": [1, 2, 3, 4],
     "elements": [
       {
         "id": 1,
@@ -24,8 +24,8 @@
           "description": "",
           "charLimit": 100,
           "required": true
-          }
-          },
+        }
+      },
       {
         "id": 2,
         "type": "textField",
@@ -41,34 +41,34 @@
         }
       },
       {
-        "id":3,
-        "type":"radio",
-        "properties":{
-          "titleEn":"How can we help?",
-          "titleFr":"Quel est votre besoin",
-          "descriptionEn":"",
-          "descriptionFr":"",
-          "required":false,
-          "choices":[
+        "id": 3,
+        "type": "radio",
+        "properties": {
+          "titleEn": "How can we help?",
+          "titleFr": "Quel est votre besoin",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false,
+          "choices": [
             {
-              "en":"Ask a question",
-              "fr":"Poser une question"
+              "en": "Ask a question",
+              "fr": "Poser une question"
             },
             {
-              "en":"Get technical suppoort",
-              "fr":"Obtenir du soutien technique"
+              "en": "Get technical suppoort",
+              "fr": "Obtenir du soutien technique"
             },
             {
-              "en":"Give feedback",
-              "fr":"Donner votre avis"
+              "en": "Give feedback",
+              "fr": "Donner votre avis"
             },
             {
-              "en":"Set up a demo too learn more about GD Notify",
-              "fr":"Organiser une démo pour en savoir plus sur GC Notification"
+              "en": "Set up a demo too learn more about GD Notify",
+              "fr": "Organiser une démo pour en savoir plus sur GC Notification"
             },
             {
-              "en":"Other",
-              "fr":"Autre"
+              "en": "Other",
+              "fr": "Autre"
             }
           ]
         }
@@ -85,7 +85,7 @@
           "descriptionFr": "",
           "charLimit": 100,
           "required": true
-        }         
+        }
       }
     ]
   }
