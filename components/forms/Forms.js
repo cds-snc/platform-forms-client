@@ -52,24 +52,22 @@ const Form = ({ formModel, i18n }) => {
     <div>
       <h1>{formToRender[getProperty("title", i18n.language)]}</h1>
       <form id="form" onSubmit={formik.handleSubmit} method="POST">
-        <fieldset>
-          {formToRender.layout.map((item) => {
-            const element = formToRender.elements.find(
-              (element) => element.id === item
-            );
-            return buildForm(
-              element,
-              formik.values[element.id],
-              i18n.language,
-              formik.handleChange
-            );
-          })}
-          <div className="buttons">
-            <button className="gc-button" type="submit">
-              Submit
-            </button>
-          </div>
-        </fieldset>
+        {formToRender.layout.map((item) => {
+          const element = formToRender.elements.find(
+            (element) => element.id === item
+          );
+          return buildForm(
+            element,
+            formik.values[element.id],
+            i18n.language,
+            formik.handleChange
+          );
+        })}
+        <div className="buttons">
+          <button className="gc-button" type="submit">
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );
