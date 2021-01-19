@@ -125,7 +125,7 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`}>
+        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
           {label}
           {checkboxItems}
         </FormGroup>
@@ -145,7 +145,7 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`}>
+        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
           {label}
           {radioButtons}
         </FormGroup>
