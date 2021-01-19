@@ -3,7 +3,6 @@ import {
   Alert,
   Checkbox,
   Dropdown,
-  Fieldset,
   Label,
   Radio,
   TextInput,
@@ -85,11 +84,11 @@ function buildForm(
     onChange: handleChange,
   };
 
-  const label = (
+  const label = inputProps.label ? (
     <Label key={`label-${element.id}`} htmlFor={inputProps.name}>
       {inputProps.label}
     </Label>
-  );
+  ) : null;
 
   switch (element.type) {
     case "alert":
@@ -161,10 +160,10 @@ function buildForm(
       );
     case "plainText":
       return (
-        <Fieldset {...inputProps}>
+        <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
           {label}
           {inputProps.description}
-        </Fieldset>
+        </div>
       );
     case "fileInput":
       return (

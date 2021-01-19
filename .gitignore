@@ -76,3 +76,4 @@ cdk/local-image
 credentials
 
 terraform/azure/secrets.auto.tfvars
+package-lock.json
