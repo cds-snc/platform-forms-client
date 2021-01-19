@@ -44,12 +44,10 @@ There are some environment variables that can optionally be configured. You can 
 
 ### Notify integration
 
-To send a form submission to an email address, you should configure the following environment variables:
+To send a form submission to an email address, you should configure the following environment variables in a `.env` file:
 
 ```sh
-NOTIFY_ENDPOINT=
 NOTIFY_API_KEY=
-NOTIFY_TEMPLATE_ID=
 ```
 
 ## ---------------------------------------------------------------------
@@ -108,6 +106,5 @@ Certaines valeurs d'environnement peuvent être configurés. Cette étape est op
 Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez configurer les variables suivantes :
 
 ```sh
-NOTIFY_ENDPOINT=
 NOTIFY_API_KEY=
 ```
