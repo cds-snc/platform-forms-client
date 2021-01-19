@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../../i18n";
 
 const LanguageToggle = ({ t, i18n }) => {
   const locale = i18n.language;
+
+  useEffect(() => {
+    const html = document.querySelector("html");
+
+    if (html) html.setAttribute("lang", locale);
+  }, [locale]);
 
   return (
     <>
