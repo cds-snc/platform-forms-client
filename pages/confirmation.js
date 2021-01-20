@@ -1,16 +1,28 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../i18n";
+import { useRouter } from "next/router";
 
-const Confirmation = ({ t }) => (
-  <>
-    <h1>{t("title")}</h1>
+const Confirmation = ({ t }) => {
+  const router = useRouter();
+  const urlQuery = router.query;
+  const backToLink =
+    urlQuery && urlQuery.referrerUrl ? (
+      <a href={urlQuery.referrerUrl}>{t("backLink")}</a>
+    ) : null;
 
-    <div>
-      <p>{t("body")}</p>
-    </div>
-  </>
-);
+  return (
+    <>
+      <h1>{t("title")}</h1>
+
+      <div>
+        <p>{t("body")}</p>
+      </div>
+
+      <div class="gc-form-confirmation">{backToLink}</div>
+    </>
+  );
+};
 
 Confirmation.getInitialProps = async () => ({
   namespacesRequired: ["confirmation"],
