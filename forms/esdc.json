@@ -1,4 +1,11 @@
 {
+  "internalTitleEn": "ESDC Grant Application for Funding",
+  "internalTitleFr": "Demande de financement de subvention",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "steven.talbot@cds-snc.ca"
+  },
   "form": {
     "id": 8,
     "version": 1,
@@ -153,6 +160,9 @@
       146,
       147
     ],
+    "endPage": {
+      "referrerUrl": "https://www.canada.ca/en/employment-social-development/services/funding/enabling-accessibility-fund-small-projects.html#h2.06-h3.02"
+    },
     "elements": [
       {
         "id": 1,
@@ -2368,7 +2378,7 @@
           "titleEn": "",
           "titleFr": "",
           "description": "",
-          "required": false,
+          "required": true,
           "choices": [
             {
               "en": "I have provided a digital picture of the workspace or community space I want to improve, if my project is for a renovation.",
@@ -2422,7 +2432,7 @@
           "titleEn": "",
           "titleFr": "",
           "description": "",
-          "required": false,
+          "required": true,
           "choices": [
             {
               "en": "I have the capacity and the authority to submit this Application for Funding on behalf of the applicant organization.",
