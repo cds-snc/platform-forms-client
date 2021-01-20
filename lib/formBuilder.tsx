@@ -72,6 +72,7 @@ function buildForm(
     key: element.id,
     id: element.id,
     name: element.id.toString(),
+    required: element.properties.required,
     label: element.properties[getProperty("title", lang)]?.toString(),
     value: value ? value.toString() : "",
     choices:
