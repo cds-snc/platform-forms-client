@@ -91,7 +91,7 @@ function buildForm(
   ) : null;
 
   const descriptiveText = inputProps.description ? (
-    <span key={`desc-${element.id}`}>{inputProps.description}</span>
+    <p key={`desc-${element.id}`}>{inputProps.description}</p>
   ) : null;
 
   switch (element.type) {
@@ -131,7 +131,13 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
+        <FormGroup
+          key={`formGroup-${inputProps.id}`}
+          name={inputProps.name}
+          aria-describedby={
+            inputProps.description ? `desc-${element.id}` : undefined
+          }
+        >
           {label}
           {descriptiveText}
           {checkboxItems}
