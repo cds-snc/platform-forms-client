@@ -183,7 +183,7 @@
             {
               "en": "Workplace accessibility",
               "fr": "Accessibilité en milieu de travail"
-            },
+            }
           ]
         }
       },
@@ -211,7 +211,7 @@
             {
               "en": "Other project",
               "fr": "Autre projet"
-            },
+            }
           ]
         }
       },
@@ -277,7 +277,7 @@
             {
               "en": "Public sector",
               "fr": "Secteur public"
-            },
+            }
           ]
         }
       },
@@ -554,7 +554,7 @@
           "titleEn": "Select the target group(s) that best aligns with your organization’s primary activities",
           "titleFr": "Sélectionnez le ou les groupes cibles qui cadrent le mieux avec les activités principales de votre organisme",
           "descriptionEN": "Note: your answer to this question will not impact the assessment of your proposed project. (Optional)",
-          "descriptionFR":"Remarque : votre réponse à cette question n’a aucune incidence sur l’évaluation de votre projet.(Facultatif)",
+          "descriptionFR": "Remarque : votre réponse à cette question n’a aucune incidence sur l’évaluation de votre projet.(Facultatif)",
           "required": false,
           "choices": [
             {
@@ -1795,7 +1795,7 @@
             {
               "en": "Your organization offers or will offer employment opportunities for persons with disabilities.",
               "fr": "Votre organisme offre ou offrira des possibilités d’emploi aux personnes en situation de handicap"
-            },
+            }
           ]
         }
       },
@@ -1822,7 +1822,7 @@
             {
               "en": "Other, please specify:",
               "fr": "Autre, veuillez préciser"
-            },
+            }
           ]
         }
       },
@@ -2050,7 +2050,7 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "required": false,
-          "charLimit": 5000,
+          "charLimit": 5000
         }
       },
       {
@@ -2127,7 +2127,7 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "required": false,
-          "charLimit": 5000,
+          "charLimit": 5000
         }
       },
       {
@@ -2185,7 +2185,7 @@
             {
               "en": "Made of steel/concrete",
               "fr": "Construction en béton/acier"
-            },
+            }
           ]
         }
       },
@@ -2224,7 +2224,7 @@
             {
               "en": "Renovation to your washroom to add or modify an accessible stall",
               "fr": "Ajout ou modification d’une cabine accessible à une toilette existante"
-            },
+            }
           ]
         }
       },
@@ -2247,32 +2247,32 @@
           "choices": [
             {
               "en": "Modifications to structural walls",
-              "fr": "Modifications à des murs structuraux",
+              "fr": "Modifications à des murs structuraux"
             },
             {
               "en": "Modifications to non-structural walls",
-              "fr": "Modifications à des murs non-structuraux",
+              "fr": "Modifications à des murs non-structuraux"
             },
             {
               "en": "Modifications to heating, ventilation and air conditioning (HVAC) system (for example moving or rerouting ducts)",
-              "fr": "Modifications au chauffage, à l’évent et le système de ventilation (CVCA) (par exemple remplacer ou changer les conduits)",
+              "fr": "Modifications au chauffage, à l’évent et le système de ventilation (CVCA) (par exemple remplacer ou changer les conduits)"
             },
             {
               "en": "Modifications to electrical",
-              "fr": "Modifications des installations électriques",
+              "fr": "Modifications des installations électriques"
             },
             {
               "en": "Modifications to existing plumbing locations",
-              "fr": "Modifications des installations de plomberie existantes",
+              "fr": "Modifications des installations de plomberie existantes"
             },
             {
               "en": "Modifications to add new plumbing lines",
-              "fr": "Modifications (mineures) pour l’ajout de nouvelles conduites de plomberie",
+              "fr": "Modifications (mineures) pour l’ajout de nouvelles conduites de plomberie"
             },
             {
               "en": "Modification to counters, vanities, cupboards or mirrors",
-              "fr": "Modification des comptoirs, meubles-lavabos, armoires ou miroir existants",
-            },
+              "fr": "Modification des comptoirs, meubles-lavabos, armoires ou miroir existants"
+            }
           ]
         }
       },
@@ -2286,44 +2286,44 @@
           "choices": [
             {
               "en": "Barrier free toilet",
-              "fr": "Cabine accessible",
+              "fr": "Cabine accessible"
             },
             {
               "en": "Barrier free sink",
-              "fr": "Évier accessible",
+              "fr": "Évier accessible"
             },
             {
               "en": "Grab bars",
-              "fr": "Barres d’appui",
+              "fr": "Barres d’appui"
             },
             {
               "en": "Accessible urinal",
-              "fr": "Urinoir accessible",
+              "fr": "Urinoir accessible"
             },
             {
               "en": "Power assisted adult change table]",
-              "fr": "Table à langer électrique pour adulte",
+              "fr": "Table à langer électrique pour adulte"
             },
             {
               "en": "Quantity Emergency call button",
-              "fr": "Bouton d’urgence",
+              "fr": "Bouton d’urgence"
             },
             {
               "en": "New flooring (Non-slip flooring)",
-              "fr": "Nouveau revêtement de sol (antidérapant)",
+              "fr": "Nouveau revêtement de sol (antidérapant)"
             },
             {
               "en": "Colour contrasting painting",
-              "fr": "Peinture de couleur contrastante",
+              "fr": "Peinture de couleur contrastante"
             },
             {
               "en": "Barrier free shower",
-              "fr": "Douche accessible",
+              "fr": "Douche accessible"
             },
             {
               "en": "Automatic hand dryer or paper towel dispenser",
-              "fr": "Sèche-mains automatique ou distributeur de serviettes hygiéniques",
-            },
+              "fr": "Sèche-mains automatique ou distributeur de serviettes hygiéniques"
+            }
           ]
         }
       },
@@ -2362,7 +2362,7 @@
             {
               "en": "No",
               "fr": "Non"
-            },
+            }
           ]
         }
       },
@@ -2385,32 +2385,32 @@
           "choices": [
             {
               "en": "Modifications to structural walls",
-              "fr": "Modifications à des murs structuraux",
+              "fr": "Modifications à des murs structuraux"
             },
             {
               "en": "Modifications to non-structural walls",
-              "fr": "Modifications à des murs non-structuraux",
+              "fr": "Modifications à des murs non-structuraux"
             },
             {
               "en": "Modifications to heating, ventilation and air conditioning (HVAC) system (for example moving or rerouting ducts)",
-              "fr": "Modifications au chauffage, à l’évent et le système de ventilation (CVCA) (par exemple remplacer ou changer les conduits)",
+              "fr": "Modifications au chauffage, à l’évent et le système de ventilation (CVCA) (par exemple remplacer ou changer les conduits)"
             },
             {
               "en": "Modifications to electrical",
-              "fr": "Modifications des installations électriques",
+              "fr": "Modifications des installations électriques"
             },
             {
               "en": "Modifications to existing plumbing locations",
-              "fr": "Modifications des installations de plomberie existantes",
+              "fr": "Modifications des installations de plomberie existantes"
             },
             {
               "en": "Modifications to add new plumbing lines",
-              "fr": "Modifications (mineures) pour l’ajout de nouvelles conduites de plomberie",
+              "fr": "Modifications (mineures) pour l’ajout de nouvelles conduites de plomberie"
             },
             {
               "en": "Modification to counters, vanities, cupboards or mirrors",
-              "fr": "Modification des comptoirs, meubles-lavabos, armoires ou miroir existants",
-            },
+              "fr": "Modification des comptoirs, meubles-lavabos, armoires ou miroir existants"
+            }
           ]
         }
       },
@@ -2424,19 +2424,19 @@
           "choices": [
             {
               "en": "Accessible urinal",
-              "fr": "Urinoir accessible",
+              "fr": "Urinoir accessible"
             },
             {
               "en": "Emergency call button",
-              "fr": "Bouton d’urgence",
+              "fr": "Bouton d’urgence"
             },
             {
               "en": "Power assisted adult change table",
-              "fr": "Table à langer électrique pour adulte",
+              "fr": "Table à langer électrique pour adulte"
             },
             {
               "en": "Barrier-free shower",
-              "fr": "Douche accessible",
+              "fr": "Douche accessible"
             }
           ]
         }
@@ -2476,7 +2476,7 @@
             {
               "en": "No",
               "fr": "Non"
-            },
+            }
           ]
         }
       },
@@ -2499,32 +2499,32 @@
           "choices": [
             {
               "en": "Modifications to structural walls",
-              "fr": "Modifications à des murs structuraux",
+              "fr": "Modifications à des murs structuraux"
             },
             {
               "en": "Modifications to non-structural walls",
-              "fr": "Modifications à des murs non-structuraux",
+              "fr": "Modifications à des murs non-structuraux"
             },
             {
               "en": "Modifications to heating, ventilation and air conditioning (HVAC) system (for example moving or rerouting ducts)",
-              "fr": "Modifications au chauffage, à l’évent et le système de ventilation (CVCA) (par exemple remplacer ou changer les conduits)",
+              "fr": "Modifications au chauffage, à l’évent et le système de ventilation (CVCA) (par exemple remplacer ou changer les conduits)"
             },
             {
               "en": "Modifications to electrical",
-              "fr": "Modifications des installations électriques",
+              "fr": "Modifications des installations électriques"
             },
             {
               "en": "Modifications to existing plumbing locations",
-              "fr": "Modifications des installations de plomberie existantes",
+              "fr": "Modifications des installations de plomberie existantes"
             },
             {
               "en": "Modifications to add new plumbing lines",
-              "fr": "Modifications (mineures) pour l’ajout de nouvelles conduites de plomberie",
+              "fr": "Modifications (mineures) pour l’ajout de nouvelles conduites de plomberie"
             },
             {
               "en": "Modification to counters, vanities, cupboards or mirrors",
-              "fr": "Modification des comptoirs, meubles-lavabos, armoires ou miroir existants",
-            },
+              "fr": "Modification des comptoirs, meubles-lavabos, armoires ou miroir existants"
+            }
           ]
         }
       },
@@ -2538,15 +2538,15 @@
           "choices": [
             {
               "en": "Emergency call button",
-              "fr": "Bouton d’urgence",
+              "fr": "Bouton d’urgence"
             },
             {
               "en": "Power assisted adult change table",
-              "fr": "Table à langer électrique pour adulte",
+              "fr": "Table à langer électrique pour adulte"
             },
             {
               "en": "Barrier-free shower",
-              "fr": "Douche accessible",
+              "fr": "Douche accessible"
             }
           ]
         }
@@ -2595,7 +2595,7 @@
             {
               "en": "No",
               "fr": "Non"
-            },
+            }
           ]
         }
       },
@@ -2609,15 +2609,15 @@
           "choices": [
             {
               "en": "Cane detectable guardrails",
-              "fr": "Garde-corps détectable à l’aide d’une canne",
+              "fr": "Garde-corps détectable à l’aide d’une canne"
             },
             {
               "en": "Non glaring lights",
-              "fr": "Lumière nonéblouissante",
+              "fr": "Lumière nonéblouissante"
             },
             {
               "en": "Signalisation braille",
-              "fr": "Braille Signage",
+              "fr": "Braille Signage"
             }
           ]
         }
@@ -2661,15 +2661,15 @@
           "choices": [
             {
               "en": "Modification to a glass storefront",
-              "fr": "Modification à une porte qui est dans un mur de vitre",
+              "fr": "Modification à une porte qui est dans un mur de vitre"
             },
             {
               "en": "Modification to structural framing",
-              "fr": "Modification à la charpente",
+              "fr": "Modification à la charpente"
             },
             {
               "en": "Cane detectable guardrails",
-              "fr": "Garde-corps détectable à l’aide d’une canne",
+              "fr": "Garde-corps détectable à l’aide d’une canne"
             }
           ]
         }
@@ -2713,15 +2713,15 @@
           "choices": [
             {
               "en": "Modification to a door that is surrounded by glass",
-              "fr": "Modification à une porte qui est dans un mur de vitre",
+              "fr": "Modification à une porte qui est dans un mur de vitre"
             },
             {
               "en": "Modification to structural framing",
-              "fr": "Modification à la charpente",
+              "fr": "Modification à la charpente"
             },
             {
               "en": "Cane detectable guardrails",
-              "fr": "Garde-corps détectable à l’aide d’une canne",
+              "fr": "Garde-corps détectable à l’aide d’une canne"
             }
           ]
         }
@@ -2778,23 +2778,23 @@
           "choices": [
             {
               "en": "I have provided an external quote for the project costs. Projects for ramps, doors and washrooms do not require a quote.",
-              "fr": "J’ai soumis une estimation externe pour les coûts associés au projet. Les projets en lien avec des rampes, des portes ou des toilettes ne nécessitent pas d’estimation.",
+              "fr": "J’ai soumis une estimation externe pour les coûts associés au projet. Les projets en lien avec des rampes, des portes ou des toilettes ne nécessitent pas d’estimation."
             },
             {
               "en": "I attest that I am either the owner of the building or have a lease and written approval of building owner to undertake the project (select only one option).",
-              "fr": "J’atteste que je suis le propriétaire du bâtiment ou un locataire qui possède un bail et une permission écrite de la part du propriétaire d’entreprendre le projet. (Veuillez choisir une seule option)",
+              "fr": "J’atteste que je suis le propriétaire du bâtiment ou un locataire qui possède un bail et une permission écrite de la part du propriétaire d’entreprendre le projet. (Veuillez choisir une seule option)"
             },
             {
               "en": "I attest that the project is not located on a Government of Canada property, in a public hospital, in a public school nor in a private home or dwelling",
-              "fr": "J’atteste que le projet n’a pas lieu sur une propriété du gouvernement du Canada, d’un hôpital public ou d’une école publique, ni dans une résidence ou une habitation privée.",
+              "fr": "J’atteste que le projet n’a pas lieu sur une propriété du gouvernement du Canada, d’un hôpital public ou d’une école publique, ni dans une résidence ou une habitation privée."
             },
             {
               "en": "I have provided a digital picture of the project space to be improved.",
-              "fr": "J'ai soumis une photo numérique de l'espace de projet qui sera améliorée.",
+              "fr": "J'ai soumis une photo numérique de l'espace de projet qui sera améliorée."
             },
             {
               "en": "I will attest to the contents in Section C – Part 5 of this application form",
-              "fr": "J’attesterai au contenu de la section C – partie 5 de ce formulaire de demande.",
+              "fr": "J’attesterai au contenu de la section C – partie 5 de ce formulaire de demande."
             }
           ]
         }
@@ -2821,8 +2821,8 @@
           "choices": [
             {
               "en": "Yes",
-              "fr": "Oui",
-            },
+              "fr": "Oui"
+            }
           ]
         }
       },
@@ -2836,8 +2836,8 @@
           "choices": [
             {
               "en": "Yes",
-              "fr": "Oui",
-            },
+              "fr": "Oui"
+            }
           ]
         }
       },
@@ -2851,8 +2851,8 @@
           "choices": [
             {
               "en": "Yes",
-              "fr": "Oui",
-            },
+              "fr": "Oui"
+            }
           ]
         }
       },
@@ -2882,7 +2882,7 @@
           "titleFr": "Date (JJ-MM-AAAA)",
           "required": false
         }
-      },
+      }
 
       /////////////////////////
     ]
