@@ -4,14 +4,14 @@
   "publishingStatus": true,
   "submission": {
     "templateID": "",
-    "email": "mario.garneau@cds-snc.ca"
+    "email": "steven.talbot@cds-snc.ca"
   },
   "form": {
     "id": 3,
     "version": 1,
     "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
     "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+    "layout": [1, 20, 2, 3, 4, 5, 6, 7, 21, 8, 9, 10, 11, 12, 13, 14],
 
     "elements": [
       {
@@ -47,11 +47,25 @@
         }
       },
       {
+        "id": 20,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Nominator Information",
+          "titleFr": "Information sur le proposant",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
         "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominator family name",
-          "titleFr": "Nom du proposant",
+          "titleEn": "Family name",
+          "titleFr": "Nom",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -63,8 +77,8 @@
         "id": 3,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominator given name",
-          "titleFr": "Prénom du proposant",
+          "titleEn": "Given name",
+          "titleFr": "Prénom",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -76,8 +90,8 @@
         "id": 4,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominator department or organization",
-          "titleFr": "Ministère ou organisme du proposant",
+          "titleEn": "Department or organization",
+          "titleFr": "Ministère ou organisme",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -89,8 +103,8 @@
         "id": 5,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominator's title",
-          "titleFr": "Titre du proposant",
+          "titleEn": "Title",
+          "titleFr": "Titre",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -102,8 +116,8 @@
         "id": 6,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominator's phone number",
-          "titleFr": "Numéro de téléphone du proposant",
+          "titleEn": "Phone number",
+          "titleFr": "Numéro de téléphone",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -115,8 +129,8 @@
         "id": 7,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominator's email address",
-          "titleFr": "Adresse de courriel du proposant",
+          "titleEn": "Email address",
+          "titleFr": "Adresse de courriel",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -125,11 +139,25 @@
         }
       },
       {
+        "id": 21,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Individual Information",
+          "titleFr": "Mise en candidature d'une personne",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
         "id": 8,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominee's family name",
-          "titleFr": "Nom du candidat",
+          "titleEn": "Family name",
+          "titleFr": "Nom",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -141,8 +169,8 @@
         "id": 9,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominee's given name",
-          "titleFr": "Prénom du candidat",
+          "titleEn": "Given name",
+          "titleFr": "Prénom",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -154,8 +182,8 @@
         "id": 10,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominee's department or organization",
-          "titleFr": "Ministère ou organisme du candidat",
+          "titleEn": "Department or organization",
+          "titleFr": "Ministère ou organisme",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -165,23 +193,80 @@
       },
       {
         "id": 11,
-        "type": "textField",
+        "type": "dropdown",
         "properties": {
-          "titleEn": "Nominee's province",
-          "titleFr": "Province du candidat",
+          "titleEn": "Province or territory",
+          "titleFr": "Province ou territoire",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "charLimit": 100,
-          "required": true
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            },
+            {
+              "en": "Alberta",
+              "fr": "Alberta"
+            },
+            {
+              "en": "British Columbia",
+              "fr": "British Columbia"
+            },
+            {
+              "en": "Manitoba",
+              "fr": "Manitoba"
+            },
+            {
+              "en": "New Brunswick",
+              "fr": "New Brunswick"
+            },
+            {
+              "en": "Newfoundland and Labrador",
+              "fr": "Newfoundland and Labrador"
+            },
+            {
+              "en": "Northwest Territories",
+              "fr": "Northwest Territories"
+            },
+            {
+              "en": "Nova Scotia",
+              "fr": "Nova Scotia"
+            },
+            {
+              "en": "Nunavut",
+              "fr": "Nunavut"
+            },
+            {
+              "en": "Ontario",
+              "fr": "Ontario"
+            },
+            {
+              "en": "Prince Edward Island",
+              "fr": "Prince Edward Island"
+            },
+            {
+              "en": "Quebec",
+              "fr": "Quebec"
+            },
+            {
+              "en": "Saskatchewan",
+              "fr": "Saskatchewan"
+            },
+            {
+              "en": "Yukon",
+              "fr": "Yukon"
+            }
+          ],
+          "required": false
         }
       },
       {
         "id": 12,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominee's preferred language",
-          "titleFr": "Langue préférée du candidat",
+          "titleEn": "Preferred language",
+          "titleFr": "Langue préférée",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -193,8 +278,8 @@
         "id": 13,
         "type": "textField",
         "properties": {
-          "titleEn": "Nominee's group and level",
-          "titleFr": "Groupe et niveau du candidat",
+          "titleEn": "Group and level",
+          "titleFr": "Groupe et niveau",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -212,7 +297,7 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 100,
+          "charLimit": 1000,
           "required": false
         }
       }
