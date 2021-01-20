@@ -91,25 +91,42 @@ function buildForm(
     </Label>
   ) : null;
 
+  const descriptiveText = inputProps.description ? (
+    <div id={`desc-${element.id}`}>{inputProps.description}</div>
+  ) : null;
+
   switch (element.type) {
     case "alert":
       return (
         <Alert type="info" noIcon>
-          {inputProps.description}
+          {descriptiveText}
         </Alert>
       );
     case "textField":
       return (
         <Fragment key={inputProps.id}>
           {label}
-          <TextInput type="text" {...inputProps} />
+          {descriptiveText}
+          <TextInput
+            type="text"
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+          />
         </Fragment>
       );
     case "textArea":
       return (
         <Fragment key={inputProps.id}>
           {label}
-          <TextArea {...inputProps} />
+          {descriptiveText}
+          <TextArea
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+          />
         </Fragment>
       );
     case "checkbox": {
@@ -126,8 +143,15 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
+        <FormGroup
+          key={`formGroup-${inputProps.id}`}
+          name={inputProps.name}
+          aria-describedby={
+            inputProps.description ? `desc-${element.id}` : undefined
+          }
+        >
           {label}
+          {descriptiveText}
           {checkboxItems}
         </FormGroup>
       );
@@ -146,8 +170,15 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
+        <FormGroup
+          key={`formGroup-${inputProps.id}`}
+          name={inputProps.name}
+          aria-describedby={
+            inputProps.description ? `desc-${element.id}` : undefined
+          }
+        >
           {label}
+          {descriptiveText}
           {radioButtons}
         </FormGroup>
       );
@@ -156,21 +187,34 @@ function buildForm(
       return (
         <Fragment key={inputProps.id}>
           {label}
-          <Dropdown {...inputProps} />
+          {descriptiveText}
+          <Dropdown
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+          />
         </Fragment>
       );
     case "plainText":
       return (
         <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
-          {label}
-          {inputProps.description}
+          {inputProps.label ? <h2>{inputProps.label}</h2> : null}
+          {descriptiveText}
         </div>
       );
     case "fileInput":
       return (
         <Fragment key={inputProps.id}>
           {label}
-          <FileInput {...inputProps} fileType={element.properties.fileType} />
+          {descriptiveText}
+          <FileInput
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+            fileType={element.properties.fileType}
+          />
         </Fragment>
       );
     default:
