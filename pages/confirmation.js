@@ -19,7 +19,7 @@ const Confirmation = ({ t }) => {
         <p>{t("body")}</p>
       </div>
 
-      <div class="gc-form-confirmation">{backToLink}</div>
+      <div className="gc-form-confirmation">{backToLink}</div>
     </>
   );
 };
