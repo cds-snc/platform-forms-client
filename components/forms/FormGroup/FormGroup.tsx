@@ -3,12 +3,13 @@ import classnames from "classnames";
 
 interface FormGroupProps {
   children: React.ReactNode;
+  name: string;
   className?: string;
   error?: boolean;
 }
 
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
-  const { children, className, error } = props;
+  const { children, name, className, error } = props;
 
   const classes = classnames(
     "gc-form-group",
@@ -17,9 +18,9 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
   );
 
   return (
-    <div data-testid="formGroup" className={classes}>
+    <fieldset name={name} data-testid="formGroup" className={classes}>
       {children}
-    </div>
+    </fieldset>
   );
 };
 

@@ -122,8 +122,8 @@ function buildForm(
         return (
           <Checkbox
             {...inputProps}
-            key={`key-${index}`}
-            id={`id-${choice}`}
+            key={`key-${inputProps.id}-${index}`}
+            id={`id-${inputProps.id}-${index}`}
             label={choice}
             value={choice}
           />
@@ -131,7 +131,7 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`}>
+        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
           {label}
           {descriptiveText}
           {checkboxItems}
@@ -143,8 +143,8 @@ function buildForm(
         return (
           <Radio
             {...inputProps}
-            key={`key-${index}`}
-            id={`id-${choice}`}
+            key={`key-${inputProps.id}-${index}`}
+            id={`id-${inputProps.id}-${index}`}
             label={choice}
             value={choice}
           />
@@ -152,7 +152,7 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`}>
+        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
           {label}
           {descriptiveText}
           {radioButtons}
