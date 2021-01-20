@@ -90,17 +90,22 @@ function buildForm(
     </Label>
   ) : null;
 
+  const descriptiveText = inputProps.description ? (
+    <span key={`desc-${element.id}`}>{inputProps.description}</span>
+  ) : null;
+
   switch (element.type) {
     case "alert":
       return (
         <Alert type="info" noIcon>
-          {inputProps.description}
+          {descriptiveText}
         </Alert>
       );
     case "textField":
       return (
         <Fragment key={inputProps.id}>
           {label}
+          {descriptiveText}
           <TextInput type="text" {...inputProps} />
         </Fragment>
       );
@@ -108,6 +113,7 @@ function buildForm(
       return (
         <Fragment key={inputProps.id}>
           {label}
+          {descriptiveText}
           <TextArea {...inputProps} />
         </Fragment>
       );
@@ -127,6 +133,7 @@ function buildForm(
       return (
         <FormGroup key={`formGroup-${inputProps.id}`}>
           {label}
+          {descriptiveText}
           {checkboxItems}
         </FormGroup>
       );
@@ -147,6 +154,7 @@ function buildForm(
       return (
         <FormGroup key={`formGroup-${inputProps.id}`}>
           {label}
+          {descriptiveText}
           {radioButtons}
         </FormGroup>
       );
@@ -155,20 +163,22 @@ function buildForm(
       return (
         <Fragment key={inputProps.id}>
           {label}
+          {descriptiveText}
           <Dropdown {...inputProps} />
         </Fragment>
       );
     case "plainText":
       return (
         <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
-          {label}
-          {inputProps.description}
+          {inputProps.label ? <h2>inputProps.label</h2> : null}
+          {descriptiveText}
         </div>
       );
     case "fileInput":
       return (
         <Fragment key={inputProps.id}>
           {label}
+          {descriptiveText}
           <FileInput {...inputProps} fileType={element.properties.fileType} />
         </Fragment>
       );
