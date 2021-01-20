@@ -4,14 +4,14 @@
   "publishingStatus": true,
   "submission": {
     "templateID": "",
-    "email": "steven.talbot@cds-snc.ca"
+    "email": "mario.garneau@cds-snc.ca"
   },
   "form": {
     "id": 3,
     "version": 1,
     "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
     "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
-    "layout": [1, 20, 2, 3, 4, 5, 6, 7, 21, 8, 9, 10, 11, 12, 13, 14],
+    "layout": [1, 20, 2, 3, 4, 5, 6, 7, 21, 8, 9, 10, 11, 12, 13, 14, 99],
 
     "elements": [
       {
@@ -298,6 +298,18 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 99,
+        "type": "fileInput",
+        "properties": {
+          "titleEn": "Upload a document",
+          "titleFr": "Télécharger le document",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "fileType": "image/*,.pdf",
           "required": false
         }
       }
