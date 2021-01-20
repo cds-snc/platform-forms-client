@@ -45,7 +45,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
       ref={inputRef}
       {...inputProps}
     >
-      <>{options}</>
+      {options}
     </select>
   );
 };

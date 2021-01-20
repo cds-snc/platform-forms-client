@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { getProperty, buildForm } from "../../lib/formBuilder";
 import PropTypes from "prop-types";
 import { useFormik } from "formik";
+import Head from "next/head";
 
 const Form = ({ formModel, i18n }) => {
   const formToRender = formModel;
@@ -50,6 +51,9 @@ const Form = ({ formModel, i18n }) => {
 
   return (
     <div>
+      <Head>
+        <title>{formToRender[getProperty("title", i18n.language)]}</title>
+      </Head>
       <h1>{formToRender[getProperty("title", i18n.language)]}</h1>
       <form id="form" onSubmit={formik.handleSubmit} method="POST">
         {formToRender.layout.map((item) => {
