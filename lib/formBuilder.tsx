@@ -92,7 +92,7 @@ function buildForm(
   ) : null;
 
   const descriptiveText = inputProps.description ? (
-    <p key={`desc-${element.id}`}>{inputProps.description}</p>
+    <div id={`desc-${element.id}`}>{inputProps.description}</div>
   ) : null;
 
   switch (element.type) {
@@ -107,7 +107,13 @@ function buildForm(
         <Fragment key={inputProps.id}>
           {label}
           {descriptiveText}
-          <TextInput type="text" {...inputProps} />
+          <TextInput
+            type="text"
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+          />
         </Fragment>
       );
     case "textArea":
@@ -115,7 +121,12 @@ function buildForm(
         <Fragment key={inputProps.id}>
           {label}
           {descriptiveText}
-          <TextArea {...inputProps} />
+          <TextArea
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+          />
         </Fragment>
       );
     case "checkbox": {
@@ -159,7 +170,13 @@ function buildForm(
       });
 
       return (
-        <FormGroup key={`formGroup-${inputProps.id}`} name={inputProps.name}>
+        <FormGroup
+          key={`formGroup-${inputProps.id}`}
+          name={inputProps.name}
+          aria-describedby={
+            inputProps.description ? `desc-${element.id}` : undefined
+          }
+        >
           {label}
           {descriptiveText}
           {radioButtons}
@@ -171,7 +188,12 @@ function buildForm(
         <Fragment key={inputProps.id}>
           {label}
           {descriptiveText}
-          <Dropdown {...inputProps} />
+          <Dropdown
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+          />
         </Fragment>
       );
     case "plainText":
@@ -186,7 +208,13 @@ function buildForm(
         <Fragment key={inputProps.id}>
           {label}
           {descriptiveText}
-          <FileInput {...inputProps} fileType={element.properties.fileType} />
+          <FileInput
+            aria-describedby={
+              inputProps.description ? `desc-${element.id}` : undefined
+            }
+            {...inputProps}
+            fileType={element.properties.fileType}
+          />
         </Fragment>
       );
     default:
