@@ -1,6 +1,13 @@
 {
+  "internalTitleEn": "Grant Application for Funding – Enabling Accessibility Fund (EAF) - Small Projects Component",
+  "internalTitleFr": "Demande de financement de subvention - Initiative pour appuyer les communautés noires du Canada (ACNC)",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "steven.talbot@cds-snc.ca"
+  },
   "form": {
-    "id": 18,
+    "id": 14,
     "version": 1,
     "titleEn": "Grant Application for Funding – Enabling Accessibility Fund (EAF) - Small Projects Component",
     "titleFr": "Demande de financement de subvention - Initiative pour appuyer les communautés noires du Canada (ACNC)",
@@ -30,7 +37,6 @@
       23,
       24,
       25,
-      26,
       27,
       28,
       29,
@@ -2883,8 +2889,6 @@
           "required": false
         }
       }
-
-      /////////////////////////
     ]
   }
 }
