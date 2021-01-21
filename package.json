@@ -9,7 +9,9 @@
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
-    "format": "prettier --write --config ./.prettierrc.js ."
+    "format": "prettier --write --config ./.prettierrc.js .",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "formik": "^2.2.6",
@@ -29,8 +31,12 @@
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "autoprefixer": "^10.1.0",
+    "axe-core": "^4.1.1",
+    "cypress": "^6.3.0",
+    "cypress-axe": "^0.12.0",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
