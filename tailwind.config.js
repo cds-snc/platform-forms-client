@@ -53,6 +53,11 @@ module.exports = {
       maxWidth: {
         950: "950px",
       },
+      fontSize: {
+        base: "1.25rem",
+        lg: "2rem",
+        xl: "2.25rem",
+      },
     },
 
     boxShadow: {
