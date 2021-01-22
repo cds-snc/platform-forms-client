@@ -6,13 +6,6 @@ import { Button } from "../Button/Button";
 export default {
   title: "Forms/Alert",
   component: Alert,
-  parameters: {
-    info: `
-USWDS 2.0 Alert component
-
-Source: https://designsystem.digital.gov/components/alert/
-`,
-  },
 };
 
 const testText = (

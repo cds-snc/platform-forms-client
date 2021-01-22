@@ -4,13 +4,6 @@ import { Button } from "./Button";
 export default {
   title: "Forms/Button",
   component: Button,
-  parameters: {
-    info: `
-USWDS 2.0 Button component
-
-Source: https://designsystem.digital.gov/components/button/
-`,
-  },
 };
 
 export const defaultButton = (): React.ReactElement => (
