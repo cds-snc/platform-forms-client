@@ -17,17 +17,9 @@ iframe,
 
 body {
   margin: 0;
-  font-size: 1.05em;
+  font-size: 1.25em;
   font-family: "Noto Sans", sans-serif;
   line-height: 1.65;
-
-  @include xs {
-    font-size: 1.2em;
-  }
-
-  @include sm {
-    font-size: 1.3em;
-  }
 }
 
 p,
@@ -92,7 +84,8 @@ main {
 
   h1 {
     border-bottom: 1px solid $color-red;
-    margin: $space-md 0;
+    margin: 5rem 0;
+    font-size: 2.25rem;
   }
 }
 
