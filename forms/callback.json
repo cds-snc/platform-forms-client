@@ -20,7 +20,7 @@
         "properties": {
           "titleEn": "Language of service",
           "titleFr": "Préférence linguistique",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "English",
@@ -57,7 +57,7 @@
           "titleFr": "Lieu (province / territoire)",
           "descriptionEn": "Select your response",
           "descriptionFr": "Province/Territoire",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "Alberta",
@@ -122,7 +122,7 @@
           "titleFr": "Numéro de téléphone pour vous joindre",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {

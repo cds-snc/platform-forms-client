@@ -22,6 +22,10 @@
   @apply w-full;
 }
 
+.gc-heading-2 {
+  @apply mt-8 mb-2 text-2xl;
+}
+
 .gc-dropdown {
   @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mb-2;
 }

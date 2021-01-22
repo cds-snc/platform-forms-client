@@ -70,7 +70,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -83,7 +83,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -96,7 +96,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -162,7 +162,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -175,7 +175,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -188,7 +188,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -271,7 +271,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -284,7 +284,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
