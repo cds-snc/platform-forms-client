@@ -69,12 +69,16 @@ const Form = ({ formModel, i18n }) => {
           const element = formToRender.elements.find(
             (element) => element.id === item
           );
-          return buildForm(
-            element,
-            formik.values[element.id],
-            i18n.language,
-            formik.handleChange
-          );
+          if (element) {
+            return buildForm(
+              element,
+              formik.values[element.id],
+              i18n.language,
+              formik.handleChange
+            );
+          } else {
+            console.log(`Failed component look up ${item}`);
+          }
         })}
         <div className="buttons">
           <button className="gc-button" type="submit">
