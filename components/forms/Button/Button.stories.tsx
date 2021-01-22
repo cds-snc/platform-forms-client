@@ -17,6 +17,12 @@ export const defaultButton = (): React.ReactElement => (
   <Button type="button">Click Me</Button>
 );
 
+export const secondaryButton = (): React.ReactElement => (
+  <Button type="button" secondary={true}>
+    Click Me
+  </Button>
+);
+
 defaultButton.parameters = {
   docs: {
     source: {

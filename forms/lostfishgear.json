@@ -158,8 +158,8 @@
         "id": 9,
         "type": "textField",
         "properties": {
-          "titleEn": " ",
-          "titleFr": " ",
+          "titleEn": "",
+          "titleFr": "",
           "placeholderEn": "If Other",
           "placeholderFr": "Si autre",
           "description": "",
