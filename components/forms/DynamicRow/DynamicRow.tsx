@@ -34,7 +34,7 @@ export const DynamicRow = (props: DynamicGroupProps): React.ReactElement => {
     <fieldset name={name} data-testid="formGroup" className={classes}>
       <legend>{legend}</legend>
       <Button type="button" secondary={true} onClick={addRow}>
-        Add Row
+        {lang === "en" ? "Add Row" : "Ajouter Element"}
       </Button>
       {rows.map((row, index) => {
         return (
@@ -42,7 +42,10 @@ export const DynamicRow = (props: DynamicGroupProps): React.ReactElement => {
             key={`${name}-${index}`}
             className="border-solid border-2 border-black"
           >
-            <p>Entry {index + 1}</p>
+            <p>
+              {lang === "en" ? "Item" : "Article"}
+              {index + 1}
+            </p>
             {row.map((subItem, subIndex) => {
               subItem.id = `${name}-${index}-${subIndex}`;
               return buildForm(
