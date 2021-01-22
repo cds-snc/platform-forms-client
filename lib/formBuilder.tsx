@@ -12,7 +12,7 @@ import {
   DynamicRow,
 } from "../components/forms";
 type callback = (event: ChangeEvent) => void;
-export interface FormElements {
+export interface FormElement {
   id: string;
   type: string;
   properties: ElementProperties;
@@ -28,13 +28,13 @@ export interface ElementProperties {
   descriptionFr?: string;
   required: boolean;
   choices?: Array<PropertyChoices>;
-  subElements?: Array<FormElements>;
+  subElements?: Array<FormElement>;
   fileType?: string | undefined;
   [key: string]:
     | string
     | boolean
     | Array<PropertyChoices>
-    | Array<FormElements>
+    | Array<FormElement>
     | undefined;
 }
 
@@ -70,7 +70,7 @@ function getLocaleChoices(
 
 // This function renders the form elements with passed in properties.
 export function buildForm(
-  element: FormElements,
+  element: FormElement,
   value: string,
   lang: string,
   handleChange: callback
@@ -235,7 +235,6 @@ export function buildForm(
           name={inputProps.name}
           legend={inputProps.label}
           rowElements={inputProps.subElements}
-          onChange={handleChange}
           lang={lang}
           value={value}
         />
