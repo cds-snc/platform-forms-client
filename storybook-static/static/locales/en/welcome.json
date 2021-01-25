@@ -1,0 +1,33 @@
+{
+  "title": "Welcome to Forms",
+  "body": "[work in progress]",
+  "product": {
+    "title": "Product Vision",
+    "text": "Help government-users quickly and easily publish simple, accessible, online forms that the public can use to apply for or access the services or benefits they need."
+  },
+  "formList": {
+    "title": "Forms List",
+    "esdc": "Grant Application for Funding – Supporting Black Canadian Communities (SBCC) Initiative",
+    "clearance": "Security Clearance Form",
+    "notifycontact": "Notify Contact Us",
+    "intake": "CDS Intake Form",
+    "award": "Public Service Award of Excellence 2020 Nominations",
+    "callback": "Service Canada Callback form",
+    "lostfishgear": "Atlantic lost fishing gear form: Fixed gear, including crab and lobster traps",
+    "baggage": "Delayed Baggage Report"
+  },
+  "design": {
+    "title": "Design",
+    "text": "Learn more about our design, research and accessibility efforts.",
+    "system": {
+      "title": "Design System on Storybook"
+    }
+  },
+  "technology": {
+    "title": "Technology",
+    "text": "Our tech stack runs on Next.js and uses AWS cloud services.",
+    "git": {
+      "title": "Forms on GitHub"
+    }
+  }
+}

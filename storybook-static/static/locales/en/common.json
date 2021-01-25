@@ -1,0 +1,21 @@
+{
+  "footer": {
+    "privacy": {
+      "link": "https://numerique.canada.ca/transparence/confidentialite/",
+      "desc": "Privacy policy"
+    },
+    "terms": {
+      "link": "https://numerique.canada.ca/transparence/avis/",
+      "desc": "Terms and conditions"
+    }
+  },
+  "phase": {
+    "desc": "This site will change as we test ideas."
+  },
+  "skip-link": "Skip to main content",
+  "fip": {
+    "link": "",
+    "text": "Government of Canada"
+  },
+  "lang-toggle": "Language Selection"
+}
