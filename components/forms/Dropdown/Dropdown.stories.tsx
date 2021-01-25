@@ -1,0 +1,52 @@
+import React from "react";
+
+import { Dropdown } from "./Dropdown";
+import { Label } from "../Label/Label";
+
+export default {
+  title: "Forms/Dropdown",
+  component: Dropdown,
+  parameters: {
+    info: `Dropdown component`,
+  },
+};
+
+const inputProps = {
+  key: "id",
+  id: "id",
+  name: "province",
+  label: "Select a province",
+  value: "",
+  choices: [
+    "",
+    "Alberta",
+    "British Columbia",
+    "Manitoba",
+    "New Brunswick",
+    "Newfoundland",
+    "Northwest Territories",
+    "Nova Scotia",
+    "Nunavut",
+    "Ontario",
+    "Prince Edward Island",
+    "Quebec",
+    "Saskatchewan",
+    "Yukon",
+  ],
+};
+
+export const defaultDropdown = (): React.ReactElement => (
+  <>
+    <Label htmlFor="options">{inputProps.label}</Label>
+    <Dropdown {...inputProps} />
+  </>
+);
+
+defaultDropdown.parameters = {
+  docs: {
+    source: {
+      code:
+        '<select class="gc-dropdown" name="support_type"><option value="GC Form - First option">GC Form - First option</option><option value="GC Form - Second option">GC Form - Second option</option></select>',
+    },
+  },
+};

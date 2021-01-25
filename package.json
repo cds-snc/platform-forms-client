@@ -9,9 +9,12 @@
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
-    "format": "prettier --write --config ./.prettierrc.js ."
+    "format": "prettier --write --config ./.prettierrc.js .",
+    "build-storybook": "build-storybook -s public --no-dll",
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
+    "@storybook/addon-a11y": "^6.1.15",
     "formik": "^2.2.6",
     "i18next-hmr": "^1.6.3",
     "json2md": "^1.9.2",
@@ -23,12 +26,19 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@storybook/addon-actions": "^6.1.15",
+    "@storybook/addon-essentials": "^6.1.15",
+    "@storybook/addon-links": "^6.1.15",
+    "@storybook/react": "^6.1.15",
     "@types/classnames": "^2.2.11",
     "@types/json2md": "^1.5.0",
     "@types/react": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "autoprefixer": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -37,10 +47,13 @@
     "postcss": "^8.2.1",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^14.0.0",
+    "postcss-loader": "^4.2.0",
     "postcss-preset-env": "^6.7.0",
     "precss": "^4.0.0",
     "prettier": "^2.2.1",
     "sass": "^1.30.0",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
     "tailwindcss": "^2.0.2",
     "typescript": "^4.1.3"
   }
