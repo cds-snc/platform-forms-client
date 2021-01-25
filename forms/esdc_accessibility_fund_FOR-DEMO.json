@@ -903,7 +903,7 @@
         "id": 45,
         "type": "radio",
         "properties": {
-          "titleEn": "Does your organization owe any amounts of to the Government of Canada?",
+          "titleEn": "Does your organization owe any amounts to the Government of Canada?",
           "titleFr": "Est-ce que votre organisme doit des sommes au gouvernement du Canada?",
           "required": false,
           "choices": [
