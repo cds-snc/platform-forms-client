@@ -7,7 +7,7 @@ type callback = (event: ChangeEvent) => void;
 interface DynamicGroupProps {
   name: string;
   legend?: string;
-  rowElements: Array<FormElements>;
+  rowElements: Array<FormElement>;
   lang: string;
   className?: string;
   error?: boolean;
@@ -49,7 +49,7 @@ export const DynamicRow = (props: DynamicGroupProps): React.ReactElement => {
             {row.map((subItem, subIndex) => {
               subItem.id = `${name}-${index}-${subIndex}`;
               return buildForm(
-                (subItem as unknown) as FormElements,
+                (subItem as unknown) as FormElement,
                 "",
                 lang,
                 () => null
