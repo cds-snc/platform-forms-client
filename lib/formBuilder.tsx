@@ -9,6 +9,7 @@ import {
   TextArea,
   FormGroup,
   FileInput,
+  Description,
 } from "../components/forms";
 type callback = (event: ChangeEvent) => void;
 interface FormElements {
@@ -92,7 +93,9 @@ function buildForm(
   ) : null;
 
   const descriptiveText = inputProps.description ? (
-    <div id={`desc-${element.id}`}>{inputProps.description}</div>
+    <Description id={`desc-${element.id}`}>
+      {inputProps.description}
+    </Description>
   ) : null;
 
   switch (element.type) {
