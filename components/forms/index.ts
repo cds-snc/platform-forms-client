@@ -11,3 +11,4 @@ export { TextArea } from "./TextArea/TextArea";
 export { TextInput } from "./TextInput/TextInput";
 export { FileInput } from "./FileInput/FileInput";
 export { Description } from "./Description/Description";
+export { DynamicGroup } from "./DynamicRow/DynamicRow";

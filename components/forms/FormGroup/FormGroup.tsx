@@ -5,11 +5,12 @@ interface FormGroupProps {
   children: React.ReactNode;
   name: string;
   className?: string;
+  ariaDescribedBy?: string;
   error?: boolean;
 }
 
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
-  const { children, name, className, error } = props;
+  const { children, name, className, ariaDescribedBy, error } = props;
 
   const classes = classnames(
     "gc-form-group",
@@ -18,7 +19,12 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
   );
 
   return (
-    <fieldset name={name} data-testid="formGroup" className={classes}>
+    <fieldset
+      name={name}
+      data-testid="formGroup"
+      className={classes}
+      aria-describedby={ariaDescribedBy}
+    >
       {children}
     </fieldset>
   );

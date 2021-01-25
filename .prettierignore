@@ -2,5 +2,5 @@
 .next
 # Ignore IDE settings
 .vscode
-# Ignore Storybook static site
+# Ignore compiled storybook
 storybook-static

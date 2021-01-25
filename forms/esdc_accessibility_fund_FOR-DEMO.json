@@ -38,7 +38,6 @@
       24,
       25,
       27,
-      28,
       29,
       30,
       31,
@@ -58,25 +57,6 @@
       45,
       46,
       47,
-      48,
-      49,
-      50,
-      51,
-      52,
-      53,
-      54,
-      55,
-      56,
-      57,
-      58,
-      59,
-      60,
-      61,
-      62,
-      63,
-      64,
-      65,
-      66,
       67,
       68,
       69,
@@ -157,7 +137,44 @@
       144,
       145,
       146,
-      147
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184
     ],
     "elements": [
       {
@@ -168,7 +185,7 @@
           "titleFr": "Fonds pour l’accessibilité (FA) - Projets de petite envergure",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "The Enabling Accessibility Fund provides funding for eligible capital projects that increase accessibility for people with disabilities in Canadian communities and workplaces. It creates more opportunities for people with disabilities to participate in",
+          "descriptionEn": "The Enabling Accessibility Fund provides funding for eligible capital projects that increase accessibility for people with disabilities in Canadian communities and workplaces. It creates more opportunities for people with disabilities to participate in community activities, programs and services, or access employment opportunities.",
           "descriptionFr": "Le Fonds pour l’accessibilité (FA) offre du financement pour les projets qui rendent les collectivités et les milieux de travail plus accessibles aux personnes en situation de handicap. Le FA crée des possibilités pour que les personnes en situation de handicap participent aux activités, aux programmes et aux services de leur communauté et accèdent à des possibilités d’emploi.",
           "charLimit": 5000,
           "required": false
@@ -195,7 +212,7 @@
       },
       {
         "id": 3,
-        "type": "radio",
+        "type": "checkbox",
         "properties": {
           "titleEn": "Project category",
           "titleFr": "Catégorie de projet",
@@ -619,16 +636,6 @@
         }
       },
       {
-        "id": 66,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "ORGANIZATION CONTACTS",
-          "titleFr": "PERSONNES-RESSOURCES DE L’ORGANISME",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
         "id": 27,
         "type": "plainText",
         "properties": {
@@ -638,20 +645,6 @@
           "placeholderFr": "",
           "descriptionEn": "This should be your primary contact person with respect to this application for funding.",
           "descriptionFr": "Il s’agira de votre principale personne-ressource en ce qui a trait à la présente demande de financement.",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 28,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Given Name / Surname",
-          "titleFr": "Prénom et nom de famille",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
           "charLimit": 1000,
           "required": false
         }
@@ -941,276 +934,66 @@
       },
       {
         "id": 47,
-        "type": "plainText",
+        "type": "dynamicRow",
         "properties": {
-          "titleEn": "Entry 1",
-          "titleFr": "Entrée 1",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 48,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 49,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 50,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 51,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+          "titleEn": "",
+          "titleFr": "",
           "required": false,
-          "choices": [
+          "subElements": [
             {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 48,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Amount Owing",
+                "titleFr": "Somme due",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "description": "",
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 52,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Entry 2",
-          "titleFr": "Entrée 2",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 53,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 54,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 55,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 56,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-          "required": false,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 49,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+                "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "description": "",
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 57,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Entry 3",
-          "titleFr": "Entrée 3",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 58,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 59,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 60,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 61,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-          "required": false,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 50,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Department or agency to which amount is owed",
+                "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "description": "",
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 62,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Entry 4",
-          "titleFr": "Entrée 4",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 63,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 64,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 65,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 66,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-          "required": false,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
+              "id": 51,
+              "type": "radio",
+              "properties": {
+                "titleEn": "If an amount is owing, is a payment plan in place?",
+                "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+                "required": false,
+                "choices": [
+                  {
+                    "en": "Yes",
+                    "fr": "Oui"
+                  },
+                  {
+                    "en": "No",
+                    "fr": "Non"
+                  }
+                ]
+              }
             }
           ]
         }
@@ -2885,6 +2668,68 @@
         "type": "textField",
         "properties": {
           "titleEn": "Date (YYYY-MM-DD)",
+          "titleFr": "Date (JJ-MM-AAAA)",
+          "required": false
+        }
+      },
+      {
+        "id": 180,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Attestation",
+          "titleFr": "Attestation",
+          "descriptionEn": "In order for your application to be eligible, an official representative who has the capacity and the authority to submit project proposals and enter into contracts and agreements on behalf of your organization must attest to the following:",
+          "descriptionFr": "Pour que votre demande soit admissible, un représentant officiel qui a la capacité et l’autorité de soumettre des propositions de projet au nom de votre organisme ainsi que conclure des contrats et des accords au nom de votre organisme doit attester ce qui suit",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 181,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Please review the following checklist carefully. Errors or incomplete applications will result in delayed processing and/or rejection.",
+          "titleFr": "Veuillez revoir la liste suivante attentivement. Les demandes de financement erronées et/ou incomplètes entraîneront un retard dans l’évaluation du projet et pourraient être rejetées.",
+          "required": false,
+          "choices": [
+            {
+              "en": "I have the capacity and the authority to submit this Application for Funding on behalf of the applicant organization.",
+              "fr": "J’ai la capacité et l’autorité pour soumettre la présente Demande de financement au nom de l’organisme"
+            },
+            {
+              "en": "I certify and warrant on behalf of the organization and in my personal capacity that the information provided in this Application for Funding and any supporting documentation is true, accurate, and complete.",
+              "fr": "Je certifie et garantis au nom de l’organisation et à titre personnel que les informations fournies dans la présente demande de financement ainsi que les documents d’appui sont véridiques, exacts et complets."
+            },
+            {
+              "en": "I have read the Applicant Guide and understand the program’s requirements.",
+              "fr": "J’ai lu le Guide du demandeur et j’ai compris les exigences du programme."
+            }
+          ]
+        }
+      },
+      {
+        "id": 182,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Official Representative Name",
+          "titleFr": "Nom du représentant officiel",
+          "required": false
+        }
+      },
+      {
+        "id": 183,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Title",
+          "titleFr": "Titre",
+          "required": false
+        }
+      },
+      {
+        "id": 184,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Date",
           "titleFr": "Date (JJ-MM-AAAA)",
           "required": false
         }
