@@ -12,6 +12,9 @@ const Home = ({ t }) => (
         <p>{t("product.text")}</p>
         <h2 className="text-3xl mb-5">{t("formList.title")}</h2>
         <p>
+          <Link href="/14">{t("formList.accessibility")}</Link>
+        </p>
+        <p>
           <Link href="/8">{t("formList.esdc")}</Link>
         </p>
         <p>
