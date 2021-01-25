@@ -191,7 +191,7 @@
       180,
       181,
       182,
-      183, 
+      183,
       184
     ],
     "elements": [
@@ -2931,7 +2931,7 @@
             {
               "en": "I have read the Applicant Guide and understand the program’s requirements.",
               "fr": "J’ai lu le Guide du demandeur et j’ai compris les exigences du programme."
-            },
+            }
           ]
         }
       },
@@ -2961,7 +2961,7 @@
           "titleFr": "Date (JJ-MM-AAAA)",
           "required": false
         }
-      },
+      }
     ]
   }
 }
