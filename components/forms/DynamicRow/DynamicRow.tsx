@@ -113,9 +113,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   return (
     <fieldset name={name} data-testid="formGroup" className={classes}>
       <legend>{legend}</legend>
-      <Button type="button" secondary={true} onClick={addRow}>
-        {lang === "en" ? "Add Row" : "Ajouter Element"}
-      </Button>
       {rows.map((row, index) => {
         return (
           <div
@@ -139,6 +136,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
           </div>
         );
       })}
+      <Button type="button" secondary={true} onClick={addRow}>
+        {lang === "en" ? "Add Row" : "Ajouter Element"}
+      </Button>
     </fieldset>
   );
 };
