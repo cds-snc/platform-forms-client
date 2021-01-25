@@ -16,7 +16,8 @@
     "endPage": {
       "descriptionEn": "",
       "descriptionFr": "",
-      "referrerUrl": "https://digital.canada.ca/"
+      "referrerUrlEn": "https://digital.canada.ca/",
+      "referrerUrlFr": "https://numerique.canada.ca/"
     },
 
     "elements": [

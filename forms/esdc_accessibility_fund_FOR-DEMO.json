@@ -182,7 +182,7 @@
           "titleEn": "Project category",
           "titleFr": "Catégorie de projet",
           "description": "Select the appropriate project category below that best describes your project. Note that you may select one or more as applicable.",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "Ramp",
@@ -221,7 +221,7 @@
           "titleFr": "Nom légal",
           "descriptionEN": "(Organization’s full name, as it appears on legal documents)",
           "descriptionFR": "(Nom complet de l’organisme, tel qu’il apparaît sur les documents juridiques)",
-          "required": true
+          "required": false
         }
       },
       {
@@ -232,7 +232,7 @@
           "titleFr": "Nom commercial",
           "descriptionEN": "(if different from legal name)",
           "descriptionFR": "(s’il est différent du nom légal)",
-          "required": true
+          "required": false
         }
       },
       {
@@ -243,7 +243,7 @@
           "titleFr": "Année de fondation",
           "descriptionEN": "(Year the organization was originally created.)",
           "descriptionFR": "(Année où l’organisme a été initialement créé)",
-          "required": true
+          "required": false
         }
       },
       {
@@ -252,7 +252,7 @@
         "properties": {
           "titleEn": "Organization type",
           "titleFr": "Type d'organisme",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "Not-for-profit",
@@ -277,7 +277,7 @@
           "titleFr": "Catégorie d’organisme",
           "descriptionEN": "(For example: Sector councils; University; Municipal Government; etc.",
           "descriptionFR": "Par exemple : conseil sectoriel, université, administration municipale, etc.",
-          "required": true
+          "required": false
         }
       },
       {

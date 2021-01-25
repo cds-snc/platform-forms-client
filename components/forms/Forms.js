@@ -41,10 +41,13 @@ const Form = ({ formModel, i18n }) => {
         .then((response) => response.json())
         .then(() => {
           const referrerUrl =
-            formToRender &&
-            formToRender.endPage &&
-            formToRender.endPage.referrerUrl
-              ? { referrerUrl: formToRender.endPage.referrerUrl }
+            formToRender && formToRender.endPage
+              ? {
+                  referrerUrl:
+                    formToRender.endPage[
+                      getProperty("referrerUrl", i18n.language)
+                    ],
+                }
               : {};
           router.push({
             pathname: `${i18n.language}/confirmation`,

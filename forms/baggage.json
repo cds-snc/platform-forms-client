@@ -34,7 +34,7 @@
           "titleEn": "Residential Status",
           "titleFr": "Statut résidentiel",
           "description": "",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "Resident of Canada",
@@ -220,7 +220,7 @@
           "titleEn": "Authorization - I certify that the information given above is true and complete and I authorize the carrier mentioned above to open my baggage on my behalf for customs examination",
           "titleFr": "Autorisation - Je déclare que les renseignements ci-dessus sont exacts et complets, et j'autorise le transporteur indiqué ci-dessus à ouvrir mes bagages en mon nom pour l'examen des douanes",
           "description": "",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "Yes",
