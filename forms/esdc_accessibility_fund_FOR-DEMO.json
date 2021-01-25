@@ -197,7 +197,7 @@
         "properties": {
           "titleEn": "Funding Requested",
           "titleFr": "Financement demandé",
-          "required": true,
+          "required": false,
           "choices": [
             {
               "en": "Community accessibility",
