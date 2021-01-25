@@ -1,8 +1,13 @@
-import React, { useState, ChangeEvent, useRef } from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
-import { buildForm, FormElement, getProperty } from "../../../lib/formBuilder";
+import {
+  buildForm,
+  FormElement,
+  getProperty,
+  callback,
+  allFormElements,
+} from "../../../lib/formBuilder";
 import { Button } from "../index";
-type callback = (event: ChangeEvent) => void;
 
 interface DynamicGroupProps {
   name: string;
@@ -11,6 +16,7 @@ interface DynamicGroupProps {
   lang: string;
   className?: string;
   error?: boolean;
+  value?: string;
 }
 
 interface DynamicRowProps {
@@ -18,12 +24,10 @@ interface DynamicRowProps {
   lang: string;
   name: string;
   rowNum: number;
-  values: [
-    {
-      id: string;
-      value: string;
-    }
-  ];
+  values: {
+    id: string;
+    value: string;
+  }[];
   onChange: callback;
 }
 
@@ -37,10 +41,10 @@ const DynamicRow = (props: DynamicRowProps) => {
   const { name, elements, rowNum, values, lang, onChange } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
     subItem.id = `${name}-${rowNum}-${subIndex}`;
-    console.log(`Here is the subItem.id: ${subItem.id}`);
-    const element = values.find((value) => value.id === subItem.id);
-    console.log(element);
-    console.log(`Component is re-rendering`);
+    const element = values.find((value) => value.id === subItem.id) ?? {
+      id: subItem.id,
+      value: "",
+    };
     return (
       <DynamicElement
         key={subItem.id}
@@ -64,38 +68,39 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   const [rows, setRows] = useState([rowElements]);
 
-  const createRowState = (rowNum = 0) =>
+  const createRowState = (rowNum = 0): { id: string; value: string }[] =>
     rowElements.map((element, index) => {
       element.id = `${name}-${rowNum}-${index}`;
       return {
         id: element.id,
-        value: element.properties[getProperty("placeholder", lang)],
+        value: element.properties[getProperty("placeholder", lang)] as string,
       };
     });
 
   const [responses, setResponses] = useState(createRowState);
 
-  const updateLocalResponses = async (event) => {
+  const updateLocalResponses = async (event: allFormElements) => {
     const { target } = event;
-    console.log(`New Value for ${target.name}: ${target.value}`);
-
-    const newState = responses.map((response) => {
-      if (response.id === target.name) {
-        return {
-          id: target.name,
-          value: target.value,
-        };
-      }
-      return response;
+    await setResponses((prevState) => {
+      const newState = prevState.map((response) => {
+        if (response.id === target.name) {
+          return {
+            id: target.name,
+            value: target.value,
+          };
+        }
+        return response;
+      });
+      return newState;
     });
-
-    await setResponses(newState);
   };
 
   const addRow = async () => {
     const baseClone = await createRowState(rows.length);
-    const newState = [...responses, ...baseClone];
-    await setResponses(newState);
+
+    await setResponses((prevState) => {
+      return [...prevState, ...baseClone];
+    });
     await setRows([...rows, rowElements]);
   };
 
@@ -126,7 +131,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               elements={row}
               rowNum={index}
               lang={lang}
-              values={responses}
+              values={
+                responses.length > 0 ? responses : [{ id: "", value: "" }]
+              }
               onChange={updateLocalResponses}
             />
           </div>

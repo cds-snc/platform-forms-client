@@ -11,7 +11,11 @@ import {
   FileInput,
   DynamicGroup,
 } from "../components/forms";
-type callback = (event: ChangeEvent) => void;
+export type allFormElements =
+  | ChangeEvent<HTMLInputElement>
+  | ChangeEvent<HTMLTextAreaElement>
+  | ChangeEvent<HTMLSelectElement>;
+export type callback = (event: allFormElements) => void;
 export interface FormElement {
   id: string;
   type: string;
@@ -95,8 +99,6 @@ export function buildForm(
         : [],
     onChange: handleChange,
   };
-
-  //console.log(`Build value from formBuild: ${value}`);
 
   const label = inputProps.label ? (
     <Label key={`label-${element.id}`} htmlFor={inputProps.name}>
