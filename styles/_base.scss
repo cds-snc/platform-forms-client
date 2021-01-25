@@ -2,6 +2,24 @@
   box-sizing: border-box;
 }
 
+/* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
+
+ol {
+  @apply list-decimal;
+}
+
+ul {
+  @apply list-disc;
+}
+
+a {
+  @apply underline;
+}
+
+.canada-wordmark img {
+  @apply inline;
+}
+
 a[href],
 area[href],
 input,

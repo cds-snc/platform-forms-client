@@ -1,3 +1,4 @@
+/*
 .gc-button {
   @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 my-10 font-bold text-base no-underline text-gray-50 bg-blue-800 outline-none w-60;
   &:hover {
@@ -69,6 +70,189 @@
     margin-top: $space-xs;
     margin-bottom: $space-md;
   }
+}
+
+.validation-message {
+  @apply text-red-500;
+} */
+
+.gc-layout-container {
+  @apply mx-40;
+}
+
+.gc-fieldset ul {
+  @apply mb-12;
+}
+
+.gc-alert,
+.gc-error-message {
+  @apply text-base py-0 text-red-700 font-bold w-4/5;
+}
+
+.gc-p {
+  @apply text-p mb-10 w-full;
+}
+
+.gc-description {
+  @apply text-gray-text mb-2 text-sm w-4/5;
+}
+
+.gc-h1 {
+  @apply border-b-2 border-red-default text-h1 font-bold pb-2 mb-20;
+}
+
+.gc-h2 {
+  @apply font-bold text-h2 pb-6;
+}
+
+.gc-form-group {
+  @apply mb-0;
+}
+
+.gc-form-group .gc-input-radio:last-of-type,
+.gc-form-group .gc-input-checkbox:last-of-type {
+  @apply mb-12;
+}
+
+.gc-h3 {
+  @apply font-bold text-h3 pb-6;
+}
+
+.gc-section-header {
+  @apply font-bold text-h2 mb-16 mt-10 p-6 bg-gray-background;
+}
+
+.gc-legend {
+  @apply text-h2 mb-12 font-bold;
+}
+
+.gc-button {
+  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 my-5 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
+
+  &:hover {
+    @apply bg-green-darker;
+  }
+}
+
+.gc-button--secondary {
+  @apply px-16 py-2 border-2 border-green-700 text-green-darker;
+  &:hover {
+    @apply text-gray-50 bg-green-darker;
+  }
+}
+
+.gc-label {
+  @apply block mb-2 text-base font-bold w-4/5;
+}
+
+.gc-ul {
+  @apply list-disc text-base;
+}
+
+.gc-ul li {
+  @apply ml-6;
+}
+
+.gc-ul li:last-of-type {
+  @apply mb-12;
+}
+
+.gc-textarea {
+  @apply border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12 w-full lg:w-3/6;
+}
+
+.gc-input-text {
+  @apply border-solid border-2 py-3 px-2 mt-2 mb-12 border-gray-900;
+}
+
+.gc-dropdown {
+  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12;
+}
+
+.gc-input-checkbox .gc-input-checkbox__input {
+  @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-6 align-middle;
+}
+
+.gc-input-checkbox:checked {
+  @apply text-gray-50 bg-blue-800;
+}
+
+.gc-input-radio,
+.gc-input-checkbox {
+  @apply flex pt-4 pb-2 px-0 items-center;
+}
+
+.gc-radio-label,
+.gc-checkbox-label {
+  @apply block font-normal text-base;
+}
+
+.gc-radio__input {
+  @apply border-2 border-gray-900 w-10 h-10 mr-4;
+}
+
+.gc-phase-banner {
+  @apply bg-gray-background flex items-center py-6 px-40;
+}
+
+.gc-phase-banner span {
+  @apply text-sm;
+}
+
+.gc-phase-banner span:first-of-type {
+  @apply border-2 border-black-default py-1 px-4 mr-4;
+}
+
+.gc-phase-banner span:last-of-type {
+  @apply mt-3;
+}
+
+.gc-phase-banner span span {
+  @apply border-0 py-0 px-0 mr-0;
+}
+
+.gc-fip {
+  @apply flex flex-row justify-between items-center mx-40 my-20;
+}
+
+.gc-fip div {
+  @apply h-auto max-h-10 w-72;
+}
+
+.gc-language-toggle {
+  @apply text-right text-sm;
+}
+
+.gc-language-toggle button {
+  @apply shadow-none bg-none text-blue-900 underline border-0 text-base;
+}
+
+.gc-footer {
+  @apply border-0 bg-gray-100 mt-20;
+}
+
+.gc-footer .gc-footer-container {
+  @apply flex py-10 px-40 mt-10 flex-row items-center justify-between;
+}
+
+.gc-footer .gc-footer-container ul {
+  @apply p-0 flex text-base list-inside;
+}
+
+.gc-footer .gc-footer-container ul li {
+  @apply pr-4;
+}
+
+.gc-footer .gc-footer-container ul li:last-of-type {
+  @apply pr-0;
+}
+
+.gc-footer .gc-footer-container ul li a {
+  @apply no-underline hover:underline text-blue-dark;
+}
+
+.gc-footer div img {
+  @apply h-10;
 }
 
 .validation-message {

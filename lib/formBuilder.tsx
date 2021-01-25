@@ -200,7 +200,7 @@ function buildForm(
       return (
         <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
           {inputProps.label ? (
-            <h2 className="gc-heading-2">{inputProps.label}</h2>
+            <h2 className="gc-section-header">{inputProps.label}</h2>
           ) : null}
           {descriptiveText}
         </div>
