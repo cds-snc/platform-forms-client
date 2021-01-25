@@ -57,24 +57,7 @@
       45,
       46,
       47,
-      48,
-      49,
-      50,
-      51,
-      52,
-      53,
-      54,
-      55,
-      56,
-      57,
-      58,
-      59,
-      60,
-      61,
-      62,
-      63,
-      64,
-      65,
+      66,
       67,
       68,
       69,
@@ -952,276 +935,66 @@
       },
       {
         "id": 47,
-        "type": "plainText",
+        "type": "dynamicRow",
         "properties": {
-          "titleEn": "Entry 1",
-          "titleFr": "Entrée 1",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 48,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 49,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 50,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 51,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+          "titleEn": "",
+          "titleFr": "",
           "required": false,
-          "choices": [
+          "subElements": [
             {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 48,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Amount Owing",
+                "titleFr": "Somme due",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "description": "",
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 52,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Entry 2",
-          "titleFr": "Entrée 2",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 53,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 54,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 55,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 56,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-          "required": false,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 49,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+                "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "description": "",
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 57,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Entry 3",
-          "titleFr": "Entrée 3",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 58,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 59,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 60,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 61,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-          "required": false,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 50,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Department or agency to which amount is owed",
+                "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "description": "",
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 62,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Entry 4",
-          "titleFr": "Entrée 4",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
-          "required": false
-        }
-      },
-      {
-        "id": 63,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Amount Owing",
-          "titleFr": "Somme due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 64,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          "titleFr": "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 65,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or agency to which amount is owed",
-          "titleFr": "Ministère ou organisme auquel la somme en souffrance est due",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "description": "",
-          "required": false
-        }
-      },
-      {
-        "id": 66,
-        "type": "radio",
-        "properties": {
-          "titleEn": "If an amount is owing, is a payment plan in place?",
-          "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-          "required": false,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
+              "id": 51,
+              "type": "radio",
+              "properties": {
+                "titleEn": "If an amount is owing, is a payment plan in place?",
+                "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
+                "required": false,
+                "choices": [
+                  {
+                    "en": "Yes",
+                    "fr": "Oui"
+                  },
+                  {
+                    "en": "No",
+                    "fr": "Non"
+                  }
+                ]
+              }
             }
           ]
         }

@@ -10,3 +10,4 @@ export { Radio } from "./Radio/Radio";
 export { TextArea } from "./TextArea/TextArea";
 export { TextInput } from "./TextInput/TextInput";
 export { FileInput } from "./FileInput/FileInput";
+export { DynamicGroup } from "./DynamicRow/DynamicRow";

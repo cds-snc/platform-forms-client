@@ -9,16 +9,21 @@ import {
   TextArea,
   FormGroup,
   FileInput,
+  DynamicGroup,
 } from "../components/forms";
-type callback = (event: ChangeEvent) => void;
-interface FormElements {
+export type allFormElements =
+  | ChangeEvent<HTMLInputElement>
+  | ChangeEvent<HTMLTextAreaElement>
+  | ChangeEvent<HTMLSelectElement>;
+export type callback = (event: allFormElements) => void;
+export interface FormElement {
   id: string;
   type: string;
   properties: ElementProperties;
   onchange?: callback;
 }
 
-interface ElementProperties {
+export interface ElementProperties {
   titleEn: string;
   titleFr: string;
   placeholderEn?: string;
@@ -27,18 +32,24 @@ interface ElementProperties {
   descriptionFr?: string;
   required: boolean;
   choices?: Array<PropertyChoices>;
+  subElements?: Array<FormElement>;
   fileType?: string | undefined;
-  [key: string]: string | boolean | Array<PropertyChoices> | undefined;
+  [key: string]:
+    | string
+    | boolean
+    | Array<PropertyChoices>
+    | Array<FormElement>
+    | undefined;
 }
 
-interface PropertyChoices {
+export interface PropertyChoices {
   en: string;
   fr: string;
   [key: string]: string;
 }
 
 // This function is used for the i18n change of form labels
-function getProperty(field: string, lang: string): string {
+export function getProperty(field: string, lang: string): string {
   if (!field) {
     return lang;
   }
@@ -62,8 +73,8 @@ function getLocaleChoices(
 }
 
 // This function renders the form elements with passed in properties.
-function buildForm(
-  element: FormElements,
+export function buildForm(
+  element: FormElement,
   value: string,
   lang: string,
   handleChange: callback
@@ -82,6 +93,10 @@ function buildForm(
     description: element.properties[
       getProperty("description", lang)
     ]?.toString(),
+    subElements:
+      element.properties && element.properties.subElements
+        ? element.properties.subElements
+        : [],
     onChange: handleChange,
   };
 
@@ -219,12 +234,19 @@ function buildForm(
           />
         </Fragment>
       );
+    case "dynamicRow": {
+      return (
+        <DynamicGroup
+          key={`dynamicGroup-${inputProps.id}`}
+          name={inputProps.name}
+          legend={inputProps.label}
+          rowElements={inputProps.subElements}
+          lang={lang}
+          value={value}
+        />
+      );
+    }
     default:
       return <></>;
   }
 }
-
-module.exports = {
-  getProperty,
-  buildForm,
-};
