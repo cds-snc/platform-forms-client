@@ -9,7 +9,7 @@ import {
   TextArea,
   FormGroup,
   FileInput,
-  DynamicRow,
+  DynamicGroup,
 } from "../components/forms";
 type callback = (event: ChangeEvent) => void;
 export interface FormElement {
@@ -95,6 +95,8 @@ export function buildForm(
         : [],
     onChange: handleChange,
   };
+
+  //console.log(`Build value from formBuild: ${value}`);
 
   const label = inputProps.label ? (
     <Label key={`label-${element.id}`} htmlFor={inputProps.name}>
@@ -184,7 +186,7 @@ export function buildForm(
         <FormGroup
           key={`formGroup-${inputProps.id}`}
           name={inputProps.name}
-          ariaDescribedBy={
+          aria-describedby={
             inputProps.description ? `desc-${element.id}` : undefined
           }
         >
@@ -232,7 +234,7 @@ export function buildForm(
       );
     case "dynamicRow": {
       return (
-        <DynamicRow
+        <DynamicGroup
           key={`dynamicGroup-${inputProps.id}`}
           name={inputProps.name}
           legend={inputProps.label}
