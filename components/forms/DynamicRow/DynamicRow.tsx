@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import classnames from "classnames";
-import { buildForm, FormElements } from "../../../lib/formBuilder";
+import { buildForm, FormElement } from "../../../lib/formBuilder";
 import { Button } from "../index";
 type callback = (event: ChangeEvent) => void;
 
