@@ -27,6 +27,10 @@
   @apply mb-0;
 }
 
+.gc-item-row {
+  @apply border-t-2 border-green-default pt-4;
+}
+
 .gc-form-group .gc-input-radio:last-of-type,
 .gc-form-group .gc-input-checkbox:last-of-type {
   @apply mb-12;
@@ -53,7 +57,7 @@
 }
 
 .gc-button--secondary {
-  @apply px-16 py-2 border-2 border-green-700 text-green-darker;
+  @apply bg-white-default px-16 py-2 border-2 border-green-700 text-green-darker;
   &:hover {
     @apply text-gray-50 bg-green-darker;
   }
@@ -73,6 +77,10 @@
 
 .gc-input-text {
   @apply border-solid border-2 py-3 px-2 mt-2 mb-12 border-gray-900 w-3/6;
+}
+
+.gc-file-input {
+  @apply mt-2 mb-12;
 }
 
 .gc-dropdown {

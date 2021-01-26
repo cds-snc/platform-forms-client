@@ -66,7 +66,9 @@ const Form = ({ formModel, i18n }) => {
       <Head>
         <title>{formToRender[getProperty("title", i18n.language)]}</title>
       </Head>
-      <h1>{formToRender[getProperty("title", i18n.language)]}</h1>
+      <h1 className="gc-h1">
+        {formToRender[getProperty("title", i18n.language)]}
+      </h1>
       <form id="form" onSubmit={formik.handleSubmit} method="POST">
         {formToRender.layout.map((item) => {
           const element = formToRender.elements.find(

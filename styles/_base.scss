@@ -143,12 +143,6 @@ h6 {
 main {
   @extend %page-container;
   padding: 0 $space-md;
-
-  h1 {
-    border-bottom: 1px solid $color-red;
-    margin: 5rem 0;
-    font-size: 2.25rem;
-  }
 }
 
 li:not(:last-of-type) {

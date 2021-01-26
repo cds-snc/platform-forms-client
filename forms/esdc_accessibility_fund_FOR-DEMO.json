@@ -246,11 +246,12 @@
       },
       {
         "id": 4,
-        "type": "plainText",
+        "type": "heading",
         "properties": {
-          "titleEn": "ORGANIZATION IDENTIFICATION",
-          "titleFr": "IDENTIFICATION DE L’ORGANISME",
-          "charLimit": 1000,
+          "titleEn": "Organization Identification",
+          "titleFr": "Identification de l'organisation",
+          "headingLevel": "h2",
+          "isSectional": true,
           "required": false
         }
       },
@@ -403,15 +404,12 @@
       },
       {
         "id": 15,
-        "type": "plainText",
+        "type": "heading",
         "properties": {
           "titleEn": "Organization Primary Address",
-          "titleFr": "Adresse principale de l’organisme",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 1000,
+          "titleFr": "Adresse principale de l’organismen",
+          "headingLevel": "h2",
+          "isSectional": true,
           "required": false
         }
       },
@@ -794,7 +792,7 @@
       },
       {
         "id": 37,
-        "type": "plainText",
+        "type": "textField",
         "properties": {
           "titleEn": "Given Name / Surname",
           "titleFr": "Prénom et nom de famille",
@@ -2720,7 +2718,7 @@
         "properties": {
           "titleEn": "Please review the following checklist carefully. Errors or incomplete applications will result in delayed processing and/or rejection.",
           "titleFr": "Veuillez revoir la liste suivante attentivement. Les demandes de financement erronées et/ou incomplètes entraîneront un retard dans l’évaluation du projet et pourraient être rejetées.",
-          "required": false,
+          "required": true,
           "choices": [
             {
               "en": "I have the capacity and the authority to submit this Application for Funding on behalf of the applicant organization.",

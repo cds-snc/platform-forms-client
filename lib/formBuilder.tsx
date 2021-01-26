@@ -11,6 +11,7 @@ import {
   FileInput,
   DynamicGroup,
   Description,
+  Heading,
 } from "../components/forms";
 export type allFormElements =
   | ChangeEvent<HTMLInputElement>
@@ -35,6 +36,8 @@ export interface ElementProperties {
   choices?: Array<PropertyChoices>;
   subElements?: Array<FormElement>;
   fileType?: string | undefined;
+  headingLevel?: string | undefined;
+  isSectional?: boolean;
   [key: string]:
     | string
     | boolean
@@ -87,6 +90,10 @@ export function buildForm(
     required: element.properties.required,
     label: element.properties[getProperty("title", lang)]?.toString(),
     value: value ? value.toString() : "",
+    headingLevel: element.properties.headingLevel
+      ? element.properties.headingLevel
+      : "h2",
+    isSectional: element.properties.isSectional ? true : false,
     choices:
       element.properties && element.properties.choices
         ? getLocaleChoices(element.properties.choices, lang)
@@ -218,10 +225,18 @@ export function buildForm(
       return (
         <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
           {inputProps.label ? (
-            <h2 className="gc-section-header">{inputProps.label}</h2>
+            <h2 className="gc-h2">{inputProps.label}</h2>
           ) : null}
           {descriptiveText}
         </div>
+      );
+    case "heading":
+      return (
+        <>
+          {inputProps.label ? (
+            <Heading {...inputProps}>{inputProps.label}</Heading>
+          ) : null}
+        </>
       );
     case "fileInput":
       return (
