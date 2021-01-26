@@ -25,6 +25,7 @@
       11,
       12,
       13,
+      185,
       14,
       15,
       16,
@@ -163,6 +164,7 @@
       170,
       171,
       172,
+      186,
       173,
       174,
       175,
@@ -176,6 +178,10 @@
       183,
       184
     ],
+    "endPage": {
+      "referrerUrlEn": "https://catalogue.servicecanada.gc.ca/content/EForms/en/Detail.html?Form=EMP5670",
+      "referrerUrlFr": "https://catalogue.servicecanada.gc.ca/content/EForms/fr/Detail.html?Form=EMP5670"
+    },
     "elements": [
       {
         "id": 1,
@@ -368,6 +374,18 @@
               "fr": "J’ai fourni un document d’appui confirmant la preuve des activités de mon organisme."
             }
           ]
+        }
+      },
+      {
+        "id": 185,
+        "type": "fileInput",
+        "properties": {
+          "titleEn": "Upload separate Documentation",
+          "titleFr": "Téléchargez la documentation séparée",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "fileType": "image/*,.pdf",
+          "required": false
         }
       },
       {
@@ -2578,14 +2596,26 @@
               "fr": "J’atteste que le projet n’a pas lieu sur une propriété du gouvernement du Canada, d’un hôpital public ou d’une école publique, ni dans une résidence ou une habitation privée."
             },
             {
-              "en": "I have provided a digital picture of the project space to be improved.",
-              "fr": "J'ai soumis une photo numérique de l'espace de projet qui sera améliorée."
-            },
-            {
               "en": "I will attest to the contents in Section C – Part 5 of this application form",
               "fr": "J’attesterai au contenu de la section C – partie 5 de ce formulaire de demande."
+            },
+            {
+              "en": "I have provided a digital picture of the project space to be improved.",
+              "fr": "J'ai soumis une photo numérique de l'espace de projet qui sera améliorée."
             }
           ]
+        }
+      },
+      {
+        "id": 186,
+        "type": "fileInput",
+        "properties": {
+          "titleEn": "Upload a photo",
+          "titleFr": "Téléchargez une photo",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "fileType": "image/*,.pdf",
+          "required": false
         }
       },
       {
