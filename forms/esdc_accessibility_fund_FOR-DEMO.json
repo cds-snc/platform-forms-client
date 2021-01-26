@@ -1248,7 +1248,7 @@
         "id": 87,
         "type": "plainText",
         "properties": {
-          "titleEn": "[placeholder for add-an-address block]",
+          "titleEn": "[]",
           "titleFr": "",
           "descriptionEn": "If yes, include the address for every other location where project activities will occur:",
           "descriptionFr": "Dans l’affirmative, veuillez indiquer l’adresse de chaque endroit où se dérouleront les activités du projet :",
