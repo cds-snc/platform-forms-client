@@ -7,6 +7,7 @@
   },
   "formList": {
     "title": "Liste de formulaires",
+    "a11yfunding": "Demande de financement de subvention - Initiative pour appuyer les communautés noires du Canada (ACNC)",
     "esdc": "Demande de financement de subvention - Initiative pour appuyer les communautés noires du Canada (ACNC)",
     "clearance": "Liste de vérification des exigences relatives à la sécurité",
     "notifycontact": "Nous joindre - Notification",
@@ -14,7 +15,8 @@
     "award": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
     "callback": "SC Demandes des Services",
     "lostfishgear": "Formulaire de déclaration de perte d'engin de pêche : Fixe, incluant les casiers à homard et à crabe (Atlantique)",
-    "baggage": "Rapport de bagages retardés"
+    "baggage": "Rapport de bagages retardés",
+    "accessibility": "Fonds pour l'accessibilité (FA) - Projets de petite envergure"
   },
   "design": {
     "title": "Design",

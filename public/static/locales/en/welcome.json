@@ -7,6 +7,7 @@
   },
   "formList": {
     "title": "Forms List",
+    "a11yfunding": "Grant Application for Funding – Enabling Accessibility Fund (EAF) - Small Projects Component",
     "esdc": "Grant Application for Funding – Supporting Black Canadian Communities (SBCC) Initiative",
     "clearance": "Security Clearance Form",
     "notifycontact": "Notify Contact Us",
@@ -14,7 +15,8 @@
     "award": "Public Service Award of Excellence 2020 Nominations",
     "callback": "Service Canada Callback form",
     "lostfishgear": "Atlantic lost fishing gear form: Fixed gear, including crab and lobster traps",
-    "baggage": "Delayed Baggage Report"
+    "baggage": "Delayed Baggage Report",
+    "accessibility": "Enabling Accessibility Fund (EAF) - Small Projects Component"
   },
   "design": {
     "title": "Design",
