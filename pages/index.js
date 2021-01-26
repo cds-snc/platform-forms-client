@@ -4,7 +4,7 @@ import { Link, withTranslation } from "../i18n";
 
 const Home = ({ t }) => (
   <>
-    <h1>{t("title")}</h1>
+    <h1 className="gc-h1">{t("title")}</h1>
 
     <div className="">
       <div className="mb-20">

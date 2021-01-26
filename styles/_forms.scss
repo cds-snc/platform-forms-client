@@ -1,74 +1,114 @@
+.gc-fieldset ul {
+  @apply mb-12;
+}
+
+.gc-alert,
+.gc-error-message {
+  @apply text-base py-0 text-red-700 font-bold w-4/5;
+}
+
+.gc-p {
+  @apply text-p mb-10 w-full;
+}
+
+.gc-description {
+  @apply text-gray-text mb-2 text-sm w-4/5;
+}
+
+.gc-h1 {
+  @apply border-b-2 border-red-default text-h1 font-bold pb-2 mb-20;
+}
+
+.gc-h2 {
+  @apply font-bold text-h2 pb-6;
+}
+
+.gc-form-group {
+  @apply mb-0;
+}
+
+.gc-item-row {
+  @apply border-t-2 border-green-default pt-4;
+}
+
+.gc-form-group .gc-input-radio:last-of-type,
+.gc-form-group .gc-input-checkbox:last-of-type {
+  @apply mb-12;
+}
+
+.gc-h3 {
+  @apply font-bold text-h3 pb-6;
+}
+
+.gc-section-header {
+  @apply font-bold text-h2 mb-16 mt-10 p-6 bg-gray-background;
+}
+
+.gc-legend {
+  @apply text-h2 mb-12 font-bold;
+}
+
 .gc-button {
-  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 my-10 font-bold text-base no-underline text-gray-50 bg-blue-800 outline-none w-60;
+  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 my-5 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
+
   &:hover {
-    @apply bg-blue-700;
+    @apply bg-green-darker;
   }
 }
 
 .gc-button--secondary {
-  @apply bg-transparent px-16 py-2 border-2 border-green-700 text-green-700;
+  @apply bg-white-default px-16 py-2 border-2 border-green-700 text-green-darker;
   &:hover {
-    @apply text-gray-50 bg-green-700;
+    @apply text-gray-50 bg-green-darker;
   }
 }
 
 .gc-label {
-  @apply block py-2 mt-10 mb-4 font-bold leading-5;
-}
-
-.gc-textarea {
-  @apply border-solid border-2 py-3 px-2 border-gray-900 w-4/6 h-40;
-}
-
-.gc-input-text {
-  @apply border-solid border-2 py-3 px-2 my-2 border-gray-900 mb-2 w-3/6;
+  @apply block mb-2 text-base font-bold w-4/5;
 }
 
 .gc-plain-text {
   @apply w-full my-5;
 }
 
-.gc-heading-2 {
-  @apply mt-20 mb-10 text-lg;
+.gc-textarea {
+  @apply border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12 w-4/6 h-40;
+}
+
+.gc-input-text {
+  @apply border-solid border-2 py-3 px-2 mt-2 mb-12 border-gray-900 w-3/6;
+}
+
+.gc-file-input {
+  @apply mt-2 mb-12;
 }
 
 .gc-dropdown {
-  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mb-2;
+  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12;
 }
 
-.gc-checkbox {
-  .gc-checkbox__input,
-  form input.gc-checkbox__input {
-    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-2 align-middle my-2;
+.gc-input-checkbox {
+  .gc-input-checkbox__input {
+    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-6 align-middle;
   }
 
-  &:checked {
+  .gc-input-checkbox:checked {
     @apply text-gray-50 bg-blue-800;
   }
 }
 
-.gc-input-radio {
-  @apply py-3 px-2;
-
-  .gc-radio__input {
-    @apply h-10 w-10 border-2 border-gray-900 mr-2 align-middle;
-  }
+.gc-input-radio,
+.gc-input-checkbox {
+  @apply flex pt-4 pb-2 px-0 items-center;
 }
 
-.gc-checkbox,
-.gc-input-radio {
-  .gc-label {
-    @apply inline font-normal my-0 p-2;
-  }
+.gc-radio-label,
+.gc-checkbox-label {
+  @apply block font-normal text-base;
 }
 
-.error-list {
-  @apply px-5 bg-red-50 border-l-4 border-red-500 my-2;
-
-  &__header {
-    margin-top: $space-xs;
-    margin-bottom: $space-md;
-  }
+.gc-radio__input {
+  @apply border-2 border-gray-900 w-10 h-10 mr-4;
 }
 
 .validation-message {

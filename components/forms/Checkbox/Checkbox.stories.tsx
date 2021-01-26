@@ -4,6 +4,9 @@ import { Checkbox } from "./Checkbox";
 export default {
   title: "Forms/Checkbox",
   component: Checkbox,
+  parameters: {
+    info: `Checkbox component`,
+  },
 };
 
 export const defaultCheckbox = (): React.ReactElement => (

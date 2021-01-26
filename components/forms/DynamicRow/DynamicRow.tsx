@@ -115,10 +115,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       <legend>{legend}</legend>
       {rows.map((row, index) => {
         return (
-          <div
-            key={`${name}-${index}`}
-            className="border-solid border-2 border-black"
-          >
+          <div key={`${name}-${index}`} className="gc-item-row">
             <p>
               {lang === "en" ? "Item" : "Article"}
               {index + 1}
