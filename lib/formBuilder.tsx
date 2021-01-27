@@ -223,7 +223,7 @@ export function buildForm(
       );
     case "plainText":
       return (
-        <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
+        <div className="gc-plain-text" key={inputProps.id}>
           {inputProps.label ? (
             <h2 className="gc-h2">{inputProps.label}</h2>
           ) : null}
@@ -232,11 +232,11 @@ export function buildForm(
       );
     case "heading":
       return (
-        <>
+        <Fragment key={inputProps.id}>
           {inputProps.label ? (
             <Heading {...inputProps}>{inputProps.label}</Heading>
           ) : null}
-        </>
+        </Fragment>
       );
     case "fileInput":
       return (
