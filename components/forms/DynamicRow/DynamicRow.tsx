@@ -121,6 +121,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               {index + 1}
             </p>
             <DynamicRow
+              key={name}
               name={name}
               elements={row}
               rowNum={index}
