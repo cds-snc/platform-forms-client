@@ -1,17 +1,14 @@
 import json2md from "json2md";
 
-// Redo this interface and remember that that it's an Array and not an object.
 interface Response {
   form: {
     titleEn: string;
     titleFr: string;
-    elements: [
-      {
-        id: string | number;
-        titleEn: string;
-        properties: Record<string, string>;
-      }
-    ];
+    elements: {
+      id: string | number;
+      titleEn: string;
+      properties: Record<string, string>;
+    }[];
   };
   responses: {
     [key: string]: string | [];

@@ -25,7 +25,11 @@ const Form = ({ formModel, i18n }) => {
     initialValues: initialState,
     onSubmit: (values) => {
       const formResponseObject = {
-        form: formToRender,
+        form: {
+          titleEn: formToRender.titleEn,
+          titleFr: formToRender.titleFr,
+          elements: formToRender.elements,
+        },
         responses: values,
       };
 
