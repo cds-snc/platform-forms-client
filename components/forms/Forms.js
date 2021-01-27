@@ -26,6 +26,7 @@ const Form = ({ formModel, i18n }) => {
     onSubmit: (values) => {
       const formResponseObject = {
         form: {
+          id: formToRender.id,
           titleEn: formToRender.titleEn,
           titleFr: formToRender.titleFr,
           elements: formToRender.elements,
