@@ -39,5 +39,6 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react", "jsx-a11y", "prettier", "cypress"],
+  ignorePatterns: ["**/storybook-static/*.*"],
   rules: { "prettier/prettier": "error" },
 };

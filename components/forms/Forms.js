@@ -25,7 +25,12 @@ const Form = ({ formModel, i18n }) => {
     initialValues: initialState,
     onSubmit: (values) => {
       const formResponseObject = {
-        form: formToRender,
+        form: {
+          id: formToRender.id,
+          titleEn: formToRender.titleEn,
+          titleFr: formToRender.titleFr,
+          elements: formToRender.elements,
+        },
         responses: values,
       };
 
@@ -41,10 +46,13 @@ const Form = ({ formModel, i18n }) => {
         .then((response) => response.json())
         .then(() => {
           const referrerUrl =
-            formToRender &&
-            formToRender.endPage &&
-            formToRender.endPage.referrerUrl
-              ? { referrerUrl: formToRender.endPage.referrerUrl }
+            formToRender && formToRender.endPage
+              ? {
+                  referrerUrl:
+                    formToRender.endPage[
+                      getProperty("referrerUrl", i18n.language)
+                    ],
+                }
               : {};
           router.push({
             pathname: `${i18n.language}/confirmation`,
@@ -63,18 +71,24 @@ const Form = ({ formModel, i18n }) => {
       <Head>
         <title>{formToRender[getProperty("title", i18n.language)]}</title>
       </Head>
-      <h1>{formToRender[getProperty("title", i18n.language)]}</h1>
+      <h1 className="gc-h1">
+        {formToRender[getProperty("title", i18n.language)]}
+      </h1>
       <form id="form" onSubmit={formik.handleSubmit} method="POST">
         {formToRender.layout.map((item) => {
           const element = formToRender.elements.find(
             (element) => element.id === item
           );
-          return buildForm(
-            element,
-            formik.values[element.id],
-            i18n.language,
-            formik.handleChange
-          );
+          if (element) {
+            return buildForm(
+              element,
+              formik.values[element.id],
+              i18n.language,
+              formik.handleChange
+            );
+          } else {
+            console.log(`Failed component look up ${item}`);
+          }
         })}
         <div className="buttons">
           <button className="gc-button" type="submit">

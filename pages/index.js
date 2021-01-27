@@ -4,13 +4,16 @@ import { Link, withTranslation } from "../i18n";
 
 const Home = ({ t }) => (
   <>
-    <h1>{t("title")}</h1>
+    <h1 className="gc-h1">{t("title")}</h1>
 
     <div className="">
       <div className="mb-20">
         <h2 className="text-3xl mb-5">{t("product.title")}</h2>
         <p>{t("product.text")}</p>
         <h2 className="text-3xl mb-5">{t("formList.title")}</h2>
+        <p>
+          <Link href="/14">{t("formList.accessibility")}</Link>
+        </p>
         <p>
           <Link href="/8">{t("formList.esdc")}</Link>
         </p>

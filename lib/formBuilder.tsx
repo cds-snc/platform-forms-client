@@ -9,16 +9,23 @@ import {
   TextArea,
   FormGroup,
   FileInput,
+  DynamicGroup,
+  Description,
+  Heading,
 } from "../components/forms";
-type callback = (event: ChangeEvent) => void;
-interface FormElements {
+export type allFormElements =
+  | ChangeEvent<HTMLInputElement>
+  | ChangeEvent<HTMLTextAreaElement>
+  | ChangeEvent<HTMLSelectElement>;
+export type callback = (event: allFormElements) => void;
+export interface FormElement {
   id: string;
   type: string;
   properties: ElementProperties;
   onchange?: callback;
 }
 
-interface ElementProperties {
+export interface ElementProperties {
   titleEn: string;
   titleFr: string;
   placeholderEn?: string;
@@ -27,18 +34,26 @@ interface ElementProperties {
   descriptionFr?: string;
   required: boolean;
   choices?: Array<PropertyChoices>;
+  subElements?: Array<FormElement>;
   fileType?: string | undefined;
-  [key: string]: string | boolean | Array<PropertyChoices> | undefined;
+  headingLevel?: string | undefined;
+  isSectional?: boolean;
+  [key: string]:
+    | string
+    | boolean
+    | Array<PropertyChoices>
+    | Array<FormElement>
+    | undefined;
 }
 
-interface PropertyChoices {
+export interface PropertyChoices {
   en: string;
   fr: string;
   [key: string]: string;
 }
 
 // This function is used for the i18n change of form labels
-function getProperty(field: string, lang: string): string {
+export function getProperty(field: string, lang: string): string {
   if (!field) {
     return lang;
   }
@@ -62,8 +77,8 @@ function getLocaleChoices(
 }
 
 // This function renders the form elements with passed in properties.
-function buildForm(
-  element: FormElements,
+export function buildForm(
+  element: FormElement,
   value: string,
   lang: string,
   handleChange: callback
@@ -75,6 +90,10 @@ function buildForm(
     required: element.properties.required,
     label: element.properties[getProperty("title", lang)]?.toString(),
     value: value ? value.toString() : "",
+    headingLevel: element.properties.headingLevel
+      ? element.properties.headingLevel
+      : "h2",
+    isSectional: element.properties.isSectional ? true : false,
     choices:
       element.properties && element.properties.choices
         ? getLocaleChoices(element.properties.choices, lang)
@@ -82,6 +101,10 @@ function buildForm(
     description: element.properties[
       getProperty("description", lang)
     ]?.toString(),
+    subElements:
+      element.properties && element.properties.subElements
+        ? element.properties.subElements
+        : [],
     onChange: handleChange,
   };
 
@@ -92,7 +115,9 @@ function buildForm(
   ) : null;
 
   const descriptiveText = inputProps.description ? (
-    <div id={`desc-${element.id}`}>{inputProps.description}</div>
+    <Description id={`desc-${element.id}`}>
+      {inputProps.description}
+    </Description>
   ) : null;
 
   switch (element.type) {
@@ -198,10 +223,20 @@ function buildForm(
       );
     case "plainText":
       return (
-        <div className="gc-plain-text" key={`formGroup-${inputProps.id}`}>
-          {inputProps.label ? <h2>{inputProps.label}</h2> : null}
+        <div className="gc-plain-text" key={inputProps.id}>
+          {inputProps.label ? (
+            <h2 className="gc-h2">{inputProps.label}</h2>
+          ) : null}
           {descriptiveText}
         </div>
+      );
+    case "heading":
+      return (
+        <Fragment key={inputProps.id}>
+          {inputProps.label ? (
+            <Heading {...inputProps}>{inputProps.label}</Heading>
+          ) : null}
+        </Fragment>
       );
     case "fileInput":
       return (
@@ -217,12 +252,19 @@ function buildForm(
           />
         </Fragment>
       );
+    case "dynamicRow": {
+      return (
+        <DynamicGroup
+          key={`dynamicGroup-${inputProps.id}`}
+          name={inputProps.name}
+          legend={inputProps.label}
+          rowElements={inputProps.subElements}
+          lang={lang}
+          value={value}
+        />
+      );
+    }
     default:
       return <></>;
   }
 }
-
-module.exports = {
-  getProperty,
-  buildForm,
-};

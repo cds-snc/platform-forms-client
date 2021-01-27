@@ -31,7 +31,7 @@ export const Radio = (
         ref={inputRef}
         {...inputProps}
       />
-      <label className="gc-label" htmlFor={id}>
+      <label className="gc-radio-label" htmlFor={id}>
         {label}
       </label>
     </div>

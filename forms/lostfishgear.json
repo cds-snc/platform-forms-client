@@ -57,7 +57,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -70,7 +70,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -83,7 +83,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -96,7 +96,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -109,7 +109,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -158,8 +158,8 @@
         "id": 9,
         "type": "textField",
         "properties": {
-          "titleEn": " ",
-          "titleFr": " ",
+          "titleEn": "",
+          "titleFr": "",
           "placeholderEn": "If Other",
           "placeholderFr": "Si autre",
           "description": "",
@@ -177,7 +177,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -203,7 +203,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -216,7 +216,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -255,7 +255,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -268,7 +268,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {
@@ -281,7 +281,7 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "required": false
         }
       },
       {

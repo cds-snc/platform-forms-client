@@ -13,7 +13,7 @@ const Confirmation = ({ t }) => {
 
   return (
     <>
-      <h1>{t("title")}</h1>
+      <h1 className="gc-h1">{t("title")}</h1>
 
       <div>
         <p>{t("body")}</p>
