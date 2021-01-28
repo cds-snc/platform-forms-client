@@ -8,6 +8,6 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           build: yarn build
-          start: PORT=3000 yarn start
+          start: yarn start
           wait-on: "http://localhost:3000"
           command: yarn cypress:accessibility
