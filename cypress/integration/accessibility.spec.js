@@ -5,9 +5,14 @@ const A11Y_OPTIONS = {
   },
 };
 context("Accessibility (A11Y)", () => {
-  it("Passes accessibility tests", () => {
-    cy.visit("http://localhost:3000");
+  it("Welcome Page Passes accessibility tests", () => {
+    cy.visit("http://localhost:3000/en");
     cy.injectAxe();
-    cy.checkA11y(A11Y_OPTIONS);
+    cy.checkA11y(null, A11Y_OPTIONS);
+  });
+  it("CDS Intake Form Passes accessibility tests", () => {
+    cy.visit("http://localhost:3000/en/2");
+    cy.injectAxe();
+    cy.checkA11y(null, A11Y_OPTIONS);
   });
 });
