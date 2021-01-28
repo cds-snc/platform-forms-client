@@ -1,3 +1,4 @@
+name: Linting Code
 on: [pull_request]
 
 jobs:

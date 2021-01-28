@@ -1,3 +1,4 @@
+name: Prettify Code
 on: [pull_request]
 
 jobs:
