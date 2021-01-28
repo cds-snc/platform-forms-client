@@ -7,11 +7,8 @@ const Fip = ({ t, i18n }) => (
   <div className="page--container">
     <div className="fip-container">
       <div className="canada-flag">
-        <a href={t("fip.link")} aria-label={t("fip.text")}>
-          <img
-            src={"/img/sig-blk-" + i18n.language + ".svg"}
-            alt={t("fip.text")}
-          />
+        <a href={t("fip.link")}>
+          <img src={"/img/sig-blk-" + i18n.language + ".svg"} />
         </a>
       </div>
       <LanguageToggle />
