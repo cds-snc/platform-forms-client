@@ -11,7 +11,7 @@
     "lint:fix": "eslint --fix .",
     "format": "prettier --write --config ./.prettierrc.js .",
     "cypress:open": "cypress open",
-    "cypress:run": "start-server-and-test 'yarn build && PORT=3000 yarn start' 'http://localhost:3000' 'cypress run --spec cypress/integration/accessibility.spec.js'",
+    "cypress:accessibility": "start-server-and-test 'yarn build && PORT=3000 yarn start' 'http://localhost:3000' 'cypress run --spec cypress/integration/accessibility.spec.js'",
     "build-storybook": "build-storybook -s public --no-dll",
     "storybook": "start-storybook -p 6006"
   },
