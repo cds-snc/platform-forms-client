@@ -42,7 +42,7 @@ jobs:
           echo "##[set-output name=container_name;]$(jq -r '.containerDefinitions[0].name' form_viewer.json)"
       - name: Render image for form viewer service
         id: taskdef-form-viewer
-        uses: aws-actions/amazon-ecs-render-task-definition@9666dc9
+        uses: aws-actions/amazon-ecs-render-task-definition
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -56,7 +56,7 @@ jobs:
           jq  --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
-        uses: aws-actions/amazon-ecs-deploy-task-definition@7218b9c
+        uses: aws-actions/amazon-ecs-deploy-task-definition
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer

@@ -26,6 +26,7 @@ module.exports = {
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
+    "plugin:cypress/recommended",
     "plugin:prettier/recommended",
     "prettier/flowtype",
     "prettier/react",
@@ -37,7 +38,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: ["react", "jsx-a11y", "prettier"],
+  plugins: ["react", "jsx-a11y", "prettier", "cypress"],
   ignorePatterns: ["**/storybook-static/*.*"],
   rules: { "prettier/prettier": "error" },
 };
