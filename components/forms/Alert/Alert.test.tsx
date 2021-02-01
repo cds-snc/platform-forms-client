@@ -8,8 +8,8 @@ describe("Alert component", () => {
   it("renders without errors", () => {
     const { queryByTestId, queryByText } = render(
       <Alert type="success" heading="Success status">
-      {text}
-    </Alert>
+        {text}
+      </Alert>
     );
     expect(queryByTestId("alert")).toBeInTheDocument();
     expect(queryByText(text)).toBeInTheDocument();
