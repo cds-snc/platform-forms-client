@@ -14,7 +14,7 @@ describe("Heading component", () => {
   });
 
   it("renders secondary heading", () => {
-    const { queryByTestId, queryByText } = render(
+    const { queryByTestId } = render(
       <Heading headingLevel="h2" isSectional={true}>
         {text}
       </Heading>
