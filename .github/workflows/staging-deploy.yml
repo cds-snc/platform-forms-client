@@ -9,7 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for container to be built and pushed
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        # v1.0.0 of this action as of Jan 28 2021
+        uses: fountainhead/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891
         id: wait-for-build
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -21,7 +22,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        # v1 as of Jan 28 2021
+        uses: aws-actions/configure-aws-credentials@51e2d042f8c5cf77f151685c9338e989dc0b8fc8
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -29,7 +31,8 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+        # v1 as of Jan 28 2021
+        uses: aws-actions/amazon-ecr-login@b9c809dc38d74cd0fde3c13cc4fe4ac72ebecdae1
 
       - name: Get Cluster Name
         id: cluster
@@ -42,7 +45,8 @@ jobs:
           echo "##[set-output name=container_name;]$(jq -r '.containerDefinitions[0].name' form_viewer.json)"
       - name: Render image for form viewer service
         id: taskdef-form-viewer
-        uses: aws-actions/amazon-ecs-render-task-definition
+        # v1.0.10
+        uses: aws-actions/amazon-ecs-render-task-definition@9666dc9d3bf790a3a6a49737b240f17fa599a5f2
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -56,7 +60,8 @@ jobs:
           jq  --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
-        uses: aws-actions/amazon-ecs-deploy-task-definition
+        # v1.4.2
+        uses: aws-actions/amazon-ecs-deploy-task-definition@c74a8ca2cd0dd04d25f469715e23cb6c2fe0f01a
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
