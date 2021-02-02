@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
     "lint": "eslint . ",
@@ -24,6 +24,7 @@
     "next": "10.0.4",
     "next-i18next": "^7.0.1",
     "notifications-node-client": "^5.0.2",
+    "pino": "^6.11.0",
     "react": "^17.0.1",
     "react-dom": "17.0.1",
     "uuid": "^8.3.2"
@@ -38,6 +39,7 @@
     "@testing-library/react": "^11.2.3",
     "@types/classnames": "^2.2.11",
     "@types/json2md": "^1.5.0",
+    "@types/pino": "^6.3.5",
     "@types/react": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",

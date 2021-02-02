@@ -5,15 +5,11 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Launch via npm",
+        "name":"NextJS Debugger",
         "type": "node",
-        "request": "launch",
-        "cwd": "${workspaceFolder}",
-        "runtimeExecutable": "npm",
-        "runtimeArgs": [
-          "run-script",
-          "dev"
-        ]
+        "request": "attach",
+        "skipFiles": ["<node_internals>/**"],
+        "port": 9229
       }
     ]
 }
