@@ -19,7 +19,7 @@ export const Heading = (props: HeadingProps): React.ReactElement => {
   const CustomTag = headingLevel as keyof JSX.IntrinsicElements;
 
   return (
-    <CustomTag data-testid="h1" className={classes} id={id}>
+    <CustomTag data-testid="heading" className={classes} id={id}>
       {children}
     </CustomTag>
   );
