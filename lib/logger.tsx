@@ -5,7 +5,7 @@ export const logMessage = pino({
   browser: {
     asObject: true,
     transmit: {
-      level: "info",
+      level: process.env.NODE_ENV === "production" ? "error" : "info",
       send: (level, logEvent) => {
         let msg = logEvent.messages[0];
         if (Array.isArray(msg)) {
