@@ -61,7 +61,7 @@ const DynamicRow = (props: DynamicRowProps) => {
 const DynamicElement = (props: DynamicElementProps): React.ReactElement => {
   const { element, value, lang, onChange } = props;
 
-  return buildForm(element, value, lang, onChange);
+  return buildForm(element, lang, onChange);
 };
 export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const { name, className, legend, error, rowElements, lang } = props;

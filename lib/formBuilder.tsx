@@ -79,17 +79,18 @@ function getLocaleChoices(
 // This function renders the form elements with passed in properties.
 export function buildForm(
   element: FormElement,
-  value: string,
   lang: string,
   handleChange: callback
 ): ReactElement {
+
+
   const inputProps = {
     key: element.id,
     id: element.id,
     name: element.id.toString(),
     required: element.properties.required,
     label: element.properties[getProperty("title", lang)]?.toString(),
-    value: value ? value.toString() : "",
+
     headingLevel: element.properties.headingLevel
       ? element.properties.headingLevel
       : "h2",
@@ -260,7 +261,6 @@ export function buildForm(
           legend={inputProps.label}
           rowElements={inputProps.subElements}
           lang={lang}
-          value={value}
         />
       );
     }
