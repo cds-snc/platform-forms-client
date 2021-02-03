@@ -77,25 +77,23 @@ const Form = ({ formModel, i18n, t }) => {
         {formToRender[getProperty("title", i18n.language)]}
       </h1>
       <form id="form" onSubmit={formik.handleSubmit} method="POST">
-        {logger(
-          formToRender.layout.map((item) => {
-            const element = formToRender.elements.find(
-              (element) => element.id === item
+        {formToRender.layout.map((item) => {
+          const element = formToRender.elements.find(
+            (element) => element.id === item
+          );
+          if (element) {
+            return buildForm(
+              element,
+              formik.values[element.id],
+              i18n.language,
+              formik.handleChange
             );
-            if (element) {
-              return buildForm(
-                element,
-                formik.values[element.id],
-                i18n.language,
-                formik.handleChange
-              );
-            } else {
-              logMessage.error(
-                `Failed component ID look up ${item} on form ID ${formToRender.id}`
-              );
-            }
-          })
-        )}
+          } else {
+            logMessage.error(
+              `Failed component ID look up ${item} on form ID ${formToRender.id}`
+            );
+          }
+        })}
         <div className="buttons">
           <button className="gc-button" type="submit">
             {t("submitButton")}
