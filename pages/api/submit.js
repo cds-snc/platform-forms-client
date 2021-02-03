@@ -27,7 +27,10 @@ const submit = (req, res) => {
           },
           reference: uniqueReference,
         })
-        .catch((err) => logMessage.error(err));
+        .catch((err) => {
+          logMessage.error(err);
+          throw err;
+        });
 
       res.statusCode = 200;
       res.json({ subject: messageSubject, markdown: emailBody });
@@ -39,7 +42,10 @@ const submit = (req, res) => {
         formResponse: emailBody,
       })
       .then((response) => console.log(response.data.html))
-      .catch((err) => logMessage.error(err));
+      .catch((err) => {
+        logMessage.error(err);
+        throw err;
+      });
     res.statusCode = 200;
     res.json({ subject: messageSubject, markdown: emailBody });
   }
