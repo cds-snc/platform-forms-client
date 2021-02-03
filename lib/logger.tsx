@@ -6,7 +6,9 @@ export const logMessage = pino({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const logger = <A extends any[], R>(f: (...a: A) => R) => (...args: A): R => {
+export const logger = <A extends any[], R>(f: (...a: A) => R) => (
+  ...args: A
+): R => {
   let value;
   try {
     value = f(...args);
