@@ -1,0 +1,16 @@
+name: Jest Tests
+on: [pull_request]
+jobs:
+  jest-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: "Install dependencies"
+        run: yarn install
+      - name: "Run just tests with coverage"
+        uses: mattallty/jest-github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # this is just an example, this could be any command that will trigger jest
+          test-command: "yarn test"
