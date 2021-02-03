@@ -9,7 +9,6 @@ interface FormProps {
   children: React.ReactNode;
 }
 
-
 export const Form = ({ formModel, i18n }) => {
   const formToRender = formModel;
   const initialState = useRef(null);
@@ -109,8 +108,6 @@ const formSubmitHandler = (formToRender, values, language, router) => {
       // Need to add more error handling here
     });
 };
-
-
 
 /**
  * Internal function that is called when the form needs to be built from JSON

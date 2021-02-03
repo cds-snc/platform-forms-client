@@ -1,6 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { useField } from 'formik';
+import { useField } from "formik";
 
 type TextInputRef =
   | string
@@ -34,15 +34,21 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
   const classes = classnames("gc-input-text", className);
 
   return (
-    <input
-      data-testid="textInput"
-      className={classes}
-      id={id}
-      type={type}
-      ref={inputRef}
-      {...inputProps}
-      {...field}
-    />
+    <>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+
+      <input
+        data-testid="textInput"
+        className={classes}
+        id={id}
+        type={type}
+        ref={inputRef}
+        {...inputProps}
+        {...field}
+      />
+    </>
   );
 };
 

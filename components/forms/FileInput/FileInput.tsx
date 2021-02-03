@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 interface FileInputProps {
   id: string;
@@ -13,6 +14,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const { id, className, fileType } = props;
 
   const classes = classnames("gc-file-input", className);
+  const [field, meta] = useField(props);
 
   return (
     <input
@@ -20,8 +22,8 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       data-testid="file"
       className={classes}
       id={id}
-      name={id}
       accept={fileType}
+      {...field}
     />
   );
 };

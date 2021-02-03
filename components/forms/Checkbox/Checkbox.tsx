@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 interface CheckboxProps {
   id: string;
@@ -17,20 +18,26 @@ interface CheckboxProps {
 export const Checkbox = (
   props: CheckboxProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, name, className, label, inputRef, ...inputProps } = props;
+  const { id, className, label, inputRef, ...inputProps } = props;
+
+  const [field, meta] = useField(props);
 
   const classes = classnames("gc-input-checkbox", className);
 
   return (
     <div data-testid="checkbox" className={classes}>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+
       <div>
         <input
           className="gc-input-checkbox__input"
           id={id}
           type="checkbox"
-          name={name}
           ref={inputRef}
           {...inputProps}
+          {...field}
         />
       </div>
       <label className="gc-checkbox-label" htmlFor={id}>

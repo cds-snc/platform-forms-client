@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 interface DropdownProps {
   id: string;
@@ -29,6 +30,8 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const classes = classnames("gc-dropdown", className);
 
+  const [field, meta] = useField(props);
+
   let options = null;
   if (choices && choices.length) {
     options = choices.map((choice, i) => {
@@ -37,16 +40,22 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
   }
 
   return (
-    <select
-      data-testid="dropdown"
-      className={classes}
-      id={id}
-      name={name}
-      ref={inputRef}
-      {...inputProps}
-    >
-      {options}
-    </select>
+    <>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+
+      <select
+        data-testid="dropdown"
+        className={classes}
+        id={id}
+        ref={inputRef}
+        {...inputProps}
+        {...field}
+      >
+        {options}
+      </select>
+    </>
   );
 };
 

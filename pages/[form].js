@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withTranslation } from "../i18n";
-//import Form from "../components/forms/Forms";
 import Form from "../components/forms/Form/Form";
 
 import { getFormByID } from "../lib/dataLayer";

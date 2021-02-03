@@ -82,8 +82,6 @@ export function buildForm(
   lang: string,
   handleChange: callback
 ): ReactElement {
-
-
   const inputProps = {
     key: element.id,
     id: element.id,

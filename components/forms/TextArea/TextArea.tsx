@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 type TextAreaRef =
   | string
@@ -42,17 +43,24 @@ export const TextArea = (
     className
   );
 
+  const [field, meta, helpers] = useField(props);
+
   return (
-    <textarea
-      data-testid="textarea"
-      className={classes}
-      id={id}
-      name={name}
-      ref={inputRef}
-      {...inputProps}
-    >
-      {children}
-    </textarea>
+    <>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+      <textarea
+        data-testid="textarea"
+        className={classes}
+        id={id}
+        ref={inputRef}
+        {...inputProps}
+        {...field}
+      >
+        {children}
+      </textarea>
+    </>
   );
 };
 
