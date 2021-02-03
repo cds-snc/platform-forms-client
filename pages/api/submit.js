@@ -2,7 +2,7 @@ import { NotifyClient } from "notifications-node-client";
 import { v4 as uuidv4 } from "uuid";
 import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
-import logger from "../../lib/logger";
+import { logger, logMessage } from "../../lib/logger";
 
 const submit = (req, res) => {
   const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
@@ -27,7 +27,7 @@ const submit = (req, res) => {
           },
           reference: uniqueReference,
         })
-        .catch((err) => console.log(err));
+        .catch((err) => logMessage.error(err));
 
       res.statusCode = 200;
       res.json({ subject: messageSubject, markdown: emailBody });
@@ -39,7 +39,7 @@ const submit = (req, res) => {
         formResponse: emailBody,
       })
       .then((response) => console.log(response.data.html))
-      .catch((err) => console.error(err));
+      .catch((err) => logMessage.error(err));
     res.statusCode = 200;
     res.json({ subject: messageSubject, markdown: emailBody });
   }
