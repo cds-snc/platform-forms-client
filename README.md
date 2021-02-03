@@ -50,6 +50,11 @@ To send a form submission to an email address, you should configure the followin
 NOTIFY_API_KEY=
 ```
 
+### Debugging
+
+For verbose debug logging set an environment variable called DEBUG to `true` before running `yarn dev`
+ex. `DEBUG=true yarn dev`
+
 ## ---------------------------------------------------------------------
 
 # Plate-forme - Formulaires GC
@@ -108,3 +113,8 @@ Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez 
 ```sh
 NOTIFY_API_KEY=
 ```
+
+### Débougage
+
+Pour des logs plus verbose en fin de débougage, définissez une variable d'environnement appelée DEBUG comme `true` avant d'exécuter` yarn dev`
+ex. `DEBUG=true yarn dev`
