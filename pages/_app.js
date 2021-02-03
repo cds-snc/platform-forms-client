@@ -15,7 +15,7 @@ MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
   const defaultProps = appContext.Component.defaultProps;
   logMessage.info(
-    `Path: ${appContext.ctx.pathname} Query: ${JSON.stringify(
+    `Path: ${appContext.ctx.pathname}, Query: ${JSON.stringify(
       appContext.ctx.query
     )}`
   );
