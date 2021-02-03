@@ -79,7 +79,7 @@ module.exports = {
       },
     },
     boxShadow: {
-      sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+      sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
       result: "0px 0px 12px -2px rgba(0,0,0,0.4)",
       none:
         "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
