@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ReactElement, Fragment } from "react";
-import { logMessage } from "./logger";
+import { logger, logMessage } from "./logger";
 import {
   Alert,
   Checkbox,
@@ -88,7 +88,8 @@ function getLocaleChoices(
 }
 
 // This function renders the form elements with passed in properties.
-export function buildForm(
+export const buildForm = logger(_buildForm);
+function _buildForm(
   element: FormElement,
   value: string,
   lang: string,
