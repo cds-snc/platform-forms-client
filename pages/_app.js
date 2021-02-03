@@ -4,7 +4,7 @@ import App from "next/app";
 import { appWithTranslation } from "../i18n";
 import Base from "../components/globals/Base";
 import "../styles/app.scss";
-import logger from "../lib/logger";
+import { logMessage } from "../lib/logger";
 
 const MyApp = ({ Component, pageProps }) => (
   <Base>
@@ -14,13 +14,13 @@ const MyApp = ({ Component, pageProps }) => (
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
   const defaultProps = appContext.Component.defaultProps;
-  logger.info(
+  logMessage.info(
     `Path: ${appContext.ctx.pathname} Query: ${JSON.stringify(
       appContext.ctx.query
     )}`
   );
   if (appContext.ctx.err) {
-    logger.error(appContext.ctx.err);
+    logMessage.error(appContext.ctx.err);
   }
   return {
     ...appProps,

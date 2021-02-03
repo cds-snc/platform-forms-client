@@ -1,4 +1,5 @@
 import json2md from "json2md";
+import logger from "../lib/logger";
 
 interface Response {
   form: {
@@ -14,7 +15,7 @@ interface Response {
     [key: string]: string | [];
   };
 }
-export default (formResponse: Response): string => {
+export default logger((formResponse: Response): string => {
   const formElements = formResponse.form.elements;
   const responses = formResponse.responses;
   const title = `${formResponse.form.titleEn} / ${formResponse.form.titleFr}`;
@@ -55,4 +56,4 @@ export default (formResponse: Response): string => {
   const emailBody = json2md([{ h1: title }, mdBody]);
 
   return emailBody;
-};
+});
