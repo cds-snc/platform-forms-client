@@ -4,7 +4,7 @@ import { Link, withTranslation } from "../i18n";
 import { getFormByStatus, getFormByID } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
 
-const Home = ({ t, i18n }) => {
+const Sandbox = ({ t, i18n }) => {
   const LinksList = () => {
     const formIDs = getFormByStatus(false);
     return formIDs.map((formID) => {
@@ -54,13 +54,14 @@ const Home = ({ t, i18n }) => {
     </>
   );
 };
-Home.getInitialProps = async () => ({
+
+Sandbox.getInitialProps = async () => ({
   namespacesRequired: ["welcome"],
 });
 
-Home.propTypes = {
+Sandbox.propTypes = {
   t: PropTypes.func.isRequired,
   i18n: PropTypes.object.isRequired,
 };
 
-export default withTranslation("welcome")(Home);
+export default withTranslation("welcome")(Sandbox);
