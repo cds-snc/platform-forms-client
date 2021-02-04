@@ -6,19 +6,22 @@ import { getProperty, buildForm } from "../../lib/formBuilder";
 import PropTypes from "prop-types";
 import { useFormik } from "formik";
 import Head from "next/head";
+import { logMessage, logger } from "../../lib/logger";
 
-const Form = ({ formModel, i18n }) => {
+const Form = ({ formModel, i18n, t }) => {
   const formToRender = formModel;
   const router = useRouter();
   const initialState = useRef(null);
 
   useEffect(() => {
-    formToRender.elements.map((element) => {
-      initialState.current = {
-        [element.id]:
-          element.properties[getProperty("placeholder", i18n.language)],
-      };
-    });
+    logger(
+      formToRender.elements.map((element) => {
+        initialState.current = {
+          [element.id]:
+            element.properties[getProperty("placeholder", i18n.language)],
+        };
+      })
+    );
   }, [formToRender]);
 
   const formik = useFormik({
@@ -60,8 +63,7 @@ const Form = ({ formModel, i18n }) => {
           });
         })
         .catch((error) => {
-          console.log(error);
-          // Need to add more error handling here
+          logMessage.error(error);
         });
     },
   });
@@ -87,12 +89,14 @@ const Form = ({ formModel, i18n }) => {
               formik.handleChange
             );
           } else {
-            console.log(`Failed component look up ${item}`);
+            logMessage.error(
+              `Failed component ID look up ${item} on form ID ${formToRender.id}`
+            );
           }
         })}
         <div className="buttons">
           <button className="gc-button" type="submit">
-            Submit
+            {t("submitButton")}
           </button>
         </div>
       </form>

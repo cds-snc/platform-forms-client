@@ -1,4 +1,5 @@
 import React, { ChangeEvent, ReactElement, Fragment } from "react";
+import { logger, logMessage } from "./logger";
 import {
   Alert,
   Checkbox,
@@ -54,10 +55,15 @@ export interface PropertyChoices {
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
-  if (!field) {
-    return lang;
+  try {
+    if (!field) {
+      return lang;
+    }
+    return field + lang.charAt(0).toUpperCase() + lang.slice(1);
+  } catch (err) {
+    logMessage.error(err);
+    throw err;
   }
-  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
 }
 
 // This function is used for select/radio/checkbox i18n change of form labels
@@ -65,19 +71,25 @@ function getLocaleChoices(
   choices: Array<PropertyChoices> | undefined,
   lang: string
 ) {
-  if (!choices || !choices.length) {
-    return [];
+  try {
+    if (!choices || !choices.length) {
+      return [];
+    }
+
+    const localeChoices = choices.map((choice) => {
+      return choice[lang];
+    });
+
+    return localeChoices;
+  } catch (err) {
+    logMessage.error(err);
+    throw err;
   }
-
-  const localeChoices = choices.map((choice) => {
-    return choice[lang];
-  });
-
-  return localeChoices;
 }
 
 // This function renders the form elements with passed in properties.
-export function buildForm(
+export const buildForm = logger(_buildForm);
+function _buildForm(
   element: FormElement,
   value: string,
   lang: string,
