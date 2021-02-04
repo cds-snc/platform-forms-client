@@ -1,7 +1,7 @@
 {
   "internalTitleEn": "Delayed Baggage Report",
   "internalTitleFr": "Rapport de bagages retardés",
-  "publishingStatus": true,
+  "publishingStatus": false,
   "submission": {
     "templateID": "",
     "email": "steven.talbot@cds-snc.ca"

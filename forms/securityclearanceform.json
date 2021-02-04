@@ -1,7 +1,7 @@
 {
   "internalTitleEn": "Security Clearance Form",
   "internalTitleFr": "Liste de vérification des exigences relatives à la sécurité",
-  "publishingStatus": true,
+  "publishingStatus": false,
   "submission": {
     "templateID": "",
     "email": "mario.garneau@cds-snc.ca"
