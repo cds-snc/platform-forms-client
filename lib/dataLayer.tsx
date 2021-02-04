@@ -15,6 +15,18 @@ function _getFormByID(formID: string): Record<string, unknown> {
   return formToReturn;
 }
 
+// Get an array of form IDs based on the publishing status
+// Returns -> Array of form IDs.
+function _getFormByStatus(status: boolean): Array<number> {
+  return Object.values(Forms)
+    .map((form) => {
+      if (form.publishingStatus === status) {
+        return form.form.id;
+      }
+    })
+    .filter((val) => typeof val !== "undefined" && val !== null);
+}
+
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
 function _getSubmissionByID(formID: string): Record<string, unknown> {
@@ -30,3 +42,4 @@ function _getSubmissionByID(formID: string): Record<string, unknown> {
 
 export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
+export const getFormByStatus = logger(_getFormByStatus);
