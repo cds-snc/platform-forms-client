@@ -5,6 +5,9 @@
     "title": "Product Vision",
     "text": "Help government-users quickly and easily publish simple, accessible, online forms that the public can use to apply for or access the services or benefits they need."
   },
+  "formList": {
+    "title": "Forms List"
+  },
   "design": {
     "title": "Design",
     "text": "Learn more about our design, research and accessibility efforts.",

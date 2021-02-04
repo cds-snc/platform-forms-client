@@ -5,7 +5,9 @@
     "title": "La vision du produit",
     "text": "Aider les utilisateurs du gouvernement à publier rapidement et facilement des formulaires en ligne simples et accessibles que le public peut utiliser pour demander ou accéder aux services ou prestations dont il a besoin."
   },
-
+  "formList": {
+    "title": "Liste de formulaires"
+  },
   "design": {
     "title": "Design",
     "text": "En savoir plus sur nos efforts en matière de conception, de recherche et d'accessibilité.",
