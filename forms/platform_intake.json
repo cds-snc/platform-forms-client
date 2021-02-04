@@ -11,7 +11,7 @@
     "version": 1,
     "titleEn": "Register to learn more about CDS Platform products",
     "titleFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
-    "layout": [1, 2, 3, 4, 5, 6, 7],
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
     "startPage": {},
     "endPage": {
       "descriptionEn": "",
@@ -86,7 +86,7 @@
       },
 
       {
-        "id": 5,
+        "id": 7,
         "type": "checkbocx",
         "properties": {
           "titleEn": "How can we work together?",
@@ -116,7 +116,7 @@
         }
       },
       {
-        "id": 7,
+        "id": 8,
         "type": "textArea",
         "properties": {
           "titleEn": "Email(s) of other people in your team we should reach out to",
