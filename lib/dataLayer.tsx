@@ -19,11 +19,13 @@ function _getFormByID(formID: string): Record<string, unknown> {
 // Returns -> Array of form IDs.
 function _getFormByStatus(status: boolean): Array<number> {
   return Object.values(Forms)
-    .map((form) => {
-      if (form.publishingStatus === status) {
-        return form.form.id;
-      }
-    })
+    .map(
+      logger((form) => {
+        if (form.publishingStatus === status) {
+          return form.form.id;
+        }
+      })
+    )
     .filter((val) => typeof val !== "undefined" && val !== null);
 }
 
