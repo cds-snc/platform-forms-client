@@ -93,24 +93,24 @@
           "titleFr": "Comment pouvons-nous collaborer?",
           "descriptionEN": "Select all that apply",
           "descriptionFr": "Cocher tous les choix qui s’appliquent",
-          "choices":[
-		      {
-		        "en":"I have a form I would like to publish in the next month",
-		        "fr":"J’ai un formulaire à faire publier d’ici le mois prochain."
-		      },
-		      {
-		        "en":"I have feedback on why this product will (or won't) work for my team",
-		        "fr":"J’ai des commentaires qui expliquent pourquoi ce produit est bien (ou n’est pas bien) adapté à mon équipe."
-		      },
-		      {
-		        "en":"I'm interested in learning more please contact me to set up a demo",
-		        "fr":"Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place un démo."
-		      },
-		      {
-		        "en":"Please keep me in the loop by adding me to your mailing list",
-		        "fr":"Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
-		      },
-		    ],
+          "choices": [
+            {
+              "en": "I have a form I would like to publish in the next month",
+              "fr": "J’ai un formulaire à faire publier d’ici le mois prochain."
+            },
+            {
+              "en": "I have feedback on why this product will (or won't) work for my team",
+              "fr": "J’ai des commentaires qui expliquent pourquoi ce produit est bien (ou n’est pas bien) adapté à mon équipe."
+            },
+            {
+              "en": "I'm interested in learning more please contact me to set up a demo",
+              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place un démo."
+            },
+            {
+              "en": "Please keep me in the loop by adding me to your mailing list",
+              "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
+            }
+          ],
           "charLimit": 100,
           "required": true
         }
