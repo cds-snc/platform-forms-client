@@ -1,22 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { withTranslation } from "../i18n";
-import Form from "../components/forms/Form/Form";
-
 import { getFormByID } from "../lib/dataLayer";
-
-const DynamicForm = ({ formObject }) => <Form formModel={formObject} />;
-
-DynamicForm.defaultProps = {
-  i18nNamespaces: ["common"],
-};
-
-DynamicForm.propTypes = {
-  t: PropTypes.func.isRequired,
-  formObject: PropTypes.object.isRequired,
-};
-
-export default withTranslation()(DynamicForm);
+import DynamicForm from "../components/forms/DynamicForm/DynamicForm";
 
 export async function getServerSideProps(context) {
   const form = await getFormByID(context.params.form);
@@ -34,3 +18,5 @@ export async function getServerSideProps(context) {
     props: { formObject: form }, // will be passed to the page component as props
   };
 }
+
+export default withTranslation()(DynamicForm);

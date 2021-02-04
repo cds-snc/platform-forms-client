@@ -82,6 +82,8 @@ export function buildForm(
   lang: string,
   handleChange: callback
 ): ReactElement {
+
+
   const inputProps = {
     key: element.id,
     id: element.id,
@@ -161,7 +163,6 @@ export function buildForm(
             key={`key-${inputProps.id}-${index}`}
             id={`id-${inputProps.id}-${index}`}
             label={choice}
-            value={choice}
           />
         );
       });

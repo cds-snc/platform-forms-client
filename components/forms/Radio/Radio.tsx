@@ -24,6 +24,7 @@ export const Radio = (
 
   const [field, meta, helpers] = useField(props);
 
+  console.log("IN RADIO COMPONENT", field, "meta", meta, "props", props);
   return (
     <div data-testid="radio" className={classes}>
       {meta.touched && meta.error ? (

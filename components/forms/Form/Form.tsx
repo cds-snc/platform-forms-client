@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { withTranslation } from "../../../i18n";
 import { useRouter } from "next/router";
-import { getProperty, buildForm } from "../../../lib/formBuilder";
+import { getProperty, buildForm, FormElement } from "../../../lib/formBuilder";
 import Head from "next/head";
 import { Formik } from "formik";
 
@@ -15,7 +15,7 @@ export const Form = ({ formModel, i18n }) => {
   const router = useRouter();
 
   useEffect(() => {
-    formToRender.elements.map((element) => {
+    formToRender.elements.map((element: FormElement) => {
       initialState.current = {
         [element.id]:
           element.properties[getProperty("placeholder", i18n.language)],
@@ -39,13 +39,15 @@ export const Form = ({ formModel, i18n }) => {
         validateOnBlur={false}
         validateOnChange={false}
         onSubmit={(values, actions) => {
-          console.log("FORMIK form submission values", this);
+          console.log("FORMIK form submission values", values);
 
           formSubmitHandler(formToRender, values, i18n.language, router);
           actions.setSubmitting(false);
         }}
       >
-        {(props) => (
+        {(props) => {
+          console.log("FORMIK PROPS", props)
+          return(
           <form id="form" onSubmit={props.handleSubmit} method="POST">
             {currentForm}
             <div className="buttons">
@@ -55,6 +57,7 @@ export const Form = ({ formModel, i18n }) => {
             </div>
           </form>
         )}
+      }
       </Formik>
     </div>
   );
@@ -69,7 +72,7 @@ export default withTranslation()(React.memo(Form));
  * @param values
  * @param language
  */
-const formSubmitHandler = (formToRender, values, language, router) => {
+const formSubmitHandler = (formToRender, values, language: string, router) => {
   const formResponseObject = {
     form: {
       id: formToRender.id,
