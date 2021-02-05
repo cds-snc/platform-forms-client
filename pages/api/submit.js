@@ -35,7 +35,7 @@ const submit = (req, res) => {
       res.statusCode = 200;
       res.json({ subject: messageSubject, markdown: emailBody });
     }
-  } else {
+  } else if (sendToNotify === "development") {
     notify
       .previewTemplateById(templateID, {
         subject: messageSubject,
@@ -46,6 +46,9 @@ const submit = (req, res) => {
         logMessage.error(err);
         throw err;
       });
+    res.statusCode = 200;
+    res.json({ subject: messageSubject, markdown: emailBody });
+  } else {
     res.statusCode = 200;
     res.json({ subject: messageSubject, markdown: emailBody });
   }
