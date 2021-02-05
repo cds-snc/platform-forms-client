@@ -8,8 +8,6 @@ jobs:
       - uses: cypress-io/github-action@v2
         with:
           build: yarn build
-          start: yarn start
-          env:
-            NODE_ENV: "development"
+          start: NODE_ENV="development" yarn start
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
