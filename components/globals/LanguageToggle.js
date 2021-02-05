@@ -13,8 +13,8 @@ const LanguageToggle = ({ t, i18n }) => {
 
   return (
     <>
-      <h2 className="sr-only">{t("lang-toggle")}</h2>
-      <div className="language-link">
+      <h2 className="sr-only visually-hidden">{t("lang-toggle")}</h2>
+      <div className="gc-language-toggle">
         {locale == "en" ? (
           <button
             onClick={() => {
