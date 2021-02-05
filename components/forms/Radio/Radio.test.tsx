@@ -13,7 +13,7 @@ describe("Radio component", () => {
         }}
         onSubmit={() => {}}
       >
-      <Radio id="input-radio" name="input-radio" label={text} />
+        <Radio id="input-radio" name="input-radio" label={text} />
       </Formik>
     );
     expect(queryByTestId("radio")).toBeInTheDocument();

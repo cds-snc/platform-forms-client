@@ -20,16 +20,17 @@ const choices = [
   "Yukon",
 ];
 
+/*eslint no-empty-function: ["error", { "allow": ["arrowFunctions"] }]*/
 describe("Dropdown component", () => {
   it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
       <Formik
-      initialValues={{
-        "input-radio": "",
-      }}
-      onSubmit={() => {}}
-    >
-      <Dropdown id="dropdown" name="dropdown" choices={choices} />
+        initialValues={{
+          "input-radio": "",
+        }}
+        onSubmit={() => {}}
+      >
+        <Dropdown id="dropdown" name="dropdown" choices={choices} />
       </Formik>
     );
     expect(queryByTestId("dropdown")).toBeInTheDocument();

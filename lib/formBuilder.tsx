@@ -82,19 +82,12 @@ export function buildForm(
   lang: string,
   handleChange: callback
 ): ReactElement {
-
-
   const inputProps = {
     key: element.id,
-    id: element.id,
-    name: element.id.toString(),
+    id: `id-${element.id}`,
+    name: `name-${element.id}`,
     required: element.properties.required,
     label: element.properties[getProperty("title", lang)]?.toString(),
-
-    headingLevel: element.properties.headingLevel
-      ? element.properties.headingLevel
-      : "h2",
-    isSectional: element.properties.isSectional ? true : false,
     choices:
       element.properties && element.properties.choices
         ? getLocaleChoices(element.properties.choices, lang)
@@ -102,11 +95,18 @@ export function buildForm(
     description: element.properties[
       getProperty("description", lang)
     ]?.toString(),
+    onChange: handleChange,
+  };
+
+  const customProps = {
+    headingLevel: element.properties.headingLevel
+      ? element.properties.headingLevel
+      : "h2",
+    isSectional: element.properties.isSectional ? true : false,
     subElements:
       element.properties && element.properties.subElements
         ? element.properties.subElements
         : [],
-    onChange: handleChange,
   };
 
   const label = inputProps.label ? (
@@ -162,7 +162,9 @@ export function buildForm(
             {...inputProps}
             key={`key-${inputProps.id}-${index}`}
             id={`id-${inputProps.id}-${index}`}
+            name={`name-${inputProps.id}-${index}`}
             label={choice}
+            value={choice}
           />
         );
       });
@@ -234,7 +236,13 @@ export function buildForm(
       return (
         <Fragment key={inputProps.id}>
           {inputProps.label ? (
-            <Heading {...inputProps}>{inputProps.label}</Heading>
+            <Heading
+              {...inputProps}
+              isSectional={customProps.isSectional}
+              headingLevel={"h2"}
+            >
+              {inputProps.label}
+            </Heading>
           ) : null}
         </Fragment>
       );
@@ -258,7 +266,7 @@ export function buildForm(
           key={`dynamicGroup-${inputProps.id}`}
           name={inputProps.name}
           legend={inputProps.label}
-          rowElements={inputProps.subElements}
+          rowElements={customProps.subElements}
           lang={lang}
         />
       );
@@ -267,3 +275,26 @@ export function buildForm(
       return <></>;
   }
 }
+
+/**
+ * Internal function that is called when the form needs to be built from JSON
+ * getRenderedForm
+ * @param formToRender
+ * @param language
+ */
+export const getRenderedForm = (formToRender, language: string) => {
+  if (!formToRender) {
+    return null;
+  }
+
+  return formToRender.layout.map((item: string) => {
+    const element = formToRender.elements.find(
+      (element: FormElement) => element.id === item
+    );
+    if (element) {
+      return buildForm(element, language, (e) => {});
+    } else {
+      console.log(`Failed component look up ${item}`);
+    }
+  });
+};

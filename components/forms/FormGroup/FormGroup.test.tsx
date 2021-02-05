@@ -15,10 +15,10 @@ describe("FormGroup component", () => {
         }}
         onSubmit={() => {}}
       >
-      <FormGroup name="formGroup">
-        <Label htmlFor="input-type-text">{text}</Label>
-        <TextInput id="input-type-text" name="input-type-text" type="text" />
-      </FormGroup>
+        <FormGroup name="formGroup">
+          <Label htmlFor="input-type-text">{text}</Label>
+          <TextInput id="input-type-text" name="input-type-text" type="text" />
+        </FormGroup>
       </Formik>
     );
     expect(queryByTestId("formGroup")).toBeInTheDocument();

@@ -1,63 +1,69 @@
 import React, { useRef, useEffect } from "react";
 import { withTranslation } from "../../../i18n";
 import { useRouter } from "next/router";
-import { getProperty, buildForm, FormElement } from "../../../lib/formBuilder";
-import Head from "next/head";
-import { Formik } from "formik";
+import { getProperty, FormElement } from "../../../lib/formBuilder";
+import { withFormik, Formik } from "formik";
 
 interface FormProps {
   children: React.ReactNode;
+  formObject: object;
+  i18n: object;
+  t: object;
 }
 
-export const Form = ({ formModel, i18n }) => {
-  const formToRender = formModel;
-  const initialState = useRef(null);
+export const Form = (props: FormProps) => {
+  const { formObject, i18n, t, children } = props;
+  const formToRender = formObject;
+  let initialState = {};
   const router = useRouter();
 
   useEffect(() => {
-    formToRender.elements.map((element: FormElement) => {
-      initialState.current = {
-        [element.id]:
-          element.properties[getProperty("placeholder", i18n.language)],
+    Object.keys(formToRender.elements).forEach(function (key) {
+      let currentElement = formToRender.elements[key];
+
+      initialState[`id-${currentElement.id}`] = {
+        name: `name-${currentElement.id}`,
+        value:
+          currentElement.properties[getProperty("placeholder", i18n.language)],
       };
+
+      if (currentElement.properties.choices) {
+        let nestedObj = {};
+        currentElement.properties.choices.map((choice, index) => {
+          const choiceId = `id-${key}-${index}`;
+          nestedObj[choiceId] = {
+            name: `name-${currentElement.id}`,
+            value: choice[i18n.language],
+          };
+        });
+        initialState[`id-${currentElement.id}`].nested = nestedObj;
+      }
     });
   }, [formToRender]);
 
-  const currentForm = getRenderedForm(formToRender, i18n.language);
-
   return (
     <div>
-      <Head>
-        <title>{formToRender[getProperty("title", i18n.language)]}</title>
-      </Head>
-      <h1 className="gc-h1">
-        {formToRender[getProperty("title", i18n.language)]}
-      </h1>
-
       <Formik
         initialValues={initialState}
         validateOnBlur={false}
         validateOnChange={false}
         onSubmit={(values, actions) => {
-          console.log("FORMIK form submission values", values);
-
           formSubmitHandler(formToRender, values, i18n.language, router);
           actions.setSubmitting(false);
         }}
       >
-        {(props) => {
-          console.log("FORMIK PROPS", props)
-          return(
-          <form id="form" onSubmit={props.handleSubmit} method="POST">
-            {currentForm}
-            <div className="buttons">
-              <button className="gc-button" type="submit">
-                Submit
-              </button>
-            </div>
-          </form>
-        )}
-      }
+        {(formikProps) => {
+          return (
+            <form id="form" onSubmit={formikProps.handleSubmit} method="POST">
+              {children}
+              <div className="buttons">
+                <button className="gc-button" type="submit">
+                  {t("submitButton")}
+                </button>
+              </div>
+            </form>
+          );
+        }}
       </Formik>
     </div>
   );
@@ -110,27 +116,4 @@ const formSubmitHandler = (formToRender, values, language: string, router) => {
       console.log(error);
       // Need to add more error handling here
     });
-};
-
-/**
- * Internal function that is called when the form needs to be built from JSON
- * getRenderedForm
- * @param formToRender
- * @param language
- */
-const getRenderedForm = (formToRender, language) => {
-  if (!formToRender) {
-    return null;
-  }
-
-  return formToRender.layout.map((item) => {
-    const element = formToRender.elements.find(
-      (element) => element.id === item
-    );
-    if (element) {
-      return buildForm(element, language, (e) => {});
-    } else {
-      console.log(`Failed component look up ${item}`);
-    }
-  });
 };

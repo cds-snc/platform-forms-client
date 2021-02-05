@@ -16,14 +16,14 @@ describe("FileInput component", () => {
   it("renders without errors", async () => {
     const { queryByTestId } = render(
       <Formik
-      initialValues={{
-        "input-radio": "",
-      }}
-      onSubmit={() => {}}
-    >
-      <FileInput {...inputProps} />
+        initialValues={{
+          "input-radio": "",
+        }}
+        onSubmit={() => {}}
+      >
+        <FileInput {...inputProps} />
       </Formik>
-      );
+    );
     expect(queryByTestId("file")).toBeInTheDocument();
   });
 });

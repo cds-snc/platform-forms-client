@@ -7,6 +7,7 @@ interface RadioProps {
   name: string;
   className?: string;
   label: React.ReactNode;
+  value?: string;
   inputRef?:
     | string
     | ((instance: HTMLInputElement | null) => void)
@@ -24,7 +25,6 @@ export const Radio = (
 
   const [field, meta, helpers] = useField(props);
 
-  console.log("IN RADIO COMPONENT", field, "meta", meta, "props", props);
   return (
     <div data-testid="radio" className={classes}>
       {meta.touched && meta.error ? (
@@ -38,6 +38,7 @@ export const Radio = (
         ref={inputRef}
         {...inputProps}
         {...field}
+        value={props.value}
       />
       <label className="gc-radio-label" htmlFor={id}>
         {label}

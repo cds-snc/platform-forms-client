@@ -7,6 +7,7 @@ interface CheckboxProps {
   name: string;
   className?: string;
   label: React.ReactNode;
+  value?: string;
   inputRef?:
     | string
     | ((instance: HTMLInputElement | null) => void)
@@ -38,6 +39,7 @@ export const Checkbox = (
           ref={inputRef}
           {...inputProps}
           {...field}
+          value={props.value}
         />
       </div>
       <label className="gc-checkbox-label" htmlFor={id}>
