@@ -24,6 +24,7 @@ export const Checkbox = (
   const [field, meta] = useField(props);
 
   const classes = classnames("gc-input-checkbox", className);
+  const value = field.value ? field.value[id] : field.value;
 
   return (
     <div data-testid="checkbox" className={classes}>
@@ -39,7 +40,7 @@ export const Checkbox = (
           ref={inputRef}
           {...inputProps}
           {...field}
-          value={props.value}
+          value={value}
         />
       </div>
       <label className="gc-checkbox-label" htmlFor={id}>

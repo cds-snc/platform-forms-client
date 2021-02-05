@@ -24,6 +24,7 @@ export const Radio = (
   const classes = classnames("gc-input-radio", className);
 
   const [field, meta, helpers] = useField(props);
+  const value = field.value ? field.value[id] : field.value;
 
   return (
     <div data-testid="radio" className={classes}>
@@ -38,7 +39,7 @@ export const Radio = (
         ref={inputRef}
         {...inputProps}
         {...field}
-        value={props.value}
+        value={value}
       />
       <label className="gc-radio-label" htmlFor={id}>
         {label}

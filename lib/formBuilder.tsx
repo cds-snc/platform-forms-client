@@ -96,7 +96,7 @@ function _buildForm(
   const inputProps = {
     key: element.id,
     id: `id-${element.id}`,
-    name: `name-${element.id}`,
+    name: `id-${element.id}`,
     required: element.properties.required,
     label: element.properties[getProperty("title", lang)]?.toString(),
     choices:
@@ -172,10 +172,8 @@ function _buildForm(
           <Checkbox
             {...inputProps}
             key={`key-${inputProps.id}-${index}`}
-            id={`id-${inputProps.id}-${index}`}
-            name={`name-${inputProps.id}-${index}`}
+            id={`${inputProps.id}-${index}`}
             label={choice}
-            value={choice}
           />
         );
       });
@@ -200,9 +198,8 @@ function _buildForm(
           <Radio
             {...inputProps}
             key={`key-${inputProps.id}-${index}`}
-            id={`id-${inputProps.id}-${index}`}
+            id={`${inputProps.id}-${index}`}
             label={choice}
-            value={choice}
           />
         );
       });
@@ -317,7 +314,7 @@ const _getRenderedForm = (formToRender, language: string) => {
  * getFormInitialValues
  * @param formMetadata
  */
-const _getFormInitialValues = (formMetadata) => {
+const _getFormInitialValues = (formMetadata, language) => {
   if (!formMetadata) {
     return null;
   }
@@ -326,22 +323,26 @@ const _getFormInitialValues = (formMetadata) => {
 
   logger(
     formMetadata.elements.map((element) => {
-      initialValues[`name-${element.id}`] = element.properties.choices
-        ? false
-        : "";
+      const currentId = `id-${element.id}`;
 
-      // if (element.properties.choices) {
-      //   let nestedObj = {};
-      //   element.properties.choices.map((choice, index) => {
-      //     const choiceId = `id-${index}`;
-      //     nestedObj[choiceId] = {
-      //       name: `name-${element.id}`,
-      //       value: choice[i18n.language],
-      //     };
-      //   });
-      //}
+      // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
+      if (element.properties.choices) {
+        let nestedObj = {};
+
+        element.properties.choices.map((choice, index) => {
+          const choiceId = `${currentId}-${index}`;
+          //initialValues[choiceId] = choice[language];
+          nestedObj[choiceId] = choice[language];
+        });
+
+        initialValues[currentId] = nestedObj;
+      } else {
+        // Regular inputs (not nested) like text, textarea might have a placeholder value
+        initialValues[currentId] =
+          element.properties[getProperty("placeholder", language)] || "";
+      }
     })
-  );
+  ); // end logger
   return initialValues;
 };
 

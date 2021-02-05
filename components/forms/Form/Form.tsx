@@ -21,7 +21,12 @@ interface FormProps {
  */
 const InnerForm = (props: FormProps) => {
   return (
-    <form id="form" onSubmit={props.handleSubmit} method="POST">
+    <form
+      id="form"
+      data-testid="form"
+      onSubmit={props.handleSubmit}
+      method="POST"
+    >
       {props.children}
       <div className="buttons">
         <button className="gc-button" type="submit">

@@ -23,9 +23,11 @@ export default logger((formResponse: Response): string => {
   const mdBody = formElements.map((element) => {
     // In future add validation to remove page elements
     const qTitle = element.properties.titleEn;
-    if (Array.isArray(responses[element.id])) {
-      if (responses[element.id].length) {
-        const options = (responses[element.id] as Array<string>)
+    const currentId = `id-${element.id}`;
+
+    if (Array.isArray(responses[currentId])) {
+      if (responses[currentId].length) {
+        const options = (responses[currentId] as Array<string>)
           .map((option: string) => {
             return `- ${option}`;
           })
@@ -40,7 +42,7 @@ export default logger((formResponse: Response): string => {
         };
       }
     } else {
-      const response = responses[element.id];
+      const response = responses[currentId];
       if (response !== undefined && response !== null) {
         return {
           p: `${qTitle}${String.fromCharCode(13)}-${response}`,
