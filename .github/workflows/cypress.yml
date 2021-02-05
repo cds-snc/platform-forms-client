@@ -9,5 +9,7 @@ jobs:
         with:
           build: yarn build
           start: yarn start
+          env:
+            NODE_ENV: "development"
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
