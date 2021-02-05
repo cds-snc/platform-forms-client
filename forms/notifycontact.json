@@ -1,7 +1,7 @@
 {
   "internalTitleEn": "Notify Contact Us",
   "internalTitleFr": "Nous joindre - Notification",
-  "publishingStatus": true,
+  "publishingStatus": false,
   "submission": {
     "templateID": "",
     "email": "steven.talbot@cds-snc.ca"

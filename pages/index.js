@@ -6,7 +6,7 @@ import { getProperty } from "../lib/formBuilder";
 
 const Home = ({ t, i18n }) => {
   const LinksList = () => {
-    const formIDs = getFormByStatus(false);
+    const formIDs = getFormByStatus(true);
     return formIDs.map((formID) => {
       const form = getFormByID(formID);
       return (

@@ -4,7 +4,7 @@
   "publishingStatus": true,
   "submission": {
     "templateID": "",
-    "email": "forms-formulaires@cds-snc.ca"
+    "email": "steven.talbot@cds-snc.ca"
   },
   "form": {
     "id": 20,
@@ -89,7 +89,7 @@
 
       {
         "id": 7,
-        "type": "checkbocx",
+        "type": "checkbox",
         "properties": {
           "titleEn": "How can we work together?",
           "titleFr": "Comment pouvons-nous collaborer?",
