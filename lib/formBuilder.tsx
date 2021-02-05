@@ -88,7 +88,6 @@ function getLocaleChoices(
 }
 
 // This function renders the form elements with passed in properties.
-export const buildForm = logger(_buildForm);
 function _buildForm(
   element: FormElement,
   lang: string,
@@ -289,12 +288,12 @@ function _buildForm(
 }
 
 /**
- * Internal function that is called when the form needs to be built from JSON
+ * DynamicForm calls this function to build the entire form, from JSON
  * getRenderedForm
  * @param formToRender
  * @param language
  */
-export const getRenderedForm = (formToRender, language: string) => {
+const _getRenderedForm = (formToRender, language: string) => {
   if (!formToRender) {
     return null;
   }
@@ -306,7 +305,46 @@ export const getRenderedForm = (formToRender, language: string) => {
     if (element) {
       return buildForm(element, language, (e) => {});
     } else {
-      console.log(`Failed component look up ${item}`);
+      logMessage.error(
+        `Failed component ID look up ${item} on form ID ${formToRender.id}`
+      );
     }
   });
 };
+
+/**
+ * DynamicForm calls this function to set the initial form values
+ * getFormInitialValues
+ * @param formMetadata
+ */
+const _getFormInitialValues = (formMetadata) => {
+  if (!formMetadata) {
+    return null;
+  }
+
+  let initialValues = {};
+
+  logger(
+    formMetadata.elements.map((element) => {
+      initialValues[`name-${element.id}`] = element.properties.choices
+        ? false
+        : "";
+
+      // if (element.properties.choices) {
+      //   let nestedObj = {};
+      //   element.properties.choices.map((choice, index) => {
+      //     const choiceId = `id-${index}`;
+      //     nestedObj[choiceId] = {
+      //       name: `name-${element.id}`,
+      //       value: choice[i18n.language],
+      //     };
+      //   });
+      //}
+    })
+  );
+  return initialValues;
+};
+
+export const buildForm = logger(_buildForm);
+export const getFormInitialValues = logger(_getFormInitialValues);
+export const getRenderedForm = logger(_getRenderedForm);

@@ -5,7 +5,9 @@ import { Form } from "./Form";
 
 describe("Form component", () => {
   it("renders without errors", async () => {
-    const { queryByTestId, queryByText } = render(<Form>test</Form>);
+    const { queryByTestId, queryByText } = render(
+      <Form formObject={{ elements: null }}>test</Form>
+    );
     expect(queryByTestId("form")).toBeInTheDocument();
   });
 });

@@ -1,119 +1,96 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { withTranslation } from "../../../i18n";
-import { useRouter } from "next/router";
-import { getProperty, FormElement } from "../../../lib/formBuilder";
-import { withFormik, Formik } from "formik";
+import {
+  getProperty,
+  getFormInitialValues,
+  FormElement,
+} from "../../../lib/formBuilder";
+import { withFormik } from "formik";
+import { logMessage } from "../../../lib/logger";
 
 interface FormProps {
   children: React.ReactNode;
-  formObject: object;
-  i18n: object;
-  t: object;
+  router: object;
+  t?: object;
+  handleSubmit?: React.FormEvent<HTMLFormElement>;
 }
 
-export const Form = (props: FormProps) => {
-  const { formObject, i18n, t, children } = props;
-  const formToRender = formObject;
-  let initialState = {};
-  const router = useRouter();
-
-  useEffect(() => {
-    Object.keys(formToRender.elements).forEach(function (key) {
-      let currentElement = formToRender.elements[key];
-
-      initialState[`id-${currentElement.id}`] = {
-        name: `name-${currentElement.id}`,
-        value:
-          currentElement.properties[getProperty("placeholder", i18n.language)],
-      };
-
-      if (currentElement.properties.choices) {
-        let nestedObj = {};
-        currentElement.properties.choices.map((choice, index) => {
-          const choiceId = `id-${key}-${index}`;
-          nestedObj[choiceId] = {
-            name: `name-${currentElement.id}`,
-            value: choice[i18n.language],
-          };
-        });
-        initialState[`id-${currentElement.id}`].nested = nestedObj;
-      }
-    });
-  }, [formToRender]);
-
+/**
+ * This is the "inner" form component that isn't connected to Formik and just renders a simple form
+ * @param props
+ */
+const InnerForm = (props: FormProps) => {
   return (
-    <div>
-      <Formik
-        initialValues={initialState}
-        validateOnBlur={false}
-        validateOnChange={false}
-        onSubmit={(values, actions) => {
-          formSubmitHandler(formToRender, values, i18n.language, router);
-          actions.setSubmitting(false);
-        }}
-      >
-        {(formikProps) => {
-          return (
-            <form id="form" onSubmit={formikProps.handleSubmit} method="POST">
-              {children}
-              <div className="buttons">
-                <button className="gc-button" type="submit">
-                  {t("submitButton")}
-                </button>
-              </div>
-            </form>
-          );
-        }}
-      </Formik>
-    </div>
+    <form id="form" onSubmit={props.handleSubmit} method="POST">
+      {props.children}
+      <div className="buttons">
+        <button className="gc-button" type="submit">
+          Submit
+        </button>
+      </div>
+    </form>
   );
 };
 
-export default withTranslation()(React.memo(Form));
-
 /**
- * Internal function that is called when the form is submitted
- * formSubmitHandler
- * @param formToRender
- * @param values
- * @param language
+ * This is the main Form component that wrapps "InnerForm" withFormik hook, giving all of its components context
+ * @param props
  */
-const formSubmitHandler = (formToRender, values, language: string, router) => {
-  const formResponseObject = {
-    form: {
-      id: formToRender.id,
-      titleEn: formToRender.titleEn,
-      titleFr: formToRender.titleFr,
-      elements: formToRender.elements,
-    },
-    responses: values,
-  };
+export const Form = withFormik({
+  validateOnChange: false,
 
-  //making a post request to the submit API
-  fetch("/api/submit", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formResponseObject),
-  })
-    .then((response) => response.json())
-    .then(() => {
-      const referrerUrl =
-        formToRender && formToRender.endPage
-          ? {
-              referrerUrl:
-                formToRender.endPage[getProperty("referrerUrl", language)],
-            }
-          : {};
-      router.push({
-        pathname: `${language}/confirmation`,
-        query: referrerUrl,
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-      // Need to add more error handling here
-    });
-};
+  validateOnBlur: false,
+
+  mapPropsToValues: (props) => {
+    return getFormInitialValues(props.formMetadata, props.i18n.language);
+  },
+
+  handleSubmit: (values, bag) => {
+    const { formMetadata, i18n, router } = bag.props;
+
+    setTimeout(() => {
+      const formResponseObject = {
+        form: {
+          id: formMetadata.id,
+          titleEn: formMetadata.titleEn,
+          titleFr: formMetadata.titleFr,
+          elements: formMetadata.elements,
+        },
+        responses: values,
+      };
+
+      //making a post request to the submit API
+      fetch("/api/submit", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formResponseObject),
+      })
+        .then((response) => response.json())
+        .then(() => {
+          const referrerUrl =
+            formMetadata && formMetadata.endPage
+              ? {
+                  referrerUrl:
+                    formMetadata.endPage[
+                      getProperty("referrerUrl", i18n.language)
+                    ],
+                }
+              : {};
+          router.push({
+            pathname: `${i18n.language}/confirmation`,
+            query: referrerUrl,
+          });
+        })
+        .catch((error) => {
+          logMessage.error(error);
+        });
+
+      bag.setSubmitting(false);
+    }, 1000);
+  },
+})(InnerForm);
+
+export default withTranslation()(Form);

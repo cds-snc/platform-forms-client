@@ -1,6 +1,6 @@
 import { withTranslation } from "../i18n";
 import { getFormByID } from "../lib/dataLayer";
-import DynamicForm from "../components/forms/DynamicForm/DynamicForm";
+import DynamicForm from "../components/pages/DynamicForm/DynamicForm";
 
 export async function getServerSideProps(context) {
   const form = await getFormByID(context.params.form);
@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { formObject: form }, // will be passed to the page component as props
+    props: { formMetadata: form }, // will be passed to the page component as props
   };
 }
 
