@@ -89,7 +89,7 @@
 
       {
         "id": 7,
-        "type": "checkbocx",
+        "type": "checkbox",
         "properties": {
           "titleEn": "How can we work together?",
           "titleFr": "Comment pouvons-nous collaborer?",
