@@ -15,3 +15,8 @@ jobs:
         with:
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
