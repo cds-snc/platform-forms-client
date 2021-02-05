@@ -4,7 +4,7 @@ const A11Y_OPTIONS = {
     values: ["wcag21aa", "wcag2aa", "best-practice", "section508"],
   },
 };
-context("Accessibility (A11Y)", () => {
+describe("Accessibility (A11Y) Check", () => {
   it("Welcome Page Passes accessibility tests", () => {
     cy.visit("http://localhost:3000/en");
     cy.injectAxe();
