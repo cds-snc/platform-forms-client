@@ -7,7 +7,6 @@ jobs:
       - uses: actions/checkout@v1
       - uses: cypress-io/github-action@v2
         with:
-          build: yarn build
-          start: NODE_ENV="development" yarn start
+          start: yarn dev
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
