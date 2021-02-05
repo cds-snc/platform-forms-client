@@ -1,11 +1,13 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 interface RadioProps {
   id: string;
   name: string;
   className?: string;
   label: React.ReactNode;
+  value?: string;
   inputRef?:
     | string
     | ((instance: HTMLInputElement | null) => void)
@@ -21,15 +23,22 @@ export const Radio = (
 
   const classes = classnames("gc-input-radio", className);
 
+  const [field, meta, helpers] = useField(props);
+
   return (
     <div data-testid="radio" className={classes}>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+
       <input
         className="gc-radio__input"
         id={id}
         type="radio"
-        name={name}
         ref={inputRef}
         {...inputProps}
+        {...field}
+        value={props.value}
       />
       <label className="gc-radio-label" htmlFor={id}>
         {label}
