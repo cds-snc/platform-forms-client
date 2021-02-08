@@ -21,7 +21,6 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const classes = classnames("gc-form-wrapper", props.className);
   const currentForm = getRenderedForm(formMetadata, language);
   const formTitle = formMetadata[getProperty("title", language)] as string;
-  const router = useRouter();
 
   return (
     <div className={classes}>
@@ -29,7 +28,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         <title>{formTitle}</title>
       </Head>
       <h1 className="gc-h1">{formTitle}</h1>
-      <Form formMetadata={formMetadata} language={language} router={router}>
+      <Form formMetadata={formMetadata} language={language}>
         {currentForm}
       </Form>
     </div>

@@ -1,21 +1,30 @@
 import React from "react";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
-import { withFormik } from "formik";
+import { withFormik, FormikProps } from "formik";
 import { logMessage } from "../../../lib/logger";
+import { FormMetadataProperties, callback } from "../../../lib/types";
+import { useRouter } from "next/router";
 
 interface FormProps {
-  children: React.ReactNode;
-  router: object;
-  t?: object;
+  children?: React.ReactNode;
   language: string;
-  handleSubmit?: React.FormEvent<HTMLFormElement>;
+  handleSubmit: callback;
+}
+
+interface withFormikProps {
+  formMetadata: FormMetadataProperties;
+  language: string;
+}
+
+interface FormValues {
+  [key: string]: unknown;
 }
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm = (props: FormProps) => {
+const InnerForm = (props: FormProps & FormikProps<FormValues>) => {
   return (
     <form
       id="form"
@@ -37,17 +46,21 @@ const InnerForm = (props: FormProps) => {
  * This is the main Form component that wrapps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-export const Form = withFormik({
+export const Form = withFormik<withFormikProps, FormValues>({
   validateOnChange: false,
 
   validateOnBlur: false,
 
   mapPropsToValues: (props) => {
-    return getFormInitialValues(props.formMetadata, props.language);
+    return getFormInitialValues(
+      props.formMetadata,
+      props.language
+    ) as FormValues;
   },
 
   handleSubmit: (values, childPropsBag) => {
-    const { formMetadata, language, router } = childPropsBag.props;
+    const router = useRouter();
+    const { formMetadata, language } = childPropsBag.props;
 
     setTimeout(() => {
       const formResponseObject = {
