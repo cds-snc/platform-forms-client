@@ -7,6 +7,7 @@ export interface FormMetadataProperties {
   titleFr: string;
   layout: Array<string>;
   elements: Array<FormElement>;
+  [key: string]: string | Array<string> | Array<FormElement>;
 }
 
 export type allFormElements =
