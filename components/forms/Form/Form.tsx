@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  getProperty,
-  getFormInitialValues,
-} from "../../../lib/formBuilder";
+import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { withFormik } from "formik";
 import { logMessage } from "../../../lib/logger";
 
@@ -78,9 +75,7 @@ export const Form = withFormik({
             formMetadata && formMetadata.endPage
               ? {
                   referrerUrl:
-                    formMetadata.endPage[
-                      getProperty("referrerUrl", language)
-                    ],
+                    formMetadata.endPage[getProperty("referrerUrl", language)],
                 }
               : {};
           router.push({

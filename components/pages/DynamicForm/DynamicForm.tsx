@@ -23,7 +23,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const router = useRouter();
 
   return (
-    <>
+    <div className={classes}>
       <Head>
         <title>{formTitle}</title>
       </Head>
@@ -31,7 +31,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
       <Form formMetadata={formMetadata} language={language} router={router}>
         {currentForm}
       </Form>
-    </>
+    </div>
   );
 };
 

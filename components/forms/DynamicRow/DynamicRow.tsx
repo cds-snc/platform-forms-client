@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
-import {
-  buildForm,
-  FormElement,
-  getProperty,
-  callback,
-  allFormElements,
-} from "../../../lib/formBuilder";
+import { buildForm, getProperty } from "../../../lib/formBuilder";
+import { FormElement, allFormElements, callback } from "../../../lib/types";
 import { Button } from "../index";
 
 interface DynamicGroupProps {

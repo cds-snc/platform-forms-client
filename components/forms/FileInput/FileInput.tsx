@@ -15,7 +15,7 @@ const getFileObject = (e: React.ChangeEvent<HTMLInputElement>) => {
   }
   const file = e.target.files[0];
 
-  let reader = new FileReader();
+  const reader = new FileReader();
   reader.readAsDataURL(file);
 
   reader.onload = function () {
@@ -35,18 +35,23 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const { setValue } = helpers;
 
   return (
-    <input
-      type="file"
-      data-testid="file"
-      className={classes}
-      id={id}
-      accept={fileType}
-      {...field}
-      onChange={(e) => {
-        setValue(e.target.value);
-        getFileObject(e);
-      }}
-    />
+    <>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+      <input
+        type="file"
+        data-testid="file"
+        className={classes}
+        id={id}
+        accept={fileType}
+        {...field}
+        onChange={(e) => {
+          setValue(e.target.value);
+          getFileObject(e);
+        }}
+      />
+    </>
   );
 };
 

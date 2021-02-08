@@ -19,11 +19,11 @@ interface RadioProps {
 export const Radio = (
   props: RadioProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, name, className, label, inputRef, ...inputProps } = props;
+  const { id, className, label, inputRef, ...inputProps } = props;
 
   const classes = classnames("gc-input-radio", className);
 
-  const [field, meta, helpers] = useField(props);
+  const [field, meta] = useField(props);
   const value = field.value ? field.value[id] : field.value;
 
   return (

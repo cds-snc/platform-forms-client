@@ -25,7 +25,6 @@ export const TextArea = (
 ): React.ReactElement => {
   const {
     id,
-    name,
     className,
     error,
     success,
@@ -43,7 +42,7 @@ export const TextArea = (
     className
   );
 
-  const [field, meta, helpers] = useField(props);
+  const [field, meta] = useField(props);
 
   return (
     <>

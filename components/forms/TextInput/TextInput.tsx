@@ -29,8 +29,8 @@ export type OptionalTextInputProps = CustomTextInputProps &
 export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
 export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const { id, name, type, className, inputRef, ...inputProps } = props;
-  const [field, meta, helpers] = useField(props);
+  const { id, type, className, inputRef, ...inputProps } = props;
+  const [field, meta] = useField(props);
   const classes = classnames("gc-input-text", className);
 
   return (

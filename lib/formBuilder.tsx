@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, Fragment } from "react";
+import React, { ReactElement, Fragment } from "react";
 import { logger, logMessage } from "./logger";
 import {
   Alert,
@@ -271,7 +271,7 @@ const _getRenderedForm = (
       (element: FormElement) => element.id === item
     );
     if (element) {
-      return buildForm(element, language, (e) => {});
+      return buildForm(element, language, () => {});
     } else {
       logMessage.error(
         `Failed component ID look up ${item} on form ID ${formMetadata.id}`

@@ -26,7 +26,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, name, className, inputRef, choices, ...inputProps } = props;
+  const { id, className, inputRef, choices, ...inputProps } = props;
 
   const classes = classnames("gc-dropdown", className);
 
@@ -35,8 +35,11 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
   let options = null;
   if (choices && choices.length) {
     options = choices.map((choice, i) => {
-      const value = field.value ? field.value[id] : field.value;
-      return <DropdownOption key={`key-${i}`} value={value} name={choice} />;
+      const innerId = `${id}-${i}`;
+      const value = field.value ? field.value[innerId] : field.value;
+      return (
+        <DropdownOption key={`key-${innerId}`} value={value} name={choice} />
+      );
     });
   }
 
