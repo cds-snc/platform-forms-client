@@ -9,7 +9,7 @@ const submit = (req, res) => {
   const uniqueReference = uuidv4();
   const notify = new NotifyClient(
     "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY || ""
+    process.env.NOTIFY_API_KEY || "thisIsATestKey"
   );
 
   const emailBody = convertMessage(req.body);
