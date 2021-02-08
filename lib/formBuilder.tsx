@@ -285,35 +285,36 @@ const _getRenderedForm = (
  * getFormInitialValues
  * @param formMetadata
  */
-const _getFormInitialValues = (formMetadata, language: string) => {
+const _getFormInitialValues = (
+  formMetadata: FormMetadataProperties,
+  language: string
+) => {
   if (!formMetadata) {
     return null;
   }
 
-  let initialValues = {};
+  const initialValues: Record<string, unknown> = {};
 
-  logger(
-    formMetadata.elements.map((element: FormElement) => {
-      const currentId = `id-${element.id}`;
+  formMetadata.elements.map((element: FormElement) => {
+    const currentId = `id-${element.id}`;
 
-      // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
-      if (element.properties.choices) {
-        let nestedObj = {};
+    // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
+    if (element.properties.choices) {
+      const nestedObj: Record<string, unknown> = {};
 
-        element.properties.choices.map((choice, index) => {
-          const choiceId = `${currentId}-${index}`;
-          //initialValues[choiceId] = choice[language];
-          nestedObj[choiceId] = choice[language];
-        });
+      element.properties.choices.map((choice, index) => {
+        const choiceId = `${currentId}-${index}`;
+        //initialValues[choiceId] = choice[language];
+        nestedObj[choiceId] = choice[language];
+      });
 
-        initialValues[currentId] = nestedObj;
-      } else {
-        // Regular inputs (not nested) like text, textarea might have a placeholder value
-        initialValues[currentId] =
-          element.properties[getProperty("placeholder", language)] || "";
-      }
-    })
-  ); // end logger
+      initialValues[currentId] = nestedObj;
+    } else {
+      // Regular inputs (not nested) like text, textarea might have a placeholder value
+      initialValues[currentId] =
+        element.properties[getProperty("placeholder", language)] || "";
+    }
+  });
   return initialValues;
 };
 
