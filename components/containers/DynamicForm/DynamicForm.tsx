@@ -6,6 +6,7 @@ import { Form } from "../../forms/Form/Form";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
 import { FormMetadataProperties } from "../../../lib/types";
 import { withTranslation } from "../../../i18n";
+import { useRouter } from "next/router";
 
 interface DynamicFormProps {
   i18n: I18n;
@@ -20,6 +21,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const classes = classnames("gc-form-wrapper", props.className);
   const currentForm = getRenderedForm(formMetadata, language);
   const formTitle = formMetadata[getProperty("title", language)] as string;
+  const router = useRouter();
 
   return (
     <div className={classes}>
@@ -27,7 +29,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         <title>{formTitle}</title>
       </Head>
       <h1 className="gc-h1">{formTitle}</h1>
-      <Form formMetadata={formMetadata} language={language}>
+      <Form formMetadata={formMetadata} language={language} router={router}>
         {currentForm}
       </Form>
     </div>

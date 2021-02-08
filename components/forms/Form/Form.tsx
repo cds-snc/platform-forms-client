@@ -3,7 +3,7 @@ import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { withFormik, FormikProps } from "formik";
 import { logMessage } from "../../../lib/logger";
 import { FormMetadataProperties } from "../../../lib/types";
-import { useRouter } from "next/router";
+import { NextRouter } from "next/router";
 
 interface FormProps {
   children?: React.ReactNode;
@@ -13,6 +13,7 @@ interface FormProps {
 interface withFormikProps {
   formMetadata: FormMetadataProperties;
   language: string;
+  router: NextRouter;
 }
 
 interface FormValues {
@@ -24,14 +25,10 @@ interface FormValues {
  * @param props
  */
 const InnerForm = (props: FormProps & FormikProps<FormValues>) => {
+  const { children, handleSubmit } = props;
   return (
-    <form
-      id="form"
-      data-testid="form"
-      onSubmit={props.handleSubmit}
-      method="POST"
-    >
-      {props.children}
+    <form id="form" data-testid="form" onSubmit={handleSubmit} method="POST">
+      {children}
       <div className="buttons">
         <button className="gc-button" type="submit">
           Submit
@@ -58,8 +55,7 @@ export const Form = withFormik<withFormikProps, FormValues>({
   },
 
   handleSubmit: (values, childPropsBag) => {
-    const router = useRouter();
-    const { formMetadata, language } = childPropsBag.props;
+    const { formMetadata, language, router } = childPropsBag.props;
 
     setTimeout(() => {
       const formResponseObject = {
