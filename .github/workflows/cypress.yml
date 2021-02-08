@@ -1,4 +1,4 @@
-name: Accessibility Checks
+name: E2E Tests
 on: [pull_request]
 jobs:
   cypress-run:
@@ -22,6 +22,8 @@ jobs:
           NODE_ENV=test yarn start &
       - uses: cypress-io/github-action@v2
         with:
+          build: yarn build
+          start: yarn start:test
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
           config: baseUrl=http://localhost:3000
