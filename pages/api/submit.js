@@ -9,15 +9,16 @@ const submit = (req, res) => {
   const uniqueReference = uuidv4();
   const notify = new NotifyClient(
     "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY || ""
+    process.env.NOTIFY_API_KEY || "thisIsATestKey"
   );
 
   const emailBody = convertMessage(req.body);
   const messageSubject = req.body.form.titleEn + " Submission";
   const submissionFormat = getSubmissionByID(req.body.form.id);
   const sendToNotify = process.env.NODE_ENV || "development";
+  const testing = process.env.TEST || false;
 
-  if (sendToNotify === "production") {
+  if (sendToNotify === "production" && !testing) {
     if ((submissionFormat !== null) & (submissionFormat.email !== "")) {
       notify
         .sendEmail(templateID, submissionFormat.email, {
@@ -35,7 +36,7 @@ const submit = (req, res) => {
       res.statusCode = 200;
       res.json({ subject: messageSubject, markdown: emailBody });
     }
-  } else {
+  } else if (sendToNotify === "development" && !testing) {
     notify
       .previewTemplateById(templateID, {
         subject: messageSubject,
@@ -46,6 +47,10 @@ const submit = (req, res) => {
         logMessage.error(err);
         throw err;
       });
+    res.statusCode = 200;
+    res.json({ subject: messageSubject, markdown: emailBody });
+  } else {
+    logMessage.info("Not Sending Email - Test mode");
     res.statusCode = 200;
     res.json({ subject: messageSubject, markdown: emailBody });
   }
