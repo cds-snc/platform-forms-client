@@ -2,13 +2,12 @@ import React from "react";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { withFormik, FormikProps } from "formik";
 import { logMessage } from "../../../lib/logger";
-import { FormMetadataProperties, callback } from "../../../lib/types";
+import { FormMetadataProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
 
 interface FormProps {
   children?: React.ReactNode;
   language: string;
-  handleSubmit: callback;
 }
 
 interface withFormikProps {
