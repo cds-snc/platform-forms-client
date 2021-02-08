@@ -1,20 +1,15 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { Formik } from "formik";
+import Form from "../Form/Form";
 import { Radio } from "./Radio";
 
 describe("Radio component", () => {
   const text = "My radio button";
   it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
-      <Formik
-        initialValues={{
-          "input-radio": "",
-        }}
-        onSubmit={() => {}}
-      >
+      <Form>
         <Radio id="input-radio" name="input-radio" label={text} />
-      </Formik>
+      </Form>
     );
     expect(queryByTestId("radio")).toBeInTheDocument();
     expect(queryByText(text)).toBeInTheDocument();

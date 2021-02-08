@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { Formik } from "formik";
+import Form from "../Form/Form";
 import { Dropdown } from "./Dropdown";
 
 const choices = [
@@ -24,14 +24,9 @@ const choices = [
 describe("Dropdown component", () => {
   it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
-      <Formik
-        initialValues={{
-          "input-radio": "",
-        }}
-        onSubmit={() => {}}
-      >
+      <Form>
         <Dropdown id="dropdown" name="dropdown" choices={choices} />
-      </Formik>
+      </Form>
     );
     expect(queryByTestId("dropdown")).toBeInTheDocument();
     expect(queryByText("Prince Edward Island")).toBeInTheDocument();

@@ -1,9 +1,7 @@
 import React from "react";
-import { withTranslation } from "../../../i18n";
 import {
   getProperty,
   getFormInitialValues,
-  FormElement,
 } from "../../../lib/formBuilder";
 import { withFormik } from "formik";
 import { logMessage } from "../../../lib/logger";
@@ -12,6 +10,7 @@ interface FormProps {
   children: React.ReactNode;
   router: object;
   t?: object;
+  language: string;
   handleSubmit?: React.FormEvent<HTMLFormElement>;
 }
 
@@ -47,11 +46,11 @@ export const Form = withFormik({
   validateOnBlur: false,
 
   mapPropsToValues: (props) => {
-    return getFormInitialValues(props.formMetadata, props.i18n.language);
+    return getFormInitialValues(props.formMetadata, props.language);
   },
 
   handleSubmit: (values, bag) => {
-    const { formMetadata, i18n, router } = bag.props;
+    const { formMetadata, language, router } = bag.props;
 
     setTimeout(() => {
       const formResponseObject = {
@@ -80,12 +79,12 @@ export const Form = withFormik({
               ? {
                   referrerUrl:
                     formMetadata.endPage[
-                      getProperty("referrerUrl", i18n.language)
+                      getProperty("referrerUrl", language)
                     ],
                 }
               : {};
           router.push({
-            pathname: `${i18n.language}/confirmation`,
+            pathname: `${language}/confirmation`,
             query: referrerUrl,
           });
         })
@@ -98,4 +97,4 @@ export const Form = withFormik({
   },
 })(InnerForm);
 
-export default withTranslation()(Form);
+export default Form;
