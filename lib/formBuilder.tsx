@@ -14,44 +14,12 @@ import {
   Description,
   Heading,
 } from "../components/forms";
-export type allFormElements =
-  | ChangeEvent<HTMLInputElement>
-  | ChangeEvent<HTMLTextAreaElement>
-  | ChangeEvent<HTMLSelectElement>;
-export type callback = (event: allFormElements) => void;
-export interface FormElement {
-  id: string;
-  type: string;
-  properties: ElementProperties;
-  onchange?: callback;
-}
-
-export interface ElementProperties {
-  titleEn: string;
-  titleFr: string;
-  placeholderEn?: string;
-  placeholderFr?: string;
-  descriptionEn?: string;
-  descriptionFr?: string;
-  required: boolean;
-  choices?: Array<PropertyChoices>;
-  subElements?: Array<FormElement>;
-  fileType?: string | undefined;
-  headingLevel?: string | undefined;
-  isSectional?: boolean;
-  [key: string]:
-    | string
-    | boolean
-    | Array<PropertyChoices>
-    | Array<FormElement>
-    | undefined;
-}
-
-export interface PropertyChoices {
-  en: string;
-  fr: string;
-  [key: string]: string;
-}
+import {
+  FormElement,
+  PropertyChoices,
+  callback,
+  FormMetadataProperties,
+} from "./types";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -290,20 +258,23 @@ function _buildForm(
  * @param formToRender
  * @param language
  */
-const _getRenderedForm = (formToRender, language: string) => {
-  if (!formToRender) {
+const _getRenderedForm = (
+  formMetadata: FormMetadataProperties,
+  language: string
+) => {
+  if (!formMetadata) {
     return null;
   }
 
-  return formToRender.layout.map((item: string) => {
-    const element = formToRender.elements.find(
+  return formMetadata.layout.map((item: string) => {
+    const element = formMetadata.elements.find(
       (element: FormElement) => element.id === item
     );
     if (element) {
       return buildForm(element, language, (e) => {});
     } else {
       logMessage.error(
-        `Failed component ID look up ${item} on form ID ${formToRender.id}`
+        `Failed component ID look up ${item} on form ID ${formMetadata.id}`
       );
     }
   });
@@ -314,7 +285,7 @@ const _getRenderedForm = (formToRender, language: string) => {
  * getFormInitialValues
  * @param formMetadata
  */
-const _getFormInitialValues = (formMetadata, language) => {
+const _getFormInitialValues = (formMetadata, language: string) => {
   if (!formMetadata) {
     return null;
   }
@@ -322,7 +293,7 @@ const _getFormInitialValues = (formMetadata, language) => {
   let initialValues = {};
 
   logger(
-    formMetadata.elements.map((element) => {
+    formMetadata.elements.map((element: FormElement) => {
       const currentId = `id-${element.id}`;
 
       // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
