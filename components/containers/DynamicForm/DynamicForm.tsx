@@ -3,7 +3,6 @@ import classnames from "classnames";
 import { I18n } from "next-i18next";
 import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
-import { useRouter } from "next/router";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
 import { FormMetadataProperties } from "../../../lib/types";
 import { withTranslation } from "../../../i18n";
