@@ -16,8 +16,9 @@ const submit = (req, res) => {
   const messageSubject = req.body.form.titleEn + " Submission";
   const submissionFormat = getSubmissionByID(req.body.form.id);
   const sendToNotify = process.env.NODE_ENV || "development";
+  const testing = process.env.TEST || false;
 
-  if (sendToNotify === "production") {
+  if (sendToNotify === "production" && !testing) {
     if ((submissionFormat !== null) & (submissionFormat.email !== "")) {
       notify
         .sendEmail(templateID, submissionFormat.email, {
@@ -35,7 +36,7 @@ const submit = (req, res) => {
       res.statusCode = 200;
       res.json({ subject: messageSubject, markdown: emailBody });
     }
-  } else if (sendToNotify === "development") {
+  } else if (sendToNotify === "development" && !testing) {
     notify
       .previewTemplateById(templateID, {
         subject: messageSubject,
@@ -49,6 +50,7 @@ const submit = (req, res) => {
     res.statusCode = 200;
     res.json({ subject: messageSubject, markdown: emailBody });
   } else {
+    logMessage.info("Not Sending Email - Test mode");
     res.statusCode = 200;
     res.json({ subject: messageSubject, markdown: emailBody });
   }
