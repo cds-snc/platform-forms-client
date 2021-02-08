@@ -1,7 +1,7 @@
 {
   "internalTitleEn": "CDS Contact Form",
   "internalTitleFr": "SNC Formulaire de contact",
-  "publishingStatus": true,
+  "publishingStatus": false,
   "submission": {
     "templateID": "",
     "email": "bryan.robitaille@cds-snc.ca"

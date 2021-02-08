@@ -3,12 +3,9 @@ import PropTypes from "prop-types";
 import { withTranslation } from "../../i18n";
 
 const PhaseBanner = ({ t }) => (
-  <div className="phase-banner">
+  <div data-testid="PhaseBanner" className="gc-phase-banner">
     <div>
-      <span>
-        <strong className="font-normal">ALPHA</strong>
-        <span className="visually-hidden"></span>
-      </span>
+      <span>ALPHA</span>
       <span>{t("phase.desc")}</span>
     </div>
   </div>

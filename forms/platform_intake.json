@@ -1,0 +1,134 @@
+{
+  "internalTitleEn": "CDS Platform Intake Form",
+  "internalTitleFr": "SNC Formulaire d'admission du Plateforme",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "steven.talbot@cds-snc.ca"
+  },
+  "form": {
+    "id": 20,
+    "version": 1,
+    "titleEn": "",
+    "titleFr": "",
+    "descriptionEn": "Register to learn more about CDS Platform products",
+    "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+    "startPage": {},
+    "endPage": {
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "referrerUrlEn": "https://digital.canada.ca/",
+      "referrerUrlFr": "https://numerique.canada.ca/"
+    },
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products.",
+          "titleFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien.",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 2,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
+          "titleFr": "Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name",
+          "titleFr": "Nom",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Work email",
+          "titleFr": "Courriel professionnel",
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What department do you work for?",
+          "titleFr": "Pour quel service travaillez-vous?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Work phone number",
+          "titleFr": "Numéro de téléphone professionnel",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+
+      {
+        "id": 7,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "How can we work together?",
+          "titleFr": "Comment pouvons-nous collaborer?",
+          "descriptionEN": "Select all that apply",
+          "descriptionFr": "Cocher tous les choix qui s’appliquent",
+          "choices": [
+            {
+              "en": "I have a form I would like to publish in the next month",
+              "fr": "J’ai un formulaire à faire publier d’ici le mois prochain."
+            },
+            {
+              "en": "I have feedback on why this product will (or won't) work for my team",
+              "fr": "J’ai des commentaires qui expliquent pourquoi ce produit est bien (ou n’est pas bien) adapté à mon équipe."
+            },
+            {
+              "en": "I'm interested in learning more please contact me to set up a demo",
+              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place un démo."
+            },
+            {
+              "en": "Please keep me in the loop by adding me to your mailing list",
+              "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
+            }
+          ],
+          "charLimit": 100,
+          "required": true
+        }
+      },
+      {
+        "id": 8,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Email(s) of other people in your team we should reach out to",
+          "titleFr": "Courriel(s) d'autres personnes de votre équipe que nous devrions contacter.",
+          "descriptionEn": "Separate each email address with a comma.",
+          "descriptionFr": "Veuillez ajouter des courriels séparés par des virgules ci-dessus.",
+          "charLimit": 500,
+          "required": false
+        }
+      }
+    ]
+  }
+}

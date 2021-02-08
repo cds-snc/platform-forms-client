@@ -18,32 +18,33 @@
   @apply mb-12;
 }
 
+// FOOTER STYLES
+
 .gc-footer {
   @apply border-0 bg-gray-100 mt-20;
-}
 
-.gc-footer .gc-footer-container {
-  @apply flex py-10 px-40 mt-10 flex-row items-center justify-between;
-}
+  div img {
+    @apply h-10;
+  }
 
-.gc-footer .gc-footer-container ul {
-  @apply p-0 flex text-base list-inside;
-}
+  .gc-footer-container {
+    @apply flex py-10 px-40 mt-10 flex-row items-center justify-between;
 
-.gc-footer .gc-footer-container ul li {
-  @apply pr-4;
-}
+    ul {
+      @apply p-0 mb-0 flex text-base list-none;
 
-.gc-footer .gc-footer-container ul li:last-of-type {
-  @apply pr-0;
-}
+      li {
+        @apply pr-8;
 
-.gc-footer .gc-footer-container ul li a {
-  @apply no-underline hover:underline text-blue-dark;
-}
-
-.gc-footer div img {
-  @apply h-10;
+        a {
+          @apply no-underline hover:underline text-blue-dark;
+        }
+      }
+      li:last-of-type {
+        @apply pr-0;
+      }
+    }
+  }
 }
 
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
@@ -130,19 +131,12 @@ h6 {
 }
 
 %page-container {
-  max-width: 960px;
-  margin: 0 auto;
-  padding-left: $space-md;
-  padding-right: $space-md;
-
-  @include xl {
-    max-width: 1024px;
-  }
+  @apply mx-40;
 }
 
 main {
   @extend %page-container;
-  padding: 0 $space-md;
+  padding: 0;
 }
 
 li:not(:last-of-type) {
