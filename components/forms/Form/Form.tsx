@@ -46,8 +46,8 @@ export const Form = withFormik({
     return getFormInitialValues(props.formMetadata, props.language);
   },
 
-  handleSubmit: (values, bag) => {
-    const { formMetadata, language, router } = bag.props;
+  handleSubmit: (values, childPropsBag) => {
+    const { formMetadata, language, router } = childPropsBag.props;
 
     setTimeout(() => {
       const formResponseObject = {
@@ -87,7 +87,7 @@ export const Form = withFormik({
           logMessage.error(error);
         });
 
-      bag.setSubmitting(false);
+      childPropsBag.setSubmitting(false);
     }, 1000);
   },
 })(InnerForm);

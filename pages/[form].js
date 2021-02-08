@@ -1,6 +1,6 @@
 import { withTranslation } from "../i18n";
 import { getFormByID } from "../lib/dataLayer";
-import DynamicForm from "../components/pages/DynamicForm/DynamicForm";
+import DynamicForm from "../components/containers/DynamicForm/DynamicForm";
 
 export async function getServerSideProps(context) {
   const form = await getFormByID(context.params.form);
