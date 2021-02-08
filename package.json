@@ -13,7 +13,7 @@
     "format": "prettier --write --config ./.prettierrc.js .",
     "test": "jest",
     "cypress": "cypress open",
-    "cypress:headless": "cypress run --headless",
+    "cypress:headless": "cypress run --browser chrome --headless",
     "build-storybook": "build-storybook -s public --no-dll",
     "storybook": "start-storybook -p 6006"
   },
