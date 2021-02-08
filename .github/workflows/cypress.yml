@@ -1,13 +1,22 @@
-name: Accessibility Checks
+name: E2E Tests
 on: [pull_request]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
       - uses: cypress-io/github-action@v2
         with:
           build: yarn build
-          start: yarn start
+          start: yarn start:test
           wait-on: "http://localhost:3000"
-          command: yarn cypress:accessibility
+          command: yarn cypress:headless
+          config: baseUrl=http://localhost:3000
+          parallel: true
+          group: "Form E2E Tests"
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
