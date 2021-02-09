@@ -7,12 +7,13 @@ interface CheckboxProps {
   name: string;
   className?: string;
   label: React.ReactNode;
+  required: boolean;
 }
 
 export const Checkbox = (
   props: CheckboxProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, className, label } = props;
+  const { id, className, label, required } = props;
 
   // field contains name, value, onChange, and other required Form attributes.
   const [field, meta] = useField(props);
@@ -31,6 +32,7 @@ export const Checkbox = (
           id={id}
           type="checkbox"
           {...field}
+          required={required}
         />
       </div>
       <label className="gc-checkbox-label" htmlFor={id}>

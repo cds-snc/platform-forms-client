@@ -128,10 +128,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const checkboxItems = inputProps.choices.map((choice, index) => {
         return (
           <Checkbox
-            {...inputProps}
             key={`key-${inputProps.id}-${index}`}
             id={`${inputProps.id}-${index}`}
+            name={`${inputProps.id}-${index}`}
             label={choice}
+            required={inputProps.required}
           />
         );
       });
