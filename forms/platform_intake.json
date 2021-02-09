@@ -49,6 +49,8 @@
         "properties": {
           "titleEn": "Name",
           "titleFr": "Nom",
+          "descriptionEn": "This is your first and last name",
+          "descriptionFr": "Surnom + prenom",
           "charLimit": 100,
           "required": true
         }
@@ -93,7 +95,7 @@
         "properties": {
           "titleEn": "How can we work together?",
           "titleFr": "Comment pouvons-nous collaborer?",
-          "descriptionEN": "Select all that apply",
+          "descriptionEn": "Select all that apply",
           "descriptionFr": "Cocher tous les choix qui s’appliquent",
           "choices": [
             {
