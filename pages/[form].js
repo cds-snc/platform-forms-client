@@ -1,4 +1,3 @@
-import { withTranslation } from "../i18n";
 import { getFormByID } from "../lib/dataLayer";
 import DynamicForm from "../components/containers/DynamicForm/DynamicForm";
 
@@ -18,5 +17,5 @@ export async function getServerSideProps(context) {
     props: { formMetadata: form }, // will be passed to the page component as props
   };
 }
-// The translation wrapper is used here to pass the TFunction to DynamicForm
-export default withTranslation()(DynamicForm);
+
+export default DynamicForm;
