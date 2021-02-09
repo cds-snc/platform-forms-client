@@ -7,24 +7,17 @@ interface CheckboxProps {
   name: string;
   className?: string;
   label: React.ReactNode;
-  value?: string;
-  inputRef?:
-    | string
-    | ((instance: HTMLInputElement | null) => void)
-    | React.RefObject<HTMLInputElement>
-    | null
-    | undefined;
 }
 
 export const Checkbox = (
   props: CheckboxProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, className, label, inputRef, ...inputProps } = props;
+  const { id, className, label } = props;
 
+  // field contains name, value, onChange, and other required Form attributes.
   const [field, meta] = useField(props);
 
   const classes = classnames("gc-input-checkbox", className);
-  const value = field.value ? field.value[id] : field.value;
 
   return (
     <div data-testid="checkbox" className={classes}>
@@ -37,10 +30,7 @@ export const Checkbox = (
           className="gc-input-checkbox__input"
           id={id}
           type="checkbox"
-          ref={inputRef}
-          {...inputProps}
           {...field}
-          value={value}
         />
       </div>
       <label className="gc-checkbox-label" htmlFor={id}>
