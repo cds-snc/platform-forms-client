@@ -12,14 +12,12 @@ interface DynamicFormProps {
   i18n: I18n;
   t: TFunction;
   formMetadata: FormMetadataProperties;
-  className?: string;
-  children?: React.ReactNodeArray;
 }
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { formMetadata, i18n, t } = props;
   const language = i18n.language as string;
-  const classes = classnames("gc-form-wrapper", props.className);
+  const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formMetadata, language);
   const formTitle = formMetadata[getProperty("title", language)] as string;
   const router = useRouter();
