@@ -6,6 +6,20 @@ main {
   @apply mx-40;
 }
 
+.gc-homepage {
+  div {
+    @apply mb-16;
+  }
+
+  div:last-of-type {
+    @apply mb-20;
+  }
+
+  h2 {
+    @apply text-h2 mb-5;
+  }
+}
+
 .gc-ul {
   @apply list-disc text-base;
 }
