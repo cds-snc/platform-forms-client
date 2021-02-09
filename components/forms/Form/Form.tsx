@@ -7,19 +7,20 @@ import { TFunction } from "next-i18next";
 import { logMessage } from "../../../lib/logger";
 import { FormMetadataProperties } from "../../../lib/types";
 
-interface FormProps {
+interface InnerFormProps {
   children?: React.ReactNode;
   language: string;
   t: TFunction;
 }
 
-interface withFormikProps {
+interface DynamicFormProps {
   formMetadata: FormMetadataProperties;
   language: string;
   router: NextRouter;
   t: TFunction;
 }
 
+//Shape of Form input values as returned by 'getFormInitialValues'
 interface FormValues {
   [key: string]: unknown;
 }
@@ -28,7 +29,7 @@ interface FormValues {
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm = (props: FormProps & FormikProps<FormValues>) => {
+const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
   return (
     <form id="form" data-testid="form" onSubmit={handleSubmit} method="POST">
@@ -46,7 +47,7 @@ const InnerForm = (props: FormProps & FormikProps<FormValues>) => {
  * This is the main Form component that wrapps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-export const Form = withFormik<withFormikProps, FormValues>({
+export const Form = withFormik<DynamicFormProps, FormValues>({
   validateOnChange: false,
 
   validateOnBlur: false,
@@ -89,7 +90,7 @@ export const Form = withFormik<withFormikProps, FormValues>({
                   referrerUrl:
                     formMetadata.endPage[getProperty("referrerUrl", language)],
                 }
-              : {};
+              : null;
           router.push({
             pathname: `${language}/confirmation`,
             query: referrerUrl,
