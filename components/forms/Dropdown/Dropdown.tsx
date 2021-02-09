@@ -7,13 +7,6 @@ interface DropdownProps {
   name: string;
   className?: string;
   choices: Array<string | number>;
-  children?: React.ReactNode;
-  inputRef?:
-    | string
-    | ((instance: HTMLSelectElement | null) => void)
-    | React.RefObject<HTMLSelectElement>
-    | null
-    | undefined;
 }
 
 interface DropdownOptionProps {
@@ -26,7 +19,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, className, inputRef, choices, ...inputProps } = props;
+  const { id, className, choices } = props;
 
   const classes = classnames("gc-dropdown", className);
 
@@ -49,14 +42,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         <div className="error">{meta.error}</div>
       ) : null}
 
-      <select
-        data-testid="dropdown"
-        className={classes}
-        id={id}
-        ref={inputRef}
-        {...inputProps}
-        {...field}
-      >
+      <select data-testid="dropdown" className={classes} id={id} {...field}>
         {options}
       </select>
     </>
