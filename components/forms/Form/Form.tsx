@@ -2,6 +2,7 @@ import React from "react";
 import { NextRouter } from "next/router";
 import { withFormik, FormikProps } from "formik";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
+import { Button } from "../index";
 
 import { TFunction } from "next-i18next";
 import { logMessage } from "../../../lib/logger";
@@ -35,9 +36,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
     <form id="form" data-testid="form" onSubmit={handleSubmit} method="POST">
       {children}
       <div className="buttons">
-        <button className="gc-button" type="submit">
+        <Button className="gc-button" type="submit">
           {t("submitButton")}
-        </button>
+        </Button>
       </div>
     </form>
   );
