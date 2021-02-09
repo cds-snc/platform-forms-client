@@ -7,7 +7,7 @@ import SkipLink from "./SkipLink";
 import Fip from "./Fip";
 
 const Base = ({ children }) => {
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.GA_ACTIVE ? true : false;
   return (
     <>
       <Head>
