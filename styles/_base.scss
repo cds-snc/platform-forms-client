@@ -72,7 +72,11 @@ ul {
 }
 
 a {
-  @apply underline;
+  @apply underline text-blue-dark;
+}
+
+a:visited {
+  @apply text-purple-default;
 }
 
 .canada-wordmark img {

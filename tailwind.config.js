@@ -35,6 +35,10 @@ module.exports = {
         100: "#f3e9e8",
         default: "#b10e1e",
       },
+      purple: {
+        ...colors.purple,
+        default: "#7834bc",
+      }
       white: {
         ...colors.white,
         default: "#FFF",
