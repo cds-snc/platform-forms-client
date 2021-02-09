@@ -18,5 +18,5 @@ export async function getServerSideProps(context) {
     props: { formMetadata: form }, // will be passed to the page component as props
   };
 }
-
+// The translation wrapper is used here to pass the TFunction to DynamicForm
 export default withTranslation()(DynamicForm);
