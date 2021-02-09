@@ -14,12 +14,7 @@ import {
   Description,
   Heading,
 } from "../components/forms";
-import {
-  FormElement,
-  PropertyChoices,
-  callback,
-  FormMetadataProperties,
-} from "./types";
+import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -56,11 +51,7 @@ function getLocaleChoices(
 }
 
 // This function renders the form elements with passed in properties.
-function _buildForm(
-  element: FormElement,
-  lang: string,
-  handleChange: callback
-): ReactElement {
+function _buildForm(element: FormElement, lang: string): ReactElement {
   const inputProps = {
     key: element.id,
     id: `id-${element.id}`,
@@ -74,7 +65,6 @@ function _buildForm(
     description: element.properties[
       getProperty("description", lang)
     ]?.toString(),
-    onChange: handleChange,
   };
 
   const customProps = {
@@ -271,7 +261,7 @@ const _getRenderedForm = (
       (element: FormElement) => element.id === item
     );
     if (element) {
-      return buildForm(element, language, () => {});
+      return buildForm(element, language);
     } else {
       logMessage.error(
         `Failed component ID look up ${item} on form ID ${formMetadata.id}`
