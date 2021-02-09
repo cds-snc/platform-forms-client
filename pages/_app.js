@@ -26,8 +26,8 @@ MyApp.getInitialProps = async (appContext) => {
     ...appProps,
     pageProps: {
       namespacesRequired: [
-        ...(appProps.pageProps.namespacesRequired || ["common"]),
-        ...(defaultProps?.i18nNamespaces || []),
+        ...(appProps.pageProps.namespacesRequired ?? ["common"]),
+        ...(defaultProps?.i18nNamespaces ?? []),
       ],
     },
   };

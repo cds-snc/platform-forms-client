@@ -302,7 +302,7 @@ const _getFormInitialValues = (
     } else {
       // Regular inputs (not nested) like text, textarea might have a placeholder value
       initialValues[currentId] =
-        element.properties[getProperty("placeholder", language)] || "";
+        element.properties[getProperty("placeholder", language)] ?? "";
     }
   });
   return initialValues;
