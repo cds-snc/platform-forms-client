@@ -12,8 +12,8 @@ const submit = (req, res) => {
     }`
   );
   if (!formAttached) {
-    res.statusCode = 400;
-    res.json({ error: "No form submitted with request" });
+    res.status(400).json({ error: "No form submitted with request" });
+    return;
   }
   const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
   const uniqueReference = uuidv4();
@@ -44,7 +44,7 @@ const submit = (req, res) => {
         });
 
       res.statusCode = 202;
-      res.json({ subject: messageSubject, markdown: emailBody });
+      return;
     }
   } else if (sendToNotify === "development" && !testing) {
     notify
@@ -57,12 +57,10 @@ const submit = (req, res) => {
         logMessage.error(err);
         throw err;
       });
-    res.statusCode = 201;
-    res.json({ subject: messageSubject, markdown: emailBody });
+    res.status(201).json({ subject: messageSubject, markdown: emailBody });
   } else {
     logMessage.info("Not Sending Email - Test mode");
-    res.statusCode = 200;
-    res.json({ subject: messageSubject, markdown: emailBody });
+    res.status(200).json({ subject: messageSubject, markdown: emailBody });
   }
 };
 
