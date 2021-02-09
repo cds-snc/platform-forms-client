@@ -38,7 +38,7 @@ module.exports = {
       purple: {
         ...colors.purple,
         default: "#7834bc",
-      }
+      },
       white: {
         ...colors.white,
         default: "#FFF",
