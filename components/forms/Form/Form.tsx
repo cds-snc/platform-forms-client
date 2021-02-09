@@ -1,19 +1,23 @@
 import React from "react";
-import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
+import { NextRouter } from "next/router";
 import { withFormik, FormikProps } from "formik";
+import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
+
+import { TFunction } from "next-i18next";
 import { logMessage } from "../../../lib/logger";
 import { FormMetadataProperties } from "../../../lib/types";
-import { NextRouter } from "next/router";
 
 interface FormProps {
   children?: React.ReactNode;
   language: string;
+  t: TFunction;
 }
 
 interface withFormikProps {
   formMetadata: FormMetadataProperties;
   language: string;
   router: NextRouter;
+  t: TFunction;
 }
 
 interface FormValues {
@@ -25,13 +29,13 @@ interface FormValues {
  * @param props
  */
 const InnerForm = (props: FormProps & FormikProps<FormValues>) => {
-  const { children, handleSubmit } = props;
+  const { children, handleSubmit, t } = props;
   return (
     <form id="form" data-testid="form" onSubmit={handleSubmit} method="POST">
       {children}
       <div className="buttons">
         <button className="gc-button" type="submit">
-          Submit
+          {t("submitButton")}
         </button>
       </div>
     </form>
@@ -54,8 +58,8 @@ export const Form = withFormik<withFormikProps, FormValues>({
     ) as FormValues;
   },
 
-  handleSubmit: (values, childPropsBag) => {
-    const { formMetadata, language, router } = childPropsBag.props;
+  handleSubmit: (values, formikBag) => {
+    const { formMetadata, language, router } = formikBag.props;
 
     setTimeout(() => {
       const formResponseObject = {
@@ -95,7 +99,7 @@ export const Form = withFormik<withFormikProps, FormValues>({
           logMessage.error(error);
         });
 
-      childPropsBag.setSubmitting(false);
+      formikBag.setSubmitting(false);
     }, 1000);
   },
 })(InnerForm);
