@@ -29,7 +29,7 @@ const choices = [
 ];
 
 export const defaultDropdown = (): React.ReactElement => (
-  <Formik initialValues={{"dropdown": ""}}>
+  <Formik initialValues={{ dropdown: "" }}>
     <Dropdown id="dropdown" name="dropdown" choices={choices} />
   </Formik>
 );

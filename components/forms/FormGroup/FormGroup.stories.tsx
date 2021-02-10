@@ -12,26 +12,26 @@ export default {
 
 export const textInputFormGroup = (): React.ReactElement => (
   <Formik>
-  <FormGroup name="formGroup">
-    <Label htmlFor="input-type-text">Text input label</Label>
-    <TextInput id="input-type-text" name="input-type-text" type="text" />
-  </FormGroup>
+    <FormGroup name="formGroup">
+      <Label htmlFor="input-type-text">Text input label</Label>
+      <TextInput id="input-type-text" name="input-type-text" type="text" />
+    </FormGroup>
   </Formik>
 );
 
 export const textInputErrorFormGroup = (): React.ReactElement => (
   <Formik>
-  <FormGroup name="formGroupError" error>
-    <Label htmlFor="input-type-text" error>
-      Text input label
-    </Label>
-    <ErrorMessage>Helpful error message</ErrorMessage>
-    <TextInput
-      id="input-type-text"
-      name="input-type-text"
-      type="text"
-      validationStatus="error"
-    />
-  </FormGroup>
+    <FormGroup name="formGroupError" error>
+      <Label htmlFor="input-type-text" error>
+        Text input label
+      </Label>
+      <ErrorMessage>Helpful error message</ErrorMessage>
+      <TextInput
+        id="input-type-text"
+        name="input-type-text"
+        type="text"
+        validationStatus="error"
+      />
+    </FormGroup>
   </Formik>
 );

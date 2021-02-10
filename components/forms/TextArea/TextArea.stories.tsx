@@ -11,27 +11,41 @@ export default {
 };
 
 export const defaultTextArea = (): React.ReactElement => (
-  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" /></Formik>
+  <Formik initialValues={{ "input-type-text": "" }}>
+    <TextArea id="input-type-text" name="input-type-text" />
+  </Formik>
 );
 
 export const withDefaultValue = (): React.ReactElement => (
-  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" defaultValue="Change me" /></Formik>
+  <Formik initialValues={{ "input-type-text": "" }}>
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      defaultValue="Change me"
+    />
+  </Formik>
 );
 
 export const withPlaceholder = (): React.ReactElement => (
-  <Formik initialValues={{"input-type-text": ""}}><TextArea
-    id="input-type-text"
-    name="input-type-text"
-    placeholder="Enter value"
-  /></Formik>
+  <Formik initialValues={{ "input-type-text": "" }}>
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      placeholder="Enter value"
+    />
+  </Formik>
 );
 
 export const disabled = (): React.ReactElement => (
-  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" disabled /></Formik>
+  <Formik initialValues={{ "input-type-text": "" }}>
+    <TextArea id="input-type-text" name="input-type-text" disabled />
+  </Formik>
 );
 
 export const readonly = (): React.ReactElement => (
-  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" readOnly /></Formik>
+  <Formik initialValues={{ "input-type-text": "" }}>
+    <TextArea id="input-type-text" name="input-type-text" readOnly />
+  </Formik>
 );
 
 defaultTextArea.parameters = {

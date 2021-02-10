@@ -10,7 +10,6 @@ export default {
 };
 
 export const defaultForm = (): React.ReactElement => {
-
   return <Form t={(key: string) => key}>Test</Form>;
 };
 

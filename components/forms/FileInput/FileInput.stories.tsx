@@ -20,5 +20,7 @@ const inputProps = {
 };
 
 export const defaultFileInput = (): React.ReactElement => (
-  <Formik initialValues={{"checkbox": ""}}><FileInput {...inputProps} /></Formik>
+  <Formik initialValues={{ checkbox: "" }}>
+    <FileInput {...inputProps} />
+  </Formik>
 );
