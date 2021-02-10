@@ -85,9 +85,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   ) : null;
 
   const descriptiveText = inputProps.description ? (
-    <Description id={`desc-${element.id}`}>
+    <p className="gc-p" id={`desc-${element.id}`}>
       {inputProps.description}
-    </Description>
+    </p>
   ) : null;
 
   switch (element.type) {
@@ -101,7 +101,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment key={inputProps.id}>
           {label}
-          {descriptiveText}
+          <Description>{inputProps.description}</Description>
           <TextInput
             type="text"
             aria-describedby={
@@ -115,7 +115,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment key={inputProps.id}>
           {label}
-          {descriptiveText}
+          <Description>{inputProps.description}</Description>
           <TextArea
             aria-describedby={
               inputProps.description ? `desc-${element.id}` : undefined
@@ -146,7 +146,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           }
         >
           {label}
-          {descriptiveText}
+          <Description>{inputProps.description}</Description>
           {checkboxItems}
         </FormGroup>
       );
@@ -172,7 +172,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           }
         >
           {label}
-          {descriptiveText}
+          <Description>{inputProps.description}</Description>
           {radioButtons}
         </FormGroup>
       );
@@ -181,7 +181,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment key={inputProps.id}>
           {label}
-          {descriptiveText}
+          <Description>{inputProps.description}</Description>
           <Dropdown
             aria-describedby={
               inputProps.description ? `desc-${element.id}` : undefined
@@ -217,7 +217,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment key={inputProps.id}>
           {label}
-          {descriptiveText}
+          <Description>{inputProps.description}</Description>
           <FileInput
             aria-describedby={
               inputProps.description ? `desc-${element.id}` : undefined
