@@ -11,8 +11,6 @@ interface RequiredTextInputProps {
 interface CustomTextInputProps {
   className?: string;
   required?: boolean;
-  success?: boolean;
-  inputSize?: "small" | "medium";
 }
 
 export type OptionalTextInputProps = CustomTextInputProps &
