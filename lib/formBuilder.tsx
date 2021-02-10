@@ -285,7 +285,7 @@ const _getElementInitialValue = (
     // For Dynamic Row reiterate through and create Initial Values to an Array of Objects
     const dynamicRow: Record<string, unknown> = {};
     element.properties.subElements.map((subElement, index) => {
-      subElement.id = `${currentId}-${index}`;
+      subElement.id = `${element.id}-${index}`;
       dynamicRow[subElement.id] = _getElementInitialValue(subElement, language);
     });
     return dynamicRow;
