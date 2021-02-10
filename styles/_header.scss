@@ -25,10 +25,6 @@
 
 .gc-fip {
   @apply flex flex-row justify-between items-center mx-40 my-20;
-
-  div {
-    @apply h-auto max-h-10 w-72;
-  }
 }
 
 // LANGUAGE TOGGLE
@@ -42,124 +38,27 @@
 }
 
 header {
-  padding: 0 0 0 0;
-  margin-bottom: $space-xl;
-
-  button {
-    padding: 0;
-  }
-
-  @include sm {
-    margin-bottom: calc(#{$space-xl} + #{$space-xl});
-    text-align: right;
-  }
-
-  .fip-container {
-    flex-direction: row;
-    justify-content: space-between;
-    display: flex;
-  }
-
   .language-link {
-    text-align: left;
-    margin-bottom: $space-sm;
-    font-size: 0.85em;
-
     h2 {
       @include visuallyHidden();
     }
 
-    form,
     button {
-      margin: 0;
-      max-width: unset;
-      width: auto;
-    }
-
-    button {
-      background: none;
-      color: $color-blue-dark;
-      text-decoration: underline;
-      border: 0;
-
-      box-shadow: none;
-      font-size: 0.9em;
-
       &:focus {
         @include focus(3px, 3px);
       }
-    }
-
-    @include xs {
-      font-size: 0.9em;
-    }
-
-    @include sm {
-      margin-bottom: 0;
-      font-size: 1em;
     }
   }
 
   .canada-flag {
     height: auto;
     max-height: 40px;
-    width: 272px;
-    margin-bottom: $space-sm;
-    margin-right: $space-sm;
-
-    @include sm {
-      width: 360px;
-      margin-bottom: 0;
-    }
+    width: 360px;
   }
 }
 
 .visually-hidden {
   @include visuallyHidden();
-}
-
-.phase-banner {
-  background: #f4f4f4;
-  line-height: 1.33;
-}
-
-.phase-banner {
-  div {
-    @extend %page-container;
-    display: flex;
-    align-items: flex-start;
-    padding-top: $space-sm;
-    padding-bottom: $space-sm;
-    margin-bottom: $space-md;
-
-    @include sm {
-      align-items: center;
-      margin-bottom: $space-xl;
-    }
-  }
-
-  span {
-    font-size: 0.7em;
-  }
-
-  span:first-of-type {
-    border: 2px $color-black solid;
-    padding: 1px 5px;
-    letter-spacing: 1px;
-    margin-right: 1.7em;
-
-    @include sm {
-      padding: 1px 7px;
-    }
-  }
-
-  span:last-of-type {
-    margin-top: 3px;
-
-    @include sm {
-      margin-top: 0px;
-    }
-  }
 }
 
 #skip-link-container {

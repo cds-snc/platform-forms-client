@@ -2,8 +2,22 @@
   box-sizing: border-box;
 }
 
-.gc-layout-container {
+main {
   @apply mx-40;
+}
+
+.gc-homepage {
+  div {
+    @apply mb-16;
+  }
+
+  div:last-of-type {
+    @apply mb-20;
+  }
+
+  h2 {
+    @apply text-h2 mb-5;
+  }
 }
 
 .gc-ul {
@@ -58,7 +72,11 @@ ul {
 }
 
 a {
-  @apply underline;
+  @apply underline text-blue-dark;
+}
+
+a:visited {
+  @apply text-purple-default;
 }
 
 .canada-wordmark img {
@@ -85,40 +103,6 @@ body {
   line-height: 1.65;
 }
 
-p,
-.multiple-choice__item p,
-ol,
-ul {
-  margin-top: 0;
-  margin-bottom: $space-xs;
-
-  @include xs {
-    margin-bottom: $space-sm;
-  }
-}
-
-p + ul {
-  margin-top: -$space-xs;
-
-  @include xs {
-    margin-top: -$space-sm;
-  }
-}
-
-ol,
-ul {
-  padding-left: $space-lg;
-
-  @include sm {
-    padding-left: $space-xl;
-  }
-}
-
-a,
-a:visited {
-  color: $color-blue-dark;
-}
-
 h1,
 h2,
 h3,
@@ -130,36 +114,7 @@ h6 {
   font-weight: 600;
 }
 
-%page-container {
-  @apply mx-40;
-}
-
-main {
-  @extend %page-container;
-  padding: 0;
-}
-
-li:not(:last-of-type) {
-  padding-bottom: $space-xxs;
-
-  @include sm {
-    padding-bottom: 0;
-  }
-}
-
 .outer-container {
   position: relative;
   min-height: 100vh;
-}
-
-.page--container {
-  @extend %page-container;
-}
-
-.hide--mobile {
-  display: none;
-
-  @include sm {
-    display: inherit;
-  }
 }
