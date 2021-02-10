@@ -272,9 +272,48 @@ const _getRenderedForm = (
 };
 
 /**
+ * _getFormInitialValues calls this function to set the initial value for an element
+ * @param formMetadata
+ * @param language
+ */
+
+const _getElementInitialValue = (
+  element: FormElement,
+  language: string
+): Record<string, unknown> | Record<string, unknown>[] | string => {
+  const nestedObj: Record<string, unknown> = {};
+  const currentId = `id-${element.id}`;
+
+  // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
+  if (element.properties.choices) {
+    element.properties.choices.map((choice, index) => {
+      const choiceId = `${currentId}-${index}`;
+      //initialValues[choiceId] = choice[language];
+      nestedObj[choiceId] = choice[language];
+    });
+
+    return nestedObj;
+  } else if (element.properties.subElements) {
+    // For Dynamic Row reiterate through and create Initial Values to an Array of Objects
+    const dynamicRow: Record<string, unknown> = {};
+    element.properties.subElements.map((subElement, index) => {
+      subElement.id = `${currentId}-${index}`;
+      dynamicRow[subElement.id] = _getElementInitialValue(subElement, language);
+    });
+    return dynamicRow;
+  } else {
+    // Regular inputs (not nested) like text, textarea might have a placeholder value
+    return (
+      (element.properties[getProperty("placeholder", language)] as string) ?? ""
+    );
+  }
+};
+
+/**
  * DynamicForm calls this function to set the initial form values
  * getFormInitialValues
  * @param formMetadata
+ * @param language
  */
 const _getFormInitialValues = (
   formMetadata: FormMetadataProperties,
@@ -289,22 +328,7 @@ const _getFormInitialValues = (
   formMetadata.elements.map((element: FormElement) => {
     const currentId = `id-${element.id}`;
 
-    // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
-    if (element.properties.choices) {
-      const nestedObj: Record<string, unknown> = {};
-
-      element.properties.choices.map((choice, index) => {
-        const choiceId = `${currentId}-${index}`;
-        //initialValues[choiceId] = choice[language];
-        nestedObj[choiceId] = choice[language];
-      });
-
-      initialValues[currentId] = nestedObj;
-    } else {
-      // Regular inputs (not nested) like text, textarea might have a placeholder value
-      initialValues[currentId] =
-        element.properties[getProperty("placeholder", language)] ?? "";
-    }
+    initialValues[currentId] = _getElementInitialValue(element, language);
   });
   return initialValues;
 };
