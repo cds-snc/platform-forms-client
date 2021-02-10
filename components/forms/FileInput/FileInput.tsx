@@ -4,6 +4,7 @@ import { useField } from "formik";
 
 interface FileInputProps {
   id: string;
+  name: string;
   className?: string;
   error?: boolean;
   hint?: React.ReactNode;
@@ -13,17 +14,11 @@ const getFileObject = (e: React.ChangeEvent<HTMLInputElement>) => {
   if (!e.target.files) {
     return;
   }
-  const file = e.target.files[0];
-
   const reader = new FileReader();
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(e.target.files[0]);
 
   reader.onload = function () {
     console.log("FILE UPLOAD ONLOAD", reader.result);
-  };
-
-  reader.onerror = function () {
-    console.log("FILE UPLOAD ONERROR", reader.error);
   };
 };
 

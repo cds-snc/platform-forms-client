@@ -33,7 +33,13 @@ interface FormValues {
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
   return (
-    <form id="form" data-testid="form" onSubmit={handleSubmit} method="POST">
+    <form
+      id="form"
+      data-testid="form"
+      onSubmit={handleSubmit}
+      method="POST"
+      encType="multipart/form-data"
+    >
       {children}
       <div className="buttons">
         <Button className="gc-button" type="submit">

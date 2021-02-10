@@ -2,13 +2,6 @@ import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 
-type TextInputRef =
-  | string
-  | ((instance: HTMLInputElement | null) => void)
-  | React.RefObject<HTMLInputElement>
-  | null
-  | undefined;
-
 interface RequiredTextInputProps {
   id: string;
   name: string;
@@ -17,10 +10,9 @@ interface RequiredTextInputProps {
 
 interface CustomTextInputProps {
   className?: string;
-  validationStatus?: "error" | "success";
+  required?: boolean;
   success?: boolean;
   inputSize?: "small" | "medium";
-  inputRef?: TextInputRef;
 }
 
 export type OptionalTextInputProps = CustomTextInputProps &
@@ -29,7 +21,7 @@ export type OptionalTextInputProps = CustomTextInputProps &
 export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
 export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const { id, type, className, inputRef, ...inputProps } = props;
+  const { id, type, className, required } = props;
   const [field, meta] = useField(props);
   const classes = classnames("gc-input-text", className);
 
@@ -44,8 +36,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         className={classes}
         id={id}
         type={type}
-        ref={inputRef}
-        {...inputProps}
+        required={required}
         {...field}
       />
     </>
