@@ -1,5 +1,6 @@
 import React from "react";
 import { TextArea } from "./TextArea";
+import { Formik } from "formik";
 
 export default {
   title: "Forms/TextArea",
@@ -10,27 +11,27 @@ export default {
 };
 
 export const defaultTextArea = (): React.ReactElement => (
-  <TextArea id="input-type-text" name="input-type-text" />
+  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" /></Formik>
 );
 
 export const withDefaultValue = (): React.ReactElement => (
-  <TextArea id="input-value" name="input-value" defaultValue="Change me" />
+  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" defaultValue="Change me" /></Formik>
 );
 
 export const withPlaceholder = (): React.ReactElement => (
-  <TextArea
+  <Formik initialValues={{"input-type-text": ""}}><TextArea
     id="input-type-text"
     name="input-type-text"
     placeholder="Enter value"
-  />
+  /></Formik>
 );
 
 export const disabled = (): React.ReactElement => (
-  <TextArea id="input-disabled" name="input-disabled" disabled />
+  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" disabled /></Formik>
 );
 
 export const readonly = (): React.ReactElement => (
-  <TextArea id="input-readonly" name="input-readonly" readOnly />
+  <Formik initialValues={{"input-type-text": ""}}><TextArea id="input-type-text" name="input-type-text" readOnly /></Formik>
 );
 
 defaultTextArea.parameters = {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Fieldset } from "./Fieldset";
-
+import { Formik } from "formik";
 import { Label } from "../Label/Label";
 import { TextInput } from "../TextInput/TextInput";
 export default {
@@ -12,6 +12,7 @@ export default {
 };
 
 export const nameFieldset = (): React.ReactElement => (
+  <Formik>
   <Fieldset legend="Name">
     <Label htmlFor="title" hint=" (optional)">
       Title
@@ -26,4 +27,5 @@ export const nameFieldset = (): React.ReactElement => (
     <Label htmlFor="last-name">Last name</Label>
     <TextInput id="last-name" name="last-name" type="text" />
   </Fieldset>
+  </Formik>
 );

@@ -1,5 +1,6 @@
 import React from "react";
 import { Checkbox } from "./Checkbox";
+import { Formik } from "formik";
 
 export default {
   title: "Forms/Checkbox",
@@ -10,7 +11,9 @@ export default {
 };
 
 export const defaultCheckbox = (): React.ReactElement => (
-  <Checkbox id="checkbox" name="checkbox" label="My Checkbox" />
+  <Formik initialValues={{ checkbox: "" }}>
+    <Checkbox id="checkbox" name="checkbox" label="My Checkbox" />
+  </Formik>
 );
 
 defaultCheckbox.parameters = {
