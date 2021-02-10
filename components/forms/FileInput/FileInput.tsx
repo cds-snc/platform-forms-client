@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 
@@ -10,22 +10,9 @@ interface FileInputProps {
   hint?: React.ReactNode;
   fileType?: string | undefined;
 }
-export const getFileObject = (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (!e.target.files) {
-    return;
-  }
-  const reader = new FileReader();
-  reader.readAsDataURL(e.target.files[0]);
-
-  let fileResult = null;
-  reader.onload = function () {
-    fileResult = reader.result;
-    console.log("FILE UPLOAD ONLOAD", reader.result);
-  };
-  return fileResult;
-};
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
+  const [file, setFile] = useState<ArrayBuffer | string | null>();
   const { id, className, fileType } = props;
 
   const classes = classnames("gc-file-input", className);
@@ -40,13 +27,22 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       <input
         type="file"
         data-testid="file"
+        data-attachment={file}
         className={classes}
         id={id}
         accept={fileType}
         {...field}
         onChange={(e) => {
           setValue(e.target.value);
-          getFileObject(e);
+          if (e.target.files) {
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function () {
+              const fileObject = reader.result;
+              setFile(fileObject);
+            };
+          }
+
         }}
       />
     </>
