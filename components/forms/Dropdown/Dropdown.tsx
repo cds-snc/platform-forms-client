@@ -7,6 +7,7 @@ interface DropdownProps {
   name: string;
   className?: string;
   choices: Array<string | number>;
+  required?: boolean;
 }
 
 interface DropdownOptionProps {
@@ -19,7 +20,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, className, choices } = props;
+  const { id, className, choices, required } = props;
 
   const classes = classnames("gc-dropdown", className);
 
@@ -42,7 +43,13 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         <div className="error">{meta.error}</div>
       ) : null}
 
-      <select data-testid="dropdown" className={classes} id={id} {...field}>
+      <select
+        data-testid="dropdown"
+        className={classes}
+        id={id}
+        required={required}
+        {...field}
+      >
         {options}
       </select>
     </>
