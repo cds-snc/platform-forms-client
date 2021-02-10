@@ -68,7 +68,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   const labelText = element.properties[getProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
-    <Label key={`label-${element.id}`} htmlFor={`id-${element.id}`}>
+    <Label key={`label-${id}`} htmlFor={id}>
       {labelText}
     </Label>
   ) : null;
@@ -77,7 +77,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     getProperty("description", lang)
   ]?.toString();
   const descriptiveText = description ? (
-    <p className="gc-p" id={`desc-${element.id}`}>
+    <p className="gc-p" id={`desc-${id}`}>
       {description}
     </p>
   ) : null;
@@ -96,11 +96,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Description>{description}</Description>
           <TextInput
             type="text"
-            key={`key-${element.id}`}
-            id={element.id}
-            name={element.id}
+            key={`key-${id}`}
+            id={id}
+            name={name}
             required={element.properties.required}
-            aria-describedby={description ? `desc-${element.id}` : undefined}
+            aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
@@ -110,11 +110,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           <Description>{description}</Description>
           <TextArea
-            key={`key-${element.id}`}
-            id={element.id}
-            name={element.id}
+            key={`key-${id}`}
+            id={id}
+            name={name}
             required={element.properties.required}
-            aria-describedby={description ? `desc-${element.id}` : undefined}
+            aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
@@ -135,7 +135,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         <FormGroup
           key={`formGroup-${id}`}
           name={name}
-          aria-describedby={description ? `desc-${element.id}` : undefined}
+          aria-describedby={description ? `desc-${id}` : undefined}
         >
           {labelComponent}
           <Description>{description}</Description>
@@ -160,7 +160,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         <FormGroup
           key={`formGroup-${id}`}
           name={name}
-          aria-describedby={description ? `desc-${element.id}` : undefined}
+          aria-describedby={description ? `desc-${id}` : undefined}
         >
           {labelComponent}
           <Description>{description}</Description>
@@ -176,8 +176,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Dropdown
             id={id}
             name={name}
-            required={element.properties.required}
-            aria-describedby={description ? `desc-${element.id}` : undefined}
+            aria-describedby={description ? `desc-${id}` : undefined}
             choices={choices}
           />
         </Fragment>
@@ -210,7 +209,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <FileInput
             id={id}
             name={name}
-            aria-describedby={description ? `desc-${element.id}` : undefined}
+            aria-describedby={description ? `desc-${id}` : undefined}
             fileType={element.properties.fileType}
           />
         </Fragment>
@@ -318,6 +317,7 @@ const _getFormInitialValues = (
 
     initialValues[currentId] = _getElementInitialValue(element, language);
   });
+
   return initialValues;
 };
 
