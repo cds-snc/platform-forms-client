@@ -15,7 +15,7 @@ const inputProps = {
 describe("FileInput component", () => {
   it("renders without errors", async () => {
     const { queryByTestId } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <FileInput {...inputProps} />
       </Form>
     );

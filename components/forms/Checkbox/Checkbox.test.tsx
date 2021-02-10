@@ -6,7 +6,7 @@ import { Checkbox } from "./Checkbox";
 describe("Checkbox component", () => {
   it("renders without errors", async () => {
     const { queryByTestId, queryByLabelText } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <Checkbox
           id="input-checkbox"
           name="input-checkbox"
