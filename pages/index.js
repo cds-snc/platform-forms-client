@@ -21,18 +21,20 @@ const Home = ({ t, i18n }) => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
-
-      <div className="">
-        <div className="mb-20">
-          <h2 className="text-3xl mb-5">{t("product.title")}</h2>
+      <div className="gc-homepage">
+        <h1 className="gc-h1">{t("title")}</h1>
+        <div>
+          <h2>{t("product.title")}</h2>
           <p>{t("product.text")}</p>
-          <h2 className="text-3xl mb-5">{t("formList.title")}</h2>
+        </div>
+
+        <div>
+          <h2>{t("formList.title")}</h2>
           <LinksList />
         </div>
 
-        <div className="mb-20">
-          <h2 className="text-3xl mb-5">{t("design.title")}</h2>
+        <div>
+          <h2>{t("design.title")}</h2>
           <p>{t("design.text")}</p>
           <p>
             <a href="https://platform-storybook.herokuapp.com/">
@@ -41,8 +43,8 @@ const Home = ({ t, i18n }) => {
           </p>
         </div>
 
-        <div className="mb-20">
-          <h2 className="text-3xl mb-5">{t("technology.title")}</h2>
+        <div>
+          <h2>{t("technology.title")}</h2>
           <p>{t("technology.text")}</p>
           <p>
             <a href="https://github.com/cds-snc/platform-forms-node/">

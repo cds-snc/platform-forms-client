@@ -7,7 +7,7 @@ import { TextInput } from "./TextInput";
 describe("TextInput component", () => {
   it("renders without errors", async () => {
     const { queryByTestId } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <TextInput id="input-type-text" name="input-type-text" type="text" />
       </Form>
     );

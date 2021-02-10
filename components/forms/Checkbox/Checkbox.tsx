@@ -7,7 +7,7 @@ interface CheckboxProps {
   name: string;
   className?: string;
   label: React.ReactNode;
-  required: boolean;
+  required?: boolean;
 }
 
 export const Checkbox = (

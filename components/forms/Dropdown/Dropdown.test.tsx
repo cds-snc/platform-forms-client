@@ -24,7 +24,7 @@ const choices = [
 describe("Dropdown component", () => {
   it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <Dropdown id="dropdown" name="dropdown" choices={choices} />
       </Form>
     );

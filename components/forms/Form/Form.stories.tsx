@@ -13,7 +13,7 @@ export default {
 export const defaultForm = (): React.ReactElement => {
   const formObject = getFormByID("1");
 
-  return <Form formModel={formObject} i18n={{ language: "en" }}></Form>;
+  return <Form formMetadata={formObject} i18n={{ language: "en" }}></Form>;
 };
 
 defaultForm.parameters = {

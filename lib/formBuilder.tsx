@@ -52,42 +52,34 @@ function getLocaleChoices(
 
 // This function renders the form elements with passed in properties.
 function _buildForm(element: FormElement, lang: string): ReactElement {
-  const inputProps = {
-    key: element.id,
-    id: `id-${element.id}`,
-    name: `id-${element.id}`,
-    required: element.properties.required,
-    label: element.properties[getProperty("title", lang)]?.toString(),
-    choices:
-      element.properties && element.properties.choices
-        ? getLocaleChoices(element.properties.choices, lang)
-        : [],
-    description: element.properties[
-      getProperty("description", lang)
-    ]?.toString(),
-  };
+  const id = `id-${element.id}`;
+  const name = id;
+  const key = element.id;
 
-  const customProps = {
-    headingLevel: element.properties.headingLevel
-      ? element.properties.headingLevel
-      : "h2",
-    isSectional: element.properties.isSectional ? true : false,
-    subElements:
-      element.properties && element.properties.subElements
-        ? element.properties.subElements
-        : [],
-  };
+  const choices =
+    element.properties && element.properties.choices
+      ? getLocaleChoices(element.properties.choices, lang)
+      : [];
 
-  const label = inputProps.label ? (
-    <Label key={`label-${element.id}`} htmlFor={inputProps.name}>
-      {inputProps.label}
+  const subElements =
+    element.properties && element.properties.subElements
+      ? element.properties.subElements
+      : [];
+
+  const labelText = element.properties[getProperty("title", lang)]?.toString();
+  const labelComponent = labelText ? (
+    <Label key={`label-${element.id}`} htmlFor={`id-${element.id}`}>
+      {labelText}
     </Label>
   ) : null;
 
-  const descriptiveText = inputProps.description ? (
-    <Description id={`desc-${element.id}`}>
-      {inputProps.description}
-    </Description>
+  const description = element.properties[
+    getProperty("description", lang)
+  ]?.toString();
+  const descriptiveText = description ? (
+    <p className="gc-p" id={`desc-${element.id}`}>
+      {description}
+    </p>
   ) : null;
 
   switch (element.type) {
@@ -99,130 +91,126 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "textField":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          {descriptiveText}
+        <Fragment key={key}>
+          {labelComponent}
+          <Description>{description}</Description>
           <TextInput
             type="text"
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            key={`key-${element.id}`}
+            id={element.id}
+            name={element.id}
+            required={element.properties.required}
+            aria-describedby={description ? `desc-${element.id}` : undefined}
           />
         </Fragment>
       );
     case "textArea":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          {descriptiveText}
+        <Fragment key={key}>
+          {labelComponent}
+          <Description>{description}</Description>
           <TextArea
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            key={`key-${element.id}`}
+            id={element.id}
+            name={element.id}
+            required={element.properties.required}
+            aria-describedby={description ? `desc-${element.id}` : undefined}
           />
         </Fragment>
       );
     case "checkbox": {
-      const checkboxItems = inputProps.choices.map((choice, index) => {
+      const checkboxItems = choices.map((choice, index) => {
         return (
           <Checkbox
-            key={`key-${inputProps.id}-${index}`}
-            id={`${inputProps.id}-${index}`}
-            name={`${inputProps.id}-${index}`}
+            key={`key-${id}-${index}`}
+            id={`${id}-${index}`}
+            name={`${id}-${index}`}
             label={choice}
-            required={inputProps.required}
+            required={element.properties.required}
           />
         );
       });
 
       return (
         <FormGroup
-          key={`formGroup-${inputProps.id}`}
-          name={inputProps.name}
-          aria-describedby={
-            inputProps.description ? `desc-${element.id}` : undefined
-          }
+          key={`formGroup-${id}`}
+          name={name}
+          aria-describedby={description ? `desc-${element.id}` : undefined}
         >
-          {label}
-          {descriptiveText}
+          {labelComponent}
+          <Description>{description}</Description>
           {checkboxItems}
         </FormGroup>
       );
     }
     case "radio": {
-      const radioButtons = inputProps.choices.map((choice, index) => {
+      const radioButtons = choices.map((choice, index) => {
         return (
           <Radio
-            {...inputProps}
-            key={`key-${inputProps.id}-${index}`}
-            id={`${inputProps.id}-${index}`}
+            key={`key-${id}-${index}`}
+            id={`${id}-${index}`}
+            name={name}
             label={choice}
+            required={element.properties.required}
           />
         );
       });
 
       return (
         <FormGroup
-          key={`formGroup-${inputProps.id}`}
-          name={inputProps.name}
-          aria-describedby={
-            inputProps.description ? `desc-${element.id}` : undefined
-          }
+          key={`formGroup-${id}`}
+          name={name}
+          aria-describedby={description ? `desc-${element.id}` : undefined}
         >
-          {label}
-          {descriptiveText}
+          {labelComponent}
+          <Description>{description}</Description>
           {radioButtons}
         </FormGroup>
       );
     }
     case "dropdown":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          {descriptiveText}
+        <Fragment key={key}>
+          {labelComponent}
+          <Description>{description}</Description>
           <Dropdown
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            id={id}
+            name={name}
+            required={element.properties.required}
+            aria-describedby={description ? `desc-${element.id}` : undefined}
+            choices={choices}
           />
         </Fragment>
       );
     case "plainText":
       return (
-        <div className="gc-plain-text" key={inputProps.id}>
-          {inputProps.label ? (
-            <h2 className="gc-h2">{inputProps.label}</h2>
-          ) : null}
+        <div className="gc-plain-text" key={key}>
+          {labelText ? <h2 className="gc-h2">{labelText}</h2> : null}
           {descriptiveText}
         </div>
       );
     case "heading":
       return (
-        <Fragment key={inputProps.id}>
-          {inputProps.label ? (
+        <Fragment key={key}>
+          {labelText ? (
             <Heading
-              {...inputProps}
-              isSectional={customProps.isSectional}
+              isSectional={element.properties.isSectional ? true : false}
               headingLevel={"h2"}
             >
-              {inputProps.label}
+              {labelText}
             </Heading>
           ) : null}
         </Fragment>
       );
     case "fileInput":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          {descriptiveText}
+        <Fragment key={key}>
+          {labelComponent}
+          <Description>{description}</Description>
           <FileInput
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            id={id}
+            name={name}
+            aria-describedby={description ? `desc-${element.id}` : undefined}
             fileType={element.properties.fileType}
           />
         </Fragment>
@@ -230,10 +218,10 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     case "dynamicRow": {
       return (
         <DynamicGroup
-          key={`dynamicGroup-${inputProps.id}`}
-          name={inputProps.name}
-          legend={inputProps.label}
-          rowElements={customProps.subElements}
+          key={`dynamicGroup-${id}`}
+          name={name}
+          legend={labelText}
+          rowElements={subElements}
           lang={lang}
         />
       );

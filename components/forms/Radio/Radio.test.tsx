@@ -7,7 +7,7 @@ describe("Radio component", () => {
   const text = "My radio button";
   it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <Radio id="input-radio" name="input-radio" label={text} />
       </Form>
     );

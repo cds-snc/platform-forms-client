@@ -6,7 +6,7 @@ import { TextArea } from "./TextArea";
 describe("TextArea component", () => {
   it("renders without errors", async () => {
     const { queryByTestId } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <TextArea id="input-type-text" name="input-type-text" />
       </Form>
     );

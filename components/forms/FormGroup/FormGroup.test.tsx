@@ -9,7 +9,7 @@ describe("FormGroup component", () => {
   const text = "Text input label";
   it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
-      <Form>
+      <Form t={(key: string) => key}>
         <FormGroup name="formGroup">
           <Label htmlFor="input-type-text">{text}</Label>
           <TextInput id="input-type-text" name="input-type-text" type="text" />
