@@ -7,6 +7,14 @@
   @apply text-base py-0 text-red-700 font-bold w-full;
 }
 
+.gc-dropdown {
+  @apply block border-1 rounded border-gray-600 py-3 px-5 mt-2 mb-14;
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+    no-repeat;
+  -webkit-appearance: none;
+  background-position: center right 20px;
+}
+
 .gc-p {
   @apply text-p mb-10 w-full;
 }
@@ -76,28 +84,24 @@
 }
 
 .gc-textarea {
-  @apply border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-14 w-4/6 h-40;
+  @apply border-solid block border-1 border-gray-600 py-3 px-2 mt-2 mb-14 w-full h-40;
 }
 
 .gc-input-text {
-  @apply border-solid border-2 py-3 px-2 mt-2 mb-14 border-gray-900 w-3/6;
+  @apply border-solid block border-1 border-gray-600 py-3 px-2 mt-2 mb-14 w-3/6 rounded;
 }
 
 .gc-file-input {
   @apply mt-2 mb-14;
 }
 
-.gc-dropdown {
-  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-14;
-}
-
 .gc-input-checkbox {
   .gc-input-checkbox__input {
-    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-6 align-middle;
+    @apply text-gray-500 h-10 w-10 border-2 border-gray-600 rounded mr-6 align-middle;
   }
 
   .gc-input-checkbox:checked {
-    @apply text-gray-50 bg-blue-800;
+    @apply text-gray-500 bg-blue-800;
   }
 }
 
@@ -112,7 +116,7 @@
 }
 
 .gc-radio__input {
-  @apply border-2 border-gray-900 w-10 h-10 mr-6 align-middle;
+  @apply border-2 border-gray-600 w-10 h-10 mr-6 align-middle;
 }
 
 .validation-message {
