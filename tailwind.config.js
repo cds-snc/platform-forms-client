@@ -82,6 +82,7 @@ module.exports = {
       black: {
         ...colors.black,
         default: "#000",
+        form: "#0b0c0c",
       },
     },
     boxShadow: {

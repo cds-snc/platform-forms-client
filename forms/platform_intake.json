@@ -13,7 +13,7 @@
     "titleFr": "SNC Formulaire d'admission du Plateforme",
     "descriptionEn": "Register to learn more about CDS Platform products",
     "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "startPage": {},
     "endPage": {
       "descriptionEn": "",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "id": 3,
+        "id": 2,
         "type": "textField",
         "properties": {
           "titleEn": "Name",
@@ -48,7 +48,7 @@
         }
       },
       {
-        "id": 4,
+        "id": 3,
         "type": "textField",
         "properties": {
           "titleEn": "Work email",
@@ -58,7 +58,7 @@
         }
       },
       {
-        "id": 5,
+        "id": 4,
         "type": "textField",
         "properties": {
           "titleEn": "What department do you work for?",
@@ -71,7 +71,7 @@
         }
       },
       {
-        "id": 6,
+        "id": 5,
         "type": "textField",
         "properties": {
           "titleEn": "Work phone number",
@@ -82,7 +82,7 @@
       },
 
       {
-        "id": 7,
+        "id": 6,
         "type": "checkbox",
         "properties": {
           "titleEn": "How can we work together?",
@@ -112,7 +112,7 @@
         }
       },
       {
-        "id": 8,
+        "id": 7,
         "type": "textArea",
         "properties": {
           "titleEn": "Email(s) of other people in your team we should reach out to",
