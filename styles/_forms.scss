@@ -8,11 +8,11 @@
 }
 
 .gc-dropdown {
-  @apply block border-1 rounded border-gray-600 py-3 px-5 mt-2 mb-14;
+  @apply block border-2 border-black-form py-3 px-5 mt-2 mb-14;
   background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
     no-repeat;
   -webkit-appearance: none;
-  background-position: center right 20px;
+  background-position: center right 15px;
 }
 
 .gc-p {
@@ -84,11 +84,11 @@
 }
 
 .gc-textarea {
-  @apply border-solid block border-1 border-gray-600 py-3 px-2 mt-2 mb-14 w-full h-40;
+  @apply border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-full h-40;
 }
 
 .gc-input-text {
-  @apply border-solid block border-1 border-gray-600 py-3 px-2 mt-2 mb-14 w-3/6 rounded;
+  @apply border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-3/6;
 }
 
 .gc-file-input {
@@ -97,7 +97,7 @@
 
 .gc-input-checkbox {
   .gc-input-checkbox__input {
-    @apply text-gray-500 h-10 w-10 border-2 border-gray-600 rounded mr-6 align-middle;
+    @apply text-gray-500 h-10 w-10 border-2 border-black-form mr-6 align-middle;
   }
 
   .gc-input-checkbox:checked {
@@ -116,7 +116,7 @@
 }
 
 .gc-radio__input {
-  @apply border-2 border-gray-600 w-10 h-10 mr-6 align-middle;
+  @apply border-4 border-black-form w-10 h-10 mr-6 align-middle;
 }
 
 .validation-message {
