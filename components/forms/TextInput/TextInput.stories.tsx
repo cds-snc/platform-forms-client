@@ -1,5 +1,6 @@
 import React from "react";
 import { TextInput } from "./TextInput";
+import { Formik } from "formik";
 
 export default {
   title: "Forms/TextInput",
@@ -10,7 +11,9 @@ export default {
 };
 
 export const defaultTextInput = (): React.ReactElement => (
-  <TextInput id="input-type-text" name="input-type-text" type="text" />
+  <Formik initialValues={{ "input-type-text": "" }}>
+    <TextInput id="input-type-text" name="input-type-text" type="text" />
+  </Formik>
 );
 
 defaultTextInput.parameters = {

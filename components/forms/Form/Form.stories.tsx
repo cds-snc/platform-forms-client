@@ -1,6 +1,5 @@
 import React from "react";
 import { Form } from "./Form";
-import { getFormByID } from "../../../lib/dataLayer";
 
 export default {
   title: "Forms/Form",
@@ -11,9 +10,7 @@ export default {
 };
 
 export const defaultForm = (): React.ReactElement => {
-  const formObject = getFormByID("1");
-
-  return <Form formMetadata={formObject} i18n={{ language: "en" }}></Form>;
+  return <Form t={(key: string) => key}>Test</Form>;
 };
 
 defaultForm.parameters = {

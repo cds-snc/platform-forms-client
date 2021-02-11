@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Formik } from "formik";
 import { Dropdown } from "./Dropdown";
 import { Label } from "../Label/Label";
 
@@ -11,35 +11,27 @@ export default {
   },
 };
 
-const inputProps = {
-  key: "id",
-  id: "id",
-  name: "province",
-  label: "Select a province",
-  value: "",
-  choices: [
-    "",
-    "Alberta",
-    "British Columbia",
-    "Manitoba",
-    "New Brunswick",
-    "Newfoundland",
-    "Northwest Territories",
-    "Nova Scotia",
-    "Nunavut",
-    "Ontario",
-    "Prince Edward Island",
-    "Quebec",
-    "Saskatchewan",
-    "Yukon",
-  ],
-};
+const choices = [
+  "",
+  "Alberta",
+  "British Columbia",
+  "Manitoba",
+  "New Brunswick",
+  "Newfoundland",
+  "Northwest Territories",
+  "Nova Scotia",
+  "Nunavut",
+  "Ontario",
+  "Prince Edward Island",
+  "Quebec",
+  "Saskatchewan",
+  "Yukon",
+];
 
 export const defaultDropdown = (): React.ReactElement => (
-  <>
-    <Label htmlFor="options">{inputProps.label}</Label>
-    <Dropdown {...inputProps} />
-  </>
+  <Formik initialValues={{ dropdown: "" }}>
+    <Dropdown id="dropdown" name="dropdown" choices={choices} />
+  </Formik>
 );
 
 defaultDropdown.parameters = {
