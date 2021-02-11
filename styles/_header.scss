@@ -1,7 +1,7 @@
 // PHASE BANNER STYLES
 
 .gc-phase-banner {
-  @apply bg-gray-background flex items-center py-6 px-40;
+  @apply bg-gray-background flex items-center py-6 px-64;
 
   span {
     @apply text-sm;
@@ -24,7 +24,7 @@
 // FIP STYLES
 
 .gc-fip {
-  @apply flex flex-row justify-between items-center mx-40 my-20;
+  @apply flex flex-row justify-between items-center px-64 my-20;
 }
 
 // LANGUAGE TOGGLE
