@@ -12,14 +12,16 @@ module.exports = {
     /* ["fontSize", "lineHeight"]
        These typography rules have been pulled from the design system
     */
-
     fontSize: {
       sm: ["16px", "22px"],
-      base: ["20px", "30px"],
-      p: ["20px", "30px"],
-      h3: ["24px", "24.3px"],
-      h2: ["30px", "33.5px"],
-      h1: ["34px", "42px"],
+      base: ["20px", "26px"],
+      p: ["20px", "28px"],
+      h3: ["24px", "26px"],
+      h2: ["30px", "38px"],
+      h1: ["34px", "44px"],
+    },
+    maxWidth: {
+    prose: "75ch",
     },
     screens: {
       xxs: "280px",

@@ -23,14 +23,16 @@ export const Radio = (
 
   return (
     <div data-testid="radio" className={classes}>
-      <input
-        className="gc-radio__input"
-        id={id}
-        type="radio"
-        name={name}
-        ref={inputRef}
-        {...inputProps}
-      />
+      <div>
+        <input
+          className="gc-radio__input"
+          id={id}
+          type="radio"
+          name={name}
+          ref={inputRef}
+          {...inputProps}
+        />
+      </div>
       <label className="gc-radio-label" htmlFor={id}>
         {label}
       </label>

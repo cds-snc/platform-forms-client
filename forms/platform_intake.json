@@ -29,16 +29,8 @@
         "properties": {
           "titleEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products.",
           "titleFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien.",
-          "charLimit": 200,
-          "required": false
-        }
-      },
-      {
-        "id": 2,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
-          "titleFr": "Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
+          "descriptionEn": "Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
+          "descriptionFr": "Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
           "charLimit": 200,
           "required": false
         }

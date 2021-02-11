@@ -1,10 +1,10 @@
 .gc-fieldset ul {
-  @apply mb-12;
+  @apply mb-14;
 }
 
 .gc-alert,
 .gc-error-message {
-  @apply text-base py-0 text-red-700 font-bold w-4/5;
+  @apply text-base py-0 text-red-700 font-bold w-full;
 }
 
 .gc-p {
@@ -12,32 +12,32 @@
 }
 
 .gc-description {
-  @apply text-gray-text mb-2 text-sm w-4/5;
+  @apply text-gray-text mb-2 text-sm w-full;
 }
 
 .gc-h1 {
-  @apply border-b-2 border-red-default text-h1 font-bold pb-2 mb-20;
+  @apply border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
 }
 
 .gc-h2 {
   @apply font-bold text-h2 pb-6;
 }
 
-.gc-form-group {
-  @apply mb-0;
-}
-
 .gc-item-row {
   @apply my-5 p-10 bg-gray-100;
 
   h2 {
-    @apply text-h2 mb-10;
+    @apply text-h2 mb-14;
   }
 }
 
-.gc-form-group .gc-input-radio:last-of-type,
-.gc-form-group .gc-input-checkbox:last-of-type {
-  @apply mb-12;
+.gc-form-group {
+  @apply mb-0;
+
+  .gc-input-radio:last-of-type,
+  .gc-input-checkbox:last-of-type {
+    @apply mb-14 pb-0;
+  }
 }
 
 .gc-h3 {
@@ -49,7 +49,7 @@
 }
 
 .gc-legend {
-  @apply text-h2 mb-12 font-bold;
+  @apply text-h2 mb-14 font-bold;
 }
 
 .gc-button {
@@ -61,14 +61,14 @@
 }
 
 .gc-button--secondary {
-  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-10;
+  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14;
   &:hover {
     @apply bg-gray-300;
   }
 }
 
 .gc-label {
-  @apply block mb-2 text-base font-bold w-4/5;
+  @apply block mb-2 text-base font-bold w-full;
 }
 
 .gc-plain-text {
@@ -76,19 +76,19 @@
 }
 
 .gc-textarea {
-  @apply border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12 w-4/6 h-40;
+  @apply border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-14 w-4/6 h-40;
 }
 
 .gc-input-text {
-  @apply border-solid border-2 py-3 px-2 mt-2 mb-12 border-gray-900 w-3/6;
+  @apply border-solid border-2 py-3 px-2 mt-2 mb-14 border-gray-900 w-3/6;
 }
 
 .gc-file-input {
-  @apply mt-2 mb-12;
+  @apply mt-2 mb-14;
 }
 
 .gc-dropdown {
-  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12;
+  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-14;
 }
 
 .gc-input-checkbox {
@@ -112,7 +112,7 @@
 }
 
 .gc-radio__input {
-  @apply border-2 border-gray-900 w-10 h-10 mr-4;
+  @apply border-2 border-gray-900 w-10 h-10 mr-6 align-middle;
 }
 
 .validation-message {
