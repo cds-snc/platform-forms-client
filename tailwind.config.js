@@ -85,7 +85,7 @@ module.exports = {
       },
     },
     boxShadow: {
-      sm: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      default: "0 1px 3px rgba(0, 0, 0, 0.05);",
       result: "0px 0px 12px -2px rgba(0,0,0,0.4)",
       none:
         "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
@@ -94,6 +94,7 @@ module.exports = {
       default: "1px",
       0: "0",
       1: "1px",
+      1.5: "1.5px",
       2: "2px",
       2.5: "2.5px",
       3: "3px",
