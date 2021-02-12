@@ -96,12 +96,29 @@
 }
 
 .gc-input-checkbox {
-  .gc-input-checkbox__input {
-    @apply text-gray-500 h-10 w-10 border-2 border-black-form mr-6 align-middle;
-  }
+  @apply block;
 
-  .gc-input-checkbox:checked {
-    @apply text-gray-500 bg-blue-800;
+  .gc-input-checkbox__input {
+    @apply absolute opacity-0;
+
+    & + label {
+      @apply relative cursor-pointer p-0;
+    }
+
+    // Box.
+    & + label:before {
+      content: "";
+      @apply mr-4 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
+    }
+
+    // Checkmark. Could be replaced with an image
+    &:checked + label:after {
+      content: "";
+      left: 8px;
+      top: 9px;
+      background-image: url("/img/checkmark.svg");
+      @apply absolute w-6 h-6;
+    }
   }
 }
 
@@ -112,7 +129,7 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply block font-normal text-base;
+  @apply block font-normal text-base flex items-center;
 }
 
 .gc-radio__input {
