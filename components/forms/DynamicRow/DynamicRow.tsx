@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "../../../lib/formBuilder";
-import { FormElement, allFormElements, callback } from "../../../lib/types";
+import { FormElement } from "../../../lib/types";
 import { Button } from "../index";
 
 interface DynamicGroupProps {
