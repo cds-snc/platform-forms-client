@@ -52,9 +52,7 @@ function getLocaleChoices(
 
 // This function renders the form elements with passed in properties.
 function _buildForm(element: FormElement, lang: string): ReactElement {
-  const id = `id-${element.id}`;
-  const name = id;
-  const key = element.id;
+  const id = element.id;
 
   const choices =
     element.properties && element.properties.choices
@@ -91,14 +89,14 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "textField":
       return (
-        <Fragment key={key}>
+        <Fragment>
           {labelComponent}
           <Description>{description}</Description>
           <TextInput
             type="text"
             key={`key-${id}`}
             id={id}
-            name={name}
+            name={id}
             required={element.properties.required}
             aria-describedby={description ? `desc-${id}` : undefined}
           />
@@ -106,13 +104,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "textArea":
       return (
-        <Fragment key={key}>
+        <Fragment>
           {labelComponent}
           <Description>{description}</Description>
           <TextArea
             key={`key-${id}`}
             id={id}
-            name={name}
+            name={id}
             required={element.properties.required}
             aria-describedby={description ? `desc-${id}` : undefined}
           />
@@ -133,8 +131,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
       return (
         <FormGroup
-          key={`formGroup-${id}`}
-          name={name}
+          name={id}
           aria-describedby={description ? `desc-${id}` : undefined}
         >
           {labelComponent}
@@ -149,7 +146,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Radio
             key={`key-${id}-${index}`}
             id={`${id}-${index}`}
-            name={name}
+            name={`${id}-${index}`}
             label={choice}
             required={element.properties.required}
           />
@@ -159,7 +156,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup
           key={`formGroup-${id}`}
-          name={name}
+          name={id}
           aria-describedby={description ? `desc-${id}` : undefined}
         >
           {labelComponent}
@@ -170,12 +167,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     }
     case "dropdown":
       return (
-        <Fragment key={key}>
+        <Fragment>
           {labelComponent}
           <Description>{description}</Description>
           <Dropdown
             id={id}
-            name={name}
+            name={id}
             aria-describedby={description ? `desc-${id}` : undefined}
             choices={choices}
           />
@@ -183,14 +180,14 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "plainText":
       return (
-        <div className="gc-plain-text" key={key}>
+        <div className="gc-plain-text">
           {labelText ? <h2 className="gc-h2">{labelText}</h2> : null}
           {descriptiveText}
         </div>
       );
     case "heading":
       return (
-        <Fragment key={key}>
+        <Fragment>
           {labelText ? (
             <Heading
               isSectional={element.properties.isSectional ? true : false}
@@ -203,12 +200,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "fileInput":
       return (
-        <Fragment key={key}>
+        <Fragment>
           {labelComponent}
           <Description>{description}</Description>
           <FileInput
             id={id}
-            name={name}
+            name={id}
             aria-describedby={description ? `desc-${id}` : undefined}
             fileType={element.properties.fileType}
           />
@@ -217,8 +214,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     case "dynamicRow": {
       return (
         <DynamicGroup
-          key={`dynamicGroup-${id}`}
-          name={name}
+          name={id}
           legend={labelText}
           rowElements={subElements}
           lang={lang}
@@ -249,7 +245,13 @@ const _getRenderedForm = (
       (element: FormElement) => element.id === item
     );
     if (element) {
-      return buildForm(element, language);
+      return (
+        <GenerateElement
+          key={element.id}
+          element={element}
+          language={language}
+        />
+      );
     } else {
       logMessage.error(
         `Failed component ID look up ${item} on form ID ${formMetadata.id}`
@@ -321,6 +323,15 @@ const _getFormInitialValues = (
   return initialValues;
 };
 
-export const buildForm = logger(_buildForm);
+type GenerateElementProps = {
+  element: FormElement;
+  language: string;
+};
+export const GenerateElement = (props: GenerateElementProps) => {
+  const { element, language } = props;
+  const generatedElement = _buildForm(element, language);
+  return <>{generatedElement}</>;
+};
+
 export const getFormInitialValues = logger(_getFormInitialValues);
 export const getRenderedForm = logger(_getRenderedForm);
