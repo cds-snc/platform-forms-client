@@ -94,7 +94,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Description>{description}</Description>
           <TextInput
             type="text"
-            key={`key-${id}`}
             id={id}
             name={id}
             required={element.properties.required}
@@ -108,7 +107,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           <Description>{description}</Description>
           <TextArea
-            key={`key-${id}`}
             id={id}
             name={id}
             required={element.properties.required}
@@ -120,9 +118,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const checkboxItems = choices.map((choice, index) => {
         return (
           <Checkbox
-            key={`key-${id}-${index}`}
-            id={`${id}-${index}`}
-            name={`${id}-${index}`}
+            key={`${id}.${index}`}
+            id={`${id}.${index}`}
+            name={`${id}.${index}`}
             label={choice}
             required={element.properties.required}
           />
@@ -144,9 +142,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const radioButtons = choices.map((choice, index) => {
         return (
           <Radio
-            key={`key-${id}-${index}`}
-            id={`${id}-${index}`}
-            name={`${id}-${index}`}
+            key={`${id}.${index}`}
+            id={`${id}.${index}`}
+            name={`${id}.${index}`}
             label={choice}
             required={element.properties.required}
           />
@@ -155,7 +153,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
       return (
         <FormGroup
-          key={`formGroup-${id}`}
           name={id}
           aria-describedby={description ? `desc-${id}` : undefined}
         >
@@ -268,15 +265,15 @@ const _getRenderedForm = (
 
 const _getElementInitialValue = (
   element: FormElement,
-  language: string
+  language: string,
+  parentID: string
 ): Record<string, unknown> | Record<string, unknown>[] | string => {
   const nestedObj: Record<string, unknown> = {};
-  const currentId = `id-${element.id}`;
 
   // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
   if (element.properties.choices) {
     element.properties.choices.map((choice, index) => {
-      const choiceId = `${currentId}-${index}`;
+      const choiceId = `${parentID}-${index}`;
       //initialValues[choiceId] = choice[language];
       nestedObj[choiceId] = choice[language];
     });
@@ -286,10 +283,14 @@ const _getElementInitialValue = (
     // For Dynamic Row reiterate through and create Initial Values to an Array of Objects
     const dynamicRow: Record<string, unknown> = {};
     element.properties.subElements.map((subElement, index) => {
-      subElement.id = `${element.id}-${index}`;
-      dynamicRow[subElement.id] = _getElementInitialValue(subElement, language);
+      const subElementID = `${parentID}.0.${index}`;
+      dynamicRow[subElementID] = _getElementInitialValue(
+        subElement,
+        language,
+        subElementID
+      );
     });
-    return dynamicRow;
+    return [dynamicRow];
   } else {
     // Regular inputs (not nested) like text, textarea might have a placeholder value
     return (
@@ -315,9 +316,11 @@ const _getFormInitialValues = (
   const initialValues: Record<string, unknown> = {};
 
   formMetadata.elements.map((element: FormElement) => {
-    const currentId = `id-${element.id}`;
-
-    initialValues[currentId] = _getElementInitialValue(element, language);
+    initialValues[element.id] = _getElementInitialValue(
+      element,
+      language,
+      element.id
+    );
   });
 
   return initialValues;
@@ -327,7 +330,9 @@ type GenerateElementProps = {
   element: FormElement;
   language: string;
 };
-export const GenerateElement = (props: GenerateElementProps) => {
+export const GenerateElement = (
+  props: GenerateElementProps
+): React.ReactElement => {
   const { element, language } = props;
   const generatedElement = _buildForm(element, language);
   return <>{generatedElement}</>;
