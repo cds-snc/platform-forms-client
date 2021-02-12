@@ -273,9 +273,8 @@ const _getElementInitialValue = (
   // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
   if (element.properties.choices) {
     element.properties.choices.map((choice, index) => {
-      const choiceId = `${parentID}-${index}`;
       //initialValues[choiceId] = choice[language];
-      nestedObj[choiceId] = choice[language];
+      nestedObj[index] = choice[language];
     });
 
     return nestedObj;
@@ -283,7 +282,7 @@ const _getElementInitialValue = (
     // For Dynamic Row reiterate through and create Initial Values to an Array of Objects
     const dynamicRow: Record<string, unknown> = {};
     element.properties.subElements.map((subElement, index) => {
-      const subElementID = `${parentID}.0.${index}`;
+      const subElementID = `${index}`;
       dynamicRow[subElementID] = _getElementInitialValue(
         subElement,
         language,
