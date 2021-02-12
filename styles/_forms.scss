@@ -100,7 +100,6 @@
 
   .gc-input-checkbox__input {
     @apply absolute opacity-0;
-
     & + label {
       @apply relative cursor-pointer p-0;
     }
@@ -129,7 +128,12 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply block font-normal text-base flex items-center;
+  @apply block font-normal text-base flex;
+
+  span {
+    width: 50rem;
+    @apply mt-2;
+  }
 }
 
 .gc-radio__input {

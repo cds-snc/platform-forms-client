@@ -32,7 +32,7 @@ export const Checkbox = (
         {...inputProps}
       />
       <label className="gc-checkbox-label" htmlFor={id}>
-        {label}
+        <span>{label}</span>
       </label>
     </div>
   );
