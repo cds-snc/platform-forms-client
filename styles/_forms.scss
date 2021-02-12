@@ -105,7 +105,7 @@
     }
 
     &:focus + label:before {
-      outline: 3px solid #FFBF47;
+      outline: 3px solid #ffbf47;
     }
 
     // Box.
@@ -141,7 +141,32 @@
 }
 
 .gc-radio__input {
-  @apply border-4 border-black-form w-10 h-10 mr-6 align-middle;
+  // @apply border-4 border-black-form w-10 h-10 mr-6 align-middle;
+  opacity: 0;
+  position: absolute;
+
+  & + label {
+    @apply relative cursor-pointer p-0;
+  }
+
+  &:focus + label:before {
+    outline: 3px solid #ffbf47;
+  }
+
+  // Circle.
+  & + label:before {
+    content: "";
+    @apply mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
+  }
+
+  // Radio. Could be replaced with an image
+  &:checked + label:after {
+    content: "";
+    left: 10px;
+    top: 10px;
+    background-image: url("/img/black-circle.svg");
+    @apply absolute w-5 h-5;
+  }
 }
 
 .validation-message {

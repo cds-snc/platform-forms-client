@@ -32,7 +32,7 @@ export const Radio = (
         {...inputProps}
       />
       <label className="gc-radio-label" htmlFor={id}>
-        {label}
+        <span>{label}</span>
       </label>
     </div>
   );
