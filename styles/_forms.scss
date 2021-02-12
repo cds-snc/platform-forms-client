@@ -104,10 +104,14 @@
       @apply relative cursor-pointer p-0;
     }
 
+    &:focus + label:before {
+      outline: 3px solid #FFBF47;
+    }
+
     // Box.
     & + label:before {
       content: "";
-      @apply mr-4 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
+      @apply mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
     }
 
     // Checkmark. Could be replaced with an image
