@@ -35,7 +35,7 @@ const DynamicRow = (props: DynamicRowProps) => {
 export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const { className, legend, error, rowElements, lang } = props;
   const [field, meta, helpers] = useField(props);
-  const initialValues = field.value;
+  const initialValues = JSON.parse(JSON.stringify(field.value[0]));
   const [rows, setRows] = useState([rowElements]);
 
   const addRow = async () => {
