@@ -2,6 +2,14 @@ const { colors } = require("tailwindcss/defaultTheme");
 
 module.exports = {
   theme: {
+    extend: {
+      width: {
+        "cr-label-desktop": "50rem",
+        "cr-label-5s": "14rem",
+        "flag-desktop": "22.5rem",
+        "flag-5s": "16.5rem",
+      },
+    },
     container: {
       center: true,
     },
@@ -13,6 +21,7 @@ module.exports = {
        These typography rules have been pulled from the design system
     */
     fontSize: {
+      badge: ["14px", "14px"],
       sm: ["16px", "22px"],
       base: ["20px", "26px"],
       p: ["20px", "28px"],
@@ -21,15 +30,14 @@ module.exports = {
       h1: ["34px", "44px"],
     },
     maxWidth: {
-    prose: "75ch",
+      prose: "75ch",
     },
     screens: {
-      xxs: "280px",
-      xs: "325px",
-      sm: "450px",
-      md: "550px",
-      lg: "768px",
-      xl: "1024px",
+      xl: { max: "1024px" },
+      lg: { max: "768px" },
+      md: { max: "550px" },
+      sm: { max: "450px" },
+      xs: { max: "320px" },
     },
     colors: {
       red: {
