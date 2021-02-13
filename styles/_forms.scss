@@ -61,7 +61,7 @@
 }
 
 .gc-button {
-  @apply xs:w-full cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
+  @apply sm:w-full cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
 
   &:hover {
     @apply bg-green-darker;
@@ -88,7 +88,7 @@
 }
 
 .gc-input-text {
-  @apply xs:w-full border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-1/2;
+  @apply sm:w-full border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-1/2;
 }
 
 .gc-file-input {
@@ -135,8 +135,7 @@
   @apply block font-normal text-base flex;
 
   span {
-    @apply xs:w-cr-label-5s w-cr-label-desktop;
-    @apply mt-2;
+    @apply xs:w-cr-label-5s sm:w-cr-label-6s w-cr-label-desktop mt-2;
   }
 }
 

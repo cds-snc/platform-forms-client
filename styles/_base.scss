@@ -3,7 +3,7 @@
 }
 
 main {
-  @apply xs:mx-4 mx-64;
+  @apply xs:mx-4 sm:mx-8 mx-64;
 }
 
 .gc-homepage {
@@ -42,20 +42,20 @@ main {
   }
 
   .gc-footer-container {
-    @apply xs:px-4 xs:flex-col xs:items-start flex py-10 px-64 flex-row items-center justify-between;
+    @apply xs:px-4 sm:px-8 sm:flex-col sm:items-start flex py-10 px-64 flex-row items-center justify-between;
 
     ul {
-      @apply xs:flex-col p-0 mb-0 flex text-base list-none;
+      @apply sm:flex-col p-0 mb-0 flex text-base list-none;
 
       li {
-        @apply xs:pr-0 xs:pb-4 pr-8 pb-0;
+        @apply sm:pr-0 sm:pb-4 pr-8 pb-0;
 
         a {
           @apply no-underline hover:underline text-blue-dark;
         }
       }
       li:last-of-type {
-        @apply xs:pb-20 pr-0 pb-0;
+        @apply xs:pb-20 sm:pb-20 pr-0 pb-0;
       }
     }
   }

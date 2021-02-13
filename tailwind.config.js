@@ -6,8 +6,10 @@ module.exports = {
       width: {
         "cr-label-desktop": "50rem",
         "cr-label-5s": "14rem",
+        "cr-label-6s": "15rem",
         "flag-desktop": "22.5rem",
         "flag-5s": "16.5rem",
+        "flag-6s": "18rem",
       },
     },
     container: {

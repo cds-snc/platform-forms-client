@@ -1,8 +1,8 @@
 // PHASE BANNER STYLES
 
 .gc-phase-banner {
-  @apply bg-gray-background flex items-center py-6 px-64 xs:px-4;
-  
+  @apply xs:px-4 sm:px-8 bg-gray-background flex items-center py-6 px-64;
+
   .banner-container {
     @apply flex;
   }
@@ -13,7 +13,7 @@
   }
 
   .phase-text {
-    @apply text-sm block relative top-2;
+    @apply sm:pb-2 pb-0 text-sm block relative top-2;
   }
 
   span span {
@@ -24,7 +24,7 @@
 // FIP STYLES
 
 .gc-fip {
-  @apply flex flex-row justify-between items-center my-20 px-64 xs:px-4;
+  @apply xs:px-4 sm:px-8 sm:flex-col-reverse sm:items-start flex flex-row justify-between items-center my-20 px-64;
 }
 
 // LANGUAGE TOGGLE
@@ -51,6 +51,7 @@ header {
   }
 
   .canada-flag {
+    @apply xs:w-flag-5s sm:w-flag-6s w-flag-desktop mt-10;
   }
 }
 
