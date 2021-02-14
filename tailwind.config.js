@@ -49,7 +49,7 @@ module.exports = {
       prose: "75ch",
     },
     screens: {
-      xxl: {max: "1240px"},
+      xxl: { max: "1240px" },
       xl: { max: "1025px" },
       lg: { max: "769px" },
       md: { max: "550px" },

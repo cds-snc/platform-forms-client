@@ -38,6 +38,10 @@
   }
 }
 
+.gc-form {
+  @apply max-w-prose;
+}
+
 .gc-form-group {
   @apply mb-0;
 

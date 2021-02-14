@@ -27,10 +27,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
   const { id, name, className, inputRef, choices, ...inputProps } = props;
 
-  const classes = classnames(
-    "gc-dropdown",
-    className
-  );
+  const classes = classnames("gc-dropdown", className);
 
   let options = null;
   if (choices && choices.length) {
