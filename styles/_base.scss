@@ -3,27 +3,27 @@
 }
 
 main {
-  @apply xs:mx-4 sm:mx-8 mx-64;
+  @apply xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64;
 }
 
 .gc-homepage {
-  @apply sm:text-small_base text-base;
+  @apply md:text-small_base text-base;
 
   div {
-    @apply sm:mb-12 mb-16 max-w-prose;
+    @apply md:mb-12 mb-16 max-w-prose;
   }
 
   div:last-of-type {
-    @apply sm:mb-14 mb-20;
+    @apply md:mb-14 mb-20;
   }
 
   h2 {
-    @apply sm:text-small_h2 text-h2 mb-5;
+    @apply md:text-small_h2 text-h2 mb-5;
   }
 }
 
 .gc-ul {
-  @apply sm:text-small_base list-disc text-base;
+  @apply md:text-small_base list-disc text-base;
 }
 
 .gc-ul li {
@@ -37,27 +37,27 @@ main {
 // FOOTER STYLES
 
 .gc-footer {
-  @apply sm:mt-10 border-0 bg-gray-100 mt-16;
+  @apply lg:mt-10 border-0 bg-gray-100 mt-16;
 
   div img {
-    @apply sm:h-8 h-10;
+    @apply lg:h-8 h-10;
   }
 
   .gc-footer-container {
-    @apply xs:px-4 sm:px-8 sm:flex-col sm:items-start flex py-10 px-64 flex-row items-center justify-between;
+    @apply xs:px-4 md:px-8 lg:flex-col lg:items-start lg:px-16 xl:px-32 xxl:px-48 flex py-10 px-64 flex-row items-center justify-between;
 
     ul {
-      @apply sm:flex-col sm:text-small_base p-0 mb-0 flex text-base list-none;
+      @apply lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none;
 
       li {
-        @apply sm:pr-0 sm:pb-4 pr-8 pb-0;
+        @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
 
         a {
           @apply no-underline hover:underline text-blue-dark;
         }
       }
       li:last-of-type {
-        @apply xs:pb-20 sm:pb-20 pr-0 pb-0;
+        @apply lg:pb-20 pr-0 pb-0;
       }
     }
   }

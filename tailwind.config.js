@@ -5,6 +5,9 @@ module.exports = {
     extend: {
       width: {
         "cr-label-desktop": "50rem",
+        "cr-label-1025": "30rem",
+        "cr-label-ipad": "35rem",
+        "cr-label-duo": "25rem",
         "cr-label-6s": "15rem",
         "cr-label-5s": "14rem",
         "cr-label-fold": "11.5rem",
@@ -46,8 +49,9 @@ module.exports = {
       prose: "75ch",
     },
     screens: {
-      xl: { max: "1024px" },
-      lg: { max: "768px" },
+      xxl: {max: "1240px"},
+      xl: { max: "1025px" },
+      lg: { max: "769px" },
       md: { max: "550px" },
       sm: { max: "450px" },
       xs: { max: "320px" },
