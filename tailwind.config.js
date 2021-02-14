@@ -5,11 +5,16 @@ module.exports = {
     extend: {
       width: {
         "cr-label-desktop": "50rem",
-        "cr-label-5s": "14rem",
         "cr-label-6s": "15rem",
+        "cr-label-5s": "14rem",
+        "cr-label-fold": "11.5rem",
         "flag-desktop": "22.5rem",
-        "flag-5s": "16.5rem",
         "flag-6s": "18rem",
+        "flag-5s": "16.5rem",
+        "flag-fold": "15rem",
+      },
+      margin: {
+        "10px": "10px",
       },
     },
     container: {
@@ -25,11 +30,17 @@ module.exports = {
     fontSize: {
       badge: ["14px", "14px"],
       sm: ["16px", "22px"],
-      base: ["20px", "26px"],
+      base: ["20px", "28px"],
       p: ["20px", "28px"],
       h3: ["24px", "26px"],
       h2: ["30px", "38px"],
       h1: ["34px", "44px"],
+      small_sm: ["12px", "14px"],
+      small_base: ["16px", "22px"],
+      small_p: ["16px", "22px"],
+      small_h3: ["18px", "22px"],
+      small_h2: ["20px", "28px"],
+      small_h1: ["24px", "28px"],
     },
     maxWidth: {
       prose: "75ch",
@@ -40,6 +51,7 @@ module.exports = {
       md: { max: "550px" },
       sm: { max: "450px" },
       xs: { max: "320px" },
+      xxs: { max: "290px" },
     },
     colors: {
       red: {
