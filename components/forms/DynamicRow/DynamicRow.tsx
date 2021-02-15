@@ -43,8 +43,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   }, []);
 
   const addRow = async () => {
-    console.log(`Initial values: ${JSON.stringify(initialValue)}`);
-
     field.value.push(initialValue);
     helpers.setValue(field.value);
     await setRows([...rows, rowElements]);
