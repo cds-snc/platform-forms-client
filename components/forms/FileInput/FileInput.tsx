@@ -42,7 +42,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               setFile(fileObject);
             };
           }
-
         }}
       />
     </>
