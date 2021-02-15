@@ -59,3 +59,7 @@ export interface PropertyChoices {
   fr: string;
   [key: string]: string;
 }
+
+export interface Responses {
+  [key: string]: string | [];
+}
