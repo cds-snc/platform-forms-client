@@ -265,8 +265,7 @@ const _getRenderedForm = (
 
 const _getElementInitialValue = (
   element: FormElement,
-  language: string,
-  parentID: string
+  language: string
 ): Record<string, unknown> | Record<string, unknown>[] | string => {
   const nestedObj: Record<string, unknown> = {};
 
@@ -283,11 +282,7 @@ const _getElementInitialValue = (
     const dynamicRow: Record<string, unknown> = {};
     element.properties.subElements.map((subElement, index) => {
       const subElementID = `${index}`;
-      dynamicRow[subElementID] = _getElementInitialValue(
-        subElement,
-        language,
-        subElementID
-      );
+      dynamicRow[subElementID] = _getElementInitialValue(subElement, language);
     });
     return [dynamicRow];
   } else {
@@ -315,11 +310,7 @@ const _getFormInitialValues = (
   const initialValues: Record<string, unknown> = {};
 
   formMetadata.elements.map((element: FormElement) => {
-    initialValues[element.id] = _getElementInitialValue(
-      element,
-      language,
-      element.id
-    );
+    initialValues[element.id] = _getElementInitialValue(element, language);
   });
 
   return initialValues;
