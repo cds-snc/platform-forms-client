@@ -9,7 +9,7 @@ const log = (req, res) => {
     res.status(500).send("Error ocurred when logging on server");
     return;
   }
-  res.status(202);
+  return res.status(202).send("Log received");
 };
 
 export default log;

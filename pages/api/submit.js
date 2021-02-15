@@ -43,7 +43,7 @@ const submit = (req, res) => {
           throw err;
         });
 
-      res.statusCode = 202;
+      res.status(202).json({ received: true });
       return;
     }
   } else if (sendToNotify === "development" && !testing) {
@@ -57,10 +57,10 @@ const submit = (req, res) => {
         logMessage.error(err);
         throw err;
       });
-    res.status(201).json({ subject: messageSubject, markdown: emailBody });
+    res.status(201).json({ received: true });
   } else {
     logMessage.info("Not Sending Email - Test mode");
-    res.status(200).json({ subject: messageSubject, markdown: emailBody });
+    res.status(200).json({ received: true });
   }
 };
 

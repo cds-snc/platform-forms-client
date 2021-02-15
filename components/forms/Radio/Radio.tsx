@@ -6,7 +6,7 @@ interface RadioProps {
   id: string;
   name: string;
   className?: string;
-  label: React.ReactNode;
+  label: string;
 }
 
 export const Radio = (
@@ -29,7 +29,7 @@ export const Radio = (
         id={id}
         type="radio"
         {...field}
-        value={field.value ? field.value[id] : ""}
+        value={label} // This needs to be static... the actual label...
       />
       <label className="gc-radio-label" htmlFor={id}>
         {label}

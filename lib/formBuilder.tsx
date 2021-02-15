@@ -120,7 +120,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Checkbox
             key={`${id}.${index}`}
             id={`${id}.${index}`}
-            name={`${id}.${index}`}
+            name={`${id}`}
             label={choice}
             required={element.properties.required}
           />
@@ -144,7 +144,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Radio
             key={`${id}.${index}`}
             id={`${id}.${index}`}
-            name={`${id}.${index}`}
+            name={`${id}`}
             label={choice}
             required={element.properties.required}
           />

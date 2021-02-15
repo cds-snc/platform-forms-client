@@ -23,7 +23,7 @@ export default logger((formResponse: Response): string => {
   const mdBody = formElements.map((element) => {
     // In future add validation to remove page elements
     const qTitle = element.properties.titleEn;
-    const currentId = `id-${element.id}`;
+    const currentId = `${element.id}`;
 
     if (Array.isArray(responses[currentId])) {
       if (responses[currentId].length) {

@@ -92,18 +92,24 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
         body: JSON.stringify(formResponseObject),
       })
         .then((response) => response.json())
-        .then(() => {
-          const referrerUrl =
-            formMetadata && formMetadata.endPage
-              ? {
-                  referrerUrl:
-                    formMetadata.endPage[getProperty("referrerUrl", language)],
-                }
-              : null;
-          router.push({
-            pathname: `${language}/confirmation`,
-            query: referrerUrl,
-          });
+        .then((serverResponse) => {
+          if (serverResponse.received === true) {
+            const referrerUrl =
+              formMetadata && formMetadata.endPage
+                ? {
+                    referrerUrl:
+                      formMetadata.endPage[
+                        getProperty("referrerUrl", language)
+                      ],
+                  }
+                : null;
+            router.push({
+              pathname: `${language}/confirmation`,
+              query: referrerUrl,
+            });
+          } else {
+            throw Error("Server submit API returned an error");
+          }
         })
         .catch((error) => {
           logMessage.error(error);
