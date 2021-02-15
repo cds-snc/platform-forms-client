@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "../../../lib/formBuilder";
@@ -35,11 +35,17 @@ const DynamicRow = (props: DynamicRowProps) => {
 export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const { className, legend, error, rowElements, lang } = props;
   const [field, meta, helpers] = useField(props);
-  const initialValues = JSON.parse(JSON.stringify(field.value[0]));
   const [rows, setRows] = useState([rowElements]);
+  const [initialValue, setInitialValues] = useState({});
+
+  useEffect(() => {
+    setInitialValues(field.value[0]);
+  }, []);
 
   const addRow = async () => {
-    field.value.push(initialValues);
+    console.log(`Initial values: ${JSON.stringify(initialValue)}`);
+
+    field.value.push(initialValue);
     helpers.setValue(field.value);
     await setRows([...rows, rowElements]);
   };
