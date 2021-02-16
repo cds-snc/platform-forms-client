@@ -15,10 +15,10 @@
     "cypress": "cypress open",
     "cypress:headless": "cypress run --browser chrome --headless",
     "build-storybook": "build-storybook -s public --no-dll",
+    "deploy-storybook": "storybook-to-ghpages",
     "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
-    "@storybook/addon-a11y": "^6.1.15",
     "formik": "^2.2.6",
     "i18next-hmr": "^1.6.3",
     "json2md": "^1.9.2",
@@ -36,6 +36,8 @@
     "@storybook/addon-essentials": "^6.1.15",
     "@storybook/addon-links": "^6.1.15",
     "@storybook/react": "^6.1.15",
+    "@storybook/storybook-deployer": "^2.8.7",
+    "@storybook/addon-a11y": "^6.1.15",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@types/classnames": "^2.2.11",
