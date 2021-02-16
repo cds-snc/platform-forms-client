@@ -1,19 +1,19 @@
 // PHASE BANNER STYLES
 
 .gc-phase-banner {
-  @apply bg-gray-background flex items-center py-6 px-40;
+  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 bg-gray-background flex items-center py-6 px-64;
 
-  span {
-    @apply text-sm;
+  .banner-container {
+    @apply flex;
   }
 
-  span:first-of-type {
-    @apply border-2 border-black-default py-0 px-0 mr-4;
-    padding: 2px 8px !important;
+  .phase-badge {
+    @apply md:text-small_sm text-badge bg-black-default text-white-default font-bold py-0 px-0 mr-6;
+    padding: 4px 10px !important;
   }
 
-  span:last-of-type {
-    @apply mt-3;
+  .phase-text {
+    @apply md:pb-2 md:text-small_sm md:top-3 md:mb-2 mb-0 top-2 pb-2 text-sm pb-0 block relative;
   }
 
   span span {
@@ -24,16 +24,16 @@
 // FIP STYLES
 
 .gc-fip {
-  @apply flex flex-row justify-between items-center mx-40 my-20;
+  @apply xs:px-4 md:px-8 lg:px-16 lg:flex-col-reverse lg:items-start lg:my-10 xl:px-32 xxl:px-48 flex flex-row justify-between items-center my-20 px-64;
 }
 
 // LANGUAGE TOGGLE
 
 .gc-language-toggle {
-  @apply text-right text-sm;
+  @apply md:text-small_base text-base text-right;
 
   button {
-    @apply shadow-none bg-none text-blue-900 underline border-0 text-base;
+    @apply shadow-none bg-none text-blue-900 underline border-0;
   }
 }
 
@@ -51,9 +51,7 @@ header {
   }
 
   .canada-flag {
-    height: auto;
-    max-height: 40px;
-    width: 360px;
+    @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
   }
 }
 

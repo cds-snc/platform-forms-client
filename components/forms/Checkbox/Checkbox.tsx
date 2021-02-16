@@ -23,18 +23,16 @@ export const Checkbox = (
 
   return (
     <div data-testid="checkbox" className={classes}>
-      <div>
-        <input
-          className="gc-input-checkbox__input"
-          id={id}
-          type="checkbox"
-          name={name}
-          ref={inputRef}
-          {...inputProps}
-        />
-      </div>
+      <input
+        className="gc-input-checkbox__input"
+        id={id}
+        type="checkbox"
+        name={name}
+        ref={inputRef}
+        {...inputProps}
+      />
       <label className="gc-checkbox-label" htmlFor={id}>
-        {label}
+        <span className="checkbox-label-text">{label}</span>
       </label>
     </div>
   );

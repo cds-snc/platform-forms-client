@@ -53,7 +53,7 @@ const Base = ({ children }) => {
       </Head>
       <SkipLink />
       <div className="outer-container">
-        <header className="mb-20">
+        <header>
           <PhaseBanner />
           <Fip />
         </header>
