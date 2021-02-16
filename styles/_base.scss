@@ -3,25 +3,27 @@
 }
 
 main {
-  @apply mx-40;
+  @apply xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64;
 }
 
 .gc-homepage {
+  @apply md:text-small_base text-base;
+
   div {
-    @apply mb-16;
+    @apply md:mb-12 mb-16 max-w-prose;
   }
 
   div:last-of-type {
-    @apply mb-20;
+    @apply md:mb-14 mb-20;
   }
 
   h2 {
-    @apply text-h2 mb-5;
+    @apply md:text-small_h2 text-h2 mb-5;
   }
 }
 
 .gc-ul {
-  @apply list-disc text-base;
+  @apply md:text-small_base list-disc text-base;
 }
 
 .gc-ul li {
@@ -35,27 +37,27 @@ main {
 // FOOTER STYLES
 
 .gc-footer {
-  @apply border-0 bg-gray-100 mt-20;
+  @apply lg:mt-10 border-0 bg-gray-100 mt-16;
 
   div img {
-    @apply h-10;
+    @apply lg:h-8 h-10;
   }
 
   .gc-footer-container {
-    @apply flex py-10 px-40 mt-10 flex-row items-center justify-between;
+    @apply xs:px-4 md:px-8 lg:flex-col lg:items-start lg:px-16 xl:px-32 xxl:px-48 flex py-10 px-64 flex-row items-center justify-between;
 
     ul {
-      @apply p-0 mb-0 flex text-base list-none;
+      @apply lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none;
 
       li {
-        @apply pr-8;
+        @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
 
         a {
           @apply no-underline hover:underline text-blue-dark;
         }
       }
       li:last-of-type {
-        @apply pr-0;
+        @apply lg:pb-20 pr-0 pb-0;
       }
     }
   }
@@ -86,7 +88,8 @@ a:visited {
 a[href],
 area[href],
 input,
-select textarea,
+select,
+textarea,
 button,
 iframe,
 [tabindex],

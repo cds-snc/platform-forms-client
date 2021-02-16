@@ -11,13 +11,13 @@ export default {
 };
 
 export const defaultRadio = (): React.ReactElement => (
-  <Formik initialValues={{ "input-radio": "" }}>
+  <Formik onSubmit={()=>{}} initialValues={{ "input-radio": "" }}>
     <Radio id="input-radio" name="input-radio" label="My Radio Button" />
   </Formik>
 );
 
 export const selected = (): React.ReactElement => (
-  <Formik initialValues={{ "input-radio": "" }}>
+  <Formik onSubmit={()=>{}} initialValues={{ "input-radio": "" }}>
     <Radio
       id="input-radio"
       name="input-radio"
@@ -28,7 +28,7 @@ export const selected = (): React.ReactElement => (
 );
 
 export const disabled = (): React.ReactElement => (
-  <Formik initialValues={{ "input-radio": "" }}>
+  <Formik onSubmit={()=>{}} initialValues={{ "input-radio": "" }}>
     <Radio
       id="input-radio"
       name="input-radio"

@@ -11,7 +11,7 @@ export default {
 };
 
 export const defaultTextInput = (): React.ReactElement => (
-  <Formik initialValues={{ "input-type-text": "" }}>
+  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
     <TextInput id="input-type-text" name="input-type-text" type="text" />
   </Formik>
 );

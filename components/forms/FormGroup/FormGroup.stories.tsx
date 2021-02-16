@@ -11,7 +11,7 @@ export default {
 };
 
 export const textInputFormGroup = (): React.ReactElement => (
-  <Formik>
+  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
     <FormGroup name="formGroup">
       <Label htmlFor="input-type-text">Text input label</Label>
       <TextInput id="input-type-text" name="input-type-text" type="text" />
@@ -20,7 +20,7 @@ export const textInputFormGroup = (): React.ReactElement => (
 );
 
 export const textInputErrorFormGroup = (): React.ReactElement => (
-  <Formik>
+  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
     <FormGroup name="formGroupError" error>
       <Label htmlFor="input-type-text" error>
         Text input label
@@ -30,7 +30,6 @@ export const textInputErrorFormGroup = (): React.ReactElement => (
         id="input-type-text"
         name="input-type-text"
         type="text"
-        validationStatus="error"
       />
     </FormGroup>
   </Formik>

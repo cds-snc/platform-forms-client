@@ -11,7 +11,7 @@ export default {
 };
 
 export const defaultCheckbox = (): React.ReactElement => (
-  <Formik initialValues={{ checkbox: "" }}>
+  <Formik onSubmit={()=>{}} initialValues={{ checkbox: "" }}>
     <Checkbox id="checkbox" name="checkbox" label="My Checkbox" />
   </Formik>
 );

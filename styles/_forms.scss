@@ -1,43 +1,51 @@
 .gc-fieldset ul {
-  @apply mb-12;
+  @apply mb-14;
 }
 
 .gc-alert,
 .gc-error-message {
-  @apply text-base py-0 text-red-700 font-bold w-4/5;
+  @apply md:text-small_base text-base py-0 text-red-700 font-bold w-full;
+}
+
+.gc-dropdown {
+  @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-dropdown bg-center-right-15px;
 }
 
 .gc-p {
-  @apply text-p mb-10 w-full;
+  @apply md:text-small_p text-p mb-10 w-full;
 }
 
 .gc-description {
-  @apply text-gray-text mb-2 text-sm w-4/5;
+  @apply md:text-small_sm text-gray-text mb-2 text-sm w-full;
 }
 
 .gc-h1 {
-  @apply border-b-2 border-red-default text-h1 font-bold pb-2 mb-20;
+  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
 }
 
 .gc-h2 {
-  @apply font-bold text-h2 pb-6;
+  @apply md:text-small_h2 font-bold text-h2 pb-6;
+}
+
+.gc-item-row {
+  @apply lg:border-t-2 lg:pb-0 lg:pt-10 lg:px-0 lg:bg-white-default lg:my-0 p-10 my-5 bg-gray-100 border-black-form;
+
+  h2 {
+    @apply md:text-small_h2 text-h2 mb-14;
+  }
+}
+
+.gc-form {
+  @apply max-w-prose;
 }
 
 .gc-form-group {
   @apply mb-0;
-}
 
-.gc-item-row {
-  @apply my-5 p-10 bg-gray-100;
-
-  h2 {
-    @apply text-h2 mb-10;
+  .gc-input-radio:last-of-type,
+  .gc-input-checkbox:last-of-type {
+    @apply md:mb-10 mb-14 pb-0;
   }
-}
-
-.gc-form-group .gc-input-radio:last-of-type,
-.gc-form-group .gc-input-checkbox:last-of-type {
-  @apply mb-12;
 }
 
 .gc-h3 {
@@ -45,15 +53,15 @@
 }
 
 .gc-section-header {
-  @apply font-bold text-h2 mb-16 mt-10 p-6 bg-gray-background;
+  @apply md:text-small_h2 font-bold text-h2 mb-16 mt-10 p-6 bg-gray-background;
 }
 
 .gc-legend {
-  @apply text-h2 mb-12 font-bold;
+  @apply md:text-small_h2 text-h2 mb-14 font-bold;
 }
 
 .gc-button {
-  @apply cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
+  @apply md:w-full md:text-small_base cursor-pointer border-b-4 border-gray-900 py-3 px-5 mr-2 m-0 font-bold text-base no-underline text-gray-50 bg-green-default outline-none w-60;
 
   &:hover {
     @apply bg-green-darker;
@@ -61,14 +69,14 @@
 }
 
 .gc-button--secondary {
-  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-10;
+  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14;
   &:hover {
     @apply bg-gray-300;
   }
 }
 
 .gc-label {
-  @apply block mb-2 text-base font-bold w-4/5;
+  @apply md:text-small_base block mb-2 text-base font-bold w-full;
 }
 
 .gc-plain-text {
@@ -76,43 +84,80 @@
 }
 
 .gc-textarea {
-  @apply border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12 w-4/6 h-40;
+  @apply md:text-small_base text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-full h-40;
 }
 
 .gc-input-text {
-  @apply border-solid border-2 py-3 px-2 mt-2 mb-12 border-gray-900 w-3/6;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-1/2;
 }
 
 .gc-file-input {
-  @apply mt-2 mb-12;
-}
-
-.gc-dropdown {
-  @apply w-full lg:w-3/6 border-solid border-2 py-3 px-2 border-gray-900 mt-2 mb-12;
+  @apply md:w-full md:text-small_base text-base w-1/2 mt-2 mb-14;
 }
 
 .gc-input-checkbox {
-  .gc-input-checkbox__input {
-    @apply text-gray-50 h-10 w-10 border-2 border-gray-900 rounded mr-6 align-middle;
-  }
+  @apply block;
 
-  .gc-input-checkbox:checked {
-    @apply text-gray-50 bg-blue-800;
+  .gc-input-checkbox__input {
+    @apply absolute opacity-0;
+    & + .gc-checkbox-label {
+      @apply relative cursor-pointer p-0;
+    }
+
+    &:focus + .gc-checkbox-label:before {
+      @apply outline-default;
+    }
+
+    // Box.
+    & + .gc-checkbox-label:before {
+      content: "";
+      @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
+    }
+
+    // Checkmark. Could be replaced with an image
+    &:checked + .gc-checkbox-label:after {
+      content: "";
+      @apply absolute w-6 h-6 bg-checkmark top-10px left-2;
+    }
   }
 }
 
 .gc-input-radio,
 .gc-input-checkbox {
-  @apply flex pt-4 pb-2 px-0 items-center;
+  @apply flex pt-3 pb-1 px-0 items-center;
 }
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply block font-normal text-base;
+  @apply md:text-small_base block font-normal text-base flex;
+
+  .checkbox-label-text,
+  .radio-label-text {
+    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
+  }
 }
 
 .gc-radio__input {
-  @apply border-2 border-gray-900 w-10 h-10 mr-4;
+  @apply absolute opacity-0;
+  & + .gc-radio-label {
+    @apply relative cursor-pointer p-0;
+  }
+
+  &:focus + .gc-radio-label:before {
+    @apply outline-default;
+  }
+
+  // Circle.
+  & + .gc-radio-label:before {
+    content: "";
+    @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
+  }
+
+  // Radio. Could be replaced with an image
+  &:checked + .gc-radio-label:after {
+    content: "";
+    @apply absolute w-5 h-5 bg-radio left-10px top-10px;
+  }
 }
 
 .validation-message {
