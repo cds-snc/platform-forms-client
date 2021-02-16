@@ -7,7 +7,7 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         // We can redirect to a 'Form does not exist page' in the future
-        destination: "/doesNotExist",
+        destination: "/404",
         permanent: false,
       },
     };
