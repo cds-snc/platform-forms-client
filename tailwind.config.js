@@ -6,7 +6,7 @@ module.exports = {
       width: {
         "cr-label-desktop": "50rem",
         "cr-label-1025": "30rem",
-        "cr-label-ipad": "35rem",
+        "cr-label-ipad": "25rem",
         "cr-label-duo": "25rem",
         "cr-label-6s": "15rem",
         "cr-label-5s": "14rem",
@@ -18,6 +18,21 @@ module.exports = {
       },
       margin: {
         "10px": "10px",
+      },
+      outline: {
+        default: ["3px solid #ffbf47"],
+      },
+      backgroundImage: {
+        checkmark: "url('/img/checkmark.svg')",
+        radio: "url('/img/black-circle.svg')",
+        dropdown: "url('/img/arrow-down.svg')",
+      },
+      backgroundPosition: {
+        "center-right-15px": "center right 15px",
+      },
+      inset: {
+        "10px": "10px",
+        "9px": "9px",
       },
     },
     container: {
