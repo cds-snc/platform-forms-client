@@ -60,6 +60,8 @@ export interface PropertyChoices {
   [key: string]: string;
 }
 
-export interface Responses {
-  [key: string]: string | [];
-}
+export type Responses = {
+  [key: string]: Response;
+};
+
+export type Response = string | string[] | Record<string, unknown>[];
