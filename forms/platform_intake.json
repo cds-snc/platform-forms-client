@@ -1,6 +1,6 @@
 {
   "internalTitleEn": "CDS Platform Intake Form",
-  "internalTitleFr": "SNC Formulaire d'admission du Plateforme",
+  "internalTitleFr": "Formulaire de demande pour Plateforme SNC",
   "publishingStatus": true,
   "submission": {
     "templateID": "",
@@ -10,10 +10,10 @@
     "id": 20,
     "version": 1,
     "titleEn": "CDS Platform Intake Form",
-    "titleFr": "SNC Formulaire d'admission du Plateforme",
+    "titleFr": "Formulaire de demande pour Plateforme SNC",
     "descriptionEn": "Register to learn more about CDS Platform products",
     "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "startPage": {},
     "endPage": {
       "descriptionEn": "",
@@ -29,34 +29,26 @@
         "properties": {
           "titleEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products.",
           "titleFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien.",
+          "descriptionEn": "Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
+          "descriptionFr": "Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
           "charLimit": 200,
           "required": false
         }
       },
       {
         "id": 2,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
-          "titleFr": "Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
-          "charLimit": 200,
-          "required": false
-        }
-      },
-      {
-        "id": 3,
         "type": "textField",
         "properties": {
           "titleEn": "Name",
           "titleFr": "Nom",
           "descriptionEn": "This is your first and last name",
-          "descriptionFr": "Surnom + prenom",
+          "descriptionFr": "Nom et prénom",
           "charLimit": 100,
           "required": true
         }
       },
       {
-        "id": 4,
+        "id": 3,
         "type": "textField",
         "properties": {
           "titleEn": "Work email",
@@ -66,11 +58,11 @@
         }
       },
       {
-        "id": 5,
+        "id": 4,
         "type": "textField",
         "properties": {
           "titleEn": "What department do you work for?",
-          "titleFr": "Pour quel service travaillez-vous?",
+          "titleFr": "Pour quel ministère travaillez-vous?",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -79,7 +71,7 @@
         }
       },
       {
-        "id": 6,
+        "id": 5,
         "type": "textField",
         "properties": {
           "titleEn": "Work phone number",
@@ -90,7 +82,7 @@
       },
 
       {
-        "id": 7,
+        "id": 6,
         "type": "checkbox",
         "properties": {
           "titleEn": "How can we work together?",
@@ -120,13 +112,13 @@
         }
       },
       {
-        "id": 8,
+        "id": 7,
         "type": "textArea",
         "properties": {
           "titleEn": "Email(s) of other people in your team we should reach out to",
-          "titleFr": "Courriel(s) d'autres personnes de votre équipe que nous devrions contacter.",
+          "titleFr": "Adresse(s) courriel d'autres membres de votre équipe avec qui nous devrions contacter.",
           "descriptionEn": "Separate each email address with a comma.",
-          "descriptionFr": "Veuillez ajouter des courriels séparés par des virgules ci-dessus.",
+          "descriptionFr": "Veuillez ajouter les adresses séparées par des virgules.",
           "charLimit": 500,
           "required": false
         }

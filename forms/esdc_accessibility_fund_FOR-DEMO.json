@@ -448,8 +448,8 @@
           "description": "",
           "choices": [
             {
-              "en": "",
-              "fr": ""
+              "en": "Select a province",
+              "fr": "Select a province"
             },
             {
               "en": "Alberta",

@@ -4,9 +4,13 @@ import { withTranslation } from "../../i18n";
 
 const PhaseBanner = ({ t }) => (
   <div data-testid="PhaseBanner" className="gc-phase-banner">
-    <div>
-      <span>ALPHA</span>
-      <span>{t("phase.desc")}</span>
+    <div className="banner-container">
+      <div>
+        <span className="phase-badge">ALPHA</span>
+      </div>
+      <div>
+        <span className="phase-text">{t("phase.desc")}</span>
+      </div>
     </div>
   </div>
 );

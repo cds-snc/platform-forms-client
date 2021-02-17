@@ -4,7 +4,7 @@ import { withTranslation } from "../../i18n";
 
 const Footer = ({ t }) => (
   <footer className="gc-footer" data-testid="footer">
-    <div className="gc-footer-container">
+    <div className="gc-footer-container items-start">
       <div>
         <ul>
           <li>

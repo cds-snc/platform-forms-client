@@ -35,7 +35,7 @@ const Home = ({ t, i18n }) => {
 
         <div>
           <h2>{t("design.title")}</h2>
-          <p>{t("design.text")}</p>
+          <p className="mb-3">{t("design.text")}</p>
           <p>
             <a href="https://platform-storybook.herokuapp.com/">
               {t("design.system.title")}
@@ -45,7 +45,7 @@ const Home = ({ t, i18n }) => {
 
         <div>
           <h2>{t("technology.title")}</h2>
-          <p>{t("technology.text")}</p>
+          <p className="mb-3">{t("technology.text")}</p>
           <p>
             <a href="https://github.com/cds-snc/platform-forms-node/">
               {t("technology.git.title")}

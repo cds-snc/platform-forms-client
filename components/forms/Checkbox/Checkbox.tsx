@@ -37,7 +37,7 @@ export const Checkbox = (
         />
       </div>
       <label className="gc-checkbox-label" htmlFor={id}>
-        {label}
+        <span className="checkbox-label-text">{label}</span>
       </label>
     </div>
   );
