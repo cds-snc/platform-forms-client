@@ -25,17 +25,14 @@ export const Checkbox = (
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
-
-      <div>
-        <input
-          className="gc-input-checkbox__input"
-          id={id}
-          type="checkbox"
-          {...field}
-          value={label}
-          required={required}
-        />
-      </div>
+      <input
+        className="gc-input-checkbox__input"
+        id={id}
+        type="checkbox"
+        {...field}
+        value={label}
+        required={required}
+      />
       <label className="gc-checkbox-label" htmlFor={id}>
         <span className="checkbox-label-text">{label}</span>
       </label>
