@@ -78,6 +78,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
           titleEn: formMetadata.titleEn,
           titleFr: formMetadata.titleFr,
           elements: formMetadata.elements,
+          layout: formMetadata.layout,
         },
         responses: values,
       };
