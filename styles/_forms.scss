@@ -16,7 +16,7 @@
 }
 
 .gc-description {
-  @apply md:text-small_sm text-gray-text mb-2 text-sm w-full;
+  @apply md:text-small_sm text-gray-text mb-3 text-sm w-full;
 }
 
 .gc-h1 {
@@ -28,10 +28,10 @@
 }
 
 .gc-item-row {
-  @apply lg:border-t-2 lg:pb-0 lg:pt-10 lg:px-0 lg:bg-white-default lg:my-0 p-10 my-5 bg-gray-100 border-black-form;
+  @apply border-t-2 pt-16 pb-0 px-0 bg-white-default mt-0 mb-16 border-black-form;
 
-  h2 {
-    @apply md:text-small_h2 text-h2 mb-14;
+  h3 {
+    @apply md:text-small_h3 font-bold text-h3 pb-0 mb-10;
   }
 }
 
@@ -49,11 +49,11 @@
 }
 
 .gc-h3 {
-  @apply font-bold text-h3 pb-6;
+  @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-10;
 }
 
 .gc-section-header {
-  @apply md:text-small_h2 font-bold text-h2 mb-16 mt-10 p-6 bg-gray-background;
+  @apply md:text-small_h2 font-bold text-h2 mb-16 mt-12 p-6 bg-gray-background;
 }
 
 .gc-legend {

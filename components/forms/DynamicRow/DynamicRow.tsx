@@ -116,10 +116,10 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       {rows.map((row, index) => {
         return (
           <div key={`${name}-${index}`} className="gc-item-row">
-            <h2>
+            <h3>
               {lang === "en" ? "Item " : "Article "}
               {index + 1}
-            </h2>
+            </h3>
             <DynamicRow
               key={name}
               name={name}

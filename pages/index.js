@@ -30,6 +30,7 @@ const Home = ({ t, i18n }) => {
 
         <div>
           <h2>{t("formList.title")}</h2>
+          <p className="mb-3">{t("formList.text")}</p>
           <LinksList />
         </div>
 

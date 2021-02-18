@@ -6,7 +6,8 @@
     "text": "Aider les utilisateurs du gouvernement à publier rapidement et facilement des formulaires en ligne simples et accessibles que le public peut utiliser pour demander ou accéder aux services ou prestations dont il a besoin."
   },
   "formList": {
-    "title": "Liste de formulaires"
+    "title": "Liste de formulaires",
+    "text": "A list of live or demo forms that we are currently working on:"
   },
   "design": {
     "title": "Design",
