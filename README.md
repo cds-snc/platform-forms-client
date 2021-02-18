@@ -56,6 +56,16 @@ NOTIFY_API_KEY=
 For verbose debug logging set an environment variable called DEBUG to `true` before running `yarn dev`
 ex. `DEBUG=true yarn dev`
 
+### Storybook
+
+- In order to run Storybook localy, type `yarn storybook`
+- It can also be deployed to the `gh-pages` branch automatically using [storybook-deployer](https://github.com/storybookjs/storybook-deployer) via the command:
+
+```sh
+cd platform-forms-client
+yarn deploy-storybook
+```
+
 ## ---------------------------------------------------------------------
 
 # Plate-forme - Formulaires GC
@@ -120,3 +130,13 @@ NOTIFY_API_KEY=
 
 Pour des logs plus verbose en fin de débougage, définissez une variable d'environnement appelée DEBUG comme `true` avant d'exécuter` yarn dev`
 ex. `DEBUG=true yarn dev`
+
+### Storybook
+
+- Pour voir Storybook exécutez `yarn storybook`
+- Pour deployer a `gh-pages` avec [storybook-deployer](https://github.com/storybookjs/storybook-deployer) exécutez:
+
+```sh
+cd platform-forms-client
+yarn deploy-storybook
+```
