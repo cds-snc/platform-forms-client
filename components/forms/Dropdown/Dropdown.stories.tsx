@@ -1,7 +1,6 @@
 import React from "react";
 import { Formik } from "formik";
 import { Dropdown } from "./Dropdown";
-import { Label } from "../Label/Label";
 
 export default {
   title: "Forms/Dropdown",
@@ -29,7 +28,12 @@ const choices = [
 ];
 
 export const defaultDropdown = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ dropdown: "" }}>
+  <Formik
+    initialValues={{ dropdown: "" }}
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+  >
     <Dropdown id="dropdown" name="dropdown" choices={choices} />
   </Formik>
 );

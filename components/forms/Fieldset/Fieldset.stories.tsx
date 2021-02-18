@@ -12,7 +12,12 @@ export default {
 };
 
 export const nameFieldset = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ title: "" }}>
+  <Formik
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+    initialValues={{ title: "" }}
+  >
     <Fieldset legend="Name">
       <Label htmlFor="title" hint=" (optional)">
         Title

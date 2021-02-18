@@ -8,7 +8,8 @@
 }
 
 .gc-dropdown {
-  @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-dropdown bg-center-right-15px;
+  background-image: url("../public/img/arrow-down.svg");
+  @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
 }
 
 .gc-p {
@@ -117,7 +118,8 @@
     // Checkmark. Could be replaced with an image
     &:checked + .gc-checkbox-label:after {
       content: "";
-      @apply absolute w-6 h-6 bg-checkmark top-10px left-2;
+      background-image: url("../public/img/checkmark.svg");
+      @apply absolute w-6 h-6 top-10px left-2;
     }
   }
 }
@@ -156,7 +158,8 @@
   // Radio. Could be replaced with an image
   &:checked + .gc-radio-label:after {
     content: "";
-    @apply absolute w-5 h-5 bg-radio left-10px top-10px;
+    background-image: url("../public/img/black-circle.svg");
+    @apply absolute w-5 h-5 left-10px top-10px;
   }
 }
 

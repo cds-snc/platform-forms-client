@@ -11,13 +11,23 @@ export default {
 };
 
 export const defaultTextArea = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
+  <Formik
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+    initialValues={{ "input-type-text": "" }}
+  >
     <TextArea id="input-type-text" name="input-type-text" />
   </Formik>
 );
 
 export const withDefaultValue = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
+  <Formik
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+    initialValues={{ "input-type-text": "" }}
+  >
     <TextArea
       id="input-type-text"
       name="input-type-text"
@@ -27,7 +37,12 @@ export const withDefaultValue = (): React.ReactElement => (
 );
 
 export const withPlaceholder = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
+  <Formik
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+    initialValues={{ "input-type-text": "" }}
+  >
     <TextArea
       id="input-type-text"
       name="input-type-text"
@@ -37,13 +52,23 @@ export const withPlaceholder = (): React.ReactElement => (
 );
 
 export const disabled = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
+  <Formik
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+    initialValues={{ "input-type-text": "" }}
+  >
     <TextArea id="input-type-text" name="input-type-text" disabled />
   </Formik>
 );
 
 export const readonly = (): React.ReactElement => (
-  <Formik onSubmit={()=>{}} initialValues={{ "input-type-text": "" }}>
+  <Formik
+    onSubmit={(values) => {
+      console.log(values);
+    }}
+    initialValues={{ "input-type-text": "" }}
+  >
     <TextArea id="input-type-text" name="input-type-text" readOnly />
   </Formik>
 );
