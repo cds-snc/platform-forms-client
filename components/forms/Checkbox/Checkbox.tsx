@@ -1,35 +1,37 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 interface CheckboxProps {
   id: string;
   name: string;
   className?: string;
-  label: React.ReactNode;
-  inputRef?:
-    | string
-    | ((instance: HTMLInputElement | null) => void)
-    | React.RefObject<HTMLInputElement>
-    | null
-    | undefined;
+  label: string;
+  required?: boolean;
 }
 
 export const Checkbox = (
   props: CheckboxProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, name, className, label, inputRef, ...inputProps } = props;
+  const { id, className, label, required } = props;
+
+  // field contains name, value, onChange, and other required Form attributes.
+  const [field, meta] = useField(props);
 
   const classes = classnames("gc-input-checkbox", className);
 
   return (
     <div data-testid="checkbox" className={classes}>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
       <input
         className="gc-input-checkbox__input"
         id={id}
         type="checkbox"
-        name={name}
-        ref={inputRef}
-        {...inputProps}
+        {...field}
+        value={label}
+        required={required}
       />
       <label className="gc-checkbox-label" htmlFor={id}>
         <span className="checkbox-label-text">{label}</span>

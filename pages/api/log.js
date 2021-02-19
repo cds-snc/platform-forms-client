@@ -6,11 +6,10 @@ const log = (req, res) => {
     logMessage[level](msg);
   } catch (err) {
     logMessage.error(err);
-    res.statusCode = 500;
-    res.send("error ocurred when logging on server");
+    res.status(500).send("Error ocurred when logging on server");
+    return;
   }
-  res.statusCode = 200;
-  res.send("message logged on server");
+  return res.status(202).send("Log received");
 };
 
 export default log;

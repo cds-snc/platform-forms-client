@@ -1,25 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withTranslation } from "../i18n";
-import Form from "../components/forms/Forms";
-
 import { getFormByID } from "../lib/dataLayer";
-
-const DynamicForm = ({ formObject }) => <Form formModel={formObject} />;
-
-DynamicForm.defaultProps = {
-  i18nNamespaces: ["common"],
-};
-
-DynamicForm.propTypes = {
-  t: PropTypes.func.isRequired,
-  formObject: PropTypes.object.isRequired,
-};
-
-export default withTranslation()(DynamicForm);
+import DynamicForm from "../components/containers/DynamicForm/DynamicForm";
 
 export async function getServerSideProps(context) {
-  const form = await getFormByID(context.params.form);
+  let form = null;
+  const formId = context.params.form;
+
+  if (formId === "preview-form" && context.query) {
+    // If we're previewing a form, get the object from the query string
+    const queryObj = context.query;
+    const parsedForm =
+      queryObj && queryObj.formObject ? JSON.parse(queryObj.formObject) : null;
+    form = parsedForm && parsedForm.form ? parsedForm.form : null;
+  } else {
+    //Otherwise, get the form object via the dataLayer library
+    form = await getFormByID(context.params.form);
+  }
+
   if (!form) {
     return {
       redirect: {
@@ -31,6 +27,8 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { formObject: form }, // will be passed to the page component as props
+    props: { formMetadata: form }, // will be passed to the page component as props
   };
 }
+
+export default DynamicForm;

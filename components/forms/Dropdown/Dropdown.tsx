@@ -1,18 +1,13 @@
 import React from "react";
 import classnames from "classnames";
+import { useField } from "formik";
 
 interface DropdownProps {
   id: string;
   name: string;
   className?: string;
   choices: Array<string | number>;
-  children?: React.ReactNode;
-  inputRef?:
-    | string
-    | ((instance: HTMLSelectElement | null) => void)
-    | React.RefObject<HTMLSelectElement>
-    | null
-    | undefined;
+  required?: boolean;
 }
 
 interface DropdownOptionProps {
@@ -25,28 +20,39 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, name, className, inputRef, choices, ...inputProps } = props;
+  const { id, className, choices, required } = props;
 
   const classes = classnames("gc-dropdown", className);
+
+  const [field, meta] = useField(props);
 
   let options = null;
   if (choices && choices.length) {
     options = choices.map((choice, i) => {
-      return <DropdownOption key={`key-${i}`} value={choice} name={choice} />;
+      const innerId = `${id}-${i}`;
+      const value = field.value ? field.value[innerId] : field.value;
+      return (
+        <DropdownOption key={`key-${innerId}`} value={value} name={choice} />
+      );
     });
   }
 
   return (
-    <select
-      data-testid="dropdown"
-      className={classes}
-      id={id}
-      name={name}
-      ref={inputRef}
-      {...inputProps}
-    >
-      {options}
-    </select>
+    <>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+
+      <select
+        data-testid="dropdown"
+        className={classes}
+        id={id}
+        required={required}
+        {...field}
+      >
+        {options}
+      </select>
+    </>
   );
 };
 

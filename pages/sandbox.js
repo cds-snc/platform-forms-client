@@ -27,8 +27,11 @@ const Sandbox = ({ t, i18n }) => {
         <div className="mb-20">
           <h2 className="text-3xl mb-5">{t("product.title")}</h2>
           <p>{t("product.text")}</p>
-          <h2 className="text-3xl mb-5">{t("formList.title")}</h2>
+          <h2 className="text-3xl mt-10 mb-5">{t("formList.title")}</h2>
           <LinksList />
+
+          <h2 className="text-3xl mt-10 mb-5">{t("product.preview.title")}</h2>
+          <Link href="/builder-preview">{t("product.preview.link")}</Link>
         </div>
 
         <div className="mb-20">

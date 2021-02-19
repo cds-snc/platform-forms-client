@@ -3,7 +3,11 @@
   "body": "[travaux en cours]",
   "product": {
     "title": "La vision du produit",
-    "text": "Aider les utilisateurs du gouvernement à publier rapidement et facilement des formulaires en ligne simples et accessibles que le public peut utiliser pour demander ou accéder aux services ou prestations dont il a besoin."
+    "text": "Aider les utilisateurs du gouvernement à publier rapidement et facilement des formulaires en ligne simples et accessibles que le public peut utiliser pour demander ou accéder aux services ou prestations dont il a besoin.",
+    "preview": {
+      "title": "Prévisualisation",
+      "link": "Prévisualisation d'un formulaire à partir de la configuration"
+    }
   },
   "formList": {
     "title": "Liste de formulaires"

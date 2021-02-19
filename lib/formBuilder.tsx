@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, Fragment } from "react";
+import React, { ReactElement, Fragment } from "react";
 import { logger, logMessage } from "./logger";
 import {
   Alert,
@@ -14,44 +14,7 @@ import {
   Description,
   Heading,
 } from "../components/forms";
-export type allFormElements =
-  | ChangeEvent<HTMLInputElement>
-  | ChangeEvent<HTMLTextAreaElement>
-  | ChangeEvent<HTMLSelectElement>;
-export type callback = (event: allFormElements) => void;
-export interface FormElement {
-  id: string;
-  type: string;
-  properties: ElementProperties;
-  onchange?: callback;
-}
-
-export interface ElementProperties {
-  titleEn: string;
-  titleFr: string;
-  placeholderEn?: string;
-  placeholderFr?: string;
-  descriptionEn?: string;
-  descriptionFr?: string;
-  required: boolean;
-  choices?: Array<PropertyChoices>;
-  subElements?: Array<FormElement>;
-  fileType?: string | undefined;
-  headingLevel?: string | undefined;
-  isSectional?: boolean;
-  [key: string]:
-    | string
-    | boolean
-    | Array<PropertyChoices>
-    | Array<FormElement>
-    | undefined;
-}
-
-export interface PropertyChoices {
-  en: string;
-  fr: string;
-  [key: string]: string;
-}
+import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -88,47 +51,32 @@ function getLocaleChoices(
 }
 
 // This function renders the form elements with passed in properties.
-export const buildForm = logger(_buildForm);
-function _buildForm(
-  element: FormElement,
-  value: string,
-  lang: string,
-  handleChange: callback
-): ReactElement {
-  const inputProps = {
-    key: element.id,
-    id: element.id,
-    name: element.id.toString(),
-    required: element.properties.required,
-    label: element.properties[getProperty("title", lang)]?.toString(),
-    value: value ? value.toString() : "",
-    headingLevel: element.properties.headingLevel
-      ? element.properties.headingLevel
-      : "h2",
-    isSectional: element.properties.isSectional ? true : false,
-    choices:
-      element.properties && element.properties.choices
-        ? getLocaleChoices(element.properties.choices, lang)
-        : [],
-    description: element.properties[
-      getProperty("description", lang)
-    ]?.toString(),
-    subElements:
-      element.properties && element.properties.subElements
-        ? element.properties.subElements
-        : [],
-    onChange: handleChange,
-  };
+function _buildForm(element: FormElement, lang: string): ReactElement {
+  const id = element.id;
 
-  const label = inputProps.label ? (
-    <Label key={`label-${element.id}`} htmlFor={inputProps.name}>
-      {inputProps.label}
+  const choices =
+    element.properties && element.properties.choices
+      ? getLocaleChoices(element.properties.choices, lang)
+      : [];
+
+  const subElements =
+    element.properties && element.properties.subElements
+      ? element.properties.subElements
+      : [];
+
+  const labelText = element.properties[getProperty("title", lang)]?.toString();
+  const labelComponent = labelText ? (
+    <Label key={`label-${id}`} htmlFor={id}>
+      {labelText}
     </Label>
   ) : null;
 
-  const descriptiveText = inputProps.description ? (
-    <p className="gc-p" id={`desc-${element.id}`}>
-      {inputProps.description}
+  const description = element.properties[
+    getProperty("description", lang)
+  ]?.toString();
+  const descriptiveText = description ? (
+    <p className="gc-p" id={`desc-${id}`}>
+      {description}
     </p>
   ) : null;
 
@@ -141,125 +89,121 @@ function _buildForm(
       );
     case "textField":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          <Description>{inputProps.description}</Description>
+        <Fragment>
+          {labelComponent}
+          <Description>{description}</Description>
           <TextInput
             type="text"
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            id={id}
+            name={id}
+            required={element.properties.required}
+            aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
     case "textArea":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          <Description>{inputProps.description}</Description>
+        <Fragment>
+          {labelComponent}
+          <Description>{description}</Description>
           <TextArea
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            id={id}
+            name={id}
+            required={element.properties.required}
+            aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
     case "checkbox": {
-      const checkboxItems = inputProps.choices.map((choice, index) => {
+      const checkboxItems = choices.map((choice, index) => {
         return (
           <Checkbox
-            {...inputProps}
-            key={`key-${inputProps.id}-${index}`}
-            id={`id-${inputProps.id}-${index}`}
+            key={`${id}.${index}`}
+            id={`${id}.${index}`}
+            name={`${id}`}
             label={choice}
-            value={choice}
+            required={element.properties.required}
           />
         );
       });
 
       return (
         <FormGroup
-          key={`formGroup-${inputProps.id}`}
-          name={inputProps.name}
-          aria-describedby={
-            inputProps.description ? `desc-${element.id}` : undefined
-          }
+          name={id}
+          aria-describedby={description ? `desc-${id}` : undefined}
         >
-          {label}
-          <Description>{inputProps.description}</Description>
+          {labelComponent}
+          <Description>{description}</Description>
           {checkboxItems}
         </FormGroup>
       );
     }
     case "radio": {
-      const radioButtons = inputProps.choices.map((choice, index) => {
+      const radioButtons = choices.map((choice, index) => {
         return (
           <Radio
-            {...inputProps}
-            key={`key-${inputProps.id}-${index}`}
-            id={`id-${inputProps.id}-${index}`}
+            key={`${id}.${index}`}
+            id={`${id}.${index}`}
+            name={`${id}`}
             label={choice}
-            value={choice}
+            required={element.properties.required}
           />
         );
       });
 
       return (
         <FormGroup
-          key={`formGroup-${inputProps.id}`}
-          name={inputProps.name}
-          aria-describedby={
-            inputProps.description ? `desc-${element.id}` : undefined
-          }
+          name={id}
+          aria-describedby={description ? `desc-${id}` : undefined}
         >
-          {label}
-          <Description>{inputProps.description}</Description>
+          {labelComponent}
+          <Description>{description}</Description>
           {radioButtons}
         </FormGroup>
       );
     }
     case "dropdown":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          <Description>{inputProps.description}</Description>
+        <Fragment>
+          {labelComponent}
+          <Description>{description}</Description>
           <Dropdown
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            id={id}
+            name={id}
+            aria-describedby={description ? `desc-${id}` : undefined}
+            choices={choices}
           />
         </Fragment>
       );
     case "plainText":
       return (
-        <div className="gc-plain-text" key={inputProps.id}>
-          {inputProps.label ? (
-            <h2 className="gc-h2">{inputProps.label}</h2>
-          ) : null}
+        <div className="gc-plain-text">
+          {labelText ? <h2 className="gc-h2">{labelText}</h2> : null}
           {descriptiveText}
         </div>
       );
     case "heading":
       return (
-        <Fragment key={inputProps.id}>
-          {inputProps.label ? (
-            <Heading {...inputProps}>{inputProps.label}</Heading>
+        <Fragment>
+          {labelText ? (
+            <Heading
+              isSectional={element.properties.isSectional ? true : false}
+              headingLevel={"h2"}
+            >
+              {labelText}
+            </Heading>
           ) : null}
         </Fragment>
       );
     case "fileInput":
       return (
-        <Fragment key={inputProps.id}>
-          {label}
-          <Description>{inputProps.description}</Description>
+        <Fragment>
+          {labelComponent}
+          <Description>{description}</Description>
           <FileInput
-            aria-describedby={
-              inputProps.description ? `desc-${element.id}` : undefined
-            }
-            {...inputProps}
+            id={id}
+            name={id}
+            aria-describedby={description ? `desc-${id}` : undefined}
             fileType={element.properties.fileType}
           />
         </Fragment>
@@ -267,12 +211,10 @@ function _buildForm(
     case "dynamicRow": {
       return (
         <DynamicGroup
-          key={`dynamicGroup-${inputProps.id}`}
-          name={inputProps.name}
-          legend={inputProps.label}
-          rowElements={inputProps.subElements}
+          name={id}
+          legend={labelText}
+          rowElements={subElements}
           lang={lang}
-          value={value}
         />
       );
     }
@@ -280,3 +222,111 @@ function _buildForm(
       return <></>;
   }
 }
+
+/**
+ * DynamicForm calls this function to build the entire form, from JSON
+ * getRenderedForm
+ * @param formToRender
+ * @param language
+ */
+const _getRenderedForm = (
+  formMetadata: FormMetadataProperties,
+  language: string
+) => {
+  if (!formMetadata) {
+    return null;
+  }
+
+  return formMetadata.layout.map((item: string) => {
+    const element = formMetadata.elements.find(
+      (element: FormElement) => element.id === item
+    );
+    if (element) {
+      return (
+        <GenerateElement
+          key={element.id}
+          element={element}
+          language={language}
+        />
+      );
+    } else {
+      logMessage.error(
+        `Failed component ID look up ${item} on form ID ${formMetadata.id}`
+      );
+    }
+  });
+};
+
+/**
+ * _getFormInitialValues calls this function to set the initial value for an element
+ * @param formMetadata
+ * @param language
+ */
+
+const _getElementInitialValue = (
+  element: FormElement,
+  language: string
+): Record<string, unknown> | Record<string, unknown>[] | string => {
+  const nestedObj: Record<string, unknown> = {};
+
+  // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
+  if (element.properties.choices) {
+    element.properties.choices.map((choice, index) => {
+      //initialValues[choiceId] = choice[language];
+      nestedObj[index] = choice[language];
+    });
+
+    return nestedObj;
+  } else if (element.properties.subElements) {
+    // For Dynamic Row reiterate through and create Initial Values to an Array of Objects
+    const dynamicRow: Record<string, unknown> = {};
+    element.properties.subElements.map((subElement, index) => {
+      const subElementID = `${index}`;
+      dynamicRow[subElementID] = _getElementInitialValue(subElement, language);
+    });
+    return [dynamicRow];
+  } else {
+    // Regular inputs (not nested) like text, textarea might have a placeholder value
+    return (
+      (element.properties[getProperty("placeholder", language)] as string) ?? ""
+    );
+  }
+};
+
+/**
+ * DynamicForm calls this function to set the initial form values
+ * getFormInitialValues
+ * @param formMetadata
+ * @param language
+ */
+const _getFormInitialValues = (
+  formMetadata: FormMetadataProperties,
+  language: string
+) => {
+  if (!formMetadata) {
+    return null;
+  }
+
+  const initialValues: Record<string, unknown> = {};
+
+  formMetadata.elements.map((element: FormElement) => {
+    initialValues[element.id] = _getElementInitialValue(element, language);
+  });
+
+  return initialValues;
+};
+
+type GenerateElementProps = {
+  element: FormElement;
+  language: string;
+};
+export const GenerateElement = (
+  props: GenerateElementProps
+): React.ReactElement => {
+  const { element, language } = props;
+  const generatedElement = _buildForm(element, language);
+  return <>{generatedElement}</>;
+};
+
+export const getFormInitialValues = logger(_getFormInitialValues);
+export const getRenderedForm = logger(_getRenderedForm);
