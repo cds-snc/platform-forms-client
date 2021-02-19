@@ -67,7 +67,8 @@
       51,
       52,
       53,
-      54
+      54,
+      55
     ],
     "startPage": {},
     "endPage": {
@@ -125,6 +126,17 @@
         "id": 5,
         "type": "textField",
         "properties": {
+          "titleEn": "Phone Number",
+          "titleFr": "Phone Number",
+          "descriptionEN": "",
+          "descriptionFR": "",
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
           "titleEn": "E-mail Address",
           "titleFr": "E-mail Address",
           "descriptionEN": "",
@@ -133,7 +145,7 @@
         }
       },
       {
-        "id": 6,
+        "id": 7,
         "type": "checkbox",
         "properties": {
           "titleEn": "Applicant Type",
@@ -166,7 +178,7 @@
         }
       },
       {
-        "id": 7,
+        "id": 8,
         "type": "textArea",
         "properties": {
           "titleEn": "Brief description of your organization or business and its mandate",
@@ -180,7 +192,7 @@
         }
       },
       {
-        "id": 8,
+        "id": 9,
         "type": "textField",
         "properties": {
           "titleEn": "How many years of tree planting experience does your organization have?",
@@ -191,7 +203,7 @@
         }
       },
       {
-        "id": 9,
+        "id": 10,
         "type": "textField",
         "properties": {
           "titleEn": "How many trees has your organization successfully planted in the past 3 years and/or how much area have you successfully tree planted? Please note that demonstrated experience is a selection criterion.",
@@ -202,7 +214,7 @@
         }
       },
       {
-        "id": 10,
+        "id": 11,
         "type": "heading",
         "properties": {
           "titleEn": "Project Information",
@@ -213,7 +225,7 @@
         }
       },
       {
-        "id": 11,
+        "id": 12,
         "type": "plainText",
         "properties": {
           "titleEn": "Project Location",
@@ -225,7 +237,7 @@
         }
       },
       {
-        "id": 12,
+        "id": 13,
         "type": "dynamicRow",
         "properties": {
           "titleEn": "",
@@ -233,7 +245,7 @@
           "required": false,
           "subElements": [
             {
-              "id": 12,
+              "id": 13,
               "type": "dropdown",
               "properties": {
                 "titleEn": "Province or territory",
@@ -304,7 +316,7 @@
               }
             },
             {
-              "id": 12,
+              "id": 13,
               "type": "textField",
               "properties": {
                 "titleEn": "City or Region",
@@ -320,7 +332,7 @@
         }
       },
       {
-        "id": 13,
+        "id": 14,
         "type": "textField",
         "properties": {
           "titleEn": "Expected Start Date",
@@ -333,7 +345,7 @@
         }
       },
       {
-        "id": 14,
+        "id": 15,
         "type": "textField",
         "properties": {
           "titleEn": "Expected End Date",
@@ -346,7 +358,7 @@
         }
       },
       {
-        "id": 15,
+        "id": 16,
         "type": "checkbox",
         "properties": {
           "titleEn": "Please select the location type(s) for your project",
@@ -371,7 +383,7 @@
         }
       },
       {
-        "id": 16,
+        "id": 17,
         "type": "textField",
         "properties": {
           "titleEn": "Provide an estimate of the number of new trees to be planted for this 2021 tree planting project/initiative.",
@@ -384,7 +396,7 @@
         }
       },
       {
-        "id": 17,
+        "id": 18,
         "type": "radio",
         "properties": {
           "titleEn": "Has the source of trees for this project been identified and/or secured?",
@@ -405,7 +417,7 @@
         }
       },
       {
-        "id": 18,
+        "id": 19,
         "type": "textField",
         "properties": {
           "titleEn": "Name of nursery (If you answered yes, to previous question)",
@@ -418,7 +430,7 @@
         }
       },
       {
-        "id": 19,
+        "id": 20,
         "type": "textField",
         "properties": {
           "titleEn": "Location of nursery (If you answered yes to the previous question)",
@@ -431,7 +443,7 @@
         }
       },
       {
-        "id": 20,
+        "id": 21,
         "type": "textField",
         "properties": {
           "titleEn": "Provide an estimate of the land required to plant the number of trees identified above",
@@ -444,7 +456,7 @@
         }
       },
       {
-        "id": 21,
+        "id": 22,
         "type": "radio",
         "properties": {
           "titleEn": "Has land already been identified and/or secured?",
@@ -465,7 +477,7 @@
         }
       },
       {
-        "id": 22,
+        "id": 23,
         "type": "radio",
         "properties": {
           "titleEn": "If applicable, do you know if your proposed project will take place within or adjacent to Indigenous lands or traditional territory, including lands governed by a modern treaty?",
@@ -490,7 +502,7 @@
         }
       },
       {
-        "id": 23,
+        "id": 24,
         "type": "heading",
         "properties": {
           "titleEn": "Project Overview",
@@ -501,7 +513,7 @@
         }
       },
       {
-        "id": 24,
+        "id": 25,
         "type": "plainText",
         "properties": {
           "titleEn": "Please provide brief answers to all the sections below.",
@@ -513,7 +525,7 @@
         }
       },
       {
-        "id": 25,
+        "id": 26,
         "type": "textArea",
         "properties": {
           "titleEn": "Goals and Objectives",
@@ -527,7 +539,7 @@
         }
       },
       {
-        "id": 26,
+        "id": 27,
         "type": "textArea",
         "properties": {
           "titleEn": "Proposed Plan",
@@ -541,7 +553,7 @@
         }
       },
       {
-        "id": 27,
+        "id": 28,
         "type": "textArea",
         "properties": {
           "titleEn": "Readiness",
@@ -555,7 +567,7 @@
         }
       },
       {
-        "id": 28,
+        "id": 29,
         "type": "textArea",
         "properties": {
           "titleEn": "Monitoring",
@@ -569,7 +581,7 @@
         }
       },
       {
-        "id": 29,
+        "id": 30,
         "type": "textArea",
         "properties": {
           "titleEn": "Prior Work",
@@ -583,7 +595,7 @@
         }
       },
       {
-        "id": 30,
+        "id": 31,
         "type": "textArea",
         "properties": {
           "titleEn": "GHG Emission Reductions and Co-Benefits",
@@ -597,7 +609,7 @@
         }
       },
       {
-        "id": 31,
+        "id": 32,
         "type": "textArea",
         "properties": {
           "titleEn": "Partners/Supporters",
@@ -611,7 +623,7 @@
         }
       },
       {
-        "id": 32,
+        "id": 33,
         "type": "heading",
         "properties": {
           "titleEn": "Forecasted Project Costs",
@@ -622,7 +634,7 @@
         }
       },
       {
-        "id": 33,
+        "id": 34,
         "type": "textField",
         "properties": {
           "titleEn": "Forecasted Total Project Cost",
@@ -635,7 +647,7 @@
         }
       },
       {
-        "id": 34,
+        "id": 35,
         "type": "textField",
         "properties": {
           "titleEn": "Amount Requested from NRCAN",
@@ -648,7 +660,7 @@
         }
       },
       {
-        "id": 35,
+        "id": 36,
         "type": "heading",
         "properties": {
           "titleEn": "Funding Partners",
@@ -659,7 +671,7 @@
         }
       },
       {
-        "id": 36,
+        "id": 37,
         "type": "plainText",
         "properties": {
           "titleEn": "NRCAN",
@@ -671,7 +683,7 @@
         }
       },
       {
-        "id": 37,
+        "id": 38,
         "type": "textField",
         "properties": {
           "titleEn": "Total Budget",
@@ -684,7 +696,7 @@
         }
       },
       {
-        "id": 38,
+        "id": 39,
         "type": "textField",
         "properties": {
           "titleEn": "Fiscal Year 2021",
@@ -697,7 +709,7 @@
         }
       },
       {
-        "id": 39,
+        "id": 40,
         "type": "plainText",
         "properties": {
           "titleEn": "Applicant",
@@ -709,7 +721,7 @@
         }
       },
       {
-        "id": 40,
+        "id": 41,
         "type": "textField",
         "properties": {
           "titleEn": "Total Budget",
@@ -722,7 +734,7 @@
         }
       },
       {
-        "id": 41,
+        "id": 42,
         "type": "textField",
         "properties": {
           "titleEn": "Fiscal Year 2021",
@@ -735,7 +747,7 @@
         }
       },
       {
-        "id": 42,
+        "id": 43,
         "type": "plainText",
         "properties": {
           "titleEn": "Other Funding Partners/Supporters (specify)",
@@ -748,7 +760,7 @@
         }
       },
       {
-        "id": 43,
+        "id": 44,
         "type": "dynamicRow",
         "properties": {
           "titleEn": "",
@@ -756,7 +768,7 @@
           "required": false,
           "subElements": [
             {
-              "id": 43,
+              "id": 44,
               "type": "textField",
               "properties": {
                 "titleEn": "Name of Funding Source",
@@ -769,7 +781,7 @@
               }
             },
             {
-              "id": 43,
+              "id": 44,
               "type": "textField",
               "properties": {
                 "titleEn": "Total Budget",
@@ -782,7 +794,7 @@
               }
             },
             {
-              "id": 43,
+              "id": 44,
               "type": "textField",
               "properties": {
                 "titleEn": "Fiscal Year 2021",
@@ -798,7 +810,7 @@
         }
       },
       {
-        "id": 44,
+        "id": 45,
         "type": "radio",
         "properties": {
           "titleEn": "Have you already incurred costs or made legal commitments to the project?",
@@ -819,7 +831,7 @@
         }
       },
       {
-        "id": 45,
+        "id": 46,
         "type": "textArea",
         "properties": {
           "titleEn": "Describe any commitments and/or the costs including, the amount and when the costs were incurred",
@@ -833,7 +845,7 @@
         }
       },
       {
-        "id": 46,
+        "id": 47,
         "type": "heading",
         "properties": {
           "titleEn": "Diversity and Inclusion",
@@ -844,7 +856,7 @@
         }
       },
       {
-        "id": 47,
+        "id": 48,
         "type": "plainText",
         "properties": {
           "titleEn": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
@@ -856,7 +868,7 @@
         }
       },
       {
-        "id": 48,
+        "id": 49,
         "type": "checkbox",
         "properties": {
           "titleEn": "Does your organization have a workplace diversity and inclusion plan that targets one or more of the following under-represented groups?",
@@ -897,7 +909,7 @@
         }
       },
       {
-        "id": 49,
+        "id": 50,
         "type": "heading",
         "properties": {
           "titleEn": "Authorization",
@@ -908,7 +920,7 @@
         }
       },
       {
-        "id": 50,
+        "id": 51,
         "type": "plainText",
         "properties": {
           "titleEn": "Notice to Applicants",
@@ -920,7 +932,7 @@
         }
       },
       {
-        "id": 51,
+        "id": 52,
         "type": "plainText",
         "properties": {
           "titleEn": "Pursuant to Privacy Act",
@@ -932,7 +944,7 @@
         }
       },
       {
-        "id": 52,
+        "id": 53,
         "type": "plainText",
         "properties": {
           "titleEn": "Pursuant to Access of Information Act",
@@ -944,7 +956,7 @@
         }
       },
       {
-        "id": 53,
+        "id": 54,
         "type": "checkbox",
         "properties": {
           "titleEn": "By checking the box below, you are providing the program with consent to use your information",
@@ -961,7 +973,7 @@
         }
       },
       {
-        "id": 54,
+        "id": 55,
         "type": "checkbox",
         "properties": {
           "titleEn": "By checking the box below you certify that you have read the Early Start Applicant Guide",
