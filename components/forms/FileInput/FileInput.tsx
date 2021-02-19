@@ -27,7 +27,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       <input
         type="file"
         data-testid="file"
-        data-attachment={file}
         className={classes}
         id={id}
         accept={fileType}
@@ -47,12 +46,16 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
                   typeof fileObject === "string"
                     ? fileObject.replace(/^data:(.)*base64,/, "")
                     : fileObject;
-                console.log("FILE ATTACHMENT BLOB", fileObject);
               }
               setFile(fileObject);
             };
           }
         }}
+      />
+      <input
+        type="hidden"
+        name={`${id}.attachment`}
+        value={file ? file.toString() : ""}
       />
     </>
   );

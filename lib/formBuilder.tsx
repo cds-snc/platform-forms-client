@@ -10,6 +10,7 @@ import {
   TextArea,
   FormGroup,
   FileInput,
+  FileAttachment,
   DynamicGroup,
   Description,
   Heading,
@@ -311,6 +312,10 @@ const _getFormInitialValues = (
 
   formMetadata.elements.map((element: FormElement) => {
     initialValues[element.id] = _getElementInitialValue(element, language);
+    if (element.properties.fileType) {
+      // Setup an adjacent hidden-field to hold the attached file object
+      initialValues[`${element.id}.attachment`] = "";
+    }
   });
 
   return initialValues;
