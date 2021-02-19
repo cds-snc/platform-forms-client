@@ -4,7 +4,7 @@
   "publishingStatus": false,
   "submission": {
     "templateID": "",
-    "email": "cayce.fischerb@cds-snc.ca"
+    "email": "fitore.jaha.price@cds-snc.ca"
   },
   "form": {
     "id": 18,
@@ -60,12 +60,16 @@
           "required": false,
           "choices": [
             {
+              "en": "",
+              "fr": ""
+            },
+            {
               "en": "Alberta",
               "fr": "Alberta"
             },
             {
               "en": "British Columbia",
-              "fr": "British Columbia"
+              "fr": "Colombie-Britannique"
             },
             {
               "en": "Manitoba",
@@ -73,19 +77,19 @@
             },
             {
               "en": "New Brunswick",
-              "fr": "New Brunswick"
+              "fr": "Nouveau-Brunswick"
             },
             {
-              "en": "Newfoundland",
-              "fr": "Newfoundland"
+              "en": "Newfoundland and Labrador",
+              "fr": "Terre-Neuve-et-Labrador"
             },
             {
               "en": "Northwest Territories",
-              "fr": "Northwest Territories"
+              "fr": "Territoires du Nord-Ouest"
             },
             {
               "en": "Nova Scotia",
-              "fr": "Nova Scotia"
+              "fr": "Nouvelle-Écosse"
             },
             {
               "en": "Nunavut",
@@ -97,11 +101,11 @@
             },
             {
               "en": "Prince Edward Island",
-              "fr": "Prince Edward Island"
+              "fr": "Île-du-Prince-Édouard"
             },
             {
               "en": "Quebec",
-              "fr": "Quebec"
+              "fr": "Québec"
             },
             {
               "en": "Saskatchewan",

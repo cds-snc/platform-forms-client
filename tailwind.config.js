@@ -22,11 +22,6 @@ module.exports = {
       outline: {
         default: ["3px solid #ffbf47"],
       },
-      backgroundImage: {
-        checkmark: "url('/img/checkmark.svg')",
-        radio: "url('/img/black-circle.svg')",
-        dropdown: "url('/img/arrow-down.svg')",
-      },
       backgroundPosition: {
         "center-right-15px": "center right 15px",
       },

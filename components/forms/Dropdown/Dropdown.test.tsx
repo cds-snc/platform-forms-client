@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-
+import Form from "../Form/Form";
 import { Dropdown } from "./Dropdown";
 
 const choices = [
@@ -20,10 +20,13 @@ const choices = [
   "Yukon",
 ];
 
+/*eslint no-empty-function: ["error", { "allow": ["arrowFunctions"] }]*/
 describe("Dropdown component", () => {
-  it("renders without errors", () => {
+  it("renders without errors", async () => {
     const { queryByTestId, queryByText } = render(
-      <Dropdown id="dropdown" name="dropdown" choices={choices} />
+      <Form t={(key: string) => key}>
+        <Dropdown id="dropdown" name="dropdown" choices={choices} />
+      </Form>
     );
     expect(queryByTestId("dropdown")).toBeInTheDocument();
     expect(queryByText("Prince Edward Island")).toBeInTheDocument();

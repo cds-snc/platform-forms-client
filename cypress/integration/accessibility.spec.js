@@ -13,8 +13,8 @@ describe(
       cy.injectAxe();
       cy.checkA11y(null, A11Y_OPTIONS);
     });
-    it("CDS Intake Form Passes accessibility tests", () => {
-      cy.visit("/en/2");
+    it("CDS Platform Intake Form Passes accessibility tests", () => {
+      cy.visit("/en/20");
       cy.injectAxe();
       cy.checkA11y(null, A11Y_OPTIONS);
     });

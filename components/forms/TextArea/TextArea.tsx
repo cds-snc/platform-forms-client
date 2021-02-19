@@ -1,58 +1,39 @@
 import React from "react";
 import classnames from "classnames";
-
-type TextAreaRef =
-  | string
-  | string
-  | ((instance: HTMLTextAreaElement | null) => void)
-  | React.RefObject<HTMLTextAreaElement>
-  | null
-  | undefined;
+import { useField } from "formik";
 
 export interface TextAreaProps {
   id: string;
   name: string;
   className?: string;
-  error?: boolean;
-  success?: boolean;
+  required?: boolean;
   children?: React.ReactNode;
-  inputRef?: TextAreaRef;
 }
 
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const {
-    id,
-    name,
-    className,
-    error,
-    success,
-    children,
-    inputRef,
-    ...inputProps
-  } = props;
+  const { id, className, required, children } = props;
 
-  const classes = classnames(
-    "gc-textarea",
-    {
-      "gc-input--error": error,
-      "gc-input--success": success,
-    },
-    className
-  );
+  const classes = classnames("gc-textarea", className);
+
+  const [field, meta] = useField(props);
 
   return (
-    <textarea
-      data-testid="textarea"
-      className={classes}
-      id={id}
-      name={name}
-      ref={inputRef}
-      {...inputProps}
-    >
-      {children}
-    </textarea>
+    <>
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+      <textarea
+        data-testid="textarea"
+        className={classes}
+        id={id}
+        required={required}
+        {...field}
+      >
+        {children}
+      </textarea>
+    </>
   );
 };
 

@@ -1,12 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classnames from "classnames";
-import {
-  buildForm,
-  FormElement,
-  getProperty,
-  callback,
-  allFormElements,
-} from "../../../lib/formBuilder";
+import { useField } from "formik";
+import { GenerateElement } from "../../../lib/formBuilder";
+import { FormElement } from "../../../lib/types";
 import { Button } from "../index";
 
 interface DynamicGroupProps {
@@ -23,84 +19,32 @@ interface DynamicRowProps {
   elements: Array<FormElement>;
   lang: string;
   name: string;
-  rowNum: number;
-  values: {
-    id: string;
-    value: string;
-  }[];
-  onChange: callback;
 }
 
-interface DynamicElementProps {
-  element: FormElement;
-  value: string;
-  lang: string;
-  onChange: callback;
-}
 const DynamicRow = (props: DynamicRowProps) => {
-  const { name, elements, rowNum, values, lang, onChange } = props;
+  const { name, elements, lang } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
-    subItem.id = `${name}-${rowNum}-${subIndex}`;
-    const element = values.find((value) => value.id === subItem.id) ?? {
-      id: subItem.id,
-      value: "",
-    };
+    subItem.id = `${name}.${subIndex}`;
     return (
-      <DynamicElement
-        key={subItem.id}
-        element={subItem}
-        value={element.value}
-        lang={lang}
-        onChange={onChange}
-      />
+      <GenerateElement key={subItem.id} element={subItem} language={lang} />
     );
   });
   return <div>{rowGroup}</div>;
 };
 
-const DynamicElement = (props: DynamicElementProps): React.ReactElement => {
-  const { element, value, lang, onChange } = props;
-
-  return buildForm(element, value, lang, onChange);
-};
 export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
-  const { name, className, legend, error, rowElements, lang } = props;
-
+  const { className, legend, error, rowElements, lang } = props;
+  const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState([rowElements]);
+  const [initialValue, setInitialValues] = useState({});
 
-  const createRowState = (rowNum = 0): { id: string; value: string }[] =>
-    rowElements.map((element, index) => {
-      element.id = `${name}-${rowNum}-${index}`;
-      return {
-        id: element.id,
-        value: element.properties[getProperty("placeholder", lang)] as string,
-      };
-    });
-
-  const [responses, setResponses] = useState(createRowState);
-
-  const updateLocalResponses = async (event: allFormElements) => {
-    const { target } = event;
-    await setResponses((prevState) => {
-      const newState = prevState.map((response) => {
-        if (response.id === target.name) {
-          return {
-            id: target.name,
-            value: target.value,
-          };
-        }
-        return response;
-      });
-      return newState;
-    });
-  };
+  useEffect(() => {
+    setInitialValues(field.value[0]);
+  }, []);
 
   const addRow = async () => {
-    const baseClone = await createRowState(rows.length);
-
-    await setResponses((prevState) => {
-      return [...prevState, ...baseClone];
-    });
+    field.value.push(initialValue);
+    helpers.setValue(field.value);
     await setRows([...rows, rowElements]);
   };
 
@@ -111,25 +55,19 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   );
 
   return (
-    <fieldset name={name} data-testid="formGroup" className={classes}>
+    <fieldset name={field.name} data-testid="formGroup" className={classes}>
       <legend>{legend}</legend>
       {rows.map((row, index) => {
         return (
-          <div key={`${name}-${index}`} className="gc-item-row">
+          <div key={`${field.name}.${index}`} className="gc-item-row">
             <h3>
               {lang === "en" ? "Item " : "Article "}
               {index + 1}
             </h3>
             <DynamicRow
-              key={name}
-              name={name}
               elements={row}
-              rowNum={index}
+              name={`${field.name}.${index}`}
               lang={lang}
-              values={
-                responses.length > 0 ? responses : [{ id: "", value: "" }]
-              }
-              onChange={updateLocalResponses}
             />
           </div>
         );

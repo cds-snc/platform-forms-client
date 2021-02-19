@@ -10,17 +10,22 @@ The form viewer expects a JSON with the following structure.
 
 ```json
 {
-  "id":"1234",
-  "version": 1,
-  "titleEn": "",
-  "titleFr": "",
+  "internalTitleEn": "",
+  "internalTitleFr": "",
+  "publishingStatus": false,
   "submission": {
     "email": ""
   },
-  "layout": [ ... ],
-  "startPage": {},
-  "endPage": {},
-  "elements":[ ... ]
+  "form": {
+    "id": 4,
+    "version": 1,
+    "titleEn": "",
+    "titleFr": "",
+    "layout": [ ... ],
+    "elements": [ ... ],
+    "startPage": {},
+    "endPage": {}
+  }
 }
 ```
 
@@ -41,6 +46,8 @@ There are 2 main parts to the structure:
    `startPage`: Defines what appears on the first, intro page
 
    `endPage`: Defines what appears on the confirmation page, after the form was submitted
+
+   `publishingStatus`: If set to false, the link to the form will not appear on the main page, rather under "sandbox"
 
 2. Form questions and page elements to be rendered
 

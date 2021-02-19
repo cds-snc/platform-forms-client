@@ -59,6 +59,10 @@ typings/
 .env
 !.env.test
 
+# Ignore cypress screenshots and videos
+cypress/screenshots
+cypress/videos
+
 # next.js build output
 .next
 

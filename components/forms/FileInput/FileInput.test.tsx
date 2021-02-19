@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-
+import Form from "../Form/Form";
 import { FileInput } from "./FileInput";
 
 const inputProps = {
@@ -13,8 +13,12 @@ const inputProps = {
 };
 
 describe("FileInput component", () => {
-  it("renders without errors", () => {
-    const { queryByTestId } = render(<FileInput {...inputProps} />);
+  it("renders without errors", async () => {
+    const { queryByTestId } = render(
+      <Form t={(key: string) => key}>
+        <FileInput {...inputProps} />
+      </Form>
+    );
     expect(queryByTestId("file")).toBeInTheDocument();
   });
 });
