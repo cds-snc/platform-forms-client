@@ -10,11 +10,11 @@ const Home = ({ t, i18n }) => {
     return formIDs.map((formID) => {
       const form = getFormByID(formID);
       return (
-        <p key={`link-${form.id}`}>
+        <li key={`link-${form.id}`}>
           <Link href={`/${form.id}`}>
             {form[getProperty("title", i18n.language)].toString()}
           </Link>
-        </p>
+        </li>
       );
     });
   };
@@ -31,27 +31,33 @@ const Home = ({ t, i18n }) => {
         <div>
           <h2>{t("formList.title")}</h2>
           <p className="mb-3">{t("formList.text")}</p>
-          <LinksList />
+          <ul className="list-inside">
+            <LinksList />
+          </ul>
         </div>
 
         <div>
           <h2>{t("design.title")}</h2>
           <p className="mb-3">{t("design.text")}</p>
-          <p>
-            <a href="https://platform-storybook.herokuapp.com/">
-              {t("design.system.title")}
-            </a>
-          </p>
+          <ul className="list-inside">
+            <li>
+              <a href="https://platform-storybook.herokuapp.com/">
+                {t("design.system.title")}
+              </a>
+            </li>
+          </ul>
         </div>
 
         <div>
           <h2>{t("technology.title")}</h2>
           <p className="mb-3">{t("technology.text")}</p>
-          <p>
-            <a href="https://github.com/cds-snc/platform-forms-node/">
-              {t("technology.git.title")}
-            </a>
-          </p>
+          <ul className="list-inside">
+            <li>
+              <a href="https://github.com/cds-snc/platform-forms-node/">
+                {t("technology.git.title")}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </>
