@@ -12,15 +12,19 @@ interface DynamicFormProps {
   i18n: I18n;
   t: TFunction;
   formMetadata: FormMetadataProperties;
+  className?: string;
 }
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { formMetadata, i18n, t } = props;
   const language = i18n.language as string;
+  const router = useRouter();
   const classes = classnames("gc-form-wrapper");
+  const innerFormClasses = classnames({
+    "preview-form": router.query && router.query.form === "preview-form",
+  });
   const currentForm = getRenderedForm(formMetadata, language);
   const formTitle = formMetadata[getProperty("title", language)] as string;
-  const router = useRouter();
 
   return (
     <div className={classes}>
@@ -33,6 +37,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         language={language}
         router={router}
         t={t}
+        className={innerFormClasses}
       >
         {currentForm}
       </Form>

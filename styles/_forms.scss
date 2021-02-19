@@ -86,6 +86,9 @@
 
 .gc-textarea {
   @apply md:text-small_base text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-full h-40;
+  &.full-height {
+    @apply h-auto;
+  }
 }
 
 .gc-input-text {
@@ -160,6 +163,16 @@
     content: "";
     background-image: url("../public/img/black-circle.svg");
     @apply absolute w-5 h-5 left-10px top-10px;
+  }
+}
+
+.preview-form {
+  &::before {
+    content: "Preview/Prévisualisation";
+    @apply mb-10 block font-bold text-green-700;
+  }
+  .gc-button[type="submit"] {
+    display: none;
   }
 }
 

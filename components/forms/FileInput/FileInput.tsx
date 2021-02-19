@@ -38,7 +38,17 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             const reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
             reader.onload = function () {
-              const fileObject = reader.result;
+              let fileObject = reader.result;
+              if (fileObject) {
+                // Before sending to Notify, remove the "data..." from the result as per
+                // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+
+                fileObject =
+                  typeof fileObject === "string"
+                    ? fileObject.replace(/^data:(.)*base64,/, "")
+                    : fileObject;
+                console.log("FILE ATTACHMENT BLOB", fileObject);
+              }
               setFile(fileObject);
             };
           }

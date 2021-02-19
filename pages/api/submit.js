@@ -11,6 +11,9 @@ const submit = (req, res) => {
       formAttached && req.body.form.id ? req.body.form.id : "No form attached"
     }`
   );
+
+  console.log("IN SUBMIT API with req.body", req.body);
+
   if (!formAttached) {
     res.status(400).json({ error: "No form submitted with request" });
     return;
@@ -27,6 +30,7 @@ const submit = (req, res) => {
   const submissionFormat = getSubmissionByID(req.body.form.id);
   const sendToNotify = process.env.NODE_ENV ?? "development";
   const testing = process.env.TEST ?? false;
+  const fileAttachment = formAttached.file ? formAttached.file : null;
 
   if (sendToNotify === "production" && !testing) {
     if ((submissionFormat !== null) & (submissionFormat.email !== "")) {
@@ -35,6 +39,7 @@ const submit = (req, res) => {
           personalisation: {
             subject: messageSubject,
             formResponse: emailBody,
+            link_to_file: { file: fileAttachment },
           },
           reference: uniqueReference,
         })

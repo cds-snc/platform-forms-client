@@ -26,10 +26,9 @@ const PreviewForm = () => {
         <form onSubmit={(e) => getFormData(e, router)} method="POST">
           <textarea
             id="jsonInput"
-            rows="70"
-            cols="30"
+            rows="20"
             name="jsonIput"
-            className="gc-textarea"
+            className="gc-textarea full-height"
           ></textarea>
           <div>
             <button type="submit" className="gc-button">

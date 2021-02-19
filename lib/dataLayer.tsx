@@ -56,6 +56,9 @@ interface Submission {
 export function extractFormData(submission: Submission): Array<string> {
   const formResponses = submission.responses;
   const formOrigin = submission.form;
+
+  console.log("IN EXTRACT FORM DATA", submission);
+
   const dataCollector: Array<string> = [];
   formOrigin.layout.map((qID) => {
     const question = formOrigin.elements.find(
