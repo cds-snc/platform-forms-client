@@ -237,7 +237,7 @@ function _buildForm(
       return (
         <div className="gc-plain-text" key={inputProps.id}>
           {inputProps.label ? (
-            <h3 className="gc-h3">{inputProps.label}</h3>
+            <h2 className="gc-h3">{inputProps.label}</h2>
           ) : null}
           {descriptiveText}
         </div>
