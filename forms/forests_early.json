@@ -1,0 +1,994 @@
+{
+  "internalTitleEn": "Growing Canada's Forest 2021 - Early Start Expression of Interest",
+  "internalTitleFr": "Growing Canada's Forest 2021 - Early Start Expression of Interest",
+  "publishingStatus": true,
+  "submission": {
+    "templateID": "",
+    "email": "nick.makuch@cds-snc.ca"
+  },
+  "form": {
+    "id": 1337,
+    "version": 1,
+    "titleEn": "Growing Canada's Forest 2021 - Early Start Expression of Interest",
+    "titleFr": "Growing Canada's Forest 2021 - Early Start Expression of Interest",
+    "descriptionEn": "Register to learn more about CDS Platform products",
+    "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
+    "layout": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "startPage": {},
+    "endPage": {
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "referrerUrlEn": "https://digital.canada.ca/",
+      "referrerUrlFr": "https://numerique.canada.ca/"
+    },
+    "elements": [
+      {
+        "id": 1,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Applicant and Contact Information",
+          "titleFr": "Applicant and Contact Information",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Legal name of applicant",
+          "titleFr": "Legal name of applicant",
+          "descriptionEN": "",
+          "descriptionFR": "",
+          "required": false
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Project Name",
+          "titleFr": "Project Name",
+          "descriptionEN": "",
+          "descriptionFR": "",
+          "required": false
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Primary Contact Name",
+          "titleFr": "Primary Contact Name",
+          "descriptionEN": "",
+          "descriptionFR": "",
+          "required": false
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Phone Number",
+          "titleFr": "Phone Number",
+          "descriptionEN": "",
+          "descriptionFR": "",
+          "required": false
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "E-mail Address",
+          "titleFr": "E-mail Address",
+          "descriptionEN": "",
+          "descriptionFR": "",
+          "required": false
+        }
+      },
+      {
+        "id": 7,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Applicant Type",
+          "titleFr": "Applicant Type",
+          "descriptionEn": "Select all that apply",
+          "descriptionFr": "Select all that apply",
+          "required": false,
+          "choices": [
+            {
+              "en": "Municipal or local government or one of their agencies",
+              "fr": "Municipal or local government or one of their agencies"
+            },
+            {
+              "en": "Indigenous Governments or Organizations",
+              "fr": "Indigenous Governments or Organizations"
+            },
+            {
+              "en": "For-Profit",
+              "fr": "For-Profit"
+            },
+            {
+              "en": "Non-Profit",
+              "fr": "Non-Profit"
+            },
+            {
+              "en": "Other",
+              "fr": "Other"
+            }
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Brief description of your organization or business and its mandate",
+          "titleFr": "Brief description of your organization or business and its mandate",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(This should be no more than 3 sentences)",
+          "descriptionFr": "(This should be no more than 3 sentences)",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 9,
+        "type": "textField",
+        "properties": {
+          "titleEn": "How many years of tree planting experience does your organization have?",
+          "titleFr": "How many years of tree planting experience does your organization have?",
+          "descriptionEn": "(Enter the number of years)",
+          "descriptionFr": "(Enter the number of years)",
+          "required": false
+        }
+      },
+      {
+        "id": 10,
+        "type": "textField",
+        "properties": {
+          "titleEn": "How many trees has your organization successfully planted in the past 3 years and/or how much area have you successfully tree planted? Please note that demonstrated experience is a selection criterion.",
+          "titleFr": "How many trees has your organization successfully planted in the past 3 years and/or how much area have you successfully tree planted? Please note that demonstrated experience is a selection criterion.",
+          "descriptionEn": "(Enter number of trees to nearest thousand or area to the nearest hectare)",
+          "descriptionFr": "(Enter number of trees to nearest thousand or area to the nearest hectare)",
+          "required": false
+        }
+      },
+      {
+        "id": 11,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Project Information",
+          "titleFr": "Project Information",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 12,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Project Location",
+          "titleFr": "Project Location",
+          "descriptionEn": "List the location(s) in which your project operates. Please specify your province and region/city. You can add another location if your project operates in more than one place.",
+          "descriptionFr": "List the location(s) in which your project operates. Please specify your province and region/city. You can add another location if your project operates in more than one place.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 13,
+        "type": "dynamicRow",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "required": false,
+          "subElements": [
+            {
+              "id": 13,
+              "type": "dropdown",
+              "properties": {
+                "titleEn": "Province or territory",
+                "titleFr": "Province ou territoire",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "choices": [
+                  {
+                    "en": "Select a province",
+                    "fr": "Select a province"
+                  },
+                  {
+                    "en": "Alberta",
+                    "fr": "Alberta"
+                  },
+                  {
+                    "en": "British Columbia",
+                    "fr": "British Columbia"
+                  },
+                  {
+                    "en": "Manitoba",
+                    "fr": "Manitoba"
+                  },
+                  {
+                    "en": "New Brunswick",
+                    "fr": "New Brunswick"
+                  },
+                  {
+                    "en": "Newfoundland and Labrador",
+                    "fr": "Newfoundland and Labrador"
+                  },
+                  {
+                    "en": "Northwest Territories",
+                    "fr": "Northwest Territories"
+                  },
+                  {
+                    "en": "Nova Scotia",
+                    "fr": "Nova Scotia"
+                  },
+                  {
+                    "en": "Nunavut",
+                    "fr": "Nunavut"
+                  },
+                  {
+                    "en": "Ontario",
+                    "fr": "Ontario"
+                  },
+                  {
+                    "en": "Prince Edward Island",
+                    "fr": "Prince Edward Island"
+                  },
+                  {
+                    "en": "Quebec",
+                    "fr": "Quebec"
+                  },
+                  {
+                    "en": "Saskatchewan",
+                    "fr": "Saskatchewan"
+                  },
+                  {
+                    "en": "Yukon",
+                    "fr": "Yukon"
+                  }
+                ],
+                "required": false
+              }
+            },
+            {
+              "id": 13,
+              "type": "textField",
+              "properties": {
+                "titleEn": "City or Region",
+                "titleFr": "City or Region",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "required": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Expected Start Date",
+          "titleFr": "Expected Start Date",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 15,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Expected End Date",
+          "titleFr": "Expected End Date",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 16,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Please select the location type(s) for your project",
+          "titleFr": "Please select the location type(s) for your project",
+          "descriptionEn": "Select all that apply",
+          "descriptionFr": "Select all that apply",
+          "required": false,
+          "choices": [
+            {
+              "en": "Urban",
+              "fr": "Urban"
+            },
+            {
+              "en": "Suburban/Periurban",
+              "fr": "Suburban/Periurban"
+            },
+            {
+              "en": "Rural/Remote",
+              "fr": "Rural/Remote"
+            }
+          ]
+        }
+      },
+      {
+        "id": 17,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Provide an estimate of the number of new trees to be planted for this 2021 tree planting project/initiative.",
+          "titleFr": "Provide an estimate of the number of new trees to be planted for this 2021 tree planting project/initiative.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Please provide number to nearest thousand)",
+          "descriptionFr": "(Please provide number to nearest thousand)",
+          "required": false
+        }
+      },
+      {
+        "id": 18,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Has the source of trees for this project been identified and/or secured?",
+          "titleFr": "Has the source of trees for this project been identified and/or secured?",
+          "descriptionEn": "If yes, please provide the name and location of the nursery below.",
+          "descriptionFr": "If yes, please provide the name and location of the nursery below.",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 19,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name of nursery (If you answered yes, to previous question)",
+          "titleFr": "Name of nursery (If you answered yes, to previous question)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 20,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Location of nursery (If you answered yes to the previous question)",
+          "titleFr": "Location of nursery (If you answered yes to the previous question)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 21,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Provide an estimate of the land required to plant the number of trees identified above",
+          "titleFr": "Provide an estimate of the land required to plant the number of trees identified above",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Please express land area in hectares)",
+          "descriptionFr": "(Please express land area in hectares)",
+          "required": false
+        }
+      },
+      {
+        "id": 22,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Has land already been identified and/or secured?",
+          "titleFr": "Has land already been identified and/or secured?",
+          "descriptionEn": "(i.e: agreement in principal with landowners)",
+          "descriptionFr": "(i.e: agreement in principal with landowners)",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 23,
+        "type": "radio",
+        "properties": {
+          "titleEn": "If applicable, do you know if your proposed project will take place within or adjacent to Indigenous lands or traditional territory, including lands governed by a modern treaty?",
+          "titleFr": "If applicable, do you know if your proposed project will take place within or adjacent to Indigenous lands or traditional territory, including lands governed by a modern treaty?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            },
+            {
+              "en": "I don't know",
+              "fr": "I don't know"
+            }
+          ]
+        }
+      },
+      {
+        "id": 24,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Project Overview",
+          "titleFr": "Project Overview",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 25,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Please provide brief answers to all the sections below.",
+          "titleFr": "Please provide brief answers to all the sections below.",
+          "descriptionEn": "Be as concise as possible with your responses; however, do not leave out important information in order to be brief. Answer all sections as best as you can. Incomplete answers will not necessarily adversely affect the assessment of your EOI.",
+          "descriptionFr": "Be as concise as possible with your responses; however, do not leave out important information in order to be brief. Answer all sections as best as you can. Incomplete answers will not necessarily adversely affect the assessment of your EOI.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 26,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Goals and Objectives",
+          "titleFr": "Goals and Objectives",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Describe the project and indicate how it fits within the objectives of the Growing Canada Forests program. Please visit (main web page for GCF) to learn more",
+          "descriptionFr": "Describe the project and indicate how it fits within the objectives of the Growing Canada Forests program. Please visit (main web page for GCF) to learn more",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 27,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Proposed Plan",
+          "titleFr": "Proposed Plan",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Describe the key activities that will be carried out in 2021 to implement the tree planting project/initiative, including elements such as: securing trees, accessing available land, seeking authorizations from appropriate authorities (if required), ensuring that the right trees are planted in the right environment, availability of labour and overseeing tree-planting operations. Please describe critical milestones and dates",
+          "descriptionFr": "Describe the key activities that will be carried out in 2021 to implement the tree planting project/initiative, including elements such as: securing trees, accessing available land, seeking authorizations from appropriate authorities (if required), ensuring that the right trees are planted in the right environment, availability of labour and overseeing tree-planting operations. Please describe critical milestones and dates",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 28,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Readiness",
+          "titleFr": "Readiness",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Describe your organization’s experience and readiness for successfully implementing your proposed tree planting project/initiative. This must include your plan to implement COVID-19 protocols in accordance with the health safety regulations in the province(s) or territory(ies) where trees would be planted",
+          "descriptionFr": "Describe your organization’s experience and readiness for successfully implementing your proposed tree planting project/initiative. This must include your plan to implement COVID-19 protocols in accordance with the health safety regulations in the province(s) or territory(ies) where trees would be planted",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 29,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Monitoring",
+          "titleFr": "Monitoring",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Provide details on how the trees would be monitored for health and survival in 2021 and for a period after the trees are planted. Please provide information on your management plan in the case of substantial tree mortality post-planting",
+          "descriptionFr": "Provide details on how the trees would be monitored for health and survival in 2021 and for a period after the trees are planted. Please provide information on your management plan in the case of substantial tree mortality post-planting",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 30,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Prior Work",
+          "titleFr": "Prior Work",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "List any work that has been completed in preparation for this project - e.g., work plan or business case, available seedlings and land identified, feasibility studies",
+          "descriptionFr": "List any work that has been completed in preparation for this project - e.g., work plan or business case, available seedlings and land identified, feasibility studies",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 31,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "GHG Emission Reductions and Co-Benefits",
+          "titleFr": "GHG Emission Reductions and Co-Benefits",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Describe how your proposed project will seek to maximize greenhouse gas (GHG) emission reductions or carbon sequestration (for example, by selecting planting sites where no or minimal vegetation removal is required).  GHG impacts do not need to be quantified at this stage.  Also describe how your proposed project will lead to environmental and human well-being co-benefits (for example, increasing biodiversity to increase ecosystem resilience to climate change, creating more green spaces for your community, creating green jobs, etc.)",
+          "descriptionFr": "Describe how your proposed project will seek to maximize greenhouse gas (GHG) emission reductions or carbon sequestration (for example, by selecting planting sites where no or minimal vegetation removal is required).  GHG impacts do not need to be quantified at this stage.  Also describe how your proposed project will lead to environmental and human well-being co-benefits (for example, increasing biodiversity to increase ecosystem resilience to climate change, creating more green spaces for your community, creating green jobs, etc.)",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 32,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Partners/Supporters",
+          "titleFr": "Partners/Supporters",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Identify any existing or potential partnerships/collaborations associated to your proposed project and provide a brief overview of their proposed contribution(s)",
+          "descriptionFr": "Identify any existing or potential partnerships/collaborations associated to your proposed project and provide a brief overview of their proposed contribution(s)",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 33,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Forecasted Project Costs",
+          "titleFr": "Forecasted Project Costs",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 34,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Forecasted Total Project Cost",
+          "titleFr": "Forecasted Total Project Cost",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 35,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Amount Requested from NRCAN",
+          "titleFr": "Amount Requested from NRCAN",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 36,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Funding Partners",
+          "titleFr": "Funding Partners",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 37,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "NRCAN",
+          "titleFr": "NRCAN",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 38,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Total Budget",
+          "titleFr": "Total Budget",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 39,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Fiscal Year 2021",
+          "titleFr": "Fiscal Year 2021",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 40,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Applicant",
+          "titleFr": "Applicant",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 41,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Total Budget",
+          "titleFr": "Total Budget",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 42,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Fiscal Year 2021",
+          "titleFr": "Fiscal Year 2021",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": false
+        }
+      },
+      {
+        "id": 43,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Other Funding Partners/Supporters (specify)",
+          "titleFr": "Other Funding Partners/Supporters (specify)",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If your project is receiving funding from multiple sources click add a row to create additional entries.",
+          "descriptionFr": "If your project is receiving funding from multiple sources click add a row to create additional entries.",
+          "required": false
+        }
+      },
+      {
+        "id": 44,
+        "type": "dynamicRow",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "required": false,
+          "subElements": [
+            {
+              "id": 44,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Name of Funding Source",
+                "titleFr": "Name of Funding Source",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "required": false
+              }
+            },
+            {
+              "id": 44,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Total Budget",
+                "titleFr": "Total Budget",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "required": false
+              }
+            },
+            {
+              "id": 44,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Fiscal Year 2021",
+                "titleFr": "Fiscal Year 2021",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "required": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": 45,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Have you already incurred costs or made legal commitments to the project?",
+          "titleFr": "Have you already incurred costs or made legal commitments to the project?",
+          "descriptionEn": "(If yes, please describe any commitments and/or the costs including, the amount and when the costs were incurred)",
+          "descriptionFr": "(If yes, please describe any commitments and/or the costs including, the amount and when the costs were incurred)",
+          "required": false,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 46,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Describe any commitments and/or the costs including, the amount and when the costs were incurred",
+          "titleFr": "Describe any commitments and/or the costs including, the amount and when the costs were incurred",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(If you answered yes to the previous question)",
+          "descriptionFr": "(If you answered yes to the previous question)",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 47,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Diversity and Inclusion",
+          "titleFr": "Diversity and Inclusion",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 48,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
+          "titleFr": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
+          "descriptionEn": "Please note: Providing answers to the question below will not adversely affect the assessment of your EOI. If your organization does not wish to answer the question, please leave the fields blank.",
+          "descriptionFr": "Please note: Providing answers to the question below will not adversely affect the assessment of your EOI. If your organization does not wish to answer the question, please leave the fields blank.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 49,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Does your organization have a workplace diversity and inclusion plan that targets one or more of the following under-represented groups?",
+          "titleFr": "Does your organization have a workplace diversity and inclusion plan that targets one or more of the following under-represented groups?",
+          "descriptionEn": "Select all that apply",
+          "descriptionFr": "Select all that apply",
+          "required": false,
+          "choices": [
+            {
+              "en": "Indigenous Peoples",
+              "fr": "Indigenous Peoples"
+            },
+            {
+              "en": "LGBQT2+",
+              "fr": "LGBQT2+"
+            },
+            {
+              "en": "Members of Official Language Minority",
+              "fr": "Members of Official Language Minority"
+            },
+            {
+              "en": "Persons with Disabilities",
+              "fr": "Persons with Disabilities"
+            },
+            {
+              "en": "Visible Minorities",
+              "fr": "Visible Minorities"
+            },
+            {
+              "en": "Women",
+              "fr": "Women"
+            },
+            {
+              "en": "Youth",
+              "fr": "Youth"
+            }
+          ]
+        }
+      },
+      {
+        "id": 50,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Authorization",
+          "titleFr": "Authorization",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 51,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Notice to Applicants",
+          "titleFr": "Notice to Applicants",
+          "descriptionEn": "The use and distribution of information collected through this Expression of Interest (EOI) will comply with both the Privacy Act and the Access to Information Act.",
+          "descriptionFr": "The use and distribution of information collected through this Expression of Interest (EOI) will comply with both the Privacy Act and the Access to Information Act.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 52,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Pursuant to Privacy Act",
+          "titleFr": "Pursuant to Privacy Act",
+          "descriptionEn": "The program will keep confidential any personal information it may collect and will not disclose or transmit said information without your written consent.",
+          "descriptionFr": "The program will keep confidential any personal information it may collect and will not disclose or transmit said information without your written consent.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 53,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Pursuant to Access of Information Act",
+          "titleFr": "Pursuant to Access of Information Act",
+          "descriptionEn": "The program will protect from disclosure any information of a financial, commercial, scientific or technical nature it collects from you so long as you treat said information as confidential in your own establishment. If you choose to send the information or other confidential information to the program by e-mail, the program will respond by email. Similarly, if your correspondence is through regular mail, the program’s response will be in like manner. However, in all cases, the program will use e-mail correspondence to you for all non-confidential matters.",
+          "descriptionFr": "The program will protect from disclosure any information of a financial, commercial, scientific or technical nature it collects from you so long as you treat said information as confidential in your own establishment. If you choose to send the information or other confidential information to the program by e-mail, the program will respond by email. Similarly, if your correspondence is through regular mail, the program’s response will be in like manner. However, in all cases, the program will use e-mail correspondence to you for all non-confidential matters.",
+          "charLimit": 1000,
+          "required": false
+        }
+      },
+      {
+        "id": 54,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "By checking the box below, you are providing the program with consent to use your information",
+          "titleFr": "By checking the box below, you are providing the program with consent to use your information",
+          "descriptionEn": "We might share it with the program’s employees, external consultants, review committee members, officials in other departments (federal, provincial and territorial) for the purposes assessing the merits of your EOI and for formulating internal policy analysis",
+          "descriptionFr": "We might share it with the program’s employees, external consultants, review committee members, officials in other departments (federal, provincial and territorial) for the purposes assessing the merits of your EOI and for formulating internal policy analysis",
+          "required": false,
+          "choices": [
+            {
+              "en": "I have read and agree with the statement above",
+              "fr": "I have read and agree with the statement above"
+            }
+          ]
+        }
+      },
+      {
+        "id": 55,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "By checking the box below you certify that you have read the Early Start Applicant Guide",
+          "titleFr": "By checking the box below you certify that you have read the Early Start Applicant Guide",
+          "descriptionEn": "This means that you understand that this EOI does not constitute, nor should it be construed, in any manner whatsoever, as creating an obligation on NRCan to fund the proposed project",
+          "descriptionFr": "This means that you understand that this EOI does not constitute, nor should it be construed, in any manner whatsoever, as creating an obligation on NRCan to fund the proposed project",
+          "required": false,
+          "choices": [
+            {
+              "en": "I have read and agree with the statement above",
+              "fr": "I have read and agree with the statement above"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

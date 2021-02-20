@@ -81,6 +81,18 @@ a:visited {
   @apply text-purple-default;
 }
 
+.link-list {
+  @apply list-inside;
+
+  li {
+    @apply mb-2;
+  }
+
+  li:last-of-type {
+    @apply mb-0;
+  }
+}
+
 .canada-wordmark img {
   @apply inline;
 }

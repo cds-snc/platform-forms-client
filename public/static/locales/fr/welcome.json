@@ -10,7 +10,8 @@
     }
   },
   "formList": {
-    "title": "Liste de formulaires"
+    "title": "Liste de formulaires",
+    "text": "A list of live or demo forms that we are currently working on:"
   },
   "design": {
     "title": "Design",

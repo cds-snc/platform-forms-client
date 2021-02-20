@@ -178,7 +178,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     case "plainText":
       return (
         <div className="gc-plain-text">
-          {labelText ? <h2 className="gc-h2">{labelText}</h2> : null}
+          {labelText ? <h2 className="gc-h3">{labelText}</h2> : null}
+
           {descriptiveText}
         </div>
       );
