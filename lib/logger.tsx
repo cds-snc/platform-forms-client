@@ -7,17 +7,14 @@ export const logMessage = pino({
     transmit: {
       level: process.env.NODE_ENV === "production" ? "error" : "info",
       send: (level, logEvent) => {
-        let msg = logEvent.messages[0];
-        if (Array.isArray(msg)) {
-          msg.push("Client Side Log:");
-        } else {
-          msg = `Client Side Log: ${msg}`;
-        }
-
+        const msg = logEvent.messages[0];
         const headers = {
           type: "application/json",
         };
-        const blob = new Blob([JSON.stringify({ msg, level })], headers);
+        const blob = new Blob(
+          ["Client Side Log: " + JSON.stringify({ msg, level })],
+          headers
+        );
         navigator.sendBeacon("/api/log", blob);
       },
     },
