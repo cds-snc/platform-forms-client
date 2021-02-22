@@ -10,7 +10,7 @@ main {
   @apply md:text-small_base text-base;
 
   div {
-    @apply md:mb-12 mb-16 max-w-prose;
+    @apply md:mb-12 mb-14 max-w-prose;
   }
 
   div:last-of-type {
@@ -26,8 +26,24 @@ main {
   @apply md:text-small_base list-disc text-base;
 }
 
-.gc-ul li {
-  @apply ml-6;
+.gc-ul {
+  li {
+    @apply ml-6 block;
+  }
+}
+
+ul.custom {
+  list-style: none;
+  padding-left: 1em;
+  margin-left: 0;
+  li {
+    margin: 0.5rem 0;
+  }
+  li:before {
+    content: "•";
+    margin: 0 0.5em 0.1em -0.9em;
+    font-size: 22px;
+  }
 }
 
 .gc-ul li:last-of-type {
@@ -82,8 +98,6 @@ a:visited {
 }
 
 .link-list {
-  @apply list-inside;
-
   li {
     @apply mb-2;
   }

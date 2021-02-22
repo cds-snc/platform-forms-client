@@ -10,11 +10,11 @@ const Sandbox = ({ t, i18n }) => {
     return formIDs.map((formID) => {
       const form = getFormByID(formID);
       return (
-        <p key={`link-${form.id}`}>
+        <li key={`link-${form.id}`}>
           <Link href={`/${form.id}`}>
             {form[getProperty("title", i18n.language)].toString()}
           </Link>
-        </p>
+        </li>
       );
     });
   };
@@ -23,35 +23,49 @@ const Sandbox = ({ t, i18n }) => {
     <>
       <h1 className="gc-h1">{t("title")}</h1>
 
-      <div className="">
-        <div className="mb-20">
-          <h2 className="text-3xl mb-5">{t("product.title")}</h2>
+      <div className="gc-homepage">
+        <div>
+          <h2>{t("product.title")}</h2>
           <p>{t("product.text")}</p>
-          <h2 className="text-3xl mt-10 mb-5">{t("formList.title")}</h2>
-          <LinksList />
-
-          <h2 className="text-3xl mt-10 mb-5">{t("product.preview.title")}</h2>
-          <Link href="/builder-preview">{t("product.preview.link")}</Link>
+        </div>
+        <div>
+          <h2>{t("formList.title")}</h2>
+          <ul className="link-list custom">
+            <LinksList />
+          </ul>
         </div>
 
-        <div className="mb-20">
-          <h2 className="text-3xl mb-5">{t("design.title")}</h2>
+        <div>
+          <h2>{t("product.preview.title")}</h2>
+          <ul className="link-list custom">
+            <li>
+              <Link href="/builder-preview">{t("product.preview.link")}</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>{t("design.title")}</h2>
           <p>{t("design.text")}</p>
-          <p>
-            <a href="https://platform-storybook.herokuapp.com/">
-              {t("design.system.title")}
-            </a>
-          </p>
+          <ul className="link-list custom">
+            <li>
+              <a href="https://platform-storybook.herokuapp.com/">
+                {t("design.system.title")}
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <div className="mb-20">
-          <h2 className="text-3xl mb-5">{t("technology.title")}</h2>
+        <div>
+          <h2>{t("technology.title")}</h2>
           <p>{t("technology.text")}</p>
-          <p>
-            <a href="https://github.com/cds-snc/platform-forms-node/">
-              {t("technology.git.title")}
-            </a>
-          </p>
+          <ul className="link-list custom">
+            <li>
+              <a href="https://github.com/cds-snc/platform-forms-node/">
+                {t("technology.git.title")}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </>
