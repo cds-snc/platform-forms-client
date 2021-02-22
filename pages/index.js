@@ -30,16 +30,16 @@ const Home = ({ t, i18n }) => {
 
         <div>
           <h2>{t("formList.title")}</h2>
-          <p className="mb-3">{t("formList.text")}</p>
-          <ul className="link-list">
+          <p>{t("formList.text")}</p>
+          <ul className="link-list custom">
             <LinksList />
           </ul>
         </div>
 
         <div>
           <h2>{t("design.title")}</h2>
-          <p className="mb-3">{t("design.text")}</p>
-          <ul className="list-inside">
+          <p>{t("design.text")}</p>
+          <ul className="link-list custom">
             <li>
               <a href="https://platform-storybook.herokuapp.com/">
                 {t("design.system.title")}
@@ -50,8 +50,8 @@ const Home = ({ t, i18n }) => {
 
         <div>
           <h2>{t("technology.title")}</h2>
-          <p className="mb-3">{t("technology.text")}</p>
-          <ul className="list-inside">
+          <p>{t("technology.text")}</p>
+          <ul className="link-list custom">
             <li>
               <a href="https://github.com/cds-snc/platform-forms-node/">
                 {t("technology.git.title")}
