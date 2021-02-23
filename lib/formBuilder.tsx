@@ -10,7 +10,6 @@ import {
   TextArea,
   FormGroup,
   FileInput,
-  FileAttachment,
   DynamicGroup,
   Description,
   Heading,

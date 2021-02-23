@@ -19,6 +19,29 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    if (e.target.files) {
+      const reader = new FileReader();
+
+      reader.onload = function () {
+        let fileObject = reader.result;
+        if (fileObject) {
+          // Before sending to Notify, remove the "data..." from the result as per
+          // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+
+          fileObject =
+            typeof fileObject === "string"
+              ? fileObject.replace(/^data:(.)*base64,/, "")
+              : fileObject;
+        }
+        setFile(fileObject);
+      };
+
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
   return (
     <>
       {meta.touched && meta.error ? (
@@ -31,26 +54,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         id={id}
         accept={fileType}
         {...field}
-        onChange={(e) => {
-          setValue(e.target.value);
-          if (e.target.files) {
-            const reader = new FileReader();
-            reader.readAsDataURL(e.target.files[0]);
-            reader.onload = function () {
-              let fileObject = reader.result;
-              if (fileObject) {
-                // Before sending to Notify, remove the "data..." from the result as per
-                // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
-
-                fileObject =
-                  typeof fileObject === "string"
-                    ? fileObject.replace(/^data:(.)*base64,/, "")
-                    : fileObject;
-              }
-              setFile(fileObject);
-            };
-          }
-        }}
+        onChange={handleFileChange}
       />
       <input
         type="hidden"
