@@ -100,18 +100,6 @@
         }
       },
       {
-        "id": 8,
-        "type": "fileInput",
-        "properties": {
-          "titleEn": "Test file upload",
-          "titleFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "fileType": "image/*",
-          "required": false
-        }
-      },
-      {
         "id": 7,
         "type": "textArea",
         "properties": {
@@ -121,6 +109,18 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 8,
+        "type": "fileInput",
+        "properties": {
+          "titleEn": "Test file upload",
+          "titleFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "fileType": "image/*",
           "required": false
         }
       }

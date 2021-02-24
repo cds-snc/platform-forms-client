@@ -30,7 +30,23 @@ const submit = (req, res) => {
   const submissionFormat = getSubmissionByID(req.body.form.id);
   const sendToNotify = process.env.NODE_ENV ?? "development";
   const testing = process.env.TEST ?? false;
-  const fileAttachment = formAttached.file ? formAttached.file : null;
+  const responses = req.body?.submission?.responses;
+
+  //Handle file attachments
+  let fileAttachment = "";
+  if (responses) {
+    responses.map((response) => {
+      if (response.file) {
+        // Before sending to Notify, remove the "data..." from the result as per
+        // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+        fileObject = response.src.result;
+        fileAttachment =
+          typeof fileObject === "string"
+            ? fileObject.replace(/^data:(.)*base64,/, "")
+            : fileObject;
+      }
+    });
+  }
 
   if (sendToNotify === "production" && !testing) {
     if ((submissionFormat !== null) & (submissionFormat.email !== "")) {
