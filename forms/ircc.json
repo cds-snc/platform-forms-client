@@ -92,8 +92,8 @@
         "id": 1,
         "type": "heading",
         "properties": {
-          "titleEn": "1. SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
-          "titleFr": "1. SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
+          "titleEn": "Introduction",
+          "titleFr": "Introduction",
           "headingLevel": "h2",
           "isSectional": true,
           "required": false
@@ -101,154 +101,136 @@
       },
       {
         "id": 2,
-        "type": "textField",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Originating Government Department or Organization",
-          "titleFr": "Ministère ou organisme gouvernemental d’origine",
-          "placeholderEn": "",
-          "placeholderFr": "",
+          "titleEn": "SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
+          "titleFr": "SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 100,
+          "charLimit": 5000,
           "required": false
         }
       },
       {
         "id": 3,
-        "type": "textField",
+        "type": "radio",
         "properties": {
-          "titleEn": "Branch or Directorate",
-          "titleFr": "Direction générale ou Direction",
-          "placeholderEn": "",
-          "placeholderFr": "",
+          "titleEn": "Does your project propose indirect settlement services or direct services only within a testing context?",
+          "titleFr": "Does your project propose indirect settlement services or direct services only within a testing context?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
         }
       },
       {
         "id": 4,
-        "type": "textField",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Subcontract Number",
-          "titleFr": "Numéro du contrat de sous-traitance",
-          "placeholderEn": "",
-          "placeholderFr": "",
+          "titleEn": "The project must undertake innovative approaches (a new approach or adaptation of an existing approach) and be informed by user-centred design principles that places clients and their needs at the center of the innovation’s focus, contribute to building strong evidence-based research, and respond to the problem statement.",
+          "titleFr": "The project must undertake innovative approaches (a new approach or adaptation of an existing approach) and be informed by user-centred design principles that places clients and their needs at the center of the innovation’s focus, contribute to building strong evidence-based research, and respond to the problem statement.",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 100,
+          "charLimit": 5000,
           "required": false
         }
       },
       {
         "id": 5,
-        "type": "textField",
+        "type": "radio",
         "properties": {
-          "titleEn": "Name and Address of Subcontractor",
-          "titleFr": "Nom et adresse du sous-traitant",
-          "placeholderEn": "",
-          "placeholderFr": "",
+          "titleEn": "In your application, will you be able to demonstrate how you’ve conducted a strong assessment of gaps in existing policies, approaches or initiatives directed toward IRCC eligible clients?",
+          "titleFr": "In your application, will you be able to demonstrate how you’ve conducted a strong assessment of gaps in existing policies, approaches or initiatives directed toward IRCC eligible clients?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
         }
       },
       {
         "id": 6,
-        "type": "textArea",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Brief Description of Work",
-          "titleFr": "Brève description du travail",
-          "placeholderEn": "",
-          "placeholderFr": "",
+          "titleEn": "The following elements should be included in a full proposal to ensure a well-designed evaluation plan is produced:",
+          "titleFr": "The following elements should be included in a full proposal to ensure a well-designed evaluation plan is produced:",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 200,
+          "charLimit": 5000,
           "required": false
         }
       },
       {
         "id": 7,
-        "type": "radio",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Will the supplier require access to Controlled Goods?",
-          "titleFr": "Le fournisseur aura-t-il accès à des marchandises contrôlées?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(1) A comprehensive plan to measure performance and track progress to achieve identified Settlement Program outcomes;",
+          "descriptionFr": "(1) A comprehensive plan to measure performance and track progress to achieve identified Settlement Program outcomes;",
+          "charLimit": 5000,
+          "required": false
         }
       },
       {
         "id": 8,
-        "type": "radio",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Will the supplier require access to unclassified military technical data subject to the provisions of the Technical Data Control Regulations?",
-          "titleFr": "Le fournisseur aura-t-il accès à des données techniques militaires non classifiées qui sont assujetties aux dispositions du Règlement sur le contrôle des données techniques?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(2) Clear, measurable and meaningful performance indicators to assess impact;",
+          "descriptionFr": "(2) Clear, measurable and meaningful performance indicators to assess impact;",
+          "charLimit": 5000,
+          "required": false
         }
       },
       {
         "id": 9,
-        "type": "heading",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Part A: Indicate the type of access required",
-          "titleFr": "Partie A : Indiquer le type d’accès requis",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(3) An effective approach to establish baseline data on indicators;",
+          "descriptionFr": "(3) An effective approach to establish baseline data on indicators;",
+          "charLimit": 5000,
           "required": false
         }
       },
       {
         "id": 10,
-        "type": "radio",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Will the supplier and its employees require access to PROTECTED and/or CLASSIFIED information or assets?",
-          "titleFr": "Le fournisseur ainsi que les employés auront-ils accès à des renseignements ou à des biens PROTÉGÉS et/ou CLASSIFIÉS?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(4) Multiple lines of evidence to increase the reliability of data;",
+          "descriptionFr": "(4) Multiple lines of evidence to increase the reliability of data;",
+          "charLimit": 5000,
+          "required": false
         }
       },
       {
         "id": 11,
         "type": "radio",
         "properties": {
-          "titleEn": "Will the supplier and its employees (e.g. cleaners, maintenance personnel) require access to restricted access areas? No access to PROTECTED and/or CLASSIFIED information or assets is permitted",
-          "titleFr": "Le fournisseur et ses employés (p. ex. nettoyeurs, personnel d’entretien) auront-ils accès à des zones d’accès restreintes? L’accès à des renseignements ou à des biens PROTÉGÉS et/ou CLASSIFIÉS n’est pas autorisé",
+          "titleEn": "Can you clearly articulate how you possess the skills and experience to put forward a robust evaluation plan focussing on outcomes? Or, can you outline a comprehensive plan to ensure that a qualified third-party evaluator will deliver such a plan?",
+          "titleFr": "Can you clearly articulate how you possess the skills and experience to put forward a robust evaluation plan focussing on outcomes? Or, can you outline a comprehensive plan to ensure that a qualified third-party evaluator will deliver such a plan?",
           "descriptionEn": "",
           "descriptionFr": "",
           "required": true,
@@ -266,10 +248,22 @@
       },
       {
         "id": 12,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "It is strongly encouraged that applicants collaborate with new and existing partners throughout the life of the project.",
+          "titleFr": "It is strongly encouraged that applicants collaborate with new and existing partners throughout the life of the project.",
+          "descriptionEn": "Potential applicants must define how they will engage key partners who will collaborate in a meaningful way to the successful of the project. This includes identifying existing partnerships, describing the nature of the partnerships, and the skills and experiences these partnerships will bring to the project.",
+          "descriptionFr": "Potential applicants must define how they will engage key partners who will collaborate in a meaningful way to the successful of the project. This includes identifying existing partnerships, describing the nature of the partnerships, and the skills and experiences these partnerships will bring to the project.",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 13,
         "type": "radio",
         "properties": {
-          "titleEn": "Is this a commercial courier or delivery requirement with no overnight storage?",
-          "titleFr": "S’agit-il d’un contrat de messagerie ou de livraison commerciale sans entreposage de nuit?",
+          "titleEn": "Have you identified relevant partners for your project, and can their contributions be clearly explained in detail and linked to the achievement of the projected outcomes?",
+          "titleFr": "Have you identified relevant partners for your project, and can their contributions be clearly explained in detail and linked to the achievement of the projected outcomes?",
           "descriptionEn": "",
           "descriptionFr": "",
           "required": true,
@@ -286,22 +280,11 @@
         }
       },
       {
-        "id": 13,
-        "type": "heading",
-        "properties": {
-          "titleEn": "Part A: Indicate the type of information that the supplier will be required to access",
-          "titleFr": "Partie A : Indiquer le type d'information auquel le fournisseur devra avoir accès",
-          "headingLevel": "h2",
-          "isSectional": true,
-          "required": false
-        }
-      },
-      {
         "id": 14,
         "type": "plainText",
         "properties": {
-          "titleEn": "Level of Information",
-          "titleFr": "Niveau d'information",
+          "titleEn": "SDI has the goal of informing Settlement services to ultimately improve them in the medium to long term. As a result, reporting to IRCC for an SDI project may require reporting beyond the standard financial and activity reporting expected for the Settlement program.",
+          "titleFr": "SDI has the goal of informing Settlement services to ultimately improve them in the medium to long term. As a result, reporting to IRCC for an SDI project may require reporting beyond the standard financial and activity reporting expected for the Settlement program.",
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
@@ -310,1052 +293,357 @@
       },
       {
         "id": 15,
-        "type": "checkbox",
+        "type": "radio",
         "properties": {
-          "titleEn": "Canada",
-          "titleFr": "Canada",
-          "descriptionEn": "(Select all that apply)",
-          "descriptionFr": "(Select all that apply)",
-          "required": false,
+          "titleEn": "Does your organization have the capacity to thoroughly report to IRCC bi-annually in relation to on-going project-level information?",
+          "titleFr": "Does your organization have the capacity to thoroughly report to IRCC bi-annually in relation to on-going project-level information?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": true,
           "choices": [
             {
-              "en": "Confidential",
-              "fr": "Confidentiel"
+              "en": "Yes",
+              "fr": "Oui"
             },
             {
-              "en": "Protected A",
-              "fr": "Protégé A"
-            },
-            {
-              "en": "Protected B",
-              "fr": "Protégé B"
-            },
-            {
-              "en": "Protected C",
-              "fr": "Protégé C"
-            },
-            {
-              "en": "Secret",
-              "fr": "Secret"
-            },
-            {
-              "en": "Top Secret",
-              "fr": "Très secret"
-            },
-            {
-              "en": "Top Secret (SIGINT)",
-              "fr": "Très secret (SIGINT)"
+              "en": "No",
+              "fr": "Non"
             }
           ]
         }
       },
       {
         "id": 16,
-        "type": "checkbox",
+        "type": "heading",
         "properties": {
-          "titleEn": "Foreign",
-          "titleFr": "Étranger",
-          "descriptionEn": "(Select all that apply)",
-          "descriptionFr": "(Select all that apply)",
-          "required": false,
-          "choices": [
-            {
-              "en": "Confidential",
-              "fr": "Confidentiel"
-            },
-            {
-              "en": "Protected A",
-              "fr": "Protégé A"
-            },
-            {
-              "en": "Protected B",
-              "fr": "Protégé B"
-            },
-            {
-              "en": "Protected C",
-              "fr": "Protégé C"
-            },
-            {
-              "en": "Secret",
-              "fr": "Secret"
-            },
-            {
-              "en": "Top Secret",
-              "fr": "Très secret"
-            },
-            {
-              "en": "Top Secret (SIGINT)",
-              "fr": "Très secret (SIGINT)"
-            }
-          ]
+          "titleEn": "Project Information",
+          "titleFr": "Project Information",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
         }
       },
       {
         "id": 17,
-        "type": "checkbox",
+        "type": "textField",
         "properties": {
-          "titleEn": "NATO",
-          "titleFr": "OTAN",
-          "descriptionEn": "(Select all that apply)",
-          "descriptionFr": "(Select all that apply)",
-          "required": false,
-          "choices": [
-            {
-              "en": "Unclassified",
-              "fr": "Non classifié"
-            },
-            {
-              "en": "Restricted",
-              "fr": "Diffusion restreinte"
-            },
-            {
-              "en": "Confidential",
-              "fr": "Confidentiel"
-            },
-            {
-              "en": "Secret",
-              "fr": "Secret"
-            },
-            {
-              "en": "Cosmic Top Secret",
-              "fr": "Cosmic très secret"
-            }
-          ]
+          "titleEn": "Email",
+          "titleFr": "Email",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Please enter a valid business e-mail address for the purposes of communication related to this funding process.",
+          "descriptionFr": "Please enter a valid business e-mail address for the purposes of communication related to this funding process.",
+          "charLimit": 100,
+          "required": false
         }
       },
       {
         "id": 18,
-        "type": "plainText",
+        "type": "textField",
         "properties": {
-          "titleEn": "Release Restrictions",
-          "titleFr": "Restrictions relatives à la diffusion",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
+          "titleEn": "GCS Organization ID",
+          "titleFr": "GCS Organization ID",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If you have previously applied for IRCC funding, or are currently receiving it, please enter your GCS organizational ID. If you do not have a GCS organizational ID, you can create one here.",
+          "descriptionFr": "If you have previously applied for IRCC funding, or are currently receiving it, please enter your GCS organizational ID. If you do not have a GCS organizational ID, you can create one here.",
+          "charLimit": 100,
           "required": false
         }
       },
       {
         "id": 19,
-        "type": "radio",
+        "type": "textField",
         "properties": {
-          "titleEn": "Canada",
-          "titleFr": "Canada",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": false,
-          "choices": [
-            {
-              "en": "No release restrictions",
-              "fr": "Aucune restriction relative à la diffusion"
-            },
-            {
-              "en": "Not releasable",
-              "fr": "À ne pas diffuser"
-            },
-            {
-              "en": "Restricted to (specify below)",
-              "fr": "Limité à (précisez ci-dessous)"
-            }
-          ]
+          "titleEn": "Name of Organization",
+          "titleFr": "Name of Organization",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "What is the name of the applying organization (or individual, if applicable) of this Letter of Interest? (12 words maximum)",
+          "descriptionFr": "What is the name of the applying organization (or individual, if applicable) of this Letter of Interest? (12 words maximum)",
+          "charLimit": 100,
+          "required": false
         }
       },
       {
         "id": 20,
-        "type": "textArea",
+        "type": "textField",
         "properties": {
-          "titleEn": "Specify country(ies)",
-          "titleFr": "Préciser le(s) pays",
+          "titleEn": "What is the title of your proposed project?",
+          "titleFr": "What is the title of your proposed project?",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
+          "descriptionEn": "(10 words max)",
+          "descriptionFr": "(10 words max)",
+          "charLimit": 300,
           "required": false
         }
       },
       {
         "id": 21,
-        "type": "radio",
+        "type": "plainText",
         "properties": {
-          "titleEn": "NATO",
-          "titleFr": "OTAN",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": false,
-          "choices": [
-            {
-              "en": "All NATO countries",
-              "fr": "Tous les pays de l’OTAN"
-            },
-            {
-              "en": "Restricted to (specify below)",
-              "fr": "Limité à (précisez ci-dessous)"
-            }
-          ]
-        }
-      },
-      {
-        "id": 22,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "Specify country(ies)",
-          "titleFr": "Préciser le(s) pays",
+          "titleEn": "Identify the proposed start and end date of your project",
+          "titleFr": "Identify the proposed start and end date of your project",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "descriptionEn": "Note that the earliest projects can begin is September 1, 2021, and the latest projects can end is March 31, 2024.",
+          "descriptionFr": "Note that the earliest projects can begin is September 1, 2021, and the latest projects can end is March 31, 2024.",
           "charLimit": 100,
           "required": false
         }
       },
       {
-        "id": 23,
-        "type": "radio",
+        "id": 22,
+        "type": "textField",
         "properties": {
-          "titleEn": "Foreign",
-          "titleFr": "Étranger",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": false,
-          "choices": [
-            {
-              "en": "No release restrictions",
-              "fr": "Aucune restriction relative à la diffusion"
-            },
-            {
-              "en": "Restricted to (specify below)",
-              "fr": "Limité à (précisez ci-dessous)"
-            }
-          ]
-        }
-      },
-      {
-        "id": 24,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "Specify country(ies)",
-          "titleFr": "Préciser le(s) pays",
+          "titleEn": "Start Date",
+          "titleFr": "Start Date",
           "placeholderEn": "",
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 23,
+        "type": "textField",
+        "properties": {
+          "titleEn": "End Date",
+          "titleFr": "End Date",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 24,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Financial Breakdown",
+          "titleFr": "Financial Breakdown",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Please indicate your notional funding request from IRCC, per fiscal year (if applicable).",
+          "descriptionFr": "Please indicate your notional funding request from IRCC, per fiscal year (if applicable).",
           "charLimit": 100,
           "required": false
         }
       },
       {
         "id": 25,
-        "type": "radio",
+        "type": "dynamicRow",
         "properties": {
-          "titleEn": "Will the supplier require access to PROTECTED and/or CLASSIFIED COMSEC information or assets?",
-          "titleFr": "Le fournisseur aura-t-il accès à des renseignements ou à des biens COMSEC désignés PROTÉGÉS et/ou CLASSIFIÉS?",
-          "descriptionEn": "(If Yes, indicate the level of sensitivity)",
-          "descriptionFr": "(Dans l’affirmative, indiquer le niveau de sensibilité)",
-          "required": true,
-          "choices": [
+          "titleEn": "",
+          "titleFr": "",
+          "required": false,
+          "subElements": [
             {
-              "en": "Yes",
-              "fr": "Oui"
+              "id": 25,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Fiscal Year",
+                "titleFr": "Fiscal Year",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "charLimit": 300,
+                "required": false
+              }
             },
             {
-              "en": "No",
-              "fr": "Non"
+              "id": 25,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Funding Requested",
+                "titleFr": "Funding Requested",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "charLimit": 300,
+                "required": false
+              }
             }
           ]
         }
       },
       {
         "id": 26,
-        "type": "textField",
+        "type": "dropdown",
         "properties": {
-          "titleEn": "Indicate the level of sensitivity",
-          "titleFr": "Indiquer le niveau de sensibilité",
+          "titleEn": "Select the priority that your project addresses",
+          "titleFr": "Select the priority that your project addresses",
           "placeholderEn": "",
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 100,
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            },
+            {
+              "en": "Harnessing Technologies to Support Remote Service Delivery",
+              "fr": "Harnessing Technologies to Support Remote Service Delivery"
+            },
+            {
+              "en": "Other",
+              "fr": "Other"
+            }
+          ],
           "required": false
         }
       },
       {
         "id": 27,
-        "type": "radio",
+        "type": "plainText",
         "properties": {
-          "titleEn": "Will the supplier require access to extremely sensitive INFOSEC information or assets?",
-          "titleFr": "Le fournisseur aura-t-il accès à des renseignements ou à des biens INFOSEC de nature extrêmement délicate?",
+          "titleEn": "Select at least one immediate and one intermediate Settlement Program outcome of your project.",
+          "titleFr": "Select at least one immediate and one intermediate Settlement Program outcome of your project.",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 28,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Immediate outcomes",
+          "titleFr": "Immediate outcomes",
+          "descriptionEn": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "descriptionFr": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "required": false,
           "choices": [
             {
-              "en": "Yes",
-              "fr": "Oui"
+              "en": "Increased understanding of client settlement needs an appropriate linkages to other services",
+              "fr": "Increased understanding of client settlement needs an appropriate linkages to other services"
             },
             {
-              "en": "No",
-              "fr": "Non"
+              "en": "Clients increase knowledge of life in Canada",
+              "fr": "Clients increase knowledge of life in Canada"
+            },
+            {
+              "en": "Clients acquire knowledge, skills, and connections to prepare for the Canadian labour market",
+              "fr": "Clients acquire knowledge, skills, and connections to prepare for the Canadian labour market"
             }
           ]
         }
       },
       {
-        "id": 28,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Short Title(s) of material",
-          "titleFr": "Titre(s) abrégé(s) du matériel",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
         "id": 29,
-        "type": "textField",
+        "type": "checkbox",
         "properties": {
-          "titleEn": "Document Number",
-          "titleFr": "Numéro du document",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
+          "titleEn": "Intermediate outcomes",
+          "titleFr": "Intermediate outcomes",
+          "descriptionEn": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "descriptionFr": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "required": false,
+          "choices": [
+            {
+              "en": "Clients access services that meet their needs",
+              "fr": "Clients access services that meet their needs"
+            },
+            {
+              "en": "Clients access services that meet their needs",
+              "fr": "Clients access services that meet their needs"
+            },
+            {
+              "en": "Clients are connected to communities and institutions",
+              "fr": "Clients are connected to communities and institutions"
+            }
+          ]
         }
       },
       {
         "id": 30,
-        "type": "heading",
+        "type": "textArea",
         "properties": {
-          "titleEn": "Part B: Personnel (Supplier)",
-          "titleFr": "Partie B : Personnel (Fournisseur)",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "titleEn": "In 500 words or less, describe the problem/issue/gap that the proposed project will address. Please provide the following information:",
+          "titleFr": "In 500 words or less, describe the problem/issue/gap that the proposed project will address. Please provide the following information:",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(A description of the problem/issue or an assessment of gaps in existing approaches or initiatives, The evidence and/or data supporting the problem/issue statement; and, The reason why current approaches/interventions are not adequately addressing the above mentioned problem or issue.)",
+          "descriptionFr": "(A description of the problem/issue or an assessment of gaps in existing approaches or initiatives, The evidence and/or data supporting the problem/issue statement; and, The reason why current approaches/interventions are not adequately addressing the above mentioned problem or issue.)",
+          "charLimit": 200,
           "required": false
         }
       },
       {
         "id": 31,
-        "type": "checkbox",
+        "type": "textArea",
         "properties": {
-          "titleEn": "Personnel security screening level required",
-          "titleFr": "Niveau de contrôle de la sécurité du personnel requis",
-          "descriptionEn": "(Select all that apply)",
-          "descriptionFr": "(Select all that apply)",
-          "required": false,
-          "choices": [
-            {
-              "en": "Confidential",
-              "fr": "Confidentiel"
-            },
-            {
-              "en": "Cosmic Top Secret",
-              "fr": "Cosmic très secret"
-            },
-            {
-              "en": "NATO Confidential",
-              "fr": "NATO Confidentiel"
-            },
-            {
-              "en": "NATO Secret",
-              "fr": "NATO Secret"
-            },
-            {
-              "en": "Reliability Status",
-              "fr": "Cote de fiabilité"
-            },
-            {
-              "en": "Secret",
-              "fr": "Secret"
-            },
-            {
-              "en": "Site Access",
-              "fr": "Accès aux emplacements"
-            },
-            {
-              "en": "Top Secret",
-              "fr": "Très secret"
-            },
-            {
-              "en": "Top Secret (SIGINT)",
-              "fr": "Très secret (SIGINT)"
-            }
-          ]
+          "titleEn": "In 500 words or less, please describe what activities your proposed project will do in order to test the problem/issue/gap identified in the previous question.",
+          "titleFr": "In 500 words or less, please describe what activities your proposed project will do in order to test the problem/issue/gap identified in the previous question.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Please include the following: Key activities that will be undertaken to address this problem/issue; The expected results of these activities.)",
+          "descriptionFr": "(Please include the following: Key activities that will be undertaken to address this problem/issue; The expected results of these activities.)",
+          "charLimit": 200,
+          "required": false
         }
       },
       {
         "id": 32,
         "type": "textArea",
         "properties": {
-          "titleEn": "Special Comments",
-          "titleFr": "Commentaires spéciaux",
+          "titleEn": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "titleFr": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "(NOTE: If multiple levels of screening are identified, a Security Classification Guide must be provided)",
-          "descriptionFr": "(REMARQUE : Si plusieurs niveaux de contrôle de sécurité sont requis, un guide de classification de la sécurité doit être fourni)",
+          "descriptionEn": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "descriptionFr": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
           "charLimit": 200,
           "required": false
         }
       },
       {
         "id": 33,
-        "type": "radio",
+        "type": "textArea",
         "properties": {
-          "titleEn": "May unscreened personnel be used for portions of the work?",
-          "titleFr": "Du personnel sans autorisation sécuritaire peut-il se voir confier des parties du travail?",
-          "descriptionEn": "(If Yes, will unscreened personnel be escorted?)",
-          "descriptionFr": "(Dans l’affirmative, le personnel en question sera-t-il escorté)",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
+          "titleEn": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "titleFr": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "descriptionFr": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "charLimit": 200,
+          "required": false
         }
       },
       {
         "id": 34,
-        "type": "textField",
+        "type": "textArea",
         "properties": {
-          "titleEn": "Will unscreened personnel be escorted?",
-          "titleFr": "Le personnel en question sera-t-il escorté",
+          "titleEn": "Potential applicants should engage key partners who will collaborate in a meaningful way to the success of the project.",
+          "titleFr": "Potential applicants should engage key partners who will collaborate in a meaningful way to the success of the project.",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
+          "descriptionEn": "(In 500 words or less, please list potential partners who will be involved in the project planning and implementation, and briefly describe the nature of the partnership/collaboration, including their skills and experience to fulfill their role.)",
+          "descriptionFr": "(In 500 words or less, please list potential partners who will be involved in the project planning and implementation, and briefly describe the nature of the partnership/collaboration, including their skills and experience to fulfill their role.)",
+          "charLimit": 200,
           "required": false
         }
       },
       {
-        "id": 35,
-        "type": "heading",
+        "id": 34,
+        "type": "textArea",
         "properties": {
-          "titleEn": "Part C: Safeguards (Supplier)",
-          "titleFr": "Partie C : Mesures de protection",
-          "headingLevel": "h2",
-          "isSectional": true,
-          "required": false
-        }
-      },
-      {
-        "id": 36,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Information / Assets",
-          "titleFr": "Renseignements / Biens",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 37,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Will the supplier be required to receive and store PROTECTED and/or CLASSIFIED information or assets on its site or premises?",
-          "titleFr": "Le fournisseur sera-t-il tenu de recevoir et d’entreposer sur place des renseignements ou des biens PROTÉGÉS et/ou CLASSIFIÉS?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 38,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Will the supplier be required to safeguard COMSEC information or assets?",
-          "titleFr": "Le fournisseur sera-t-il tenu de protéger des renseignements ou des biens COMSEC?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 39,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Production",
-          "titleFr": "Production",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 40,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Will the production (manufacture, and/or repair and/or modification) of PROTECTED and/or CLASSIFIED material or equipment occur at the supplier’s site or premises?",
-          "titleFr": "Les installations du fournisseur serviront-elles à la production (fabrication et/ou réparation et/ou modification) de matériel PROTÉGÉ et/ou CLASSIFIÉ?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 41,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Information Technology (IT) Media",
-          "titleFr": "Support relatif à la technologie de l'information (TI)",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 42,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Will the supplier be required to use its IT systems to electronically process, produce or store PROTECTED and/or CLASSIFIED information or data?",
-          "titleFr": "Le fournisseur sera-t-il tenu d’utiliser ses propres systèmes informatiques pour traiter, produire ou stocker électroniquement des renseignements ou des données PROTÉGÉS et/ou CLASSIFIÉS?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 43,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Will there be an electronic link between the supplier’s IT systems and the government department or agency?",
-          "titleFr": "Disposera-t-on d’un lien électronique entre le système informatique du fournisseur et celui du ministère ou de l’agence gouvernementale?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 41,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Summary Chart",
-          "titleFr": "Summary Chart",
-          "descriptionEn": "This will be automatically populated with answers from previous sections",
-          "descriptionFr": "This will be automatically populated with answers from previous sections",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 42,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Is the description of the work contained within this SRCL PROTECTED and/or CLASSIFIED?",
-          "titleFr": "La description du travail visé par la présente LVERS est-elle de nature PROTÉGÉE et/ou CLASSIFIÉE?",
-          "descriptionEn": "(If Yes, indicate the level of sensitivity)",
-          "descriptionFr": "(Dans l’affirmative, indiquer le niveau de sensibilité)",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 43,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Will the documentation attached to this SRCL be PROTECTED and/or CLASSIFIED?",
-          "titleFr": "La documentation associée à la présente LVERS sera-t-elle PROTÉGÉE et/ou CLASSIFIÉE?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 44,
-        "type": "heading",
-        "properties": {
-          "titleEn": "Part D: Authorization",
-          "titleFr": "Partie D : Authorisation",
-          "headingLevel": "h2",
-          "isSectional": true,
-          "required": false
-        }
-      },
-      {
-        "id": 45,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Organization Project Authority",
-          "titleFr": "Chargé de projet de l’organisme",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 46,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Name",
-          "titleFr": "Nom",
+          "titleEn": "Who will evaluate the project’s performance?",
+          "titleFr": "Who will evaluate the project’s performance?",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 47,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "Titre",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 48,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Telephone No",
-          "titleFr": "No de téléphone",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 49,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Facsimile No",
-          "titleFr": "No de télécopieur",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 50,
-        "type": "textField",
-        "properties": {
-          "titleEn": "E-mail address",
-          "titleFr": "Adresse courriel",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 51,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Date",
-          "titleFr": "Date",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 52,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Organization Security Authority",
-          "titleFr": "Responsable de la sécurité de l’organisme",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 53,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Name",
-          "titleFr": "Nom",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 54,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "Titre",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 55,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Telephone No",
-          "titleFr": "No de téléphone",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 56,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Facsimile No",
-          "titleFr": "No de télécopieur",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 57,
-        "type": "textField",
-        "properties": {
-          "titleEn": "E-mail address",
-          "titleFr": "Adresse courriel",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 58,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Date",
-          "titleFr": "Date",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 59,
-        "type": "radio",
-        "properties": {
-          "titleEn": "Are there additional instructions (e.g. Security Guide, Security Classification Guide) attached?",
-          "titleFr": "Des instructions supplémentaires (p. ex. Guide de sécurité, Guide de classification de la sécurité) sont-elles jointes?",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "required": true,
-          "choices": [
-            {
-              "en": "Yes",
-              "fr": "Oui"
-            },
-            {
-              "en": "No",
-              "fr": "Non"
-            }
-          ]
-        }
-      },
-      {
-        "id": 60,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Procurement Officer",
-          "titleFr": "Agent d'approvisionnement",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 61,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Name",
-          "titleFr": "Nom",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 62,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "Titre",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 63,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Telephone No",
-          "titleFr": "No de téléphone",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 64,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Facsimile No",
-          "titleFr": "No de télécopieur",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 65,
-        "type": "textField",
-        "properties": {
-          "titleEn": "E-mail address",
-          "titleFr": "Adresse courriel",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 66,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Date",
-          "titleFr": "Date",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 67,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Contracting Security Authority",
-          "titleFr": "Autorité contractante en matière de sécurité",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
-          "required": false
-        }
-      },
-      {
-        "id": 68,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Name",
-          "titleFr": "Nom",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 69,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "Titre",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 70,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Telephone No",
-          "titleFr": "No de téléphone",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 71,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Facsimile No",
-          "titleFr": "No de télécopieur",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 72,
-        "type": "textField",
-        "properties": {
-          "titleEn": "E-mail address",
-          "titleFr": "Adresse courriel",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "required": false
-        }
-      },
-      {
-        "id": 73,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Date",
-          "titleFr": "Date",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
+          "descriptionEn": "(In 500 words or less, If a third party organization will be used to evaluate the project’s performance, please provide the name, location, type of organization, and skills and experience in undertaking evaluation. If you are planning to conduct your own evaluation, please describe your organization’s ability (skills and experience) for designing and conducting the evaluation)",
+          "descriptionFr": "(In 500 words or less, If a third party organization will be used to evaluate the project’s performance, please provide the name, location, type of organization, and skills and experience in undertaking evaluation. If you are planning to conduct your own evaluation, please describe your organization’s ability (skills and experience) for designing and conducting the evaluation)",
+          "charLimit": 200,
           "required": false
         }
       }
