@@ -1,0 +1,652 @@
+{
+  "internalTitleEn": "Algonquin College Letter of Interest",
+  "internalTitleFr": "Algonquin College Letter of Interest",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "nick.makuch@cds-snc.ca"
+  },
+  "form": {
+    "id": 1990,
+    "version": 1,
+    "titleEn": "Algonquin College Letter of Interest",
+    "titleFr": "Algonquin College Letter of Interest",
+    "layout": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73
+    ],
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Introduction",
+          "titleFr": "Introduction",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 2,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
+          "titleFr": "SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 3,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Does your project propose indirect settlement services or direct services only within a testing context?",
+          "titleFr": "Does your project propose indirect settlement services or direct services only within a testing context?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "The project must undertake innovative approaches (a new approach or adaptation of an existing approach) and be informed by user-centred design principles that places clients and their needs at the center of the innovation’s focus, contribute to building strong evidence-based research, and respond to the problem statement.",
+          "titleFr": "The project must undertake innovative approaches (a new approach or adaptation of an existing approach) and be informed by user-centred design principles that places clients and their needs at the center of the innovation’s focus, contribute to building strong evidence-based research, and respond to the problem statement.",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 5,
+        "type": "radio",
+        "properties": {
+          "titleEn": "In your application, will you be able to demonstrate how you’ve conducted a strong assessment of gaps in existing policies, approaches or initiatives directed toward IRCC eligible clients?",
+          "titleFr": "In your application, will you be able to demonstrate how you’ve conducted a strong assessment of gaps in existing policies, approaches or initiatives directed toward IRCC eligible clients?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "The following elements should be included in a full proposal to ensure a well-designed evaluation plan is produced:",
+          "titleFr": "The following elements should be included in a full proposal to ensure a well-designed evaluation plan is produced:",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 7,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(1) A comprehensive plan to measure performance and track progress to achieve identified Settlement Program outcomes;",
+          "descriptionFr": "(1) A comprehensive plan to measure performance and track progress to achieve identified Settlement Program outcomes;",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 8,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(2) Clear, measurable and meaningful performance indicators to assess impact;",
+          "descriptionFr": "(2) Clear, measurable and meaningful performance indicators to assess impact;",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 9,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(3) An effective approach to establish baseline data on indicators;",
+          "descriptionFr": "(3) An effective approach to establish baseline data on indicators;",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 10,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "(4) Multiple lines of evidence to increase the reliability of data;",
+          "descriptionFr": "(4) Multiple lines of evidence to increase the reliability of data;",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 11,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Can you clearly articulate how you possess the skills and experience to put forward a robust evaluation plan focussing on outcomes? Or, can you outline a comprehensive plan to ensure that a qualified third-party evaluator will deliver such a plan?",
+          "titleFr": "Can you clearly articulate how you possess the skills and experience to put forward a robust evaluation plan focussing on outcomes? Or, can you outline a comprehensive plan to ensure that a qualified third-party evaluator will deliver such a plan?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "It is strongly encouraged that applicants collaborate with new and existing partners throughout the life of the project.",
+          "titleFr": "It is strongly encouraged that applicants collaborate with new and existing partners throughout the life of the project.",
+          "descriptionEn": "Potential applicants must define how they will engage key partners who will collaborate in a meaningful way to the successful of the project. This includes identifying existing partnerships, describing the nature of the partnerships, and the skills and experiences these partnerships will bring to the project.",
+          "descriptionFr": "Potential applicants must define how they will engage key partners who will collaborate in a meaningful way to the successful of the project. This includes identifying existing partnerships, describing the nature of the partnerships, and the skills and experiences these partnerships will bring to the project.",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 13,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Have you identified relevant partners for your project, and can their contributions be clearly explained in detail and linked to the achievement of the projected outcomes?",
+          "titleFr": "Have you identified relevant partners for your project, and can their contributions be clearly explained in detail and linked to the achievement of the projected outcomes?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "SDI has the goal of informing Settlement services to ultimately improve them in the medium to long term. As a result, reporting to IRCC for an SDI project may require reporting beyond the standard financial and activity reporting expected for the Settlement program.",
+          "titleFr": "SDI has the goal of informing Settlement services to ultimately improve them in the medium to long term. As a result, reporting to IRCC for an SDI project may require reporting beyond the standard financial and activity reporting expected for the Settlement program.",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 15,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Does your organization have the capacity to thoroughly report to IRCC bi-annually in relation to on-going project-level information?",
+          "titleFr": "Does your organization have the capacity to thoroughly report to IRCC bi-annually in relation to on-going project-level information?",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "required": true,
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ]
+        }
+      },
+      {
+        "id": 16,
+        "type": "heading",
+        "properties": {
+          "titleEn": "Project Information",
+          "titleFr": "Project Information",
+          "headingLevel": "h2",
+          "isSectional": true,
+          "required": false
+        }
+      },
+      {
+        "id": 17,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Email",
+          "titleFr": "Email",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Please enter a valid business e-mail address for the purposes of communication related to this funding process.",
+          "descriptionFr": "Please enter a valid business e-mail address for the purposes of communication related to this funding process.",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 18,
+        "type": "textField",
+        "properties": {
+          "titleEn": "GCS Organization ID",
+          "titleFr": "GCS Organization ID",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If you have previously applied for IRCC funding, or are currently receiving it, please enter your GCS organizational ID. If you do not have a GCS organizational ID, you can create one here.",
+          "descriptionFr": "If you have previously applied for IRCC funding, or are currently receiving it, please enter your GCS organizational ID. If you do not have a GCS organizational ID, you can create one here.",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 19,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name of Organization",
+          "titleFr": "Name of Organization",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "What is the name of the applying organization (or individual, if applicable) of this Letter of Interest? (12 words maximum)",
+          "descriptionFr": "What is the name of the applying organization (or individual, if applicable) of this Letter of Interest? (12 words maximum)",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 20,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What is the title of your proposed project?",
+          "titleFr": "What is the title of your proposed project?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(10 words max)",
+          "descriptionFr": "(10 words max)",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 21,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Identify the proposed start and end date of your project",
+          "titleFr": "Identify the proposed start and end date of your project",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Note that the earliest projects can begin is September 1, 2021, and the latest projects can end is March 31, 2024.",
+          "descriptionFr": "Note that the earliest projects can begin is September 1, 2021, and the latest projects can end is March 31, 2024.",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 22,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Start Date",
+          "titleFr": "Start Date",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 23,
+        "type": "textField",
+        "properties": {
+          "titleEn": "End Date",
+          "titleFr": "End Date",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 300,
+          "required": false
+        }
+      },
+      {
+        "id": 24,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Financial Breakdown",
+          "titleFr": "Financial Breakdown",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Please indicate your notional funding request from IRCC, per fiscal year (if applicable).",
+          "descriptionFr": "Please indicate your notional funding request from IRCC, per fiscal year (if applicable).",
+          "charLimit": 100,
+          "required": false
+        }
+      },
+      {
+        "id": 25,
+        "type": "dynamicRow",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "required": false,
+          "subElements": [
+            {
+              "id": 25,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Fiscal Year",
+                "titleFr": "Fiscal Year",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "charLimit": 300,
+                "required": false
+              }
+            },
+            {
+              "id": 25,
+              "type": "textField",
+              "properties": {
+                "titleEn": "Funding Requested",
+                "titleFr": "Funding Requested",
+                "placeholderEn": "",
+                "placeholderFr": "",
+                "descriptionEn": "",
+                "descriptionFr": "",
+                "charLimit": 300,
+                "required": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": 26,
+        "type": "dropdown",
+        "properties": {
+          "titleEn": "Select the priority that your project addresses",
+          "titleFr": "Select the priority that your project addresses",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "choices": [
+            {
+              "en": "",
+              "fr": ""
+            },
+            {
+              "en": "Harnessing Technologies to Support Remote Service Delivery",
+              "fr": "Harnessing Technologies to Support Remote Service Delivery"
+            },
+            {
+              "en": "Other",
+              "fr": "Other"
+            }
+          ],
+          "required": false
+        }
+      },
+      {
+        "id": 27,
+        "type": "plainText",
+        "properties": {
+          "titleEn": "Select at least one immediate and one intermediate Settlement Program outcome of your project.",
+          "titleFr": "Select at least one immediate and one intermediate Settlement Program outcome of your project.",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 5000,
+          "required": false
+        }
+      },
+      {
+        "id": 28,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Immediate outcomes",
+          "titleFr": "Immediate outcomes",
+          "descriptionEn": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "descriptionFr": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "required": false,
+          "choices": [
+            {
+              "en": "Increased understanding of client settlement needs an appropriate linkages to other services",
+              "fr": "Increased understanding of client settlement needs an appropriate linkages to other services"
+            },
+            {
+              "en": "Clients increase knowledge of life in Canada",
+              "fr": "Clients increase knowledge of life in Canada"
+            },
+            {
+              "en": "Clients acquire knowledge, skills, and connections to prepare for the Canadian labour market",
+              "fr": "Clients acquire knowledge, skills, and connections to prepare for the Canadian labour market"
+            }
+          ]
+        }
+      },
+      {
+        "id": 29,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Intermediate outcomes",
+          "titleFr": "Intermediate outcomes",
+          "descriptionEn": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "descriptionFr": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
+          "required": false,
+          "choices": [
+            {
+              "en": "Clients access services that meet their needs",
+              "fr": "Clients access services that meet their needs"
+            },
+            {
+              "en": "Clients access services that meet their needs",
+              "fr": "Clients access services that meet their needs"
+            },
+            {
+              "en": "Clients are connected to communities and institutions",
+              "fr": "Clients are connected to communities and institutions"
+            }
+          ]
+        }
+      },
+      {
+        "id": 30,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "In 500 words or less, describe the problem/issue/gap that the proposed project will address. Please provide the following information:",
+          "titleFr": "In 500 words or less, describe the problem/issue/gap that the proposed project will address. Please provide the following information:",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(A description of the problem/issue or an assessment of gaps in existing approaches or initiatives, The evidence and/or data supporting the problem/issue statement; and, The reason why current approaches/interventions are not adequately addressing the above mentioned problem or issue.)",
+          "descriptionFr": "(A description of the problem/issue or an assessment of gaps in existing approaches or initiatives, The evidence and/or data supporting the problem/issue statement; and, The reason why current approaches/interventions are not adequately addressing the above mentioned problem or issue.)",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 31,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "In 500 words or less, please describe what activities your proposed project will do in order to test the problem/issue/gap identified in the previous question.",
+          "titleFr": "In 500 words or less, please describe what activities your proposed project will do in order to test the problem/issue/gap identified in the previous question.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Please include the following: Key activities that will be undertaken to address this problem/issue; The expected results of these activities.)",
+          "descriptionFr": "(Please include the following: Key activities that will be undertaken to address this problem/issue; The expected results of these activities.)",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 32,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "titleFr": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "descriptionFr": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 33,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "titleFr": "In 750 words or less, please describe the methodology(ies) that will be used to demonstrate how, and to what extent, service delivery and client outcomes have improved.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "descriptionFr": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 34,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Potential applicants should engage key partners who will collaborate in a meaningful way to the success of the project.",
+          "titleFr": "Potential applicants should engage key partners who will collaborate in a meaningful way to the success of the project.",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(In 500 words or less, please list potential partners who will be involved in the project planning and implementation, and briefly describe the nature of the partnership/collaboration, including their skills and experience to fulfill their role.)",
+          "descriptionFr": "(In 500 words or less, please list potential partners who will be involved in the project planning and implementation, and briefly describe the nature of the partnership/collaboration, including their skills and experience to fulfill their role.)",
+          "charLimit": 200,
+          "required": false
+        }
+      },
+      {
+        "id": 34,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Who will evaluate the project’s performance?",
+          "titleFr": "Who will evaluate the project’s performance?",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(In 500 words or less, If a third party organization will be used to evaluate the project’s performance, please provide the name, location, type of organization, and skills and experience in undertaking evaluation. If you are planning to conduct your own evaluation, please describe your organization’s ability (skills and experience) for designing and conducting the evaluation)",
+          "descriptionFr": "(In 500 words or less, If a third party organization will be used to evaluate the project’s performance, please provide the name, location, type of organization, and skills and experience in undertaking evaluation. If you are planning to conduct your own evaluation, please describe your organization’s ability (skills and experience) for designing and conducting the evaluation)",
+          "charLimit": 200,
+          "required": false
+        }
+      }
+    ]
+  }
+}
