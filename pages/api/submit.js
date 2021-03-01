@@ -35,6 +35,7 @@ const submit = (req, res) => {
           personalisation: {
             subject: messageSubject,
             formResponse: emailBody,
+            link_to_file: { file: fileAttachment },
           },
           reference: uniqueReference,
         })
