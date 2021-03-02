@@ -166,9 +166,9 @@
   }
 }
 
-.preview-form {
-  &::before {
-    content: "Preview/Prévisualisation";
+.page-preview-form {
+  .gc-h1::before {
+    content: "[Preview/Prévisualisation]";
     @apply mb-10 block font-bold text-green-700;
   }
   .gc-button[type="submit"] {

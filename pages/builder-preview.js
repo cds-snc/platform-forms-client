@@ -23,7 +23,11 @@ const PreviewForm = () => {
       <h1 className="gc-h1">Preview a Form from JSON config</h1>
 
       <div>
-        <form onSubmit={(e) => getFormData(e, router)} method="POST">
+        <form
+          onSubmit={(e) => getFormData(e, router)}
+          method="POST"
+          encType="multipart/form-data"
+        >
           <textarea
             id="jsonInput"
             rows="20"

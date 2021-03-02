@@ -15,7 +15,6 @@ export type FileEventTarget = EventTarget & {
 };
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
-  //const [file, setFile] = useState<ArrayBuffer | string | null>();
   const { id, className, fileType } = props;
 
   const [field, meta, helpers] = useField(props);
@@ -58,6 +57,11 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   );
 };
 
+/**
+ * The input type="file" cannot be updated programatically, only via a user interaction
+ * Therefore, the HOC Field wraps this UploadField component.
+ * Formik will receive the updated values via the onChange function that is in the props
+ */
 const UploadField = ({ ...props }) => {
   return (
     <>

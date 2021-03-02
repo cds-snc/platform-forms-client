@@ -7,10 +7,11 @@ import "../styles/app.scss";
 import { logMessage } from "../lib/logger";
 
 const MyApp = ({ Component, pageProps }) => (
-  <Base>
+  <Base router={pageProps.router}>
     <Component {...pageProps} />
   </Base>
 );
+
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
   const defaultProps = appContext.Component.defaultProps;
@@ -29,6 +30,7 @@ MyApp.getInitialProps = async (appContext) => {
         ...(appProps.pageProps.namespacesRequired ?? ["common"]),
         ...(defaultProps?.i18nNamespaces ?? []),
       ],
+      router: appContext.router,
     },
   };
 };

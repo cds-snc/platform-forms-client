@@ -5,9 +5,18 @@ import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
 import Fip from "./Fip";
+import classnames from "classnames";
+import { useRouter } from "next/router";
 
 const Base = ({ children }) => {
   const isProduction = process.env.GA_ACTIVE ? true : false;
+  const router = useRouter();
+  const pageName = router && router.asPath ? router.asPath.split("?")[0] : "";
+  const classes = classnames(
+    "outer-container",
+    `page${pageName.replace(/\//g, "-")}`
+  );
+
   return (
     <>
       <Head>
@@ -52,7 +61,7 @@ const Base = ({ children }) => {
         />
       </Head>
       <SkipLink />
-      <div className="outer-container">
+      <div className={classes}>
         <header>
           <PhaseBanner />
           <Fip />

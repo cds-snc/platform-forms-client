@@ -3,7 +3,7 @@ import { NextRouter } from "next/router";
 import { withFormik, FormikProps } from "formik";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { Button } from "../index";
-import classnames from "classnames";
+
 import { TFunction } from "next-i18next";
 import { logMessage } from "../../../lib/logger";
 import { FormMetadataProperties } from "../../../lib/types";
@@ -12,7 +12,6 @@ interface InnerFormProps {
   children?: React.ReactNode;
   language: string;
   t: TFunction;
-  className?: string;
 }
 
 interface DynamicFormProps {
@@ -20,7 +19,6 @@ interface DynamicFormProps {
   language: string;
   router: NextRouter;
   t: TFunction;
-  className?: string;
 }
 
 //Shape of Form input values as returned by 'getFormInitialValues'
@@ -33,9 +31,7 @@ interface FormValues {
  * @param props
  */
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
-  const { children, handleSubmit, t, className } = props;
-  const classes = classnames("gc-form", className);
-
+  const { children, handleSubmit, t } = props;
   return (
     <form
       id="form"
@@ -43,7 +39,6 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
       onSubmit={handleSubmit}
       method="POST"
       encType="multipart/form-data"
-      className={classes}
     >
       {children}
       <div className="buttons">
