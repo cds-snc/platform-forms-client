@@ -15,8 +15,6 @@ export type FileEventTarget = EventTarget & {
 };
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
-  const { id, className, fileType } = props;
-
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
@@ -29,8 +27,8 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     if (!e.target || !e.target.files) {
       return;
     }
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    const reader = new FileReader();
+    const file = e.target.files[0];
     if (file) {
       reader.onloadend = () => setFileName(file.name);
       if (file.name !== fileName) {
@@ -52,7 +50,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
       ) : null}
-      <Field field={field} component={UploadField} onChange={_onChange} />
+      <Field component={UploadField} onChange={_onChange} />
     </>
   );
 };
@@ -67,8 +65,9 @@ const UploadField = ({ ...props }) => {
     <>
       <Field
         className="gc-file-input"
-        name={`${props.field.name}.uploader`}
+        name="uploader"
         type={"file"}
+        data-testid="file"
         {...props}
       />
     </>
