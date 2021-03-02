@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 export interface TextAreaProps {
   id: string;
@@ -22,7 +23,7 @@ export const TextArea = (
   return (
     <>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <ErrorMessage>{meta.error}</ErrorMessage>
       ) : null}
       <textarea
         data-testid="textarea"

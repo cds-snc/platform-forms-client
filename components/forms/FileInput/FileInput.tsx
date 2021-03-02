@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface FileInputProps {
   id: string;
@@ -22,7 +23,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   return (
     <>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <ErrorMessage>{meta.error}</ErrorMessage>
       ) : null}
       <input
         type="file"

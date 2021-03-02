@@ -1,4 +1,6 @@
 import { ChangeEvent } from "react";
+import { TFunction } from "next-i18next";
+import { NextRouter } from "next/router";
 
 export interface FormMetadataProperties {
   id: string;
@@ -65,3 +67,15 @@ export type Responses = {
 };
 
 export type Response = string | string[] | Record<string, unknown>[];
+
+//Shape of Form input values
+export interface FormValues {
+  [key: string]: unknown;
+}
+
+export interface DynamicFormProps {
+  formMetadata: FormMetadataProperties;
+  language: string;
+  router: NextRouter;
+  t: TFunction;
+}

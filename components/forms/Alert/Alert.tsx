@@ -37,14 +37,14 @@ export const Alert = ({
   );
 
   return (
-    <div className={classes} data-testid="alert" {...props}>
+    <div className={classes} data-testid="alert" {...props} role="alert">
       <div className="gc-alert__body">
-        {heading && <h3 className="gc-alert__heading">{heading}</h3>}
+        {heading && <h3 className="gc-h3">{heading}</h3>}
         {children &&
           (validation ? (
             children
           ) : (
-            <p className="gc-alert__text">{children}</p>
+            <div className="gc-alert__text">{children}</div>
           ))}
       </div>
       {cta && <div>{cta}</div>}

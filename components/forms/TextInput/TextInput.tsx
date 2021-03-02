@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface RequiredTextInputProps {
   id: string;
@@ -26,7 +27,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
   return (
     <>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <ErrorMessage>{meta.error}</ErrorMessage>
       ) : null}
 
       <input

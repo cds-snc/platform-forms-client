@@ -13,9 +13,9 @@ export const ErrorMessage = (props: ErrorMessageProps): React.ReactElement => {
   const classes = classnames("gc-error-message", className);
 
   return (
-    <div data-testid="errorMessage" className={classes} id={id} role="alert">
-      <p>{children}</p>
-    </div>
+    <p data-testid="errorMessage" className={classes} id={id} role="alert">
+      {children}
+    </p>
   );
 };
 

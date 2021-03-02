@@ -7,6 +7,10 @@
   @apply md:text-small_base text-base py-0 text-red-700 font-bold w-full;
 }
 
+.gc-alert {
+  @apply p-4 my-4  bg-red-100;
+}
+
 .gc-dropdown {
   background-image: url("../public/img/arrow-down.svg");
   @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;

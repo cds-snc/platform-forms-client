@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface RadioProps {
   id: string;
@@ -21,7 +22,7 @@ export const Radio = (
   return (
     <div data-testid="radio" className={classes}>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <ErrorMessage>{meta.error}</ErrorMessage>
       ) : null}
 
       <input

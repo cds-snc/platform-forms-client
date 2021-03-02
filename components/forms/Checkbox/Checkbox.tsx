@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface CheckboxProps {
   id: string;
@@ -23,7 +24,7 @@ export const Checkbox = (
   return (
     <div data-testid="checkbox" className={classes}>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <ErrorMessage>{meta.error}</ErrorMessage>
       ) : null}
       <input
         className="gc-input-checkbox__input"
