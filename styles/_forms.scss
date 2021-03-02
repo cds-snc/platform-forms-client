@@ -166,7 +166,9 @@
   }
 }
 
-.page-preview-form {
+.page-preview-form,
+.page-en-preview-form,
+.page-fr-preview-form {
   .gc-h1::before {
     content: "[Preview/Prévisualisation]";
     @apply mb-10 block font-bold text-green-700;
