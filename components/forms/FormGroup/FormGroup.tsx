@@ -21,6 +21,7 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
   return (
     <fieldset
       name={name}
+      id={name}
       data-testid="formGroup"
       className={classes}
       aria-describedby={ariaDescribedBy}
