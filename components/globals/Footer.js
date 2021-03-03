@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withTranslation } from "../../i18n";
+import { withTranslation } from "next-i18next";
 
 const Footer = ({ t }) => (
   <footer className="gc-footer" data-testid="footer">

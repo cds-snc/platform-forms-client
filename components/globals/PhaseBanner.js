@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withTranslation } from "../../i18n";
+import { withTranslation } from "next-i18next";
 
 const PhaseBanner = ({ t }) => (
   <div data-testid="PhaseBanner" className="gc-phase-banner">

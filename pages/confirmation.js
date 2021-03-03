@@ -1,9 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { withTranslation } from "../i18n";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 
-const Confirmation = ({ t }) => {
+const Confirmation = () => {
+  const { t } = useTranslation("confirmation");
   const router = useRouter();
   const urlQuery = router.query;
   const backToLink =
@@ -24,12 +25,10 @@ const Confirmation = ({ t }) => {
   );
 };
 
-Confirmation.getInitialProps = async () => ({
-  namespacesRequired: ["confirmation"],
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common", "confirmation"])),
+  },
 });
 
-Confirmation.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation("confirmation")(Confirmation);
+export default Confirmation;
