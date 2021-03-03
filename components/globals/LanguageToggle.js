@@ -1,15 +1,21 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { withTranslation } from "../../i18n";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
-const LanguageToggle = ({ t, i18n }) => {
+const LanguageToggle = () => {
+  const { t, i18n } = useTranslation("common");
   const locale = i18n.language;
+  const router = useRouter();
 
   useEffect(() => {
     const html = document.querySelector("html");
 
     if (html) html.setAttribute("lang", locale);
   }, [locale]);
+
+  function changeLang(lang) {
+    router.push(router.asPath, router.asPath, { locale: lang });
+  }
 
   return (
     <>
@@ -18,7 +24,7 @@ const LanguageToggle = ({ t, i18n }) => {
         {locale == "en" ? (
           <button
             onClick={() => {
-              i18n.changeLanguage("fr");
+              changeLang("fr");
             }}
             lang="fr"
           >
@@ -27,7 +33,7 @@ const LanguageToggle = ({ t, i18n }) => {
         ) : (
           <button
             onClick={() => {
-              i18n.changeLanguage("en");
+              changeLang("en");
             }}
             lang="en"
           >
@@ -38,9 +44,5 @@ const LanguageToggle = ({ t, i18n }) => {
     </>
   );
 };
-LanguageToggle.propTypes = {
-  t: PropTypes.func.isRequired,
-  i18n: PropTypes.object.isRequired,
-};
 
-export default withTranslation("common")(LanguageToggle);
+export default LanguageToggle;
