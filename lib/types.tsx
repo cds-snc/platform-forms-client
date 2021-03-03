@@ -8,11 +8,7 @@ export interface FormMetadataProperties {
   layout: Array<string>;
   elements: Array<FormElement>;
   endPage: Record<string, string>;
-  [key: string]:
-    | string
-    | Array<string>
-    | Array<FormElement>
-    | Record<string, string>;
+  [key: string]: string | Array<string> | Array<FormElement> | Record<string, string>;
 }
 
 export type allFormElements =
@@ -46,12 +42,7 @@ export interface ElementProperties {
   fileType?: string | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
-  [key: string]:
-    | string
-    | boolean
-    | Array<PropertyChoices>
-    | Array<FormElement>
-    | undefined;
+  [key: string]: string | boolean | Array<PropertyChoices> | Array<FormElement> | undefined;
 }
 
 export interface PropertyChoices {

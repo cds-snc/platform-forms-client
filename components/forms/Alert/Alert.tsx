@@ -40,12 +40,7 @@ export const Alert = ({
     <div className={classes} data-testid="alert" {...props}>
       <div className="gc-alert__body">
         {heading && <h3 className="gc-alert__heading">{heading}</h3>}
-        {children &&
-          (validation ? (
-            children
-          ) : (
-            <p className="gc-alert__text">{children}</p>
-          ))}
+        {children && (validation ? children : <p className="gc-alert__text">{children}</p>)}
       </div>
       {cta && <div>{cta}</div>}
     </div>

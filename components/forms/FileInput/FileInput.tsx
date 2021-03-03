@@ -21,9 +21,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
       <input
         type="file"
         data-testid="file"

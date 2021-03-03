@@ -25,9 +25,7 @@ const DynamicRow = (props: DynamicRowProps) => {
   const { name, elements, lang } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
     subItem.id = `${name}.${subIndex}`;
-    return (
-      <GenerateElement key={subItem.id} element={subItem} language={lang} />
-    );
+    return <GenerateElement key={subItem.id} element={subItem} language={lang} />;
   });
   return <div>{rowGroup}</div>;
 };
@@ -48,11 +46,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     await setRows([...rows, rowElements]);
   };
 
-  const classes = classnames(
-    "gc-form-group",
-    { "gc-form-group--error": error },
-    className
-  );
+  const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
 
   return (
     <fieldset name={field.name} data-testid="formGroup" className={classes}>
@@ -64,11 +58,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               {lang === "en" ? "Item " : "Article "}
               {index + 1}
             </h3>
-            <DynamicRow
-              elements={row}
-              name={`${field.name}.${index}`}
-              lang={lang}
-            />
+            <DynamicRow elements={row} name={`${field.name}.${index}`} lang={lang} />
           </div>
         );
       })}

@@ -22,9 +22,7 @@ export const Checkbox = (
 
   return (
     <div data-testid="checkbox" className={classes}>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
       <input
         className="gc-input-checkbox__input"
         id={id}

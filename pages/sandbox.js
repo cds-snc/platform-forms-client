@@ -13,9 +13,7 @@ const Sandbox = () => {
       const form = getFormByID(formID);
       return (
         <li key={`link-${form.id}`}>
-          <Link href={`/${form.id}`}>
-            {form[getProperty("title", i18n.language)].toString()}
-          </Link>
+          <Link href={`/${form.id}`}>{form[getProperty("title", i18n.language)].toString()}</Link>
         </li>
       );
     });
@@ -51,9 +49,7 @@ const Sandbox = () => {
           <p>{t("design.text")}</p>
           <ul className="link-list custom">
             <li>
-              <a href="https://platform-storybook.herokuapp.com/">
-                {t("design.system.title")}
-              </a>
+              <a href="https://platform-storybook.herokuapp.com/">{t("design.system.title")}</a>
             </li>
           </ul>
         </div>

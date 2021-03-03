@@ -26,12 +26,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         <title>{formTitle}</title>
       </Head>
       <h1 className="gc-h1">{formTitle}</h1>
-      <Form
-        formMetadata={formMetadata}
-        language={language}
-        router={router}
-        t={t}
-      >
+      <Form formMetadata={formMetadata} language={language} router={router} t={t}>
         {currentForm}
       </Form>
     </div>

@@ -30,10 +30,7 @@ export function getProperty(field: string, lang: string): string {
 }
 
 // This function is used for select/radio/checkbox i18n change of form labels
-function getLocaleChoices(
-  choices: Array<PropertyChoices> | undefined,
-  lang: string
-) {
+function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
   try {
     if (!choices || !choices.length) {
       return [];
@@ -60,9 +57,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       : [];
 
   const subElements =
-    element.properties && element.properties.subElements
-      ? element.properties.subElements
-      : [];
+    element.properties && element.properties.subElements ? element.properties.subElements : [];
 
   const labelText = element.properties[getProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
@@ -71,9 +66,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const description = element.properties[
-    getProperty("description", lang)
-  ]?.toString();
+  const description = element.properties[getProperty("description", lang)]?.toString();
   const descriptiveText = description ? (
     <p className="gc-p" id={`desc-${id}`}>
       {description}
@@ -128,10 +121,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup
-          name={id}
-          aria-describedby={description ? `desc-${id}` : undefined}
-        >
+        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
           <Description>{description}</Description>
           {checkboxItems}
@@ -152,10 +142,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup
-          name={id}
-          aria-describedby={description ? `desc-${id}` : undefined}
-        >
+        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
           <Description>{description}</Description>
           {radioButtons}
@@ -210,14 +197,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </Fragment>
       );
     case "dynamicRow": {
-      return (
-        <DynamicGroup
-          name={id}
-          legend={labelText}
-          rowElements={subElements}
-          lang={lang}
-        />
-      );
+      return <DynamicGroup name={id} legend={labelText} rowElements={subElements} lang={lang} />;
     }
     default:
       return <></>;
@@ -230,30 +210,17 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
  * @param formToRender
  * @param language
  */
-const _getRenderedForm = (
-  formMetadata: FormMetadataProperties,
-  language: string
-) => {
+const _getRenderedForm = (formMetadata: FormMetadataProperties, language: string) => {
   if (!formMetadata) {
     return null;
   }
 
   return formMetadata.layout.map((item: string) => {
-    const element = formMetadata.elements.find(
-      (element: FormElement) => element.id === item
-    );
+    const element = formMetadata.elements.find((element: FormElement) => element.id === item);
     if (element) {
-      return (
-        <GenerateElement
-          key={element.id}
-          element={element}
-          language={language}
-        />
-      );
+      return <GenerateElement key={element.id} element={element} language={language} />;
     } else {
-      logMessage.error(
-        `Failed component ID look up ${item} on form ID ${formMetadata.id}`
-      );
+      logMessage.error(`Failed component ID look up ${item} on form ID ${formMetadata.id}`);
     }
   });
 };
@@ -288,9 +255,7 @@ const _getElementInitialValue = (
     return [dynamicRow];
   } else {
     // Regular inputs (not nested) like text, textarea might have a placeholder value
-    return (
-      (element.properties[getProperty("placeholder", language)] as string) ?? ""
-    );
+    return (element.properties[getProperty("placeholder", language)] as string) ?? "";
   }
 };
 
@@ -300,10 +265,7 @@ const _getElementInitialValue = (
  * @param formMetadata
  * @param language
  */
-const _getFormInitialValues = (
-  formMetadata: FormMetadataProperties,
-  language: string
-) => {
+const _getFormInitialValues = (formMetadata: FormMetadataProperties, language: string) => {
   if (!formMetadata) {
     return null;
   }
@@ -321,9 +283,7 @@ type GenerateElementProps = {
   element: FormElement;
   language: string;
 };
-export const GenerateElement = (
-  props: GenerateElementProps
-): React.ReactElement => {
+export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
   const { element, language } = props;
   const generatedElement = _buildForm(element, language);
   return <>{generatedElement}</>;
