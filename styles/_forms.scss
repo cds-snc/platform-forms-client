@@ -8,7 +8,15 @@
 }
 
 .gc-alert {
-  @apply p-4 my-4  bg-red-100;
+  @apply p-4 my-4;
+  &.gc-alert--validation,
+  &.gc-alert--error {
+    @apply bg-red-100 border-l-2 border-red-default;
+  }
+
+  &.gc-alert--success {
+    @apply bg-green-100;
+  }
 }
 
 .gc-dropdown {

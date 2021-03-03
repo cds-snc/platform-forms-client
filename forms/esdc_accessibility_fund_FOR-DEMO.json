@@ -194,7 +194,9 @@
           "descriptionEn": "The Enabling Accessibility Fund provides funding for eligible capital projects that increase accessibility for people with disabilities in Canadian communities and workplaces. It creates more opportunities for people with disabilities to participate in community activities, programs and services, or access employment opportunities.",
           "descriptionFr": "Le Fonds pour l’accessibilité (FA) offre du financement pour les projets qui rendent les collectivités et les milieux de travail plus accessibles aux personnes en situation de handicap. Le FA crée des possibilités pour que les personnes en situation de handicap participent aux activités, aux programmes et aux services de leur communauté et accèdent à des possibilités d’emploi.",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -203,7 +205,9 @@
         "properties": {
           "titleEn": "Funding Requested",
           "titleFr": "Financement demandé",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Community accessibility",
@@ -223,7 +227,9 @@
           "titleEn": "Project category",
           "titleFr": "Catégorie de projet",
           "description": "Select the appropriate project category below that best describes your project. Note that you may select one or more as applicable.",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Ramp",
@@ -252,7 +258,9 @@
           "titleFr": "Identification de l'organisation",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -263,7 +271,9 @@
           "titleFr": "Nom légal",
           "descriptionEN": "(Organization’s full name, as it appears on legal documents)",
           "descriptionFR": "(Nom complet de l’organisme, tel qu’il apparaît sur les documents juridiques)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -274,7 +284,9 @@
           "titleFr": "Nom commercial",
           "descriptionEN": "(if different from legal name)",
           "descriptionFR": "(s’il est différent du nom légal)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -285,7 +297,9 @@
           "titleFr": "Année de fondation",
           "descriptionEN": "(Year the organization was originally created.)",
           "descriptionFR": "(Année où l’organisme a été initialement créé)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -294,7 +308,9 @@
         "properties": {
           "titleEn": "Organization type",
           "titleFr": "Type d'organisme",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Not-for-profit",
@@ -319,7 +335,9 @@
           "titleFr": "Catégorie d’organisme",
           "descriptionEN": "(For example: Sector councils; University; Municipal Government; etc.",
           "descriptionFR": "Par exemple : conseil sectoriel, université, administration municipale, etc.",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -331,7 +349,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "(Unique 15-digit number that is assigned to your business or legal entity by CRA)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -343,7 +363,9 @@
           "descriptionEn": "If you do not have a CRA Business Number, provide one of the following:",
           "descriptionFr": "Si vous ne possédez pas de numéro d’entreprise de l’ARC, veuillez fournir un des numéros suivants :",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -355,7 +377,9 @@
           "descriptionEn": "For example: Your provincial/territorial corporation number (i.e. number found on your Letters Patent) or your federal corporation number with Industry Canada (see Applicant Guide for further details).",
           "descriptionFr": "Par exemple : Votre numéro d’entreprise provincial ou territorial (c.-à-d. le numéro qui se trouve dans vos lettres patentes) ou votre numéro d’entreprise fédéral auprès d’Industrie Canada (voir le Guide du demandeur pour en savoir plus).",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -364,7 +388,9 @@
         "properties": {
           "titleEn": "CRA Business Number",
           "titleFr": "Numéro d’entreprise de l’ARC",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "I have a registration number",
@@ -386,7 +412,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "fileType": "image/*,.pdf",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -399,7 +427,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -410,7 +440,9 @@
           "titleFr": "Adresse principale de l’organismen",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -422,7 +454,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -434,7 +468,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -504,7 +540,9 @@
               "fr": "Yukon"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -516,7 +554,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -528,7 +568,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -540,7 +582,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -552,7 +596,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -561,7 +607,9 @@
         "properties": {
           "titleEn": "Is your mailing address the same as the Organization Primary Address?",
           "titleFr": "Votre adresse postale est-elle la même que l'adresse principale de l'organisation?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -583,7 +631,9 @@
           "descriptionEn": " (In no more than 500 words, provide a description of your organization’s primary activities.)",
           "descriptionFr": " (En 500 mots ou moins, veuillez fournir une description des principales activités de votre",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -594,7 +644,9 @@
           "titleFr": "Sélectionnez le ou les groupes cibles qui cadrent le mieux avec les activités principales de votre organisme",
           "descriptionEN": "Note: your answer to this question will not impact the assessment of your proposed project. (Optional)",
           "descriptionFR": "Remarque : votre réponse à cette question n’a aucune incidence sur l’évaluation de votre projet.(Facultatif)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Select all groups",
@@ -662,7 +714,9 @@
           "descriptionEn": "This should be your primary contact person with respect to this application for funding.",
           "descriptionFr": "Il s’agira de votre principale personne-ressource en ce qui a trait à la présente demande de financement.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -674,7 +728,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -686,7 +742,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -698,7 +756,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -712,7 +772,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -721,7 +783,9 @@
         "properties": {
           "titleEn": "Written",
           "titleFr": "Écrite",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "English",
@@ -740,7 +804,9 @@
         "properties": {
           "titleEn": "Spoken",
           "titleFr": "Parlée",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "English",
@@ -759,7 +825,9 @@
         "properties": {
           "titleEn": "Primary Contact Address",
           "titleFr": "Adresse du personne-ressource principale",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Same as Organization Primary Address",
@@ -787,7 +855,9 @@
           "descriptionEn": "This should be your secondary contact person with respect to this application for funding in case we cannot reach the primary contact.",
           "descriptionFr": "Il s’agira de votre deuxième personne-ressource en ce qui a trait à la présente demande de financement au cas où nous ne pouvons pas joindre la personne-ressource principale.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -801,7 +871,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -813,7 +885,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -825,7 +899,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -837,7 +913,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -851,7 +929,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -860,7 +940,9 @@
         "properties": {
           "titleEn": "Written",
           "titleFr": "Écrite",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "English",
@@ -879,7 +961,9 @@
         "properties": {
           "titleEn": "Spoken",
           "titleFr": "Parlée",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "English",
@@ -898,7 +982,9 @@
         "properties": {
           "titleEn": "Secondary Contact Address",
           "titleFr": "Adresse du personne-ressource secondaire",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Same as Organization Primary Address",
@@ -921,7 +1007,9 @@
         "properties": {
           "titleEn": "Does your organization owe any amounts to the Government of Canada?",
           "titleFr": "Est-ce que votre organisme doit des sommes au gouvernement du Canada?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -945,7 +1033,9 @@
           "descriptionEn": "If yes, complete the fields below for each amount owing.",
           "descriptionFr": "Si oui, veuillez remplir les champs ci-dessous pour chaque somme due.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -954,7 +1044,9 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "subElements": [
             {
               "id": 48,
@@ -965,7 +1057,9 @@
                 "placeholderEn": "",
                 "placeholderFr": "",
                 "description": "",
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             },
             {
@@ -977,7 +1071,9 @@
                 "placeholderEn": "",
                 "placeholderFr": "",
                 "description": "",
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             },
             {
@@ -989,7 +1085,9 @@
                 "placeholderEn": "",
                 "placeholderFr": "",
                 "description": "",
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             },
             {
@@ -998,7 +1096,9 @@
               "properties": {
                 "titleEn": "If an amount is owing, is a payment plan in place?",
                 "titleFr": "Si une somme est due, une entente de paiement a-t-elle été conclue?",
-                "required": false,
+                "validation": {
+                  "required": false
+                },
                 "choices": [
                   {
                     "en": "Yes",
@@ -1021,7 +1121,9 @@
           "titleEn": "PROJECT PROPOSAL IDENTIFICATION",
           "titleFr": "IDENTIFICATION DE LA PROPOSITION DE PROJET",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1030,7 +1132,9 @@
         "properties": {
           "titleEn": "Project title",
           "titleFr": "Titre du projet",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1041,7 +1145,9 @@
           "titleFr": "Date prévue de début du projet",
           "descriptionEN": "(YYYY-MM-DD)",
           "descriptionFR": "(JJ-MM-AAAA)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1052,7 +1158,9 @@
           "titleFr": "Date prévue de fin du projet",
           "descriptionEN": "(YYYY-MM-DD)",
           "descriptionFR": "(JJ-MM-AAAA)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1061,7 +1169,9 @@
         "properties": {
           "titleEn": "Amount requested from Employment and Social Development Canada",
           "titleFr": "Montant demandé à Emploi et Développement social Canada",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
 
@@ -1072,7 +1182,9 @@
           "titleEn": "Project Proposal Description",
           "titleFr": "DESCRIPTION DE LA PROPOSITION DE PROJET",
           "charLimit": 500,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1084,7 +1196,9 @@
           "descriptionEn": " In 500 words or less, describe the need of the proposed project including what it aims to achieve (objective and anticipated results), and who is the targeted group.",
           "descriptionFr": "En 500 mots ou moins, veuillez décrire le besoin auquel le projet proposé répond, y compris le but visé (objectif et résultats escomptés), et le groupe cible.",
           "charLimit": 500,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1096,7 +1210,9 @@
           "descriptionEn": "In 500 words or less, describe how the proposed project meets the objective(s) and/or priority(ies) of the funding program under which you are applying.",
           "descriptionFr": "En 500 mots ou moins, veuillez décrire de quelle manière le projet proposé répond à un ou à plusieurs objectifs et à une ou à plusieurs priorités du programme de financement pour lequel vous présentez votre demande.",
           "charLimit": 500,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1110,7 +1226,9 @@
           "descriptionEn": "(Provide the activities and their timelines that will be taking place as part of this proposed project.)",
           "descriptionFr": "(Indiquez les activités qui auront lieu et leurs échéanciers dans le cadre du projet proposé.)",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1120,7 +1238,9 @@
           "titleEn": "Activity 1",
           "titleFr": "Activité 1",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1129,7 +1249,9 @@
         "properties": {
           "titleEn": "Activity 1 Name",
           "titleFr": "Activité 1 Nom",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1141,7 +1263,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1151,7 +1275,9 @@
           "titleEn": "Activity 2",
           "titleFr": "Activité 2",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1160,7 +1286,9 @@
         "properties": {
           "titleEn": "Activity 2 Name",
           "titleFr": "Activité 2 Nom",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1172,7 +1300,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1182,7 +1312,9 @@
           "titleEn": "Activity 3",
           "titleFr": "Activité 3",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1191,7 +1323,9 @@
         "properties": {
           "titleEn": "Activity 3 Name",
           "titleFr": "Activité 3 Nom",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1203,7 +1337,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1212,7 +1348,9 @@
         "properties": {
           "titleEn": "Will any of the proposed project activities be delivered at your organization’s primary address?",
           "titleFr": "Y a-t-il des activités du projet proposé qui se dérouleront à l’adresse principale de votre organisme?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1231,7 +1369,9 @@
         "properties": {
           "titleEn": "Will any of the proposed project activities be delivered in a different location from your organization’s primary address?",
           "titleFr": "Y a-t-il des activités du projet proposé qui se dérouleront à un endroit différent de celui situé à l’adresse principale de votre organisme?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1253,7 +1393,9 @@
           "descriptionEn": "If yes, include the address for every other location where project activities will occur:",
           "descriptionFr": "Dans l’affirmative, veuillez indiquer l’adresse de chaque endroit où se dérouleront les activités du projet :",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1262,7 +1404,9 @@
         "properties": {
           "titleEn": "Will the project or any of its activities involve or benefit people in English or French linguistic minority communities in Canada, in some way?",
           "titleFr": " Le projet ou les activités connexes impliquent-ils ou s’adressent-ils d’une façon ou d’une autre aux minorités francophones et anglophones du Canada?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1288,7 +1432,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 10000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1297,7 +1443,9 @@
         "properties": {
           "titleEn": "Is your project targeting vulnerable groups?",
           "titleFr": "Votre projet vise-t-il des groupes vulnérables?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1317,7 +1465,9 @@
           "titleEn": "If yes, select the specific target group(s) that applies to your project.",
           "titleFr": "Si oui, sélectionnez le(s) groupe(s) qui s’appliquent à votre projet.",
           "description": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Select all groups",
@@ -1381,7 +1531,9 @@
           "titleEn": "Part 3 - Budget",
           "titleFr": "Partie 3 – Budget",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1393,7 +1545,9 @@
           "descriptionEn": "(expenses) for the eligible activities or services of the proposed object",
           "descriptionFr": "Dépenses aux fins d’activités ou de services admissibles liées au projet proposé",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1407,7 +1561,9 @@
           "descriptionEn": "List each eligible activity or service:",
           "descriptionFr": "Énumérez chaque activité ou service admissible:",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1417,7 +1573,9 @@
           "titleEn": "Activity 1",
           "titleFr": "Activité 1",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1427,7 +1585,9 @@
           "titleEn": "Name",
           "titleFr": "Nom",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1436,7 +1596,9 @@
         "properties": {
           "titleEn": "Cost is:",
           "titleFr": "Le coût est de :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Cash",
@@ -1455,7 +1617,9 @@
         "properties": {
           "titleEn": "Cost ($ value)",
           "titleFr": "Coût (valeur en dollars)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1466,7 +1630,9 @@
           "titleFr": "Coût total des activités et/ou des services admissibles *",
           "descriptionEn": "Total cost and total funding of eligible activities and/or services must equal each other. ",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1478,7 +1644,9 @@
           "descriptionEn": "(revenues) for the proposed project costs noted above",
           "descriptionFr": "(contributions) pour les coûts du projet proposé indiqués ci-dessus",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1490,7 +1658,9 @@
           "descriptionEn": "List Organization Name for each Funding Source (can be other governments, a private sector organization, or self-funded)",
           "descriptionFr": "Indiquez le nom de l’organisme associé à chaque source de financement (il peut s’agir d’autres gouvernements, d’une organisation du secteur privé ou d’autofinancement)",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1500,7 +1670,9 @@
           "titleEn": "Organization 1",
           "titleFr": "L'organisme 1",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1509,7 +1681,9 @@
         "properties": {
           "titleEn": "Name",
           "titleFr": "Nom",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1518,7 +1692,9 @@
         "properties": {
           "titleEn": "Cost is:",
           "titleFr": "Coût (valeur en dollars)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Cash",
@@ -1541,7 +1717,9 @@
         "properties": {
           "titleEn": "Funding Amount ($ value)",
           "titleFr": "Montant du financement (valeur en dollars)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1552,7 +1730,9 @@
           "titleFr": "Montant demandé à Emploi et Développement social Canada **",
           "descriptionEn": "Amount must correspond with the amount requested in the question above",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1564,7 +1744,9 @@
           "descriptionEn": " Use this field to provide any further budget details that you may find necessary in describing your project.",
           "descriptionFr": "Veuillez utiliser ce champ afin d’indiquer d’autres renseignements sur le budget que vous considérez comme nécessaires pour la description de votre projet. ",
           "charLimit": 10000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1576,7 +1758,9 @@
           "descriptionEn": "Enabling Accessibility Fund (EAF) - Small Projects Component ",
           "descriptionFr": "Fonds pour l’accessibilité (FA) - Projets de petite envergure",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1586,7 +1770,9 @@
           "titleEn": "In 250 words or less, describe the support you have for the success of your project.",
           "titleFr": " En moins de 250 mots, veuillez décrire l’appui que vous avez reçu pour assurer le succès de votre projet.",
           "charLimit": 10000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1595,7 +1781,9 @@
         "properties": {
           "titleEn": "This Call for Proposals may prioritize funding for projects that meet the priorities described below. If applicable, select the priorities that are applicable to your project.",
           "titleFr": " Cet appel de proposition peut donner priorité au financement de projets qui répondent aux priorités décrites ci-dessous. S’il y a lieu, sélectionnez les priorités qui s’appliquent à votre projet.",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Your organization offers or will offer employment opportunities for persons with disabilities.",
@@ -1610,7 +1798,9 @@
         "properties": {
           "titleEn": "As a result of the proposed project, my organization will be able to:",
           "titleFr": "Veuillez sélectionner la réponse qui s'applique à votre organisation:",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Maintain job opportunities for persons with disabilities",
@@ -1638,7 +1828,9 @@
           "titleEn": "Please describe the job opportunities that will be available for persons with disabilities as a result of your project, including how many positions will be offered",
           "titleFr": "Veuillez décrire les possibilités d’emploi qui seront offertes aux personnes en situation de handicap grâce à votre projet, y compris le nombre de postes qui sera offert.",
           "charLimit": 10000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1648,7 +1840,9 @@
           "titleEn": "Select the appropriate project category below that best describes your project. Note that you may select one or more as applicable.",
           "titleFr": "Sélectionnez la catégorie qui s’applique à votre projet. Il est possible de sélectionner plus d’un type de projet à la fois",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1657,7 +1851,9 @@
         "properties": {
           "titleEn": "Ramp",
           "titleFr": "Rampe",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Renovation of Existing Interior/Exterior Ramp",
@@ -1680,7 +1876,9 @@
         "properties": {
           "titleEn": "Accessible washroom",
           "titleFr": "Toilettes accessibles",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Renovation of Existing Washroom",
@@ -1703,7 +1901,9 @@
         "properties": {
           "titleEn": "Accessible door",
           "titleFr": "Portes accessibles",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Renovation of Existing Door",
@@ -1726,7 +1926,9 @@
         "properties": {
           "titleEn": "Other project",
           "titleFr": "Autre projet",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Other Project (not ramps, doors or washrooms)",
@@ -1742,7 +1944,9 @@
           "titleEn": "Renovation of Existing Interior/Exterior Ramp",
           "titleFr": "Réaménagement d’une rampe intérieure/extérieure",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1753,7 +1957,9 @@
           "titleFr": "Combien de rampes seront réaménagées?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1763,7 +1969,9 @@
           "titleEn": "Existing interior/exterior ramp 1",
           "titleFr": "Rampe intérieure/extérieure 1",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1772,7 +1980,9 @@
         "properties": {
           "titleEn": "What is the rise of your ramp(s)? (i.e. how many feet from the top of the landing to the base)",
           "titleFr": "Quelle est la montée de la rampe (p. ex. combien de pieds entre le sommet de la rampe et la base)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1781,7 +1991,9 @@
         "properties": {
           "titleEn": "Select the main material of your ramp:",
           "titleFr": "Sélectionnez le matériel de construction de votre rampe:",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Wood/aluminum",
@@ -1800,7 +2012,9 @@
         "properties": {
           "titleEn": "Select the specific requirements that apply to your project:",
           "titleFr": "Sélectionnez les éléments requis pour la complétion de votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modification to ramp slope and/or including landings",
@@ -1827,7 +2041,9 @@
         "properties": {
           "titleEn": "Select the additional accessibility features needed for your project:",
           "titleFr": "Sélectionnez toutes autres modifications additionnelles requises :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Installation of weather cover",
@@ -1854,7 +2070,9 @@
         "properties": {
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "charLimit": 5000
         }
       },
@@ -1865,7 +2083,9 @@
           "titleEn": "New Exterior Ramp",
           "titleFr": "Nouvelle Rampe Extérieure",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1876,7 +2096,9 @@
           "titleFr": "Combien de rampes extérieures seront construites?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1886,7 +2108,9 @@
           "titleEn": "Exterior ramp 1",
           "titleFr": "Rampe extérieure 1",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1895,7 +2119,9 @@
         "properties": {
           "titleEn": "What is the rise of your ramp(s)? (i.e. how many feet from the top of the landing to the base)",
           "titleFr": "Quelle est la montée de la rampe (p. ex. combien de pieds entre le sommet de la rampe et la base)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1904,7 +2130,9 @@
         "properties": {
           "titleEn": "Select the specific requirements that apply to your project:",
           "titleFr": "Sélectionnez tout ce qui s’applique à votre projet:",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Made of wood/aluminum",
@@ -1931,7 +2159,9 @@
         "properties": {
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "charLimit": 5000
         }
       },
@@ -1942,7 +2172,9 @@
           "titleEn": "New Interior Ramp",
           "titleFr": "Nouvelle Rampe Intérieure",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1953,7 +2185,9 @@
           "titleFr": "Combien de rampes intérieure seront construites?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1963,7 +2197,9 @@
           "titleEn": "Interior ramp 1",
           "titleFr": "Rampe intérieure 1",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1972,7 +2208,9 @@
         "properties": {
           "titleEn": "What is the rise of your ramp(s)? (i.e. how many feet from the top of the landing to the base)",
           "titleFr": "Quelle est la montée de la rampe (p. ex. combien de pieds entre le sommet de la rampe et la base)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1981,7 +2219,9 @@
         "properties": {
           "titleEn": "Select the specific requirements that apply to your project:",
           "titleFr": "Sélectionnez tout ce qui s’applique à votre projet:",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Made of wood/aluminum",
@@ -2001,7 +2241,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2011,7 +2253,9 @@
           "titleEn": "Renovation of existing washroom",
           "titleFr": "Nouvelle Rampe Intérieure",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2020,7 +2264,9 @@
         "properties": {
           "titleEn": "Select the option that best describes your renovation:",
           "titleFr": "Sélectionnez les options qui s’appliquent à votre projet de réaménagement :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modification or upgrade to a single occupant washroom",
@@ -2039,7 +2285,9 @@
         "properties": {
           "titleEn": "If renovating a washroom with stalls, how many accessible stalls will be built or modified?",
           "titleFr": "Dans le cas d’un ajout d’une cabine à une toilette existante, combien de cabines accessibles seront construites ou modifiées?",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2048,7 +2296,9 @@
         "properties": {
           "titleEn": "Select the specific requirements that apply to your project:",
           "titleFr": "Sélectionnez les options qui s’appliquent à votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modifications to structural walls",
@@ -2087,7 +2337,9 @@
         "properties": {
           "titleEn": "Select the additional accessibility features needed for your project:",
           "titleFr": "Sélectionnez toutes autres modifications additionnelles requises :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Barrier free toilet",
@@ -2139,7 +2391,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2149,7 +2403,9 @@
           "titleEn": "New Accessible Single Occupant Washroom",
           "titleFr": "Nouvelle toilette accessible pour une personne",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2158,7 +2414,9 @@
         "properties": {
           "titleEn": "Is this washroom part of a new building or an addition to an existing building?",
           "titleFr": "Est-ce que cette toilette fait partie d’un nouvel édifice ou est-elle une addition à une construction existante?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -2177,7 +2435,9 @@
         "properties": {
           "titleEn": "How many single occupant washrooms will be built?",
           "titleFr": "Combien de toilettes accessibles pour une personne seront construites?",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2186,7 +2446,9 @@
         "properties": {
           "titleEn": "Select the specific requirements that apply to your project:",
           "titleFr": "Sélectionnez les éléments requis pour la complétion de votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modifications to structural walls",
@@ -2225,7 +2487,9 @@
         "properties": {
           "titleEn": "Select the additional accessibility features needed for your project:",
           "titleFr": "Sélectionnez toutes autres modifications additionnelles requises :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Accessible urinal",
@@ -2253,7 +2517,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2263,7 +2529,9 @@
           "titleEn": "New Accessible Stall Washroom",
           "titleFr": "Nouvelle toilette accessible avec cabines",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2272,7 +2540,9 @@
         "properties": {
           "titleEn": "Is this washroom part of a new building or an addition to an existing building?",
           "titleFr": "Est-ce que cette toilette fait partie d’un nouvel édifice ou est-elle une addition à une construction existante?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -2291,7 +2561,9 @@
         "properties": {
           "titleEn": "How many accessible washrooms will be built?",
           "titleFr": "Combien de toilettes accessibles seront construites?",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2300,7 +2572,9 @@
         "properties": {
           "titleEn": "Select the specific requirements that apply to your project:",
           "titleFr": "Sélectionnez les éléments requis pour la complétion de votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modifications to structural walls",
@@ -2339,7 +2613,9 @@
         "properties": {
           "titleEn": "Select the additional accessibility features needed for your project:",
           "titleFr": "Sélectionnez toutes autres modifications additionnelles requises :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Emergency call button",
@@ -2363,7 +2639,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2373,7 +2651,9 @@
           "titleEn": "Renovation of existing door",
           "titleFr": "Réaménagement d’une porte",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2382,7 +2662,9 @@
         "properties": {
           "titleEn": "How many doors will you modify?",
           "titleFr": "Combien de portes seront modifiées?",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2391,7 +2673,9 @@
         "properties": {
           "titleEn": "Do you require an automatic door opener including electrical hookup?",
           "titleFr": "Avez-vous besoin d’un ouvre-porte automatique avec branchement électrique?",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -2410,7 +2694,9 @@
         "properties": {
           "titleEn": "Select the accessibility features needed for your project:",
           "titleFr": "Sélectionnez tout ce qui s’applique à votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Cane detectable guardrails",
@@ -2434,7 +2720,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2444,7 +2732,9 @@
           "titleEn": "New Accessible Exterior Door",
           "titleFr": "Nouvelle porte extérieure accessible",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2453,7 +2743,9 @@
         "properties": {
           "titleEn": "How many doors will you modify?",
           "titleFr": "Combien de portes seront modifiées?",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2462,7 +2754,9 @@
         "properties": {
           "titleEn": "Select the accessibility features needed for your project:",
           "titleFr": "Sélectionnez tout ce qui s’applique à votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modification to a glass storefront",
@@ -2486,7 +2780,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2496,7 +2792,9 @@
           "titleEn": "New Accessible Interior Door",
           "titleFr": "Nouvelle porte intérieure accessible",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2505,7 +2803,9 @@
         "properties": {
           "titleEn": "How many doors will you modify?",
           "titleFr": "Combien de portes seront modifiées?",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2514,7 +2814,9 @@
         "properties": {
           "titleEn": "Select the accessibility features needed for your project:",
           "titleFr": "Sélectionnez tout ce qui s’applique à votre projet :",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Modification to a door that is surrounded by glass",
@@ -2538,7 +2840,9 @@
           "titleEn": "Additional details",
           "titleFr": "Détails supplementaires",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2550,7 +2854,9 @@
           "descriptionEn": "(not ramps, doors or washrooms)",
           "descriptionFr": "(n’est pas l’installation de rampes, portes ou toilettes)",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2560,7 +2866,9 @@
           "titleEn": "Describe your project:",
           "titleFr": "Description du projet :",
           "charLimit": 10000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2570,7 +2878,9 @@
           "titleEn": "Program checklist",
           "titleFr": "Liste de vérification",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2579,7 +2889,9 @@
         "properties": {
           "titleEn": "Please review the following checklist carefully. Errors or incomplete applications will result in delayed processing and/or rejection.",
           "titleFr": "Veuillez revoir la liste suivante attentivement. Les demandes de financement erronées et/ou incomplètes entraîneront un retard dans l’évaluation du projet et pourraient être rejetées.",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "I have provided an external quote for the project costs. Projects for ramps, doors and washrooms do not require a quote.",
@@ -2613,7 +2925,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "fileType": "image/*,.pdf",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2625,7 +2939,9 @@
           "descriptionEn": "In order for your application to be eligible, an official representative who has the capacity and the authority to submit project proposals and enter into contracts and agreements on behalf of your organization must attest to the following: ",
           "descriptionFr": "Pour que votre demande soit admissible, un représentant officiel qui a la capacité et l’autorité de soumettre des propositions de projet au nom de votre organisme ainsi que conclure des contrats et des accords au nom de votre organisme doit attester ce qui suit :",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2634,7 +2950,9 @@
         "properties": {
           "titleEn": "I have the capacity and the authority to submit this Application for Funding on behalf of the applicant organization.",
           "titleFr": "J’ai la capacité et l’autorité pour soumettre la présente Demande de financement au nom de l’organisme",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -2649,7 +2967,9 @@
         "properties": {
           "titleEn": "I certify and warrant on behalf of the organization and in my personal capacity that the information provided in this Application for Funding and any supporting documentation is true, accurate, and complete.",
           "titleFr": "Je certifie et garantis au nom de l’organisation et à titre personnel que les informations fournies dans la présente demande de financement ainsi que les documents d’appui sont véridiques, exacts et complets.",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -2664,7 +2984,9 @@
         "properties": {
           "titleEn": "I have read the Applicant Guide and understand the program’s requirements",
           "titleFr": "J’ai lu le Guide du demandeur et j’ai compris les exigences du programme.",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -2679,7 +3001,9 @@
         "properties": {
           "titleEn": "Official Representative Name",
           "titleFr": "Nom du représentant officiel",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2688,7 +3012,9 @@
         "properties": {
           "titleEn": "Title",
           "titleFr": "Titre",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2697,7 +3023,9 @@
         "properties": {
           "titleEn": "Date (YYYY-MM-DD)",
           "titleFr": "Date (JJ-MM-AAAA)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2709,7 +3037,9 @@
           "descriptionEn": "In order for your application to be eligible, an official representative who has the capacity and the authority to submit project proposals and enter into contracts and agreements on behalf of your organization must attest to the following:",
           "descriptionFr": "Pour que votre demande soit admissible, un représentant officiel qui a la capacité et l’autorité de soumettre des propositions de projet au nom de votre organisme ainsi que conclure des contrats et des accords au nom de votre organisme doit attester ce qui suit",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2718,7 +3048,9 @@
         "properties": {
           "titleEn": "Please review the following checklist carefully. Errors or incomplete applications will result in delayed processing and/or rejection.",
           "titleFr": "Veuillez revoir la liste suivante attentivement. Les demandes de financement erronées et/ou incomplètes entraîneront un retard dans l’évaluation du projet et pourraient être rejetées.",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "I have the capacity and the authority to submit this Application for Funding on behalf of the applicant organization.",
@@ -2741,7 +3073,9 @@
         "properties": {
           "titleEn": "Official Representative Name",
           "titleFr": "Nom du représentant officiel",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2750,7 +3084,9 @@
         "properties": {
           "titleEn": "Title",
           "titleFr": "Titre",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -2759,7 +3095,9 @@
         "properties": {
           "titleEn": "Date",
           "titleFr": "Date (JJ-MM-AAAA)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

@@ -8,12 +8,13 @@ interface RadioProps {
   name: string;
   className?: string;
   label: string;
+  required?: boolean;
 }
 
 export const Radio = (
   props: RadioProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, className, label } = props;
+  const { id, className, label, required } = props;
 
   const classes = classnames("gc-input-radio", className);
 
@@ -29,6 +30,7 @@ export const Radio = (
         className="gc-radio__input"
         id={id}
         type="radio"
+        required={required}
         {...field}
         value={label} // This needs to be static... the actual label...
       />

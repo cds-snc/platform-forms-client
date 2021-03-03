@@ -35,6 +35,13 @@ export interface FormElement {
   onchange?: callback;
 }
 
+export interface ValidationProperties {
+  required: boolean;
+  type?: string;
+  regex?: string;
+  [key: string]: unknown;
+}
+
 export interface ElementProperties {
   titleEn: string;
   titleFr: string;
@@ -42,7 +49,7 @@ export interface ElementProperties {
   placeholderFr?: string;
   descriptionEn?: string;
   descriptionFr?: string;
-  required: boolean;
+  validation?: ValidationProperties | undefined;
   choices?: Array<PropertyChoices>;
   subElements?: Array<FormElement>;
   fileType?: string | undefined;
@@ -53,6 +60,7 @@ export interface ElementProperties {
     | boolean
     | Array<PropertyChoices>
     | Array<FormElement>
+    | ValidationProperties
     | undefined;
 }
 
@@ -77,5 +85,11 @@ export interface DynamicFormProps {
   formMetadata: FormMetadataProperties;
   language: string;
   router: NextRouter;
+  t: TFunction;
+}
+
+export interface InnerFormProps {
+  children?: React.ReactNode;
+  language: string;
   t: TFunction;
 }

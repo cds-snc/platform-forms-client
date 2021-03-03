@@ -96,7 +96,9 @@
           "titleFr": "Introduction",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -108,7 +110,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -119,7 +123,9 @@
           "titleFr": "Does your project propose indirect settlement services or direct services only within a testing context?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -141,7 +147,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -152,7 +160,9 @@
           "titleFr": "In your application, will you be able to demonstrate how you’ve conducted a strong assessment of gaps in existing policies, approaches or initiatives directed toward IRCC eligible clients?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -174,7 +184,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -186,7 +198,9 @@
           "descriptionEn": "(1) A comprehensive plan to measure performance and track progress to achieve identified Settlement Program outcomes;",
           "descriptionFr": "(1) A comprehensive plan to measure performance and track progress to achieve identified Settlement Program outcomes;",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -198,7 +212,9 @@
           "descriptionEn": "(2) Clear, measurable and meaningful performance indicators to assess impact;",
           "descriptionFr": "(2) Clear, measurable and meaningful performance indicators to assess impact;",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -210,7 +226,9 @@
           "descriptionEn": "(3) An effective approach to establish baseline data on indicators;",
           "descriptionFr": "(3) An effective approach to establish baseline data on indicators;",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -222,7 +240,9 @@
           "descriptionEn": "(4) Multiple lines of evidence to increase the reliability of data;",
           "descriptionFr": "(4) Multiple lines of evidence to increase the reliability of data;",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -233,7 +253,9 @@
           "titleFr": "Can you clearly articulate how you possess the skills and experience to put forward a robust evaluation plan focussing on outcomes? Or, can you outline a comprehensive plan to ensure that a qualified third-party evaluator will deliver such a plan?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -255,7 +277,9 @@
           "descriptionEn": "Potential applicants must define how they will engage key partners who will collaborate in a meaningful way to the successful of the project. This includes identifying existing partnerships, describing the nature of the partnerships, and the skills and experiences these partnerships will bring to the project.",
           "descriptionFr": "Potential applicants must define how they will engage key partners who will collaborate in a meaningful way to the successful of the project. This includes identifying existing partnerships, describing the nature of the partnerships, and the skills and experiences these partnerships will bring to the project.",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -266,7 +290,9 @@
           "titleFr": "Have you identified relevant partners for your project, and can their contributions be clearly explained in detail and linked to the achievement of the projected outcomes?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -288,7 +314,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -299,7 +327,9 @@
           "titleFr": "Does your organization have the capacity to thoroughly report to IRCC bi-annually in relation to on-going project-level information?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -320,7 +350,9 @@
           "titleFr": "Project Information",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -334,7 +366,9 @@
           "descriptionEn": "Please enter a valid business e-mail address for the purposes of communication related to this funding process.",
           "descriptionFr": "Please enter a valid business e-mail address for the purposes of communication related to this funding process.",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -348,7 +382,9 @@
           "descriptionEn": "If you have previously applied for IRCC funding, or are currently receiving it, please enter your GCS organizational ID. If you do not have a GCS organizational ID, you can create one here.",
           "descriptionFr": "If you have previously applied for IRCC funding, or are currently receiving it, please enter your GCS organizational ID. If you do not have a GCS organizational ID, you can create one here.",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -362,7 +398,9 @@
           "descriptionEn": "What is the name of the applying organization (or individual, if applicable) of this Letter of Interest? (12 words maximum)",
           "descriptionFr": "What is the name of the applying organization (or individual, if applicable) of this Letter of Interest? (12 words maximum)",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -376,7 +414,9 @@
           "descriptionEn": "(10 words max)",
           "descriptionFr": "(10 words max)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -390,7 +430,9 @@
           "descriptionEn": "Note that the earliest projects can begin is September 1, 2021, and the latest projects can end is March 31, 2024.",
           "descriptionFr": "Note that the earliest projects can begin is September 1, 2021, and the latest projects can end is March 31, 2024.",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -404,7 +446,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -418,7 +462,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -432,7 +478,9 @@
           "descriptionEn": "Please indicate your notional funding request from IRCC, per fiscal year (if applicable).",
           "descriptionFr": "Please indicate your notional funding request from IRCC, per fiscal year (if applicable).",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -441,7 +489,9 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "subElements": [
             {
               "id": 25,
@@ -454,7 +504,9 @@
                 "descriptionEn": "",
                 "descriptionFr": "",
                 "charLimit": 300,
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             },
             {
@@ -468,7 +520,9 @@
                 "descriptionEn": "",
                 "descriptionFr": "",
                 "charLimit": 300,
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             }
           ]
@@ -498,7 +552,9 @@
               "fr": "Other"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -510,7 +566,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -521,7 +579,9 @@
           "titleFr": "Immediate outcomes",
           "descriptionEn": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
           "descriptionFr": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Increased understanding of client settlement needs an appropriate linkages to other services",
@@ -546,7 +606,9 @@
           "titleFr": "Intermediate outcomes",
           "descriptionEn": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
           "descriptionFr": "(You will be required to report on each selected outcome throughout the life of the project, so select only those outcomes that are relevant to the project)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Clients access services that meet their needs",
@@ -574,7 +636,9 @@
           "descriptionEn": "(A description of the problem/issue or an assessment of gaps in existing approaches or initiatives, The evidence and/or data supporting the problem/issue statement; and, The reason why current approaches/interventions are not adequately addressing the above mentioned problem or issue.)",
           "descriptionFr": "(A description of the problem/issue or an assessment of gaps in existing approaches or initiatives, The evidence and/or data supporting the problem/issue statement; and, The reason why current approaches/interventions are not adequately addressing the above mentioned problem or issue.)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -588,7 +652,9 @@
           "descriptionEn": "(Please include the following: Key activities that will be undertaken to address this problem/issue; The expected results of these activities.)",
           "descriptionFr": "(Please include the following: Key activities that will be undertaken to address this problem/issue; The expected results of these activities.)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -602,7 +668,9 @@
           "descriptionEn": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
           "descriptionFr": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -616,7 +684,9 @@
           "descriptionEn": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
           "descriptionFr": "(Examples of methodologies that can be used are: Comparing a status quo (existing) service with a new service delivery approach; Comparing two substantively different service delivery approaches implemented at the same time to achieve the same outcomes; Comparing one service delivery approach with two distinct client populations to determine whether the intervention is more effective with specific populations; Applying randomized control trials. Other methodologies to address the problem/issue/gap may be considered where appropriate and where the project does not align with the above described methodologies.)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -630,7 +700,9 @@
           "descriptionEn": "(In 500 words or less, please list potential partners who will be involved in the project planning and implementation, and briefly describe the nature of the partnership/collaboration, including their skills and experience to fulfill their role.)",
           "descriptionFr": "(In 500 words or less, please list potential partners who will be involved in the project planning and implementation, and briefly describe the nature of the partnership/collaboration, including their skills and experience to fulfill their role.)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -644,7 +716,9 @@
           "descriptionEn": "(In 500 words or less, If a third party organization will be used to evaluate the project’s performance, please provide the name, location, type of organization, and skills and experience in undertaking evaluation. If you are planning to conduct your own evaluation, please describe your organization’s ability (skills and experience) for designing and conducting the evaluation)",
           "descriptionFr": "(In 500 words or less, If a third party organization will be used to evaluate the project’s performance, please provide the name, location, type of organization, and skills and experience in undertaking evaluation. If you are planning to conduct your own evaluation, please describe your organization’s ability (skills and experience) for designing and conducting the evaluation)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

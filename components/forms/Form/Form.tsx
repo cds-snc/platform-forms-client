@@ -1,25 +1,14 @@
 import React from "react";
-import { NextRouter } from "next/router";
 import { withFormik, FormikProps } from "formik";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
-import { validateOnSubmit } from "../../../lib/validation";
-import { Button, Alert, ErrorMessage } from "../index";
-import { TFunction } from "next-i18next";
+import { validateOnSubmit, getErrorList } from "../../../lib/validation";
+import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
-import { FormMetadataProperties, FormValues } from "../../../lib/types";
-
-interface InnerFormProps {
-  children?: React.ReactNode;
-  language: string;
-  t: TFunction;
-}
-
-interface DynamicFormProps {
-  formMetadata: FormMetadataProperties;
-  language: string;
-  router: NextRouter;
-  t: TFunction;
-}
+import {
+  FormValues,
+  InnerFormProps,
+  DynamicFormProps,
+} from "../../../lib/types";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -28,18 +17,15 @@ interface DynamicFormProps {
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
 
-  let errorList = null;
-  const errorValues = Object.values(props.errors);
-  if (props.touched && errorValues.length) {
-    errorList = errorValues.map((error, index) => {
-      return <ErrorMessage key={index}>{error}</ErrorMessage>;
-    });
-  }
-
+  const errorList = getErrorList(props);
   return (
     <>
       {errorList ? (
-        <Alert type="error" heading={t("input-validation.heading")}>
+        <Alert
+          type="error"
+          heading={t("input-validation.heading")}
+          validation={true}
+        >
           {errorList}
         </Alert>
       ) : null}

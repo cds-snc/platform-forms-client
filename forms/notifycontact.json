@@ -23,7 +23,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -37,7 +39,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -48,7 +52,9 @@
           "titleFr": "Quel est votre besoin",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Ask a question",
@@ -84,7 +90,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       }
     ]

@@ -129,7 +129,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -142,7 +144,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -155,7 +159,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -166,7 +172,9 @@
           "titleFr": "string",
           "descriptionEn": "(To be completed by Department/Agency/Organization)",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "New",
@@ -199,7 +207,9 @@
           "titleFr": "string",
           "descriptionEn": "Level",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "I (CONFIDENTIAL)",
@@ -230,7 +240,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -243,7 +255,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -256,7 +270,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -269,7 +285,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -282,7 +300,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -295,7 +315,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -308,7 +330,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -319,7 +343,9 @@
           "titleFr": "string",
           "descriptionEn": "Level",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Male",
@@ -342,7 +368,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -355,7 +383,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -368,7 +398,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -381,7 +413,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -394,7 +428,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -407,7 +443,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -420,7 +458,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -433,7 +473,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -446,7 +488,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -457,7 +501,9 @@
           "titleFr": "string",
           "descriptionEn": "Level",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Married",
@@ -496,7 +542,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -509,7 +557,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -522,7 +572,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -535,7 +587,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -548,7 +602,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -561,7 +617,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -574,7 +632,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -587,7 +647,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -600,7 +662,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -613,7 +677,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -626,7 +692,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -639,7 +707,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -652,7 +722,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -665,7 +737,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -678,7 +752,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -691,7 +767,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -704,7 +782,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -717,7 +797,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -730,7 +812,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -743,7 +827,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -756,7 +842,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -769,7 +857,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -782,7 +872,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -795,7 +887,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -808,7 +902,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -821,7 +917,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -832,7 +930,9 @@
           "titleFr": "string",
           "descriptionEn": "",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -855,7 +955,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -868,7 +970,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -881,7 +985,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -894,7 +1000,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -907,7 +1015,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -920,7 +1030,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -933,7 +1045,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -946,7 +1060,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -957,7 +1073,9 @@
           "titleFr": "string",
           "descriptionEn": "",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "yes",
@@ -980,7 +1098,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -993,7 +1113,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1006,7 +1128,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1019,7 +1143,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1032,7 +1158,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1045,7 +1173,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1058,7 +1188,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1071,7 +1203,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1084,7 +1218,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1097,7 +1233,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1110,7 +1248,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1123,7 +1263,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1136,7 +1278,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1149,7 +1293,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1160,7 +1306,9 @@
           "titleFr": "string",
           "descriptionEn": "",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "yes",
@@ -1183,7 +1331,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1194,7 +1344,9 @@
           "titleFr": "string",
           "descriptionEn": "",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "yes",
@@ -1217,7 +1369,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1230,7 +1384,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1243,7 +1399,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1256,7 +1414,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1269,7 +1429,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1282,7 +1444,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1295,7 +1459,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1308,7 +1474,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1321,7 +1489,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1334,7 +1504,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1347,7 +1519,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1360,7 +1534,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1371,7 +1547,9 @@
           "titleFr": "string",
           "descriptionEn": "",
           "descriptionFr": "string",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "yes",
@@ -1394,7 +1572,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1407,7 +1587,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1420,7 +1602,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1433,7 +1617,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1446,7 +1632,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1459,7 +1647,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1472,7 +1662,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1485,7 +1677,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1498,7 +1692,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1511,7 +1707,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1524,7 +1722,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1537,7 +1737,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1550,7 +1752,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1563,7 +1767,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1576,7 +1782,9 @@
           "placeholderFr": "",
           "description": "e-signature",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1589,7 +1797,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

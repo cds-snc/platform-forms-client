@@ -80,6 +80,10 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </p>
   ) : null;
 
+  const isRequired: boolean = element.properties.validation
+    ? element.properties.validation.required
+    : false;
+
   switch (element.type) {
     case "alert":
       return (
@@ -96,7 +100,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             type="text"
             id={id}
             name={id}
-            required={element.properties.required}
+            required={isRequired}
             aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
@@ -109,7 +113,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <TextArea
             id={id}
             name={id}
-            required={element.properties.required}
+            required={isRequired}
             aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
@@ -122,7 +126,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}.${index}`}
             name={`${id}`}
             label={choice}
-            required={element.properties.required}
+            required={isRequired}
           />
         );
       });
@@ -146,7 +150,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}.${index}`}
             name={`${id}`}
             label={choice}
-            required={element.properties.required}
+            required={isRequired}
           />
         );
       });

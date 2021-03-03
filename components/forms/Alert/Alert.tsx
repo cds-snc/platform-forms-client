@@ -16,8 +16,6 @@ export const Alert = ({
   heading,
   cta,
   children,
-  slim,
-  noIcon,
   className,
   validation,
   ...props
@@ -29,8 +27,6 @@ export const Alert = ({
       "gc-alert--warning": type === "warning",
       "gc-alert--error": type === "error",
       "gc-alert--info": type === "info",
-      "gc-alert--slim": slim,
-      "gc-alert--no-icon": noIcon,
       "gc-alert--validation": validation,
     },
     className

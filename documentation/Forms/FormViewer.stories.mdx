@@ -93,7 +93,9 @@ Example:
         "placeholderFr": "",
         "description": "",
         "charLimit": 100,
-        "required": true
+        "validation": {
+          "required": true
+        }
       }
     },
     {
@@ -106,7 +108,9 @@ Example:
         "placeholderFr": "",
         "description": "",
         "charLimit": 100,
-        "required": false
+        "validation": {
+          "required": false
+        }
       }
     },
     {
@@ -119,7 +123,9 @@ Example:
         "placeholderFr": "",
         "description": "",
         "charLimit": 100,
-        "required": false
+        "validation": {
+          "required": false
+        }
       }
     },
     {
@@ -132,7 +138,9 @@ Example:
         "placeholderFr": "",
         "description": "",
         "charLimit": 100,
-        "required": false
+        "validation": {
+          "required": false
+        }
       }
     }
   ]
@@ -159,7 +167,9 @@ A simple text input where the `title` property is used as the input's label.
     "descriptionEn": "string",
     "descriptionFr": "string",
     "charLimit": 100,
-    "required": false
+    "validation": {
+      "required": false
+    }
   }
 }
 ```
@@ -194,7 +204,9 @@ A simple muli-line text input where the `title` property is used as the input's 
     "descriptionEn": "string",
     "descriptionFr": "string",
     "charLimit": 100,
-    "required": false
+    "validation": {
+      "required": false
+    }
   }
 }
 ```
@@ -226,7 +238,9 @@ A dropdown / select menu element that allows for a single selection.
     "titleFr":"string",
     "descriptionEn":"string",
     "descriptionFr":"string",
-    "required": false,
+    "validation": {
+      "required": false
+    },
     "choices":[
       {
         "en":"string",
@@ -335,7 +349,9 @@ A browser-native file upload field
     "descriptionEn": "",
     "descriptionFr": "",
     "fileType": "image/*,.pdf",
-    "required": false
+    "validation": {
+      "required": false
+    }
   }
 }
 ```
@@ -368,7 +384,9 @@ An option to add plain text to the form
     "descriptionEn": "Plain text paragraph",
     "descriptionFr": "",
     "charLimit": 1000,
-    "required": false
+    "validation": {
+      "required": false
+    }
   }
 }
 ```
@@ -398,7 +416,9 @@ An option to add a heading to the form, either by providing the level (h1, h2, h
     "titleFr": "Identification de l'organisation",
     "headingLevel": "h2",
     "isSectional": true,
-    "required": false
+    "validation": {
+      "required": false
+    }
   }
 }
 ```

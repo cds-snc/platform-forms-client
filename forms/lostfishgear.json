@@ -44,7 +44,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -57,7 +59,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -70,7 +74,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -83,7 +89,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -96,7 +104,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -109,7 +119,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -123,7 +135,9 @@
           "descriptionEn": "Complete below fields: (including crab and lobster traps). if not applicable, fill is as '-'",
           "descriptionFr": "Remplir les champs ci-dessous : (y compris les casiers à crabe et à homard) indiquez '0' si non applicable",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -133,7 +147,9 @@
           "titleEn": "Gear (include all types of trawls",
           "titleFr": "Type d'engin perdu",
           "description": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Trap / Pot",
@@ -164,7 +180,9 @@
           "placeholderFr": "Si autre",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -177,7 +195,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -190,7 +210,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -203,7 +225,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -216,7 +240,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -229,7 +255,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -242,7 +270,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -255,7 +285,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -268,7 +300,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -281,7 +315,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -294,7 +330,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]
