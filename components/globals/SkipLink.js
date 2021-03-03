@@ -1,19 +1,17 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { withTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 
-const SkipLink = ({ t }) => (
-  <nav>
-    <div id="skip-link-container">
-      <a href="#content" id="skip-link">
-        {t("skip-link")}
-      </a>
-    </div>
-  </nav>
-);
-
-SkipLink.propTypes = {
-  t: PropTypes.func.isRequired,
+const SkipLink = () => {
+  const { t } = useTranslation("common");
+  return (
+    <nav>
+      <div id="skip-link-container">
+        <a href="#content" id="skip-link">
+          {t("skip-link")}
+        </a>
+      </div>
+    </nav>
+  );
 };
 
-export default withTranslation("common")(SkipLink);
+export default SkipLink;
