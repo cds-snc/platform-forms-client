@@ -268,7 +268,7 @@ const _getElementInitialValue = (
   element: FormElement,
   language: string
 ): Record<string, unknown> | Record<string, unknown>[] | string => {
-  let nestedObj: Record<string, unknown> = {};
+  const nestedObj: Record<string, unknown> = {};
 
   // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
   if (element.properties.choices) {
@@ -288,8 +288,7 @@ const _getElementInitialValue = (
     return [dynamicRow];
   } else if (element.properties.fileType) {
     // For file attachments, we need several values like the FileName, FileReader base64 object and File object
-    nestedObj = { file: null, src: null, name: "" };
-    return nestedObj;
+    return { file: null, src: null, name: "" };
   } else {
     // Regular inputs (not nested) like text, textarea might have a placeholder value
     return (
