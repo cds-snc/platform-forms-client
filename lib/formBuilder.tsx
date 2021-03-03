@@ -132,7 +132,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           name={id}
           aria-describedby={description ? `desc-${id}` : undefined}
         >
-          {labelComponent}
+          <legend className="gc-label">{labelText}</legend>
           <Description>{description}</Description>
           {checkboxItems}
         </FormGroup>
@@ -156,7 +156,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           name={id}
           aria-describedby={description ? `desc-${id}` : undefined}
         >
-          {labelComponent}
+          <legend className="gc-label">{labelText}</legend>
           <Description>{description}</Description>
           {radioButtons}
         </FormGroup>
