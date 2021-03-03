@@ -9,9 +9,7 @@ interface RadioProps {
   label: string;
 }
 
-export const Radio = (
-  props: RadioProps & JSX.IntrinsicElements["input"]
-): React.ReactElement => {
+export const Radio = (props: RadioProps & JSX.IntrinsicElements["input"]): React.ReactElement => {
   const { id, className, label } = props;
 
   const classes = classnames("gc-input-radio", className);
@@ -20,9 +18,7 @@ export const Radio = (
 
   return (
     <div data-testid="radio" className={classes}>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
 
       <input
         className="gc-radio__input"

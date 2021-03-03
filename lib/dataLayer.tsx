@@ -1,11 +1,6 @@
 import Forms from "../forms/forms";
 import { logger, logMessage } from "./logger";
-import {
-  FormElement,
-  FormMetadataProperties,
-  Responses,
-  Response,
-} from "./types";
+import { FormElement, FormMetadataProperties, Responses, Response } from "./types";
 
 // Get the form json object by using the form ID
 // Returns => json object of form
@@ -58,25 +53,17 @@ export function extractFormData(submission: Submission): Array<string> {
   const formOrigin = submission.form;
   const dataCollector: Array<string> = [];
   formOrigin.layout.map((qID) => {
-    const question = formOrigin.elements.find(
-      (element: FormElement) => element.id === qID
-    );
+    const question = formOrigin.elements.find((element: FormElement) => element.id === qID);
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
     } else {
-      logMessage.error(
-        `Failed component ID look up ${qID} on form ID ${formOrigin.id}`
-      );
+      logMessage.error(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
     }
   });
   return dataCollector;
 }
 
-function handleType(
-  question: FormElement,
-  response: Response,
-  collector: Array<string>
-) {
+function handleType(question: FormElement, response: Response, collector: Array<string>) {
   // Add i18n here later on?
   // Do we detect lang submission or output with mixed lang?
   const qTitle = question.properties.titleEn;
@@ -124,11 +111,7 @@ function handleDynamicForm(
           break;
 
         case "checkbox":
-          handleArrayResponse(
-            qTitle,
-            row[qIndex] as Array<string>,
-            rowCollector
-          );
+          handleArrayResponse(qTitle, row[qIndex] as Array<string>, rowCollector);
           break;
       }
     });
@@ -139,11 +122,7 @@ function handleDynamicForm(
   collector.push(responseCollector.join(String.fromCharCode(13)));
 }
 
-function handleArrayResponse(
-  title: string,
-  response: Array<string>,
-  collector: Array<string>
-) {
+function handleArrayResponse(title: string, response: Array<string>, collector: Array<string>) {
   if (response.length) {
     if (Array.isArray(response)) {
       const responses = response
@@ -161,11 +140,7 @@ function handleArrayResponse(
   collector.push(`${title}${String.fromCharCode(13)}- No response`);
 }
 
-function handleTextResponse(
-  title: string,
-  response: string,
-  collector: Array<string>
-) {
+function handleTextResponse(title: string, response: string, collector: Array<string>) {
   if (response !== undefined && response !== null) {
     collector.push(`${title}${String.fromCharCode(13)}-${response}`);
     return;
