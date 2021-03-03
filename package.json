@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "formik": "^2.2.6",
-    "i18next-hmr": "^1.6.3",
     "json2md": "^1.9.2",
     "next": "10.0.4",
     "next-i18next": "^8.0.6",
