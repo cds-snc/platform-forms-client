@@ -1,19 +1,19 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { Link, withTranslation } from "../i18n";
+import { useTranslation } from "next-i18next";
+import Link from "next/link";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormByStatus, getFormByID } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
 
-const Sandbox = ({ t, i18n }) => {
+const Sandbox = () => {
+  const { t, i18n } = useTranslation("welcome");
   const LinksList = () => {
     const formIDs = getFormByStatus(false);
     return formIDs.map((formID) => {
       const form = getFormByID(formID);
       return (
         <li key={`link-${form.id}`}>
-          <Link href={`/${form.id}`}>
-            {form[getProperty("title", i18n.language)].toString()}
-          </Link>
+          <Link href={`/${form.id}`}>{form[getProperty("title", i18n.language)].toString()}</Link>
         </li>
       );
     });
@@ -49,9 +49,7 @@ const Sandbox = ({ t, i18n }) => {
           <p>{t("design.text")}</p>
           <ul className="link-list custom">
             <li>
-              <a href="https://platform-storybook.herokuapp.com/">
-                {t("design.system.title")}
-              </a>
+              <a href="https://platform-storybook.herokuapp.com/">{t("design.system.title")}</a>
             </li>
           </ul>
         </div>
@@ -72,13 +70,10 @@ const Sandbox = ({ t, i18n }) => {
   );
 };
 
-Sandbox.getInitialProps = async () => ({
-  namespacesRequired: ["welcome"],
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common", "welcome"])),
+  },
 });
 
-Sandbox.propTypes = {
-  t: PropTypes.func.isRequired,
-  i18n: PropTypes.object.isRequired,
-};
-
-export default withTranslation("welcome")(Sandbox);
+export default Sandbox;

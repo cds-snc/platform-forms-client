@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { withTranslation } from "../i18n";
+import { useTranslation } from "next-i18next";
 import Link from "next/link";
 
-function Error({ statusCode, t }) {
+function Error({ statusCode }) {
+  const { t } = useTranslation("error");
   return (
     <>
       <h1 className="gc-h1">
@@ -21,8 +22,7 @@ Error.getInitialProps = ({ res, err }) => {
 };
 
 Error.propTypes = {
-  t: PropTypes.func.isRequired,
   statusCode: PropTypes.number,
 };
 
-export default withTranslation("error")(Error);
+export default Error;

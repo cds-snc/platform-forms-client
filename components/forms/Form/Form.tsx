@@ -62,10 +62,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
   enableReinitialize: true, // needed when switching languages
 
   mapPropsToValues: (props) => {
-    return getFormInitialValues(
-      props.formMetadata,
-      props.language
-    ) as FormValues;
+    return getFormInitialValues(props.formMetadata, props.language) as FormValues;
   },
 
   handleSubmit: (values, formikBag) => {
@@ -98,10 +95,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
             const referrerUrl =
               formMetadata && formMetadata.endPage
                 ? {
-                    referrerUrl:
-                      formMetadata.endPage[
-                        getProperty("referrerUrl", language)
-                      ],
+                    referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
                   }
                 : null;
             router.push({

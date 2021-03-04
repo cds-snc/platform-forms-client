@@ -5,9 +5,7 @@ const getFormData = async (e, router) => {
   e.preventDefault();
 
   const formConfig =
-    e && e.target.elements && e.target.elements.jsonInput
-      ? e.target.elements.jsonInput
-      : {};
+    e && e.target.elements && e.target.elements.jsonInput ? e.target.elements.jsonInput : {};
   if (!formConfig) return;
 
   router.push({
