@@ -6,8 +6,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended",
         "plugin:jsx-a11y/recommended",
         "plugin:prettier/recommended",
-        "prettier/flowtype",
-        "prettier/react",
+        "prettier",
       ],
 
       parser: "@typescript-eslint/parser",
@@ -28,8 +27,7 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "plugin:cypress/recommended",
     "plugin:prettier/recommended",
-    "prettier/flowtype",
-    "prettier/react",
+    "prettier",
   ],
   parserOptions: {
     ecmaFeatures: {

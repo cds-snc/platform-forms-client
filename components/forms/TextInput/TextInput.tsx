@@ -14,8 +14,7 @@ interface CustomTextInputProps {
   required?: boolean;
 }
 
-export type OptionalTextInputProps = CustomTextInputProps &
-  JSX.IntrinsicElements["input"];
+export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElements["input"];
 
 export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
@@ -26,9 +25,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <ErrorMessage>{meta.error}</ErrorMessage>
-      ) : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
 
       <input
         data-testid="textInput"

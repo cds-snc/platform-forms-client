@@ -10,11 +10,7 @@ export interface FormMetadataProperties {
   layout: Array<string>;
   elements: Array<FormElement>;
   endPage: Record<string, string>;
-  [key: string]:
-    | string
-    | Array<string>
-    | Array<FormElement>
-    | Record<string, string>;
+  [key: string]: string | Array<string> | Array<FormElement> | Record<string, string>;
 }
 
 export type allFormElements =

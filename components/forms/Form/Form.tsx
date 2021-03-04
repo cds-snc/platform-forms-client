@@ -4,11 +4,7 @@ import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList } from "../../../lib/validation";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
-import {
-  FormValues,
-  InnerFormProps,
-  DynamicFormProps,
-} from "../../../lib/types";
+import { FormValues, InnerFormProps, DynamicFormProps } from "../../../lib/types";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -21,11 +17,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   return (
     <>
       {errorList ? (
-        <Alert
-          type="error"
-          heading={t("input-validation.heading")}
-          validation={true}
-        >
+        <Alert type="error" heading={t("input-validation.heading")} validation={true}>
           {errorList}
         </Alert>
       ) : null}
@@ -61,10 +53,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
   enableReinitialize: true, // needed when switching languages
 
   mapPropsToValues: (props) => {
-    return getFormInitialValues(
-      props.formMetadata,
-      props.language
-    ) as FormValues;
+    return getFormInitialValues(props.formMetadata, props.language) as FormValues;
   },
 
   validate: (values, props) => {
@@ -106,10 +95,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
             const referrerUrl =
               formMetadata && formMetadata.endPage
                 ? {
-                    referrerUrl:
-                      formMetadata.endPage[
-                        getProperty("referrerUrl", language)
-                      ],
+                    referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
                   }
                 : null;
             router.push({

@@ -1,21 +1,29 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { withTranslation } from "../i18n";
+
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 
-const PageNotFound = ({ t }) => (
-  <>
-    <h1 className="gc-h1">{t("404.title")}</h1>
+const PageNotFound = () => {
+  const { t, i18n } = useTranslation("error");
+  return (
+    <>
+      <h1 className="gc-h1">{t("404.title")}</h1>
 
-    <div>
-      <p>{t("404.body")}</p>
-      <Link href={t("home-link.link")}>{t("home-link.desc")}</Link>
-    </div>
-  </>
-);
-
-PageNotFound.propTypes = {
-  t: PropTypes.func.isRequired,
+      <div>
+        <p>{t("404.body")}</p>
+        <Link href={t("home-link.link")} locale={i18n.language}>
+          {t("home-link.desc")}
+        </Link>
+      </div>
+    </>
+  );
 };
 
-export default withTranslation("error")(PageNotFound);
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common", "error"])),
+  },
+});
+
+export default PageNotFound;

@@ -6,9 +6,7 @@ export default {
   component: Button,
 };
 
-export const defaultButton = (): React.ReactElement => (
-  <Button type="button">Click Me</Button>
-);
+export const defaultButton = (): React.ReactElement => <Button type="button">Click Me</Button>;
 
 export const secondaryButton = (): React.ReactElement => (
   <Button type="button" secondary={true}>

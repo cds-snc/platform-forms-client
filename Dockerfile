@@ -24,6 +24,7 @@ COPY --from=0 /src/node_modules ./node_modules
 COPY --from=0 /src/.next ./.next
 COPY public ./public
 COPY next.config.js .
+COPY next-i18next.config.js .
 
 ENV PORT 3000
 

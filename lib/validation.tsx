@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  FormValues,
-  DynamicFormProps,
-  InnerFormProps,
-  FormElement,
-  Responses,
-} from "./types";
+import { FormValues, DynamicFormProps, InnerFormProps, FormElement, Responses } from "./types";
 import { FormikProps } from "formik";
 
 /**
@@ -13,10 +7,7 @@ import { FormikProps } from "formik";
  * @param values
  * @param props
  */
-export const validateOnSubmit = (
-  values: FormValues,
-  props: DynamicFormProps
-): Responses => {
+export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
   const errors: Responses = {};
 
   for (const item in values) {
@@ -59,7 +50,5 @@ export const getErrorList = (
       );
     });
   }
-  return errorList && errorList.length ? (
-    <ol className="gc-ordered-list">{errorList}</ol>
-  ) : null;
+  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
 };
