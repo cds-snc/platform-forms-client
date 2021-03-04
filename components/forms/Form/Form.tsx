@@ -1,30 +1,10 @@
 import React from "react";
-import { NextRouter } from "next/router";
 import { withFormik, FormikProps } from "formik";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
-import { Button } from "../index";
-
-import { TFunction } from "next-i18next";
+import { validateOnSubmit, getErrorList } from "../../../lib/validation";
+import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
-import { FormMetadataProperties } from "../../../lib/types";
-
-interface InnerFormProps {
-  children?: React.ReactNode;
-  language: string;
-  t: TFunction;
-}
-
-interface DynamicFormProps {
-  formMetadata: FormMetadataProperties;
-  language: string;
-  router: NextRouter;
-  t: TFunction;
-}
-
-//Shape of Form input values as returned by 'getFormInitialValues'
-interface FormValues {
-  [key: string]: unknown;
-}
+import { FormValues, InnerFormProps, DynamicFormProps } from "../../../lib/types";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -32,21 +12,32 @@ interface FormValues {
  */
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
+
+  const errorList = props.errors ? getErrorList(props) : null;
   return (
-    <form
-      id="form"
-      data-testid="form"
-      onSubmit={handleSubmit}
-      method="POST"
-      encType="multipart/form-data"
-    >
-      {children}
-      <div className="buttons">
-        <Button className="gc-button" type="submit">
-          {t("submitButton")}
-        </Button>
-      </div>
-    </form>
+    <>
+      {errorList ? (
+        <Alert type="error" heading={t("input-validation.heading")} validation={true}>
+          {errorList}
+        </Alert>
+      ) : null}
+
+      <form
+        id="form"
+        data-testid="form"
+        onSubmit={handleSubmit}
+        method="POST"
+        encType="multipart/form-data"
+        noValidate
+      >
+        {children}
+        <div className="buttons">
+          <Button className="gc-button" type="submit">
+            {t("submitButton")}
+          </Button>
+        </div>
+      </form>
+    </>
   );
 };
 
@@ -63,6 +54,15 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   mapPropsToValues: (props) => {
     return getFormInitialValues(props.formMetadata, props.language) as FormValues;
+  },
+
+  validate: (values, props) => {
+    const validationResult = validateOnSubmit(values, props);
+    //  If there are errors on the page, scroll into view
+    if (typeof window !== "undefined" && Object.keys(validationResult).length) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    return validationResult;
   },
 
   handleSubmit: (values, formikBag) => {

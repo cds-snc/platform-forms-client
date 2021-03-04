@@ -32,7 +32,9 @@
           "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products.",
           "descriptionFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien.",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -44,7 +46,9 @@
           "descriptionEn": "Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
           "descriptionFr": "Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -56,7 +60,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -66,7 +72,9 @@
           "titleEn": "Work email",
           "titleFr": "Courriel professionnel",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -79,7 +87,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -89,7 +99,9 @@
           "titleEn": "Work phone number",
           "titleFr": "Numéro de téléphone professionnel",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
 
@@ -120,7 +132,9 @@
             }
           ],
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -132,7 +146,9 @@
           "descriptionEn": "Separate each email address with a comma.",
           "descriptionFr": "Veuillez ajouter les adresses séparées par des virgules.",
           "charLimit": 500,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

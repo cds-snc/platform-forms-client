@@ -18,5 +18,14 @@
     "text": "Government of Canada"
   },
   "lang-toggle": "Language Selection",
-  "submitButton": "Submit"
+  "submitButton": "Submit",
+  "input-validation": {
+    "heading": "Please correct the errors on the page",
+    "required": "Please complete the required field to continue",
+    "text": "Please enter text only",
+    "number": "Please enter a numeric value",
+    "email": "Please enter a valid email",
+    "date": "Please enter a valid date",
+    "phone": "Please enter a valid telephone number"
+  }
 }

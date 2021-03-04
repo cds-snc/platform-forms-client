@@ -16,8 +16,6 @@ export const Alert = ({
   heading,
   cta,
   children,
-  slim,
-  noIcon,
   className,
   validation,
   ...props
@@ -29,18 +27,16 @@ export const Alert = ({
       "gc-alert--warning": type === "warning",
       "gc-alert--error": type === "error",
       "gc-alert--info": type === "info",
-      "gc-alert--slim": slim,
-      "gc-alert--no-icon": noIcon,
       "gc-alert--validation": validation,
     },
     className
   );
 
   return (
-    <div className={classes} data-testid="alert" {...props}>
+    <div className={classes} data-testid="alert" {...props} role="alert">
       <div className="gc-alert__body">
-        {heading && <h3 className="gc-alert__heading">{heading}</h3>}
-        {children && (validation ? children : <p className="gc-alert__text">{children}</p>)}
+        {heading && <h3 className="gc-h3">{heading}</h3>}
+        {children && (validation ? children : <div className="gc-alert__text">{children}</div>)}
       </div>
       {cta && <div>{cta}</div>}
     </div>

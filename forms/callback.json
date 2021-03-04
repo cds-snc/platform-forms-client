@@ -20,7 +20,9 @@
         "properties": {
           "titleEn": "Language of service",
           "titleFr": "Préférence linguistique",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "English",
@@ -46,7 +48,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -57,7 +61,9 @@
           "titleFr": "Lieu (province / territoire)",
           "descriptionEn": "Select your response",
           "descriptionFr": "Province/Territoire",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "",
@@ -126,7 +132,9 @@
           "titleFr": "Numéro de téléphone pour vous joindre",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -140,7 +148,9 @@
           "descriptionEn": "Do not include any sensitive personal information in the questions/comments box, such as your social insurance number, date of birth, personal finance data, and medical or work history.",
           "descriptionFr": "Veuillez ne pas fournir de renseignements personnels de nature délicate dans la boîte questions/commentaires, comme votre numéro d'assurance sociale, date de naissance, des renseignements d'ordre financier ou médical, ou de l'information sur vos antécédents de travail.",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -149,7 +159,9 @@
         "properties": {
           "titleEn": "Canada Pension / Old Age Security",
           "titleFr": "Régime de pensions du Canada / Sécurité de la vieillesse",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Death benefit",
@@ -180,7 +192,9 @@
         "properties": {
           "titleEn": "Employment Insurance",
           "titleFr": "Assurance emploi",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Help applying online",
@@ -199,7 +213,9 @@
         "properties": {
           "titleEn": "Limited urgent passport service",
           "titleFr": "Services de Passeport Urgents Limités - pour les raisons suivantes",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Applicant’s own serious illness or must tend to the serious illness or death of another individual they have had a relationship with;",
@@ -222,7 +238,9 @@
         "properties": {
           "titleEn": "Social Insurance Number (SIN)",
           "titleFr": "Numéro d’assurance sociale (NAS)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Information",
@@ -241,7 +259,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

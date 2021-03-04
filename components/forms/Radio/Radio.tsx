@@ -1,16 +1,18 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface RadioProps {
   id: string;
   name: string;
   className?: string;
   label: string;
+  required?: boolean;
 }
 
 export const Radio = (props: RadioProps & JSX.IntrinsicElements["input"]): React.ReactElement => {
-  const { id, className, label } = props;
+  const { id, className, label, required } = props;
 
   const classes = classnames("gc-input-radio", className);
 
@@ -18,12 +20,13 @@ export const Radio = (props: RadioProps & JSX.IntrinsicElements["input"]): React
 
   return (
     <div data-testid="radio" className={classes}>
-      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
 
       <input
         className="gc-radio__input"
         id={id}
         type="radio"
+        required={required}
         {...field}
         value={label} // This needs to be static... the actual label...
       />

@@ -59,9 +59,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const subElements =
     element.properties && element.properties.subElements ? element.properties.subElements : [];
 
+  const isRequired: boolean = element.properties.validation
+    ? element.properties.validation.required
+    : false;
+
   const labelText = element.properties[getProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
-    <Label key={`label-${id}`} htmlFor={id}>
+    <Label key={`label-${id}`} htmlFor={id} className={isRequired ? "required" : ""}>
       {labelText}
     </Label>
   ) : null;
@@ -89,7 +93,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             type="text"
             id={id}
             name={id}
-            required={element.properties.required}
+            required={isRequired}
             aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
@@ -102,7 +106,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <TextArea
             id={id}
             name={id}
-            required={element.properties.required}
+            required={isRequired}
             aria-describedby={description ? `desc-${id}` : undefined}
           />
         </Fragment>
@@ -115,7 +119,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}.${index}`}
             name={`${id}`}
             label={choice}
-            required={element.properties.required}
+            required={isRequired}
           />
         );
       });
@@ -136,7 +140,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}.${index}`}
             name={`${id}`}
             label={choice}
-            required={element.properties.required}
+            required={isRequired}
           />
         );
       });

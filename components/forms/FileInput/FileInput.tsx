@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface FileInputProps {
   id: string;
@@ -9,11 +10,12 @@ interface FileInputProps {
   error?: boolean;
   hint?: React.ReactNode;
   fileType?: string | undefined;
+  required?: boolean;
 }
 
 export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [file, setFile] = useState<ArrayBuffer | string | null>();
-  const { id, className, fileType } = props;
+  const { id, className, fileType, required } = props;
 
   const classes = classnames("gc-file-input", className);
   const [field, meta, helpers] = useField(props);
@@ -21,7 +23,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.touched && meta.error ? <div className="error">{meta.error}</div> : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       <input
         type="file"
         data-testid="file"
@@ -30,6 +32,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         id={id}
         accept={fileType}
         {...field}
+        required={required}
         onChange={(e) => {
           setValue(e.target.value);
           if (e.target.files) {
