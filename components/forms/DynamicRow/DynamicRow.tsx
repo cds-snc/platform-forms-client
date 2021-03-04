@@ -4,6 +4,7 @@ import { useField } from "formik";
 import { GenerateElement } from "../../../lib/formBuilder";
 import { FormElement } from "../../../lib/types";
 import { Button } from "../index";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface DynamicGroupProps {
   name: string;
@@ -57,6 +58,11 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   return (
     <fieldset name={field.name} data-testid="formGroup" className={classes}>
       <legend>{legend}</legend>
+
+      {meta.touched && meta.error ? (
+        <ErrorMessage>{meta.error}</ErrorMessage>
+      ) : null}
+
       {rows.map((row, index) => {
         return (
           <div key={`${field.name}.${index}`} className="gc-item-row">

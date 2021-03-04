@@ -6,7 +6,6 @@ import {
   FormElement,
   Responses,
 } from "./types";
-import { ErrorMessage } from "../components/forms/index";
 import { FormikProps } from "formik";
 
 /**
@@ -46,13 +45,22 @@ export const validateOnSubmit = (
  */
 export const getErrorList = (
   props: InnerFormProps & FormikProps<FormValues>
-): Array<JSX.Element> | null => {
+): JSX.Element | null => {
   let errorList = null;
-  const errorValues = Object.values(props.errors);
-  if (props.touched && errorValues.length) {
-    errorList = errorValues.map((error, index) => {
-      return <ErrorMessage key={index}>{error}</ErrorMessage>;
+  const errorEntries = Object.entries(props.errors);
+  if (props.touched && errorEntries.length) {
+    errorList = errorEntries.map(([key, value], index) => {
+      console.log("ERROR ENTRIES", key, value, index);
+      return (
+        <li key={`error-${index}`}>
+          <a href={`#${key}`} className="gc-error-link" key={index}>
+            {value}
+          </a>
+        </li>
+      );
     });
   }
-  return errorList;
+  return errorList && errorList.length ? (
+    <ol className="gc-ordered-list">{errorList}</ol>
+  ) : null;
 };
