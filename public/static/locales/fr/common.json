@@ -17,6 +17,10 @@
     "link": "",
     "text": "Gouvernement du Canada"
   },
+  "preview": {
+    "title": "Prévisualisation à partir de JSON config",
+    "button": "Prévisualisation"
+  },
   "lang-toggle": "Sélection de la langue",
   "submitButton": "Soumettre",
   "input-validation": {

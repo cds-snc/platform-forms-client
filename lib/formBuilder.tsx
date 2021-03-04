@@ -257,6 +257,9 @@ const _getElementInitialValue = (
       dynamicRow[subElementID] = _getElementInitialValue(subElement, language);
     });
     return [dynamicRow];
+  } else if (element.properties.fileType) {
+    // For file attachments, we need several values like the FileName, FileReader base64 object and File object
+    return { file: null, src: null, name: "" };
   } else {
     // Regular inputs (not nested) like text, textarea might have a placeholder value
     return (element.properties[getProperty("placeholder", language)] as string) ?? "";

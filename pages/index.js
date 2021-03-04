@@ -43,7 +43,9 @@ const Home = () => {
           <p>{t("design.text")}</p>
           <ul className="link-list custom">
             <li>
-              <a href="https://platform-storybook.herokuapp.com/">{t("design.system.title")}</a>
+              <a href="https://cds-snc.github.io/platform-forms-client/">
+                {t("design.system.title")}
+              </a>
             </li>
           </ul>
         </div>

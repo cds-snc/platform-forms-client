@@ -1,23 +1,27 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import Form from "../Form/Form";
+import { Formik } from "formik";
 import { FileInput } from "./FileInput";
 
 const inputProps = {
-  key: "id",
-  id: "id",
+  key: "pdf",
+  id: "pdf",
   name: "pdf",
   label: "Upload a PDF",
-  value: "",
   fileType: ".pdf",
 };
 
 describe("FileInput component", () => {
   it("renders without errors", async () => {
     const { queryByTestId } = render(
-      <Form t={(key: string) => key}>
+      <Formik
+        onSubmit={(values) => {
+          console.log(values);
+        }}
+        initialValues={{ pdf: { file: "", name: "", src: "" } }}
+      >
         <FileInput {...inputProps} />
-      </Form>
+      </Formik>
     );
     expect(queryByTestId("file")).toBeInTheDocument();
   });

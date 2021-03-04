@@ -17,6 +17,10 @@
     "link": "",
     "text": "Government of Canada"
   },
+  "preview": {
+    "title": "Preview a Form from JSON config",
+    "button": "Preview"
+  },
   "lang-toggle": "Language Selection",
   "submitButton": "Submit",
   "input-validation": {
