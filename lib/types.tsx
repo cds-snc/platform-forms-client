@@ -1,4 +1,6 @@
 import { ChangeEvent } from "react";
+import { TFunction } from "next-i18next";
+import { NextRouter } from "next/router";
 
 export interface FormMetadataProperties {
   id: string;
@@ -8,11 +10,7 @@ export interface FormMetadataProperties {
   layout: Array<string>;
   elements: Array<FormElement>;
   endPage: Record<string, string>;
-  [key: string]:
-    | string
-    | Array<string>
-    | Array<FormElement>
-    | Record<string, string>;
+  [key: string]: string | Array<string> | Array<FormElement> | Record<string, string>;
 }
 
 export type allFormElements =
@@ -33,6 +31,15 @@ export interface FormElement {
   onchange?: callback;
 }
 
+export interface ValidationProperties {
+  required: boolean;
+  type?: string;
+  regex?: string;
+  descriptionEN?: string;
+  descriptionFR?: string;
+  [key: string]: unknown;
+}
+
 export interface ElementProperties {
   titleEn: string;
   titleFr: string;
@@ -40,7 +47,7 @@ export interface ElementProperties {
   placeholderFr?: string;
   descriptionEn?: string;
   descriptionFr?: string;
-  required: boolean;
+  validation?: ValidationProperties | undefined;
   choices?: Array<PropertyChoices>;
   subElements?: Array<FormElement>;
   fileType?: string | undefined;
@@ -51,6 +58,7 @@ export interface ElementProperties {
     | boolean
     | Array<PropertyChoices>
     | Array<FormElement>
+    | ValidationProperties
     | undefined;
 }
 
@@ -65,3 +73,21 @@ export type Responses = {
 };
 
 export type Response = string | string[] | Record<string, unknown>[];
+
+//Shape of Form input values
+export interface FormValues {
+  [key: string]: unknown;
+}
+
+export interface DynamicFormProps {
+  formMetadata: FormMetadataProperties;
+  language: string;
+  router: NextRouter;
+  t: TFunction;
+}
+
+export interface InnerFormProps {
+  children?: React.ReactNode;
+  language: string;
+  t: TFunction;
+}

@@ -64,7 +64,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -75,7 +77,9 @@
           "titleFr": "TBD",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -87,7 +91,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -99,7 +105,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -111,7 +119,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -123,7 +133,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -134,7 +146,9 @@
           "titleFr": "TBD",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -145,7 +159,9 @@
           "titleFr": "TBD",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Renovation",
@@ -179,7 +195,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -191,7 +209,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -203,7 +223,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -215,7 +237,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -227,7 +251,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -238,7 +264,9 @@
           "titleFr": "TBD",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -252,7 +280,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -264,7 +294,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -334,7 +366,9 @@
               "fr": "Yukon"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -346,7 +380,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -358,7 +394,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -372,7 +410,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -384,7 +424,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -454,7 +496,9 @@
               "fr": "Yukon"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -466,7 +510,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -478,7 +524,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -492,7 +540,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -504,7 +554,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -574,7 +626,9 @@
               "fr": "Yukon"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -586,7 +640,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -598,7 +654,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -612,7 +670,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -624,7 +684,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -694,7 +756,9 @@
               "fr": "Yukon"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -706,7 +770,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -718,7 +784,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -732,7 +800,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -744,7 +814,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -814,7 +886,9 @@
               "fr": "Yukon"
             }
           ],
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -826,7 +900,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -838,7 +914,9 @@
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -849,7 +927,9 @@
           "titleFr": "TBD",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -860,7 +940,9 @@
           "titleFr": "TBD",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "I/We hereby make application for a Building Permit under the Provisions of National Park Building Regulations, Town of Jasper Land Use Regulations, Municipality of Jasper Bylaws, Fire Regulations, National Park Management Plans, Local Guidelines, and Canadian Environmental Assessment Act that apply.",

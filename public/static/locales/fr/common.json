@@ -17,6 +17,19 @@
     "link": "",
     "text": "Gouvernement du Canada"
   },
+  "preview": {
+    "title": "Prévisualisation à partir de JSON config",
+    "button": "Prévisualisation"
+  },
   "lang-toggle": "Sélection de la langue",
-  "submitButton": "Soumettre"
+  "submitButton": "Soumettre",
+  "input-validation": {
+    "heading": "Veuillez corriger les erreurs trouvées dans la page",
+    "required": "Ce champ est obligatoire",
+    "number": "Veuillez entrer un numéro",
+    "text": "Veuillez entrer du text",
+    "email": "Veuillez entrer une adresse e-mail valide",
+    "date": "Veuillez entrer une date valide",
+    "phone": "Veuillez entrer votre numéro de téléphone au format xxx-xxx-xxxx"
+  }
 }

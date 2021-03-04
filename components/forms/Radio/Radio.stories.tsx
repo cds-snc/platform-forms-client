@@ -28,12 +28,7 @@ export const selected = (): React.ReactElement => (
     }}
     initialValues={{ "input-radio": "" }}
   >
-    <Radio
-      id="input-radio"
-      name="input-radio"
-      label="My Radio Button"
-      defaultChecked
-    />
+    <Radio id="input-radio" name="input-radio" label="My Radio Button" defaultChecked />
   </Formik>
 );
 
@@ -44,11 +39,6 @@ export const disabled = (): React.ReactElement => (
     }}
     initialValues={{ "input-radio": "" }}
   >
-    <Radio
-      id="input-radio"
-      name="input-radio"
-      label="My Radio Button"
-      disabled
-    />
+    <Radio id="input-radio" name="input-radio" label="My Radio Button" disabled />
   </Formik>
 );

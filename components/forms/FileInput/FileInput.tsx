@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useField, Field } from "formik";
+import { ErrorMessage } from "../index";
 
 interface FileInputProps {
   id: string;
@@ -47,9 +48,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       <Field component={UploadField} onChange={_onChange} />
     </>
   );

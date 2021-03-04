@@ -1,5 +1,6 @@
 import { getFormByID } from "../lib/dataLayer";
 import DynamicForm from "../components/containers/DynamicForm/DynamicForm";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export async function getServerSideProps(context) {
   let form = null;
@@ -8,8 +9,7 @@ export async function getServerSideProps(context) {
   if (formId === "preview-form" && context.query) {
     // If we're previewing a form, get the object from the query string
     const queryObj = context.query;
-    const parsedForm =
-      queryObj && queryObj.formObject ? JSON.parse(queryObj.formObject) : null;
+    const parsedForm = queryObj && queryObj.formObject ? JSON.parse(queryObj.formObject) : null;
     form = parsedForm && parsedForm.form ? parsedForm.form : null;
   } else {
     //Otherwise, get the form object via the dataLayer library
@@ -27,7 +27,10 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { formMetadata: form }, // will be passed to the page component as props
+    props: {
+      formMetadata: form,
+      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+    }, // will be passed to the page component as props
   };
 }
 

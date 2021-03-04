@@ -11,27 +11,7 @@
     "version": 1,
     "titleEn": "Atlantic lost fishing gear form: Fixed gear, including crab and lobster traps",
     "titleFr": "Formulaire de déclaration de perte d'engin de pêche : Fixe, incluant les casiers à homard et à crabe (Atlantique)",
-    "layout": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19
-    ],
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
 
     "elements": [
       {
@@ -44,7 +24,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": true
+          "validation": {
+            "required": true
+          }
         }
       },
       {
@@ -57,7 +39,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -70,7 +54,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -83,7 +69,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -96,7 +84,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -109,7 +99,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -123,7 +115,9 @@
           "descriptionEn": "Complete below fields: (including crab and lobster traps). if not applicable, fill is as '-'",
           "descriptionFr": "Remplir les champs ci-dessous : (y compris les casiers à crabe et à homard) indiquez '0' si non applicable",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -133,7 +127,9 @@
           "titleEn": "Gear (include all types of trawls",
           "titleFr": "Type d'engin perdu",
           "description": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Trap / Pot",
@@ -164,7 +160,9 @@
           "placeholderFr": "Si autre",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -177,7 +175,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -190,7 +190,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -203,7 +205,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -216,7 +220,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -229,7 +235,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -242,7 +250,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -255,7 +265,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -268,7 +280,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -281,7 +295,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -294,7 +310,9 @@
           "placeholderFr": "",
           "description": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

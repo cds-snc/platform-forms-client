@@ -96,7 +96,9 @@
           "titleFr": "Partie A : Information contractuelle",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -110,7 +112,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -124,7 +128,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -138,7 +144,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -152,7 +160,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -166,7 +176,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -177,7 +189,9 @@
           "titleFr": "Le fournisseur aura-t-il accès à des marchandises contrôlées?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -198,7 +212,9 @@
           "titleFr": "Le fournisseur aura-t-il accès à des données techniques militaires non classifiées qui sont assujetties aux dispositions du Règlement sur le contrôle des données techniques?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -219,7 +235,9 @@
           "titleFr": "Partie A : Indiquer le type d’accès requis",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -230,7 +248,9 @@
           "titleFr": "Le fournisseur ainsi que les employés auront-ils accès à des renseignements ou à des biens PROTÉGÉS et/ou CLASSIFIÉS?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -251,7 +271,9 @@
           "titleFr": "Le fournisseur et ses employés (p. ex. nettoyeurs, personnel d’entretien) auront-ils accès à des zones d’accès restreintes? L’accès à des renseignements ou à des biens PROTÉGÉS et/ou CLASSIFIÉS n’est pas autorisé",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -272,7 +294,9 @@
           "titleFr": "S’agit-il d’un contrat de messagerie ou de livraison commerciale sans entreposage de nuit?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -293,7 +317,9 @@
           "titleFr": "Partie A : Indiquer le type d'information auquel le fournisseur devra avoir accès",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -305,7 +331,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -316,7 +344,9 @@
           "titleFr": "Canada",
           "descriptionEn": "(Select all that apply)",
           "descriptionFr": "(Select all that apply)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Confidential",
@@ -357,7 +387,9 @@
           "titleFr": "Étranger",
           "descriptionEn": "(Select all that apply)",
           "descriptionFr": "(Select all that apply)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Confidential",
@@ -398,7 +430,9 @@
           "titleFr": "OTAN",
           "descriptionEn": "(Select all that apply)",
           "descriptionFr": "(Select all that apply)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Unclassified",
@@ -432,7 +466,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -443,7 +479,9 @@
           "titleFr": "Canada",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "No release restrictions",
@@ -471,7 +509,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -482,7 +522,9 @@
           "titleFr": "OTAN",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "All NATO countries",
@@ -506,7 +548,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -517,7 +561,9 @@
           "titleFr": "Étranger",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "No release restrictions",
@@ -541,7 +587,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -552,7 +600,9 @@
           "titleFr": "Le fournisseur aura-t-il accès à des renseignements ou à des biens COMSEC désignés PROTÉGÉS et/ou CLASSIFIÉS?",
           "descriptionEn": "(If Yes, indicate the level of sensitivity)",
           "descriptionFr": "(Dans l’affirmative, indiquer le niveau de sensibilité)",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -576,7 +626,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -587,7 +639,9 @@
           "titleFr": "Le fournisseur aura-t-il accès à des renseignements ou à des biens INFOSEC de nature extrêmement délicate?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -611,7 +665,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -625,7 +681,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -636,7 +694,9 @@
           "titleFr": "Partie B : Personnel (Fournisseur)",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -647,7 +707,9 @@
           "titleFr": "Niveau de contrôle de la sécurité du personnel requis",
           "descriptionEn": "(Select all that apply)",
           "descriptionFr": "(Select all that apply)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Confidential",
@@ -699,7 +761,9 @@
           "descriptionEn": "(NOTE: If multiple levels of screening are identified, a Security Classification Guide must be provided)",
           "descriptionFr": "(REMARQUE : Si plusieurs niveaux de contrôle de sécurité sont requis, un guide de classification de la sécurité doit être fourni)",
           "charLimit": 200,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -710,7 +774,9 @@
           "titleFr": "Du personnel sans autorisation sécuritaire peut-il se voir confier des parties du travail?",
           "descriptionEn": "(If Yes, will unscreened personnel be escorted?)",
           "descriptionFr": "(Dans l’affirmative, le personnel en question sera-t-il escorté)",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -734,7 +800,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -745,7 +813,9 @@
           "titleFr": "Partie C : Mesures de protection",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -757,7 +827,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -768,7 +840,9 @@
           "titleFr": "Le fournisseur sera-t-il tenu de recevoir et d’entreposer sur place des renseignements ou des biens PROTÉGÉS et/ou CLASSIFIÉS?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -789,7 +863,9 @@
           "titleFr": "Le fournisseur sera-t-il tenu de protéger des renseignements ou des biens COMSEC?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -811,7 +887,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -822,7 +900,9 @@
           "titleFr": "Les installations du fournisseur serviront-elles à la production (fabrication et/ou réparation et/ou modification) de matériel PROTÉGÉ et/ou CLASSIFIÉ?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -844,7 +924,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -855,7 +937,9 @@
           "titleFr": "Le fournisseur sera-t-il tenu d’utiliser ses propres systèmes informatiques pour traiter, produire ou stocker électroniquement des renseignements ou des données PROTÉGÉS et/ou CLASSIFIÉS?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -876,7 +960,9 @@
           "titleFr": "Disposera-t-on d’un lien électronique entre le système informatique du fournisseur et celui du ministère ou de l’agence gouvernementale?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -898,7 +984,9 @@
           "descriptionEn": "This will be automatically populated with answers from previous sections",
           "descriptionFr": "This will be automatically populated with answers from previous sections",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -909,7 +997,9 @@
           "titleFr": "La description du travail visé par la présente LVERS est-elle de nature PROTÉGÉE et/ou CLASSIFIÉE?",
           "descriptionEn": "(If Yes, indicate the level of sensitivity)",
           "descriptionFr": "(Dans l’affirmative, indiquer le niveau de sensibilité)",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -930,7 +1020,9 @@
           "titleFr": "La documentation associée à la présente LVERS sera-t-elle PROTÉGÉE et/ou CLASSIFIÉE?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -951,7 +1043,9 @@
           "titleFr": "Partie D : Authorisation",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -963,7 +1057,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -977,7 +1073,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -991,7 +1089,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1005,7 +1105,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1019,7 +1121,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1033,7 +1137,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1047,7 +1153,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1059,7 +1167,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1073,7 +1183,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1087,7 +1199,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1101,7 +1215,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1115,7 +1231,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1129,7 +1247,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1143,7 +1263,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1154,7 +1276,9 @@
           "titleFr": "Des instructions supplémentaires (p. ex. Guide de sécurité, Guide de classification de la sécurité) sont-elles jointes?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": true,
+          "validation": {
+            "required": true
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1176,7 +1300,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1190,7 +1316,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1204,7 +1332,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1218,7 +1348,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1232,7 +1364,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1246,7 +1380,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1260,7 +1396,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1272,7 +1410,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 5000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1286,7 +1426,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1300,7 +1442,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1314,7 +1458,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1328,7 +1474,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1342,7 +1490,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1356,7 +1506,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       }
     ]

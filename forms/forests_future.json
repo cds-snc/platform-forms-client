@@ -116,7 +116,9 @@
           "titleFr": "Respondent Contact Information",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -127,7 +129,9 @@
           "titleFr": "Legal name of applicant",
           "descriptionEN": "",
           "descriptionFR": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -138,7 +142,9 @@
           "titleFr": "Project Name",
           "descriptionEN": "",
           "descriptionFR": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -149,7 +155,9 @@
           "titleFr": "Primary Contact Name",
           "descriptionEN": "",
           "descriptionFR": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -160,7 +168,9 @@
           "titleFr": "Phone Number",
           "descriptionEN": "",
           "descriptionFR": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -171,7 +181,9 @@
           "titleFr": "E-mail Address",
           "descriptionEN": "",
           "descriptionFR": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -182,7 +194,9 @@
           "titleFr": "Respondent applying on behalf of:",
           "descriptionEn": "Check all that apply",
           "descriptionFr": "Check all that apply",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Municipal or local government or one of their agencies",
@@ -218,7 +232,9 @@
           "descriptionEn": "(This should be no more than 3 sentences)",
           "descriptionFr": "(This should be no more than 3 sentences)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -229,7 +245,9 @@
           "titleFr": "Organization Overview",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -240,7 +258,9 @@
           "titleFr": "Describe how your organization is interested in participating in large-scale cost-shared tree planting projects",
           "descriptionEn": "Check all boxes that apply and briefly provide more details in the space below if required",
           "descriptionFr": "Check all boxes that apply and briefly provide more details in the space below if required",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Implement tree planting projects from beginning to end, including monitoring trees for continued health (for example, undertaking a project or projects from sourcing trees and land for project, securing labour and overseeing tree planting, to monitoring and reporting on results)",
@@ -281,7 +301,9 @@
           "titleFr": "If you selected other, please specify",
           "descriptionEN": "",
           "descriptionFR": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -295,7 +317,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -306,7 +330,9 @@
           "titleFr": "Does your organization have experience in the area(s) selected above?",
           "descriptionEn": "(If yes, enter the number of years below)",
           "descriptionFr": "(If yes, enter the number of years below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -329,7 +355,9 @@
           "placeholderFr": "",
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -343,7 +371,9 @@
           "descriptionEn": "(For example, number of trees planted per year, hectares of land planted per year, number of tree planting projects managed, number of seedlings developed)",
           "descriptionFr": "(For example, number of trees planted per year, hectares of land planted per year, number of tree planting projects managed, number of seedlings developed)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -357,7 +387,9 @@
           "descriptionEn": "(For example, securing funding to expand your operations, securing a source of seedlings/trees, finding access to land, finding labour, monitoring the trees for survivability, etc.)",
           "descriptionFr": "(For example, securing funding to expand your operations, securing a source of seedlings/trees, finding access to land, finding labour, monitoring the trees for survivability, etc.)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -368,7 +400,9 @@
           "titleFr": "Project Overview",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -380,7 +414,9 @@
           "descriptionEn": "This information will not be retained in the context of any subsequent Request for Proposal. The information will be used to better understand organizations’ interest and capacity to participate in the Growing Canada’s Forest program. Please refer to the GCF program Future Participants Respondent Guide for details on how to fill out this section",
           "descriptionFr": "This information will not be retained in the context of any subsequent Request for Proposal. The information will be used to better understand organizations’ interest and capacity to participate in the Growing Canada’s Forest program. Please refer to the GCF program Future Participants Respondent Guide for details on how to fill out this section",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -392,7 +428,9 @@
           "descriptionEn": "List the location(s) in which your project operates. Please specify your province and region/city. You can add another location if your project operates in more than one place.",
           "descriptionFr": "List the location(s) in which your project operates. Please specify your province and region/city. You can add another location if your project operates in more than one place.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -401,7 +439,9 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "subElements": [
             {
               "id": 20,
@@ -471,7 +511,9 @@
                     "fr": "Yukon"
                   }
                 ],
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             },
             {
@@ -484,7 +526,9 @@
                 "placeholderFr": "",
                 "descriptionEn": "",
                 "descriptionFr": "",
-                "required": false
+                "validation": {
+                  "required": false
+                }
               }
             }
           ]
@@ -500,7 +544,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -513,7 +559,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -524,7 +572,9 @@
           "titleFr": "Please select the location type(s) for your project",
           "descriptionEn": "Select all that apply",
           "descriptionFr": "Select all that apply",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Urban",
@@ -550,7 +600,9 @@
           "descriptionEn": "If you are a nursery, provide the number of new seedlings/trees your organization could potentially supply beyond your current supply agreements. Please provide a number to nearest thousand.",
           "descriptionFr": "If you are a nursery, provide the number of new seedlings/trees your organization could potentially supply beyond your current supply agreements. Please provide a number to nearest thousand.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -562,7 +614,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -575,7 +629,9 @@
           "placeholderFr": "",
           "descriptionEn": "(estimated to the nearest thousand)",
           "descriptionFr": "(estimated to the nearest thousand)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -587,7 +643,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -600,7 +658,9 @@
           "placeholderFr": "",
           "descriptionEn": "(estimated to the nearest thousand)",
           "descriptionFr": "(estimated to the nearest thousand)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -612,7 +672,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -625,7 +687,9 @@
           "placeholderFr": "",
           "descriptionEn": "(estimated to the nearest thousand)",
           "descriptionFr": "(estimated to the nearest thousand)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -637,7 +701,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -650,7 +716,9 @@
           "placeholderFr": "",
           "descriptionEn": "(estimated to the nearest thousand)",
           "descriptionFr": "(estimated to the nearest thousand)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -662,7 +730,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -675,7 +745,9 @@
           "placeholderFr": "",
           "descriptionEn": "(estimated to the nearest thousand)",
           "descriptionFr": "(estimated to the nearest thousand)",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -689,7 +761,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -701,7 +775,9 @@
           "descriptionEn": "Only complete this question if it is applicable to your case. Please express land area in hectares",
           "descriptionFr": "Only complete this question if it is applicable to your case. Please express land area in hectares",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -713,7 +789,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -726,7 +804,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -738,7 +818,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -751,7 +833,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -763,7 +847,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -776,7 +862,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -788,7 +876,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -801,7 +891,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -813,7 +905,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -826,7 +920,9 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -840,7 +936,9 @@
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -851,7 +949,9 @@
           "titleFr": "If applicable, do you know if your proposed project will take place within or adjacent to Indigenous lands or traditional territory, including lands governed by a modern treaty?",
           "descriptionEn": "",
           "descriptionFr": "",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -876,7 +976,9 @@
           "titleFr": "Project Overview",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -888,7 +990,9 @@
           "descriptionEn": "Be as concise as possible with your responses; however, do not leave out important information in order to be brief. Answer all sections that apply as best as you can. Incomplete forms will be considered as part of the information gathering exercise.",
           "descriptionFr": "Be as concise as possible with your responses; however, do not leave out important information in order to be brief. Answer all sections that apply as best as you can. Incomplete forms will be considered as part of the information gathering exercise.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -902,7 +1006,9 @@
           "descriptionEn": "Description of the key activities your organization would like to carry out in the context of implementing one or more tree planting projects/initiatives. If applicable, include how you will ensure that the right trees are planted in the right location, seeking authorizations from appropriate authorities (if required), and post-planting activities like monitoring for tree health and survival and reporting on project outcomes",
           "descriptionFr": "Description of the key activities your organization would like to carry out in the context of implementing one or more tree planting projects/initiatives. If applicable, include how you will ensure that the right trees are planted in the right location, seeking authorizations from appropriate authorities (if required), and post-planting activities like monitoring for tree health and survival and reporting on project outcomes",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -916,7 +1022,9 @@
           "descriptionEn": "Describe your organization’s experience and readiness as it relates to your proposed contribution to the Growing Canada’s Forests program. Describe any capacity building needs or potential gaps in your ability to participate",
           "descriptionFr": "Describe your organization’s experience and readiness as it relates to your proposed contribution to the Growing Canada’s Forests program. Describe any capacity building needs or potential gaps in your ability to participate",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -930,7 +1038,9 @@
           "descriptionEn": "Describe how your proposed project will seek to maximize greenhouse gas (GHG) emission reductions or carbon sequestration (for example, by selecting planting sites where no or minimal vegetation removal is required).  GHG impacts do not need to be quantified at this stage.  Also describe how your proposed project will lead to environmental and human well-being co-benefits (for example, increasing biodiversity to increase ecosystem resilience to climate change, creating more green spaces for your community, creating green jobs, etc.)",
           "descriptionFr": "Describe how your proposed project will seek to maximize greenhouse gas (GHG) emission reductions or carbon sequestration (for example, by selecting planting sites where no or minimal vegetation removal is required).  GHG impacts do not need to be quantified at this stage.  Also describe how your proposed project will lead to environmental and human well-being co-benefits (for example, increasing biodiversity to increase ecosystem resilience to climate change, creating more green spaces for your community, creating green jobs, etc.)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -941,7 +1051,9 @@
           "titleFr": "Forecasted Project Costs and Funding Sources",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -952,7 +1064,9 @@
           "titleFr": "Has your organization considered the costs of implementing tree-planting projects over the proposed project period?",
           "descriptionEn": "(If yes, provide details below)",
           "descriptionFr": "(If yes, provide details below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -976,7 +1090,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -987,7 +1103,9 @@
           "titleFr": "Recognizing the Government of Canada will ultimately be looking to enter into cost-sharing agreements, describe how your organization would finance a proposed project. Has your organization considered using multiple sources of funding to finance project costs?",
           "descriptionEn": "(If yes, please describe any funding partnerships or different funding mechanisms below)",
           "descriptionFr": "(If yes, please describe any funding partnerships or different funding mechanisms below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1011,7 +1129,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1022,7 +1142,9 @@
           "titleFr": "Future Collaboration",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1033,7 +1155,9 @@
           "titleFr": "Is your organization seeking collaborators and partners to develop a tree-planting project or to build capacity to undertake a tree-planting project?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1057,7 +1181,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1068,7 +1194,9 @@
           "titleFr": "Recognizing that some organizations may not know of potential opportunities to collaborate with other organizations, Natural Resources Canada can facilitate collaboration across various elements of the tree planting supply chain",
           "descriptionEn": "In agreeing to the sharing of your contact information with other interested organizations, you certify your understanding that Canada will not accept any liability that may arise because of collaboration, business association, joint venture, partnership, agent and principle, or employer/employee relationship that was fostered through this RFI process",
           "descriptionFr": "In agreeing to the sharing of your contact information with other interested organizations, you certify your understanding that Canada will not accept any liability that may arise because of collaboration, business association, joint venture, partnership, agent and principle, or employer/employee relationship that was fostered through this RFI process",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Please check to certify your agreement",
@@ -1085,7 +1213,9 @@
           "titleFr": "General Questions for Program Delivery Consideration",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1097,7 +1227,9 @@
           "descriptionEn": "Please keep in mind, the responses to these questions will help inform and identify the most appropriate program delivery scenarios of a future funded Request for Proposals (RFPs) with respect to implementing or contributing to large-scale single or multi-year projects.",
           "descriptionFr": "Please keep in mind, the responses to these questions will help inform and identify the most appropriate program delivery scenarios of a future funded Request for Proposals (RFPs) with respect to implementing or contributing to large-scale single or multi-year projects.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1108,7 +1240,9 @@
           "titleFr": "Are there elements to the eligibility criteria, whether related to eligible recipient type or eligible costs that would prevent/hinder your organization from participating in a future RFP?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1132,7 +1266,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1143,7 +1279,9 @@
           "titleFr": "The questions within this RFI would generally reflect the types of questions being included in a formal funding RFP. In your view are there elements missing that should be considered to ensure projects are well assessed and represent good value for money for the Government of Canada?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1167,7 +1305,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1178,7 +1318,9 @@
           "titleFr": "Are there questions within this RFI, if transposed into a funding RFP, that would create barriers to participation and prevent the program from reaching its goal with respect to large-scale single or multi-year projects?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1202,7 +1344,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1213,7 +1357,9 @@
           "titleFr": "Are there specific criteria, in your experience as an organization involved in large-scale tree plant projects that should be weighted more heavily than others for the sake of achieving the goals of the Growing Canada’s Forest program?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1237,7 +1383,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1248,7 +1396,9 @@
           "titleFr": "Monitoring results of tree plantings will be a significant undertaking. Are there best practices (whether tools, systems or processes) that you would like to identify?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1272,7 +1422,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1283,7 +1435,9 @@
           "titleFr": "Are there tools/mechanisms that you, as an organization participating in a future large-scale project, would like to see to enable collaboration between various funding recipients?",
           "descriptionEn": "(If yes, describe below)",
           "descriptionFr": "(If yes, describe below)",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Yes",
@@ -1307,7 +1461,9 @@
           "descriptionEn": "(If you answered yes to the previous question)",
           "descriptionFr": "(If you answered yes to the previous question)",
           "charLimit": 300,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1318,7 +1474,9 @@
           "titleFr": "Diversity and Inclusion",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1330,7 +1488,9 @@
           "descriptionEn": "Please note: Providing answers to the question below will not adversely affect the assessment of your EOI. If your organization does not wish to answer the question, please leave the fields blank.",
           "descriptionFr": "Please note: Providing answers to the question below will not adversely affect the assessment of your EOI. If your organization does not wish to answer the question, please leave the fields blank.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1341,7 +1501,9 @@
           "titleFr": "Does your organization have a workplace diversity and inclusion plan that targets one or more of the following under-represented groups?",
           "descriptionEn": "Select all that apply",
           "descriptionFr": "Select all that apply",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "Indigenous Peoples",
@@ -1382,7 +1544,9 @@
           "titleFr": "Authorization",
           "headingLevel": "h2",
           "isSectional": true,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1394,7 +1558,9 @@
           "descriptionEn": "The use and distribution of information collected through this Expression of Interest (EOI) will comply with both the Privacy Act and the Access to Information Act.",
           "descriptionFr": "The use and distribution of information collected through this Expression of Interest (EOI) will comply with both the Privacy Act and the Access to Information Act.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1406,7 +1572,9 @@
           "descriptionEn": "The program will keep confidential any personal information it may collect and will not disclose or transmit said information without your written consent.",
           "descriptionFr": "The program will keep confidential any personal information it may collect and will not disclose or transmit said information without your written consent.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1418,7 +1586,9 @@
           "descriptionEn": "The program will protect from disclosure any information of a financial, commercial, scientific or technical nature it collects from you so long as you treat said information as confidential in your own establishment. If you choose to send the information or other confidential information to the program by e-mail, the program will respond by email. Similarly, if your correspondence is through regular mail, the program’s response will be in like manner. However, in all cases, the program will use e-mail correspondence to you for all non-confidential matters.",
           "descriptionFr": "The program will protect from disclosure any information of a financial, commercial, scientific or technical nature it collects from you so long as you treat said information as confidential in your own establishment. If you choose to send the information or other confidential information to the program by e-mail, the program will respond by email. Similarly, if your correspondence is through regular mail, the program’s response will be in like manner. However, in all cases, the program will use e-mail correspondence to you for all non-confidential matters.",
           "charLimit": 1000,
-          "required": false
+          "validation": {
+            "required": false
+          }
         }
       },
       {
@@ -1429,7 +1599,9 @@
           "titleFr": "By checking the box below, you are providing the program with consent to use your information",
           "descriptionEn": "We might share it with the program’s employees, external consultants, review committee members, officials in other departments (federal, provincial and territorial) for the purposes assessing the merits of your EOI and for formulating internal policy analysis",
           "descriptionFr": "We might share it with the program’s employees, external consultants, review committee members, officials in other departments (federal, provincial and territorial) for the purposes assessing the merits of your EOI and for formulating internal policy analysis",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "I have read and agree with the statement above",
@@ -1446,7 +1618,9 @@
           "titleFr": "By checking the box below you certify that you have read the Early Start Applicant Guide",
           "descriptionEn": "This means that you understand that this EOI does not constitute, nor should it be construed, in any manner whatsoever, as creating an obligation on NRCan to fund the proposed project",
           "descriptionFr": "This means that you understand that this EOI does not constitute, nor should it be construed, in any manner whatsoever, as creating an obligation on NRCan to fund the proposed project",
-          "required": false,
+          "validation": {
+            "required": false
+          },
           "choices": [
             {
               "en": "I have read and agree with the statement above",

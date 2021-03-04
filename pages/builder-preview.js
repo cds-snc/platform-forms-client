@@ -1,13 +1,13 @@
 import React from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const getFormData = async (e, router) => {
   e.preventDefault();
 
   const formConfig =
-    e && e.target.elements && e.target.elements.jsonInput
-      ? e.target.elements.jsonInput
-      : {};
+    e && e.target.elements && e.target.elements.jsonInput ? e.target.elements.jsonInput : {};
   if (!formConfig) return;
 
   router.push({
@@ -18,16 +18,13 @@ const getFormData = async (e, router) => {
 
 const PreviewForm = () => {
   const router = useRouter();
+  const { t } = useTranslation("common");
   return (
     <>
-      <h1 className="gc-h1">Preview a Form from JSON config</h1>
+      <h1 className="gc-h1">{t("preview.title")}</h1>
 
       <div>
-        <form
-          onSubmit={(e) => getFormData(e, router)}
-          method="POST"
-          encType="multipart/form-data"
-        >
+        <form onSubmit={(e) => getFormData(e, router)} method="POST" encType="multipart/form-data">
           <textarea
             id="jsonInput"
             rows="20"
@@ -36,7 +33,7 @@ const PreviewForm = () => {
           ></textarea>
           <div>
             <button type="submit" className="gc-button">
-              Preview
+              {t("preview.button")}
             </button>
           </div>
         </form>
@@ -44,5 +41,11 @@ const PreviewForm = () => {
     </>
   );
 };
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
+});
 
 export default PreviewForm;
