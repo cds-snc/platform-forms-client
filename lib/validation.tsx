@@ -50,7 +50,6 @@ export const getErrorList = (
   const errorEntries = Object.entries(props.errors);
   if (props.touched && errorEntries.length) {
     errorList = errorEntries.map(([key, value], index) => {
-      console.log("ERROR ENTRIES", key, value, index);
       return (
         <li key={`error-${index}`}>
           <a href={`#${key}`} className="gc-error-link" key={index}>

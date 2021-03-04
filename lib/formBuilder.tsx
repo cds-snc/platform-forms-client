@@ -64,9 +64,17 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       ? element.properties.subElements
       : [];
 
+  const isRequired: boolean = element.properties.validation
+    ? element.properties.validation.required
+    : false;
+
   const labelText = element.properties[getProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
-    <Label key={`label-${id}`} htmlFor={id}>
+    <Label
+      key={`label-${id}`}
+      htmlFor={id}
+      className={isRequired ? "required" : ""}
+    >
       {labelText}
     </Label>
   ) : null;
@@ -79,10 +87,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       {description}
     </p>
   ) : null;
-
-  const isRequired: boolean = element.properties.validation
-    ? element.properties.validation.required
-    : false;
 
   switch (element.type) {
     case "alert":

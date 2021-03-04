@@ -98,6 +98,10 @@
 
 .gc-label {
   @apply md:text-small_base block mb-2 text-base font-bold w-full;
+  &.required::after {
+    @apply text-red-500;
+    content: " *";
+  }
 }
 
 .gc-plain-text {
