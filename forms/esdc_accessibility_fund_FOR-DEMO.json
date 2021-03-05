@@ -185,7 +185,7 @@
     "elements": [
       {
         "id": 1,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Enabling Accessibility Fund (EAF) - Small Projects Component",
           "titleFr": "Fonds pour l’accessibilité (FA) - Projets de petite envergure",
@@ -356,7 +356,7 @@
       },
       {
         "id": 11,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "placeholderEn": "",
           "placeholderFr": "",
@@ -370,7 +370,7 @@
       },
       {
         "id": 12,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "placeholderEn": "",
           "placeholderFr": "",
@@ -705,7 +705,7 @@
       },
       {
         "id": 27,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Primary Contact",
           "titleFr": "Personne-ressource principale",
@@ -763,7 +763,7 @@
       },
       {
         "id": 32,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Preferred language of communication",
           "titleFr": "Langue de communication préférée",
@@ -846,7 +846,7 @@
       },
       {
         "id": 36,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Secondary Contact",
           "titleFr": "Deuxième personne-ressource",
@@ -920,7 +920,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Preferred language of communication",
           "titleFr": "Langue de communication préférée",
@@ -1024,7 +1024,7 @@
       },
       {
         "id": 46,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -1116,7 +1116,7 @@
       },
       {
         "id": 67,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "PROJECT PROPOSAL IDENTIFICATION",
           "titleFr": "IDENTIFICATION DE LA PROPOSITION DE PROJET",
@@ -1177,7 +1177,7 @@
 
       {
         "id": 72,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Proposal Description",
           "titleFr": "DESCRIPTION DE LA PROPOSITION DE PROJET",
@@ -1217,7 +1217,7 @@
       },
       {
         "id": 75,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Activities and Timelines",
           "titleFr": "",
@@ -1233,7 +1233,7 @@
       },
       {
         "id": 76,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 1",
           "titleFr": "Activité 1",
@@ -1270,7 +1270,7 @@
       },
       {
         "id": 79,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 2",
           "titleFr": "Activité 2",
@@ -1307,7 +1307,7 @@
       },
       {
         "id": 82,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 3",
           "titleFr": "Activité 3",
@@ -1386,7 +1386,7 @@
       },
       {
         "id": 87,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "[]",
           "titleFr": "",
@@ -1526,7 +1526,7 @@
       },
       {
         "id": 92,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Part 3 - Budget",
           "titleFr": "Partie 3 – Budget",
@@ -1538,7 +1538,7 @@
       },
       {
         "id": 93,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project costs",
           "titleFr": "Coûts du projet",
@@ -1552,7 +1552,7 @@
       },
       {
         "id": 94,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -1568,7 +1568,7 @@
       },
       {
         "id": 95,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 1",
           "titleFr": "Activité 1",
@@ -1637,7 +1637,7 @@
       },
       {
         "id": 100,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Funding sources",
           "titleFr": "Sources de financement",
@@ -1651,7 +1651,7 @@
       },
       {
         "id": 101,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -1665,7 +1665,7 @@
       },
       {
         "id": 102,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization 1",
           "titleFr": "L'organisme 1",
@@ -1751,7 +1751,7 @@
       },
       {
         "id": 108,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Part 4 - Program Specific Questions and Checklist",
           "titleFr": "Partie 4 – Questions et liste de vérification propres au programme",
@@ -1835,7 +1835,7 @@
       },
       {
         "id": 113,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Select the appropriate project category below that best describes your project. Note that you may select one or more as applicable.",
           "titleFr": "Sélectionnez la catégorie qui s’applique à votre projet. Il est possible de sélectionner plus d’un type de projet à la fois",
@@ -1939,7 +1939,7 @@
       },
       {
         "id": 118,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Renovation of Existing Interior/Exterior Ramp",
           "titleFr": "Réaménagement d’une rampe intérieure/extérieure",
@@ -1964,7 +1964,7 @@
       },
       {
         "id": 120,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Existing interior/exterior ramp 1",
           "titleFr": "Rampe intérieure/extérieure 1",
@@ -2078,7 +2078,7 @@
       },
       {
         "id": 126,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "New Exterior Ramp",
           "titleFr": "Nouvelle Rampe Extérieure",
@@ -2103,7 +2103,7 @@
       },
       {
         "id": 128,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Exterior ramp 1",
           "titleFr": "Rampe extérieure 1",
@@ -2167,7 +2167,7 @@
       },
       {
         "id": 132,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "New Interior Ramp",
           "titleFr": "Nouvelle Rampe Intérieure",
@@ -2192,7 +2192,7 @@
       },
       {
         "id": 134,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Interior ramp 1",
           "titleFr": "Rampe intérieure 1",
@@ -2248,7 +2248,7 @@
       },
       {
         "id": 138,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Renovation of existing washroom",
           "titleFr": "Nouvelle Rampe Intérieure",
@@ -2398,7 +2398,7 @@
       },
       {
         "id": 144,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "New Accessible Single Occupant Washroom",
           "titleFr": "Nouvelle toilette accessible pour une personne",
@@ -2524,7 +2524,7 @@
       },
       {
         "id": 150,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "New Accessible Stall Washroom",
           "titleFr": "Nouvelle toilette accessible avec cabines",
@@ -2646,7 +2646,7 @@
       },
       {
         "id": 156,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Renovation of existing door",
           "titleFr": "Réaménagement d’une porte",
@@ -2727,7 +2727,7 @@
       },
       {
         "id": 161,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "New Accessible Exterior Door",
           "titleFr": "Nouvelle porte extérieure accessible",
@@ -2787,7 +2787,7 @@
       },
       {
         "id": 165,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "New Accessible Interior Door",
           "titleFr": "Nouvelle porte intérieure accessible",
@@ -2847,7 +2847,7 @@
       },
       {
         "id": 169,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Other projects",
           "titleFr": "Autre projets",
@@ -2873,7 +2873,7 @@
       },
       {
         "id": 171,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Program checklist",
           "titleFr": "Liste de vérification",
@@ -2932,7 +2932,7 @@
       },
       {
         "id": 173,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Part 5 - Attestation",
           "titleFr": "Partie 5 – Attestation",
@@ -3030,7 +3030,7 @@
       },
       {
         "id": 180,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Attestation",
           "titleFr": "Attestation",

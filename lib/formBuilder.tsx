@@ -11,8 +11,8 @@ import {
   FormGroup,
   FileInput,
   DynamicGroup,
-  Description,
   Heading,
+  RichText,
 } from "../components/forms";
 import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
 
@@ -88,7 +88,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <RichText className="gc-description">{description}</RichText>
           <TextInput
             type="text"
             id={id}
@@ -102,7 +102,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <RichText className="gc-description">{description}</RichText>
           <TextArea
             id={id}
             name={id}
@@ -127,7 +127,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          <Description>{description}</Description>
+          <RichText className="gc-description">{description}</RichText>
           {checkboxItems}
         </FormGroup>
       );
@@ -148,7 +148,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          <Description>{description}</Description>
+          <RichText className="gc-description">{description}</RichText>
           {radioButtons}
         </FormGroup>
       );
@@ -157,7 +157,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <RichText className="gc-description">{description}</RichText>
           <Dropdown
             id={id}
             name={id}
@@ -166,14 +166,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           />
         </Fragment>
       );
-    case "plainText":
-      return (
-        <div className="gc-plain-text">
-          {labelText ? <h2 className="gc-h3">{labelText}</h2> : null}
-
-          {descriptiveText}
-        </div>
-      );
+    case "richText":
+      return <RichText>{description}</RichText>;
     case "heading":
       return (
         <Fragment>
@@ -191,7 +185,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <RichText className="gc-description">{description}</RichText>
           <FileInput
             id={id}
             name={id}

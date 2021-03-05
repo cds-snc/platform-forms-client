@@ -167,7 +167,7 @@
     "elements": [
       {
         "id": 1,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Supporting Black Canadian Communities (SBCC) Initiative",
           "titleFr": "Initiative pour appuyer les communautés noires du Canada",
@@ -303,7 +303,7 @@
       },
       {
         "id": 9,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "placeholderEn": "",
           "placeholderFr": "",
@@ -317,7 +317,7 @@
       },
       {
         "id": 10,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "placeholderEn": "",
           "placeholderFr": "",
@@ -367,7 +367,7 @@
       },
       {
         "id": 13,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization Primary Address",
           "titleFr": "Adresse principale de l’organisme",
@@ -715,7 +715,7 @@
       },
       {
         "id": 27,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization Contacts",
           "titleFr": "Personnes-ressources de l'organisme",
@@ -731,7 +731,7 @@
       },
       {
         "id": 28,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Primary Contact",
           "titleFr": "Personne-ressource principale",
@@ -747,7 +747,7 @@
       },
       {
         "id": 28,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Given Name / Surname",
           "titleFr": "Prénom et nom de famille",
@@ -805,7 +805,7 @@
       },
       {
         "id": 32,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Preferred language of communication",
           "titleFr": "Langue de communication préférée",
@@ -888,7 +888,7 @@
       },
       {
         "id": 36,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Secondary Contact",
           "titleFr": "Deuxième personne-ressource",
@@ -904,7 +904,7 @@
       },
       {
         "id": 37,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Given Name / Surname",
           "titleFr": "Prénom et nom de famille",
@@ -962,7 +962,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Preferred language of communication",
           "titleFr": "Langue de communication préférée",
@@ -1066,7 +1066,7 @@
       },
       {
         "id": 46,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -1082,7 +1082,7 @@
       },
       {
         "id": 47,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Entry 1",
           "titleFr": "Entrée 1",
@@ -1161,7 +1161,7 @@
       },
       {
         "id": 52,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Entry 2",
           "titleFr": "Entrée 2",
@@ -1240,7 +1240,7 @@
       },
       {
         "id": 57,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Entry 3",
           "titleFr": "Entrée 3",
@@ -1319,7 +1319,7 @@
       },
       {
         "id": 62,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Entry 4",
           "titleFr": "Entrée 4",
@@ -1398,7 +1398,7 @@
       },
       {
         "id": 67,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Proposal Identification",
           "titleFr": "",
@@ -1470,7 +1470,7 @@
       },
       {
         "id": 72,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Proposal Description",
           "titleFr": "",
@@ -1516,7 +1516,7 @@
       },
       {
         "id": 75,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Activities and Timelines",
           "titleFr": "",
@@ -1532,7 +1532,7 @@
       },
       {
         "id": 76,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 1",
           "titleFr": "",
@@ -1576,7 +1576,7 @@
       },
       {
         "id": 79,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 2",
           "titleFr": "",
@@ -1620,7 +1620,7 @@
       },
       {
         "id": 82,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 3",
           "titleFr": "",
@@ -1664,7 +1664,7 @@
       },
       {
         "id": 85,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 4",
           "titleFr": "",
@@ -1935,7 +1935,7 @@
       },
       {
         "id": 96,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Costs",
           "titleFr": "",
@@ -1951,7 +1951,7 @@
       },
       {
         "id": 97,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -1967,7 +1967,7 @@
       },
       {
         "id": 98,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 1",
           "titleFr": "",
@@ -2033,7 +2033,7 @@
       },
       {
         "id": 102,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 2",
           "titleFr": "",
@@ -2099,7 +2099,7 @@
       },
       {
         "id": 106,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 3",
           "titleFr": "",
@@ -2165,7 +2165,7 @@
       },
       {
         "id": 110,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Activity 4",
           "titleFr": "",
@@ -2231,7 +2231,7 @@
       },
       {
         "id": 114,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Funding Sources",
           "titleFr": "",
@@ -2247,7 +2247,7 @@
       },
       {
         "id": 115,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -2263,7 +2263,7 @@
       },
       {
         "id": 116,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization 1",
           "titleFr": "",
@@ -2333,7 +2333,7 @@
       },
       {
         "id": 120,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization 2",
           "titleFr": "",
@@ -2403,7 +2403,7 @@
       },
       {
         "id": 124,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization 3",
           "titleFr": "",
@@ -2473,7 +2473,7 @@
       },
       {
         "id": 128,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization 4",
           "titleFr": "",
@@ -2543,7 +2543,7 @@
       },
       {
         "id": 132,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Budget Details",
           "titleFr": "",
@@ -2574,7 +2574,7 @@
       },
       {
         "id": 132,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Program Specific Questions",
           "titleFr": "",
@@ -2634,7 +2634,7 @@
       },
       {
         "id": 135,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Program Specific Questions",
           "titleFr": "",
@@ -2692,7 +2692,7 @@
       },
       {
         "id": 137,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Attestation",
           "titleFr": "",

@@ -25,7 +25,7 @@
     "elements": [
       {
         "id": 1,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -39,7 +39,7 @@
       },
       {
         "id": 2,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",

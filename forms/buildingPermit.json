@@ -271,7 +271,7 @@
       },
       {
         "id": 14,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Leaseholder",
           "titleFr": "TBD",
@@ -401,7 +401,7 @@
       },
       {
         "id": 19,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Architect",
           "titleFr": "TBD",
@@ -531,7 +531,7 @@
       },
       {
         "id": 24,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Engineer",
           "titleFr": "TBD",
@@ -661,7 +661,7 @@
       },
       {
         "id": 29,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Contractor",
           "titleFr": "TBD",
@@ -791,7 +791,7 @@
       },
       {
         "id": 34,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Inspection Agency",
           "titleFr": "TBD",

@@ -407,7 +407,7 @@
       },
       {
         "id": 18,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Where applicable to your organization type, we encourage you to provide details below to the best of your knowledge",
           "titleFr": "Where applicable to your organization type, we encourage you to provide details below to the best of your knowledge",
@@ -421,7 +421,7 @@
       },
       {
         "id": 19,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Location",
           "titleFr": "Project Location",
@@ -593,7 +593,7 @@
       },
       {
         "id": 24,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Provide an estimate of the number of new trees your organization could plant.",
           "titleFr": "Provide an estimate of the number of new trees your organization could plant.",
@@ -607,7 +607,7 @@
       },
       {
         "id": 25,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2022-2023",
           "titleFr": "2022-2023",
@@ -636,7 +636,7 @@
       },
       {
         "id": 27,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2023-2024",
           "titleFr": "2023-2024",
@@ -665,7 +665,7 @@
       },
       {
         "id": 29,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2024-2025",
           "titleFr": "2024-2025",
@@ -694,7 +694,7 @@
       },
       {
         "id": 31,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2025-2026",
           "titleFr": "2025-2026",
@@ -723,7 +723,7 @@
       },
       {
         "id": 33,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2026+",
           "titleFr": "2026+",
@@ -768,7 +768,7 @@
       },
       {
         "id": 36,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Provide an estimate of the land that would be required to plant the number of trees you have identified above for your tree planting project(s)",
           "titleFr": "Provide an estimate of the land that would be required to plant the number of trees you have identified above for your tree planting project(s)",
@@ -782,7 +782,7 @@
       },
       {
         "id": 37,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2022-2023",
           "titleFr": "2022-2023",
@@ -811,7 +811,7 @@
       },
       {
         "id": 39,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2023-2024",
           "titleFr": "2023-2024",
@@ -840,7 +840,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2024-2025",
           "titleFr": "2024-2025",
@@ -869,7 +869,7 @@
       },
       {
         "id": 43,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2025-2026",
           "titleFr": "2025-2026",
@@ -898,7 +898,7 @@
       },
       {
         "id": 45,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2026+",
           "titleFr": "2026+",
@@ -983,7 +983,7 @@
       },
       {
         "id": 50,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Where applicable to your organization type, please provide brief answers to all the sections below.",
           "titleFr": "Where applicable to your organization type, please provide brief answers to all the sections below.",
@@ -1220,7 +1220,7 @@
       },
       {
         "id": 64,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Regardless of whether or not you have a project(s) in mind as part of your response to this RFI, we would welcome feedback on the following questions.",
           "titleFr": "Regardless of whether or not you have a project(s) in mind as part of your response to this RFI, we would welcome feedback on the following questions.",
@@ -1481,7 +1481,7 @@
       },
       {
         "id": 78,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
           "titleFr": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
@@ -1551,7 +1551,7 @@
       },
       {
         "id": 81,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Notice to Applicants",
           "titleFr": "Notice to Applicants",
@@ -1565,7 +1565,7 @@
       },
       {
         "id": 82,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Privacy Act",
           "titleFr": "Pursuant to Privacy Act",
@@ -1579,7 +1579,7 @@
       },
       {
         "id": 83,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Access of Information Act",
           "titleFr": "Pursuant to Access of Information Act",

@@ -439,7 +439,7 @@
       },
       {
         "id": 21,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Team Members",
           "titleFr": "Membres de l’équipe",

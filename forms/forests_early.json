@@ -248,7 +248,7 @@
       },
       {
         "id": 12,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Location",
           "titleFr": "Project Location",
@@ -566,7 +566,7 @@
       },
       {
         "id": 25,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Please provide brief answers to all the sections below.",
           "titleFr": "Please provide brief answers to all the sections below.",
@@ -748,7 +748,7 @@
       },
       {
         "id": 37,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "NRCAN",
           "titleFr": "NRCAN",
@@ -792,7 +792,7 @@
       },
       {
         "id": 40,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Applicant",
           "titleFr": "Applicant",
@@ -836,7 +836,7 @@
       },
       {
         "id": 43,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Other Funding Partners/Supporters (specify)",
           "titleFr": "Other Funding Partners/Supporters (specify)",
@@ -961,7 +961,7 @@
       },
       {
         "id": 48,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
           "titleFr": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
@@ -1031,7 +1031,7 @@
       },
       {
         "id": 51,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Notice to Applicants",
           "titleFr": "Notice to Applicants",
@@ -1045,7 +1045,7 @@
       },
       {
         "id": 52,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Privacy Act",
           "titleFr": "Pursuant to Privacy Act",
@@ -1059,7 +1059,7 @@
       },
       {
         "id": 53,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Access of Information Act",
           "titleFr": "Pursuant to Access of Information Act",

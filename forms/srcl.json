@@ -324,7 +324,7 @@
       },
       {
         "id": 14,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Level of Information",
           "titleFr": "Niveau d'information",
@@ -459,7 +459,7 @@
       },
       {
         "id": 18,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Release Restrictions",
           "titleFr": "Restrictions relatives à la diffusion",
@@ -820,7 +820,7 @@
       },
       {
         "id": 36,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Information / Assets",
           "titleFr": "Renseignements / Biens",
@@ -880,7 +880,7 @@
       },
       {
         "id": 39,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Production",
           "titleFr": "Production",
@@ -917,7 +917,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Information Technology (IT) Media",
           "titleFr": "Support relatif à la technologie de l'information (TI)",
@@ -977,7 +977,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Summary Chart",
           "titleFr": "Summary Chart",
@@ -1050,7 +1050,7 @@
       },
       {
         "id": 45,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization Project Authority",
           "titleFr": "Chargé de projet de l’organisme",
@@ -1160,7 +1160,7 @@
       },
       {
         "id": 52,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization Security Authority",
           "titleFr": "Responsable de la sécurité de l’organisme",
@@ -1293,7 +1293,7 @@
       },
       {
         "id": 60,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Procurement Officer",
           "titleFr": "Agent d'approvisionnement",
@@ -1403,7 +1403,7 @@
       },
       {
         "id": 67,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Contracting Security Authority",
           "titleFr": "Autorité contractante en matière de sécurité",
