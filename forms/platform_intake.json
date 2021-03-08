@@ -13,7 +13,7 @@
     "titleFr": "Formulaire de demande pour Plateforme SNC",
     "descriptionEn": "Register to learn more about CDS Platform products",
     "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9],
     "startPage": {},
     "endPage": {
       "descriptionEn": "",
@@ -55,7 +55,7 @@
         "id": 3,
         "type": "textField",
         "properties": {
-          "titleEn": "First and last name",
+          "titleEn": "Full name",
           "titleFr": "Nom et prénom",
           "descriptionEn": "",
           "descriptionFr": "",
@@ -81,7 +81,7 @@
         "id": 5,
         "type": "textField",
         "properties": {
-          "titleEn": "What department do you work for?",
+          "titleEn": "Which department do you work for?",
           "titleFr": "Pour quel ministère travaillez-vous?",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -104,7 +104,6 @@
           }
         }
       },
-
       {
         "id": 7,
         "type": "checkbox",
@@ -115,20 +114,20 @@
           "descriptionFr": "Cocher tous les choix qui s’appliquent",
           "choices": [
             {
-              "en": "I have a form I would like to publish in the next month",
+              "en": "I have a form I would like to publish",
               "fr": "J’ai un formulaire à faire publier d’ici le mois prochain."
             },
             {
-              "en": "I have feedback on why this product will (or won't) work for my team",
-              "fr": "J’ai des commentaires qui expliquent pourquoi ce produit est bien (ou n’est pas bien) adapté à mon équipe."
-            },
-            {
-              "en": "I'm interested in learning more please contact me to set up a demo",
+              "en": "I'm interested in learning more - please contact me to set up a demo",
               "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place un démo."
             },
             {
-              "en": "Please keep me in the loop by adding me to your mailing list",
+              "en": "Keep me in the loop by adding me to your mailing list",
               "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
+            },
+            {
+              "en": "Other",
+              "fr": "Autre"
             }
           ],
           "charLimit": 100,
@@ -139,6 +138,18 @@
       },
       {
         "id": 8,
+        "type": "textField",
+        "properties": {
+          "titleEn": "If you selected other",
+          "titleFr": "If you selected other",
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 9,
         "type": "textArea",
         "properties": {
           "titleEn": "Email(s) of other people in your team we should reach out to",
