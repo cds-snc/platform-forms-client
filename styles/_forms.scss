@@ -48,6 +48,21 @@
   @apply md:text-small_h2 font-bold text-h2 pb-6;
 }
 
+.gc-richText {
+  p {
+    @extend .gc-p;
+  }
+  h1 {
+    @extend .gc-h1;
+  }
+  h2 {
+    @extend .gc-h2;
+  }
+  h3 {
+    @extend .gc-h3;
+  }
+}
+
 .gc-item-row {
   @apply border-t-2 pt-16 pb-3 px-0 bg-white-default mt-0 border-black-form;
 

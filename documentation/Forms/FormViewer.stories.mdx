@@ -366,29 +366,29 @@ A browser-native file upload field
 
 `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
-### Plain text
+### Rich text via markdown/mdx
 
-An option to add plain text to the form
+An option to add rich text to the form, either in markdown or HTML
 
 > Add rendered component here as an example
 
 ```json
 {
-  "id": 1,
+  "id": 15,
   "type": "richText",
   "properties": {
-    "titleEn": "Text Heading",
+    "titleEn": "",
     "titleFr": "",
     "placeholderEn": "",
     "placeholderFr": "",
-    "descriptionEn": "Plain text paragraph",
-    "descriptionFr": "",
-    "charLimit": 1000,
+    "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Primary Address</h2> \n Follow up text, below the heading. <ol><li>A list item</li></ol>",
+    "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Adresse principale de l’organismen</h2>",
+    "charLimit": 5000,
     "validation": {
       "required": false
     }
   }
-}
+},
 ```
 
 `id`: The unique id for the object (`string`)

@@ -369,12 +369,12 @@
         "id": 13,
         "type": "richText",
         "properties": {
-          "titleEn": "Organization Primary Address",
-          "titleFr": "Adresse principale de l’organisme",
+          "titleEn": "",
+          "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "descriptionEn": "### Organization Primary Address",
+          "descriptionFr": "### Adresse principale de l’organisme",
           "charLimit": 1000,
           "validation": {
             "required": false

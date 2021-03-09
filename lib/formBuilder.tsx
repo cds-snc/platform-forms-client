@@ -70,18 +70,20 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const description = element.properties[getProperty("description", lang)]?.toString();
-  const descriptiveText = description ? (
-    <p className="gc-p" id={`desc-${id}`}>
-      {description}
-    </p>
-  ) : null;
+  const descriptionPerLocale = element.properties[getProperty("description", lang)];
+  const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
     case "alert":
       return (
         <Alert type="info" noIcon>
-          {descriptiveText}
+          <p className="gc-p" id={`desc-${id}`}>
+            {description ? (
+              <p className="gc-p" id={`desc-${id}`}>
+                {description}
+              </p>
+            ) : null}
+          </p>
         </Alert>
       );
     case "textField":
@@ -167,7 +169,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </Fragment>
       );
     case "richText":
-      return <RichText>{description}</RichText>;
+      return (
+        <>
+          {labelComponent}
+          <RichText>{description}</RichText>
+        </>
+      );
     case "heading":
       return (
         <Fragment>

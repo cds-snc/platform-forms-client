@@ -23,7 +23,6 @@
       9,
       10,
       11,
-      12,
       13,
       185,
       14,
@@ -187,12 +186,12 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "titleEn": "Enabling Accessibility Fund (EAF) - Small Projects Component",
-          "titleFr": "Fonds pour l’accessibilité (FA) - Projets de petite envergure",
+          "titleEn": "",
+          "titleFr": "",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "The Enabling Accessibility Fund provides funding for eligible capital projects that increase accessibility for people with disabilities in Canadian communities and workplaces. It creates more opportunities for people with disabilities to participate in community activities, programs and services, or access employment opportunities.",
-          "descriptionFr": "Le Fonds pour l’accessibilité (FA) offre du financement pour les projets qui rendent les collectivités et les milieux de travail plus accessibles aux personnes en situation de handicap. Le FA crée des possibilités pour que les personnes en situation de handicap participent aux activités, aux programmes et aux services de leur communauté et accèdent à des possibilités d’emploi.",
+          "descriptionEn": "###Enabling Accessibility Fund (EAF) - Small Projects Component \n The Enabling Accessibility Fund provides funding for eligible capital projects that increase accessibility for people with disabilities in Canadian communities and workplaces. It creates more opportunities for people with disabilities to participate in community activities, programs and services, or access employment opportunities.",
+          "descriptionFr": "###Fonds pour l’accessibilité (FA) - Projets de petite envergure \n Le Fonds pour l’accessibilité (FA) offre du financement pour les projets qui rendent les collectivités et les milieux de travail plus accessibles aux personnes en situation de handicap. Le FA crée des possibilités pour que les personnes en situation de handicap participent aux activités, aux programmes et aux services de leur communauté et accèdent à des possibilités d’emploi.",
           "charLimit": 5000,
           "validation": {
             "required": false
@@ -252,12 +251,15 @@
       },
       {
         "id": 4,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Organization Identification",
-          "titleFr": "Identification de l'organisation",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "titleEn": "",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Identification</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Identification de l'organisation</h2>",
+          "charLimit": 5000,
           "validation": {
             "required": false
           }
@@ -360,22 +362,8 @@
         "properties": {
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "If you do not have a CRA Business Number, provide one of the following:",
-          "descriptionFr": "Si vous ne possédez pas de numéro d’entreprise de l’ARC, veuillez fournir un des numéros suivants :",
-          "charLimit": 1000,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 12,
-        "type": "richText",
-        "properties": {
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "For example: Your provincial/territorial corporation number (i.e. number found on your Letters Patent) or your federal corporation number with Industry Canada (see Applicant Guide for further details).",
-          "descriptionFr": "Par exemple : Votre numéro d’entreprise provincial ou territorial (c.-à-d. le numéro qui se trouve dans vos lettres patentes) ou votre numéro d’entreprise fédéral auprès d’Industrie Canada (voir le Guide du demandeur pour en savoir plus).",
+          "descriptionEn": "If you do not have a CRA Business Number, provide one of the following: <br/><br/>For example: Your provincial/territorial corporation number (i.e. number found on your Letters Patent) or your federal corporation number with Industry Canada (see Applicant Guide for further details).",
+          "descriptionFr": "Si vous ne possédez pas de numéro d’entreprise de l’ARC, veuillez fournir un des numéros suivants: <br/><br/> Par exemple : Votre numéro d’entreprise provincial ou territorial (c.-à-d. le numéro qui se trouve dans vos lettres patentes) ou votre numéro d’entreprise fédéral auprès d’Industrie Canada (voir le Guide du demandeur pour en savoir plus).",
           "charLimit": 1000,
           "validation": {
             "required": false
@@ -434,12 +422,15 @@
       },
       {
         "id": 15,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Organization Primary Address",
-          "titleFr": "Adresse principale de l’organismen",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "titleEn": "",
+          "titleFr": "",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Primary Address</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Adresse principale de l’organismen</h2>",
+          "charLimit": 5000,
           "validation": {
             "required": false
           }
