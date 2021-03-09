@@ -110,12 +110,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Respondent Contact Information",
-          "titleFr": "Respondent Contact Information",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Respondent Contact Information</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Respondent Contact Information</h2>",
           "validation": {
             "required": false
           }
@@ -239,12 +237,10 @@
       },
       {
         "id": 9,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Organization Overview",
-          "titleFr": "Organization Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Overview</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Organization Overview</h2>",
           "validation": {
             "required": false
           }
@@ -394,12 +390,10 @@
       },
       {
         "id": 17,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Information and Overview",
-          "titleFr": "Project Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Information and Overview</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Information and Overview</h2>",
           "validation": {
             "required": false
           }
@@ -970,12 +964,10 @@
       },
       {
         "id": 49,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Overview",
-          "titleFr": "Project Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Overview</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Overview</h2>",
           "validation": {
             "required": false
           }
@@ -1045,12 +1037,10 @@
       },
       {
         "id": 54,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Forecasted Project Costs and Funding Sources",
-          "titleFr": "Forecasted Project Costs and Funding Sources",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Forecasted Project Costs and Funding Sources</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Forecasted Project Costs and Funding Sources</h2>",
           "validation": {
             "required": false
           }
@@ -1136,12 +1126,10 @@
       },
       {
         "id": 59,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Future Collaboration",
-          "titleFr": "Future Collaboration",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Future Collaboration</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Future Collaboration</h2>",
           "validation": {
             "required": false
           }
@@ -1207,12 +1195,10 @@
       },
       {
         "id": 63,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "General Questions for Program Delivery Consideration",
-          "titleFr": "General Questions for Program Delivery Consideration",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">General Questions for Program Delivery Consideration</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">General Questions for Program Delivery Consideration</h2>",
           "validation": {
             "required": false
           }
@@ -1468,12 +1454,10 @@
       },
       {
         "id": 77,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Diversity and Inclusion",
-          "titleFr": "Diversity and Inclusion",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Diversity and Inclusion</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Diversity and Inclusion</h2>",
           "validation": {
             "required": false
           }
@@ -1538,12 +1522,10 @@
       },
       {
         "id": 80,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Authorization",
-          "titleFr": "Authorization",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Authorization</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Authorization</h2>",
           "validation": {
             "required": false
           }

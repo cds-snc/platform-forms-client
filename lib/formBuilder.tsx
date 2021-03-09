@@ -11,7 +11,6 @@ import {
   FormGroup,
   FileInput,
   DynamicGroup,
-  Heading,
   RichText,
 } from "../components/forms";
 import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
@@ -171,22 +170,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     case "richText":
       return (
         <>
-          {labelComponent}
+          {labelText ? <h3 className="gc-h3">{labelText}</h3> : null}
           <RichText>{description}</RichText>
         </>
-      );
-    case "heading":
-      return (
-        <Fragment>
-          {labelText ? (
-            <Heading
-              isSectional={element.properties.isSectional ? true : false}
-              headingLevel={"h2"}
-            >
-              {labelText}
-            </Heading>
-          ) : null}
-        </Fragment>
       );
     case "fileInput":
       return (

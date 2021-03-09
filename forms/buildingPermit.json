@@ -71,12 +71,10 @@
       },
       {
         "id": 2,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Location",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Location</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Location</h2>",
           "validation": {
             "required": false
           }
@@ -140,12 +138,10 @@
       },
       {
         "id": 6,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Building information",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Building information</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Building information</h2>",
           "validation": {
             "required": false
           }
@@ -258,12 +254,10 @@
       },
       {
         "id": 13,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project information",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project information</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project information</h2>",
           "validation": {
             "required": false
           }
@@ -921,12 +915,10 @@
       },
       {
         "id": 39,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Confirmation",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Confirmation</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Confirmation</h2>",
           "validation": {
             "required": false
           }

@@ -90,12 +90,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Introduction",
-          "titleFr": "Introduction",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Introduction</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Introduction</h2>",
           "validation": {
             "required": false
           }
@@ -344,12 +342,10 @@
       },
       {
         "id": 16,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Information",
-          "titleFr": "Project Information",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Information</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Information</h2>",
           "validation": {
             "required": false
           }

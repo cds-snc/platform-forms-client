@@ -305,8 +305,6 @@
         "id": 9,
         "type": "richText",
         "properties": {
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "If you do not have a CRA Business Number, provide one of the following:",
           "descriptionFr": "Si vous ne possédez pas de numéro d’entreprise de l’ARC, veuillez fournir un des numéros suivants :",
           "charLimit": 1000,
@@ -319,8 +317,6 @@
         "id": 10,
         "type": "richText",
         "properties": {
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "For example: Your provincial/territorial corporation number (i.e. number found on your Letters Patent) or your federal corporation number with Industry Canada (see Applicant Guide for further details).",
           "descriptionFr": "Par exemple : Votre numéro d’entreprise provincial ou territorial (c.-à-d. le numéro qui se trouve dans vos lettres patentes) ou votre numéro d’entreprise fédéral auprès d’Industrie Canada (voir le Guide du demandeur pour en savoir plus).",
           "charLimit": 1000,

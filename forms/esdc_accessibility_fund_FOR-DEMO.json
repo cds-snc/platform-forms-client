@@ -186,10 +186,6 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "###Enabling Accessibility Fund (EAF) - Small Projects Component \n The Enabling Accessibility Fund provides funding for eligible capital projects that increase accessibility for people with disabilities in Canadian communities and workplaces. It creates more opportunities for people with disabilities to participate in community activities, programs and services, or access employment opportunities.",
           "descriptionFr": "###Fonds pour l’accessibilité (FA) - Projets de petite envergure \n Le Fonds pour l’accessibilité (FA) offre du financement pour les projets qui rendent les collectivités et les milieux de travail plus accessibles aux personnes en situation de handicap. Le FA crée des possibilités pour que les personnes en situation de handicap participent aux activités, aux programmes et aux services de leur communauté et accèdent à des possibilités d’emploi.",
           "charLimit": 5000,
@@ -253,10 +249,6 @@
         "id": 4,
         "type": "richText",
         "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Identification</h2>",
           "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Identification de l'organisation</h2>",
           "charLimit": 5000,
@@ -360,8 +352,6 @@
         "id": 11,
         "type": "richText",
         "properties": {
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "If you do not have a CRA Business Number, provide one of the following: <br/><br/>For example: Your provincial/territorial corporation number (i.e. number found on your Letters Patent) or your federal corporation number with Industry Canada (see Applicant Guide for further details).",
           "descriptionFr": "Si vous ne possédez pas de numéro d’entreprise de l’ARC, veuillez fournir un des numéros suivants: <br/><br/> Par exemple : Votre numéro d’entreprise provincial ou territorial (c.-à-d. le numéro qui se trouve dans vos lettres patentes) ou votre numéro d’entreprise fédéral auprès d’Industrie Canada (voir le Guide du demandeur pour en savoir plus).",
           "charLimit": 1000,
@@ -424,10 +414,6 @@
         "id": 15,
         "type": "richText",
         "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Primary Address</h2>",
           "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Adresse principale de l’organismen</h2>",
           "charLimit": 5000,
@@ -698,12 +684,8 @@
         "id": 27,
         "type": "richText",
         "properties": {
-          "titleEn": "Primary Contact",
-          "titleFr": "Personne-ressource principale",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "This should be your primary contact person with respect to this application for funding.",
-          "descriptionFr": "Il s’agira de votre principale personne-ressource en ce qui a trait à la présente demande de financement.",
+          "descriptionEn": "###Primary Contact \n This should be your primary contact person with respect to this application for funding.",
+          "descriptionFr": "###Personne-ressource principale \n Il s’agira de votre principale personne-ressource en ce qui a trait à la présente demande de financement.",
           "charLimit": 1000,
           "validation": {
             "required": false
@@ -756,12 +738,8 @@
         "id": 32,
         "type": "richText",
         "properties": {
-          "titleEn": "Preferred language of communication",
-          "titleFr": "Langue de communication préférée",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "descriptionEn": "###Preferred language of communication",
+          "descriptionFr": "###Langue de communication préférée",
           "charLimit": 1000,
           "validation": {
             "required": false
@@ -841,8 +819,6 @@
         "properties": {
           "titleEn": "Secondary Contact",
           "titleFr": "Deuxième personne-ressource",
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "This should be your secondary contact person with respect to this application for funding in case we cannot reach the primary contact.",
           "descriptionFr": "Il s’agira de votre deuxième personne-ressource en ce qui a trait à la présente demande de financement au cas où nous ne pouvons pas joindre la personne-ressource principale.",
           "charLimit": 1000,
@@ -1017,10 +993,6 @@
         "id": 46,
         "type": "richText",
         "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "If yes, complete the fields below for each amount owing.",
           "descriptionFr": "Si oui, veuillez remplir les champs ci-dessous pour chaque somme due.",
           "charLimit": 1000,
@@ -1545,10 +1517,6 @@
         "id": 94,
         "type": "richText",
         "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "placeholderEn": "",
-          "placeholderFr": "",
           "descriptionEn": "List each eligible activity or service:",
           "descriptionFr": "Énumérez chaque activité ou service admissible:",
           "charLimit": 1000,

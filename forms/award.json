@@ -44,12 +44,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Section 1: Nomination Category",
-          "titleFr": "Section 1: Catégorie de la nomination",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 1: Nomination Category</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 1: Catégorie de la nomination</h2>",
           "validation": {
             "required": false
           }
@@ -119,12 +117,10 @@
       },
       {
         "id": 4,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Section 2: Nominator Information",
-          "titleFr": "Section 2: Information sur le proposant",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 2: Nominator Information</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 2: Information sur le proposant</h2>",
           "validation": {
             "required": false
           }
@@ -228,12 +224,10 @@
       },
       {
         "id": 11,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Section 3: Individual Information (For an Individual Nomination)",
-          "titleFr": "Section 3: Mise en candidature d'une personne (For an Individual Nomination)",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 3: Individual Information (For an Individual Nomination)</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 3: Mise en candidature d'une personne (For an Individual Nomination)</h2>",
           "validation": {
             "required": false
           }
@@ -394,12 +388,10 @@
       },
       {
         "id": 18,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Section 4: Team Nomination (for a Team Nomination)",
-          "titleFr": "Section 4: Mise en candidature d’une équipe (for a Team Nomination)",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 4: Team Nomination (for a Team Nomination)</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 4: Mise en candidature d’une équipe (for a Team Nomination)</h2>",
           "validation": {
             "required": false
           }
@@ -621,12 +613,10 @@
       },
       {
         "id": 23,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Annex A: Achievement Summary",
-          "titleFr": "Annex A: Résumé des réalisations",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Annex A: Achievement Summary</h2>",
+          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Annex A: Résumé des réalisations</h2>",
           "validation": {
             "required": false
           }
