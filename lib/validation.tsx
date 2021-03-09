@@ -1,6 +1,13 @@
 import React from "react";
-import { FormValues, DynamicFormProps, InnerFormProps, FormElement, Responses } from "./types";
-import { FormikProps } from "formik";
+import {
+  FormValues,
+  DynamicFormProps,
+  InnerFormProps,
+  FormElement,
+  Responses,
+  ValidationProperties,
+} from "./types";
+import { FormikProps, FormikValues } from "formik";
 import { TFunction } from "next-i18next";
 
 /**
@@ -20,8 +27,9 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
       return errors;
     }
 
-    const currentValidation = currentItem.properties?.validation;
-    const currentValue: string = values[item].toString() || "";
+    const currentValidation = (currentItem.properties?.validation as ValidationProperties) || {};
+    const formikValue = values[item] as string;
+    const currentValue: string = formikValue.toString() || "";
     const currentRegex = getRegexByType(currentValidation.type, props.t, currentValue);
 
     // Check for required fields
@@ -63,7 +71,14 @@ export const getErrorList = (
 };
 
 const getRegexByType = (type: string | undefined, t: TFunction, value?: string) => {
-  const REGEX_CONFIG = {
+  interface RegexProps {
+    [key: string]: {
+      regex: RegExp | null;
+      error: string;
+    };
+  }
+
+  const REGEX_CONFIG: RegexProps = {
     email: {
       regex: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
       error: t("input-validation.email"),
@@ -81,11 +96,11 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
       error: t("input-validation.date"),
     },
     phone: {
-      regex: /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/,
+      regex: /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/,
       error: t("input-validation.phone"),
     },
     custom: {
-      regex: value,
+      regex: value ? new RegExp(value) : null,
       error: t("input-validation.regex"),
     },
   };
