@@ -1,0 +1,65 @@
+{
+  "internalTitleEn": "Contact Us - TSB",
+  "internalTitleFr": "Nous joindre - BST",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "communications@bst-tsb.gc.ca"
+  },
+  "form": {
+    "id": 42,
+    "version": 1,
+    "titleEn": "Contact us – Transportation Safety Board of Canada",
+    "titleFr": "Nous joindre – Bureau de la sécurité des transports du Canada",
+    "layout": [1, 2, 3],
+    "elements": [
+      {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Your name",
+          "titleFr": "Votre nom",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Your email",
+          "titleFr": "Votre courriel",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Your message",
+          "titleFr": "Votre message",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 500,
+          "validation": {
+            "required": true
+          }
+        }
+      }
+    ]
+  }
+}
