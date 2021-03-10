@@ -42,7 +42,7 @@
         "type": "textField",
         "properties": {
           "titleEn": "Full name",
-          "titleFr": "Nom et prénom",
+          "titleFr": "Nom au complet",
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
