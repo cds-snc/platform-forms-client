@@ -54,7 +54,7 @@
           "placeholderFr": "",
           "descriptionEn": "",
           "descriptionFr": "",
-          "charLimit": 500,
+          "charLimit": 800,
           "validation": {
             "required": true
           }
