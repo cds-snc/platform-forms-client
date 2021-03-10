@@ -7,7 +7,7 @@ import {
   Responses,
   ValidationProperties,
 } from "./types";
-import { FormikProps, FormikValues } from "formik";
+import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 
 /**
@@ -84,11 +84,11 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
       error: t("input-validation.email"),
     },
     text: {
-      regex: /^[0-9a-zA-Z]+$/,
+      regex: /^(\s)*[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*(\s)*$/,
       error: t("input-validation.text"),
     },
     number: {
-      regex: /^[0-9]+$/,
+      regex: /^[\d|.|,]+/,
       error: t("input-validation.number"),
     },
     date: {
