@@ -1,6 +1,6 @@
 {
-  "internalTitleEn": "CDS Platform Intake Form",
-  "internalTitleFr": "Formulaire de demande pour Plateforme SNC",
+  "internalTitleEn": "Work with CDS on a Digital Form",
+  "internalTitleFr": "Travailler avec le SNC sur un formulaire numérique",
   "publishingStatus": true,
   "submission": {
     "templateID": "",
@@ -11,8 +11,8 @@
     "version": 1,
     "titleEn": "CDS Platform Intake Form",
     "titleFr": "Formulaire de demande pour Plateforme SNC",
-    "descriptionEn": "Register to learn more about CDS Platform products",
-    "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
+    "descriptionEn": "Register to learn more about the work CDS is doing on forms",
+    "descriptionFr": "Inscrivez-vous pour en savoir plus sur le travail du SNC sur les formulaires",
     "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9],
     "startPage": {},
     "endPage": {
@@ -29,8 +29,13 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
+<<<<<<< HEAD
           "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products. <br/><br/> Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
           "descriptionFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien. <br/><br/> Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
+=======
+          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms product.",
+          "descriptionFr": "Merci beaucoup de l’intérêt que vous portez au produit Formulaires du Service Numérique Canadien.",
+>>>>>>> Updated name & French & removed add emails copy
           "charLimit": 200,
           "validation": {
             "required": false
@@ -104,11 +109,11 @@
           "choices": [
             {
               "en": "I have a form I would like to publish",
-              "fr": "J’ai un formulaire à faire publier d’ici le mois prochain."
+              "fr": "J’ai un formulaire à faire publier."
             },
             {
               "en": "I'm interested in learning more - please contact me to set up a demo",
-              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place un démo."
+              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place une démo."
             },
             {
               "en": "Keep me in the loop by adding me to your mailing list",
@@ -129,26 +134,14 @@
         "id": 8,
         "type": "textField",
         "properties": {
-          "titleEn": "If you selected other",
-          "titleFr": "If you selected other",
+          "titleEn": "If you selected other, please specify:",
+          "titleFr": "Si vous avez sélectionner autre, veuillez cibler :",
           "charLimit": 100,
           "validation": {
             "required": false
           }
         }
-      },
-      {
-        "id": 9,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "Email(s) of other people in your team we should reach out to",
-          "titleFr": "Adresse(s) courriel d'autres membres de votre équipe avec qui nous devrions contacter.",
-          "descriptionEn": "Separate each email address with a comma.",
-          "descriptionFr": "Veuillez ajouter les adresses séparées par des virgules.",
-          "charLimit": 500,
-          "validation": {
-            "required": false
-          }
+      }      
         }
       }
     ]
