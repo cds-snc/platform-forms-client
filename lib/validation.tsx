@@ -84,7 +84,7 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
       error: t("input-validation.email"),
     },
     text: {
-      regex: /^(\s)*[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*(\s)*$/,
+      regex: /^(\s)*[A-Za-z]+((\s)?(('|-|\.)?([A-Za-z])+))*(\s)*$/,
       error: t("input-validation.text"),
     },
     number: {
