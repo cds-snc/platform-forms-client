@@ -12,10 +12,14 @@ describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:
     cy.get("input[id=5]").type("1 877-636-0656").should("have.value", "1 877-636-0656");
     cy.get(".gc-checkbox-label").click({ multiple: true });
 <<<<<<< HEAD
+<<<<<<< HEAD
     cy.get("textarea[id='7']")
 =======
     cy.get("textarea[id='9']")
 >>>>>>> update broken e2e
+=======
+    cy.get("textarea[id='8']")
+>>>>>>> fixed e2e tests
       .type("More emails: santa1@northpole.global, santa2@northpole.global")
       .should("have.value", "More emails: santa1@northpole.global, santa2@northpole.global");
   });
