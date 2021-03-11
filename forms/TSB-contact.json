@@ -17,8 +17,8 @@
         "id": 1,
         "type": "textField",
         "properties": {
-          "titleEn": "Your name",
-          "titleFr": "Votre nom",
+          "titleEn": "First and last name",
+          "titleFr": "Nom et prénom",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -32,8 +32,8 @@
         "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "Your email",
-          "titleFr": "Votre courriel",
+          "titleEn": "Email",
+          "titleFr": "Courriel",
           "placeholderEn": "",
           "placeholderFr": "",
           "descriptionEn": "",
@@ -48,8 +48,8 @@
         "id": 3,
         "type": "textArea",
         "properties": {
-          "titleEn": "Your message",
-          "titleFr": "Votre message",
+          "titleEn": "Message",
+          "titleFr": "Message",
           "placeholderEn": "",
           "placeholderFr": "",
           "descriptionEn": "",
