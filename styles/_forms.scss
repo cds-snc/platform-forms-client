@@ -127,14 +127,14 @@
 }
 
 .gc-textarea {
-  @apply md:text-small_base text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-full h-40;
+  @apply md:text-small_base md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-3/4 h-40;
   &.full-height {
     @apply h-auto;
   }
 }
 
 .gc-input-text {
-  @apply md:w-full md:text-small_base text-base text-gray-700 border-solid border-2 border-black-form py-3 px-2 mt-2 mb-14 w-1/2;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-solid border-2 border-black-form py-3 px-2 mt-2 mb-14 w-96;
 }
 
 .gc-file-input {
