@@ -1,7 +1,7 @@
 describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:3000" }, () => {
   it("CDS Platform Intake Form renders", () => {
     cy.visit("/en/20");
-    cy.get("h1").contains("CDS Platform Intake Form");
+    cy.get("h1").contains("Work with CDS on a Digital Form");
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa Claus").should("have.value", "Santa Claus");
