@@ -7,7 +7,7 @@ module.exports = {
         "cr-label-desktop": "50rem",
         "cr-label-1025": "30rem",
         "cr-label-ipad": "25rem",
-        "cr-label-duo": "25rem",
+        "cr-label-duo": "24rem",
         "cr-label-6s": "15rem",
         "cr-label-5s": "14rem",
         "cr-label-fold": "11.5rem",

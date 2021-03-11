@@ -9,11 +9,11 @@
   "form": {
     "id": 20,
     "version": 1,
-    "titleEn": "CDS Platform Intake Form",
-    "titleFr": "Formulaire de demande pour Plateforme SNC",
+    "titleEn": "Work with CDS on a Digital Form",
+    "titleFr": "Travailler avec le SNC sur un formulaire numérique",
     "descriptionEn": "Register to learn more about the work CDS is doing on forms",
     "descriptionFr": "Inscrivez-vous pour en savoir plus sur le travail du SNC sur les formulaires",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "startPage": {},
     "endPage": {
       "descriptionEn": "",
@@ -29,7 +29,7 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products. <br/><br/> Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
+          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms products. <br/><br/> Please provide your information below so CDS can contact you about improving, updating or digitizing a form.",
           "descriptionFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien. <br/><br/> Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
           "charLimit": 200,
           "validation": {
@@ -115,7 +115,7 @@
               "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
             },
             {
-              "en": "Other",
+              "en": "Other (specify below)",
               "fr": "Autre"
             }
           ],
@@ -126,11 +126,13 @@
         }
       },
       {
-        "id": 8,
+        "id": 7,
         "type": "textField",
         "properties": {
-          "titleEn": "If you selected other, please specify:",
-          "titleFr": "Si vous avez sélectionner autre, veuillez spécifier :",
+          "titleEn": "Please specify:",
+          "titleFr": "Spécifier :",
+          "descriptionEn": "If you selected other in the previous question",
+          "descriptionFr": "Si vous avez sélectionner autre",
           "charLimit": 100,
           "validation": {
             "required": false
