@@ -47,7 +47,8 @@
           "descriptionFr": "",
           "charLimit": 100,
           "validation": {
-            "required": true
+            "required": true,
+            "type": "text"
           }
         }
       },
@@ -59,7 +60,8 @@
           "titleFr": "Courriel professionnel",
           "charLimit": 100,
           "validation": {
-            "required": true
+            "required": true,
+            "type": "email"
           }
         }
       },
@@ -86,7 +88,8 @@
           "titleFr": "Numéro de téléphone professionnel",
           "charLimit": 100,
           "validation": {
-            "required": false
+            "required": false,
+            "type": "phone"
           }
         }
       },

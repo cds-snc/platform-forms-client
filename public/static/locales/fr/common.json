@@ -30,6 +30,7 @@
     "text": "Veuillez entrer du text",
     "email": "Veuillez entrer une adresse e-mail valide",
     "date": "Veuillez entrer une date valide",
-    "phone": "Veuillez entrer votre numéro de téléphone au format xxx-xxx-xxxx"
+    "phone": "Veuillez entrer votre numéro de téléphone au format xxx-xxx-xxxx",
+    "regex": "Veuillez saisir le format correct"
   }
 }
