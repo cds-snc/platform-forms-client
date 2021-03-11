@@ -9,8 +9,8 @@
   "form": {
     "id": 42,
     "version": 1,
-    "titleEn": "Contact us – Transportation Safety Board of Canada",
-    "titleFr": "Nous joindre – Bureau de la sécurité des transports du Canada",
+    "titleEn": "General enquiries – Transportation Safety Board of Canada",
+    "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
     "layout": [1, 2, 3],
     "elements": [
       {
