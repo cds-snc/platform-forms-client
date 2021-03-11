@@ -71,12 +71,10 @@
       },
       {
         "id": 2,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Location",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Location",
+          "descriptionFr": "#### Location",
           "validation": {
             "required": false
           }
@@ -140,12 +138,10 @@
       },
       {
         "id": 6,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Building information",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Building information",
+          "descriptionFr": "#### Building information",
           "validation": {
             "required": false
           }
@@ -258,12 +254,10 @@
       },
       {
         "id": 13,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project information",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Project information",
+          "descriptionFr": "#### Project information",
           "validation": {
             "required": false
           }
@@ -271,7 +265,7 @@
       },
       {
         "id": 14,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Leaseholder",
           "titleFr": "TBD",
@@ -401,7 +395,7 @@
       },
       {
         "id": 19,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Architect",
           "titleFr": "TBD",
@@ -531,7 +525,7 @@
       },
       {
         "id": 24,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Engineer",
           "titleFr": "TBD",
@@ -661,7 +655,7 @@
       },
       {
         "id": 29,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Contractor",
           "titleFr": "TBD",
@@ -791,7 +785,7 @@
       },
       {
         "id": 34,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Inspection Agency",
           "titleFr": "TBD",
@@ -921,12 +915,10 @@
       },
       {
         "id": 39,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Confirmation",
-          "titleFr": "TBD",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Confirmation",
+          "descriptionFr": "#### Confirmation",
           "validation": {
             "required": false
           }

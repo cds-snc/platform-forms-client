@@ -80,12 +80,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Applicant and Contact Information",
-          "titleFr": "Applicant and Contact Information",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Applicant and Contact Information",
+          "descriptionFr": "#### Applicant and Contact Information",
           "validation": {
             "required": false
           }
@@ -235,12 +233,10 @@
       },
       {
         "id": 11,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Information",
-          "titleFr": "Project Information",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Project Information",
+          "descriptionFr": "#### Project Information",
           "validation": {
             "required": false
           }
@@ -248,7 +244,7 @@
       },
       {
         "id": 12,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Location",
           "titleFr": "Project Location",
@@ -553,12 +549,10 @@
       },
       {
         "id": 24,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Overview",
-          "titleFr": "Project Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Project Overview",
+          "descriptionFr": "#### Project Overview",
           "validation": {
             "required": false
           }
@@ -566,7 +560,7 @@
       },
       {
         "id": 25,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Please provide brief answers to all the sections below.",
           "titleFr": "Please provide brief answers to all the sections below.",
@@ -692,12 +686,10 @@
       },
       {
         "id": 33,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Forecasted Project Costs",
-          "titleFr": "Forecasted Project Costs",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Forecasted Project Costs",
+          "descriptionFr": "#### Forecasted Project Costs",
           "validation": {
             "required": false
           }
@@ -735,12 +727,10 @@
       },
       {
         "id": 36,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Funding Partners",
-          "titleFr": "Funding Partners",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Funding Partners",
+          "descriptionFr": "#### Funding Partners",
           "validation": {
             "required": false
           }
@@ -748,7 +738,7 @@
       },
       {
         "id": 37,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "NRCAN",
           "titleFr": "NRCAN",
@@ -792,7 +782,7 @@
       },
       {
         "id": 40,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Applicant",
           "titleFr": "Applicant",
@@ -836,7 +826,7 @@
       },
       {
         "id": 43,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Other Funding Partners/Supporters (specify)",
           "titleFr": "Other Funding Partners/Supporters (specify)",
@@ -948,12 +938,10 @@
       },
       {
         "id": 47,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Diversity and Inclusion",
-          "titleFr": "Diversity and Inclusion",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Diversity and Inclusion",
+          "descriptionFr": "#### Diversity and Inclusion",
           "validation": {
             "required": false
           }
@@ -961,7 +949,7 @@
       },
       {
         "id": 48,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
           "titleFr": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
@@ -1018,12 +1006,10 @@
       },
       {
         "id": 50,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Authorization",
-          "titleFr": "Authorization",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Authorization",
+          "descriptionFr": "#### Authorization",
           "validation": {
             "required": false
           }
@@ -1031,7 +1017,7 @@
       },
       {
         "id": 51,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Notice to Applicants",
           "titleFr": "Notice to Applicants",
@@ -1045,7 +1031,7 @@
       },
       {
         "id": 52,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Privacy Act",
           "titleFr": "Pursuant to Privacy Act",
@@ -1059,7 +1045,7 @@
       },
       {
         "id": 53,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Access of Information Act",
           "titleFr": "Pursuant to Access of Information Act",

@@ -12,7 +12,7 @@ import {
   FileInput,
   DynamicGroup,
   Description,
-  Heading,
+  RichText,
 } from "../components/forms";
 import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
 
@@ -70,18 +70,20 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-  const description = element.properties[getProperty("description", lang)]?.toString();
-  const descriptiveText = description ? (
-    <p className="gc-p" id={`desc-${id}`}>
-      {description}
-    </p>
-  ) : null;
+  const descriptionPerLocale = element.properties[getProperty("description", lang)];
+  const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
     case "alert":
       return (
         <Alert type="info" noIcon>
-          {descriptiveText}
+          <p className="gc-p" id={`desc-${id}`}>
+            {description ? (
+              <p className="gc-p" id={`desc-${id}`}>
+                {description}
+              </p>
+            ) : null}
+          </p>
         </Alert>
       );
     case "textField":
@@ -166,26 +168,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           />
         </Fragment>
       );
-    case "plainText":
+    case "richText":
       return (
-        <div className="gc-plain-text">
-          {labelText ? <h2 className="gc-h3">{labelText}</h2> : null}
-
-          {descriptiveText}
-        </div>
-      );
-    case "heading":
-      return (
-        <Fragment>
-          {labelText ? (
-            <Heading
-              isSectional={element.properties.isSectional ? true : false}
-              headingLevel={"h2"}
-            >
-              {labelText}
-            </Heading>
-          ) : null}
-        </Fragment>
+        <>
+          {labelText ? <h3 className="gc-h3">{labelText}</h3> : null}
+          <RichText>{description}</RichText>
+        </>
       );
     case "fileInput":
       return (

@@ -110,12 +110,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Respondent Contact Information",
-          "titleFr": "Respondent Contact Information",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Respondent Contact Information",
+          "descriptionFr": "#### Respondent Contact Information",
           "validation": {
             "required": false
           }
@@ -239,12 +237,10 @@
       },
       {
         "id": 9,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Organization Overview",
-          "titleFr": "Organization Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Organization Overview",
+          "descriptionFr": "#### Organization Overview",
           "validation": {
             "required": false
           }
@@ -394,12 +390,10 @@
       },
       {
         "id": 17,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Information and Overview",
-          "titleFr": "Project Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Project Information and Overview",
+          "descriptionFr": "#### Project Information and Overview",
           "validation": {
             "required": false
           }
@@ -407,7 +401,7 @@
       },
       {
         "id": 18,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Where applicable to your organization type, we encourage you to provide details below to the best of your knowledge",
           "titleFr": "Where applicable to your organization type, we encourage you to provide details below to the best of your knowledge",
@@ -421,7 +415,7 @@
       },
       {
         "id": 19,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Project Location",
           "titleFr": "Project Location",
@@ -593,7 +587,7 @@
       },
       {
         "id": 24,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Provide an estimate of the number of new trees your organization could plant.",
           "titleFr": "Provide an estimate of the number of new trees your organization could plant.",
@@ -607,7 +601,7 @@
       },
       {
         "id": 25,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2022-2023",
           "titleFr": "2022-2023",
@@ -636,7 +630,7 @@
       },
       {
         "id": 27,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2023-2024",
           "titleFr": "2023-2024",
@@ -665,7 +659,7 @@
       },
       {
         "id": 29,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2024-2025",
           "titleFr": "2024-2025",
@@ -694,7 +688,7 @@
       },
       {
         "id": 31,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2025-2026",
           "titleFr": "2025-2026",
@@ -723,7 +717,7 @@
       },
       {
         "id": 33,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2026+",
           "titleFr": "2026+",
@@ -768,7 +762,7 @@
       },
       {
         "id": 36,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Provide an estimate of the land that would be required to plant the number of trees you have identified above for your tree planting project(s)",
           "titleFr": "Provide an estimate of the land that would be required to plant the number of trees you have identified above for your tree planting project(s)",
@@ -782,7 +776,7 @@
       },
       {
         "id": 37,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2022-2023",
           "titleFr": "2022-2023",
@@ -811,7 +805,7 @@
       },
       {
         "id": 39,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2023-2024",
           "titleFr": "2023-2024",
@@ -840,7 +834,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2024-2025",
           "titleFr": "2024-2025",
@@ -869,7 +863,7 @@
       },
       {
         "id": 43,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2025-2026",
           "titleFr": "2025-2026",
@@ -898,7 +892,7 @@
       },
       {
         "id": 45,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "2026+",
           "titleFr": "2026+",
@@ -970,12 +964,10 @@
       },
       {
         "id": 49,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Overview",
-          "titleFr": "Project Overview",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Project Overview",
+          "descriptionFr": "#### Project Overview",
           "validation": {
             "required": false
           }
@@ -983,7 +975,7 @@
       },
       {
         "id": 50,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Where applicable to your organization type, please provide brief answers to all the sections below.",
           "titleFr": "Where applicable to your organization type, please provide brief answers to all the sections below.",
@@ -1045,12 +1037,10 @@
       },
       {
         "id": 54,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Forecasted Project Costs and Funding Sources",
-          "titleFr": "Forecasted Project Costs and Funding Sources",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Forecasted Project Costs and Funding Sources",
+          "descriptionFr": "#### Forecasted Project Costs and Funding Sources",
           "validation": {
             "required": false
           }
@@ -1136,12 +1126,10 @@
       },
       {
         "id": 59,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Future Collaboration",
-          "titleFr": "Future Collaboration",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Future Collaboration",
+          "descriptionFr": "#### Future Collaboration",
           "validation": {
             "required": false
           }
@@ -1207,12 +1195,10 @@
       },
       {
         "id": 63,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "General Questions for Program Delivery Consideration",
-          "titleFr": "General Questions for Program Delivery Consideration",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### General Questions for Program Delivery Consideration",
+          "descriptionFr": "#### General Questions for Program Delivery Consideration",
           "validation": {
             "required": false
           }
@@ -1220,7 +1206,7 @@
       },
       {
         "id": 64,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Regardless of whether or not you have a project(s) in mind as part of your response to this RFI, we would welcome feedback on the following questions.",
           "titleFr": "Regardless of whether or not you have a project(s) in mind as part of your response to this RFI, we would welcome feedback on the following questions.",
@@ -1468,12 +1454,10 @@
       },
       {
         "id": 77,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Diversity and Inclusion",
-          "titleFr": "Diversity and Inclusion",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Diversity and Inclusion",
+          "descriptionFr": "#### Diversity and Inclusion",
           "validation": {
             "required": false
           }
@@ -1481,7 +1465,7 @@
       },
       {
         "id": 78,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
           "titleFr": "The Government of Canada is committed to equality and diversity so that all Canadians have the opportunity to participate in and contribute to the growth of the economy.",
@@ -1538,12 +1522,10 @@
       },
       {
         "id": 80,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Authorization",
-          "titleFr": "Authorization",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Authorization",
+          "descriptionFr": "#### Authorization",
           "validation": {
             "required": false
           }
@@ -1551,7 +1533,7 @@
       },
       {
         "id": 81,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Notice to Applicants",
           "titleFr": "Notice to Applicants",
@@ -1565,7 +1547,7 @@
       },
       {
         "id": 82,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Privacy Act",
           "titleFr": "Pursuant to Privacy Act",
@@ -1579,7 +1561,7 @@
       },
       {
         "id": 83,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Pursuant to Access of Information Act",
           "titleFr": "Pursuant to Access of Information Act",

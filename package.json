@@ -27,7 +27,8 @@
     "pino": "^6.11.1",
     "react": "^17.0.1",
     "react-dom": "17.0.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "markdown-to-jsx": "^7.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",

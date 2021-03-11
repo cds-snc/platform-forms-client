@@ -25,7 +25,6 @@
       11,
       12,
       13,
-      14,
       15,
       16,
       17,
@@ -47,7 +46,6 @@
       33,
       34,
       35,
-      36,
       37,
       38,
       39,
@@ -56,7 +54,6 @@
       42,
       43,
       44,
-      45,
       46,
       47,
       48,
@@ -90,12 +87,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Part A: Contract Information",
-          "titleFr": "Partie A : Information contractuelle",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Part A: Contract Information",
+          "descriptionFr": "#### Partie A : Information contractuelle",
           "validation": {
             "required": false
           }
@@ -228,13 +223,11 @@
         }
       },
       {
-        "id": 9,
-        "type": "heading",
+        "id": 8,
+        "type": "richText",
         "properties": {
-          "titleEn": "Part A: Indicate the type of access required",
-          "titleFr": "Partie A : Indiquer le type d’accès requis",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Part A: Indicate the type of access required",
+          "descriptionFr": "#### Partie A : Indiquer le type d’accès requis",
           "validation": {
             "required": false
           }
@@ -311,26 +304,10 @@
       },
       {
         "id": 13,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Part A: Indicate the type of information that the supplier will be required to access",
-          "titleFr": "Partie A : Indiquer le type d'information auquel le fournisseur devra avoir accès",
-          "headingLevel": "h2",
-          "isSectional": true,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 14,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Level of Information",
-          "titleFr": "Niveau d'information",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
+          "descriptionEn": "#### Part A: Indicate the type of information that the supplier will be required to access \n <h3>Level of Information</h3>",
+          "descriptionFr": "#### Partie A : Indiquer le type d'information auquel le fournisseur devra avoir accès \n <h3>Niveau d'information</h3>",
           "validation": {
             "required": false
           }
@@ -459,7 +436,7 @@
       },
       {
         "id": 18,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Release Restrictions",
           "titleFr": "Restrictions relatives à la diffusion",
@@ -688,12 +665,10 @@
       },
       {
         "id": 30,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Part B: Personnel (Supplier)",
-          "titleFr": "Partie B : Personnel (Fournisseur)",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Part B: Personnel (Supplier)",
+          "descriptionFr": "#### Partie B : Personnel (Fournisseur)",
           "validation": {
             "required": false
           }
@@ -807,26 +782,10 @@
       },
       {
         "id": 35,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Part C: Safeguards (Supplier)",
-          "titleFr": "Partie C : Mesures de protection",
-          "headingLevel": "h2",
-          "isSectional": true,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 36,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Information / Assets",
-          "titleFr": "Renseignements / Biens",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 5000,
+          "descriptionEn": "#### Part C: Safeguards (Supplier) \n <h3>Information / Assets</h3>",
+          "descriptionFr": "#### Partie C : Mesures de protection \n <h3>Renseignements / Biens</h3>",
           "validation": {
             "required": false
           }
@@ -880,7 +839,7 @@
       },
       {
         "id": 39,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Production",
           "titleFr": "Production",
@@ -917,7 +876,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Information Technology (IT) Media",
           "titleFr": "Support relatif à la technologie de l'information (TI)",
@@ -977,7 +936,7 @@
       },
       {
         "id": 41,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Summary Chart",
           "titleFr": "Summary Chart",
@@ -1037,25 +996,10 @@
       },
       {
         "id": 44,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Part D: Authorization",
-          "titleFr": "Partie D : Authorisation",
-          "headingLevel": "h2",
-          "isSectional": true,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 45,
-        "type": "plainText",
-        "properties": {
-          "titleEn": "Organization Project Authority",
-          "titleFr": "Chargé de projet de l’organisme",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "descriptionEn": "#### Part D: Authorization \n <h3>Organization Project Authority</h3>",
+          "descriptionFr": "#### Partie D : Authorisation \n <h3>Chargé de projet de l’organisme</h3>",
           "charLimit": 5000,
           "validation": {
             "required": false
@@ -1160,7 +1104,7 @@
       },
       {
         "id": 52,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Organization Security Authority",
           "titleFr": "Responsable de la sécurité de l’organisme",
@@ -1293,7 +1237,7 @@
       },
       {
         "id": 60,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Procurement Officer",
           "titleFr": "Agent d'approvisionnement",
@@ -1403,7 +1347,7 @@
       },
       {
         "id": 67,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Contracting Security Authority",
           "titleFr": "Autorité contractante en matière de sécurité",
