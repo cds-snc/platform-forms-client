@@ -29,13 +29,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-<<<<<<< HEAD
           "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products. <br/><br/> Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
           "descriptionFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien. <br/><br/> Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
-=======
-          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms product.",
-          "descriptionFr": "Merci beaucoup de l’intérêt que vous portez au produit Formulaires du Service Numérique Canadien.",
->>>>>>> Updated name & French & removed add emails copy
           "charLimit": 200,
           "validation": {
             "required": false
