@@ -141,7 +141,7 @@
         "type": "textField",
         "properties": {
           "titleEn": "If you selected other, please specify:",
-          "titleFr": "Si vous avez sélectionner autre, veuillez cibler :",
+          "titleFr": "Si vous avez sélectionner autre, veuillez spécifier :",
           "charLimit": 100,
           "validation": {
             "required": false
