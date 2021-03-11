@@ -46,8 +46,8 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 1: Nomination Category</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 1: Catégorie de la nomination</h2>",
+          "descriptionEn": "#### Section 1: Nomination Category",
+          "descriptionFr": "#### Section 1: Catégorie de la nomination",
           "validation": {
             "required": false
           }
@@ -119,8 +119,8 @@
         "id": 4,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 2: Nominator Information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 2: Information sur le proposant</h2>",
+          "descriptionEn": "#### Section 2: Nominator Information",
+          "descriptionFr": "#### Section 2: Information sur le proposant",
           "validation": {
             "required": false
           }
@@ -226,8 +226,8 @@
         "id": 11,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 3: Individual Information (For an Individual Nomination)</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 3: Mise en candidature d'une personne (For an Individual Nomination)</h2>",
+          "descriptionEn": "#### Section 3: Individual Information (For an Individual Nomination)",
+          "descriptionFr": "#### Section 3: Mise en candidature d'une personne (For an Individual Nomination)",
           "validation": {
             "required": false
           }
@@ -390,8 +390,8 @@
         "id": 18,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Section 4: Team Nomination (for a Team Nomination)</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Section 4: Mise en candidature d’une équipe (for a Team Nomination)</h2>",
+          "descriptionEn": "#### Section 4: Team Nomination (for a Team Nomination)",
+          "descriptionFr": "#### Section 4: Mise en candidature d’une équipe (for a Team Nomination)",
           "validation": {
             "required": false
           }
@@ -615,8 +615,8 @@
         "id": 23,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Annex A: Achievement Summary</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Annex A: Résumé des réalisations</h2>",
+          "descriptionEn": "#### Annex A: Achievement Summary",
+          "descriptionFr": "#### Annex A: Résumé des réalisations",
           "validation": {
             "required": false
           }

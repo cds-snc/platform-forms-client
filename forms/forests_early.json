@@ -82,8 +82,8 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Applicant and Contact Information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Applicant and Contact Information</h2>",
+          "descriptionEn": "#### Applicant and Contact Information",
+          "descriptionFr": "#### Applicant and Contact Information",
           "validation": {
             "required": false
           }
@@ -235,8 +235,8 @@
         "id": 11,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Information</h2>",
+          "descriptionEn": "#### Project Information",
+          "descriptionFr": "#### Project Information",
           "validation": {
             "required": false
           }
@@ -551,8 +551,8 @@
         "id": 24,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Overview</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Overview</h2>",
+          "descriptionEn": "#### Project Overview",
+          "descriptionFr": "#### Project Overview",
           "validation": {
             "required": false
           }
@@ -688,8 +688,8 @@
         "id": 33,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Forecasted Project Costs</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Forecasted Project Costs</h2>",
+          "descriptionEn": "#### Forecasted Project Costs",
+          "descriptionFr": "#### Forecasted Project Costs",
           "validation": {
             "required": false
           }
@@ -729,8 +729,8 @@
         "id": 36,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Funding Partners</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Funding Partners</h2>",
+          "descriptionEn": "#### Funding Partners",
+          "descriptionFr": "#### Funding Partners",
           "validation": {
             "required": false
           }
@@ -940,8 +940,8 @@
         "id": 47,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Diversity and Inclusion</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Diversity and Inclusion</h2>",
+          "descriptionEn": "#### Diversity and Inclusion",
+          "descriptionFr": "#### Diversity and Inclusion",
           "validation": {
             "required": false
           }
@@ -1008,8 +1008,8 @@
         "id": 50,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Authorization</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Authorization</h2>",
+          "descriptionEn": "#### Authorization",
+          "descriptionFr": "#### Authorization",
           "validation": {
             "required": false
           }

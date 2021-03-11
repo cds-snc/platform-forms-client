@@ -249,8 +249,8 @@
         "id": 4,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Identification</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Identification de l'organisation</h2>",
+          "descriptionEn": "#### Organization Identification",
+          "descriptionFr": "#### Identification de l'organisation",
           "charLimit": 5000,
           "validation": {
             "required": false
@@ -414,8 +414,8 @@
         "id": 15,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Primary Address</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Adresse principale de l’organismen</h2>",
+          "descriptionEn": "#### Organization Primary Address",
+          "descriptionFr": "#### Adresse principale de l’organismen",
           "charLimit": 5000,
           "validation": {
             "required": false

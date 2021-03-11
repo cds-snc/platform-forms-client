@@ -73,8 +73,8 @@
         "id": 2,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Location</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Location</h2>",
+          "descriptionEn": "#### Location",
+          "descriptionFr": "#### Location",
           "validation": {
             "required": false
           }
@@ -140,8 +140,8 @@
         "id": 6,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Building information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Building information</h2>",
+          "descriptionEn": "#### Building information",
+          "descriptionFr": "#### Building information",
           "validation": {
             "required": false
           }
@@ -256,8 +256,8 @@
         "id": 13,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project information</h2>",
+          "descriptionEn": "#### Project information",
+          "descriptionFr": "#### Project information",
           "validation": {
             "required": false
           }
@@ -917,8 +917,8 @@
         "id": 39,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Confirmation</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Confirmation</h2>",
+          "descriptionEn": "#### Confirmation",
+          "descriptionFr": "#### Confirmation",
           "validation": {
             "required": false
           }

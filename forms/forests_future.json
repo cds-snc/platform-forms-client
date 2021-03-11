@@ -112,8 +112,8 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Respondent Contact Information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Respondent Contact Information</h2>",
+          "descriptionEn": "#### Respondent Contact Information",
+          "descriptionFr": "#### Respondent Contact Information",
           "validation": {
             "required": false
           }
@@ -239,8 +239,8 @@
         "id": 9,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Organization Overview</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Organization Overview</h2>",
+          "descriptionEn": "#### Organization Overview",
+          "descriptionFr": "#### Organization Overview",
           "validation": {
             "required": false
           }
@@ -392,8 +392,8 @@
         "id": 17,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Information and Overview</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Information and Overview</h2>",
+          "descriptionEn": "#### Project Information and Overview",
+          "descriptionFr": "#### Project Information and Overview",
           "validation": {
             "required": false
           }
@@ -966,8 +966,8 @@
         "id": 49,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Overview</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Overview</h2>",
+          "descriptionEn": "#### Project Overview",
+          "descriptionFr": "#### Project Overview",
           "validation": {
             "required": false
           }
@@ -1039,8 +1039,8 @@
         "id": 54,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Forecasted Project Costs and Funding Sources</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Forecasted Project Costs and Funding Sources</h2>",
+          "descriptionEn": "#### Forecasted Project Costs and Funding Sources",
+          "descriptionFr": "#### Forecasted Project Costs and Funding Sources",
           "validation": {
             "required": false
           }
@@ -1128,8 +1128,8 @@
         "id": 59,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Future Collaboration</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Future Collaboration</h2>",
+          "descriptionEn": "#### Future Collaboration",
+          "descriptionFr": "#### Future Collaboration",
           "validation": {
             "required": false
           }
@@ -1197,8 +1197,8 @@
         "id": 63,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">General Questions for Program Delivery Consideration</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">General Questions for Program Delivery Consideration</h2>",
+          "descriptionEn": "#### General Questions for Program Delivery Consideration",
+          "descriptionFr": "#### General Questions for Program Delivery Consideration",
           "validation": {
             "required": false
           }
@@ -1456,8 +1456,8 @@
         "id": 77,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Diversity and Inclusion</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Diversity and Inclusion</h2>",
+          "descriptionEn": "#### Diversity and Inclusion",
+          "descriptionFr": "#### Diversity and Inclusion",
           "validation": {
             "required": false
           }
@@ -1524,8 +1524,8 @@
         "id": 80,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Authorization</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Authorization</h2>",
+          "descriptionEn": "#### Authorization",
+          "descriptionFr": "#### Authorization",
           "validation": {
             "required": false
           }

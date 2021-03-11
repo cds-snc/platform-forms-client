@@ -92,8 +92,8 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Introduction</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Introduction</h2>",
+          "descriptionEn": "#### Introduction",
+          "descriptionFr": "#### Introduction",
           "validation": {
             "required": false
           }
@@ -344,8 +344,8 @@
         "id": 16,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Project Information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Project Information</h2>",
+          "descriptionEn": "#### Project Information",
+          "descriptionFr": "#### Project Information",
           "validation": {
             "required": false
           }

@@ -89,8 +89,8 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Part A: Contract Information</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Partie A : Information contractuelle</h2>",
+          "descriptionEn": "#### Part A: Contract Information",
+          "descriptionFr": "#### Partie A : Information contractuelle",
           "validation": {
             "required": false
           }
@@ -226,8 +226,8 @@
         "id": 8,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Part A: Indicate the type of access required</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Partie A : Indiquer le type d’accès requis</h2>",
+          "descriptionEn": "#### Part A: Indicate the type of access required",
+          "descriptionFr": "#### Partie A : Indiquer le type d’accès requis",
           "validation": {
             "required": false
           }
@@ -306,8 +306,8 @@
         "id": 13,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Part A: Indicate the type of information that the supplier will be required to access</h2> \n <h3>Level of Information</h3>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Partie A : Indiquer le type d'information auquel le fournisseur devra avoir accès</h2> \n <h3>Niveau d'information</h3>",
+          "descriptionEn": "#### Part A: Indicate the type of information that the supplier will be required to access \n <h3>Level of Information</h3>",
+          "descriptionFr": "#### Partie A : Indiquer le type d'information auquel le fournisseur devra avoir accès \n <h3>Niveau d'information</h3>",
           "validation": {
             "required": false
           }
@@ -667,8 +667,8 @@
         "id": 30,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Part B: Personnel (Supplier)</h2>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Partie B : Personnel (Fournisseur)</h2>",
+          "descriptionEn": "#### Part B: Personnel (Supplier)",
+          "descriptionFr": "#### Partie B : Personnel (Fournisseur)",
           "validation": {
             "required": false
           }
@@ -784,8 +784,8 @@
         "id": 35,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Part C: Safeguards (Supplier)</h2> \n <h3>Information / Assets</h3>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Partie C : Mesures de protection</h2> \n <h3>Renseignements / Biens</h3>",
+          "descriptionEn": "#### Part C: Safeguards (Supplier) \n <h3>Information / Assets</h3>",
+          "descriptionFr": "#### Partie C : Mesures de protection \n <h3>Renseignements / Biens</h3>",
           "validation": {
             "required": false
           }
@@ -998,8 +998,8 @@
         "id": 44,
         "type": "richText",
         "properties": {
-          "descriptionEn": "<h2 class=\"gc-h2 gc-section-header\">Part D: Authorization</h2> \n <h3>Organization Project Authority</h3>",
-          "descriptionFr": "<h2 class=\"gc-h2 gc-section-header\">Partie D : Authorisation</h2> \n <h3>Chargé de projet de l’organisme</h3>",
+          "descriptionEn": "#### Part D: Authorization \n <h3>Organization Project Authority</h3>",
+          "descriptionFr": "#### Partie D : Authorisation \n <h3>Chargé de projet de l’organisme</h3>",
           "charLimit": 5000,
           "validation": {
             "required": false
