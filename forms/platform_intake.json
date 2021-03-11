@@ -1,6 +1,6 @@
 {
-  "internalTitleEn": "CDS Platform Intake Form",
-  "internalTitleFr": "Formulaire de demande pour Plateforme SNC",
+  "internalTitleEn": "Work with CDS on a Digital Form",
+  "internalTitleFr": "Travailler avec le SNC sur un formulaire numérique",
   "publishingStatus": true,
   "submission": {
     "templateID": "",
@@ -9,10 +9,10 @@
   "form": {
     "id": 20,
     "version": 1,
-    "titleEn": "CDS Platform Intake Form",
-    "titleFr": "Formulaire de demande pour Plateforme SNC",
-    "descriptionEn": "Register to learn more about CDS Platform products",
-    "descriptionFr": "Inscrivez-vous pour en savoir plus sur nos produits de plate-forme CDS",
+    "titleEn": "Work with CDS on a Digital Form",
+    "titleFr": "Travailler avec le SNC sur un formulaire numérique",
+    "descriptionEn": "Register to learn more about the work CDS is doing on forms",
+    "descriptionFr": "Inscrivez-vous pour en savoir plus sur le travail du SNC sur les formulaires",
     "layout": [1, 2, 3, 4, 5, 6, 7],
     "startPage": {},
     "endPage": {
@@ -29,7 +29,7 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Platform products. <br/><br/> Please fill out the form below so that we can reach out to chat further to help with your specific needs.",
+          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms products. <br/><br/> Please provide your information below so CDS can contact you about improving, updating or digitizing a form.",
           "descriptionFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien. <br/><br/> Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
           "charLimit": 200,
           "validation": {
@@ -41,8 +41,8 @@
         "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "First and last name",
-          "titleFr": "Nom et prénom",
+          "titleEn": "Full name",
+          "titleFr": "Nom au complet",
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
@@ -69,7 +69,7 @@
         "id": 4,
         "type": "textField",
         "properties": {
-          "titleEn": "What department do you work for?",
+          "titleEn": "Which department do you work for?",
           "titleFr": "Pour quel ministère travaillez-vous?",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -93,7 +93,6 @@
           }
         }
       },
-
       {
         "id": 6,
         "type": "checkbox",
@@ -104,20 +103,20 @@
           "descriptionFr": "Cocher tous les choix qui s’appliquent",
           "choices": [
             {
-              "en": "I have a form I would like to publish in the next month",
-              "fr": "J’ai un formulaire à faire publier d’ici le mois prochain."
+              "en": "I have a form I would like to publish",
+              "fr": "J’ai un formulaire à faire publier."
             },
             {
-              "en": "I have feedback on why this product will (or won't) work for my team",
-              "fr": "J’ai des commentaires qui expliquent pourquoi ce produit est bien (ou n’est pas bien) adapté à mon équipe."
+              "en": "I'm interested in learning more - please contact me to set up a demo",
+              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place une démo."
             },
             {
-              "en": "I'm interested in learning more please contact me to set up a demo",
-              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place un démo."
-            },
-            {
-              "en": "Please keep me in the loop by adding me to your mailing list",
+              "en": "Keep me in the loop by adding me to your mailing list",
               "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
+            },
+            {
+              "en": "Other (specify below)",
+              "fr": "Autre"
             }
           ],
           "charLimit": 100,
@@ -128,18 +127,18 @@
       },
       {
         "id": 7,
-        "type": "textArea",
+        "type": "textField",
         "properties": {
-          "titleEn": "Email(s) of other people in your team we should reach out to",
-          "titleFr": "Adresse(s) courriel d'autres membres de votre équipe avec qui nous devrions contacter.",
-          "descriptionEn": "Separate each email address with a comma.",
-          "descriptionFr": "Veuillez ajouter les adresses séparées par des virgules.",
-          "charLimit": 500,
+          "titleEn": "Please specify:",
+          "titleFr": "Spécifier :",
+          "descriptionEn": "If you selected other in the previous question",
+          "descriptionFr": "Si vous avez sélectionner autre",
+          "charLimit": 100,
           "validation": {
             "required": false
           }
         }
-      }
+      }      
     ]
   }
 }
