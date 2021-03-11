@@ -90,12 +90,10 @@
     "elements": [
       {
         "id": 1,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Introduction",
-          "titleFr": "Introduction",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Introduction",
+          "descriptionFr": "#### Introduction",
           "validation": {
             "required": false
           }
@@ -103,7 +101,7 @@
       },
       {
         "id": 2,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
           "titleFr": "SDI funding is for short-term, indirect service projects that will focus on testing new approaches to delivering high-quality settlement services. It is not intended to fund direct settlement services.",
@@ -140,7 +138,7 @@
       },
       {
         "id": 4,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "The project must undertake innovative approaches (a new approach or adaptation of an existing approach) and be informed by user-centred design principles that places clients and their needs at the center of the innovation’s focus, contribute to building strong evidence-based research, and respond to the problem statement.",
           "titleFr": "The project must undertake innovative approaches (a new approach or adaptation of an existing approach) and be informed by user-centred design principles that places clients and their needs at the center of the innovation’s focus, contribute to building strong evidence-based research, and respond to the problem statement.",
@@ -177,7 +175,7 @@
       },
       {
         "id": 6,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "The following elements should be included in a full proposal to ensure a well-designed evaluation plan is produced:",
           "titleFr": "The following elements should be included in a full proposal to ensure a well-designed evaluation plan is produced:",
@@ -191,7 +189,7 @@
       },
       {
         "id": 7,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -205,7 +203,7 @@
       },
       {
         "id": 8,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -219,7 +217,7 @@
       },
       {
         "id": 9,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -233,7 +231,7 @@
       },
       {
         "id": 10,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "",
           "titleFr": "",
@@ -270,7 +268,7 @@
       },
       {
         "id": 12,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "It is strongly encouraged that applicants collaborate with new and existing partners throughout the life of the project.",
           "titleFr": "It is strongly encouraged that applicants collaborate with new and existing partners throughout the life of the project.",
@@ -307,7 +305,7 @@
       },
       {
         "id": 14,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "SDI has the goal of informing Settlement services to ultimately improve them in the medium to long term. As a result, reporting to IRCC for an SDI project may require reporting beyond the standard financial and activity reporting expected for the Settlement program.",
           "titleFr": "SDI has the goal of informing Settlement services to ultimately improve them in the medium to long term. As a result, reporting to IRCC for an SDI project may require reporting beyond the standard financial and activity reporting expected for the Settlement program.",
@@ -344,12 +342,10 @@
       },
       {
         "id": 16,
-        "type": "heading",
+        "type": "richText",
         "properties": {
-          "titleEn": "Project Information",
-          "titleFr": "Project Information",
-          "headingLevel": "h2",
-          "isSectional": true,
+          "descriptionEn": "#### Project Information",
+          "descriptionFr": "#### Project Information",
           "validation": {
             "required": false
           }
@@ -421,7 +417,7 @@
       },
       {
         "id": 21,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Identify the proposed start and end date of your project",
           "titleFr": "Identify the proposed start and end date of your project",
@@ -469,7 +465,7 @@
       },
       {
         "id": 24,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Financial Breakdown",
           "titleFr": "Financial Breakdown",
@@ -559,7 +555,7 @@
       },
       {
         "id": 27,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Select at least one immediate and one intermediate Settlement Program outcome of your project.",
           "titleFr": "Select at least one immediate and one intermediate Settlement Program outcome of your project.",

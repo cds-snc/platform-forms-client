@@ -16,7 +16,7 @@
     "elements": [
       {
         "id": 1,
-        "type": "plainText",
+        "type": "richText",
         "properties": {
           "titleEn": "Info",
           "titleFr": "Info",

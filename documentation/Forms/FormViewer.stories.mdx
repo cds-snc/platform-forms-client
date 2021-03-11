@@ -366,29 +366,25 @@ A browser-native file upload field
 
 `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
-### Plain text
+### Rich text via markdown/mdx
 
-An option to add plain text to the form
+An option to add rich text to the form via [markdown](https://guides.github.com/features/mastering-markdown/).
 
 > Add rendered component here as an example
 
 ```json
 {
-  "id": 1,
-  "type": "plainText",
+  "id": 15,
+  "type": "richText",
   "properties": {
-    "titleEn": "Text Heading",
-    "titleFr": "",
-    "placeholderEn": "",
-    "placeholderFr": "",
-    "descriptionEn": "Plain text paragraph",
-    "descriptionFr": "",
-    "charLimit": 1000,
+    "descriptionEn": "#### Organization Primary Address \n Follow up text, below the heading.",
+    "descriptionFr": "#### Adresse principale de l’organismen",
+    "charLimit": 5000,
     "validation": {
       "required": false
     }
   }
-}
+},
 ```
 
 `id`: The unique id for the object (`string`)
@@ -401,31 +397,9 @@ An option to add plain text to the form
 
 `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
-### Heading
-
-An option to add a heading to the form, either by providing the level (h1, h2, h3...) or by indicating if it's a "section break"
-
-> Add rendered component here as an example
-
-```json
-{
-  "id": 4,
-  "type": "heading",
-  "properties": {
-    "titleEn": "Organization Identification",
-    "titleFr": "Identification de l'organisation",
-    "headingLevel": "h2",
-    "isSectional": true,
-    "validation": {
-      "required": false
-    }
-  }
-}
-```
-
 ### Validation and error messages
 
-Every field has a key `validation` that can contain the following values:
+Every field has a key `validation` that can contain the values below. The type can be "email", "text", "number", "phone", "date" and if those aren't relevant, you can provide a custom regular expression within "regex".
 
 ```json
 "validation": {
