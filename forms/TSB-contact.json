@@ -9,16 +9,16 @@
   "form": {
     "id": 42,
     "version": 1,
-    "titleEn": "General enquiries – Transportation Safety Board of Canada",
-    "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
+    "titleEn": "Contact us – Transportation Safety Board of Canada",
+    "titleFr": "Nous joindre – Bureau de la sécurité des transports du Canada",
     "layout": [1, 2, 3],
     "elements": [
       {
         "id": 1,
         "type": "textField",
         "properties": {
-          "titleEn": "First and last name",
-          "titleFr": "Nom et prénom",
+          "titleEn": "Name",
+          "titleFr": "Nom",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -32,7 +32,7 @@
         "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "Email",
+          "titleEn": "Email address",
           "titleFr": "Courriel",
           "placeholderEn": "",
           "placeholderFr": "",
@@ -48,8 +48,8 @@
         "id": 3,
         "type": "textArea",
         "properties": {
-          "titleEn": "Message",
-          "titleFr": "Message",
+          "titleEn": "Your message",
+          "titleFr": "Votre message",
           "placeholderEn": "",
           "placeholderFr": "",
           "descriptionEn": "",
