@@ -4,7 +4,7 @@
   "publishingStatus": true,
   "submission": {
     "templateID": "",
-    "email": "leanne.labelle@cds-snc.ca"
+    "email": "eanne.labelle@cds-snc.ca"
   },
   "form": {
     "id": 20,
@@ -116,7 +116,7 @@
             },
             {
               "en": "Other (specify below)",
-              "fr": "Autre"
+              "fr": "Autre (spécifier ci-dessous)"
             }
           ],
           "charLimit": 100,
@@ -129,16 +129,16 @@
         "id": 7,
         "type": "textField",
         "properties": {
-          "titleEn": "Please specify:",
-          "titleFr": "Spécifier :",
+          "titleEn": "Please specify",
+          "titleFr": "Veuillez spécifier",
           "descriptionEn": "If you selected other in the previous question",
-          "descriptionFr": "Si vous avez sélectionner autre",
+          "descriptionFr": "Si vous avez sélectionné(e) autre à la question précédente",
           "charLimit": 100,
           "validation": {
             "required": false
           }
         }
-      }      
+      }
     ]
   }
 }
