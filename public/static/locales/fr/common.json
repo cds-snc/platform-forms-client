@@ -28,7 +28,7 @@
     "required": "Ce champ est obligatoire",
     "number": "Veuillez entrer un numéro",
     "text": "Veuillez entrer du text",
-    "email": "Veuillez entrer une adresse e-mail valide",
+    "email": "Veuillez entrer une adresse courriel valide",
     "date": "Veuillez entrer une date valide",
     "phone": "Veuillez entrer votre numéro de téléphone au format xxx-xxx-xxxx",
     "regex": "Veuillez saisir le format correct"

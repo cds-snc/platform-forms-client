@@ -4,7 +4,7 @@
   "publishingStatus": true,
   "submission": {
     "templateID": "",
-    "email": "steven.talbot@cds-snc.ca"
+    "email": "leanne.labelle@cds-snc.ca"
   },
   "form": {
     "id": 20,
@@ -29,8 +29,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms products. <br/><br/> Please provide your information below so CDS can contact you about improving, updating or digitizing a form.",
-          "descriptionFr": "Merci beaucoup de l’intérêt que vous portez aux produits de la plateforme du Service Numérique Canadien. <br/><br/> Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
+          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms product. <br/><br/> Please provide your information below so CDS can contact you about improving, updating, or digitizing a form.",
+          "descriptionFr": "Merci beaucoup de l’intérêt que vous portez au produit de Formulaire du Service Numérique Canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter davantage l'amélioration, la mise à jour ou la numérisation d'un formulaire.",
           "charLimit": 200,
           "validation": {
             "required": false
@@ -116,7 +116,7 @@
             },
             {
               "en": "Other (specify below)",
-              "fr": "Autre"
+              "fr": "Autre (spécifier ci-dessous)"
             }
           ],
           "charLimit": 100,
@@ -129,16 +129,16 @@
         "id": 7,
         "type": "textField",
         "properties": {
-          "titleEn": "Please specify:",
-          "titleFr": "Spécifier :",
-          "descriptionEn": "If you selected other in the previous question",
-          "descriptionFr": "Si vous avez sélectionner autre",
+          "titleEn": "Please specify",
+          "titleFr": "Veuillez spécifier",
+          "descriptionEn": "If you selected Other in the previous question",
+          "descriptionFr": "Si vous avez sélectionné Autre à la question précédente",
           "charLimit": 100,
           "validation": {
             "required": false
           }
         }
-      }      
+      }
     ]
   }
 }
