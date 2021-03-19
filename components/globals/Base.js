@@ -16,7 +16,7 @@ const getPageClassNames = () => {
 };
 
 const Base = ({ children }) => {
-  const isProduction = process.env.GA_ACTIVE ? true : false;
+  const isProduction = process.env.PRODUCTION_ENV ? true : false;
   const classes = getPageClassNames();
 
   return (
