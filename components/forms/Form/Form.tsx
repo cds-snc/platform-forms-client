@@ -108,6 +108,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
         })
         .catch((error) => {
           logMessage.error(error);
+          // Need to short circuit this to 500 Error page
         });
 
       formikBag.setSubmitting(false);
