@@ -1,11 +1,11 @@
 {
   "footer": {
     "privacy": {
-      "link": "https://numerique.canada.ca/transparence/confidentialite/",
+      "link": "/fr/privacy-confidentialite",
       "desc": "Politique de confidentialité"
     },
     "terms": {
-      "link": "https://numerique.canada.ca/transparence/avis/",
+      "link": "/fr/terms-avis",
       "desc": "Avis"
     }
   },

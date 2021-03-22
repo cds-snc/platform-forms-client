@@ -1,11 +1,11 @@
 {
   "footer": {
     "privacy": {
-      "link": "https://digital.canada.ca/legal/privacy/",
+      "link": "/en/privacy-confidentialite",
       "desc": "Privacy policy"
     },
     "terms": {
-      "link": "https://digital.canada.ca/legal/terms/",
+      "link": "/en/terms-avis",
       "desc": "Terms and conditions"
     }
   },
