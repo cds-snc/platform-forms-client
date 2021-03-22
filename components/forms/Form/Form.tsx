@@ -1,5 +1,6 @@
 import React from "react";
 import { withFormik, FormikProps } from "formik";
+import axios from "axios";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList } from "../../../lib/validation";
 import { Button, Alert } from "../index";
@@ -14,8 +15,10 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
 
   const errorList = props.errors ? getErrorList(props) : null;
+  const formStatus = props.status === "Error" ? t("server-error") : null;
   return (
     <>
+      {formStatus ? <Alert type="error" heading={formStatus} /> : null}
       {errorList ? (
         <Alert type="error" heading={t("input-validation.heading")} validation={true}>
           {errorList}
@@ -65,10 +68,11 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
     return validationResult;
   },
 
-  handleSubmit: (values, formikBag) => {
-    const { formMetadata, language, router } = formikBag.props;
+  handleSubmit: async (values, formikBag) => {
+    try {
+      const { formMetadata, language, router } = formikBag.props;
+      const { setStatus } = formikBag;
 
-    setTimeout(() => {
       const formResponseObject = {
         form: {
           id: formMetadata.id,
@@ -81,17 +85,18 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
       };
 
       //making a post request to the submit API
-      fetch("/api/submit", {
+      await axios({
+        url: "/api/submit",
         method: "POST",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
         },
-        body: JSON.stringify(formResponseObject),
+        data: formResponseObject,
+        timeout: 3000,
       })
-        .then((response) => response.json())
         .then((serverResponse) => {
-          if (serverResponse.received === true) {
+          if (serverResponse.data.received === true) {
             const referrerUrl =
               formMetadata && formMetadata.endPage
                 ? {
@@ -105,14 +110,19 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
           } else {
             throw Error("Server submit API returned an error");
           }
+          // ;
         })
-        .catch((error) => {
-          logMessage.error(error);
-          // Need to short circuit this to 500 Error page
+        .catch((err) => {
+          if (err.response) {
+            logMessage.error(err);
+            setStatus("Error");
+          }
         });
-
+    } catch (err) {
+      logMessage.error(err);
+    } finally {
       formikBag.setSubmitting(false);
-    }, 1000);
+    }
   },
 })(InnerForm);
 

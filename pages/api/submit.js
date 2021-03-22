@@ -31,17 +31,18 @@ const submit = async (req, res) => {
           submissionFormat,
         },
       };
-      await axios(options)
+      return await axios(options)
         .then((response) => {
           if (!response.data.status) {
             throw Error("Submission API could not process form response");
+          } else {
+            return res.status(201).json({ received: true });
           }
         })
         .catch((err) => {
-          throw err;
+          logMessage.error(err);
+          return res.status(500).json({ received: false });
         });
-
-      res.status(201).json({ received: true });
     } else if (process.env.NODE_ENV === "development") {
       // Will only run if using development env locally
       const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
@@ -52,25 +53,28 @@ const submit = async (req, res) => {
 
       const emailBody = await convertMessage(req.body);
       const messageSubject = req.body.form.titleEn + " Submission";
-      await notify
+      return await notify
         .previewTemplateById(templateID, {
           subject: messageSubject,
           formResponse: emailBody,
         })
-        .then((response) => console.log(response.data.html))
+        .then((response) => {
+          console.log(response.data.html);
+          res.status(201).json({ received: true });
+        })
         .catch((err) => {
-          throw err;
+          logMessage.error(err);
+          return res.status(500).json({ received: false });
         });
-      res.status(201).json({ received: true });
     } else {
       // Note that Staging will not send email here.  We can figure that out once we have
       // Staging mirroring production
       logMessage.info("Not Sending Email - Test mode");
-      res.status(200).json({ received: true });
+      return res.status(200).json({ received: true });
     }
   } catch (err) {
     logMessage.error(err);
-    res.status(500).json({ received: false });
+    return res.status(500).json({ received: false });
   }
 };
 
