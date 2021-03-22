@@ -7,7 +7,7 @@
   @apply md:text-small_base text-base py-0 w-full text-red-700 mb-2;
 }
 
-.gc-error-message + .gc-input-text, 
+.gc-error-message + .gc-input-text,
 .gc-error-message + .gc-textarea {
   @apply border-red-700;
 }
@@ -30,10 +30,10 @@
     }
 
     ol {
-     @apply list-inside;
+      @apply list-inside;
 
-     li{
-      @apply mb-2;
+      li {
+        @apply mb-2;
       }
     }
   }
@@ -85,7 +85,8 @@
     @extend .gc-section-header;
   }
 
-  ul, ol {
+  ul,
+  ol {
     @apply list-inside mb-10;
   }
 
