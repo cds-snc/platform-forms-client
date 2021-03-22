@@ -24,7 +24,8 @@
           "description": "",
           "charLimit": 100,
           "validation": {
-            "required": true
+            "required": true,
+            "type": "text"
           }
         }
       },
@@ -40,7 +41,8 @@
           "descriptionFr": "",
           "charLimit": 100,
           "validation": {
-            "required": true
+            "required": true,
+            "type": "email"
           }
         }
       },
