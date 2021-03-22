@@ -4,7 +4,7 @@
 
 .gc-alert,
 .gc-error-message {
-  @apply md:text-small_base text-base py-0 font-bold w-full text-red-700 mb-2;
+  @apply md:text-small_base text-base py-0 w-full text-red-700 mb-2;
 }
 
 .gc-error-message + .gc-input-text, 
@@ -83,6 +83,14 @@
   }
   h4 {
     @extend .gc-section-header;
+  }
+
+  ul, ol {
+    @apply list-inside mb-10;
+  }
+
+  a {
+    @apply text-blue-900;
   }
 }
 
