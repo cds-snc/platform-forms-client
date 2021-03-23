@@ -59,7 +59,7 @@ const submit = async (req, res) => {
           formResponse: emailBody,
         })
         .then((response) => {
-          res.status(201).json({ received: true, htmlEmail: response.data.html });
+          return res.status(201).json({ received: true, htmlEmail: response.data.html });
         })
         .catch((err) => {
           logMessage.error(err);
