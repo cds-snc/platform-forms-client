@@ -109,10 +109,16 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
                     referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
                   }
                 : null;
-            router.push({
-              pathname: `${language}/confirmation`,
-              query: referrerUrl,
-            });
+            const htmlEmail = !process.env.PRODUCTION ? serverResponse.data.htmlEmail : null;
+            router.push(
+              {
+                pathname: `${language}/confirmation`,
+                query: { ...referrerUrl, htmlEmail: htmlEmail },
+              },
+              {
+                pathname: `${language}/confirmation`,
+              }
+            );
           } else {
             throw Error("Server submit API returned an error");
           }

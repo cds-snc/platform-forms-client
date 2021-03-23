@@ -1,4 +1,5 @@
 import React from "react";
+import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
@@ -6,9 +7,9 @@ import { useRouter } from "next/router";
 const Confirmation = () => {
   const { t } = useTranslation("confirmation");
   const router = useRouter();
-  const urlQuery = router.query;
-  const backToLink =
-    urlQuery && urlQuery.referrerUrl ? <a href={urlQuery.referrerUrl}>{t("backLink")}</a> : null;
+  const { urlQuery, htmlEmail } = router.query;
+
+  const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
 
   return (
     <>
@@ -19,6 +20,13 @@ const Confirmation = () => {
       </div>
 
       <div className="gc-form-confirmation">{backToLink}</div>
+
+      {!process.env.PRODUCTION ? (
+        <div>
+          <h2>Email to Form Owner Below</h2>
+          {parse(htmlEmail)}
+        </div>
+      ) : null}
     </>
   );
 };
