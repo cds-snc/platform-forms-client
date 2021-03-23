@@ -1,29 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import { RichText } from "../components/forms/RichText/RichText";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
 
-const Privacy = () => {
-  const [content, setContent] = useState(null);
-  const router = useRouter();
+const Privacy = ({ content }) => (
+  <>
+    <RichText>{content}</RichText>
+  </>
+);
 
-  // Load the markdown file based on the locale
-  useEffect(() => {
-    import(`../public/static/content/${router.locale}/privacy.md`).then((module) =>
-      setContent(module.default)
-    );
-  }, [content]);
-
-  return (
-    <>
-      <RichText>{content}</RichText>
-    </>
-  );
+Privacy.propTypes = {
+  content: PropTypes.string.isRequired,
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common"])),
-  },
-});
+export const getStaticProps = async ({ locale }) => {
+  const privacyContent = await require(`../public/static/content/${locale}/privacy.md`);
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      content: privacyContent.default,
+    },
+  };
+};
 export default Privacy;

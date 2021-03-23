@@ -1,29 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import { RichText } from "../components/forms/RichText/RichText";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
 
-const Terms = () => {
-  const [content, setContent] = useState(null);
-  const router = useRouter();
+const Terms = ({ content }) => (
+  <>
+    <RichText>{content}</RichText>
+  </>
+);
 
-  // Load the markdown file based on the locale
-  useEffect(() => {
-    import(`../public/static/content/${router.locale}/terms.md`).then((module) =>
-      setContent(module.default)
-    );
-  }, [content]);
-
-  return (
-    <>
-      <RichText>{content}</RichText>
-    </>
-  );
+Terms.propTypes = {
+  content: PropTypes.string.isRequired,
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common"])),
-  },
-});
+export const getStaticProps = async ({ locale }) => {
+  const termsContent = await require(`../public/static/content/${locale}/terms.md`);
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      content: termsContent.default,
+    },
+  };
+};
 export default Terms;
