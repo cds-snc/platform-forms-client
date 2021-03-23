@@ -5,7 +5,7 @@ import Link from "next/link";
 const Home = () => {
   return (
     <>
-      <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl justify-items-center">
+      <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">
         <p>
           <Link href="/en/welcome-bienvenue">Forms in English</Link>
         </p>
