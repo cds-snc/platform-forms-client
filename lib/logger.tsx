@@ -11,7 +11,7 @@ export const logMessage = pino({
         const headers = {
           type: "application/json",
         };
-        const blob = new Blob(["Client Side Log: " + JSON.stringify({ msg, level })], headers);
+        const blob = new Blob([JSON.stringify({ msg, level })], headers);
         navigator.sendBeacon("/api/log", blob);
       },
     },

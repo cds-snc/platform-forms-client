@@ -1,66 +1,79 @@
 import { NotifyClient } from "notifications-node-client";
-import { v4 as uuidv4 } from "uuid";
 import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
 import { logger, logMessage } from "../../lib/logger";
+import axios from "axios";
 
-const submit = (req, res) => {
-  const formAttached = req.body.form ? true : false;
-  logMessage.info(
-    `Path: ${req.url}, Method: ${req.method}, Form ID: ${
-      formAttached && req.body.form.id ? req.body.form.id : "No form attached"
-    }`
-  );
-  if (!formAttached) {
-    res.status(400).json({ error: "No form submitted with request" });
-    return;
-  }
-  const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
-  const uniqueReference = uuidv4();
-  const notify = new NotifyClient(
-    "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
-  );
+const submit = async (req, res) => {
+  try {
+    const formAttached = req.body.form ? true : false;
+    logMessage.info(
+      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
+        formAttached && req.body.form.id ? req.body.form.id : "No form attached"
+      }`
+    );
+    if (!formAttached) {
+      res.status(400).json({ error: "No form submitted with request" });
+      return;
+    }
 
-  const emailBody = convertMessage(req.body);
-  const messageSubject = req.body.form.titleEn + " Submission";
-  const submissionFormat = getSubmissionByID(req.body.form.id);
-  const sendToNotify = process.env.NODE_ENV ?? "development";
-  const testing = process.env.TEST ?? false;
-
-  if (sendToNotify === "production" && !testing) {
-    if ((submissionFormat !== null) & (submissionFormat.email !== "")) {
-      notify
-        .sendEmail(templateID, submissionFormat.email, {
-          personalisation: {
-            subject: messageSubject,
-            formResponse: emailBody,
-          },
-          reference: uniqueReference,
+    if (process.env.PRODUCTION_ENV) {
+      const submissionFormat = await getSubmissionByID(req.body.form.id);
+      const options = {
+        url: process.env.SUBMISSION_API ?? null,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        data: {
+          ...req.body,
+          submissionFormat,
+        },
+      };
+      return await axios(options)
+        .then((response) => {
+          if (!response.data.status) {
+            throw Error("Submission API could not process form response");
+          } else {
+            return res.status(201).json({ received: true });
+          }
         })
         .catch((err) => {
           logMessage.error(err);
-          throw err;
+          return res.status(500).json({ received: false });
         });
+    } else if (process.env.NODE_ENV === "development") {
+      // Will only run if using development env locally
+      const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
+      const notify = new NotifyClient(
+        "https://api.notification.canada.ca",
+        process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
+      );
 
-      res.status(202).json({ received: true });
-      return;
+      const emailBody = await convertMessage(req.body);
+      const messageSubject = req.body.form.titleEn + " Submission";
+      return await notify
+        .previewTemplateById(templateID, {
+          subject: messageSubject,
+          formResponse: emailBody,
+        })
+        .then((response) => {
+          return res.status(201).json({ received: true, htmlEmail: response.data.html });
+        })
+        .catch((err) => {
+          logMessage.error(err);
+          return res.status(500).json({ received: false });
+        });
+    } else {
+      // Note that Staging will not send email here.  We can figure that out once we have
+      // Staging mirroring production
+      logMessage.info("Not Sending Email - Test mode");
+      return res.status(200).json({ received: true });
     }
-  } else if (sendToNotify === "development" && !testing) {
-    notify
-      .previewTemplateById(templateID, {
-        subject: messageSubject,
-        formResponse: emailBody,
-      })
-      .then((response) => console.log(response.data.html))
-      .catch((err) => {
-        logMessage.error(err);
-        throw err;
-      });
-    res.status(201).json({ received: true });
-  } else {
-    logMessage.info("Not Sending Email - Test mode");
-    res.status(200).json({ received: true });
+  } catch (err) {
+    logMessage.error(err);
+    return res.status(500).json({ received: false });
   }
 };
 

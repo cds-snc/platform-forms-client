@@ -16,7 +16,7 @@ const getPageClassNames = () => {
 };
 
 const Base = ({ children }) => {
-  const isProduction = process.env.GA_ACTIVE ? true : false;
+  const isProduction = process.env.PRODUCTION_ENV ? true : false;
   const classes = getPageClassNames();
 
   return (
@@ -24,15 +24,18 @@ const Base = ({ children }) => {
       <Head>
         {isProduction && (
           <React.Fragment>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-KY2EVJV33K"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-8PNSS76E3B"></script>
             <script
               dangerouslySetInnerHTML={{
                 __html: `
-                window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', 'G-KY2EVJV33K');
+                <!-- Global site tag (gtag.js) - Google Analytics -->
+                <script>
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                
+                  gtag('config', 'G-8PNSS76E3B');
+                </script>
               `,
               }}
             />

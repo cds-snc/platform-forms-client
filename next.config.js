@@ -7,4 +7,16 @@ module.exports = {
     includePaths: [path.join(__dirname, "styles")],
   },
   reactStrictMode: true,
+  async redirects() {
+    if (process.env.PRODUCTION_ENV) {
+      return [
+        {
+          source: "/sandbox",
+          destination: "/",
+          permanent: false,
+        },
+      ];
+    }
+    return [];
+  },
 };
