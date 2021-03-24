@@ -2,7 +2,7 @@ name: Production — Push container to ECR
 
 on:
   push:
-    branches: [main]
+    branches: [production]
 
 env:
   ECR_REPOSITORY: form_viewer_production
