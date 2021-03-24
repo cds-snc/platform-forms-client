@@ -109,7 +109,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
                     referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
                   }
                 : null;
-            const htmlEmail = !process.env.PRODUCTION ? serverResponse.data.htmlEmail : null;
+            const htmlEmail = !process.env.PRODUCTION_ENV ? serverResponse.data.htmlEmail : null;
             router.push(
               {
                 pathname: `${language}/confirmation`,

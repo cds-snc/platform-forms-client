@@ -21,7 +21,7 @@ const Confirmation = () => {
 
       <div className="gc-form-confirmation">{backToLink}</div>
 
-      {!process.env.PRODUCTION && htmlEmail ? (
+      {htmlEmail ? (
         <div className="p-5 mt-5 border-double border-gray-400 border-4">
           <h2>Email to Form Owner Below:</h2>
           <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
