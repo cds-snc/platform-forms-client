@@ -1,4 +1,5 @@
 import { getFormByID } from "../lib/dataLayer";
+import getConfig from "next/config";
 import DynamicForm from "../components/containers/DynamicForm/DynamicForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -15,8 +16,9 @@ export async function getServerSideProps(context) {
     //Otherwise, get the form object via the dataLayer library
     form = await getFormByID(context.params.form);
   }
-
-  if (!form) {
+  // Only retrieve publish ready forms if isProduction
+  const { publicRuntimeConfig } = getConfig();
+  if (!form || (!form.publishingStatus && publicRuntimeConfig.isProduction)) {
     return {
       redirect: {
         // We can redirect to a 'Form does not exist page' in the future

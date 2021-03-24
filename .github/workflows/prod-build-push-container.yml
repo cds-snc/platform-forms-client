@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Form Viewer
-        run: docker build -t base --build-arg GITHUB_SHA_ARG=$GITHUB_SHA .
+        run: docker build -t base --build-arg GITHUB_SHA_ARG=$GITHUB_SHA --build-arg PRODUCTION_ENV=true .
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer

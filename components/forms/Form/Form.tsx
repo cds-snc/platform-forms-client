@@ -1,6 +1,7 @@
 import React from "react";
 import { withFormik, FormikProps } from "formik";
 import axios from "axios";
+import getConfig from "next/config";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList } from "../../../lib/validation";
 import { Button, Alert } from "../index";
@@ -109,7 +110,10 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
                     referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
                   }
                 : null;
-            const htmlEmail = !process.env.PRODUCTION_ENV ? serverResponse.data.htmlEmail : null;
+            const { publicRuntimeConfig } = getConfig();
+            const htmlEmail = !publicRuntimeConfig.isProduction
+              ? serverResponse.data.htmlEmail
+              : null;
             router.push(
               {
                 pathname: `${language}/confirmation`,

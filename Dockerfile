@@ -1,6 +1,11 @@
 FROM node:14-alpine
+
+ARG PRODUCTION_ENV=false
+ENV PRODUCTION_ENV=${PRODUCTION_ENV}
+
 COPY . /src
 WORKDIR /src
+
 RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
@@ -13,6 +18,10 @@ ENV GITHUB_SHA=$GITHUB_SHA_ARG
 
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
+
+ARG PRODUCTION_ENV=false
+ENV PRODUCTION_ENV=${PRODUCTION_ENV}
+
 ENV NODE_ENV=production
 
 WORKDIR /src

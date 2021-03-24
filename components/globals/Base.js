@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
+import getConfig from "next/config";
 import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
@@ -16,7 +17,8 @@ const getPageClassNames = () => {
 };
 
 const Base = ({ children }) => {
-  const isProduction = process.env.PRODUCTION_ENV ? true : false;
+  const { publicRuntimeConfig } = getConfig();
+  const isProduction = publicRuntimeConfig.isProduction;
   const classes = getPageClassNames();
 
   return (
@@ -28,14 +30,11 @@ const Base = ({ children }) => {
             <script
               dangerouslySetInnerHTML={{
                 __html: `
-                <!-- Global site tag (gtag.js) - Google Analytics -->
-                <script>
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
                 
                   gtag('config', 'G-8PNSS76E3B');
-                </script>
               `,
               }}
             />

@@ -1,4 +1,5 @@
 import { NotifyClient } from "notifications-node-client";
+import getConfig from "next/config";
 import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
 import { logger, logMessage } from "../../lib/logger";
@@ -6,6 +7,7 @@ import axios from "axios";
 
 const submit = async (req, res) => {
   try {
+    const { publicRuntimeConfig } = getConfig();
     const formAttached = req.body.form ? true : false;
     logMessage.info(
       `Path: ${req.url}, Method: ${req.method}, Form ID: ${
@@ -17,7 +19,7 @@ const submit = async (req, res) => {
       return;
     }
 
-    if (process.env.PRODUCTION_ENV) {
+    if (publicRuntimeConfig.isProduction) {
       const submissionFormat = await getSubmissionByID(req.body.form.id);
       const options = {
         url: process.env.SUBMISSION_API ?? null,
