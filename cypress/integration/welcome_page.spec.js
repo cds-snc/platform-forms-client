@@ -1,6 +1,6 @@
-describe("Welcome Page", { baseUrl: "http://localhost:3000" }, () => {
+describe("Welcome Page", { baseUrl: "http://localhost:3000/" }, () => {
   it("En page renders", () => {
-    cy.visit("/en");
+    cy.visit("/en/welcome-bienvenue");
     cy.get("h1").should("contain", "Welcome to Forms");
   });
   it("Change page language", () => {

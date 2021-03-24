@@ -28,6 +28,7 @@
     "next-i18next": "^8.1.1",
     "notifications-node-client": "^5.0.2",
     "pino": "^6.11.1",
+    "raw-loader": "^4.0.2",
     "react": "^17.0.1",
     "react-dom": "17.0.1"
   },
