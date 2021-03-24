@@ -8,6 +8,7 @@ module.exports = {
   },
   reactStrictMode: true,
   async redirects() {
+    console.log(JSON.stringify(process.env));
     if (process.env.PRODUCTION_ENV) {
       return [
         {
