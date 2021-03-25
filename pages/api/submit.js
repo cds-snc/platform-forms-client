@@ -25,10 +25,10 @@ const submit = async (req, res) => {
       const labmdaClient = new LambdaClient({ region: "ca-central-1" });
       const command = new InvokeCommand({
         FunctionName: process.env.SUBMISSION_API ?? null,
-        Payload: {
+        Payload: JSON.stringify({
           ...req.body,
           submissionFormat,
-        },
+        }),
       });
       return await labmdaClient
         .send(command)
