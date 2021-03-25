@@ -19,6 +19,7 @@
     "storybook": "start-storybook -s public -p 6006"
   },
   "dependencies": {
+    "@aws-sdk/client-lambda": "^3.9.0",
     "axios": "^0.21.1",
     "formik": "^2.2.6",
     "html-react-parser": "^1.2.4",

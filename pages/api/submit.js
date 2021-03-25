@@ -1,9 +1,9 @@
 import { NotifyClient } from "notifications-node-client";
 import getConfig from "next/config";
+const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
 import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
 import { logger, logMessage } from "../../lib/logger";
-import axios from "axios";
 
 const submit = async (req, res) => {
   try {
@@ -21,21 +21,19 @@ const submit = async (req, res) => {
 
     if (publicRuntimeConfig.isProduction) {
       const submissionFormat = await getSubmissionByID(req.body.form.id);
-      const options = {
-        url: process.env.SUBMISSION_API ?? null,
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-        data: {
+
+      const labmdaClient = new LambdaClient({ region: "ca-central-1" });
+      const command = new InvokeCommand({
+        FunctionName: process.env.SUBMISSION_API ?? null,
+        Payload: {
           ...req.body,
           submissionFormat,
         },
-      };
-      return await axios(options)
+      });
+      return await labmdaClient
+        .send(command)
         .then((response) => {
-          if (!response.data.status) {
+          if (!response.status) {
             throw Error("Submission API could not process form response");
           } else {
             return res.status(201).json({ received: true });
