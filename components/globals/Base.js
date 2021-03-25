@@ -18,6 +18,8 @@ const getPageClassNames = () => {
 const Base = ({ children }) => {
   const isProduction = process.env.GA_ACTIVE ? true : false;
   const classes = getPageClassNames();
+  const formMetadata =
+    children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
 
   return (
     <>
@@ -51,7 +53,7 @@ const Base = ({ children }) => {
       <div className={classes}>
         <header>
           <PhaseBanner />
-          <Fip />
+          <Fip formMetadata={formMetadata} />
         </header>
         <main id="content">{children}</main>
         <Footer />
