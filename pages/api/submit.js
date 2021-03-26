@@ -32,7 +32,10 @@ const submit = async (req, res) => {
       });
       return await labmdaClient
         .send(command)
-        .then((response) => JSON.parse(response))
+        .then((response) => {
+          console.log(response);
+          return JSON.parse(response);
+        })
         .then((response) => {
           if (response.FunctionError || !response.payload.status) {
             throw Error("Submission API could not process form response");
