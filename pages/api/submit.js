@@ -20,18 +20,19 @@ const submit = async (req, res) => {
     }
 
     if (publicRuntimeConfig.isProduction) {
-      const submissionFormat = await getSubmissionByID(req.body.form.id);
+      const submission = await getSubmissionByID(req.body.form.id);
 
       const labmdaClient = new LambdaClient({ region: "ca-central-1" });
       const command = new InvokeCommand({
         FunctionName: process.env.SUBMISSION_API ?? null,
         Payload: JSON.stringify({
           ...req.body,
-          submissionFormat,
+          submission,
         }),
       });
       return await labmdaClient
         .send(command)
+        .then((response) => JSON.parse(response))
         .then((response) => {
           if (!response.status) {
             throw Error("Submission API could not process form response");
