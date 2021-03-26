@@ -34,7 +34,7 @@ const submit = async (req, res) => {
         .send(command)
         .then((response) => JSON.parse(response))
         .then((response) => {
-          if (!response.status) {
+          if (response.FunctionError || !response.payload.status) {
             throw Error("Submission API could not process form response");
           } else {
             return res.status(201).json({ received: true });
