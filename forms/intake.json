@@ -13,11 +13,13 @@
     "titleFr": "SNC Formulaire d'admission",
     "layout": [1, 2, 3, 4, 5, 6, 7],
     "brand": {
+      "name": "cds-snc",
       "logoEn": "https://digital.canada.ca/img/cds/cds-lockup-ko-en.svg",
       "logoFr": "https://numerique.canada.ca/img/cds/cds-lockup-ko-fr.svg",
+      "logoTitleEn": "Canadian Digital Service",
+      "logoTitleFr": "Service numérique canadien",
       "urlEn": "https://digital.canada.ca/",
-      "urlFr": "https://numerique.canada.ca/",
-      "title": "cds-snc"
+      "urlFr": "https://numerique.canada.ca/"
     },
     "startPage": {},
     "endPage": {
