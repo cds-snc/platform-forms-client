@@ -9,17 +9,19 @@ import Fip from "./Fip";
 import classnames from "classnames";
 import { useRouter } from "next/router";
 
-const getPageClassNames = () => {
+const getPageClassNames = (formMetadata) => {
   const router = useRouter();
   const pageName = router && router.asPath ? router.asPath.split("?")[0] : "";
-  const classes = classnames("outer-container", `page${pageName.replace(/\//g, "-")}`);
+  const brandName = formMetadata && formMetadata.brand ? formMetadata.brand.title : "";
+  const classes = classnames("outer-container", `page${pageName.replace(/\//g, "-")}`, brandName);
   return classes;
 };
 
 const Base = ({ children }) => {
-  const { publicRuntimeConfig } = getConfig();
-  const isProduction = publicRuntimeConfig.isProduction;
-  const classes = getPageClassNames();
+  const { publicRuntimeConfig: isProduction } = getConfig();
+  const formMetadata =
+    children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
+  const classes = getPageClassNames(formMetadata);
 
   return (
     <>
@@ -53,7 +55,7 @@ const Base = ({ children }) => {
       <div className={classes}>
         <header>
           <PhaseBanner />
-          <Fip />
+          <Fip formMetadata={formMetadata} />
         </header>
         <main id="content">{children}</main>
         <Footer />
