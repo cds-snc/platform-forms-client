@@ -9,7 +9,11 @@ const Confirmation = () => {
   const router = useRouter();
   const urlQuery = router.query;
   const backToLink =
-    urlQuery && urlQuery.referrerUrl ? <p>{t("linkSentence")} <a href={urlQuery.referrerUrl}>{t("backLink")}</a>.</p> : null;
+    urlQuery && urlQuery.referrerUrl ? (
+      <p>
+        {t("linkSentence")} <a href={urlQuery.referrerUrl}>{t("backLink")}</a>.
+      </p>
+    ) : null;
 
   return (
     <>
