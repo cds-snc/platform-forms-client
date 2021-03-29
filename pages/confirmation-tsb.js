@@ -1,15 +1,15 @@
 import React from "react";
-import parse from "html-react-parser";
 import ConfirmationBanner from "../components/globals/ConfirmationBanner.tsx";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 
 const Confirmation = () => {
-  const { t } = useTranslation("confirmation");
+  const { t } = useTranslation("confirmation-tsb");
   const router = useRouter();
-  const { urlQuery, htmlEmail } = router.query;
-  const backToLink = urlQuery ? <p className="md:text-small_p">{t("linkSentence")}<a href={urlQuery}>{t("backLink")}</a>.</p> : null;
+  const urlQuery = router.query;
+  const backToLink =
+    urlQuery && urlQuery.referrerUrl ? <p className="md:text-small_p">{t("linkSentence")} <a href={urlQuery.referrerUrl}>{t("backLink")}</a>.</p> : null;
 
   return (
     <>
@@ -21,16 +21,14 @@ const Confirmation = () => {
           lightText={t("bannerLight")}
           boldText={t("bannerDark")}
         />
-        <p className="gc-p">{t("body")} <a href="mailto:info@cds-snc.ca">info@cds-snc.ca</a>.</p>
         <div className="relative">
+          <p className="gc-p">{t("body")}</p>
+          <ul className="list-inside mb-10">
+            <li>{t("li-1")}</li>
+            <li>{t("li-2")}</li>
+          </ul>
           <div className="gc-form-confirmation">{backToLink}</div>
         </div>
-        {htmlEmail ? (
-          <div className="p-5 mt-5 border-double border-gray-400 border-4">
-            <h2>Email to Form Owner Below:</h2>
-            <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
-          </div>
-        ) : null}
       </div>
     </>
   );
@@ -38,7 +36,7 @@ const Confirmation = () => {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common", "confirmation"])),
+    ...(await serverSideTranslations(locale, ["common", "confirmation-tsb"])),
   },
 });
 
