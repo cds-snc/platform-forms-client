@@ -45,8 +45,7 @@ const submit = async (req, res) => {
           logMessage.error(err);
           return res.status(500).json({ received: false });
         });
-    } else if (process.env.NODE_ENV === "development") {
-      // Will only run if using development env locally
+    } else if (process.env.NODE_ENV !== "test") {
       const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
       const notify = new NotifyClient(
         "https://api.notification.canada.ca",
