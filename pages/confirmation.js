@@ -9,7 +9,7 @@ const Confirmation = () => {
   const { t } = useTranslation("confirmation");
   const router = useRouter();
   const { urlQuery, htmlEmail } = router.query;
-  const backToLink = urlQuery ? <p className="md:text-small_p">{t("linkSentence")}<a href={urlQuery}>{t("backLink")}</a>.</p> : null;
+  const backToLink = urlQuery ? <p>{t("linkSentence")}<a href={urlQuery}>{t("backLink")}</a>.</p> : null;
 
   return (
     <>
@@ -22,7 +22,7 @@ const Confirmation = () => {
           boldText={t("bannerDark")}
         />
         <p className="gc-p">{t("body")} <a href="mailto:info@cds-snc.ca">info@cds-snc.ca</a>.</p>
-        <div className="relative">
+        <div className="confirmation-content">
           <div className="gc-form-confirmation">{backToLink}</div>
         </div>
         {htmlEmail ? (
