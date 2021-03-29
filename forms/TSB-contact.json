@@ -12,6 +12,11 @@
     "titleEn": "General enquiries – Transportation Safety Board of Canada",
     "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
     "layout": [1, 2, 3],
+    "startPage": {},
+    "endPage": {
+      "referrerUrlEn": "https://www.tsb.gc.ca/eng/contactez-contact/index.html",
+      "referrerUrlFr": "https://www.tsb.gc.ca/fra/contactez-contact/index.html"
+    },
     "elements": [
       {
         "id": 1,
