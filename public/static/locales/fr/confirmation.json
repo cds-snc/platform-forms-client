@@ -1,8 +1,10 @@
 {
   "title": "Votre demande a été reçue",
   "bannerTitle": "Merci, nous avons reçu votre message",
-  "bannerLight": "Nous vous enverrons sous peu une copie de votre message par e-mail.",
-  "bannerDark": "Notre personnel vous contactera dans un jour.",
+  "bannerLight": "We'll send you an email copy of your message shortly.",
+  "bannerDark": "Nous vous enverrons sous peu une copie de votre message par e-mail.",
+  "body": "Merci, votre demande a été soumise. Un membre de notre équipe vous contactera par courriel sous peu ",
+  "email": "info@cds-snc.ca",
   "linkSentence": "Si vous avez terminé, vous pouvez ",
-  "backLink": "retour à la page d'accueil"
+  "backLink": "revenir à la page d'accueil"
 }
