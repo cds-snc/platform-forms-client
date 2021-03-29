@@ -252,3 +252,33 @@
 .validation-message {
   @apply text-red-500;
 }
+
+.gc-form-confirmation {
+  p{
+    @apply text-base md:text-small_p;
+  }
+}
+
+.confirmation-content {
+  @apply relative;
+}
+
+.confirmation-list {
+  @apply list-inside mb-10;
+}
+
+.gc-confirmation-banner {
+  @apply bg-gray-200 py-16 px-20 mb-10 w-5/6 xl:w-full md:py-10 md:px-10;
+
+  h2 {
+    @apply text-h2 mb-6 md:text-small_h2;
+  }
+  
+  p:first-of-type {
+    @apply mb-5 md:text-small_p;
+  }
+
+  p:last-of-type {
+    @apply font-bold md:text-small_p;
+  }
+}

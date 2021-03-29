@@ -9,7 +9,7 @@ const Confirmation = () => {
   const router = useRouter();
   const urlQuery = router.query;
   const backToLink =
-    urlQuery && urlQuery.referrerUrl ? <p className="md:text-small_p">{t("linkSentence")} <a href={urlQuery.referrerUrl}>{t("backLink")}</a>.</p> : null;
+    urlQuery && urlQuery.referrerUrl ? <p>{t("linkSentence")} <a href={urlQuery.referrerUrl}>{t("backLink")}</a>.</p> : null;
 
   return (
     <>
@@ -21,7 +21,7 @@ const Confirmation = () => {
           lightText={t("bannerLight")}
           boldText={t("bannerDark")}
         />
-        <div className="relative">
+        <div className="confirmation-content">
           <div className="gc-form-confirmation">{backToLink}</div>
         </div>
       </div>
