@@ -1,5 +1,10 @@
 {
-  "title": "Forms - Confirmation",
-  "body": "Thank you, your request has been submitted. A team member will email you shortly",
-  "backLink": "Back"
+  "title": "Your submission has been received",
+  "bannerTitle": "Thanks we got your message",
+  "bannerLight": "We'll send you an email copy of your message shortly.",
+  "bannerDark": "We aim to respond to your message or enquiry within one business day.",
+  "body": "If you don't get a response soon, you can email us at ",
+  "email": "info@cds-snc.ca",
+  "linkSentence": "If you're finished, you can navigate ",
+  "backLink": "back to the homepage"
 }
