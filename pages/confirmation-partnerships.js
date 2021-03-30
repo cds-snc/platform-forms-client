@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 
 const Confirmation = () => {
-  const { t } = useTranslation("confirmation");
+  const { t } = useTranslation("confirmation-partnerships");
   const router = useRouter();
   const urlQuery = router.query;
   const backToLink =
@@ -26,6 +26,9 @@ const Confirmation = () => {
           boldText={t("bannerDark")}
         />
         <div className="confirmation-content">
+          <p className="gc-p">
+            {t("body")} <a href={`mailto:${t("email")}`}>{t("email")}</a>
+          </p>
           <div className="gc-form-confirmation">{backToLink}</div>
         </div>
       </div>
@@ -35,7 +38,7 @@ const Confirmation = () => {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common", "confirmation"])),
+    ...(await serverSideTranslations(locale, ["common", "confirmation-partnerships"])),
   },
 });
 
