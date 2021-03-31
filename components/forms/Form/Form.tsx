@@ -12,6 +12,9 @@ import { FormValues, InnerFormProps, DynamicFormProps } from "../../../lib/types
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
+const {
+  publicRuntimeConfig: { isProduction: isProduction },
+} = getConfig();
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
 
@@ -100,7 +103,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
           "Content-Type": "application/json;charset=UTF-8",
         },
         data: formResponseObject,
-        timeout: 3000,
+        timeout: isProduction ? 3000 : 0,
       })
         .then((serverResponse) => {
           if (serverResponse.data.received === true) {
