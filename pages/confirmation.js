@@ -9,7 +9,12 @@ const Confirmation = () => {
   const { t } = useTranslation("confirmation");
   const router = useRouter();
   const { urlQuery, htmlEmail } = router.query;
-  const backToLink = urlQuery ? <p>{t("linkSentence")}<a href={urlQuery}>{t("backLink")}</a>.</p> : null;
+  const backToLink = urlQuery ? (
+    <p>
+      {t("linkSentence")}
+      <a href={urlQuery}>{t("backLink")}</a>.
+    </p>
+  ) : null;
 
   return (
     <>
