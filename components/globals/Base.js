@@ -8,6 +8,7 @@ import SkipLink from "./SkipLink";
 import Fip from "./Fip";
 import classnames from "classnames";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 const getPageClassNames = (formMetadata) => {
   const router = useRouter();
@@ -18,6 +19,8 @@ const getPageClassNames = (formMetadata) => {
 };
 
 const Base = ({ children }) => {
+  const { t } = useTranslation("common");
+
   const {
     publicRuntimeConfig: { isProduction: isProduction },
   } = getConfig();
@@ -52,6 +55,7 @@ const Base = ({ children }) => {
           href="https://fonts.googleapis.com/css?family=Lato:400,700%7CNoto+Sans:400,700&amp;display=fallback"
           rel="stylesheet"
         />
+        <title>{t("title")}</title>
       </Head>
       <SkipLink />
       <div className={classes}>

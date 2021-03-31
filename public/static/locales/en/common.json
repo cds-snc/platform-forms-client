@@ -33,5 +33,6 @@
     "phone": "Please enter a valid telephone number",
     "regex": "Please enter the correct format"
   },
-  "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later."
+  "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
+  "title": "GC Forms"
 }
