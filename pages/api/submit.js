@@ -5,6 +5,10 @@ import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
 import { logMessage } from "../../lib/logger";
 
+// check if aws credentials (process.env.AWS_ACCESS_KEY_ID and process.env.AWS_SECRET_ACCESS_KEY)
+// if prod and error throw and return issue (500)
+// if notify API and not NODE_ENV==="test" key then preview and return render
+
 const submit = async (req, res) => {
   try {
     const {
@@ -46,6 +50,12 @@ const submit = async (req, res) => {
       logMessage.info("Not Sending Email - Test mode");
       return res.status(200).json({ received: true });
     }
+    if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
+      return await previewNotify(req, res);
+    }
+
+    logMessage.info("Not Sending Email - Test mode");
+    return res.status(200).json({ received: true });
   } catch (err) {
     logMessage.error(err);
     return res.status(500).json({ received: false });
