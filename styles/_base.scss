@@ -151,3 +151,11 @@ h6 {
   position: relative;
   min-height: 100vh;
 }
+
+.email-preview > * {
+  all: revert;
+}
+
+.email-preview ul {
+  padding-left: 20px !important;
+}

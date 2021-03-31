@@ -9,7 +9,10 @@ function _getFormByID(formID: string): Record<string, unknown> {
   let formToReturn = null;
   for (const form of Object.values(Forms)) {
     if (form.form.id == formID) {
-      formToReturn = form.form;
+      formToReturn = {
+        ...form.form,
+        publishingStatus: form.publishingStatus,
+      };
       break;
     }
   }

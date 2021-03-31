@@ -1,0 +1,49 @@
+name: Production — Push container to ECR
+
+on:
+  push:
+    branches: [main]
+
+env:
+  ECR_REPOSITORY: form_viewer_production
+  GITHUB_SHA: ${{ github.sha }}
+
+jobs:
+  push-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Form Viewer
+        run: docker build -t base --build-arg GITHUB_SHA_ARG=$GITHUB_SHA --build-arg PRODUCTION_ENV=true .
+
+      - name: Configure Production AWS credentials
+        id: aws-form-viewer
+        uses: aws-actions/configure-aws-credentials@51e2d042f8c5cf77f151685c9338e989dc0b8fc8
+        with:
+          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ca-central-1
+
+      - name: Login to Production Amazon ECR
+        id: login-ecr-production
+        uses: aws-actions/amazon-ecr-login@b9c809dc38d74cd0fde3c13cc4fe4ac72ebecdae
+
+      - name: Tag Images for Production
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr-production.outputs.registry }}
+        run: |
+          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Push containers to Production Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr-production.outputs.registry }}
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Logout of Production Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr-production.outputs.registry }}

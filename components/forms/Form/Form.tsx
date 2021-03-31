@@ -1,5 +1,7 @@
 import React from "react";
 import { withFormik, FormikProps } from "formik";
+import axios from "axios";
+import getConfig from "next/config";
 import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList } from "../../../lib/validation";
 import { Button, Alert } from "../index";
@@ -10,12 +12,23 @@ import { FormValues, InnerFormProps, DynamicFormProps } from "../../../lib/types
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
+const {
+  publicRuntimeConfig: { isProduction: isProduction },
+} = getConfig();
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
 
   const errorList = props.errors ? getErrorList(props) : null;
+  const formStatus = props.status === "Error" ? t("server-error") : null;
+  if (errorList || formStatus) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
   return (
     <>
+      {formStatus ? <Alert type="error" heading={formStatus} /> : null}
       {errorList ? (
         <Alert type="error" heading={t("input-validation.heading")} validation={true}>
           {errorList}
@@ -65,10 +78,11 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
     return validationResult;
   },
 
-  handleSubmit: (values, formikBag) => {
-    const { formMetadata, language, router } = formikBag.props;
+  handleSubmit: async (values, formikBag) => {
+    try {
+      const { formMetadata, language, router } = formikBag.props;
+      const { setStatus } = formikBag;
 
-    setTimeout(() => {
       const formResponseObject = {
         form: {
           id: formMetadata.id,
@@ -81,37 +95,53 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
       };
 
       //making a post request to the submit API
-      fetch("/api/submit", {
+      await axios({
+        url: "/api/submit",
         method: "POST",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
         },
-        body: JSON.stringify(formResponseObject),
+        data: formResponseObject,
+        timeout: isProduction ? 3000 : 0,
       })
-        .then((response) => response.json())
         .then((serverResponse) => {
-          if (serverResponse.received === true) {
+          if (serverResponse.data.received === true) {
             const referrerUrl =
               formMetadata && formMetadata.endPage
                 ? {
                     referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
                   }
                 : null;
-            router.push({
-              pathname: `${language}/confirmation`,
-              query: referrerUrl,
-            });
+            const { publicRuntimeConfig } = getConfig();
+            const htmlEmail = !publicRuntimeConfig.isProduction
+              ? serverResponse.data.htmlEmail
+              : null;
+            router.push(
+              {
+                pathname: `${language}/confirmation`,
+                query: { ...referrerUrl, htmlEmail: htmlEmail },
+              },
+              {
+                pathname: `${language}/confirmation`,
+              }
+            );
           } else {
             throw Error("Server submit API returned an error");
           }
+          // ;
         })
-        .catch((error) => {
-          logMessage.error(error);
+        .catch((err) => {
+          if (err.response) {
+            logMessage.error(err);
+            setStatus("Error");
+          }
         });
-
+    } catch (err) {
+      logMessage.error(err);
+    } finally {
       formikBag.setSubmitting(false);
-    }, 1000);
+    }
   },
 })(InnerForm);
 

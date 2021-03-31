@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
+import getConfig from "next/config";
 import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
@@ -17,7 +18,9 @@ const getPageClassNames = (formMetadata) => {
 };
 
 const Base = ({ children }) => {
-  const isProduction = process.env.GA_ACTIVE ? true : false;
+  const {
+    publicRuntimeConfig: { isProduction: isProduction },
+  } = getConfig();
   const formMetadata =
     children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
   const classes = getPageClassNames(formMetadata);
@@ -27,15 +30,15 @@ const Base = ({ children }) => {
       <Head>
         {isProduction && (
           <React.Fragment>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-KY2EVJV33K"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-8PNSS76E3B"></script>
             <script
               dangerouslySetInnerHTML={{
                 __html: `
-                window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', 'G-KY2EVJV33K');
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                
+                  gtag('config', 'G-8PNSS76E3B');
               `,
               }}
             />
