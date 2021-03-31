@@ -18,7 +18,9 @@ const getPageClassNames = (formMetadata) => {
 };
 
 const Base = ({ children }) => {
-  const { publicRuntimeConfig: isProduction } = getConfig();
+  const {
+    publicRuntimeConfig: { isProduction: isProduction },
+  } = getConfig();
   const formMetadata =
     children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
   const classes = getPageClassNames(formMetadata);
