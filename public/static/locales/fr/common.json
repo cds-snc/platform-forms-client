@@ -33,5 +33,6 @@
     "phone": "Veuillez entrer votre numéro de téléphone au format xxx-xxx-xxxx",
     "regex": "Veuillez saisir le format correct"
   },
-  "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard."
+  "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
+  "title": "GC Formulaires"
 }
