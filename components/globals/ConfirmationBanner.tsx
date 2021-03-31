@@ -15,10 +15,6 @@ export const ConfirmationBanner = ({
   ...props
 }: ConfirmationBannerProps & React.HTMLAttributes<HTMLDivElement>): React.ReactElement => {
   const classes = classnames("gc-confirmation-banner", className);
-<<<<<<< HEAD
-=======
-
->>>>>>> Prettified Code!
   return (
     <div className={classes} {...props}>
       <h2>{title}</h2>
