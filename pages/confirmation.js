@@ -21,7 +21,6 @@ const Confirmation = () => {
           lightText={t("bannerLight")}
           boldText={t("bannerDark")}
         />
-        <p className="gc-p">{t("body")} <a href="mailto:info@cds-snc.ca">info@cds-snc.ca</a>.</p>
         <div className="confirmation-content">
           <div className="gc-form-confirmation">{backToLink}</div>
         </div>
