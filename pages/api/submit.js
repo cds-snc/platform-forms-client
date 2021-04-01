@@ -5,10 +5,6 @@ import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
 import { logger, logMessage } from "../../lib/logger";
 
-// check if aws credentials (process.env.AWS_ACCESS_KEY_ID and process.env.AWS_SECRET_ACCESS_KEY)
-// if prod and error throw and return issue (500)
-// if notify API and not NODE_ENV==="test" key then preview and return render
-
 const submit = async (req, res) => {
   try {
     const {
@@ -25,25 +21,28 @@ const submit = async (req, res) => {
       return;
     }
 
+    // Staging or Production AWS environments
     if (process.env.SUBMISSION_API) {
-      try {
-        if (isProduction) {
-          return await callLambda(req, res, isProduction);
-        } else {
-          callLambda(req, res, isProduction);
-        }
-      } catch (err) {
-        if (isProduction) {
+      return await callLambda(req, res, isProduction)
+        .then(async (response) => {
+          if (!isProduction && process.env.NOTIFY_API_KEY) {
+            return await previewNotify(req, res);
+          } else {
+            return response;
+          }
+        })
+        .catch((err) => {
+          logMessage.error(err);
           throw err;
-        }
-      }
+        });
     }
-    if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
+    // Local development and Heroku
+    else if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
       return await previewNotify(req, res);
+    } else {
+      logMessage.info("Not Sending Email - Test mode");
+      return res.status(200).json({ received: true });
     }
-
-    logMessage.info("Not Sending Email - Test mode");
-    return res.status(200).json({ received: true });
   } catch (err) {
     logMessage.error(err);
     return res.status(500).json({ received: false });
@@ -69,7 +68,11 @@ const callLambda = async (req, res, isProduction) => {
       if (response.FunctionError || !JSON.parse(payload).status) {
         throw Error("Submission API could not process form response");
       } else {
-        return res.status(201).json({ received: true });
+        if (!isProduction) {
+          return res.status(201).json({ received: true });
+        } else {
+          logMessage.info("Lambda Client sucessfully triggered");
+        }
       }
     })
     .catch((err) => {
