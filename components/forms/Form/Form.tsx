@@ -118,7 +118,10 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
               ? serverResponse.data.htmlEmail
               : null;
 
-            const endPageText = formMetadata.endPage[getProperty("description", language)];
+            const endPageText =
+              formMetadata && formMetadata.endPage
+                ? formMetadata.endPage[getProperty("description", language)]
+                : "";
 
             router.push(
               {
