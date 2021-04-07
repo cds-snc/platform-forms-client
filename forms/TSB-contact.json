@@ -12,6 +12,10 @@
     "titleEn": "General enquiries – Transportation Safety Board of Canada",
     "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
     "layout": [1, 2, 3],
+    "endPage": {
+      "descriptionEn": "# Transportation Safety Board of Canada  \n\r ## Thanks, we got your message  \n\r We'll send you an email copy of your message shortly. **Someone from our office will contact you in the next 7 days.** \n\r  If you don't get a response within 7 days, you can contact our office directly or by phone. Our office hours are 8:00 a.m. to 4:30 p.m. Eastern, Monday to Friday. \n\r  <ul><li>General enquiries: 1-800-387-3557</li><li>Media relations: (819) 994-8053</li></ul> If you're finished, you can [navigate back to the homepage](https://www.tsb.gc.ca/eng/contactez-contact/index.html)",
+      "descriptionFr": "# Bureau de la sécurité des transports du Canada  \n\r ## Merci, nous avons reçu votre message  \n\r Nous vous enverrons sous peu une copie de votre message par courriel. **Notre personnel vous contactera dans les 7 prochains jours.** \n\r  Si vous n'obtenez pas de réponse avant les prochains jours, vous pouvez nous contacter directement par téléphone. Nos heures de bureau sont de 8 h 00 à 16 h 30 heure de l'Est, du lundi au vendredi. \n\r <ul><li>Renseignements généraux: 1-800-387-3557</li><li>Relations avec les médias: 819-994-8053</li></ul> Si vous avez terminé, vous pouvez [retour à la page d'accueil](https://www.tsb.gc.ca/fra/contactez-contact/index.html)"
+    },
     "elements": [
       {
         "id": 1,
