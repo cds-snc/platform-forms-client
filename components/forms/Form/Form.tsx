@@ -117,10 +117,17 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
             const htmlEmail = !publicRuntimeConfig.isProduction
               ? serverResponse.data.htmlEmail
               : null;
+
+            const endPageText = formMetadata.endPage[getProperty("description", language)];
+
             router.push(
               {
                 pathname: `${language}/confirmation`,
-                query: { ...referrerUrl, htmlEmail: htmlEmail },
+                query: {
+                  ...referrerUrl,
+                  htmlEmail: htmlEmail,
+                  pageText: JSON.stringify(endPageText),
+                },
               },
               {
                 pathname: `${language}/confirmation`,

@@ -3,13 +3,18 @@ import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
+import { RichText } from "../components/forms";
 
 const Confirmation = () => {
   const { t } = useTranslation("confirmation");
   const router = useRouter();
-  const { urlQuery, htmlEmail } = router.query;
+  const { urlQuery, htmlEmail, pageText } = router.query;
 
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
+
+  const customPageText = pageText ? (
+    <RichText className="confirmation">{JSON.parse(pageText)}</RichText>
+  ) : null;
 
   return (
     <>
@@ -20,6 +25,8 @@ const Confirmation = () => {
       </div>
 
       <div className="gc-form-confirmation">{backToLink}</div>
+
+      {customPageText ? customPageText : null}
 
       {htmlEmail ? (
         <div className="p-5 mt-5 border-double border-gray-400 border-4">
