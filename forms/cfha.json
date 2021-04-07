@@ -1,0 +1,129 @@
+{
+  "internalTitleEn": "Repair Request Form",
+  "internalTitleFr": "Formulaire de demande de réparation",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "mario.garneau@cds-snc.ca"
+  },
+  "form": {
+    "id": 44,
+    "version": 1,
+    "titleEn": "Repair Request Form",
+    "titleFr": "Formulaire de demande de réparation",
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+    "startPage": {},
+    "endPage": {
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "referrerUrlEn": "https://www.canada.ca/en/department-national-defence/services/benefits-military/military-housing/repairs-maintenance.html",
+      "referrerUrlFr": "https://www.canada.ca/fr/ministere-defense-nationale/services/avantages-militaires/logements-militaires/reparations-entretien.html"
+    },
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "richText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "Note that requests are monitored during normal business hours. Any urgent requests should be made directly by phone to your local HSC or through our <a href='https://www.canada.ca/en/department-national-defence/services/benefits-military/military-housing/contact-cfha/after-hours.html/'>Emergency After-Hours Response Service</a>",
+          "descriptionFr": "FR - Note that requests are monitored during normal business hours. Any urgent requests should be made directly by phone to your local HSC or through our <a href='https://www.canada.ca/en/department-national-defence/services/benefits-military/military-housing/contact-cfha/after-hours.html/'>Emergency After-Hours Response Service</a>",
+          "charLimit": 400,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Occupant / requestor name",
+          "titleFr": "Nom de l'occupant ou du demandeur",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "House number & street name",
+          "titleFr": "Adresse de la résidence",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "City",
+          "titleFr": "Ville",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "validation": {
+            "required": false,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Contact phone number",
+          "titleFr": "Numéro de téléphone du contact",
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Alternate contact number",
+          "titleFr": "Numéro de téléphone du contact alternatif",
+          "descriptionEn": "(if applicable)",
+          "descriptionFr": "(si applicable)",
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Request / repair description",
+          "titleFr": "Description de la demande ou réparation",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "(ex: clogged toilet on main floor OR No hot water)",
+          "descriptionFr": "(ex: Toilette bloquée au rez-de-chaussée ou Pas d'eau chaude)",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "textArea"
+          }
+        }
+      }
+    ]
+  }
+}
