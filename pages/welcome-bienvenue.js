@@ -13,7 +13,7 @@ const Home = () => {
       const form = getFormByID(formID);
       return (
         <li key={`link-${form.id}`}>
-          <Link href={`/${form.id}`} locale={i18n.language}>
+          <Link href={`/id/${form.id}`} locale={i18n.language}>
             {form[getProperty("title", i18n.language)].toString()}
           </Link>
         </li>
