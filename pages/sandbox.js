@@ -13,7 +13,9 @@ const Sandbox = () => {
       const form = getFormByID(formID);
       return (
         <li key={`link-${form.id}`}>
-          <Link href={`/id/${form.id}`}>{form[getProperty("title", i18n.language)].toString()}</Link>
+          <Link href={`/id/${form.id}`}>
+            {form[getProperty("title", i18n.language)].toString()}
+          </Link>
         </li>
       );
     });
