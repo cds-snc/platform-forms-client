@@ -9,16 +9,30 @@
   "form": {
     "id": 42,
     "version": 1,
-    "titleEn": "General enquiries – Transportation Safety Board of Canada",
-    "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
-    "layout": [1, 2, 3],
+    "titleEn": "Transportation Safety Board of Canada general enquiries",
+    "titleFr": "Renseignements généraux Bureau de la sécurité des transports du Canada",
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "elements": [
       {
         "id": 1,
+        "type": "richText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "The Transportation Safety Board of Canada can answer your questions about our organization, the status of our investigations, and incidents related to air, rail, marine, and pipeline. To contact us, please fill out the form below.",
+          "descriptionFr": "The Transportation Safety Board of Canada can answer your questions about our organization, the status of our investigations, and incidents related to air, rail, marine, and pipeline. To contact us, please fill out the form below.",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "First and last name",
-          "titleFr": "Nom et prénom",
+          "titleEn": "Full name",
+          "titleFr": "Nom au complet",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -30,7 +44,7 @@
         }
       },
       {
-        "id": 2,
+        "id": 3,
         "type": "textField",
         "properties": {
           "titleEn": "Email",
@@ -47,18 +61,87 @@
         }
       },
       {
-        "id": 3,
+        "id": 4,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "What kind of information do you need?",
+          "titleFr": "What kind of information do you need?",
+          "descriptionEn": "Select all that apply",
+          "descriptionFr": "Cocher tous les choix qui s’appliquent",
+          "choices": [
+            {
+              "en": "Air, marine, oil, or pipeline incident",
+              "fr": "Air, marine, oil, or pipeline incident"
+            },
+            {
+              "en": "Investigation status or lab report request",
+              "fr": "Investigation status or lab report request"
+            },
+            {
+              "en": "Statistics",
+              "fr": "Statistics"
+            },
+            {
+              "en": "Other, such as jobs and training, photos or videos, pilot background letter",
+              "fr": "Other, such as jobs and training, photos or videos, pilot background letter"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Please specify",
+          "titleFr": "Please specify",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If you selected Other in the previous question",
+          "descriptionFr": "If you selected Other in the previous question",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "email"
+          }
+        }
+      },
+      {
+        "id": 6,
         "type": "textArea",
         "properties": {
           "titleEn": "Message",
           "titleFr": "Message",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "descriptionEn": "Any relevant details or specific questions",
+          "descriptionFr": "Any relevant details or specific questions",
           "charLimit": 800,
           "validation": {
             "required": true
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Air updates",
+          "titleFr": "Air updates",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "choices": [
+            {
+              "en": "I would like to receive daily notifications for air updates ",
+              "fr": "I would like to receive daily notifications for air updates "
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": false
           }
         }
       }
