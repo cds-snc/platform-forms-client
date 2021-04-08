@@ -96,11 +96,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={id}
             name={id}
             required={isRequired}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
     case "textArea":
+      console.log(`Value of ariaDescribedBy: ${description ? `desc-${id}` : undefined}`);
       return (
         <Fragment>
           {labelComponent}
@@ -109,7 +110,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={id}
             name={id}
             required={isRequired}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
@@ -127,7 +128,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
+        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
           {description ? <Description>{description}</Description> : null}
           {checkboxItems}
@@ -148,7 +149,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
+        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
           {description ? <Description>{description}</Description> : null}
           {radioButtons}
@@ -163,7 +164,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <Dropdown
             id={id}
             name={id}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
           />
         </Fragment>
@@ -183,7 +184,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <FileInput
             id={id}
             name={id}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             fileType={element.properties.fileType}
           />
         </Fragment>

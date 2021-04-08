@@ -9,6 +9,7 @@ interface DropdownProps {
   className?: string;
   choices: Array<string | number>;
   required?: boolean;
+  ariaDescribedBy?: string;
 }
 
 interface DropdownOptionProps {
@@ -21,7 +22,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, className, choices, required } = props;
+  const { id, className, choices, required, ariaDescribedBy } = props;
 
   const classes = classnames("gc-dropdown", className);
 
@@ -40,7 +41,14 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
     <>
       {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
 
-      <select data-testid="dropdown" className={classes} id={id} required={required} {...field}>
+      <select
+        data-testid="dropdown"
+        className={classes}
+        id={id}
+        required={required}
+        aria-describedby={ariaDescribedBy}
+        {...field}
+      >
         {options}
       </select>
     </>
