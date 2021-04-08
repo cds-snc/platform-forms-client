@@ -20,7 +20,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 
   const errorList = props.errors ? getErrorList(props) : null;
   const formStatus = props.status === "Error" ? t("server-error") : null;
-  if (errorList || formStatus) {
+  if (formStatus) {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -125,7 +125,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
             router.push(
               {
-                pathname: `${language}/confirmation`,
+                pathname: `/${language}/confirmation`,
                 query: {
                   ...referrerUrl,
                   htmlEmail: htmlEmail,
@@ -133,7 +133,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
                 },
               },
               {
-                pathname: `${language}/confirmation`,
+                pathname: `/${language}/confirmation`,
               }
             );
           } else {
