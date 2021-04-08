@@ -20,7 +20,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 
   const errorList = props.errors ? getErrorList(props) : null;
   const formStatus = props.status === "Error" ? t("server-error") : null;
-  if (errorList || formStatus) {
+  if (formStatus) {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -117,13 +117,23 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
             const htmlEmail = !publicRuntimeConfig.isProduction
               ? serverResponse.data.htmlEmail
               : null;
+
+            const endPageText =
+              formMetadata && formMetadata.endPage
+                ? formMetadata.endPage[getProperty("description", language)]
+                : "";
+
             router.push(
               {
-                pathname: `${language}/confirmation`,
-                query: { ...referrerUrl, htmlEmail: htmlEmail },
+                pathname: `/${language}/confirmation`,
+                query: {
+                  ...referrerUrl,
+                  htmlEmail: htmlEmail,
+                  pageText: JSON.stringify(endPageText),
+                },
               },
               {
-                pathname: `${language}/confirmation`,
+                pathname: `/${language}/confirmation`,
               }
             );
           } else {
