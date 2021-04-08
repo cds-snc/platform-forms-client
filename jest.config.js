@@ -9,5 +9,5 @@ module.exports = {
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
   },
-  setupFilesAfterEnv: ["<rootDir>/lib/tests/setupTests.ts"],
+  setupFilesAfterEnv: ["<rootDir>/lib/tests/setupTests.ts", "jest-chain"],
 };
