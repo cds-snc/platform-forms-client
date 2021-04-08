@@ -3,7 +3,7 @@ import getConfig from "next/config";
 const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
 import convertMessage from "../../lib/markdown";
 import { getSubmissionByID } from "../../lib/dataLayer";
-import { logger, logMessage } from "../../lib/logger";
+import { logMessage } from "../../lib/logger";
 
 const submit = async (req, res) => {
   try {
@@ -17,28 +17,31 @@ const submit = async (req, res) => {
       }`
     );
     if (!formAttached) {
-      res.status(400).json({ error: "No form submitted with request" });
-      return;
+      return res.status(400).json({ error: "No form submitted with request" });
     }
 
     // Staging or Production AWS environments
     if (process.env.SUBMISSION_API) {
-      return await callLambda(req, res, isProduction)
-        .then(async (response) => {
+      return await callLambda(req)
+        .then(async () => {
           if (!isProduction && process.env.NOTIFY_API_KEY) {
-            return await previewNotify(req, res);
+            await previewNotify(req).then((response) => {
+              return res.status(201).json({ received: true, htmlEmail: response });
+            });
           } else {
-            return response;
+            return res.status(201).json({ received: true });
           }
         })
         .catch((err) => {
           logMessage.error(err);
-          throw err;
+          return res.status(500).json({ received: false });
         });
     }
     // Local development and Heroku
     else if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
-      return await previewNotify(req, res);
+      return await previewNotify(req).then((response) => {
+        return res.status(201).json({ received: true, htmlEmail: response });
+      });
     } else {
       logMessage.info("Not Sending Email - Test mode");
       return res.status(200).json({ received: true });
@@ -49,12 +52,12 @@ const submit = async (req, res) => {
   }
 };
 
-const callLambda = async (req, res, isProduction) => {
+const callLambda = async (req) => {
   const submission = await getSubmissionByID(req.body.form.id);
 
   const labmdaClient = new LambdaClient({ region: "ca-central-1" });
   const command = new InvokeCommand({
-    FunctionName: process.env.SUBMISSION_API ?? null,
+    FunctionName: process.env.SUBMISSION_API ?? "",
     Payload: JSON.stringify({
       ...req.body,
       submission,
@@ -68,22 +71,16 @@ const callLambda = async (req, res, isProduction) => {
       if (response.FunctionError || !JSON.parse(payload).status) {
         throw Error("Submission API could not process form response");
       } else {
-        if (!isProduction) {
-          return res.status(201).json({ received: true });
-        } else {
-          logMessage.info("Lambda Client sucessfully triggered");
-        }
+        logMessage.info("Lambda Client successfully triggered");
       }
     })
     .catch((err) => {
       logMessage.error(err);
-      if (isProduction) {
-        return res.status(500).json({ received: false });
-      }
+      throw new Error("Could not process request with Lambda Submit function");
     });
 };
 
-const previewNotify = async (req, res) => {
+const previewNotify = async (req) => {
   const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
   const notify = new NotifyClient(
     "https://api.notification.canada.ca",
@@ -98,12 +95,12 @@ const previewNotify = async (req, res) => {
       formResponse: emailBody,
     })
     .then((response) => {
-      return res.status(201).json({ received: true, htmlEmail: response.data.html });
+      return response.data.html;
     })
     .catch((err) => {
       logMessage.error(err);
-      return res.status(500).json({ received: false });
+      return "<h1>Could not preview HTML / Error in processing </h2>";
     });
 };
 
-export default logger(submit);
+export default submit;
