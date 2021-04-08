@@ -9,8 +9,8 @@
   "form": {
     "id": 42,
     "version": 1,
-    "titleEn": "General enquiries – Transportation Safety Board of Canada",
-    "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
+    "titleEn": "Transportation Safety Board of Canada general enquiries",
+    "titleFr": "Renseignements généraux Bureau de la sécurité des transports du Canada",
     "layout": [1, 2, 3, 4, 5, 6, 7],
     "brand": {
       "name": "tsb-bst",
