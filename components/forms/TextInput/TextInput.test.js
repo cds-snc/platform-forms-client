@@ -29,12 +29,14 @@ describe("Generate a text input", () => {
     );
     // Label properly renders
     expect(screen.getByLabelText(textInputData.properties.titleEn)).toBeInTheDocument();
-    // Description properly render
+    // Description properly renders
     expect(screen.getByText(textInputData.properties.descriptionEn)).toBeInTheDocument();
+    // Field marked as required
+    expect(screen.getByRole("textbox"))
+      .toBeRequired()
+      .toHaveDescription(textInputData.properties.descriptionEn);
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(textInputData.properties.placeholderEn)).toBeInTheDocument();
-    // Field marked as required
-    expect(screen.getByRole("textbox")).toBeRequired();
   });
   test("...in French", () => {
     render(
@@ -49,6 +51,8 @@ describe("Generate a text input", () => {
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(textInputData.properties.placeholderEn)).toBeInTheDocument();
     // Field marked as required
-    expect(screen.getByRole("textbox")).toBeRequired();
+    expect(screen.getByRole("textbox"))
+      .toBeRequired()
+      .toHaveDescription(textInputData.properties.descriptionFr);
   });
 });

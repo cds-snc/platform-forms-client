@@ -7,8 +7,7 @@ describe("Label component", () => {
   const text = "This is a label";
   it("renders without errors", () => {
     render(<Label htmlFor="testInput">{text}</Label>);
-    expect(screen.queryByTestId("label")).toBeInTheDocument();
+    expect(screen.queryByTestId("label")).toBeInTheDocument().toHaveAttribute("for", "testInput");
     expect(screen.queryByText(text)).toBeInTheDocument();
-    expect(screen.queryByTestId("label")).toHaveAttribute("for", "testInput");
   });
 });
