@@ -32,10 +32,12 @@ describe("Generate a text area", () => {
     expect(screen.getByLabelText(textAreaData.properties.titleEn)).toBeInTheDocument();
     // Description properly render
     expect(screen.getByText(textAreaData.properties.descriptionEn)).toBeInTheDocument();
+    // Field marked as required and have aria described by
+    expect(screen.getByRole("textbox"))
+      .toBeRequired()
+      .toHaveDescription(textAreaData.properties.descriptionEn);
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(textAreaData.properties.placeholderEn)).toBeInTheDocument();
-    // Field marked as required
-    expect(screen.getByRole("textbox")).toBeRequired();
   });
   test("...in French", () => {
     render(
