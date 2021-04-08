@@ -90,26 +90,27 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <Description id={`desc-${id}`}>{description}</Description>
           <TextInput
             type="text"
             id={id}
             name={id}
             required={isRequired}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
     case "textArea":
+      console.log(`Value of ariaDescribedBy: ${description ? `desc-${id}` : undefined}`);
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <Description id={`desc-${id}`}>{description}</Description>
           <TextArea
             id={id}
             name={id}
             required={isRequired}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
           />
         </Fragment>
       );
@@ -127,9 +128,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
+        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          <Description>{description}</Description>
+          <Description id={`desc-${id}`}>{description}</Description>
           {checkboxItems}
         </FormGroup>
       );
@@ -148,9 +149,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
+        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          <Description>{description}</Description>
+          <Description id={`desc-${id}`}>{description}</Description>
           {radioButtons}
         </FormGroup>
       );
@@ -159,11 +160,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <Description id={`desc-${id}`}>{description}</Description>
           <Dropdown
             id={id}
             name={id}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
           />
         </Fragment>
@@ -179,11 +180,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          <Description>{description}</Description>
+          <Description id={`desc-${id}`}>{description}</Description>
           <FileInput
             id={id}
             name={id}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             fileType={element.properties.fileType}
           />
         </Fragment>
