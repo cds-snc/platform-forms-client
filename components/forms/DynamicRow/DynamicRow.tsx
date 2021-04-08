@@ -57,7 +57,11 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
       {rows.map((row, index) => {
         return (
-          <div key={`${field.name}.${index}`} className="gc-item-row">
+          <div
+            key={`${field.name}.${index}`}
+            className="gc-item-row"
+            data-testid={`dynamic-row-${index + 1}`}
+          >
             <h3>
               {lang === "en" ? "Item " : "Article "}
               {index + 1}
