@@ -20,7 +20,12 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 
   const errorList = props.errors ? getErrorList(props) : null;
   const formStatus = props.status === "Error" ? t("server-error") : null;
-
+  if (formStatus) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
   return (
     <>
       {formStatus ? <Alert type="error" heading={formStatus} /> : null}
