@@ -2,7 +2,6 @@ import React from "react";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
-import { data } from "autoprefixer";
 
 const checkboxData = {
   id: 8,
