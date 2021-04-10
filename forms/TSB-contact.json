@@ -117,7 +117,11 @@
           "descriptionFr": "If you selected Other in the previous question",
           "charLimit": 100,
           "validation": {
+<<<<<<< HEAD
             "required": false,
+=======
+            "required": true,
+>>>>>>> 6e884ffc1ea0c1636086f9aca91de21af0e4d70c
             "type": "email"
           }
         }
