@@ -117,7 +117,7 @@
           "descriptionFr": "If you selected Other in the previous question",
           "charLimit": 100,
           "validation": {
-            "required": true,
+            "required": false,
             "type": "email"
           }
         }
