@@ -9,29 +9,43 @@
   "form": {
     "id": 42,
     "version": 1,
-    "titleEn": "General enquiries – Transportation Safety Board of Canada",
-    "titleFr": "Renseignements généraux – Bureau de la sécurité des transports du Canada",
-    "layout": [1, 2, 3],
+    "titleEn": "Transportation Safety Board of Canada general enquiries",
+    "titleFr": "Renseignements généraux Bureau de la sécurité des transports du Canada",
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "brand": {
       "name": "tsb-bst",
-      "logoEn": "https://pbs.twimg.com/profile_images/1240697213745090560/y1fvDkx4_200x200.jpg",
-      "logoFr": "https://pbs.twimg.com/profile_images/1240697213745090560/y1fvDkx4_200x200.jpg",
+      "logoEn": "/img/tsb-en.png",
+      "logoFr": "/img/tsb-fr.png",
       "logoTitleEn": "Transportation Safety Board of Canada",
       "logoTitleFr": "Bureau de la sécurité des transports du Canada",
       "urlEn": "https://bst-tsb.gc.ca/eng/index.html",
       "urlFr": "https://bst-tsb.gc.ca/fra/index.html"
     },
     "endPage": {
-      "descriptionEn": "# Transportation Safety Board of Canada  \n\r ## Thanks, we got your message  \n\r We'll send you an email copy of your message shortly. \n\r **Someone from our office will contact you in the next 7 days.** \n\r  If you don't get a response within 7 days, you can contact our office directly or by phone. Our office hours are 8:00 a.m. to 4:30 p.m. Eastern, Monday to Friday. \n\r  <ul><li>General enquiries: 1-800-387-3557</li><li>Media relations: (819) 994-8053</li></ul> If you're finished, you can [navigate back to the homepage](https://www.tsb.gc.ca/eng/contactez-contact/index.html)",
-      "descriptionFr": "# Bureau de la sécurité des transports du Canada  \n\r ## Merci, nous avons reçu votre message  \n\r Nous vous enverrons sous peu une copie de votre message par courriel.   \n\r **Notre personnel vous contactera dans les 7 prochains jours.** \n\r  Si vous n'obtenez pas de réponse avant les prochains jours, vous pouvez nous contacter directement par téléphone. Nos heures de bureau sont de 8 h 00 à 16 h 30 heure de l'Est, du lundi au vendredi. \n\r <ul><li>Renseignements généraux: 1-800-387-3557</li><li>Relations avec les médias: 819-994-8053</li></ul> Si vous avez terminé, vous pouvez [retour à la page d'accueil](https://www.tsb.gc.ca/fra/contactez-contact/index.html)"
+      "descriptionEn": "# Thank you for your enquiry  \n\r The Transportation Safety Board of Canada will respond to your email within one week. \n\r ## Reach the right organization \n\r For transportation security, regulations, and Canadian Armed Forces enquiries, we encourage you to contact those organizations directly. \n\r  ### Airport security \n\r  <ul className='link-list custom'><li><a href='https://www.otc-cta.gc.ca'>Canadian Air Transport Security Authority</a></li></ul> \n\r ### Airline Service \n\r  <ul className='link-list custom'><li><a href='https://www.otc-cta.gc.ca'>Canadian Transport Agency, Commissioner of Air Complaints</a></li></ul> \n\r ### Cars, trucks, and other motor vehicles \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/en'>Transport Canada</a> or your provincial ministry of transport.</li></ul> \n\r ### Transport regulations \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/en'>Transport Canada</a></li></ul> \n\r ### Military and search and rescue incidents \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/en/department-national-defence.html'>National Defence</a></li></ul> \n\r ### Investigation reports from before 1990 \n\r  <ul className='link-list custom'><li><a href='https://www.bac-lac.gc.ca/eng/Pages/home.aspx'>Library and Archives Canada</a></li></ul>",
+      "descriptionFr": "# Merci pour votre demande  \n\r Le Bureau de la sécurité des transports du Canada répondra à votre demande d’ici une semaine. \n\r ## Rejoindre le bon organisme \n\r Pour la sécurité des transports, les règlements et les demandes pour les Forces armées canadiennes, nous vous encourageons de contacter directement ces organismes. \n\r  ### Sûreté aéroportuaire \n\r  <ul className='link-list custom'><li><a href='https://www.rcaf-arc.forces.gc.ca/fr/securite-vols/index.page'>Administration canadienne de la sûreté du transport aérien</a></li></ul> \n\r ### Transport aérien \n\r  <ul className='link-list custom'><li><a href='https://www.otc-cta.gc.ca/fra?lang=fra'>Office des transports du Canada, Bureau du commissaire aux plaintes relatives au transport aérien</a></li></ul> \n\r ### Automobiles, camions ou  autres véhicules à moteur \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/fr'>Transports Canada</a> ou le ministère des transports de votre province.</li></ul> \n\r ### Règlements sur les transports \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/fr'>Transports Canada</a></li></ul> \n\r ### Accidents impliquant des véhicules militaires et les incidents de recherche et sauvetage \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/ministere-defense-nationale.html'>Défense nationale</a></li></ul> \n\r ### Investigation reports from before 1990 \n\r  <ul className='link-list custom'><li><a href='https://www.bac-lac.gc.ca/fra/Pages/accueil.aspx'>Bibliothèque et Archives Canada</a></li></ul>"
     },
     "elements": [
       {
         "id": 1,
+        "type": "richText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "The Transportation Safety Board of Canada can answer your questions about our organization, the status of our investigations, and incidents related to air, rail, marine, and pipeline. To contact us, please fill out the form below.",
+          "descriptionFr": "Le Bureau de la sécurité des transports du Canada peut répondre aux questions sur notre organisme, le statut de nos enquêtes et les incidents reliés au transport aéronautique, ferroviaire, maritime et pipelinier.",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "First and last name",
-          "titleFr": "Nom et prénom",
+          "titleEn": "Full name",
+          "titleFr": "Nom au complet",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -43,7 +57,7 @@
         }
       },
       {
-        "id": 2,
+        "id": 3,
         "type": "textField",
         "properties": {
           "titleEn": "Email",
@@ -60,18 +74,91 @@
         }
       },
       {
-        "id": 3,
+        "id": 4,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "What kind of information do you need?",
+          "titleFr": "Quel genre d’information recherchez-vous?",
+          "descriptionEn": "Select all that apply",
+          "descriptionFr": "Cocher tous les choix qui s’appliquent",
+          "choices": [
+            {
+              "en": "Air, marine, oil, or pipeline incident",
+              "fr": "Incident aéronautique, maritime, ferroviaire, ou pipelinier"
+            },
+            {
+              "en": "Investigation status or lab report request",
+              "fr": "Statut d’enquête ou demande de rapport de laboratoire"
+            },
+            {
+              "en": "Statistics",
+              "fr": "Statistiques"
+            },
+            {
+              "en": "Access to Information and Privacy",
+              "fr": "Demande de renseignements sur la vie privée"
+            },
+            {
+              "en": "Other, such as jobs and training, photos or videos, pilot background letter",
+              "fr": "Autre, tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Please specify",
+          "titleFr": "Veuillez spécifier",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If you selected Other in the previous question",
+          "descriptionFr": "Si vous avez sélectionné Autre à la question précédente",
+          "charLimit": 100,
+          "validation": {
+            "required": false,
+            "type": "email"
+          }
+        }
+      },
+      {
+        "id": 6,
         "type": "textArea",
         "properties": {
           "titleEn": "Message",
           "titleFr": "Message",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "descriptionEn": "Any relevant details or specific questions",
+          "descriptionFr": "Avez-vous des détails pertinents ou des questions spécifiques?",
           "charLimit": 800,
           "validation": {
             "required": true
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Air updates",
+          "titleFr": "Air updates",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "choices": [
+            {
+              "en": "I would like to receive daily notifications for air updates",
+              "fr": "Je souhaite recevoir des notifications quotidiennes pour les air updates"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": false
           }
         }
       }
