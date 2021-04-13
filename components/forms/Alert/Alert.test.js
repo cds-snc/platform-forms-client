@@ -13,7 +13,6 @@ describe("Alert component", () => {
         {text}
       </Alert>
     );
-    screen.debug();
     expect(screen.getByRole("alert"))
       .toHaveClass("gc-alert--success")
       .toHaveTextContent(text)
