@@ -101,7 +101,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </Fragment>
       );
     case "textArea":
-      console.log(`Value of ariaDescribedBy: ${description ? `desc-${id}` : undefined}`);
       return (
         <Fragment>
           {labelComponent}
