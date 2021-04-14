@@ -83,3 +83,6 @@ credentials
 
 terraform/azure/secrets.auto.tfvars
 package-lock.json
+
+# storybook
+storybook-static/
