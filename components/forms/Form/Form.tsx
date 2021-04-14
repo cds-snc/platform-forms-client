@@ -1,9 +1,9 @@
 import React from "react";
 import { withFormik, FormikProps } from "formik";
-import axios from "axios";
 import getConfig from "next/config";
-import { getProperty, getFormInitialValues } from "../../../lib/formBuilder";
+import { getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList } from "../../../lib/validation";
+import { submitToAPI } from "../../../lib/dataLayer";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps } from "../../../lib/types";
@@ -70,12 +70,8 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
   },
 
   validate: (values, props) => {
-    const validationResult = validateOnSubmit(values, props);
+    return validateOnSubmit(values, props);
     //  If there are errors on the page, scroll into view
-    if (typeof window !== "undefined" && Object.keys(validationResult).length) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-    return validationResult;
   },
 
   handleSubmit: async (values, formikBag) => {
