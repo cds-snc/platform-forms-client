@@ -1,5 +1,7 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { getRenderedForm } from "../../../lib/formBuilder";
 import Form from "./Form";
 
 const formMetadata = {
@@ -7,7 +9,7 @@ const formMetadata = {
   version: 1,
   titleEn: "Test Form",
   titleFr: "Formulaire de test",
-  layout: [1],
+  layout: [1, 2],
   elements: [
     {
       id: 1,
@@ -24,10 +26,20 @@ const formMetadata = {
         },
       },
     },
+    {
+      id: 2,
+      type: "textField",
+      properties: {
+        titleEn: "What is your name?",
+        titleFr: "Votre nom?",
+        validation: {
+          required: true,
+          type: "text",
+        },
+      },
+    },
   ],
 };
-
-// Need more tests here like submit, validation, ect....
 
 describe("Generate a form component", () => {
   afterEach(cleanup);
@@ -37,10 +49,33 @@ describe("Generate a form component", () => {
         <div data-testid="test-child"></div>
       </Form>
     );
-    screen.debug();
     expect(screen.getByTestId("form"))
       .toBeInTheDocument()
       .toContainElement(screen.getByTestId("test-child"));
-    // Label properly renders
+  });
+  describe("Form Functionality", () => {
+    afterAll(() => {
+      cleanup;
+    });
+
+    test("Form is submitted", () => {
+      const form = getRenderedForm(formMetadata, "en");
+      render(
+        <Form formMetadata={formMetadata} language="en" t={(key) => key}>
+          {form}
+        </Form>
+      );
+      const textField = screen.getByRole("textbox", {
+        name: formMetadata.elements[1].properties.titleEn,
+      });
+      userEvent.type(textField, "Bryan");
+
+      expect(textField).toHaveValue("Bryan");
+
+      userEvent.click(screen.getByRole("button", { type: "submit" }));
+      // Need to work on how we test the form was successfully submitted.
+      // Maybe mock Formik and check is handleSubmit and validation resolved?
+      // Could also check the setSubmitting(false) was called.
+    });
   });
 });
