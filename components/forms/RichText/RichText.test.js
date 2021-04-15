@@ -45,4 +45,23 @@ describe("Generate a text area", () => {
     // Description properly render
     expect(screen.getByText(richTextData.properties.descriptionFr)).toBeInTheDocument();
   });
+  test("Return null if no children", () => {
+    const emptyRichTextData = {
+      id: 3,
+      type: "richText",
+      properties: {
+        titleEn: "",
+        titleFr: "",
+        descriptionEn: "",
+        descriptionFr: "",
+      },
+    };
+    render(
+      <Form t={(key) => key}>
+        <GenerateElement element={emptyRichTextData} language="en" />
+      </Form>
+    );
+    expect(screen.queryByRole("label")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("richText")).not.toBeInTheDocument();
+  });
 });

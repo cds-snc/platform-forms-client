@@ -215,10 +215,8 @@ async function _submitToApI(
       }
     })
     .catch((err) => {
-      if (err.response) {
-        logMessage.error(err);
-        setStatus("Error");
-      }
+      logMessage.error(err);
+      setStatus("Error");
     });
 }
 
