@@ -1,6 +1,16 @@
 import Forms from "../forms/forms";
+import axios from "axios";
+import type { FormikBag } from "formik";
+import { getProperty } from "./formBuilder";
 import { logger, logMessage } from "./logger";
-import { FormElement, FormMetadataProperties, Responses, Response } from "./types";
+import {
+  FormElement,
+  FormMetadataProperties,
+  Responses,
+  Response,
+  FormValues,
+  DynamicFormProps,
+} from "./types";
 
 // Get the form json object by using the form ID
 // Returns => json object of form
@@ -144,7 +154,7 @@ function handleArrayResponse(title: string, response: Array<string>, collector: 
 }
 
 function handleTextResponse(title: string, response: string, collector: Array<string>) {
-  if (response !== undefined && response !== null) {
+  if (response !== undefined && response !== null && response !== "") {
     collector.push(`${title}${String.fromCharCode(13)}-${response}`);
     return;
   }
@@ -152,6 +162,67 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`${title}${String.fromCharCode(13)}- No Response`);
 }
 
+async function _submitToApI(
+  values: FormValues,
+  formikBag: FormikBag<DynamicFormProps, FormValues>,
+  isProduction: boolean
+) {
+  const { formMetadata, language, router } = formikBag.props;
+  const { setStatus } = formikBag;
+
+  const formResponseObject = {
+    form: {
+      id: formMetadata.id,
+      titleEn: formMetadata.titleEn,
+      titleFr: formMetadata.titleFr,
+      elements: formMetadata.elements,
+      layout: formMetadata.layout,
+    },
+    responses: values,
+  };
+
+  //making a post request to the submit API
+  await axios({
+    url: "/api/submit",
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: formResponseObject,
+    timeout: isProduction ? 3000 : 0,
+  })
+    .then((serverResponse) => {
+      if (serverResponse.data.received === true) {
+        const referrerUrl =
+          formMetadata && formMetadata.endPage
+            ? {
+                referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
+              }
+            : null;
+        const htmlEmail = !isProduction ? serverResponse.data.htmlEmail : null;
+        router.push(
+          {
+            pathname: `${language}/confirmation`,
+            query: { ...referrerUrl, htmlEmail: htmlEmail },
+          },
+          {
+            pathname: `${language}/confirmation`,
+          }
+        );
+      } else {
+        throw Error("Server submit API returned an error");
+      }
+    })
+    .catch((err) => {
+      if (err.response) {
+        logMessage.error(err);
+        setStatus("Error");
+      }
+    });
+}
+
 export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
+export const submitToAPI = logger(_submitToApI);
