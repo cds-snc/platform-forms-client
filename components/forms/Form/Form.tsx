@@ -70,8 +70,12 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
   },
 
   validate: (values, props) => {
-    return validateOnSubmit(values, props);
+    const validationResult = validateOnSubmit(values, props);
     //  If there are errors on the page, scroll into view
+    if (typeof window !== "undefined" && Object.keys(validationResult).length) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    return validationResult;
   },
 
   handleSubmit: async (values, formikBag) => {
