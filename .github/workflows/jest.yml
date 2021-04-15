@@ -8,7 +8,7 @@ jobs:
       - name: "Install dependencies"
         run: yarn install
       - name: "Run just tests with coverage"
-        uses: raulanatol/jest-coverage-comment-action@v1.0.0
+        uses: raulanatol/jest-coverage-comment-action@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jest-command: "yarn test --coverage"
