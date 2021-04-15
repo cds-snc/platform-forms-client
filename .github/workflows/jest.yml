@@ -8,9 +8,7 @@ jobs:
       - name: "Install dependencies"
         run: yarn install
       - name: "Run just tests with coverage"
-        uses: mattallty/jest-github-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: raulanatol/jest-coverage-comment-action@v1.0.0
         with:
-          # this is just an example, this could be any command that will trigger jest
-          test-command: "yarn test"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jest-command: "yarn test --coverage"
