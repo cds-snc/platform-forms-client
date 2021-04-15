@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export { Alert } from "./Alert/Alert";
 export { ErrorMessage } from "./ErrorMessage/ErrorMessage";
 export { Button } from "./Button/Button";
