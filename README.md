@@ -28,13 +28,13 @@ Install dependencies
 
 ```sh
 cd platform-forms-client
-yarn install // or // npm install
+yarn install
 ```
 
 Run in development mode:
 
 ```sh
-yarn dev // or // npm run dev
+yarn dev
 ```
 
 Browse application on `http://localhost:3000`
@@ -103,13 +103,13 @@ Installer les dépendances
 
 ```sh
 cd platform-forms-client
-yarn install // ou // npm install
+yarn install
 ```
 
 Exécuter en mode développement
 
 ```sh
-yarn dev // or // npm run dev
+yarn dev
 ```
 
 Accéder à l’application au `http://localhost:3000`
