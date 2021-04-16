@@ -52,7 +52,7 @@
           "charLimit": 100,
           "validation": {
             "required": true,
-            "type": "text"
+            "type": "name"
           }
         }
       },
