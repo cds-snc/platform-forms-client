@@ -90,7 +90,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           <TextInput
             type="text"
             id={id}
@@ -104,7 +104,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           <TextArea
             id={id}
             name={id}
@@ -129,7 +129,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           {checkboxItems}
         </FormGroup>
       );
@@ -150,7 +150,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           {radioButtons}
         </FormGroup>
       );
@@ -159,7 +159,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           <Dropdown
             id={id}
             name={id}
