@@ -49,7 +49,7 @@ describe("Generate a text input", () => {
     // Description properly render
     expect(screen.getByText(textInputData.properties.descriptionFr)).toBeInTheDocument();
     // Placeholder properly renders
-    expect(screen.getByPlaceholderText(textInputData.properties.placeholderEn)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(textInputData.properties.placeholderFr)).toBeInTheDocument();
     // Field marked as required
     expect(screen.getByRole("textbox"))
       .toBeRequired()

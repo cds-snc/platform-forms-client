@@ -10,12 +10,13 @@ export interface TextAreaProps {
   required?: boolean;
   children?: React.ReactNode;
   ariaDescribedBy?: string;
+  placeholder?: string;
 }
 
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const { id, className, ariaDescribedBy, required, children } = props;
+  const { id, className, ariaDescribedBy, required, children, placeholder } = props;
 
   const classes = classnames("gc-textarea", className);
 
@@ -30,6 +31,7 @@ export const TextArea = (
         id={id}
         required={required}
         aria-describedby={ariaDescribedBy}
+        placeholder={placeholder}
         {...field}
       >
         {children}
