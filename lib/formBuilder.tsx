@@ -1,7 +1,6 @@
 import React, { ReactElement, Fragment } from "react";
 import { logger, logMessage } from "./logger";
 import {
-  Alert,
   Checkbox,
   Dropdown,
   Label,
@@ -74,18 +73,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
-    case "alert":
-      return (
-        <Alert type="info" noIcon>
-          <p className="gc-p" id={`desc-${id}`}>
-            {description ? (
-              <p className="gc-p" id={`desc-${id}`}>
-                {description}
-              </p>
-            ) : null}
-          </p>
-        </Alert>
-      );
     case "textField":
       return (
         <Fragment>
