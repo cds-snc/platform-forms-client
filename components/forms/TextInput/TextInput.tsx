@@ -13,6 +13,7 @@ interface CustomTextInputProps {
   className?: string;
   required?: boolean;
   ariaDescribedBy?: string;
+  placeholder?: string;
 }
 
 export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElements["input"];
@@ -20,7 +21,7 @@ export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElement
 export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
 export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const { id, type, className, required, ariaDescribedBy } = props;
+  const { id, type, className, required, ariaDescribedBy, placeholder } = props;
   const [field, meta] = useField(props);
   const classes = classnames("gc-input-text", className);
 
@@ -35,6 +36,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         type={type}
         required={required}
         aria-describedby={ariaDescribedBy}
+        placeholder={placeholder}
         {...field}
       />
     </>

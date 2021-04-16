@@ -69,6 +69,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
+  const placeHolder = element.properties[getProperty("placeholder", lang)] ?? "";
+
   const descriptionPerLocale = element.properties[getProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
@@ -84,6 +86,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={id}
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
+            placeholder={placeHolder.toString()}
           />
         </Fragment>
       );
@@ -97,6 +100,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={id}
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
+            placeholder={placeHolder.toString()}
           />
         </Fragment>
       );
