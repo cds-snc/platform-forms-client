@@ -240,8 +240,9 @@ const _getElementInitialValue = (
     // For file attachments, we need several values like the FileName, FileReader base64 object and File object
     return { file: null, src: null, name: "" };
   } else {
-    // Regular inputs (not nested) like text, textarea might have a placeholder value
-    return (element.properties[getProperty("placeholder", language)] as string) ?? "";
+    // Regular inputs (not nested) like text, textarea have an empty value
+    // Placeholder value is passed in using the appropriate html attribute
+    return "";
   }
 };
 
