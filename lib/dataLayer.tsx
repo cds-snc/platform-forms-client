@@ -207,7 +207,7 @@ async function _submitToApI(
             query: { ...referrerUrl, htmlEmail: htmlEmail },
           },
           {
-            pathname: `${language}/confirmation`,
+            pathname: `/${language}/confirmation`,
           }
         );
       } else {
