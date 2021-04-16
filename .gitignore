@@ -85,3 +85,6 @@ package-lock.json
 
 # storybook
 storybook-static/
+
+# VS Code Counter module
+.VSCodeCounter
