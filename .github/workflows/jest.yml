@@ -8,7 +8,7 @@ jobs:
       - name: "Install dependencies"
         run: yarn install
       - name: "Run just tests with coverage"
-        uses: ziishaned/jest-reporter-action@v0.0.1
+        uses: ziishaned/jest-reporter-action@0.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-command: "yarn jest --coverage"
+          test-command: "yarn test --coverage"
