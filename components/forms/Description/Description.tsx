@@ -13,7 +13,7 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
   const classes = classnames("gc-description", className);
 
   return (
-    <p data-testid="description" className={classes} id={id}>
+    <p data-testid="description" className={classes} id={`desc-${id}`}>
       {children}
     </p>
   );
