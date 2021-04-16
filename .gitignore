@@ -57,7 +57,6 @@ typings/
 # dotenv environment variables file
 .env*.local
 .env
-!.env.test
 
 # Ignore cypress screenshots and videos
 cypress/screenshots
@@ -86,3 +85,6 @@ package-lock.json
 
 # storybook
 storybook-static/
+
+# VS Code Counter module
+.VSCodeCounter
