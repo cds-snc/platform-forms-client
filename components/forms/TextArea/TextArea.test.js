@@ -3,6 +3,11 @@ import { cleanup, render, screen } from "@testing-library/react";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
+jest.mock("formik", () => ({
+  ...jest.requireActual("formik"),
+  useField: jest.fn(() => [{ field: { value: "" } }, { meta: { touched: null, error: null } }]),
+}));
+
 const textAreaData = {
   id: 2,
   type: "textArea",
