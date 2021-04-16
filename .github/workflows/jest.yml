@@ -11,4 +11,3 @@ jobs:
         uses: raulanatol/jest-coverage-comment-action@v1.0.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          only-changes: false
