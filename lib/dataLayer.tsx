@@ -203,15 +203,15 @@ async function _submitToApI(
         const htmlEmail = !isProduction ? serverResponse.data.htmlEmail : null;
         const endPageText =
           formMetadata && formMetadata.endPage
-            ? formMetadata.endPage[getProperty("description", language)]
+            ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
             : "";
         router.push(
           {
-            pathname: `${language}/confirmation`,
-            query: { ...referrerUrl, htmlEmail: htmlEmail, pageText: JSON.stringify(endPageText) },
+            pathname: `/${language}/confirmation`,
+            query: { ...referrerUrl, htmlEmail: htmlEmail, pageText: endPageText },
           },
           {
-            pathname: `${language}/confirmation`,
+            pathname: `/${language}/confirmation`,
           }
         );
       } else {
