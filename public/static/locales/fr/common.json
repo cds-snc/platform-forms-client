@@ -15,7 +15,7 @@
   "skip-link": "Passer au contenu principal",
   "fip": {
     "link": "/",
-    "text": "Gouvernement du Canada"
+    "text": "Symbole du gouvernement du Canada"
   },
   "preview": {
     "title": "Prévisualisation à partir de JSON config",
@@ -35,5 +35,5 @@
     "regex": "Veuillez saisir le format correct"
   },
   "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
-  "title": "GC Formulaires"
+  "title": "GC Forms - Formulaires GC"
 }

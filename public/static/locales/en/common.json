@@ -15,7 +15,7 @@
   "skip-link": "Skip to main content",
   "fip": {
     "link": "/",
-    "text": "Government of Canada"
+    "text": "Symbol of the Government of Canada"
   },
   "preview": {
     "title": "Preview a Form from JSON config",
@@ -35,5 +35,5 @@
     "regex": "Please enter the correct format"
   },
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
-  "title": "GC Forms"
+  "title": "GC Forms - Formulaires GC"
 }

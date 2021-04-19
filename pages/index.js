@@ -12,12 +12,12 @@ const Home = () => {
       </div>
       <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">
         <p>
-          <Link href="/en/welcome-bienvenue">Forms in English</Link>
+          <Link href="/en/welcome-bienvenue">Forms</Link>
         </p>
 
         <p>
           <Link href="/fr/welcome-bienvenue" className="block">
-            Formulaires en Français
+            Formulaires
           </Link>
         </p>
       </div>
@@ -27,7 +27,7 @@ const Home = () => {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["common", "welcome"])),
+    ...(await serverSideTranslations(locale, ["common"])),
   },
 });
 
