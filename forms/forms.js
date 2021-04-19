@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const requireModule = require.context("./", false, /\.json$/); //
 const api = {};
 

@@ -1,7 +1,6 @@
 import React, { ReactElement, Fragment } from "react";
 import { logger, logMessage } from "./logger";
 import {
-  Alert,
   Checkbox,
   Dropdown,
   Label,
@@ -70,7 +69,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
-
+  // get text field types in order to be more specific in <input> definition, and allow for browser autofill (best practice)
   function getTextType(element: FormElement): string {
     if (element.properties && element.properties.validation && element.properties.validation.type) {
       switch (element.properties.validation.type) {
@@ -84,34 +83,24 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   }
   const textType = getTextType(element) as "text" | "email" | "number" | "password" | "search" | "tel" | "url";
 
+  const placeHolder = element.properties[getProperty("placeholder", lang)] ?? "";
 
   const descriptionPerLocale = element.properties[getProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
-    case "alert":
-      return (
-        <Alert type="info" noIcon>
-          <p className="gc-p" id={`desc-${id}`}>
-            {description ? (
-              <p className="gc-p" id={`desc-${id}`}>
-                {description}
-              </p>
-            ) : null}
-          </p>
-        </Alert>
-      );
     case "textField":
       return (
         <Fragment>
           {labelComponent}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           <TextInput
             type={textType}
             id={id}
             name={id}
             required={isRequired}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            placeholder={placeHolder.toString()}
           />
         </Fragment>
       );
@@ -119,12 +108,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           <TextArea
             id={id}
             name={id}
             required={isRequired}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            placeholder={placeHolder.toString()}
           />
         </Fragment>
       );
@@ -142,9 +132,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
+        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           {checkboxItems}
         </FormGroup>
       );
@@ -163,9 +153,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} aria-describedby={description ? `desc-${id}` : undefined}>
+        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <legend className="gc-label">{labelText}</legend>
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           {radioButtons}
         </FormGroup>
       );
@@ -174,11 +164,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <Fragment>
           {labelComponent}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={id}>{description}</Description> : null}
           <Dropdown
             id={id}
             name={id}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
           />
         </Fragment>
@@ -198,7 +188,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <FileInput
             id={id}
             name={id}
-            aria-describedby={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             fileType={element.properties.fileType}
           />
         </Fragment>
@@ -264,8 +254,9 @@ const _getElementInitialValue = (
     // For file attachments, we need several values like the FileName, FileReader base64 object and File object
     return { file: null, src: null, name: "" };
   } else {
-    // Regular inputs (not nested) like text, textarea might have a placeholder value
-    return (element.properties[getProperty("placeholder", language)] as string) ?? "";
+    // Regular inputs (not nested) like text, textarea have an empty value
+    // Placeholder value is passed in using the appropriate html attribute
+    return "";
   }
 };
 

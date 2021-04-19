@@ -9,6 +9,7 @@ interface FileInputProps {
   error?: boolean;
   hint?: React.ReactNode;
   fileType?: string | undefined;
+  ariaDescribedBy?: string;
 }
 export type FileEventTarget = EventTarget & {
   files: FileList;
