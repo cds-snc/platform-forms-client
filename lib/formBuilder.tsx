@@ -69,6 +69,27 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
+  // get text field types in order to be more specific in <input> definition, and allow for browser autofill (best practice)
+  function getTextType(element: FormElement): string {
+    if (element.properties && element.properties.validation && element.properties.validation.type) {
+      switch (element.properties.validation.type) {
+        case "email":
+          return "email";
+        case "phone":
+          return "tel";
+      }
+    }
+    return "text";
+  }
+  const textType = getTextType(element) as
+    | "text"
+    | "email"
+    | "number"
+    | "password"
+    | "search"
+    | "tel"
+    | "url";
+
   const placeHolder = element.properties[getProperty("placeholder", lang)] ?? "";
 
   const descriptionPerLocale = element.properties[getProperty("description", lang)];
@@ -81,7 +102,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description ? <Description id={id}>{description}</Description> : null}
           <TextInput
-            type="text"
+            type={textType}
             id={id}
             name={id}
             required={isRequired}
