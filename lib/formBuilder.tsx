@@ -81,7 +81,14 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     }
     return "text";
   }
-  const textType = getTextType(element) as "text" | "email" | "number" | "password" | "search" | "tel" | "url";
+  const textType = getTextType(element) as
+    | "text"
+    | "email"
+    | "number"
+    | "password"
+    | "search"
+    | "tel"
+    | "url";
 
   const placeHolder = element.properties[getProperty("placeholder", lang)] ?? "";
 

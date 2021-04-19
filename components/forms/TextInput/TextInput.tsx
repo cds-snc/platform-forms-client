@@ -34,7 +34,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         id={id}
         type={type}
         required={required}
-        autoComplete={(type == "text" ? "off" : type)}
+        autoComplete={type == "text" ? "off" : type}
         aria-describedby={ariaDescribedBy}
         placeholder={placeholder}
         {...field}
