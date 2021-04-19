@@ -85,7 +85,7 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
     },
     alphanumeric: {
       regex: /^( )*[A-Za-z0-9\s]+( )*$/,
-      error: t("input-validation.alphanumeric"), /* message needs a translation */
+      error: t("input-validation.alphanumeric") /* message needs a translation */,
     },
     text: {
       regex: /^.*[^\n]+.*$/,
