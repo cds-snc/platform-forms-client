@@ -70,6 +70,21 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     </Label>
   ) : null;
 
+
+  function getTextType(element: FormElement): string {
+    if (element.properties && element.properties.validation && element.properties.validation.type) {
+      switch (element.properties.validation.type) {
+        case "email":
+          return "email";
+        case "phone":
+          return "tel";
+      }
+    }
+    return "text";
+  }
+  const textType = getTextType(element) as "text" | "email" | "number" | "password" | "search" | "tel" | "url";
+
+
   const descriptionPerLocale = element.properties[getProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
@@ -92,7 +107,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description ? <Description>{description}</Description> : null}
           <TextInput
-            type="text"
+            type={textType}
             id={id}
             name={id}
             required={isRequired}
