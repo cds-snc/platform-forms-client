@@ -21,6 +21,7 @@
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.9.0",
     "axios": "^0.21.1",
+    "formidable": "^1.2.2",
     "formik": "^2.2.6",
     "html-react-parser": "^1.2.4",
     "json2md": "^1.10.0",
