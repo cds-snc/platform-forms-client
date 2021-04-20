@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import LanguageToggle from "./LanguageToggle";
 import { getProperty } from "../../lib/formBuilder";
+import { getPageNameUrl } from "../../lib/routeUtils";
 
 const Fip = (props) => {
   const { t, i18n } = useTranslation("common");
@@ -25,6 +26,7 @@ const Fip = (props) => {
       ? formTheme[getProperty("logoTitle", i18n.language)]
       : t("fip.text");
 
+  const languageToggle = getPageNameUrl() === "splash" ? null : <LanguageToggle />;
   return (
     <div data-testid="fip" className="gc-fip">
       <div className="canada-flag">
@@ -32,7 +34,7 @@ const Fip = (props) => {
           <img src={logo} alt={logoTitle} />
         </a>
       </div>
-      <LanguageToggle />
+      {languageToggle}
     </div>
   );
 };
