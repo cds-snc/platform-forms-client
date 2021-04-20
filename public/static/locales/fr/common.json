@@ -18,22 +18,22 @@
     "text": "Gouvernement du Canada"
   },
   "preview": {
-    "title": "Prévisualisation à partir de JSON config",
+    "title": "Prévisualisation à partir de configuration JSON",
     "button": "Prévisualisation"
   },
   "lang-toggle": "Sélection de la langue",
   "submitButton": "Soumettre",
   "input-validation": {
     "heading": "Veuillez corriger les erreurs trouvées dans la page",
-    "required": "Ce champ est obligatoire",
+    "required": "Veuillez compléter les champs obligatoires afin de continuer",
     "number": "Veuillez entrer un numéro",
     "text": "",
     "alphanumeric": "Veuillez entrer uniquement des lettres et des chiffres",
     "email": "Veuillez entrer une adresse courriel valide",
-    "date": "Veuillez entrer une date valide",
-    "phone": "Veuillez entrer votre numéro de téléphone au format xxx-xxx-xxxx",
-    "regex": "Veuillez saisir le format correct"
+    "date": "Veuillez utiliser le format de date mm/jj/aaaa",
+    "phone": "Veuillez entrer numéro de téléphone valide",
+    "regex": "Veuillez utiliser le bon format"
   },
   "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
-  "title": "GC Formulaires"
+  "title": "Formulaires GC"
 }
