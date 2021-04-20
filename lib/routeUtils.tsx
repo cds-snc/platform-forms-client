@@ -6,11 +6,11 @@ export const getPageClassNames = (formMetadata: FormMetadataProperties) => {
   if (!formMetadata) return "";
 
   let pageNameUrl = getPageNameUrl();
-  const brand: BrandProperties = formMetadata.brand;
+  const brandName = formMetadata.brand ? formMetadata.brand.name : "";
   const classes = classnames(
     "outer-container",
     `page${pageNameUrl.replace(/\//g, "-")}`,
-    brand.name
+    brandName
   );
   return classes;
 };

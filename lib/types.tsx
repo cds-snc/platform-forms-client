@@ -8,10 +8,16 @@ export interface FormMetadataProperties {
   titleEn: string;
   titleFr: string;
   layout: Array<string>;
-  brand: BrandProperties;
+  brand?: BrandProperties;
   elements: Array<FormElement>;
   endPage: Record<string, string>;
-  [key: string]: string | Array<string> | Array<FormElement> | Record<string, string>;
+  [key: string]:
+    | string
+    | Array<string>
+    | Array<FormElement>
+    | Record<string, string>
+    | BrandProperties
+    | undefined;
 }
 
 export type allFormElements =

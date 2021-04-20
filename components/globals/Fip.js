@@ -26,7 +26,9 @@ const Fip = (props) => {
       ? formTheme[getProperty("logoTitle", i18n.language)]
       : t("fip.text");
 
+  // Do not show the language toggle on the "splash" page
   const languageToggle = getPageNameUrl() === "splash" ? null : <LanguageToggle />;
+
   return (
     <div data-testid="fip" className="gc-fip">
       <div className="canada-flag">

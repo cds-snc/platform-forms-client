@@ -21,7 +21,7 @@
   },
   "technology": {
     "title": "Technologie",
-    "text": "L'application fonctionne avec Next.js et utilise les services de infonuagique d'Amazon Web Services (AWS)",
+    "text": "L'application fonctionne avec Next.js et utilise les services infonuagique d'Amazon Web Services (AWS)",
     "git": {
       "title": "Formulaires GC sur github"
     }
