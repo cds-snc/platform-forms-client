@@ -31,7 +31,7 @@
     "number": "Please enter a numeric value",
     "email": "Please enter a valid email",
     "date": "Please enter a valid date in mm/dd/yyyy format",
-    "phone": "Please enter a valid telephone number",
+    "phone": "Please enter the telephone number using the format xxx-xxx-xxxx",
     "regex": "Please enter the correct format"
   },
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
