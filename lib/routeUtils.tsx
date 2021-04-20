@@ -23,3 +23,7 @@ export const getPageNameUrl = () => {
   }
   return pageNameUrl;
 };
+
+export const isSplashPage = () => {
+  return getPageNameUrl() === "splash";
+};
