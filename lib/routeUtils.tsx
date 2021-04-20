@@ -3,10 +3,8 @@ import { useRouter } from "next/router";
 import { FormMetadataProperties } from "./types";
 
 export const getPageClassNames = (formMetadata: FormMetadataProperties): string => {
-  if (!formMetadata) return "";
-
   const pageNameUrl = getPageNameUrl();
-  const brandName = formMetadata.brand ? formMetadata.brand.name : "";
+  const brandName = formMetadata && formMetadata.brand ? formMetadata.brand.name : "";
   const classes = classnames(
     "outer-container",
     `page${pageNameUrl.replace(/\//g, "-")}`,
