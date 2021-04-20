@@ -30,22 +30,20 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       return;
     }
     const reader = new FileReader();
-    const file = e.target.files[0];
-    if (file) {
-      reader.onloadend = () => setFileName(file.name);
-      if (file.name !== fileName) {
-        reader.readAsDataURL(file);
+    const newFile = e.target.files[0];
+    if (newFile) {
+      reader.onloadend = () => setFileName(newFile.name);
+      if (newFile.name !== fileName) {
+        reader.readAsDataURL(newFile);
         setSrc(reader);
-        setFile(file);
+        setFile(newFile);
       }
     }
   };
 
   useEffect(() => {
-    if (file && fileName && src) {
-      setValue({ file: file, src: src, name: fileName });
-    }
-  }, [src, fileName, file]);
+    setValue({ file: file, src: src, name: fileName });
+  }, [file, src, fileName]);
 
   return (
     <>
