@@ -1,11 +1,11 @@
 import classnames from "classnames";
 import { useRouter } from "next/router";
-import { FormMetadataProperties, BrandProperties } from "./types";
+import { FormMetadataProperties } from "./types";
 
-export const getPageClassNames = (formMetadata: FormMetadataProperties) => {
+export const getPageClassNames = (formMetadata: FormMetadataProperties): string => {
   if (!formMetadata) return "";
 
-  let pageNameUrl = getPageNameUrl();
+  const pageNameUrl = getPageNameUrl();
   const brandName = formMetadata.brand ? formMetadata.brand.name : "";
   const classes = classnames(
     "outer-container",
@@ -15,7 +15,7 @@ export const getPageClassNames = (formMetadata: FormMetadataProperties) => {
   return classes;
 };
 
-export const getPageNameUrl = () => {
+export const getPageNameUrl = (): string => {
   const router = useRouter();
   let pageNameUrl = router && router.asPath ? router.asPath.split("?")[0] : "";
   if (pageNameUrl === "/") {
@@ -24,6 +24,6 @@ export const getPageNameUrl = () => {
   return pageNameUrl;
 };
 
-export const isSplashPage = () => {
+export const isSplashPage = (): boolean => {
   return getPageNameUrl() === "splash";
 };
