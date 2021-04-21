@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
+import { TextPage } from "../../forms/TextPage/TextPage";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
 import { FormMetadataProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
@@ -24,7 +25,17 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const currentForm = getRenderedForm(formMetadata, language);
   const formTitle = formMetadata[getProperty("title", language)] as string;
   const router = useRouter();
-  const { step } = router.query;
+  const { step, urlQuery, htmlEmail } = router.query;
+
+  console.log(step)
+  console.log(step == 'confirmation')
+
+  // render text pages
+  if (step == 'confirmation') {
+    return (
+      <TextPage formMetadata={formMetadata} step={step} urlQuery={urlQuery} htmlEmail={htmlEmail} ></TextPage>
+    )
+  }
 
   return (
     <div className={classes}>
