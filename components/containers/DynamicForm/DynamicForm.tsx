@@ -9,7 +9,12 @@ import { useRouter } from "next/router";
 
 interface DynamicFormProps {
   formMetadata: FormMetadataProperties;
+  step: string;
 }
+
+/* The Dynamic form component is the outer stateful component which renders either a form step or a
+    form text page based on the step
+*/
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { formMetadata } = props;
@@ -19,6 +24,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const currentForm = getRenderedForm(formMetadata, language);
   const formTitle = formMetadata[getProperty("title", language)] as string;
   const router = useRouter();
+  const { step } = router.query;
 
   return (
     <div className={classes}>
