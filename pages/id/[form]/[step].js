@@ -3,7 +3,7 @@ import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { RichText } from "../components/forms";
+import { RichText } from "../../../components/forms";
 
 const getPageContent = (t, pageText, urlQuery) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
@@ -27,20 +27,28 @@ const getPageContent = (t, pageText, urlQuery) => {
 const Confirmation = () => {
   const { t } = useTranslation("confirmation");
   const router = useRouter();
-  const { urlQuery, htmlEmail, pageText } = router.query;
+  const { urlQuery, htmlEmail, pageText, step } = router.query;
 
-  return (
-    <>
-      {getPageContent(t, pageText, urlQuery)}
-
-      {htmlEmail ? (
-        <div className="p-5 mt-5 border-double border-gray-400 border-4">
-          <h2>Email to Form Owner Below:</h2>
-          <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
-        </div>
-      ) : null}
-    </>
-  );
+  if (step === "confirmation") {
+    return (
+      <>
+        {getPageContent(t, pageText, urlQuery)}
+  
+        {htmlEmail ? (
+          <div className="p-5 mt-5 border-double border-gray-400 border-4">
+            <h2>Email to Form Owner Below:</h2>
+            <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
+          </div>
+        ) : null}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div>"Placeholder"</div>
+      </>
+    )
+  }
 };
 
 export const getStaticProps = async ({ locale }) => ({
@@ -48,5 +56,12 @@ export const getStaticProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale, ["common", "confirmation"])),
   },
 });
+
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  }
+}
 
 export default Confirmation;
