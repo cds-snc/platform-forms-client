@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       formMetadata: form,
-      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+      ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
     }, // will be passed to the page component as props
   };
 }
