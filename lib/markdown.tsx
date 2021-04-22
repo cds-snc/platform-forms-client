@@ -1,16 +1,15 @@
 import json2md from "json2md";
 import logger from "../lib/logger";
-import { FormMetadataProperties, Responses } from "./types";
-import { extractFormData } from "./dataLayer";
-
-interface Submission {
-  form: FormMetadataProperties;
-  responses: Responses;
-}
+import { Submission } from "./types";
+import { extractFormData, rehydrateFormResponses } from "./dataLayer";
 
 export default logger((formResponse: Submission): string => {
   const title = `${formResponse.form.titleEn} / ${formResponse.form.titleFr}`;
-  const stringifiedData = extractFormData(formResponse);
+  const rehydratedResponses = rehydrateFormResponses(formResponse);
+  const stringifiedData = extractFormData({
+    ...formResponse,
+    responses: rehydratedResponses,
+  });
   const mdBody = stringifiedData.map((item) => {
     return { p: item };
   });

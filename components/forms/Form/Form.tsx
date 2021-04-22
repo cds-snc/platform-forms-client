@@ -6,7 +6,7 @@ import { validateOnSubmit, getErrorList } from "../../../lib/validation";
 import { submitToAPI } from "../../../lib/dataLayer";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
-import { FormValues, InnerFormProps, DynamicFormProps } from "../../../lib/types";
+import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -80,7 +80,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values, formikBag, isProduction);
+      await submitToAPI(values as Responses, formikBag, isProduction);
     } catch (err) {
       logMessage.error(err);
     } finally {
