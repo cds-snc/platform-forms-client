@@ -3,6 +3,7 @@ import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
 import { FormMetadataProperties } from "../../../lib/types";
+import { TFunction } from "next-i18next";
 import { getProperty } from "../../../lib/formBuilder";
 
 /*
@@ -16,7 +17,7 @@ interface TextPageProps {
   step: string | string[] | undefined;
 }
 
-const getPageContent = (t: Function, pageText: string, urlQuery: string | undefined) => {
+const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undefined) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{JSON.parse(pageText)}</RichText>;
@@ -35,7 +36,7 @@ const getPageContent = (t: Function, pageText: string, urlQuery: string | undefi
   );
 };
 
-export const TextPage = (props: TextPageProps) => {
+export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { t, i18n } = useTranslation("confirmation");
   const { urlQuery, htmlEmail, formMetadata } = props;
   const language = i18n.language as string;

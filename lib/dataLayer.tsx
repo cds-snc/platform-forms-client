@@ -207,11 +207,11 @@ async function _submitToApI(
             : "";
         router.push(
           {
-            pathname: `/id/${formMetadata.id}/confirmation`,
+            pathname: `/${language}/id/${formMetadata.id}/confirmation`,
             query: { ...referrerUrl, htmlEmail: htmlEmail, pageText: endPageText },
           },
           {
-            pathname: `/id/${formMetadata.id}/confirmation`,
+            pathname: `/${language}/id/${formMetadata.id}/confirmation`,
           }
         );
       } else {
