@@ -55,7 +55,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 };
 
 /**
- * This is the main Form component that wrapps "InnerForm" withFormik hook, giving all of its components context
+ * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
 export const Form = withFormik<DynamicFormProps, FormValues>({

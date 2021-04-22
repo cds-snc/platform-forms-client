@@ -1,11 +1,23 @@
 import React from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useRouter } from "next/router";
-import { RichText } from "../components/forms";
+import { RichText } from "../../../components/forms";
+import { FormMetadataProperties } from "../../../lib/types";
+import { TFunction } from "next-i18next";
+import { getProperty } from "../../../lib/formBuilder";
 
-const getPageContent = (t, pageText, urlQuery) => {
+/*
+  This is the component for text pages within the form flow (start pages, end pages)
+*/
+
+interface TextPageProps {
+  formMetadata: FormMetadataProperties;
+  htmlEmail: string | undefined;
+  urlQuery: string | undefined;
+  step: string | string[] | undefined;
+}
+
+const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undefined) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{JSON.parse(pageText)}</RichText>;
@@ -24,10 +36,15 @@ const getPageContent = (t, pageText, urlQuery) => {
   );
 };
 
-const Confirmation = () => {
-  const { t } = useTranslation("confirmation");
-  const router = useRouter();
-  const { urlQuery, htmlEmail, pageText } = router.query;
+export const TextPage = (props: TextPageProps): React.ReactElement => {
+  const { t, i18n } = useTranslation("confirmation");
+  const { urlQuery, htmlEmail, formMetadata } = props;
+  const language = i18n.language as string;
+
+  const pageText =
+    formMetadata && formMetadata.endPage
+      ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
+      : "";
 
   return (
     <>
@@ -43,10 +60,4 @@ const Confirmation = () => {
   );
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common", "confirmation"])),
-  },
-});
-
-export default Confirmation;
+export default TextPage;
