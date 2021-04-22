@@ -20,7 +20,7 @@ interface TextPageProps {
 const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undefined) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
-    return <RichText className="confirmation">{JSON.parse(pageText)}</RichText>;
+    return <RichText className="confirmation">{pageText}</RichText>;
   }
 
   // Otherwise, display the default confirmation text
@@ -43,7 +43,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
 
   const pageText =
     formMetadata && formMetadata.endPage
-      ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
+      ? formMetadata.endPage[getProperty("description", language)]
       : "";
 
   return (
