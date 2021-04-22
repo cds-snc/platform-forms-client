@@ -12,7 +12,7 @@ import { getProperty } from "../../../lib/formBuilder";
 interface TextPageProps {
   formMetadata: FormMetadataProperties;
   htmlEmail: string | undefined;
-  urlQuery: string |  undefined;
+  urlQuery: string | undefined;
   step: string | string[] | undefined;
 }
 
@@ -45,18 +45,18 @@ export const TextPage = (props: TextPageProps) => {
       ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
       : "";
 
-    return (
-      <>
-        {getPageContent(t, pageText, urlQuery)}
-  
-        {htmlEmail ? (
-          <div className="p-5 mt-5 border-double border-gray-400 border-4">
-            <h2>Email to Form Owner Below:</h2>
-            <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
-          </div>
-        ) : null}
-      </>
-    )
+  return (
+    <>
+      {getPageContent(t, pageText, urlQuery)}
+
+      {htmlEmail ? (
+        <div className="p-5 mt-5 border-double border-gray-400 border-4">
+          <h2>Email to Form Owner Below:</h2>
+          <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
+        </div>
+      ) : null}
+    </>
+  );
 };
 
 export default TextPage;

@@ -27,10 +27,15 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { step, urlQuery, htmlEmail } = router.query;
 
   // render text pages
-  if (step == 'confirmation') {
+  if (step == "confirmation") {
     return (
-      <TextPage formMetadata={formMetadata} step={step} urlQuery={urlQuery as string | undefined} htmlEmail={htmlEmail as string | undefined} ></TextPage>
-    )
+      <TextPage
+        formMetadata={formMetadata}
+        step={step}
+        urlQuery={urlQuery as string | undefined}
+        htmlEmail={htmlEmail as string | undefined}
+      ></TextPage>
+    );
   }
 
   return (
