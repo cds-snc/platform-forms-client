@@ -6,17 +6,8 @@ import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
 import Fip from "./Fip";
-import classnames from "classnames";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-
-const getPageClassNames = (formMetadata) => {
-  const router = useRouter();
-  const pageName = router && router.asPath ? router.asPath.split("?")[0] : "";
-  const brandName = formMetadata && formMetadata.brand ? formMetadata.brand.title : "";
-  const classes = classnames("outer-container", `page${pageName.replace(/\//g, "-")}`, brandName);
-  return classes;
-};
+import { getPageClassNames } from "../../lib/routeUtils";
 
 const Base = ({ children }) => {
   const { t } = useTranslation("common");
