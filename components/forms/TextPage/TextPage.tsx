@@ -11,12 +11,12 @@ import { getProperty } from "../../../lib/formBuilder";
 
 interface TextPageProps {
   formMetadata: FormMetadataProperties;
-  htmlEmail: string | string[] | undefined;
-  urlQuery: string | string[] | undefined;
+  htmlEmail: string | undefined;
+  urlQuery: string |  undefined;
   step: string | string[] | undefined;
 }
 
-const getPageContent = (t: Function, pageText: string, urlQuery: string) => {
+const getPageContent = (t: Function, pageText: string, urlQuery: string | undefined) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{JSON.parse(pageText)}</RichText>;

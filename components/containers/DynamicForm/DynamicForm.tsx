@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 
 interface DynamicFormProps {
   formMetadata: FormMetadataProperties;
-  step: string;
 }
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
@@ -27,13 +26,10 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const router = useRouter();
   const { step, urlQuery, htmlEmail } = router.query;
 
-  console.log(step)
-  console.log(step == 'confirmation')
-
   // render text pages
   if (step == 'confirmation') {
     return (
-      <TextPage formMetadata={formMetadata} step={step} urlQuery={urlQuery} htmlEmail={htmlEmail} ></TextPage>
+      <TextPage formMetadata={formMetadata} step={step} urlQuery={urlQuery as string | undefined} htmlEmail={htmlEmail as string | undefined} ></TextPage>
     )
   }
 
