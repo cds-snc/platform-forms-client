@@ -122,7 +122,7 @@
           "charLimit": 100,
           "validation": {
             "required": false,
-            "type": "email"
+            "type": "text"
           }
         }
       },

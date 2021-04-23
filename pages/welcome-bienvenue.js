@@ -32,7 +32,6 @@ const Home = () => {
 
         <div>
           <h2>{t("formList.title")}</h2>
-          <p>{t("formList.text")}</p>
           <ul className="link-list custom">
             <LinksList />
           </ul>

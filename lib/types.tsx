@@ -8,9 +8,16 @@ export interface FormMetadataProperties {
   titleEn: string;
   titleFr: string;
   layout: Array<string>;
+  brand?: BrandProperties;
   elements: Array<FormElement>;
-  endPage?: Record<string, string> | undefined;
-  [key: string]: string | Array<string> | Array<FormElement> | Record<string, string> | undefined;
+  endPage: Record<string, string>;
+  [key: string]:
+    | string
+    | Array<string>
+    | Array<FormElement>
+    | Record<string, string>
+    | BrandProperties
+    | undefined;
 }
 
 export type allFormElements =
@@ -65,6 +72,17 @@ export interface ElementProperties {
     | Array<FormElement>
     | ValidationProperties
     | undefined;
+}
+
+export interface BrandProperties {
+  name?: string;
+  logoEn: string;
+  logoFr: string;
+  logoTitleEn: string;
+  logoTitleFr: string;
+  urlEn?: string;
+  urlFr?: string;
+  [key: string]: string | undefined;
 }
 
 export interface PropertyChoices {

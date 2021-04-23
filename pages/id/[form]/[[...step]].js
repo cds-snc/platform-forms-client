@@ -1,6 +1,6 @@
-import { getFormByID } from "../../lib/dataLayer";
+import { getFormByID } from "../../../lib/dataLayer";
 import getConfig from "next/config";
-import DynamicForm from "../../components/containers/DynamicForm/DynamicForm";
+import DynamicForm from "../../../components/containers/DynamicForm/DynamicForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export async function getServerSideProps(context) {
@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       formMetadata: form,
-      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+      ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
     }, // will be passed to the page component as props
   };
 }
