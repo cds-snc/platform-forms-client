@@ -39,10 +39,11 @@ const callLambda = async (form, fields) => {
 
   const command = new InvokeCommand({
     FunctionName: process.env.SUBMISSION_API ?? "",
-    Payload: {
-      fields,
+    Payload: JSON.stringify({
+      form,
+      responses: fields,
       submission,
-    },
+    }),
   });
   return await labmdaClient
     .send(command)
