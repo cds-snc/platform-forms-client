@@ -281,7 +281,9 @@ const _getFormInitialValues = (formMetadata: FormMetadataProperties, language: s
   const initialValues: Record<string, unknown> = {};
 
   formMetadata.elements.map((element: FormElement) => {
-    initialValues[element.id] = _getElementInitialValue(element, language);
+    if (element.type !== "richText") {
+      initialValues[element.id] = _getElementInitialValue(element, language);
+    }
   });
 
   return initialValues;
