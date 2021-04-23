@@ -4,7 +4,7 @@ const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
 import formidable from "formidable";
 import fs from "fs";
 import convertMessage from "../../lib/markdown";
-import { getSubmissionByID } from "../../lib/dataLayer";
+import { getSubmissionByID, rehydrateFormResponses } from "../../lib/dataLayer";
 import { logMessage } from "../../lib/logger";
 
 export const config = {
@@ -32,13 +32,8 @@ const submit = async (req, res) => {
   }
 };
 
-const callLambda = async (form, fields, files) => {
+const callLambda = async (form, fields) => {
   const submission = await getSubmissionByID(form.id);
-  // Add file S3 urls to payload once we start processing files through reliability queue
-  // For now just attach the file names
-  for (let [key, value] of Object.entries(files)) {
-    fields[key] = value.name;
-  }
 
   const labmdaClient = new LambdaClient({ region: "ca-central-1" });
 
@@ -66,12 +61,7 @@ const callLambda = async (form, fields, files) => {
     });
 };
 
-const previewNotify = async (form, fields, files) => {
-  //
-  for (let [key, value] of Object.entries(files)) {
-    fields[key] = value.name;
-  }
-
+const previewNotify = async (form, fields) => {
   const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
   const notify = new NotifyClient(
     "https://api.notification.canada.ca",
@@ -94,13 +84,13 @@ const previewNotify = async (form, fields, files) => {
     });
 };
 
-const processFormData = async (form, fields, files, res, req) => {
+const processFormData = async (form, reqFields, files, res, req) => {
   try {
     const {
       publicRuntimeConfig: { isProduction: isProduction },
     } = getConfig();
 
-    const formAttached = form.id && fields ? true : false;
+    const formAttached = form.id && reqFields ? true : false;
 
     logMessage.info(
       `Path: ${req.url}, Method: ${req.method}, Form ID: ${
@@ -111,12 +101,19 @@ const processFormData = async (form, fields, files, res, req) => {
       return res.status(400).json({ error: "No form submitted with request" });
     }
 
+    // Add file S3 urls to payload once we start processing files through reliability queue
+    // For now just attach the file names
+    for (let [key, value] of Object.entries(files)) {
+      reqFields[key] = value.name;
+    }
+    const fields = await rehydrateFormResponses({ form, responses: reqFields });
+
     // Staging or Production AWS environments
     if (process.env.SUBMISSION_API) {
-      return await callLambda(form, fields, files)
+      return await callLambda(form, fields)
         .then(async () => {
           if (!isProduction && process.env.NOTIFY_API_KEY) {
-            await previewNotify(form, fields, files).then((response) => {
+            await previewNotify(form, fields).then((response) => {
               return res.status(201).json({ received: true, htmlEmail: response });
             });
           } else {
@@ -130,7 +127,7 @@ const processFormData = async (form, fields, files, res, req) => {
     }
     // Local development and Heroku
     else if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
-      return await previewNotify(form, fields, files).then((response) => {
+      return await previewNotify(form, fields).then((response) => {
         return res.status(201).json({ received: true, htmlEmail: response });
       });
     } else {
