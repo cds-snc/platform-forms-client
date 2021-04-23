@@ -65,13 +65,20 @@ function _rehydrateFormResponses(payload: Submission) {
     const question = form.elements.find((element: FormElement) => element.id === qID);
     if (question) {
       const response = responses[question.id];
-      if (question.type === "checkbox" || question.type === "dynamicRow") {
-        if (response) {
-          rehydratedResponses[question.id] = JSON.parse(response as string).value;
-        } else rehydratedResponses[question.id] = [];
-      } else rehydratedResponses[question.id] = response;
+      switch (question.type) {
+        case "checkbox":
+        case "dynamicRow":
+          if (response) {
+            rehydratedResponses[question.id] = JSON.parse(response as string).value;
+          } else rehydratedResponses[question.id] = [];
+          break;
+        case "richText":
+          break;
+        default:
+          rehydratedResponses[question.id] = response;
+      }
     } else {
-      logMessage.error(`Failed component ID look up ${qID} on form ID ${form.id}`);
+      logMessage.warn(`Failed component ID look up ${qID} on form ID ${form.id}`);
     }
   });
   return rehydratedResponses;
@@ -88,7 +95,7 @@ export function extractFormData(submission: Submission): Array<string> {
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
     } else {
-      logMessage.error(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
+      logMessage.warn(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
     }
   });
   return dataCollector;
@@ -191,7 +198,7 @@ function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
     if (element) {
       _handleFormDataType(element, values[element.id], formData);
     } else {
-      logMessage.error(`Failed component ID look up ${elementID} on form ID ${form.id}`);
+      logMessage.warn(`Failed component ID look up ${elementID} on form ID ${form.id}`);
     }
   });
   formData.append("formInfo", JSON.stringify(form));
@@ -312,3 +319,4 @@ export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
 export const submitToAPI = logger(_submitToApI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
+export const buildFormDataObject = logger(_buildFormDataObject);
