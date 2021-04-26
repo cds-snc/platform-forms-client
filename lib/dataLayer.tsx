@@ -89,8 +89,6 @@ export function extractFormData(submission: Submission): Array<string> {
     const question = formOrigin.elements.find((element: FormElement) => element.id === qID);
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
-    } else {
-      logMessage.warn(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
     }
   });
   return dataCollector;
@@ -185,13 +183,11 @@ function handleTextResponse(title: string, response: string, collector: Array<st
 
 function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
   const formData = new FormData();
-  const formElementList = form.elements;
+  form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
-  formElementList
-    .filter((element) => !["richText"].includes(element.type))
-    .map((element) => {
-      _handleFormDataType(element, values[element.id], formData);
-    });
+  form.elements.map((element) => {
+    _handleFormDataType(element, values[element.id], formData);
+  });
   formData.append("formInfo", JSON.stringify(form));
   return formData;
 }
