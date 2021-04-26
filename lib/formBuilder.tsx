@@ -280,11 +280,11 @@ const _getFormInitialValues = (formMetadata: FormMetadataProperties, language: s
 
   const initialValues: Record<string, unknown> = {};
 
-  formMetadata.elements.map((element: FormElement) => {
-    if (element.type !== "richText") {
+  formMetadata.elements
+    .filter((element) => !["richText"].includes(element.type))
+    .map((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
-    }
-  });
+    });
 
   return initialValues;
 };
