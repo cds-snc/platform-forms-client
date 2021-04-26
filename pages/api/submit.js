@@ -17,6 +17,9 @@ const submit = async (req, res) => {
   try {
     const incomingForm = new formidable.IncomingForm();
     await incomingForm.parse(req, (err, fields, files) => {
+      if (err) {
+        throw new Error(err);
+      }
       const form = { ...JSON.parse(fields.formInfo) };
       delete fields.formInfo;
       processFormData(form, fields, files, res, req).finally(() => {
