@@ -10,6 +10,8 @@ import {
   Response,
   FormValues,
   DynamicFormProps,
+  FileInputResponse,
+  Submission,
 } from "./types";
 
 // Get the form json object by using the form ID
@@ -56,11 +58,34 @@ function _getSubmissionByID(formID: string): Record<string, unknown> {
   return submissionFormat;
 }
 
-// Email submission data manipulation
-interface Submission {
-  form: FormMetadataProperties;
-  responses: Responses;
+function _rehydrateFormResponses(payload: Submission) {
+  const { form, responses } = payload;
+  const rehydratedResponses: Responses = {};
+  form.layout.forEach((qID: string) => {
+    const question = form.elements.find((element: FormElement) => element.id === qID);
+    if (question) {
+      const response = responses[question.id];
+      switch (question.type) {
+        case "checkbox":
+        case "dynamicRow":
+          if (response) {
+            rehydratedResponses[question.id] = JSON.parse(response as string).value;
+          } else rehydratedResponses[question.id] = [];
+          break;
+        case "richText":
+          break;
+        default:
+          rehydratedResponses[question.id] = response;
+      }
+    } else {
+      logMessage.warn(`Failed component ID look up ${qID} on form ID ${form.id}`);
+    }
+  });
+  return rehydratedResponses;
 }
+
+// Email submission data manipulation
+
 export function extractFormData(submission: Submission): Array<string> {
   const formResponses = submission.responses;
   const formOrigin = submission.form;
@@ -70,7 +95,7 @@ export function extractFormData(submission: Submission): Array<string> {
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
     } else {
-      logMessage.error(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
+      logMessage.warn(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
     }
   });
   return dataCollector;
@@ -100,6 +125,7 @@ function handleType(question: FormElement, response: Response, collector: Array<
       );
       break;
     case "fileInput":
+      handleTextResponse(qTitle, response as string, collector);
       break;
   }
 }
@@ -162,8 +188,68 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`${title}${String.fromCharCode(13)}- No Response`);
 }
 
+function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
+  const formData = new FormData();
+  const formElementList = form.layout;
+
+  formElementList.map((elementID) => {
+    const element = form.elements.find((formElement: FormElement) => formElement.id === elementID);
+
+    if (element) {
+      _handleFormDataType(element, values[element.id], formData);
+    } else {
+      logMessage.warn(`Failed component ID look up ${elementID} on form ID ${form.id}`);
+    }
+  });
+  formData.append("formInfo", JSON.stringify(form));
+  return formData;
+}
+
+function _handleFormDataType(element: FormElement, value: Response, formData: FormData) {
+  switch (element.type) {
+    case "textField":
+    case "textArea":
+      // string
+      _handleFormDataText(element.id, value as string, formData);
+      break;
+
+    case "dropdown":
+    case "radio":
+      value instanceof Object
+        ? _handleFormDataText(element.id, "", formData)
+        : _handleFormDataText(element.id, value, formData);
+      break;
+
+    case "checkbox":
+    case "dynamicRow":
+      // array of strings
+      Array.isArray(value)
+        ? _handleFormDataArray(element.id, value as Array<string>, formData)
+        : _handleFormDataText(element.id, "", formData);
+
+      break;
+
+      break;
+    case "fileInput":
+      // file input
+      _handleFormDataFileInput(element.id, value as FileInputResponse, formData);
+      break;
+  }
+}
+
+function _handleFormDataFileInput(key: string, value: FileInputResponse, formData: FormData) {
+  value.file ? formData.append(key, value.file) : _handleFormDataText(key, "", formData);
+}
+
+function _handleFormDataText(key: string, value: string, formData: FormData) {
+  formData.append(key, value);
+}
+
+function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
+  formData.append(key, JSON.stringify({ value: value }));
+}
 async function _submitToApI(
-  values: FormValues,
+  values: Responses,
   formikBag: FormikBag<DynamicFormProps, FormValues>,
   isProduction: boolean
 ) {
@@ -181,15 +267,19 @@ async function _submitToApI(
     responses: values,
   };
 
+  const formDataObject = await _buildFormDataObject(
+    formResponseObject.form,
+    formResponseObject.responses
+  );
+
   //making a post request to the submit API
   await axios({
     url: "/api/submit",
     method: "POST",
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
+      "Content-Type": "multipart/form-data",
     },
-    data: formResponseObject,
+    data: formDataObject,
     timeout: isProduction ? 3000 : 0,
   })
     .then((serverResponse) => {
@@ -228,3 +318,5 @@ export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
 export const submitToAPI = logger(_submitToApI);
+export const rehydrateFormResponses = logger(_rehydrateFormResponses);
+export const buildFormDataObject = logger(_buildFormDataObject);

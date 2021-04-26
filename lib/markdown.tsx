@@ -1,12 +1,7 @@
 import json2md from "json2md";
 import logger from "../lib/logger";
-import { FormMetadataProperties, Responses } from "./types";
+import { Submission } from "./types";
 import { extractFormData } from "./dataLayer";
-
-interface Submission {
-  form: FormMetadataProperties;
-  responses: Responses;
-}
 
 export default logger((formResponse: Submission): string => {
   const title = `${formResponse.form.titleEn} / ${formResponse.form.titleFr}`;

@@ -4,13 +4,13 @@ import { NextRouter } from "next/router";
 
 export interface FormMetadataProperties {
   id: string;
-  version: string;
+  version?: string | undefined;
   titleEn: string;
   titleFr: string;
   layout: Array<string>;
   brand?: BrandProperties;
   elements: Array<FormElement>;
-  endPage: Record<string, string>;
+  endPage?: Record<string, string>;
   [key: string]:
     | string
     | Array<string>
@@ -29,6 +29,11 @@ export type callback = (event: allFormElements) => void;
 export interface SubmissionProperties {
   templateID: string;
   email: string;
+}
+
+export interface Submission {
+  form: FormMetadataProperties;
+  responses: Responses;
 }
 
 export interface FormElement {
@@ -90,7 +95,12 @@ export type Responses = {
   [key: string]: Response;
 };
 
-export type Response = string | string[] | Record<string, unknown>[];
+export type Response =
+  | string
+  | string[]
+  | Record<string, unknown>[]
+  | FileInputResponse
+  | Record<string, unknown>;
 
 //Shape of Form input values
 export interface FormValues {
@@ -109,3 +119,10 @@ export interface InnerFormProps {
   language: string;
   t: TFunction;
 }
+
+export type FileInputResponse = {
+  name: string;
+  file: File;
+  src: FileReader;
+  [key: string]: string | File | FileReader;
+};
