@@ -10,7 +10,7 @@ export interface FormMetadataProperties {
   layout: Array<string>;
   brand?: BrandProperties;
   elements: Array<FormElement>;
-  endPage: Record<string, string>;
+  endPage?: Record<string, string>;
   [key: string]:
     | string
     | Array<string>
