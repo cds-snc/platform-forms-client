@@ -1,7 +1,15 @@
 describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:3000" }, () => {
+  let formMetaData = null;
+  before(() => {
+    //Get form JSON configuration
+    cy.readFile("forms/platform_intake.json").then((response) => {
+      formMetaData = response;
+    });
+  });
+
   it("CDS Platform Intake Form renders", () => {
-    cy.visit("/en/id/20");
-    cy.get("h1").contains("Work with CDS on a Digital Form");
+    cy.visit(`/en/id/${formMetaData.form.id}`);
+    cy.get("h1").contains(formMetaData.form.titleEn);
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa Claus").should("have.value", "Santa Claus");
@@ -17,6 +25,11 @@ describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:
   });
   it("Submit the Form", () => {
     cy.get("button").contains("Submit").click();
-    cy.url().should("include", "/confirmation");
+    cy.url().should("include", `/en/id/${formMetaData.form.id}/confirmation`);
+    cy.get("h1").contains("Your submission has been received");
+    cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/sig-blk-en.svg");
+    cy.get("#content").contains(
+      "Thank you, your request has been submitted. A team member will email you shortly."
+    );
   });
 });
