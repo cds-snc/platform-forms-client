@@ -61,24 +61,19 @@ function _getSubmissionByID(formID: string): Record<string, unknown> {
 function _rehydrateFormResponses(payload: Submission) {
   const { form, responses } = payload;
   const rehydratedResponses: Responses = {};
-  form.layout.forEach((qID: string) => {
-    const question = form.elements.find((element: FormElement) => element.id === qID);
-    if (question) {
-      const response = responses[question.id];
-      switch (question.type) {
-        case "checkbox":
-        case "dynamicRow":
-          if (response) {
-            rehydratedResponses[question.id] = JSON.parse(response as string).value;
-          } else rehydratedResponses[question.id] = [];
-          break;
-        case "richText":
-          break;
-        default:
-          rehydratedResponses[question.id] = response;
-      }
-    } else {
-      logMessage.warn(`Failed component ID look up ${qID} on form ID ${form.id}`);
+  form.elements.forEach((question: FormElement) => {
+    const response = responses[question.id];
+    switch (question.type) {
+      case "checkbox":
+      case "dynamicRow":
+        if (response) {
+          rehydratedResponses[question.id] = JSON.parse(response as string).value;
+        } else rehydratedResponses[question.id] = [];
+        break;
+      case "richText":
+        break;
+      default:
+        rehydratedResponses[question.id] = response;
     }
   });
   return rehydratedResponses;
@@ -94,8 +89,6 @@ export function extractFormData(submission: Submission): Array<string> {
     const question = formOrigin.elements.find((element: FormElement) => element.id === qID);
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
-    } else {
-      logMessage.warn(`Failed component ID look up ${qID} on form ID ${formOrigin.id}`);
     }
   });
   return dataCollector;
@@ -190,16 +183,10 @@ function handleTextResponse(title: string, response: string, collector: Array<st
 
 function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
   const formData = new FormData();
-  const formElementList = form.layout;
+  form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
-  formElementList.map((elementID) => {
-    const element = form.elements.find((formElement: FormElement) => formElement.id === elementID);
-
-    if (element) {
-      _handleFormDataType(element, values[element.id], formData);
-    } else {
-      logMessage.warn(`Failed component ID look up ${elementID} on form ID ${form.id}`);
-    }
+  form.elements.map((element) => {
+    _handleFormDataType(element, values[element.id], formData);
   });
   formData.append("formInfo", JSON.stringify(form));
   return formData;
@@ -226,8 +213,6 @@ function _handleFormDataType(element: FormElement, value: Response, formData: Fo
       Array.isArray(value)
         ? _handleFormDataArray(element.id, value as Array<string>, formData)
         : _handleFormDataText(element.id, "", formData);
-
-      break;
 
       break;
     case "fileInput":
