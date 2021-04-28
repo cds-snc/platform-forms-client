@@ -16,8 +16,8 @@
     "layout": [1, 2, 3, 4],
     "startPage": {},
     "endPage": {
-      "descriptionEn": "#Thank you for your email <br/> Thank you, your request has been submitted. A team member will email you in **three to five business days**.",
-      "descriptionFr": "#Merci pour votre courriel <br/> Merci, votre demande a été soumise. Un membre de l'équipe vous répondra par courriel dans **trois à cinq jours ouvrables**.",
+      "descriptionEn": "# Thank you for your email \n\r Thank you, your request has been submitted. A team member will email you in **three to five business days**.",
+      "descriptionFr": "# Merci pour votre courriel \n\r Merci, votre demande a été soumise. Un membre de l'équipe vous répondra par courriel dans **trois à cinq jours ouvrables**.",
       "referrerUrlEn": "https://digital.canada.ca/partnerships/",
       "referrerUrlFr": "https://numerique.canada.ca/partenariats/"
     },
