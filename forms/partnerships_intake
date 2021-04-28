@@ -1,0 +1,85 @@
+{
+  "internalTitleEn": "Work with CDS Partnerships team",
+  "internalTitleFr": "Travailler avec l'équipe des partenariats du SNC",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "forms-formulaires@cds-snc.ca"
+  },
+  "form": {
+    "id": 45,
+    "version": 1,
+    "titleEn": "Work with CDS Partnerships team",
+    "titleFr": "Travailler avec l'équipe des partenariats du SNC",
+    "descriptionEn": "Contact the CDS Partnerships team to work with us",
+    "descriptionFr": "Contactez l'équipe des partenariats du CDS pour travailler avec nous.",
+    "layout": [1, 2, 3, 4],
+    "startPage": {},
+    "endPage": {
+      "descriptionEn": "#Thank you for your email \n\r Thank you, your request has been submitted. A team member will email you in **three to five business days**.",
+      "descriptionFr": "#Merci pour votre courriel \n\r Merci, votre demande a été soumise. Un membre de l'équipe vous enverra un courriel dans **trois à cinq jours ouvrables**.",
+      "referrerUrlEn": "https://digital.canada.ca/partnerships/",
+      "referrerUrlFr": "https://numerique.canada.ca/partenariats/"
+    },
+    "elements": [
+      {
+        "id": 1,
+        "type": "richText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "Thank you for your interest in working with the Canadian Digital Service. <br/><br/> Please provide your information below so CDS can contact you about starting a partnership",
+          "descriptionFr": "Merci de l’intérêt que vous portez à la collaboration avec le Service Numérique Canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter pour établir un partenariat.",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Full name",
+          "titleFr": "Nom au complet",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "name"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Work email",
+          "titleFr": "Courriel professionnel",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "email"
+          }
+        }
+      },
+       {
+        "id": 4,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Message",
+          "titleFr": "Message",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Tell us about your work",
+          "descriptionFr": "Parlez-nous de votre travail",
+          "charLimit": 800,
+          "validation": {
+            "required": true
+          }
+        }
+      }
+    ]
+  }
+}
