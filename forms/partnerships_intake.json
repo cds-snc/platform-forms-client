@@ -12,12 +12,12 @@
     "titleEn": "Work with CDS Partnerships team",
     "titleFr": "Travailler avec l'équipe des partenariats du SNC",
     "descriptionEn": "Contact the CDS Partnerships team to work with us",
-    "descriptionFr": "Contactez l'équipe des partenariats du CDS pour travailler avec nous.",
+    "descriptionFr": "Contactez l'équipe des partenariats du SNC pour travailler avec nous.",
     "layout": [1, 2, 3, 4],
     "startPage": {},
     "endPage": {
       "descriptionEn": "#Thank you for your email <br/> Thank you, your request has been submitted. A team member will email you in **three to five business days**.",
-      "descriptionFr": "#Merci pour votre courriel <br/> Merci, votre demande a été soumise. Un membre de l'équipe vous enverra un courriel dans **trois à cinq jours ouvrables**.",
+      "descriptionFr": "#Merci pour votre courriel <br/> Merci, votre demande a été soumise. Un membre de l'équipe vous répondra par courriel dans **trois à cinq jours ouvrables**.",
       "referrerUrlEn": "https://digital.canada.ca/partnerships/",
       "referrerUrlFr": "https://numerique.canada.ca/partenariats/"
     },
@@ -29,7 +29,7 @@
           "titleEn": "",
           "titleFr": "",
           "descriptionEn": "Thank you for your interest in working with the Canadian Digital Service. <br/><br/> Please provide your information below so CDS can contact you about starting a partnership",
-          "descriptionFr": "Merci de l’intérêt que vous portez à la collaboration avec le Service Numérique Canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter pour établir un partenariat.",
+          "descriptionFr": "Merci de l’intérêt porté à une collaboration avec le Service numérique canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter d'un partenariat potentiel.",
           "charLimit": 200,
           "validation": {
             "required": false
@@ -41,7 +41,7 @@
         "type": "textField",
         "properties": {
           "titleEn": "Full name",
-          "titleFr": "Nom au complet",
+          "titleFr": "Nom",
           "descriptionEn": "",
           "descriptionFr": "",
           "charLimit": 100,
