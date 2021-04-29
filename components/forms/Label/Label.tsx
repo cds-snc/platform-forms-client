@@ -24,7 +24,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
 
   return (
     <label data-testid="label" className={classes} htmlFor={htmlFor}>
-      {children}
+      {children} {classes.includes("required") ? <span aria-label="required">*</span> : null}
       {hint && <span className="gc-hint">{hint}</span>}
     </label>
   );
