@@ -32,6 +32,7 @@
     "pino": "^6.11.1",
     "raw-loader": "^4.0.2",
     "react": "^17.0.1",
+    "react-app-polyfill": "^2.0.0",
     "react-dom": "17.0.1"
   },
   "devDependencies": {
