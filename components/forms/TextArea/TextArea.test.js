@@ -34,7 +34,7 @@ describe("Generate a text area", () => {
       </Form>
     );
     // Label properly renders
-    expect(screen.getByLabelText(textAreaData.properties.titleEn)).toBeInTheDocument();
+    expect(screen.getByTestId("label")).toContainHTML(textAreaData.properties.titleEn);
     // Description properly render
     expect(screen.getByText(textAreaData.properties.descriptionEn)).toBeInTheDocument();
     // Field marked as required and have aria described by
@@ -51,7 +51,7 @@ describe("Generate a text area", () => {
       </Form>
     );
     // Label properly renders
-    expect(screen.getByLabelText(textAreaData.properties.titleFr)).toBeInTheDocument();
+    expect(screen.getByTestId("label")).toContainHTML(textAreaData.properties.titleFr);
     // Description properly render
     expect(screen.getByText(textAreaData.properties.descriptionFr)).toBeInTheDocument();
     // Placeholder properly renders

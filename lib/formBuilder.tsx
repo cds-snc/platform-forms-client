@@ -64,7 +64,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   const labelText = element.properties[getProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
-    <Label key={`label-${id}`} htmlFor={id} className={isRequired ? "required" : ""}>
+    <Label
+      key={`label-${id}`}
+      htmlFor={id}
+      className={isRequired ? "required" : ""}
+      required={isRequired}
+    >
       {labelText}
     </Label>
   ) : null;

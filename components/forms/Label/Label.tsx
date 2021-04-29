@@ -8,10 +8,11 @@ interface LabelProps {
   error?: boolean;
   hint?: React.ReactNode;
   srOnly?: boolean;
+  required?: boolean;
 }
 
 export const Label = (props: LabelProps): React.ReactElement => {
-  const { children, htmlFor, className, error, hint, srOnly } = props;
+  const { children, htmlFor, className, error, hint, srOnly, required } = props;
 
   const classes = classnames(
     {
@@ -24,7 +25,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
 
   return (
     <label data-testid="label" className={classes} htmlFor={htmlFor}>
-      {children}
+      {children} {required ? <span aria-label="required">*</span> : null}
       {hint && <span className="gc-hint">{hint}</span>}
     </label>
   );
