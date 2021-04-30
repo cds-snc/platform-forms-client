@@ -120,6 +120,7 @@ module.exports = {
         default: "#000",
         form: "#0b0c0c",
       },
+      transparent: "transparent",
     },
     boxShadow: {
       default: "0 1px 3px rgba(0, 0, 0, 0.05);",
