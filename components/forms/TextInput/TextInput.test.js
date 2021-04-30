@@ -33,7 +33,7 @@ describe("Generate a text input", () => {
       </Form>
     );
     // Label properly renders
-    expect(screen.getByLabelText(textInputData.properties.titleEn)).toBeInTheDocument();
+    expect(screen.getByTestId("label")).toContainHTML(textInputData.properties.titleEn);
     // Description properly renders
     expect(screen.getByText(textInputData.properties.descriptionEn)).toBeInTheDocument();
     // Field marked as required
@@ -50,7 +50,7 @@ describe("Generate a text input", () => {
       </Form>
     );
     // Label properly renders
-    expect(screen.getByLabelText(textInputData.properties.titleFr)).toBeInTheDocument();
+    expect(screen.getByTestId("label")).toContainHTML(textInputData.properties.titleFr);
     // Description properly render
     expect(screen.getByText(textInputData.properties.descriptionFr)).toBeInTheDocument();
     // Placeholder properly renders
