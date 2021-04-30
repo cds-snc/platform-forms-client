@@ -11,21 +11,18 @@
     "version": 1,
     "titleEn": "Send a question or comment",
     "titleFr": "Envoyez une question ou un commentaire",
-    "layout": [1, 2, 3, 4, 5, 6, 7],
-    },
+    "layout": [1, 2, 3, 4, 5, 6],
     "endPage": {
       "descriptionEn": "#Thank you for your email  \n\r Our delay to answer is approximately 3 days.",
-      "descriptionFr": "#Merci pour votre demande  \n\r Notre délai de réponse est d'environ 4 jours.",
+      "descriptionFr": "#Merci pour votre demande  \n\r Notre délai de réponse est d'environ 4 jours."
     },
     "elements": [
       {
         "id": 1,
         "type": "richText",
         "properties": {
-          "titleEn": "Files and applications",
-          "titleFr": "Dossiers et demandes",
-          "descriptionEn": "###Files and applications \n\r Case specific enquiries about your file or application **must be directed** to the program at the relevant <li><a href='https://www.canada.ca/en/contact.html'>Government of Canada contacts</a></li></ul>",
-          "descriptionFr": "###Dossiers et demandes \n\r Les demandes de renseignements concernant votre dossier ou votre demande doivent être adressées au programme approprié, via les <li><a href='https://www.canada.ca/fr/contact.html'>coordonnées du gouvernement du Canada</a></li></ul>",
+          "descriptionEn": "###Files and applications \n\r Case specific enquiries about your file or application **must be directed** to the program at the relevant <a href='https://www.canada.ca/en/contact.html'>Government of Canada contacts</a>",
+          "descriptionFr": "###Dossiers et demandes \n\r Les demandes de renseignements concernant votre dossier ou votre demande doivent être adressées au programme approprié, via les <a href='https://www.canada.ca/fr/contact.html'>coordonnées du gouvernement du Canada</a>",
           "charLimit": 200,
           "validation": {
             "required": false
@@ -36,8 +33,6 @@
         "id": 2,
         "type": "richText",
         "properties": {
-          "titleEn": "Service hours",
-          "titleFr": "Heures de service",
           "descriptionEn": "###Service hours \n\r Emails are answered from Monday to Friday, 8:00 am to 8:00 pm (Eastern Standard Time).",
           "descriptionFr": "###Heures de service \n\r Nous répondons aux courriels du lundi au vendredi, de 8 h à 20 h (heure normale de l’Est).",
           "charLimit": 200,
@@ -50,8 +45,6 @@
         "id": 3,
         "type": "richText",
         "properties": {
-          "titleEn": "Wait time",
-          "titleFr": "Temps d’attente",
           "descriptionEn": "###Wait time \n\r Our delay to answer is approximately 3 days",
           "descriptionFr": "###Temps d’attente \n\r Notre délai de réponse est d'environ 4 jours.",
           "charLimit": 200,
@@ -61,11 +54,11 @@
         }
       },
       {
-          "id": 4,
+        "id": 4,
         "type": "richText",
         "properties": {
           "titleEn": "Personal information",
-          "titleFr": "personnels de nature délicate",
+          "titleFr": "Personnels de nature délicate",
           "descriptionEn": "Please do not include sensitive personal information in the questions/comments box, such as your social insurance number, personal finance data and medical or work history.",
           "descriptionFr": "Veuillez **ne pas fournir de renseignements personnels de nature délicate** dans le champ des questions/commentaires, comme votre numéro d'assurance sociale, vos données financières personnelles et vos antécédents médicaux ou professionnels. ",
           "charLimit": 200,
@@ -75,7 +68,7 @@
         }
       },
       {
-       "id": 6,
+        "id": 5,
         "type": "textArea",
         "properties": {
           "titleEn": "Message",
@@ -86,13 +79,13 @@
           "descriptionFr": "Inscrivez vos questions ou commentaires",
           "charLimit": 800,
           "validation": {
-            "required": true
-            "type": "Text"
+            "required": true,
+            "type": "text"
           }
         }
       },
       {
-        "id": 7,
+        "id": 6,
         "type": "textField",
         "properties": {
           "titleEn": "Email",
