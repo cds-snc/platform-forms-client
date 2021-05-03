@@ -82,6 +82,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           return "email";
         case "phone":
           return "tel";
+        case "name":
+          return "name";
       }
     }
     return "text";
@@ -89,6 +91,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const textType = getTextType(element) as
     | "text"
     | "email"
+    | "name"
     | "number"
     | "password"
     | "search"
