@@ -1,5 +1,3 @@
-import "react-app-polyfill/ie11";
-import "react-app-polyfill/stable";
 import React from "react";
 import PropTypes from "prop-types";
 import { appWithTranslation } from "next-i18next";
