@@ -13,11 +13,11 @@
     "titleFr": "Travailler avec l'équipe des partenariats du SNC",
     "descriptionEn": "Contact the CDS Partnerships team to work with us",
     "descriptionFr": "Contactez l'équipe des partenariats du SNC pour travailler avec nous.",
-    "layout": [1, 2, 3, 4],
+    "layout": [1, 2, 3, 4, 5],
     "startPage": {},
     "endPage": {
       "descriptionEn": "# Thank you for your email \n\r Thank you, your request has been submitted. A team member will email you in **three to five business days**.",
-      "descriptionFr": "# Merci pour votre courriel \n\r Merci, votre demande a été soumise. Un membre de l'équipe vous répondra par courriel dans **trois à cinq jours ouvrables**.",
+      "descriptionFr": "# Merci pour votre courriel \n\r Merci, votre demande a été soumise. Un membre de l'équipe vous répondra par courriel dans **trois à cinq jours ouvrables**. \n\r ",
       "referrerUrlEn": "https://digital.canada.ca/partnerships/",
       "referrerUrlFr": "https://numerique.canada.ca/partenariats/"
     },
@@ -66,6 +66,19 @@
       },
       {
         "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What organization do you work for?",
+          "titleFr": "Pour quelle organisation travaillez-vous ?",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+             "type": "text"
+          }
+        }
+      },
+      {
+        "id": 5,
         "type": "textArea",
         "properties": {
           "titleEn": "Message",
