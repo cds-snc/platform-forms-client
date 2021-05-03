@@ -1,5 +1,6 @@
 import React from "react";
 import classnames from "classnames";
+import { useTranslation } from "next-i18next";
 
 interface LabelProps {
   children: React.ReactNode;
@@ -23,9 +24,12 @@ export const Label = (props: LabelProps): React.ReactElement => {
     className
   );
 
+  const { t } = useTranslation("common");
+
   return (
     <label data-testid="label" className={classes} htmlFor={htmlFor}>
-      {children} {required ? <span aria-label="required">*</span> : null}
+      {children} {required ? <span aria-hidden>*</span> : null}
+      {required ? <i className="visually-hidden">{t("required-field")}</i> : null}
       {hint && <span className="gc-hint">{hint}</span>}
     </label>
   );
