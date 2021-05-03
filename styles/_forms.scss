@@ -174,7 +174,7 @@
   @apply block;
 
   .gc-input-checkbox__input {
-    @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
+    @apply absolute -left-full;
     & + .gc-checkbox-label {
       @apply relative cursor-pointer p-0;
     }
