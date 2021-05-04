@@ -19,14 +19,17 @@ const LanguageToggle = () => {
 
   return (
     <>
-      <h2 className="sr-only visually-hidden">{t("lang-toggle")}</h2>
       <div className="gc-language-toggle">
+        <label htmlFor="lang-switcher-button">
+          {t("lang-toggle")}: {locale == "en" ? "Français" : "English"}
+        </label>
         {locale == "en" ? (
           <button
             onClick={() => {
               changeLang("fr");
             }}
             lang="fr"
+            id="lang-switcher-button"
           >
             Français
           </button>
@@ -36,6 +39,7 @@ const LanguageToggle = () => {
               changeLang("en");
             }}
             lang="en"
+            id="lang-switcher-button"
           >
             English
           </button>

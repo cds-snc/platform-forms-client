@@ -66,6 +66,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const labelComponent = labelText ? (
     <Label
       key={`label-${id}`}
+      id={`label-${id}`}
       htmlFor={id}
       className={isRequired ? "required" : ""}
       required={isRequired}
@@ -82,6 +83,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           return "email";
         case "phone":
           return "tel";
+        case "name":
+          return "name";
       }
     }
     return "text";
@@ -89,6 +92,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const textType = getTextType(element) as
     | "text"
     | "email"
+    | "name"
     | "number"
     | "password"
     | "search"
