@@ -1,5 +1,6 @@
 const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
-import { logMessage } from "../../lib/logger";å
+import { logMessage } from "../../lib/logger";
+å;
 
 const templates = async (req, res) => {
   try {
