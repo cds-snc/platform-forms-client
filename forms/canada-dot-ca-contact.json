@@ -1,119 +1,119 @@
 {
-  "internalTitleEn": "Contact Us - Canada.ca",
-  "internalTitleFr": "Nous joindre - Canada.ca",
-  "publishingStatus": false,
-  "submission": {
-    "templateID": "",
-    "email": "forms-formulaires@cds-snc.ca"
-  },
-  "form": {
-    "id": 46,
-    "version": 1,
-    "titleEn": "Send a question or comment",
-    "titleFr": "Envoyez une question ou un commentaire",
-    "layout": [1, 2, 3, 4, 5, 6],
-    "endPage": {
-      "descriptionEn": "#Thank you for your email  \n\r Our delay to answer is approximately 3 days.",
-      "descriptionFr": "#Merci pour votre demande  \n\r Notre délai de réponse est d'environ 4 jours."
-    },
-    "elements": [
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "descriptionEn": "###Files and applications \n\r Case specific enquiries about your file or application **must be directed** to the program at the relevant <a href='https://www.canada.ca/en/contact.html'>Government of Canada contacts</a>",
-          "descriptionFr": "###Dossiers et demandes \n\r Les demandes de renseignements concernant votre dossier ou votre demande doivent être adressées au programme approprié, via les <a href='https://www.canada.ca/fr/contact.html'>coordonnées du gouvernement du Canada</a>",
-          "charLimit": 200,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 2,
-        "type": "richText",
-        "properties": {
-          "descriptionEn": "###Service hours \n\r Emails are answered from Monday to Friday, 8:00 am to 8:00 pm (Eastern Standard Time).",
-          "descriptionFr": "###Heures de service \n\r Nous répondons aux courriels du lundi au vendredi, de 8 h à 20 h (heure normale de l’Est).",
-          "charLimit": 200,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 3,
-        "type": "richText",
-        "properties": {
-          "descriptionEn": "###Wait time \n\r Our delay to answer is approximately 3 days",
-          "descriptionFr": "###Temps d’attente \n\r Notre délai de réponse est d'environ 4 jours.",
-          "charLimit": 200,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 4,
-        "type": "richText",
-        "properties": {
-          "titleEn": "Personal information",
-          "titleFr": "Personnels de nature délicate",
-          "descriptionEn": "Please do not include sensitive personal information in the questions/comments box, such as your social insurance number, personal finance data and medical or work history.",
-          "descriptionFr": "Veuillez **ne pas fournir de renseignements personnels de nature délicate** dans le champ des questions/commentaires, comme votre numéro d'assurance sociale, vos données financières personnelles et vos antécédents médicaux ou professionnels. ",
-          "charLimit": 200,
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 5,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "Message",
-          "titleFr": "Message",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "Your question or comment",
-          "descriptionFr": "Inscrivez vos questions ou commentaires",
-          "charLimit": 800,
-          "validation": {
-            "required": true,
-            "type": "text"
-          }
-        }
-      },
-      {
-        "id": 6,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Email",
-          "titleFr": "Courriel",
-          "placeholderEn": "",
-          "placeholderFr": "",
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "charLimit": 100,
-          "validation": {
-            "required": true,
-            "type": "email"
-          }
-        }
-      },
-      {
-        "id": 7,
-        "type": "richText",
-        "properties": {
-          "titleEn": "Personal information",
-          "titleFr": "Personnels de nature délicate",
-          "descriptionEn": "### Privacy statement \n\r In order to respond to your enquiry, the Government of Canada will need to collect a limited amount of information (such as your email address). \n\r The information you provide is collected and stored in the Personal Information Bank entitled Public Communications (PSU 914). It may also be used for policy analysis, research and/or evaluation purposes. Your personal information is collected and administered under the authority of the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html'>Privacy Act</a> and other applicable laws. You have the right to access your personal information. For more information on this, see <a href='https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings.html'>Information about programs and information holdings</a>.",
-          "descriptionFr": "### Avis confidentialité \n\r Pour répondre à votre demande de renseignements, le gouvernement du Canada devra recueillir un minimum de renseignements (comme votre adresse courriel). \n\r Les renseignements que vous fournissez sont recueillis et conservés dans le fichier de renseignements personnels intitulé Communications publiques (POU 914). Elle peuvent également être utilisées à des fins d'analyse, de recherche et/ou d'évaluation. Les renseignements sont recueillis et utilisés en vertu de la Loi sur <a href='http://laws-lois.justice.gc.ca/fra/lois/P-21/index.html'>la protection des renseignements personnels</a> et des autres lois applicables. Vous avez le droit d'accéder à vos renseignements personnels. Pour en savoir davantage à ce sujet, veuillez consulter le site Web <a href='https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements.html'>Info Source</a>",
-          "charLimit": 200,
-          "validation": {
-            "required": false
-          }
-        }
-    ]
-  }
+	"internalTitleEn": "Contact Us - Canada.ca",
+	"internalTitleFr": "Nous joindre - Canada.ca",
+	"publishingStatus": false,
+	"submission": {
+		"templateID": "",
+		"email": "forms-formulaires@cds-snc.ca"
+	},
+	"form": {
+		"id": 46,
+		"version": 1,
+		"titleEn": "Send a question or comment",
+		"titleFr": "Envoyez une question ou un commentaire",
+		"layout": [1, 2, 3, 4, 5, 6, 7],
+		"endPage": {
+			"descriptionEn": "#Thank you for your email  \n\r Our delay to answer is approximately 3 days.",
+			"descriptionFr": "#Merci pour votre demande  \n\r Notre délai de réponse est d'environ 4 jours."
+		},
+		"elements": [{
+				"id": 1,
+				"type": "richText",
+				"properties": {
+					"descriptionEn": "###Files and applications \n\r Case specific enquiries about your file or application **must be directed** to the program at the relevant <a href='https://www.canada.ca/en/contact.html'>Government of Canada contacts</a>",
+					"descriptionFr": "###Dossiers et demandes \n\r Les demandes de renseignements concernant votre dossier ou votre demande doivent être adressées au programme approprié, via les <a href='https://www.canada.ca/fr/contact.html'>coordonnées du gouvernement du Canada</a>",
+					"charLimit": 200,
+					"validation": {
+						"required": false
+					}
+				}
+			},
+			{
+				"id": 2,
+				"type": "richText",
+				"properties": {
+					"descriptionEn": "###Service hours \n\r Emails are answered from Monday to Friday, 8:00 am to 8:00 pm (Eastern Standard Time).",
+					"descriptionFr": "###Heures de service \n\r Nous répondons aux courriels du lundi au vendredi, de 8 h à 20 h (heure normale de l’Est).",
+					"charLimit": 200,
+					"validation": {
+						"required": false
+					}
+				}
+			},
+			{
+				"id": 3,
+				"type": "richText",
+				"properties": {
+					"descriptionEn": "###Wait time \n\r Our delay to answer is approximately 3 days",
+					"descriptionFr": "###Temps d’attente \n\r Notre délai de réponse est d'environ 4 jours.",
+					"charLimit": 200,
+					"validation": {
+						"required": false
+					}
+				}
+			},
+			{
+				"id": 4,
+				"type": "richText",
+				"properties": {
+					"titleEn": "Personal information",
+					"titleFr": "Personnels de nature délicate",
+					"descriptionEn": "Please do not include sensitive personal information in the questions/comments box, such as your social insurance number, personal finance data and medical or work history.",
+					"descriptionFr": "Veuillez **ne pas fournir de renseignements personnels de nature délicate** dans le champ des questions/commentaires, comme votre numéro d'assurance sociale, vos données financières personnelles et vos antécédents médicaux ou professionnels. ",
+					"charLimit": 200,
+					"validation": {
+						"required": false
+					}
+				}
+			},
+			{
+				"id": 5,
+				"type": "textArea",
+				"properties": {
+					"titleEn": "Message",
+					"titleFr": "Message",
+					"placeholderEn": "",
+					"placeholderFr": "",
+					"descriptionEn": "Your question or comment",
+					"descriptionFr": "Inscrivez vos questions ou commentaires",
+					"charLimit": 800,
+					"validation": {
+						"required": true,
+						"type": "text"
+					}
+				}
+			},
+			{
+				"id": 6,
+				"type": "textField",
+				"properties": {
+					"titleEn": "Email",
+					"titleFr": "Courriel",
+					"placeholderEn": "",
+					"placeholderFr": "",
+					"descriptionEn": "",
+					"descriptionFr": "",
+					"charLimit": 100,
+					"validation": {
+						"required": true,
+						"type": "email"
+					}
+				}
+			},
+			{
+				"id": 7,
+				"type": "richText",
+				"properties": {
+					"titleEn": "Personal information",
+					"titleFr": "Personnels de nature délicate",
+					"descriptionEn": "### Privacy statement \n\r In order to respond to your enquiry, the Government of Canada will need to collect a limited amount of information (such as your email address). \n\r The information you provide is collected and stored in the Personal Information Bank entitled Public Communications (PSU 914). It may also be used for policy analysis, research and/or evaluation purposes. Your personal information is collected and administered under the authority of the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html'>Privacy Act</a> and other applicable laws. You have the right to access your personal information. For more information on this, see <a href='https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings.html'>Information about programs and information holdings</a>.",
+					"descriptionFr": "### Avis confidentialité \n\r Pour répondre à votre demande de renseignements, le gouvernement du Canada devra recueillir un minimum de renseignements (comme votre adresse courriel). \n\r Les renseignements que vous fournissez sont recueillis et conservés dans le fichier de renseignements personnels intitulé Communications publiques (POU 914). Elle peuvent également être utilisées à des fins d'analyse, de recherche et/ou d'évaluation. Les renseignements sont recueillis et utilisés en vertu de la Loi sur <a href='http://laws-lois.justice.gc.ca/fra/lois/P-21/index.html'>la protection des renseignements personnels</a> et des autres lois applicables. Vous avez le droit d'accéder à vos renseignements personnels. Pour en savoir davantage à ce sujet, veuillez consulter le site Web <a href='https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements.html'>Info Source</a>",
+					"charLimit": 200,
+					"validation": {
+						"required": false
+					}
+				}
+			}
+		]
+	}
 }
