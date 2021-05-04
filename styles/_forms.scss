@@ -193,7 +193,7 @@
     &:checked + .gc-checkbox-label:after {
       content: "";
       background-image: url("../public/img/checkmark.svg");
-      @apply absolute w-6 h-6 top-10px left-2;
+      @apply absolute w-6 h-6 left-2;
     }
   }
 }
@@ -205,7 +205,7 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-small_base block font-normal text-base flex;
+  @apply md:text-small_base block font-normal text-base flex items-center;
 
   .checkbox-label-text,
   .radio-label-text {
@@ -214,7 +214,7 @@
 }
 
 .gc-radio__input {
-  @apply absolute opacity-0;
+  @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
   & + .gc-radio-label {
     @apply relative cursor-pointer p-0;
   }
@@ -233,7 +233,7 @@
   &:checked + .gc-radio-label:after {
     content: "";
     background-image: url("../public/img/black-circle.svg");
-    @apply absolute w-5 h-5 left-10px top-10px;
+    @apply absolute w-5 h-5 left-10px;
   }
 }
 
