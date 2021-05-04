@@ -38,7 +38,7 @@ const submit = async (req, res) => {
 const callLambda = async (form, fields) => {
   const submission = await getSubmissionByID(form.id);
 
-  const labmdaClient = new LambdaClient({ region: "ca-central-1" });
+  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
 
   const command = new InvokeCommand({
     FunctionName: process.env.SUBMISSION_API ?? "",
@@ -48,7 +48,7 @@ const callLambda = async (form, fields) => {
       submission,
     }),
   });
-  return await labmdaClient
+  return await lambdaClient
     .send(command)
     .then((response) => {
       let decoder = new TextDecoder();
