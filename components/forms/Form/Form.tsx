@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { withFormik, FormikProps } from "formik";
 import getConfig from "next/config";
 import { getFormInitialValues } from "../../../lib/formBuilder";
-import { validateOnSubmit, getErrorList, setFocusOnErrors } from "../../../lib/validation";
+import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../../lib/validation";
 import { submitToAPI } from "../../../lib/dataLayer";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
@@ -25,11 +25,11 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  //  If there are errors on the page, scroll into view and set focus the first error field
+  //  If there are errors on the page, set focus the first error field
   useEffect(() => {
     if (!props.isValid && props.submitCount > 0) {
       if (typeof window !== "undefined") {
-        setFocusOnErrors(props, errorId);
+        setFocusOnErrorMessage(props, errorId);
       }
     }
   }, [props.submitCount, props.isValid, props.errors]);

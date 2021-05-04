@@ -4,6 +4,7 @@ import classnames from "classnames";
 interface LabelProps {
   children: React.ReactNode;
   htmlFor: string;
+  id?: string;
   className?: string;
   error?: boolean;
   hint?: React.ReactNode;
@@ -12,7 +13,7 @@ interface LabelProps {
 }
 
 export const Label = (props: LabelProps): React.ReactElement => {
-  const { children, htmlFor, className, error, hint, srOnly, required } = props;
+  const { children, htmlFor, className, error, hint, srOnly, required, id } = props;
 
   const classes = classnames(
     {
@@ -24,7 +25,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
   );
 
   return (
-    <label data-testid="label" className={classes} htmlFor={htmlFor}>
+    <label data-testid="label" className={classes} htmlFor={htmlFor} id={id}>
       {children} {required ? <span aria-label="required">*</span> : null}
       {hint && <span className="gc-hint">{hint}</span>}
     </label>

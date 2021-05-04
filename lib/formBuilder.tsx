@@ -66,6 +66,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const labelComponent = labelText ? (
     <Label
       key={`label-${id}`}
+      id={`label-${id}`}
       htmlFor={id}
       className={isRequired ? "required" : ""}
       required={isRequired}
