@@ -139,11 +139,7 @@ export const getErrorList = (
       );
     });
   }
-  return errorList && errorList.length ? (
-    <ol id="gc-form-errors" className="gc-ordered-list">
-      {errorList}
-    </ol>
-  ) : null;
+  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
 };
 
 /**
