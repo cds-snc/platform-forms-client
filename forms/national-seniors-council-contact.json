@@ -11,91 +11,92 @@
 		"version": 1,
 		"titleEn": "Contact Us - National Seniors Council",
 		"titleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
-		"layout": [1, 2, 3, 4, 5]
-	},
-	"endPage": {
-		"descriptionEn": "#Thank you for your email  \n\r ## Reach the right organization \n\r For more services and information, please see. \n\r  ### The Council <ul className='link-list custom'><li><a href='https://www.canada.ca/en/national-seniors-council/corporate/about-us.html'></a></li></ul> \n\r The NSC provides advice to the federal government on issues that matter to seniors. \n\r ### Members <ul className='link-list custom'><li><a href='https://www.canada.ca/en/national-seniors-council/corporate/members.html'> \n\r  NSC members are nominated based on their expertise and experience related to seniors issues.</a></li></ul> \n\r ### Priorities \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/en/national-seniors-council/corporate/priorities.html'> The NSC is currently implementing a 3-year work plan covering 2018 to 2021, focusing on 4 key work priorities.</li></ul> \n\r ### Publications and reports \n\r <ul className='link-list custom'><li><a href='https://www.canada.ca/en/national-seniors-council/programs/publications-reports.html'> The NSC produces publications and reports based on its work priorities. </a></li></ul> \n\r ### Relevant services and resources \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/en/national-seniors-council/corporate/relevant-resources.html'>A number of services and resources are available to seniors, their families and their caregivers.</a></li></ul>",
-		"descriptionFr": "#Merci pour votre courriel \n\r ## Rejoindre le bon organisme \n\r Pour plus de services et d'informations, veuillez consulter. \n\r  ### À propos du Conseil \n\r <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/apropos-nous.html'>Le CNA conseille le gouvernement fédéral sur les enjeux importants pour les aînés.</a></li></ul> \n\r ### Membres \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/membres.html'>Les membres du CNA sont nommés en fonction de leurs expertises et expériences sur les enjeux liés aux aînés.</a></li></ul> \n\r ### Priorités \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/priorities.html'> Le CNA met actuellement en œuvre un plan de travail triennal, de 2018 à 2021, axé sur quatre priorités de travail clés.</a></li></ul> \n\r ### Publications et rapports \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/conseil-national-aines/programmes/publications-rapports.html'>Le CNA produit dees publications et des rapports basés sur ses priorités de travail</a></li></ul> \n\r ### Ressources et services pertinents \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/ressources-pertinents.html'>Un éventail de services et de ressources sont à la disposition des aînés, de leur famille et de leurs fournisseurs de soins. </a></li></ul>"
-	},
-	"elements": [{
-			"id": 1,
-			"type": "richText",
-			"properties": {
-				"titleEn": "",
-				"titleFr": "",
-				"descriptionEn": "**It is the responsibility of the requester to provide an accurate, up-to-date email address**. \n\r If you have difficulty with the following form, you can use any of our other <a href='https://www.canada.ca/en/national-seniors-council/corporate/contact-us.html'>service channels</a> to contact us.",
-				"descriptionFr": "**Vous êtes responsable de fournir une adresse de courriel correcte et à jour.** \n\r Si vous avez des problèmes avec le formulaire suivant, vous pouvez utiliser une des <a href='https://www.canada.ca/en/national-seniors-council/corporate/contact-us.html'>autres voies de service</a> pour communiquer avec nous.",
-				"charLimit": 200,
-				"validation": {
-					"required": false
-				}
-			}
-		},
-		{
-			"id": 2,
-			"type": "textField",
-			"properties": {
-				"titleEn": "Full name",
-				"titleFr": "Nom au complet",
-				"placeholderEn": "",
-				"placeholderFr": "",
-				"description": "",
-				"charLimit": 100,
-				"validation": {
-					"required": false,
-					"type": "name"
-				}
-			}
-		},
-		{
-			"id": 3,
-			"type": "textField",
-			"properties": {
-				"titleEn": "Email",
-				"titleFr": "Courriel",
-				"placeholderEn": "",
-				"placeholderFr": "",
-				"descriptionEn": "",
-				"descriptionFr": "",
-				"charLimit": 100,
-				"validation": {
-					"required": true,
-					"type": "email"
-				}
-			}
-		},
-		{
-			"id": 4,
-			"type": "textField",
-			"properties": {
-				"titleEn": "Subject",
-				"titleFr": "Sujet",
-				"placeholderEn": "",
-				"placeholderFr": "",
-				"descriptionEn": "",
-				"descriptionFr": "",
-				"charLimit": 100,
-				"validation": {
-					"required": true,
-					"type": "text"
-				}
-			}
-		},
-		{
-			"id": 5,
-			"type": "textArea",
-			"properties": {
-				"titleEn": "Enter your message",
-				"titleFr": "Inscrire votre message",
-				"placeholderEn": "",
-				"placeholderFr": "",
-				"descriptionEn": "Any relevant details or specific questions",
-				"descriptionFr": "Avez-vous des détails pertinents ou des questions spécifiques?",
-				"charLimit": 800,
-				"validation": {
-					"required": true
-				}
-			}
-		}
-	]
+		"layout": [1, 2, 3, 4, 5],
+    "endPage": {
+      "descriptionEn": "#Thank you for your email  \n\r ## Reach the right organization \n\r For more services and information, please see. \n\r  <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/about-us.html'>The Council</a></h3> \n\r The NSC provides advice to the federal government on issues that matter to seniors. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/members.html'>Members</a></h3> \n\r  NSC members are nominated based on their expertise and experience related to seniors issues. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/priorities.html'>Priorities</a></h3> \n\r The NSC is currently implementing a 3-year work plan covering 2018 to 2021, focusing on 4 key work priorities. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/programs/publications-reports.html'>Publications and reports</a></h3> \n\r The NSC produces publications and reports based on its work priorities. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/relevant-resources.html'>Relevant services and resources</a></h3> \n\r A number of services and resources are available to seniors, their families and their caregivers.",
+      "descriptionFr": "#Merci pour votre courriel \n\r ## Rejoindre le bon organisme \n\r Pour plus de services et d'informations, veuillez consulter. \n\r  <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/apropos-nous.html'>À propos du Conseil</a></h3> \n\r Le CNA conseille le gouvernement fédéral sur les enjeux importants pour les aînés. \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/membres.html'>Membres</a></h3> \n\r Les membres du CNA sont nommés en fonction de leurs expertises et expériences sur les enjeux liés aux aînés. \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/priorities.html'>Priorités</a></h3> \n\r Le CNA met actuellement en œuvre un plan de travail triennal, de 2018 à 2021, axé sur quatre priorités de travail clés. \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/programmes/publications-rapports.html'>Publications et rapports</a></h3> \n\r Le CNA produit dees publications et des rapports basés sur ses priorités de travail \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/ressources-pertinents.html'>Ressources et services pertinents</a></h3> \n\r Un éventail de services et de ressources sont à la disposition des aînés, de leur famille et de leurs fournisseurs de soins."
+    },
+    "elements": [
+      {
+        "id": 1,
+        "type": "richText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "**It is the responsibility of the requester to provide an accurate, up-to-date email address**. \n\r If you have difficulty with the following form, you can use any of our other <a href='https://www.canada.ca/en/national-seniors-council/corporate/contact-us.html'>service channels</a> to contact us.",
+          "descriptionFr": "**Vous êtes responsable de fournir une adresse de courriel correcte et à jour.** \n\r Si vous avez des problèmes avec le formulaire suivant, vous pouvez utiliser une des <a href='https://www.canada.ca/en/national-seniors-council/corporate/contact-us.html'>autres voies de service</a> pour communiquer avec nous.",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Full name",
+          "titleFr": "Nom au complet",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "validation": {
+            "required": false,
+            "type": "name"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Email",
+          "titleFr": "Courriel",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "email"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Subject",
+          "titleFr": "Sujet",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Enter your message",
+          "titleFr": "Inscrire votre message",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Any relevant details or specific questions",
+          "descriptionFr": "Avez-vous des détails pertinents ou des questions spécifiques?",
+          "charLimit": 800,
+          "validation": {
+            "required": true
+          }
+        }
+      }
+    ]
+  }
 }
