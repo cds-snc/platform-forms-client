@@ -20,23 +20,24 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
-  const formStatus = props.status === "Error" ? t("server-error") : null;
-  if (formStatus) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  const serverErrorId = `${errorId}-server`;
+  const formStatusError = props.status === "Error" ? t("server-error") : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
+    if (formStatusError) {
+      setFocusOnErrorMessage(props, serverErrorId);
+    }
     if (!props.isValid && props.submitCount > 0) {
-      if (typeof window !== "undefined") {
-        setFocusOnErrorMessage(props, errorId);
-      }
+      setFocusOnErrorMessage(props, errorId);
     }
   }, [props.submitCount, props.isValid, props.errors]);
 
   return (
     <>
-      {formStatus ? <Alert type="error" heading={formStatus} /> : null}
+      {formStatusError ? (
+        <Alert type="error" heading={formStatusError} tabIndex={0} id={serverErrorId} />
+      ) : null}
       {errorList ? (
         <Alert
           type="error"

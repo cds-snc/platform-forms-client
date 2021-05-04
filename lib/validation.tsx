@@ -149,7 +149,7 @@ export const setFocusOnErrorMessage = (
   props: InnerFormProps & FormikProps<FormValues>,
   errorId: string
 ): void => {
-  if (props && props.errors && props.touched && errorId) {
+  if (typeof window !== "undefined" && props && props.errors && props.touched && errorId) {
     const errorAlert = document.getElementById(errorId);
     if (errorAlert && typeof errorAlert !== "undefined") {
       errorAlert.focus();
