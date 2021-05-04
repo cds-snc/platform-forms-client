@@ -11,7 +11,7 @@
 		"version": 1,
 		"titleEn": "Contact Us - National Seniors Council",
 		"titleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
-		"layout": [1, 2, 3, 4, 5],
+		"layout": [1, 2, 3, 4, 5, 6],
     "endPage": {
       "descriptionEn": "#Thank you for your email  \n\r ## Reach the right organization \n\r For more services and information, please see. \n\r  <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/about-us.html'>The Council</a></h3> \n\r The NSC provides advice to the federal government on issues that matter to seniors. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/members.html'>Members</a></h3> \n\r  NSC members are nominated based on their expertise and experience related to seniors issues. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/priorities.html'>Priorities</a></h3> \n\r The NSC is currently implementing a 3-year work plan covering 2018 to 2021, focusing on 4 key work priorities. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/programs/publications-reports.html'>Publications and reports</a></h3> \n\r The NSC produces publications and reports based on its work priorities. \n\r <h3><a href='https://www.canada.ca/en/national-seniors-council/corporate/relevant-resources.html'>Relevant services and resources</a></h3> \n\r A number of services and resources are available to seniors, their families and their caregivers.",
       "descriptionFr": "#Merci pour votre courriel \n\r ## Rejoindre le bon organisme \n\r Pour plus de services et d'informations, veuillez consulter. \n\r  <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/apropos-nous.html'>À propos du Conseil</a></h3> \n\r Le CNA conseille le gouvernement fédéral sur les enjeux importants pour les aînés. \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/membres.html'>Membres</a></h3> \n\r Les membres du CNA sont nommés en fonction de leurs expertises et expériences sur les enjeux liés aux aînés. \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/priorities.html'>Priorités</a></h3> \n\r Le CNA met actuellement en œuvre un plan de travail triennal, de 2018 à 2021, axé sur quatre priorités de travail clés. \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/programmes/publications-rapports.html'>Publications et rapports</a></h3> \n\r Le CNA produit dees publications et des rapports basés sur ses priorités de travail \n\r <h3><a href='https://www.canada.ca/fr/conseil-national-aines/organisation/ressources-pertinents.html'>Ressources et services pertinents</a></h3> \n\r Un éventail de services et de ressources sont à la disposition des aînés, de leur famille et de leurs fournisseurs de soins."
@@ -83,6 +83,20 @@
       },
       {
         "id": 5,
+        "type": "richText",
+        "properties": {
+          "titleEn": "",
+          "titleFr": "",
+          "descriptionEn": "**Please do not include sensitive personal information** in the message box, such as your Social Insurance Number, personal finance data and medical or work history.",
+          "descriptionFr": "**Veuillez ne pas fournir de renseignements personnels de nature délicate** dans la boîte à message, comme votre numéro d'assurance sociale, des renseignements d'ordre financier ou médical, ou de l'information sur vos antécédents de travail",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 6,
         "type": "textArea",
         "properties": {
           "titleEn": "Enter your message",
@@ -94,6 +108,20 @@
           "charLimit": 800,
           "validation": {
             "required": true
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": "richText",
+        "properties": {
+          "titleEn": "Personal Information Collection Statetment",
+          "titleFr": "",
+          "descriptionEn": "In order to respond to your inquiry, National Seniors Council (NSC) will need to collect a limited amount of information (such as your email address). However, please note, this 'Contact Us' service is intended for general inquiries only. /n/r Due to the unprotected nature of the Internet, sensitive, personal inquiries cannot be answered through this service, and are best addressed in person, over the telephone or by ground mail. The information you provide is collected through a secure e-mail format and will be stored in the Personal Information Bank entitled Public Communications (PSU 914). Your request is collected under the authority of the Department of Human Resources and Skills Development Act and the Department of Social Development Act, and will be administered in accordance with the <a href='http://laws.justice.gc.ca/eng/acts/P-21/index.html'>Privacy Act</a> and other applicable laws. The information you provide may also be used for policy analysis, research and/or evaluation purposes and may be shared with Publications if you request documentation. You have the right to access your personal information. For more information on this, please access the <a href'http://www.infosource.gc.ca/index-eng.asp'> Info Source</a> Web site.",
+          "descriptionFr": "Pour répondre à votre demande de renseignements, le Conseil national des aînés (CNA) devra recueillir quelques renseignements (par exemple, votre adresse de courriel). Veuillez noter que le service « Contactez-nous » est offert uniquement pour répondre aux demandes de renseignements généraux. \n\r Nous ne pouvons pas répondre aux demandes comportant des renseignements personnels de nature délicate par l'entremise de ce service car l'information qui circule sur Internet n'est pas protégée. Il est préférable de poser ces questions en personne, par téléphone, ou encore de les acheminer par la poste. \n\r L'information que vous fournissez est recueillie au moyen d'un formulaire en ligne sécurisé et sera gardée dans le fichier de renseignements personnels, communications publiques (PSU 914). Les renseignements sont recueillis en vertu de la Loi sur le ministère des Ressources humaines et du Développement des compétences et de la Loi sur le ministère du Développement social, et seront utilisés conformément à la <a href'http://laws.justice.gc.ca/fra/lois/P-21/index.html'>Loi sur la protection des renseignements</a> personnels et aux autres lois applicables. Les renseignements que vous fournissez peuvent servir à l'analyse des politiques, à la recherche ou à l'évaluation et peuvent être partagés avec les publications si vous demandez de la documentation. Vous avez le droit d'accéder à vos renseignements personnels. Pour en savoir davantage à ce sujet, veuillez consulter le site Web <a href'http://www.infosource.gc.ca/index-fra.asp'> Info Source</a>.",
+          "charLimit": 200,
+          "validation": {
+            "required": false
           }
         }
       }
