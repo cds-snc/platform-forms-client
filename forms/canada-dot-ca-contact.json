@@ -13,8 +13,8 @@
 		"titleFr": "Envoyez une question ou un commentaire",
 		"layout": [1, 2, 3, 4, 5, 6, 7],
 		"endPage": {
-			"descriptionEn": "#Thank you for your email  \n\r Our delay to answer is approximately 3 days.",
-			"descriptionFr": "#Merci pour votre demande  \n\r Notre délai de réponse est d'environ 4 jours."
+			"descriptionEn": "#Thank you for your enquiry  \n\r Our delay to answer is approximately 3 days.\n\r  <a href='https://www.canada.ca/en/contact/questions.html'>Go back</a>",
+			"descriptionFr": "#Merci pour votre demande  \n\r Notre délai de réponse est d'environ 4 jours.\n\r<a href='https://www.canada.ca/fr/contact/questions.html'>Retour</a>"
 		},
 		"elements": [{
 				"id": 1,
@@ -104,10 +104,10 @@
 				"id": 7,
 				"type": "richText",
 				"properties": {
-					"titleEn": "Personal information",
-					"titleFr": "Personnels de nature délicate",
-					"descriptionEn": "### Privacy statement \n\r In order to respond to your enquiry, the Government of Canada will need to collect a limited amount of information (such as your email address). \n\r The information you provide is collected and stored in the Personal Information Bank entitled Public Communications (PSU 914). It may also be used for policy analysis, research and/or evaluation purposes. Your personal information is collected and administered under the authority of the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html'>Privacy Act</a> and other applicable laws. You have the right to access your personal information. For more information on this, see <a href='https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings.html'>Information about programs and information holdings</a>.",
-					"descriptionFr": "### Avis confidentialité \n\r Pour répondre à votre demande de renseignements, le gouvernement du Canada devra recueillir un minimum de renseignements (comme votre adresse courriel). \n\r Les renseignements que vous fournissez sont recueillis et conservés dans le fichier de renseignements personnels intitulé Communications publiques (POU 914). Elle peuvent également être utilisées à des fins d'analyse, de recherche et/ou d'évaluation. Les renseignements sont recueillis et utilisés en vertu de la Loi sur <a href='http://laws-lois.justice.gc.ca/fra/lois/P-21/index.html'>la protection des renseignements personnels</a> et des autres lois applicables. Vous avez le droit d'accéder à vos renseignements personnels. Pour en savoir davantage à ce sujet, veuillez consulter le site Web <a href='https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements.html'>Info Source</a>",
+					"titleEn": "Privacy statement",
+					"titleFr": "Avis confidentialité",
+					"descriptionEn": "In order to respond to your enquiry, the Government of Canada will need to collect a limited amount of information (such as your email address). \n\r The information you provide is collected and stored in the Personal Information Bank entitled Public Communications (PSU 914). It may also be used for policy analysis, research and/or evaluation purposes. Your personal information is collected and administered under the authority of the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html'>Privacy Act</a> and other applicable laws. You have the right to access your personal information. For more information on this, see <a href='https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings.html'>Information about programs and information holdings</a>.",
+					"descriptionFr": "Pour répondre à votre demande de renseignements, le gouvernement du Canada devra recueillir un minimum de renseignements (comme votre adresse courriel). \n\r Les renseignements que vous fournissez sont recueillis et conservés dans le fichier de renseignements personnels intitulé Communications publiques (POU 914). Elle peuvent également être utilisées à des fins d'analyse, de recherche et/ou d'évaluation. Les renseignements sont recueillis et utilisés en vertu de la Loi sur <a href='http://laws-lois.justice.gc.ca/fra/lois/P-21/index.html'>la protection des renseignements personnels</a> et des autres lois applicables. Vous avez le droit d'accéder à vos renseignements personnels. Pour en savoir davantage à ce sujet, veuillez consulter le site Web <a href='https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements.html'>Info Source</a>",
 					"charLimit": 200,
 					"validation": {
 						"required": false
