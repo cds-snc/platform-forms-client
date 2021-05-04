@@ -67,7 +67,23 @@ export const getErrorList = (
       );
     });
   }
-  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+  return errorList && errorList.length ? (
+    <ol id="gc-form-errors" className="gc-ordered-list">
+      {errorList}
+    </ol>
+  ) : null;
+};
+
+export const setFocusOnErrors = (
+  props: InnerFormProps & FormikProps<FormValues>,
+  errorId: string
+) => {
+  if (props && props.errors && props.touched && errorId) {
+    const errorAlert = document.getElementById(errorId);
+    if (errorAlert && typeof errorAlert !== "undefined") {
+      errorAlert.focus();
+    }
+  }
 };
 
 const getRegexByType = (type: string | undefined, t: TFunction, value?: string) => {

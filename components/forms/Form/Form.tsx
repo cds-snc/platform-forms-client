@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { withFormik, FormikProps } from "formik";
 import getConfig from "next/config";
 import { getFormInitialValues } from "../../../lib/formBuilder";
-import { validateOnSubmit, getErrorList } from "../../../lib/validation";
+import { validateOnSubmit, getErrorList, setFocusOnErrors } from "../../../lib/validation";
 import { submitToAPI } from "../../../lib/dataLayer";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
@@ -19,18 +19,32 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
 
   const errorList = props.errors ? getErrorList(props) : null;
+  const errorId = "gc-form-errors";
   const formStatus = props.status === "Error" ? t("server-error") : null;
   if (formStatus) {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  //  If there are errors on the page, scroll into view and set focus the first error field
+  useEffect(() => {
+    if (!props.isValid && props.submitCount > 0) {
+      if (typeof window !== "undefined") {
+        setFocusOnErrors(props, errorId);
+      }
+    }
+  }, [props.submitCount, props.isValid, props.errors]);
+
   return (
     <>
       {formStatus ? <Alert type="error" heading={formStatus} /> : null}
       {errorList ? (
-        <Alert type="error" heading={t("input-validation.heading")} validation={true}>
+        <Alert
+          type="error"
+          heading={t("input-validation.heading")}
+          validation={true}
+          id={errorId}
+          tabIndex={0}
+        >
           {errorList}
         </Alert>
       ) : null}
@@ -71,10 +85,6 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   validate: (values, props) => {
     const validationResult = validateOnSubmit(values, props);
-    //  If there are errors on the page, scroll into view
-    if (typeof window !== "undefined" && Object.keys(validationResult).length) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
     return validationResult;
   },
 
