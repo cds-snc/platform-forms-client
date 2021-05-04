@@ -1,0 +1,8 @@
+{
+  "title": "Admin Dashboard",
+  "logged-in": "Signed in as",
+  "button": {
+    "login": "Login",
+    "logout": "Logout"
+  }
+}
