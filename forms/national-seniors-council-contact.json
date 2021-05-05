@@ -1,17 +1,17 @@
 {
-	"internalTitleEn": "Contact Us - National Seniors Council",
-	"internalTitleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
-	"publishingStatus": false,
-	"submission": {
-		"templateID": "",
-		"email": "forms-formularies@cds-snc.ca"
-	},
-	"form": {
-		"id": 47,
-		"version": 1,
-		"titleEn": "Contact Us - National Seniors Council",
-		"titleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
-		"layout": [1, 2, 3, 4, 5, 6],
+  "internalTitleEn": "Contact Us - National Seniors Council",
+  "internalTitleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "forms-formularies@cds-snc.ca"
+  },
+  "form": {
+    "id": 47,
+    "version": 1,
+    "titleEn": "Contact Us - National Seniors Council",
+    "titleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
+    "layout": [1, 2, 3, 4, 5, 6],
     "endPage": {
       "descriptionEn": "#Thank you for your email  PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/en/national-seniors-council.html'>Go back</a>",
       "descriptionFr": "#Merci pour votre courriel PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/fr/conseil-national-aines.html'>Retour</a>"
