@@ -6,7 +6,7 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 interface RequiredTextInputProps {
   id: string;
   name: string;
-  type: "text" | "email" | "number" | "password" | "search" | "tel" | "url";
+  type: "text" | "email" | "name" | "number" | "password" | "search" | "tel" | "url";
 }
 
 interface CustomTextInputProps {

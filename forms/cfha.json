@@ -30,7 +30,7 @@
           "titleEn": "",
           "titleFr": "",
           "descriptionEn": "Note that requests are monitored during normal business hours. Any urgent requests should be made directly by phone to your local HSC or through our <a href='https://www.canada.ca/en/department-national-defence/services/benefits-military/military-housing/contact-cfha/after-hours.html/'>Emergency After-Hours Response Service</a>",
-          "descriptionFr": "FR - Note that requests are monitored during normal business hours. Any urgent requests should be made directly by phone to your local HSC or through our <a href='https://www.canada.ca/en/department-national-defence/services/benefits-military/military-housing/contact-cfha/after-hours.html/'>Emergency After-Hours Response Service</a>",
+          "descriptionFr": "Si un entretien est requis de façon urgente en dehors des heures normales d’ouverture, veuillez communiquer avec le <a href='https://www.canada.ca/fr/ministere-defense-nationale/services/avantages-militaires/logements-militaires/contactez-nous/apres-heures.html'>service d'urgence</a>",
           "charLimit": 400,
           "validation": {
             "required": false

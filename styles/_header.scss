@@ -36,24 +36,16 @@
 .gc-language-toggle {
   @apply md:text-small_base text-base text-right;
 
+  label {
+    @include visuallyHidden();
+  }
+
   button {
     @apply shadow-none bg-none text-blue-900 underline border-0;
   }
 }
 
 header {
-  .language-link {
-    h2 {
-      @include visuallyHidden();
-    }
-
-    button {
-      &:focus {
-        @include focus(3px, 3px);
-      }
-    }
-  }
-
   .canada-flag {
     @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
   }
