@@ -48,7 +48,7 @@ There are 2 main parts to the structure:
 
    `startPage`: Defines what appears on the first, intro page
 
-   `endPage`: Defines what appears on the confirmation page, after the form was submitted
+   `endPage`: Defines what appears on the confirmation page, after the form was submitted. Can write markdown within the description.
 
    `publishingStatus`: If set to false, the link to the form will not appear on the main page, rather under "sandbox"
 
@@ -89,8 +89,8 @@ Example:
     "title": "cds-snc"
   },
   "endPage": {
-    "referrerUrlEn": "https://digital.canada.ca/",
-    "referrerUrlFr": "https://numerique.canada.ca/"
+    "descriptionEn": "# Thank you for your enquiry  \n\r Canadian Digital Services will respond to your email within one week.",
+    "descriptionFr": "# Merci pour votre demande  \n\r Le Service numérique canadien répondra à votre demande d’ici une semaine."
   },
   "elements": [
     {
