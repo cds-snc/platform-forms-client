@@ -24,7 +24,7 @@
           "titleEn": "",
           "titleFr": "",
           "descriptionEn": "**It is the responsibility of the requester to provide an accurate, up-to-date email address**. \n\r If you have difficulty with the following form, you can use any of our other <a href='https://www.canada.ca/en/national-seniors-council/corporate/contact-us.html'>service channels</a> to contact us.",
-          "descriptionFr": "**Vous êtes responsable de fournir une adresse de courriel correcte et à jour.** \n\r Si vous avez des problèmes avec le formulaire suivant, vous pouvez utiliser une des <a href='https://www.canada.ca/en/national-seniors-council/corporate/contact-us.html'>autres voies de service</a> pour communiquer avec nous.",
+          "descriptionFr": "**Vous êtes responsable de fournir une adresse de courriel correcte et à jour.** \n\r Si vous avez des problèmes avec le formulaire suivant, vous pouvez utiliser une des <a href='https://www.canada.ca/fr/conseil-national-aines/organisation/contactez-nous.html'>autres voies de service</a> pour communiquer avec nous.",
           "charLimit": 200,
           "validation": {
             "required": false
