@@ -32,8 +32,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "The Transportation Safety Board of Canada can answer your questions about our organization, the status of our investigations, and incidents related to air, rail, marine, and pipeline. To contact us, please fill out the form below.",
-          "descriptionFr": "Le Bureau de la sécurité des transports du Canada peut répondre aux questions sur notre organisme, le statut de nos enquêtes et les incidents reliés au transport aéronautique, ferroviaire, maritime et pipelinier.",
+          "descriptionEn": "The Transportation Safety Board of Canada can answer your questions about our organization, the status of our investigations, and incidents related to air, rail, marine, and pipeline. To contact us, please fill out the form below. \n\r Learn about how Transport Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
+          "descriptionFr": "Le Bureau de la sécurité des transports du Canada peut répondre aux questions sur notre organisme, le statut de nos enquêtes et les incidents reliés au transport aéronautique, ferroviaire, maritime et pipelinier. \n\r Pour connaître comment le Bureau de la sécurité des transports du Canada protège votre confidentialité, naviguez à <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>l'avis de confidentialité</a>.",
           "charLimit": 200,
           "validation": {
             "required": false
@@ -97,10 +97,6 @@
             {
               "en": "Access to Information and Privacy",
               "fr": "Demande de renseignements sur la vie privée"
-            },
-            {
-              "en": "Other, such as jobs and training, photos or videos, pilot background letter",
-              "fr": "Autre, tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote"
             }
           ],
           "charLimit": 100,
@@ -113,12 +109,12 @@
         "id": 5,
         "type": "textField",
         "properties": {
-          "titleEn": "Please specify",
-          "titleFr": "Veuillez spécifier",
+          "titleEn": "For other information please specify",
+          "titleFr": "Pour d'autre information veuillez spécifier",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "If you selected Other in the previous question",
-          "descriptionFr": "Si vous avez sélectionné Autre à la question précédente",
+          "descriptionEn": "Such as jobs and training, photos or videos, pilot background letter",
+          "descriptionFr": "Tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote",
           "charLimit": 100,
           "validation": {
             "required": false,
