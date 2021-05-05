@@ -73,7 +73,7 @@
           "charLimit": 200,
           "validation": {
             "required": true,
-             "type": "text"
+            "type": "text"
           }
         }
       },
