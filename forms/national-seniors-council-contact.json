@@ -13,8 +13,8 @@
     "titleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
     "layout": [1, 2, 3, 4, 5, 6],
     "endPage": {
-      "descriptionEn": "#Thank you for your email  PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/en/national-seniors-council.html'>Go back</a>",
-      "descriptionFr": "#Merci pour votre courriel PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/fr/conseil-national-aines.html'>Retour</a>"
+      "descriptionEn": "#Thank you for your email  \n\r PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/en/national-seniors-council.html'>Go back</a>",
+      "descriptionFr": "#Merci pour votre courriel \n\r PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/fr/conseil-national-aines.html'>Retour</a>"
     },
     "elements": [
       {
