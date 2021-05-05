@@ -11,7 +11,7 @@
     "version": 1,
     "titleEn": "Contact Us - National Seniors Council",
     "titleFr": "Nous joindre - Formulaire pour communiquer avec le Conseil national des aînés",
-    "layout": [1, 2, 3, 4, 5, 6],
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "endPage": {
       "descriptionEn": "#Thank you for your email  \n\r PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/en/national-seniors-council.html'>Go back</a>",
       "descriptionFr": "#Merci pour votre courriel \n\r PLACEHOLDER TEXT FOR RESPONSE TIMELINE \n\r <a href='https://www.canada.ca/fr/conseil-national-aines.html'>Retour</a>"
@@ -27,7 +27,7 @@
           "descriptionFr": "**Vous êtes responsable de fournir une adresse de courriel correcte et à jour.** \n\r Si vous avez des problèmes avec le formulaire suivant, vous pouvez utiliser une des <a href='https://www.canada.ca/fr/conseil-national-aines/organisation/contactez-nous.html'>autres voies de service</a> pour communiquer avec nous.",
           "charLimit": 200,
           "validation": {
-            "required": true
+            "required": false
           }
         }
       },
@@ -42,7 +42,7 @@
           "description": "",
           "charLimit": 100,
           "validation": {
-            "required": false,
+            "required": true,
             "type": "name"
           }
         }
