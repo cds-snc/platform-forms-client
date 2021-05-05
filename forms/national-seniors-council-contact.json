@@ -27,8 +27,7 @@
           "descriptionFr": "**Vous êtes responsable de fournir une adresse de courriel correcte et à jour.** \n\r Si vous avez des problèmes avec le formulaire suivant, vous pouvez utiliser une des <a href='https://www.canada.ca/fr/conseil-national-aines/organisation/contactez-nous.html'>autres voies de service</a> pour communiquer avec nous.",
           "charLimit": 200,
           "validation": {
-            "required": true
-            "type": "text"
+            "required": false
           }
         }
       },
@@ -43,7 +42,7 @@
           "description": "",
           "charLimit": 100,
           "validation": {
-            "required": false,
+            "required": true,
             "type": "name"
           }
         }
