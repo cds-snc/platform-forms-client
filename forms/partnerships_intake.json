@@ -1,9 +1,10 @@
 {
   "internalTitleEn": "Work with CDS Partnerships team",
   "internalTitleFr": "Travailler avec l'équipe des partenariats du SNC",
-  "publishingStatus": false,
+  "publishingStatus": true,
   "submission": {
-    "email": "forms-formulaires@cds-snc.ca"
+    "templateID": "",
+    "email": "Partnerhips-Partenariat@cds-snc.ca"
   },
   "form": {
     "id": 45,
@@ -27,8 +28,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you for your interest in working with the Canadian Digital Service. <br/><br/> Please provide your information below so CDS can contact you about starting a partnership",
-          "descriptionFr": "Merci de l’intérêt porté à une collaboration avec le Service numérique canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter d'un partenariat potentiel.",
+          "descriptionEn": "Thank you for your interest in working with the Canadian Digital Service. <br/><br/> Please provide your information below so CDS can contact you about how we can help",
+          "descriptionFr": "Merci de l’intérêt porté à une collaboration avec le Service numérique canadien. <br/><br/> Veuillez fournir vos informations ci-dessous afin que le SNC puisse vous contacter pour expliquer comment nous pouvons vous aider.",
           "charLimit": 200,
           "validation": {
             "required": false
