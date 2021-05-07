@@ -1,0 +1,15 @@
+{
+  "name": "forms-postgres-migrations",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "node index.js"
+  },
+  "keywords": [],
+  "author": "Bethany Dunfield",
+  "dependencies": {
+    "dotenv": "^9.0.0",
+    "postgres-migrations": "^5.1.1"
+  }
+}
