@@ -1,2 +1,3 @@
 # Ignore Compiled Storybook
 /storybook-static
+/public/static/scripts/polyfills
