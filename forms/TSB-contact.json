@@ -1,10 +1,10 @@
 {
   "internalTitleEn": "Contact Us - TSB",
   "internalTitleFr": "Nous joindre - BST",
-  "publishingStatus": false,
+  "publishingStatus": true,
   "submission": {
     "templateID": "",
-    "email": "steven.talbot@cds-snc.ca"
+    "email": "communications@bst-tsb.gc.ca"
   },
   "form": {
     "id": 42,
