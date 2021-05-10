@@ -15,9 +15,9 @@ const main = async function () {
     dbConfig = parse(process.env.DATABASE_URL);
   }
 
-  if (dbConfig.host) {
+  if (dbConfig.host && dbConfig.database) {
     console.log("Running Migrations");
-    await createDb(process.env.DB_NAME, {
+    await createDb(dbConfig.database, {
       ...dbConfig,
       defaultDatabase: "postgres", // defaults to "postgres"
     });
