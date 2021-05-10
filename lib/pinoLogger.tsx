@@ -1,6 +1,6 @@
 import pino from "pino";
-// create pino loggger
-export const logMessage = pino({
+
+export default pino({
   level: process.env.DEBUG ? "debug" : "info",
   browser: {
     asObject: true,
@@ -22,5 +22,3 @@ export const logMessage = pino({
   base: null,
   prettyPrint: process.env.DEBUG || process.env.NODE_ENV === "development" ? true : false,
 });
-
-export default logMessage;
