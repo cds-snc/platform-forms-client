@@ -13,6 +13,7 @@ const main = async function () {
 
   if (process.env.DATABASE_URL) {
     dbConfig = parse(process.env.DATABASE_URL);
+    dbConfig.port = parseInt(dbConfig.port);
   }
 
   if (dbConfig.host && dbConfig.database) {

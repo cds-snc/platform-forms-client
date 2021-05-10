@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
-    "start": "node ./migrations/index.js && next start -p ${PORT:-3000}",
+    "start": "yarn migrate && next start -p ${PORT:-3000}",
+    "migrate": "cd ./migrations && yarn migrate && cd ..",
     "start:test": "NODE_ENV=test next start",
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
