@@ -1,6 +1,6 @@
 const createTemplateTable = `
   CREATE TABLE templates (
-    id UUID PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     json_config JSONB,
     organisation UUID
   );
