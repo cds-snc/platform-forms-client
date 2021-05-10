@@ -10,6 +10,7 @@
   "author": "Bethany Dunfield",
   "dependencies": {
     "dotenv": "^9.0.0",
+    "pg-connection-string": "^2.5.0",
     "postgres-migrations": "^5.1.1"
   }
 }

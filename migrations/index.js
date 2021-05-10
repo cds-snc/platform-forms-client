@@ -1,8 +1,9 @@
 require("dotenv").config();
 const { createDb, migrate } = require("postgres-migrations");
+var parse = require("pg-connection-string").parse;
 
 const main = async function () {
-  const dbConfig = {
+  let dbConfig = {
     database: process.env.DB_NAME,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
@@ -10,11 +11,20 @@ const main = async function () {
     port: 5432,
   };
 
-  await createDb(process.env.DB_NAME, {
-    ...dbConfig,
-    defaultDatabase: "postgres", // defaults to "postgres"
-  });
-  await migrate(dbConfig, "./migrations");
+  if (process.env.DATABASE_URL) {
+    dbConfig = parse(process.env.DATABASE_URL);
+  }
+
+  if (dbConfig.host) {
+    console.log("Running Migrations");
+    await createDb(process.env.DB_NAME, {
+      ...dbConfig,
+      defaultDatabase: "postgres", // defaults to "postgres"
+    });
+    await migrate(dbConfig, "./migrations");
+  } else {
+    console.log("No Database Configured");
+  }
 };
 
 main();
