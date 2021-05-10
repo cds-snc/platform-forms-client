@@ -7851,7 +7851,12 @@ i18next-hmr@^1.7.1:
   resolved "https://registry.yarnpkg.com/i18next-hmr/-/i18next-hmr-1.7.1.tgz#567d1ce6cb5a959973d550b7462cc47ad95e6c10"
   integrity sha512-+RZCyvquys7ZqnYSXy/wvw7Ap7lMnfeNrvn/XyQbdCLspdpMfVZhT8cYgSSSRr8+A4cxVBN8OqkTJIJHJe6vcg==
 
-i18next@^19.7.0:
+i18next-hmr@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/i18next-hmr/-/i18next-hmr-1.7.1.tgz#567d1ce6cb5a959973d550b7462cc47ad95e6c10"
+  integrity sha512-+RZCyvquys7ZqnYSXy/wvw7Ap7lMnfeNrvn/XyQbdCLspdpMfVZhT8cYgSSSRr8+A4cxVBN8OqkTJIJHJe6vcg==
+
+i18next@^19.7.0, i18next@^19.8.4:
   version "19.9.2"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-19.9.2.tgz#ea5a124416e3c5ab85fddca2c8e3c3669a8da397"
   integrity sha512-0i6cuo6ER6usEOtKajUUDj92zlG+KArFia0857xxiEHAQcUwh/RtOQocui1LPJwunSYT574Pk64aNva1kwtxZg==
