@@ -1,5 +1,6 @@
 {
-  "title": "Admin Dashboard",
+  "title": "Forms Administration",
+  "sub-title": "Login with your CDS-SNC Google Account",
   "logged-in": "Signed in as",
   "button": {
     "login": "Login",
