@@ -1,0 +1,9 @@
+{
+  "title": "Administration de formulaires",
+  "sub-title": "Acceder avec votre compte CDS-SNC de Google",
+  "logged-in": "Acceder comme",
+  "button": {
+    "login": "Acceder",
+    "logout": "Disconnexion"
+  }
+}
