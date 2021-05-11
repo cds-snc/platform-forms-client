@@ -21,6 +21,8 @@ The form viewer expects a JSON with the following structure.
     "version": 1,
     "titleEn": "",
     "titleFr": "",
+    "emailSubjectEn": "",
+    "emailSubjectFr": "",
     "layout": [ ... ],
     "brand": {},
     "elements": [ ... ],
@@ -39,6 +41,8 @@ There are 2 main parts to the structure:
    `version`: Defines the static version of the form (`int`)
 
    `titleEn/Fr`: The displayed title of the form to the user (`string`)
+
+   `emailSubjectEn/Fr`: Optional value to customize the subject line, if different from the `titleEn/Fr`,
 
    `layout`: The order of the questions and/or page elements identified by id (`array`)
 
