@@ -8,7 +8,7 @@ module.exports = {
     "<rootDir>/.next/",
     "<rootDir>/node_modules/",
     "<rootDir>/cypress/",
-    "<rootDir>/public/static/scripts/polyfills",
+    "<rootDir>/public/static/scripts/",
   ],
   clearMocks: true,
   transform: {
