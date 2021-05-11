@@ -1,5 +1,6 @@
 import { getSession } from "next-auth/client";
 import { GetServerSidePropsResult, GetServerSidePropsContext } from "next";
+import { hasOwnProperty } from "./tsUtils";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -17,7 +18,6 @@ export function requireAuthentication(
     if (!session) {
       // If no user, redirect to login
       return {
-        props: {},
         redirect: {
           destination: `/${context.locale}/admin/login/`,
           permanent: false,
@@ -27,6 +27,11 @@ export function requireAuthentication(
 
     context.user = { ...session.user };
 
-    return innerFunction(context); // Continue on to call `getServerSideProps` logic
+    const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic
+    if (hasOwnProperty(innerFunctionProps, "props")) {
+      return { props: { ...innerFunctionProps.props, user: { ...session.user } } };
+    }
+
+    return innerFunctionProps;
   };
 }

@@ -32,22 +32,14 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  let pageProps = {};
-  if (context.user) {
-    pageProps = {
-      user: { ...context.user },
-      ...pageProps,
-    };
-  }
-
   if (context.locale) {
-    pageProps = {
-      ...(await serverSideTranslations(context.locale, ["common", "admin-login"])),
-      ...pageProps,
+    return {
+      props: {
+        ...(await serverSideTranslations(context.locale, ["common", "admin-login"])),
+      },
     };
   }
-
-  return { props: pageProps };
+  return { props: {} };
 });
 
 export default AdminWelcome;
