@@ -83,12 +83,12 @@
           "descriptionFr": "Cocher tous les choix qui s’appliquent",
           "choices": [
             {
-              "en": "Air, marine, oil, or pipeline incident",
-              "fr": "Incident aéronautique, maritime, ferroviaire, ou pipelinier"
+              "en": "Air, marine, pipeline, or rail accident or incident",
+              "fr": "Accident ou incident aéronautique, maritime, de pipeline ou ferroviaire"
             },
             {
-              "en": "Investigation status or lab report request",
-              "fr": "Statut d’enquête ou demande de rapport de laboratoire"
+              "en": "Investigation request or lab report",
+              "fr": "Demande d'enquête ou rapport de laboratoire"
             },
             {
               "en": "Statistics",
@@ -97,6 +97,14 @@
             {
               "en": "Access to Information and Privacy",
               "fr": "Demande de renseignements sur la vie privée"
+            },
+            {
+              "en": "Copyright or permissions request",
+              "fr": "Demande de droits d'auteur ou de permissions"
+            },
+            {
+              "en": "Other",
+              "fr": "Autres"
             }
           ],
           "charLimit": 100,
