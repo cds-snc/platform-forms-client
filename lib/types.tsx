@@ -126,9 +126,3 @@ export type FileInputResponse = {
   src: FileReader;
   [key: string]: string | File | FileReader;
 };
-
-export interface AuthenticatedUser {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-}
