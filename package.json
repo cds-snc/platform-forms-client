@@ -31,6 +31,7 @@
     "next-auth": "^3.21.1",
     "next-i18next": "^8.2.0",
     "notifications-node-client": "^5.0.2",
+    "pg": "^8.6.0",
     "pino": "^6.11.1",
     "raw-loader": "^4.0.2",
     "react": "^17.0.1",
