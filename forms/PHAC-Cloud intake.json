@@ -11,7 +11,7 @@
     "version": 1,
     "titleEn": "Public Health Agency of Canada Cloud Services Request",
     "titleFr": "FR - Public Health Agency of Canada Cloud Services Request",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
     },
     "endPage": {
       "descriptionEn": "# Thank you for your request  \n\r Placeholder text for response service standard",
@@ -306,7 +306,7 @@
         }
       },
       {
-        "id": 16,
+        "id": 17,
         "type": "textArea",
         "properties": {
           "titleEn": "Local accounts",
@@ -323,7 +323,7 @@
         }
       },
       {
-        "id": 17,
+        "id": 18,
         "type": "textArea",
         "properties": {
           "titleEn": "Networking",
@@ -412,7 +412,7 @@
         }
       },
       {
-        "id": 21,
+        "id": 22,
         "type": "radio",
         "properties": {
           "titleEn": "Azure active directory groups",
@@ -436,7 +436,7 @@
         }
       },
       {
-        "id": 22,
+        "id": 23,
         "type": "radio",
         "properties": {
           "titleEn": "Security and privacy",
@@ -460,7 +460,7 @@
         }
       },
       {
-        "id": 23,
+        "id": 24,
         "type": "textArea",
         "properties": {
           "titleEn": "Additional notes",
@@ -477,7 +477,7 @@
         }
       },
       {
-        "id": 24,
+        "id": 25,
         "type": "richText",
         "properties": {
           "titleEn": "###Your information",
@@ -491,7 +491,7 @@
         }
       },
       {
-        "id": 25,
+        "id": 26,
         "type": "textField",
         "properties": {
           "titleEn": "Your full name",
@@ -508,7 +508,7 @@
         }
       },
       {
-        "id": 26,
+        "id": 27,
         "type": "textField",
         "properties": {
           "titleEn": "Email",
@@ -526,4 +526,3 @@
       }
     ]
   }
-
