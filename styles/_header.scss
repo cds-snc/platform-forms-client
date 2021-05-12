@@ -41,7 +41,7 @@
   }
 
   button {
-    @apply shadow-none bg-transparent text-blue-dark hover:bg-blue-hover underline border-0;
+    @apply shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0;
   }
 
   button:focus {
@@ -50,7 +50,7 @@
   }
 
   button:active {
-    @apply bg-blue-active;
+    @apply bg-purple-active;
   }
 }
 
