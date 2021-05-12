@@ -1,0 +1,529 @@
+{
+  "internalTitleEn": "PHAC - Cloud intake",
+  "internalTitleFr": "FR - PHAC - Cloud intake",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "forms-formulaires@cds-snc.ca"
+  },
+  "form": {
+    "id": 48,
+    "version": 1,
+    "titleEn": "Public Health Agency of Canada Cloud Services Request",
+    "titleFr": "FR - Public Health Agency of Canada Cloud Services Request",
+    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+    },
+    "endPage": {
+      "descriptionEn": "# Thank you for your request  \n\r Placeholder text for response service standard",
+      "descriptionFr": "# Merci pour votre demande  \n\r FR - Placeholder text for response service standard"
+    },
+    "elements": [
+      {
+        "id": 1,
+        "type": "richText",
+        "properties": {
+          "titleEn": "Purpose",
+          "titleFr": "FR - Purpose",
+          "descriptionEn": "Use this form to request cloud infrastructure. A cloud operator will review your request and assist you in provisioning resources",
+          "descriptionFr": "FR - Use this form to request cloud infrastructure. A cloud operator will review your request and assist you in provisioning resources",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "richText",
+        "properties": {
+          "titleEn": "###General Information",
+          "titleFr": "###FR - General Information",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Project title",
+          "titleFr": "FR - Projet",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 1000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Division",
+          "titleFr": "FR - Division",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Branch",
+          "titleFr": "FR - Branc",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Cost centre",
+          "titleFr": "FR - Cost centre",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Business client",
+          "titleFr": "FR - Business client",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 8,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Project authority",
+          "titleFr": "FR - Project authority",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 9,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Client engagement representative",
+          "titleFr": "FR - Client engagement representative",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 10,
+        "type": "richText",
+        "properties": {
+          "titleEn": "###Detailed Project Information",
+          "titleFr": "###FR - Detailed Project Information",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 11,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Problem",
+          "titleFr": "FR - Problem",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Decribe what the problem this product will solve for the client",
+          "descriptionFr": "FR - Describe what the problem this product will solve for the client",
+          "charLimit": 1000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 12,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Solution",
+          "titleFr": "FR - Solution",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Describe at a high level the anticipated solution architecture",
+          "descriptionFr": "FR - Describe at a high level the anticipated solution architecture",
+          "charLimit": 1000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 13,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Data",
+          "titleFr": "FR - Données",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Describe the data. e.g.: file sizes, database needs, storage needs, data format, etc.",
+          "descriptionFr": "FR - Describe the data. e.g.: file sizes, database needs, storage needs, data format, etc.",
+          "charLimit": 1000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 14,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Is this work approved in the departmental IT plan?",
+          "titleFr": "FR - Is this work approved in the departmental IT plan?",
+          "descriptionEn": "Select one",
+          "descriptionFr": "FR - Cocher un",
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            },
+            {
+              "en": "In progress",
+              "fr": "FR - In progress"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 15,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Which environments do you need?",
+          "titleFr": "FR - Which environments do you need?",
+          "descriptionEn": "Select all that apply",
+          "descriptionFr": "Cocher tous les choix qui s’appliquent",
+          "choices": [
+            {
+              "en": "Sandbox",
+              "fr": "FR - Sandbox"
+            },
+            {
+              "en": "Dev or test",
+              "fr": "FR - Dev or test"
+            },
+            {
+              "en": "Production",
+              "fr": "FR - Production"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 16,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Resources",
+          "titleFr": "FR - Resources",
+          "placeholderEn": "e.g., compute, containers, databases, storage, web, or other",
+          "placeholderFr": "FR - e.g., compute, containers, databases, storage, web, or other",
+          "descriptionEn": "Separated by a colon, list the resources you need",
+          "descriptionFr": "FR - Separated by a colon, list the resources you need ",
+          "charLimit": 1000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 16,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Local accounts",
+          "titleFr": "FR - Local accounts",
+          "placeholderEn": "e.g.: Tim Berners-Lee, berners-lee.tim@canada.ca, administrator, virtual machine one; Vint Cerf, cerf.vint@canada.ca, no admin, virtual machine two",
+          "placeholderFr": "FR - e.g.: Tim Berners-Lee, berners-lee.tim@canada.ca, administrator, virtual machine one; Vint Cerf, cerf.vint@canada.ca, no admin, virtual machine two",
+          "descriptionEn": "If you are requesting a virtual machine or Databrick, list the local accounts you need. Separate each account with a colon. Please provide the username, their email, if they are an administrator, and the environment.",
+          "descriptionFr": "FR - If you are requesting a virtual machine or Databrick, list the local accounts you need. Separate each account with a colon. Please provide the username, their email, if they are an administrator, and the environment.",
+          "charLimit": 2000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 17,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Networking",
+          "titleFr": "FR - Networking",
+          "placeholderEn": "e.g.: ",
+          "placeholderFr": "FR - e.g.: ",
+          "descriptionEn": "List all the nodes of the anticipated solution (including user nodes) with connection point details. This information is required so that we can configure the connection rules at the network layer",
+          "descriptionFr": "FR - List all the nodes of the anticipated solution (including user nodes) with connection point details. This information is required so that we can configure the connection rules at the network layer",
+          "charLimit": 2000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 19,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Fully qualified domain name",
+          "titleFr": "FR  - Fully qualified domain name",
+          "descriptionEn": "Do you require a fully qualified domain name?",
+          "descriptionFr": "FR - Do you require a fully qualified domain name?",
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 20,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Source code repository",
+          "titleFr": "FR - Source code repository",
+          "descriptionEn": "Do you have a source code repository",
+          "descriptionFr": "FR - Do you have a source code repository",
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 21,
+        "type": "radio",
+        "properties": {
+          "titleEn": "DevOps",
+          "titleFr": "FR - DevOps",
+          "descriptionEn": "Does this application require continuous integration or deployment (CI/CD)?",
+          "descriptionFr": "FR - Does this application require continuous integration or deployment (CI/CD)?",
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 21,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Azure active directory groups",
+          "titleFr": "FR - Azure active directory groups",
+          "descriptionEn": "Does this application require Azure active directory groups?",
+          "descriptionFr": "FR - Does this application require Azure active directory groups?",
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 22,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Security and privacy",
+          "titleFr": "FR - Sécurité et confidentialité",
+          "descriptionEn": "Has a statement of sensitivity been completed?",
+          "descriptionFr": "FR - Has a statement of sensitivity been completed?",
+          "choices": [
+            {
+              "en": "Yes",
+              "fr": "Oui"
+            },
+            {
+              "en": "No",
+              "fr": "Non"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      },
+      {
+        "id": 23,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Additional notes",
+          "titleFr": "FR - Additional notes",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "Is there anything else we should know?",
+          "descriptionFr": "FR - Is there anything else we should know?",
+          "charLimit": 2000,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 24,
+        "type": "richText",
+        "properties": {
+          "titleEn": "###Your information",
+          "titleFr": "FR - Your information",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 200,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 25,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Your full name",
+          "titleFr": "FR - Your full name",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 26,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Email",
+          "titleFr": "Courriel",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 800,
+          "validation": {
+            "required": true,
+            "type": "email"
+          }
+        }
+      }
+    ]
+  }
+
