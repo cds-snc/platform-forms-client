@@ -83,7 +83,8 @@ module.exports = {
       },
       blue: {
         ...colors.blue,
-        dark: "#284162",
+        dark: "#2B4380",
+        active: "#3654A1",
         light: "#335075",
         hover: "#0535D2",
         active: "#03279B",

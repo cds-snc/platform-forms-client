@@ -129,6 +129,15 @@ a:active {
   @apply bg-blue-active;
 }
 
+a:focus {
+  outline: none;
+  @apply bg-blue-dark text-white-default;
+}
+
+a:active {
+  @apply bg-blue-active;
+}
+
 .link-list {
   li {
     @apply mb-2;
