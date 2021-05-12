@@ -75,7 +75,7 @@ module.exports = {
       },
       purple: {
         ...colors.purple,
-        default: "#7834bc",
+        default: "#6300C7",
       },
       white: {
         ...colors.white,
@@ -83,8 +83,10 @@ module.exports = {
       },
       blue: {
         ...colors.blue,
-        dark: "#284162",
+        dark: "#2B4380",
+        active: "#3654A1",
         light: "#335075",
+        hover: "#E0F3FF",
         default: "#26374A",
         100: "#B2E3FF",
         200: "#DFF8FD",

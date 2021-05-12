@@ -98,7 +98,20 @@
   }
 
   a {
-    @apply text-blue-900;
+    @apply underline text-blue-dark hover:bg-blue-hover;
+  }
+
+  a:visited {
+    @apply text-purple-default;
+  }
+
+  a:focus {
+    outline: none;
+    @apply bg-blue-dark text-white-default;
+  }
+
+  a:active {
+    @apply bg-blue-active;
   }
 }
 

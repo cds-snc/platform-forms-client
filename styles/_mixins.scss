@@ -1,8 +1,3 @@
-@mixin focus($outline: 3px, $outlineOffset: 0) {
-  outline: $outline solid #ffbf47;
-  outline-offset: $outlineOffset;
-}
-
 @mixin visuallyHidden() {
   position: absolute !important;
   width: 1px !important;
