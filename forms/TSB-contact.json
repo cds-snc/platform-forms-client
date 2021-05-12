@@ -34,7 +34,7 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below \n\r Find out how Transport Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
+          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below \n\r Find out how Transportation Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
           "descriptionFr": "(French to follow) Thank you for your interest in the TSB. Send your question using the form below . \n\r Pour connaître comment le Bureau de la sécurité des transports du Canada protège votre confidentialité, naviguez à <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>l'avis de confidentialité</a>.",
           "charLimit": 200,
           "validation": {
