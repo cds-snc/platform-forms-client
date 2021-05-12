@@ -11,8 +11,8 @@
     "version": 1,
     "titleEn": "Transportation Safety Board of Canada general enquiries",
     "titleFr": "Renseignements généraux Bureau de la sécurité des transports du Canada",
-    "emailSubjectEn": "TSB email subject",
-    "emailSubjectFr": "BST couriel sujet",
+    "emailSubjectEn": "TSB general enquiries",
+    "emailSubjectFr": "Renseignements généraux BST",
     "layout": [1, 2, 3, 4, 5, 6, 7],
     "brand": {
       "name": "tsb-bst",
