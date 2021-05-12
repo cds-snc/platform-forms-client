@@ -41,13 +41,36 @@
   }
 
   button {
-    @apply shadow-none bg-none text-blue-900 underline border-0;
+    @apply shadow-none bg-transparent text-blue-dark hover:bg-blue-hover underline border-0;
+  }
+
+  button:focus {
+    outline: none;
+    @apply bg-blue-dark text-white-default;
+  }
+
+  button:active {
+    @apply bg-blue-active;
   }
 }
 
 header {
   .canada-flag {
     @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
+
+    a:hover {
+      @apply hover:bg-white-default;
+    }
+
+    a:focus {
+      outline: 3px solid #2b4380;
+      outline-offset: 1px;
+      @apply bg-white-default;
+    }
+
+    a:active {
+      @apply bg-white-default;
+    }
   }
 }
 
@@ -75,7 +98,6 @@ header {
       width: auto;
       height: auto;
       overflow: auto;
-      background-color: white;
       text-align: center;
     }
   }
