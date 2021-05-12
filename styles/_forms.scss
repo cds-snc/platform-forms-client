@@ -97,12 +97,12 @@
     @apply list-inside mb-10;
   }
 
-  a {
-    @apply underline text-blue-dark hover:bg-blue-hover;
-  }
-
   a:visited {
     @apply text-purple-default;
+  }
+
+  a {
+    @apply underline text-blue-dark hover:text-blue-hover;
   }
 
   a:focus {
@@ -111,7 +111,7 @@
   }
 
   a:active {
-    @apply bg-blue-active;
+    @apply bg-purple-active;
   }
 }
 

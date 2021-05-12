@@ -74,12 +74,12 @@ ul.custom {
       li {
         @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
 
-        a {
-          @apply no-underline hover:underline text-blue-dark hover:bg-blue-hover;
-        }
-
         a:visited {
           @apply text-purple-default;
+        }
+
+        a {
+          @apply no-underline hover:underline text-blue-dark hover:text-blue-hover;
         }
 
         a:focus {
@@ -88,7 +88,7 @@ ul.custom {
         }
 
         a:active {
-          @apply underline bg-blue-active;
+          @apply underline bg-purple-active;
         }
       }
       li:last-of-type {
@@ -108,12 +108,12 @@ ul {
   @apply list-disc pl-4;
 }
 
-a {
-  @apply underline text-blue-dark hover:bg-blue-hover;
-}
-
 a:visited {
   @apply text-purple-default;
+}
+
+a {
+  @apply underline text-blue-dark hover:text-blue-hover;
 }
 
 a:focus {
@@ -122,7 +122,7 @@ a:focus {
 }
 
 a:active {
-  @apply bg-blue-active;
+  @apply bg-purple-active;
 }
 
 .link-list {
