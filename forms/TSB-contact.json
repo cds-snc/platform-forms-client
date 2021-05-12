@@ -24,8 +24,8 @@
       "urlFr": "https://bst-tsb.gc.ca/fra/index.html"
     },
     "endPage": {
-      "descriptionEn": "# Thank you for your enquiry  \n\r The Transportation Safety Board of Canada will respond to your email within one week. \n\r ## Reach the right organization \n\r For transportation security, regulations, and Canadian Armed Forces enquiries, we encourage you to contact those organizations directly. \n\r  ### Airport security \n\r  <ul className='link-list custom'><li><a href='https://www.otc-cta.gc.ca'>Canadian Air Transport Security Authority</a></li></ul> \n\r ### Airline Service \n\r  <ul className='link-list custom'><li><a href='https://www.otc-cta.gc.ca'>Canadian Transport Agency, Commissioner of Air Complaints</a></li></ul> \n\r ### Cars, trucks, and other motor vehicles \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/en'>Transport Canada</a> or your provincial ministry of transport.</li></ul> \n\r ### Transport regulations \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/en'>Transport Canada</a></li></ul> \n\r ### Military and search and rescue incidents \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/en/department-national-defence.html'>National Defence</a></li></ul> \n\r ### Investigation reports from before 1990 \n\r  <ul className='link-list custom'><li><a href='https://www.bac-lac.gc.ca/eng/Pages/home.aspx'>Library and Archives Canada</a></li></ul>",
-      "descriptionFr": "# Merci pour votre demande  \n\r Le Bureau de la sécurité des transports du Canada répondra à votre demande d’ici une semaine. \n\r ## Rejoindre le bon organisme \n\r Pour la sécurité des transports, les règlements et les demandes pour les Forces armées canadiennes, nous vous encourageons de contacter directement ces organismes. \n\r  ### Sûreté aéroportuaire \n\r  <ul className='link-list custom'><li><a href='https://www.rcaf-arc.forces.gc.ca/fr/securite-vols/index.page'>Administration canadienne de la sûreté du transport aérien</a></li></ul> \n\r ### Transport aérien \n\r  <ul className='link-list custom'><li><a href='https://www.otc-cta.gc.ca/fra?lang=fra'>Office des transports du Canada, Bureau du commissaire aux plaintes relatives au transport aérien</a></li></ul> \n\r ### Automobiles, camions ou  autres véhicules à moteur \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/fr'>Transports Canada</a> ou le ministère des transports de votre province.</li></ul> \n\r ### Règlements sur les transports \n\r  <ul className='link-list custom'><li><a href='https://tc.canada.ca/fr'>Transports Canada</a></li></ul> \n\r ### Accidents impliquant des véhicules militaires et les incidents de recherche et sauvetage \n\r  <ul className='link-list custom'><li><a href='https://www.canada.ca/fr/ministere-defense-nationale.html'>Défense nationale</a></li></ul> \n\r ### Investigation reports from before 1990 \n\r  <ul className='link-list custom'><li><a href='https://www.bac-lac.gc.ca/fra/Pages/accueil.aspx'>Bibliothèque et Archives Canada</a></li></ul>"
+      "descriptionEn": "# Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week",
+      "descriptionFr": "# Merci pour votre demande  \n\r Le Bureau de la sécurité des transports du Canada répondra à votre demande d’ici une semaine."
     },
     "elements": [
       {
@@ -34,8 +34,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "The Transportation Safety Board of Canada can answer your questions about our organization, the status of our investigations, and incidents related to air, rail, marine, and pipeline. To contact us, please fill out the form below. \n\r Learn about how Transport Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
-          "descriptionFr": "Le Bureau de la sécurité des transports du Canada peut répondre aux questions sur notre organisme, le statut de nos enquêtes et les incidents reliés au transport aéronautique, ferroviaire, maritime et pipelinier. \n\r Pour connaître comment le Bureau de la sécurité des transports du Canada protège votre confidentialité, naviguez à <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>l'avis de confidentialité</a>.",
+          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below \n\r Find out how Transportation Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
+          "descriptionFr": "(French to follow) Thank you for your interest in the TSB. Send your question using the form below . \n\r Pour connaître comment le Bureau de la sécurité des transports du Canada protège votre confidentialité, naviguez à <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>l'avis de confidentialité</a>.",
           "charLimit": 200,
           "validation": {
             "required": false
@@ -119,12 +119,12 @@
         "id": 5,
         "type": "textField",
         "properties": {
-          "titleEn": "For other information please specify",
+          "titleEn": "If you checked Other, please specify",
           "titleFr": "Pour d'autre information veuillez spécifier",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "Such as jobs and training, photos or videos, pilot background letter",
-          "descriptionFr": "Tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote",
+          "descriptionEn": "Tell us the subject of your question, e.g., training, jobs",
+          "descriptionFr": "(French to follow) Tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote",
           "charLimit": 100,
           "validation": {
             "required": false,
@@ -152,14 +152,26 @@
         "id": 7,
         "type": "checkbox",
         "properties": {
-          "titleEn": "Air updates",
-          "titleFr": "Air updates",
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "titleEn": "Notifications",
+          "titleFr": "Notifications",
+          "descriptionEn": "I would like to receive notifications of transportation accidents and incidents",
+          "descriptionFr": "(French to follow) I would like to receive notifications of transportation accidents and incidents",
           "choices": [
             {
-              "en": "I would like to receive daily notifications for air updates",
-              "fr": "Je souhaite recevoir des notifications quotidiennes pour les air updates"
+              "en": "Air (daily)",
+              "fr": "French to follow"
+            },
+            {
+              "en": "Marine (daily)",
+              "fr": "French to follow"
+            },
+            {
+              "en": "Pipeline (Monthly)",
+              "fr": "French to follow"
+            },
+            {
+              "en": "Rail (daily)",
+              "fr": "French to follow"
             }
           ],
           "charLimit": 100,
