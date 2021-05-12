@@ -31,7 +31,7 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
     cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");
     cy.get("#content").contains(
-      "The Transport Safety Board of Canada will respond to you within a week"
+      "The Transportation Safety Board of Canada will respond to you within a week"
     );
   });
 });
