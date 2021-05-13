@@ -12,10 +12,16 @@ jobs:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
 
+      - name: Install prettier
+        run: yarn install
+
       - name: Prettify code
-        uses: creyD/prettier_action@v3.1
+        run: yarn format
+
+      - name: Commit any changes
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          # This part is also where you can pass other options, for example:
-          prettier_options: --config .prettierrc.js --write .
+          commit_message: Prettified - Auto Commit
+          branch: ${{ github.head_ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
