@@ -17,6 +17,10 @@
   &.gc-alert--validation,
   &.gc-alert--error {
     @apply bg-red-100 border-l-4 border-red-default;
+
+    &:focus {
+      @apply border-4 border-red-default;
+    }
   }
 
   &.gc-alert--success {
@@ -44,12 +48,35 @@
 
   .gc-error-link {
     @apply ml-2 text-blue-900;
+
+    &:focus {
+      @apply bg-red-default text-white-default;
+    }
   }
 }
 
-.gc-dropdown {
-  background-image: url("../public/img/arrow-down.svg");
-  @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
+.dropdown-group {
+  @apply flex flex-col-reverse;
+
+  .gc-dropdown {
+    background-image: url("../public/img/arrow-down.svg");
+    @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
+
+    &:focus {
+      @apply border-4 border-blue-hover outline-none;
+
+      + label {
+        @apply text-blue-hover;
+      }
+
+      + p {
+        @apply text-blue-hover;
+        + label {
+          @apply text-blue-hover;
+        }
+      }
+    }
+  }
 }
 
 .gc-p {
@@ -147,6 +174,14 @@
   &:hover {
     @apply bg-green-darker;
   }
+
+  &:focus {
+    @apply bg-blue-hover outline-none;
+  }
+
+  &:active {
+    @apply bg-purple-active;
+  }
 }
 
 .gc-button--secondary {
@@ -168,15 +203,54 @@
   @apply w-full my-5;
 }
 
-.gc-textarea {
-  @apply md:text-small_base md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-3/4 h-40;
-  &.full-height {
-    @apply h-auto;
+.textarea-group {
+  @apply flex flex-col-reverse;
+
+  .gc-textarea {
+    @apply md:text-small_base md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-3/4 h-40;
+
+    &.full-height {
+      @apply h-auto;
+    }
+
+    &:focus {
+      @apply border-4 border-blue-hover outline-none;
+
+      + label {
+        @apply text-blue-hover;
+      }
+
+      + p {
+        @apply text-blue-hover;
+        + label {
+          @apply text-blue-hover;
+        }
+      }
+    }
   }
 }
 
-.gc-input-text {
-  @apply md:w-full md:text-small_base text-base text-gray-700 border-solid border-2 border-black-form py-3 px-2 mt-2 mb-14 w-96;
+.input-text-group {
+  @apply flex flex-col-reverse;
+
+  .gc-input-text {
+    @apply md:w-full md:text-small_base text-base text-gray-700 border-solid border-2 border-black-form py-3 px-2 mt-2 mb-14 w-96;
+
+    &:focus {
+      @apply border-4 border-blue-hover outline-none;
+
+      + label {
+        @apply text-blue-hover;
+      }
+
+      + p {
+        @apply text-blue-hover;
+        + label {
+          @apply text-blue-hover;
+        }
+      }
+    }
+  }
 }
 
 .gc-file-input {
@@ -192,8 +266,16 @@
       @apply relative cursor-pointer p-0;
     }
 
-    &:focus + .gc-checkbox-label:before {
-      @apply outline-default;
+    &:focus {
+      outline: none;
+
+      + .gc-checkbox-label:before {
+        @apply border-4 border-blue-hover outline-none;
+      }
+
+      + .gc-checkbox-label {
+        @apply text-blue-hover;
+      }
     }
 
     // Box.
@@ -232,8 +314,16 @@
     @apply relative cursor-pointer p-0;
   }
 
-  &:focus + .gc-radio-label:before {
-    @apply outline-default;
+  &:focus {
+    @apply outline-none;
+
+    + .gc-radio-label:before {
+      @apply border-4 border-blue-hover outline-none;
+    }
+
+    + .gc-radio-label {
+      @apply text-blue-hover;
+    }
   }
 
   // Circle.

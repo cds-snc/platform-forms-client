@@ -107,9 +107,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   switch (element.type) {
     case "textField":
       return (
-        <Fragment>
-          {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+        <div className="input-text-group">
           <TextInput
             type={textType}
             id={id}
@@ -118,13 +116,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
           />
-        </Fragment>
+          {description ? <Description id={id}>{description}</Description> : null}
+          {labelComponent}
+        </div>
       );
     case "textArea":
       return (
-        <Fragment>
-          {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+        <div className="textarea-group">
           <TextArea
             id={id}
             name={id}
@@ -132,7 +130,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
           />
-        </Fragment>
+          {description ? <Description id={id}>{description}</Description> : null}
+          {labelComponent}
+        </div>
       );
     case "checkbox": {
       const checkboxItems = choices.map((choice, index) => {
@@ -178,16 +178,17 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     }
     case "dropdown":
       return (
-        <Fragment>
-          {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+        <div className="dropdown-group">
+
           <Dropdown
             id={id}
             name={id}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
           />
-        </Fragment>
+          {description ? <Description id={id}>{description}</Description> : null}
+          {labelComponent}
+        </div>
       );
     case "richText":
       return (

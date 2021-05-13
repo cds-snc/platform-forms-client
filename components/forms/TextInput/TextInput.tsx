@@ -27,7 +27,6 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       <input
         data-testid="textInput"
         className={classes}
@@ -39,6 +38,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         placeholder={placeholder}
         {...field}
       />
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
     </>
   );
 };
