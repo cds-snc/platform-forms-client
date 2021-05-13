@@ -11,7 +11,9 @@ interface RadioProps {
   required?: boolean;
 }
 
-export const Radio = (props: RadioProps & JSX.IntrinsicElements["input"]): React.ReactElement => {
+export const Radio = (
+  props: RadioProps & JSX.IntrinsicElements["input"]
+): React.ReactElement => {
   const { id, className, label, required } = props;
 
   const classes = classnames("gc-input-radio", className);
@@ -20,7 +22,9 @@ export const Radio = (props: RadioProps & JSX.IntrinsicElements["input"]): React
 
   return (
     <div data-testid="radio" className={classes}>
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.touched && meta.error ? (
+        <ErrorMessage>{meta.error}</ErrorMessage>
+      ) : null}
 
       <input
         className="gc-radio__input"

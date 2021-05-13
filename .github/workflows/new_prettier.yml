@@ -19,9 +19,7 @@ jobs:
         run: yarn format
 
       - name: Commit any changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Prettified - Auto Commit
-          branch: ${{ github.head_ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: "docker://cdssnc/auto-commit-github-action"
+        needs: ["Prettify Code"]
+        args: "Prettified - Auto Commit"
+        secrets: ["${{ secrets.GITHUB_TOKEN }}"]

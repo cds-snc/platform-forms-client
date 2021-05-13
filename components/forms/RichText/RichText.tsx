@@ -8,7 +8,9 @@ interface RichTextProps {
   className?: string;
 }
 
-export const RichText = (props: RichTextProps): React.ReactElement | null => {
+export const RichText = (
+  props: RichTextProps
+): React.ReactElement | null => {
   const { children, className, id } = props;
   if (!children) {
     return null;

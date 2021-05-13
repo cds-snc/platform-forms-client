@@ -6,7 +6,15 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 interface RequiredTextInputProps {
   id: string;
   name: string;
-  type: "text" | "email" | "name" | "number" | "password" | "search" | "tel" | "url";
+  type:
+    | "text"
+    | "email"
+    | "name"
+    | "number"
+    | "password"
+    | "search"
+    | "tel"
+    | "url";
 }
 
 interface CustomTextInputProps {
@@ -16,18 +24,31 @@ interface CustomTextInputProps {
   placeholder?: string;
 }
 
-export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElements["input"];
+export type OptionalTextInputProps = CustomTextInputProps &
+  JSX.IntrinsicElements["input"];
 
-export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
+export type TextInputProps = RequiredTextInputProps &
+  OptionalTextInputProps;
 
-export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const { id, type, className, required, ariaDescribedBy, placeholder } = props;
+export const TextInput = (
+  props: TextInputProps
+): React.ReactElement => {
+  const {
+    id,
+    type,
+    className,
+    required,
+    ariaDescribedBy,
+    placeholder,
+  } = props;
   const [field, meta] = useField(props);
   const classes = classnames("gc-input-text", className);
 
   return (
     <>
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.touched && meta.error ? (
+        <ErrorMessage>{meta.error}</ErrorMessage>
+      ) : null}
       <input
         data-testid="textInput"
         className={classes}

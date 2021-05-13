@@ -21,7 +21,8 @@ const LanguageToggle = () => {
     <>
       <div className="gc-language-toggle">
         <label htmlFor="lang-switcher-button">
-          {t("lang-toggle")}: {locale == "en" ? "Français" : "English"}
+          {t("lang-toggle")}:{" "}
+          {locale == "en" ? "Français" : "English"}
         </label>
         {locale == "en" ? (
           <button

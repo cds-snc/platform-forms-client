@@ -24,7 +24,8 @@ export const defaultCheckbox = (): React.ReactElement => (
 defaultCheckbox.parameters = {
   docs: {
     source: {
-      code: '<label class="gc-checkbox-label"><input type="checkbox" class="gc-checkbox" checked=""><span class="ml-4">Check this box</span></label>',
+      code:
+        '<label class="gc-checkbox-label"><input type="checkbox" class="gc-checkbox" checked=""><span class="ml-4">Check this box</span></label>',
     },
   },
 };

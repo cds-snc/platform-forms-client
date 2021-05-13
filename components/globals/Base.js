@@ -16,7 +16,9 @@ const Base = ({ children }) => {
     publicRuntimeConfig: { isProduction: isProduction },
   } = getConfig();
   const formMetadata =
-    children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
+    children && children.props && children.props.formMetadata
+      ? children.props.formMetadata
+      : null;
   const classes = getPageClassNames(formMetadata);
 
   return (
@@ -24,7 +26,10 @@ const Base = ({ children }) => {
       <Head>
         {isProduction && (
           <React.Fragment>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-8PNSS76E3B"></script>
+            <script
+              async
+              src="https://www.googletagmanager.com/gtag/js?id=G-8PNSS76E3B"
+            ></script>
             <script
               dangerouslySetInnerHTML={{
                 __html: `
@@ -38,11 +43,26 @@ const Base = ({ children }) => {
             />
           </React.Fragment>
         )}
-        <script type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
+        <script
+          type="text/javascript"
+          src="/static/scripts/form-polyfills.js"
+        ></script>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-        <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <link
+          rel="shortcut icon"
+          href="/favicon.ico"
+          type="image/x-icon"
+          sizes="32x32"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com/"
+          crossOrigin=""
+        />
         <link
           href="https://fonts.googleapis.com/css?family=Lato:400,700%7CNoto+Sans:400,700&amp;display=fallback"
           rel="stylesheet"

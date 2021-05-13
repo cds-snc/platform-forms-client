@@ -1,5 +1,10 @@
 import React from "react";
-import { render, cleanup, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  cleanup,
+  screen,
+  fireEvent,
+} from "@testing-library/react";
 import { Button } from "./Button";
 
 describe("Button component", () => {
@@ -23,7 +28,9 @@ describe("Button component", () => {
           Click Me
         </Button>
       );
-      expect(screen.queryByTestId("button")).toHaveClass("gc-button--secondary");
+      expect(screen.queryByTestId("button")).toHaveClass(
+        "gc-button--secondary"
+      );
     });
   });
   test("button click", () => {

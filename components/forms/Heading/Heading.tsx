@@ -10,7 +10,13 @@ interface HeadingProps {
 }
 
 export const Heading = (props: HeadingProps): React.ReactElement => {
-  const { headingLevel, children, className, id, isSectional } = props;
+  const {
+    headingLevel,
+    children,
+    className,
+    id,
+    isSectional,
+  } = props;
 
   const classes = classnames(`gc-${headingLevel}`, className, {
     "gc-section-header": isSectional,

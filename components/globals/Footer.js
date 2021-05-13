@@ -13,12 +13,17 @@ const Footer = () => {
           {isSplashPage() ? null : (
             <ul>
               <li>
-                <Link href={t("footer.privacy.link")} locale={i18n.language}>
+                <Link
+                  href={t("footer.privacy.link")}
+                  locale={i18n.language}
+                >
                   {t("footer.privacy.desc")}
                 </Link>
               </li>
               <li>
-                <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
+                <a href={t("footer.terms.link")}>
+                  {t("footer.terms.desc")}
+                </a>
               </li>
             </ul>
           )}

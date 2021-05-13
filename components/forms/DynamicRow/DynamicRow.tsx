@@ -26,12 +26,20 @@ const DynamicRow = (props: DynamicRowProps) => {
   const { name, elements, lang } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
     subItem.id = `${name}.${subIndex}`;
-    return <GenerateElement key={subItem.id} element={subItem} language={lang} />;
+    return (
+      <GenerateElement
+        key={subItem.id}
+        element={subItem}
+        language={lang}
+      />
+    );
   });
   return <div>{rowGroup}</div>;
 };
 
-export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
+export const DynamicGroup = (
+  props: DynamicGroupProps
+): React.ReactElement => {
   const { className, legend, error, rowElements, lang } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState([rowElements]);
@@ -47,13 +55,23 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     await setRows([...rows, rowElements]);
   };
 
-  const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
+  const classes = classnames(
+    "gc-form-group",
+    { "gc-form-group--error": error },
+    className
+  );
 
   return (
-    <fieldset name={field.name} data-testid="formGroup" className={classes}>
+    <fieldset
+      name={field.name}
+      data-testid="formGroup"
+      className={classes}
+    >
       <legend>{legend}</legend>
 
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.touched && meta.error ? (
+        <ErrorMessage>{meta.error}</ErrorMessage>
+      ) : null}
 
       {rows.map((row, index) => {
         return (
@@ -66,7 +84,11 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               {lang === "en" ? "Item " : "Article "}
               {index + 1}
             </h3>
-            <DynamicRow elements={row} name={`${field.name}.${index}`} lang={lang} />
+            <DynamicRow
+              elements={row}
+              name={`${field.name}.${index}`}
+              lang={lang}
+            />
           </div>
         );
       })}

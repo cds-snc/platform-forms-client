@@ -1,5 +1,10 @@
 import React from "react";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
@@ -48,7 +53,11 @@ describe("Checkbox component", () => {
   afterEach(cleanup);
   test("... in English", () => {
     render(
-      <Form formMetadata={formMetadata} t={(key) => key} language="en">
+      <Form
+        formMetadata={formMetadata}
+        t={(key) => key}
+        language="en"
+      >
         <GenerateElement element={checkboxData} language="en" />
       </Form>
     );
@@ -56,19 +65,25 @@ describe("Checkbox component", () => {
       expect(screen.getByText(input.en)).toBeInTheDocument();
     });
     screen.getAllByRole("checkbox").forEach((input) => {
-      expect(input).toHaveClass("gc-input-checkbox__input").not.toBeChecked();
+      expect(input)
+        .toHaveClass("gc-input-checkbox__input")
+        .not.toBeChecked();
     });
     // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(checkboxData.properties.descriptionEn);
+    expect(screen.getByRole("group")).toHaveDescription(
+      checkboxData.properties.descriptionEn
+    );
 
     // Check the boxes
     screen.getAllByRole("checkbox").forEach((input) => {
       fireEvent.click(input);
     });
 
-    const resultsArray = checkboxData.properties.choices.map((object) => {
-      return object.en;
-    });
+    const resultsArray = checkboxData.properties.choices.map(
+      (object) => {
+        return object.en;
+      }
+    );
 
     expect(screen.getByRole("group")).toHaveFormValues({
       8: resultsArray,
@@ -76,7 +91,11 @@ describe("Checkbox component", () => {
   });
   test("... in French", () => {
     render(
-      <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+      <Form
+        formMetadata={formMetadata}
+        t={(key) => key}
+        language="fr"
+      >
         <GenerateElement element={checkboxData} language="fr" />
       </Form>
     );
@@ -84,19 +103,25 @@ describe("Checkbox component", () => {
       expect(screen.getByText(input.fr)).toBeInTheDocument();
     });
     screen.getAllByRole("checkbox").forEach((input) => {
-      expect(input).toHaveClass("gc-input-checkbox__input").not.toBeChecked();
+      expect(input)
+        .toHaveClass("gc-input-checkbox__input")
+        .not.toBeChecked();
     });
     // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(checkboxData.properties.descriptionFr);
+    expect(screen.getByRole("group")).toHaveDescription(
+      checkboxData.properties.descriptionFr
+    );
 
     // Check the boxes
     screen.getAllByRole("checkbox").forEach((input) => {
       fireEvent.click(input);
     });
 
-    const resultsArray = checkboxData.properties.choices.map((object) => {
-      return object.fr;
-    });
+    const resultsArray = checkboxData.properties.choices.map(
+      (object) => {
+        return object.fr;
+      }
+    );
 
     expect(screen.getByRole("group")).toHaveFormValues({
       8: resultsArray,

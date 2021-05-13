@@ -67,7 +67,9 @@ function _rehydrateFormResponses(payload: Submission) {
       case "checkbox":
       case "dynamicRow":
         if (response) {
-          rehydratedResponses[question.id] = JSON.parse(response as string).value;
+          rehydratedResponses[question.id] = JSON.parse(
+            response as string
+          ).value;
         } else rehydratedResponses[question.id] = [];
         break;
       case "richText":
@@ -81,12 +83,16 @@ function _rehydrateFormResponses(payload: Submission) {
 
 // Email submission data manipulation
 
-export function extractFormData(submission: Submission): Array<string> {
+export function extractFormData(
+  submission: Submission
+): Array<string> {
   const formResponses = submission.responses;
   const formOrigin = submission.form;
   const dataCollector: Array<string> = [];
   formOrigin.layout.map((qID) => {
-    const question = formOrigin.elements.find((element: FormElement) => element.id === qID);
+    const question = formOrigin.elements.find(
+      (element: FormElement) => element.id === qID
+    );
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
     }
@@ -94,7 +100,11 @@ export function extractFormData(submission: Submission): Array<string> {
   return dataCollector;
 }
 
-function handleType(question: FormElement, response: Response, collector: Array<string>) {
+function handleType(
+  question: FormElement,
+  response: Response,
+  collector: Array<string>
+) {
   // Add i18n here later on?
   // Do we detect lang submission or output with mixed lang?
   const qTitle = question.properties.titleEn;
@@ -107,7 +117,11 @@ function handleType(question: FormElement, response: Response, collector: Array<
       break;
 
     case "checkbox":
-      handleArrayResponse(qTitle, response as Array<string>, collector);
+      handleArrayResponse(
+        qTitle,
+        response as Array<string>,
+        collector
+      );
       break;
     case "dynamicRow":
       handleDynamicForm(
@@ -139,11 +153,19 @@ function handleDynamicForm(
         case "textArea":
         case "dropdown":
         case "radio":
-          handleTextResponse(qTitle, row[qIndex] as string, rowCollector);
+          handleTextResponse(
+            qTitle,
+            row[qIndex] as string,
+            rowCollector
+          );
           break;
 
         case "checkbox":
-          handleArrayResponse(qTitle, row[qIndex] as Array<string>, rowCollector);
+          handleArrayResponse(
+            qTitle,
+            row[qIndex] as Array<string>,
+            rowCollector
+          );
           break;
       }
     });
@@ -154,7 +176,11 @@ function handleDynamicForm(
   collector.push(responseCollector.join(String.fromCharCode(13)));
 }
 
-function handleArrayResponse(title: string, response: Array<string>, collector: Array<string>) {
+function handleArrayResponse(
+  title: string,
+  response: Array<string>,
+  collector: Array<string>
+) {
   if (response.length) {
     if (Array.isArray(response)) {
       const responses = response
@@ -162,7 +188,9 @@ function handleArrayResponse(title: string, response: Array<string>, collector: 
           return `- ${item}`;
         })
         .join(String.fromCharCode(13));
-      collector.push(`${title}${String.fromCharCode(13)}${responses}`);
+      collector.push(
+        `${title}${String.fromCharCode(13)}${responses}`
+      );
       return;
     } else {
       handleTextResponse(title, response, collector);
@@ -172,8 +200,16 @@ function handleArrayResponse(title: string, response: Array<string>, collector: 
   collector.push(`${title}${String.fromCharCode(13)}- No response`);
 }
 
-function handleTextResponse(title: string, response: string, collector: Array<string>) {
-  if (response !== undefined && response !== null && response !== "") {
+function handleTextResponse(
+  title: string,
+  response: string,
+  collector: Array<string>
+) {
+  if (
+    response !== undefined &&
+    response !== null &&
+    response !== ""
+  ) {
     collector.push(`${title}${String.fromCharCode(13)}-${response}`);
     return;
   }
@@ -181,9 +217,14 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`${title}${String.fromCharCode(13)}- No Response`);
 }
 
-function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
+function _buildFormDataObject(
+  form: FormMetadataProperties,
+  values: Responses
+) {
   const formData = new FormData();
-  form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
+  form.elements = form.elements.filter(
+    (element) => !["richText"].includes(element.type)
+  );
 
   form.elements.map((element) => {
     _handleFormDataType(element, values[element.id], formData);
@@ -192,7 +233,11 @@ function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
   return formData;
 }
 
-function _handleFormDataType(element: FormElement, value: Response, formData: FormData) {
+function _handleFormDataType(
+  element: FormElement,
+  value: Response,
+  formData: FormData
+) {
   switch (element.type) {
     case "textField":
     case "textArea":
@@ -211,26 +256,48 @@ function _handleFormDataType(element: FormElement, value: Response, formData: Fo
     case "dynamicRow":
       // array of strings
       Array.isArray(value)
-        ? _handleFormDataArray(element.id, value as Array<string>, formData)
+        ? _handleFormDataArray(
+            element.id,
+            value as Array<string>,
+            formData
+          )
         : _handleFormDataText(element.id, "", formData);
 
       break;
     case "fileInput":
       // file input
-      _handleFormDataFileInput(element.id, value as FileInputResponse, formData);
+      _handleFormDataFileInput(
+        element.id,
+        value as FileInputResponse,
+        formData
+      );
       break;
   }
 }
 
-function _handleFormDataFileInput(key: string, value: FileInputResponse, formData: FormData) {
-  value.file ? formData.append(key, value.file) : _handleFormDataText(key, "", formData);
+function _handleFormDataFileInput(
+  key: string,
+  value: FileInputResponse,
+  formData: FormData
+) {
+  value.file
+    ? formData.append(key, value.file)
+    : _handleFormDataText(key, "", formData);
 }
 
-function _handleFormDataText(key: string, value: string, formData: FormData) {
+function _handleFormDataText(
+  key: string,
+  value: string,
+  formData: FormData
+) {
   formData.append(key, value);
 }
 
-function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
+function _handleFormDataArray(
+  key: string,
+  value: Array<string>,
+  formData: FormData
+) {
   formData.append(key, JSON.stringify({ value: value }));
 }
 async function _submitToApI(
@@ -274,18 +341,31 @@ async function _submitToApI(
         const referrerUrl =
           formMetadata && formMetadata.endPage
             ? {
-                referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
+                referrerUrl:
+                  formMetadata.endPage[
+                    getProperty("referrerUrl", language)
+                  ],
               }
             : null;
-        const htmlEmail = !isProduction ? serverResponse.data.htmlEmail : null;
+        const htmlEmail = !isProduction
+          ? serverResponse.data.htmlEmail
+          : null;
         const endPageText =
           formMetadata && formMetadata.endPage
-            ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
+            ? JSON.stringify(
+                formMetadata.endPage[
+                  getProperty("description", language)
+                ]
+              )
             : "";
         router.push(
           {
             pathname: `/${language}/id/${formMetadata.id}/confirmation`,
-            query: { ...referrerUrl, htmlEmail: htmlEmail, pageText: endPageText },
+            query: {
+              ...referrerUrl,
+              htmlEmail: htmlEmail,
+              pageText: endPageText,
+            },
           },
           {
             pathname: `/${language}/id/${formMetadata.id}/confirmation`,

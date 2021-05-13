@@ -18,4 +18,6 @@ Our aim is to make services easier for government to deliver. We collaborate wit
 
 [Learn more](https://digital.canada.ca/partnerships)
 `;
-export const defaultRichText = (): React.ReactElement => <RichText>{richText}</RichText>;
+export const defaultRichText = (): React.ReactElement => (
+  <RichText>{richText}</RichText>
+);

@@ -1,5 +1,10 @@
 import React from "react";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
@@ -31,8 +36,10 @@ const dynamicRowData = {
         id: 2,
         type: "textField",
         properties: {
-          titleEn: "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
-          titleFr: "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
+          titleEn:
+            "Nature of the amount owing (e.g. taxes, penalties, overpayments)",
+          titleFr:
+            "Nature de la somme due (p. ex., impôts, pénalités, trop payés)",
           placeholderEn: "",
           placeholderFr: "",
           description: "",
@@ -46,7 +53,8 @@ const dynamicRowData = {
         type: "textField",
         properties: {
           titleEn: "Department or agency to which amount is owed",
-          titleFr: "Ministère ou organisme auquel la somme en souffrance est due",
+          titleFr:
+            "Ministère ou organisme auquel la somme en souffrance est due",
           placeholderEn: "",
           placeholderFr: "",
           description: "",
@@ -73,7 +81,11 @@ describe("Generate a dynamic row", () => {
   describe("... in English", () => {
     test("...initialState", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="en">
+        <Form
+          formMetadata={formMetadata}
+          t={(key) => key}
+          language="en"
+        >
           <GenerateElement element={dynamicRowData} language="en" />
         </Form>
       );
@@ -81,68 +93,96 @@ describe("Generate a dynamic row", () => {
       // Item has a title
       expect(screen.getByText("Item 1")).toBeInTheDocument();
       // There is only 1 row on initiation
-      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
+      expect(
+        screen.queryAllByTestId("dynamic-row", { exact: false })
+      ).toHaveLength(1);
       // All children are present in row 1
       expect(screen.getByTestId("dynamic-row-1"))
         .toContainElement(
           screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[0].properties
+                .titleEn,
           })
         )
         .toContainElement(
           screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[1].properties
+                .titleEn,
           })
         )
         .toContainElement(
           screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[2].properties
+                .titleEn,
           })
         );
     });
 
     test("Add a row", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="en">
+        <Form
+          formMetadata={formMetadata}
+          t={(key) => key}
+          language="en"
+        >
           <GenerateElement element={dynamicRowData} language="en" />
         </Form>
       );
-      fireEvent.click(screen.getByRole("button", { name: "Add Row" }));
+      fireEvent.click(
+        screen.getByRole("button", { name: "Add Row" })
+      );
       expect(screen.getByText("Item 1")).toBeInTheDocument();
       expect(screen.getByText("Item 2")).toBeInTheDocument();
       // There is only 1 row on initiation
-      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
+      expect(
+        screen.queryAllByTestId("dynamic-row", { exact: false })
+      ).toHaveLength(2);
       // All children are present in row 1
       expect(screen.getByTestId("dynamic-row-1"))
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[0].properties
+                .titleEn,
           })[0]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[1].properties
+                .titleEn,
           })[0]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[2].properties
+                .titleEn,
           })[0]
         );
       expect(screen.getByTestId("dynamic-row-2"))
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[0].properties
+                .titleEn,
           })[1]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[1].properties
+                .titleEn,
           })[1]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties.titleEn,
+            name:
+              dynamicRowData.properties.subElements[2].properties
+                .titleEn,
           })[1]
         );
     });
@@ -150,7 +190,11 @@ describe("Generate a dynamic row", () => {
   describe("...in French", () => {
     test("...initialState", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+        <Form
+          formMetadata={formMetadata}
+          t={(key) => key}
+          language="fr"
+        >
           <GenerateElement element={dynamicRowData} language="fr" />
         </Form>
       );
@@ -158,68 +202,96 @@ describe("Generate a dynamic row", () => {
       // Item has a title
       expect(screen.getByText("Article 1")).toBeInTheDocument();
       // There is only 1 row on initiation
-      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
+      expect(
+        screen.queryAllByTestId("dynamic-row", { exact: false })
+      ).toHaveLength(1);
       // All children are present in row 1
       expect(screen.getByTestId("dynamic-row-1"))
         .toContainElement(
           screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[0].properties
+                .titleFr,
           })
         )
         .toContainElement(
           screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[1].properties
+                .titleFr,
           })
         )
         .toContainElement(
           screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[2].properties
+                .titleFr,
           })
         );
     });
 
     test("Add a row", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+        <Form
+          formMetadata={formMetadata}
+          t={(key) => key}
+          language="fr"
+        >
           <GenerateElement element={dynamicRowData} language="fr" />
         </Form>
       );
-      fireEvent.click(screen.getByRole("button", { name: "Ajouter Element" }));
+      fireEvent.click(
+        screen.getByRole("button", { name: "Ajouter Element" })
+      );
       expect(screen.getByText("Article 1")).toBeInTheDocument();
       expect(screen.getByText("Article 2")).toBeInTheDocument();
       // There is only 1 row on initiation
-      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
+      expect(
+        screen.queryAllByTestId("dynamic-row", { exact: false })
+      ).toHaveLength(2);
       // All children are present in row 1
       expect(screen.getByTestId("dynamic-row-1"))
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[0].properties
+                .titleFr,
           })[0]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[1].properties
+                .titleFr,
           })[0]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[2].properties
+                .titleFr,
           })[0]
         );
       expect(screen.getByTestId("dynamic-row-2"))
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[0].properties
+                .titleFr,
           })[1]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[1].properties
+                .titleFr,
           })[1]
         )
         .toContainElement(
           screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties.titleFr,
+            name:
+              dynamicRowData.properties.subElements[2].properties
+                .titleFr,
           })[1]
         );
     });

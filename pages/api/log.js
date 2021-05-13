@@ -6,7 +6,9 @@ const log = (req, res) => {
     logMessage[level]("Client Side log: " + JSON.stringify(msg));
   } catch (err) {
     logMessage.error(err);
-    res.status(500).send("Error ocurred when logging client side log on server");
+    res
+      .status(500)
+      .send("Error ocurred when logging client side log on server");
     return;
   }
   return res.status(202).send("Log received");

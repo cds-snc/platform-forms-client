@@ -10,7 +10,8 @@ export default {
 
 const testText = (
   <>
-    Lorem ipsum dolor sit amet, <a href="#test">consectetur adipiscing</a> elit, sed do eiusmod.
+    Lorem ipsum dolor sit amet,{" "}
+    <a href="#test">consectetur adipiscing</a> elit, sed do eiusmod.
   </>
 );
 
@@ -90,7 +91,11 @@ export const slimNoIcon = (): React.ReactElement => (
 );
 
 export const withCTA = (): React.ReactElement => (
-  <Alert type="warning" heading="Warning status" cta={<Button type="button">Click here</Button>}>
+  <Alert
+    type="warning"
+    heading="Warning status"
+    cta={<Button type="button">Click here</Button>}
+  >
     {testText}
   </Alert>
 );

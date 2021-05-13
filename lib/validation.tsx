@@ -14,7 +14,11 @@ import { TFunction } from "next-i18next";
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
  * Also, defines the regex for validation, with a matching bilingual error message
  */
-const getRegexByType = (type: string | undefined, t: TFunction, value?: string) => {
+const getRegexByType = (
+  type: string | undefined,
+  t: TFunction,
+  value?: string
+) => {
   interface RegexProps {
     [key: string]: {
       regex: RegExp | null;
@@ -29,7 +33,9 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
     },
     alphanumeric: {
       regex: /^( )*[A-Za-z0-9\s]+( )*$/,
-      error: t("input-validation.alphanumeric") /* message needs a translation */,
+      error: t(
+        "input-validation.alphanumeric"
+      ) /* message needs a translation */,
     },
     text: {
       regex: /^.*[^\n]+.*$/,
@@ -65,7 +71,10 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
  * @param e The click event of the error link
  * @param id The id of the input field that has the error and we need to focus
  */
-const scrollErrorInView = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
+const scrollErrorInView = (
+  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  id: string
+) => {
   e.preventDefault();
   const labelElement = document.getElementById(`label-${id}`);
   const inputElement = document.getElementById(id);
@@ -80,27 +89,46 @@ const scrollErrorInView = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, i
  * @param values
  * @param props
  */
-export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
+export const validateOnSubmit = (
+  values: FormValues,
+  props: DynamicFormProps
+): Responses => {
   const errors: Responses = {};
 
   for (const item in values) {
     const formMetadata = props.formMetadata;
     const elements: Array<FormElement> = formMetadata.elements;
-    const currentItem = elements.find((element) => element.id == item);
+    const currentItem = elements.find(
+      (element) => element.id == item
+    );
 
     if (!currentItem) {
       return errors;
     }
 
-    const currentValidation = (currentItem.properties?.validation as ValidationProperties) || {};
+    const currentValidation =
+      (currentItem.properties?.validation as ValidationProperties) ||
+      {};
     const formikValue = values[item] as string;
     const currentValue: string = formikValue.toString() || "";
-    const currentRegex = getRegexByType(currentValidation.type, props.t, currentValue);
+    const currentRegex = getRegexByType(
+      currentValidation.type,
+      props.t,
+      currentValue
+    );
 
     // Check for required fields
-    if (currentValidation && currentValidation?.required && !currentValue) {
+    if (
+      currentValidation &&
+      currentValidation?.required &&
+      !currentValue
+    ) {
       errors[item] = props.t("input-validation.required");
-    } else if (currentValidation.type && currentRegex && currentRegex.regex) {
+    } else if (
+      currentValidation.type &&
+      currentRegex &&
+      currentRegex.regex
+    ) {
       // Check for different types of fields, email, date, number, custom etc
       const regex = new RegExp(currentRegex.regex);
       if (currentValue && !regex.test(currentValue)) {
@@ -139,7 +167,9 @@ export const getErrorList = (
       );
     });
   }
-  return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+  return errorList && errorList.length ? (
+    <ol className="gc-ordered-list">{errorList}</ol>
+  ) : null;
 };
 
 /**
@@ -149,7 +179,13 @@ export const setFocusOnErrorMessage = (
   props: InnerFormProps & FormikProps<FormValues>,
   errorId: string
 ): void => {
-  if (typeof window !== "undefined" && props && props.errors && props.touched && errorId) {
+  if (
+    typeof window !== "undefined" &&
+    props &&
+    props.errors &&
+    props.touched &&
+    errorId
+  ) {
     const errorAlert = document.getElementById(errorId);
     if (errorAlert && typeof errorAlert !== "undefined") {
       errorAlert.focus();
