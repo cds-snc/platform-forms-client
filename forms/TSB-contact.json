@@ -24,7 +24,7 @@
       "urlFr": "https://bst-tsb.gc.ca/fra/index.html"
     },
     "endPage": {
-      "descriptionEn": "# Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week",
+      "descriptionEn": "# Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week.",
       "descriptionFr": "# Merci pour votre demande  \n\r Le Bureau de la sécurité des transports du Canada répondra à votre demande d’ici une semaine."
     },
     "elements": [
@@ -34,7 +34,7 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below \n\r Find out how Transportation Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
+          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below. \n\r Find out how <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>the Transportation Safety Board protects your privacy.</a>",
           "descriptionFr": "(French to follow) Thank you for your interest in the TSB. Send your question using the form below . \n\r Pour connaître comment le Bureau de la sécurité des transports du Canada protège votre confidentialité, naviguez à <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>l'avis de confidentialité</a>.",
           "charLimit": 200,
           "validation": {
@@ -81,7 +81,7 @@
         "properties": {
           "titleEn": "What kind of information do you need?",
           "titleFr": "Quel genre d’information recherchez-vous?",
-          "descriptionEn": "Select all that apply",
+          "descriptionEn": "Select all that apply.",
           "descriptionFr": "Cocher tous les choix qui s’appliquent",
           "choices": [
             {
@@ -95,6 +95,10 @@
             {
               "en": "Statistics",
               "fr": "Statistiques"
+            },
+            {
+              "en": "Website",
+              "fr": "FR - Website"
             },
             {
               "en": "Access to Information and Privacy",
@@ -123,7 +127,7 @@
           "titleFr": "Pour d'autre information veuillez spécifier",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "Tell us the subject of your question, e.g., training, jobs",
+          "descriptionEn": "Tell us the subject of your question. e.g., training, jobs",
           "descriptionFr": "(French to follow) Tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote",
           "charLimit": 100,
           "validation": {
@@ -140,7 +144,7 @@
           "titleFr": "Message",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "Any relevant details or specific questions",
+          "descriptionEn": "Any relevant details or specific questions.",
           "descriptionFr": "Avez-vous des détails pertinents ou des questions spécifiques?",
           "charLimit": 800,
           "validation": {
@@ -166,7 +170,7 @@
               "fr": "French to follow"
             },
             {
-              "en": "Pipeline (Monthly)",
+              "en": "Pipeline (monthly)",
               "fr": "French to follow"
             },
             {
