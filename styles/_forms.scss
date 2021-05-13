@@ -24,6 +24,14 @@
   &.gc-alert--validation,
   &.gc-alert--error {
     @apply border-2 border-red-default;
+
+    &:focus {
+      @apply outline-none border-5;
+    }
+
+    &:focus-within {
+      @apply outline-none border-5;
+    }
   }
 
   &.gc-alert--success {
@@ -51,6 +59,10 @@
 
   .gc-error-link {
     @apply ml-2 text-blue-900;
+
+    &:focus {
+      @apply bg-red-700 text-white-default;
+    }
   }
 }
 
@@ -164,9 +176,9 @@
 }
 
 .gc-label {
-  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
+  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full focus-within:text-blue-hover;
   &.required > span {
-    @apply text-red-500;
+    @apply text-red-700;
     content: " *";
   }
 }
@@ -180,10 +192,27 @@
   &.full-height {
     @apply h-auto;
   }
+
+  &:focus {
+    @apply border-4 border-blue-hover;
+  }
+}
+
+.focus-group:focus-within {
+  @apply text-blue-hover;
+
+  .gc-description {
+    @apply text-blue-hover;
+  }
 }
 
 .gc-input-text {
-  @apply md:w-full md:text-small_base text-base text-gray-700 border-solid border-2 border-black-form py-3 px-2 mt-2 mb-14 w-96;
+  border: solid 2px black;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
+
+  &:focus {
+    @apply outline-none border-4 border-blue-hover;
+  }
 }
 
 .gc-file-input {
