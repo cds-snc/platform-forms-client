@@ -62,7 +62,7 @@
           "descriptionEn": "Select your response",
           "descriptionFr": "Province/Territoire",
           "validation": {
-            "required": false
+            "required": true
           },
           "choices": [
             {

@@ -87,7 +87,7 @@ ul.custom {
         }
 
         a:active {
-          @apply underline bg-purple-active;
+          @apply underline bg-blue-active;
         }
       }
       li:last-of-type {
@@ -121,7 +121,7 @@ a:focus {
 }
 
 a:active {
-  @apply bg-purple-active;
+  @apply bg-blue-active;
 }
 
 .link-list {

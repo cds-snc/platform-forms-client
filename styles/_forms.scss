@@ -17,10 +17,6 @@
   &.gc-alert--validation,
   &.gc-alert--error {
     @apply bg-red-100 border-l-4 border-red-default;
-
-    &:focus {
-      @apply border-4 border-red-default;
-    }
   }
 
   &.gc-alert--success {
@@ -131,7 +127,7 @@
   }
 
   a:active {
-    @apply bg-purple-active;
+    @apply bg-blue-active;
   }
 }
 
@@ -180,7 +176,7 @@
   }
 
   &:active {
-    @apply bg-purple-active;
+    @apply bg-blue-active;
   }
 }
 
