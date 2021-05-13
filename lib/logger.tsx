@@ -11,10 +11,7 @@ export const logMessage = pino({
         const headers = {
           type: "application/json",
         };
-        const blob = new Blob(
-          [JSON.stringify({ msg, level })],
-          headers
-        );
+        const blob = new Blob([JSON.stringify({ msg, level })], headers);
         navigator.sendBeacon("/api/log", blob);
       },
     },
@@ -23,16 +20,11 @@ export const logMessage = pino({
     level: (label) => ({ level: label }),
   },
   base: null,
-  prettyPrint:
-    process.env.DEBUG || process.env.NODE_ENV === "development"
-      ? true
-      : false,
+  prettyPrint: process.env.DEBUG || process.env.NODE_ENV === "development" ? true : false,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logger = <A extends any[], R>(f: (...a: A) => R) => (
-  ...args: A
-): R => {
+export const logger = <A extends any[], R>(f: (...a: A) => R) => (...args: A): R => {
   // Add nicer formatting for arguments being passed
   logMessage.debug(`${f.name} function called`);
   let value;
