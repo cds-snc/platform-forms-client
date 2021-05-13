@@ -24,7 +24,8 @@ export const defaultTextInput = (): React.ReactElement => (
 defaultTextInput.parameters = {
   docs: {
     source: {
-      code: '<label class="gc-input-label">Text Input<input type="text" name="" class="gc-input-text"></label>',
+      code:
+        '<label class="gc-input-label">Text Input<input type="text" name="" class="gc-input-text"></label>',
     },
   },
 };
