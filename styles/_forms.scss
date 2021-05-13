@@ -26,11 +26,13 @@
     @apply border-2 border-red-default;
 
     &:focus {
-      @apply outline-none border-5;
+          box-shadow: inset 0 0 0 2px #b10e1e;
+      @apply outline-none;
     }
 
     &:focus-within {
-      @apply outline-none border-5;
+          box-shadow: inset 0 0 0 2px #b10e1e;
+      @apply outline-none;
     }
   }
 
