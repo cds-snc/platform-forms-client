@@ -28,10 +28,10 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
   it("Submit the Form", () => {
     cy.get("button").contains("Submit").click();
     cy.url().should("include", `/en/id/${formMetaData.form.id}/confirmation`);
-    cy.get("h1").contains("Thank you for your enquiry");
+    cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");
     cy.get("#content").contains(
-      "The Transportation Safety Board of Canada will respond to your email within one week."
+      "The Transportation Safety Board of Canada will respond to you within a week"
     );
   });
 });

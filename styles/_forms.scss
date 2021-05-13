@@ -1,3 +1,10 @@
+// IE polyfills
+@supports not (display: grid) {
+  input {
+    border: 1px solid #000;
+  }
+}
+
 .gc-fieldset ul {
   @apply mb-14;
 }

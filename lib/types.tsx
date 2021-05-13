@@ -7,6 +7,8 @@ export interface FormMetadataProperties {
   version?: string | undefined;
   titleEn: string;
   titleFr: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
   layout: Array<string>;
   brand?: BrandProperties;
   elements: Array<FormElement>;
@@ -126,3 +128,9 @@ export type FileInputResponse = {
   src: FileReader;
   [key: string]: string | File | FileReader;
 };
+
+export interface AuthenticatedUser {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}

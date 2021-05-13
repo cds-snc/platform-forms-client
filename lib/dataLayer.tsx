@@ -246,6 +246,8 @@ async function _submitToApI(
       id: formMetadata.id,
       titleEn: formMetadata.titleEn,
       titleFr: formMetadata.titleFr,
+      emailSubjectEn: formMetadata.emailSubjectEn,
+      emailSubjectFr: formMetadata.emailSubjectFr,
       elements: formMetadata.elements,
       layout: formMetadata.layout,
     },

@@ -73,7 +73,7 @@ const previewNotify = async (form, fields) => {
   );
 
   const emailBody = await convertMessage({ form, responses: fields });
-  const messageSubject = form.titleEn + " Submission";
+  const messageSubject = `${form.emailSubjectEn ? form.emailSubjectEn : form.titleEn} Submission`;
   return await notify
     .previewTemplateById(templateID, {
       subject: messageSubject,

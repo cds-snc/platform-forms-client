@@ -21,6 +21,8 @@ The form viewer expects a JSON with the following structure.
     "version": 1,
     "titleEn": "",
     "titleFr": "",
+    "emailSubjectEn": "",
+    "emailSubjectFr": "",
     "layout": [ ... ],
     "brand": {},
     "elements": [ ... ],
@@ -40,6 +42,8 @@ There are 2 main parts to the structure:
 
    `titleEn/Fr`: The displayed title of the form to the user (`string`)
 
+   `emailSubjectEn/Fr`: Optional value to customize the subject line, if different from the `titleEn/Fr`,
+
    `layout`: The order of the questions and/or page elements identified by id (`array`)
 
    `brand`: Certain departments might have legal obligations to display a different brand, in terms of logo
@@ -48,7 +52,7 @@ There are 2 main parts to the structure:
 
    `startPage`: Defines what appears on the first, intro page
 
-   `endPage`: Defines what appears on the confirmation page, after the form was submitted
+   `endPage`: Defines what appears on the confirmation page, after the form was submitted. Can write markdown within the description.
 
    `publishingStatus`: If set to false, the link to the form will not appear on the main page, rather under "sandbox"
 
@@ -89,8 +93,8 @@ Example:
     "title": "cds-snc"
   },
   "endPage": {
-    "referrerUrlEn": "https://digital.canada.ca/",
-    "referrerUrlFr": "https://numerique.canada.ca/"
+    "descriptionEn": "# Thank you for your enquiry  \n\r Canadian Digital Services will respond to your email within one week.",
+    "descriptionFr": "# Merci pour votre demande  \n\r Le Service numérique canadien répondra à votre demande d’ici une semaine."
   },
   "elements": [
     {
