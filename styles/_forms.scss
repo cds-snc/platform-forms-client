@@ -198,7 +198,7 @@
 }
 
 .gc-label {
-  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
+  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full focus-within:text-blue-hover;
   &.required > span {
     @apply text-red-700;
     content: " *";
