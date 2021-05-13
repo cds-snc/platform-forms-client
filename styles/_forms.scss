@@ -20,10 +20,10 @@
 }
 
 .gc-alert {
-  @apply py-8 px-12 mb-14;
+  @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
   &.gc-alert--validation,
   &.gc-alert--error {
-    @apply bg-red-100 border-l-4 border-red-default;
+    @apply border-2 border-red-default;
   }
 
   &.gc-alert--success {
@@ -33,7 +33,7 @@
   .gc-alert__body {
     @apply text-black-default;
     h3 {
-      @apply mb-5;
+      @apply mb-5 text-red-default;
     }
 
     ol {
@@ -60,11 +60,11 @@
 }
 
 .gc-p {
-  @apply md:text-small_p xxl:w-full text-p mb-10 w-5/6;
+  @apply md:text-small_p text-p mb-10 w-full;
 }
 
 .gc-description {
-  @apply md:text-small_sm text-gray-text mb-3 text-sm w-full;
+  @apply md:text-small_sm text-gray-text mb-3 text-sm w-3/4 xl:w-full;
 }
 
 .gc-h1 {
@@ -164,7 +164,7 @@
 }
 
 .gc-label {
-  @apply md:text-small_base block mb-2 text-base font-bold w-full;
+  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
   &.required > span {
     @apply text-red-500;
     content: " *";
