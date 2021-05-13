@@ -25,9 +25,17 @@ module.exports = {
     }
   },
   webpack: (config) => {
+    // Support reading markdown
     config.module.rules.push({
       test: /\.md$/,
       use: "raw-loader",
+    });
+
+    // The pino logger module is transpiled for IE11 via babel.config.js
+    config.module.rules.push({
+      test: /\.js$/,
+      exclude: (file) => /node_modules/.test(file) && !/pino/.test(file),
+      use: [{ loader: "babel-loader" }],
     });
     return config;
   },

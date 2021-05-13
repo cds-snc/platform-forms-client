@@ -4,6 +4,7 @@
 
 main {
   min-height: calc(100vh - 450px);
+  display: block;
   @apply xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64;
 }
 
