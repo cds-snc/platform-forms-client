@@ -20,5 +20,6 @@ jobs:
 
       - name: Commit any changes
         uses: "docker://cdssnc/auto-commit-github-action"
-        args: "Prettified - Auto Commit"
-        secrets: ["${{ secrets.GITHUB_TOKEN }}"]
+        with:
+          args: "Prettified - Auto Commit"
+          secrets: ["${{ secrets.GITHUB_TOKEN }}"]
