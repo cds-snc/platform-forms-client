@@ -76,7 +76,6 @@ module.exports = {
       purple: {
         ...colors.purple,
         default: "#6300C7",
-        active: "#452862",
       },
       white: {
         ...colors.white,
