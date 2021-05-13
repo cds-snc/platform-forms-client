@@ -68,8 +68,7 @@ export const readonly = (): React.ReactElement => (
 defaultTextArea.parameters = {
   docs: {
     source: {
-      code:
-        '<label class="gc-textarea-label"><span class="ml-4">Enter text</span><textarea class="gc-textarea"></textarea></label>',
+      code: '<label class="gc-textarea-label"><span class="ml-4">Enter text</span><textarea class="gc-textarea"></textarea></label>',
     },
   },
 };
