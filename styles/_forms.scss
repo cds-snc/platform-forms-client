@@ -71,7 +71,8 @@
   @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
 
   &:focus {
-    @apply outline-none border-4 border-blue-hover;
+    box-shadow: inset 0 0 0 2px #0535d2;
+    @apply outline-none border-blue-hover;
   }
 }
 
@@ -206,11 +207,12 @@
   }
 
   &:focus {
-    @apply outline-none border-4 border-blue-hover;
+    box-shadow: inset 0 0 0 2px #0535d2;
+    @apply outline-none border-blue-hover;
   }
 }
 
-.focus-group:focus-within {
+.gc-form-group:focus-within {
   .gc-label,
   .gc-description {
     @apply text-blue-hover;
@@ -222,7 +224,8 @@
   @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
 
   &:focus {
-    @apply outline-none border-4 border-blue-hover;
+    box-shadow: inset 0 0 0 2px #0535d2;
+    @apply outline-none border-blue-hover;
   }
 }
 
