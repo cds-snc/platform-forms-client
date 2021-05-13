@@ -24,19 +24,21 @@ export const logMessage = pino({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logger = <A extends any[], R>(f: (...a: A) => R) => (...args: A): R => {
-  // Add nicer formatting for arguments being passed
-  logMessage.debug(`${f.name} function called`);
-  let value;
-  try {
-    value = f(...args);
-  } catch (error) {
-    logMessage.error(error);
-    throw error;
-  }
-  // Add formatting for value being returned
-  logMessage.debug(`${f.name} function returned`);
-  return value;
-};
+export const logger =
+  <A extends any[], R>(f: (...a: A) => R) =>
+  (...args: A): R => {
+    // Add nicer formatting for arguments being passed
+    logMessage.debug(`${f.name} function called`);
+    let value;
+    try {
+      value = f(...args);
+    } catch (error) {
+      logMessage.error(error);
+      throw error;
+    }
+    // Add formatting for value being returned
+    logMessage.debug(`${f.name} function returned`);
+    return value;
+  };
 
 export default logger;
