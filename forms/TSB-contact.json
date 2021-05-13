@@ -127,7 +127,7 @@
           "titleFr": "Pour d'autre information veuillez spécifier",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "Tell us the subject of your question. e.g., training, jobs",
+          "descriptionEn": "Tell us the subject of your question. e.g., training, jobs.",
           "descriptionFr": "(French to follow) Tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote",
           "charLimit": 100,
           "validation": {
@@ -158,8 +158,8 @@
         "properties": {
           "titleEn": "Notifications",
           "titleFr": "Notifications",
-          "descriptionEn": "I would like to receive notifications of transportation accidents and incidents",
-          "descriptionFr": "(French to follow) I would like to receive notifications of transportation accidents and incidents",
+          "descriptionEn": "I would like to receive notifications of transportation accidents and incidents.",
+          "descriptionFr": "(French to follow) I would like to receive notifications of transportation accidents and incidents.",
           "choices": [
             {
               "en": "Air (daily)",
