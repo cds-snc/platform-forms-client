@@ -149,9 +149,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
-          <legend className="gc-label">{labelText}</legend>
-          {description ? <Description id={id}>{description}</Description> : null}
-          {checkboxItems}
+          <div className="focus-group">
+            <legend className="gc-label">{labelText}</legend>
+            {description ? <Description id={id}>{description}</Description> : null}
+            {checkboxItems}
+          </div>
         </FormGroup>
       );
     }
@@ -170,15 +172,17 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
-          <legend className="gc-label">{labelText}</legend>
-          {description ? <Description id={id}>{description}</Description> : null}
-          {radioButtons}
+          <div className="focus-group">
+            <legend className="gc-label">{labelText}</legend>
+            {description ? <Description id={id}>{description}</Description> : null}
+            {radioButtons}
+          </div>
         </FormGroup>
       );
     }
     case "dropdown":
       return (
-        <Fragment>
+        <div className="focus-group">
           {labelComponent}
           {description ? <Description id={id}>{description}</Description> : null}
           <Dropdown
@@ -187,7 +191,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
           />
-        </Fragment>
+        </div>
       );
     case "richText":
       return (
