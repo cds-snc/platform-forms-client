@@ -7,6 +7,8 @@ export interface FormMetadataProperties {
   version?: string | undefined;
   titleEn: string;
   titleFr: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
   layout: Array<string>;
   brand?: BrandProperties;
   elements: Array<FormElement>;
