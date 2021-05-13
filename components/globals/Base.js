@@ -38,6 +38,7 @@ const Base = ({ children }) => {
             />
           </React.Fragment>
         )}
+        <script type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
