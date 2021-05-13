@@ -107,7 +107,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   switch (element.type) {
     case "textField":
       return (
-        <Fragment>
+        <div className="focus-group">
           {labelComponent}
           {description ? <Description id={id}>{description}</Description> : null}
           <TextInput
@@ -118,11 +118,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
           />
-        </Fragment>
+        </div>
       );
     case "textArea":
       return (
-        <Fragment>
+        <div className="focus-group">
           {labelComponent}
           {description ? <Description id={id}>{description}</Description> : null}
           <TextArea
@@ -132,7 +132,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
           />
-        </Fragment>
+        </div>
       );
     case "checkbox": {
       const checkboxItems = choices.map((choice, index) => {
