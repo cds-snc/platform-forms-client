@@ -13,13 +13,7 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Install prettier
-        run: yarn install
+        run: yarn add prettier
 
-      - name: Prettify code
-        run: yarn format
-
-      - name: Commit any changes
-        uses: "docker://cdssnc/auto-commit-github-action"
-        with:
-          args: "Prettified - Auto Commit"
-          secrets: ["${{ secrets.GITHUB_TOKEN }}"]
+      - name: Check code style
+        run: yarn format:check
