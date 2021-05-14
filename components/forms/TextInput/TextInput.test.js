@@ -5,10 +5,7 @@ import { GenerateElement } from "../../../lib/formBuilder";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),
-  useField: jest.fn(() => [
-    { field: { value: "" } },
-    { meta: { touched: null, error: null } },
-  ]),
+  useField: jest.fn(() => [{ field: { value: "" } }, { meta: { touched: null, error: null } }]),
 }));
 
 const textInputData = {
@@ -36,23 +33,15 @@ describe("Generate a text input", () => {
       </Form>
     );
     // Label properly renders
-    expect(screen.getByTestId("label")).toContainHTML(
-      textInputData.properties.titleEn
-    );
+    expect(screen.getByTestId("label")).toContainHTML(textInputData.properties.titleEn);
     // Description properly renders
-    expect(
-      screen.getByText(textInputData.properties.descriptionEn)
-    ).toBeInTheDocument();
+    expect(screen.getByText(textInputData.properties.descriptionEn)).toBeInTheDocument();
     // Field marked as required
     expect(screen.getByRole("textbox"))
       .toBeRequired()
       .toHaveDescription(textInputData.properties.descriptionEn);
     // Placeholder properly renders
-    expect(
-      screen.getByPlaceholderText(
-        textInputData.properties.placeholderEn
-      )
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(textInputData.properties.placeholderEn)).toBeInTheDocument();
   });
   test("...in French", () => {
     render(
@@ -61,19 +50,11 @@ describe("Generate a text input", () => {
       </Form>
     );
     // Label properly renders
-    expect(screen.getByTestId("label")).toContainHTML(
-      textInputData.properties.titleFr
-    );
+    expect(screen.getByTestId("label")).toContainHTML(textInputData.properties.titleFr);
     // Description properly render
-    expect(
-      screen.getByText(textInputData.properties.descriptionFr)
-    ).toBeInTheDocument();
+    expect(screen.getByText(textInputData.properties.descriptionFr)).toBeInTheDocument();
     // Placeholder properly renders
-    expect(
-      screen.getByPlaceholderText(
-        textInputData.properties.placeholderFr
-      )
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(textInputData.properties.placeholderFr)).toBeInTheDocument();
     // Field marked as required
     expect(screen.getByRole("textbox"))
       .toBeRequired()

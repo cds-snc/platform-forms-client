@@ -17,11 +17,7 @@ export const defaultTextInput = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextInput
-      id="input-type-text"
-      name="input-type-text"
-      type="text"
-    />
+    <TextInput id="input-type-text" name="input-type-text" type="text" />
   </Formik>
 );
 

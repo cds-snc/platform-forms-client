@@ -6,9 +6,7 @@ export default {
   component: Button,
 };
 
-export const defaultButton = (): React.ReactElement => (
-  <Button type="button">Click Me</Button>
-);
+export const defaultButton = (): React.ReactElement => <Button type="button">Click Me</Button>;
 
 export const secondaryButton = (): React.ReactElement => (
   <Button type="button" secondary={true}>
@@ -19,8 +17,7 @@ export const secondaryButton = (): React.ReactElement => (
 defaultButton.parameters = {
   docs: {
     source: {
-      code:
-        '<button type="button" class="gc-button button">Next</button>',
+      code: '<button type="button" class="gc-button button">Next</button>',
     },
   },
 };

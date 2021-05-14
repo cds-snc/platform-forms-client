@@ -14,16 +14,7 @@ interface LabelProps {
 }
 
 export const Label = (props: LabelProps): React.ReactElement => {
-  const {
-    children,
-    htmlFor,
-    className,
-    error,
-    hint,
-    srOnly,
-    required,
-    id,
-  } = props;
+  const { children, htmlFor, className, error, hint, srOnly, required, id } = props;
 
   const classes = classnames(
     {
@@ -37,16 +28,9 @@ export const Label = (props: LabelProps): React.ReactElement => {
   const { t } = useTranslation("common");
 
   return (
-    <label
-      data-testid="label"
-      className={classes}
-      htmlFor={htmlFor}
-      id={id}
-    >
+    <label data-testid="label" className={classes} htmlFor={htmlFor} id={id}>
       {children} {required ? <span aria-hidden>*</span> : null}
-      {required ? (
-        <i className="visually-hidden">{t("required-field")}</i>
-      ) : null}
+      {required ? <i className="visually-hidden">{t("required-field")}</i> : null}
       {hint && <span className="gc-hint">{hint}</span>}
     </label>
   );

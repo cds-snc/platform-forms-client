@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  cleanup,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Form from "./Form";
 import mockedDataLayer from "../../../lib/dataLayer";
@@ -26,11 +21,7 @@ describe("Generate a form component", () => {
   afterEach(cleanup);
   test("...with fake children", () => {
     render(
-      <Form
-        formMetadata={formMetadata}
-        language="en"
-        t={(key) => key}
-      >
+      <Form formMetadata={formMetadata} language="en" t={(key) => key}>
         <div data-testid="test-child"></div>
       </Form>
     );
@@ -44,19 +35,10 @@ describe("Generate a form component", () => {
     });
 
     test("Form is submitted", () => {
-      render(
-        <Form
-          formMetadata={formMetadata}
-          language="en"
-          t={(key) => key}
-        ></Form>
-      );
+      render(<Form formMetadata={formMetadata} language="en" t={(key) => key}></Form>);
 
       userEvent.click(screen.getByRole("button", { type: "submit" }));
-      const mockedSubmitFunction = jest.spyOn(
-        mockedDataLayer,
-        "submitToAPI"
-      );
+      const mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
       waitFor(() => {
         expect(mockedSubmitFunction).toBeCalledTimes(1);
       });

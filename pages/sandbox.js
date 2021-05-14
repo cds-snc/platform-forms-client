@@ -41,9 +41,7 @@ const Sandbox = () => {
           <h2>{t("product.preview.title")}</h2>
           <ul className="link-list custom">
             <li>
-              <Link href="/builder-preview">
-                {t("product.preview.link")}
-              </Link>
+              <Link href="/builder-preview">{t("product.preview.link")}</Link>
             </li>
           </ul>
         </div>
@@ -53,9 +51,7 @@ const Sandbox = () => {
           <p>{t("design.text")}</p>
           <ul className="link-list custom">
             <li>
-              <a href="https://platform-storybook.herokuapp.com/">
-                {t("design.system.title")}
-              </a>
+              <a href="https://platform-storybook.herokuapp.com/">{t("design.system.title")}</a>
             </li>
           </ul>
         </div>

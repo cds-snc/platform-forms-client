@@ -29,16 +29,10 @@ describe("Generate a text area", () => {
       </Form>
     );
     // Label properly renders
-    expect(
-      screen.getByText(richTextData.properties.titleEn)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(richTextData.properties.titleEn)
-    ).toHaveClass("gc-h3");
+    expect(screen.getByText(richTextData.properties.titleEn)).toBeInTheDocument();
+    expect(screen.getByText(richTextData.properties.titleEn)).toHaveClass("gc-h3");
     // Description properly render
-    expect(
-      screen.getByText(richTextData.properties.descriptionEn)
-    ).toBeInTheDocument();
+    expect(screen.getByText(richTextData.properties.descriptionEn)).toBeInTheDocument();
   });
   test("...in French", () => {
     render(
@@ -47,13 +41,9 @@ describe("Generate a text area", () => {
       </Form>
     );
     // Label properly renders
-    expect(
-      screen.getByText(richTextData.properties.titleFr)
-    ).toBeInTheDocument();
+    expect(screen.getByText(richTextData.properties.titleFr)).toBeInTheDocument();
     // Description properly render
-    expect(
-      screen.getByText(richTextData.properties.descriptionFr)
-    ).toBeInTheDocument();
+    expect(screen.getByText(richTextData.properties.descriptionFr)).toBeInTheDocument();
   });
   test("Return null if no children", () => {
     const emptyRichTextData = {

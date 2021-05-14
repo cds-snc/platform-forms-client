@@ -19,8 +19,7 @@ export const Alert = ({
   className,
   validation,
   ...props
-}: AlertProps &
-  React.HTMLAttributes<HTMLDivElement>): React.ReactElement => {
+}: AlertProps & React.HTMLAttributes<HTMLDivElement>): React.ReactElement => {
   const classes = classnames(
     "gc-alert",
     {
@@ -34,20 +33,10 @@ export const Alert = ({
   );
 
   return (
-    <div
-      className={classes}
-      data-testid="alert"
-      {...props}
-      role="alert"
-    >
+    <div className={classes} data-testid="alert" {...props} role="alert">
       <div className="gc-alert__body">
         {heading && <h3 className="gc-h3">{heading}</h3>}
-        {children &&
-          (validation ? (
-            children
-          ) : (
-            <div className="gc-alert__text">{children}</div>
-          ))}
+        {children && (validation ? children : <div className="gc-alert__text">{children}</div>)}
       </div>
       {cta && <div>{cta}</div>}
     </div>

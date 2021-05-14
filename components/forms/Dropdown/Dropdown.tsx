@@ -17,15 +17,11 @@ interface DropdownOptionProps {
   value: string | number;
 }
 
-const DropdownOption = (
-  props: DropdownOptionProps
-): React.ReactElement => {
+const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
   return <option value={props.value}>{props.name}</option>;
 };
 
-export const Dropdown = (
-  props: DropdownProps
-): React.ReactElement => {
+export const Dropdown = (props: DropdownProps): React.ReactElement => {
   const { id, className, choices, required, ariaDescribedBy } = props;
 
   const classes = classnames("gc-dropdown", className);
@@ -37,21 +33,13 @@ export const Dropdown = (
     options = choices.map((choice, i) => {
       const innerId = `${id}-${i}`;
       const value = field.value ? field.value[innerId] : field.value;
-      return (
-        <DropdownOption
-          key={`key-${innerId}`}
-          value={value}
-          name={choice}
-        />
-      );
+      return <DropdownOption key={`key-${innerId}`} value={value} name={choice} />;
     });
   }
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <ErrorMessage>{meta.error}</ErrorMessage>
-      ) : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
 
       <select
         data-testid="dropdown"

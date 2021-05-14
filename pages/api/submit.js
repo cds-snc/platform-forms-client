@@ -1,16 +1,10 @@
 import { NotifyClient } from "notifications-node-client";
 import getConfig from "next/config";
-const {
-  LambdaClient,
-  InvokeCommand,
-} = require("@aws-sdk/client-lambda");
+const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
 import formidable from "formidable";
 import fs from "fs";
 import convertMessage from "../../lib/markdown";
-import {
-  getSubmissionByID,
-  rehydrateFormResponses,
-} from "../../lib/dataLayer";
+import { getSubmissionByID, rehydrateFormResponses } from "../../lib/dataLayer";
 import { logMessage } from "../../lib/logger";
 
 export const config = {
@@ -67,9 +61,7 @@ const callLambda = async (form, fields) => {
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error(
-        "Could not process request with Lambda Submit function"
-      );
+      throw new Error("Could not process request with Lambda Submit function");
     });
 };
 
@@ -81,9 +73,7 @@ const previewNotify = async (form, fields) => {
   );
 
   const emailBody = await convertMessage({ form, responses: fields });
-  const messageSubject = `${
-    form.emailSubjectEn ? form.emailSubjectEn : form.titleEn
-  } Submission`;
+  const messageSubject = `${form.emailSubjectEn ? form.emailSubjectEn : form.titleEn} Submission`;
   return await notify
     .previewTemplateById(templateID, {
       subject: messageSubject,
@@ -112,9 +102,7 @@ const processFormData = async (form, reqFields, files, res, req) => {
       }`
     );
     if (!formAttached) {
-      return res
-        .status(400)
-        .json({ error: "No form submitted with request" });
+      return res.status(400).json({ error: "No form submitted with request" });
     }
 
     // Add file S3 urls to payload once we start processing files through reliability queue
@@ -133,9 +121,7 @@ const processFormData = async (form, reqFields, files, res, req) => {
         .then(async () => {
           if (!isProduction && process.env.NOTIFY_API_KEY) {
             await previewNotify(form, fields).then((response) => {
-              return res
-                .status(201)
-                .json({ received: true, htmlEmail: response });
+              return res.status(201).json({ received: true, htmlEmail: response });
             });
           } else {
             return res.status(201).json({ received: true });
@@ -147,14 +133,9 @@ const processFormData = async (form, reqFields, files, res, req) => {
         });
     }
     // Local development and Heroku
-    else if (
-      process.env.NOTIFY_API_KEY &&
-      process.env.NODE_ENV !== "test"
-    ) {
+    else if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
       return await previewNotify(form, fields).then((response) => {
-        return res
-          .status(201)
-          .json({ received: true, htmlEmail: response });
+        return res.status(201).json({ received: true, htmlEmail: response });
       });
     } else {
       logMessage.info("Not Sending Email - Test mode");

@@ -1,19 +1,11 @@
 import React from "react";
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-} from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),
-  useField: jest.fn(() => [
-    { field: { value: "" } },
-    { meta: { touched: null, error: null } },
-  ]),
+  useField: jest.fn(() => [{ field: { value: "" } }, { meta: { touched: null, error: null } }]),
 }));
 
 const dropdownData = {
@@ -135,9 +127,7 @@ describe("Dropdown component", () => {
     ).toBeInTheDocument();
 
     // Change value
-    const newValue = Math.floor(
-      Math.random() * dropdownData.properties.choices.length
-    );
+    const newValue = Math.floor(Math.random() * dropdownData.properties.choices.length);
     fireEvent.select(screen.queryByTestId("dropdown"), {
       target: {
         value: dropdownData.properties.choices[newValue].fr,

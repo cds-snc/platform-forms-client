@@ -4,10 +4,7 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
 import { TextPage } from "../../forms/TextPage/TextPage";
-import {
-  getProperty,
-  getRenderedForm,
-} from "../../../lib/formBuilder";
+import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
 import { FormMetadataProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
 
@@ -19,17 +16,13 @@ interface DynamicFormProps {
     form text page based on the step
 */
 
-export const DynamicForm = (
-  props: DynamicFormProps
-): React.ReactElement => {
+export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { formMetadata } = props;
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formMetadata, language);
-  const formTitle = formMetadata[
-    getProperty("title", language)
-  ] as string;
+  const formTitle = formMetadata[getProperty("title", language)] as string;
   const router = useRouter();
   const { step, urlQuery, htmlEmail } = router.query;
 
@@ -51,12 +44,7 @@ export const DynamicForm = (
         <title>{formTitle}</title>
       </Head>
       <h1 className="gc-h1">{formTitle}</h1>
-      <Form
-        formMetadata={formMetadata}
-        language={language}
-        router={router}
-        t={t}
-      >
+      <Form formMetadata={formMetadata} language={language} router={router} t={t}>
         {currentForm}
       </Form>
     </div>

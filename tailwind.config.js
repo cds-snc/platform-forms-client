@@ -148,9 +148,5 @@ module.exports = {
     extend: {},
   },
   purge: ["./components/**/*.tsx", "./pages/**/*.js"],
-  plugins: [
-    require("tailwindcss"),
-    require("precss"),
-    require("autoprefixer"),
-  ],
+  plugins: [require("tailwindcss"), require("precss"), require("autoprefixer")],
 };

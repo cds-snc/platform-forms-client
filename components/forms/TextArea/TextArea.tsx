@@ -16,14 +16,7 @@ export interface TextAreaProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const {
-    id,
-    className,
-    ariaDescribedBy,
-    required,
-    children,
-    placeholder,
-  } = props;
+  const { id, className, ariaDescribedBy, required, children, placeholder } = props;
 
   const classes = classnames("gc-textarea", className);
 
@@ -31,9 +24,7 @@ export const TextArea = (
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <ErrorMessage>{meta.error}</ErrorMessage>
-      ) : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       <textarea
         data-testid="textarea"
         className={classes}

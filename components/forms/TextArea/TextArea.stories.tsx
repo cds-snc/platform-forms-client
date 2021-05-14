@@ -28,11 +28,7 @@ export const withDefaultValue = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea
-      id="input-type-text"
-      name="input-type-text"
-      defaultValue="Change me"
-    />
+    <TextArea id="input-type-text" name="input-type-text" defaultValue="Change me" />
   </Formik>
 );
 
@@ -43,11 +39,7 @@ export const withPlaceholder = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea
-      id="input-type-text"
-      name="input-type-text"
-      placeholder="Enter value"
-    />
+    <TextArea id="input-type-text" name="input-type-text" placeholder="Enter value" />
   </Formik>
 );
 

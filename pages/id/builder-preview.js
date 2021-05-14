@@ -7,9 +7,7 @@ const getFormData = async (e, router) => {
   e.preventDefault();
 
   const formConfig =
-    e && e.target.elements && e.target.elements.jsonInput
-      ? e.target.elements.jsonInput
-      : {};
+    e && e.target.elements && e.target.elements.jsonInput ? e.target.elements.jsonInput : {};
   if (!formConfig) return;
 
   router.push({
@@ -28,11 +26,7 @@ const PreviewForm = () => {
       <h1 className="gc-h1">{t("preview.title")}</h1>
 
       <div>
-        <form
-          onSubmit={(e) => getFormData(e, router)}
-          method="POST"
-          encType="multipart/form-data"
-        >
+        <form onSubmit={(e) => getFormData(e, router)} method="POST" encType="multipart/form-data">
           <textarea
             id="jsonInput"
             rows="20"

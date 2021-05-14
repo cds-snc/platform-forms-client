@@ -16,9 +16,7 @@ export type FileEventTarget = EventTarget & {
   target: HTMLInputElement;
 };
 
-export const FileInput = (
-  props: FileInputProps
-): React.ReactElement => {
+export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
@@ -49,9 +47,7 @@ export const FileInput = (
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <ErrorMessage>{meta.error}</ErrorMessage>
-      ) : null}
+      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       <Field component={UploadField} onChange={_onChange} />
     </>
   );

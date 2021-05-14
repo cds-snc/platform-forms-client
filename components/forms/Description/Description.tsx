@@ -7,19 +7,13 @@ interface DescriptionProps {
   className?: string;
 }
 
-export const Description = (
-  props: DescriptionProps
-): React.ReactElement => {
+export const Description = (props: DescriptionProps): React.ReactElement => {
   const { children, className, id } = props;
 
   const classes = classnames("gc-description", className);
 
   return (
-    <p
-      data-testid="description"
-      className={classes}
-      id={`desc-${id}`}
-    >
+    <p data-testid="description" className={classes} id={`desc-${id}`}>
       {children}
     </p>
   );
