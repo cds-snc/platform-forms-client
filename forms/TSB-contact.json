@@ -10,7 +10,7 @@
     "id": 42,
     "version": 1,
     "titleEn": "Transportation Safety Board of Canada general enquiries",
-    "titleFr": "Renseignements généraux Bureau de la sécurité des transports du Canada",
+    "titleFr": "Demandes de renseignements au Bureau de la sécurité des transports du Canada",
     "emailSubjectEn": "TSB general enquiries",
     "emailSubjectFr": "Renseignements généraux BST",
     "layout": [1, 2, 3, 4, 5, 6, 7],
@@ -24,8 +24,8 @@
       "urlFr": "https://bst-tsb.gc.ca/fra/index.html"
     },
     "endPage": {
-      "descriptionEn": "# Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week",
-      "descriptionFr": "# Merci pour votre demande  \n\r Le Bureau de la sécurité des transports du Canada répondra à votre demande d’ici une semaine."
+      "descriptionEn": "#Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week.",
+      "descriptionFr": "#Merci pour votre message  \n\r Le Bureau de la sécurité des transports du Canada vous répondra d’ici une semaine."
     },
     "elements": [
       {
@@ -34,8 +34,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below \n\r Find out how Transportation Safety Board’s protects your privacy, visit the <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>privacy notice</a> page.",
-          "descriptionFr": "(French to follow) Thank you for your interest in the TSB. Send your question using the form below . \n\r Pour connaître comment le Bureau de la sécurité des transports du Canada protège votre confidentialité, naviguez à <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>l'avis de confidentialité</a>.",
+          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below. \n\r Find out how <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>the TSB protects your privacy</a>.",
+          "descriptionFr": "Merci de vous intéresser au BST. Faites-nous parvenir vos questions en utilisant le formulaire suivant. \n\r Apprenez comment <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>le BST protége votre confidentialité</a>.",
           "charLimit": 200,
           "validation": {
             "required": false
@@ -47,7 +47,7 @@
         "type": "textField",
         "properties": {
           "titleEn": "Full name",
-          "titleFr": "Nom au complet",
+          "titleFr": "Nom complet",
           "placeholderEn": "",
           "placeholderFr": "",
           "description": "",
@@ -80,29 +80,33 @@
         "type": "checkbox",
         "properties": {
           "titleEn": "What kind of information do you need?",
-          "titleFr": "Quel genre d’information recherchez-vous?",
-          "descriptionEn": "Select all that apply",
-          "descriptionFr": "Cocher tous les choix qui s’appliquent",
+          "titleFr": "Dites-nous de quel type de renseignements vous avez besoin.",
+          "descriptionEn": "Select all that apply.",
+          "descriptionFr": "Cocher toutes les cases qui s’appliquent",
           "choices": [
             {
-              "en": "Air, marine, pipeline, or rail accident or incident",
-              "fr": "Accident ou incident aéronautique, maritime, de pipeline ou ferroviaire"
+              "en": "Access to Information and Privacy (ATIP)",
+              "fr": "Accès à l’information et protection des renseignements personnels (AIPRP)"
             },
             {
-              "en": "Investigation request or lab report",
-              "fr": "Demande d'enquête ou rapport de laboratoire"
+              "en": "Air, marine, pipeline, or rail accident or incident",
+              "fr": "Accident ou incident de transport aérien, ferroviaire, maritime ou pipelinier"
+            },
+            {
+              "en": "Copyright and permissions",
+              "fr": "Droit d’auteur et permissions"
+            },
+            {
+              "en": "Investigation report or lab report",
+              "fr": "Rapport d’enquête ou de laboratoire"
+            },
+            {
+              "en": "Website",
+              "fr": "Site Web"
             },
             {
               "en": "Statistics",
               "fr": "Statistiques"
-            },
-            {
-              "en": "Access to Information and Privacy",
-              "fr": "Demande de renseignements sur la vie privée"
-            },
-            {
-              "en": "Copyright or permissions request",
-              "fr": "Demande de droits d'auteur ou de permissions"
             },
             {
               "en": "Other",
@@ -120,11 +124,11 @@
         "type": "textField",
         "properties": {
           "titleEn": "If you checked Other, please specify",
-          "titleFr": "Pour d'autre information veuillez spécifier",
+          "titleFr": "Si vous avez coché Autres, veuillez préciser",
           "placeholderEn": "",
           "placeholderFr": "",
-          "descriptionEn": "Tell us the subject of your question, e.g., training, jobs",
-          "descriptionFr": "(French to follow) Tel que la formation et l’emploi, photos et vidéos, lettre d'antécédents de pilote",
+          "descriptionEn": "Tell us the subject of your question. e.g., training, jobs",
+          "descriptionFr": "Dites-nous le sujet de votre question, p. ex. formation, emploi.",
           "charLimit": 100,
           "validation": {
             "required": false,
@@ -137,11 +141,11 @@
         "type": "textArea",
         "properties": {
           "titleEn": "Message",
-          "titleFr": "Message",
+          "titleFr": "Votre message",
           "placeholderEn": "",
           "placeholderFr": "",
           "descriptionEn": "Any relevant details or specific questions",
-          "descriptionFr": "Avez-vous des détails pertinents ou des questions spécifiques?",
+          "descriptionFr": "Donnez-nous des détails qui nous aideront à vous aider, p. ex. URL, dates, lieux.",
           "charLimit": 800,
           "validation": {
             "required": true
@@ -154,24 +158,24 @@
         "properties": {
           "titleEn": "Notifications",
           "titleFr": "Notifications",
-          "descriptionEn": "I would like to receive notifications of transportation accidents and incidents",
-          "descriptionFr": "(French to follow) I would like to receive notifications of transportation accidents and incidents",
+          "descriptionEn": "I would like to receive notifications of transportation accidents and incidents.",
+          "descriptionFr": "J’aimerais être prévenu des accidents et incidents de transport",
           "choices": [
             {
               "en": "Air (daily)",
-              "fr": "French to follow"
+              "fr": "Aérien (quotidien)"
             },
             {
               "en": "Marine (daily)",
-              "fr": "French to follow"
+              "fr": "Ferroviaire (quotidien)"
             },
             {
-              "en": "Pipeline (Monthly)",
-              "fr": "French to follow"
+              "en": "Pipeline (monthly)",
+              "fr": "Maritime (quotidien)"
             },
             {
               "en": "Rail (daily)",
-              "fr": "French to follow"
+              "fr": "Pipelinier (mensuel)"
             }
           ],
           "charLimit": 100,
