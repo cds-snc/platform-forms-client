@@ -285,7 +285,11 @@ async function _submitToApI(
         router.push(
           {
             pathname: `/${language}/id/${formMetadata.id}/confirmation`,
-            query: { ...referrerUrl, htmlEmail: htmlEmail, pageText: endPageText },
+            query: {
+              ...referrerUrl,
+              htmlEmail: htmlEmail,
+              pageText: endPageText,
+            },
           },
           {
             pathname: `/${language}/id/${formMetadata.id}/confirmation`,
