@@ -275,6 +275,10 @@
       background-image: url("../public/img/checkmark.svg");
       @apply absolute w-6 h-6 left-2;
     }
+
+    &:focus + .gc-checkbox-label:after {
+      background-image: url("../public/img/blue-checkmark.svg");
+    }
   }
 }
 
@@ -324,6 +328,10 @@
     content: "";
     background-image: url("../public/img/black-circle.svg");
     @apply absolute w-5 h-5 left-10px;
+  }
+
+  &:focus + .gc-radio-label:after {
+    background-image: url("../public/img/blue-circle.svg");
   }
 }
 
