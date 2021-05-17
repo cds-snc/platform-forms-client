@@ -89,7 +89,7 @@ ul.custom {
         }
 
         a:active {
-          box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+          box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
           @apply underline bg-blue-active;
         }
       }
@@ -97,6 +97,29 @@ ul.custom {
         @apply lg:pb-20 pr-0 pb-0;
       }
     }
+  }
+}
+
+/* Admin styling */
+ul.json_templates {
+  @apply list-none;
+  li {
+    @apply border-2 border-solid border-gray-400 cursor-pointer;
+
+    button.expand {
+      left: 0;
+      @apply bg-green-default w-full text-white-default;
+    }
+  }
+  li span {
+    max-height: 100px;
+    overflow: hidden;
+    font-family: monospace;
+    display: inline-block;
+    margin: 0 1rem;
+  }
+  li.expanded span {
+    max-height: 100%;
   }
 }
 
@@ -125,7 +148,7 @@ a:focus {
 }
 
 a:active {
-  box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+  box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
   @apply underline bg-blue-active;
 }
 

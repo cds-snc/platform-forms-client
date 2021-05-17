@@ -2,8 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { requireAuthentication } from "../../lib/auth";
 
-// TODO wrap in Auth
 const JSONUpload = () => {
   const { t } = useTranslation("common");
 
@@ -46,6 +46,7 @@ const handleSubmit = async (e) => {
   })
     .then((serverResponse) => {
       // TODO - indicate success
+      jsonInput.value = "";
       console.log(serverResponse);
     })
     .catch((err) => {
@@ -53,10 +54,12 @@ const handleSubmit = async (e) => {
     });
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common"])),
-  },
+export const getServerSideProps = requireAuthentication(async (context) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(context.locale, ["common"])),
+    },
+  };
 });
 
 export default JSONUpload;
