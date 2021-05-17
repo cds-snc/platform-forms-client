@@ -4,25 +4,20 @@ import { logMessage } from "../../lib/logger";
 // handler
 
 const templates = async (req, res) => {
-  if (req.method === "GET") {
-    res.status(200).json({ true: "true" });
+  if (req.method === "POST") {
+    handleUploadTemplate(req.body);
   } else {
     res.status(200).json({ true: "true" });
   }
-  //console.log(data);
-  //if (data.json_config) return await handleUploadTemplate(data.json_config);
-  //else return await getTemplates();
 };
 
 // Lambda API functions:
 // GET, INSERT, UPDATE, DELETE
 const handleUploadTemplate = async (json_config) => {
   // hit api endpoint
-  json_config = { test: "test" };
-
   const payload = {
     method: "INSERT", // todo - update, delete
-    json_config: json_config,
+    json_config: JSON.parse(json_config),
   };
   return await invokeLambda(payload);
 };
@@ -57,7 +52,7 @@ export const invokeLambda = async (payload) => {
       })
       .catch((err) => {
         logMessage.error(err);
-        throw new Error("Could not process request with Lambda Submit function");
+        throw new Error("Could not process request with Lambda Templates function");
       });
   }
 };

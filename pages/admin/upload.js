@@ -3,6 +3,7 @@ import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
+// TODO wrap in Auth
 const JSONUpload = () => {
   const { t } = useTranslation("common");
 
@@ -20,7 +21,7 @@ const JSONUpload = () => {
           ></textarea>
           <div>
             <button type="submit" className="gc-button">
-              {t("preview.button")}
+              {t("upload.button")}
             </button>
           </div>
         </form>
@@ -29,19 +30,22 @@ const JSONUpload = () => {
   );
 };
 
-const handleSubmit = async (e, json_config) => {
-  console.log(e);
+const handleSubmit = async (e) => {
   e.preventDefault();
+  const jsonInput =
+    e && e.target.elements && e.target.elements.jsonInput ? e.target.elements.jsonInput : {};
+  if (!jsonInput || !jsonInput.value) return;
   await axios({
     url: "/api/templates",
     method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",
     },
-    data: json_config,
+    data: jsonInput.value,
     timeout: 0,
   })
     .then((serverResponse) => {
+      // TODO - indicate success
       console.log(serverResponse);
     })
     .catch((err) => {
