@@ -75,7 +75,7 @@ module.exports = {
       },
       purple: {
         ...colors.purple,
-        default: "#7834bc",
+        default: "#6300C7",
       },
       white: {
         ...colors.white,
@@ -85,6 +85,8 @@ module.exports = {
         ...colors.blue,
         dark: "#284162",
         light: "#335075",
+        hover: "#0535D2",
+        active: "#1B2736",
         default: "#26374A",
         100: "#B2E3FF",
         200: "#DFF8FD",
@@ -125,6 +127,7 @@ module.exports = {
     boxShadow: {
       default: "0 1px 3px rgba(0, 0, 0, 0.05);",
       result: "0px 0px 12px -2px rgba(0,0,0,0.4)",
+      input: "inset 0 0 0 2px #0535d2",
       none:
         "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
     },
@@ -137,6 +140,7 @@ module.exports = {
       2.5: "2.5px",
       3: "3px",
       4: "4px",
+      5: "5px",
       8: "8px",
     },
     zIndex: {

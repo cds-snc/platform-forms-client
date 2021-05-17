@@ -12,7 +12,9 @@ const getFormData = async (e, router) => {
 
   router.push({
     pathname: "/id/preview-form",
-    query: { formObject: JSON.stringify(JSON.parse(formConfig.value)) },
+    query: {
+      formObject: JSON.stringify(JSON.parse(formConfig.value)),
+    },
   });
 };
 

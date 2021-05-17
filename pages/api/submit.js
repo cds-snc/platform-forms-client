@@ -110,7 +110,10 @@ const processFormData = async (form, reqFields, files, res, req) => {
     for (let [key, value] of Object.entries(files)) {
       reqFields[key] = value.name;
     }
-    const fields = await rehydrateFormResponses({ form, responses: reqFields });
+    const fields = await rehydrateFormResponses({
+      form,
+      responses: reqFields,
+    });
 
     // Staging or Production AWS environments
     if (process.env.SUBMISSION_API) {
