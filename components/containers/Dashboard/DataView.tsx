@@ -8,9 +8,11 @@ interface DataViewProps {
 }
 
 export const DataView = (props: DataViewProps): React.ReactElement => {
-  const jsonElements = props.templatesJSON.map((template): React.ReactElement => {
-    return <li key={props.templatesJSON.indexOf(template)}>{JSON.stringify(template)}</li>;
-  });
+  const jsonElements = props.templatesJSON.map(
+    (template): React.ReactElement => {
+      return <li key={props.templatesJSON.indexOf(template)}>{JSON.stringify(template)}</li>;
+    }
+  );
 
   return (
     <>
