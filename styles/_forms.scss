@@ -20,10 +20,20 @@
 }
 
 .gc-alert {
-  @apply py-8 px-12 mb-14;
+  @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
   &.gc-alert--validation,
   &.gc-alert--error {
-    @apply bg-red-100 border-l-4 border-red-default;
+    @apply border-2 border-red-default;
+
+    &:focus {
+      box-shadow: inset 0 0 0 2px #b10e1e;
+      @apply outline-none;
+    }
+
+    &:focus-within {
+      box-shadow: inset 0 0 0 2px #b10e1e;
+      @apply outline-none;
+    }
   }
 
   &.gc-alert--success {
@@ -33,7 +43,7 @@
   .gc-alert__body {
     @apply text-black-default;
     h3 {
-      @apply mb-5;
+      @apply mb-5 text-red-default;
     }
 
     ol {
@@ -51,20 +61,34 @@
 
   .gc-error-link {
     @apply ml-2 text-blue-900;
+
+    &:focus {
+      box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
+      @apply bg-blue-dark text-white-default;
+    }
+
+    &:active {
+      box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+      @apply underline bg-blue-active;
+    }
   }
 }
 
 .gc-dropdown {
   background-image: url("../public/img/arrow-down.svg");
   @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
+
+  &:focus {
+    @apply outline-none border-blue-hover shadow-input;
+  }
 }
 
 .gc-p {
-  @apply md:text-small_p xxl:w-full text-p mb-10 w-5/6;
+  @apply md:text-small_p text-p mb-10 w-full;
 }
 
 .gc-description {
-  @apply md:text-small_sm text-gray-text mb-3 text-sm w-full;
+  @apply md:text-small_sm text-gray-text mb-3 text-sm w-3/4 xl:w-full;
 }
 
 .gc-h1 {
@@ -97,8 +121,23 @@
     @apply list-inside mb-10;
   }
 
+  a:visited {
+    @apply text-purple-default;
+  }
+
   a {
-    @apply text-blue-900;
+    @apply underline text-blue-dark hover:text-blue-hover;
+  }
+
+  a:focus {
+    outline: none;
+    box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
+    @apply bg-blue-dark text-white-default;
+  }
+
+  a:active {
+    box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+    @apply underline bg-blue-active;
   }
 }
 
@@ -141,6 +180,14 @@
   &:hover {
     @apply bg-green-darker;
   }
+
+  &:focus {
+    @apply outline-none bg-blue-hover;
+  }
+
+  &:active {
+    @apply outline-none bg-blue-active;
+  }
 }
 
 .gc-button--secondary {
@@ -151,9 +198,9 @@
 }
 
 .gc-label {
-  @apply md:text-small_base block mb-2 text-base font-bold w-full;
+  @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
   &.required > span {
-    @apply text-red-500;
+    @apply text-red-700;
     content: " *";
   }
 }
@@ -167,10 +214,26 @@
   &.full-height {
     @apply h-auto;
   }
+
+  &:focus {
+    @apply outline-none border-blue-hover shadow-input;
+  }
+}
+
+.focus-group:focus-within {
+  .gc-label,
+  .gc-description {
+    @apply text-blue-hover;
+  }
 }
 
 .gc-input-text {
-  @apply md:w-full md:text-small_base text-base text-gray-700 border-solid border-2 border-black-form py-3 px-2 mt-2 mb-14 w-96;
+  border: solid 2px black;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
+
+  &:focus {
+    @apply outline-none border-blue-hover shadow-input;
+  }
 }
 
 .gc-file-input {
@@ -186,8 +249,18 @@
       @apply relative cursor-pointer p-0;
     }
 
+    &:focus {
+      @apply outline-none;
+    }
+
+    &:focus + .gc-checkbox-label {
+      span {
+        @apply text-blue-hover;
+      }
+    }
+
     &:focus + .gc-checkbox-label:before {
-      @apply outline-default;
+      @apply outline-none border-4 border-blue-hover;
     }
 
     // Box.
@@ -201,6 +274,10 @@
       content: "";
       background-image: url("../public/img/checkmark.svg");
       @apply absolute w-6 h-6 left-2;
+    }
+
+    &:focus + .gc-checkbox-label:after {
+      background-image: url("../public/img/blue-checkmark.svg");
     }
   }
 }
@@ -226,8 +303,18 @@
     @apply relative cursor-pointer p-0;
   }
 
+  &:focus {
+    @apply outline-none;
+  }
+
+  &:focus + .gc-radio-label {
+    span {
+      @apply text-blue-hover;
+    }
+  }
+
   &:focus + .gc-radio-label:before {
-    @apply outline-default;
+    @apply outline-none border-4 border-blue-hover;
   }
 
   // Circle.
@@ -241,6 +328,10 @@
     content: "";
     background-image: url("../public/img/black-circle.svg");
     @apply absolute w-5 h-5 left-10px;
+  }
+
+  &:focus + .gc-radio-label:after {
+    background-image: url("../public/img/blue-circle.svg");
   }
 }
 

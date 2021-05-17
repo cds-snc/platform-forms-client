@@ -94,7 +94,9 @@ describe("Dropdown component", () => {
       .toHaveClass("gc-dropdown")
       .toHaveDisplayValue("");
     expect(
-      screen.getByRole("combobox", { name: dropdownData.properties.titleEn })
+      screen.getByRole("combobox", {
+        name: dropdownData.properties.titleEn,
+      })
     ).toBeInTheDocument();
 
     // Change value
@@ -119,7 +121,9 @@ describe("Dropdown component", () => {
       .toHaveClass("gc-dropdown")
       .toHaveDisplayValue("");
     expect(
-      screen.getByRole("combobox", { name: dropdownData.properties.titleFr })
+      screen.getByRole("combobox", {
+        name: dropdownData.properties.titleFr,
+      })
     ).toBeInTheDocument();
 
     // Change value

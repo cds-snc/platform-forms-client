@@ -9,7 +9,7 @@ main {
 }
 
 .gc-richText {
-  @apply xxl:w-full w-5/6;
+  @apply w-5/6 xl:w-full;
 }
 
 .gc-homepage {
@@ -74,8 +74,23 @@ ul.custom {
       li {
         @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
 
+        a:visited {
+          @apply text-purple-default;
+        }
+
         a {
-          @apply no-underline hover:underline text-blue-dark;
+          @apply no-underline hover:underline text-blue-dark hover:text-blue-hover;
+        }
+
+        a:focus {
+          outline: none;
+          box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
+          @apply underline bg-blue-dark text-white-default;
+        }
+
+        a:active {
+          box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+          @apply underline bg-blue-active;
         }
       }
       li:last-of-type {
@@ -95,12 +110,23 @@ ul {
   @apply list-disc pl-4;
 }
 
-a {
-  @apply underline text-blue-dark;
-}
-
 a:visited {
   @apply text-purple-default;
+}
+
+a {
+  @apply underline text-blue-dark hover:text-blue-hover;
+}
+
+a:focus {
+  outline: none;
+  box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
+  @apply bg-blue-dark text-white-default;
+}
+
+a:active {
+  box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+  @apply underline bg-blue-active;
 }
 
 .link-list {
@@ -115,20 +141,6 @@ a:visited {
 
 .canada-wordmark img {
   @apply inline;
-}
-
-a[href],
-area[href],
-input,
-select,
-textarea,
-button,
-iframe,
-[tabindex],
-[contentEditable="true"] {
-  &:not([disabled]):focus:not(.autocomplete__option) {
-    @include focus();
-  }
 }
 
 body {
