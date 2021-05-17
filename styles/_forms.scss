@@ -68,8 +68,8 @@
     }
 
     &:active {
-      box-shadow: 4px 0 0 0 #03279b, -4px 0 0 0 #03279b;
-      @apply bg-blue-active;
+      box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+      @apply underline bg-blue-active;
     }
   }
 }
@@ -136,8 +136,8 @@
   }
 
   a:active {
-    box-shadow: 4px 0 0 0 #03279b, -4px 0 0 0 #03279b;
-    @apply bg-blue-active;
+    box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+    @apply underline bg-blue-active;
   }
 }
 

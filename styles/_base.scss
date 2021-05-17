@@ -89,7 +89,7 @@ ul.custom {
         }
 
         a:active {
-          box-shadow: 4px 0 0 0 #03279b, -4px 0 0 0 #03279b;
+          box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
           @apply underline bg-blue-active;
         }
       }
@@ -125,8 +125,8 @@ a:focus {
 }
 
 a:active {
-  box-shadow: 4px 0 0 0 #03279b, -4px 0 0 0 #03279b;
-  @apply bg-blue-active;
+  box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+  @apply underline bg-blue-active;
 }
 
 .link-list {
