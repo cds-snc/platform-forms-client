@@ -16,7 +16,7 @@ import {
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-function _getFormByID(formID: string): Record<string, unknown> {
+function _getFormByID(formID: string): FormMetadataProperties {
   // Need to get these forms from a DB or API in the future
   let formToReturn = null;
   for (const form of Object.values(Forms)) {

@@ -3,9 +3,85 @@ import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { signOut } from "next-auth/client";
-import { AuthenticatedUser, FormMetadataProperties } from "../../lib/types";
+import { Responses, FormMetadataProperties } from "../../lib/types";
 import { requireAuthentication } from "../../lib/auth";
-import { Button } from "../../components/forms";
+import { getFormByID } from "../../lib/dataLayer";
+import convertMessage from "../../lib/markdown";
+import { Button, RichText } from "../../components/forms";
+
+interface ResponseListInterface {
+  Items: {
+    FormSubmission: {
+      S: string;
+    };
+    SubmissionID: {
+      S: string;
+    };
+    FormID: {
+      S: string;
+    };
+  }[];
+  Count: number;
+}
+
+const FormResponse = ({ Items, Count }: ResponseListInterface) => {
+  const [index, setIndex] = useState(0);
+  if (Count > 0) {
+    const submission = Items[index];
+    const formID = submission.FormID.S;
+    const submissionID = submission.SubmissionID.S;
+    const responseJson = JSON.parse(submission.FormSubmission.S);
+    const form = getFormByID(formID);
+    const formText = convertMessage({ form, responses: responseJson });
+
+    return (
+      <>
+        <div className="border-b-4 pl-4">
+          <p>{`Response ${index + 1} of ${Count}`}</p>
+          <p>{`Submission ID: ${submissionID}`}</p>
+        </div>
+        <div className="p-5">
+          <RichText className="email-preview">{formText}</RichText>
+        </div>
+        <div className="inline-block justify-center flex space-x-20">
+          {index > 0 ? (
+            <Button
+              className="gc-button rounded-lg float-left"
+              type="button"
+              onClick={() => {
+                const goTo = index - 1;
+
+                setIndex(goTo >= 0 ? goTo : 0);
+              }}
+            >
+              Back
+            </Button>
+          ) : null}
+
+          {index < Count - 1 ? (
+            <Button
+              className="gc-button rounded-lg float-right"
+              type="button"
+              onClick={() => {
+                const goTo = index + 1;
+
+                setIndex(goTo >= 0 ? goTo : 0);
+              }}
+            >
+              Next
+            </Button>
+          ) : null}
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <h3>No Responses for selected form</h3>
+      </>
+    );
+  }
+};
 
 const AdminVault: React.FC = () => {
   const { t } = useTranslation("admin-vault");
@@ -24,32 +100,26 @@ const AdminVault: React.FC = () => {
   };
 
   const fetchResponses = async (formID: string) => {
-    await axios({
-      url: "/api/retrieval",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json ",
-      },
-      data: { formID, action: "GET" },
-    }).then((response) => {
-      setResponses(response.data);
-    });
+    if (formID) {
+      await axios({
+        url: "/api/retrieval",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json ",
+        },
+        data: { formID, action: "GET" },
+      })
+        .then((response) => {
+          setResponses(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          setResponses({ Items: [], Count: 0 });
+        });
+    } else {
+      setResponses({ Items: [], Count: 0 });
+    }
   };
-
-  interface ResponseListInterface {
-    Items: {
-      FormSubmission: {
-        S: string;
-      };
-      SubmissionID: {
-        S: string;
-      };
-      FormID: {
-        S: string;
-      };
-    }[];
-    Count: number;
-  }
 
   return (
     <>
@@ -62,32 +132,24 @@ const AdminVault: React.FC = () => {
           <label className={"gc-label"} htmlFor={"formTextInput"} id={"1"}>
             {t("formInput")}
           </label>
-          <input
-            className={"gc-input-text"}
-            id={"formTextInput"}
-            name="formTextInput"
-            onChange={handleChange}
-          />
-          <div className="buttons">
+          <div className="inline-block space-x-3">
+            <input
+              className={"gc-input-text"}
+              id={"formTextInput"}
+              name="formTextInput"
+              onChange={handleChange}
+            />
+
             <Button className="gc-button" type="submit">
               {t("submitButton")}
             </Button>
           </div>
         </form>
-        {responses.Count
-          ? responses.Items.map((response) => {
-              const submission = response.FormSubmission.S;
-              const submissionID = response.SubmissionID.S;
-              const formID = response.FormID.S;
-              return (
-                <div key={submissionID}>
-                  <p>Submission: {submission}</p>
-                  <p>SubmissionID: {submissionID}</p>
-                  <p>For Form: {formID}</p>
-                </div>
-              );
-            })
-          : null}
+      </div>
+      <div className="border-4 rounded-lg border-black border-solid ">
+        <div>
+          <FormResponse {...responses} />
+        </div>
       </div>
     </>
   );
