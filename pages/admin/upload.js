@@ -41,7 +41,10 @@ const handleSubmit = async (e) => {
     headers: {
       "Content-Type": "multipart/form-data",
     },
-    data: jsonInput.value,
+    data: {
+      json_config: jsonInput.value,
+      method: "INSERT", // todo, not hard code based on whether formID present
+    },
     timeout: 0,
   })
     .then((serverResponse) => {
