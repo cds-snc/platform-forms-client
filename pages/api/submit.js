@@ -41,11 +41,12 @@ const callLambda = async (form, fields) => {
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
 
   const command = new InvokeCommand({
-    FunctionName: process.env.SUBMISSION_API ?? "",
+    FunctionName: process.env.SUBMISSION_API ?? "Submission",
     Payload: JSON.stringify({
       form,
       responses: fields,
       submission,
+      vault: true,
     }),
   });
   return await lambdaClient

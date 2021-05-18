@@ -233,7 +233,7 @@ function _handleFormDataText(key: string, value: string, formData: FormData) {
 function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
   formData.append(key, JSON.stringify({ value: value }));
 }
-async function _submitToApI(
+async function _submitToAPI(
   values: Responses,
   formikBag: FormikBag<DynamicFormProps, FormValues>,
   isProduction: boolean
@@ -308,6 +308,6 @@ async function _submitToApI(
 export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
-export const submitToAPI = logger(_submitToApI);
+export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
