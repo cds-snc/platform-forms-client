@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { signOut } from "next-auth/client";
+import Link from "next/link";
 import { AuthenticatedUser } from "../../lib/types";
 import { requireAuthentication } from "../../lib/auth";
 import { Button } from "../../components/forms";
@@ -48,6 +49,13 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
             <Link href="/admin/vault">View Form Submissions</Link>
           </p>
         </div>
+      </div>
+      <div className="pt-10">
+        <li>
+          <Link href={"/admin/vault"} locale={i18n.language}>
+            {t("formResponses")}
+          </Link>
+        </li>
       </div>
     </>
   );

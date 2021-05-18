@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { signOut } from "next-auth/client";
-import { Responses, FormMetadataProperties } from "../../lib/types";
 import { requireAuthentication } from "../../lib/auth";
 import { getFormByID } from "../../lib/dataLayer";
 import convertMessage from "../../lib/markdown";
@@ -91,7 +89,6 @@ const AdminVault: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formID);
     fetchResponses(formID);
   };
 
@@ -113,7 +110,7 @@ const AdminVault: React.FC = () => {
           setResponses(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           setResponses({ Items: [], Count: 0 });
         });
     } else {
