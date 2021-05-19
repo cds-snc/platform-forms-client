@@ -19,7 +19,7 @@
     "build-storybook": "build-storybook -s public --no-dll",
     "deploy-storybook": "storybook-to-ghpages",
     "storybook": "start-storybook -s public -p 6006",
-    "heroku-postbuild": "cd ./migrations && yarn install && cd .."
+    "heroku-postbuild": "cd ./migrations && yarn install && cd .. && yarn build"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.9.0",
