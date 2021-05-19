@@ -5,6 +5,7 @@ import { signOut } from "next-auth/client";
 import { AuthenticatedUser } from "../../lib/types";
 import { requireAuthentication } from "../../lib/auth";
 import { Button } from "../../components/forms";
+import Link from "next/link";
 
 type AdminWelcomeProps = {
   user: AuthenticatedUser;
@@ -17,15 +18,36 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
   return (
     <>
       <h1 className="gc-h1">{t("title")}</h1>
-      <div>
-        <h2 className="gc-h2">
-          {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
-        </h2>
-        {user.image ? <img src={user.image} alt="profile" /> : null}
-        {t("logged-in")} {user.email} <br />
-        <Button type="button" onClick={() => signOut()}>
-          {t("button.logout")}
-        </Button>
+      <div className="grid grid-cols-3 md:grid-cols-1 gap-4 md:grid-flow-col">
+        <div>
+          <h3 className="gc-h3">
+            {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
+          </h3>
+          {user.image ? <img src={user.image} alt="profile" className="rounded-full" /> : null}
+          <p className="text-sm mb-8">
+            {t("logged-in")} {user.email}
+          </p>
+
+          <Button type="button" onClick={() => signOut()}>
+            {t("button.logout")}
+          </Button>
+        </div>
+
+        <div className="w-60">
+          <h3 className="gc-h3">Create Forms</h3>
+          <p>
+            <Link href="/admin/upload">Upload Form Templates</Link>
+          </p>
+        </div>
+        <div className="w-60">
+          <h3 className="gc-h3">View Existing Forms</h3>
+          <p>
+            <Link href="/admin/view-templates">View Form Templates</Link>
+          </p>
+          <p>
+            <Link href="/admin/vault">View Form Submissions</Link>
+          </p>
+        </div>
       </div>
     </>
   );
