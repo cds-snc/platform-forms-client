@@ -36,16 +36,16 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
         <div className="w-60">
           <h3 className="gc-h3">Create Forms</h3>
           <p>
-            <Link href="/admin/upload">View Form templates</Link>
+            <Link href="/admin/upload">Upload Form Templates</Link>
           </p>
         </div>
         <div className="w-60">
           <h3 className="gc-h3">View Existing Forms</h3>
           <p>
-            <Link href="/admin/view-templates">View Form templates</Link>
+            <Link href="/admin/view-templates">View Form Templates</Link>
           </p>
           <p>
-            <Link href="/admin/vault">View Form submissions</Link>
+            <Link href="/admin/vault">View Form Submissions</Link>
           </p>
         </div>
       </div>
