@@ -90,7 +90,7 @@ ul.custom {
 
         a:active {
           box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
-          @apply underline bg-blue-active;
+          @apply underline bg-blue-active text-white-default;
         }
       }
       li:last-of-type {
@@ -126,7 +126,7 @@ a:focus {
 
 a:active {
   box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
-  @apply underline bg-blue-active;
+  @apply underline bg-blue-active text-white-default;
 }
 
 .link-list {
