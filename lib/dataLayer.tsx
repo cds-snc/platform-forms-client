@@ -1,3 +1,4 @@
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import Forms from "../forms/forms";
 import axios from "axios";
 import type { FormikBag } from "formik";
@@ -13,6 +14,67 @@ import {
   FileInputResponse,
   Submission,
 } from "./types";
+
+// CRUD Operations for Templates
+interface CrudTemplateInterface {
+  method: string;
+  formID?: string;
+  json_config?: Record<string, unknown>;
+}
+async function _crudTemplates(payload: CrudTemplateInterface) {
+  const getConfig = (payload: CrudTemplateInterface) => {
+    const { method } = payload;
+
+    switch (payload.method) {
+      case "GET":
+        return {
+          method,
+          formID: payload.formID || undefined,
+        };
+      case "INSERT":
+        return {
+          method,
+          json_config: payload.json_config,
+        };
+      case "UPDATE":
+        break;
+      case "DELETE":
+        break;
+      default:
+        return {
+          method: "UNDEFINED",
+        };
+    }
+  };
+
+  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
+  const encoder = new TextEncoder();
+
+  const command = new InvokeCommand({
+    FunctionName: process.env.TEMPLATES_API ?? "Templates",
+    Payload: encoder.encode(JSON.stringify(getConfig(payload))),
+  });
+
+  return await lambdaClient
+    .send(command)
+    .then((response) => {
+      const decoder = new TextDecoder();
+      const respPayload = decoder.decode(response.Payload);
+      if (response.FunctionError) {
+        //throw Error("Templates API could not process json");
+        // temporary more graceful failure here
+        logMessage.info("Lambda Client not successful");
+        return null;
+      } else {
+        logMessage.info("Lambda Client successfully triggered");
+        return respPayload;
+      }
+    })
+    .catch((err) => {
+      logMessage.error(err);
+      throw new Error("Could not process request with Lambda Templates function");
+    });
+}
 
 // Get the form json object by using the form ID
 // Returns => json object of form
@@ -311,3 +373,4 @@ export const getFormByStatus = logger(_getFormByStatus);
 export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
+export const crudTemplates = logger(_crudTemplates);
