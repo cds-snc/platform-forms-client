@@ -1,0 +1,14 @@
+{
+  "upload": {
+    "title": "Upload a form Configuration file",
+    "edit-title": "Edit a form Configuration file",
+    "submit": "Upload"
+  },
+  "view": {
+    "title": "View Form Template JSON",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "update": "Edit",
+    "delete": "Delete"
+  }
+}

@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 //import classnames from "classnames";
-//import { useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
+import { TFunction } from "next-i18next";
 import Head from "next/head";
 
 interface DataViewProps {
@@ -8,12 +9,15 @@ interface DataViewProps {
 }
 
 export const DataView = (props: DataViewProps): React.ReactElement => {
+  const { t } = useTranslation("admin-templates");
+
   const jsonElements = props.templatesJSON.map(
     (template): React.ReactElement => {
       return (
         <DataElement
           template={JSON.stringify(template)}
           key={props.templatesJSON.indexOf(template)}
+          t={t}
         />
       );
     }
@@ -25,7 +29,7 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
         <title>Data View</title>
       </Head>
 
-      <h1 className="gc-h1">Data View</h1>
+      <h1 className="gc-h1">{t("view.title")}</h1>
       <ul className="json_templates">
         <Fragment>{jsonElements}</Fragment>
       </ul>
@@ -33,8 +37,9 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
   );
 };
 
-const DataElement = (props: { template: string }): React.ReactElement => {
+const DataElement = (props: { template: string; t: TFunction }): React.ReactElement => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { t } = props;
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -43,13 +48,12 @@ const DataElement = (props: { template: string }): React.ReactElement => {
   return (
     <li className={isExpanded ? "expanded" : ""}>
       <button className="expand" onClick={() => toggleExpanded()}>
-        {isExpanded ? "Collapse" : "Expand"}
+        {isExpanded ? t("view.collapse") : t("view.expand")}
       </button>
       <div className="expandable pb-4 m-auto px-4">
         <span>{props.template}</span>
-        <div>
-          <button className="gc-button">Edit</button>
-          <button className="gc-button float-right">Delete</button>
+        <div className="update-buttons">
+          <button className="gc-button">{t("view.update")}</button>
         </div>
       </div>
     </li>

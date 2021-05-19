@@ -11,18 +11,21 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     const payload = {
       method: "GET",
     };
-    const lambdaResult = JSON.parse(await invokeLambda(payload));
+    const lambdaResult = JSON.parse((await invokeLambda(payload)) as string);
     const templatesJSON =
       lambdaResult.data && lambdaResult.data.records && lambdaResult.data.records.length > 0
         ? lambdaResult.data.records
         : [];
 
-    return {
-      props: {
-        templatesJSON: templatesJSON,
-        ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
-      }, // will be passed to the page component as props
-    };
+    if (context.locale) {
+      return {
+        props: {
+          templatesJSON: templatesJSON,
+          ...(await serverSideTranslations(context.locale, ["common", "admin-templates"])),
+        }, // will be passed to the page component as props
+      };
+    }
+    return { props: {} };
   }
 });
 
