@@ -4,30 +4,43 @@ import { logMessage } from "../../lib/logger";
 // handler
 
 const templates = async (req, res) => {
+  let result;
   if (req.method === "POST") {
-    handleUploadTemplate(req.body);
-  } else {
-    res.status(200).json({ true: "true" });
+    result = handlePostTemplate(req.body);
+  } else if (req.method === "GET") {
+    result = getTemplates(req.body);
   }
+  return res.status(200).json(result);
 };
 
 // Lambda API functions:
 // GET, INSERT, UPDATE, DELETE
-const handleUploadTemplate = async (json_config) => {
-  // hit api endpoint
+
+const handlePostTemplate = async (body) => {
+  // Handles INSERT, UPDATE, DELETE
+  let payload;
+  body = JSON.parse(body);
+  switch (body.method) {
+    case "INSERT":
+      payload = {
+        method: "INSERT",
+        json_config: JSON.parse(body.json_config),
+      };
+      break;
+    default:
+      // TODO - throw error
+      break;
+  }
+  if (payload) return await invokeLambda(payload);
+};
+
+const getTemplates = async (formID) => {
   const payload = {
-    method: "INSERT", // todo - update, delete
-    json_config: JSON.parse(json_config),
+    method: "GET",
+    formID: formID || undefined,
   };
   return await invokeLambda(payload);
 };
-
-/*const getTemplates = async () => {
-  const payload = {
-    method: "GET",
-  };
-  invokeLambda(payload);
-};*/
 
 export const invokeLambda = async (payload) => {
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
@@ -44,7 +57,10 @@ export const invokeLambda = async (payload) => {
         let decoder = new TextDecoder();
         const respPayload = decoder.decode(response.Payload);
         if (response.FunctionError) {
-          throw Error("Templates API could not process json");
+          //throw Error("Templates API could not process json");
+          // temporary more graceful failure here
+          logMessage.info("Lambda Client not successful");
+          return null;
         } else {
           logMessage.info("Lambda Client successfully triggered");
           return respPayload;
