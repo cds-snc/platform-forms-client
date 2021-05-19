@@ -12,7 +12,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
       method: "GET",
     };
     const lambdaResult = JSON.parse(await invokeLambda(payload));
-    console.log(lambdaResult);
     const templatesJSON =
       lambdaResult.data && lambdaResult.data.records && lambdaResult.data.records.length > 0
         ? lambdaResult.data.records

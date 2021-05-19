@@ -45,7 +45,13 @@ const DataElement = (props: { template: string }): React.ReactElement => {
       <button className="expand" onClick={() => toggleExpanded()}>
         {isExpanded ? "Collapse" : "Expand"}
       </button>
-      <span>{props.template}</span>
+      <div className="expandable pb-4 m-auto px-4">
+        <span>{props.template}</span>
+        <div>
+          <button className="gc-button">Edit</button>
+          <button className="gc-button float-right">Delete</button>
+        </div>
+      </div>
     </li>
   );
 };

@@ -45,6 +45,7 @@ const getTemplates = async (formID) => {
 export const invokeLambda = async (payload) => {
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
 
+  // TODO - default value for env var - do we still need the if statement below?
   const command = new InvokeCommand({
     FunctionName: process.env.TEMPLATES_API ?? "",
     Payload: JSON.stringify(payload),
