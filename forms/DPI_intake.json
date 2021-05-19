@@ -1,0 +1,145 @@
+{
+  "internalTitleEn": "DPI Professional Development Week",
+  "internalTitleFr": "Semaine de perfectionnement professionnel (SPP)",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "forms-formulaires@cds-snc.ca"
+  },
+  "form": {
+    "id": 49,
+    "version": 1,
+    "titleEn": "DPI Professional Development Week",
+    "titleFr": "Semaine de perfectionnement professionnel (SPP)",
+    "emailSubjectEn": "DPI Demo",
+    "emailSubjectFr": "Demo pour SPP",
+    "layout": [1, 2, 3, 4, 5, 6],
+    "endPage": {
+      "descriptionEn": "# Thank you for your response. \n\r A team member will email you shortly. \n\r <a href='https://digital.canada.ca/'>Go back.</a>",
+      "descriptionFr": "# Merci pour votre réponse. \n\r Un membre de notre équipe vous contactera par courriel sous peu. \n\r <a href='https://numerique.canada.ca/'>Retour.</a>",
+      "referrerUrlEn": "",
+      "referrerUrlFr": ""
+    },
+
+    "elements": [
+      {
+        "id": 1,
+        "type": "richText",
+        "properties": {
+          "descriptionEn": "Thanks for reaching out during DPI's professional development week. We're hoping you can give us a bit more information on your requirement so we best meet your need. \n\r Please answer the questions below and we'll follow up with you in the coming days with more information.",
+          "descriptionFr": "Merci de nous avoir contactés pendant la semaine de développement professionnel de SPP. Nous espérons que vous pourrez nous donner un peu plus d'informations afin que nous puissions répondre à vos besoins. \n\r Veuillez remplir le formulaire ci-dessous afin que nous puissions vous contacter pour discuter davantage pour répondre à vos besoins spécifiques.",
+          "charLimit": 5000,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Email",
+          "titleFr": "Courriel",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "description": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "email"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Which product are you interested in?",
+          "titleFr": "Quel(s) produit(s) vous intéresse(nt)?",
+          "descriptionEn": "Select all that apply.",
+          "descriptionFr": "Cocher toutes les cases qui s’appliquent",
+          "choices": [
+            {
+              "en": "Notify",
+              "fr": "Notification"
+            },
+            {
+              "en": "Forms",
+              "fr": "Formulaires"
+            },
+            {
+              "en": "Other",
+              "fr": "Autres"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "If you checked Other, please specify",
+          "titleFr": "Si vous avez coché Autres, veuillez préciser",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": false,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "How can we help you learn more about the product?",
+          "titleFr": "Comment pouvons-nous vous aider à en savoir plus sur le produit?",
+          "descriptionEn": "Select all that apply.",
+          "descriptionFr": "Cocher toutes les cases qui s’appliquent",
+          "choices": [
+            {
+              "en": "Please contact me to set up a demo",
+              "fr": "Veuillez me contacter pour mettre en place un démo."
+            },
+            {
+              "en": "Please contact me, I have questions",
+              "fr": "Veuillez me contacter, j'ai des questions."
+            },
+            {
+              "en": "Other",
+              "fr": "Autres"
+            }
+          ],
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "If you checked Other, please specify",
+          "titleFr": "Si vous avez coché Autres, veuillez préciser",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": false,
+            "type": "text"
+          }
+        }
+      }
+    ]
+  }
+}
