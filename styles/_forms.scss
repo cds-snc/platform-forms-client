@@ -63,8 +63,8 @@
     @apply ml-2 text-blue-900;
 
     &:focus {
-      box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
-      @apply bg-blue-dark text-white-default;
+      box-shadow: 4px 0 0 0 #3500C7, -4px 0 0 0 #3500C7;
+      @apply bg-blue-focus text-white-default;
     }
 
     &:active {
@@ -79,7 +79,7 @@
   @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
 
   &:focus {
-    @apply outline-none border-blue-hover shadow-input;
+    @apply outline-none border-blue-focus shadow-input;
   }
 }
 
@@ -131,8 +131,8 @@
 
   a:focus {
     outline: none;
-    box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
-    @apply bg-blue-dark text-white-default;
+    box-shadow: 4px 0 0 0 #3500C7, -4px 0 0 0 #3500C7;
+    @apply bg-blue-focus text-white-default;
   }
 
   a:active {
@@ -182,11 +182,17 @@
   }
 
   &:focus {
-    @apply outline-none bg-blue-hover;
+    box-shadow: 0 0 0 2px white;
+    outline: solid 2px #3500C7;
+    outline-offset: 2px;
+    @apply bg-blue-focus;
   }
 
   &:active {
-    @apply outline-none bg-blue-active;
+    box-shadow: 0 0 0 2px white;
+    outline: solid 2px #1B2736;
+    outline-offset: 2px;
+    @apply bg-blue-active;
   }
 }
 
@@ -216,14 +222,14 @@
   }
 
   &:focus {
-    @apply outline-none border-blue-hover shadow-input;
+    @apply outline-none border-blue-focus shadow-input;
   }
 }
 
 .focus-group:focus-within {
   .gc-label,
   .gc-description {
-    @apply text-blue-hover;
+    @apply text-blue-focus;
   }
 }
 
@@ -232,7 +238,7 @@
   @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
 
   &:focus {
-    @apply outline-none border-blue-hover shadow-input;
+    @apply outline-none border-blue-focus shadow-input;
   }
 }
 
@@ -255,12 +261,12 @@
 
     &:focus + .gc-checkbox-label {
       span {
-        @apply text-blue-hover;
+        @apply text-blue-focus;
       }
     }
 
     &:focus + .gc-checkbox-label:before {
-      @apply outline-none border-4 border-blue-hover;
+      @apply outline-none border-4 border-blue-focus;
     }
 
     // Box.
@@ -309,12 +315,12 @@
 
   &:focus + .gc-radio-label {
     span {
-      @apply text-blue-hover;
+      @apply text-blue-focus;
     }
   }
 
   &:focus + .gc-radio-label:before {
-    @apply outline-none border-4 border-blue-hover;
+    @apply outline-none border-4 border-blue-focus;
   }
 
   // Circle.

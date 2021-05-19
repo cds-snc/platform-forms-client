@@ -84,8 +84,8 @@ ul.custom {
 
         a:focus {
           outline: none;
-          box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
-          @apply underline bg-blue-dark text-white-default;
+          box-shadow: 4px 0 0 0 #3500C7, -4px 0 0 0 #3500C7;
+          @apply underline bg-blue-focus text-white-default;
         }
 
         a:active {
@@ -120,8 +120,8 @@ a {
 
 a:focus {
   outline: none;
-  box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
-  @apply bg-blue-dark text-white-default;
+  box-shadow: 4px 0 0 0 #3500C7, -4px 0 0 0 #3500C7;
+  @apply bg-blue-focus text-white-default;
 }
 
 a:active {
