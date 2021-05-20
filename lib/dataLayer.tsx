@@ -13,23 +13,36 @@ import {
   DynamicFormProps,
   FileInputResponse,
   Submission,
+  FormJSONConfigProperties,
+  SubmissionProperties,
 } from "./types";
 
 // CRUD Operations for Templates
-interface CrudTemplateInterface {
+interface CrudTemplateInput {
   method: string;
   formID?: string;
-  json_config?: Record<string, unknown>;
+  json_config?: FormJSONConfigProperties;
 }
-async function _crudTemplates(payload: CrudTemplateInterface) {
-  const getConfig = (payload: CrudTemplateInterface) => {
+
+interface CrudTemplateResponse {
+  data: {
+    records?: {
+      formID: string;
+      json_config?: FormJSONConfigProperties;
+      isNull?: boolean;
+    }[];
+  };
+}
+
+async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
+  const getConfig = (payload: CrudTemplateInput) => {
     const { method } = payload;
 
     switch (payload.method) {
       case "GET":
         return {
           method,
-          formID: payload.formID || undefined,
+          formID: payload.formID ? parseInt(payload.formID) : undefined,
         };
       case "INSERT":
         return {
@@ -49,7 +62,6 @@ async function _crudTemplates(payload: CrudTemplateInterface) {
 
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
   const encoder = new TextEncoder();
-
   const command = new InvokeCommand({
     FunctionName: process.env.TEMPLATES_API ?? "Templates",
     Payload: encoder.encode(JSON.stringify(getConfig(payload))),
@@ -67,7 +79,8 @@ async function _crudTemplates(payload: CrudTemplateInterface) {
         return null;
       } else {
         logMessage.info("Lambda Client successfully triggered");
-        return respPayload;
+
+        return JSON.parse(respPayload);
       }
     })
     .catch((err) => {
@@ -78,46 +91,59 @@ async function _crudTemplates(payload: CrudTemplateInterface) {
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-function _getFormByID(formID: string): FormMetadataProperties {
-  // Need to get these forms from a DB or API in the future
-  let formToReturn = null;
-  for (const form of Object.values(Forms)) {
-    if (form.form.id == formID) {
-      formToReturn = {
-        ...form.form,
-        publishingStatus: form.publishingStatus,
+
+interface ClientSidePublicFormProperties extends FormMetadataProperties {
+  publishingStatus: boolean;
+}
+
+async function _getFormByID(formID: string): Promise<ClientSidePublicFormProperties | null> {
+  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+    const { records } = response.data;
+    if (records?.length === 1 && records[0].json_config?.form) {
+      return {
+        ...records[0].json_config?.form,
+        publishingStatus: records[0].json_config?.publishingStatus,
       };
-      break;
     }
-  }
-  return formToReturn;
+    return null;
+  });
 }
 
 // Get an array of form IDs based on the publishing status
 // Returns -> Array of form IDs.
-function _getFormByStatus(status: boolean): Array<number> {
-  return Object.values(Forms)
-    .map(
-      logger((form) => {
-        if (form.publishingStatus === status) {
-          return form.form.id;
-        }
-      })
-    )
-    .filter((val) => typeof val !== "undefined" && val !== null);
+async function _getFormByStatus(
+  status: boolean
+): Promise<(ClientSidePublicFormProperties | undefined)[]> {
+  return crudTemplates({ method: "GET" }).then((response) => {
+    const { records } = response.data;
+    if (records && records?.length > 0) {
+      return records
+        .map((record) => {
+          if (record.json_config?.publishingStatus === status) {
+            return {
+              ...record.json_config?.form,
+              publishingStatus: record.json_config?.publishingStatus,
+            };
+          }
+        })
+        .filter((val) => typeof val !== "undefined" && val !== null);
+    }
+    return [];
+  });
 }
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
-function _getSubmissionByID(formID: string): Record<string, unknown> {
-  let submissionFormat = null;
-  for (const submission of Object.values(Forms)) {
-    if (submission.form.id == formID) {
-      submissionFormat = submission.submission;
-      break;
+async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
+  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+    const { records } = response.data;
+    if (records?.length === 1 && records[0].json_config?.submission) {
+      return {
+        ...records[0].json_config?.submission,
+      };
     }
-  }
-  return submissionFormat;
+    return null;
+  });
 }
 
 function _rehydrateFormResponses(payload: Submission) {

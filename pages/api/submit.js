@@ -46,7 +46,6 @@ const callLambda = async (form, fields) => {
       form,
       responses: fields,
       submission,
-      vault: true,
     }),
   });
   return await lambdaClient

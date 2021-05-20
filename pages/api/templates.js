@@ -6,7 +6,11 @@ import { logMessage } from "../../lib/logger";
 const templates = async (req, res) => {
   return crudTemplates(JSON.parse(req.body))
     .then((response) => {
-      res.status(200).json(response);
+      if (response) {
+        res.status(200).json(response);
+      } else {
+        res.status(500).json({ error: "Error on Server Side" });
+      }
     })
     .catch((err) => {
       logMessage.error(err);
