@@ -41,7 +41,7 @@ const callLambda = async (form, fields) => {
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
 
   const command = new InvokeCommand({
-    FunctionName: process.env.SUBMISSION_API ?? "",
+    FunctionName: process.env.SUBMISSION_API ?? "Submission",
     Payload: JSON.stringify({
       form,
       responses: fields,
@@ -56,12 +56,12 @@ const callLambda = async (form, fields) => {
       if (response.FunctionError || !JSON.parse(payload).status) {
         throw Error("Submission API could not process form response");
       } else {
-        logMessage.info("Lambda Client successfully triggered");
+        logMessage.info("Submission Lambda Client successfully triggered");
       }
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error("Could not process request with Lambda Submit function");
+      throw new Error("Could not process request with Lambda Submission function");
     });
 };
 

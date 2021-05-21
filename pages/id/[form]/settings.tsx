@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../../lib/auth";
-import { invokeLambda } from "../../api/templates";
+import { crudTemplates } from "../../../lib/dataLayer";
 import FormSettings from "../../../components/containers/DynamicForm/Settings";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
@@ -11,7 +11,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     method: "GET",
     formID: formID,
   };
-  const lambdaResult = JSON.parse((await invokeLambda(payload)) as string);
+  const lambdaResult = await crudTemplates(payload);
 
   if (context.locale && lambdaResult.data.records.length === 1) {
     return {

@@ -1,4 +1,4 @@
-import Forms from "../forms/forms";
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import axios from "axios";
 import type { FormikBag } from "formik";
 import { getProperty } from "./formBuilder";
@@ -12,50 +12,209 @@ import {
   DynamicFormProps,
   FileInputResponse,
   Submission,
+  FormJSONConfigProperties,
+  SubmissionProperties,
 } from "./types";
+
+// CRUD Operations for Templates
+interface CrudTemplateInput {
+  method: string;
+  formID?: string;
+  json_config?: FormJSONConfigProperties;
+}
+
+interface CrudTemplateResponse {
+  data: {
+    records?: {
+      formID: string;
+      json_config?: FormJSONConfigProperties;
+      isNull?: boolean;
+    }[];
+  };
+}
+
+async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
+  const getConfig = (payload: CrudTemplateInput) => {
+    const { method } = payload;
+
+    switch (payload.method) {
+      case "GET":
+        return {
+          method,
+          formID: payload.formID ? parseInt(payload.formID) : undefined,
+        };
+      case "INSERT":
+        return {
+          method,
+          json_config: payload.json_config,
+        };
+      case "UPDATE":
+        return {
+          method: "UPDATE",
+          json_config: payload.json_config,
+        };
+        break;
+      case "DELETE":
+        return {
+          method: "DELETE",
+          formID: payload.formID ? parseInt(payload.formID) : undefined,
+        };
+        break;
+      default:
+        return {
+          method: "UNDEFINED",
+        };
+    }
+  };
+
+  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
+  const encoder = new TextEncoder();
+  const command = new InvokeCommand({
+    FunctionName: process.env.TEMPLATES_API ?? "Templates",
+    Payload: encoder.encode(JSON.stringify(getConfig(payload))),
+  });
+
+  return await lambdaClient
+    .send(command)
+    .then((response) => {
+      const decoder = new TextDecoder();
+      const respPayload = decoder.decode(response.Payload);
+      if (response.FunctionError) {
+        //throw Error("Templates API could not process json");
+        // temporary more graceful failure here
+        logMessage.info("Lambda Template Client not successful");
+        return null;
+      } else {
+        logMessage.info("Lambda Template Client successfully triggered");
+
+        return JSON.parse(respPayload);
+      }
+    })
+    .catch((err) => {
+      logMessage.error(err);
+      throw new Error("Could not process request with Lambda Templates function");
+    });
+}
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-function _getFormByID(formID: string): Record<string, unknown> {
-  // Need to get these forms from a DB or API in the future
-  let formToReturn = null;
-  for (const form of Object.values(Forms)) {
-    if (form.form.id == formID) {
-      formToReturn = {
-        ...form.form,
-        publishingStatus: form.publishingStatus,
-      };
-      break;
-    }
+
+interface ClientSidePublicFormProperties extends FormMetadataProperties {
+  publishingStatus: boolean;
+}
+
+async function _getFormByID(formID: string): Promise<ClientSidePublicFormProperties | null> {
+  if (typeof window === "undefined") {
+    return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+      const { records } = response.data;
+      if (records?.length === 1 && records[0].json_config?.form) {
+        return {
+          ...records[0].json_config?.form,
+          publishingStatus: records[0].json_config?.publishingStatus,
+        };
+      }
+      return null;
+    });
+  } else {
+    return await axios({
+      url: "/api/templates",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        formID: formID,
+        method: "GET",
+      },
+      timeout: 5000,
+    })
+      .then((response) => {
+        const { records } = response.data.data;
+        if (records?.length === 1 && records[0].json_config?.form) {
+          return {
+            ...records[0].json_config?.form,
+            publishingStatus: records[0].json_config?.publishingStatus,
+          };
+        }
+        return null;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
-  return formToReturn;
 }
 
 // Get an array of form IDs based on the publishing status
 // Returns -> Array of form IDs.
-function _getFormByStatus(status: boolean): Array<number> {
-  return Object.values(Forms)
-    .map(
-      logger((form) => {
-        if (form.publishingStatus === status) {
-          return form.form.id;
+async function _getFormByStatus(
+  status: boolean
+): Promise<(ClientSidePublicFormProperties | undefined)[]> {
+  if (typeof window === "undefined") {
+    return crudTemplates({ method: "GET" }).then((response) => {
+      const { records } = response.data;
+      if (records && records?.length > 0) {
+        return records
+          .map((record) => {
+            if (record.json_config?.publishingStatus === status) {
+              return {
+                ...record.json_config?.form,
+                publishingStatus: record.json_config?.publishingStatus,
+              };
+            }
+          })
+          .filter((val) => typeof val !== "undefined" && val !== null);
+      }
+      return [];
+    });
+  } else {
+    return await axios({
+      url: "/api/templates",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        method: "GET",
+      },
+      timeout: 5000,
+    })
+      .then((response) => {
+        const {
+          data: { records: records },
+        } = response.data as CrudTemplateResponse;
+        if (records && records?.length > 0) {
+          return records
+            .map((record) => {
+              if (record.json_config?.publishingStatus === status) {
+                return {
+                  ...record.json_config?.form,
+                  publishingStatus: record.json_config?.publishingStatus,
+                };
+              }
+            })
+            .filter((val) => typeof val !== "undefined" && val !== null);
         }
+        return [];
       })
-    )
-    .filter((val) => typeof val !== "undefined" && val !== null);
+      .catch((err) => {
+        console.error(err);
+        throw new Error("Cannot get forms by status");
+      });
+  }
 }
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
-function _getSubmissionByID(formID: string): Record<string, unknown> {
-  let submissionFormat = null;
-  for (const submission of Object.values(Forms)) {
-    if (submission.form.id == formID) {
-      submissionFormat = submission.submission;
-      break;
+async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
+  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+    const { records } = response.data;
+    if (records?.length === 1 && records[0].json_config?.submission) {
+      return {
+        ...records[0].json_config?.submission,
+      };
     }
-  }
-  return submissionFormat;
+    return null;
+  });
 }
 
 function _rehydrateFormResponses(payload: Submission) {
@@ -233,7 +392,7 @@ function _handleFormDataText(key: string, value: string, formData: FormData) {
 function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
   formData.append(key, JSON.stringify({ value: value }));
 }
-async function _submitToApI(
+async function _submitToAPI(
   values: Responses,
   formikBag: FormikBag<DynamicFormProps, FormValues>,
   isProduction: boolean
@@ -308,6 +467,7 @@ async function _submitToApI(
 export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
-export const submitToAPI = logger(_submitToApI);
+export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
+export const crudTemplates = logger(_crudTemplates);

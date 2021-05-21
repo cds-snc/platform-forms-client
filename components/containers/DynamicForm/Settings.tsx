@@ -7,7 +7,6 @@ import axios from "axios";
 
 const handleDelete = async (formID: Int16Array) => {
   // redirect to view templates page on success
-  const router = useRouter();
   const resp = await axios({
     url: "/api/templates",
     method: "POST",
@@ -23,9 +22,6 @@ const handleDelete = async (formID: Int16Array) => {
     .then((serverResponse) => {
       //success - redirect to view-templates page
       console.log(serverResponse);
-      router.push({
-        pathname: `/admin/view-templates`,
-      });
     })
     .catch((err) => {
       console.error(err);
@@ -35,6 +31,7 @@ const handleDelete = async (formID: Int16Array) => {
 
 const FormSettings = (props): React.ReactElement => {
   const { form } = props;
+  const router = useRouter();
   const { t } = useTranslation("admin-templates");
   return (
     <>
@@ -43,7 +40,16 @@ const FormSettings = (props): React.ReactElement => {
       <h2>Edit Form Config File:</h2>
       <JSONUpload form={form}></JSONUpload>
       <br />
-      <Button onClick={() => handleDelete(form.formID)} type="button">
+      <Button
+        onClick={async () => {
+          const resp = await handleDelete(form.formID);
+          if (resp.status == 200)
+            router.push({
+              pathname: `/admin/view-templates`,
+            });
+        }}
+        type="button"
+      >
         {t("settings.delete")}
       </Button>
     </>

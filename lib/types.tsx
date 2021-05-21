@@ -2,6 +2,17 @@ import { ChangeEvent } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
 
+export interface FormJSONConfigProperties {
+  internalTitleEn?: string;
+  interalTitleFr?: string;
+  publishingStatus: boolean;
+  submission: {
+    email?: string;
+    vault?: boolean;
+  };
+  form: FormMetadataProperties;
+}
+
 export interface FormMetadataProperties {
   id: string;
   version?: string | undefined;
@@ -15,6 +26,7 @@ export interface FormMetadataProperties {
   endPage?: Record<string, string>;
   [key: string]:
     | string
+    | boolean
     | Array<string>
     | Array<FormElement>
     | Record<string, string>
@@ -29,8 +41,8 @@ export type allFormElements =
 export type callback = (event: allFormElements) => void;
 
 export interface SubmissionProperties {
-  templateID: string;
-  email: string;
+  email?: string;
+  vault?: boolean;
 }
 
 export interface Submission {
