@@ -5,29 +5,30 @@ import { getProperty } from "./formBuilder";
 import { logger, logMessage } from "./logger";
 import {
   FormElement,
-  FormConfigProperties,
+  FormSchemaProperties,
   Responses,
   Response,
   FormValues,
   DynamicFormProps,
   FileInputResponse,
   Submission,
-  FormJSONConfigProperties,
+  FormDefinitionProperties,
   SubmissionProperties,
+  PublicFormSchemaProperties,
 } from "./types";
 
 // CRUD Operations for Templates
 interface CrudTemplateInput {
   method: string;
   formID?: string;
-  formConfig?: FormJSONConfigProperties;
+  formConfig?: FormDefinitionProperties;
 }
 
 interface CrudTemplateResponse {
   data: {
     records?: {
       formID: string;
-      formConfig?: FormJSONConfigProperties;
+      formConfig: FormDefinitionProperties;
       organization?: boolean;
     }[];
   };
@@ -91,18 +92,15 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
 // Get the form json object by using the form ID
 // Returns => json object of form
 
-interface ClientSidePublicFormProperties extends FormConfigProperties {
-  publishingStatus: boolean;
-}
-
-async function _getFormByID(formID: string): Promise<ClientSidePublicFormProperties | null> {
+async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
   if (typeof window === "undefined") {
     return crudTemplates({ method: "GET", formID: formID }).then((response) => {
       const { records } = response.data;
-      if (records?.length === 1 && records[0].formConfig?.form) {
+      if (records?.length === 1 && records[0].formConfig.form) {
         return {
-          ...records[0].formConfig?.form,
-          publishingStatus: records[0].formConfig?.publishingStatus,
+          formID,
+          ...records[0].formConfig.form,
+          publishingStatus: records[0].formConfig.publishingStatus,
         };
       }
       return null;
@@ -122,10 +120,11 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
     })
       .then((response) => {
         const { records } = response.data.data;
-        if (records?.length === 1 && records[0].formConfig?.form) {
+        if (records?.length === 1 && records[0].formConfig.form) {
           return {
+            formID,
             ...records[0].json_config?.form,
-            publishingStatus: records[0].formConfig?.publishingStatus,
+            publishingStatus: records[0].formConfig.publishingStatus,
           };
         }
         return null;
@@ -140,17 +139,18 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
 // Returns -> Array of form IDs.
 async function _getFormByStatus(
   status: boolean
-): Promise<(ClientSidePublicFormProperties | undefined)[]> {
+): Promise<(PublicFormSchemaProperties | undefined)[]> {
   if (typeof window === "undefined") {
     return crudTemplates({ method: "GET" }).then((response) => {
       const { records } = response.data;
       if (records && records?.length > 0) {
         return records
           .map((record) => {
-            if (record.formConfig?.publishingStatus === status) {
+            if (record.formConfig.publishingStatus === status) {
               return {
-                ...record.formConfig?.form,
-                publishingStatus: record.formConfig?.publishingStatus,
+                formID: record.formID,
+                ...record.formConfig.form,
+                publishingStatus: record.formConfig.publishingStatus,
               };
             }
           })
@@ -179,6 +179,7 @@ async function _getFormByStatus(
             .map((record) => {
               if (record.formConfig?.publishingStatus === status) {
                 return {
+                  formID: record.formID,
                   ...record.formConfig?.form,
                   publishingStatus: record.formConfig?.publishingStatus,
                 };
@@ -332,13 +333,14 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`${title}${String.fromCharCode(13)}- No Response`);
 }
 
-function _buildFormDataObject(form: FormConfigProperties, values: Responses) {
+function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
   const formData = new FormData();
   form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
   form.elements.map((element) => {
     _handleFormDataType(element, values[element.id], formData);
   });
+  formData.append("formID", form.formID);
   return formData;
 }
 
@@ -384,15 +386,14 @@ function _handleFormDataArray(key: string, value: Array<string>, formData: FormD
   formData.append(key, JSON.stringify({ value: value }));
 }
 async function _submitToAPI(
-  formID: string,
   values: Responses,
   formikBag: FormikBag<DynamicFormProps, FormValues>,
   isProduction: boolean
 ) {
-  const { language, router } = formikBag.props;
+  const { language, router, formConfig } = formikBag.props;
   const { setStatus } = formikBag;
 
-  const formDataObject = await _buildFormDataObject(formResponseObject.form, values);
+  const formDataObject = _buildFormDataObject(formConfig, values);
 
   //making a post request to the submit API
   await axios({

@@ -1,11 +1,13 @@
 import { NotifyClient } from "notifications-node-client";
+import type { NextApiRequest, NextApiResponse } from "next";
 import getConfig from "next/config";
-const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import formidable from "formidable";
 import fs from "fs";
 import convertMessage from "../../lib/markdown";
-import { getSubmissionByID, rehydrateFormResponses } from "../../lib/dataLayer";
+import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "../../lib/dataLayer";
 import { logMessage } from "../../lib/logger";
+import { Responses } from "../../lib/types";
 
 export const config = {
   api: {
@@ -13,19 +15,25 @@ export const config = {
   },
 };
 
-const submit = async (req, res) => {
+const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     const incomingForm = new formidable.IncomingForm();
     await incomingForm.parse(req, (err, fields, files) => {
       if (err) {
         throw new Error(err);
       }
-      const form = { ...JSON.parse(fields.formInfo) };
-      delete fields.formInfo;
-      processFormData(form, fields, files, res, req).finally(() => {
-        for (let [id] of Object.entries(files)) {
-          console.log(`File path to be deleted: ${files[id].path}`);
-          fs.unlinkSync(files[id].path);
+      processFormData(fields, files, res, req).finally(() => {
+        for (const [id] of Object.entries(files)) {
+          const fileOrArray = files[id];
+          if (Array.isArray(fileOrArray)) {
+            fileOrArray.forEach((file) => {
+              console.log(`File path to be deleted: ${file.path}`);
+              fs.unlinkSync(file.path);
+            });
+          } else {
+            console.log(`File path to be deleted: ${fileOrArray.path}`);
+            fs.unlinkSync(fileOrArray.path);
+          }
         }
       });
     });
@@ -88,32 +96,50 @@ const previewNotify = async (form, fields) => {
     });
 };
 
-const processFormData = async (form, reqFields, files, res, req) => {
+const processFormData = async (
+  reqFields: Responses | undefined,
+  files: formidable.Files,
+  res: NextApiResponse,
+  req: NextApiRequest
+) => {
   try {
     const {
       publicRuntimeConfig: { isProduction: isProduction },
     } = getConfig();
 
-    const formAttached = form.id && reqFields ? true : false;
-
-    logMessage.info(
-      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
-        formAttached ? form.id : "No form attached"
-      }`
-    );
-    if (!formAttached) {
+    if (!reqFields) {
       return res.status(400).json({ error: "No form submitted with request" });
     }
 
+    logMessage.info(
+      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
+        reqFields ? reqFields.formID : "No form attached"
+      }`
+    );
+
     // Add file S3 urls to payload once we start processing files through reliability queue
     // For now just attach the file names
-    for (let [key, value] of Object.entries(files)) {
-      reqFields[key] = value.name;
+    for (const [key, value] of Object.entries(files)) {
+      const fileOrArray = value;
+      if (!Array.isArray(fileOrArray)) {
+        if (fileOrArray.name) {
+          reqFields[key] = fileOrArray.name;
+        }
+      }
     }
-    const fields = await rehydrateFormResponses({
+
+    const form = await getFormByID(reqFields.formID as string);
+
+    if (!form) {
+      return res.status(400).json({ error: "No form could be found with that ID" });
+    }
+
+    const fields = rehydrateFormResponses({
       form,
       responses: reqFields,
     });
+
+    /// Pick up here on Monday morning!!
 
     // Staging or Production AWS environments
     if (process.env.SUBMISSION_API) {

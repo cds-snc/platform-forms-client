@@ -32,6 +32,11 @@ export interface FormSchemaProperties {
     | undefined;
 }
 
+export interface PublicFormSchemaProperties extends FormSchemaProperties {
+  formID: string;
+  publishingStatus: boolean;
+}
+
 export type allFormElements =
   | ChangeEvent<HTMLInputElement>
   | ChangeEvent<HTMLTextAreaElement>
@@ -44,7 +49,7 @@ export interface SubmissionProperties {
 }
 
 export interface Submission {
-  form: FormSchemaProperties;
+  form: PublicFormSchemaProperties;
   responses: Responses;
 }
 
@@ -120,7 +125,7 @@ export interface FormValues {
 }
 
 export interface DynamicFormProps {
-  formConfig: FormSchemaProperties;
+  formConfig: PublicFormSchemaProperties;
   language: string;
   router: NextRouter;
   t: TFunction;
