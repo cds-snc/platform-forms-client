@@ -36,6 +36,7 @@ module.exports = {
     fontFamily: {
       sans: ["lato"],
       body: ["Noto Sans"],
+      mono: ["monospace"],
     },
     /* ["fontSize", "lineHeight"]
        These typography rules have been pulled from the design system

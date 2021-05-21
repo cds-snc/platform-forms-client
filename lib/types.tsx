@@ -15,7 +15,7 @@ export interface FormJSONConfigProperties {
 
 export interface FormDBConfigProperties {
   formID: number;
-  json_config?: string;
+  json_config?: FormMetadataProperties;
   isNull?: boolean;
 }
 
