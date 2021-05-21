@@ -25,7 +25,20 @@ const handlePostTemplate = async (body) => {
       payload = {
         method: "INSERT",
         json_config: JSON.parse(body.json_config),
+        formID: parseInt(body.formID),
       };
+      break;
+    case "UPDATE":
+      payload = {
+        method: "UPDATE",
+        json_config: JSON.parse(body.json_config),
+      };
+      break;
+    case "DELETE":
+      payload = {
+        method: "DELETE",
+        formID: parseInt(body.formID),
+      }
       break;
     default:
       // TODO - throw error

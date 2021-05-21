@@ -8,7 +8,10 @@
     "title": "View Form Template JSON",
     "expand": "Expand",
     "collapse": "Collapse",
-    "update": "Edit",
+    "update": "Edit"
+  },
+  "settings": {
+    "title": "Form Settings",
     "delete": "Delete"
   }
 }
