@@ -15,9 +15,9 @@ const Base = ({ children }) => {
   const {
     publicRuntimeConfig: { isProduction: isProduction },
   } = getConfig();
-  const formMetadata =
-    children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
-  const classes = getPageClassNames(formMetadata);
+  const formConfig =
+    children && children.props && children.props.formConfig ? children.props.formConfig : null;
+  const classes = getPageClassNames(formConfig);
 
   return (
     <>
@@ -53,7 +53,7 @@ const Base = ({ children }) => {
       <div className={classes}>
         <header>
           <PhaseBanner />
-          <Fip formMetadata={formMetadata} />
+          <Fip formConfig={formConfig} />
         </header>
         <main id="content">{children}</main>
         <Footer />

@@ -35,7 +35,7 @@ const checkboxData = {
   },
 };
 
-const formMetadata = {
+const formConfig = {
   id: 1,
   version: 1,
   titleEn: "Test Form",
@@ -48,7 +48,7 @@ describe("Checkbox component", () => {
   afterEach(cleanup);
   test("... in English", () => {
     render(
-      <Form formMetadata={formMetadata} t={(key) => key} language="en">
+      <Form formConfig={formConfig} t={(key) => key} language="en">
         <GenerateElement element={checkboxData} language="en" />
       </Form>
     );
@@ -76,7 +76,7 @@ describe("Checkbox component", () => {
   });
   test("... in French", () => {
     render(
-      <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+      <Form formConfig={formConfig} t={(key) => key} language="fr">
         <GenerateElement element={checkboxData} language="fr" />
       </Form>
     );

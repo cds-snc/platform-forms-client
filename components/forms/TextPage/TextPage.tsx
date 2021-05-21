@@ -11,7 +11,7 @@ import { getProperty } from "../../../lib/formBuilder";
 */
 
 interface TextPageProps {
-  formMetadata: FormMetadataProperties;
+  formConfig: FormMetadataProperties;
   htmlEmail: string | undefined;
   urlQuery: string | undefined;
   step: string | string[] | undefined;
@@ -38,12 +38,12 @@ const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undef
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { t, i18n } = useTranslation("confirmation");
-  const { urlQuery, htmlEmail, formMetadata } = props;
+  const { urlQuery, htmlEmail, formConfig } = props;
   const language = i18n.language as string;
 
   const pageText =
-    formMetadata && formMetadata.endPage
-      ? formMetadata.endPage[getProperty("description", language)]
+    formConfig && formConfig.endPage
+      ? formConfig.endPage[getProperty("description", language)]
       : "";
 
   return (

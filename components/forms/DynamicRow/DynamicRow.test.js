@@ -59,7 +59,7 @@ const dynamicRowData = {
   },
 };
 
-const formMetadata = {
+const formConfig = {
   id: 1,
   version: 1,
   titleEn: "Test Form",
@@ -73,7 +73,7 @@ describe("Generate a dynamic row", () => {
   describe("... in English", () => {
     test("...initialState", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="en">
+        <Form formConfig={formConfig} t={(key) => key} language="en">
           <GenerateElement element={dynamicRowData} language="en" />
         </Form>
       );
@@ -103,7 +103,7 @@ describe("Generate a dynamic row", () => {
 
     test("Add a row", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="en">
+        <Form formConfig={formConfig} t={(key) => key} language="en">
           <GenerateElement element={dynamicRowData} language="en" />
         </Form>
       );
@@ -150,7 +150,7 @@ describe("Generate a dynamic row", () => {
   describe("...in French", () => {
     test("...initialState", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+        <Form formConfig={formConfig} t={(key) => key} language="fr">
           <GenerateElement element={dynamicRowData} language="fr" />
         </Form>
       );
@@ -180,7 +180,7 @@ describe("Generate a dynamic row", () => {
 
     test("Add a row", () => {
       render(
-        <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+        <Form formConfig={formConfig} t={(key) => key} language="fr">
           <GenerateElement element={dynamicRowData} language="fr" />
         </Form>
       );

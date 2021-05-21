@@ -14,8 +14,6 @@ export interface FormJSONConfigProperties {
 }
 
 export interface FormMetadataProperties {
-  id: string;
-  version?: string | undefined;
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;
@@ -122,7 +120,7 @@ export interface FormValues {
 }
 
 export interface DynamicFormProps {
-  formMetadata: FormMetadataProperties;
+  formConfig: FormMetadataProperties;
   language: string;
   router: NextRouter;
   t: TFunction;

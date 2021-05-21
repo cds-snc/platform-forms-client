@@ -20,33 +20,33 @@ import {
 interface CrudTemplateInput {
   method: string;
   formID?: string;
-  json_config?: FormJSONConfigProperties;
+  formConfig?: FormJSONConfigProperties;
 }
 
 interface CrudTemplateResponse {
   data: {
     records?: {
       formID: string;
-      json_config?: FormJSONConfigProperties;
-      isNull?: boolean;
+      formConfig?: FormJSONConfigProperties;
+      organization?: boolean;
     }[];
   };
 }
 
 async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
   const getConfig = (payload: CrudTemplateInput) => {
-    const { method } = payload;
+    const { method, formID, formConfig } = payload;
 
     switch (payload.method) {
       case "GET":
         return {
           method,
-          formID: payload.formID ? parseInt(payload.formID) : undefined,
+          formID,
         };
       case "INSERT":
         return {
           method,
-          json_config: payload.json_config,
+          formConfig,
         };
       case "UPDATE":
         break;
@@ -99,10 +99,10 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
   if (typeof window === "undefined") {
     return crudTemplates({ method: "GET", formID: formID }).then((response) => {
       const { records } = response.data;
-      if (records?.length === 1 && records[0].json_config?.form) {
+      if (records?.length === 1 && records[0].formConfig?.form) {
         return {
-          ...records[0].json_config?.form,
-          publishingStatus: records[0].json_config?.publishingStatus,
+          ...records[0].formConfig?.form,
+          publishingStatus: records[0].formConfig?.publishingStatus,
         };
       }
       return null;
@@ -122,10 +122,10 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
     })
       .then((response) => {
         const { records } = response.data.data;
-        if (records?.length === 1 && records[0].json_config?.form) {
+        if (records?.length === 1 && records[0].formConfig?.form) {
           return {
             ...records[0].json_config?.form,
-            publishingStatus: records[0].json_config?.publishingStatus,
+            publishingStatus: records[0].formConfig?.publishingStatus,
           };
         }
         return null;
@@ -147,10 +147,10 @@ async function _getFormByStatus(
       if (records && records?.length > 0) {
         return records
           .map((record) => {
-            if (record.json_config?.publishingStatus === status) {
+            if (record.formConfig?.publishingStatus === status) {
               return {
-                ...record.json_config?.form,
-                publishingStatus: record.json_config?.publishingStatus,
+                ...record.formConfig?.form,
+                publishingStatus: record.formConfig?.publishingStatus,
               };
             }
           })
@@ -177,10 +177,10 @@ async function _getFormByStatus(
         if (records && records?.length > 0) {
           return records
             .map((record) => {
-              if (record.json_config?.publishingStatus === status) {
+              if (record.formConfig?.publishingStatus === status) {
                 return {
-                  ...record.json_config?.form,
-                  publishingStatus: record.json_config?.publishingStatus,
+                  ...record.formConfig?.form,
+                  publishingStatus: record.formConfig?.publishingStatus,
                 };
               }
             })
@@ -200,9 +200,9 @@ async function _getFormByStatus(
 async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
   return crudTemplates({ method: "GET", formID: formID }).then((response) => {
     const { records } = response.data;
-    if (records?.length === 1 && records[0].json_config?.submission) {
+    if (records?.length === 1 && records[0].formConfig?.submission) {
       return {
-        ...records[0].json_config?.submission,
+        ...records[0].formConfig?.submission,
       };
     }
     return null;
@@ -339,7 +339,6 @@ function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
   form.elements.map((element) => {
     _handleFormDataType(element, values[element.id], formData);
   });
-  formData.append("formInfo", JSON.stringify(form));
   return formData;
 }
 
@@ -385,30 +384,15 @@ function _handleFormDataArray(key: string, value: Array<string>, formData: FormD
   formData.append(key, JSON.stringify({ value: value }));
 }
 async function _submitToAPI(
+  formID: string,
   values: Responses,
   formikBag: FormikBag<DynamicFormProps, FormValues>,
   isProduction: boolean
 ) {
-  const { formMetadata, language, router } = formikBag.props;
+  const { language, router } = formikBag.props;
   const { setStatus } = formikBag;
 
-  const formResponseObject = {
-    form: {
-      id: formMetadata.id,
-      titleEn: formMetadata.titleEn,
-      titleFr: formMetadata.titleFr,
-      emailSubjectEn: formMetadata.emailSubjectEn,
-      emailSubjectFr: formMetadata.emailSubjectFr,
-      elements: formMetadata.elements,
-      layout: formMetadata.layout,
-    },
-    responses: values,
-  };
-
-  const formDataObject = await _buildFormDataObject(
-    formResponseObject.form,
-    formResponseObject.responses
-  );
+  const formDataObject = await _buildFormDataObject(formResponseObject.form, values);
 
   //making a post request to the submit API
   await axios({
@@ -423,19 +407,19 @@ async function _submitToAPI(
     .then((serverResponse) => {
       if (serverResponse.data.received === true) {
         const referrerUrl =
-          formMetadata && formMetadata.endPage
+          formConfig && formConfig.endPage
             ? {
-                referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
+                referrerUrl: formConfig.endPage[getProperty("referrerUrl", language)],
               }
             : null;
         const htmlEmail = !isProduction ? serverResponse.data.htmlEmail : null;
         const endPageText =
-          formMetadata && formMetadata.endPage
-            ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
+          formConfig && formConfig.endPage
+            ? JSON.stringify(formConfig.endPage[getProperty("description", language)])
             : "";
         router.push(
           {
-            pathname: `/${language}/id/${formMetadata.id}/confirmation`,
+            pathname: `/${language}/id/${formConfig.id}/confirmation`,
             query: {
               ...referrerUrl,
               htmlEmail: htmlEmail,
@@ -443,7 +427,7 @@ async function _submitToAPI(
             },
           },
           {
-            pathname: `/${language}/id/${formMetadata.id}/confirmation`,
+            pathname: `/${language}/id/${formConfig.id}/confirmation`,
           }
         );
       } else {
