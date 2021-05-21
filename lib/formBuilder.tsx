@@ -13,7 +13,7 @@ import {
   Description,
   RichText,
 } from "../components/forms";
-import { FormElement, PropertyChoices, FormConfigProperties } from "./types";
+import { FormElement, PropertyChoices, FormSchemaProperties } from "./types";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -227,7 +227,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
  * @param formToRender
  * @param language
  */
-const _getRenderedForm = (formConfig: FormConfigProperties, language: string) => {
+const _getRenderedForm = (formConfig: FormSchemaProperties, language: string) => {
   if (!formConfig) {
     return null;
   }
@@ -286,7 +286,7 @@ const _getElementInitialValue = (
  * @param formConfig
  * @param language
  */
-const _getFormInitialValues = (formConfig: FormConfigProperties, language: string) => {
+const _getFormInitialValues = (formConfig: FormSchemaProperties, language: string) => {
   if (!formConfig) {
     return null;
   }

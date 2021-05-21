@@ -2,7 +2,7 @@ import React from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
-import { FormConfigProperties } from "../../../lib/types";
+import { FormSchemaProperties } from "../../../lib/types";
 import { TFunction } from "next-i18next";
 import { getProperty } from "../../../lib/formBuilder";
 
@@ -11,7 +11,7 @@ import { getProperty } from "../../../lib/formBuilder";
 */
 
 interface TextPageProps {
-  formConfig: FormConfigProperties;
+  formConfig: FormSchemaProperties;
   htmlEmail: string | undefined;
   urlQuery: string | undefined;
   step: string | string[] | undefined;
