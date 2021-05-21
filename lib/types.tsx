@@ -13,6 +13,12 @@ export interface FormJSONConfigProperties {
   form: FormMetadataProperties;
 }
 
+export interface FormDBConfigProperties {
+  formID: number;
+  json_config?: FormMetadataProperties;
+  isNull?: boolean;
+}
+
 export interface FormMetadataProperties {
   id: string;
   version?: string | undefined;

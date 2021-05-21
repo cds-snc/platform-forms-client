@@ -111,15 +111,23 @@ ul.json_templates {
       @apply bg-green-default w-full text-white-default;
     }
   }
-  li span {
+  li div.expandable {
     max-height: 100px;
     overflow: hidden;
     font-family: monospace;
     display: inline-block;
     margin: 0 1rem;
+
+    div.update-buttons {
+      display: none;
+    }
   }
-  li.expanded span {
+  li.expanded div.expandable {
     max-height: 100%;
+
+    div.update-buttons {
+      display: block;
+    }
   }
 }
 
