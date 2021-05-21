@@ -5,11 +5,11 @@ import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
 import { TextPage } from "../../forms/TextPage/TextPage";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
-import { FormMetadataProperties } from "../../../lib/types";
+import { FormConfigProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
 
 interface DynamicFormProps {
-  formConfig: FormMetadataProperties;
+  formConfig: FormConfigProperties;
 }
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a

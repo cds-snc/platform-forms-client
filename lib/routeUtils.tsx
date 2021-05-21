@@ -1,8 +1,8 @@
 import classnames from "classnames";
 import { useRouter } from "next/router";
-import { FormMetadataProperties } from "./types";
+import { FormConfigProperties } from "./types";
 
-export const getPageClassNames = (formConfig: FormMetadataProperties): string => {
+export const getPageClassNames = (formConfig: FormConfigProperties): string => {
   const pageNameUrl = getPageNameUrl();
   const brandName = formConfig && formConfig.brand ? formConfig.brand.name : "";
   const classes = classnames(

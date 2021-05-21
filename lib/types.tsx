@@ -10,10 +10,10 @@ export interface FormJSONConfigProperties {
     email?: string;
     vault?: boolean;
   };
-  form: FormMetadataProperties;
+  form: FormConfigProperties;
 }
 
-export interface FormMetadataProperties {
+export interface FormConfigProperties {
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;
@@ -44,7 +44,7 @@ export interface SubmissionProperties {
 }
 
 export interface Submission {
-  form: FormMetadataProperties;
+  form: FormConfigProperties;
   responses: Responses;
 }
 
@@ -120,7 +120,7 @@ export interface FormValues {
 }
 
 export interface DynamicFormProps {
-  formConfig: FormMetadataProperties;
+  formConfig: FormConfigProperties;
   language: string;
   router: NextRouter;
   t: TFunction;

@@ -5,7 +5,7 @@ import { getProperty } from "./formBuilder";
 import { logger, logMessage } from "./logger";
 import {
   FormElement,
-  FormMetadataProperties,
+  FormConfigProperties,
   Responses,
   Response,
   FormValues,
@@ -91,7 +91,7 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
 // Get the form json object by using the form ID
 // Returns => json object of form
 
-interface ClientSidePublicFormProperties extends FormMetadataProperties {
+interface ClientSidePublicFormProperties extends FormConfigProperties {
   publishingStatus: boolean;
 }
 
@@ -332,7 +332,7 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`${title}${String.fromCharCode(13)}- No Response`);
 }
 
-function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
+function _buildFormDataObject(form: FormConfigProperties, values: Responses) {
   const formData = new FormData();
   form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
