@@ -146,7 +146,7 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
 }
 
 // Get an array of form IDs based on the publishing status
-// Returns -> Array of form IDs.
+// Returns -> Array of form objects.
 async function _getFormByStatus(
   status: boolean
 ): Promise<(ClientSidePublicFormProperties | undefined)[]> {
@@ -159,6 +159,7 @@ async function _getFormByStatus(
             if (record.json_config?.publishingStatus === status) {
               return {
                 ...record.json_config?.form,
+                id: record.formID,
                 publishingStatus: record.json_config?.publishingStatus,
               };
             }
@@ -189,6 +190,7 @@ async function _getFormByStatus(
               if (record.json_config?.publishingStatus === status) {
                 return {
                   ...record.json_config?.form,
+                  id: record.formID,
                   publishingStatus: record.json_config?.publishingStatus,
                 };
               }
