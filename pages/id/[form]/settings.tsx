@@ -9,11 +9,11 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   // get form info from db
   const payload = {
     method: "GET",
-    formID: formID,
+    formID: formID as string,
   };
   const lambdaResult = await crudTemplates(payload);
 
-  if (context.locale && lambdaResult.data.records.length === 1) {
+  if (context.locale && lambdaResult && lambdaResult.data && lambdaResult.data.records) {
     return {
       props: {
         form: lambdaResult.data.records[0],

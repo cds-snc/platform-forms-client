@@ -4,8 +4,13 @@ import { useTranslation } from "next-i18next";
 import Button from "../../forms/Button/Button";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { FormDBConfigProperties } from "../../../lib/types";
 
-const handleDelete = async (formID: Int16Array) => {
+interface FormSettingsProps {
+  form: FormDBConfigProperties;
+}
+
+const handleDelete = async (formID: number) => {
   // redirect to view templates page on success
   const resp = await axios({
     url: "/api/templates",
@@ -22,14 +27,16 @@ const handleDelete = async (formID: Int16Array) => {
     .then((serverResponse) => {
       //success - redirect to view-templates page
       console.log(serverResponse);
+      return serverResponse;
     })
     .catch((err) => {
       console.error(err);
+      return err;
     });
-  return resp;
+  return resp.status;
 };
 
-const FormSettings = (props): React.ReactElement => {
+const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const { form } = props;
   const router = useRouter();
   const { t } = useTranslation("admin-templates");
@@ -43,7 +50,7 @@ const FormSettings = (props): React.ReactElement => {
       <Button
         onClick={async () => {
           const resp = await handleDelete(form.formID);
-          if (resp.status == 200)
+          if (resp == 200)
             router.push({
               pathname: `/admin/view-templates`,
             });

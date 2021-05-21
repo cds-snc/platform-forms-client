@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
+import { FormDBConfigProperties } from "../../../lib/types";
 
-const JSONUpload = (props): React.ReactElement => {
+interface JSONUploadProps {
+  form?: FormDBConfigProperties;
+}
+
+const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
   const [jsonConfig, setJsonConfig] = useState("");
   const { form } = props;
@@ -41,7 +46,7 @@ const JSONUpload = (props): React.ReactElement => {
   );
 };
 
-const handleSubmit = async (jsonInput: string, formID: Int32Array) => {
+const handleSubmit = async (jsonInput: string, formID: number | null) => {
   const resp = await axios({
     url: "/api/templates",
     method: "POST",
