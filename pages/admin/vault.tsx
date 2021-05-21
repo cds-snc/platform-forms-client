@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -24,14 +24,29 @@ interface ResponseListInterface {
 
 const FormResponse = ({ Items, Count }: ResponseListInterface) => {
   const [index, setIndex] = useState(0);
-  if (Count > 0) {
-    const submission = Items[index];
-    const formID = submission.FormID.S;
-    const submissionID = submission.SubmissionID.S;
-    const responseJson = JSON.parse(submission.FormSubmission.S);
-    const form = getFormByID(formID);
-    const formText = convertMessage({ form, responses: responseJson });
+  const [response, setResponse] = useState("");
+  const [submissionID, setSubmissionID] = useState("");
 
+  useEffect(() => {
+    if (Items.length > 0) {
+      const submission = Items[index];
+      const formID = submission.FormID.S;
+      setSubmissionID(submission.SubmissionID.S);
+      const responseJson = JSON.parse(submission.FormSubmission.S);
+      getFormByID(formID)
+        .then((form) => {
+          return form ? convertMessage({ form, responses: responseJson }) : undefined;
+        })
+        .then((formText) => {
+          setResponse(formText ?? "");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [index, Items]);
+
+  if (Count > 0) {
     return (
       <>
         <div className="border-b-4 pl-4">
@@ -39,7 +54,7 @@ const FormResponse = ({ Items, Count }: ResponseListInterface) => {
           <p>{`Submission ID: ${submissionID}`}</p>
         </div>
         <div className="p-5">
-          <RichText className="email-preview">{formText}</RichText>
+          <RichText className="email-preview">{response}</RichText>
         </div>
         <div className="inline-block justify-center flex space-x-20">
           {index > 0 ? (

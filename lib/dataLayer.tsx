@@ -74,10 +74,10 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
       if (response.FunctionError) {
         //throw Error("Templates API could not process json");
         // temporary more graceful failure here
-        logMessage.info("Lambda Client not successful");
+        logMessage.info("Lambda Template Client not successful");
         return null;
       } else {
-        logMessage.info("Lambda Client successfully triggered");
+        logMessage.info("Lambda Template Client successfully triggered");
 
         return JSON.parse(respPayload);
       }
@@ -96,16 +96,45 @@ interface ClientSidePublicFormProperties extends FormMetadataProperties {
 }
 
 async function _getFormByID(formID: string): Promise<ClientSidePublicFormProperties | null> {
-  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
-    const { records } = response.data;
-    if (records?.length === 1 && records[0].json_config?.form) {
-      return {
-        ...records[0].json_config?.form,
-        publishingStatus: records[0].json_config?.publishingStatus,
-      };
-    }
-    return null;
-  });
+  if (typeof window === "undefined") {
+    return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+      const { records } = response.data;
+      if (records?.length === 1 && records[0].json_config?.form) {
+        return {
+          ...records[0].json_config?.form,
+          publishingStatus: records[0].json_config?.publishingStatus,
+        };
+      }
+      return null;
+    });
+  } else {
+    console.log("getFormByID launched Browser Side");
+    return await axios({
+      url: "/api/templates",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        formID: formID,
+        method: "GET",
+      },
+      timeout: 5000,
+    })
+      .then((response) => {
+        const { records } = response.data.data;
+        if (records?.length === 1 && records[0].json_config?.form) {
+          return {
+            ...records[0].json_config?.form,
+            publishingStatus: records[0].json_config?.publishingStatus,
+          };
+        }
+        return null;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 }
 
 // Get an array of form IDs based on the publishing status
@@ -113,22 +142,59 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
 async function _getFormByStatus(
   status: boolean
 ): Promise<(ClientSidePublicFormProperties | undefined)[]> {
-  return crudTemplates({ method: "GET" }).then((response) => {
-    const { records } = response.data;
-    if (records && records?.length > 0) {
-      return records
-        .map((record) => {
-          if (record.json_config?.publishingStatus === status) {
-            return {
-              ...record.json_config?.form,
-              publishingStatus: record.json_config?.publishingStatus,
-            };
-          }
-        })
-        .filter((val) => typeof val !== "undefined" && val !== null);
-    }
-    return [];
-  });
+  if (typeof window === "undefined") {
+    return crudTemplates({ method: "GET" }).then((response) => {
+      const { records } = response.data;
+      if (records && records?.length > 0) {
+        return records
+          .map((record) => {
+            if (record.json_config?.publishingStatus === status) {
+              return {
+                ...record.json_config?.form,
+                publishingStatus: record.json_config?.publishingStatus,
+              };
+            }
+          })
+          .filter((val) => typeof val !== "undefined" && val !== null);
+      }
+      return [];
+    });
+  } else {
+    console.log("getFormByID launched Browser Side");
+    return await axios({
+      url: "/api/templates",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        method: "GET",
+      },
+      timeout: 5000,
+    })
+      .then((response) => {
+        const {
+          data: { records: records },
+        } = response.data as CrudTemplateResponse;
+        if (records && records?.length > 0) {
+          return records
+            .map((record) => {
+              if (record.json_config?.publishingStatus === status) {
+                return {
+                  ...record.json_config?.form,
+                  publishingStatus: record.json_config?.publishingStatus,
+                };
+              }
+            })
+            .filter((val) => typeof val !== "undefined" && val !== null);
+        }
+        return [];
+      })
+      .catch((err) => {
+        console.error(err);
+        throw new Error("Cannot get forms by status");
+      });
+  }
 }
 
 // Get the submission format by using the form ID

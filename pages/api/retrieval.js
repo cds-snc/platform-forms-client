@@ -27,7 +27,7 @@ const retrieval = async (req, res) => {
         if (response.FunctionError) {
           throw Error("Submission API could not process form response");
         } else {
-          logMessage.info("Lambda Client successfully triggered");
+          logMessage.info("Lambda Retrieval Client successfully triggered");
         }
 
         let decoder = new TextDecoder();
