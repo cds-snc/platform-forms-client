@@ -42,7 +42,6 @@ const JSONUpload = (props): React.ReactElement => {
 };
 
 const handleSubmit = async (jsonInput: string, formID: Int32Array) => {
-  console.log(formID ? "UPDATE" : "INSERT");
   const resp = await axios({
     url: "/api/templates",
     method: "POST",
