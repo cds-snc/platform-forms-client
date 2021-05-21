@@ -1,16 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getFormByStatus, getFormByID } from "../lib/dataLayer.tsx";
+import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
 
-const Home = () => {
+const Home = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");
   const LinksList = () => {
-    const formIDs = getFormByStatus(true);
-    return formIDs.map((formID) => {
-      const form = getFormByID(formID);
+    return formsList.map((form) => {
       return (
         <li key={`link-${form.id}`}>
           <Link href={`/id/${form.id}`} locale={i18n.language}>
@@ -65,10 +64,18 @@ const Home = () => {
   );
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common", "welcome"])),
-  },
-});
+Home.propTypes = {
+  formsList: PropTypes.array.isRequired,
+};
+export async function getServerSideProps(context) {
+  const formsList = await getFormByStatus(true);
+
+  return {
+    props: {
+      formsList,
+      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+    }, // will be passed to the page component as props
+  };
+}
 
 export default Home;

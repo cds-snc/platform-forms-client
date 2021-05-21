@@ -1,20 +1,20 @@
 //import getConfig from "next/config";
 import DataView from "../../components/containers/Dashboard/DataView";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { invokeLambda } from "../api/templates";
+import { crudTemplates } from "../../lib/dataLayer";
 import { requireAuthentication } from "../../lib/auth";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   {
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
-    const payload = {
-      method: "GET",
-    };
-    const lambdaResult = JSON.parse(await invokeLambda(payload));
-    console.log(lambdaResult);
+
+    const lambdaResult = await crudTemplates({ method: "GET" });
     const templatesJSON =
-      lambdaResult.data && lambdaResult.data.records && lambdaResult.data.records.length > 0
+      lambdaResult &&
+      lambdaResult.data &&
+      lambdaResult.data.records &&
+      lambdaResult.data.records.length > 0
         ? lambdaResult.data.records
         : [];
 
