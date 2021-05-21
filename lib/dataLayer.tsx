@@ -108,7 +108,6 @@ async function _getFormByID(formID: string): Promise<ClientSidePublicFormPropert
       return null;
     });
   } else {
-    console.log("getFormByID launched Browser Side");
     return await axios({
       url: "/api/templates",
       method: "POST",
@@ -160,7 +159,6 @@ async function _getFormByStatus(
       return [];
     });
   } else {
-    console.log("getFormByID launched Browser Side");
     return await axios({
       url: "/api/templates",
       method: "POST",
