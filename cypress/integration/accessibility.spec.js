@@ -16,5 +16,5 @@ describe("Accessibility (A11Y) Check", { baseUrl: "http://localhost:3000" }, () 
     cy.injectAxe();
     cy.checkA11y(null, A11Y_OPTIONS);
   });
-  */
 });
+*/
