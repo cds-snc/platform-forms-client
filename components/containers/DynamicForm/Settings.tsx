@@ -5,8 +5,9 @@ import Button from "../../forms/Button/Button";
 import { useRouter } from "next/router";
 import axios from "axios";
 
-const handleDelete = async (formID: Int16Array, router) => {
+const handleDelete = async (formID: Int16Array) => {
   // redirect to view templates page on success
+  const router = useRouter();
   const resp = await axios({
     url: "/api/templates",
     method: "POST",
@@ -34,7 +35,6 @@ const handleDelete = async (formID: Int16Array, router) => {
 
 const FormSettings = (props): React.ReactElement => {
   const { form } = props;
-  const router = useRouter();
   const { t } = useTranslation("admin-templates");
   return (
     <>
@@ -43,7 +43,7 @@ const FormSettings = (props): React.ReactElement => {
       <h2>Edit Form Config File:</h2>
       <JSONUpload form={form}></JSONUpload>
       <br />
-      <Button onClick={() => handleDelete(form.formID, router)} type="button">
+      <Button onClick={() => handleDelete(form.formID)} type="button">
         {t("settings.delete")}
       </Button>
     </>

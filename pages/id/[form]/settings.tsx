@@ -4,7 +4,7 @@ import { invokeLambda } from "../../api/templates";
 import FormSettings from "../../../components/containers/DynamicForm/Settings";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  const formID = context.params.form;
+  const formID = context && context.params && context.params.form ? context.params.form : undefined;
 
   // get form info from db
   const payload = {
