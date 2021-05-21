@@ -1,10 +1,10 @@
+/* commented out for sandbox
 const A11Y_OPTIONS = {
   runOnly: {
     type: "tag",
     values: ["wcag21aa", "wcag2aa", "best-practice", "section508"],
   },
 };
-/* commented out for sandbox
 describe("Accessibility (A11Y) Check", { baseUrl: "http://localhost:3000" }, () => {
   it("Welcome Page Passes accessibility tests", () => {
     cy.visit("/en/welcome-bienvenue");
