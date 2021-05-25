@@ -1,16 +1,16 @@
-/* commented out for sandbox
 describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" }, () => {
-  let formMetaData = null;
+  let formMetaData = null,
+    formID = 165;
 
   before(() => {
     //Get form JSON configuration
-    cy.readFile("forms/TSB-contact.json").then((response) => {
+    cy.readFile("cypress/fixtures/tsb.json").then((response) => {
       formMetaData = response;
     });
   });
 
   it("TSB Contact Form renders", () => {
-    cy.visit(`/en/id/${formMetaData.form.id}`);
+    cy.visit(`/en/id/${formID}`);
     cy.get("h1").contains(formMetaData.form.titleEn);
   });
   it("Fill out the form", () => {
@@ -28,7 +28,7 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
   });
   it("Submit the Form", () => {
     cy.get("button").contains("Submit").click();
-    cy.url().should("include", `/en/id/${formMetaData.form.id}/confirmation`);
+    cy.url().should("include", `/en/id/${formID}/confirmation`);
     cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");
     cy.get("#content").contains(
@@ -36,4 +36,4 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
     );
   });
 });
-*/
+
