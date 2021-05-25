@@ -4,8 +4,12 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
 
   before(() => {
     //Get form JSON configuration
-    cy.readFile("cypress/fixtures/tsb.json").then((response) => {
-      formMetaData = response;
+    const body = {
+      method: "GET",
+      formID: formID,
+    };
+    cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
+      formMetaData = response.body.data.records[0].formConfig;
     });
   });
 
