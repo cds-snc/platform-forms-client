@@ -2907,6 +2907,13 @@
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.11.tgz#2521cc86f69d15c5b90664e4829d84566052c1cf"
   integrity sha512-2koNhpWm3DgWRp5tpkiJ8JGc1xTn2q0l+jUNUE7oMKXUf5NpI9AIdC4kbjGNFBdHtcxBD18LAksoudAVhFKCjw==
 
+"@types/formidable@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/formidable/-/formidable-1.2.2.tgz#e690d60732ee9d3f0a441bc572c17409785b283c"
+  integrity sha512-8RDAMnMHOh7QrY1xuQ7s6/Xre9pMvJ2zT2VgATiz5cIE71Q/6N3+P8sr3z/dNWNmvX5/aX9x8uJlG0MZiMZXoA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/glob-base@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@types/glob-base/-/glob-base-0.3.0.tgz#a581d688347e10e50dd7c17d6f2880a10354319d"

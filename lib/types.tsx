@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
 
-export interface FormJSONConfigProperties {
+export interface FormDefinitionProperties {
   internalTitleEn?: string;
   interalTitleFr?: string;
   publishingStatus: boolean;
@@ -10,18 +10,15 @@ export interface FormJSONConfigProperties {
     email?: string;
     vault?: boolean;
   };
-  form: FormMetadataProperties;
+  form: FormSchemaProperties;
 }
 
 export interface FormDBConfigProperties {
   formID: number;
-  json_config?: FormMetadataProperties;
-  isNull?: boolean;
+  formConfig?: FormDefinitionProperties;
+  organization?: boolean;
 }
-
-export interface FormMetadataProperties {
-  id: string;
-  version?: string | undefined;
+export interface FormSchemaProperties {
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;
@@ -40,6 +37,11 @@ export interface FormMetadataProperties {
     | undefined;
 }
 
+export interface PublicFormSchemaProperties extends FormSchemaProperties {
+  formID: string;
+  publishingStatus: boolean;
+}
+
 export type allFormElements =
   | ChangeEvent<HTMLInputElement>
   | ChangeEvent<HTMLTextAreaElement>
@@ -52,7 +54,7 @@ export interface SubmissionProperties {
 }
 
 export interface Submission {
-  form: FormMetadataProperties;
+  form: PublicFormSchemaProperties;
   responses: Responses;
 }
 
@@ -128,7 +130,7 @@ export interface FormValues {
 }
 
 export interface DynamicFormProps {
-  formMetadata: FormMetadataProperties;
+  formConfig: PublicFormSchemaProperties;
   language: string;
   router: NextRouter;
   t: TFunction;

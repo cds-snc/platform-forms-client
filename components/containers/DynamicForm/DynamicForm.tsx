@@ -5,11 +5,11 @@ import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
 import { TextPage } from "../../forms/TextPage/TextPage";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
-import { FormMetadataProperties } from "../../../lib/types";
+import { PublicFormSchemaProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
 
 interface DynamicFormProps {
-  formMetadata: FormMetadataProperties;
+  formConfig: PublicFormSchemaProperties;
 }
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
@@ -17,12 +17,12 @@ interface DynamicFormProps {
 */
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
-  const { formMetadata } = props;
+  const { formConfig } = props;
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
-  const currentForm = getRenderedForm(formMetadata, language);
-  const formTitle = formMetadata[getProperty("title", language)] as string;
+  const currentForm = getRenderedForm(formConfig, language);
+  const formTitle = formConfig[getProperty("title", language)] as string;
   const router = useRouter();
   const { step, urlQuery, htmlEmail } = router.query;
 
@@ -30,7 +30,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   if (step == "confirmation") {
     return (
       <TextPage
-        formMetadata={formMetadata}
+        formConfig={formConfig}
         step={step}
         urlQuery={urlQuery as string | undefined}
         htmlEmail={htmlEmail as string | undefined}
@@ -44,7 +44,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         <title>{formTitle}</title>
       </Head>
       <h1 className="gc-h1">{formTitle}</h1>
-      <Form formMetadata={formMetadata} language={language} router={router} t={t}>
+      <Form formConfig={formConfig} language={language} router={router} t={t}>
         {currentForm}
       </Form>
     </div>
