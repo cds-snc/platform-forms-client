@@ -54,7 +54,7 @@ const handleSubmit = async (jsonInput: string, formID: number | null) => {
       "Content-Type": "multipart/form-data",
     },
     data: {
-      json_config: JSON.parse(jsonInput),
+      formConfig: JSON.parse(jsonInput),
       method: formID ? "UPDATE" : "INSERT",
       formID: formID,
     },

@@ -131,7 +131,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
         if (records?.length === 1 && records[0].formConfig.form) {
           return {
             formID,
-            ...records[0].json_config?.form,
+            ...records[0].formConfig?.form,
             publishingStatus: records[0].formConfig.publishingStatus,
           };
         }
