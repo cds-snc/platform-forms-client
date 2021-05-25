@@ -5,7 +5,6 @@ import { getProperty } from "./formBuilder";
 import { logger, logMessage } from "./logger";
 import {
   FormElement,
-  FormSchemaProperties,
   Responses,
   Response,
   FormValues,

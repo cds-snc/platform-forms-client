@@ -7,7 +7,7 @@ import fs from "fs";
 import convertMessage from "../../lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "../../lib/dataLayer";
 import { logMessage } from "../../lib/logger";
-import { Responses } from "../../lib/types";
+import { PublicFormSchemaProperties, Responses } from "../../lib/types";
 
 export const config = {
   api: {
@@ -43,23 +43,26 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
   }
 };
 
-const callLambda = async (form, fields) => {
-  const submission = await getSubmissionByID(form.id);
+const callLambda = async (formID: string, fields: Responses) => {
+  const submission = await getSubmissionByID(formID);
 
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
+  const encoder = new TextEncoder();
 
   const command = new InvokeCommand({
     FunctionName: process.env.SUBMISSION_API ?? "Submission",
-    Payload: JSON.stringify({
-      form,
-      responses: fields,
-      submission,
-    }),
+    Payload: encoder.encode(
+      JSON.stringify({
+        formID,
+        responses: fields,
+        submission,
+      })
+    ),
   });
   return await lambdaClient
     .send(command)
     .then((response) => {
-      let decoder = new TextDecoder();
+      const decoder = new TextDecoder();
       const payload = decoder.decode(response.Payload);
       if (response.FunctionError || !JSON.parse(payload).status) {
         throw Error("Submission API could not process form response");
@@ -73,7 +76,7 @@ const callLambda = async (form, fields) => {
     });
 };
 
-const previewNotify = async (form, fields) => {
+const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
   const templateID = "92096ac6-1cc5-40ae-9052-fffdb8439a90";
   const notify = new NotifyClient(
     "https://api.notification.canada.ca",
@@ -87,10 +90,10 @@ const previewNotify = async (form, fields) => {
       subject: messageSubject,
       formResponse: emailBody,
     })
-    .then((response) => {
+    .then((response: { data: { html: string } }) => {
       return response.data.html;
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       logMessage.error(err);
       return "<h1>Could not preview HTML / Error in processing </h2>";
     });
@@ -143,7 +146,7 @@ const processFormData = async (
 
     // Staging or Production AWS environments
     if (process.env.SUBMISSION_API) {
-      return await callLambda(form, fields)
+      return await callLambda(form.formID, fields)
         .then(async () => {
           if (!isProduction && process.env.NOTIFY_API_KEY) {
             await previewNotify(form, fields).then((response) => {
