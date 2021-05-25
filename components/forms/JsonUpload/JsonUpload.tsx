@@ -30,7 +30,7 @@ const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             rows={20}
             name="jsonIput"
             className="gc-textarea full-height font-mono"
-            defaultValue={form ? JSON.stringify(form.json_config, null, 2) : ""}
+            defaultValue={form ? JSON.stringify(form.formConfig, null, 2) : ""}
             onChange={(e) => {
               setJsonConfig(e.currentTarget.value);
             }}

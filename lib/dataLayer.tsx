@@ -51,14 +51,14 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
       case "UPDATE":
         return {
           method,
-          json_config: payload.json_config,
-          formID: payload.formID ? parseInt(payload.formID) : undefined,
+          formConfig,
+          formID,
         };
         break;
       case "DELETE":
         return {
           method: "DELETE",
-          formID: payload.formID ? parseInt(payload.formID) : undefined,
+          formID,
         };
         break;
       default:

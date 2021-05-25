@@ -15,8 +15,8 @@ export interface FormDefinitionProperties {
 
 export interface FormDBConfigProperties {
   formID: number;
-  json_config?: FormSchemaProperties;
-  isNull?: boolean;
+  formConfig?: FormDefinitionProperties;
+  organization?: boolean;
 }
 export interface FormSchemaProperties {
   titleEn: string;
