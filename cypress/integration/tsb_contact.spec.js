@@ -36,4 +36,3 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
     );
   });
 });
-
