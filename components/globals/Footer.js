@@ -11,13 +11,13 @@ const Footer = () => {
       <div className="gc-footer-container items-start">
         <div>
           {isSplashPage() ? null : (
-            <ul>
-              <li>
+            <ul className="gc-horizontal-list">
+              <li className="gc-horizontal-item">
                 <Link href={t("footer.privacy.link")} locale={i18n.language}>
                   {t("footer.privacy.desc")}
                 </Link>
               </li>
-              <li>
+              <li className="gc-horizontal-item">
                 <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
               </li>
             </ul>

@@ -18,7 +18,7 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
   return (
     <>
       <h1 className="gc-h1">{t("title")}</h1>
-      <div className="grid grid-cols-3 md:grid-cols-1 gap-4 md:grid-flow-col">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div>
           <h3 className="gc-h3">
             {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
