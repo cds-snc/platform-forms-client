@@ -11,8 +11,8 @@ const Home = ({ formsList }) => {
   const LinksList = () => {
     return formsList.map((form) => {
       return (
-        <li key={`link-${form.id}`}>
-          <Link href={`/id/${form.id}`} locale={i18n.language}>
+        <li key={`link-${form.formID}`}>
+          <Link href={`/id/${form.formID}`} locale={i18n.language}>
             {form[getProperty("title", i18n.language)].toString()}
           </Link>
         </li>

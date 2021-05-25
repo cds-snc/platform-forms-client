@@ -428,7 +428,7 @@ async function _submitToAPI(
             : "";
         router.push(
           {
-            pathname: `/${language}/id/${formConfig.id}/confirmation`,
+            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
             query: {
               ...referrerUrl,
               htmlEmail: htmlEmail,
@@ -436,7 +436,7 @@ async function _submitToAPI(
             },
           },
           {
-            pathname: `/${language}/id/${formConfig.id}/confirmation`,
+            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
           }
         );
       } else {

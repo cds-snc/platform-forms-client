@@ -18,11 +18,11 @@ export const config = {
 const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     const incomingForm = new formidable.IncomingForm();
-    await incomingForm.parse(req, (err, fields, files) => {
+    return incomingForm.parse(req, async (err, fields, files) => {
       if (err) {
         throw new Error(err);
       }
-      processFormData(fields, files, res, req).finally(() => {
+      return await processFormData(fields, files, res, req).finally(() => {
         for (const [id] of Object.entries(files)) {
           const fileOrArray = files[id];
           if (Array.isArray(fileOrArray)) {
