@@ -13,6 +13,11 @@ export interface FormDefinitionProperties {
   form: FormSchemaProperties;
 }
 
+export interface FormDBConfigProperties {
+  formID: number;
+  json_config?: FormSchemaProperties;
+  isNull?: boolean;
+}
 export interface FormSchemaProperties {
   titleEn: string;
   titleFr: string;

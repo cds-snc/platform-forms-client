@@ -18,12 +18,15 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         ? lambdaResult.data.records
         : [];
 
-    return {
-      props: {
-        templatesJSON: templatesJSON,
-        ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
-      }, // will be passed to the page component as props
-    };
+    if (context.locale) {
+      return {
+        props: {
+          templatesJSON: templatesJSON,
+          ...(await serverSideTranslations(context.locale, ["common", "admin-templates"])),
+        }, // will be passed to the page component as props
+      };
+    }
+    return { props: {} };
   }
 });
 
