@@ -1,4 +1,3 @@
-/* commented out for sandbox
 const A11Y_OPTIONS = {
   runOnly: {
     type: "tag",
@@ -12,9 +11,8 @@ describe("Accessibility (A11Y) Check", { baseUrl: "http://localhost:3000" }, () 
     cy.checkA11y(null, A11Y_OPTIONS);
   });
   it("CDS Platform Intake Form Passes accessibility tests", () => {
-    cy.visit("/en/id/20");
+    cy.visit("/en/id/155");
     cy.injectAxe();
     cy.checkA11y(null, A11Y_OPTIONS);
   });
 });
-*/
