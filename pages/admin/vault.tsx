@@ -6,6 +6,7 @@ import { requireAuthentication } from "../../lib/auth";
 import { getFormByID } from "../../lib/dataLayer";
 import convertMessage from "../../lib/markdown";
 import { Button, RichText } from "../../components/forms";
+import { PublicFormSchemaProperties } from "../../lib/types";
 
 interface ResponseListInterface {
   Items: {
@@ -20,9 +21,10 @@ interface ResponseListInterface {
     };
   }[];
   Count: number;
+  formSchema?: PublicFormSchemaProperties;
 }
 
-const FormResponse = ({ Items, Count }: ResponseListInterface) => {
+const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState("");
   const [submissionID, setSubmissionID] = useState("");
@@ -30,19 +32,11 @@ const FormResponse = ({ Items, Count }: ResponseListInterface) => {
   useEffect(() => {
     if (Items.length > 0) {
       const submission = Items[index];
-      const formID = submission.FormID.S;
       setSubmissionID(submission.SubmissionID.S);
       const responseJson = JSON.parse(submission.FormSubmission.S);
-      getFormByID(formID)
-        .then((form) => {
-          return form ? convertMessage({ form, responses: responseJson }) : undefined;
-        })
-        .then((formText) => {
-          setResponse(formText ?? "");
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      setResponse(() => {
+        return formSchema ? convertMessage({ form: formSchema, responses: responseJson }) : "";
+      });
     }
   }, [index, Items]);
 
@@ -100,11 +94,15 @@ const AdminVault: React.FC = () => {
   const { t } = useTranslation("admin-vault");
 
   const [formID, setFormID] = useState("");
+  const [formSchema, setFormSchema] = useState<PublicFormSchemaProperties | undefined>(undefined);
   const [responses, setResponses] = useState<ResponseListInterface>({ Items: [], Count: 0 });
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     fetchResponses(formID);
+    getFormByID(formID).then((form) => {
+      form ? setFormSchema(form) : setFormSchema(undefined);
+    });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,7 +158,7 @@ const AdminVault: React.FC = () => {
       </div>
       <div className="border-4 rounded-lg border-black border-solid ">
         <div>
-          <FormResponse {...responses} />
+          <FormResponse {...responses} formSchema={formSchema} />
         </div>
       </div>
     </>
