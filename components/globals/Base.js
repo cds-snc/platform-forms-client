@@ -16,12 +16,12 @@ const Base = ({ children }) => {
   const {
     publicRuntimeConfig: { isProduction: isProduction },
   } = getConfig();
-  const formMetadata =
-    children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
-  const classes = getPageClassNames(formMetadata);
+  const formConfig =
+    children && children.props && children.props.formConfig ? children.props.formConfig : null;
+  const classes = getPageClassNames(formConfig);
 
-  const isAdmin = true;
-  const isEmbeddable = formMetadata && children && children.props && children.props.isEmbeddable;
+  const isAdmin = children && children.props && children.props.user;
+  const isEmbeddable = formConfig && children && children.props && children.props.isEmbeddable;
 
   return (
     <>
@@ -58,8 +58,8 @@ const Base = ({ children }) => {
         {!isEmbeddable && (
           <header>
             <PhaseBanner />
-            <Fip formMetadata={formMetadata} />
-            {isAdmin && <AdminNav />}
+            <Fip formConfig={formConfig} />
+            {isAdmin && <AdminNav user={children.props.user} />}
           </header>
         )}
         <main id="content">{children}</main>

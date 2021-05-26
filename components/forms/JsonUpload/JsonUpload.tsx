@@ -30,7 +30,7 @@ const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             rows={20}
             name="jsonIput"
             className="gc-textarea full-height font-mono"
-            defaultValue={form ? JSON.stringify(form.json_config, null, 2) : ""}
+            defaultValue={form ? JSON.stringify(form.formConfig, null, 2) : ""}
             onChange={(e) => {
               setJsonConfig(e.currentTarget.value);
             }}
@@ -54,7 +54,7 @@ const handleSubmit = async (jsonInput: string, formID: number | null) => {
       "Content-Type": "multipart/form-data",
     },
     data: {
-      json_config: JSON.parse(jsonInput),
+      formConfig: JSON.parse(jsonInput),
       method: formID ? "UPDATE" : "INSERT",
       formID: formID,
     },

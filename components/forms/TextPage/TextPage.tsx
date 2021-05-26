@@ -2,7 +2,7 @@ import React from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
-import { FormMetadataProperties } from "../../../lib/types";
+import { FormSchemaProperties } from "../../../lib/types";
 import { TFunction } from "next-i18next";
 import { getProperty } from "../../../lib/formBuilder";
 
@@ -11,7 +11,7 @@ import { getProperty } from "../../../lib/formBuilder";
 */
 
 interface TextPageProps {
-  formMetadata: FormMetadataProperties;
+  formConfig: FormSchemaProperties;
   htmlEmail: string | undefined;
   urlQuery: string | undefined;
   step: string | string[] | undefined;
@@ -38,12 +38,12 @@ const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undef
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { t, i18n } = useTranslation("confirmation");
-  const { urlQuery, htmlEmail, formMetadata } = props;
+  const { urlQuery, htmlEmail, formConfig } = props;
   const language = i18n.language as string;
 
   const pageText =
-    formMetadata && formMetadata.endPage
-      ? formMetadata.endPage[getProperty("description", language)]
+    formConfig && formConfig.endPage
+      ? formConfig.endPage[getProperty("description", language)]
       : "";
 
   return (

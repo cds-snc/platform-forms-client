@@ -81,7 +81,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
   enableReinitialize: true, // needed when switching languages
 
   mapPropsToValues: (props) => {
-    return getFormInitialValues(props.formMetadata, props.language) as FormValues;
+    return getFormInitialValues(props.formConfig, props.language) as FormValues;
   },
 
   validate: (values, props) => {

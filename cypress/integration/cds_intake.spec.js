@@ -1,7 +1,6 @@
-/* commented out for sandbox
 describe("CDS Intake Form functionality", { baseUrl: "http://localhost:3000" }, () => {
   it("CDS Intake Form renders", () => {
-    cy.visit("/en/id/1");
+    cy.visit("/en/id/155");
     cy.get("h1").contains("CDS Intake Form");
   });
   it("Fill out the form", () => {
@@ -29,4 +28,3 @@ describe("CDS Intake Form functionality", { baseUrl: "http://localhost:3000" }, 
     cy.url().should("include", "/confirmation");
   });
 });
-*/

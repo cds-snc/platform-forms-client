@@ -11,8 +11,8 @@ const Sandbox = ({ formsList }) => {
   const LinksList = () => {
     return formsList.map((form) => {
       return (
-        <li key={`link-${form.id}`}>
-          <Link href={`/id/${form.id}`}>
+        <li key={`link-${form.formID}`}>
+          <Link href={`/id/${form.formID}`}>
             {form[getProperty("title", i18n.language)].toString()}
           </Link>
         </li>

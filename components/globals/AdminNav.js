@@ -3,8 +3,9 @@ import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { signOut } from "next-auth/client";
 
-const AdminNav = () => {
+const AdminNav = (props) => {
   const { t, i18n } = useTranslation("admin-login");
+  const user = props.user;
 
   return (
     <nav className="gc-admin">
@@ -22,13 +23,16 @@ const AdminNav = () => {
           <Link href="/admin/view-templates">Form templates</Link>
         </li>
         <li className="gc-horizontal-item">
-          <Link href="/admin/login" locale={i18n.language}>
-            Login
-          </Link>
-          /
-          <Link href="#" onClick={() => signOut()}>
-            Logout
-          </Link>
+          {(!user || !user.name) && (
+            <Link href="/admin/login" locale={i18n.language}>
+              Login
+            </Link>
+          )}
+          {user && user.name && (
+            <Link href="#" onClick={() => signOut()}>
+              Logout
+            </Link>
+          )}
         </li>
       </ul>
     </nav>

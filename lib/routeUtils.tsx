@@ -1,10 +1,10 @@
 import classnames from "classnames";
 import { useRouter } from "next/router";
-import { FormMetadataProperties } from "./types";
+import { FormSchemaProperties } from "./types";
 
-export const getPageClassNames = (formMetadata: FormMetadataProperties): string => {
+export const getPageClassNames = (formConfig: FormSchemaProperties): string => {
   const pageNameUrl = getPageNameUrl();
-  const brandName = formMetadata && formMetadata.brand ? formMetadata.brand.name : "";
+  const brandName = formConfig && formConfig.brand ? formConfig.brand.name : "";
   const classes = classnames(
     "outer-container",
     `page${pageNameUrl.replace(/\//g, "-")}`,
