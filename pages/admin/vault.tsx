@@ -32,27 +32,36 @@ const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
   const { t } = useTranslation("admin-vault");
 
   useEffect(() => {
-    if (Items.length > 0) {
+    if (Items.length > 0 && formSchema) {
       const submission = Items[index];
-      setSubmissionID(submission.SubmissionID.S);
       const responseJson = JSON.parse(submission.FormSubmission.S);
-      setResponse(() => {
-        return formSchema ? convertMessage({ form: formSchema, responses: responseJson }) : "";
-      });
+      const message = convertMessage({ form: formSchema, responses: responseJson });
+      setResponse(message);
+      setSubmissionID(submission.SubmissionID.S);
     }
-  }, [index, Items]);
+  }, [index, Items, formSchema]);
 
   useEffect(() => {
     setIndex(0);
-  }, [formSchema, Count]);
+  }, [formSchema]);
 
   if (Count > 0) {
     return (
       <>
-        <div className="border-b-4 pl-4">
-          <p>{`Response ${index + 1} of ${Count}`}</p>
-          <p>{`Submission ID: ${submissionID}`}</p>
+        <div className="border-b-4">
+          <div className="flex items-center">
+            <div className="pl-4 flex-auto">
+              <p>{`Response ${index + 1} of ${Count}`}</p>
+            </div>
+            <div className="flex-auto">
+              <Button className="gc-button rounded-lg float-right" type="button" onClick={() => {}}>
+                {t("removeButton")}
+              </Button>
+            </div>
+          </div>
+          <p className="pl-4">{`Submission ID: ${submissionID}`}</p>{" "}
         </div>
+
         <div className="p-5">
           <RichText className="email-preview">{response}</RichText>
         </div>
@@ -103,16 +112,19 @@ const AdminVault: React.FC = () => {
   const [formSchema, setFormSchema] = useState<PublicFormSchemaProperties | undefined>(undefined);
   const [responses, setResponses] = useState<ResponseListInterface>({ Items: [], Count: 0 });
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    fetchResponses(formID);
-    getFormByID(formID).then((form) => {
-      form ? setFormSchema(form) : setFormSchema(undefined);
-    });
+    Promise.all([fetchResponses(formID), fetchForm(formID)]);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormID(event.target.value);
+  };
+
+  const fetchForm = async (formID: string) => {
+    await getFormByID(formID).then((form) => {
+      form ? setFormSchema(form) : setFormSchema(undefined);
+    });
   };
 
   const fetchResponses = async (formID: string) => {
@@ -156,7 +168,7 @@ const AdminVault: React.FC = () => {
               onChange={handleChange}
             />
 
-            <Button className="gc-button" type="submit">
+            <Button className="gc-button rounded-lg " type="submit">
               {t("submitButton")}
             </Button>
           </div>
