@@ -36,25 +36,33 @@ const handleDelete = async (formID: number) => {
   return resp.status;
 };
 
-const FormSettings = (props: FormSettingsProps): React.ReactElement => {
+export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const { form } = props;
   const router = useRouter();
   const { t } = useTranslation("admin-templates");
   return (
     <>
       <h1 className="gc-h1">{t("settings.title")}</h1>
-      <div>Form ID: {form.formID}</div>
+      <div data-testid="formID">Form ID: {form.formID}</div>
       <h2>Edit Form Config File:</h2>
       <JSONUpload form={form}></JSONUpload>
       <br />
       <Button
         onClick={async () => {
-          const resp = await handleDelete(form.formID);
-          if (resp == 200)
-            router.push({
-              pathname: `/admin/view-templates`,
-            });
+          try {
+            const resp = await handleDelete(form.formID);
+            if (resp == 200) {
+              router.push({
+                pathname: `/admin/view-templates`,
+              });
+            } else {
+              console.error(JSON.stringify(resp));
+            }
+          } catch (e) {
+            console.error(e);
+          }
         }}
+        testid="delete"
         type="button"
       >
         {t("settings.delete")}
