@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
-import { FormSettings, } from "./Settings";
+import { FormSettings } from "./Settings";
 import mockedAxios from "axios";
 import { useRouter } from "next/router";
 
