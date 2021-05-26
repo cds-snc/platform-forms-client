@@ -2,9 +2,14 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { signOut } from "next-auth/client";
+import { AuthenticatedUser } from "../../lib/types";
 
-const AdminNav = (props) => {
-  const { t, i18n } = useTranslation("admin-login");
+type AdminNavProps = {
+  user: AuthenticatedUser;
+};
+
+const AdminNav = (props: AdminNavProps): React.ReactElement => {
+  const { i18n } = useTranslation("admin-login");
   const user = props.user;
 
   return (
