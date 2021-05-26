@@ -17,6 +17,7 @@ const Base = ({ children }) => {
   } = getConfig();
   const formMetadata =
     children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
+  const isEmbeddable = formMetadata && children && children.props && children.props.isEmbeddable;
   const classes = getPageClassNames(formMetadata);
 
   return (
@@ -51,12 +52,14 @@ const Base = ({ children }) => {
       </Head>
       <SkipLink />
       <div className={classes}>
-        <header>
-          <PhaseBanner />
-          <Fip formMetadata={formMetadata} />
-        </header>
+        {!isEmbeddable && (
+          <header>
+            <PhaseBanner />
+            <Fip formMetadata={formMetadata} />
+          </header>
+        )}
         <main id="content">{children}</main>
-        <Footer />
+        {!isEmbeddable && <Footer />}
       </div>
     </>
   );
