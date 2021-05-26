@@ -29,6 +29,8 @@ const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
   const [response, setResponse] = useState("");
   const [submissionID, setSubmissionID] = useState("");
 
+  const { t } = useTranslation("admin-vault");
+
   useEffect(() => {
     if (Items.length > 0) {
       const submission = Items[index];
@@ -39,6 +41,10 @@ const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
       });
     }
   }, [index, Items]);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [formSchema, Count]);
 
   if (Count > 0) {
     return (
@@ -61,7 +67,7 @@ const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
                 setIndex(goTo >= 0 ? goTo : 0);
               }}
             >
-              Back
+              {t("backButton")}
             </Button>
           ) : null}
 
@@ -75,7 +81,7 @@ const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
                 setIndex(goTo >= 0 ? goTo : 0);
               }}
             >
-              Next
+              {t("nextButton")}
             </Button>
           ) : null}
         </div>
@@ -84,7 +90,7 @@ const FormResponse = ({ Items, Count, formSchema }: ResponseListInterface) => {
   } else {
     return (
       <>
-        <h3>No Responses for selected form</h3>
+        <h3>{t("noResponse")}</h3>
       </>
     );
   }
