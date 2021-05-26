@@ -8,8 +8,9 @@ const retrieval = async (req, res) => {
   if (session) {
     const formID = req.body.formID ? req.body.formID : null;
     const action = req.body.action ? req.body.action : null;
-    if (!formID) {
-      throw new Error("No form ID specified");
+    const responseID = req.body.responseID ? req.body.responseID : null;
+    if (!formID && !responseID) {
+      throw new Error("No form ID or response ID specified");
     }
 
     const lambdaClient = new LambdaClient({ region: "ca-central-1" });
@@ -19,13 +20,14 @@ const retrieval = async (req, res) => {
       Payload: JSON.stringify({
         formID,
         action,
+        responseID,
       }),
     });
     return await lambdaClient
       .send(command)
       .then((response) => {
         if (response.FunctionError) {
-          throw Error("Submission API could not process form response");
+          throw Error("Retrieval API could not process form response");
         } else {
           logMessage.info("Lambda Retrieval Client successfully triggered");
         }
@@ -33,9 +35,9 @@ const retrieval = async (req, res) => {
         let decoder = new TextDecoder();
         const payload = JSON.parse(decoder.decode(response.Payload));
 
-        const { Items, Count } = payload;
+        const { Items } = payload;
 
-        res.status(200).json({ Items, Count });
+        res.status(200).json({ Items });
       })
       .catch((err) => {
         logMessage.error(err);
