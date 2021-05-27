@@ -7,7 +7,7 @@ interface JSONUploadProps {
   form?: FormDBConfigProperties;
 }
 
-const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
+export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
   const [jsonConfig, setJsonConfig] = useState("");
   const { form } = props;
@@ -28,8 +28,9 @@ const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
           <textarea
             id="jsonInput"
             rows={20}
-            name="jsonIput"
+            name="jsonInput"
             className="gc-textarea full-height font-mono"
+            data-testid="jsonInput"
             defaultValue={form ? JSON.stringify(form.formConfig, null, 2) : ""}
             onChange={(e) => {
               setJsonConfig(e.currentTarget.value);

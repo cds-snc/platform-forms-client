@@ -1,0 +1,10 @@
+{
+  "title": "Coffre de formulaires",
+  "subTitle": "Vos submissions",
+  "formInput": "Formulaire pour recueillir les submissions",
+  "submitButton": "Recueillir les submissions",
+  "noResponse": "Aucune submission pour cette formualire",
+  "nextButton": "Prochain",
+  "backButton": "Précédent",
+  "removeButton": "Traité"
+}
