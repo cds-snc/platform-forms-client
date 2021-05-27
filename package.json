@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "yarn migrate && next start -p ${PORT:-3000}",
     "migrate": "cd ./migrations && yarn migrate && cd ..",
-    "start:test": "NODE_ENV=test next start",
+    "start:test": "CYPRESS=true next start",
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",
