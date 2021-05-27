@@ -2,25 +2,45 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { FormDBConfigProperties } from "../../../lib/types";
+import { useRouter } from "next/router";
 
 interface JSONUploadProps {
   form?: FormDBConfigProperties;
 }
 
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
-  const { t } = useTranslation("admin-templates");
-  const [jsonConfig, setJsonConfig] = useState("");
+  const { t, i18n } = useTranslation("admin-templates");
   const { form } = props;
 
+  const [jsonConfig, setJsonConfig] = useState(form ? JSON.stringify(form.formConfig) : "");
+  const [submitStatus, setSubmitStatus] = useState("");
+
   const formID = form ? form.formID : null;
+  const router = useRouter();
 
   return (
     <>
       <div>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            handleSubmit(jsonConfig, formID);
+            const resp = await handleSubmit(jsonConfig, formID);
+            console.log(resp);
+            // If the server returned a record, this is a new record
+            // Redirect to the appropriate page
+            if (resp && resp.data && resp.data.data && resp.data.data.records) {
+              const formID = resp.data.data.records[0].formID;
+              router.push({
+                pathname: `/${i18n.language}/id/${formID}/settings`,
+                query: {
+                  newForm: true,
+                },
+              });
+            } else if (resp) {
+              // If not, but response was successful,
+              // update the page text to show a success
+              setSubmitStatus(t("upload.success"));
+            }
           }}
           method="POST"
           encType="multipart/form-data"
@@ -40,6 +60,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             <button type="submit" className="gc-button">
               {t("upload.submit")}
             </button>
+            <span id="submitStatus">{submitStatus}</span>
           </div>
         </form>
       </div>
@@ -62,9 +83,7 @@ const handleSubmit = async (jsonInput: string, formID: number | null) => {
     timeout: 0,
   })
     .then((serverResponse) => {
-      // TODO - indicate success
       jsonInput = "";
-      console.log(serverResponse);
       return serverResponse;
     })
     .catch((err) => {
