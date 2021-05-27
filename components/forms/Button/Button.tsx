@@ -8,12 +8,13 @@ interface ButtonProps {
   base?: boolean;
   size?: "big";
   unstyled?: boolean;
+  testid?: string;
 }
 
 export const Button = (
   props: ButtonProps & JSX.IntrinsicElements["button"]
 ): React.ReactElement => {
-  const { type, children, secondary, base, onClick, className } = props;
+  const { type, children, secondary, base, onClick, className, testid } = props;
 
   const classes = classnames(
     "gc-button",
@@ -25,7 +26,12 @@ export const Button = (
   );
 
   return (
-    <button type={type} className={classes} onClick={onClick} data-testid="button">
+    <button
+      type={type}
+      className={classes}
+      onClick={onClick}
+      data-testid={testid ? testid : "button"}
+    >
       {children}
     </button>
   );

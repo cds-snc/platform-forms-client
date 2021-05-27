@@ -145,7 +145,10 @@ const processFormData = async (
     /// Pick up here on Monday morning!!
 
     // Staging or Production AWS environments
-    if (process.env.SUBMISSION_API) {
+    if (process.env.NODE_ENV === "test") {
+      logMessage.info("Not Sending Email - Test mode");
+      return res.status(200).json({ received: true });
+    } else if (process.env.SUBMISSION_API) {
       return await callLambda(form.formID, fields)
         .then(async () => {
           if (!isProduction && process.env.NOTIFY_API_KEY) {
@@ -162,13 +165,10 @@ const processFormData = async (
         });
     }
     // Local development and Heroku
-    else if (process.env.NOTIFY_API_KEY && process.env.NODE_ENV !== "test") {
+    else if (process.env.NOTIFY_API_KEY) {
       return await previewNotify(form, fields).then((response) => {
         return res.status(201).json({ received: true, htmlEmail: response });
       });
-    } else {
-      logMessage.info("Not Sending Email - Test mode");
-      return res.status(200).json({ received: true });
     }
   } catch (err) {
     logMessage.error(err);
