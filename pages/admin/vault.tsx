@@ -6,6 +6,7 @@ import { requireAuthentication } from "../../lib/auth";
 import { getFormByID } from "../../lib/dataLayer";
 import convertMessage from "../../lib/markdown";
 import { Button, RichText } from "../../components/forms";
+import { PublicFormSchemaProperties } from "../../lib/types";
 
 interface ResponseListInterface {
   Items: {
@@ -19,99 +20,142 @@ interface ResponseListInterface {
       S: string;
     };
   }[];
-  Count: number;
 }
 
-const FormResponse = ({ Items, Count }: ResponseListInterface) => {
+const FormResponse = ({
+  Items,
+  formSchema,
+  fetchResponses,
+}: ResponseListInterface & { formSchema?: PublicFormSchemaProperties } & {
+  fetchResponses: () => void;
+}) => {
   const [index, setIndex] = useState(0);
+  const [submissionArray, setSubmissionArray] = useState(Items);
   const [response, setResponse] = useState("");
   const [submissionID, setSubmissionID] = useState("");
+  const { t } = useTranslation("admin-vault");
 
-  useEffect(() => {
-    if (Items.length > 0) {
-      const submission = Items[index];
-      const formID = submission.FormID.S;
-      setSubmissionID(submission.SubmissionID.S);
-      const responseJson = JSON.parse(submission.FormSubmission.S);
-      getFormByID(formID)
-        .then((form) => {
-          return form ? convertMessage({ form, responses: responseJson }) : undefined;
-        })
-        .then((formText) => {
-          setResponse(formText ?? "");
+  const removeSubmission = async () => {
+    if (submissionID) {
+      await axios({
+        url: "/api/retrieval",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json ",
+        },
+        data: { responseID: submissionID, action: "DELETE" },
+      })
+        .then(() => {
+          if (submissionArray.length === 1) {
+            // This is the last entry in the array.
+            // Fetch more from server or show there are none left.
+            fetchResponses();
+          } else {
+            setIndex((index) => (index === submissionArray.length - 1 ? index - 1 : index));
+            setSubmissionArray((subArray) =>
+              subArray.filter((item) => item.SubmissionID.S !== submissionID)
+            );
+          }
         })
         .catch((err) => {
           console.error(err);
         });
     }
-  }, [index, Items]);
+  };
 
-  if (Count > 0) {
-    return (
-      <>
-        <div className="border-b-4 pl-4">
-          <p>{`Response ${index + 1} of ${Count}`}</p>
-          <p>{`Submission ID: ${submissionID}`}</p>
-        </div>
-        <div className="p-5">
-          <RichText className="email-preview">{response}</RichText>
-        </div>
-        <div className="inline-block justify-center flex space-x-20">
-          {index > 0 ? (
-            <Button
-              className="gc-button rounded-lg float-left"
-              type="button"
-              onClick={() => {
-                const goTo = index - 1;
+  useEffect(() => {
+    if (submissionArray.length > 0 && formSchema) {
+      const submission = submissionArray[index];
+      const responseJson = JSON.parse(submission.FormSubmission.S);
+      const message = convertMessage({ form: formSchema, responses: responseJson });
+      setResponse(message);
+      setSubmissionID(submission.SubmissionID.S);
+    }
+  }, [index, submissionArray, formSchema]);
 
-                setIndex(goTo >= 0 ? goTo : 0);
-              }}
-            >
-              Back
-            </Button>
-          ) : null}
+  useEffect(() => {
+    setIndex(0);
+    setSubmissionArray(Items);
+  }, [formSchema, Items]);
 
-          {index < Count - 1 ? (
+  return (
+    <>
+      <div className="border-b-4">
+        <div className="flex items-center">
+          <div className="pl-4 flex-auto">
+            <p>{`Response ${index + 1} of ${submissionArray.length}`}</p>
+          </div>
+          <div className="flex-auto">
             <Button
               className="gc-button rounded-lg float-right"
               type="button"
-              onClick={() => {
-                const goTo = index + 1;
-
-                setIndex(goTo >= 0 ? goTo : 0);
-              }}
+              onClick={removeSubmission}
             >
-              Next
+              {t("removeButton")}
             </Button>
-          ) : null}
+          </div>
         </div>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <h3>No Responses for selected form</h3>
-      </>
-    );
-  }
-};
+        <p className="pl-4">{`Submission ID: ${submissionID}`}</p>{" "}
+      </div>
 
+      <div className="p-5">
+        <RichText className="email-preview">{response}</RichText>
+      </div>
+      <div className="inline-block justify-center flex space-x-20">
+        {index > 0 ? (
+          <Button
+            className="gc-button rounded-lg float-left"
+            type="button"
+            onClick={() => {
+              const goTo = index - 1;
+
+              setIndex(goTo >= 0 ? goTo : 0);
+            }}
+          >
+            {t("backButton")}
+          </Button>
+        ) : null}
+
+        {index < submissionArray.length - 1 ? (
+          <Button
+            className="gc-button rounded-lg float-right"
+            type="button"
+            onClick={() => {
+              const goTo = index + 1;
+
+              setIndex(goTo >= 0 ? goTo : 0);
+            }}
+          >
+            {t("nextButton")}
+          </Button>
+        ) : null}
+      </div>
+    </>
+  );
+};
 const AdminVault: React.FC = () => {
   const { t } = useTranslation("admin-vault");
 
   const [formID, setFormID] = useState("");
-  const [responses, setResponses] = useState<ResponseListInterface>({ Items: [], Count: 0 });
+  const [formSchema, setFormSchema] = useState<PublicFormSchemaProperties | undefined>(undefined);
+  const [responses, setResponses] = useState<ResponseListInterface>({ Items: [] });
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    fetchResponses(formID);
+    Promise.all([fetchResponses(), fetchForm()]);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormID(event.target.value);
   };
 
-  const fetchResponses = async (formID: string) => {
+  const fetchForm = async () => {
+    await getFormByID(formID).then((form) => {
+      form ? setFormSchema(form) : setFormSchema(undefined);
+    });
+  };
+
+  const fetchResponses = async () => {
     if (formID) {
       await axios({
         url: "/api/retrieval",
@@ -126,10 +170,10 @@ const AdminVault: React.FC = () => {
         })
         .catch((err) => {
           console.error(err);
-          setResponses({ Items: [], Count: 0 });
+          setResponses({ Items: [] });
         });
     } else {
-      setResponses({ Items: [], Count: 0 });
+      setResponses({ Items: [] });
     }
   };
 
@@ -152,7 +196,7 @@ const AdminVault: React.FC = () => {
               onChange={handleChange}
             />
 
-            <Button className="gc-button" type="submit">
+            <Button className="gc-button rounded-lg " type="submit">
               {t("submitButton")}
             </Button>
           </div>
@@ -160,7 +204,11 @@ const AdminVault: React.FC = () => {
       </div>
       <div className="border-4 rounded-lg border-black border-solid ">
         <div>
-          <FormResponse {...responses} />
+          {responses.Items.length ? (
+            <FormResponse {...responses} formSchema={formSchema} fetchResponses={fetchResponses} />
+          ) : (
+            <h3>{t("noResponse")}</h3>
+          )}
         </div>
       </div>
     </>

@@ -142,10 +142,8 @@ const processFormData = async (
       responses: reqFields,
     });
 
-    /// Pick up here on Monday morning!!
-
     // Staging or Production AWS environments
-    if (process.env.NODE_ENV === "test") {
+    if (process.env.CYPRESS) {
       logMessage.info("Not Sending Email - Test mode");
       return res.status(200).json({ received: true });
     } else if (process.env.SUBMISSION_API) {
@@ -169,6 +167,8 @@ const processFormData = async (
       return await previewNotify(form, fields).then((response) => {
         return res.status(201).json({ received: true, htmlEmail: response });
       });
+    } else {
+      return res.status(400).json({ received: false });
     }
   } catch (err) {
     logMessage.error(err);

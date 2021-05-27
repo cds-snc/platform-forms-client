@@ -2,5 +2,9 @@
   "title": "Forms Vault",
   "subTitle": "Your form responses",
   "formInput": "Form to get responses for",
-  "submitButton": "Look up responses"
+  "submitButton": "Look up responses",
+  "noResponse": "No Responses for selected form",
+  "nextButton": "Next",
+  "backButton": "Previous",
+  "removeButton": "Processed"
 }
