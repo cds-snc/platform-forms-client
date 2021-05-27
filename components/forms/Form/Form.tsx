@@ -19,7 +19,7 @@ const {
 
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
-  const [submitting, setSubmitting] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
