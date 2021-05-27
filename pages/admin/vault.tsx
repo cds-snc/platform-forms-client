@@ -20,10 +20,15 @@ interface ResponseListInterface {
       S: string;
     };
   }[];
-  formSchema?: PublicFormSchemaProperties;
 }
 
-const FormResponse = ({ Items, formSchema }: ResponseListInterface) => {
+const FormResponse = ({
+  Items,
+  formSchema,
+  fetchResponses,
+}: ResponseListInterface & { formSchema?: PublicFormSchemaProperties } & {
+  fetchResponses: () => void;
+}) => {
   const [index, setIndex] = useState(0);
   const [submissionArray, setSubmissionArray] = useState(Items);
   const [response, setResponse] = useState("");
@@ -41,10 +46,16 @@ const FormResponse = ({ Items, formSchema }: ResponseListInterface) => {
         data: { responseID: submissionID, action: "DELETE" },
       })
         .then(() => {
-          setSubmissionArray((subArray) =>
-            subArray.filter((item) => item.SubmissionID.S !== submissionID)
-          );
-          setIndex((index) => (index === submissionArray.length - 1 ? index - 1 : index));
+          if (submissionArray.length === 1) {
+            // This is the last entry in the array.
+            // Fetch more from server or show there are none left.
+            fetchResponses();
+          } else {
+            setIndex((index) => (index === submissionArray.length - 1 ? index - 1 : index));
+            setSubmissionArray((subArray) =>
+              subArray.filter((item) => item.SubmissionID.S !== submissionID)
+            );
+          }
         })
         .catch((err) => {
           console.error(err);
@@ -131,20 +142,20 @@ const AdminVault: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    Promise.all([fetchResponses(formID), fetchForm(formID)]);
+    Promise.all([fetchResponses(), fetchForm()]);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormID(event.target.value);
   };
 
-  const fetchForm = async (formID: string) => {
+  const fetchForm = async () => {
     await getFormByID(formID).then((form) => {
       form ? setFormSchema(form) : setFormSchema(undefined);
     });
   };
 
-  const fetchResponses = async (formID: string) => {
+  const fetchResponses = async () => {
     if (formID) {
       await axios({
         url: "/api/retrieval",
@@ -194,7 +205,7 @@ const AdminVault: React.FC = () => {
       <div className="border-4 rounded-lg border-black border-solid ">
         <div>
           {responses.Items.length ? (
-            <FormResponse {...responses} formSchema={formSchema} />
+            <FormResponse {...responses} formSchema={formSchema} fetchResponses={fetchResponses} />
           ) : (
             <h3>{t("noResponse")}</h3>
           )}
