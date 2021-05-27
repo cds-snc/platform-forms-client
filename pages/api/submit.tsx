@@ -120,6 +120,11 @@ const processFormData = async (
       }`
     );
 
+    if (process.env.CYPRESS) {
+      logMessage.info("Not Sending Email - Test mode");
+      return await setTimeout(() => res.status(200).json({ received: true }), 1000);
+    }
+
     // Add file S3 urls to payload once we start processing files through reliability queue
     // For now just attach the file names
     for (const [key, value] of Object.entries(files)) {
@@ -143,10 +148,7 @@ const processFormData = async (
     });
 
     // Staging or Production AWS environments
-    if (process.env.CYPRESS) {
-      logMessage.info("Not Sending Email - Test mode");
-      return res.status(200).json({ received: true });
-    } else if (process.env.SUBMISSION_API) {
+    if (process.env.SUBMISSION_API) {
       return await callLambda(form.formID, fields)
         .then(async () => {
           if (!isProduction && process.env.NOTIFY_API_KEY) {
@@ -167,9 +169,9 @@ const processFormData = async (
       return await previewNotify(form, fields).then((response) => {
         return res.status(201).json({ received: true, htmlEmail: response });
       });
-    } else {
-      return res.status(400).json({ received: false });
     }
+
+    return res.status(400).json({ received: false });
   } catch (err) {
     logMessage.error(err);
     return res.status(500).json({ received: false });
