@@ -10,9 +10,10 @@ interface JSONUploadProps {
 
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
-  const [jsonConfig, setJsonConfig] = useState("");
-  const [submitStatus, setSubmitStatus] = useState("");
   const { form } = props;
+
+  const [jsonConfig, setJsonConfig] = useState(form ? JSON.stringify(form.formConfig) : "");
+  const [submitStatus, setSubmitStatus] = useState("");
 
   const formID = form ? form.formID : null;
   const router = useRouter();
