@@ -17,6 +17,9 @@ describe("Form Settings Page", () => {
     formConfig: { test: "test JSON" },
   };
   test("renders without errors", () => {
+    useRouter.mockImplementation(() => ({
+      query: {},
+    }));
     render(<FormSettings form={form}></FormSettings>);
     expect(screen.queryByText("Form ID: 15")).toBeInTheDocument();
   });
@@ -33,6 +36,9 @@ describe("Form Settings Page", () => {
     render(<FormSettings form={form}></FormSettings>);
 
     await fireEvent.click(screen.queryByTestId("delete"));
+    expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
+
+    await fireEvent.click(screen.queryByTestId("confirmDelete"));
     expect(push).toHaveBeenCalled();
   });
 });
