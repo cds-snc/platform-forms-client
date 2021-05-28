@@ -70,45 +70,54 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
 
   if (process.env.CYPRESS && payload.method !== "GET") {
     logMessage.info("Templates CRUD API in Test Mode");
-    await setTimeout(() => undefined, 1000);
-    const { method, formConfig } = payload;
-    switch (method) {
-      case "INSERT":
-        return {
-          data: {
-            records: [
-              {
-                formID: "TEST",
-                formConfig: formConfig ?? {
-                  publishingStatus: false,
-                  submission: {},
-                  form: {
-                    titleEn: "test",
-                    titleFr: "test",
-                    layout: [],
-                    elements: [],
+    const timer = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(undefined);
+        }, 1000);
+      });
+    };
+
+    return timer().then(() => {
+      const { method, formConfig } = payload;
+      switch (method) {
+        case "INSERT":
+          return {
+            data: {
+              records: [
+                {
+                  formID: "TEST",
+                  formConfig: formConfig ?? {
+                    publishingStatus: false,
+                    submission: {},
+                    form: {
+                      titleEn: "test",
+                      titleFr: "test",
+                      layout: [],
+                      elements: [],
+                    },
                   },
+                  organization: false,
                 },
-                organization: false,
-              },
-            ],
-          },
-        };
-      case "UPDATE":
-        return {
-          data: {},
-        };
-        break;
-      case "DELETE":
-        return {
-          data: {},
-        };
-        break;
-      default:
-        return {
-          data: {},
-        };
-    }
+              ],
+            },
+          };
+        case "UPDATE":
+          return {
+            data: {},
+          };
+          break;
+        case "DELETE":
+          return {
+            data: {},
+          };
+          break;
+        default:
+          return {
+            data: {},
+          };
+      }
+    });
   }
 
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
