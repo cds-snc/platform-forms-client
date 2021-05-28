@@ -34,9 +34,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             </Link>
           )}
           {user && user.name && (
-            <Link href="#" onClick={() => signOut()}>
+            <button className="gc-button-link" onClick={() => signOut()}>
               Logout
-            </Link>
+            </button>
           )}
         </li>
       </ul>

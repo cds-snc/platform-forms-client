@@ -147,17 +147,20 @@ a:visited {
   @apply text-purple-default;
 }
 
-a {
+a,
+.gc-button-link {
   @apply underline text-blue-dark hover:text-blue-hover;
 }
 
-a:focus {
+a:focus,
+.gc-button-link:focus {
   outline: none;
   box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
   @apply bg-blue-dark text-white-default;
 }
 
-a:active {
+a:active,
+.gc-button-link:active {
   box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
   @apply underline bg-blue-active;
 }
