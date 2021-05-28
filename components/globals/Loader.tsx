@@ -1,6 +1,6 @@
 import React from "react";
 import { css } from "@emotion/react";
-import Loader from "react-spinners/PacmanLoader";
+import Loader from "react-spinners/PropagateLoader";
 
 interface CustomLoaderProps {
   loading: boolean;
@@ -8,14 +8,16 @@ interface CustomLoaderProps {
 }
 
 const override = css`
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const CustomLoader = ({ loading, message }: CustomLoaderProps): React.ReactElement => {
   return (
-    <div role="status">
-      <p className="pb-6">{message}</p>
-      <Loader loading={loading} color="#00703C" size="100px" margin="2px" css={override} />
+    <div role="status" className="text-center">
+      <p className="pb-8">{message}</p>
+      <Loader loading={loading} color="#00703C" size="25px" css={override} />
     </div>
   );
 };
