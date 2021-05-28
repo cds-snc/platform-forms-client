@@ -70,14 +70,16 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
 
   if (process.env.CYPRESS && payload.method !== "GET") {
     logMessage.info("Templates CRUD API in Test Mode");
-    switch (payload.method) {
+    await setTimeout(() => undefined, 1000);
+    const { method, formConfig } = payload;
+    switch (method) {
       case "INSERT":
         return {
           data: {
             records: [
               {
                 formID: "TEST",
-                formConfig: payload.formConfig ?? {
+                formConfig: formConfig ?? {
                   publishingStatus: false,
                   submission: {},
                   form: {
