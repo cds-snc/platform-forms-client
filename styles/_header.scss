@@ -55,6 +55,10 @@
     @apply underline bg-blue-active;
   }
 }
+// ADMIN HEADER
+.gc-admin {
+  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 border-t-1 border-b-1 mb-20 py-5 flex items-center px-64;
+}
 
 header {
   .canada-flag {

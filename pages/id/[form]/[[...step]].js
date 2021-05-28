@@ -6,6 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 export async function getServerSideProps(context) {
   let form = null;
   const formId = context.params.form;
+  const isEmbeddable = (context.query.embed && context.query.embed == "true") || null;
   const {
     publicRuntimeConfig: { isProduction: isProduction },
   } = getConfig();
@@ -34,6 +35,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       formConfig: form,
+      isEmbeddable: isEmbeddable,
       ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
     }, // will be passed to the page component as props
   };
