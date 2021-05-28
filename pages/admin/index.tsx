@@ -27,10 +27,6 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
           <p className="text-sm mb-8">
             {t("logged-in")} {user.email}
           </p>
-
-          <Button type="button" onClick={() => signOut()}>
-            {t("button.logout")}
-          </Button>
         </div>
 
         <div className="flex-auto mb-10 w-60">
