@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import Loader from "react-spinners/PropagateLoader";
 
 interface CustomLoaderProps {
-  loading: boolean;
+  loading?: boolean;
   message: string;
 }
 
@@ -13,7 +13,10 @@ const override = css`
   align-items: center;
 `;
 
-export const CustomLoader = ({ loading, message }: CustomLoaderProps): React.ReactElement => {
+export const CustomLoader = ({
+  loading = true,
+  message,
+}: CustomLoaderProps): React.ReactElement => {
   return (
     <div role="status" className="text-center">
       <p className="pb-8">{message}</p>
