@@ -152,6 +152,6 @@ module.exports = {
   variants: {
     extend: {},
   },
-  purge: ["./components/**/*.tsx", "./pages/**/*.js"],
+  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("tailwindcss"), require("precss"), require("autoprefixer")],
 };
