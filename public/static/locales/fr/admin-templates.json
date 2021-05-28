@@ -1,0 +1,21 @@
+{
+  "upload": {
+    "title": "Télécharger un modèle de formulaire JSON",
+    "edit-title": "Modifier le modèle de formulaire JSON",
+    "submit": "Télécharger",
+    "success": "JSON téléchargé avec succès."
+  },
+  "view": {
+    "title": "Voir le modèle de formulaire JSON",
+    "expand": "Élargir",
+    "collapse": "Collapse",
+    "update": "Modifier"
+  },
+  "settings": {
+    "title": "Paramètres du formulaire",
+    "delete": "Supprimer le formulaire",
+    "delete-check": "Êtes-vous sûr de vouloir supprimer ce formulaire ?",
+    "confirm-delete": "Confirmer Supprimer",
+    "new": "Le formulaire a été créé avec succès"
+  }
+}

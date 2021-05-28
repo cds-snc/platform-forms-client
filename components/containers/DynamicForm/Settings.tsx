@@ -41,7 +41,12 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const router = useRouter();
   const { t } = useTranslation("admin-templates");
 
-  const newText = router.query && router.query.newForm ? t("settings.new") : "";
+  const newText =
+    router.query && router.query.newForm ? (
+      <p className="gc-confirmation-banner">{t("settings.new")}</p>
+    ) : (
+      ""
+    );
 
   const [deleteVisible, setDeleteVisible] = useState(false);
 
@@ -65,6 +70,7 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         }}
         testid="confirmDelete"
         type="button"
+        destructive={true}
       >
         {t("settings.confirm-delete")}
       </Button>
@@ -76,10 +82,10 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   return (
     <>
       <h1 className="gc-h1">{t("settings.title")}</h1>
-      <div>
-        <p>{newText}</p>
+      <div>{newText}</div>
+      <div data-testid="formID" className="mb-4">
+        Form ID: {form.formID}
       </div>
-      <div data-testid="formID">Form ID: {form.formID}</div>
       <h2>Edit Form Config File:</h2>
       <JSONUpload form={form}></JSONUpload>
       <br />
@@ -87,6 +93,7 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         <Button
           type="button"
           testid="delete"
+          destructive={true}
           onClick={() => {
             setDeleteVisible(!deleteVisible);
           }}

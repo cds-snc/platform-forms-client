@@ -9,18 +9,20 @@ interface ButtonProps {
   size?: "big";
   unstyled?: boolean;
   testid?: string;
+  destructive?: boolean;
 }
 
 export const Button = (
   props: ButtonProps & JSX.IntrinsicElements["button"]
 ): React.ReactElement => {
-  const { type, children, secondary, base, onClick, className, testid } = props;
+  const { type, children, secondary, base, onClick, className, testid, destructive } = props;
 
   const classes = classnames(
     "gc-button",
     {
       "gc-button--secondary": secondary,
       "gc-button--base": base,
+      "gc-button--destructive": destructive,
     },
     className
   );
