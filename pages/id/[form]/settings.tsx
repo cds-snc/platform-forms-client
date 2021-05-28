@@ -13,7 +13,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   };
   const lambdaResult = await crudTemplates(payload);
 
-  if (context.locale && lambdaResult && lambdaResult.data && lambdaResult.data.records) {
+  if (context.locale && lambdaResult.data.records && lambdaResult.data.records.length > 0) {
     return {
       props: {
         form: lambdaResult.data.records[0],

@@ -68,6 +68,58 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     }
   };
 
+  if (process.env.CYPRESS && payload.method !== "GET") {
+    logMessage.info("Templates CRUD API in Test Mode");
+    const timer = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(undefined);
+        }, 1000);
+      });
+    };
+
+    return timer().then(() => {
+      const { method, formConfig } = payload;
+      switch (method) {
+        case "INSERT":
+          return {
+            data: {
+              records: [
+                {
+                  formID: "TEST",
+                  formConfig: formConfig ?? {
+                    publishingStatus: false,
+                    submission: {},
+                    form: {
+                      titleEn: "test",
+                      titleFr: "test",
+                      layout: [],
+                      elements: [],
+                    },
+                  },
+                  organization: false,
+                },
+              ],
+            },
+          };
+        case "UPDATE":
+          return {
+            data: {},
+          };
+          break;
+        case "DELETE":
+          return {
+            data: {},
+          };
+          break;
+        default:
+          return {
+            data: {},
+          };
+      }
+    });
+  }
+
   const lambdaClient = new LambdaClient({ region: "ca-central-1" });
   const encoder = new TextEncoder();
   const command = new InvokeCommand({
@@ -87,7 +139,6 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
         return null;
       } else {
         logMessage.info("Lambda Template Client successfully triggered");
-
         return JSON.parse(respPayload);
       }
     })

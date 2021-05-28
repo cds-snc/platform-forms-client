@@ -26,7 +26,6 @@ const handleDelete = async (formID: number) => {
   })
     .then((serverResponse) => {
       //success - redirect to view-templates page
-      console.log(serverResponse);
       return serverResponse;
     })
     .catch((err) => {

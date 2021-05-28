@@ -1,3 +1,5 @@
+import "react-app-polyfill/ie9";
+
 import React from "react";
 import PropTypes from "prop-types";
 import { appWithTranslation } from "next-i18next";
