@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
 import Fip from "./Fip";
+import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
 
@@ -18,6 +19,9 @@ const Base = ({ children }) => {
   const formConfig =
     children && children.props && children.props.formConfig ? children.props.formConfig : null;
   const classes = getPageClassNames(formConfig);
+
+  const isAdmin = children && children.props && children.props.user;
+  const isEmbeddable = formConfig && children && children.props && children.props.isEmbeddable;
 
   return (
     <>
@@ -51,12 +55,15 @@ const Base = ({ children }) => {
       </Head>
       <SkipLink />
       <div className={classes}>
-        <header>
-          <PhaseBanner />
-          <Fip formConfig={formConfig} />
-        </header>
+        {!isEmbeddable && (
+          <header>
+            <PhaseBanner />
+            <Fip formConfig={formConfig} />
+            {isAdmin && <AdminNav user={children.props.user} />}
+          </header>
+        )}
         <main id="content">{children}</main>
-        <Footer />
+        {!isEmbeddable && <Footer />}
       </div>
     </>
   );

@@ -18,8 +18,8 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
   return (
     <>
       <h1 className="gc-h1">{t("title")}</h1>
-      <div className="grid grid-cols-3 md:grid-cols-1 gap-4 md:grid-flow-col">
-        <div>
+      <div className="flex flex-wrap">
+        <div className="flex-auto mb-10">
           <h3 className="gc-h3">
             {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
           </h3>
@@ -27,19 +27,15 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
           <p className="text-sm mb-8">
             {t("logged-in")} {user.email}
           </p>
-
-          <Button type="button" onClick={() => signOut()}>
-            {t("button.logout")}
-          </Button>
         </div>
 
-        <div className="w-60">
+        <div className="flex-auto mb-10 w-60">
           <h3 className="gc-h3">Create Forms</h3>
           <p>
             <Link href="/admin/upload">Upload Form Templates</Link>
           </p>
         </div>
-        <div className="w-60">
+        <div className="flex-auto mb-10 w-60">
           <h3 className="gc-h3">View Existing Forms</h3>
           <p>
             <Link href="/admin/view-templates">View Form Templates</Link>
