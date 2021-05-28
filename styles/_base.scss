@@ -115,10 +115,10 @@ ul.json_templates {
   }
   li div.expandable {
     max-height: 100px;
-    overflow: hidden;
+    max-width: 100%;
     font-family: monospace;
-    display: inline-block;
     margin: 0 1rem;
+    @apply inline-block overflow-hidden break-words;
 
     div.update-buttons {
       display: none;
