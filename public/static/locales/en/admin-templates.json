@@ -13,7 +13,7 @@
   },
   "settings": {
     "title": "Form Settings",
-    "delete": "Delete",
+    "delete": "Delete Form",
     "delete-check": "Are you sure you want to delete this form?",
     "confirm-delete": "Confirm Delete",
     "new": "The Form was successfully created"

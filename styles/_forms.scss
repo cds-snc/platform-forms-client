@@ -196,6 +196,12 @@
     @apply bg-gray-300;
   }
 }
+.gc-button--destructive {
+  @apply bg-red-destructive;
+  &:hover {
+    @apply bg-red-hover;
+  }
+}
 
 .gc-label {
   @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;

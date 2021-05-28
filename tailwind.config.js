@@ -73,6 +73,8 @@ module.exports = {
         ...colors.red,
         100: "#f3e9e8",
         default: "#b10e1e",
+        destructive: "#892406",
+        hover: "#4E1504",
       },
       purple: {
         ...colors.purple,
