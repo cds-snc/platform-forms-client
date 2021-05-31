@@ -13,7 +13,7 @@
     "titleFr": "Cadre pour les Normes relatives au numérique",
     "descriptionEn": "",
     "descriptionFr": "",
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "layout": [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12],
     "startPage": {},
     "endPage": {
       "descriptionEn": "#Thank you for your submission",
@@ -43,8 +43,8 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "descriptionEn": "<a href='https://www.canada.ca/en/government/system/digital-government/government-canada-digital-standards.html'>Digital Standards</a>",
-          "descriptionFr": "<a href='https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/normes-numeriques-gouvernement-canada.html'>Les Normes relatives au numérique</a>",
+          "descriptionEn": "<a href='https://www.canada.ca/en/government/system/digital-government/government-canada-digital-standards.html'>Digital Standards</a><br><br>",
+          "descriptionFr": "<a href='https://www.canada.ca/fr/gouvernement/systeme/gouvernement-numerique/normes-numeriques-gouvernement-canada.html'>Les Normes relatives au numérique</a><br><br>",
           "charLimit": 400,
           "validation": {
             "required": false
