@@ -21,7 +21,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const formID = form ? form.formID : null;
   const router = useRouter();
 
-  const handleSubmit = async (jsonInput: string, formID: number | null) => {
+  const handleSubmit = async (formID: number | null) => {
     return await axios({
       url: "/api/templates",
       method: "POST",
@@ -29,14 +29,14 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
         "Content-Type": "multipart/form-data",
       },
       data: {
-        formConfig: JSON.parse(jsonInput),
+        formConfig: JSON.parse(jsonConfig),
         method: formID ? "UPDATE" : "INSERT",
         formID: formID,
       },
       timeout: 0,
     })
       .then((serverResponse) => {
-        jsonInput = "";
+        setJsonConfig("");
         return serverResponse;
       })
       .catch((err) => {
@@ -62,7 +62,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
               setErrorState({ message: "JSON Formatting error" });
             }
 
-            const resp = await handleSubmit(jsonConfig, formID);
+            const resp = await handleSubmit(formID);
 
             // If the server returned a record, this is a new record
             // Redirect to the appropriate page
