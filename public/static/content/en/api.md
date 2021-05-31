@@ -18,6 +18,18 @@ Only the `GET` method can be used without authentication. The `INSERT`, `UPDATE`
 }
 ```
 
+The method parameter is required. Each method has different requirements for formID and formConfig as detailed below.
+
+- **GET method:** formID is an optional parameter. If provided, the form matching the provided ID will be returned. If no matching form is found, no records will be returned. If no formID is provided, all forms will be returned.
+
+- **INSERT Method:** formConfig is a required parameter.
+
+- **UPDATE method:** Both formID and formConfig are required parameters.
+
+- **Delete method:** formID is a required parameter.
+
+---
+
 ### Response Body (GET method)
 
 ```json
@@ -46,7 +58,7 @@ Only the `GET` method can be used without authentication. The `INSERT`, `UPDATE`
 }
 ```
 
-### Response Body(UPDATE, DELETE method)
+### Response Body (UPDATE, DELETE method)
 
 ```json
 {
@@ -114,4 +126,4 @@ All API requests require a valid `next-auth.session-token` attached in the Cooki
 }
 ```
 
-Response returns HTTP status code 200 if sucessful.
+Response returns HTTP status code 200 if successful.
