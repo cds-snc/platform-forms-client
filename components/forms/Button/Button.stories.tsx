@@ -14,6 +14,12 @@ export const secondaryButton = (): React.ReactElement => (
   </Button>
 );
 
+export const destructiveButton = (): React.ReactElement => (
+  <Button type="button" destructive={true}>
+    Delete
+  </Button>
+);
+
 defaultButton.parameters = {
   docs: {
     source: {
