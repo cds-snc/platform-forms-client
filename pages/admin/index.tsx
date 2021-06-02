@@ -1,10 +1,8 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { signOut } from "next-auth/client";
 import { AuthenticatedUser } from "../../lib/types";
 import { requireAuthentication } from "../../lib/auth";
-import { Button } from "../../components/forms";
 import Link from "next/link";
 
 type AdminWelcomeProps = {
