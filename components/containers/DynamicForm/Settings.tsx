@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import JSONUpload from "../../forms/JsonUpload/JsonUpload";
+import JSONUpload from "../../admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
 import Button from "../../forms/Button/Button";
 import { useRouter } from "next/router";
