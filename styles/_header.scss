@@ -46,13 +46,13 @@
 
   button:focus {
     outline: none;
-    box-shadow: 4px 0 0 0 #284162, -4px 0 0 0 #284162;
-    @apply bg-blue-dark text-white-default;
+    box-shadow: 4px 0 0 0 #303FC3, -4px 0 0 0 #303FC3;
+    @apply bg-blue-focus text-white-default;
   }
 
   button:active {
     box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-    @apply underline bg-blue-active;
+    @apply underline bg-blue-active text-white-default;
   }
 }
 // ADMIN HEADER
@@ -69,7 +69,7 @@ header {
     }
 
     a:focus {
-      outline: 3px solid #284162;
+      outline: 3px solid #303FC3;
       outline-offset: 1px;
       @apply bg-white-default;
     }

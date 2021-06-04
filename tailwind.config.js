@@ -89,6 +89,7 @@ module.exports = {
         dark: "#284162",
         light: "#335075",
         hover: "#0535D2",
+        focus: "#303FC3",
         active: "#1B2736",
         default: "#26374A",
         100: "#B2E3FF",
