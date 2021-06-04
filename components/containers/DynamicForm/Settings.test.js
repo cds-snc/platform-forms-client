@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { FormSettings } from "./Settings";
 import mockedAxios from "axios";
@@ -31,7 +31,7 @@ describe("Form Settings Page", () => {
     const push = jest.fn();
     useRouter.mockImplementation(() => ({
       asPath: "/",
-      push: push(),
+      push: push,
     }));
     render(<FormSettings form={form}></FormSettings>);
 
@@ -39,6 +39,8 @@ describe("Form Settings Page", () => {
     expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
 
     await fireEvent.click(screen.queryByTestId("confirmDelete"));
-    expect(push).toHaveBeenCalled();
+    waitFor(() => {
+      expect(push).toHaveBeenCalled();
+    });
   });
 });

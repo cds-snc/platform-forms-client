@@ -60,6 +60,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             } catch {
               setSubmitting(false);
               setErrorState({ message: "JSON Formatting error" });
+              return;
             }
 
             const resp = await handleSubmit(formID);
@@ -89,7 +90,11 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             <Loader message="Loading..." />
           ) : (
             <>
-              {errorState.message ? <p role="alert">Error... Argh!!</p> : null}
+              {errorState.message ? (
+                <p role="alert" data-testid="alert">
+                  {errorState.message}
+                </p>
+              ) : null}
               <textarea
                 id="jsonInput"
                 rows={20}
@@ -102,10 +107,12 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 }}
               ></textarea>
               <div>
-                <button type="submit" className="gc-button">
+                <button type="submit" className="gc-button" data-testid="upload">
                   {t("upload.submit")}
                 </button>
-                <span id="submitStatus">{submitStatus}</span>
+                <span id="submitStatus" data-testid="submitStatus">
+                  {submitStatus}
+                </span>
               </div>
             </>
           )}
