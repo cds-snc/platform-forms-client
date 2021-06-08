@@ -7,6 +7,7 @@ on:
     branches: [main, sandbox]
 jobs:
   cypress-run:
+    name: Cypress
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
