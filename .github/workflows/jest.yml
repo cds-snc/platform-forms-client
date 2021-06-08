@@ -7,13 +7,18 @@ on:
     branches: [main, sandbox]
 jobs:
   jest-run:
+    name: Jest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: "Install dependencies"
         run: yarn install
       - name: Jest Annotations & Coverage
+        if: github.event_name == 'pull_request'
         uses: dkershner6/jest-coverage-commenter-action@v1
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           test_command: "yarn test --coverage"
+      - name: Jest Tests
+        if: github.event_name == 'push'
+        run: yarn test
