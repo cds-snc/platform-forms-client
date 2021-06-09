@@ -7,9 +7,10 @@ on:
     branches: [main, sandbox]
 
 jobs:
-  eslint_flow:
+  eslint_flow_merge:
+    name: eslint_merge
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v1
       - name: Node.JS 12
@@ -20,7 +21,25 @@ jobs:
         run: yarn install
         env:
           CI: TRUE
-      - name: Test Code Linting
+      - name: Test Code Linting on Merge
+        if: github.event_name == 'push'
+        run: yarn lint
+        # If there is an error stop here and fail the test
+  eslint_flow_pr:
+    name: eslint_pr
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Node.JS 12
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - name: Install Node Dependencies
+        run: yarn install
+        env:
+          CI: TRUE
+      - name: Test Code Linting on Pull Request
         run: yarn lint
         continue-on-error: true
       - name: Save Code Linting Report JSON
