@@ -170,8 +170,7 @@ a:focus,
   @apply bg-blue-focus text-white-default;
 }
 
-a:active,
-.gc-button-link:active {
+a:active {
   box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
   @apply underline bg-blue-active text-white-default;
 }
