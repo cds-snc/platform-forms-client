@@ -35,6 +35,13 @@ const FormResponse = ({
   const [submissionID, setSubmissionID] = useState("");
   const { t } = useTranslation("admin-vault");
 
+  useEffect(() => {
+    if (Items.length != submissionArray.length) {
+      // allow "Look up responses" button to get updated numbers without a hard refresh
+      setSubmissionArray(Items);
+    }
+  });
+
   const removeSubmission = async () => {
     if (submissionID) {
       await axios({
@@ -177,6 +184,57 @@ const AdminVault: React.FC = () => {
     }
   };
 
+  const removeAllSubmissions = async () => {
+    if (formID) {
+      if (formID) {
+        await axios({
+          url: "/api/retrieval",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json ",
+          },
+          data: { formID, action: "DELETE" },
+        })
+          .then((response) => {
+            console.log(response);
+            setResponses({ Items: [] });
+          })
+          .catch((err) => {
+            console.error(err);
+            setResponses({ Items: [] });
+          });
+      } else {
+        setResponses({ Items: [] });
+      }
+    }
+  };
+
+  const [deleteVisible, setDeleteVisible] = useState(false);
+
+  const deleteButton = deleteVisible ? (
+    <>
+      <p>{t("confirmRemoveAll")}</p>
+      <Button
+        onClick={async () => {
+          try {
+            const resp = await removeAllSubmissions();
+            console.log(resp);
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        testid="confirmDelete"
+        type="button"
+        destructive={true}
+        className="rounded-lg"
+      >
+        {t("confirmRemoveAllButton")}
+      </Button>
+    </>
+  ) : (
+    ""
+  );
+
   return (
     <>
       <h1 className="gc-h1">{t("title")}</h1>
@@ -211,6 +269,23 @@ const AdminVault: React.FC = () => {
           )}
         </div>
       </div>
+      {responses.Items.length ? (
+        <div className="mt-4 inline-block justify-left flex space-x-20">
+          <Button
+            className="gc-button rounded-lg"
+            type="button"
+            destructive={true}
+            onClick={() => {
+              setDeleteVisible(!deleteVisible);
+            }}
+          >
+            {t("removeAllButton")}
+          </Button>
+          <div>{deleteButton}</div>
+        </div>
+      ) : (
+        ""
+      )}
     </>
   );
 };
