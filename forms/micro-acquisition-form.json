@@ -1,0 +1,110 @@
+{
+  "internalTitleEn": "Micro-acquisition opportunity application",
+  "internalTitleFr": "[FR] Micro-acquisition opportunity application",
+  "publishingStatus": false,
+  "submission": {
+    "templateID": "",
+    "email": "forms-formulaires@cds-snc.ca"
+  },
+  "form": {
+    "id": 52,
+    "version": 1,
+    "titleEn": "Micro-acquisition opportunity",
+    "titleFr": "[FR] Micro-acquisition opportunity",
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "layout": [1, 2, 3, 4, 5],
+    "startPage": {},
+    "endPage": {
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "referrerUrlEn": "Thank you for your submission",
+      "referrerUrlFr": "Merci pour votre souimission"
+    },
+    "elements": [
+      {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Name of the opportunity",
+          "titleFr": "[FR] Name of the opportunity",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 400,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Your name",
+          "titleFr": "Votre nom",
+          "charLimit": 100,
+          "validation": {
+            "required": true,
+            "type": "text"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "Your business name",
+          "titleFr": "[FR] Your business name",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "If applicable",
+          "descriptionFr": "[FR] If applicable",
+          "charLimit": 100,
+          "validation": {
+            "required": false
+          }
+        }
+      },
+      {
+        "id": 4,
+        "type": "radio",
+        "properties": {
+          "titleEn": "Eligibility",
+          "titleFr": "Admissibilité",
+          "descriptionEn":"Select the option that applies to you",
+          "descriptionFr":"[FR] Select the option that applies to you",
+          "validation": {
+            "required": true
+          },
+          "choices": [
+            {
+              "en": "I affirm that I am Canadian and/or First Nations, Metis, Inuit",
+              "fr": "[FR] I affirm that I am Canadian and/or First Nations, Metis, Inuit"
+            },
+            {
+              "en": "I affirm that I have all the relevant work permits to work in Canada",
+              "fr": "[FR] I affirm that I have all the relevant work permits to work in Canada"
+            }
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "Response to application evaluation criteria",
+          "titleFr": "[FR] Response to application evaluation criteria",
+          "placeholderEn": "",
+          "placeholderFr": "",
+          "descriptionEn": "",
+          "descriptionFr": "",
+          "charLimit": 100,
+          "validation": {
+            "required": true
+          }
+        }
+      }
+    ]
+  }
+}
