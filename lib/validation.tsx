@@ -93,12 +93,17 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
     }
 
     const currentValidation = (currentItem.properties?.validation as ValidationProperties) || {};
-    const formikValue = values[item] as string;
+    const formikValue = values[item] || "";
     const currentValue: string = formikValue.toString() || "";
     const currentRegex = getRegexByType(currentValidation.type, props.t, currentValue);
 
     // Check for required fields
-    if (currentValidation && currentValidation?.required && !currentValue) {
+    let isEmpty = !currentValue;
+    // currentValue is not a straight existence check for things like radio button and checkboxes
+    if (!isEmpty && typeof formikValue == "object") {
+      if (!formikValue.length || formikValue.length < 1) isEmpty = true;
+    }
+    if (currentValidation && currentValidation?.required && isEmpty) {
       errors[item] = props.t("input-validation.required");
     } else if (currentValidation.type && currentRegex && currentRegex.regex) {
       // Check for different types of fields, email, date, number, custom etc

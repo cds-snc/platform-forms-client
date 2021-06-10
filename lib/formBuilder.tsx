@@ -14,6 +14,7 @@ import {
   RichText,
 } from "../components/forms";
 import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
+import CheckboxGroup from "../components/forms/Checkbox/CheckboxGroup/CheckboxGroup";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -136,23 +137,21 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "checkbox": {
       const checkboxItems = choices.map((choice, index) => {
-        return (
-          <Checkbox
-            key={`${id}.${index}`}
-            id={`${id}.${index}`}
-            name={`${id}`}
-            label={choice}
-            required={isRequired}
-          />
-        );
+        return {
+          key: `${id}.${index}`,
+          id: `${id}.${index}`,
+          name: `${id}`,
+          label: choice,
+          required: isRequired,
+        };
       });
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <div className="focus-group">
-            <legend className="gc-label">{labelText}</legend>
+            {labelComponent}
             {description ? <Description id={id}>{description}</Description> : null}
-            {checkboxItems}
+            <CheckboxGroup name={id} checkboxProps={checkboxItems}></CheckboxGroup>
           </div>
         </FormGroup>
       );
@@ -173,7 +172,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <div className="focus-group">
-            <legend className="gc-label">{labelText}</legend>
+            {labelComponent}
             {description ? <Description id={id}>{description}</Description> : null}
             {radioButtons}
           </div>
