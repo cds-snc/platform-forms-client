@@ -33,6 +33,7 @@ const FormResponse = ({
   const [submissionArray, setSubmissionArray] = useState(Items);
   const [response, setResponse] = useState("");
   const [submissionID, setSubmissionID] = useState("");
+  const [formID, setFormID] = useState("");
   const { t } = useTranslation("admin-vault");
 
   const removeSubmission = async () => {
@@ -43,7 +44,7 @@ const FormResponse = ({
         headers: {
           "Content-Type": "application/json ",
         },
-        data: { responseID: submissionID, action: "DELETE" },
+        data: { formID, responseID: submissionID, action: "DELETE" },
       })
         .then(() => {
           if (submissionArray.length === 1) {
@@ -70,6 +71,7 @@ const FormResponse = ({
       const message = convertMessage({ form: formSchema, responses: responseJson });
       setResponse(message);
       setSubmissionID(submission.SubmissionID.S);
+      setFormID(submission.FormID.S);
     }
   }, [index, submissionArray, formSchema]);
 

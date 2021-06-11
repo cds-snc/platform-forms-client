@@ -9,8 +9,8 @@ const retrieval = async (req, res) => {
     const formID = req.body.formID ? req.body.formID : null;
     const action = req.body.action ? req.body.action : null;
     const responseID = req.body.responseID ? req.body.responseID : null;
-    if (!formID && !responseID) {
-      throw new Error("No form ID or response ID specified");
+    if (!formID) {
+      throw new Error("No form ID specified");
     }
 
     const lambdaClient = new LambdaClient({ region: "ca-central-1" });
