@@ -210,10 +210,14 @@ function _handleFormDataType(element: FormElement, value: Response, formData: Fo
     case "checkbox":
     case "dynamicRow":
       // array of strings
-      Array.isArray(value)
-        ? _handleFormDataArray(element.id, value as Array<string>, formData)
-        : _handleFormDataText(element.id, "", formData);
-
+      if (value instanceof Object && !Array.isArray(value)) {
+        console.log("this doesn't work");
+        _handleFormDataText(element.id, "", formData);
+      } else {
+        Array.isArray(value)
+          ? _handleFormDataArray(element.id, value as Array<string>, formData)
+          : _handleFormDataText(element.id, "", formData);
+      }
       break;
     case "fileInput":
       // file input
