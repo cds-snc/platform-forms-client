@@ -1,10 +1,8 @@
 import React, { ReactElement, Fragment } from "react";
 import { logger, logMessage } from "./logger";
 import {
-  Checkbox,
   Dropdown,
   Label,
-  Radio,
   TextInput,
   TextArea,
   FormGroup,
@@ -12,9 +10,9 @@ import {
   DynamicGroup,
   Description,
   RichText,
+  MultipleChoiceGroup,
 } from "../components/forms";
 import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
-import CheckboxGroup from "../components/forms/Checkbox/CheckboxGroup/CheckboxGroup";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -151,22 +149,24 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <div className="focus-group">
             {labelComponent}
             {description ? <Description id={id}>{description}</Description> : null}
-            <CheckboxGroup name={id} checkboxProps={checkboxItems}></CheckboxGroup>
+            <MultipleChoiceGroup
+              type="checkbox"
+              name={id}
+              choicesProps={checkboxItems}
+            ></MultipleChoiceGroup>
           </div>
         </FormGroup>
       );
     }
     case "radio": {
-      const radioButtons = choices.map((choice, index) => {
-        return (
-          <Radio
-            key={`${id}.${index}`}
-            id={`${id}.${index}`}
-            name={`${id}`}
-            label={choice}
-            required={isRequired}
-          />
-        );
+      const radioItems = choices.map((choice, index) => {
+        return {
+          key: `${id}.${index}`,
+          id: `${id}.${index}`,
+          name: `${id}`,
+          label: choice,
+          required: isRequired,
+        };
       });
 
       return (
@@ -174,7 +174,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           <div className="focus-group">
             {labelComponent}
             {description ? <Description id={id}>{description}</Description> : null}
-            {radioButtons}
+            <MultipleChoiceGroup
+              type="radio"
+              name={id}
+              choicesProps={radioItems}
+            ></MultipleChoiceGroup>
           </div>
         </FormGroup>
       );

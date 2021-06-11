@@ -128,3 +128,10 @@ export type FileInputResponse = {
   src: FileReader;
   [key: string]: string | File | FileReader;
 };
+
+export type MultipleChoiceProps = {
+  id: string;
+  name: string;
+  label: string;
+  required?: boolean;
+};

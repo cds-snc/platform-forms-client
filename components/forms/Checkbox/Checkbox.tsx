@@ -1,16 +1,9 @@
-import { Field } from "formik";
 import React from "react";
-
-interface CheckboxProps {
-  id: string;
-  name: string;
-  className?: string;
-  label: string;
-  required?: boolean;
-}
+import { Field } from "formik";
+import { MultipleChoiceProps } from "../../../lib/types";
 
 export const Checkbox = (
-  props: CheckboxProps & JSX.IntrinsicElements["input"]
+  props: MultipleChoiceProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name } = props;
 
