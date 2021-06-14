@@ -93,12 +93,23 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
     }
 
     const currentValidation = (currentItem.properties?.validation as ValidationProperties) || {};
-    const formikValue = values[item] as string;
-    const currentValue: string = formikValue.toString() || "";
+    const formikValue = values[item];
+    // A non-array object indicates an unset field (this is how Formik sends it to us)
+    // Discard these values, and convert anything else to a string
+    const currentValue: string = (typeof formikValue == "object" && !Array.isArray(formikValue)
+      ? ""
+      : (formikValue as string)
+    ).toString();
     const currentRegex = getRegexByType(currentValidation.type, props.t, currentValue);
 
     // Check for required fields
-    if (currentValidation && currentValidation?.required && !currentValue) {
+    let isEmpty = !currentValue;
+    // currentValue is not a straight existence check for things like radio button and checkboxes
+    if (!isEmpty && typeof formikValue == "object") {
+      if (Array.isArray(formikValue) && formikValue.length < 1) isEmpty = true;
+      if (!Array.isArray(formikValue)) isEmpty = true; // non array objects are an unset field
+    }
+    if (currentValidation && currentValidation?.required && isEmpty) {
       errors[item] = props.t("input-validation.required");
     } else if (currentValidation.type && currentRegex && currentRegex.regex) {
       // Check for different types of fields, email, date, number, custom etc

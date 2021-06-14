@@ -1,10 +1,8 @@
 import React, { ReactElement, Fragment } from "react";
 import { logger, logMessage } from "./logger";
 import {
-  Checkbox,
   Dropdown,
   Label,
-  Radio,
   TextInput,
   TextArea,
   FormGroup,
@@ -12,6 +10,7 @@ import {
   DynamicGroup,
   Description,
   RichText,
+  MultipleChoiceGroup,
 } from "../components/forms";
 import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
 
@@ -136,46 +135,50 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "checkbox": {
       const checkboxItems = choices.map((choice, index) => {
-        return (
-          <Checkbox
-            key={`${id}.${index}`}
-            id={`${id}.${index}`}
-            name={`${id}`}
-            label={choice}
-            required={isRequired}
-          />
-        );
+        return {
+          key: `${id}.${index}`,
+          id: `${id}.${index}`,
+          name: `${id}`,
+          label: choice,
+          required: isRequired,
+        };
       });
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <div className="focus-group">
-            <legend className="gc-label">{labelText}</legend>
+            {labelComponent}
             {description ? <Description id={id}>{description}</Description> : null}
-            {checkboxItems}
+            <MultipleChoiceGroup
+              type="checkbox"
+              name={id}
+              choicesProps={checkboxItems}
+            ></MultipleChoiceGroup>
           </div>
         </FormGroup>
       );
     }
     case "radio": {
-      const radioButtons = choices.map((choice, index) => {
-        return (
-          <Radio
-            key={`${id}.${index}`}
-            id={`${id}.${index}`}
-            name={`${id}`}
-            label={choice}
-            required={isRequired}
-          />
-        );
+      const radioItems = choices.map((choice, index) => {
+        return {
+          key: `${id}.${index}`,
+          id: `${id}.${index}`,
+          name: `${id}`,
+          label: choice,
+          required: isRequired,
+        };
       });
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           <div className="focus-group">
-            <legend className="gc-label">{labelText}</legend>
+            {labelComponent}
             {description ? <Description id={id}>{description}</Description> : null}
-            {radioButtons}
+            <MultipleChoiceGroup
+              type="radio"
+              name={id}
+              choicesProps={radioItems}
+            ></MultipleChoiceGroup>
           </div>
         </FormGroup>
       );

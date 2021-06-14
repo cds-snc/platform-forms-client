@@ -1,34 +1,21 @@
 import React from "react";
-import classnames from "classnames";
-import { useField } from "formik";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import { Field } from "formik";
+import { MultipleChoiceProps } from "../../../lib/types";
 
-interface RadioProps {
-  id: string;
-  name: string;
-  className?: string;
-  label: string;
-  required?: boolean;
-}
-
-export const Radio = (props: RadioProps & JSX.IntrinsicElements["input"]): React.ReactElement => {
-  const { id, className, label, required } = props;
-
-  const classes = classnames("gc-input-radio", className);
-
-  const [field, meta] = useField(props);
+export const Radio = (
+  props: MultipleChoiceProps & JSX.IntrinsicElements["input"]
+): React.ReactElement => {
+  const { id, label, required, name } = props;
 
   return (
-    <div data-testid="radio" className={classes}>
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
-
-      <input
+    <div className="gc-input-radio">
+      <Field
         className="gc-radio__input"
         id={id}
         type="radio"
         required={required}
-        {...field}
         value={label} // This needs to be static... the actual label...
+        name={name}
       />
       <label className="gc-radio-label" htmlFor={id}>
         <span className="radio-label-text">{label}</span>
