@@ -424,7 +424,6 @@ function _handleFormDataType(element: FormElement, value: Response, formData: Fo
       Array.isArray(value)
         ? _handleFormDataArray(element.id, value as Array<string>, formData)
         : _handleFormDataText(element.id, "", formData);
-
       break;
     case "fileInput":
       // file input

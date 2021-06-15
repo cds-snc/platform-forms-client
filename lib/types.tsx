@@ -154,3 +154,10 @@ export interface AuthenticatedUser {
   email?: string | null;
   image?: string | null;
 }
+
+export type MultipleChoiceProps = {
+  id: string;
+  name: string;
+  label: string;
+  required?: boolean;
+};
