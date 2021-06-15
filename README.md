@@ -84,13 +84,6 @@ Ce projet est conçu sur une de base [Next.js](https://nextjs.org/) et utilise l
 - [Tailwindcss](https://tailwindcss.com/) un environnement CSS modulaire accélérant la conception de pages web
 - [PostCSS](https://postcss.org/)
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) and is built with:
-
-- Next.js >= 10.x
-- Sass (Syntactically Awesome Style Sheets) for reusable styles
-- [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
-- [PostCSS](https://postcss.org/)
-
 ## Exécuter localement
 
 Cloner ce référentiel
