@@ -6,10 +6,9 @@
     "success": "JSON téléchargé avec succès."
   },
   "view": {
-    "title": "Voir le modèle de formulaire JSON",
-    "expand": "Élargir",
-    "collapse": "Collapse",
-    "update": "Modifier"
+    "title": "Voir le modèle des formulaires",
+    "update": "Modifier",
+    "formID": "ID de formulaire:"
   },
   "settings": {
     "title": "Paramètres du formulaire",

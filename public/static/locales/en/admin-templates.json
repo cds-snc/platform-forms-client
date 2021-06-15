@@ -6,10 +6,9 @@
     "success": "JSON successfully uploaded."
   },
   "view": {
-    "title": "View Form Template JSON",
-    "expand": "Expand",
-    "collapse": "Collapse",
-    "update": "Edit"
+    "title": "View Form Templates",
+    "update": "Edit",
+    "formID": "Form ID:"
   },
   "settings": {
     "title": "Form Settings",
