@@ -28,6 +28,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
           <Link href="/admin/view-templates">Form templates</Link>
         </li>
         <li className="gc-horizontal-item">
+          <Link href="/admin/flags">Feature Settings</Link>
+        </li>
+        <li className="gc-horizontal-item">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>
               Login
