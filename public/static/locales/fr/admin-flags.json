@@ -1,0 +1,38 @@
+{
+  "title": "Indicateurs de fonction",
+  "subTitle": "Les indicateurs de fonctionnalité vous permettent de contrôler les différentes fonctionnalités activées dans l'application",
+  "loading": "Chargement des indicateurs de fonctionnalité",
+  "enabled": "Activé",
+  "disabled": "Déactivé",
+  "enable": "Allumer",
+  "disable": "Éteindre",
+  "featureTitle": "Indicateur",
+  "featureStatus": "Statut",
+  "featureSwitch": "Activé/Déactivé",
+  "features": {
+    "sandbox": {
+      "title": "Page bac à sable",
+      "description": "Une page qui affiche une liste de tous les formulaires non publiés"
+    },
+    "vault": {
+      "title": "Coffre de soumission",
+      "description": "Une page qui affiche une liste des soumissions stockées dans le coffre-fort pour les formulaires activé avec cette fonctionnalité"
+    },
+    "googleAnalytics": {
+      "title": "Google Analytics",
+      "description": "Ajoute une entrée Google Analytics à chaque page"
+    },
+    "unpublishedForms": {
+      "title": "Formulaires non publiés",
+      "description": "Autoriser l'accès et le remplissage de formulaires qui n'ont pas de statut publié"
+    },
+    "submitToReliabilityQueue": {
+      "title": "Soumettre à la file d'attente de fiabilité",
+      "description": "Soumettez les réponses du formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
+    },
+    "notifyPreview": {
+      "title": "Prévisualiser par e-mail",
+      "description": "Sur la page de confirmation après la soumission, affichez une copie de l'e-mail envoyé à l'administrateur du formulaire"
+    }
+  }
+}
