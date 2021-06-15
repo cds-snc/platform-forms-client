@@ -46,10 +46,14 @@ const DataElement = (props: { template: FormDBConfigProperties }): React.ReactEl
 
   let title = "";
   if (template.formConfig) {
-    if (i18n.language === "en" && template.formConfig.internalTitleEn)
-      title = template.formConfig.internalTitleEn;
-    else if (i18n.language === "fr" && template.formConfig.internalTitleFr)
-      title = template.formConfig.internalTitleFr;
+    if (i18n.language === "en")
+      title = template.formConfig.internalTitleEn
+        ? template.formConfig.internalTitleEn
+        : template.formConfig.form.titleEn;
+    else if (i18n.language === "fr")
+      title = template.formConfig.internalTitleFr
+        ? template.formConfig.internalTitleFr
+        : template.formConfig.form.titleFr;
   }
   return (
     <li>
