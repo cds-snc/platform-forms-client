@@ -1,21 +1,40 @@
 import Redis from "ioredis";
-import useSWR from "swr";
+import mockRedis from "ioredis-mock";
 
 // Shout out to https://github.com/leighhalliday/nextjs-feature-flags for inspiration
 
+const getRedisInstance = () => {
+  if (process.env.REDIS_URL) {
+    return new Redis(process.env.REDIS_URL);
+  } else {
+    return new mockRedis();
+  }
+};
+
 // Eventually set to proper Redis url
-const redis = new Redis();
+const redis = getRedisInstance();
 
 export const createFlag = async (key: string, value: boolean): Promise<void> => {
-  await redis
-    .multi()
-    .sadd("flags", key)
-    .set(`flag:${key}`, value ? "1" : "0")
-    .exec();
+  if (process.env.REDIS_URL) {
+    await redis
+      .multi()
+      .sadd("flags", key)
+      .set(`flag:${key}`, value ? "1" : "0")
+      .exec();
+  } else {
+    // ioredis-mock does not support multi()
+    await redis.sadd("flags", key);
+    await redis.set(`flag:${key}`, value ? "1" : "0");
+  }
 };
 
 export const enableFlag = async (key: string): Promise<void> => {
-  await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
+  if (process.env.REDIS_URL) {
+    await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
+  } else {
+    await redis.sadd("flags", key);
+    redis.set(`flag:${key}`, "1");
+  }
 };
 
 export const disableFlag = async (key: string): Promise<void> => {
