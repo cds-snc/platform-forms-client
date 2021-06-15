@@ -117,29 +117,18 @@ ul.custom {
 ul.json_templates {
   @apply list-none;
   li {
-    @apply border-2 border-solid border-gray-400 cursor-pointer;
-
-    button.expand {
-      left: 0;
-      @apply bg-green-default w-full text-white-default;
-    }
-  }
-  li div.expandable {
+    @apply border-2 border-solid border-gray-400 cursor-pointer inline-block overflow-hidden break-words;
     max-height: 100px;
     max-width: 100%;
+    width: 100%;
     font-family: monospace;
     margin: 0 1rem;
-    @apply inline-block overflow-hidden break-words;
 
     div.update-buttons {
-      display: none;
+      display: inline-block;
     }
-  }
-  li.expanded div.expandable {
-    max-height: 100%;
-
-    div.update-buttons {
-      display: block;
+    div.form-title {
+      max-width: 70%;
     }
   }
 }

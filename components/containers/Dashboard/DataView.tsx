@@ -34,14 +34,9 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
 
 const DataElement = (props: { template: FormDBConfigProperties }): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
-  const [isExpanded, setIsExpanded] = useState(false);
   const { template } = props;
   const formID = template.formID;
   const router = useRouter();
-
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
 
   const redirectToSettings = (formID: number) => {
     router.push({
@@ -49,17 +44,26 @@ const DataElement = (props: { template: FormDBConfigProperties }): React.ReactEl
     });
   };
 
+  let title = "";
+  if (template.formConfig) {
+    if (i18n.language === "en" && template.formConfig.internalTitleEn)
+      title = template.formConfig.internalTitleEn;
+    else if (i18n.language === "fr" && template.formConfig.internalTitleFr)
+      title = template.formConfig.internalTitleFr;
+  }
   return (
-    <li className={isExpanded ? "expanded" : ""}>
-      <button className="expand" onClick={() => toggleExpanded()}>
-        {isExpanded ? t("view.collapse") : t("view.expand")}
-      </button>
-      <div className="expandable pb-4 m-auto px-4">
-        <span>{JSON.stringify(template)}</span>
-        <div className="update-buttons">
+    <li>
+      <div className="pb-4 m-auto px-4">
+        <div className="update-buttons mr-4">
           <button onClick={() => redirectToSettings(formID)} className="gc-button">
             {t("view.update")}
           </button>
+        </div>
+        <div className="inline-block break-words form-title">
+          <p>
+            {t("view.formID")} {formID}
+          </p>
+          <p>{title}</p>
         </div>
       </div>
     </li>

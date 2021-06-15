@@ -4,7 +4,7 @@ import { NextRouter } from "next/router";
 
 export interface FormDefinitionProperties {
   internalTitleEn?: string;
-  interalTitleFr?: string;
+  internalTitleFr?: string;
   publishingStatus: boolean;
   submission: {
     email?: string;
