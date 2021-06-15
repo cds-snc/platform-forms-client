@@ -17,6 +17,22 @@
     "vault": {
       "title": "Submission Vault",
       "description": "A page that displays a list of submissions stored in the Vault for Forms enabled with that feature"
+    },
+    "googleAnalytics": {
+      "title": "Google Analytics",
+      "description": "Adds a Google Analytics entry to each page"
+    },
+    "unpublishedForms": {
+      "title": "Unpublished Forms",
+      "description": "Allow the access to and completion of forms that do not have a published status"
+    },
+    "submitToReliabilityQueue": {
+      "title": "Submit to Reliability Queue",
+      "description": "Submit form responses to the Reliability Queue. If disabled no form submissions will be submitted.  Usually used for testing."
+    },
+    "notifyPreview": {
+      "title": "Notify Email Preview",
+      "description": "On the confirmation page after submission display a copy of the email sent to the form administrator"
     }
   }
 }

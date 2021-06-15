@@ -8,12 +8,12 @@ import Fip from "./Fip";
 import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
-import { useFlagHook } from "../../lib/flags_hook";
+import { useFlag } from "../../lib/hooks/flags";
 
 const Base = ({ children }) => {
   const { t } = useTranslation("common");
 
-  const googleTag = useFlagHook("googleAnalytics");
+  const googleTag = useFlag("googleAnalytics");
   const formConfig =
     children && children.props && children.props.formConfig ? children.props.formConfig : null;
   const classes = getPageClassNames(formConfig);

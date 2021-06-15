@@ -3,6 +3,7 @@ import axios from "axios";
 import type { FormikBag } from "formik";
 import { getProperty } from "./formBuilder";
 import { logger, logMessage } from "./logger";
+import { useFlag } from "./hooks/flags";
 import {
   FormElement,
   Responses,
@@ -444,13 +445,10 @@ function _handleFormDataText(key: string, value: string, formData: FormData) {
 function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
   formData.append(key, JSON.stringify({ value: value }));
 }
-async function _submitToAPI(
-  values: Responses,
-  formikBag: FormikBag<DynamicFormProps, FormValues>,
-  isProduction: boolean
-) {
+async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormProps, FormValues>) {
   const { language, router, formConfig } = formikBag.props;
   const { setStatus } = formikBag;
+  const notifyPreview = await useFlag("notifyPreview");
 
   const formDataObject = _buildFormDataObject(formConfig, values);
 
@@ -462,7 +460,7 @@ async function _submitToAPI(
       "Content-Type": "multipart/form-data",
     },
     data: formDataObject,
-    timeout: isProduction ? 3000 : 0,
+    timeout: process.env.NODE_ENV ? 0 : 5000,
   })
     .then((serverResponse) => {
       if (serverResponse.data.received === true) {
@@ -472,7 +470,7 @@ async function _submitToAPI(
                 referrerUrl: formConfig.endPage[getProperty("referrerUrl", language)],
               }
             : null;
-        const htmlEmail = !isProduction ? serverResponse.data.htmlEmail : null;
+        const htmlEmail = notifyPreview ? serverResponse.data.htmlEmail : null;
         const endPageText =
           formConfig && formConfig.endPage
             ? JSON.stringify(formConfig.endPage[getProperty("description", language)])

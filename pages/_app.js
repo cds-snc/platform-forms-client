@@ -6,7 +6,7 @@ import { appWithTranslation } from "next-i18next";
 import { Provider } from "next-auth/client";
 import Base from "../components/globals/Base";
 import "../styles/app.scss";
-import { useHMR } from "../lib/trans_hmr";
+import { useHMR } from "../lib/hooks/trans_hmr";
 import i18nextConfig from "../next-i18next.config";
 
 const MyApp = ({ Component, pageProps }) => {

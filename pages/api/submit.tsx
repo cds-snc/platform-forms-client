@@ -4,10 +4,11 @@ import getConfig from "next/config";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import formidable from "formidable";
 import fs from "fs";
-import convertMessage from "../../lib/markdown";
-import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "../../lib/dataLayer";
-import { logMessage } from "../../lib/logger";
-import { PublicFormSchemaProperties, Responses } from "../../lib/types";
+import convertMessage from "@lib/markdown";
+import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
+import { logMessage } from "@lib/logger";
+import { PublicFormSchemaProperties, Responses } from "@lib/types";
+import { checkOne } from "@lib/flags";
 
 export const config = {
   api: {
@@ -106,9 +107,8 @@ const processFormData = async (
   req: NextApiRequest
 ) => {
   try {
-    const {
-      publicRuntimeConfig: { isProduction: isProduction },
-    } = getConfig();
+    const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
+    const notifyPreview = await checkOne("notifyPreview");
 
     if (!reqFields) {
       return res.status(400).json({ error: "No form submitted with request" });
@@ -148,10 +148,10 @@ const processFormData = async (
     });
 
     // Staging or Production AWS environments
-    if (process.env.SUBMISSION_API) {
+    if (submitToReliabilityQueue) {
       return await callLambda(form.formID, fields)
         .then(async () => {
-          if (!isProduction && process.env.NOTIFY_API_KEY) {
+          if (notifyPreview) {
             await previewNotify(form, fields).then((response) => {
               return res.status(201).json({ received: true, htmlEmail: response });
             });
@@ -165,7 +165,7 @@ const processFormData = async (
         });
     }
     // Local development and Heroku
-    else if (process.env.NOTIFY_API_KEY) {
+    else if (notifyPreview) {
       return await previewNotify(form, fields).then((response) => {
         return res.status(201).json({ received: true, htmlEmail: response });
       });

@@ -53,10 +53,3 @@ export const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean
 
   return Object.fromEntries(mapped);
 };
-
-const fetcher = (url: string) => fetch(url).then((response) => response.json());
-
-export const useFlagHook = (key: string): boolean => {
-  const { data } = useSWR(`/api/flags/${key}/check`, fetcher);
-  return !!data;
-};

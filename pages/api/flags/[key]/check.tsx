@@ -8,6 +8,8 @@ const initialFlags: Record<string, boolean> = {
   vault: false,
   googleAnalytics: false,
   unpublishedForms: false,
+  submitToReliabilityQueue: false,
+  notifyPreview: false,
 };
 
 const initiateFlags = async () => {

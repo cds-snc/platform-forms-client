@@ -10,10 +10,6 @@ module.exports = {
     includePaths: [path.join(__dirname, "styles")],
   },
   reactStrictMode: true,
-  publicRuntimeConfig: {
-    // Will be available on both server and client
-    isProduction: process.env.PRODUCTION_ENV === "true" ? true : false,
-  },
   webpack: (config, context) => {
     // Allow for hot reload of translations
     if (!context.isServer && context.dev) {
