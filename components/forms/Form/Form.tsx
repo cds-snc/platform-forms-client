@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { withFormik, FormikProps } from "formik";
-import getConfig from "next/config";
 import { getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../../lib/validation";
 import { submitToAPI } from "../../../lib/dataLayer";
@@ -8,6 +7,7 @@ import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
 import Loader from "../../globals/Loader";
+import { useFlag } from "../../../lib/hooks/flags";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -102,7 +102,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values as Responses, formikBag);
+      await submitToAPI(values as Responses, formikBag, useFlag("notifyPreview"));
     } catch (err) {
       logMessage.error(err);
     } finally {
