@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
-import getConfig from "next/config";
 import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
@@ -9,13 +8,12 @@ import Fip from "./Fip";
 import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
+import { useFlagHook } from "../../lib/flags_hook";
 
 const Base = ({ children }) => {
   const { t } = useTranslation("common");
 
-  const {
-    publicRuntimeConfig: { isProduction: isProduction },
-  } = getConfig();
+  const googleTag = useFlagHook("googleAnalytics");
   const formConfig =
     children && children.props && children.props.formConfig ? children.props.formConfig : null;
   const classes = getPageClassNames(formConfig);
@@ -26,7 +24,7 @@ const Base = ({ children }) => {
   return (
     <>
       <Head>
-        {isProduction && (
+        {googleTag && (
           <React.Fragment>
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-8PNSS76E3B"></script>
             <script

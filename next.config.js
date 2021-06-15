@@ -1,5 +1,8 @@
 const path = require("path");
+const { I18NextHMRPlugin } = require("i18next-hmr/plugin");
 const { i18n } = require("./next-i18next.config");
+
+const localesDir = path.resolve("public/static/locales");
 
 module.exports = {
   i18n,
@@ -11,20 +14,12 @@ module.exports = {
     // Will be available on both server and client
     isProduction: process.env.PRODUCTION_ENV === "true" ? true : false,
   },
-  async redirects() {
-    if (process.env.PRODUCTION_ENV === "true") {
-      return [
-        {
-          source: "/sandbox",
-          destination: "/welcome-bienvenue",
-          permanent: true,
-        },
-      ];
-    } else {
-      return [];
+  webpack: (config, context) => {
+    // Allow for hot reload of translations
+    if (!context.isServer && context.dev) {
+      config.plugins.push(new I18NextHMRPlugin({ localesDir }));
     }
-  },
-  webpack: (config) => {
+
     // Support reading markdown
     config.module.rules.push({
       test: /\.md$/,

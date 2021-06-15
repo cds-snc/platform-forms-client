@@ -6,17 +6,22 @@ import { appWithTranslation } from "next-i18next";
 import { Provider } from "next-auth/client";
 import Base from "../components/globals/Base";
 import "../styles/app.scss";
+import { useHMR } from "../lib/trans_hmr";
+import i18nextConfig from "../next-i18next.config";
 
-const MyApp = ({ Component, pageProps }) => (
-  <Provider session={pageProps.session}>
-    <Base>
-      <Component {...pageProps} />
-    </Base>
-  </Provider>
-);
+const MyApp = ({ Component, pageProps }) => {
+  useHMR();
+  return (
+    <Provider session={pageProps.session}>
+      <Base>
+        <Component {...pageProps} />
+      </Base>
+    </Provider>
+  );
+};
 
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
 };
-export default appWithTranslation(MyApp);
+export default appWithTranslation(MyApp, i18nextConfig);

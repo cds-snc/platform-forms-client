@@ -1,4 +1,5 @@
 const path = require("path");
+const HttpBackend = require("i18next-http-backend/cjs");
 module.exports = {
   i18n: {
     defaultLocale: "en",
@@ -8,4 +9,5 @@ module.exports = {
   react: {
     useSuspense: false,
   },
+  use: process.browser ? [HttpBackend] : [],
 };
