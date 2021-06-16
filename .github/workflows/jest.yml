@@ -12,5 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Jest Tests
-        if: github.event_name == 'push'
         run: yarn test --coverage
