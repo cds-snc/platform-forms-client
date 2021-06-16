@@ -3,15 +3,25 @@ import { checkOne, checkAll, createFlag, removeFlag } from "@lib/flags";
 
 // Flags initial state values
 
-const initialFlags: Record<string, boolean> = {
-  sandbox: false,
-  vault: false,
-  googleAnalytics: false,
-  unpublishedForms: false,
-  submitToReliabilityQueue: false,
-  notifyPreview: false,
-};
-
+const initialFlags: Record<string, boolean> = process.env.CYPRESS
+  ? // Testing variables
+    {
+      sandbox: true,
+      vault: false,
+      googleAnalytics: false,
+      unpublishedForms: true,
+      submitToReliabilityQueue: false,
+      notifyPreview: false,
+    }
+  : // Default variables for application
+    {
+      sandbox: false,
+      vault: false,
+      googleAnalytics: false,
+      unpublishedForms: false,
+      submitToReliabilityQueue: false,
+      notifyPreview: false,
+    };
 const initiateFlags = async () => {
   console.log("Running flag initiation");
   let currentFlags = await checkAll();

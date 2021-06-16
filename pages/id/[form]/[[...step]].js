@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   }
   // Only retrieve publish ready forms if isProduction
 
-  if (!form || !(form.publishingStatus && unpublishedForms)) {
+  if (!form || (!form.publishingStatus && !unpublishedForms)) {
     return {
       redirect: {
         // We can redirect to a 'Form does not exist page' in the future
