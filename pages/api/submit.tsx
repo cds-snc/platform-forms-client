@@ -1,6 +1,5 @@
 import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
-import getConfig from "next/config";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import formidable from "formidable";
 import fs from "fs";

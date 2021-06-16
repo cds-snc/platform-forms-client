@@ -5,7 +5,7 @@ import mockRedis from "ioredis-mock";
 
 const getRedisInstance = () => {
   if (process.env.REDIS_URL) {
-    return new Redis(process.env.REDIS_URL);
+    return new Redis(6379, process.env.REDIS_URL);
   } else {
     // not ideal but works when you don't have local redis running.
     return new mockRedis();
