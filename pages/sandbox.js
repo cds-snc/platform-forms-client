@@ -5,6 +5,7 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
+import { checkOne } from "../lib/flags";
 
 const Sandbox = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");
@@ -75,6 +76,11 @@ Sandbox.propTypes = {
   formsList: PropTypes.array.isRequired,
 };
 export async function getServerSideProps(context) {
+  const sandboxActive = await checkOne("sandbox");
+
+  if (!sandboxActive) {
+    return { redirect: { destination: "/welcome-bienvenue", permanent: false } };
+  }
   const formsList = await getFormByStatus(false);
 
   return {

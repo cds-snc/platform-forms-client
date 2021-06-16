@@ -133,6 +133,7 @@ export interface DynamicFormProps {
   formConfig: PublicFormSchemaProperties;
   language: string;
   router: NextRouter;
+  notifyPreviewFlag: boolean;
   t: TFunction;
 }
 

@@ -7,6 +7,7 @@ import { TextPage } from "../../forms/TextPage/TextPage";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
 import { PublicFormSchemaProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
+import { useFlag } from "../../../lib/hooks/flags";
 
 interface DynamicFormProps {
   formConfig: PublicFormSchemaProperties;
@@ -25,6 +26,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const formTitle = formConfig[getProperty("title", language)] as string;
   const router = useRouter();
   const { step, urlQuery, htmlEmail } = router.query;
+  const notifyPreviewFlag = useFlag("notifyPreview");
 
   // render text pages
   if (step == "confirmation") {
@@ -44,7 +46,13 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         <title>{formTitle}</title>
       </Head>
       <h1 className="gc-h1">{formTitle}</h1>
-      <Form formConfig={formConfig} language={language} router={router} t={t}>
+      <Form
+        formConfig={formConfig}
+        language={language}
+        router={router}
+        t={t}
+        notifyPreviewFlag={notifyPreviewFlag}
+      >
         {currentForm}
       </Form>
     </div>
