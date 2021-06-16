@@ -101,4 +101,14 @@ describe("Checkbox component", () => {
       expect(input.value).toEqual(resultsArray[index]);
     });
   });
+  test("required elements display correctly", () => {
+    checkboxData.properties.validation.required = true;
+    render(
+      <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+        <GenerateElement element={checkboxData} language="fr" />
+      </Form>
+    );
+
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+  });
 });

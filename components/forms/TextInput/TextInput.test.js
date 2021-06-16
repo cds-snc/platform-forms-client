@@ -40,6 +40,7 @@ describe("Generate a text input", () => {
     expect(screen.getByRole("textbox"))
       .toBeRequired()
       .toHaveDescription(textInputData.properties.descriptionEn);
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(textInputData.properties.placeholderEn)).toBeInTheDocument();
   });
