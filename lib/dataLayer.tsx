@@ -444,12 +444,8 @@ function _handleFormDataText(key: string, value: string, formData: FormData) {
 function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
   formData.append(key, JSON.stringify({ value: value }));
 }
-async function _submitToAPI(
-  values: Responses,
-  formikBag: FormikBag<DynamicFormProps, FormValues>,
-  notifyPreview: boolean
-) {
-  const { language, router, formConfig } = formikBag.props;
+async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormProps, FormValues>) {
+  const { language, router, formConfig, notifyPreviewFlag } = formikBag.props;
   const { setStatus } = formikBag;
 
   const formDataObject = _buildFormDataObject(formConfig, values);
@@ -472,7 +468,7 @@ async function _submitToAPI(
                 referrerUrl: formConfig.endPage[getProperty("referrerUrl", language)],
               }
             : null;
-        const htmlEmail = notifyPreview ? serverResponse.data.htmlEmail : null;
+        const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
         const endPageText =
           formConfig && formConfig.endPage
             ? JSON.stringify(formConfig.endPage[getProperty("description", language)])

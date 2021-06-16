@@ -7,7 +7,6 @@ import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
 import Loader from "../../globals/Loader";
-import { useFlag } from "../../../lib/hooks/flags";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -102,7 +101,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values as Responses, formikBag, useFlag("notifyPreview"));
+      await submitToAPI(values as Responses, formikBag);
     } catch (err) {
       logMessage.error(err);
     } finally {
