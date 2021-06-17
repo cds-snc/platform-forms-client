@@ -22,6 +22,12 @@ module.exports = {
       use: "raw-loader",
     });
 
+    // Load version file
+    config.module.rules.push({
+      test: /VERSION/,
+      use: "raw-loader",
+    });
+
     // The pino logger module is transpiled for IE11 via babel.config.js
     config.module.rules.push({
       test: /\.js$/,
