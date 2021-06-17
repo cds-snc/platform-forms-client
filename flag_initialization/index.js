@@ -48,7 +48,7 @@ const initiateFlags = (redis) => {
       return checkAll(redis);
     })
     .then(async (currentFlags) => {
-      console.log("Checkign for New Flags");
+      console.log("Checking for New Flags");
       for (const key in initialFlags) {
         if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
           console.log(`Creating flag: ${key} with value ${initialFlags[key]}`);
