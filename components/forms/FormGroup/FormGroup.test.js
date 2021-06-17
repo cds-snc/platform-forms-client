@@ -35,7 +35,6 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
         <GenerateElement element={radioButtonData} language={lang} />
       </Form>
     );
-    // Legend properly renders
     const title =
         lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr,
       description =
@@ -43,6 +42,7 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
           ? radioButtonData.properties.descriptionEn
           : radioButtonData.properties.descriptionFr;
 
+    // Legend properly renders
     expect(screen.getByText(title)).toBeInTheDocument();
     expect(screen.getByText(title)).toHaveClass("gc-label");
     // description properly renders
