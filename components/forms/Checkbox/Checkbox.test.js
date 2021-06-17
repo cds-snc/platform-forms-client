@@ -70,8 +70,8 @@ describe("Checkbox component", () => {
       return object.en;
     });
 
-    expect(screen.getByRole("group")).toHaveFormValues({
-      8: resultsArray,
+    screen.getAllByRole("checkbox").forEach((input, index) => {
+      expect(input.value).toEqual(resultsArray[index]);
     });
   });
   test("... in French", () => {
@@ -97,9 +97,8 @@ describe("Checkbox component", () => {
     const resultsArray = checkboxData.properties.choices.map((object) => {
       return object.fr;
     });
-
-    expect(screen.getByRole("group")).toHaveFormValues({
-      8: resultsArray,
+    screen.getAllByRole("checkbox").forEach((input, index) => {
+      expect(input.value).toEqual(resultsArray[index]);
     });
   });
 });

@@ -4,7 +4,7 @@ import { NextRouter } from "next/router";
 
 export interface FormDefinitionProperties {
   internalTitleEn?: string;
-  interalTitleFr?: string;
+  internalTitleFr?: string;
   publishingStatus: boolean;
   submission: {
     email?: string;
@@ -133,6 +133,7 @@ export interface DynamicFormProps {
   formConfig: PublicFormSchemaProperties;
   language: string;
   router: NextRouter;
+  notifyPreviewFlag: boolean;
   t: TFunction;
 }
 
@@ -154,3 +155,10 @@ export interface AuthenticatedUser {
   email?: string | null;
   image?: string | null;
 }
+
+export type MultipleChoiceProps = {
+  id: string;
+  name: string;
+  label: string;
+  required?: boolean;
+};
