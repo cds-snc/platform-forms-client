@@ -11,12 +11,12 @@ FROM node:14-alpine
 
 COPY migrations /src
 WORKDIR /src
+RUN yarn install --silent 
 
 FROM node:14-alpine
 
 COPY flag_initialization /src
 WORKDIR /src
-
 RUN yarn install --silent 
 
 FROM node:14-alpine
