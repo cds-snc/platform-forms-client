@@ -38,7 +38,7 @@ const initiateFlags = (redis) => {
 
   return checkAll(redis)
     .then(async (currentFlags) => {
-      console.log("Removing old Flags");
+      console.log("Checking for Depreceated Flags");
       for (const key in currentFlags) {
         if (typeof initialFlags[key] === "undefined" || initialFlags[key] === null) {
           console.log(`Removing flag: ${key} from flag registry`);
@@ -48,7 +48,7 @@ const initiateFlags = (redis) => {
       return checkAll(redis);
     })
     .then(async (currentFlags) => {
-      console.log("Adding new Flags");
+      console.log("Checkign for New Flags");
       for (const key in initialFlags) {
         if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
           console.log(`Creating flag: ${key} with value ${initialFlags[key]}`);
