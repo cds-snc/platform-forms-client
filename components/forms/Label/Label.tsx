@@ -29,7 +29,12 @@ export const Label = (props: LabelProps): React.ReactElement => {
 
   return (
     <label data-testid="label" className={classes} htmlFor={htmlFor} id={id}>
-      {children} {required ? <span aria-hidden>*</span> : null}
+      {children}{" "}
+      {required ? (
+        <span data-testid="asterisk" aria-hidden>
+          *
+        </span>
+      ) : null}
       {required ? <i className="visually-hidden">{t("required-field")}</i> : null}
       {hint && <span className="gc-hint">{hint}</span>}
     </label>
