@@ -137,4 +137,13 @@ describe("Dropdown component", () => {
       dropdownData.properties.choices[newValue].fr
     );
   });
+  test("required elements display properly", () => {
+    dropdownData.properties.validation.required = true;
+    render(
+      <Form t={(key) => key}>
+        <GenerateElement element={dropdownData} language="fr" />
+      </Form>
+    );
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+  });
 });

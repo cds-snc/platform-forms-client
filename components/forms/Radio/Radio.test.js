@@ -42,6 +42,7 @@ describe("Generate a radio button", () => {
     expect(screen.getByText(radioButtonData.properties.choices[0].en)).toBeInTheDocument();
     expect(screen.getByText(radioButtonData.properties.choices[1].en)).toBeInTheDocument();
     // Field is required
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).toBeRequired();
     });
@@ -61,10 +62,23 @@ describe("Generate a radio button", () => {
     expect(screen.getByText(radioButtonData.properties.choices[0].fr)).toBeInTheDocument();
     expect(screen.getByText(radioButtonData.properties.choices[1].fr)).toBeInTheDocument();
     // Field is required
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).toBeRequired();
     });
     // Proper linked description to element
     expect(screen.getByRole("group")).toHaveDescription(radioButtonData.properties.descriptionFr);
+  });
+  test("not required displays properly", () => {
+    radioButtonData.properties.validation.required = false;
+    render(
+      <Form t={(key) => key}>
+        <GenerateElement element={radioButtonData} language="en" />
+      </Form>
+    );
+    expect(screen.queryByTestId("asterisk")).not.toBeInTheDocument();
+    screen.getAllByRole("radio").forEach((input) => {
+      expect(input).not.toBeRequired();
+    });
   });
 });
