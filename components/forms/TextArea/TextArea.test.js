@@ -41,6 +41,7 @@ describe("Generate a text area", () => {
     expect(screen.getByRole("textbox"))
       .toBeRequired()
       .toHaveDescription(textAreaData.properties.descriptionEn);
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(textAreaData.properties.placeholderEn)).toBeInTheDocument();
   });
