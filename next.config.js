@@ -1,7 +1,6 @@
 const path = require("path");
-const { I18NextHMRPlugin } = require("i18next-hmr/plugin");
-const { i18n } = require("./next-i18next.config");
 
+const { i18n } = require("./next-i18next.config");
 const localesDir = path.resolve("public/static/locales");
 
 module.exports = {
@@ -13,6 +12,7 @@ module.exports = {
   webpack: (config, context) => {
     // Allow for hot reload of translations
     if (!context.isServer && context.dev) {
+      const { I18NextHMRPlugin } = require("i18next-hmr/plugin");
       config.plugins.push(new I18NextHMRPlugin({ localesDir }));
     }
 
