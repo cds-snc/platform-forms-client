@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "yarn migrate && yarn initialize && NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
-    "start": "yarn migrate && next start -p ${PORT:-3000}",
+    "start": "yarn migrate && yarn initialize && next start -p ${PORT:-3000}",
     "migrate": "cd ./migrations && yarn migrate && cd ..",
+    "initialize": "cd ./flag_initialization && yarn initialize && cd ..",
     "start:test": "CYPRESS=true next start",
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
