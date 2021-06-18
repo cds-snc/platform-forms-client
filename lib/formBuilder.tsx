@@ -12,7 +12,7 @@ import {
   RichText,
   MultipleChoiceGroup,
 } from "../components/forms";
-import { FormElement, PropertyChoices, FormMetadataProperties } from "./types";
+import { FormElement, PropertyChoices, PublicFormSchemaProperties } from "./types";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -230,24 +230,24 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
  * @param formToRender
  * @param language
  */
-const _getRenderedForm = (formMetadata: FormMetadataProperties, language: string) => {
-  if (!formMetadata) {
+const _getRenderedForm = (formConfig: PublicFormSchemaProperties, language: string) => {
+  if (!formConfig) {
     return null;
   }
 
-  return formMetadata.layout.map((item: string) => {
-    const element = formMetadata.elements.find((element: FormElement) => element.id === item);
+  return formConfig.layout.map((item: string) => {
+    const element = formConfig.elements.find((element: FormElement) => element.id === item);
     if (element) {
       return <GenerateElement key={element.id} element={element} language={language} />;
     } else {
-      logMessage.error(`Failed component ID look up ${item} on form ID ${formMetadata.id}`);
+      logMessage.error(`Failed component ID look up ${item} on form ID ${formConfig.formID}`);
     }
   });
 };
 
 /**
  * _getFormInitialValues calls this function to set the initial value for an element
- * @param formMetadata
+ * @param formConfig
  * @param language
  */
 
@@ -286,17 +286,17 @@ const _getElementInitialValue = (
 /**
  * DynamicForm calls this function to set the initial form values
  * getFormInitialValues
- * @param formMetadata
+ * @param formConfig
  * @param language
  */
-const _getFormInitialValues = (formMetadata: FormMetadataProperties, language: string) => {
-  if (!formMetadata) {
+const _getFormInitialValues = (formConfig: PublicFormSchemaProperties, language: string) => {
+  if (!formConfig) {
     return null;
   }
 
   const initialValues: Record<string, unknown> = {};
 
-  formMetadata.elements
+  formConfig.elements
     .filter((element) => !["richText"].includes(element.type))
     .map((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);

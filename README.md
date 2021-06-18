@@ -31,6 +31,26 @@ cd platform-forms-client
 yarn install
 ```
 
+Set .env variables
+
+```
+NOTIFY_API_KEY= // Can be found in LastPass
+SUBMISSION_API=Submission
+TEMPLATES_API=Templates
+AWS_ACCESS_KEY_ID= // Can be found in LastPass
+AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
+GOOGLE_CLIENT_ID= // Can be found in LastPass
+GOOGLE_CLIENT_SECRET= // Can be found in LastPass
+NEXTAUTH_URL=http://localhost:3000
+REDIS_URL=localhost
+```
+
+Start Redis in docker locally
+
+```sh
+docker run --name local-redis -p 6379:6379 -d redis:alpine
+```
+
 Run in development mode:
 
 ```sh
@@ -97,6 +117,26 @@ Installer les dépendances
 ```sh
 cd platform-forms-client
 yarn install
+```
+
+Définir les variables .env
+
+```
+NOTIFY_API_KEY= // Peut être trouvé dans LastPass
+SUBMISSION_API=Submission
+TEMPLATES_API=Templates
+AWS_ACCESS_KEY_ID= // Peut être trouvé dans LastPass
+AWS_SECRET_ACCESS_KEY= // Peut être trouvé dans LastPass
+GOOGLE_CLIENT_ID= // Peut être trouvé dans LastPass
+GOOGLE_CLIENT_SECRET= // Peut être trouvé dans LastPass
+NEXTAUTH_URL=http://localhost:3000
+REDIS_URL=localhost
+```
+
+Démarrer Redis dans docker localement
+
+```sh
+docker run --name local-redis -p 6379:6379 -d redis:alpine
 ```
 
 Exécuter en mode développement

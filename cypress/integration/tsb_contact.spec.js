@@ -1,16 +1,21 @@
 describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" }, () => {
-  let formMetaData = null;
+  let formConfig = null,
+    formID = 165;
 
   before(() => {
     //Get form JSON configuration
-    cy.readFile("forms/TSB-contact.json").then((response) => {
-      formMetaData = response;
+    const body = {
+      method: "GET",
+      formID: formID,
+    };
+    cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
+      formConfig = response.body.data.records[0].formConfig;
     });
   });
 
   it("TSB Contact Form renders", () => {
-    cy.visit(`/en/id/${formMetaData.form.id}`);
-    cy.get("h1").contains(formMetaData.form.titleEn);
+    cy.visit(`/en/id/${formID}`);
+    cy.get("h1").contains(formConfig.form.titleEn);
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa").should("have.value", "Santa");
@@ -27,7 +32,7 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
   });
   it("Submit the Form", () => {
     cy.get("button").contains("Submit").click();
-    cy.url().should("include", `/en/id/${formMetaData.form.id}/confirmation`);
+    cy.url().should("include", `/en/id/${formID}/confirmation`);
     cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");
     cy.get("#content").contains(

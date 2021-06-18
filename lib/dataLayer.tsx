@@ -1,61 +1,272 @@
-import Forms from "../forms/forms";
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import axios from "axios";
 import type { FormikBag } from "formik";
 import { getProperty } from "./formBuilder";
 import { logger, logMessage } from "./logger";
 import {
   FormElement,
-  FormMetadataProperties,
   Responses,
   Response,
   FormValues,
   DynamicFormProps,
   FileInputResponse,
   Submission,
+  FormDefinitionProperties,
+  SubmissionProperties,
+  PublicFormSchemaProperties,
 } from "./types";
+
+// CRUD Operations for Templates
+interface CrudTemplateInput {
+  method: string;
+  formID?: string;
+  formConfig?: FormDefinitionProperties;
+}
+
+interface CrudTemplateResponse {
+  data: {
+    records?: {
+      formID: string;
+      formConfig: FormDefinitionProperties;
+      organization?: boolean;
+    }[];
+  };
+}
+
+async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
+  const getConfig = (payload: CrudTemplateInput) => {
+    const { method, formID, formConfig } = payload;
+
+    switch (payload.method) {
+      case "GET":
+        return {
+          method,
+          formID,
+        };
+      case "INSERT":
+        return {
+          method,
+          formConfig,
+        };
+      case "UPDATE":
+        return {
+          method,
+          formConfig,
+          formID,
+        };
+        break;
+      case "DELETE":
+        return {
+          method: "DELETE",
+          formID,
+        };
+        break;
+      default:
+        return {
+          method: "UNDEFINED",
+        };
+    }
+  };
+
+  if (process.env.CYPRESS && payload.method !== "GET") {
+    logMessage.info("Templates CRUD API in Test Mode");
+    const timer = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(undefined);
+        }, 1000);
+      });
+    };
+
+    return timer().then(() => {
+      const { method, formConfig } = payload;
+      switch (method) {
+        case "INSERT":
+          return {
+            data: {
+              records: [
+                {
+                  formID: "TEST",
+                  formConfig: formConfig ?? {
+                    publishingStatus: false,
+                    submission: {},
+                    form: {
+                      titleEn: "test",
+                      titleFr: "test",
+                      layout: [],
+                      elements: [],
+                    },
+                  },
+                  organization: false,
+                },
+              ],
+            },
+          };
+        case "UPDATE":
+          return {
+            data: {},
+          };
+          break;
+        case "DELETE":
+          return {
+            data: {},
+          };
+          break;
+        default:
+          return {
+            data: {},
+          };
+      }
+    });
+  }
+
+  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
+  const encoder = new TextEncoder();
+  const command = new InvokeCommand({
+    FunctionName: process.env.TEMPLATES_API ?? "Templates",
+    Payload: encoder.encode(JSON.stringify(getConfig(payload))),
+  });
+
+  return await lambdaClient
+    .send(command)
+    .then((response) => {
+      const decoder = new TextDecoder();
+      const respPayload = decoder.decode(response.Payload);
+      if (response.FunctionError) {
+        //throw Error("Templates API could not process json");
+        // temporary more graceful failure here
+        logMessage.info("Lambda Template Client not successful");
+        return null;
+      } else {
+        logMessage.info("Lambda Template Client successfully triggered");
+        return JSON.parse(respPayload);
+      }
+    })
+    .catch((err) => {
+      logMessage.error(err);
+      throw new Error("Could not process request with Lambda Templates function");
+    });
+}
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-function _getFormByID(formID: string): Record<string, unknown> {
-  // Need to get these forms from a DB or API in the future
-  let formToReturn = null;
-  for (const form of Object.values(Forms)) {
-    if (form.form.id == formID) {
-      formToReturn = {
-        ...form.form,
-        publishingStatus: form.publishingStatus,
-      };
-      break;
-    }
+
+async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
+  if (typeof window === "undefined") {
+    return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+      const { records } = response.data;
+      if (records?.length === 1 && records[0].formConfig.form) {
+        return {
+          formID,
+          ...records[0].formConfig.form,
+          publishingStatus: records[0].formConfig.publishingStatus,
+        };
+      }
+      return null;
+    });
+  } else {
+    return await axios({
+      url: "/api/templates",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        formID: formID,
+        method: "GET",
+      },
+      timeout: 5000,
+    })
+      .then((response) => {
+        const { records } = response.data.data;
+        if (records?.length === 1 && records[0].formConfig.form) {
+          return {
+            formID,
+            ...records[0].formConfig?.form,
+            publishingStatus: records[0].formConfig.publishingStatus,
+          };
+        }
+        return null;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
-  return formToReturn;
 }
 
 // Get an array of form IDs based on the publishing status
 // Returns -> Array of form IDs.
-function _getFormByStatus(status: boolean): Array<number> {
-  return Object.values(Forms)
-    .map(
-      logger((form) => {
-        if (form.publishingStatus === status) {
-          return form.form.id;
+async function _getFormByStatus(
+  status: boolean
+): Promise<(PublicFormSchemaProperties | undefined)[]> {
+  if (typeof window === "undefined") {
+    return crudTemplates({ method: "GET" }).then((response) => {
+      const { records } = response.data;
+      if (records && records?.length > 0) {
+        return records
+          .map((record) => {
+            if (record.formConfig.publishingStatus === status) {
+              return {
+                formID: record.formID,
+                ...record.formConfig.form,
+                publishingStatus: record.formConfig.publishingStatus,
+              };
+            }
+          })
+          .filter((val) => typeof val !== "undefined" && val !== null);
+      }
+      return [];
+    });
+  } else {
+    return await axios({
+      url: "/api/templates",
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        method: "GET",
+      },
+      timeout: 5000,
+    })
+      .then((response) => {
+        const {
+          data: { records: records },
+        } = response.data as CrudTemplateResponse;
+        if (records && records?.length > 0) {
+          return records
+            .map((record) => {
+              if (record.formConfig?.publishingStatus === status) {
+                return {
+                  formID: record.formID,
+                  ...record.formConfig?.form,
+                  publishingStatus: record.formConfig?.publishingStatus,
+                };
+              }
+            })
+            .filter((val) => typeof val !== "undefined" && val !== null);
         }
+        return [];
       })
-    )
-    .filter((val) => typeof val !== "undefined" && val !== null);
+      .catch((err) => {
+        console.error(err);
+        throw new Error("Cannot get forms by status");
+      });
+  }
 }
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
-function _getSubmissionByID(formID: string): Record<string, unknown> {
-  let submissionFormat = null;
-  for (const submission of Object.values(Forms)) {
-    if (submission.form.id == formID) {
-      submissionFormat = submission.submission;
-      break;
+async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
+  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
+    const { records } = response.data;
+    if (records?.length === 1 && records[0].formConfig?.submission) {
+      return {
+        ...records[0].formConfig?.submission,
+      };
     }
-  }
-  return submissionFormat;
+    return null;
+  });
 }
 
 function _rehydrateFormResponses(payload: Submission) {
@@ -181,14 +392,14 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`${title}${String.fromCharCode(13)}- No Response`);
 }
 
-function _buildFormDataObject(form: FormMetadataProperties, values: Responses) {
+function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
   const formData = new FormData();
   form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
   form.elements.map((element) => {
     _handleFormDataType(element, values[element.id], formData);
   });
-  formData.append("formInfo", JSON.stringify(form));
+  formData.append("formID", form.formID);
   return formData;
 }
 
@@ -232,31 +443,11 @@ function _handleFormDataText(key: string, value: string, formData: FormData) {
 function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
   formData.append(key, JSON.stringify({ value: value }));
 }
-async function _submitToApI(
-  values: Responses,
-  formikBag: FormikBag<DynamicFormProps, FormValues>,
-  isProduction: boolean
-) {
-  const { formMetadata, language, router } = formikBag.props;
+async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormProps, FormValues>) {
+  const { language, router, formConfig, notifyPreviewFlag } = formikBag.props;
   const { setStatus } = formikBag;
 
-  const formResponseObject = {
-    form: {
-      id: formMetadata.id,
-      titleEn: formMetadata.titleEn,
-      titleFr: formMetadata.titleFr,
-      emailSubjectEn: formMetadata.emailSubjectEn,
-      emailSubjectFr: formMetadata.emailSubjectFr,
-      elements: formMetadata.elements,
-      layout: formMetadata.layout,
-    },
-    responses: values,
-  };
-
-  const formDataObject = await _buildFormDataObject(
-    formResponseObject.form,
-    formResponseObject.responses
-  );
+  const formDataObject = _buildFormDataObject(formConfig, values);
 
   //making a post request to the submit API
   await axios({
@@ -266,24 +457,24 @@ async function _submitToApI(
       "Content-Type": "multipart/form-data",
     },
     data: formDataObject,
-    timeout: isProduction ? 3000 : 0,
+    timeout: process.env.NODE_ENV ? 0 : 5000,
   })
     .then((serverResponse) => {
       if (serverResponse.data.received === true) {
         const referrerUrl =
-          formMetadata && formMetadata.endPage
+          formConfig && formConfig.endPage
             ? {
-                referrerUrl: formMetadata.endPage[getProperty("referrerUrl", language)],
+                referrerUrl: formConfig.endPage[getProperty("referrerUrl", language)],
               }
             : null;
-        const htmlEmail = !isProduction ? serverResponse.data.htmlEmail : null;
+        const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
         const endPageText =
-          formMetadata && formMetadata.endPage
-            ? JSON.stringify(formMetadata.endPage[getProperty("description", language)])
+          formConfig && formConfig.endPage
+            ? JSON.stringify(formConfig.endPage[getProperty("description", language)])
             : "";
         router.push(
           {
-            pathname: `/${language}/id/${formMetadata.id}/confirmation`,
+            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
             query: {
               ...referrerUrl,
               htmlEmail: htmlEmail,
@@ -291,7 +482,7 @@ async function _submitToApI(
             },
           },
           {
-            pathname: `/${language}/id/${formMetadata.id}/confirmation`,
+            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
           }
         );
       } else {
@@ -307,6 +498,7 @@ async function _submitToApI(
 export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
-export const submitToAPI = logger(_submitToApI);
+export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
+export const crudTemplates = logger(_crudTemplates);

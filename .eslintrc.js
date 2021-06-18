@@ -37,6 +37,11 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
   plugins: ["react", "jsx-a11y", "prettier", "cypress"],
   ignorePatterns: ["**/storybook-static/*.*"],
   rules: { "prettier/prettier": "error" },

@@ -1,29 +1,30 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
-import getConfig from "next/config";
 import Footer from "./Footer";
 import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
 import Fip from "./Fip";
+import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
+import { useFlag } from "../../lib/hooks/flags";
 
 const Base = ({ children }) => {
   const { t } = useTranslation("common");
 
-  const {
-    publicRuntimeConfig: { isProduction: isProduction },
-  } = getConfig();
-  const formMetadata =
-    children && children.props && children.props.formMetadata ? children.props.formMetadata : null;
-  const isEmbeddable = formMetadata && children && children.props && children.props.isEmbeddable;
-  const classes = getPageClassNames(formMetadata);
+  const googleTag = useFlag("googleAnalytics");
+  const formConfig =
+    children && children.props && children.props.formConfig ? children.props.formConfig : null;
+  const classes = getPageClassNames(formConfig);
+
+  const isAdmin = children && children.props && children.props.user;
+  const isEmbeddable = formConfig && children && children.props && children.props.isEmbeddable;
 
   return (
     <>
       <Head>
-        {isProduction && (
+        {googleTag && (
           <React.Fragment>
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-8PNSS76E3B"></script>
             <script
@@ -55,7 +56,8 @@ const Base = ({ children }) => {
         {!isEmbeddable && (
           <header>
             <PhaseBanner />
-            <Fip formMetadata={formMetadata} />
+            <Fip formConfig={formConfig} />
+            {isAdmin && <AdminNav user={children.props.user} />}
           </header>
         )}
         <main id="content">{children}</main>

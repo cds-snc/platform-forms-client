@@ -84,8 +84,8 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
   const errors: Responses = {};
 
   for (const item in values) {
-    const formMetadata = props.formMetadata;
-    const elements: Array<FormElement> = formMetadata.elements;
+    const formConfig = props.formConfig;
+    const elements: Array<FormElement> = formConfig.elements;
     const currentItem = elements.find((element) => element.id == item);
 
     if (!currentItem) {

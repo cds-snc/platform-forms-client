@@ -2,9 +2,23 @@ import { ChangeEvent } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
 
-export interface FormMetadataProperties {
-  id: string;
-  version?: string | undefined;
+export interface FormDefinitionProperties {
+  internalTitleEn?: string;
+  internalTitleFr?: string;
+  publishingStatus: boolean;
+  submission: {
+    email?: string;
+    vault?: boolean;
+  };
+  form: FormSchemaProperties;
+}
+
+export interface FormDBConfigProperties {
+  formID: number;
+  formConfig?: FormDefinitionProperties;
+  organization?: boolean;
+}
+export interface FormSchemaProperties {
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;
@@ -15,11 +29,17 @@ export interface FormMetadataProperties {
   endPage?: Record<string, string>;
   [key: string]:
     | string
+    | boolean
     | Array<string>
     | Array<FormElement>
     | Record<string, string>
     | BrandProperties
     | undefined;
+}
+
+export interface PublicFormSchemaProperties extends FormSchemaProperties {
+  formID: string;
+  publishingStatus: boolean;
 }
 
 export type allFormElements =
@@ -29,12 +49,12 @@ export type allFormElements =
 export type callback = (event: allFormElements) => void;
 
 export interface SubmissionProperties {
-  templateID: string;
-  email: string;
+  email?: string;
+  vault?: boolean;
 }
 
 export interface Submission {
-  form: FormMetadataProperties;
+  form: PublicFormSchemaProperties;
   responses: Responses;
 }
 
@@ -110,9 +130,10 @@ export interface FormValues {
 }
 
 export interface DynamicFormProps {
-  formMetadata: FormMetadataProperties;
+  formConfig: PublicFormSchemaProperties;
   language: string;
   router: NextRouter;
+  notifyPreviewFlag: boolean;
   t: TFunction;
 }
 
@@ -128,6 +149,12 @@ export type FileInputResponse = {
   src: FileReader;
   [key: string]: string | File | FileReader;
 };
+
+export interface AuthenticatedUser {
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
 
 export type MultipleChoiceProps = {
   id: string;

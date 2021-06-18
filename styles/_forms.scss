@@ -118,7 +118,7 @@
 
   ul,
   ol {
-    @apply list-inside mb-10;
+    @apply mb-10;
   }
 
   a:visited {
@@ -200,6 +200,12 @@
   @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14;
   &:hover {
     @apply bg-gray-300;
+  }
+}
+.gc-button--destructive {
+  @apply bg-red-destructive;
+  &:hover {
+    @apply bg-red-hover;
   }
 }
 

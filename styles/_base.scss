@@ -56,6 +56,19 @@ ul.custom {
   @apply mb-12;
 }
 
+// HORIZONTAL NAV LIST STYLES
+.gc-horizontal-list {
+  @apply lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none;
+
+  .gc-horizontal-item {
+    @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
+
+    &:last-of-type {
+      @apply lg:pb-20 pr-0 pb-0;
+    }
+  }
+}
+
 // FOOTER STYLES
 
 .gc-footer {
@@ -84,18 +97,38 @@ ul.custom {
 
         a:focus {
           outline: none;
-          box-shadow: 4px 0 0 0 #303FC3, -4px 0 0 0 #303FC3;
+          box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
           @apply underline bg-blue-focus text-white-default;
         }
 
         a:active {
-          box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+          box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
           @apply underline bg-blue-active text-white-default;
         }
       }
       li:last-of-type {
         @apply lg:pb-20 pr-0 pb-0;
       }
+    }
+  }
+}
+
+/* Admin styling */
+ul.json_templates {
+  @apply list-none;
+  li {
+    @apply border-2 border-solid border-gray-400 cursor-pointer inline-block overflow-hidden break-words;
+    max-height: 100px;
+    max-width: 100%;
+    width: 100%;
+    font-family: monospace;
+    margin: 0 1rem;
+
+    div.update-buttons {
+      display: inline-block;
+    }
+    div.form-title {
+      max-width: 70%;
     }
   }
 }
@@ -114,18 +147,20 @@ a:visited {
   @apply text-purple-default;
 }
 
-a {
+a,
+.gc-button-link {
   @apply underline text-blue-dark hover:text-blue-hover;
 }
 
-a:focus {
+a:focus,
+.gc-button-link:focus {
   outline: none;
-  box-shadow: 4px 0 0 0 #303FC3, -4px 0 0 0 #303FC3;
+  box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
   @apply bg-blue-focus text-white-default;
 }
 
 a:active {
-  box-shadow: 4px 0 0 0 #1B2736, -4px 0 0 0 #1B2736;
+  box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
   @apply underline bg-blue-active text-white-default;
 }
 

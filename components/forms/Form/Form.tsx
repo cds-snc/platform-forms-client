@@ -1,22 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { withFormik, FormikProps } from "formik";
-import getConfig from "next/config";
 import { getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../../lib/validation";
 import { submitToAPI } from "../../../lib/dataLayer";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
+import Loader from "../../globals/Loader";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const {
-  publicRuntimeConfig: { isProduction: isProduction },
-} = getConfig();
+
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
+  const [submitting, setSubmitting] = useState(false);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -27,44 +26,55 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   useEffect(() => {
     if (formStatusError) {
       setFocusOnErrorMessage(props, serverErrorId);
+      setSubmitting(false);
     }
     if (!props.isValid && props.submitCount > 0) {
       setFocusOnErrorMessage(props, errorId);
+      setSubmitting(false);
     }
   }, [props.submitCount, props.isValid, props.errors]);
 
   return (
     <>
-      {formStatusError ? (
-        <Alert type="error" heading={formStatusError} tabIndex={0} id={serverErrorId} />
-      ) : null}
-      {errorList ? (
-        <Alert
-          type="error"
-          heading={t("input-validation.heading")}
-          validation={true}
-          id={errorId}
-          tabIndex={0}
-        >
-          {errorList}
-        </Alert>
-      ) : null}
+      {submitting ? (
+        <Loader loading={submitting} message={t("loading")} />
+      ) : (
+        <>
+          {formStatusError ? (
+            <Alert type="error" heading={formStatusError} tabIndex={0} id={serverErrorId} />
+          ) : null}
+          {errorList ? (
+            <Alert
+              type="error"
+              heading={t("input-validation.heading")}
+              validation={true}
+              id={errorId}
+              tabIndex={0}
+            >
+              {errorList}
+            </Alert>
+          ) : null}
 
-      <form
-        id="form"
-        data-testid="form"
-        onSubmit={handleSubmit}
-        method="POST"
-        encType="multipart/form-data"
-        noValidate
-      >
-        {children}
-        <div className="buttons">
-          <Button className="gc-button" type="submit">
-            {t("submitButton")}
-          </Button>
-        </div>
-      </form>
+          <form
+            id="form"
+            data-testid="form"
+            onSubmit={(e) => {
+              setSubmitting(true);
+              handleSubmit(e);
+            }}
+            method="POST"
+            encType="multipart/form-data"
+            noValidate
+          >
+            {children}
+            <div className="buttons">
+              <Button className="gc-button" type="submit">
+                {t("submitButton")}
+              </Button>
+            </div>
+          </form>
+        </>
+      )}
     </>
   );
 };
@@ -81,7 +91,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
   enableReinitialize: true, // needed when switching languages
 
   mapPropsToValues: (props) => {
-    return getFormInitialValues(props.formMetadata, props.language) as FormValues;
+    return getFormInitialValues(props.formConfig, props.language) as FormValues;
   },
 
   validate: (values, props) => {
@@ -91,7 +101,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values as Responses, formikBag, isProduction);
+      await submitToAPI(values as Responses, formikBag);
     } catch (err) {
       logMessage.error(err);
     } finally {

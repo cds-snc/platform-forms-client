@@ -1,19 +1,19 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getFormByStatus, getFormByID } from "../lib/dataLayer.tsx";
+import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
+import { checkOne } from "../lib/flags";
 
-const Sandbox = () => {
+const Sandbox = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");
   const LinksList = () => {
-    const formIDs = getFormByStatus(false);
-    return formIDs.map((formID) => {
-      const form = getFormByID(formID);
+    return formsList.map((form) => {
       return (
-        <li key={`link-${form.id}`}>
-          <Link href={`/id/${form.id}`}>
+        <li key={`link-${form.formID}`}>
+          <Link href={`/id/${form.formID}`}>
             {form[getProperty("title", i18n.language)].toString()}
           </Link>
         </li>
@@ -72,10 +72,23 @@ const Sandbox = () => {
   );
 };
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common", "welcome"])),
-  },
-});
+Sandbox.propTypes = {
+  formsList: PropTypes.array.isRequired,
+};
+export async function getServerSideProps(context) {
+  const sandboxActive = await checkOne("sandbox");
+
+  if (!sandboxActive) {
+    return { redirect: { destination: "/welcome-bienvenue", permanent: false } };
+  }
+  const formsList = await getFormByStatus(false);
+
+  return {
+    props: {
+      formsList,
+      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+    }, // will be passed to the page component as props
+  };
+}
 
 export default Sandbox;

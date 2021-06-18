@@ -36,6 +36,7 @@ module.exports = {
     fontFamily: {
       sans: ["lato"],
       body: ["Noto Sans"],
+      mono: ["monospace"],
     },
     /* ["fontSize", "lineHeight"]
        These typography rules have been pulled from the design system
@@ -72,6 +73,8 @@ module.exports = {
         ...colors.red,
         100: "#f3e9e8",
         default: "#b10e1e",
+        destructive: "#892406",
+        hover: "#4E1504",
       },
       purple: {
         ...colors.purple,
@@ -152,6 +155,6 @@ module.exports = {
   variants: {
     extend: {},
   },
-  purge: ["./components/**/*.tsx", "./pages/**/*.js"],
+  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("tailwindcss"), require("precss"), require("autoprefixer")],
 };

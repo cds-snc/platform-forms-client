@@ -8,7 +8,7 @@ jest.mock("../../../lib/dataLayer", () => ({
   submitToAPI: jest.fn(() => {}),
 }));
 
-const formMetadata = {
+const formConfig = {
   id: 1,
   version: 1,
   titleEn: "Test Form",
@@ -21,7 +21,7 @@ describe("Generate a form component", () => {
   afterEach(cleanup);
   test("...with fake children", () => {
     render(
-      <Form formMetadata={formMetadata} language="en" t={(key) => key}>
+      <Form formConfig={formConfig} language="en" t={(key) => key}>
         <div data-testid="test-child"></div>
       </Form>
     );
@@ -35,7 +35,7 @@ describe("Generate a form component", () => {
     });
 
     test("Form is submitted", () => {
-      render(<Form formMetadata={formMetadata} language="en" t={(key) => key}></Form>);
+      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
 
       userEvent.click(screen.getByRole("button", { type: "submit" }));
       const mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
