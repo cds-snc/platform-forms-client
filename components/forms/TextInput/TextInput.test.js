@@ -29,7 +29,7 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
   test("renders correctly", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language="en" />
+        <GenerateElement element={textInputData} language={lang} />
       </Form>
     );
     const title =
@@ -38,13 +38,13 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
         lang === "en"
           ? textInputData.properties.descriptionEn
           : textInputData.properties.descriptionFr,
-      placeholder = 
+      placeholder =
         lang === "en"
           ? textInputData.properties.placeholderEn
           : textInputData.properties.placeholderFr;
 
     // Label properly renders
-    expect(screen.getByTestId("label")).toContain(title);
+    expect(screen.getByText(title)).toBeInTheDocument();
     // Description properly renders
     expect(screen.getByText(description)).toBeInTheDocument();
     // Field marked as required

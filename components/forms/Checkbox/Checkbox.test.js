@@ -104,7 +104,7 @@ describe("Checkbox component", () => {
   test("required elements display correctly", () => {
     checkboxData.properties.validation.required = true;
     render(
-      <Form formMetadata={formMetadata} t={(key) => key} language="fr">
+      <Form formConfig={formConfig} t={(key) => key} language="fr">
         <GenerateElement element={checkboxData} language="fr" />
       </Form>
     );

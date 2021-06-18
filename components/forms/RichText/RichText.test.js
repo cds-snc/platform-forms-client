@@ -22,28 +22,22 @@ const richTextData = {
 
 describe("Generate a text area", () => {
   afterEach(cleanup);
-  test("...in English", () => {
+  test.each([["en"], ["fr"]])("renders properly", (lang) => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={richTextData} language="en" />
+        <GenerateElement element={richTextData} language={lang} />
       </Form>
     );
+    const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr,
+      description =
+        lang === "en"
+          ? richTextData.properties.descriptionEn
+          : richTextData.properties.descriptionFr;
     // Label properly renders
-    expect(screen.getByText(richTextData.properties.titleEn)).toBeInTheDocument();
-    expect(screen.getByText(richTextData.properties.titleEn)).toHaveClass("gc-h3");
+    expect(screen.getByText(title)).toBeInTheDocument();
+    expect(screen.getByText(title)).toHaveClass("gc-h3");
     // Description properly render
-    expect(screen.getByText(richTextData.properties.descriptionEn)).toBeInTheDocument();
-  });
-  test("...in French", () => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={richTextData} language="fr" />
-      </Form>
-    );
-    // Label properly renders
-    expect(screen.getByText(richTextData.properties.titleFr)).toBeInTheDocument();
-    // Description properly render
-    expect(screen.getByText(richTextData.properties.descriptionFr)).toBeInTheDocument();
+    expect(screen.getByText(description)).toBeInTheDocument();
   });
   test("Return null if no children", () => {
     const emptyRichTextData = {
