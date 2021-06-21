@@ -54,13 +54,11 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
           formConfig,
           formID,
         };
-        break;
       case "DELETE":
         return {
           method: "DELETE",
           formID,
         };
-        break;
       default:
         return {
           method: "UNDEFINED",
@@ -106,12 +104,10 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
           return {
             data: {},
           };
-          break;
         case "DELETE":
           return {
             data: {},
           };
-          break;
         default:
           return {
             data: {},
