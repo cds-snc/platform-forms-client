@@ -11,7 +11,12 @@ FROM node:14-alpine
 
 COPY migrations /src
 WORKDIR /src
+RUN yarn install --silent 
 
+FROM node:14-alpine
+
+COPY flag_initialization /src
+WORKDIR /src
 RUN yarn install --silent 
 
 FROM node:14-alpine
@@ -35,7 +40,9 @@ COPY public ./public
 COPY next.config.js .
 COPY next-i18next.config.js .
 COPY migrations ./migrations
+COPY flag_initialization ./flag_initialization
 COPY --from=1 /src/node_modules ./migrations/node_modules
+COPY --from=2 /src/node_modules ./flag_initialization/node_modules
 
 
 ENV PORT 3000

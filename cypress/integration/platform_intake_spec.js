@@ -1,5 +1,5 @@
 describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:3000" }, () => {
-  let formMetaData = null,
+  let formConfig = null,
     formID = 162;
   before(() => {
     //Get form JSON configuration
@@ -8,13 +8,13 @@ describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:
       formID: formID,
     };
     cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
-      formMetaData = response.body.data.records[0].formConfig;
+      formConfig = response.body.data.records[0].formConfig;
     });
   });
 
   it("CDS Platform Intake Form renders", () => {
     cy.visit(`/en/id/${formID}`);
-    cy.get("h1").contains(formMetaData.form.titleEn);
+    cy.get("h1").contains(formConfig.form.titleEn);
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa Claus").should("have.value", "Santa Claus");

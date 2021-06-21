@@ -1,5 +1,5 @@
 describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" }, () => {
-  let formMetaData = null,
+  let formConfig = null,
     formID = 165;
 
   before(() => {
@@ -9,13 +9,13 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
       formID: formID,
     };
     cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
-      formMetaData = response.body.data.records[0].formConfig;
+      formConfig = response.body.data.records[0].formConfig;
     });
   });
 
   it("TSB Contact Form renders", () => {
     cy.visit(`/en/id/${formID}`);
-    cy.get("h1").contains(formMetaData.form.titleEn);
+    cy.get("h1").contains(formConfig.form.titleEn);
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa").should("have.value", "Santa");

@@ -1,0 +1,15 @@
+{
+  "name": "forms-flags-migrations",
+  "version": "0.1.0",
+  "description": "Initiates the Feature Flags between application versions",
+  "main": "index.js",
+  "scripts": {
+    "initialize": "node index.js"
+  },
+  "keywords": [],
+  "author": "Bryan Robitaille",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ioredis": "^4.27.6"
+  }
+}

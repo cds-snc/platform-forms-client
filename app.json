@@ -1,0 +1,6 @@
+{
+  "name": "GCForms review app template",
+  "description": "This file is to help build the Heroku Review App",
+  "addons": ["heroku-redis"],
+  "success_url": "/en/welcome-bienvenue"
+}
