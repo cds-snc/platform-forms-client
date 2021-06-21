@@ -73,7 +73,7 @@ describe.each([
   ["fr", "Ajouter Element", "Article"],
 ])("Generate a dynamic row", (lang, buttonText, itemText) => {
   afterEach(cleanup);
-  describe("renders properly", () => {
+  describe("renders without errors", () => {
     test("...initialState", () => {
       render(
         <Form formConfig={formConfig} t={(key) => key} language={lang}>

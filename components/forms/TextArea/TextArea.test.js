@@ -27,37 +27,30 @@ const textAreaData = {
 
 describe("Generate a text area", () => {
   afterEach(cleanup);
-  test("...in English", () => {
+  test.each([["en"], ["fr"]])("renders without errors", (lang) => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={textAreaData} language="en" />
+        <GenerateElement element={textAreaData} language={lang} />
       </Form>
     );
+    const title = lang === "en" ? textAreaData.properties.titleEn : textAreaData.properties.titleFr,
+      description =
+        lang === "en"
+          ? textAreaData.properties.descriptionEn
+          : textAreaData.properties.descriptionFr,
+      placeholder =
+        lang === "en"
+          ? textAreaData.properties.placeholderEn
+          : textAreaData.properties.placeholderFr;
+
     // Label properly renders
-    expect(screen.getByTestId("label")).toContainHTML(textAreaData.properties.titleEn);
+    expect(screen.getByTestId("label")).toContainHTML(title);
     // Description properly render
-    expect(screen.getByText(textAreaData.properties.descriptionEn)).toBeInTheDocument();
+    expect(screen.getByText(description)).toBeInTheDocument();
     // Field marked as required and have aria described by
-    expect(screen.getByRole("textbox"))
-      .toBeRequired()
-      .toHaveDescription(textAreaData.properties.descriptionEn);
+    expect(screen.getByRole("textbox")).toBeRequired().toHaveDescription(description);
     expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     // Placeholder properly renders
-    expect(screen.getByPlaceholderText(textAreaData.properties.placeholderEn)).toBeInTheDocument();
-  });
-  test("...in French", () => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textAreaData} language="fr" />
-      </Form>
-    );
-    // Label properly renders
-    expect(screen.getByTestId("label")).toContainHTML(textAreaData.properties.titleFr);
-    // Description properly render
-    expect(screen.getByText(textAreaData.properties.descriptionFr)).toBeInTheDocument();
-    // Placeholder properly renders
-    expect(screen.getByPlaceholderText(textAreaData.properties.placeholderFr)).toBeInTheDocument();
-    // Field marked as required
-    expect(screen.getByRole("textbox")).toBeRequired();
+    expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
   });
 });

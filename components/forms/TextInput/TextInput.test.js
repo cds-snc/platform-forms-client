@@ -26,7 +26,7 @@ const textInputData = {
 
 describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
   afterEach(cleanup);
-  test("renders correctly", () => {
+  test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
         <GenerateElement element={textInputData} language={lang} />

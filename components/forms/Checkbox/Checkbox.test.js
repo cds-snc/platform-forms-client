@@ -46,20 +46,22 @@ const formConfig = {
 
 describe("Checkbox component", () => {
   afterEach(cleanup);
-  test("... in English", () => {
+  test.each([["en"], ["fr"]])("renders without errors", (lang) => {
     render(
-      <Form formConfig={formConfig} t={(key) => key} language="en">
-        <GenerateElement element={checkboxData} language="en" />
+      <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <GenerateElement element={checkboxData} language={lang} />
       </Form>
     );
+    const description =
+      lang === "en" ? checkboxData.properties.descriptionEn : checkboxData.properties.descriptionFr;
     checkboxData.properties.choices.forEach((input) => {
-      expect(screen.getByText(input.en)).toBeInTheDocument();
+      expect(screen.getByText(input[lang])).toBeInTheDocument();
     });
     screen.getAllByRole("checkbox").forEach((input) => {
       expect(input).toHaveClass("gc-input-checkbox__input").not.toBeChecked();
     });
     // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(checkboxData.properties.descriptionEn);
+    expect(screen.getByRole("group")).toHaveDescription(description);
 
     // Check the boxes
     screen.getAllByRole("checkbox").forEach((input) => {
@@ -67,36 +69,9 @@ describe("Checkbox component", () => {
     });
 
     const resultsArray = checkboxData.properties.choices.map((object) => {
-      return object.en;
+      return object[lang];
     });
 
-    screen.getAllByRole("checkbox").forEach((input, index) => {
-      expect(input.value).toEqual(resultsArray[index]);
-    });
-  });
-  test("... in French", () => {
-    render(
-      <Form formConfig={formConfig} t={(key) => key} language="fr">
-        <GenerateElement element={checkboxData} language="fr" />
-      </Form>
-    );
-    checkboxData.properties.choices.forEach((input) => {
-      expect(screen.getByText(input.fr)).toBeInTheDocument();
-    });
-    screen.getAllByRole("checkbox").forEach((input) => {
-      expect(input).toHaveClass("gc-input-checkbox__input").not.toBeChecked();
-    });
-    // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(checkboxData.properties.descriptionFr);
-
-    // Check the boxes
-    screen.getAllByRole("checkbox").forEach((input) => {
-      fireEvent.click(input);
-    });
-
-    const resultsArray = checkboxData.properties.choices.map((object) => {
-      return object.fr;
-    });
     screen.getAllByRole("checkbox").forEach((input, index) => {
       expect(input.value).toEqual(resultsArray[index]);
     });
