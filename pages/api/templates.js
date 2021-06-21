@@ -16,24 +16,30 @@ const isAllowed = (session, method) => {
 };
 
 const templates = async (req, res) => {
-  const session = await getSession({ req });
-  const requestBody = JSON.parse(req.body);
+  try {
+    const session = await getSession({ req });
 
-  if (isAllowed(session, requestBody.method)) {
-    return crudTemplates({ ...requestBody, session })
-      .then((response) => {
-        if (response) {
-          res.status(200).json(response);
-        } else {
+    const requestBody = JSON.parse(req.body);
+    console.log(requestBody);
+
+    if (isAllowed(session, requestBody.method)) {
+      return crudTemplates({ ...requestBody, session })
+        .then((response) => {
+          if (response) {
+            res.status(200).json(response);
+          } else {
+            res.status(500).json({ error: "Error on Server Side" });
+          }
+        })
+        .catch((err) => {
+          logMessage.error(err);
           res.status(500).json({ error: "Error on Server Side" });
-        }
-      })
-      .catch((err) => {
-        logMessage.error(err);
-        res.status(500).json({ error: "Error on Server Side" });
-      });
-  } else {
-    return res.status(403).json({ error: "Forbidden" });
+        });
+    } else {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+  } catch {
+    res.status(500).json({ error: "Malformed API Request" });
   }
 };
 
