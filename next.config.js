@@ -2,8 +2,6 @@ const path = require("path");
 const { i18n } = require("./next-i18next.config");
 const localesDir = path.resolve("public/static/locales");
 
-const localesDir = path.resolve("public/static/locales");
-
 module.exports = {
   i18n,
   sassOptions: {
