@@ -1,14 +1,17 @@
 describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:3000" }, () => {
   let formConfig = null,
-    formID = 162;
+    formID = null;
   before(() => {
     //Get form JSON configuration
     const body = {
       method: "GET",
-      formID: formID,
     };
     cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
-      formConfig = response.body.data.records[0].formConfig;
+      const record = response.body.data.records.find(
+        (rec) => rec.formConfig.internalTitleEn === "Work with CDS on a Digital Form"
+      );
+      formConfig = record.formConfig;
+      formID = record.formID;
     });
   });
 
