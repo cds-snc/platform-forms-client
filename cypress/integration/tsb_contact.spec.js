@@ -1,15 +1,18 @@
 describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" }, () => {
   let formConfig = null,
-    formID = 165;
+    formID = null;
 
   before(() => {
-    //Get form JSON configuration
+    // Find the JSON configuration
     const body = {
       method: "GET",
-      formID: formID,
     };
     cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
-      formConfig = response.body.data.records[0].formConfig;
+      const record = response.body.data.records.find(
+        (rec) => rec.formConfig.internalTitleEn === "Contact Us - TSB"
+      );
+      formConfig = record.formConfig;
+      formID = record.formID;
     });
   });
 
