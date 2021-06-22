@@ -1,6 +1,5 @@
 import React from "react";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-
 import { FormSettings } from "./Settings";
 import mockedAxios from "axios";
 import { useRouter } from "next/router";
@@ -42,5 +41,22 @@ describe("Form Settings Page", () => {
     waitFor(() => {
       expect(push).toHaveBeenCalled();
     });
+  });
+  test("Logs errors on failure", async () => {
+    mockedAxios.mockResolvedValue({
+      status: 400,
+    });
+    // I wanted to spy console.error but it didn't want to work
+    // for now, the handler here calls JSON.stringify so we can spy that
+    const spy = jest.spyOn(JSON, "stringify");
+
+    render(<FormSettings form={form}></FormSettings>);
+
+    await fireEvent.click(screen.queryByTestId("delete"));
+    expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
+
+    await fireEvent.click(screen.queryByTestId("confirmDelete"));
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
   });
 });
