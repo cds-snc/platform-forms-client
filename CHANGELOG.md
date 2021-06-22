@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Form Configurtion
+- Form Configuration
   - API endpoint for CRUD operations
   - Settings page to modify/delete an existing configuration
   - Uploads page to upload a new form configuration
@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- JSON files defining the form configuraitons are no longer stored within `./forms` directory in the code repository.
+- JSON files defining the form configurations are no longer stored within the `./forms` directory in the code repository.
 
 ## [0.0.1] 2020-05-11 - Initial launch
 
