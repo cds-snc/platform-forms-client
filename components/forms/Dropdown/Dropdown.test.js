@@ -80,70 +80,48 @@ const dropdownData = {
   },
 };
 
-describe("Dropdown component", () => {
+describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   afterEach(cleanup);
-  test("... in English", () => {
+  test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language="en" />
+        <GenerateElement element={dropdownData} language={lang} />
       </Form>
     );
+    const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr,
+      description =
+        lang === "en"
+          ? dropdownData.properties.descriptionEn
+          : dropdownData.properties.descriptionFr;
     expect(screen.queryByTestId("dropdown"))
       .toBeInTheDocument()
-      .toHaveDescription(dropdownData.properties.descriptionEn)
+      .toHaveDescription(description)
       .toHaveClass("gc-dropdown")
       .toHaveDisplayValue("");
     expect(
       screen.getByRole("combobox", {
-        name: dropdownData.properties.titleEn,
+        name: title,
       })
     ).toBeInTheDocument();
 
     // Change value
     fireEvent.select(screen.queryByTestId("dropdown"), {
       target: {
-        value: dropdownData.properties.choices[2].en,
+        value: dropdownData.properties.choices[2][lang],
       },
     });
     expect(screen.getByTestId("dropdown")).toHaveDisplayValue(
-      dropdownData.properties.choices[2].en
-    );
-  });
-  test("... in French", () => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language="fr" />
-      </Form>
-    );
-    expect(screen.queryByTestId("dropdown"))
-      .toBeInTheDocument()
-      .toHaveDescription(dropdownData.properties.descriptionFr)
-      .toHaveClass("gc-dropdown")
-      .toHaveDisplayValue("");
-    expect(
-      screen.getByRole("combobox", {
-        name: dropdownData.properties.titleFr,
-      })
-    ).toBeInTheDocument();
-
-    // Change value
-    const newValue = Math.floor(Math.random() * dropdownData.properties.choices.length);
-    fireEvent.select(screen.queryByTestId("dropdown"), {
-      target: {
-        value: dropdownData.properties.choices[newValue].fr,
-      },
-    });
-    expect(screen.getByTestId("dropdown")).toHaveDisplayValue(
-      dropdownData.properties.choices[newValue].fr
+      dropdownData.properties.choices[2][lang]
     );
   });
   test("required elements display properly", () => {
     dropdownData.properties.validation.required = true;
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language="fr" />
+        <GenerateElement element={dropdownData} language={lang} />
       </Form>
     );
     expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    dropdownData.properties.validation.required = false;
   });
 });

@@ -61,7 +61,9 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
                 pathname: `/admin/view-templates`,
               });
             } else {
+              // Todo show error message on page
               console.error(JSON.stringify(resp));
+              return;
             }
           } catch (e) {
             console.error(e);
