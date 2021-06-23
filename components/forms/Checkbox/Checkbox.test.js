@@ -44,9 +44,9 @@ const formConfig = {
   elements: [checkboxData],
 };
 
-describe("Checkbox component", () => {
+describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
   afterEach(cleanup);
-  test.each([["en"], ["fr"]])("renders without errors", (lang) => {
+  test("renders without errors", () => {
     render(
       <Form formConfig={formConfig} t={(key) => key} language={lang}>
         <GenerateElement element={checkboxData} language={lang} />
@@ -79,8 +79,8 @@ describe("Checkbox component", () => {
   test("required elements display correctly", () => {
     checkboxData.properties.validation.required = true;
     render(
-      <Form formConfig={formConfig} t={(key) => key} language="fr">
-        <GenerateElement element={checkboxData} language="fr" />
+      <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <GenerateElement element={checkboxData} language={lang} />
       </Form>
     );
 

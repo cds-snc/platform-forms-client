@@ -80,9 +80,9 @@ const dropdownData = {
   },
 };
 
-describe("Dropdown component", () => {
+describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   afterEach(cleanup);
-  test.each([["en"], ["fr"]])("renders without errors", (lang) => {
+  test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
         <GenerateElement element={dropdownData} language={lang} />
@@ -118,9 +118,10 @@ describe("Dropdown component", () => {
     dropdownData.properties.validation.required = true;
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language="fr" />
+        <GenerateElement element={dropdownData} language={lang} />
       </Form>
     );
     expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    dropdownData.properties.validation.required = false;
   });
 });

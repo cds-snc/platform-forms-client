@@ -27,9 +27,9 @@ const radioButtonData = {
   },
 };
 
-describe("Generate a radio button", () => {
+describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
   afterEach(cleanup);
-  test.each([["en"], ["fr"]])("renders without errors", (lang) => {
+  test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
         <GenerateElement element={radioButtonData} language={lang} />
@@ -59,12 +59,13 @@ describe("Generate a radio button", () => {
     radioButtonData.properties.validation.required = false;
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={radioButtonData} language="en" />
+        <GenerateElement element={radioButtonData} language={lang} />
       </Form>
     );
     expect(screen.queryByTestId("asterisk")).not.toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).not.toBeRequired();
     });
+    radioButtonData.properties.validation.required = true;
   });
 });
