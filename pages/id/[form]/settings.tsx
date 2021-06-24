@@ -25,7 +25,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   return {
     redirect: {
       // We can redirect to a 'Form does not exist page' in the future
-      destination: "/404",
+      destination: `/${context.locale}/404`,
       permanent: false,
     },
   };
