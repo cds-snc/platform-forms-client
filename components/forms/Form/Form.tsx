@@ -8,6 +8,11 @@ import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
 import Loader from "../../globals/Loader";
 
+declare global {
+  interface Window {
+    dataLayer: Array<unknown>;
+  }
+}
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -105,6 +110,14 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
     } catch (err) {
       logMessage.error(err);
     } finally {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "form_submission_trigger",
+        formID: formikBag.props.formConfig.formID,
+        formTitle: formikBag.props.formConfig.titleEn,
+      });
+
       formikBag.setSubmitting(false);
     }
   },
