@@ -79,7 +79,7 @@ export async function getServerSideProps(context) {
   const sandboxActive = await checkOne("sandbox");
 
   if (!sandboxActive) {
-    return { redirect: { destination: "/welcome-bienvenue", permanent: false } };
+    return { redirect: { destination: `/${context.locale}/welcome-bienvenue`, permanent: false } };
   }
   const formsList = await getFormByStatus(false);
 

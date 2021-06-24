@@ -14,6 +14,21 @@ export async function getServerSideProps(context) {
     const queryObj = context.query;
     const parsedForm = queryObj && queryObj.formObject ? JSON.parse(queryObj.formObject) : null;
     form = parsedForm && parsedForm.form ? parsedForm.form : null;
+  } else if (["20", "42", "45", "49"].includes(formId)) {
+    // This else if block is to be removed once temporary routing in no longer needed
+    // for the current production level forms.
+    const redirectTable = {
+      20: "1",
+      42: "2",
+      45: "3",
+      49: "4",
+    };
+    return {
+      redirect: {
+        destination: `/${context.locale}/id/${redirectTable[formId]}`,
+        permanent: false,
+      },
+    };
   } else {
     //Otherwise, get the form object via the dataLayer library
     form = await getFormByID(context.params.form);
@@ -24,7 +39,7 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         // We can redirect to a 'Form does not exist page' in the future
-        destination: "/404",
+        destination: `/${context.locale}/404`,
         permanent: false,
       },
     };
