@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+No changes unreleased
+
+## [1.0.0] 2021-06-24
+
 #### ⚠️ This release includes a data migration
+
+#### 🚩 This release includes features hidden behind feature flags
 
 ### Added
 
@@ -22,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Login to the administration pages using your cds-snc GSuite account
 - Feature Flags
   - Enable/Disable various application functionality through the admin interface.
+- Temporary routing for existing form Ids to newly assigned Ids. This routing will be removed in the next patched version release.
 
 ### Changed
 
