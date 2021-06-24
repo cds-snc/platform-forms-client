@@ -27,58 +27,45 @@ const radioButtonData = {
   },
 };
 
-describe("Generate a radio button", () => {
+describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
   afterEach(cleanup);
-  test("...in English", () => {
+  test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={radioButtonData} language="en" />
+        <GenerateElement element={radioButtonData} language={lang} />
       </Form>
     );
+    const title =
+        lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr,
+      description =
+        lang === "en"
+          ? radioButtonData.properties.descriptionEn
+          : radioButtonData.properties.descriptionFr;
     // Label properly renders
-    expect(screen.getByText(radioButtonData.properties.titleEn)).toBeInTheDocument();
-    expect(screen.getByText(radioButtonData.properties.titleEn)).toHaveClass("gc-label");
+    expect(screen.getByText(title)).toBeInTheDocument();
+    expect(screen.getByText(title)).toHaveClass("gc-label");
     // Choices properly render
-    expect(screen.getByText(radioButtonData.properties.choices[0].en)).toBeInTheDocument();
-    expect(screen.getByText(radioButtonData.properties.choices[1].en)).toBeInTheDocument();
+    expect(screen.getByText(radioButtonData.properties.choices[0][lang])).toBeInTheDocument();
+    expect(screen.getByText(radioButtonData.properties.choices[1][lang])).toBeInTheDocument();
     // Field is required
     expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).toBeRequired();
     });
     // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(radioButtonData.properties.descriptionEn);
-  });
-  test("...in French", () => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={radioButtonData} language="fr" />
-      </Form>
-    );
-    // Label properly renders
-    expect(screen.getByText(radioButtonData.properties.titleFr)).toBeInTheDocument();
-    expect(screen.getByText(radioButtonData.properties.titleFr)).toHaveClass("gc-label");
-    // Choices properly render
-    expect(screen.getByText(radioButtonData.properties.choices[0].fr)).toBeInTheDocument();
-    expect(screen.getByText(radioButtonData.properties.choices[1].fr)).toBeInTheDocument();
-    // Field is required
-    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
-    screen.getAllByRole("radio").forEach((input) => {
-      expect(input).toBeRequired();
-    });
-    // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(radioButtonData.properties.descriptionFr);
+    expect(screen.getByRole("group")).toHaveDescription(description);
   });
   test("not required displays properly", () => {
     radioButtonData.properties.validation.required = false;
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={radioButtonData} language="en" />
+        <GenerateElement element={radioButtonData} language={lang} />
       </Form>
     );
     expect(screen.queryByTestId("asterisk")).not.toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).not.toBeRequired();
     });
+    radioButtonData.properties.validation.required = true;
   });
 });
