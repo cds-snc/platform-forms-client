@@ -13,6 +13,8 @@ No changes unreleased
 
 #### ⚠️ This release includes a data migration
 
+#### 🚩 This release includes features hidden behind feature flags
+
 ### Added
 
 - Form Configuration
@@ -26,6 +28,7 @@ No changes unreleased
   - Login to the administration pages using your cds-snc GSuite account
 - Feature Flags
   - Enable/Disable various application functionality through the admin interface.
+- Temporary routing for existing form Ids to newly assigned Ids. This routing will be removed in the next patched version release.
 
 ### Changed
 
