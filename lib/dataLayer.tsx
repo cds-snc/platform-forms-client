@@ -116,7 +116,10 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     });
   }
 
-  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
+  const lambdaClient = new LambdaClient({
+    region: "ca-central-1",
+    endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
+  });
   const encoder = new TextEncoder();
   const command = new InvokeCommand({
     FunctionName: process.env.TEMPLATES_API ?? "Templates",
