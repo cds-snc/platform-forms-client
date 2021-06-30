@@ -169,8 +169,8 @@ const processFormData = async (
         return res.status(201).json({ received: true, htmlEmail: response });
       });
     }
-
-    return res.status(400).json({ received: false });
+    // Set this to a 200 response as it's valid if the send to reliability queue option is off.
+    return res.status(200).json({ received: true });
   } catch (err) {
     logMessage.error(err);
     return res.status(500).json({ received: false });
