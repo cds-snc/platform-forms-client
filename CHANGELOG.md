@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Remove unused debugging `console.logs()`
+- Remove info level logging from production builds
 
 ### Fixed
 
