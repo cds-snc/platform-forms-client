@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- Remove unused debugging `console.logs()`
+
+### Fixed
+
+- When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
+
 ### Removed
 
 - Temporary routing for existing form Ids to newly assigned Ids.
