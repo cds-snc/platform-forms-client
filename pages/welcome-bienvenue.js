@@ -5,6 +5,7 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
+import formCache from "../lib/cache";
 
 const Home = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");
@@ -68,11 +69,21 @@ Home.propTypes = {
   formsList: PropTypes.array.isRequired,
 };
 export async function getServerSideProps(context) {
-  const formsList = await getFormByStatus(true);
+  const formsList = async () => {
+    return await formCache.published.check().then(async (cachedValue) => {
+      if (cachedValue) {
+        return cachedValue;
+      }
+      return await getFormByStatus(true).then((freshValue) => {
+        formCache.published.set(freshValue);
+        return freshValue;
+      });
+    });
+  };
 
   return {
     props: {
-      formsList,
+      formsList: await formsList(),
       ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
     }, // will be passed to the page component as props
   };

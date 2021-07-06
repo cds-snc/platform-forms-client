@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { CrudTemplateResponse } from "@lib/types";
+import { CrudTemplateResponse, PublicFormSchemaProperties } from "@lib/types";
 
 const cacheAvailable: boolean = process.env.REDIS_URL ? true : false;
 
@@ -56,7 +56,7 @@ const formIDPut = async (formID: string, template: CrudTemplateResponse): Promis
   });
 };
 
-const publishedCheck = async (): Promise<CrudTemplateResponse | undefined> => {
+const publishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
   return await checkConnection().then(async (redis) => {
     if (redis) {
       const value = await redis.get(`form:published`);
@@ -66,7 +66,9 @@ const publishedCheck = async (): Promise<CrudTemplateResponse | undefined> => {
   });
 };
 
-const publishedPut = async (templates: CrudTemplateResponse): Promise<void> => {
+const publishedPut = async (
+  templates: (PublicFormSchemaProperties | undefined)[]
+): Promise<void> => {
   return await checkConnection().then(async (redis) => {
     if (redis) {
       await redis.setex(`form:published`, randomCacheExpiry(), JSON.stringify(templates));
@@ -74,7 +76,7 @@ const publishedPut = async (templates: CrudTemplateResponse): Promise<void> => {
   });
 };
 
-const unpublishedCheck = async (): Promise<(CrudTemplateResponse | undefined)[]> => {
+const unpublishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
   return await checkConnection().then(async (redis) => {
     if (redis) {
       const value = await redis.get(`form:published`);
@@ -84,7 +86,9 @@ const unpublishedCheck = async (): Promise<(CrudTemplateResponse | undefined)[]>
   });
 };
 
-const unpublishedPut = async (templates: CrudTemplateResponse): Promise<void> => {
+const unpublishedPut = async (
+  templates: (PublicFormSchemaProperties | undefined)[]
+): Promise<void> => {
   return await checkConnection().then(async (redis) => {
     if (redis) {
       await redis.setex(`form:published`, randomCacheExpiry(), JSON.stringify(templates));
