@@ -6,6 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
 import { checkOne } from "../lib/flags";
+import formCache from "../lib/cache";
 
 const Sandbox = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");
@@ -81,11 +82,21 @@ export async function getServerSideProps(context) {
   if (!sandboxActive) {
     return { redirect: { destination: `/${context.locale}/welcome-bienvenue`, permanent: false } };
   }
-  const formsList = await getFormByStatus(false);
+  const formsList = async () => {
+    return await formCache.unpublished.check().then(async (cachedValue) => {
+      if (cachedValue) {
+        return cachedValue;
+      }
+      return await getFormByStatus(true).then((freshValue) => {
+        formCache.unpublished.set(freshValue);
+        return freshValue;
+      });
+    });
+  };
 
   return {
     props: {
-      formsList,
+      formsList: await formsList(),
       ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
     }, // will be passed to the page component as props
   };

@@ -63,7 +63,7 @@
     @apply ml-2 text-blue-900;
 
     &:focus {
-      box-shadow: 4px 0 0 0 #303FC3, -4px 0 0 0 #303FC3;
+      box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
       @apply bg-blue-focus text-white-default;
     }
 
@@ -131,7 +131,7 @@
 
   a:focus {
     outline: none;
-    box-shadow: 4px 0 0 0 #303FC3, -4px 0 0 0 #303FC3;
+    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
     @apply bg-blue-focus text-white-default;
   }
 
@@ -183,14 +183,14 @@
 
   &:focus {
     box-shadow: 0 0 0 2px white;
-    outline: solid 2px #303FC3;
+    outline: solid 2px #303fc3;
     outline-offset: 2px;
     @apply bg-blue-focus;
   }
 
   &:active {
     box-shadow: 0 0 0 2px white;
-    outline: solid 2px #1B2736;
+    outline: solid 2px #1b2736;
     outline-offset: 2px;
     @apply bg-blue-active;
   }
