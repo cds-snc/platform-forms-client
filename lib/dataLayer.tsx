@@ -494,6 +494,128 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
     });
 }
 
+// CRUD for Organisations
+// CRUD Operations for Templates
+interface CrudOrganisationInput {
+  method: string;
+  organisationID?: string; // UUID
+  organisationNameEn?: string;
+  organisationNameFr?: string;
+}
+
+interface CrudOrganisationResponse {
+  data: {
+    organisationID: string;
+    organisationNameEn?: string;
+    organisationNameFr?: string;
+  }[];
+}
+async function _crudOrganisations(
+  payload: CrudOrganisationInput
+): Promise<CrudOrganisationResponse> {
+  const getConfig = (payload: CrudOrganisationInput) => {
+    const { method, organisationID, organisationNameEn, organisationNameFr } = payload;
+
+    switch (payload.method) {
+      case "GET":
+        return {
+          method,
+          organisationID,
+        };
+      case "INSERT":
+        return {
+          method,
+          organisationNameEn,
+          organisationNameFr,
+        };
+      case "UPDATE":
+        return {
+          method,
+          organisationID,
+          organisationNameEn,
+          organisationNameFr,
+        };
+      case "DELETE":
+        return {
+          method: "DELETE",
+          organisationID,
+        };
+      default:
+        return {
+          method: "UNDEFINED",
+        };
+    }
+  };
+
+  if (process.env.CYPRESS && payload.method !== "GET") {
+    logMessage.info("Organisations CRUD API in Test Mode");
+    const timer = () => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(undefined);
+        }, 1000);
+      });
+    };
+
+    return timer().then(() => {
+      const { method } = payload;
+      switch (method) {
+        case "INSERT":
+          return {
+            data: {
+              records: [
+                {
+                  organisationID: "11111111-1111-1111-1111-111111111111",
+                  organisationNameEn: "Test",
+                  organisationNAmeFr: "Test",
+                },
+              ],
+            },
+          };
+        case "UPDATE":
+          return {
+            data: {},
+          };
+        case "DELETE":
+          return {
+            data: {},
+          };
+        default:
+          return {
+            data: {},
+          };
+      }
+    });
+  }
+  const lambdaClient = new LambdaClient({
+    region: "ca-central-1",
+    endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
+  });
+  const encoder = new TextEncoder();
+  const command = new InvokeCommand({
+    FunctionName: process.env.ORGANISATIONS_API ?? "Organisations",
+    Payload: encoder.encode(JSON.stringify(getConfig(payload))),
+  });
+
+  return await lambdaClient
+    .send(command)
+    .then((response) => {
+      const decoder = new TextDecoder();
+      const respPayload = decoder.decode(response.Payload);
+      if (response.FunctionError) {
+        logMessage.info("Lambda Organisations Client not successful");
+        return null;
+      } else {
+        logMessage.info("Lambda Organisations Client successfully triggered");
+        return JSON.parse(respPayload);
+      }
+    })
+    .catch((err) => {
+      logMessage.error(err);
+      throw new Error("Could not process request with Lambda Organisations function");
+    });
+}
+
 export const getFormByID = logger(_getFormByID);
 export const getSubmissionByID = logger(_getSubmissionByID);
 export const getFormByStatus = logger(_getFormByStatus);
@@ -501,3 +623,4 @@ export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const crudTemplates = logger(_crudTemplates);
+export const crudOrganisations = logger(_crudOrganisations);

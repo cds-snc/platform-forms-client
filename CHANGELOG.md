@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Enable support for development using local Lambdas
+- Enable support for organisations and organisation management through the admin panel
+
 ### Removed
 
 - Temporary routing for existing form Ids to newly assigned Ids.

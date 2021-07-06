@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FormDBConfigProperties } from "../../../lib/types";
+import { FormDBConfigProperties } from "../../../../lib/types";
 
 interface DataViewProps {
   templatesJSON: Array<FormDBConfigProperties>;

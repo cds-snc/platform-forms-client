@@ -1,5 +1,5 @@
 //import getConfig from "next/config";
-import DataView from "../../components/containers/Dashboard/DataView";
+import DataView from "../../components/containers/Admin/Dashboard/DataView";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { crudTemplates } from "../../lib/dataLayer";
 import { requireAuthentication } from "../../lib/auth";
