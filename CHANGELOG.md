@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Use a cache to fill frequent requests to the Template API to reduce overall load on Lambdas
+
 ### Changed
 
 - Remove unused debugging `console.logs()`
