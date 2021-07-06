@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import JSONUpload from "../../admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
-import Button from "../../forms/Button/Button";
-import DeleteButton from "@components/forms/Button/DeleteButton";
+import { DeleteButton } from "../../forms/Button/DeleteButton";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { FormDBConfigProperties } from "../../../lib/types";
