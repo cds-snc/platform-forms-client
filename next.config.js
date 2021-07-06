@@ -19,7 +19,6 @@ module.exports = {
     // Will need to look at refactoring dataLayer between client and server side invocations.
     // Once refactored this can be removed.
     if (!context.isServer) {
-      config.resolve.fallback.fs = false;
       config.resolve.fallback.dns = false;
       config.resolve.fallback.net = false;
       config.resolve.fallback.tls = false;
