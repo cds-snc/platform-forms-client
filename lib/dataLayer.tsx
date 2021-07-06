@@ -11,26 +11,42 @@ import {
   DynamicFormProps,
   FileInputResponse,
   Submission,
-  FormDefinitionProperties,
+  CrudTemplateInput,
+  CrudTemplateResponse,
   SubmissionProperties,
   PublicFormSchemaProperties,
 } from "./types";
 
-// CRUD Operations for Templates
-interface CrudTemplateInput {
-  method: string;
-  formID?: string;
-  formConfig?: FormDefinitionProperties;
-}
+import formsCache from "./cache";
 
-interface CrudTemplateResponse {
-  data: {
-    records?: {
-      formID: string;
-      formConfig: FormDefinitionProperties;
-      organization?: boolean;
-    }[];
-  };
+async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
+  if (payload.method === "GET" && payload.formID) {
+    const cachedValue = await formsCache.formID.check(payload.formID);
+    if (cachedValue) {
+      return cachedValue;
+    }
+  }
+
+  return await _crudTemplates(payload).then((response) => {
+    switch (payload.method) {
+      case "GET":
+        if (payload.formID) {
+          formsCache.formID.set(payload.formID, response);
+        }
+        break;
+      case "DELETE":
+      case "UPDATE":
+      case "INSERT":
+        if (payload.formID) {
+          formsCache.formID.invalidate(payload.formID);
+        }
+        break;
+      default:
+        break;
+    }
+
+    return response;
+  });
 }
 
 async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
@@ -193,8 +209,8 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
   }
 }
 
-// Get an array of form IDs based on the publishing status
-// Returns -> Array of form IDs.
+// Get an array of form schemas based on the publishing status
+// Returns -> Array of form schemas
 async function _getFormByStatus(
   status: boolean
 ): Promise<(PublicFormSchemaProperties | undefined)[]> {
@@ -500,4 +516,4 @@ export const getFormByStatus = logger(_getFormByStatus);
 export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
-export const crudTemplates = logger(_crudTemplates);
+export const crudTemplates = logger(_crudTemplatesWithCache);
