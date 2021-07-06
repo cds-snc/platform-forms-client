@@ -25,7 +25,7 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
       </Head>
 
       <h1 className="gc-h1">{t("view.title")}</h1>
-      <ul className="json_templates">
+      <ul className="data_list">
         <Fragment>{jsonElements}</Fragment>
       </ul>
     </>

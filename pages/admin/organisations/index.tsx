@@ -8,15 +8,20 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
     const lambdaResult = await crudOrganisations({ method: "GET" });
-    console.log(lambdaResult);
+
     const organisations =
-      lambdaResult && lambdaResult.data && lambdaResult.data.length > 0 ? lambdaResult.data : [];
+      lambdaResult &&
+      lambdaResult.data &&
+      lambdaResult.data.records &&
+      lambdaResult.data.records.length > 0
+        ? lambdaResult.data.records
+        : [];
 
     if (context.locale) {
       return {
         props: {
-          organisations: [organisations],
-          ...(await serverSideTranslations(context.locale, ["common", "admin-templates"])),
+          organisations: organisations,
+          ...(await serverSideTranslations(context.locale, ["common", "organisations"])),
         }, // will be passed to the page component as props
       };
     }

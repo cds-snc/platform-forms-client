@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import JSONUpload from "../../admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
 import Button from "../../forms/Button/Button";
+import DeleteButton from "@components/forms/Button/DeleteButton";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { FormDBConfigProperties } from "../../../lib/types";
@@ -47,39 +48,6 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       ""
     );
 
-  const [deleteVisible, setDeleteVisible] = useState(false);
-
-  const deleteButton = deleteVisible ? (
-    <>
-      <p>{t("settings.delete-check")}</p>
-      <Button
-        onClick={async () => {
-          try {
-            const resp = await handleDelete(form.formID);
-            if (resp == 200) {
-              router.push({
-                pathname: `/admin/view-templates`,
-              });
-            } else {
-              // Todo show error message on page
-              console.error(JSON.stringify(resp));
-              return;
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        }}
-        testid="confirmDelete"
-        type="button"
-        destructive={true}
-      >
-        {t("settings.confirm-delete")}
-      </Button>
-    </>
-  ) : (
-    ""
-  );
-
   return (
     <>
       <h1 className="gc-h1">{t("settings.title")}</h1>
@@ -91,17 +59,11 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       <JSONUpload form={form}></JSONUpload>
       <br />
       <div>
-        <Button
-          type="button"
-          testid="delete"
-          destructive={true}
-          onClick={() => {
-            setDeleteVisible(!deleteVisible);
-          }}
-        >
-          {t("settings.delete")}
-        </Button>
-        <div>{deleteButton}</div>
+        <DeleteButton
+          action={handleDelete}
+          data={form.formID}
+          redirect={`/admin/view-templates`}
+        ></DeleteButton>
       </div>
     </>
   );

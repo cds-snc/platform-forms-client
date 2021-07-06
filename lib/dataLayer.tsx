@@ -505,10 +505,14 @@ interface CrudOrganisationInput {
 
 interface CrudOrganisationResponse {
   data: {
-    organisationID: string;
-    organisationNameEn?: string;
-    organisationNameFr?: string;
-  }[];
+    records: [
+      {
+        organisationID: string;
+        organisationNameEn?: string;
+        organisationNameFr?: string;
+      }
+    ];
+  };
 }
 async function _crudOrganisations(
   payload: CrudOrganisationInput
@@ -547,6 +551,7 @@ async function _crudOrganisations(
     }
   };
 
+  /*
   if (process.env.CYPRESS && payload.method !== "GET") {
     logMessage.info("Organisations CRUD API in Test Mode");
     const timer = () => {
@@ -562,15 +567,13 @@ async function _crudOrganisations(
       switch (method) {
         case "INSERT":
           return {
-            data: {
-              records: [
+            data: [
                 {
                   organisationID: "11111111-1111-1111-1111-111111111111",
                   organisationNameEn: "Test",
                   organisationNAmeFr: "Test",
                 },
-              ],
-            },
+            ],
           };
         case "UPDATE":
           return {
@@ -587,6 +590,7 @@ async function _crudOrganisations(
       }
     });
   }
+  */
   const lambdaClient = new LambdaClient({
     region: "ca-central-1",
     endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,

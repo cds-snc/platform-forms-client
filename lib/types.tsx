@@ -162,3 +162,9 @@ export type MultipleChoiceProps = {
   label: string;
   required?: boolean;
 };
+
+export type Organisation = {
+  organisationID: string;
+  organisationNameEn: string;
+  organisationNameFr: string;
+};
