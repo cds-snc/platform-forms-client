@@ -1,4 +1,4 @@
 {
-  "prettier.configPath": ".prettierrc.js",
-  "prettier.useEditorConfig": false
+  "prettier.configPath": ".prettierrc.json",
+  "prettier.useEditorConfig": false,
 }

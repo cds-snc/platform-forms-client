@@ -168,3 +168,20 @@ export type Organisation = {
   organisationNameEn: string;
   organisationNameFr: string;
 };
+
+// CRUD Operations for Templates
+export interface CrudTemplateInput {
+  method: string;
+  formID?: string;
+  formConfig?: FormDefinitionProperties;
+}
+
+export interface CrudTemplateResponse {
+  data: {
+    records?: {
+      formID: string;
+      formConfig: FormDefinitionProperties;
+      organization?: boolean;
+    }[];
+  };
+}

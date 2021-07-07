@@ -197,8 +197,7 @@ const AdminVault: React.FC = () => {
           },
           data: { formID, action: "DELETE" },
         })
-          .then((response) => {
-            console.log(response);
+          .then(() => {
             setResponses({ Items: [] });
           })
           .catch((err) => {
@@ -219,8 +218,7 @@ const AdminVault: React.FC = () => {
       <Button
         onClick={async () => {
           try {
-            const resp = await removeAllSubmissions();
-            console.log(resp);
+            await removeAllSubmissions();
           } catch (e) {
             console.error(e);
           }

@@ -7,8 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Use a cache to fill frequent requests to the Template API to reduce overall load on Lambdas
 - Enable support for development using local Lambdas
 - Enable support for organisations and organisation management through the admin panel
+
+### Changed
+
+- Remove unused debugging `console.logs()`
+- Remove info level logging from production builds
+
+### Fixed
+
+- When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
 
 ### Removed
 

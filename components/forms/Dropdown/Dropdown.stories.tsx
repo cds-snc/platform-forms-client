@@ -41,8 +41,7 @@ export const defaultDropdown = (): React.ReactElement => (
 defaultDropdown.parameters = {
   docs: {
     source: {
-      code:
-        '<select class="gc-dropdown" name="support_type"><option value="GC Form - First option">GC Form - First option</option><option value="GC Form - Second option">GC Form - Second option</option></select>',
+      code: '<select class="gc-dropdown" name="support_type"><option value="GC Form - First option">GC Form - First option</option><option value="GC Form - Second option">GC Form - Second option</option></select>',
     },
   },
 };

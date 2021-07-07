@@ -20,7 +20,6 @@ const templates = async (req, res) => {
     const session = await getSession({ req });
 
     const requestBody = JSON.parse(req.body);
-    console.log(requestBody);
 
     if (isAllowed(session, requestBody.method)) {
       return crudTemplates({ ...requestBody, session })

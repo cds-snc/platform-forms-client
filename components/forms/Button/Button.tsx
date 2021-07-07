@@ -16,17 +16,8 @@ interface ButtonProps {
 export const Button = (
   props: ButtonProps & JSX.IntrinsicElements["button"]
 ): React.ReactElement => {
-  const {
-    type,
-    children,
-    secondary,
-    base,
-    onClick,
-    className,
-    testid,
-    destructive,
-    disabled,
-  } = props;
+  const { type, children, secondary, base, onClick, className, testid, destructive, disabled } =
+    props;
 
   const classes = classnames(
     "gc-button",

@@ -96,9 +96,8 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
     const formikValue = values[item];
     // A non-array object indicates an unset field (this is how Formik sends it to us)
     // Discard these values, and convert anything else to a string
-    const currentValue: string = (typeof formikValue == "object" && !Array.isArray(formikValue)
-      ? ""
-      : (formikValue as string)
+    const currentValue: string = (
+      typeof formikValue == "object" && !Array.isArray(formikValue) ? "" : (formikValue as string)
     ).toString();
     const currentRegex = getRegexByType(currentValidation.type, props.t, currentValue);
 

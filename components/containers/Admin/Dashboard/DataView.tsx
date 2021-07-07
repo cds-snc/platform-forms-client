@@ -12,11 +12,9 @@ interface DataViewProps {
 export const DataView = (props: DataViewProps): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
 
-  const jsonElements = props.templatesJSON.map(
-    (template): React.ReactElement => {
-      return <DataElement template={template} key={props.templatesJSON.indexOf(template)} />;
-    }
-  );
+  const jsonElements = props.templatesJSON.map((template): React.ReactElement => {
+    return <DataElement template={template} key={props.templatesJSON.indexOf(template)} />;
+  });
 
   return (
     <>
