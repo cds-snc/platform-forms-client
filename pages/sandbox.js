@@ -87,7 +87,7 @@ export async function getServerSideProps(context) {
       if (cachedValue) {
         return cachedValue;
       }
-      return await getFormByStatus(true).then((freshValue) => {
+      return await getFormByStatus(false).then((freshValue) => {
         formCache.unpublished.set(freshValue);
         return freshValue;
       });
