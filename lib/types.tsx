@@ -163,12 +163,6 @@ export type MultipleChoiceProps = {
   required?: boolean;
 };
 
-export type Organisation = {
-  organisationID: string;
-  organisationNameEn: string;
-  organisationNameFr: string;
-};
-
 // CRUD Operations for Templates
 export interface CrudTemplateInput {
   method: string;
@@ -183,5 +177,31 @@ export interface CrudTemplateResponse {
       formConfig: FormDefinitionProperties;
       organization?: boolean;
     }[];
+  };
+}
+
+// CRUD Operations for Organisations
+export type Organisation = {
+  organisationID: string;
+  organisationNameEn: string;
+  organisationNameFr: string;
+};
+
+export interface CrudOrganisationInput {
+  method: string;
+  organisationID?: string; // UUID
+  organisationNameEn?: string;
+  organisationNameFr?: string;
+}
+
+export interface CrudOrganisationResponse {
+  data: {
+    records?: [
+      {
+        organisationID: string;
+        organisationNameEn?: string;
+        organisationNameFr?: string;
+      }
+    ];
   };
 }

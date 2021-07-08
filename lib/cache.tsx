@@ -1,5 +1,10 @@
 import Redis from "ioredis";
-import { CrudTemplateResponse, PublicFormSchemaProperties } from "@lib/types";
+import {
+  CrudTemplateResponse,
+  CrudOrganisationResponse,
+  Organisation,
+  PublicFormSchemaProperties,
+} from "@lib/types";
 
 const cacheAvailable: boolean = process.env.REDIS_URL ? true : false;
 
@@ -29,6 +34,10 @@ const checkConnection = async () => {
     return redisConnection;
   }
 };
+
+/*
+  Forms
+*/
 
 const formIDCheck = async (formID: string): Promise<CrudTemplateResponse | null> => {
   return await checkConnection().then(async (redis) => {
@@ -96,7 +105,46 @@ const unpublishedPut = async (
   });
 };
 
-export default {
+/*
+  Organisations
+*/
+
+const organisationIDCheck = async (
+  organisationID: string
+): Promise<CrudOrganisationResponse | null> => {
+  return await checkConnection().then(async (redis) => {
+    if (redis) {
+      const value = await redis.get(`organisations:${organisationID}`);
+      return value ? JSON.parse(value) : null;
+    }
+    return null;
+  });
+};
+
+const organisationIDPut = async (
+  organisationID: string,
+  organisation: CrudOrganisationResponse
+): Promise<void> => {
+  return await checkConnection().then(async (redis) => {
+    if (redis) {
+      await redis.setex(
+        `organisations:${organisationID}`,
+        randomCacheExpiry(),
+        JSON.stringify(organisation)
+      );
+    }
+  });
+};
+
+const organisationIDDelete = async (organisationID: string): Promise<void> => {
+  return await checkConnection().then(async (redis) => {
+    if (redis) {
+      await redis.del(`organisations:${organisationID}`);
+    }
+  });
+};
+
+export const formCache = {
   cacheAvailable,
   formID: {
     check: formIDCheck,
@@ -110,5 +158,14 @@ export default {
   unpublished: {
     check: unpublishedCheck,
     set: unpublishedPut,
+  },
+};
+
+export const organisationCache = {
+  cacheAvailable,
+  organisationID: {
+    check: organisationIDCheck,
+    set: organisationIDPut,
+    invalidate: organisationIDDelete,
   },
 };

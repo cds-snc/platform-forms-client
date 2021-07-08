@@ -13,15 +13,17 @@ import {
   Submission,
   CrudTemplateInput,
   CrudTemplateResponse,
+  CrudOrganisationInput,
+  CrudOrganisationResponse,
   SubmissionProperties,
   PublicFormSchemaProperties,
 } from "./types";
 
-import formsCache from "./cache";
+import { formCache, organisationCache } from "./cache";
 
 async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
   if (payload.method === "GET" && payload.formID) {
-    const cachedValue = await formsCache.formID.check(payload.formID);
+    const cachedValue = await formCache.formID.check(payload.formID);
     if (cachedValue) {
       return cachedValue;
     }
@@ -31,14 +33,14 @@ async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<Crud
     switch (payload.method) {
       case "GET":
         if (payload.formID) {
-          formsCache.formID.set(payload.formID, response);
+          formCache.formID.set(payload.formID, response);
         }
         break;
       case "DELETE":
       case "UPDATE":
       case "INSERT":
         if (payload.formID) {
-          formsCache.formID.invalidate(payload.formID);
+          formCache.formID.invalidate(payload.formID);
         }
         break;
       default:
@@ -511,25 +513,38 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
 }
 
 // CRUD for Organisations
-// CRUD Operations for Templates
-interface CrudOrganisationInput {
-  method: string;
-  organisationID?: string; // UUID
-  organisationNameEn?: string;
-  organisationNameFr?: string;
+async function _crudOrganisationsWithCache(
+  payload: CrudOrganisationInput
+): Promise<CrudOrganisationResponse> {
+  if (payload.method === "GET" && payload.organisationID) {
+    const cachedValue = await organisationCache.organisationID.check(payload.organisationID);
+    if (cachedValue) {
+      return cachedValue;
+    }
+  }
+
+  return await _crudOrganisations(payload).then((response) => {
+    switch (payload.method) {
+      case "GET":
+        if (payload.organisationID) {
+          organisationCache.organisationID.set(payload.organisationID, response);
+        }
+        break;
+      case "DELETE":
+      case "UPDATE":
+      case "INSERT":
+        if (payload.organisationID) {
+          organisationCache.organisationID.invalidate(payload.organisationID);
+        }
+        break;
+      default:
+        break;
+    }
+
+    return response;
+  });
 }
 
-interface CrudOrganisationResponse {
-  data: {
-    records?: [
-      {
-        organisationID: string;
-        organisationNameEn?: string;
-        organisationNameFr?: string;
-      }
-    ];
-  };
-}
 async function _crudOrganisations(
   payload: CrudOrganisationInput
 ): Promise<CrudOrganisationResponse> {
@@ -643,5 +658,5 @@ export const getFormByStatus = logger(_getFormByStatus);
 export const submitToAPI = logger(_submitToAPI);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
 export const buildFormDataObject = logger(_buildFormDataObject);
-export const crudOrganisations = logger(_crudOrganisations);
+export const crudOrganisations = logger(_crudOrganisationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);

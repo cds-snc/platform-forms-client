@@ -6,7 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
 import { checkOne } from "../lib/flags";
-import formCache from "../lib/cache";
+import { formCache } from "../lib/cache";
 
 const Sandbox = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");

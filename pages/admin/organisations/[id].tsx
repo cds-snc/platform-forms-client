@@ -5,11 +5,11 @@ import { crudOrganisations } from "@lib/dataLayer";
 import { GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps = requireAuthentication(async (context) => {
-  const orgId = context.query.id;
+  const orgId = context.query.id as string;
 
   const payload = {
     method: "GET",
-    id: orgId,
+    organisationID: orgId,
   };
 
   const lambdaResult = await crudOrganisations(payload);

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFormByStatus } from "../lib/dataLayer.tsx";
 import { getProperty } from "../lib/formBuilder";
-import formCache from "../lib/cache";
+import { formCache } from "../lib/cache";
 
 const Home = ({ formsList }) => {
   const { t, i18n } = useTranslation("welcome");
