@@ -2,7 +2,6 @@ import Redis from "ioredis";
 import {
   CrudTemplateResponse,
   CrudOrganisationResponse,
-  Organisation,
   PublicFormSchemaProperties,
 } from "@lib/types";
 
