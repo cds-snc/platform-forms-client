@@ -2,8 +2,9 @@ import { crudOrganisations } from "../../lib/dataLayer";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "../../lib/logger";
 import { getSession } from "next-auth/client";
+import { Session } from "next-auth";
 
-const isAllowed = (session, method: string) => {
+const isAllowed = (session: Session | null, method: string) => {
   switch (method) {
     case "GET":
       return true;
