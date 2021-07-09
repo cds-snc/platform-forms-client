@@ -46,7 +46,7 @@
 
   button:focus {
     outline: none;
-    box-shadow: 4px 0 0 0 #303FC3, -4px 0 0 0 #303FC3;
+    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
     @apply bg-blue-focus text-white-default;
   }
 
@@ -69,7 +69,7 @@ header {
     }
 
     a:focus {
-      outline: 3px solid #303FC3;
+      outline: 3px solid #303fc3;
       outline-offset: 1px;
       @apply bg-white-default;
     }
