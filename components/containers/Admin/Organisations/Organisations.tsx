@@ -11,21 +11,19 @@ export const Organisations = (props: OrganisationsProps): React.ReactElement => 
   const { t, i18n } = useTranslation("organisations");
   const { organisations } = props;
 
-  const organisationsElements = organisations.map(
-    (org): React.ReactElement => {
-      const orgLink = "./organisations/" + org.organisationID;
-      return (
-        <li key={org.organisationID}>
-          <div className="pb-4 m-auto px-4 border-grey">
-            <div className="width-full">
-              {i18n.language === "en" ? org.organisationNameEn : org.organisationNameFr}
-            </div>
-            <a href={orgLink}>Edit Organisation</a>
+  const organisationsElements = organisations.map((org): React.ReactElement => {
+    const orgLink = "./organisations/" + org.organisationID;
+    return (
+      <li key={org.organisationID}>
+        <div className="pb-4 m-auto px-4 border-grey">
+          <div className="width-full">
+            {i18n.language === "en" ? org.organisationNameEn : org.organisationNameFr}
           </div>
-        </li>
-      );
-    }
-  );
+          <a href={orgLink}>Edit Organisation</a>
+        </div>
+      </li>
+    );
+  });
 
   return (
     <>
