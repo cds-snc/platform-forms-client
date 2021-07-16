@@ -2,6 +2,8 @@ const { LambdaClient, InvokeCommand } = require("@aws-sdk/client-lambda");
 import { getSession } from "next-auth/client";
 import { logMessage } from "../../lib/logger";
 
+const lambdaClient = new LambdaClient({ region: "ca-central-1", retryMode: "standard" });
+
 const retrieval = async (req, res) => {
   const session = await getSession({ req });
 
@@ -12,8 +14,6 @@ const retrieval = async (req, res) => {
     if (!formID) {
       throw new Error("No form ID specified");
     }
-
-    const lambdaClient = new LambdaClient({ region: "ca-central-1" });
 
     const command = new InvokeCommand({
       FunctionName: process.env.RETRIEVAL_API ?? "Retrieval",
