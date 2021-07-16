@@ -15,6 +15,11 @@ export const config = {
   },
 };
 
+const lambdaClient = new LambdaClient({
+  region: "ca-central-1",
+  retryMode: "standard",
+});
+
 const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     const incomingForm = new formidable.IncomingForm();
@@ -46,7 +51,6 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 const callLambda = async (formID: string, fields: Responses) => {
   const submission = await getSubmissionByID(formID);
 
-  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
   const encoder = new TextEncoder();
 
   const command = new InvokeCommand({

@@ -19,6 +19,12 @@ import {
 
 import formsCache from "./cache";
 
+const lambdaClient = new LambdaClient({
+  region: "ca-central-1",
+  retryMode: "standard",
+  endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
+});
+
 async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
   if (payload.method === "GET" && payload.formID) {
     const cachedValue = await formsCache.formID.check(payload.formID);
@@ -132,10 +138,6 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     });
   }
 
-  const lambdaClient = new LambdaClient({
-    region: "ca-central-1",
-    endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
-  });
   const encoder = new TextEncoder();
   const command = new InvokeCommand({
     FunctionName: process.env.TEMPLATES_API ?? "Templates",
