@@ -22,8 +22,7 @@ const lambdaClient = new LambdaClient({
 
 const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
-    const incomingForm = new formidable.IncomingForm();
-    incomingForm.maxFileSize = 8000000; // Set to 8 MB and override default of 200 MB
+    const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000}); // Set to 8 MB and override default of 200 MB
     return incomingForm.parse(req, async (err, fields, files) => {
       if (err) {
         throw new Error(err);
