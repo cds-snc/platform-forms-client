@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FormDBConfigProperties } from "../../../lib/types";
+import { FormDBConfigProperties } from "@lib/types";
 
 interface DataViewProps {
   templatesJSON: Array<FormDBConfigProperties>;
@@ -23,7 +23,7 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
       </Head>
 
       <h1 className="gc-h1">{t("view.title")}</h1>
-      <ul className="json_templates">
+      <ul className="data_list">
         <Fragment>{jsonElements}</Fragment>
       </ul>
     </>

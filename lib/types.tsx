@@ -179,3 +179,29 @@ export interface CrudTemplateResponse {
     }[];
   };
 }
+
+// CRUD Operations for Organisations
+export type Organisation = {
+  organisationID: string;
+  organisationNameEn: string;
+  organisationNameFr: string;
+};
+
+export interface CrudOrganisationInput {
+  method: string;
+  organisationID?: string; // UUID
+  organisationNameEn?: string;
+  organisationNameFr?: string;
+}
+
+export interface CrudOrganisationResponse {
+  data: {
+    records?: [
+      {
+        organisationID: string;
+        organisationNameEn?: string;
+        organisationNameFr?: string;
+      }
+    ];
+  };
+}
