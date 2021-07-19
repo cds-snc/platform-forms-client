@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { DeleteButton } from "../../forms/Button/DeleteButton";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { logMessage } from "@lib/logger";
 import { FormDBConfigProperties } from "../../../lib/types";
 
 interface FormSettingsProps {
@@ -29,10 +30,10 @@ const handleDelete = async (formID: number) => {
       return serverResponse;
     })
     .catch((err) => {
-      console.error(err);
+      logMessage.error(err);
       return err;
     });
-  return resp.status;
+  return resp.status | resp;
 };
 
 export const FormSettings = (props: FormSettingsProps): React.ReactElement => {

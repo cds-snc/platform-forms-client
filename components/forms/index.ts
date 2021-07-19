@@ -2,6 +2,7 @@
 export { Alert } from "./Alert/Alert";
 export { ErrorMessage } from "./ErrorMessage/ErrorMessage";
 export { Button } from "./Button/Button";
+export { DeleteButton } from "./Button/DeleteButton";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Dropdown } from "./Dropdown/Dropdown";
 export { FormGroup } from "./FormGroup/FormGroup";

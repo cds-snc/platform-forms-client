@@ -2,9 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Label } from "../../../forms/Label/Label";
-import { TextInput } from "../../../forms/TextInput/TextInput";
-import { Button } from "../../../forms/Button/Button";
+import { Label, TextInput, Button } from "@components/forms";
 import { Formik, Form } from "formik";
 
 export const CreateOrganisation = (): React.ReactElement => {

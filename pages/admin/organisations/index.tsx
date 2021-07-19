@@ -10,10 +10,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     const lambdaResult = await crudOrganisations({ method: "GET" });
 
     const organisations =
-      lambdaResult &&
-      lambdaResult.data &&
-      lambdaResult.data.records &&
-      lambdaResult.data.records.length > 0
+      lambdaResult?.data?.records && lambdaResult.data.records.length > 0
         ? lambdaResult.data.records
         : [];
 

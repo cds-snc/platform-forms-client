@@ -29,7 +29,7 @@ export const DeleteButton = (props: DeleteButtonProps): React.ReactElement => {
               });
             } else {
               // Todo show error message on page
-              console.error(JSON.stringify(resp));
+              // Error should be logged already in its own action
               return;
             }
           } catch (e) {

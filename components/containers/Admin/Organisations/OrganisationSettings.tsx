@@ -2,8 +2,9 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Organisation } from "@lib/types";
-import { DeleteButton } from "../../../forms/Button/DeleteButton";
+import { DeleteButton } from "@components/forms";
 import axios from "axios";
+import { logMessage } from "@lib/logger";
 
 interface OrganisationSettingsProps {
   organisation: Organisation;
@@ -24,14 +25,14 @@ const handleDelete = async (organisationID: string) => {
     timeout: 0,
   })
     .then((serverResponse) => {
-      //success - redirect to view-templates page
+      //success - redirect to organisations list page
       return serverResponse;
     })
     .catch((err) => {
-      console.error(err);
+      logMessage.error(err);
       return err;
     });
-  return resp.status;
+  return resp.status | resp;
 };
 
 export const OrganisationSettings = (props: OrganisationSettingsProps): React.ReactElement => {
