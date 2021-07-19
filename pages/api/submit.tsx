@@ -15,9 +15,14 @@ export const config = {
   },
 };
 
+const lambdaClient = new LambdaClient({
+  region: "ca-central-1",
+  retryMode: "standard",
+});
+
 const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
-    const incomingForm = new formidable.IncomingForm();
+    const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
     return incomingForm.parse(req, async (err, fields, files) => {
       if (err) {
         throw new Error(err);
@@ -46,7 +51,6 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 const callLambda = async (formID: string, fields: Responses) => {
   const submission = await getSubmissionByID(formID);
 
-  const lambdaClient = new LambdaClient({ region: "ca-central-1" });
   const encoder = new TextEncoder();
 
   const command = new InvokeCommand({
