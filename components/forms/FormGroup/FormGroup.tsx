@@ -12,7 +12,12 @@ interface FormGroupProps {
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
   const { children, name, className, ariaDescribedBy, error } = props;
 
-  const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
+  const classes = classnames(
+    "gc-form-group",
+    "focus-group",
+    { "gc-form-group--error": error },
+    className
+  );
 
   return (
     <fieldset

@@ -69,6 +69,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       htmlFor={id}
       className={isRequired ? "required" : ""}
       required={isRequired}
+      group={["radio", "checkbox"].indexOf(element.type) !== -1}
     >
       {labelText}
     </Label>
@@ -146,15 +147,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
-          <div className="focus-group">
-            {labelComponent}
-            {description ? <Description id={id}>{description}</Description> : null}
-            <MultipleChoiceGroup
-              type="checkbox"
-              name={id}
-              choicesProps={checkboxItems}
-            ></MultipleChoiceGroup>
-          </div>
+          {labelComponent}
+          {description ? <Description id={id}>{description}</Description> : null}
+          <MultipleChoiceGroup
+            type="checkbox"
+            name={id}
+            choicesProps={checkboxItems}
+          ></MultipleChoiceGroup>
         </FormGroup>
       );
     }
@@ -171,15 +170,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
       return (
         <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
-          <div className="focus-group">
-            {labelComponent}
-            {description ? <Description id={id}>{description}</Description> : null}
-            <MultipleChoiceGroup
-              type="radio"
-              name={id}
-              choicesProps={radioItems}
-            ></MultipleChoiceGroup>
-          </div>
+          {labelComponent}
+          {description ? <Description id={id}>{description}</Description> : null}
+          <MultipleChoiceGroup
+            type="radio"
+            name={id}
+            choicesProps={radioItems}
+          ></MultipleChoiceGroup>
         </FormGroup>
       );
     }
