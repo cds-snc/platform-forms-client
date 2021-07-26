@@ -1,9 +1,10 @@
 ---
-name: "Go live: [*form title*]"
+name: 'Go live: [*form title*]'
 about: This template is the acceptance criteria to get a form live
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 The checklist below is the current state of work that needs to be done to get a form live.
