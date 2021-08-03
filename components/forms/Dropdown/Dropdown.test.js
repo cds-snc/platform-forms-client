@@ -95,7 +95,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
           : dropdownData.properties.descriptionFr;
     expect(screen.queryByTestId("dropdown"))
       .toBeInTheDocument()
-      .toHaveDescription(description)
+      .toHaveAccessibleDescription(description)
       .toHaveClass("gc-dropdown")
       .toHaveDisplayValue("");
     expect(

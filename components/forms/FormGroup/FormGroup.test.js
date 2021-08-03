@@ -47,7 +47,7 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
     expect(screen.getByText(title)).toHaveClass("gc-label");
     // description properly renders
     expect(screen.getByText(description)).toBeInTheDocument().toHaveClass("gc-description");
-    expect(screen.getByRole("group")).toHaveDescription(description);
+    expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
     // Children render
     expect(screen.getByRole("group"))
       .toContainElement(screen.getByText(title))

@@ -53,7 +53,7 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
       expect(input).toBeRequired();
     });
     // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(description);
+    expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
   });
   test("not required displays properly", () => {
     radioButtonData.properties.validation.required = false;
