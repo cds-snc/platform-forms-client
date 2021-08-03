@@ -61,7 +61,7 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
       expect(input).toHaveClass("gc-input-checkbox__input").not.toBeChecked();
     });
     // Proper linked description to element
-    expect(screen.getByRole("group")).toHaveDescription(description);
+    expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
 
     // Check the boxes
     screen.getAllByRole("checkbox").forEach((input) => {

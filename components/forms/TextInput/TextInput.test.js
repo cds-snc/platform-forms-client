@@ -48,7 +48,7 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
     // Description properly renders
     expect(screen.getByText(description)).toBeInTheDocument();
     // Field marked as required
-    expect(screen.getByRole("textbox")).toBeRequired().toHaveDescription(description);
+    expect(screen.getByRole("textbox")).toBeRequired().toHaveAccessibleDescription(description);
     expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
