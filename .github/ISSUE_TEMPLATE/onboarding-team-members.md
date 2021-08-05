@@ -24,6 +24,7 @@ Onboarding checklist:
   - [ ] Sprint Poker
   - [ ] Github tips and tricks [Github Docs](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword)
 - [ ] _Technical onboarding_
+  - [ ] [Forms Solution Architecture](https://drive.google.com/file/d/1Fs6McxOOlJJPykKm-FosHwHyfNjpOnaG/view?usp=sharing)
   - [ ] [NextJS](https://nextjs.org/)
   - [ ] [Next-i18next](https://github.com/isaachinman/next-i18next)
   - [ ] [Formik](https://formik.org/docs/overview)
