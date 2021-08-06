@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.0.1] 2021-08-06
+
+### Added
+
 - Use a cache to fill frequent requests to the Template API to reduce overall load on Lambdas
 - Enable support for development using local Lambdas
 - Enable support for organisations and organisation management through the admin panel
@@ -21,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
+- Checkbox and Radio groups were not being correctly identified by Screen Readers
 
 ### Removed
 
