@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
+- Unpublished form cache not correctly set
 
 ### Removed
 
