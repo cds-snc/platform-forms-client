@@ -87,7 +87,7 @@ const publishedPut = async (
 const unpublishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
   return await checkConnection().then(async (redis) => {
     if (redis) {
-      const value = await redis.get(`form:published`);
+      const value = await redis.get(`form:unpublished`);
       return value ? JSON.parse(value) : null;
     }
     return null;
@@ -99,7 +99,7 @@ const unpublishedPut = async (
 ): Promise<void> => {
   return await checkConnection().then(async (redis) => {
     if (redis) {
-      await redis.setex(`form:published`, randomCacheExpiry(), JSON.stringify(templates));
+      await redis.setex(`form:unpublished`, randomCacheExpiry(), JSON.stringify(templates));
     }
   });
 };
