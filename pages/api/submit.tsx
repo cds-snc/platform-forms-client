@@ -8,6 +8,7 @@ import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dat
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
+import {uploadFileToS3,readStream2buffer} from "./s3-upload";
 
 export const config = {
   api: {
@@ -24,6 +25,7 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
   try {
     const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
     return incomingForm.parse(req, async (err, fields, files) => {
+      console.log(" submit : " + fields);
       if (err) {
         throw new Error(err);
       }
@@ -36,8 +38,30 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
               fs.unlinkSync(file.path);
             });
           } else {
-            console.log(`File path to be deleted: ${fileOrArray.path}`);
-            fs.unlinkSync(fileOrArray.path);
+            let bucketName: string = process.env.AWS_BUCKET_NAME as string;
+            const buffer = [];
+            readStream2buffer(fs.createReadStream(fileOrArray.path)).then(data=>{
+              // saving file to S3 bucket
+              uploadFileToS3(data, bucketName, fileOrArray.path).then(data => {
+
+                console.log("File uploaded successfully :" + data);
+               
+                // Pass urls for saved files in S3 to Lambda Submission Function
+                //if lambada function successfull 
+                // log
+                //if not success revoke and delete the file 
+
+              }).catch(err => {
+                console.error(err);
+              });
+  
+              console.log(`File path to be deleted: ${fileOrArray.path}`);
+              fs.unlinkSync(fileOrArray.path);
+            }).catch(err=>{
+              // Error could not upload to s3. 
+              console.log("Error unable to upload a file:")
+
+            });            
           }
         }
       });

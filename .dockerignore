@@ -5,7 +5,6 @@ terraform
 .DS_Store
 .next
 .vscode
-.env
 config
 documentation
 test
