@@ -97,10 +97,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   mapPropsToValues: (props) => getFormInitialValues(props.formConfig, props.language) as FormValues,
 
-  validate: (values, props) => {
-    const validationResult = validateOnSubmit(values, props);
-    return validationResult;
-  },
+  validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
     try {
