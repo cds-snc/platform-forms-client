@@ -7,15 +7,17 @@ interface DropdownProps {
   id: string;
   name: string;
   className?: string;
-  choices: Array<string | number>;
+  choices: string[];
   required?: boolean;
   ariaDescribedBy?: string;
 }
 
 interface DropdownOptionProps {
-  name: string | number;
-  value: string | number;
+  name: string;
+  value: string;
 }
+
+const InitialDropdownOption = <option hidden value=""></option>;
 
 const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
   return <option value={props.value}>{props.name}</option>;
@@ -28,14 +30,11 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const [field, meta] = useField(props);
 
-  let options = null;
-  if (choices && choices.length) {
-    options = choices.map((choice, i) => {
-      const innerId = `${id}-${i}`;
-      const value = field.value ? field.value[innerId] : field.value;
-      return <DropdownOption key={`key-${innerId}`} value={value} name={choice} />;
-    });
-  }
+  const options = choices.map((choice, i) => {
+    const innerId = `${id}-${i}`;
+    const value = field.value ? field.value[innerId] : field.value;
+    return <DropdownOption key={`key-${innerId}`} value={value} name={choice} />;
+  });
 
   return (
     <>
@@ -49,6 +48,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         aria-describedby={ariaDescribedBy}
         {...field}
       >
+        {InitialDropdownOption}
         {options}
       </select>
     </>
