@@ -39,7 +39,6 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
             });
           } else {
             let bucketName: string = process.env.AWS_BUCKET_NAME as string;
-            const buffer = [];
             readStream2buffer(fs.createReadStream(fileOrArray.path)).then(data=>{
               // saving file to S3 bucket
               uploadFileToS3(data, bucketName, fileOrArray.path).then(data => {
@@ -59,7 +58,7 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
               fs.unlinkSync(fileOrArray.path);
             }).catch(err=>{
               // Error could not upload to s3. 
-              console.log("Error unable to upload a file:")
+              console.error("Error unable to upload a file:")
 
             });            
           }

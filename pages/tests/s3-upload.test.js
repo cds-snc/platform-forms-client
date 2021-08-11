@@ -16,9 +16,9 @@ jest.mock('aws-sdk', () => {
 });
 
 describe('S3', () => {
-    it("calls aws-sdk S3 upload method with correct parameters", async () => {       
+    it("Aws-sdk S3 upload method with correct parameters", async () => {       
  
-        const result = uploadFileToS3(Buffer.from("test"), 'fileUploadBucket', "test").then(data =>{
+        uploadFileToS3(Buffer.from("test"), 'fileUploadBucket', "test").then(data =>{
             console.log(data)
             expect(mockS3Instance.upload).toHaveBeenCalledWith({
                 Bucket: "fileUploadBucket",
@@ -28,7 +28,19 @@ describe('S3', () => {
             expect(mockS3Instance.upload).toHaveBeenCalledTimes(1);
 
         }).catch(err=>{
-            //console.log("" + err);
+            // do not add code
+        });      
+    });
+})
+
+describe('readStream2buffer', () => {
+    it("Calls readStream2buffer Should return valid data type", async () => {     
+ 
+        readStream2buffer(fs.createReadStream(Buffer.from("stream"))).then(data =>{
+            console.log(data)
+            expect(data).toBe(Buffer.from("stream"));
+        }).catch(err=>{
+            // do not add code
         });      
     });
 })
