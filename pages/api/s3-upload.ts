@@ -3,6 +3,8 @@ import aws from "aws-sdk";
 import S3 from "aws-sdk/clients/s3";
 import { ReadStream } from "fs";
 import formidable from "formidable";
+import { v4 as uuid } from 'uuid';
+import { UploadResult, UploadFailure, UploadSuccess } from "../../lib/types"
 
 const s3 = new S3({
     region: process.env.AWS_BUCKET_REGION,
@@ -11,39 +13,46 @@ const s3 = new S3({
 });
 
 /**
- * Upload a file to S3 then return a data object like data.location
- * which stores a link to your file.
+ * This function tries to upload a given file to aws S3 bucket and returns a data object  
+ * which stores a link to the file.
  * @param file 
  * @param bucketName 
  * @param filePath 
- * @returns 
+ * @returns  {"ETag": "xxxxxxx" ,"Bucket":"temp-s3-upload-testing",  "Location":"https://temp-s3-upload-testing.s3.ca-xxxxxxx"}
  */
-const uploadFileToS3 = async (file: Buffer, bucketName: string, filePath: string) => {
+const uploadFileToS3 = async (file: Buffer, bucketName: string, filePath: string): Promise<UploadResult> => {
     if (!bucketName && bucketName.length === 0) {
-        return new Promise((resolve, reject) => {
-            throw new Error("invalid bucket name");
+        return new Promise<UploadResult>((resolve, reject) => {
+            let result: UploadFailure = { isValid: false, errorReason: "Invalid bucket name" }
+            reject(result);
         });
     }
-    return new Promise((resolve, reject) => {
+    return new Promise<UploadResult>((resolve, reject) => {
 
         const uploadParams = {
             Bucket: bucketName,
             Body: file,
-            Key: filePath
+            Key: `${bucketName}/user_file/${Date.now()}/${uuid()}.${filePath}`
         }
 
         s3.upload(uploadParams, (err: any, data: any) => {
-            if (err) reject(err);
-            else resolve(data);
+            if (err) {
+                let result: UploadFailure = { isValid: false, errorReason: data }
+                reject(result);
+            } else {
+                let result: UploadSuccess = { isValid: true, successValue: data }
+                resolve(result);
+            }
         },
         );
     });
 
 };
+
 /**
  * Read and return a Buffer object from a Stream.
  * @param mystream 
- * @returns 
+ * @returns buffer array
  */
 const readStream2buffer = async (mystream: ReadStream): Promise<Buffer> => {
     return new Promise<Buffer>((resolve, reject) => {

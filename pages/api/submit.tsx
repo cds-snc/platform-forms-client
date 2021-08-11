@@ -8,7 +8,7 @@ import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dat
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import {uploadFileToS3,readStream2buffer} from "./s3-upload";
+import { uploadFileToS3, readStream2buffer } from "./s3-upload";
 
 export const config = {
   api: {
@@ -29,41 +29,8 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       if (err) {
         throw new Error(err);
       }
-      return await processFormData(fields, files, res, req).finally(() => {
-        for (const [id] of Object.entries(files)) {
-          const fileOrArray = files[id];
-          if (Array.isArray(fileOrArray)) {
-            fileOrArray.forEach((file) => {
-              console.log(`File path to be deleted: ${file.path}`);
-              fs.unlinkSync(file.path);
-            });
-          } else {
-            let bucketName: string = process.env.AWS_BUCKET_NAME as string;
-            readStream2buffer(fs.createReadStream(fileOrArray.path)).then(data=>{
-              // saving file to S3 bucket
-              uploadFileToS3(data, bucketName, fileOrArray.path).then(data => {
-
-                console.log("File uploaded successfully :" + data);
-               
-                // Pass urls for saved files in S3 to Lambda Submission Function
-                //if lambada function successfull 
-                // log
-                //if not success revoke and delete the file 
-
-              }).catch(err => {
-                console.error(err);
-              });
-  
-              console.log(`File path to be deleted: ${fileOrArray.path}`);
-              fs.unlinkSync(fileOrArray.path);
-            }).catch(err=>{
-              // Error could not upload to s3. 
-              console.error("Error unable to upload a file:")
-
-            });            
-          }
-        }
-      });
+      //TODO file extension validation before processing.
+      return await processFormData(fields, files, res, req);
     });
   } catch (err) {
     logMessage.error(err);
@@ -141,8 +108,7 @@ const processFormData = async (
     }
 
     logMessage.info(
-      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
-        reqFields ? reqFields.formID : "No form attached"
+      `Path: ${req.url}, Method: ${req.method}, Form ID: ${reqFields ? reqFields.formID : "No form attached"
       }`
     );
 
@@ -151,14 +117,19 @@ const processFormData = async (
       return await setTimeout(() => res.status(200).json({ received: true }), 1000);
     }
 
-    // Add file S3 urls to payload once we start processing files through reliability queue
-    // For now just attach the file names
     for (const [key, value] of Object.entries(files)) {
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
           reqFields[key] = fileOrArray.name;
+          pushFileToS3(fileOrArray, reqFields, fileOrArray.name);
         }
+      } else if (Array.isArray(fileOrArray)) {
+        fileOrArray.forEach((fileItem) => {
+          if (fileItem.name) {
+            pushFileToS3(fileItem, reqFields, fileItem.name);
+          }
+        });
       }
     }
 
@@ -204,4 +175,41 @@ const processFormData = async (
   }
 };
 
+/**
+ * Push a given file to a temporairy S3 and supply the resulting url to the submission's lambda. 
+ * @param fileOrArray
+ * @param reqFields 
+ * @param key 
+ */
+const pushFileToS3 = async (fileOrArray: formidable.File, reqFields: Responses | undefined, fileName: string): Promise<void> => {
+  let bucketName: string = process.env.AWS_BUCKET_NAME as string;
+
+  readStream2buffer(fs.createReadStream(fileOrArray.path)).then(fileBuffer => {
+
+    uploadFileToS3(fileBuffer, bucketName, fileName).then(result => {
+
+      if (result.isValid && reqFields) {
+        // TODO ? maybe replace fileName by id or key
+        reqFields[fileName] = result.successValue.Location;
+        callLambda(reqFields.formID as string, reqFields).catch(err => {
+          console.log(`Error lambda fails to push a file name ${fileName} - Reason: ${err}`);
+        });
+
+      } else if (!result.isValid) {
+        console.log(`Failed to upload ${fileName} to S3 bucket : ${result.errorReason}`);
+      }
+
+    }).catch(err => {
+      console.error(err);
+
+    }).finally(() => {
+      fs.unlinkSync(fileOrArray.path);
+    });
+
+  }).catch(err => {
+    console.error(`Error unable to read or create a stream`);
+    fs.unlinkSync(fileOrArray.path);
+
+  });
+};
 export default submit;

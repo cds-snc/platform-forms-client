@@ -28,13 +28,13 @@ export interface FormSchemaProperties {
   elements: Array<FormElement>;
   endPage?: Record<string, string>;
   [key: string]:
-    | string
-    | boolean
-    | Array<string>
-    | Array<FormElement>
-    | Record<string, string>
-    | BrandProperties
-    | undefined;
+  | string
+  | boolean
+  | Array<string>
+  | Array<FormElement>
+  | Record<string, string>
+  | BrandProperties
+  | undefined;
 }
 
 export interface PublicFormSchemaProperties extends FormSchemaProperties {
@@ -88,12 +88,12 @@ export interface ElementProperties {
   headingLevel?: string | undefined;
   isSectional?: boolean;
   [key: string]:
-    | string
-    | boolean
-    | Array<PropertyChoices>
-    | Array<FormElement>
-    | ValidationProperties
-    | undefined;
+  | string
+  | boolean
+  | Array<PropertyChoices>
+  | Array<FormElement>
+  | ValidationProperties
+  | undefined;
 }
 
 export interface BrandProperties {
@@ -205,3 +205,16 @@ export interface CrudOrganisationResponse {
     ];
   };
 }
+
+// File Upload Result Type
+export type UploadSuccess = {
+  isValid: true,
+  successValue: object | string
+}
+
+export type UploadFailure = {
+  isValid: false,
+  errorReason: object | string
+}
+
+export type UploadResult = UploadSuccess | UploadFailure;
