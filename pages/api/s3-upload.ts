@@ -1,65 +1,64 @@
-import S3 from "aws-sdk/clients/s3";
 import { ReadStream } from "fs";
+import fs from "fs";
 import { v4 as uuid } from "uuid";
-import { UploadResult, UploadFailure, UploadSuccess, SuccessData } from "../../lib/types";
+import { UploadResult, UploadFailure, UploadSuccess } from "../../lib/types";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import formidable from "formidable";
 
-const s3 = new S3({
-  region: process.env.AWS_BUCKET_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-});
+const s3Client = new S3Client({ region: process.env.AWS_BUCKET_REGION });
 
 /**
  * This function tries to upload a given file to aws S3 bucket and returns a data object
- * which stores a link to the file.
+ * which stores an url.
  * @param file
  * @param bucketName
  * @param filePath
- * @returns  {"ETag": "xxxxxxx" ,"Bucket":"temp-s3-upload-testing",  "Location":"https://temp-s3-upload-testing.s3.ca-xxxxxxx"}
+ * @returns
  */
 const uploadFileToS3 = async (
-  file: Buffer,
+  file: formidable.File,
   bucketName: string,
   filePath: string
 ): Promise<UploadResult> => {
-  if (!bucketName && bucketName.length === 0) {
-    return new Promise<UploadResult>((resolve, reject) => {
-      const result: UploadFailure = { isValid: false, errorReason: "Invalid bucket name" };
-      reject(result);
-    });
-  }
-  return new Promise<UploadResult>((resolve, reject) => {
+  try {
+    // setting the parameters
     const uploadParams = {
       Bucket: bucketName,
-      Body: file,
+      Body: await readStream2buffer(fs.createReadStream(file.path)).then((data) => {
+        return data;
+      }),
       Key: `${bucketName}/user_file/${new Date().toISOString().slice(0, 10)}/${uuid()}.${filePath}`,
     };
 
-    s3.upload(uploadParams, (err: unknown, data: any) => {
-      if (err) {
-        const result: UploadFailure = { isValid: false, errorReason: data };
-        reject(result);
-      } else {
-        const sucValue: SuccessData = { ...data };
-        const result: UploadSuccess = { isValid: true, successValue: sucValue };
-        resolve(result);
-      }
-    });
-  });
+    const responseData = await s3Client.send(new PutObjectCommand(uploadParams));
+    const result: UploadSuccess = {
+      isValid: true,
+      successValue: { location: uploadParams.Key, ...responseData },
+    };
+    return result;
+  } catch (error) {
+    const result: UploadFailure = { isValid: false, errorReason: error };
+    return result;
+  }
 };
 
 /**
  * Read and return a Buffer object from a Stream.
  * @param mystream
- * @returns buffer array
+ * @returns buffer array.
  */
-const readStream2buffer = async (mystream: ReadStream): Promise<Buffer> => {
+const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
   return new Promise<Buffer>((resolve, reject) => {
-    const _buf = Array<any>();
-
-    mystream.on("data", (datachunk) => _buf.push(datachunk));
-    mystream.on("end", () => resolve(Buffer.concat(_buf)));
-    mystream.on("error", (err) => reject(`error converting stream - ${err}`));
+    const _buf = [];
+    fileStream.on("data", (datachunk) => {
+      _buf.push(datachunk);
+    });
+    fileStream.on("end", () => {
+      resolve(Buffer.concat(_buf));
+    });
+    fileStream.on("error", (err) => {
+      reject(err);
+    });
   });
 };
 

@@ -213,14 +213,13 @@ export type UploadSuccess = {
 };
 
 export type SuccessData = {
-  Location: string;
-  ETag?: string;
-  Key?: string;
+  location: string;
+  data?: string;
 };
 
 export type UploadFailure = {
   isValid: false;
-  errorReason: any | string;
+  errorReason: string;
 };
 
 export type UploadResult = UploadSuccess | UploadFailure;

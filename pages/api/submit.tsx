@@ -6,9 +6,9 @@ import fs from "fs";
 import convertMessage from "@lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
 import { logMessage } from "@lib/logger";
-import { PublicFormSchemaProperties, Responses } from "@lib/types";
+import { PublicFormSchemaProperties, Responses, UploadResult } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import { uploadFileToS3, readStream2buffer } from "./s3-upload";
+import { uploadFileToS3 } from "./s3-upload";
 
 export const config = {
   api: {
@@ -122,12 +122,14 @@ const processFormData = async (
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
           reqFields[key] = fileOrArray.name;
-          pushFileToS3(fileOrArray, reqFields, fileOrArray.name);
+          const result = await pushFileToS3(fileOrArray, fileOrArray.name);
+          console.log(result);
         }
       } else if (Array.isArray(fileOrArray)) {
-        fileOrArray.forEach((fileItem) => {
+        fileOrArray.forEach(async (fileItem) => {
           if (fileItem.name) {
-            pushFileToS3(fileItem, reqFields, fileItem.name);
+            const result = await pushFileToS3(fileItem, fileItem.name);
+            console.log(result);
           }
         });
       }
@@ -183,35 +185,20 @@ const processFormData = async (
  */
 const pushFileToS3 = async (
   fileOrArray: formidable.File,
-  reqFields: Responses | undefined,
   fileName: string
-): Promise<void> => {
+): Promise<UploadResult> => {
   const bucketName: string = process.env.AWS_BUCKET_NAME as string;
-
-  readStream2buffer(fs.createReadStream(fileOrArray.path))
-    .then((fileBuffer) => {
-      uploadFileToS3(fileBuffer, bucketName, fileName)
-        .then((result) => {
-          if (result.isValid && reqFields) {
-            // TODO ? maybe replace fileName by id or key
-            reqFields[fileName] = result.successValue.Location;
-            callLambda(reqFields.formID as string, reqFields).catch((err) => {
-              console.log(`Error lambda fails to push a file name ${fileName} - Reason: ${err}`);
-            });
-          } else if (!result.isValid) {
-            console.log(`Failed to upload ${fileName} to S3 bucket : ${result.errorReason}`);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-        .finally(() => {
-          fs.unlinkSync(fileOrArray.path);
-        });
-    })
-    .catch((err) => {
-      console.error(`Error unable to read or create a stream ${err}`);
-      fs.unlinkSync(fileOrArray.path);
-    });
+  let uploadResult: UploadResult;
+  try {
+    uploadResult = await uploadFileToS3(fileOrArray, bucketName, fileName);
+    if (!uploadResult.isValid) {
+      throw new Error(uploadResult.errorReason);
+    }
+  } catch (error) {
+    throw new Error(error);
+  } finally {
+    fs.unlinkSync(fileOrArray.path);
+  }
+  return uploadResult;
 };
 export default submit;
