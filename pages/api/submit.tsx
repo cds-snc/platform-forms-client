@@ -25,7 +25,6 @@ const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
   try {
     const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
     return incomingForm.parse(req, async (err, fields, files) => {
-      console.log(" submit : " + fields);
       if (err) {
         throw new Error(err);
       }
@@ -108,7 +107,8 @@ const processFormData = async (
     }
 
     logMessage.info(
-      `Path: ${req.url}, Method: ${req.method}, Form ID: ${reqFields ? reqFields.formID : "No form attached"
+      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
+        reqFields ? reqFields.formID : "No form attached"
       }`
     );
 
@@ -176,40 +176,42 @@ const processFormData = async (
 };
 
 /**
- * Push a given file to a temporairy S3 and supply the resulting url to the submission's lambda. 
+ * Push a given file to a temporairy S3 and supply the resulting url to the submission's lambda.
  * @param fileOrArray
- * @param reqFields 
- * @param key 
+ * @param reqFields
+ * @param key
  */
-const pushFileToS3 = async (fileOrArray: formidable.File, reqFields: Responses | undefined, fileName: string): Promise<void> => {
-  let bucketName: string = process.env.AWS_BUCKET_NAME as string;
+const pushFileToS3 = async (
+  fileOrArray: formidable.File,
+  reqFields: Responses | undefined,
+  fileName: string
+): Promise<void> => {
+  const bucketName: string = process.env.AWS_BUCKET_NAME as string;
 
-  readStream2buffer(fs.createReadStream(fileOrArray.path)).then(fileBuffer => {
-
-    uploadFileToS3(fileBuffer, bucketName, fileName).then(result => {
-
-      if (result.isValid && reqFields) {
-        // TODO ? maybe replace fileName by id or key
-        reqFields[fileName] = result.successValue.Location;
-        callLambda(reqFields.formID as string, reqFields).catch(err => {
-          console.log(`Error lambda fails to push a file name ${fileName} - Reason: ${err}`);
+  readStream2buffer(fs.createReadStream(fileOrArray.path))
+    .then((fileBuffer) => {
+      uploadFileToS3(fileBuffer, bucketName, fileName)
+        .then((result) => {
+          if (result.isValid && reqFields) {
+            // TODO ? maybe replace fileName by id or key
+            reqFields[fileName] = result.successValue.Location;
+            callLambda(reqFields.formID as string, reqFields).catch((err) => {
+              console.log(`Error lambda fails to push a file name ${fileName} - Reason: ${err}`);
+            });
+          } else if (!result.isValid) {
+            console.log(`Failed to upload ${fileName} to S3 bucket : ${result.errorReason}`);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          fs.unlinkSync(fileOrArray.path);
         });
-
-      } else if (!result.isValid) {
-        console.log(`Failed to upload ${fileName} to S3 bucket : ${result.errorReason}`);
-      }
-
-    }).catch(err => {
-      console.error(err);
-
-    }).finally(() => {
+    })
+    .catch((err) => {
+      console.error(`Error unable to read or create a stream ${err}`);
       fs.unlinkSync(fileOrArray.path);
     });
-
-  }).catch(err => {
-    console.error(`Error unable to read or create a stream`);
-    fs.unlinkSync(fileOrArray.path);
-
-  });
 };
 export default submit;
