@@ -121,17 +121,23 @@ const processFormData = async (
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
-          reqFields[key] = fileOrArray.name;
           const result = await pushFileToS3(fileOrArray, fileOrArray.name);
-          console.log(result);
+          if (result.isValid) reqFields[key] = result.successValue.location;
+          else throw new Error(result.errorReason);
         }
       } else if (Array.isArray(fileOrArray)) {
-        fileOrArray.forEach(async (fileItem) => {
+        fileOrArray.map(async (fileItem) => {
           if (fileItem.name) {
             const result = await pushFileToS3(fileItem, fileItem.name);
-            console.log(result);
+            //TODO @bryan-robitaille we may need to chat on this code.
+            if (result.isValid)
+              /** what's the better approch to store these links*/ console.log(
+                result.successValue.location
+              );
+            else throw new Error(result.errorReason);
           }
         });
+        //reqFields[key] = urlMap;
       }
     }
 
