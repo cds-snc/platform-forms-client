@@ -190,20 +190,20 @@ const processFormData = async (
  * @param key
  */
 const pushFileToS3 = async (
-  fileOrArray: formidable.File,
+  file: formidable.File,
   fileName: string
 ): Promise<UploadResult> => {
   const bucketName: string = process.env.AWS_BUCKET_NAME as string;
   let uploadResult: UploadResult;
   try {
-    uploadResult = await uploadFileToS3(fileOrArray, bucketName, fileName);
+    uploadResult = await uploadFileToS3(file, bucketName, fileName);
     if (!uploadResult.isValid) {
       throw new Error(uploadResult.errorReason);
     }
   } catch (error) {
     throw new Error(error);
   } finally {
-    fs.unlinkSync(fileOrArray.path);
+    fs.unlinkSync(file.path);
   }
   return uploadResult;
 };
