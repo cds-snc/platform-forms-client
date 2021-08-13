@@ -6,7 +6,7 @@ import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import formidable from "formidable";
 
-const s3Client = new S3Client({ region: "ca-central-1" }); 
+const s3Client = new S3Client({ region: "ca-central-1" });
 
 /**
  * This function tries to upload a given file to aws S3 bucket and returns a data object
