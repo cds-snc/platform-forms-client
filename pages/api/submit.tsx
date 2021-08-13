@@ -184,7 +184,7 @@ const processFormData = async (
 };
 
 /**
- * Push a given file to a temporairy S3
+ * Push a given file to a temporary S3
  * @param fileOrArray
  * @param reqFields
  * @param key
