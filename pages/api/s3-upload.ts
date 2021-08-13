@@ -52,9 +52,13 @@ const uploadFileToS3 = async (
  */
 const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
   return new Promise<Buffer>((resolve, reject) => {
-    const _buf: any[] = [];
+    const _buf: Uint8Array[] = [];
     fileStream.on("data", (datachunk) => {
-      _buf.push(datachunk);
+      if (typeof datachunk === "string" || datachunk instanceof String) {
+        _buf.push(Buffer.from(datachunk, "utf8"));
+      } else {
+        _buf.push(datachunk as Buffer);
+      }
     });
     fileStream.on("end", () => {
       resolve(Buffer.concat(_buf));

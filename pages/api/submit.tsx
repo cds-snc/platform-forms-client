@@ -129,9 +129,9 @@ const processFormData = async (
         fileOrArray.map(async (fileItem) => {
           if (fileItem.name) {
             const result = await pushFileToS3(fileItem, fileItem.name);
-            //TODO @bryan-robitaille we may need to chat on this code.
+            //TODO @bryan-robitaille.
             if (result.isValid)
-              /** what's the better approch to store these links*/ console.log(
+              /** what's the best approach to store these links in response object*/ console.log(
                 result.successValue.location
               );
             else throw new Error(result.errorReason);
