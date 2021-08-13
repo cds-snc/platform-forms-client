@@ -184,7 +184,7 @@ const processFormData = async (
 };
 
 /**
- * Push a given file to a temporairy S3 and supply the resulting url to the submission's lambda.
+ * Push a given file to a temporairy S3
  * @param fileOrArray
  * @param reqFields
  * @param key
