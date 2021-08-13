@@ -213,8 +213,7 @@ export type UploadSuccess = {
 };
 
 export type SuccessData = {
-  location: string;
-  data?: string;
+  url: string;
 };
 
 export type UploadFailure = {

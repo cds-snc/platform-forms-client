@@ -122,17 +122,18 @@ const processFormData = async (
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
           const result = await pushFileToS3(fileOrArray, fileOrArray.name);
-          if (result.isValid) reqFields[key] = result.successValue.location;
+          if (result.isValid) reqFields[key] = result.successValue.url;
           else throw new Error(result.errorReason);
         }
       } else if (Array.isArray(fileOrArray)) {
+        //TODO when we start uploading more than a file this code should be refactored.
         fileOrArray.map(async (fileItem) => {
           if (fileItem.name) {
             const result = await pushFileToS3(fileItem, fileItem.name);
             //TODO @bryan-robitaille.
             if (result.isValid)
               /** what's the best approach to store these links in response object*/ console.log(
-                result.successValue.location
+                result.successValue.url
               );
             else throw new Error(result.errorReason);
           }
@@ -184,15 +185,12 @@ const processFormData = async (
 };
 
 /**
- * Push a given file to a temporairy S3
+ * Push a given file to a temporary S3
  * @param fileOrArray
  * @param reqFields
  * @param key
  */
-const pushFileToS3 = async (
-  file: formidable.File,
-  fileName: string
-): Promise<UploadResult> => {
+const pushFileToS3 = async (file: formidable.File, fileName: string): Promise<UploadResult> => {
   const bucketName: string = process.env.AWS_BUCKET_NAME as string;
   let uploadResult: UploadResult;
   try {
