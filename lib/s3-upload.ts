@@ -1,7 +1,7 @@
 import { ReadStream } from "fs";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
-import { UploadResult, UploadFailure, UploadSuccess } from "../../lib/types";
+import { UploadResult } from "./types";
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import formidable from "formidable";
@@ -34,13 +34,13 @@ const uploadFileToS3 = async (
     const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(uploadParams), {
       expiresIn: 3600 * 24 * 4,
     });
-    const result: UploadSuccess = {
+    const result: UploadResult = {
       isValid: true,
-      successValue: { url: signedUrl },
+      result: signedUrl,
     };
     return result;
   } catch (error) {
-    const result: UploadFailure = { isValid: false, errorReason: error };
+    const result: UploadResult = { isValid: false, result: error };
     return result;
   }
 };
