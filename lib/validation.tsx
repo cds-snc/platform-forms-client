@@ -8,6 +8,7 @@ import {
 } from "./types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
+import { acceptedFileMimeTypes } from "../components/forms";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -106,8 +107,15 @@ const isFieldResponseValid = (
       break;
     }
     case "fileInput": {
-      const typedValue = value as Record<string, string>;
+      const typedValue = value as Record<string, unknown>;
       if (validator.required && typedValue["file"] === null) return t("input-validation.required");
+      // Size limit is 8 MB
+      if ((typedValue["size"] as number) > 8000000)
+        return t("input-validation.file-size-too-large");
+      const file = typedValue["file"] as File;
+      if (acceptedFileMimeTypes.split(",").find((value) => value === file.type) === undefined) {
+        return t("input-validation.file-type-invalid");
+      }
       break;
     }
     case "dynamicRow": {

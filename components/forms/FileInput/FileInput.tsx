@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useField, Field } from "formik";
 import { ErrorMessage } from "../index";
 
-const acceptedFileMimeTypes =
+export const acceptedFileMimeTypes =
   "application/pdf,text/csv,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";
 
 interface FileInputProps {

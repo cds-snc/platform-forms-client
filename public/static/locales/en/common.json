@@ -32,7 +32,9 @@
     "email": "Please enter a valid email",
     "date": "Please enter a valid date in mm/dd/yyyy format",
     "phone": "Please enter a valid telephone number",
-    "regex": "Please enter the correct format"
+    "regex": "Please enter the correct format",
+    "file-size-too-large": "File size too large",
+    "file-type-invalid": "File type not accepted"
   },
   "required-field": "Required",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
