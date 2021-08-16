@@ -266,7 +266,9 @@ const _getElementInitialValue = (
       const dynamicRowInitialValue: Record<string, unknown> =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          accumulator[subElementID] = _getElementInitialValue(currentValue, language);
+          if (!["richText"].includes(currentValue.type)) {
+            accumulator[subElementID] = _getElementInitialValue(currentValue, language);
+          }
           return accumulator;
         }, {} as Record<string, unknown>) ?? {};
       return [dynamicRowInitialValue];
@@ -291,7 +293,7 @@ const _getFormInitialValues = (formConfig: PublicFormSchemaProperties, language:
 
   formConfig.elements
     .filter((element) => !["richText"].includes(element.type))
-    .map((element: FormElement) => {
+    .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
