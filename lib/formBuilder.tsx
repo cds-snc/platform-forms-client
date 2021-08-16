@@ -293,7 +293,7 @@ const _getFormInitialValues = (formConfig: PublicFormSchemaProperties, language:
 
   formConfig.elements
     .filter((element) => !["richText"].includes(element.type))
-    .map((element: FormElement) => {
+    .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
