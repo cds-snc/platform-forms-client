@@ -31,7 +31,7 @@
     "alphanumeric": "Veuillez entrer uniquement des lettres et des chiffres",
     "email": "Veuillez entrer une adresse courriel valide",
     "date": "Veuillez utiliser le format de date mm/jj/aaaa",
-    "phone": "Veuillez entrer numéro de téléphone valide",
+    "phone": "Veuillez entrer un numéro de téléphone valide",
     "regex": "Veuillez utiliser le bon format"
   },
   "required-field": "Nécessaire",
