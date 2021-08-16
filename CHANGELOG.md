@@ -17,10 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove unused debugging `console.logs()`
 - Remove info level logging from production builds
+- Dropdown component automatically adds a default empty option to the list of choices. It becomes the initial value so that we do not need to add it manually in the JSON file.
 
 ### Fixed
 
 - When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
+- Unpublished form cache not correctly set
 
 ### Removed
 

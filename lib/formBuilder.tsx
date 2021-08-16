@@ -251,32 +251,28 @@ const _getRenderedForm = (formConfig: PublicFormSchemaProperties, language: stri
 const _getElementInitialValue = (
   element: FormElement,
   language: string
-): Record<string, unknown> | Record<string, unknown>[] | string => {
-  const nestedObj: Record<string, unknown> = {};
-
-  // For "nested" inputs like radio, checkbox, dropdown, loop through the options to determine the nested value
-  if (element.properties.choices) {
-    element.properties.choices.map((choice, index) => {
-      //initialValues[choiceId] = choice[language];
-      nestedObj[index] = choice[language];
-    });
-
-    return nestedObj;
-  } else if (element.properties.subElements) {
-    // For Dynamic Row reiterate through and create Initial Values to an Array of Objects
-    const dynamicRow: Record<string, unknown> = {};
-    element.properties.subElements.map((subElement, index) => {
-      const subElementID = `${index}`;
-      dynamicRow[subElementID] = _getElementInitialValue(subElement, language);
-    });
-    return [dynamicRow];
-  } else if (element.properties.fileType) {
-    // For file attachments, we need several values like the FileName, FileReader base64 object and File object
-    return { file: null, src: null, name: "" };
-  } else {
-    // Regular inputs (not nested) like text, textarea have an empty value
-    // Placeholder value is passed in using the appropriate html attribute
-    return "";
+): Record<string, unknown> | Record<string, unknown>[] | string | undefined => {
+  switch (element.type) {
+    case "textField":
+    case "textArea":
+      return "";
+    case "checkbox":
+    case "radio":
+    case "dropdown":
+      return undefined;
+    case "fileInput":
+      return { file: null, src: null, name: "" };
+    case "dynamicRow": {
+      const dynamicRowInitialValue: Record<string, unknown> =
+        element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
+          const subElementID = `${currentIndex}`;
+          accumulator[subElementID] = _getElementInitialValue(currentValue, language);
+          return accumulator;
+        }, {} as Record<string, unknown>) ?? {};
+      return [dynamicRowInitialValue];
+    }
+    default:
+      throw `Initial value for component ${element.type} is not handled`;
   }
 };
 
