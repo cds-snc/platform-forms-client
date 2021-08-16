@@ -8,7 +8,7 @@ import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dat
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses, UploadResult } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import { uploadFileToS3 } from "./s3-upload";
+import { uploadFileToS3 } from "../../lib/s3-upload";
 
 export const config = {
   api: {
@@ -191,7 +191,8 @@ const processFormData = async (
  * @param key
  */
 const pushFileToS3 = async (file: formidable.File, fileName: string): Promise<UploadResult> => {
-  const bucketName: string = process.env.AWS_BUCKET_NAME as string;
+  // Set bucket name default value to something actual value once known
+  const bucketName: string = (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
   let uploadResult: UploadResult;
   try {
     uploadResult = await uploadFileToS3(file, bucketName, fileName);
