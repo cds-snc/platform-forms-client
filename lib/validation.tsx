@@ -74,7 +74,7 @@ const scrollErrorInView = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, i
   }
 };
 
-const isFielddResponseValid = (
+const isFieldResponseValid = (
   value: unknown,
   componentType: string,
   validator: ValidationProperties,
@@ -135,7 +135,7 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
     if (!formElement) return errors;
 
     if (formElement.properties.validation) {
-      const result = isFielddResponseValid(
+      const result = isFieldResponseValid(
         values[item],
         formElement.type,
         formElement.properties.validation,
