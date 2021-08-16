@@ -205,3 +205,10 @@ export interface CrudOrganisationResponse {
     ];
   };
 }
+
+// File Upload Result Type
+
+export type UploadResult = {
+  isValid: boolean;
+  result: string;
+};
