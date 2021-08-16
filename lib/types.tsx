@@ -207,18 +207,8 @@ export interface CrudOrganisationResponse {
 }
 
 // File Upload Result Type
-export type UploadSuccess = {
-  isValid: true;
-  successValue: SuccessData;
-};
 
-export type SuccessData = {
-  url: string;
+export type UploadResult = {
+  isValid: boolean;
+  result: string;
 };
-
-export type UploadFailure = {
-  isValid: false;
-  errorReason: string;
-};
-
-export type UploadResult = UploadSuccess | UploadFailure;
