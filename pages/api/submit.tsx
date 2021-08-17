@@ -121,14 +121,14 @@ const processFormData = async (
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
-          console.debug(`uploading : ${_key} - ${fileOrArray.name} `);
+          console.debug(`uploading: ${_key} - filename ${fileOrArray.name} `);
           const { isValid, result, key } = await pushFileToS3(fileOrArray, fileOrArray.name);
           if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
         }
       } else if (Array.isArray(fileOrArray)) {
         fileOrArray.forEach(async (fileItem) => {
           if (fileItem.name) {
-            console.debug(`uploading :  ${_key} - ${fileItem.name} `);
+            console.debug(`uploading: ${_key} - filename ${fileItem.name} `);
             const { isValid, result, key } = await pushFileToS3(fileItem, fileItem.name);
             if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
           }
@@ -178,7 +178,7 @@ const processFormData = async (
       const bucketName: string =
         (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
       uploadedFilesKeyUrlMapping.forEach(async (value, key) => {
-        console.log(`deletion of : key : ${key}  -  value: ${value}`);
+        console.debug(`deletion of key : ${key}  -  value: ${value}`);
         await deleteObject(bucketName, key);
       });
     }
