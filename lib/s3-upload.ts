@@ -15,7 +15,8 @@ import formidable from "formidable";
 
 const s3Client = new S3Client({ region: process.env.AWS_REGION ?? "ca-central-1" });
 
-const bucketName: string = process.env.RELIABILITY_FILE_STORAGE ?? "ca-central-1";
+const bucketName: string =
+  process.env.RELIABILITY_FILE_STORAGE ?? "forms-staging-reliability-file-storage";
 
 /**
  * This function tries to upload a given file to aws S3 bucket and returns a data object
