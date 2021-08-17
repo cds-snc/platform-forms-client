@@ -2,7 +2,12 @@ import { ReadStream } from "fs";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { UploadResult } from "./types";
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import formidable from "formidable";
 
@@ -23,11 +28,14 @@ const uploadFileToS3 = async (
 ): Promise<UploadResult> => {
   try {
     const data = await readStream2buffer(fs.createReadStream(file.path));
+    const objectKey = `${bucketName}/user_file/${new Date()
+      .toISOString()
+      .slice(0, 10)}/${uuid()}.${filePath}`;
     // setting the parameters
     const uploadParams = {
       Bucket: bucketName,
       Body: data,
-      Key: `${bucketName}/user_file/${new Date().toISOString().slice(0, 10)}/${uuid()}.${filePath}`,
+      Key: objectKey,
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
@@ -37,6 +45,7 @@ const uploadFileToS3 = async (
     const result: UploadResult = {
       isValid: true,
       result: signedUrl,
+      key: uploadParams.Key,
     };
     return result;
   } catch (error) {
@@ -69,4 +78,18 @@ const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
   });
 };
 
-export { uploadFileToS3, readStream2buffer };
+/**
+ *
+ * @param bucketName
+ * @param fileKey
+ * @returns
+ */
+const deleteObject = async (bucketName: string, fileKey: string): Promise<void> => {
+  try {
+    await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileKey }));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { uploadFileToS3, readStream2buffer, deleteObject };

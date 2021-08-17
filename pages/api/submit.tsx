@@ -2,13 +2,12 @@ import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import formidable from "formidable";
-import fs from "fs";
 import convertMessage from "@lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses, UploadResult } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import { uploadFileToS3 } from "../../lib/s3-upload";
+import { uploadFileToS3, deleteObject } from "../../lib/s3-upload";
 
 export const config = {
   api: {
@@ -98,6 +97,7 @@ const processFormData = async (
   res: NextApiResponse,
   req: NextApiRequest
 ) => {
+  const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
     const notifyPreview = await checkOne("notifyPreview");
@@ -117,28 +117,22 @@ const processFormData = async (
       return await setTimeout(() => res.status(200).json({ received: true }), 1000);
     }
 
-    for (const [key, value] of Object.entries(files)) {
+    for (const [_key, value] of Object.entries(files)) {
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
-          const { isValid, result } = await pushFileToS3(fileOrArray, fileOrArray.name);
-          if (isValid) reqFields[key] = result;
-          else throw new Error(result as string);
+          console.debug(`Processing file ${_key} - ${fileOrArray.name} `);
+          const { isValid, result, key } = await pushFileToS3(fileOrArray, fileOrArray.name);
+          if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
         }
       } else if (Array.isArray(fileOrArray)) {
-        //TODO when we start uploading more than a file this code should be refactored.
         fileOrArray.forEach(async (fileItem) => {
           if (fileItem.name) {
-            const { isValid, result } = await pushFileToS3(fileItem, fileItem.name);
-            //TODO @bryan-robitaille.
-            if (isValid)
-              /** what's the best approach to store these links in response object*/
-              // Need to check to see if the below is easy to parse out when processing the form submission
-              reqFields[key] = result;
-            else throw new Error(result);
+            console.debug(`Processing file ${_key} - ${fileItem.name} `);
+            const { isValid, result, key } = await pushFileToS3(fileItem, fileItem.name);
+            if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
           }
         });
-        //reqFields[key] = urlMap;
       }
     }
 
@@ -179,6 +173,15 @@ const processFormData = async (
     // Set this to a 200 response as it's valid if the send to reliability queue option is off.
     return res.status(200).json({ received: true });
   } catch (err) {
+    // it is true if file(s) has/have been already uploaded.It'll try a deletion of file(s) on S3.
+    if (uploadedFilesKeyUrlMapping.size > 0) {
+      const bucketName: string =
+        (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
+      uploadedFilesKeyUrlMapping.forEach(async (value, key) => {
+        console.log(`deletion of : key : ${key}  -  value: ${value}`);
+        await deleteObject(bucketName, key);
+      });
+    }
     logMessage.error(err);
     return res.status(500).json({ received: false });
   }
@@ -193,16 +196,10 @@ const processFormData = async (
 const pushFileToS3 = async (file: formidable.File, fileName: string): Promise<UploadResult> => {
   // Set bucket name default value to something actual value once known
   const bucketName: string = (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
-  let uploadResult: UploadResult;
-  try {
-    uploadResult = await uploadFileToS3(file, bucketName, fileName);
-    if (!uploadResult.isValid) {
-      throw new Error(uploadResult.result);
-    }
-  } catch (error) {
-    throw new Error(error);
-  } finally {
-    fs.unlinkSync(file.path);
+  const uploadResult: UploadResult = await uploadFileToS3(file, bucketName, fileName);
+  const { isValid, result } = uploadResult;
+  if (!isValid) {
+    throw new Error(result);
   }
   return uploadResult;
 };

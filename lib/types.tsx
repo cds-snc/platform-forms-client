@@ -211,4 +211,5 @@ export interface CrudOrganisationResponse {
 export type UploadResult = {
   isValid: boolean;
   result: string;
+  key?: string;
 };
