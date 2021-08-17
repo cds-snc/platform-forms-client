@@ -2,6 +2,7 @@ import { ReadStream } from "fs";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { UploadResult } from "./types";
+import { logMessage } from "./logger";
 import {
   S3Client,
   PutObjectCommand,
@@ -12,26 +13,22 @@ import {
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import formidable from "formidable";
 
-const s3Client = new S3Client({ region: "ca-central-1" });
+const s3Client = new S3Client({ region: process.env.AWS_REGION ?? "ca-central-1" });
+
+const bucketName: string = process.env.RELIABILITY_FILE_STORAGE ?? "ca-central-1";
 
 /**
  * This function tries to upload a given file to aws S3 bucket and returns a data object
  * which stores an url.
  * @param file
- * @param bucketName
- * @param filePath
  * @returns
  */
-const uploadFileToS3 = async (
-  file: formidable.File,
-  bucketName: string,
-  filePath: string
-): Promise<UploadResult> => {
+const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
   try {
     const data = await readStream2buffer(fs.createReadStream(file.path));
-    const objectKey = `${bucketName}/user_file/${new Date()
+    const objectKey = `${bucketName}/form_attachments/${new Date()
       .toISOString()
-      .slice(0, 10)}/${uuid()}.${filePath}`;
+      .slice(0, 10)}/${uuid()}.${file.name}`;
 
     // setting the parameters
     const uploadParams = {
@@ -81,17 +78,33 @@ const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
 };
 
 /**
+ * Push a given file to a temporary S3
+ * @param fileOrArray
+ * @param reqFields
+ * @param key
+ */
+const pushFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
+  // Set bucket name default value to something actual value once known
+  const uploadResult: UploadResult = await uploadFileToS3(file);
+  const { isValid, result } = uploadResult;
+  if (!isValid) {
+    throw new Error(result);
+  }
+  return uploadResult;
+};
+
+/**
  *
  * @param bucketName
  * @param fileKey
  * @returns
  */
-const deleteObject = async (bucketName: string, fileKey: string): Promise<void> => {
+const deleteObject = async (fileKey: string): Promise<void> => {
   try {
     await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileKey }));
   } catch (error) {
-    console.error(error);
+    logMessage.error(error);
   }
 };
 
-export { uploadFileToS3, readStream2buffer, deleteObject };
+export { uploadFileToS3, readStream2buffer, deleteObject, pushFileToS3 };

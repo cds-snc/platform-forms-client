@@ -5,9 +5,9 @@ import formidable from "formidable";
 import convertMessage from "@lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
 import { logMessage } from "@lib/logger";
-import { PublicFormSchemaProperties, Responses, UploadResult } from "@lib/types";
+import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import { uploadFileToS3, deleteObject } from "../../lib/s3-upload";
+import { pushFileToS3, deleteObject } from "../../lib/s3-upload";
 
 export const config = {
   api: {
@@ -121,15 +121,15 @@ const processFormData = async (
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
-          console.debug(`uploading: ${_key} - filename ${fileOrArray.name} `);
-          const { isValid, result, key } = await pushFileToS3(fileOrArray, fileOrArray.name);
+          logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
+          const { isValid, result, key } = await pushFileToS3(fileOrArray);
           if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
         }
       } else if (Array.isArray(fileOrArray)) {
         fileOrArray.forEach(async (fileItem) => {
           if (fileItem.name) {
-            console.debug(`uploading: ${_key} - filename ${fileItem.name} `);
-            const { isValid, result, key } = await pushFileToS3(fileItem, fileItem.name);
+            logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
+            const { isValid, result, key } = await pushFileToS3(fileItem);
             if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
           }
         });
@@ -175,11 +175,9 @@ const processFormData = async (
   } catch (err) {
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
     if (uploadedFilesKeyUrlMapping.size > 0) {
-      const bucketName: string =
-        (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
       uploadedFilesKeyUrlMapping.forEach(async (value, key) => {
-        console.debug(`deletion of key : ${key}  -  value: ${value}`);
-        await deleteObject(bucketName, key);
+        logMessage.info(`deletion of key : ${key}  -  value: ${value}`);
+        await deleteObject(key);
       });
     }
     logMessage.error(err);
@@ -187,20 +185,4 @@ const processFormData = async (
   }
 };
 
-/**
- * Push a given file to a temporary S3
- * @param fileOrArray
- * @param reqFields
- * @param key
- */
-const pushFileToS3 = async (file: formidable.File, fileName: string): Promise<UploadResult> => {
-  // Set bucket name default value to something actual value once known
-  const bucketName: string = (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
-  const uploadResult: UploadResult = await uploadFileToS3(file, bucketName, fileName);
-  const { isValid, result } = uploadResult;
-  if (!isValid) {
-    throw new Error(result);
-  }
-  return uploadResult;
-};
 export default submit;
