@@ -3,14 +3,8 @@ import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { UploadResult } from "./types";
 import { logMessage } from "./logger";
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import formidable from "formidable";
 
 const s3Client = new S3Client({ region: process.env.AWS_REGION ?? "ca-central-1" });
@@ -27,9 +21,9 @@ const bucketName: string =
 const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
   try {
     const data = await readStream2buffer(fs.createReadStream(file.path));
-    const objectKey = `${bucketName}/form_attachments/${new Date()
-      .toISOString()
-      .slice(0, 10)}/${uuid()}.${file.name}`;
+    const objectKey = `/form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}.${
+      file.name
+    }`;
 
     // setting the parameters
     const uploadParams = {
@@ -39,18 +33,12 @@ const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
-    const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(uploadParams), {
-      expiresIn: 3600 * 24 * 4,
-    });
-    const result: UploadResult = {
+    return {
       isValid: true,
-      result: signedUrl,
       key: uploadParams.Key,
     };
-    return result;
   } catch (error) {
-    const result: UploadResult = { isValid: false, result: error };
-    return result;
+    return { isValid: false, key: error };
   }
 };
 
@@ -87,9 +75,9 @@ const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
 const pushFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
   // Set bucket name default value to something actual value once known
   const uploadResult: UploadResult = await uploadFileToS3(file);
-  const { isValid, result } = uploadResult;
+  const { isValid, key } = uploadResult;
   if (!isValid) {
-    throw new Error(result);
+    throw new Error(key);
   }
   return uploadResult;
 };

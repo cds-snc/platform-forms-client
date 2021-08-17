@@ -122,15 +122,15 @@ const processFormData = async (
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
           logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
-          const { isValid, result, key } = await pushFileToS3(fileOrArray);
-          if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
+          const { isValid, key } = await pushFileToS3(fileOrArray);
+          if (isValid) uploadedFilesKeyUrlMapping.set(fileOrArray.name, key as string);
         }
       } else if (Array.isArray(fileOrArray)) {
         fileOrArray.forEach(async (fileItem) => {
           if (fileItem.name) {
             logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
-            const { isValid, result, key } = await pushFileToS3(fileItem);
-            if (isValid) uploadedFilesKeyUrlMapping.set(key as string, result);
+            const { isValid, key } = await pushFileToS3(fileItem);
+            if (isValid) uploadedFilesKeyUrlMapping.set(fileItem.name, key as string);
           }
         });
       }
