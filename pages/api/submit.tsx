@@ -173,7 +173,7 @@ const processFormData = async (
     // Set this to a 200 response as it's valid if the send to reliability queue option is off.
     return res.status(200).json({ received: true });
   } catch (err) {
-    // it is true if file(s) has/have been already uploaded.It'll try a deletion of file(s) on S3.
+    // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
     if (uploadedFilesKeyUrlMapping.size > 0) {
       const bucketName: string =
         (process.env.AWS_BUCKET_NAME as string) ?? "temp-s3-upload-testing";
