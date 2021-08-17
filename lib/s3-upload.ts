@@ -8,6 +8,7 @@ import {
   GetObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
+
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import formidable from "formidable";
 
@@ -31,6 +32,7 @@ const uploadFileToS3 = async (
     const objectKey = `${bucketName}/user_file/${new Date()
       .toISOString()
       .slice(0, 10)}/${uuid()}.${filePath}`;
+
     // setting the parameters
     const uploadParams = {
       Bucket: bucketName,
