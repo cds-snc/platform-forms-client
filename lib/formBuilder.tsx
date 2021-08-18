@@ -261,7 +261,7 @@ const _getElementInitialValue = (
     case "dropdown":
       return undefined;
     case "fileInput":
-      return { file: null, src: null, name: "" };
+      return { file: null, src: null, name: "", size: 0 };
     case "dynamicRow": {
       const dynamicRowInitialValue: Record<string, unknown> =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {

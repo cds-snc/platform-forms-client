@@ -10,7 +10,7 @@ export { Label } from "./Label/Label";
 export { Radio } from "./Radio/Radio";
 export { TextArea } from "./TextArea/TextArea";
 export { TextInput } from "./TextInput/TextInput";
-export { FileInput } from "./FileInput/FileInput";
+export { FileInput, acceptedFileMimeTypes } from "./FileInput/FileInput";
 export { RichText } from "./RichText/RichText";
 export { DynamicGroup } from "./DynamicRow/DynamicRow";
 export { Heading } from "./Heading/Heading";
