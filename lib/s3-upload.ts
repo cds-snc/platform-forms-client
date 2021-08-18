@@ -2,46 +2,43 @@ import { ReadStream } from "fs";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { UploadResult } from "./types";
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { logMessage } from "./logger";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+
 import formidable from "formidable";
 
-const s3Client = new S3Client({ region: "ca-central-1" });
+const s3Client = new S3Client({ region: process.env.AWS_REGION ?? "ca-central-1" });
+
+const bucketName: string =
+  process.env.RELIABILITY_FILE_STORAGE ?? "forms-staging-reliability-file-storage";
 
 /**
  * This function tries to upload a given file to aws S3 bucket and returns a data object
  * which stores an url.
  * @param file
- * @param bucketName
- * @param filePath
  * @returns
  */
-const uploadFileToS3 = async (
-  file: formidable.File,
-  bucketName: string,
-  filePath: string
-): Promise<UploadResult> => {
+const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
   try {
     const data = await readStream2buffer(fs.createReadStream(file.path));
+    const objectKey = `form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}.${
+      file.name
+    }`;
+
     // setting the parameters
     const uploadParams = {
       Bucket: bucketName,
       Body: data,
-      Key: `${bucketName}/user_file/${new Date().toISOString().slice(0, 10)}/${uuid()}.${filePath}`,
+      Key: objectKey,
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
-    const signedUrl = await getSignedUrl(s3Client, new GetObjectCommand(uploadParams), {
-      expiresIn: 3600 * 24 * 4,
-    });
-    const result: UploadResult = {
+    return {
       isValid: true,
-      result: signedUrl,
+      key: uploadParams.Key,
     };
-    return result;
   } catch (error) {
-    const result: UploadResult = { isValid: false, result: error };
-    return result;
+    return { isValid: false, key: error };
   }
 };
 
@@ -69,4 +66,34 @@ const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
   });
 };
 
-export { uploadFileToS3, readStream2buffer };
+/**
+ * Push a given file to a temporary S3
+ * @param fileOrArray
+ * @param reqFields
+ * @param key
+ */
+const pushFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
+  // Set bucket name default value to something actual value once known
+  const uploadResult: UploadResult = await uploadFileToS3(file);
+  const { isValid, key } = uploadResult;
+  if (!isValid) {
+    throw new Error(key);
+  }
+  return uploadResult;
+};
+
+/**
+ *
+ * @param bucketName
+ * @param fileKey
+ * @returns
+ */
+const deleteObject = async (fileKey: string): Promise<void> => {
+  try {
+    await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileKey }));
+  } catch (error) {
+    logMessage.error(error);
+  }
+};
+
+export { uploadFileToS3, readStream2buffer, deleteObject, pushFileToS3 };
