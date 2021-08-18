@@ -33,8 +33,8 @@
     "date": "Please enter a valid date in mm/dd/yyyy format",
     "phone": "Please enter a valid telephone number",
     "regex": "Please enter the correct format",
-    "file-size-too-large": "File size too large",
-    "file-type-invalid": "File type not accepted"
+    "file-size-too-large": "Please select a smaller file",
+    "file-type-invalid": "Please select a different file type"
   },
   "required-field": "Required",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",

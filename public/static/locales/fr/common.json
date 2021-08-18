@@ -33,8 +33,8 @@
     "date": "Veuillez utiliser le format de date mm/jj/aaaa",
     "phone": "Veuillez entrer un numéro de téléphone valide",
     "regex": "Veuillez utiliser le bon format",
-    "file-size-too-large": "La taille du fichier est trop grande",
-    "file-type-invalid": "Le type de fichier n'est pas accepté"
+    "file-size-too-large": "Veuillez sélectionner un fichier plus petit",
+    "file-type-invalid": "Veuillez sélectionner un autre type de fichier"
   },
   "required-field": "Nécessaire",
   "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
