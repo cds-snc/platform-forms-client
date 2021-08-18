@@ -129,13 +129,14 @@ const processFormData = async (
           }
         }
       } else if (Array.isArray(fileOrArray)) {
+        // An array will be returned in a field that includes multiple files
         fileOrArray.forEach(async (fileItem, index) => {
           if (fileItem.name) {
             logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
             const { isValid, key } = await pushFileToS3(fileItem);
             if (isValid) {
               uploadedFilesKeyUrlMapping.set(fileItem.name, key);
-              reqFields[`${_key}-${index}`];
+              reqFields[`${_key}-${index}`] = key;
             }
           }
         });
