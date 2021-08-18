@@ -117,32 +117,6 @@ const processFormData = async (
       return await setTimeout(() => res.status(200).json({ received: true }), 1000);
     }
 
-    for (const [_key, value] of Object.entries(files)) {
-      const fileOrArray = value;
-      if (!Array.isArray(fileOrArray)) {
-        if (fileOrArray.name) {
-          logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
-          const { isValid, key } = await pushFileToS3(fileOrArray);
-          if (isValid) {
-            uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
-            reqFields[_key] = key;
-          }
-        }
-      } else if (Array.isArray(fileOrArray)) {
-        // An array will be returned in a field that includes multiple files
-        fileOrArray.forEach(async (fileItem, index) => {
-          if (fileItem.name) {
-            logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
-            const { isValid, key } = await pushFileToS3(fileItem);
-            if (isValid) {
-              uploadedFilesKeyUrlMapping.set(fileItem.name, key);
-              reqFields[`${_key}-${index}`] = key;
-            }
-          }
-        });
-      }
-    }
-
     const form = await getFormByID(reqFields.formID as string);
 
     if (!form) {
@@ -156,6 +130,31 @@ const processFormData = async (
 
     // Staging or Production AWS environments
     if (submitToReliabilityQueue) {
+      for (const [_key, value] of Object.entries(files)) {
+        const fileOrArray = value;
+        if (!Array.isArray(fileOrArray)) {
+          if (fileOrArray.name) {
+            logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
+            const { isValid, key } = await pushFileToS3(fileOrArray);
+            if (isValid) {
+              uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
+              fields[_key] = key;
+            }
+          }
+        } else if (Array.isArray(fileOrArray)) {
+          // An array will be returned in a field that includes multiple files
+          fileOrArray.forEach(async (fileItem, index) => {
+            if (fileItem.name) {
+              logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
+              const { isValid, key } = await pushFileToS3(fileItem);
+              if (isValid) {
+                uploadedFilesKeyUrlMapping.set(fileItem.name, key);
+                fields[`${_key}-${index}`] = key;
+              }
+            }
+          });
+        }
+      }
       return await callLambda(form.formID, fields)
         .then(async () => {
           if (notifyPreview) {
