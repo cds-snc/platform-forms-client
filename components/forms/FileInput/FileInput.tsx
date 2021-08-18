@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useField, Field } from "formik";
 import { ErrorMessage } from "../index";
 
+export const acceptedFileMimeTypes =
+  "application/pdf,text/csv,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";
+
 interface FileInputProps {
   id: string;
   name: string;
@@ -24,6 +27,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [fileName, setFileName] = useState(value.name);
   const [file, setFile] = useState(value.file);
   const [src, setSrc] = useState(value.src);
+  const [size, setSize] = useState(value.size);
 
   const _onChange = (e: FileEventTarget) => {
     if (!e.target || !e.target.files) {
@@ -37,13 +41,14 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         reader.readAsDataURL(newFile);
         setSrc(reader);
         setFile(newFile);
+        setSize(newFile.size);
       }
     }
   };
 
   useEffect(() => {
-    setValue({ file: file, src: src, name: fileName });
-  }, [file, src, fileName]);
+    setValue({ file: file, src: src, name: fileName, size: size });
+  }, [file, src, fileName, size]);
 
   return (
     <>
@@ -66,6 +71,7 @@ const UploadField = ({ ...props }) => {
         name="uploader"
         type={"file"}
         data-testid="file"
+        accept={acceptedFileMimeTypes}
         {...props}
       />
     </>

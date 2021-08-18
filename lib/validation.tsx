@@ -8,6 +8,7 @@ import {
 } from "./types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
+import { acceptedFileMimeTypes } from "../components/forms";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -74,7 +75,7 @@ const scrollErrorInView = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, i
   }
 };
 
-const isFielddResponseValid = (
+const isFieldResponseValid = (
   value: unknown,
   componentType: string,
   validator: ValidationProperties,
@@ -106,8 +107,16 @@ const isFielddResponseValid = (
       break;
     }
     case "fileInput": {
-      const typedValue = value as Record<string, string>;
-      if (validator.required && typedValue["file"] === null) return t("input-validation.required");
+      const typedValue = value as { file: File; src: FileReader; name: string; size: number };
+      if (validator.required && typedValue.file === null) return t("input-validation.required");
+      // Size limit is 8 MB
+      if (typedValue.size > 8000000) return t("input-validation.file-size-too-large");
+      if (
+        acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
+        undefined
+      ) {
+        return t("input-validation.file-type-invalid");
+      }
       break;
     }
     case "dynamicRow": {
@@ -135,7 +144,7 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
     if (!formElement) return errors;
 
     if (formElement.properties.validation) {
-      const result = isFielddResponseValid(
+      const result = isFieldResponseValid(
         values[item],
         formElement.type,
         formElement.properties.validation,
