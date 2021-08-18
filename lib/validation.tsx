@@ -107,13 +107,14 @@ const isFieldResponseValid = (
       break;
     }
     case "fileInput": {
-      const typedValue = value as Record<string, unknown>;
-      if (validator.required && typedValue["file"] === null) return t("input-validation.required");
+      const typedValue = value as { file: File; src: FileReader; name: string; size: number };
+      if (validator.required && typedValue.file === null) return t("input-validation.required");
       // Size limit is 8 MB
-      if ((typedValue["size"] as number) > 8000000)
-        return t("input-validation.file-size-too-large");
-      const file = typedValue["file"] as File;
-      if (acceptedFileMimeTypes.split(",").find((value) => value === file.type) === undefined) {
+      if (typedValue.size > 8000000) return t("input-validation.file-size-too-large");
+      if (
+        acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
+        undefined
+      ) {
         return t("input-validation.file-type-invalid");
       }
       break;
