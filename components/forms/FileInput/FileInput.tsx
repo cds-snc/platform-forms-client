@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { ErrorMessage } from "../index";
 
 export const acceptedFileMimeTypes =
-  "application/pdf,.csv,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.jpeg,.png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";
+  "application/pdf,.csv,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";
 
 interface FileInputProps {
   id: string;
