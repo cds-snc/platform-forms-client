@@ -260,7 +260,6 @@
     @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
     & + .gc-checkbox-label {
       @apply relative cursor-pointer p-0;
-
     }
 
     &:focus {
