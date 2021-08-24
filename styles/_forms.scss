@@ -248,10 +248,6 @@
   }
 }
 
-.gc-file-input {
-  @apply md:w-full md:text-small_base text-base w-1/2 mt-2 mb-14;
-}
-
 .gc-input-checkbox {
   @apply block;
 
@@ -345,6 +341,59 @@
   &:focus + .gc-radio-label:after {
     background-image: url("../public/img/blue-circle.svg");
   }
+}
+
+.gc-file-input {
+  @apply w-full md:text-small_base text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
+  &:focus {
+    @apply outline-none border-blue-focus shadow-input;
+  }
+
+  &.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.gc-file-input-upload-button {
+  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14 text-center inline-block;
+  @apply md:w-full md:text-small_base cursor-pointer border-b-4 py-3 px-5 mr-2 m-0 text-base no-underline outline-none w-44 inline-block relative;
+
+  &:focus-within {
+    box-shadow: 0 0 0 2px white;
+    outline: solid 2px #303fc3;
+    outline-offset: 2px;
+    @apply bg-gray-300;
+  }
+
+  &:active {
+    box-shadow: 0 0 0 2px white;
+    outline: solid 2px #1b2736;
+    outline-offset: 2px;
+  }
+  &:hover {
+    @apply bg-gray-300;
+  }
+}
+
+/**
+ * Don't want to use the 'standard' method
+ * for visually hiding the native file upload
+ * with CSS, because setting the form control
+ * to 1px height/width will cause VoiceOver to
+ * inaccurately announce the state of the
+ * form control (e.g. VO will not announce
+ * whether there are files selected or not.)
+ */
+.gc-file-input [type="file"] {
+  font-size: 0.1px;
+  left: 0;
+  top: 0;
+  @apply absolute opacity-0 w-full h-full;
+}
+
+.gc-file-input-file-selected {
+  @apply inline-block;
 }
 
 .page-preview-form,
