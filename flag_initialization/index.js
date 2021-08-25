@@ -66,7 +66,7 @@ const initiateFlags = (redis) => {
 };
 
 if (process.env.REDIS_URL) {
-  const redis = new Redis(6379, process.env.REDIS_URL);
+  const redis = new Redis(process.env.REDIS_URL);
   initiateFlags(redis);
 } else {
   console.log("No Redis instance to initiate flags.  Application will fallback onto ioredis-mock");
