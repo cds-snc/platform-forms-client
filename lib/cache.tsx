@@ -4,6 +4,7 @@ import {
   CrudOrganisationResponse,
   PublicFormSchemaProperties,
 } from "@lib/types";
+import { logMessage } from "./logger";
 
 const cacheAvailable: boolean = process.env.REDIS_URL ? true : false;
 
@@ -13,7 +14,7 @@ const randomCacheExpiry = () => Math.floor(Math.random() * 30 + 30);
 const getRedisInstance = async (): Promise<Redis.Redis | null> => {
   if (cacheAvailable) {
     // If Redis is configured use it for the formID cache
-    return new Redis(6379, process.env.REDIS_URL);
+    return new Redis(process.env.REDIS_URL);
   }
   return null;
 };
@@ -34,74 +35,79 @@ const checkConnection = async () => {
   }
 };
 
+const checkValue = async (checkParameter: string) => {
+  return await checkConnection().then(async (redis) => {
+    if (redis) {
+      return await redis.get(checkParameter).then((value) => {
+        if (value) {
+          logMessage.info(`Using Cached value for ${checkParameter}`);
+          return JSON.parse(value);
+        }
+        return null;
+      });
+    }
+    return null;
+  });
+};
+
+const deleteValue = async (deleteParameter: string) => {
+  return await checkConnection().then(async (redis) => {
+    if (redis) {
+      await redis.del(deleteParameter);
+      logMessage.info(`Deleting Cached value for ${deleteParameter}`);
+    }
+  });
+};
+
+const modifyValue = async (
+  modifyParameter: string,
+  template:
+    | CrudTemplateResponse
+    | (PublicFormSchemaProperties | undefined)[]
+    | CrudOrganisationResponse
+) => {
+  return await checkConnection().then(async (redis) => {
+    if (redis) {
+      await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
+      logMessage.info(`Updating Cached value for ${modifyParameter}`);
+    }
+  });
+};
+
 /*
   Forms
 */
 
 const formIDCheck = async (formID: string): Promise<CrudTemplateResponse | null> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      const value = await redis.get(`form:config:${formID}`);
-      return value ? JSON.parse(value) : null;
-    }
-    return null;
-  });
+  return checkValue(`form:config:${formID}`);
 };
 
 const formIDDelete = async (formID: string): Promise<void> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.del(`form:config:${formID}`);
-    }
-  });
+  return deleteValue(`form:config:${formID}`);
 };
 
 const formIDPut = async (formID: string, template: CrudTemplateResponse): Promise<void> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.setex(`form:config:${formID}`, randomCacheExpiry(), JSON.stringify(template));
-    }
-  });
+  return await modifyValue(`form:config:${formID}`, template);
 };
 
 const publishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      const value = await redis.get(`form:published`);
-      return value ? JSON.parse(value) : null;
-    }
-    return null;
-  });
+  return checkValue(`form:published`);
 };
 
 const publishedPut = async (
   templates: (PublicFormSchemaProperties | undefined)[]
 ): Promise<void> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.setex(`form:published`, randomCacheExpiry(), JSON.stringify(templates));
-    }
-  });
+  return await modifyValue(`form:published`, templates);
 };
 
 const unpublishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      const value = await redis.get(`form:unpublished`);
-      return value ? JSON.parse(value) : null;
-    }
-    return null;
-  });
+  return checkValue(`form:unpublished`);
 };
 
 const unpublishedPut = async (
   templates: (PublicFormSchemaProperties | undefined)[]
 ): Promise<void> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.setex(`form:unpublished`, randomCacheExpiry(), JSON.stringify(templates));
-    }
-  });
+  return await modifyValue(`form:unpublished`, templates);
 };
 
 /*
@@ -111,36 +117,18 @@ const unpublishedPut = async (
 const organisationIDCheck = async (
   organisationID: string
 ): Promise<CrudOrganisationResponse | null> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      const value = await redis.get(`organisations:${organisationID}`);
-      return value ? JSON.parse(value) : null;
-    }
-    return null;
-  });
+  return checkValue(`organisations:${organisationID}`);
 };
 
 const organisationIDPut = async (
   organisationID: string,
   organisation: CrudOrganisationResponse
 ): Promise<void> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.setex(
-        `organisations:${organisationID}`,
-        randomCacheExpiry(),
-        JSON.stringify(organisation)
-      );
-    }
-  });
+  return await modifyValue(`organisations:${organisationID}`, organisation);
 };
 
 const organisationIDDelete = async (organisationID: string): Promise<void> => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.del(`organisations:${organisationID}`);
-    }
-  });
+  return deleteValue(`organisations:${organisationID}`);
 };
 
 export const formCache = {
