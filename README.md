@@ -33,6 +33,8 @@ yarn install
 
 Set .env variables
 
+For local development of the NextJS application but leveraging the AWS backend (Reliability Queue, Templates DB, etc.)
+
 ```
 NOTIFY_API_KEY= // Can be found in LastPass
 SUBMISSION_API=Submission
@@ -44,10 +46,22 @@ GOOGLE_CLIENT_ID= // Can be found in LastPass
 GOOGLE_CLIENT_SECRET= // Can be found in LastPass
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
-DATABASE_URL= // See "Set up local database" section
 ```
 
-Set up local database
+For local development of the complete solution (running SAM for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure ReadME](https://github.com/cds-snc/forms-staging-terraform)
+
+```
+LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
+DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
+```
+
+Start Redis in docker locally
+
+```sh
+docker run --name local-redis -p 6379:6379 -d redis:alpine
+```
+
+Set up local database (only if you want to run the project in isolation)
 
 - Make sure you have postgres installed and running on your local machine
 - Install a gui manager like PgAdmin if you would like (optional)
@@ -69,12 +83,6 @@ In your main forms .env file, DATABASE_URL can be filled in as followed (replace
 
 As an example, here's the DB string with the example values from above:
 `DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB`
-
-Start Redis in docker locally
-
-```sh
-docker run --name local-redis -p 6379:6379 -d redis:alpine
-```
 
 Run in development mode:
 
@@ -146,18 +154,26 @@ yarn install
 
 Définir les variables .env
 
+Pour le développement local de l'application NextJS mais en s'appuyant sur le backend AWS (File d'attente de fiabilité, DB de modèles, etc.)
+
 ```
-NOTIFY_API_KEY= // Peut être trouvé dans LastPass
+NOTIFY_API_KEY= // Can be found in LastPass
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
 ORGANISATIONS_API=Organisations
-AWS_ACCESS_KEY_ID= // Peut être trouvé dans LastPass
-AWS_SECRET_ACCESS_KEY= // Peut être trouvé dans LastPass
-GOOGLE_CLIENT_ID= // Peut être trouvé dans LastPass
-GOOGLE_CLIENT_SECRET= // Peut être trouvé dans LastPass
+AWS_ACCESS_KEY_ID= // Can be found in LastPass
+AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
+GOOGLE_CLIENT_ID= // Can be found in LastPass
+GOOGLE_CLIENT_SECRET= // Can be found in LastPass
 NEXTAUTH_URL=http://localhost:3000
 REDIS_URL=localhost
-DATABASE_URL= // TO TRANSLATE
+```
+
+Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure ReadME] (https://github.com/cds -snc/forms-staging-terraform)
+
+```
+LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
+DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
 ```
 
 Démarrer Redis dans docker localement
@@ -165,6 +181,29 @@ Démarrer Redis dans docker localement
 ```sh
 docker run --name local-redis -p 6379:6379 -d redis:alpine
 ```
+
+Configurer la base de données locale (uniquement si vous souhaitez exécuter le projet de manière isolée)
+
+- Assurez-vous que postgres est installé et en cours d'exécution sur votre machine locale
+- Installez un gestionnaire d'interface graphique comme PgAdmin si vous le souhaitez (facultatif)
+
+dans `/migrations`, remplissez le fichier .env séparé.
+Exemples de valeurs :
+
+```
+DB_NAME=formsDB
+DB_USERNAME=postgres
+DB_PASSWORD=password
+DB_HOST=localhost
+```
+
+dans le dossier `/migrations`, exécutez `node index.js` pour exécuter des migrations sur la base de données locale.
+
+Dans votre fichier .env de formulaires principaux, DATABASE_URL peut être rempli comme suit (remplacez les valeurs dans {} par les valeurs que vous avez utilisées dans votre fichier env de migrations)
+`DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
+
+À titre d'exemple, voici la chaîne de base de données avec les exemples de valeurs ci-dessus :
+`DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB`
 
 Exécuter en mode développement
 
