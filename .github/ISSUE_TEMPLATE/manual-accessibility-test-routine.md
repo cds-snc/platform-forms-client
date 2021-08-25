@@ -49,3 +49,5 @@ assignees: ''
 - [ ] Tag issues with a11y tag, and provide a triage rating
 
 [Triage methodology](https://docs.google.com/document/d/14vxChzDV1M1I2NHsoYDlBJElpIRqPSlqiyILBZbxC1w/edit)
+
+[CDS a11y tools and resources](https://digital.canada.ca/a11y/tools-and-resources/)
