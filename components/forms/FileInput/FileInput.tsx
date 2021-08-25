@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useField } from "formik";
 import classNames from "classnames";
 import { ErrorMessage } from "../index";
@@ -34,9 +34,6 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
   const [fileName, setFileName] = useState(value.name);
-  const [file, setFile] = useState(value.file);
-  const [src, setSrc] = useState(value.src);
-  const [size, setSize] = useState(value.size);
 
   const classes = classNames(
     "gc-file-input",
@@ -45,30 +42,22 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   );
 
   const _onChange = (e: FileEventTarget) => {
-    if (!e.target || !e.target.files) {
-      return;
-    }
-    console.log(`File Change detected for ${props.name} `);
-    const reader = new FileReader();
-    // Need to refactor in the future to add support for Multiple Files.
-    // ex.. check for length of e.target.files[] and handle accordingly.
-    // On multi file once files are selected remove `file-up--compact` and show
-    // number of files uploaded or file list in file_output
-    const newFile = e.target.files[0];
-    if (newFile) {
-      reader.onloadend = () => setFileName(newFile.name);
-      if (newFile.name !== fileName) {
-        reader.readAsDataURL(newFile);
-        setSrc(reader);
-        setFile(newFile);
-        setSize(newFile.size);
+    if (e.target?.files) {
+      const reader = new FileReader();
+      // Need to refactor in the future to add support for Multiple Files.
+      // ex.. check for length of e.target.files[] and handle accordingly.
+      // On multi file once files are selected remove `file-up--compact` and show
+      // number of files uploaded or file list in file_output
+      const newFile = e.target.files[0];
+      if (newFile) {
+        reader.onloadend = () => setFileName(newFile.name);
+        if (newFile.name !== fileName) {
+          reader.readAsDataURL(newFile);
+          setValue({ file: newFile, src: reader, name: newFile.name, size: newFile.size });
+        }
       }
     }
   };
-
-  useEffect(() => {
-    setValue({ file: file, src: src, name: fileName, size: size });
-  }, [file, src, fileName, size]);
 
   return (
     <>
@@ -100,9 +89,10 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             ref={fileInputRef}
             id={`${name}_hidden`}
             tabIndex={-1}
-            type={"file"}
+            type="file"
             accept={acceptedFileMimeTypes}
             onChange={_onChange}
+            onClick={(e) => e.stopPropagation()}
             disabled={disabled}
             required={required}
             multiple={allowMulti}
