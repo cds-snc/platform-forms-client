@@ -26,37 +26,31 @@ const checkConnection = async () => {
   if (!cacheAvailable) {
     return null;
   } else if (!redisConnection) {
-    return await getRedisInstance().then((instance) => {
-      redisConnection = instance;
-      return instance;
-    });
+    redisConnection = await getRedisInstance();
+    return redisConnection;
   } else {
     return redisConnection;
   }
 };
 
 const checkValue = async (checkParameter: string) => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      return await redis.get(checkParameter).then((value) => {
-        if (value) {
-          logMessage.info(`Using Cached value for ${checkParameter}`);
-          return JSON.parse(value);
-        }
-        return null;
-      });
+  const redis = await checkConnection();
+  if (redis) {
+    const value = await redis.get(checkParameter);
+    if (value) {
+      logMessage.info(`Using Cached value for ${checkParameter}`);
+      return JSON.parse(value);
     }
-    return null;
-  });
+  }
+  return null;
 };
 
 const deleteValue = async (deleteParameter: string) => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.del(deleteParameter);
-      logMessage.info(`Deleting Cached value for ${deleteParameter}`);
-    }
-  });
+  const redis = await checkConnection();
+  if (redis) {
+    redis.del(deleteParameter);
+    logMessage.info(`Deleting Cached value for ${deleteParameter}`);
+  }
 };
 
 const modifyValue = async (
@@ -66,12 +60,11 @@ const modifyValue = async (
     | (PublicFormSchemaProperties | undefined)[]
     | CrudOrganisationResponse
 ) => {
-  return await checkConnection().then(async (redis) => {
-    if (redis) {
-      await redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
-      logMessage.info(`Updating Cached value for ${modifyParameter}`);
-    }
-  });
+  const redis = await checkConnection();
+  if (redis) {
+    redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
+    logMessage.info(`Updating Cached value for ${modifyParameter}`);
+  }
 };
 
 /*
@@ -87,7 +80,7 @@ const formIDDelete = async (formID: string): Promise<void> => {
 };
 
 const formIDPut = async (formID: string, template: CrudTemplateResponse): Promise<void> => {
-  return await modifyValue(`form:config:${formID}`, template);
+  return modifyValue(`form:config:${formID}`, template);
 };
 
 const publishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
@@ -97,7 +90,7 @@ const publishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined
 const publishedPut = async (
   templates: (PublicFormSchemaProperties | undefined)[]
 ): Promise<void> => {
-  return await modifyValue(`form:published`, templates);
+  return modifyValue(`form:published`, templates);
 };
 
 const unpublishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
@@ -107,7 +100,7 @@ const unpublishedCheck = async (): Promise<(PublicFormSchemaProperties | undefin
 const unpublishedPut = async (
   templates: (PublicFormSchemaProperties | undefined)[]
 ): Promise<void> => {
-  return await modifyValue(`form:unpublished`, templates);
+  return modifyValue(`form:unpublished`, templates);
 };
 
 /*
@@ -124,7 +117,7 @@ const organisationIDPut = async (
   organisationID: string,
   organisation: CrudOrganisationResponse
 ): Promise<void> => {
-  return await modifyValue(`organisations:${organisationID}`, organisation);
+  return modifyValue(`organisations:${organisationID}`, organisation);
 };
 
 const organisationIDDelete = async (organisationID: string): Promise<void> => {
