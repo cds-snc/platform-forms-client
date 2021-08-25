@@ -4,7 +4,7 @@ import Redis from "ioredis";
 
 const getRedisInstance = async (): Promise<Redis.Redis> => {
   if (process.env.REDIS_URL) {
-    return new Redis(6379, process.env.REDIS_URL);
+    return new Redis(process.env.REDIS_URL);
   } else {
     // not ideal but works when you don't have local redis running.
     const { default: MockRedis } = await import("ioredis-mock");

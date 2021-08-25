@@ -1,9 +1,10 @@
 ---
 name: Onboarding team members
 about: This template is for onboarding new team members to the GC Forms Product
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 Onboarding checklist:
