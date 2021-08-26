@@ -469,7 +469,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
   const formDataObject = _buildFormDataObject(formConfig, values);
 
   //making a post request to the submit API
-  await axios({
+  return await axios({
     url: "/api/submit",
     method: "POST",
     headers: {

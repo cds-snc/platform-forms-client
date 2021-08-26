@@ -202,16 +202,27 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "fileInput":
       return (
-        <Fragment>
-          {labelComponent}
+        <div className="focus-group">
+          {labelText ? (
+            <Label
+              key={`label-${id}`}
+              id={`label-${id}`}
+              className={isRequired ? "required" : ""}
+              required={isRequired}
+            >
+              {labelText}
+            </Label>
+          ) : null}
           {description ? <Description>{description}</Description> : null}
           <FileInput
             id={id}
             name={id}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
+            ariaLabelledBy={`label-${id}`}
             fileType={element.properties.fileType}
+            required={isRequired}
           />
-        </Fragment>
+        </div>
       );
     case "dynamicRow": {
       return <DynamicGroup name={id} legend={labelText} rowElements={subElements} lang={lang} />;
