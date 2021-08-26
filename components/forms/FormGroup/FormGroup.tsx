@@ -26,6 +26,8 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       data-testid="formGroup"
       className={classes}
       aria-describedby={ariaDescribedBy}
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+      tabIndex={0}
     >
       {children}
     </fieldset>
