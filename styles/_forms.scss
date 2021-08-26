@@ -283,7 +283,7 @@
       background-repeat: no-repeat;
       content: "";
       background-image: url("../public/img/checkmark.svg");
-      @apply absolute w-6 h-6 left-2;      
+      @apply absolute w-6 h-6 left-2;
     }
 
     &:focus + .gc-checkbox-label:after {
@@ -359,7 +359,7 @@
 
 .gc-file-input-upload-button {
   @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14 text-center inline-block;
-  @apply md:w-full md:text-small_base cursor-pointer border-b-4 py-3 px-5 mr-2 m-0 text-base no-underline outline-none w-44 inline-block relative;
+  @apply md:w-full md:text-small_base cursor-pointer border-b-4 py-3 px-5 mr-2 m-0 text-base no-underline outline-none relative;
 
   &:focus-within {
     box-shadow: 0 0 0 2px white;

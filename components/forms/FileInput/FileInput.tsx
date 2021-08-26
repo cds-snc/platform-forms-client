@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
 import classNames from "classnames";
+import { useTranslation } from "next-i18next";
 import { ErrorMessage } from "../index";
 
 export const acceptedFileMimeTypes =
@@ -28,6 +29,8 @@ export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {
 export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
+
+  const { t } = useTranslation("common");
 
   const { name, disabled, allowMulti, required, ariaDescribedBy, ariaLabelledBy } = props;
 
@@ -83,7 +86,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
             meta.touched && meta.error ? `${name}_error` : null
           }`}
         >
-          <span aria-hidden={true}>Upload a File</span>
+          <span aria-hidden={true}>{t("file-upload-button-text")}</span>
 
           <input
             ref={fileInputRef}
@@ -102,11 +105,13 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         <span id={`${name}_file_selected`} className="gc-file-input-file-selected">
           {fileName ? (
             <>
-              <span className="sr-only">Currenlty selected file is: </span>
-              <span>{fileName}</span>
+              <span className="sr-only">{`${t(
+                "file-upload-sr-only-file-selected"
+              )}: ${fileName}`}</span>
+              <span aria-hidden={true}>{fileName}</span>
             </>
           ) : (
-            "No File Selected."
+            t("file-upload-no-file-selected")
           )}
         </span>
       </div>
