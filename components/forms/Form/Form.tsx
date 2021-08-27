@@ -13,14 +13,16 @@ declare global {
     dataLayer: Array<unknown>;
   }
 }
+
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const { children, handleSubmit, t } = props;
   const [submitting, setSubmitting] = useState(false);
+  const [canFocusOnError, setCanFocusOnError] = useState(false);
+  const [lastSubmitCount, setLastSubmitCount] = useState(0);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -33,11 +35,19 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
       setFocusOnErrorMessage(props, serverErrorId);
       setSubmitting(false);
     }
-    if (!props.isValid && props.submitCount > 0) {
+
+    if (!props.isValid && !canFocusOnError) {
+      if (props.submitCount > lastSubmitCount) {
+        setCanFocusOnError(true);
+        setLastSubmitCount(props.submitCount);
+      }
+      setSubmitting(false);
+    } else if (!props.isValid) {
       setFocusOnErrorMessage(props, errorId);
+      setCanFocusOnError(false);
       setSubmitting(false);
     }
-  }, [props.submitCount, props.isValid, props.errors]);
+  }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   return (
     <>
