@@ -58,23 +58,29 @@ DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
 Start Redis in docker locally
 
 ```sh
-docker run --name local-redis -p 6379:6379 -d redis:alpine
+docker-compose up -d redis
 ```
 
 Set up local database (only if you want to run the project in isolation)
 
-- Make sure you have postgres installed and running on your local machine
-- Install a gui manager like PgAdmin if you would like (optional)
+Run postgres by using the following command 
+
+```sh
+docker-compose up -d db
+```
+
+You can optionally install a gui manager like PgAdmin if you would like.
 
 in `/migrations`, fill in the separate .env file.
-Example values:
 
 ```
 DB_NAME=formsDB
 DB_USERNAME=postgres
-DB_PASSWORD=password
+DB_PASSWORD=chummy
 DB_HOST=localhost
 ```
+
+Note if running in devcontainers on vscode the DB_HOST should be of value `db`
 
 inside the `/migrations` folder, run `node index.js` to run migrations against the local database.
 
