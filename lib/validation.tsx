@@ -62,13 +62,11 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
 
 /**
  * scrollErrorInView [private] is called when you click on an error link at the top of the form
- * @param e The click event of the error link
  * @param id The id of the input field that has the error and we need to focus
  */
-const scrollErrorInView = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
-  e.preventDefault();
-  const labelElement = document.getElementById(`label-${id}`);
+const scrollErrorInView = (id: string) => {
   const inputElement = document.getElementById(id);
+  const labelElement = document.getElementById(`label-${id}`);
   if (labelElement && inputElement) {
     inputElement.focus();
     labelElement.scrollIntoView();
@@ -177,8 +175,15 @@ export const getErrorList = (
             href={`#${key}`}
             className="gc-error-link"
             key={index}
+            onKeyDown={(e) => {
+              if (e.code === "Space") {
+                e.preventDefault();
+                scrollErrorInView(key);
+              }
+            }}
             onClick={(e) => {
-              scrollErrorInView(e, key);
+              e.preventDefault();
+              scrollErrorInView(key);
             }}
           >
             {value}
