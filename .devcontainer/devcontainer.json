@@ -1,0 +1,11 @@
+{
+    "name": "Node 14 Container",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "dev",
+    "workspaceFolder": "/src",
+    "shutdownAction": "stopCompose",
+    "settings": {
+        "prettier.configPath": ".prettierrc.json",
+        "prettier.useEditorConfig": false,
+    }
+}
