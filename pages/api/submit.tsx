@@ -142,6 +142,9 @@ const processFormData = async (
 
     // if the ircc config is defined and the form id matches the array of forms specified. Then we send to the list manager
     // not the reliability queue. Otherwise we send to the normal reliability queue
+    // TODO
+    //   refactor into a function
+    //   see why api resolves without a response being returned ( an error pops up )
     if (
       listManagerHost &&
       listManagerApiKey &&
@@ -172,6 +175,8 @@ const processFormData = async (
           : false;
 
       if (contactFieldType) {
+        // forEach slower than a for loop https://codingsight.com/foreach-or-for-that-is-the-question/
+        // yes its a double loop O(n^2) but we know n <= 4
         for (let i = 0; i < languageList.length; i++) {
           for (let j = 0; j < programList.length; j++) {
             const language = languageList[i];
