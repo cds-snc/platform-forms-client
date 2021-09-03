@@ -1,0 +1,51 @@
+{
+  "forms": [
+    81,
+    83
+  ],
+  "programFieldID": 3,
+  "languageFieldID": 5,
+  "contactFieldID": 4,
+  "listMapping": {
+    "English": {
+      "Immigration program for Afghans who assisted the Government of Canada and their eligible family members.": {
+        "number": "some-id",
+        "email": "some-id"
+      },
+      "Humanitarian program for Afghan nationals who assisted the Government of Canada, their extended family members, and others in need of resettlement": {
+        "number": "some-id",
+        "email": "some-id"
+      }
+    },
+    "Anglais": {
+      "Programme d’immigration pour les Afghans qui ont aidé le gouvernement du Canada et les membres admissibles de leurs familles": {
+        "number": "some-id",
+        "email": "some-id"
+      },
+      "Programme humanitaire pour les ressortissants afghans qui ont aidé le gouvernement du Canada, les membres de la famille élargie et d’autres individus ayant besoin de se réinstaller.": {
+        "number": "some-id",
+        "email": "some-id"
+      }
+    },
+    "French": {
+      "Immigration program for Afghans who assisted the Government of Canada and their eligible family members.": {
+        "number": "some-id",
+        "email": "some-id"
+      },
+      "Humanitarian program for Afghan nationals who assisted the Government of Canada, their extended family members, and others in need of resettlement": {
+        "number": "some-id",
+        "email": "some-id"
+      }
+    },
+    "Français": {
+      "Programme d’immigration pour les Afghans qui ont aidé le gouvernement du Canada et les membres admissibles de leurs familles": {
+        "number": "some-id",
+        "email": "some-id"
+      },
+      "Programme humanitaire pour les ressortissants afghans qui ont aidé le gouvernement du Canada, les membres de la famille élargie et d’autres individus ayant besoin de se réinstaller.": {
+        "number": "some-id",
+        "email": "some-id"
+      }
+    }
+  }
+}
