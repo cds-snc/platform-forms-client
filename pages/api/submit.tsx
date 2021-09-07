@@ -147,9 +147,9 @@ const processFormData = async (
     }
 
     // get ircc configuration file from env variable. This is a base64 encoded string
-    const irccConfig: IRCCConfig = JSON.parse(
-      Buffer.from(process.env.IRCC_CONFIG || "", "base64").toString()
-    );
+    const irccConfig: IRCCConfig = process.env.IRCC_CONFIG
+      ? JSON.parse(Buffer.from(process.env.IRCC_CONFIG, "base64").toString())
+      : undefined;
 
     const listManagerHost = process.env.LIST_MANAGER_HOST;
 
