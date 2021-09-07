@@ -20,6 +20,14 @@ type CheckboxValue = {
   value: Array<string>;
 };
 
+type IRCCConfig = {
+  forms: Array<number>;
+  programFieldID: number;
+  languageFieldID: number;
+  contactFieldID: number;
+  listMapping: Record<string, Record<string, Record<string, string>>>;
+};
+
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
@@ -136,7 +144,9 @@ const processFormData = async (
     }
 
     // get ircc configuration file from env variable. This is a base64 encoded string
-    const irccConfig = JSON.parse(Buffer.from(process.env.IRCC_CONFIG || "", "base64").toString());
+    const irccConfig: IRCCConfig = JSON.parse(
+      Buffer.from(process.env.IRCC_CONFIG || "", "base64").toString()
+    );
 
     const listManagerHost = process.env.LIST_MANAGER_HOST;
 
@@ -236,7 +246,7 @@ const processFormData = async (
 };
 
 const submitToListManagementAPI = async (
-  irccConfig: any,
+  irccConfig: IRCCConfig,
   listManagerHost: string,
   listManagerApiKey: string,
   reqFields: Responses,
