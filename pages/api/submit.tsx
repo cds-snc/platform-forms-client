@@ -8,7 +8,7 @@ import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const config = {
   api: {
@@ -285,35 +285,47 @@ const submitToListManagementAPI = async (
           });
         }
 
-        // Now we create the subscription
-        const response = await axios.post(
-          `${listManagerHost}/subscription`,
-          {
-            [contactFieldType === "number" ? "phone" : "email"]: contact,
-            list_id: listID,
-          },
-          {
-            headers: {
-              Authorization: listManagerApiKey,
+        let response: AxiosResponse<any>;
+        try {
+          // Now we create the subscription
+          response = await axios.post(
+            `${listManagerHost}/subscription`,
+            {
+              [contactFieldType]: contact,
+              list_id: listID,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: listManagerApiKey,
+              },
+            }
+          );
+        } catch (e) {
+          logMessage.error(
+            `Subscription failed with status ${e.response.status} and message ${e.response.data}`
+          );
+          logMessage.error(e);
+          return res.status(500).json({
+            error: `Subscription failed with status ${e.response.status} and message ${e.response.data}`,
+          });
+        }
 
         // subscription is successfully created... log the id and return 200
         if (response.status === 200) {
           logMessage.info(`Subscription created with id: ${response.data.id}`);
-          return res.status(200).json({ received: true });
         }
-
         // otherwise something has failed... not the users issue hence 500
-        logMessage.error(
-          `Subscription failed with status ${response.status} and message ${response.data}`
-        );
-        return res.status(500).json({
-          error: `Subscription failed with status ${response.status} and message ${response.data}`,
-        });
+        else {
+          logMessage.error(
+            `Subscription failed with status ${response.status} and message ${response.data}`
+          );
+          return res.status(500).json({
+            error: `Subscription failed with status ${response.status} and message ${response.data}`,
+          });
+        }
       }
     }
+    return res.status(200).json({ received: true });
   } else {
     logMessage.error(
       `Not able to determine type of contact field for form ${reqFields.formID as string}`
