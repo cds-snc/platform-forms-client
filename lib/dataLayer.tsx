@@ -316,7 +316,9 @@ export function extractFormData(submission: Submission): Array<string> {
   const formOrigin = submission.form;
   const dataCollector: Array<string> = [];
   formOrigin.layout.map((qID) => {
-    const question = formOrigin.elements.find((element: FormElement) => element.id === qID);
+    const question = formOrigin.elements.find(
+      (element: FormElement) => element.id === parseInt(qID)
+    );
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
     }
@@ -427,26 +429,26 @@ function _handleFormDataType(element: FormElement, value: Response, formData: Fo
     case "textField":
     case "textArea":
       // string
-      _handleFormDataText(element.id, value as string, formData);
+      _handleFormDataText(element.id.toString(), value as string, formData);
       break;
 
     case "dropdown":
     case "radio":
       value instanceof Object
-        ? _handleFormDataText(element.id, "", formData)
-        : _handleFormDataText(element.id, value, formData);
+        ? _handleFormDataText(element.id.toString(), "", formData)
+        : _handleFormDataText(element.id.toString(), value, formData);
       break;
 
     case "checkbox":
     case "dynamicRow":
       // array of strings
       Array.isArray(value)
-        ? _handleFormDataArray(element.id, value as Array<string>, formData)
-        : _handleFormDataText(element.id, "", formData);
+        ? _handleFormDataArray(element.id.toString(), value as Array<string>, formData)
+        : _handleFormDataText(element.id.toString(), "", formData);
       break;
     case "fileInput":
       // file input
-      _handleFormDataFileInput(element.id, value as FileInputResponse, formData);
+      _handleFormDataFileInput(element.id.toString(), value as FileInputResponse, formData);
       break;
   }
 }

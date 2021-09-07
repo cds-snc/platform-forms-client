@@ -21,7 +21,7 @@ const testForm = {
       layout: ["1"],
       elements: [
         {
-          id: "1",
+          id: 1,
           type: "button",
           properties: {
             titleEn: "test Element!",

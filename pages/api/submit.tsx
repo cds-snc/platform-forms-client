@@ -1,13 +1,14 @@
 import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import formidable from "formidable";
+import formidable, { Fields, Files } from "formidable";
 import convertMessage from "@lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import { pushFileToS3, deleteObject } from "../../lib/s3-upload";
+import { pushFileToS3, deleteObject } from "@lib/s3-upload";
+import axios, { AxiosResponse } from "axios";
 
 export const config = {
   api: {
@@ -15,21 +16,49 @@ export const config = {
   },
 };
 
+type CheckboxValue = {
+  value: Array<string>;
+};
+
+type IRCCConfig = {
+  forms: Array<number>;
+  programFieldID: number;
+  languageFieldID: number;
+  contactFieldID: number;
+  listMapping: Record<string, Record<string, Record<string, string>>>;
+};
+
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
 });
 
-const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const submit = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void | NodeJS.Timeout> => {
   try {
     const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
-    return incomingForm.parse(req, async (err, fields, files) => {
-      if (err) {
-        throw new Error(err);
-      }
-      //TODO file extension validation before processing.
-      return await processFormData(fields, files, res, req);
-    });
+    // we have to return a response for the NextJS handler. So we create a Promise which will be resolved
+    // with the data from the IncomingForm parse callback
+    const data = (await new Promise(function (resolve, reject) {
+      incomingForm.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+        }
+        resolve({ fields, files });
+      });
+    })) as
+      | {
+          fields: Fields;
+          files: Files;
+        }
+      | string;
+
+    if (typeof data === "string") {
+      throw new Error(data);
+    }
+    return await processFormData(data.fields as Fields, data.files as Files, res, req);
   } catch (err) {
     logMessage.error(err);
     return res.status(500).json({ received: false });
@@ -117,6 +146,15 @@ const processFormData = async (
       return await setTimeout(() => res.status(200).json({ received: true }), 1000);
     }
 
+    // get ircc configuration file from env variable. This is a base64 encoded string
+    const irccConfig: IRCCConfig = JSON.parse(
+      Buffer.from(process.env.IRCC_CONFIG || "", "base64").toString()
+    );
+
+    const listManagerHost = process.env.LIST_MANAGER_HOST;
+
+    const listManagerApiKey = process.env.LIST_MANAGER_API_KEY;
+
     const form = await getFormByID(reqFields.formID as string);
 
     if (!form) {
@@ -128,8 +166,27 @@ const processFormData = async (
       responses: reqFields,
     });
 
+    // if the ircc config is defined and the form id matches the array of forms specified. Then we send to the list manager
+    // not the reliability queue. Otherwise we send to the normal reliability queue
+    if (
+      listManagerHost &&
+      listManagerApiKey &&
+      irccConfig &&
+      irccConfig.forms &&
+      irccConfig.forms.includes(parseInt(reqFields.formID as string))
+    ) {
+      return await submitToListManagementAPI(
+        irccConfig,
+        listManagerHost,
+        listManagerApiKey,
+        reqFields,
+        form,
+        req,
+        res
+      );
+    }
     // Staging or Production AWS environments
-    if (submitToReliabilityQueue) {
+    else if (submitToReliabilityQueue) {
       for (const [_key, value] of Object.entries(files)) {
         const fileOrArray = value;
         if (!Array.isArray(fileOrArray)) {
@@ -188,6 +245,98 @@ const processFormData = async (
     }
     logMessage.error(err);
     return res.status(500).json({ received: false });
+  }
+};
+
+const submitToListManagementAPI = async (
+  irccConfig: IRCCConfig,
+  listManagerHost: string,
+  listManagerApiKey: string,
+  reqFields: Responses,
+  form: PublicFormSchemaProperties,
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  // get program and language values from submission using the ircc config refrenced ids
+  const programs = JSON.parse(reqFields[irccConfig.programFieldID] as string) as CheckboxValue;
+  const programList = programs.value;
+
+  const languages = JSON.parse(reqFields[irccConfig.languageFieldID] as string) as CheckboxValue;
+
+  const languageList = languages.value;
+
+  const contact = reqFields[irccConfig.contactFieldID] as string;
+
+  // get the type of contact field from the form template
+  const contactFieldFormElement = form.elements.filter(
+    (value) => value.id === irccConfig.contactFieldID
+  );
+
+  const contactFieldType =
+    contactFieldFormElement.length > 0
+      ? contactFieldFormElement[0].properties.validation?.type
+      : false;
+
+  if (contactFieldType) {
+    // forEach slower than a for loop https://stackoverflow.com/questions/43821759/why-array-foreach-is-slower-than-for-loop-in-javascript
+    // yes its a double loop O(n^2) but we know n <= 4
+    for (let i = 0; i < languageList.length; i++) {
+      for (let j = 0; j < programList.length; j++) {
+        const language = languageList[i];
+        const program = programList[j];
+        let listID;
+        // try getting the list id from the config json. If it doesn't exist fail gracefully, log the message and send 500 error
+        // 500 error because this is a misconfiguration on our end its not the users fault i.e. 4xx
+        try {
+          listID = irccConfig.listMapping[language][program][contactFieldType];
+        } catch (e) {
+          logMessage.error(
+            `IRCC config does not contain the following path ${language}.${program}.${contactFieldType}`
+          );
+          return res.status(500).json({ received: false });
+        }
+
+        let response: AxiosResponse;
+        try {
+          // Now we create the subscription
+          response = await axios.post(
+            `${listManagerHost}/subscription`,
+            {
+              [contactFieldType]: contact,
+              list_id: listID,
+            },
+            {
+              headers: {
+                Authorization: listManagerApiKey,
+              },
+            }
+          );
+        } catch (e) {
+          logMessage.error(e);
+          return res.status(500).json({ received: false });
+        }
+
+        // subscription is successfully created... log the id and return 200
+        if (response.status === 200) {
+          logMessage.info(`Subscription created with id: ${response.data.id}`);
+        }
+        // otherwise something has failed... not the users issue hence 500
+        else {
+          logMessage.error(
+            `Subscription failed with status ${response.status} and message ${response.data}`
+          );
+          return res.status(500).json({ received: false });
+        }
+      }
+    }
+    return res.status(200).json({ received: true });
+  } else {
+    logMessage.error(
+      `Not able to determine type of contact field for form ${reqFields.formID as string}`
+    );
+    return res.status(400).json({
+      error: `Not able to determine type of contact field for form ${reqFields.formID as string}`,
+    });
   }
 };
 
