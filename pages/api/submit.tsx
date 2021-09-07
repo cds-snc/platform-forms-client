@@ -293,9 +293,7 @@ const submitToListManagementAPI = async (
           logMessage.error(
             `IRCC config does not contain the following path ${language}.${program}.${contactFieldType}`
           );
-          return res.status(500).json({
-            error: `IRCC config does not contain the following path ${language}.${program}.${contactFieldType}`,
-          });
+          return res.status(500).json({ received: false });
         }
 
         let response: AxiosResponse;
@@ -314,13 +312,8 @@ const submitToListManagementAPI = async (
             }
           );
         } catch (e) {
-          logMessage.error(
-            `Subscription failed with status ${e.response.status} and message ${e.response.data}`
-          );
           logMessage.error(e);
-          return res.status(500).json({
-            error: `Subscription failed with status ${e.response.status} and message ${e.response.data}`,
-          });
+          return res.status(500).json({ received: false });
         }
 
         // subscription is successfully created... log the id and return 200
@@ -332,9 +325,7 @@ const submitToListManagementAPI = async (
           logMessage.error(
             `Subscription failed with status ${response.status} and message ${response.data}`
           );
-          return res.status(500).json({
-            error: `Subscription failed with status ${response.status} and message ${response.data}`,
-          });
+          return res.status(500).json({ received: false });
         }
       }
     }
