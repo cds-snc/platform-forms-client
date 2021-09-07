@@ -295,7 +295,7 @@ const submitToListManagementAPI = async (
           });
         }
 
-        let response: AxiosResponse<never>;
+        let response: AxiosResponse;
         try {
           // Now we create the subscription
           response = await axios.post(
