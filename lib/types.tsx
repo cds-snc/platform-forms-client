@@ -59,7 +59,7 @@ export interface Submission {
 }
 
 export interface FormElement {
-  id: string;
+  id: number;
   type: string;
   properties: ElementProperties;
   onchange?: callback;
