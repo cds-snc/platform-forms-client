@@ -33,7 +33,10 @@ const lambdaClient = new LambdaClient({
   retryMode: "standard",
 });
 
-const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<any> => {
+const submit = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void | NodeJS.Timeout> => {
   try {
     const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
     // we have to return a response for the NextJS handler. So we create a Promise which will be resolved
