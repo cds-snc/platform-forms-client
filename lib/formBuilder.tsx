@@ -48,7 +48,7 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 
 // This function renders the form elements with passed in properties.
 function _buildForm(element: FormElement, lang: string): ReactElement {
-  const id = element.id;
+  const id = element.subId ?? element.id;
 
   const choices =
     element.properties && element.properties.choices
@@ -67,7 +67,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     <Label
       key={`label-${id}`}
       id={`label-${id}`}
-      htmlFor={id}
+      htmlFor={`${id}`}
       className={isRequired ? "required" : ""}
       required={isRequired}
       group={["radio", "checkbox"].indexOf(element.type) !== -1}
@@ -110,13 +110,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+          {description ? <Description id={`${id}`}>{description}</Description> : null}
           {textType === "tel" ? (
             <CustomPhoneInput
               type={textType}
               placeholder={placeHolder.toString()}
-              id={id}
-              name={id}
+              id={`${id}`}
+              name={`${id}`}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               required={isRequired}
               country={"ca"}
@@ -126,8 +126,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           ) : (
             <TextInput
               type={textType}
-              id={id}
-              name={id}
+              id={`${id}`}
+              name={`${id}`}
               required={isRequired}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               placeholder={placeHolder.toString()}
@@ -139,10 +139,10 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+          {description ? <Description id={`${id}`}>{description}</Description> : null}
           <TextArea
-            id={id}
-            name={id}
+            id={`${id}`}
+            name={`${id}`}
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
@@ -161,12 +161,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+          {description ? <Description id={`${id}`}>{description}</Description> : null}
           <MultipleChoiceGroup
             type="checkbox"
-            name={id}
+            name={`${id}`}
             choicesProps={checkboxItems}
           ></MultipleChoiceGroup>
         </FormGroup>
@@ -184,12 +184,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       });
 
       return (
-        <FormGroup name={id} ariaDescribedBy={description ? `desc-${id}` : undefined}>
+        <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+          {description ? <Description id={`${id}`}>{description}</Description> : null}
           <MultipleChoiceGroup
             type="radio"
-            name={id}
+            name={`${id}`}
             choicesProps={radioItems}
           ></MultipleChoiceGroup>
         </FormGroup>
@@ -199,10 +199,10 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={id}>{description}</Description> : null}
+          {description ? <Description id={`${id}`}>{description}</Description> : null}
           <Dropdown
-            id={id}
-            name={id}
+            id={`${id}`}
+            name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
           />
@@ -230,8 +230,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           ) : null}
           {description ? <Description>{description}</Description> : null}
           <FileInput
-            id={id}
-            name={id}
+            id={`${id}`}
+            name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             ariaLabelledBy={`label-${id}`}
             fileType={element.properties.fileType}
@@ -240,7 +240,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </div>
       );
     case "dynamicRow": {
-      return <DynamicGroup name={id} legend={labelText} rowElements={subElements} lang={lang} />;
+      return (
+        <DynamicGroup name={`${id}`} legend={labelText} rowElements={subElements} lang={lang} />
+      );
     }
     default:
       return <></>;
@@ -259,7 +261,9 @@ const _getRenderedForm = (formConfig: PublicFormSchemaProperties, language: stri
   }
 
   return formConfig.layout.map((item: string) => {
-    const element = formConfig.elements.find((element: FormElement) => element.id === item);
+    const element = formConfig.elements.find(
+      (element: FormElement) => element.id === parseInt(item)
+    );
     if (element) {
       return <GenerateElement key={element.id} element={element} language={language} />;
     } else {

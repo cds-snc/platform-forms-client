@@ -53,7 +53,12 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
   const style = {
     border: "none",
   };
-  const _onChange = (value, country, e, formattedValue) => {
+  const _onChange = (
+    value: string,
+    country: Record<string, unknown>,
+    e: Event,
+    formattedValue: string
+  ) => {
     setValue(formattedValue);
   };
 

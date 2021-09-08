@@ -1,0 +1,51 @@
+{
+  "forms": [
+    81,
+    83
+  ],
+  "programFieldID": 2,
+  "languageFieldID": 4,
+  "contactFieldID": 3,
+  "listMapping": {
+    "English": {
+      "Immigration program for Afghans who assisted the Government of Canada and their eligible family members.": {
+        "phone": "225005c3-45d2-463d-b85a-b374b635ba0a",
+        "email": "a1963ae8-a8af-4c8d-bd9f-ba54d45b2cb8"
+      },
+      "Humanitarian program to help Afghan nationals resettle to Canada.": {
+        "phone": "8e41499e-c6b0-4ae9-a622-4793c51ca701",
+        "email": "b8bd668d-1e2a-478e-a67a-4d9ad74400b2"
+      }
+    },
+    "Anglais": {
+      "Programme d’immigration pour les Afghans qui ont aidé le gouvernement du Canada et les membres admissibles de leurs familles.": {
+        "phone": "225005c3-45d2-463d-b85a-b374b635ba0a",
+        "email": "a1963ae8-a8af-4c8d-bd9f-ba54d45b2cb8"
+      },
+      "Programme humanitaire pour aider les afghans à s’installer au Canada.": {
+        "phone": "8e41499e-c6b0-4ae9-a622-4793c51ca701",
+        "email": "b8bd668d-1e2a-478e-a67a-4d9ad74400b2"
+      }
+    },
+    "French": {
+      "Immigration program for Afghans who assisted the Government of Canada and their eligible family members.": {
+        "phone": "ef5d85e5-fa38-4099-a259-328160089356",
+        "email": "4b0b1125-5ce2-46ea-b6c8-e47b56178754"
+      },
+      "Humanitarian program to help Afghan nationals resettle to Canada.": {
+        "phone": "7e9c354b-db6e-4663-b6d7-bb3304cfa3b6",
+        "email": "2f46c05e-1117-4477-b311-3954c6bc1fff"
+      }
+    },
+    "Français": {
+      "Programme d’immigration pour les Afghans qui ont aidé le gouvernement du Canada et les membres admissibles de leurs familles.": {
+        "phone": "ef5d85e5-fa38-4099-a259-328160089356",
+        "email": "4b0b1125-5ce2-46ea-b6c8-e47b56178754"
+      },
+      "Programme humanitaire pour aider les afghans à s’installer au Canada.": {
+        "phone": "7e9c354b-db6e-4663-b6d7-bb3304cfa3b6",
+        "email": "2f46c05e-1117-4477-b311-3954c6bc1fff"
+      }
+    }
+  }
+}
