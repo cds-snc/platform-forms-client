@@ -1,5 +1,5 @@
 import React from "react";
-import { queryByText, render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Formik } from "formik";
 import { CustomPhoneInput } from "./PhoneInput";
 
@@ -18,9 +18,9 @@ describe("PhoneCustom component", () => {
         onSubmit={(values) => {
           console.log(values);
         }}
-        initialValues={{}}
+        initialValues={{id:"phone", type:"tel", name:"phone input"}}
       >
-        <CustomPhoneInput {...inputProps}/>
+        <CustomPhoneInput {...inputProps} id={"phone"}/>
       </Formik>
     );
     console.log(queryByTestId("phone"));

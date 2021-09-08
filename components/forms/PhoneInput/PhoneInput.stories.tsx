@@ -11,13 +11,13 @@ export default {
 };
 
 const inputProps = {
-  key: "input-type-phone",
-  id: "input-type-phone",
+  key: "1",
+  id: "1",
   type: "tel",
   name: "input-type-phone",
   country: "ca",
   className: "",
-  ariaDescribedBy: "Phone Number",
+  ariaDescribedBy: "description",
   placeholder: "phone",
 };
 
