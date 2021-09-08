@@ -6,10 +6,14 @@ jest.mock("next/config", () => () => ({
     isProduction: false,
   },
 }));
+
 jest.mock("react-i18next", () => ({
   useTranslation: () => {
     return {
       t: (str: string) => str,
+      i18n: {
+        changeLanguage: () => Promise.resolve(),
+      },
     };
   },
 }));
