@@ -7,6 +7,7 @@ export interface FormDefinitionProperties {
   internalTitleFr?: string;
   publishingStatus: boolean;
   submission: SubmissionProperties;
+  displayAlphaBanner?: boolean;
   form: FormSchemaProperties;
 }
 
@@ -15,6 +16,7 @@ export interface FormDBConfigProperties {
   formConfig?: FormDefinitionProperties;
   organization?: boolean;
 }
+
 export interface FormSchemaProperties {
   titleEn: string;
   titleFr: string;
@@ -37,6 +39,7 @@ export interface FormSchemaProperties {
 export interface PublicFormSchemaProperties extends FormSchemaProperties {
   formID: string;
   publishingStatus: boolean;
+  displayAlphaBanner: boolean;
 }
 
 export type allFormElements =
