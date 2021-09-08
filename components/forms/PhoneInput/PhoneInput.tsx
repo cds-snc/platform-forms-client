@@ -22,12 +22,6 @@ interface RequiredTextInputProps {
   type: string;
 }
 
-interface CountryData {
-  name: string;
-  dialCode: string;
-  countryCode: string;
-}
-
 export type PhoneInputProps = OptionalPhoneInputProps &
   RequiredTextInputProps &
   JSX.IntrinsicElements["input"];
@@ -66,17 +60,12 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
     e: React.ChangeEvent<HTMLInputElement>,
     formattedValue: string
   ) => {
-    setValue(formattedValue);
+    setValue(formatInputPhoneValue(formattedValue, true));
   };
 
-  const _onBlur = (ev: React.FocusEvent<HTMLInputElement>, data: CountryData) => {
-    console.debug(`${data}` + " - " + `${ev.target.value}`);
-    setValue(formatInputPhoneValue(value));
-  };
-
-  const formatInputPhoneValue = (phoneNumber: string): string | null => {
+  const formatInputPhoneValue = (phoneNumber: string, useFormat = false): string | null => {
     const match = phoneNumber.match(/\+?(\d)?[-. ]?(\(?\d{3}\)?)[-. ]?(\d{3})[-. ]?(\d{4})/);
-    if (match) {
+    if (useFormat && match) {
       const intlCode = match[1] ? "1 " : "";
       return [intlCode, "", match[2], "-", match[3], "-", match[4]]
         .join("")
@@ -107,7 +96,6 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
           preferredCountries={preferredCountries}
           onChange={_onChange}
           aria-describedby={ariaDescribedBy}
-          onBlur={_onBlur}
         />
       </div>
     </>
