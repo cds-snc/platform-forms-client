@@ -16,4 +16,5 @@ export { DynamicGroup } from "./DynamicRow/DynamicRow";
 export { Heading } from "./Heading/Heading";
 export { Description } from "./Description/Description";
 export { MultipleChoiceGroup } from "./MultipleChoiceGroup/MultipleChoiceGroup";
+export { CustomPhoneInput } from "./PhoneInput/PhoneInput";
 export { Form } from "./Form/Form";

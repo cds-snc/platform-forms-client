@@ -11,6 +11,7 @@ import {
   Description,
   RichText,
   MultipleChoiceGroup,
+  CustomPhoneInput,
 } from "../components/forms";
 import { FormElement, PropertyChoices, PublicFormSchemaProperties } from "./types";
 
@@ -106,18 +107,29 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   switch (element.type) {
     case "textField":
-      return (
+      return ( 
         <div className="focus-group">
           {labelComponent}
           {description ? <Description id={id}>{description}</Description> : null}
-          <TextInput
-            type={textType}
-            id={id}
-            name={id}
-            required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            placeholder={placeHolder.toString()}
-          />
+          {textType === "tel" ? <CustomPhoneInput 
+          type={textType}            
+          placeholder={placeHolder.toString()} 
+          id={id}          
+          name={id}
+          ariaDescribedBy={description ? `desc-${id}` : undefined}
+          required={isRequired}
+          country={"ca"}
+          //onlyCountries={['ca','us','uk']};
+          //preferredCountries={['ca','us','uk']};
+        />: <TextInput
+        type={textType}
+        id={id}
+        name={id}
+        required={isRequired}
+        ariaDescribedBy={description ? `desc-${id}` : undefined}
+        placeholder={placeHolder.toString()}
+      />}
+          
         </div>
       );
     case "textArea":
@@ -226,7 +238,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "dynamicRow": {
       return <DynamicGroup name={id} legend={labelText} rowElements={subElements} lang={lang} />;
-    }
+    }   
     default:
       return <></>;
   }
@@ -283,7 +295,7 @@ const _getElementInitialValue = (
           return accumulator;
         }, {} as Record<string, unknown>) ?? {};
       return [dynamicRowInitialValue];
-    }
+    }      
     default:
       throw `Initial value for component ${element.type} is not handled`;
   }
