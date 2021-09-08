@@ -8,7 +8,7 @@ const inputProps = {
   id: "phone",
   name: "phone number",
   label: "Phone number",
-  type:"tel"
+  type: "tel",
 };
 
 describe("PhoneCustom component", () => {
@@ -18,9 +18,9 @@ describe("PhoneCustom component", () => {
         onSubmit={(values) => {
           console.log(values);
         }}
-        initialValues={{id:"phone", type:"tel", name:"phone input"}}
+        initialValues={{ id: "phone", type: "tel", name: "phone input" }}
       >
-        <CustomPhoneInput {...inputProps} id={"phone"}/>
+        <CustomPhoneInput {...inputProps} id={"phone"} />
       </Formik>
     );
     console.log(queryByTestId("phone"));

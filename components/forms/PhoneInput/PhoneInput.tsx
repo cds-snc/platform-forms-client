@@ -21,12 +21,24 @@ interface RequiredTextInputProps {
   type: string;
 }
 
-export type PhoneInputProps = OptionalPhoneInputProps & RequiredTextInputProps & JSX.IntrinsicElements["input"];
+export type PhoneInputProps = OptionalPhoneInputProps &
+  RequiredTextInputProps &
+  JSX.IntrinsicElements["input"];
 
 export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => {
-
-  const { id, type, className, required, ariaDescribedBy, 
-    placeholder, name, country, key, onlyCountries, preferredCountries } = props;
+  const {
+    id,
+    type,
+    className,
+    required,
+    ariaDescribedBy,
+    placeholder,
+    name,
+    country,
+    key,
+    onlyCountries,
+    preferredCountries,
+  } = props;
   const [field, meta, helpers] = useField(props);
   const { value } = meta;
   const { setValue } = helpers;
@@ -37,13 +49,13 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
     key: key,
     required: required,
     type: type,
-  }
+  };
   const style = {
     border: "none",
-  }
+  };
   const _onChange = (value, country, e, formattedValue) => {
     setValue(formattedValue);
-  }
+  };
 
   return (
     <>
@@ -64,7 +76,7 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
           onlyCountries={onlyCountries}
           preferredCountries={preferredCountries}
           onChange={_onChange}
-          aria-DescribedBy= {ariaDescribedBy}
+          aria-describedby={ariaDescribedBy}
         />
       </div>
     </>
