@@ -13,6 +13,7 @@ interface OptionalPhoneInputProps {
   country?: string;
   onlyCountries?: Array<string>;
   preferredCountries?: Array<string>;
+  key?: string;
 }
 
 interface RequiredTextInputProps {
