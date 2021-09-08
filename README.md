@@ -63,7 +63,7 @@ docker-compose up -d redis
 
 Set up local database (only if you want to run the project in isolation)
 
-Run postgres by using the following command 
+Run postgres by using the following command
 
 ```sh
 docker-compose up -d db
@@ -108,6 +108,32 @@ To send a form submission to an email address, you should configure the followin
 
 ```sh
 NOTIFY_API_KEY=
+```
+
+### IRCC List Management API Integration
+
+To set up Forms to submit to the IRCC List Management API (https://list-manager.alpha.canada.ca/docs), you will first need to specify the host and API key
+in the following environment variables in a `.env` file:
+
+```shell
+LIST_MANAGER_HOST=
+LIST_MANAGER_API_KEY=
+```
+
+You will then need to set the IRCC configuration JSON which specifies how to submit to the List Management API according to the responses of particular forms.
+This is set as a base64 encoded string in a `.env` file using the following key
+
+```shell
+IRCC_CONFIG=
+```
+
+To find an example of the config see [ircc-form-config.example.json](./ircc-form-config.example.json).
+
+Once you have your JSON prepared you can base64 encode it using the following command. Note you will need `jj` and `openssl`
+installed. Both can be installed via homebrew on MacOS.
+
+```shell
+$ jj -u < ircc-form-config.json | openssl base64 -A
 ```
 
 ### Debugging
