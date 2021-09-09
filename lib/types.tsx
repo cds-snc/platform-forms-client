@@ -6,10 +6,7 @@ export interface FormDefinitionProperties {
   internalTitleEn?: string;
   internalTitleFr?: string;
   publishingStatus: boolean;
-  submission: {
-    email?: string;
-    vault?: boolean;
-  };
+  submission: SubmissionProperties;
   form: FormSchemaProperties;
 }
 
@@ -51,6 +48,7 @@ export type callback = (event: allFormElements) => void;
 export interface SubmissionProperties {
   email?: string;
   vault?: boolean;
+  mailingList?: boolean;
 }
 
 export interface Submission {
