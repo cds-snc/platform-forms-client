@@ -21,6 +21,8 @@ const Base = ({ children }) => {
   const isAdmin = children && children.props && children.props.user;
   const isEmbeddable = formConfig && children && children.props && children.props.isEmbeddable;
 
+  const shouldDisplayAlphaBanner = formConfig ? formConfig.displayAlphaBanner : true;
+
   return (
     <>
       <Head>
@@ -67,7 +69,7 @@ const Base = ({ children }) => {
       <div className={classes}>
         {!isEmbeddable && (
           <header>
-            <PhaseBanner />
+            {shouldDisplayAlphaBanner && <PhaseBanner />}
             <Fip formConfig={formConfig} />
             {isAdmin && <AdminNav user={children.props.user} />}
           </header>
