@@ -444,11 +444,15 @@
   }
 }
 
-.gc-input-phone-button {
-  border: none ;
-  color:#fbfbfb;
+.react-tel-input .form-control,
+.gc-input-phone {
+  border: none ;  
+  background-color: #fbfbfb;
+  border-style: none;
+}
 
-  &:hover {
-    @apply bg-white-default border-none bg-opacity-0;
-  }
+.react-tel-input .flag-dropdown,
+.gc-input-phone-button-style {
+  border: none ;  
+  border-style: none;
 }

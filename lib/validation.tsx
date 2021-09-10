@@ -85,8 +85,6 @@ const isFieldResponseValid = (
     case "textField": {
       const typedValue = value as string;
       if (validator.required && !typedValue) return t("input-validation.required");
-      //Passing the typedValue as string to getRegexByType for a validator type phone ends up throwing a validation error
-      //A 'custom' regex obejct is returned from REGEX_CONFIG object. I'm assuming here that textField validator's properties are irrelevant for an input phone.
       const currentRegex = getRegexByType(validator.type, t, value as string);
       if (validator.type && currentRegex && currentRegex.regex) {
         // Check for different types of fields, email, date, number, custom etc

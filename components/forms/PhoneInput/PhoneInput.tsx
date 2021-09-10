@@ -36,7 +36,6 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
     id,
     className,
     required,
-    ariaDescribedBy,
     placeholder,
     name,
     country,
@@ -53,9 +52,6 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
     id: id,
     key: key,
     required: required,
-  };
-  const style = {
-    border: "none",
   };
 
   const _onChange = (
@@ -85,11 +81,8 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
           {...field}
           inputProps={{ ...extraInputProps }}
           containerClass={classes}
-          inputStyle={style}
-          inputClass={classNames("bg-transparent")}
-          dropdownStyle={style}
-          buttonStyle={style}
-          buttonClass={classNames("gc-input-phone-button")}
+          inputClass={classNames("gc-input-phone")}
+          buttonClass={classNames("gc-input-phone-button-style")}
           country={country ? country : "ca"}
           placeholder={placeholder}
           countryCodeEditable={false}
@@ -97,7 +90,6 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
           onlyCountries={onlyCountries}
           preferredCountries={preferredCountries}
           onChange={_onChange}
-          aria-describedby={ariaDescribedBy}
           onBlur={_onblur}
         />
       </div>
