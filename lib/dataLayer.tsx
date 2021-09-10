@@ -179,6 +179,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
           formID,
           ...records[0].formConfig.form,
           publishingStatus: records[0].formConfig.publishingStatus,
+          displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
         };
       }
       return null;
@@ -203,6 +204,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
             formID,
             ...records[0].formConfig?.form,
             publishingStatus: records[0].formConfig.publishingStatus,
+            displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
           };
         }
         return null;
@@ -229,6 +231,7 @@ async function _getFormByStatus(
                 formID: record.formID,
                 ...record.formConfig.form,
                 publishingStatus: record.formConfig.publishingStatus,
+                displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
               };
             }
           })
@@ -260,6 +263,7 @@ async function _getFormByStatus(
                   formID: record.formID,
                   ...record.formConfig?.form,
                   publishingStatus: record.formConfig?.publishingStatus,
+                  displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
                 };
               }
             })
