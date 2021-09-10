@@ -19,7 +19,12 @@ interface OptionalPhoneInputProps {
 interface RequiredTextInputProps {
   id: string;
   name: string;
-  type: string;
+}
+
+interface CountryData {
+  name: string;
+  dialCode: string;
+  countryCode: string;
 }
 
 export type PhoneInputProps = OptionalPhoneInputProps &
@@ -29,7 +34,6 @@ export type PhoneInputProps = OptionalPhoneInputProps &
 export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => {
   const {
     id,
-    type,
     className,
     required,
     ariaDescribedBy,
@@ -49,31 +53,27 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
     id: id,
     key: key,
     required: required,
-    type: type,
   };
   const style = {
     border: "none",
   };
+
   const _onChange = (
     value: string,
     country: Record<string, unknown>,
     e: React.ChangeEvent<HTMLInputElement>,
     formattedValue: string
   ) => {
-    setValue(formatInputPhoneValue(formattedValue, true));
+    setValue(formattedValue);
   };
+/* eslint-disable */ 
+  const _onblur = (e: React.FocusEvent<HTMLInputElement>, data: CountryData) => {
+    setValue(formatInputPhoneValue(e.target.value));
+  };
+  /* eslint-enable */
 
-  const formatInputPhoneValue = (phoneNumber: string, useFormat = false): string | null => {
-    const match = phoneNumber.match(/\+?(\d)?[-. ]?(\(?\d{3}\)?)[-. ]?(\d{3})[-. ]?(\d{4})/);
-    if (useFormat && match) {
-      const intlCode = match[1] ? "1 " : "";
-      return [intlCode, "", match[2], "-", match[3], "-", match[4]]
-        .join("")
-        .replace(/\(|\)/gi, () => {
-          return "";
-        });
-    }
-    return phoneNumber;
+  const formatInputPhoneValue = (phoneNumber: string): string | null => {
+    return `+${phoneNumber.replace(/[^0-9\\.]+/g, "")}`;
   };
 
   return (
@@ -86,8 +86,10 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
           inputProps={{ ...extraInputProps }}
           containerClass={classes}
           inputStyle={style}
+          inputClass={classNames("bg-transparent")}
           dropdownStyle={style}
           buttonStyle={style}
+          buttonClass={classNames("gc-input-phone-button")}
           country={country ? country : "ca"}
           placeholder={placeholder}
           countryCodeEditable={false}
@@ -96,6 +98,7 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
           preferredCountries={preferredCountries}
           onChange={_onChange}
           aria-describedby={ariaDescribedBy}
+          onBlur={_onblur}
         />
       </div>
     </>

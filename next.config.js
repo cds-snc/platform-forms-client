@@ -5,7 +5,7 @@ const localesDir = path.resolve("public/static/locales");
 module.exports = {
   i18n,
   sassOptions: {
-    includePaths: [path.join(__dirname, "styles"), path.resolve("node_modules")],
+    includePaths: [path.join(__dirname, "styles")],
   },
   reactStrictMode: true,
   webpack: (config, context) => {

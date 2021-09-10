@@ -1,29 +1,46 @@
 import React from "react";
-import { render } from "@testing-library/react";
-import { Formik } from "formik";
-import { CustomPhoneInput } from "./PhoneInput";
+import { cleanup, render, screen } from "@testing-library/react";
+import Form from "../Form/Form";
+import { GenerateElement } from "../../../lib/formBuilder";
 
-const inputProps = {
-  key: "phone",
-  id: "phone",
-  name: "phone number",
-  label: "Phone number",
-  type: "tel",
+jest.mock("formik", () => ({
+  ...jest.requireActual("formik"),
+  useField: jest.fn(() => [
+    { field: { value: "" } },
+    { meta: { touched: null, error: null } },
+    { helpers: { setValue: null } },
+  ]),
+}));
+
+const textInputData = {
+  id: "1",
+  type: "textField",
+  properties: {
+    titleEn: "Mobile phone number",
+    titleFr: "Numero de teelphone mobile",
+    validation: {
+      type: "phone",
+      required: true,
+    },
+  },
 };
 
-describe("PhoneCustom component", () => {
-  it("renders without errors", async () => {
-    const { queryByTestId } = render(
-      <Formik
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-        initialValues={{ id: "phone", type: "tel", name: "phone input" }}
-      >
-        <CustomPhoneInput {...inputProps} id={"phone"} />
-      </Formik>
+describe.each([["en"], ["fr"]])("Generate an input phone", (lang) => {
+  afterEach(cleanup);
+  test("renders without errors", () => {
+    render(
+      <Form t={(key) => key}>
+        <GenerateElement element={textInputData} language={lang} />
+      </Form>
     );
-    console.log(queryByTestId("phone"));
-    //expect(queryByTestId("phone")).toBeInTheDocument();
+    const title =
+      lang === "en" ? textInputData.properties.titleEn : textInputData.properties.titleFr;
+
+    // Label properly renders
+    expect(screen.getByText(title)).toBeInTheDocument();
+    // Field marked as required
+    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
   });
 });
+
+//TODO more to come.

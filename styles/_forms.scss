@@ -443,3 +443,12 @@
     @apply font-bold md:text-small_p;
   }
 }
+
+.gc-input-phone-button {
+  border: none ;
+  color:#fbfbfb;
+
+  &:hover {
+    @apply bg-white-default border-none bg-opacity-0;
+  }
+}

@@ -113,15 +113,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {description ? <Description id={`${id}`}>{description}</Description> : null}
           {textType === "tel" ? (
             <CustomPhoneInput
-              type={textType}
               placeholder={placeHolder.toString()}
               id={`${id}`}
               name={`${id}`}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               required={isRequired}
               country={"ca"}
-              //onlyCountries={['ca','us','uk']};
-              //preferredCountries={['ca','us','uk']};
             />
           ) : (
             <TextInput
