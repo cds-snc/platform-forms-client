@@ -48,8 +48,7 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
       error: t("input-validation.date"),
     },
     phone: {
-      regex:
-        /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/ /* /\+?(\d)?[-. ]?(\(?\d{3}\)?)[-. ]?(\d{3})[-. ]?(\d{4})/, */,
+      regex: /^(\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?$/, // +125468464178
       error: t("input-validation.phone"),
     },
   };

@@ -46,7 +46,7 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
   const [field, meta, helpers] = useField(props);
   const { value } = meta;
   const { setValue } = helpers;
-  const classes = classNames("gc-input-text", className);
+  const classes = classNames("gc-input-phone-container", className);
   const extraInputProps = {
     name: name,
     id: id,
@@ -75,24 +75,22 @@ export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => 
   return (
     <>
       {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
-      <div>
-        <PhoneInput
-          data-testid="textInput"
-          {...field}
-          inputProps={{ ...extraInputProps }}
-          containerClass={classes}
-          inputClass={classNames("gc-input-phone")}
-          buttonClass={classNames("gc-input-phone-button-style")}
-          country={country ? country : "ca"}
-          placeholder={placeholder}
-          countryCodeEditable={false}
-          value={value}
-          onlyCountries={onlyCountries}
-          preferredCountries={preferredCountries}
-          onChange={_onChange}
-          onBlur={_onblur}
-        />
-      </div>
+      <PhoneInput
+        data-testid="textInput"
+        {...field}
+        inputProps={{ ...extraInputProps }}
+        containerClass={classes}
+        inputClass={classNames("gc-input-phone")}
+        buttonClass={classNames("gc-input-phone-button-style")}
+        country={country ? country : "ca"}
+        placeholder={placeholder}
+        countryCodeEditable={false}
+        value={value}
+        onlyCountries={onlyCountries}
+        preferredCountries={preferredCountries}
+        onChange={_onChange}
+        onBlur={_onblur}
+      />
     </>
   );
 };
