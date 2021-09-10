@@ -52,12 +52,13 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
         /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/ /* /\+?(\d)?[-. ]?(\(?\d{3}\)?)[-. ]?(\d{3})[-. ]?(\d{4})/, */,
       error: t("input-validation.phone"),
     },
-    custom: {
+  };
+  if (type === "custom") {
+    return {
       regex: value ? new RegExp(value) : null,
       error: t("input-validation.regex"),
-    },
-  };
-
+    };
+  }
   return type ? REGEX_CONFIG[type] : null;
 };
 
@@ -87,7 +88,6 @@ const isFieldResponseValid = (
       //Passing the typedValue as string to getRegexByType for a validator type phone ends up throwing a validation error
       //A 'custom' regex obejct is returned from REGEX_CONFIG object. I'm assuming here that textField validator's properties are irrelevant for an input phone.
       const currentRegex = getRegexByType(validator.type, t, value as string);
-
       if (validator.type && currentRegex && currentRegex.regex) {
         // Check for different types of fields, email, date, number, custom etc
         const regex = new RegExp(currentRegex.regex);
