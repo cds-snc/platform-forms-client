@@ -447,8 +447,10 @@
 .react-tel-input .form-control,
 .gc-input-phone {
   border: none ;  
-  background-color:white;
+  background-color:transparent;
   border-style: none;
+  @apply md:w-full md:text-small_base sm:flex sm:w-60;
+
 }
 
 .react-tel-input .flag-dropdown,
@@ -460,5 +462,7 @@
 
 .gc-input-phone-container {
   border: solid 2px black;
-  @apply flex md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
+  background-color: white;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
+
 }
