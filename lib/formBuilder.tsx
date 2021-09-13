@@ -11,6 +11,7 @@ import {
   Description,
   RichText,
   MultipleChoiceGroup,
+  CustomPhoneInput,
 } from "../components/forms";
 import { FormElement, PropertyChoices, PublicFormSchemaProperties } from "./types";
 
@@ -110,14 +111,25 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         <div className="focus-group">
           {labelComponent}
           {description ? <Description id={`${id}`}>{description}</Description> : null}
-          <TextInput
-            type={textType}
-            id={`${id}`}
-            name={`${id}`}
-            required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            placeholder={placeHolder.toString()}
-          />
+          {textType === "tel" ? (
+            <CustomPhoneInput
+              placeholder={placeHolder.toString()}
+              id={`${id}`}
+              name={`${id}`}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              required={isRequired}
+              country={"ca"}
+            />
+          ) : (
+            <TextInput
+              type={textType}
+              id={`${id}`}
+              name={`${id}`}
+              required={isRequired}
+              ariaDescribedBy={description ? `desc-${id}` : undefined}
+              placeholder={placeHolder.toString()}
+            />
+          )}
         </div>
       );
     case "textArea":

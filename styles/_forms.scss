@@ -443,3 +443,24 @@
     @apply font-bold md:text-small_p;
   }
 }
+
+.react-tel-input .form-control,
+.gc-input-phone {
+  border: none ;  
+  background-color:transparent;
+  border-style: none;
+  @apply md:w-full md:text-small_base sm:flex sm:w-60;
+}
+
+.react-tel-input .flag-dropdown,
+.gc-input-phone-button-style {
+  border: none ;  
+  background-color:white;
+  border-style: none;
+}
+
+.gc-input-phone-container {
+  border: solid 2px black;
+  background-color: white;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
+}

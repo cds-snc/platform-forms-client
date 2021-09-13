@@ -48,15 +48,16 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
       error: t("input-validation.date"),
     },
     phone: {
-      regex: /\+?(\d)?[-. ]?(\(?\d{3}\)?)[-. ]?(\d{3})[-. ]?(\d{4})/,
+      regex: /^(\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?$/, // +125468464178
       error: t("input-validation.phone"),
     },
-    custom: {
+  };
+  if (type === "custom") {
+    return {
       regex: value ? new RegExp(value) : null,
       error: t("input-validation.regex"),
-    },
-  };
-
+    };
+  }
   return type ? REGEX_CONFIG[type] : null;
 };
 
