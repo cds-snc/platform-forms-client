@@ -1,9 +1,9 @@
 {
   "upload": {
-    "title": "Télécharger un modèle de formulaire JSON",
+    "title": "Téléverser un modèle de formulaire JSON",
     "edit-title": "Modifier le modèle de formulaire JSON",
-    "submit": "Télécharger",
-    "success": "JSON téléchargé avec succès."
+    "submit": "Téléverser",
+    "success": "JSON téléversé avec succès."
   },
   "view": {
     "title": "Voir le modèle des formulaires",

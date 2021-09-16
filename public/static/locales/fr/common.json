@@ -31,10 +31,15 @@
     "alphanumeric": "Veuillez entrer uniquement des lettres et des chiffres",
     "email": "Veuillez entrer une adresse courriel valide",
     "date": "Veuillez utiliser le format de date mm/jj/aaaa",
-    "phone": "Veuillez entrer numéro de téléphone valide",
-    "regex": "Veuillez utiliser le bon format"
+    "phone": "Veuillez entrer un numéro de téléphone valide",
+    "regex": "Veuillez utiliser le bon format",
+    "file-size-too-large": "Veuillez sélectionner un fichier plus petit",
+    "file-type-invalid": "Veuillez sélectionner un autre type de fichier"
   },
-  "required-field": "Nécessaire",
+  "required-field": "Champ obligatoire",
+  "file-upload-button-text": "Téléverser un fichier",
+  "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
+  "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
   "title": "GC Forms - Formulaires GC",
   "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter."

@@ -3,12 +3,12 @@ import {
   FormValues,
   DynamicFormProps,
   InnerFormProps,
-  FormElement,
   Responses,
   ValidationProperties,
 } from "./types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
+import { acceptedFileMimeTypes } from "../components/forms";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -48,31 +48,85 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
       error: t("input-validation.date"),
     },
     phone: {
-      regex: /\+?(\d)?[-. ]?(\(?\d{3}\)?)[-. ]?(\d{3})[-. ]?(\d{4})/,
+      regex: /^(\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?$/, // +125468464178
       error: t("input-validation.phone"),
     },
-    custom: {
+  };
+  if (type === "custom") {
+    return {
       regex: value ? new RegExp(value) : null,
       error: t("input-validation.regex"),
-    },
-  };
-
+    };
+  }
   return type ? REGEX_CONFIG[type] : null;
 };
 
 /**
  * scrollErrorInView [private] is called when you click on an error link at the top of the form
- * @param e The click event of the error link
  * @param id The id of the input field that has the error and we need to focus
  */
-const scrollErrorInView = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
-  e.preventDefault();
-  const labelElement = document.getElementById(`label-${id}`);
+const scrollErrorInView = (id: string) => {
   const inputElement = document.getElementById(id);
+  const labelElement = document.getElementById(`label-${id}`);
   if (labelElement && inputElement) {
     inputElement.focus();
     labelElement.scrollIntoView();
   }
+};
+
+const isFieldResponseValid = (
+  value: unknown,
+  componentType: string,
+  validator: ValidationProperties,
+  t: TFunction
+): string | null => {
+  switch (componentType) {
+    case "textField": {
+      const typedValue = value as string;
+      if (validator.required && !typedValue) return t("input-validation.required");
+      const currentRegex = getRegexByType(validator.type, t, value as string);
+      if (validator.type && currentRegex && currentRegex.regex) {
+        // Check for different types of fields, email, date, number, custom etc
+        const regex = new RegExp(currentRegex.regex);
+        if (typedValue && !regex.test(typedValue)) {
+          return currentRegex.error;
+        }
+      }
+      break;
+    }
+    case "textArea": {
+      const typedValue = value as string;
+      if (validator.required && !typedValue) return t("input-validation.required");
+      break;
+    }
+    case "checkbox":
+    case "radio":
+    case "dropdown": {
+      if (validator.required && value === undefined) return t("input-validation.required");
+      break;
+    }
+    case "fileInput": {
+      const typedValue = value as { file: File; src: FileReader; name: string; size: number };
+      if (validator.required && typedValue.file === null) return t("input-validation.required");
+      // Size limit is 8 MB
+      if (typedValue.size > 8000000) return t("input-validation.file-size-too-large");
+      if (
+        acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
+        undefined
+      ) {
+        return t("input-validation.file-type-invalid");
+      }
+      break;
+    }
+    case "dynamicRow": {
+      // Not implemented yet
+      break;
+    }
+    default:
+      throw `Validation for component ${componentType} is not handled`;
+  }
+
+  return null;
 };
 
 /**
@@ -84,37 +138,20 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
   const errors: Responses = {};
 
   for (const item in values) {
-    const formConfig = props.formConfig;
-    const elements: Array<FormElement> = formConfig.elements;
-    const currentItem = elements.find((element) => element.id == item);
+    const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
 
-    if (!currentItem) {
-      return errors;
-    }
+    if (!formElement) return errors;
 
-    const currentValidation = (currentItem.properties?.validation as ValidationProperties) || {};
-    const formikValue = values[item];
-    // A non-array object indicates an unset field (this is how Formik sends it to us)
-    // Discard these values, and convert anything else to a string
-    const currentValue: string = (
-      typeof formikValue == "object" && !Array.isArray(formikValue) ? "" : (formikValue as string)
-    ).toString();
-    const currentRegex = getRegexByType(currentValidation.type, props.t, currentValue);
+    if (formElement.properties.validation) {
+      const result = isFieldResponseValid(
+        values[item],
+        formElement.type,
+        formElement.properties.validation,
+        props.t
+      );
 
-    // Check for required fields
-    let isEmpty = !currentValue;
-    // currentValue is not a straight existence check for things like radio button and checkboxes
-    if (!isEmpty && typeof formikValue == "object") {
-      if (Array.isArray(formikValue) && formikValue.length < 1) isEmpty = true;
-      if (!Array.isArray(formikValue)) isEmpty = true; // non array objects are an unset field
-    }
-    if (currentValidation && currentValidation?.required && isEmpty) {
-      errors[item] = props.t("input-validation.required");
-    } else if (currentValidation.type && currentRegex && currentRegex.regex) {
-      // Check for different types of fields, email, date, number, custom etc
-      const regex = new RegExp(currentRegex.regex);
-      if (currentValue && !regex.test(currentValue)) {
-        errors[item] = currentRegex.error;
+      if (result) {
+        errors[item] = result;
       }
     }
   }
@@ -139,8 +176,15 @@ export const getErrorList = (
             href={`#${key}`}
             className="gc-error-link"
             key={index}
+            onKeyDown={(e) => {
+              if (e.code === "Space") {
+                e.preventDefault();
+                scrollErrorInView(key);
+              }
+            }}
             onClick={(e) => {
-              scrollErrorInView(e, key);
+              e.preventDefault();
+              scrollErrorInView(key);
             }}
           >
             {value}

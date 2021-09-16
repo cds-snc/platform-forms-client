@@ -22,16 +22,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use a cache to fill frequent requests to the Template API to reduce overall load on Lambdas
 - Enable support for development using local Lambdas
 - Enable support for organisations and organisation management through the admin panel
+- Added validation on FileInput component to ensure the type and size of the file is valid
+- Added `displayAlphaBanner` property to JSON form template. Defaulted to true for existing forms.
 
 ### Changed
 
 - Remove unused debugging `console.logs()`
 - Remove info level logging from production builds
+- Dropdown component automatically adds a default empty option to the list of choices. It becomes the initial value so that we do not need to add it manually in the JSON file.
 
 ### Fixed
 
 - When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
 - Checkbox and Radio groups were not being correctly identified by Screen Readers
+- Unpublished form cache not correctly set
 
 ### Removed
 

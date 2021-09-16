@@ -1,4 +1,7 @@
 module.exports = {
+  core: {
+    builder: "webpack5",
+  },
   stories: ["../**/*.stories.mdx", "../**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-a11y"],
   webpackFinal: async (config) => {
@@ -16,6 +19,14 @@ module.exports = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "next-i18next": "react-i18next",
+    };
+
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      dns: false,
+      tls: false,
+      net: false,
+      stream: false,
     };
 
     return config;

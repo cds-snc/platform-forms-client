@@ -1,13 +1,13 @@
 import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import formidable from "formidable";
-import fs from "fs";
+import formidable, { Fields, Files } from "formidable";
 import convertMessage from "@lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
+import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 
 export const config = {
   api: {
@@ -20,30 +20,34 @@ const lambdaClient = new LambdaClient({
   retryMode: "standard",
 });
 
-const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const submit = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void | NodeJS.Timeout> => {
   try {
     const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
-    return incomingForm.parse(req, async (err, fields, files) => {
-      if (err) {
-        throw new Error(err);
-      }
-      return await processFormData(fields, files, res, req).finally(() => {
-        for (const [id] of Object.entries(files)) {
-          const fileOrArray = files[id];
-          if (Array.isArray(fileOrArray)) {
-            fileOrArray.forEach((file) => {
-              console.log(`File path to be deleted: ${file.path}`);
-              fs.unlinkSync(file.path);
-            });
-          } else {
-            console.log(`File path to be deleted: ${fileOrArray.path}`);
-            fs.unlinkSync(fileOrArray.path);
-          }
+    // we have to return a response for the NextJS handler. So we create a Promise which will be resolved
+    // with the data from the IncomingForm parse callback
+    const data = (await new Promise(function (resolve, reject) {
+      incomingForm.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
         }
+        resolve({ fields, files });
       });
-    });
+    })) as
+      | {
+          fields: Fields;
+          files: Files;
+        }
+      | string;
+
+    if (typeof data === "string") {
+      throw new Error(data);
+    }
+    return await processFormData(data.fields as Fields, data.files as Files, res, req);
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
     return res.status(500).json({ received: false });
   }
 };
@@ -109,6 +113,7 @@ const processFormData = async (
   res: NextApiResponse,
   req: NextApiRequest
 ) => {
+  const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
     const notifyPreview = await checkOne("notifyPreview");
@@ -128,17 +133,6 @@ const processFormData = async (
       return await setTimeout(() => res.status(200).json({ received: true }), 1000);
     }
 
-    // Add file S3 urls to payload once we start processing files through reliability queue
-    // For now just attach the file names
-    for (const [key, value] of Object.entries(files)) {
-      const fileOrArray = value;
-      if (!Array.isArray(fileOrArray)) {
-        if (fileOrArray.name) {
-          reqFields[key] = fileOrArray.name;
-        }
-      }
-    }
-
     const form = await getFormByID(reqFields.formID as string);
 
     if (!form) {
@@ -152,6 +146,31 @@ const processFormData = async (
 
     // Staging or Production AWS environments
     if (submitToReliabilityQueue) {
+      for (const [_key, value] of Object.entries(files)) {
+        const fileOrArray = value;
+        if (!Array.isArray(fileOrArray)) {
+          if (fileOrArray.name) {
+            logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
+            const { isValid, key } = await pushFileToS3(fileOrArray);
+            if (isValid) {
+              uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
+              fields[_key] = key;
+            }
+          }
+        } else if (Array.isArray(fileOrArray)) {
+          // An array will be returned in a field that includes multiple files
+          fileOrArray.forEach(async (fileItem, index) => {
+            if (fileItem.name) {
+              logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
+              const { isValid, key } = await pushFileToS3(fileItem);
+              if (isValid) {
+                uploadedFilesKeyUrlMapping.set(fileItem.name, key);
+                fields[`${_key}-${index}`] = key;
+              }
+            }
+          });
+        }
+      }
       return await callLambda(form.formID, fields)
         .then(async () => {
           if (notifyPreview) {
@@ -176,7 +195,15 @@ const processFormData = async (
     // Set this to a 200 response as it's valid if the send to reliability queue option is off.
     return res.status(200).json({ received: true });
   } catch (err) {
-    logMessage.error(err);
+    // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
+    if (uploadedFilesKeyUrlMapping.size > 0) {
+      uploadedFilesKeyUrlMapping.forEach(async (value, key) => {
+        logMessage.info(`deletion of key : ${key}  -  value: ${value}`);
+        await deleteObject(key);
+      });
+    }
+    logMessage.error(err as Error);
+
     return res.status(500).json({ received: false });
   }
 };

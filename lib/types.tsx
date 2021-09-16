@@ -6,10 +6,8 @@ export interface FormDefinitionProperties {
   internalTitleEn?: string;
   internalTitleFr?: string;
   publishingStatus: boolean;
-  submission: {
-    email?: string;
-    vault?: boolean;
-  };
+  submission: SubmissionProperties;
+  displayAlphaBanner?: boolean;
   form: FormSchemaProperties;
 }
 
@@ -18,6 +16,7 @@ export interface FormDBConfigProperties {
   formConfig?: FormDefinitionProperties;
   organization?: boolean;
 }
+
 export interface FormSchemaProperties {
   titleEn: string;
   titleFr: string;
@@ -40,6 +39,7 @@ export interface FormSchemaProperties {
 export interface PublicFormSchemaProperties extends FormSchemaProperties {
   formID: string;
   publishingStatus: boolean;
+  displayAlphaBanner: boolean;
 }
 
 export type allFormElements =
@@ -51,6 +51,7 @@ export type callback = (event: allFormElements) => void;
 export interface SubmissionProperties {
   email?: string;
   vault?: boolean;
+  mailingList?: boolean;
 }
 
 export interface Submission {
@@ -59,7 +60,8 @@ export interface Submission {
 }
 
 export interface FormElement {
-  id: string;
+  id: number;
+  subId?: string;
   type: string;
   properties: ElementProperties;
   onchange?: callback;
@@ -205,3 +207,10 @@ export interface CrudOrganisationResponse {
     ];
   };
 }
+
+// File Upload Result Type
+
+export type UploadResult = {
+  isValid: boolean;
+  key: string;
+};

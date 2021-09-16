@@ -248,14 +248,11 @@
   }
 }
 
-.gc-file-input {
-  @apply md:w-full md:text-small_base text-base w-1/2 mt-2 mb-14;
-}
-
 .gc-input-checkbox {
   @apply block;
 
   .gc-input-checkbox__input {
+    background-repeat: round;
     @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
     & + .gc-checkbox-label {
       @apply relative cursor-pointer p-0;
@@ -283,6 +280,7 @@
 
     // Checkmark. Could be replaced with an image
     &:checked + .gc-checkbox-label:after {
+      background-repeat: no-repeat;
       content: "";
       background-image: url("../public/img/checkmark.svg");
       @apply absolute w-6 h-6 left-2;
@@ -347,6 +345,59 @@
   }
 }
 
+.gc-file-input {
+  @apply w-full md:text-small_base text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
+  &:focus {
+    @apply outline-none border-blue-focus shadow-input;
+  }
+
+  &.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.gc-file-input-upload-button {
+  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14 text-center inline-block;
+  @apply md:w-full md:text-small_base cursor-pointer border-b-4 py-3 px-5 mr-2 m-0 text-base no-underline outline-none relative;
+
+  &:focus-within {
+    box-shadow: 0 0 0 2px white;
+    outline: solid 2px #303fc3;
+    outline-offset: 2px;
+    @apply bg-gray-300;
+  }
+
+  &:active {
+    box-shadow: 0 0 0 2px white;
+    outline: solid 2px #1b2736;
+    outline-offset: 2px;
+  }
+  &:hover {
+    @apply bg-gray-300;
+  }
+}
+
+/**
+ * Don't want to use the 'standard' method
+ * for visually hiding the native file upload
+ * with CSS, because setting the form control
+ * to 1px height/width will cause VoiceOver to
+ * inaccurately announce the state of the
+ * form control (e.g. VO will not announce
+ * whether there are files selected or not.)
+ */
+.gc-file-input [type="file"] {
+  font-size: 0.1px;
+  left: 0;
+  top: 0;
+  @apply absolute opacity-0 w-full h-full;
+}
+
+.gc-file-input-file-selected {
+  @apply inline-block;
+}
+
 .page-preview-form,
 .page-en-preview-form,
 .page-fr-preview-form {
@@ -391,4 +442,25 @@
   p:last-of-type {
     @apply font-bold md:text-small_p;
   }
+}
+
+.react-tel-input .form-control,
+.gc-input-phone {
+  border: none ;  
+  background-color:transparent;
+  border-style: none;
+  @apply md:w-full md:text-small_base sm:flex sm:w-60;
+}
+
+.react-tel-input .flag-dropdown,
+.gc-input-phone-button-style {
+  border: none ;  
+  background-color:white;
+  border-style: none;
+}
+
+.gc-input-phone-container {
+  border: solid 2px black;
+  background-color: white;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
 }

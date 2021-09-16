@@ -32,9 +32,14 @@
     "email": "Please enter a valid email",
     "date": "Please enter a valid date in mm/dd/yyyy format",
     "phone": "Please enter a valid telephone number",
-    "regex": "Please enter the correct format"
+    "regex": "Please enter the correct format",
+    "file-size-too-large": "Please select a smaller file",
+    "file-type-invalid": "Please select a different file type"
   },
-  "required-field": "Required",
+  "required-field": "Required Field",
+  "file-upload-button-text": "Upload a file",
+  "file-upload-sr-only-file-selected": "Currently selected file is",
+  "file-upload-no-file-selected": "No file currently selected",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
   "title": "GC Forms - Formulaires GC",
   "loading": "We are processing your form submission.  Please wait."
