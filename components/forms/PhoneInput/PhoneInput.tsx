@@ -27,6 +27,9 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { value } = meta;
   const { setValue } = helpers;
+  // when the component refreshes ( i.e. on submit ) the country code is inserted at the start of the value
+  // so in order to prevent the country code being appended each time we have to store the country code
+  // in state and remove it from the value.
   const [countryCode, setCountryCode] = useState("+1");
   const [screenValue, setScreenValue] = useState(value.replace(countryCode, ""));
   const classes = classNames("gc-input-text", className);
@@ -44,8 +47,8 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
   ) => {
     // this is the value that formik will use when submitting to the submit API
     setValue(newNumber.replaceAll(/\(|\)|\s|-/g, ""));
-    // this is the value that is going to be shown to users with formatting
     setCountryCode(countryData.dialCode);
+    // this is the value that is going to be shown to users with formatting
     setScreenValue(newNumber);
   };
 
@@ -73,10 +76,10 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
         defaultCountry={"ca"}
         preferredCountries={["ca"]}
         useMobileFullscreenDropdown
-        formatOnInit={false}
         nationalMode={false}
         autoHideDialCode={false}
         format
+        formatOnInit
       />
     </>
   );
