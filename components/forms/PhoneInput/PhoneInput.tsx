@@ -56,10 +56,7 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
         containerClassName={"intl-tel-input mb-14"}
         inputClassName={classes}
         fieldId={extraInputProps.id}
-        // when the component refreshes ( i.e. on submit ) the default country code (canada) is inserted at the start of the value
-        // so in order to prevent the country code being appended each time we have to store the country code
-        // in state and remove it from the value.
-        defaultValue={value.replace("+1", "")}
+        defaultValue={value}
         placeholder={placeholder}
         fieldName={extraInputProps.name}
         telInputProps={extraInputProps}
