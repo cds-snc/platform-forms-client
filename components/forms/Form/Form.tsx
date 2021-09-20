@@ -111,7 +111,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values as Responses, formikBag);
+      // await submitToAPI(values as Responses, formikBag);
     } catch (err) {
       logMessage.error(err);
     } finally {

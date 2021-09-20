@@ -1,98 +1,85 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useField } from "formik";
 import classNames from "classnames";
 import { ErrorMessage } from "../index";
-import PhoneInput from "react-phone-input-2";
+import IntlTelInput from "react-int-phone-input-accessibility";
+// must import this here otherwise error occurs
+import "react-int-phone-input-accessibility/dist/main.css";
 
-interface OptionalPhoneInputProps {
-  error?: boolean;
-  required?: boolean;
-  className?: string;
-  ariaDescribedBy?: string;
-  placeholder?: string;
-  country?: string;
-  onlyCountries?: Array<string>;
-  preferredCountries?: Array<string>;
-  key?: string;
-}
-
-interface RequiredTextInputProps {
+interface RequiredPhoneInputProps {
   id: string;
   name: string;
 }
 
-interface CountryData {
-  name: string;
-  dialCode: string;
-  countryCode: string;
+interface CustomPhoneInputProps {
+  required?: boolean;
+  className?: string;
+  ariaDescribedBy?: string;
+  placeholder?: string;
 }
 
-export type PhoneInputProps = OptionalPhoneInputProps &
-  RequiredTextInputProps &
-  JSX.IntrinsicElements["input"];
+export type OptionalPhoneInputProps = CustomPhoneInputProps & JSX.IntrinsicElements["input"];
 
-export const CustomPhoneInput = (props: PhoneInputProps): React.ReactElement => {
-  const {
-    id,
-    className,
-    required,
-    placeholder,
-    name,
-    country,
-    key,
-    onlyCountries,
-    preferredCountries,
-  } = props;
+export type PhoneInputProps = RequiredPhoneInputProps & OptionalPhoneInputProps;
+
+export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
+  const { id, className, required, ariaDescribedBy, placeholder } = props;
   const [field, meta, helpers] = useField(props);
   const { value } = meta;
   const { setValue } = helpers;
-  const classes = classNames("gc-input-phone-container", className);
+  const [countryCode, setCountryCode] = useState("+1");
+  const [screenValue, setScreenValue] = useState(value.replace(countryCode, ""));
+  const classes = classNames("gc-input-text", className);
   const extraInputProps = {
-    name: name,
     id: id,
-    key: key,
     required: required,
+    "aria-describedby": ariaDescribedBy,
+    ...field,
   };
 
   const _onChange = (
-    value: string,
-    country: Record<string, unknown>,
-    e: React.ChangeEvent<HTMLInputElement>,
-    formattedValue: string
+    isValid: boolean,
+    newNumber: string,
+    countryData: { name: string; iso2: string; dialCode: string }
   ) => {
-    setValue(formattedValue);
+    // this is the value that formik will use when submitting to the submit API
+    setValue(newNumber.replaceAll(/\(|\)|\s|-/g, ""));
+    // this is the value that is going to be shown to users with formatting
+    setCountryCode(countryData.dialCode);
+    setScreenValue(newNumber);
   };
-/* eslint-disable */ 
-  const _onblur = (e: React.FocusEvent<HTMLInputElement>, data: CountryData) => {
-    setValue(formatInputPhoneValue(e.target.value));
-  };
-  /* eslint-enable */
 
-  const formatInputPhoneValue = (phoneNumber: string): string | null => {
-    return `+${phoneNumber.replace(/[^0-9\\.]+/g, "")}`;
-  };
+  // used to add aria-labelledby and aria-describedby to country code selector to make it accessible
+  useEffect(() => {
+    const buttonDropDown = document.getElementsByClassName("selected-flag");
+    if (buttonDropDown.length > 0) {
+      buttonDropDown[0].setAttribute("aria-labelledby", `label-${id}`);
+      ariaDescribedBy ? buttonDropDown[0].setAttribute("aria-describedby", ariaDescribedBy) : false;
+    }
+  });
 
   return (
     <>
       {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
-      <PhoneInput
-        data-testid="textInput"
-        {...field}
-        inputProps={{ ...extraInputProps }}
-        containerClass={classes}
-        inputClass={classNames("gc-input-phone")}
-        buttonClass={classNames("gc-input-phone-button-style")}
-        country={country ? country : "ca"}
+      <IntlTelInput
+        containerClassName={"intl-tel-input mb-14"}
+        inputClassName={classes}
+        fieldId={extraInputProps.id}
+        value={screenValue}
         placeholder={placeholder}
-        countryCodeEditable={false}
-        value={value}
-        onlyCountries={onlyCountries}
-        preferredCountries={preferredCountries}
-        onChange={_onChange}
-        onBlur={_onblur}
+        fieldName={extraInputProps.name}
+        telInputProps={extraInputProps}
+        onPhoneNumberChange={_onChange}
+        defaultCountry={"ca"}
+        preferredCountries={["ca"]}
+        useMobileFullscreenDropdown
+        formatOnInit={false}
+        nationalMode={false}
+        autoHideDialCode={false}
+        format
       />
     </>
   );
 };
 
-export default CustomPhoneInput;
+export default PhoneInput;
