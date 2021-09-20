@@ -27,11 +27,6 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { value } = meta;
   const { setValue } = helpers;
-  // when the component refreshes ( i.e. on submit ) the country code is inserted at the start of the value
-  // so in order to prevent the country code being appended each time we have to store the country code
-  // in state and remove it from the value.
-  const [countryCode, setCountryCode] = useState("+1");
-  const [screenValue, setScreenValue] = useState(value.replace(countryCode, ""));
   const classes = classNames("gc-input-text", className);
   const extraInputProps = {
     id: id,
@@ -40,16 +35,9 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
     ...field,
   };
 
-  const _onChange = (
-    isValid: boolean,
-    newNumber: string,
-    countryData: { name: string; iso2: string; dialCode: string }
-  ) => {
+  const _onChange = (isValid: boolean, newNumber: string) => {
     // this is the value that formik will use when submitting to the submit API
     setValue(newNumber.replaceAll(/\(|\)|\s|-/g, ""));
-    setCountryCode(countryData.dialCode);
-    // this is the value that is going to be shown to users with formatting
-    setScreenValue(newNumber);
   };
 
   // used to add aria-labelledby and aria-describedby to country code selector to make it accessible
@@ -68,7 +56,10 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
         containerClassName={"intl-tel-input mb-14"}
         inputClassName={classes}
         fieldId={extraInputProps.id}
-        value={screenValue}
+        // when the component refreshes ( i.e. on submit ) the default country code (canada) is inserted at the start of the value
+        // so in order to prevent the country code being appended each time we have to store the country code
+        // in state and remove it from the value.
+        defaultValue={value.replace("+1", "")}
         placeholder={placeholder}
         fieldName={extraInputProps.name}
         telInputProps={extraInputProps}
