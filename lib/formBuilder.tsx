@@ -11,7 +11,7 @@ import {
   Description,
   RichText,
   MultipleChoiceGroup,
-  CustomPhoneInput,
+  PhoneInput,
 } from "../components/forms";
 import { FormElement, PropertyChoices, PublicFormSchemaProperties } from "./types";
 
@@ -112,13 +112,12 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {labelComponent}
           {description ? <Description id={`${id}`}>{description}</Description> : null}
           {textType === "tel" ? (
-            <CustomPhoneInput
+            <PhoneInput
               placeholder={placeHolder.toString()}
               id={`${id}`}
               name={`${id}`}
               ariaDescribedBy={description ? `desc-${id}` : undefined}
               required={isRequired}
-              country={"ca"}
             />
           ) : (
             <TextInput

@@ -178,6 +178,14 @@ a:active {
   @apply inline;
 }
 
+/**
+needed for phone input as it changes the inline styles of the html tag causing issues
+ */
+html {
+  position: static !important;
+  overflow: auto !important;
+}
+
 body {
   margin: 0;
   font-size: 1.25em;
@@ -199,6 +207,7 @@ h6 {
 .outer-container {
   position: relative;
   min-height: 100vh;
+  width: 100%;
 }
 
 .email-preview > * {

@@ -10,6 +10,9 @@ module.exports = {
     "<rootDir>/cypress/",
     "<rootDir>/public/static/scripts/",
   ],
+  moduleNameMapper: {
+    "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules",
+  },
   clearMocks: true,
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",

@@ -46,7 +46,7 @@
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.2",
-    "react-phone-input-2": "^2.14.0",
+    "react-int-phone-input-accessibility": "^7.3.5",
     "react-spinners": "^0.11.0",
     "swr": "^0.5.6"
   },
@@ -92,6 +92,7 @@
     "ioredis-mock": "^5.6.0",
     "jest": "^27.0.6",
     "jest-chain": "^1.1.5",
+    "jest-css-modules": "^2.1.0",
     "pino-pretty": "^6.0.0",
     "postcss": "^8.3.6",
     "postcss-flexbugs-fixes": "^5.0.2",

@@ -1,10 +1,10 @@
 import React from "react";
-import { CustomPhoneInput } from "./PhoneInput";
+import { PhoneInput } from "./PhoneInput";
 import { Formik } from "formik";
 
 export default {
   title: "Forms/PhoneInput",
-  component: CustomPhoneInput,
+  component: PhoneInput,
   parameters: {
     info: `PhoneInput component`,
   },
@@ -28,6 +28,6 @@ export const defaultPhoneCustomComponent = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-phone": "" }}
   >
-    <CustomPhoneInput {...inputProps} />
+    <PhoneInput {...inputProps} />
   </Formik>
 );
