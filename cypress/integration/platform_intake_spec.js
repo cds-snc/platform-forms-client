@@ -25,7 +25,7 @@ describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:
       .type("santaclaus@northpole.global")
       .should("have.value", "santaclaus@northpole.global");
     cy.get("input[id='4']").type("CDS Gifts").should("have.value", "CDS Gifts");
-    cy.get("input[id=5]").type("1 877-636-0656").should("have.value", "1 877-636-0656");
+    cy.get("input[id=5]").type("877-636-0656").should("have.value", "8776360656");
     cy.get(".gc-checkbox-label").click({ multiple: true });
     cy.get("input[id='7']")
       .type("Call me at my work number")

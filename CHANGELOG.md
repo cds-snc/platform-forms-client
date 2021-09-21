@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [1.0.1] 2021-09-16
 
 ### Added
 
@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable support for development using local Lambdas
 - Enable support for organisations and organisation management through the admin panel
 - Added validation on FileInput component to ensure the type and size of the file is valid
+- Added `displayAlphaBanner` property to JSON form template. Defaulted to true for existing forms.
+- Added updated phone number input that includes an international code drop down.
+- Added a more accessible file upload component.
 
 ### Changed
 
@@ -23,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - When Feature 'Submit to Reliability Queue' is off do not treat the submission as an Error.
+- Checkbox and Radio groups were not being correctly identified by Screen Readers
 - Unpublished form cache not correctly set
 
 ### Removed
@@ -31,9 +35,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] 2021-06-24
 
-#### ⚠️ This release includes a data migration
+⚠️ This release includes a data migration
 
-#### 🚩 This release includes features hidden behind feature flags
+🚩 This release includes features hidden behind feature flags
 
 ### Added
 

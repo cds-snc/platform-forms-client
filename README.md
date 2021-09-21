@@ -63,7 +63,7 @@ docker-compose up -d redis
 
 Set up local database (only if you want to run the project in isolation)
 
-Run postgres by using the following command 
+Run postgres by using the following command
 
 ```sh
 docker-compose up -d db

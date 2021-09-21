@@ -1,13 +1,13 @@
 import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import formidable from "formidable";
+import formidable, { Fields, Files } from "formidable";
 import convertMessage from "@lib/markdown";
 import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
-import { pushFileToS3, deleteObject } from "../../lib/s3-upload";
+import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 
 export const config = {
   api: {
@@ -20,18 +20,34 @@ const lambdaClient = new LambdaClient({
   retryMode: "standard",
 });
 
-const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const submit = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void | NodeJS.Timeout> => {
   try {
     const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
-    return incomingForm.parse(req, async (err, fields, files) => {
-      if (err) {
-        throw new Error(err);
-      }
-      //TODO file extension validation before processing.
-      return await processFormData(fields, files, res, req);
-    });
+    // we have to return a response for the NextJS handler. So we create a Promise which will be resolved
+    // with the data from the IncomingForm parse callback
+    const data = (await new Promise(function (resolve, reject) {
+      incomingForm.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+        }
+        resolve({ fields, files });
+      });
+    })) as
+      | {
+          fields: Fields;
+          files: Files;
+        }
+      | string;
+
+    if (typeof data === "string") {
+      throw new Error(data);
+    }
+    return await processFormData(data.fields as Fields, data.files as Files, res, req);
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
     return res.status(500).json({ received: false });
   }
 };
@@ -186,7 +202,8 @@ const processFormData = async (
         await deleteObject(key);
       });
     }
-    logMessage.error(err);
+    logMessage.error(err as Error);
+
     return res.status(500).json({ received: false });
   }
 };
