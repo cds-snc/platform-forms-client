@@ -92,6 +92,7 @@
     "ioredis-mock": "^5.6.0",
     "jest": "^27.0.6",
     "jest-chain": "^1.1.5",
+    "jest-css-modules": "^2.1.0",
     "pino-pretty": "^6.0.0",
     "postcss": "^8.3.6",
     "postcss-flexbugs-fixes": "^5.0.2",

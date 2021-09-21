@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useField } from "formik";
 import classNames from "classnames";
 import { ErrorMessage } from "../index";
@@ -25,7 +25,7 @@ export type PhoneInputProps = RequiredPhoneInputProps & OptionalPhoneInputProps;
 export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
   const { id, className, required, ariaDescribedBy, placeholder } = props;
   const [field, meta, helpers] = useField(props);
-  const { value } = meta;
+  const { value } = field;
   const { setValue } = helpers;
   const classes = classNames("gc-input-text", className);
   const extraInputProps = {
@@ -36,8 +36,7 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
   };
 
   const _onChange = (isValid: boolean, newNumber: string) => {
-    // this is the value that formik will use when submitting to the submit API
-    setValue(newNumber.replaceAll(/\(|\)|\s|-/g, ""));
+    setValue(newNumber.replace(/\(|\)|\s|-/g, ""));
   };
 
   // used to add aria-labelledby and aria-describedby to country code selector to make it accessible
@@ -56,7 +55,7 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
         containerClassName={"intl-tel-input mb-14"}
         inputClassName={classes}
         fieldId={extraInputProps.id}
-        defaultValue={value}
+        value={value.replace("+1", "")}
         placeholder={placeholder}
         fieldName={extraInputProps.name}
         telInputProps={extraInputProps}
@@ -66,8 +65,6 @@ export const PhoneInput = (props: PhoneInputProps): React.ReactElement => {
         useMobileFullscreenDropdown
         nationalMode={false}
         autoHideDialCode={false}
-        format
-        formatOnInit
       />
     </>
   );

@@ -6,9 +6,9 @@ import { GenerateElement } from "../../../lib/formBuilder";
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),
   useField: jest.fn(() => [
-    { field: { value: "" } },
-    { meta: { touched: null, error: null } },
-    { helpers: { setValue: null } },
+    { value: "" },
+    { touched: null, error: null },
+    { setValue: jest.fn(() => {}) },
   ]),
 }));
 
@@ -42,5 +42,3 @@ describe.each([["en"], ["fr"]])("Generate an input phone", (lang) => {
     expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
   });
 });
-
-//TODO more to come.

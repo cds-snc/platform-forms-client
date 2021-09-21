@@ -80,7 +80,6 @@ const isFieldResponseValid = (
   validator: ValidationProperties,
   t: TFunction
 ): string | null => {
-  console.log(value);
   switch (componentType) {
     case "textField": {
       const typedValue = value as string;
