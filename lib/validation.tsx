@@ -5,10 +5,12 @@ import {
   InnerFormProps,
   Responses,
   ValidationProperties,
+  FormElement,
 } from "./types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "../components/forms";
+import { enumBooleanMember } from "@babel/types";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -78,7 +80,7 @@ const isFieldResponseValid = (
   value: unknown,
   componentType: string,
   validator: ValidationProperties,
-  t: TFunction
+  t: TFunction,
 ): string | null => {
   switch (componentType) {
     case "textField": {
@@ -107,10 +109,11 @@ const isFieldResponseValid = (
     }
     case "fileInput": {
       const typedValue = value as { file: File; src: FileReader; name: string; size: number };
-      if (validator.required && typedValue.file === null) return t("input-validation.required");
+      if (validator.required && typedValue === undefined || typedValue === null) return t("input-validation.required");
+      if (validator.required && typedValue && typedValue.file === null) return t("input-validation.required");
       // Size limit is 8 MB
-      if (typedValue.size > 8000000) return t("input-validation.file-size-too-large");
-      if (
+      if (typedValue && typedValue.size > 8000000) return t("input-validation.file-size-too-large");
+      if (typedValue && 
         acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
         undefined
       ) {
@@ -118,14 +121,13 @@ const isFieldResponseValid = (
       }
       break;
     }
-    case "dynamicRow": {
-      // Not implemented yet
+    case "dynamicRow":       
+      break;   
+    case "richText":
       break;
-    }
     default:
       throw `Validation for component ${componentType} is not handled`;
   }
-
   return null;
 };
 
@@ -141,21 +143,26 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
     const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
 
     if (!formElement) return errors;
-
-    if (formElement.properties.validation) {
-      const result = isFieldResponseValid(
-        values[item],
-        formElement.type,
-        formElement.properties.validation,
-        props.t
-      );
-
-      if (result) {
-        errors[item] = result;
+    
+    if(formElement.type === "dynamicRow"){
+       //dynamic row sub elements validator
+       rowsValidator(formElement, values, item, props, errors);
+    }else{
+      if (formElement.properties.validation) {
+        const result = isFieldResponseValid(
+          values[item],
+          formElement.type,
+          formElement.properties.validation,
+          props.t
+        );  
+        if (result) {
+          errors[item] = result;
+        }
       }
     }
+   
   }
-
+  console.log(errors);
   return errors;
 };
 
@@ -210,3 +217,39 @@ export const setFocusOnErrorMessage = (
     }
   }
 };
+
+/**
+ * Dynamic row validator.
+ * @param formElement 
+ * @param values 
+ * @param item 
+ * @param props 
+ * @param errors 
+ */
+function rowsValidator(formElement: FormElement, values: FormValues, item: string, props: DynamicFormProps, errors: Responses) {
+  if (formElement.properties.subElements && Array.isArray(values[item])) {
+    const subElements = formElement.properties.subElements;
+    const subElemetsValues = values[parseInt(item)] as any;
+    //const validationErrors = new Array<string>();
+    subElements.forEach((elem) => {
+      //split sub element id 
+      const subIdArray = elem.subId?.split('.'); //i.e "7.0.1" => ["7","0","1"]
+      const {validation} = elem.properties;
+      if (subIdArray && elem.subId && validation && validation.required) {
+        //get inner value by key       
+        const val = subElemetsValues[subIdArray[2]];
+        const validatorResult = isFieldResponseValid(
+          val,
+          elem.type,
+          validation,
+          props.t
+        );
+        if (validatorResult) {            
+          //validationErrors.push(validatorResult)
+          errors[elem.subId] = validatorResult;
+          //errors[item] = validationErrors;          
+        }        
+      }
+    });   
+  }
+}
