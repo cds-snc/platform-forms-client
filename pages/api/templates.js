@@ -1,4 +1,6 @@
 import { crudTemplates } from "../../lib/dataLayer";
+import { JsonValidator } from "../../lib/jsonValidator/jsonValidator";
+import templatesSchema from "../../lib/jsonValidator/schemas/templates.schema.json";
 import { logMessage } from "../../lib/logger";
 import { getSession } from "next-auth/client";
 
@@ -22,6 +24,10 @@ const templates = async (req, res) => {
     const requestBody = JSON.parse(req.body);
 
     if (isAllowed(session, requestBody.method)) {
+      if (requestBody.method === "INSERT" && requestBody.formConfig) {
+        new JsonValidator().validate(requestBody.formConfig, templatesSchema);
+      }
+
       return crudTemplates({ ...requestBody, session })
         .then((response) => {
           if (response) {

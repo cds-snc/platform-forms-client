@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+    ],
+    "required": [
+        "form"
+    ],
+    "properties": {
+        "form": {
+            "$id": "#/properties/form",
+            "type": "object",
+            "title": "The form schema",
+            "description": "The top-level form object.",
+            "default": {},
+            "examples": [
+            ],
+            "required": [
+            ],
+            "properties": {
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}
