@@ -1,5 +1,7 @@
 FROM node:14-alpine
 
+ENV NODE_ENV=production
+
 COPY . /src
 WORKDIR /src
 
@@ -28,7 +30,6 @@ ENV GITHUB_SHA=$GITHUB_SHA_ARG
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
 
-ENV NODE_ENV=production
 
 WORKDIR /src
 
