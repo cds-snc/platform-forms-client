@@ -8,10 +8,10 @@
     "examples": [
     ],
     "required": [
-        "form"
+        "formConfig"
     ],
     "properties": {
-        "form": {
+        "formConfig": {
             "$id": "#/properties/form",
             "type": "object",
             "title": "The form schema",

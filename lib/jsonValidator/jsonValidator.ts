@@ -1,19 +1,25 @@
-import { Schema, Validator, ValidatorResult } from "jsonschema";
+import { logMessage } from "@lib/logger";
+import { Schema, Validator } from "jsonschema";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export class JsonValidationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "JsonValidationError";
-  }
-}
-
-export class JsonValidator {
-  validate(json: JSON, schema: Schema): ValidatorResult {
-    const validator = new Validator();
-    const validatorResult = validator.validate(json, schema);
-    if (!validatorResult.valid) {
-      throw new JsonValidationError(`Invalid JSON. ${validatorResult.errors.toString()}`);
+const validate = (schema: Schema, handler: (req: NextApiRequest, res: NextApiResponse) => void) => {
+  return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
+    try {
+      logMessage.info("__________________++++validate");
+      if (req.method === "GET") {
+        return handler(req, res);
+      }
+      const validator = new Validator();
+      const validatorResult = validator.validate(JSON.parse(req.body), schema);
+      if (validatorResult.valid) {
+        return handler(req, res);
+      } else {
+        res.status(400).json({ error: validatorResult.errors.toString() });
+      }
+    } catch {
+      res.status(500).json({ error: "Malformed API Request" });
     }
-    return validatorResult;
-  }
-}
+  };
+};
+
+export default validate;
