@@ -12,19 +12,14 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await getSession({ req });
     const requestBody = JSON.parse(req.body);
-    return crudTemplates({ ...requestBody, session })
-      .then((response) => {
-        if (response) {
-          res.status(200).json(response);
-        } else {
-          res.status(500).json({ error: "Error on Server Side" });
-        }
-      })
-      .catch((err) => {
-        logMessage.error(err);
-        res.status(500).json({ error: "Error on Server Side" });
-      });
-  } catch {
+    const response = await crudTemplates({ ...requestBody, session });
+    if (response) {
+      res.status(200).json(response);
+    } else {
+      res.status(500).json({ error: "Error on Server Side" });
+    }
+  } catch (err) {
+    logMessage.error(`${err}`);
     res.status(500).json({ error: "Malformed API Request" });
   }
 };
