@@ -10,8 +10,6 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "../components/forms";
-import { enumBooleanMember } from "@babel/types";
-import { element } from "prop-types";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -81,7 +79,7 @@ const isFieldResponseValid = (
   value: unknown,
   componentType: string,
   validator: ValidationProperties,
-  t: TFunction,
+  t: TFunction
 ): string | null => {
   switch (componentType) {
     case "textField": {
@@ -111,13 +109,17 @@ const isFieldResponseValid = (
     case "fileInput": {
       //TODO need refactoring.
       const typedValue = value as { file: File; src: FileReader; name: string; size: number };
-      if (validator.required && typedValue === undefined || typedValue === null) return t("input-validation.required");
-      if (validator.required && typedValue && typedValue.file === null) return t("input-validation.required");
+      if ((validator.required && typedValue === undefined) || typedValue === null)
+        return t("input-validation.required");
+      if (validator.required && typedValue && typedValue.file === null)
+        return t("input-validation.required");
       // Size limit is 8 MB
       if (typedValue && typedValue.size > 8000000) return t("input-validation.file-size-too-large");
-      if (typedValue && typedValue.file &&
+      if (
+        typedValue &&
+        typedValue.file &&
         acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
-        undefined
+          undefined
       ) {
         return t("input-validation.file-type-invalid");
       }
@@ -146,7 +148,6 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
   }
   const keyGen = gen();
   return validator(values, keyGen, props, errors);
-
 };
 
 /**
@@ -203,56 +204,64 @@ export const setFocusOnErrorMessage = (
 
 /**
  * Dynamic row validator.
- * @param formElement 
- * @param values 
- * @param item 
- * @param props 
- * @param errors 
+ * @param formElement
+ * @param values
+ * @param item
+ * @param props
+ * @param errors
  */
-
 
 /**
- * 
+ *
  * @param elem Compute dynamic row sub element's ids.
- * @returns 
+ * @returns
  */
-function extractSubElementId(elem: FormElement) {
-  try {
-    if (!elem) throw Error("Invalid formElement");
-
-    const elementIdArray = elem.subId?.split('.'); //i.e "7.0.1" => ["7","0","1"]
-    if (elementIdArray && elementIdArray.length > 2) {
-      if (elementIdArray[1] && parseInt(elementIdArray[1]) > 0) {
-        return elementIdArray[1]
-      } else {
-        return elementIdArray[2]; // last digit
-      }
+export function extractSubElementId(elem: FormElement): string {
+  if (!elem) throw "Invalid formElement";
+  const elementIdArray = elem.subId?.split("."); //i.e "7.0.1" => ["7","0","1"]
+  if (elementIdArray && elementIdArray.length > 2) {
+    if (elementIdArray[1] && parseInt(elementIdArray[1]) > 0) {
+      return elementIdArray[1]; // ["7","0","1"] => "0"
+    } else {
+      return elementIdArray[2]; // last digit "1"
     }
-    throw new Error("Invalid id");
-  } catch (error) {
-    throw new Error(`${error}`);
   }
+  throw "Invalid id";
 }
 
-
-
-function validator(values: FormValues, keyGen: Generator, props: DynamicFormProps, errors: Responses) : Responses {
+/**
+ * Form values validator
+ * @param values
+ * @param keyGen
+ * @param props
+ * @param errors
+ * @returns
+ */
+export function validator(
+  values: FormValues,
+  keyGen: Generator,
+  props: DynamicFormProps,
+  errors: Responses
+): Responses {
   const item = keyGen.next().value;
-  if(!item) return errors ;
+  if (!item) return errors;
   const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
   if (!formElement) return errors;
 
-  if (formElement.properties.subElements && Array.isArray(values[item])) { // dynamic row object
-    const subElements = formElement.properties.subElements.filter((element) => element.type !== "richText"); // no need for richText elem   
-    const subElemetsValues = values[parseInt(item)] as any;
+  if (formElement.properties.subElements && Array.isArray(values[item])) {
+    // dynamic row object
+    const subElements = formElement.properties.subElements.filter(
+      (element) => element.type !== "richText"
+    ); // no need for richText elem
+    const subElemetsValues = values[parseInt(item)] as any; // any need here bc sub values can be anything.
     // caution / TODO: the number of rows must be controled whenever we add a row
     // TODO: And reinforce it here like MAX_ROW_ALLOW
-    for(const index in subElements){
-      const elem = subElements[index];  
+    for (const index in subElements) {
+      const elem = subElements[index];
       //Getting the sub element id
       const elementId = extractSubElementId(elem);
       if (elementId && elem.subId && elem.properties.validation) {
-        const rowValues = subElemetsValues["0"];  // selecting the first row
+        const rowValues = subElemetsValues["0"]; // selecting the first row
         const validatorResult = isFieldResponseValid(
           rowValues[elementId],
           elem.type,
@@ -264,7 +273,7 @@ function validator(values: FormValues, keyGen: Generator, props: DynamicFormProp
         }
       }
     }
-  }else {
+  } else {
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
         values[item],
@@ -273,9 +282,9 @@ function validator(values: FormValues, keyGen: Generator, props: DynamicFormProp
         props.t
       );
       if (result) {
-       errors[item] = result;
+        errors[item] = result;
       }
-  }  
-}
-return validator(values, keyGen,props, errors);
+    }
+  }
+  return validator(values, keyGen, props, errors);
 }
