@@ -22,7 +22,7 @@
     "deploy-storybook": "storybook-to-ghpages",
     "storybook": "start-storybook -s public -p 6006",
     "heroku-postbuild": "cd ./migrations && yarn install && cd ../flag_initialization && yarn install && cd .. &&  yarn build",
-    "postinstall": "husky install"
+    "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.27.0",
