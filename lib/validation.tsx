@@ -78,9 +78,10 @@ const scrollErrorInView = (id: string) => {
 const isFieldResponseValid = (
   value: unknown,
   componentType: string,
+  formElement: FormElement,
   validator: ValidationProperties,
   t: TFunction
-): string | null => {
+): string | null | Responses => {
   switch (componentType) {
     case "textField": {
       const typedValue = value as string;
@@ -126,6 +127,36 @@ const isFieldResponseValid = (
       break;
     }
     case "dynamicRow":
+      // in the case of the dynamicRow we want to validate the subElements
+      if (formElement.properties.subElements) {
+        // get the subElements from the dynamic row element
+        const subElements = formElement.properties.subElements.filter(
+          (element) => element.type !== "richText"
+        );
+        // set up object to store results
+        const errors: Responses = {};
+        for (const index in subElements) {
+          const subElement = subElements[index];
+          const subElementId = extractSubElementId(subElement);
+          if (subElement.properties.validation && value) {
+            const temValue = value as any;
+            const subElementValues = temValue["0"][parseInt(subElementId)];
+            // get the results for the subElement
+            const result = isFieldResponseValid(
+              subElementValues,
+              subElement.type,
+              subElement,
+              subElement.properties.validation,
+              t
+            );
+
+            if (result && subElement.subId) {
+              errors[subElement.subId] = result as string;
+            }
+          }
+        }
+        return errors;
+      }
       break;
     case "richText":
       break;
@@ -141,15 +172,33 @@ const isFieldResponseValid = (
  * @param props
  */
 export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
-  const errors: Responses = {};
+  let errors: Responses = {};
 
-  function* gen() {
-    yield* Object.keys(values);
+  for (const item in values) {
+    const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
+
+    if (!formElement) return errors;
+
+    if (formElement.properties.validation) {
+      const result = isFieldResponseValid(
+        values[item],
+        formElement.type,
+        formElement,
+        formElement.properties.validation,
+        props.t
+      );
+      if (result && typeof result === "object") {
+        errors = {
+          ...errors,
+          ...result,
+        };
+      } else if (result) {
+        errors[item] = result;
+      }
+    }
   }
-  const keyGen = gen();
-  return validator(values, keyGen, props, errors);
+  return errors;
 };
-
 /**
  * getErrorList is called to show validation errors at the top of the Form
  * @param props
@@ -203,22 +252,13 @@ export const setFocusOnErrorMessage = (
 };
 
 /**
- * Dynamic row validator.
- * @param formElement
- * @param values
- * @param item
- * @param props
- * @param errors
- */
-
-/**
  *
  * @param elem Compute dynamic row sub element's ids.
  * @returns
  */
-export function extractSubElementId(elem: FormElement): string {
-  if (!elem) throw "Invalid formElement";
-  const elementIdArray = elem.subId?.split("."); //i.e "7.0.1" => ["7","0","1"]
+export function extractSubElementId(element: FormElement): string {
+  if (!element) throw "Invalid formElement";
+  const elementIdArray = element.subId?.split("."); //i.e "7.0.1" => ["7","0","1"]
   if (elementIdArray && elementIdArray.length > 2) {
     if (elementIdArray[1] && parseInt(elementIdArray[1]) > 0) {
       return elementIdArray[1]; // ["7","0","1"] => "0"
@@ -227,64 +267,4 @@ export function extractSubElementId(elem: FormElement): string {
     }
   }
   throw "Invalid id";
-}
-
-/**
- * Form values validator
- * @param values
- * @param keyGen
- * @param props
- * @param errors
- * @returns
- */
-export function validator(
-  values: FormValues,
-  keyGen: Generator,
-  props: DynamicFormProps,
-  errors: Responses
-): Responses {
-  const item = keyGen.next().value;
-  if (!item) return errors;
-  const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
-  if (!formElement) return errors;
-
-  if (formElement.properties.subElements && Array.isArray(values[item])) {
-    // dynamic row object
-    const subElements = formElement.properties.subElements.filter(
-      (element) => element.type !== "richText"
-    ); // no need for richText elem
-    const subElemetsValues = values[parseInt(item)] as any; // any need here bc sub values can be anything.
-    // caution / TODO: the number of rows must be controled whenever we add a row
-    // TODO: And reinforce it here like MAX_ROW_ALLOW
-    for (const index in subElements) {
-      const elem = subElements[index];
-      //Getting the sub element id
-      const elementId = extractSubElementId(elem);
-      if (elementId && elem.subId && elem.properties.validation) {
-        const rowValues = subElemetsValues["0"]; // selecting the first row
-        const validatorResult = isFieldResponseValid(
-          rowValues[elementId],
-          elem.type,
-          elem.properties.validation,
-          props.t
-        );
-        if (validatorResult) {
-          errors[elem.subId] = validatorResult;
-        }
-      }
-    }
-  } else {
-    if (formElement.properties.validation) {
-      const result = isFieldResponseValid(
-        values[item],
-        formElement.type,
-        formElement.properties.validation,
-        props.t
-      );
-      if (result) {
-        errors[item] = result;
-      }
-    }
-  }
-  return validator(values, keyGen, props, errors);
 }
