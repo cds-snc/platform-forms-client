@@ -130,9 +130,7 @@ const isFieldResponseValid = (
       // in the case of the dynamicRow we want to validate the subElements
       if (formElement.properties.subElements) {
         // get the subElements from the dynamic row element
-        const subElements = formElement.properties.subElements.filter(
-          (element) => element.type !== "richText"
-        );
+        const subElements = formElement.properties.subElements;
         // set up object to store results
         const errors: Responses = {};
         for (const index in subElements) {
