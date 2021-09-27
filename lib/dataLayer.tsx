@@ -294,27 +294,80 @@ async function _getSubmissionByID(formID: string): Promise<SubmissionProperties 
 
 function _rehydrateFormResponses(payload: Submission) {
   const { form, responses } = payload;
+
   const rehydratedResponses: Responses = {};
-  form.elements.forEach((question: FormElement) => {
-    const response = responses[question.id];
-    switch (question.type) {
-      case "checkbox":
-      case "dynamicRow":
-        if (response) {
-          rehydratedResponses[question.id] = JSON.parse(response as string).value;
-        } else rehydratedResponses[question.id] = [];
-        break;
-      case "richText":
-        break;
-      default:
-        rehydratedResponses[question.id] = response;
-    }
-  });
+
+  form.elements
+    .filter((element) => !["richText"].includes(element.type))
+    .forEach((question: FormElement) => {
+      switch (question.type) {
+        case "checkbox": {
+          rehydratedResponses[question.id] = _rehydrateCheckBoxResponse(responses[question.id]);
+          break;
+        }
+        case "dynamicRow": {
+          const filteredResponses = Object.entries(responses).filter(([key]) => {
+            const splitKey = key.split("-");
+            return splitKey.length > 1 && splitKey[0] === question.id.toString();
+          });
+
+          // Here is a trick to catch and unpack checkbox type of reponses
+          // We will need some kind of overhaul on how we pass responses from functions to functions
+          const alteredResponses: [string, Response][] = filteredResponses.map(([key, value]) => {
+            if ((value as string).startsWith('{"value"')) {
+              return [key, _rehydrateCheckBoxResponse(value)];
+            } else {
+              return [key, value];
+            }
+          });
+
+          const dynamicRowResponses = _rehydrateDynamicRowResponses(alteredResponses);
+          rehydratedResponses[question.id] = dynamicRowResponses;
+          break;
+        }
+        default:
+          rehydratedResponses[question.id] = responses[question.id];
+          break;
+      }
+    });
+
   return rehydratedResponses;
 }
 
-// Email submission data manipulation
+function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
+  const rehydratedResponses: Responses[] = [];
 
+  let currentResponse: Responses = {};
+  let currentResponseIndex: string | undefined = undefined;
+
+  responses.forEach(([key, value]) => {
+    const splitKey = key.split("-");
+    const responseIndex = splitKey[1];
+    const responseSubIndex = splitKey[2];
+
+    if (!currentResponseIndex) {
+      currentResponseIndex = responseIndex;
+      currentResponse[responseSubIndex] = value;
+    } else if (currentResponseIndex === responseIndex) {
+      currentResponse[responseSubIndex] = value;
+    } else {
+      currentResponseIndex = responseIndex;
+      rehydratedResponses.push(currentResponse);
+      currentResponse = {};
+      currentResponse[responseSubIndex] = value;
+    }
+  });
+
+  rehydratedResponses.push(currentResponse);
+
+  return rehydratedResponses;
+}
+
+function _rehydrateCheckBoxResponse(response: Response) {
+  return response ? JSON.parse(response as string).value : [];
+}
+
+// Email submission data manipulation
 export function extractFormData(submission: Submission): Array<string> {
   const formResponses = submission.responses;
   const formOrigin = submission.form;
@@ -375,6 +428,7 @@ function handleDynamicForm(
         case "textArea":
         case "dropdown":
         case "radio":
+        case "fileInput":
           handleTextResponse(qTitle, row[qIndex] as string, rowCollector);
           break;
 
@@ -421,53 +475,87 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
   const formData = new FormData();
   form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
-  form.elements.map((element) => {
-    _handleFormDataType(element, values[element.id], formData);
+  form.elements.forEach((element) => {
+    const result = _handleDynamicRowTypeIfNeeded(element, values[element.id]);
+    result.forEach((tuple) => {
+      formData.append(tuple[0], tuple[1]);
+    });
   });
+
   formData.append("formID", form.formID);
   return formData;
 }
 
-function _handleFormDataType(element: FormElement, value: Response, formData: FormData) {
+function _handleDynamicRowTypeIfNeeded(
+  element: FormElement,
+  value: Response
+): [string, string | Blob][] {
+  if (element.type === "dynamicRow") {
+    if (element.properties.subElements === undefined) return [];
+
+    const subElements = element.properties.subElements.filter(
+      (element) => !["richText"].includes(element.type)
+    );
+
+    const responses = value as Responses[];
+    return responses
+      .map((response, responseIndex) => {
+        return subElements
+          .map((subElement, subElementIndex) => {
+            const result = _handleFormDataType(subElement, response[subElementIndex]);
+            return result
+              ? ([[`${element.id}-${responseIndex}-${subElementIndex}`, result[1]]] as [
+                  string,
+                  string | Blob
+                ][])
+              : [];
+          })
+          .flat();
+      })
+      .flat();
+  } else {
+    const result = _handleFormDataType(element, value);
+    return result ? [result] : [];
+  }
+}
+
+function _handleFormDataType(
+  element: FormElement,
+  value: Response
+): [string, string | Blob] | undefined {
   switch (element.type) {
     case "textField":
     case "textArea":
       // string
-      _handleFormDataText(element.id.toString(), value as string, formData);
-      break;
-
+      return _handleFormDataText(element.id.toString(), value as string);
     case "dropdown":
     case "radio":
-      value instanceof Object
-        ? _handleFormDataText(element.id.toString(), "", formData)
-        : _handleFormDataText(element.id.toString(), value, formData);
-      break;
-
+      return value instanceof Object
+        ? _handleFormDataText(element.id.toString(), "")
+        : _handleFormDataText(element.id.toString(), value);
     case "checkbox":
-    case "dynamicRow":
       // array of strings
-      Array.isArray(value)
-        ? _handleFormDataArray(element.id.toString(), value as Array<string>, formData)
-        : _handleFormDataText(element.id.toString(), "", formData);
-      break;
+      return Array.isArray(value)
+        ? _handleFormDataArray(element.id.toString(), value as Array<string>)
+        : _handleFormDataText(element.id.toString(), "");
     case "fileInput":
       // file input
-      _handleFormDataFileInput(element.id.toString(), value as FileInputResponse, formData);
-      break;
+      return _handleFormDataFileInput(element.id.toString(), value as FileInputResponse);
   }
 }
 
-function _handleFormDataFileInput(key: string, value: FileInputResponse, formData: FormData) {
-  value.file ? formData.append(key, value.file) : _handleFormDataText(key, "", formData);
+function _handleFormDataFileInput(key: string, value: FileInputResponse): [string, string | Blob] {
+  return value.file ? [key, value.file] : _handleFormDataText(key, "");
 }
 
-function _handleFormDataText(key: string, value: string, formData: FormData) {
-  formData.append(key, value);
+function _handleFormDataText(key: string, value: string): [string, string] {
+  return [key, value];
 }
 
-function _handleFormDataArray(key: string, value: Array<string>, formData: FormData) {
-  formData.append(key, JSON.stringify({ value: value }));
+function _handleFormDataArray(key: string, value: Array<string>): [string, string] {
+  return [key, JSON.stringify({ value: value })];
 }
+
 async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormProps, FormValues>) {
   const { language, router, formConfig, notifyPreviewFlag } = formikBag.props;
   const { setStatus } = formikBag;
