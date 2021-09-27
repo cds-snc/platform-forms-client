@@ -21,7 +21,7 @@ const bucketName: string =
 const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
   try {
     const data = await readStream2buffer(fs.createReadStream(file.path));
-    const objectKey = `form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}.${
+    const objectKey = `form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}/${
       file.name
     }`;
 
