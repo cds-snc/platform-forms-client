@@ -24,4 +24,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default isRequestAllowed(allowedMethods, validate(templatesSchema, templates));
+export default isRequestAllowed(
+  allowedMethods,
+  validate(templatesSchema, templates, { jsonKey: "formConfig" })
+);

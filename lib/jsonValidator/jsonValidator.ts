@@ -1,16 +1,22 @@
-import { logMessage } from "@lib/logger";
 import { Schema, Validator } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const validate = (schema: Schema, handler: (req: NextApiRequest, res: NextApiResponse) => void) => {
+export type validateOptions = {
+  jsonKey: string;
+}
+
+const validate = (
+  schema: Schema,
+  handler: (req: NextApiRequest, res: NextApiResponse) => void,
+  options: validateOptions
+) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
-      logMessage.info("__________________++++validate");
       if (req.method === "GET") {
         return handler(req, res);
       }
       const validator = new Validator();
-      const validatorResult = validator.validate(JSON.parse(req.body), schema);
+      const validatorResult = validator.validate(JSON.parse(req.body[options.jsonKey]), schema);
       if (validatorResult.valid) {
         return handler(req, res);
       } else {
