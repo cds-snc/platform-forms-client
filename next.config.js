@@ -2,18 +2,6 @@ const path = require("path");
 const { i18n } = require("./next-i18next.config");
 const localesDir = path.resolve("public/static/locales");
 
-let prod = process.env.NODE_ENV == "production";
-
-let csp = ``;
-csp += `base-uri 'self';`;
-csp += `form-action 'self';`;
-csp += `default-src 'self';`;
-csp += `script-src 'self' ${prod ? "" : "'unsafe-eval'"};`; // NextJS requires 'unsafe-eval' in dev (faster source maps)
-csp += `style-src 'self' https://fonts.googleapis.com 'unsafe-inline' data:;`; // NextJS requires 'unsafe-inline'
-csp += `img-src 'self' https: data:;`;
-csp += `font-src 'self' https://fonts.gstatic.com;`;
-csp += `frame-src https://www.googletagmanager.com;`;
-
 const securityHeaders = [
   {
     key: "Strict-Transport-Security",
@@ -30,10 +18,6 @@ const securityHeaders = [
   {
     key: "X-Content-Type-Options",
     value: "nosniff",
-  },
-  {
-    key: "Content-Security-Policy",
-    value: csp,
   },
 ];
 

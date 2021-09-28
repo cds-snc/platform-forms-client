@@ -53,6 +53,7 @@
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@emotion/babel-plugin": "^11.3.0",
+    "@next/eslint-plugin-next": "^11.1.2",
     "@storybook/addon-a11y": "^6.3.0",
     "@storybook/addon-actions": "^6.3.0",
     "@storybook/addon-essentials": "^6.3.0",
