@@ -8,23 +8,13 @@
     "examples": [
     ],
     "required": [
-        "formConfig"
+        "form",
+        "submission",
+        "internalTitleEn",
+        "internalTitleFr"
     ],
     "properties": {
-        "formConfig": {
-            "$id": "#/properties/form",
-            "type": "object",
-            "title": "The form schema",
-            "description": "The top-level form object.",
-            "default": {},
-            "examples": [
-            ],
-            "required": [
-            ],
-            "properties": {
-            },
-            "additionalProperties": true
-        }
+
     },
     "additionalProperties": true
 }
