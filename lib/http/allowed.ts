@@ -16,7 +16,12 @@ const isRequestAllowed = (
           case "INSERT":
           case "UPDATE":
           case "DELETE":
-            return session ? handler(req, res) : res.status(403).json({ error: "Forbidden" });
+            if (session) {
+              return handler(req, res);
+            } else {
+              res.status(403).json({ error: "Forbidden" });
+            }
+            break;
           default:
             res.status(403).json({ error: "Forbidden" });
         }
