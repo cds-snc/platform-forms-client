@@ -9,7 +9,6 @@ const isRequestAllowed = (
     try {
       const session = await getSession({ req });
       const requestBody = JSON.parse(req.body);
-      const forbidden = res.status(403).json({ error: "Forbidden" });
       if (requestBody.method && methods.includes(requestBody.method)) {
         switch (requestBody.method) {
           case "GET":
@@ -17,12 +16,12 @@ const isRequestAllowed = (
           case "INSERT":
           case "UPDATE":
           case "DELETE":
-            return session ? handler(req, res) : forbidden;
+            return session ? handler(req, res) : res.status(403).json({ error: "Forbidden" });
           default:
-            return forbidden;
+            res.status(403).json({ error: "Forbidden" });
         }
       } else {
-        return forbidden;
+        res.status(403).json({ error: "Forbidden" });
       }
     } catch {
       res.status(500).json({ error: "Malformed API Request" });
