@@ -3,13 +3,17 @@ import React from "react";
 import crypto from "crypto";
 
 //import { useFlag } from "../lib/hooks/flags";
+let scriptHashes = [];
+let externalScripts = [];
 
 function getCsp() {
   let csp = ``;
+  csp += `object-src 'none';`;
   csp += `base-uri 'self';`;
   csp += `form-action 'self';`;
   csp += `default-src 'self';`;
-  csp += `style-src 'self' fonts.googleapis.com data:;`;
+  csp += `script-src 'self' 'strict-dynamic' ${scriptHashes.join(" ")} http: https:;`;
+  csp += `style-src 'self' fonts.googleapis.com 'unsafe-inline' data:;`;
   csp += `img-src 'self' https: data:;`;
   csp += `font-src 'self' fonts.gstatic.com;`;
   csp += `frame-src www.googletagmanager.com;`;
@@ -30,49 +34,56 @@ const googleTagManagerScript = `
 //const HeadCSP = process.env.NODE_ENV !== "production" ? StrictStaticCSP : Head;
 
 const cspHashOf = (text) => {
+  console.warn("Hashes being computed");
   const hash = crypto.createHash("sha256");
   hash.update(text);
   return `'sha256-${hash.digest("base64")}'`;
 };
-let inlineJs = [];
-let inlineJsHashed = [];
-let sourceJsFiles = [];
 
 class StrictStaticCSP extends Head {
   constructor() {
     super();
   }
-  getDynamicChunks(files) {
-    const { dynamicImports } = this.context;
-    sourceJsFiles = dynamicImports
-      .filter((file) => /\.js$/.test(file))
-      .map((jsFile) => {
-        return `'/_next/${encodeURI(jsFile)}'`;
-      });
-    return super.getDynamicChunks(files);
+
+  getExternalScripts() {
+    const scriptProps = [];
+    React.Children.forEach(this.props?.children, (child) => {
+      if (child?.type === "script") {
+        scriptProps.push({
+          src: child.props.src,
+          async: true,
+          crossOrigin: child?.props?.crossOrigin,
+          defer: child?.props?.defer,
+          nonce: child?.props?.nonce,
+        });
+        externalScripts.push(child.props.src);
+      } else {
+        return child;
+      }
+    });
+    return scriptProps;
+  }
+  getInternalScripts(files) {
+    const scripts = super.getScripts(files);
+
+    return scripts.map((script) => {
+      const { src, async, crossOrigin = "", defer = "", nonce = "" } = script?.props;
+      return { src, async, crossOrigin, defer, nonce };
+    });
   }
 
   getScripts(files) {
-    const { allFiles } = files;
-    const jsFiles = allFiles
-      .filter((file) => /\.js$/.test(file))
-      .map((jsFile) => {
-        return `'/_next/${encodeURI(jsFile)}'`;
-      });
-    const { buildManifest, __NEXT_DATA__ } = this.context;
-    const { lowPriorityFiles } = buildManifest;
-    const jsFiles2 = lowPriorityFiles.map((jsFile) => {
-      return `'/_next/${encodeURI(jsFile)}'`;
-    });
-    const jsFiles3 = jsFiles.concat(jsFiles2);
-    const nextJsFiles = sourceJsFiles.concat(jsFiles3);
-    const nextJsSPA = `var scripts = [${nextJsFiles.join()}]
-    scripts.forEach(function(scriptUrl) {
+    const scriptProps = [];
+    scriptProps.push(...this.getInternalScripts(files));
+    scriptProps.push(...this.getExternalScripts());
+    const nextJsSPA = `var scripts = ${JSON.stringify(scriptProps)}
+    scripts.forEach(function(script) {
       var s = document.createElement('script')
-      s.src = scriptUrl
-      s.async = false // to preserve execution order
-      s.defer = true
-      document.head.appendChild(s)
+      s.src = script.src
+      s.async = script.async
+      s.defer = script.defer
+      s.nonce = script.nonce
+       document.head.appendChild(s)
     })`;
     const nextJsSPAScript = React.createElement("script", {
       defer: true,
@@ -80,21 +91,36 @@ class StrictStaticCSP extends Head {
         __html: nextJsSPA,
       },
     });
-    inlineJsHashed = inlineJs.map((inlineJs) => {
-      return cspHashOf(inlineJs);
-    });
+    this.context.headTags.push(nextJsSPAScript);
+    scriptHashes.push(cspHashOf(nextJsSPA));
+    return [];
+  }
+
+  render() {
+    const _head = super.render();
 
     const cspPolicy = React.createElement("meta", {
+      key: "CSP_NEXT_",
       httpEquiv: "Content-Security-Policy",
-      content: `${getCsp()} script-src 'strict-dynamic' ${cspHashOf(
-        nextJsSPA
-      )} ${inlineJsHashed.join(" ")} 'unsafe-inline' http: https:;`,
-      slug: __NEXT_DATA__.page,
+      content: `${getCsp()}`,
     });
-    this.context.headTags.unshift(cspPolicy);
-    this.context.headTags.push(nextJsSPAScript);
 
-    return super.getScripts(files);
+    // Remove original external script declarations
+    const pruneHead = (node) => {
+      return React.Children.map(node, (child) => {
+        if (child?.type === "script" && externalScripts.includes(child.props?.src)) {
+          return;
+        } else if (child?.props?.children) {
+          pruneHead(child.props.children);
+        }
+        return child;
+      });
+    };
+
+    return React.cloneElement(_head, { key: _head.props.key }, [
+      cspPolicy,
+      ...pruneHead(_head.props.children),
+    ]);
   }
 }
 
@@ -119,17 +145,10 @@ class MyDocument extends Document {
             </React.Fragment>
           )}
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-          <link rel="preconnect" href="https://fonts.gstatic.com/" crossOrigin="" />
-          {
-            // eslint-disable-next-line @next/next/google-font-display
-            <link
-              href="https://fonts.googleapis.com/css?family=Lato:400,700%7CNoto+Sans:400,700&amp;display=fallback"
-              rel="stylesheet"
-            />
-          }
+          <link
+            href="https://fonts.googleapis.com/css?family=Lato:400,700%7CNoto+Sans:400,700&amp;display=swap"
+            rel="stylesheet"
+          />
         </StrictStaticCSP>
         <body>
           <Main />
