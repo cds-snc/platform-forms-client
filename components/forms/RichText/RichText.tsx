@@ -8,6 +8,16 @@ interface RichTextProps {
   className?: string;
 }
 
+// override the default h1 element such that to place a tabindex value of -1 to make it
+// able to be programmatically focusable
+const H1 = ({ children, ...props }: { children: React.ReactElement }) => {
+  return (
+    <h1 {...props} tabIndex={-1}>
+      {children}
+    </h1>
+  );
+};
+
 export const RichText = (props: RichTextProps): React.ReactElement | null => {
   const { children, className, id } = props;
   if (!children) {
@@ -17,7 +27,9 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   const classes = classnames("gc-richText", className);
   return (
     <div data-testid="richText" className={classes} id={id}>
-      <Markdown options={{ forceBlock: true }}>{children}</Markdown>
+      <Markdown options={{ forceBlock: true, overrides: { h1: { component: H1 } } }}>
+        {children}
+      </Markdown>
     </div>
   );
 };
