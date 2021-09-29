@@ -11,10 +11,22 @@
         "form",
         "submission",
         "internalTitleEn",
-        "internalTitleFr"
+        "internalTitleFr",
+        "publishingStatus"
     ],
     "properties": {
-
+        "internalTitleEn": {
+            "$id": "#/properties/internalTitleEn",
+            "type": "string"
+        },
+        "internalTitleFr": {
+            "$id": "#/properties/internalTitleFr",
+            "type": "string"
+        },
+        "publishingStatus": {
+            "$id": "#/properties/publishingStatus",
+            "type": "boolean"
+        }
     },
     "additionalProperties": true
 }
