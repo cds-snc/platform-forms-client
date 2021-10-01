@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
@@ -27,7 +27,9 @@ const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undef
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1 className="gc-h1" tabIndex={-1}>
+        {t("title")}
+      </h1>
       <div>
         <p>{t("body")}</p>
       </div>
@@ -45,6 +47,11 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
     formConfig && formConfig.endPage
       ? formConfig.endPage[getProperty("description", language)]
       : "";
+
+  // autoFocus h1 element of page to ensure its read out
+  useEffect(() => {
+    document.getElementsByTagName("h1").item(0)?.focus();
+  });
 
   return (
     <>
