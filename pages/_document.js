@@ -12,9 +12,7 @@ function getCsp() {
   csp += `base-uri 'self';`;
   csp += `form-action 'self';`;
   csp += `default-src 'self';`;
-  csp += `script-src 'self' 'strict-dynamic' ${scriptHashes.join(
-    " "
-  )} 'unsafe-inline' http: https:;`;
+  csp += `script-src 'self' 'strict-dynamic' ${scriptHashes.join(" ")} 'unsafe-inline' https:;`;
   csp += `style-src 'self' fonts.googleapis.com 'unsafe-inline' data:;`;
   csp += `img-src 'self' https: data:;`;
   csp += `font-src 'self' fonts.gstatic.com;`;
