@@ -20,7 +20,7 @@ function getCsp() {
   return csp;
 }
 
-const googleTagManagerScript = `
+const googleTagManager = `
                 <!-- Google Tag Manager -->
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -30,8 +30,12 @@ const googleTagManagerScript = `
                 <!-- End Google Tag Manager -->
               `;
 
-// NextStrictCSP.inlineJs = [googleTagManagerScript];
-//const HeadCSP = process.env.NODE_ENV !== "production" ? StrictStaticCSP : Head;
+const GoogleTagScript = React.createElement("script", {
+  defer: true,
+  dangerouslySetInnerHTML: {
+    __html: googleTagManager,
+  },
+});
 
 const cspHashOf = (text) => {
   console.warn("Hashes being computed");
@@ -93,6 +97,7 @@ class StrictStaticCSP extends Head {
     });
     this.context.headTags.push(nextJsSPAScript);
     scriptHashes.push(cspHashOf(nextJsSPA));
+    scriptHashes.push(cspHashOf(googleTagManager));
     return [];
   }
 
@@ -124,32 +129,27 @@ class StrictStaticCSP extends Head {
   }
 }
 
+// Actual main Document being rendered
+
+const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
-    //const googleTag = useFlag("googleAnalytics");
-    return { ...initialProps, googleTag: false };
+    const currentUrl = ctx.req?.headers?.host;
+    return { ...initialProps, currentUrl: currentUrl };
   }
 
   render() {
     return (
       <Html>
-        <StrictStaticCSP>
-          {this.googleTag && (
-            <React.Fragment>
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: googleTagManagerScript,
-                }}
-              />
-            </React.Fragment>
-          )}
+        <CustomHead>
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           <link
             href="https://fonts.googleapis.com/css?family=Lato:400,700%7CNoto+Sans:400,700&amp;display=swap"
             rel="stylesheet"
           />
-        </StrictStaticCSP>
+          {this.props.currentUrl !== "forms-formulaires.alpha.canada.ca" ? GoogleTagScript : null}
+        </CustomHead>
         <body>
           <Main />
           <NextScript />
