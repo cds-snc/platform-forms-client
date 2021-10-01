@@ -38,7 +38,6 @@ const GoogleTagScript = React.createElement("script", {
 });
 
 const cspHashOf = (text) => {
-  console.warn("Hashes being computed");
   const hash = crypto.createHash("sha256");
   hash.update(text);
   return `'sha256-${hash.digest("base64")}'`;
