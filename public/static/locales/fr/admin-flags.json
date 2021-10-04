@@ -18,10 +18,6 @@
       "title": "Coffre de soumission",
       "description": "Une page qui affiche une liste des soumissions stockées dans le coffre-fort pour les formulaires activé avec cette fonctionnalité"
     },
-    "googleAnalytics": {
-      "title": "Google Analytics",
-      "description": "Ajoute une entrée Google Analytics à chaque page"
-    },
     "unpublishedForms": {
       "title": "Formulaires non publiés",
       "description": "Autoriser l'accès et le remplissage de formulaires qui n'ont pas de statut publié"

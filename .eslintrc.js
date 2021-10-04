@@ -28,6 +28,7 @@ module.exports = {
     "plugin:jsx-a11y/recommended",
     "plugin:cypress/recommended",
     "plugin:prettier/recommended",
+    "plugin:@next/next/recommended",
     "prettier",
   ],
   parserOptions: {
