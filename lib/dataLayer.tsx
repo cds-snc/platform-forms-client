@@ -306,22 +306,22 @@ function _rehydrateFormResponses(payload: Submission) {
           break;
         }
         case "dynamicRow": {
-          const filteredResponses = Object.entries(responses).filter(([key]) => {
-            const splitKey = key.split("-");
-            return splitKey.length > 1 && splitKey[0] === question.id.toString();
-          });
+          const filteredResponses: [string, Response][] = Object.entries(responses)
+            .filter(([key]) => {
+              const splitKey = key.split("-");
+              return splitKey.length > 1 && splitKey[0] === question.id.toString();
+            })
+            // Here is a trick to catch and unpack checkbox type of reponses
+            // We will need some kind of overhaul on how we pass responses from functions to functions
+            .map(([key, value]) => {
+              if ((value as string).startsWith('{"value"')) {
+                return [key, _rehydrateCheckBoxResponse(value)];
+              } else {
+                return [key, value];
+              }
+            });
 
-          // Here is a trick to catch and unpack checkbox type of reponses
-          // We will need some kind of overhaul on how we pass responses from functions to functions
-          const alteredResponses: [string, Response][] = filteredResponses.map(([key, value]) => {
-            if ((value as string).startsWith('{"value"')) {
-              return [key, _rehydrateCheckBoxResponse(value)];
-            } else {
-              return [key, value];
-            }
-          });
-
-          const dynamicRowResponses = _rehydrateDynamicRowResponses(alteredResponses);
+          const dynamicRowResponses = _rehydrateDynamicRowResponses(filteredResponses);
           rehydratedResponses[question.id] = dynamicRowResponses;
           break;
         }
@@ -340,7 +340,7 @@ function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
   let currentResponse: Responses = {};
   let currentResponseIndex: string | undefined = undefined;
 
-  responses.forEach(([key, value]) => {
+  for (const [key, value] of responses) {
     const splitKey = key.split("-");
     const responseIndex = splitKey[1];
     const responseSubIndex = splitKey[2];
@@ -356,7 +356,7 @@ function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
       currentResponse = {};
       currentResponse[responseSubIndex] = value;
     }
-  });
+  }
 
   rehydratedResponses.push(currentResponse);
 
@@ -475,14 +475,15 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
   const formData = new FormData();
   form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
-  form.elements.forEach((element) => {
+  for (const element of form.elements) {
     const result = _handleDynamicRowTypeIfNeeded(element, values[element.id]);
-    result.forEach((tuple) => {
+    for (const tuple of result) {
       formData.append(tuple[0], tuple[1]);
-    });
-  });
+    }
+  }
 
   formData.append("formID", form.formID);
+
   return formData;
 }
 
@@ -498,21 +499,32 @@ function _handleDynamicRowTypeIfNeeded(
     );
 
     const responses = value as Responses[];
-    return responses
-      .map((response, responseIndex) => {
-        return subElements
-          .map((subElement, subElementIndex) => {
-            const result = _handleFormDataType(subElement, response[subElementIndex]);
-            return result
-              ? ([[`${element.id}-${responseIndex}-${subElementIndex}`, result[1]]] as [
-                  string,
-                  string | Blob
-                ][])
-              : [];
-          })
-          .flat();
-      })
-      .flat();
+
+    /**
+     * We are creating a new data structure (to be passed to the submit API) from the multiple responses that could have been entered
+     * for the dynamic row component we are currently processing. */
+    return (
+      responses
+        .map((response, responseIndex) => {
+          return subElements
+            .map((subElement, subElementIndex) => {
+              const result = _handleFormDataType(subElement, response[subElementIndex]);
+              /**
+               * We are wrapping the result in an array so that if the response is undefined we can return an empty array that will then
+               * disappear once we call the `flat` function at the end.
+               */
+              return result
+                ? ([[`${element.id}-${responseIndex}-${subElementIndex}`, result[1]]] as [
+                    string,
+                    string | Blob
+                  ][])
+                : [];
+            })
+            .flat();
+        })
+        // `flat` function is needed because we use a `map` in a `map`.
+        .flat()
+    );
   } else {
     const result = _handleFormDataType(element, value);
     return result ? [result] : [];
