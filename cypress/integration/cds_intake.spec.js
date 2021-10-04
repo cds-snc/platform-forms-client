@@ -42,5 +42,6 @@ describe("CDS Intake Form functionality", { baseUrl: "http://localhost:3000" }, 
   it("Submit the Form", () => {
     cy.get("button").contains("Submit").click();
     cy.url().should("include", "/confirmation");
+    cy.get("h1").should("have.focus");
   });
 });
