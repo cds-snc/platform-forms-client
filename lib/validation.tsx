@@ -115,10 +115,9 @@ const isFieldResponseValid = (
       if (validator.required && typedValue && typedValue.file === null)
         return t("input-validation.required");
       // Size limit is 8 MB
-      if (typedValue && typedValue.size > 8000000) return t("input-validation.file-size-too-large");
+      if (typedValue?.size > 8000000) return t("input-validation.file-size-too-large");
       if (
-        typedValue &&
-        typedValue.file &&
+        typedValue?.file &&
         acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
           undefined
       ) {
@@ -127,27 +126,51 @@ const isFieldResponseValid = (
       break;
     }
     case "dynamicRow":
+      /*Caution :
+        this is the second iteration of dynamic rows's validator does not work well when rows are added after a first rendering. 
+        Reason: there's no clear way of mapping out form's values and its configuration (ids,subId) i.e
+        elements are not linked to its value (formik).
+      */
       // in the case of the dynamicRow we want to validate the subElements
       if (formElement.properties.subElements) {
-        // get the subElements from the dynamic row element
-        const subElements = formElement.properties.subElements;
-        // set up object to store results
+        //Caution: hack, we want to get rid of richtext so that values array might match subelements.
+        const subElements = formElement.properties.subElements.filter(
+          (subElement) => subElement.type !== "richText"
+        );
+        //set up object to store results
         const errors: Responses = {};
-        for (const index in subElements) {
-          const subElement = subElements[index];
+
+        for (const key in subElements) {
+          const subElement = subElements[key];
           const subElementId = extractSubElementId(subElement);
           if (subElement.properties.validation && value) {
-            const temValue = value as any;
-            const subElementValues = temValue["0"][parseInt(subElementId)];
-            // get the results for the subElement
-            const result = isFieldResponseValid(
-              subElementValues,
-              subElement.type,
-              subElement,
-              subElement.properties.validation,
-              t
-            );
-
+            const subElementValues = value[parseInt(subElementId)];
+            let result;
+            //single value object
+            if (subElementValues === undefined || Object.keys(subElementValues).length <= 1) {
+              result = isFieldResponseValid(
+                subElementValues ? subElementValues[subElementId] : subElementValues,
+                subElement.type,
+                subElement,
+                subElement.properties.validation,
+                t
+              );
+            } else {
+              // A subElement has a list/object of values.
+              for (const index in subElementValues) {
+                //we have to rely on the subElement index to guess the order.
+                if (index === key) {
+                  result = isFieldResponseValid(
+                    subElementValues[subElementId],
+                    subElement.type,
+                    subElement,
+                    subElement.properties.validation,
+                    t
+                  );
+                  break;
+                }
+              }
+            }
             if (result && subElement.subId) {
               errors[subElement.subId] = result as string;
             }
