@@ -18,10 +18,6 @@
       "title": "Submission Vault",
       "description": "A page that displays a list of submissions stored in the Vault for Forms enabled with that feature"
     },
-    "googleAnalytics": {
-      "title": "Google Analytics",
-      "description": "Adds a Google Analytics entry to each page"
-    },
     "unpublishedForms": {
       "title": "Unpublished Forms",
       "description": "Allow the access to and completion of forms that do not have a published status"
