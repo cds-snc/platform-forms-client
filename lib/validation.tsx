@@ -126,56 +126,31 @@ const isFieldResponseValid = (
       break;
     }
     case "dynamicRow":
-      /*Caution :
-        this is the second iteration of dynamic rows's validator does not work well when rows are added after a first rendering. 
-        Reason: there's no clear way of mapping out form's values and its configuration (ids,subId) i.e
-        elements are not linked to its value (formik).
-      */
-      // in the case of the dynamicRow we want to validate the subElements
       if (formElement.properties.subElements) {
-        //Caution: hack, we want to get rid of richtext so that values array might match subelements.
-        const subElements = formElement.properties.subElements.filter(
-          (subElement) => subElement.type !== "richText"
-        );
         //set up object to store results
         const errors: Responses = {};
-
-        for (const key in subElements) {
-          const subElement = subElements[key];
-          const subElementId = extractSubElementId(subElement);
-          if (subElement.properties.validation && value) {
-            const subElementValues = value[parseInt(subElementId)];
-            let result;
-            //single value object
-            if (subElementValues === undefined || Object.keys(subElementValues).length <= 1) {
-              result = isFieldResponseValid(
-                subElementValues ? subElementValues[subElementId] : subElementValues,
-                subElement.type,
-                subElement,
-                subElement.properties.validation,
-                t
-              );
-            } else {
-              // A subElement has a list/object of values.
-              for (const index in subElementValues) {
-                //we have to rely on the subElement index to guess the order.
-                if (index === key) {
-                  result = isFieldResponseValid(
-                    subElementValues[subElementId],
-                    subElement.type,
-                    subElement,
-                    subElement.properties.validation,
-                    t
-                  );
-                  break;
+        for (const subElement of formElement.properties.subElements) {
+          //Getting parent and sub element id
+          const { parentId, childId } = extractSubElementId(subElement);
+          for (const key in Object.entries(value)) {
+            if (key === parentId) {
+              if (subElement.properties.validation && subElement.subId) {
+                const validatorResult = isFieldResponseValid(
+                  value[parentId][childId],
+                  subElement.type,
+                  subElement,
+                  subElement.properties.validation,
+                  t
+                );
+                if (validatorResult) {
+                  errors[subElement.subId] = validatorResult;
                 }
               }
-            }
-            if (result && subElement.subId) {
-              errors[subElement.subId] = result as string;
+              break;
             }
           }
         }
+
         return errors;
       }
       break;
@@ -274,18 +249,14 @@ export const setFocusOnErrorMessage = (
 
 /**
  *
- * @param elem Compute dynamic row sub element's ids.
+ * @param element Compute dynamic row sub element's ids.
  * @returns
  */
-export function extractSubElementId(element: FormElement): string {
+export function extractSubElementId(element: FormElement): { parentId: string; childId: string } {
   if (!element) throw "Invalid formElement";
   const elementIdArray = element.subId?.split("."); //i.e "7.0.1" => ["7","0","1"]
   if (elementIdArray && elementIdArray.length > 2) {
-    if (elementIdArray[1] && parseInt(elementIdArray[1]) > 0) {
-      return elementIdArray[1]; // ["7","0","1"] => "0"
-    } else {
-      return elementIdArray[2]; // last digit "1"
-    }
+    return { parentId: elementIdArray[1], childId: elementIdArray[2] };
   }
   throw "Invalid id";
 }
