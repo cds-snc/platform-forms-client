@@ -132,11 +132,12 @@ const isFieldResponseValid = (
         for (const subElement of formElement.properties.subElements) {
           //Getting parent and sub element id
           const { parentId, childId } = extractSubElementId(subElement);
-          for (const key in Object.entries(value as Record<string, unknown>)) {
+          const values = value as Record<string, any>;
+          for (const key in Object.entries(values)) {
             if (key === parentId) {
               if (subElement.properties.validation && subElement.subId) {
                 const validatorResult = isFieldResponseValid(
-                  value[parentId][childId],
+                  values[parentId][childId],
                   subElement.type,
                   subElement,
                   subElement.properties.validation,
