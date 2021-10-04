@@ -122,7 +122,9 @@ class StrictStaticCSP extends Head {
         if (child?.type === "script" && externalScripts.includes(child.props?.src)) {
           return;
         } else if (child?.props?.children) {
-          pruneHead(child.props.children);
+          return React.cloneElement(child, { key: child.props?.key }, [
+            ...pruneHead(child.props.children),
+          ]);
         }
         return child;
       });
