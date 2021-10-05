@@ -129,29 +129,34 @@ const isFieldResponseValid = (
       if (formElement.properties.subElements) {
         //set up object to store results
         const errors: Responses = {};
-        for (const subElement of formElement.properties.subElements) {
-          //Getting parent and sub element id
-          const { parentId, childId } = extractSubElementId(subElement);
-          const values = value as Record<string, any>; // must be a way to not use any here.
-          for (const key in Object.entries(values)) {
-            if (key === parentId) {
-              if (subElement.properties.validation && subElement.subId) {
-                const validatorResult = isFieldResponseValid(
-                  values[parentId][childId],
-                  subElement.type,
-                  subElement,
-                  subElement.properties.validation,
-                  t
-                );
-                if (validatorResult) {
-                  errors[subElement.subId] = validatorResult;
-                }
+        // loop over rows of values
+        // need to create new variable to typecast value as you cannot
+        // call a method on a typecasted variable in the same line
+        const values = value as Array<Record<string, string | Array<string>>>;
+        for (const [rowValueIndex, rowValue] of values.entries()) {
+          for (const [k, v] of Object.entries(rowValue)) {
+            // get the relevant sub-element based on the current key which is the absolute
+            // index of the sub-element definition in the form configuration
+            const subElement = formElement.properties.subElements[parseInt(k)];
+            // if the sub element has validation enabled and a subId defined then we
+            // can validate
+            if (subElement.properties.validation && subElement.subId) {
+              const validatorResult = isFieldResponseValid(
+                v,
+                subElement.type,
+                subElement,
+                subElement.properties.validation,
+                t
+              );
+              if (validatorResult) {
+                // Split the sub id since it's dynamic. The first value in the array is static
+                // The second value in the array is the row. The third value in the array is the subElement order
+                const splitSubId = subElement.subId.split(".");
+                errors[`${splitSubId[0]}.${rowValueIndex}.${splitSubId[2]}`] = validatorResult;
               }
-              break;
             }
           }
         }
-
         return errors;
       }
       break;
@@ -247,17 +252,3 @@ export const setFocusOnErrorMessage = (
     }
   }
 };
-
-/**
- *
- * @param element Compute dynamic row sub element's ids.
- * @returns
- */
-export function extractSubElementId(element: FormElement): { parentId: string; childId: string } {
-  if (!element) throw "Invalid formElement";
-  const elementIdArray = element.subId?.split("."); //i.e "7.0.1" => ["7","0","1"]
-  if (elementIdArray && elementIdArray.length > 2) {
-    return { parentId: elementIdArray[1], childId: elementIdArray[2] };
-  }
-  throw "Invalid id";
-}
