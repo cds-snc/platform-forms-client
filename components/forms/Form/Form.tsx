@@ -115,7 +115,6 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
     } catch (err) {
       logMessage.error(err);
     } finally {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "form_submission_trigger",
