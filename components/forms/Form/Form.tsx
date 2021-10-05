@@ -113,7 +113,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
     try {
       await submitToAPI(values as Responses, formikBag);
     } catch (err) {
-      logMessage.error(err);
+      logMessage.error(err as Error);
     } finally {
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
