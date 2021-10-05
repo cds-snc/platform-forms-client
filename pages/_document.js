@@ -101,9 +101,18 @@ class StrictStaticCSP extends Head {
       },
     });
     this.context.headTags.push(nextJsSPAScript);
-    scriptHashes.push(cspHashOf(nextJsSPA), cspHashOf(googleTagManager));
+    // Don't add the hashes again if they already exist in the array
+    this.addHashes(cspHashOf(nextJsSPA));
+    this.addHashes(cspHashOf(googleTagManager));
+
     // return an empty array so NextJS doesn't duplicate the addition of the scripts to Head.
     return [];
+  }
+
+  addHashes(hash) {
+    if (!scriptHashes.includes(hash)) {
+      scriptHashes.push(hash);
+    }
   }
 
   render() {
