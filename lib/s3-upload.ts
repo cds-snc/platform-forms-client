@@ -92,7 +92,7 @@ const deleteObject = async (fileKey: string): Promise<void> => {
   try {
     await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileKey }));
   } catch (error) {
-    logMessage.error(error);
+    logMessage.error(error as Error);
   }
 };
 
