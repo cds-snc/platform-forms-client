@@ -2,6 +2,25 @@ const path = require("path");
 const { i18n } = require("./next-i18next.config");
 const localesDir = path.resolve("public/static/locales");
 
+const securityHeaders = [
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  {
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
+  },
+  {
+    key: "X-Frame-Options",
+    value: "DENY",
+  },
+  {
+    key: "X-Content-Type-Options",
+    value: "nosniff",
+  },
+];
+
 module.exports = {
   i18n,
   sassOptions: {
@@ -43,5 +62,14 @@ module.exports = {
       use: [{ loader: "babel-loader" }],
     });
     return config;
+  },
+  async headers() {
+    return [
+      {
+        // Apply these headers to all routes in your application.
+        source: "/:path*",
+        headers: securityHeaders,
+      },
+    ];
   },
 };
