@@ -5,6 +5,7 @@ import {
   InnerFormProps,
   Responses,
   ValidationProperties,
+  FormElement,
 } from "./types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
@@ -77,9 +78,10 @@ const scrollErrorInView = (id: string) => {
 const isFieldResponseValid = (
   value: unknown,
   componentType: string,
+  formElement: FormElement,
   validator: ValidationProperties,
   t: TFunction
-): string | null => {
+): string | null | Responses => {
   switch (componentType) {
     case "textField": {
       const typedValue = value as string;
@@ -106,26 +108,63 @@ const isFieldResponseValid = (
       break;
     }
     case "fileInput": {
+      //TODO need refactoring.
       const typedValue = value as { file: File; src: FileReader; name: string; size: number };
-      if (validator.required && typedValue.file === null) return t("input-validation.required");
+      if ((validator.required && typedValue === undefined) || typedValue === null)
+        return t("input-validation.required");
+      if (validator.required && typedValue && typedValue.file === null)
+        return t("input-validation.required");
       // Size limit is 8 MB
-      if (typedValue.size > 8000000) return t("input-validation.file-size-too-large");
+      if (typedValue?.size > 8000000) return t("input-validation.file-size-too-large");
       if (
+        typedValue?.file &&
         acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
-        undefined
+          undefined
       ) {
         return t("input-validation.file-type-invalid");
       }
       break;
     }
-    case "dynamicRow": {
-      // Not implemented yet
+    case "dynamicRow":
+      if (formElement.properties.subElements) {
+        //set up object to store results
+        const errors: Responses = {};
+        // loop over rows of values
+        // need to create new variable to typecast value as you cannot
+        // call a method on a typecasted variable in the same line
+        const values = value as Array<Record<string, string | Array<string>>>;
+        for (const [rowValueIndex, rowValue] of values.entries()) {
+          for (const [k, v] of Object.entries(rowValue)) {
+            // get the relevant sub-element based on the current key which is the absolute
+            // index of the sub-element definition in the form configuration
+            const subElement = formElement.properties.subElements[parseInt(k)];
+            // if the sub element has validation enabled and a subId defined then we
+            // can validate
+            if (subElement.properties.validation && subElement.subId) {
+              const validatorResult = isFieldResponseValid(
+                v,
+                subElement.type,
+                subElement,
+                subElement.properties.validation,
+                t
+              );
+              if (validatorResult) {
+                // Split the sub id since it's dynamic. The first value in the array is static
+                // The second value in the array is the row. The third value in the array is the subElement order
+                const splitSubId = subElement.subId.split(".");
+                errors[`${splitSubId[0]}.${rowValueIndex}.${splitSubId[2]}`] = validatorResult;
+              }
+            }
+          }
+        }
+        return errors;
+      }
       break;
-    }
+    case "richText":
+      break;
     default:
       throw `Validation for component ${componentType} is not handled`;
   }
-
   return null;
 };
 
@@ -135,7 +174,7 @@ const isFieldResponseValid = (
  * @param props
  */
 export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
-  const errors: Responses = {};
+  let errors: Responses = {};
 
   for (const item in values) {
     const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
@@ -146,19 +185,22 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
       const result = isFieldResponseValid(
         values[item],
         formElement.type,
+        formElement,
         formElement.properties.validation,
         props.t
       );
-
-      if (result) {
+      if (result && typeof result === "object") {
+        errors = {
+          ...errors,
+          ...result,
+        };
+      } else if (result) {
         errors[item] = result;
       }
     }
   }
-
   return errors;
 };
-
 /**
  * getErrorList is called to show validation errors at the top of the Form
  * @param props
