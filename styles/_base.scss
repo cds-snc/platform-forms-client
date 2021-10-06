@@ -9,7 +9,7 @@ main {
 }
 
 .gc-richText {
-  @apply w-5/6 xl:w-full;
+  @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
 }
 
 .gc-homepage {
