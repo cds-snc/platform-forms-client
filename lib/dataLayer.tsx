@@ -494,11 +494,8 @@ function _handleDynamicRowTypeIfNeeded(
   if (element.type === "dynamicRow") {
     if (element.properties.subElements === undefined) return [];
 
-    const subElements = element.properties.subElements.filter(
-      (element) => !["richText"].includes(element.type)
-    );
-
     const responses = value as Responses[];
+    const subElements = element.properties.subElements;
 
     /**
      * We are creating a new data structure (to be passed to the submit API) from the multiple responses that could have been entered
@@ -551,8 +548,9 @@ function _handleFormDataType(
         ? _handleFormDataArray(element.id.toString(), value as Array<string>)
         : _handleFormDataText(element.id.toString(), "");
     case "fileInput":
-      // file input
       return _handleFormDataFileInput(element.id.toString(), value as FileInputResponse);
+    case "richText":
+      return undefined;
   }
 }
 
