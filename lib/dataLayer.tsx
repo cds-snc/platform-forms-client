@@ -473,9 +473,12 @@ function handleTextResponse(title: string, response: string, collector: Array<st
 
 function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
   const formData = new FormData();
-  form.elements = form.elements.filter((element) => !["richText"].includes(element.type));
 
-  for (const element of form.elements) {
+  const formElementsWithoutRichTextComponents = form.elements.filter(
+    (element) => !["richText"].includes(element.type)
+  );
+
+  for (const element of formElementsWithoutRichTextComponents) {
     const result = _handleDynamicRowTypeIfNeeded(element, values[element.id]);
     for (const tuple of result) {
       formData.append(tuple[0], tuple[1]);
