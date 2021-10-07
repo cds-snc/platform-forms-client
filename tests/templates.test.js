@@ -91,7 +91,7 @@ describe("Test HTTP access scenarios", () => {
       user: { email: "a", name: "Delta", image: "c" },
     };
 
-    client.getSession.mockReturnValueOnce([mockSession, false]);
+    client.getSession.mockReturnValueOnce(mockSession);
 
     fetchMock.mockResponseOnce(JSON.stringify({ testing: 300 }));
     const { req, res } = createMocks({
