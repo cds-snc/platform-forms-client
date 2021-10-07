@@ -1,6 +1,6 @@
 import { createMocks } from "node-mocks-http";
 import templates from "../pages/api/templates";
-
+import client from "next-auth/client";
 import validFormTemplate from "./validFormTemplate.json";
 
 import fetchMock from "jest-fetch-mock";
@@ -86,6 +86,13 @@ describe("Test HTTP access scenarios", () => {
     fetchMock.enableMocks();
   });
   it("Allows Access if INSERT", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "a", name: "Delta", image: "c" },
+    };
+
+    client.getSession.mockReturnValueOnce([mockSession, false]);
+
     fetchMock.mockResponseOnce(JSON.stringify({ testing: 300 }));
     const { req, res } = createMocks({
       method: "POST",
@@ -101,6 +108,6 @@ describe("Test HTTP access scenarios", () => {
 
     await templates(req, res);
 
-    expect(res._getStatusCode()).toBe(200);
+    expect(res.statusCode).toBe(200);
   });
 });
