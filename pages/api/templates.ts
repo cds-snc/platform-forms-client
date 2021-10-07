@@ -2,7 +2,6 @@ import { crudTemplates } from "../../lib/dataLayer";
 import isRequestAllowed from "../../lib/http/allowed";
 import validate from "../../lib/jsonValidator/jsonValidator";
 import templatesSchema from "../../lib/jsonValidator/schemas/templates.schema.json";
-import { logMessage } from "../../lib/logger";
 import { getSession } from "next-auth/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -19,7 +18,6 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(500).json({ error: "Error on Server Side" });
     }
   } catch (err) {
-    logMessage.error(`${err}`);
     res.status(500).json({ error: "Malformed API Request" });
   }
 };
