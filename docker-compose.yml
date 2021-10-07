@@ -5,7 +5,7 @@ services:
     image: postgres:11.2
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: chummy
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     expose:

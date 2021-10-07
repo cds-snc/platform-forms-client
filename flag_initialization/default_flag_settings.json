@@ -1,7 +1,6 @@
 {
   "sandbox": false,
   "vault": false,
-  "googleAnalytics": false,
   "unpublishedForms": false,
   "submitToReliabilityQueue": false,
   "notifyPreview": false

@@ -154,7 +154,13 @@ const processFormData = async (
             const { isValid, key } = await pushFileToS3(fileOrArray);
             if (isValid) {
               uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
-              fields[_key] = key;
+              const splitKey = _key.split("-");
+              if (splitKey.length > 1) {
+                const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+                currentValue[Number(splitKey[1])][splitKey[2]] = key;
+              } else {
+                fields[_key] = key;
+              }
             }
           }
         } else if (Array.isArray(fileOrArray)) {
@@ -165,7 +171,13 @@ const processFormData = async (
               const { isValid, key } = await pushFileToS3(fileItem);
               if (isValid) {
                 uploadedFilesKeyUrlMapping.set(fileItem.name, key);
-                fields[`${_key}-${index}`] = key;
+                const splitKey = _key.split("-");
+                if (splitKey.length > 1) {
+                  const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+                  currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
+                } else {
+                  fields[`${_key}-${index}`] = key;
+                }
               }
             }
           });

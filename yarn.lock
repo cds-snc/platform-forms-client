@@ -2502,6 +2502,13 @@
   dependencies:
     glob "7.1.7"
 
+"@next/eslint-plugin-next@^11.1.2":
+  version "11.1.2"
+  resolved "https://registry.yarnpkg.com/@next/eslint-plugin-next/-/eslint-plugin-next-11.1.2.tgz#f26cf90bcb6cd2e4645e2ba253bbc9aaaa43a170"
+  integrity sha512-cN+ojHRsufr9Yz0rtvjv8WI5En0RPZRJnt0y16Ha7DD+0n473evz8i1ETEJHmOLeR7iPJR0zxRrxeTN/bJMOjg==
+  dependencies:
+    glob "7.1.7"
+
 "@next/polyfill-module@11.1.0":
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/@next/polyfill-module/-/polyfill-module-11.1.0.tgz#ee6b9117a1f9bb137479dfa51d5a9e38e066a62f"
@@ -10340,11 +10347,6 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js-utils@^8.10.2:
-  version "8.10.5"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js-utils/-/libphonenumber-js-utils-8.10.5.tgz#778cb7633c94e2524f08c3109a7450095b4e6727"
-  integrity sha512-VxpwgrAGps1p5avOVQVBTCpUQwkrJZqptV2DoTimY3VXTzm0EetbT73sWVTkg8FmreVmM2qwwFl7yqymdOkFug==
-
 lilconfig@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/lilconfig/-/lilconfig-2.0.3.tgz#68f3005e921dafbd2a2afb48379986aa6d2579fd"
@@ -12753,7 +12755,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.0.0, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -13119,17 +13121,6 @@ react-inspector@^5.1.0:
     is-dom "^1.0.0"
     prop-types "^15.0.0"
 
-react-int-phone-input-accessibility@^7.3.5:
-  version "7.3.5"
-  resolved "https://registry.yarnpkg.com/react-int-phone-input-accessibility/-/react-int-phone-input-accessibility-7.3.5.tgz#f0934dc6cbc735ce836477d11b7e225cd980f652"
-  integrity sha512-cm9DhD/XDXEHdsCDblRy5X8mXWGXwGCtKn0Ljk6zG3t9/18TN/D6YZv7KHGC7113LoJZ3uVYf2vKvGosu5JvBg==
-  dependencies:
-    classnames "^2.2.5"
-    libphonenumber-js-utils "^8.10.2"
-    prop-types "^15.6.1"
-    react-style-proptype "^3.0.0"
-    underscore.deferred "^0.4.0"
-
 react-is@17.0.2, react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -13188,13 +13179,6 @@ react-spinners@^0.11.0:
   integrity sha512-rDZc0ABWn/M1OryboGsWVmIPg8uYWl0L35jPUhr40+Yg+syVPjeHwvnB7XWaRpaKus3M0cG9BiJA+ZB0dAwWyw==
   dependencies:
     "@emotion/react" "^11.1.4"
-
-react-style-proptype@^3.0.0:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/react-style-proptype/-/react-style-proptype-3.2.2.tgz#d8e998e62ce79ec35b087252b90f19f1c33968a0"
-  integrity sha512-ywYLSjNkxKHiZOqNlso9PZByNEY+FTyh3C+7uuziK0xFXu9xzdyfHwg4S9iyiRRoPCR4k2LqaBBsWVmSBwCWYQ==
-  dependencies:
-    prop-types "^15.5.4"
 
 react-syntax-highlighter@^13.5.3:
   version "13.5.3"
@@ -15171,11 +15155,6 @@ unbox-primitive@^1.0.1:
     has-bigints "^1.0.1"
     has-symbols "^1.0.2"
     which-boxed-primitive "^1.0.2"
-
-underscore.deferred@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/underscore.deferred/-/underscore.deferred-0.4.0.tgz#2753de633b9ff7db601a2f3fa2af92b3dd290e6c"
-  integrity sha1-J1PeYzuf99tgGi8/oq+Ss90pDmw=
 
 underscore@^1.9.0:
   version "1.13.1"
