@@ -21,7 +21,7 @@ const bucketName: string =
 const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
   try {
     const data = await readStream2buffer(fs.createReadStream(file.path));
-    const objectKey = `form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}.${
+    const objectKey = `form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}/${
       file.name
     }`;
 
@@ -92,7 +92,7 @@ const deleteObject = async (fileKey: string): Promise<void> => {
   try {
     await s3Client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: fileKey }));
   } catch (error) {
-    logMessage.error(error);
+    logMessage.error(error as Error);
   }
 };
 
