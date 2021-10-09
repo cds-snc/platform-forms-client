@@ -48,7 +48,7 @@
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.2",
     "react-spinners": "^0.11.0",
-    "swr": "^0.5.6"
+    "swr": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
