@@ -71,7 +71,7 @@ describe("Test JSON validation scenarios", () => {
       user: { email: "a@b.com", name: "Testing Forms", image: "null" },
     };
 
-    client.getSession.mockReturnValueOnce([mockSession, false]);
+    client.getSession.mockReturnValueOnce(mockSession);
 
     fetchMock.mockResponseOnce(JSON.stringify({ testing: 300 }));
     const { req, res } = createMocks({
