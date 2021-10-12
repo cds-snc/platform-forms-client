@@ -71,7 +71,7 @@ const formConfig = {
 describe.each([
   ["en", "Add Row", "Item"],
   ["fr", "Ajouter Element", "Article"],
-])("Generate a dynamic row", (lang, buttonText, itemText) => {
+])("Generate a dynamic row", (lang, buttonText) => {
   afterEach(cleanup);
   describe("renders without errors", () => {
     test("...initialState", () => {
@@ -83,8 +83,6 @@ describe.each([
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
 
-      // Item has a title
-      expect(screen.getByText(itemText + " 1")).toBeInTheDocument();
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
       // All children are present in row 1
@@ -114,8 +112,6 @@ describe.each([
       );
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
       fireEvent.click(screen.getByRole("button", { name: buttonText }));
-      expect(screen.getByText(itemText + " 1")).toBeInTheDocument();
-      expect(screen.getByText(itemText + " 2")).toBeInTheDocument();
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
       // All children are present in row 1
