@@ -16,8 +16,8 @@ jest.mock("@aws-sdk/client-lambda", () => {
     LambdaClient: jest.fn(() => {
       return {
         send: jest.fn((command) => {
-          const encoder = new TextEncoder(),
-            decoder = new TextDecoder();
+          const encoder = new TextEncoder();
+          const decoder = new TextDecoder();
           const payload = JSON.parse(decoder.decode(command.Payload));
           const supported = ["GET", "UPDATE", "INSERT", "DELETE"];
 

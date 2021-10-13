@@ -1,14 +1,14 @@
 import { Schema, Validator } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export type validateOptions = {
+export type ValidateOptions = {
   jsonKey: string;
 };
 
 const validate = (
   schema: Schema,
   handler: (req: NextApiRequest, res: NextApiResponse) => void,
-  options: validateOptions
+  options: ValidateOptions
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
