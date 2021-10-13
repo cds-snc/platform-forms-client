@@ -20,15 +20,15 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
 
   const choices = choicesProps.map((choice, index) => {
     return type == "checkbox" ? (
-      <Checkbox {...choice} key={index} name={field.name}></Checkbox>
+      <Checkbox {...choice} key={index} name={field.name} className={className}></Checkbox>
     ) : (
-      <Radio {...choice} key={index} name={field.name}></Radio>
+      <Radio {...choice} key={index} name={field.name} className={className}></Radio>
     );
   });
 
   // map checkboxes
   return (
-    <Field component="div" data-testid={type} className={className} name={name}>
+    <Field component="div" data-testid={type} name={name}>
       {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       {choices}
     </Field>

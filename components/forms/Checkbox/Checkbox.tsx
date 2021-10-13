@@ -5,10 +5,10 @@ import { MultipleChoiceProps } from "../../../lib/types";
 export const Checkbox = (
   props: MultipleChoiceProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, label, required, name } = props;
+  const { id, label, required, name ,className } = props;
 
   return (
-    <div className="gc-input-checkbox">
+    <div className={"gc-input-checkbox" + `${className}`}>
       <Field
         className="gc-input-checkbox__input"
         id={id}

@@ -153,6 +153,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             type="checkbox"
             name={`${id}`}
             choicesProps={checkboxItems}
+            className="focus-group"
           ></MultipleChoiceGroup>
         </FormGroup>
       );

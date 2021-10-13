@@ -5,10 +5,10 @@ import { MultipleChoiceProps } from "../../../lib/types";
 export const Radio = (
   props: MultipleChoiceProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, label, required, name } = props;
+  const { id, label, required, name, className } = props;
 
   return (
-    <div className="gc-input-radio">
+    <div className={"gc-input-radio" + `${className}`}>
       <Field
         className="gc-radio__input"
         id={id}
