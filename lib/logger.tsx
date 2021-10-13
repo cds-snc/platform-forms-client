@@ -32,7 +32,7 @@ export const logger =
     try {
       value = f(...args);
     } catch (error) {
-      logMessage.error(error);
+      logMessage.error(error as Error);
       throw error;
     }
     // Add formatting for value being returned
