@@ -13,17 +13,13 @@ const isRequestAllowed = (
         switch (requestBody.method) {
           case "GET":
             return handler(req, res);
-          case "INSERT":
-          case "UPDATE":
-          case "DELETE":
+          default:
             if (session) {
               return handler(req, res);
             } else {
               res.status(403).json({ error: "Forbidden" });
             }
             break;
-          default:
-            res.status(403).json({ error: "Forbidden" });
         }
       } else {
         res.status(403).json({ error: "Forbidden" });

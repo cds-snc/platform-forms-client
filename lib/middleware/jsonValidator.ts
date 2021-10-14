@@ -11,6 +11,7 @@ const validate = (
   options: ValidateOptions
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
+    console.log("validate");
     try {
       if (req.method === "GET") {
         return handler(req, res);

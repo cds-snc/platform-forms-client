@@ -1,7 +1,7 @@
 import { crudTemplates } from "../../lib/dataLayer";
-import isRequestAllowed from "../../lib/http/allowed";
-import validate from "../../lib/jsonValidator/jsonValidator";
-import templatesSchema from "../../lib/jsonValidator/schemas/templates.schema.json";
+import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
+import validate from "../../lib/middleware/jsonValidator";
+import templatesSchema from "../../lib/middleware/schemas/templates.schema.json";
 import { getSession } from "next-auth/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
