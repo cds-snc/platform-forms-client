@@ -10,7 +10,7 @@ export const Radio = (
 
   return (
     <div className="gc-input-radio">
-      {ariaDescribedBy !== undefined ? (
+      {ariaDescribedBy ? (
         <Description id={id} className="gc-form-group-context">
           {ariaDescribedBy}
         </Description>

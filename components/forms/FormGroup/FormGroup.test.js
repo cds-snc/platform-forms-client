@@ -42,7 +42,7 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
           ? radioButtonData.properties.descriptionEn
           : radioButtonData.properties.descriptionFr;
 
-    // There are as many title as there are.
+    // Title are rendered
     screen.getAllByText(title).forEach((input) => {
       expect(input).toBeInTheDocument();
     });
@@ -51,7 +51,7 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
       expect(description).toHaveClass("gc-description");
     });
     expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
-    // Children are rendered. Containts
+    // Children are rendered.
     screen.getAllByText(title).forEach((child) => {
       expect(screen.getByRole("group")).toContainElement(child);
     });
