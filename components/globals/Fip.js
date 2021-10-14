@@ -26,13 +26,15 @@ const Fip = (props) => {
       ? formTheme[getProperty("logoTitle", i18n.language)]
       : t("fip.text");
 
+  const accessibilityLabel = t("fip.label");
+
   // Do not show the language toggle on the "splash" page
   const languageToggle = isSplashPage() ? null : <LanguageToggle />;
 
   return (
     <div data-testid="fip" className="gc-fip">
       <div className="canada-flag">
-        <a href={linkUrl} aria-label={logoTitle}>
+        <a href={linkUrl} aria-label={accessibilityLabel}>
           <img src={logo} alt={logoTitle} />
         </a>
       </div>
