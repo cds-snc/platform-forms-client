@@ -6756,7 +6756,14 @@ domexception@^2.0.1:
   dependencies:
     webidl-conversions "^5.0.0"
 
-domhandler@4.2.0, domhandler@^4.0.0, domhandler@^4.2.0:
+domhandler@4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-4.2.2.tgz#e825d721d19a86b8c201a35264e226c678ee755f"
+  integrity sha512-PzE9aBMsdZO8TK4BnuJwH0QT41wgMbRzuZrHUcpYncEjmQazq8QEaBWgLG7ZyC/DAZKEgglpIA6j4Qn/HmxS3w==
+  dependencies:
+    domelementtype "^2.2.0"
+
+domhandler@^4.0.0, domhandler@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/domhandler/-/domhandler-4.2.0.tgz#f9768a5f034be60a89a27c2e4d0f74eba0d8b059"
   integrity sha512-zk7sgt970kzPks2Bf+dwT/PLzghLnsivb9CcxkvR8Mzr66Olr0Ofd8neSbglHJHaHa2MadfoSdNlKYAaafmWfA==
@@ -8607,12 +8614,12 @@ hosted-git-info@^2.1.4:
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
   integrity sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
 
-html-dom-parser@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/html-dom-parser/-/html-dom-parser-1.0.1.tgz#5d147fed6656c12918edbcea4a423eefe8d0e715"
-  integrity sha512-uKXISKlHzB/l9A08jrs2wseQJ9b864ZfEdmIZskj10cuP6HxCOMHSK0RdluV8NVQaWs0PwefN7d8wqG3jR0IbQ==
+html-dom-parser@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/html-dom-parser/-/html-dom-parser-1.0.2.tgz#bb5ff844f214657d899aa4fb7b0a9e7d15607e96"
+  integrity sha512-Jq4oVkVSn+10ut3fyc2P/Fs1jqTo0l45cP6Q8d2ef/9jfkYwulO0QXmyLI0VUiZrXF4czpGgMEJRa52CQ6Fk8Q==
   dependencies:
-    domhandler "4.2.0"
+    domhandler "4.2.2"
     htmlparser2 "6.1.0"
 
 html-encoding-sniffer@^2.0.1:
@@ -8652,14 +8659,14 @@ html-parse-stringify@^3.0.1:
   dependencies:
     void-elements "3.1.0"
 
-html-react-parser@^1.2.8:
-  version "1.2.8"
-  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-1.2.8.tgz#6806984a5056417de38fc4b52145bd56b1b32d73"
-  integrity sha512-fPPbnMNbVuceyJARZTCu2/Ai7XbVsfncwVUl3IFpgV8BG7lv6hm+Z8NWXRgc2r1DXTf1wRnLaPDL4unbln/r+g==
+html-react-parser@^1.3.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-1.4.0.tgz#bf264f38b9fdf4d94e2120f6a39586c15cb81bd0"
+  integrity sha512-v8Kxy+7L90ZFSM690oJWBNRzZWZOQquYPpQt6kDQPzQyZptXgOJ69kHSi7xdqNdm1mOfsDPwF4K9Bo/dS5gRTQ==
   dependencies:
-    domhandler "4.2.0"
-    html-dom-parser "1.0.1"
-    react-property "1.0.1"
+    domhandler "4.2.2"
+    html-dom-parser "1.0.2"
+    react-property "2.0.0"
     style-to-js "1.1.0"
 
 html-tags@^3.1.0:
@@ -13166,10 +13173,10 @@ react-popper@^2.2.4:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-react-property@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-property/-/react-property-1.0.1.tgz#4ae4211557d0a0ae050a71aa8ad288c074bea4e6"
-  integrity sha512-1tKOwxFn3dXVomH6pM9IkLkq2Y8oh+fh/lYW3MJ/B03URswUTqttgckOlbxY2XHF3vPG6uanSc4dVsLW/wk3wQ==
+react-property@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-property/-/react-property-2.0.0.tgz#2156ba9d85fa4741faf1918b38efc1eae3c6a136"
+  integrity sha512-kzmNjIgU32mO4mmH5+iUyrqlpFQhF8K2k7eZ4fdLSOPFrD1XgEuSBv9LDEgxRXTMBqMd8ppT0x6TIzqE5pdGdw==
 
 react-refresh@0.8.3, react-refresh@^0.8.3:
   version "0.8.3"
