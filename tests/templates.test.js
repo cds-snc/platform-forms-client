@@ -114,5 +114,6 @@ describe("Test JSON validation scenarios", () => {
 
     await templates(req, res);
     expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res._getData()).error).toEqual('instance requires property "form"');
   });
 });
