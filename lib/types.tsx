@@ -163,6 +163,7 @@ export type MultipleChoiceProps = {
   name: string;
   label: string;
   required?: boolean;
+  ariaDescribedBy?: string;
 };
 
 // CRUD Operations for Templates
