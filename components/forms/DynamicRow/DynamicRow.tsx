@@ -41,10 +41,17 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     setInitialValues(field.value[0]);
   }, []);
 
-  const addRow = async () => {
+  const addRow = () => {
     field.value.push(initialValue);
     helpers.setValue(field.value);
-    await setRows([...rows, rowElements]);
+    setRows([...rows, rowElements]);
+  };
+
+  const deleteRow = (index: number) => {
+    field.value.splice(index, index + 1);
+    helpers.setValue(field.value);
+    rows.splice(index, index + 1);
+    setRows([...rows]);
   };
 
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
@@ -63,6 +70,11 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
             data-testid={`dynamic-row-${index + 1}`}
           >
             <DynamicRow elements={row} name={`${field.name}.${index}`} lang={lang} />
+            {rows.length > 1 && (
+              <Button type="button" secondary={true} onClick={() => deleteRow(index)}>
+                {lang === "en" ? "Delete Row" : "Ajouter Element"}
+              </Button>
+            )}
           </div>
         );
       })}
