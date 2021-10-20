@@ -38,7 +38,13 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const [initialValue, setInitialValues] = useState({});
 
   useEffect(() => {
-    setInitialValues(field.value[0]);
+    //there are rows that were added to the form other than its initialvalues.
+    if (field.value.length > 1) {
+      //Refreshing rows from Formik's state
+      setRows(Array(field.value.length).fill(rowElements));
+    } else {
+      setInitialValues(field.value[0]);
+    }
   }, []);
 
   const addRow = async () => {
