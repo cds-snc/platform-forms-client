@@ -1,4 +1,4 @@
-import { crudOrganisations } from "../../lib/dataLayer";
+import { crudOrganisations } from "../../lib/integration/crud";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "../../lib/logger";
 import { getSession } from "next-auth/client";

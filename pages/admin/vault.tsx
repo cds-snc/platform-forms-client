@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../lib/auth";
-import { getFormByID } from "../../lib/dataLayer";
+import { getFormByID } from "../../lib/integration/common";
 import convertMessage from "../../lib/markdown";
 import { Button, RichText } from "../../components/forms";
 import { PublicFormSchemaProperties } from "../../lib/types";
