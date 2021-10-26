@@ -57,7 +57,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
 
   return (
-    <fieldset name={field.name} data-testid="formGroup" className={classes}>
+    <fieldset name={field.name} data-testid={`formGroup-${field.name}`} className={classes}>
       <legend>{legend}</legend>
 
       {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
@@ -71,14 +71,24 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
           >
             <DynamicRow elements={row} name={`${field.name}.${index}`} lang={lang} />
             {rows.length > 1 && (
-              <Button type="button" secondary={true} onClick={() => deleteRow(index)}>
-                {lang === "en" ? "Delete Row" : "Ajouter Element"}
+              <Button
+                type="button"
+                secondary={true}
+                onClick={() => deleteRow(index)}
+                testid={`delete-row-button-${field.name}.${index}`}
+              >
+                {lang === "en" ? "Delete Row" : "Supprimer Element"}
               </Button>
             )}
           </div>
         );
       })}
-      <Button type="button" secondary={true} onClick={addRow}>
+      <Button
+        type="button"
+        secondary={true}
+        onClick={addRow}
+        testid={`add-row-button-${field.name}`}
+      >
         {lang === "en" ? "Add Row" : "Ajouter Element"}
       </Button>
     </fieldset>
