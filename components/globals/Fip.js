@@ -32,7 +32,7 @@ const Fip = (props) => {
   return (
     <div data-testid="fip" className="gc-fip">
       <div className="canada-flag">
-        <a href={linkUrl} aria-label={logoTitle}>
+        <a href={linkUrl} aria-label={t("fip.label")}>
           <img src={logo} alt={logoTitle} />
         </a>
       </div>
