@@ -10,7 +10,7 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "../components/forms";
-import {isServer} from "./tsUtils";
+import { isServer } from "./tsUtils";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
