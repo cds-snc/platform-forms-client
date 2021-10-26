@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Top left corner logo is now more accessible as it tells the user that clicking on it will get him back to the home page
 - Harmonized RichText and Checkbox/Radio label max width depending on screen ratio.
 
 ## [1.0.2] 2021-09-21

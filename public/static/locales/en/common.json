@@ -15,7 +15,8 @@
   "skip-link": "Skip to main content",
   "fip": {
     "link": "/",
-    "text": "Symbol of the Government of Canada"
+    "text": "Symbol of the Government of Canada",
+    "label": "Navigate to the home page"
   },
   "preview": {
     "title": "Preview a Form from JSON config",
