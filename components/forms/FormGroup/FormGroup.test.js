@@ -42,15 +42,22 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
           ? radioButtonData.properties.descriptionEn
           : radioButtonData.properties.descriptionFr;
 
-    // Legend properly renders
-    expect(screen.getByText(title)).toBeInTheDocument();
-    expect(screen.getByText(title)).toHaveClass("gc-label");
+    // Title are rendered
+    screen.getAllByText(title).forEach((input) => {
+      expect(input).toBeInTheDocument();
+    });
     // description properly renders
-    expect(screen.getByText(description)).toBeInTheDocument().toHaveClass("gc-description");
+    screen.getAllByText(description).forEach((description) => {
+      expect(description).toHaveClass("gc-description");
+    });
     expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
-    // Children render
-    expect(screen.getByRole("group"))
-      .toContainElement(screen.getByText(title))
-      .toContainElement(screen.getByText(description));
+    // Children are rendered.
+    screen.getAllByText(title).forEach((child) => {
+      expect(screen.getByRole("group")).toContainElement(child);
+    });
+    // Every child has a description
+    screen.getAllByText(description).forEach((description) => {
+      expect(screen.getByRole("group")).toContainElement(description);
+    });
   });
 });

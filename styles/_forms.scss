@@ -238,6 +238,9 @@
     @apply text-blue-focus;
   }
 }
+.gc-form-group-context {
+  @include visuallyHidden();
+}
 
 .gc-input-text {
   border: solid 2px black;

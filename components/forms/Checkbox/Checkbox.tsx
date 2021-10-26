@@ -1,14 +1,22 @@
 import React from "react";
 import { Field } from "formik";
 import { MultipleChoiceProps } from "../../../lib/types";
+import { Description } from "../Description/Description";
 
 export const Checkbox = (
   props: MultipleChoiceProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, label, required, name } = props;
+  const { id, label, required, name, ariaDescribedBy } = props;
 
   return (
     <div className="gc-input-checkbox">
+      {ariaDescribedBy ? (
+        <Description id={id} className="gc-form-group-context">
+          {ariaDescribedBy}
+        </Description>
+      ) : (
+        ""
+      )}
       <Field
         className="gc-input-checkbox__input"
         id={id}

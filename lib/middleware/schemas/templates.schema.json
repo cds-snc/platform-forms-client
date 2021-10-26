@@ -1,0 +1,32 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+    ],
+    "required": [
+        "form",
+        "submission",
+        "internalTitleEn",
+        "internalTitleFr",
+        "publishingStatus"
+    ],
+    "properties": {
+        "internalTitleEn": {
+            "$id": "#/properties/internalTitleEn",
+            "type": "string"
+        },
+        "internalTitleFr": {
+            "$id": "#/properties/internalTitleFr",
+            "type": "string"
+        },
+        "publishingStatus": {
+            "$id": "#/properties/publishingStatus",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": true
+}
