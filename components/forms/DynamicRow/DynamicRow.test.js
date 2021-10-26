@@ -69,8 +69,8 @@ const formConfig = {
 };
 
 describe.each([
-  ["en", "Add Row", "Item"],
-  ["fr", "Ajouter Element", "Article"],
+  ["en", "Add Row"],
+  ["fr", "Ajouter Element"],
 ])("Generate a dynamic row", (lang, buttonText) => {
   afterEach(cleanup);
   describe("renders without errors", () => {
