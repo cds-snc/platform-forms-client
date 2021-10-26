@@ -1,5 +1,5 @@
 describe("Dynamic Row Functionality", { baseUrl: "http://localhost:3000" }, () => {
-  const formID = 76;
+  const formID = 76; // Form: Copyright Board of Canada - Proposed Tariff Filing Form
 
   // TODO: Mock the config of the form so it's always the same for this test.
   it("Adds then deletes a dynamic row", () => {
@@ -11,5 +11,7 @@ describe("Dynamic Row Functionality", { baseUrl: "http://localhost:3000" }, () =
     cy.get("[data-testid='delete-row-button-3.1']").should("exist");
     cy.get("[data-testid='delete-row-button-3.1']").click();
     cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 1);
+    cy.get("[data-testid='delete-row-button-3.0']").should("not.exist");
+    cy.get("[data-testid='delete-row-button-3.1']").should("not.exist");
   });
 });
