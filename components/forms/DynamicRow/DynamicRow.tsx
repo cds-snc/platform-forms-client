@@ -48,7 +48,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   }, []);
 
   const addRow = async () => {
-    field.value.push(initialValue);
+    field.value.push(meta.initialValue ? meta.initialValue[0] : initialValue);
     helpers.setValue(field.value);
     await setRows([...rows, rowElements]);
   };
