@@ -41,9 +41,10 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
         lang === "en"
           ? radioButtonData.properties.descriptionEn
           : radioButtonData.properties.descriptionFr;
-    // Label properly renders
-    expect(screen.getByText(title)).toBeInTheDocument();
-    expect(screen.getByText(title)).toHaveClass("gc-label");
+    // Label and description properly render
+    screen.getAllByText(title).forEach((radio) => {
+      expect(radio).toBeInTheDocument();
+    });
     // Choices properly render
     expect(screen.getByText(radioButtonData.properties.choices[0][lang])).toBeInTheDocument();
     expect(screen.getByText(radioButtonData.properties.choices[1][lang])).toBeInTheDocument();
