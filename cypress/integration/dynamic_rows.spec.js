@@ -17,7 +17,7 @@ describe("Dynamic Row Functionality", { baseUrl: "http://localhost:3000" }, () =
     cy.get("[data-testid='delete-row-button-3.0']").should("not.exist");
     cy.get("[data-testid='delete-row-button-3.1']").should("not.exist");
   });
-  
+
   it("Reinitialize a dynamic row's state after an error occurs", () => {
     cy.visit(`/en/id/${formID}`);
     cy.get("[data-testid='formGroup-3']")
