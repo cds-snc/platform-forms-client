@@ -24,12 +24,18 @@ describe("Dynamic Row Functionality", { baseUrl: "http://localhost:3000" }, () =
       .find("[data-testid='dropdown']")
       .select("Artisti")
       .should("have.value", "Artisti");
+    // add second row
+    cy.get("[data-testid='add-row-button-3']").click();
+    // add third row
+    cy.get("[data-testid='add-row-button-3']").click();
+    // should have 3 rows
+    cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 3);
     cy.get("button").contains("Submit").click();
     // add another row
     cy.get("[data-testid='add-row-button-3']").click();
     // check if the row was effectively added
-    cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 2);
+    cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 4);
     // the initialvalue of the row must be undefined/empty
-    cy.get("[data-testid='formGroup-3']").find("[name='3.1.1']").should("not.have.text", "");
+    cy.get("[data-testid='formGroup-3']").find("[name='3.3.1']").should("not.have.text", "");
   });
 });

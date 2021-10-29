@@ -35,7 +35,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const { className, legend, error, rowElements, lang } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState([rowElements]);
-  const [initialValue, setInitialValues] = useState({});
+  const [initialValue, setInitialValues] = useState({}); // must be kept
 
   useEffect(() => {
     //there are rows that were added to the form other than its initialvalues.
@@ -43,11 +43,13 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       //Refreshing rows from Formik's state
       setRows(Array(field.value.length).fill(rowElements));
     } else {
+      // Set Initialvalues while a row is rendered for the first time.
       setInitialValues(field.value[0]);
     }
   }, []);
 
   const addRow = () => {
+    // Set the newly added row'initial value (plucked out of initialValues)
     field.value.push(meta.initialValue ? meta.initialValue[0] : initialValue);
     helpers.setValue(field.value);
     setRows([...rows, rowElements]);
