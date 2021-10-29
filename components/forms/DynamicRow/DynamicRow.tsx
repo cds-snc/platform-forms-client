@@ -56,9 +56,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   };
 
   const deleteRow = (index: number) => {
-    field.value.splice(index, index + 1);
+    field.value.splice(index, 1);
     helpers.setValue(field.value);
-    rows.splice(index, index + 1);
+    rows.splice(index, 1);
     setRows([...rows]);
   };
 
