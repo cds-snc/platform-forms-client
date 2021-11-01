@@ -1,4 +1,4 @@
-import { getFormByID } from "../../../lib/integration/common";
+import { getFormByID } from "../../../lib/integration/helpers";
 import DynamicForm from "../../../components/containers/DynamicForm/DynamicForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "../../../lib/flags";

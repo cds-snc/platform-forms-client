@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getFormByStatus } from "../lib/integration/common";
+import { getFormByStatus } from "../lib/integration/helpers";
 import { getProperty } from "../lib/formBuilder";
 import { checkOne } from "../lib/flags";
 import { formCache } from "../lib/cache";
