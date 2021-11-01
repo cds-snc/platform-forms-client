@@ -1,7 +1,7 @@
 import Organisations from "../../../components/containers/Admin/Organisations/Organisations";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../../lib/auth";
-import { crudOrganisations } from "@lib/dataLayer";
+import { crudOrganisations } from "@lib/integration/crud";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   {

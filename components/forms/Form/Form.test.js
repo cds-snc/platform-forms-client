@@ -2,9 +2,9 @@ import React from "react";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Form from "./Form";
-import mockedDataLayer from "../../../lib/dataLayer";
+import mockedDataLayer from "../../../lib/integration/helpers";
 
-jest.mock("../../../lib/dataLayer", () => ({
+jest.mock("../../../lib/integration/helpers", () => ({
   submitToAPI: jest.fn(() => {}),
 }));
 

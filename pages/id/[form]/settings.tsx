@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../../lib/auth";
-import { crudTemplates } from "../../../lib/dataLayer";
+import { crudTemplates } from "../../../lib/integration/crud";
 import FormSettings from "../../../components/containers/DynamicForm/Settings";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
