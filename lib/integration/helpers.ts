@@ -356,6 +356,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
     method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",
+      "Content-Language": language,
     },
     data: formDataObject,
     // If development mode disable timeout

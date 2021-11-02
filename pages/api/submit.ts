@@ -53,7 +53,7 @@ const submit = async (
   }
 };
 
-const callLambda = async (formID: string, fields: Responses) => {
+const callLambda = async (formID: string, fields: Responses, language: string) => {
   const submission = await getSubmissionByID(formID);
 
   const encoder = new TextEncoder();
@@ -63,26 +63,26 @@ const callLambda = async (formID: string, fields: Responses) => {
     Payload: encoder.encode(
       JSON.stringify({
         formID,
+        language,
         responses: fields,
         submission,
       })
     ),
   });
-  return await lambdaClient
-    .send(command)
-    .then((response) => {
-      const decoder = new TextDecoder();
-      const payload = decoder.decode(response.Payload);
-      if (response.FunctionError || !JSON.parse(payload).status) {
-        throw Error("Submission API could not process form response");
-      } else {
-        logMessage.info("Submission Lambda Client successfully triggered");
-      }
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      throw new Error("Could not process request with Lambda Submission function");
-    });
+
+  try {
+    const response = await lambdaClient.send(command);
+    const decoder = new TextDecoder();
+    const payload = decoder.decode(response.Payload);
+    if (response.FunctionError || !JSON.parse(payload).status) {
+      throw new Error("Submission API could not process form response");
+    } else {
+      logMessage.info("Submission Lambda Client successfully triggered");
+    }
+  } catch (err) {
+    logMessage.error(err);
+    throw new Error("Could not process request with Lambda Submission function");
+  }
 };
 
 const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
@@ -184,20 +184,24 @@ const processFormData = async (
           });
         }
       }
-      return await callLambda(form.formID, fields)
-        .then(async () => {
-          if (notifyPreview) {
-            await previewNotify(form, fields).then((response) => {
-              return res.status(201).json({ received: true, htmlEmail: response });
-            });
-          } else {
-            return res.status(201).json({ received: true });
-          }
-        })
-        .catch((err) => {
-          logMessage.error(err);
-          return res.status(500).json({ received: false });
-        });
+      try {
+        await callLambda(
+          form.formID,
+          fields,
+          // pass in the language from the header content language... assume english as the default
+          req.headers?.["content-language"] ? req.headers["content-language"] : "en"
+        );
+
+        if (notifyPreview) {
+          const notifyPreviewResponse = await previewNotify(form, fields);
+          return res.status(201).json({ received: true, htmlEmail: notifyPreviewResponse });
+        } else {
+          return res.status(201).json({ received: true });
+        }
+      } catch (err) {
+        logMessage.error(err);
+        return res.status(500).json({ received: false });
+      }
     }
     // Local development and Heroku
     else if (notifyPreview) {
