@@ -64,8 +64,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     <fieldset name={field.name} data-testid={`formGroup-${field.name}`} className={classes}>
       <legend>{legend}</legend>
 
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
-
       {rows.map((row, index) => {
         return (
           <div

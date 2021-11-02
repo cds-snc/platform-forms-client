@@ -133,7 +133,9 @@ const isFieldResponseValid = (
         // need to create new variable to typecast value as you cannot
         // call a method on a typecasted variable in the same line
         const values = value as Array<Record<string, string | Array<string>>>;
+        let splitSubId;
         for (const [rowValueIndex, rowValue] of values.entries()) {
+          const rowErrors: Responses = {};
           for (const [k, v] of Object.entries(rowValue)) {
             // get the relevant sub-element based on the current key which is the absolute
             // index of the sub-element definition in the form configuration
@@ -148,13 +150,14 @@ const isFieldResponseValid = (
                 subElement.properties.validation,
                 t
               );
+              splitSubId = subElement.subId.split(".");
               if (validatorResult) {
-                // Split the sub id since it's dynamic. The first value in the array is static
-                // The second value in the array is the row. The third value in the array is the subElement order
-                const splitSubId = subElement.subId.split(".");
-                errors[`${splitSubId[0]}.${rowValueIndex}.${splitSubId[2]}`] = validatorResult;
+                rowErrors[`${splitSubId[2]}`] = validatorResult;
               }
             }
+          }
+          if (splitSubId) {
+            errors[`${splitSubId[0]}`] = [rowErrors];
           }
         }
         return errors;
@@ -178,7 +181,6 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
 
   for (const item in values) {
     const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
-
     if (!formElement) return errors;
 
     if (formElement.properties.validation) {
@@ -208,34 +210,50 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
 export const getErrorList = (
   props: InnerFormProps & FormikProps<FormValues>
 ): JSX.Element | null => {
-  let errorList = null;
-  const errorEntries = Object.entries(props.errors);
-  if (props.touched && errorEntries.length) {
-    errorList = errorEntries.map(([key, value], index) => {
-      return (
-        <li key={`error-${index}`}>
-          <a
-            href={`#${key}`}
-            className="gc-error-link"
-            key={index}
-            onKeyDown={(e) => {
-              if (e.code === "Space") {
-                e.preventDefault();
-                scrollErrorInView(key);
-              }
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              scrollErrorInView(key);
-            }}
-          >
-            {value}
-          </a>
-        </li>
-      );
+  let errorList;
+  const formElementErrors = Object.entries(props.errors);
+  if (props.touched && formElementErrors.length) {
+    errorList = formElementErrors.map(([formElementKey, formElementErrorValue]) => {
+      if (Array.isArray(formElementErrorValue)) {
+        return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
+          const dynamicRowElements = Object.entries(dynamicRowErrors);
+          return dynamicRowElements.map(([dyanamicRowElementKey, errorValueValue]) => {
+            return errorListItem(
+              `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`,
+              errorValueValue as string
+            );
+          });
+        });
+      } else {
+        return errorListItem(formElementKey, formElementErrorValue);
+      }
     });
   }
   return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+};
+
+const errorListItem = (key: string, value: string | undefined): JSX.Element | null => {
+  return (
+    <li key={`error-${key}`}>
+      <a
+        href={`#${key}`}
+        className="gc-error-link"
+        key={key}
+        onKeyDown={(e) => {
+          if (e.code === "Space") {
+            e.preventDefault();
+            scrollErrorInView(key);
+          }
+        }}
+        onClick={(e) => {
+          e.preventDefault();
+          scrollErrorInView(key);
+        }}
+      >
+        {value}
+      </a>
+    </li>
+  );
 };
 
 /**
