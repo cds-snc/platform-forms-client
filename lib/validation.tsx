@@ -141,6 +141,8 @@ const isFieldResponseValid = (
             const subElement = formElement.properties.subElements[parseInt(responseKey)];
 
             if (subElement?.properties?.validation) {
+              console.log("Needs validation...");
+              console.log(subElement.properties);
               const validationError = isFieldResponseValid(
                 responseValue,
                 subElement.type,
@@ -207,11 +209,13 @@ export const getErrorList = (
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           const dynamicRowElements = Object.entries(dynamicRowErrors);
-          return dynamicRowElements.map(([dyanamicRowElementKey, errorValueValue]) => {
-            return errorListItem(
-              `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`,
-              errorValueValue as string
-            );
+          return dynamicRowElements.map(([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
+            return dyanamicRowElementErrorValue
+              ? errorListItem(
+                  `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`,
+                  dyanamicRowElementErrorValue as string
+                )
+              : null;
           });
         });
       } else {
