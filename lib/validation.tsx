@@ -81,7 +81,7 @@ const isFieldResponseValid = (
   formElement: FormElement,
   validator: ValidationProperties,
   t: TFunction
-): string | null | Responses => {
+): string | null | Record<string, unknown>[] => {
   switch (componentType) {
     case "textField": {
       const typedValue = value as string;
@@ -126,43 +126,37 @@ const isFieldResponseValid = (
       break;
     }
     case "dynamicRow":
-      if (formElement.properties.subElements) {
-        //set up object to store results
-        const errors: Responses = {};
-        // loop over rows of values
-        // need to create new variable to typecast value as you cannot
-        // call a method on a typecasted variable in the same line
-        const values = value as Array<Record<string, string | Array<string>>>;
-        let splitSubId;
-        for (const [rowValueIndex, rowValue] of values.entries()) {
-          const rowErrors: Responses = {};
-          for (const [k, v] of Object.entries(rowValue)) {
-            // get the relevant sub-element based on the current key which is the absolute
-            // index of the sub-element definition in the form configuration
-            const subElement = formElement.properties.subElements[parseInt(k)];
-            // if the sub element has validation enabled and a subId defined then we
-            // can validate
-            if (subElement.properties.validation && subElement.subId) {
-              const validatorResult = isFieldResponseValid(
-                v,
+      //set up object to store results
+      // loop over rows of values
+      // need to create new variable to typecast value as you cannot
+      // call a method on a typecasted variable in the same line
+
+      return (value as Array<Responses>).map((row) => {
+        const rowErrors: Record<string, unknown> = {};
+        for (const [responseKey, responseValue] of Object.entries(row)) {
+          if (
+            formElement.properties.subElements &&
+            formElement.properties.subElements[parseInt(responseKey)]
+          ) {
+            const subElement = formElement.properties.subElements[parseInt(responseKey)];
+
+            if (subElement?.properties?.validation) {
+              const validationError = isFieldResponseValid(
+                responseValue,
                 subElement.type,
                 subElement,
                 subElement.properties.validation,
                 t
               );
-              splitSubId = subElement.subId.split(".");
-              if (validatorResult) {
-                rowErrors[`${splitSubId[2]}`] = validatorResult;
-              }
+              rowErrors[responseKey] = validationError;
+            } else {
+              rowErrors[responseKey] = null;
             }
           }
-          if (splitSubId) {
-            errors[`${splitSubId[0]}`] = [rowErrors];
-          }
         }
-        return errors;
-      }
-      break;
+        return rowErrors;
+      });
+
     case "richText":
       break;
     default:
@@ -177,7 +171,7 @@ const isFieldResponseValid = (
  * @param props
  */
 export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
-  let errors: Responses = {};
+  const errors: Responses = {};
 
   for (const item in values) {
     const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
@@ -191,12 +185,8 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
         formElement.properties.validation,
         props.t
       );
-      if (result && typeof result === "object") {
-        errors = {
-          ...errors,
-          ...result,
-        };
-      } else if (result) {
+
+      if (result) {
         errors[item] = result;
       }
     }
