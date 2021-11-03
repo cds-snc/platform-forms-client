@@ -11,6 +11,7 @@ import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "../components/forms";
 import ErrorListItem from "../components/forms/Form/ErrorListItem";
+import { isServer } from "./tsUtils";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -219,7 +220,7 @@ export const setFocusOnErrorMessage = (
   props: InnerFormProps & FormikProps<FormValues>,
   errorId: string
 ): void => {
-  if (typeof window !== "undefined" && props && props.errors && props.touched && errorId) {
+  if (!isServer() && props && props.errors && props.touched && errorId) {
     const errorAlert = document.getElementById(errorId);
     if (errorAlert && typeof errorAlert !== "undefined") {
       errorAlert.focus();

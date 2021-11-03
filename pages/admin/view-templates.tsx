@@ -1,7 +1,7 @@
 //import getConfig from "next/config";
 import DataView from "../../components/containers/Admin/Dashboard/DataView";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { crudTemplates } from "../../lib/dataLayer";
+import { crudTemplates } from "../../lib/integration/crud";
 import { requireAuthentication } from "../../lib/auth";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
