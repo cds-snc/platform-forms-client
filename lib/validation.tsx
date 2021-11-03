@@ -10,6 +10,7 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "../components/forms";
+import ErrorListItem from "../components/forms/Form/ErrorListItem";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -60,19 +61,6 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
     };
   }
   return type ? REGEX_CONFIG[type] : null;
-};
-
-/**
- * scrollErrorInView [private] is called when you click on an error link at the top of the form
- * @param id The id of the input field that has the error and we need to focus
- */
-const scrollErrorInView = (id: string) => {
-  const inputElement = document.getElementById(id);
-  const labelElement = document.getElementById(`label-${id}`);
-  if (labelElement && inputElement) {
-    inputElement.focus();
-    labelElement.scrollIntoView();
-  }
 };
 
 const isFieldResponseValid = (
@@ -141,8 +129,6 @@ const isFieldResponseValid = (
             const subElement = formElement.properties.subElements[parseInt(responseKey)];
 
             if (subElement?.properties?.validation) {
-              console.log("Needs validation...");
-              console.log(subElement.properties);
               const validationError = isFieldResponseValid(
                 responseValue,
                 subElement.type,
@@ -210,44 +196,20 @@ export const getErrorList = (
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           const dynamicRowElements = Object.entries(dynamicRowErrors);
           return dynamicRowElements.map(([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
-            return dyanamicRowElementErrorValue
-              ? errorListItem(
-                  `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`,
-                  dyanamicRowElementErrorValue as string
-                )
-              : null;
+            return dyanamicRowElementErrorValue ? (
+              <ErrorListItem
+                errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                value={`${dyanamicRowElementErrorValue as string}`}
+              />
+            ) : null;
           });
         });
       } else {
-        return errorListItem(formElementKey, formElementErrorValue);
+        return <ErrorListItem errorKey={`${formElementKey}`} value={`${formElementErrorValue}`} />;
       }
     });
   }
   return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
-};
-
-const errorListItem = (key: string, value: string | undefined): JSX.Element | null => {
-  return (
-    <li key={`error-${key}`}>
-      <a
-        href={`#${key}`}
-        className="gc-error-link"
-        key={key}
-        onKeyDown={(e) => {
-          if (e.code === "Space") {
-            e.preventDefault();
-            scrollErrorInView(key);
-          }
-        }}
-        onClick={(e) => {
-          e.preventDefault();
-          scrollErrorInView(key);
-        }}
-      >
-        {value}
-      </a>
-    </li>
-  );
 };
 
 /**
