@@ -24,7 +24,7 @@ export const TextArea = (
 
   return (
     <>
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       <textarea
         data-testid="textarea"
         className={classes}
