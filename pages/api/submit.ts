@@ -145,72 +145,74 @@ const processFormData = async (
       responses: reqFields,
     });
 
-    // Staging or Production AWS environments
-    if (submitToReliabilityQueue) {
-      for (const [_key, value] of Object.entries(files)) {
-        const fileOrArray = value;
-        if (!Array.isArray(fileOrArray)) {
-          if (fileOrArray.name) {
-            logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
-            const { isValid, key } = await pushFileToS3(fileOrArray);
-            if (isValid) {
-              uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
-              const splitKey = _key.split("-");
-              if (splitKey.length > 1) {
-                const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
-                currentValue[Number(splitKey[1])][splitKey[2]] = key;
-              } else {
-                fields[_key] = key;
-              }
-            }
-          }
-        } else if (Array.isArray(fileOrArray)) {
-          // An array will be returned in a field that includes multiple files
-          fileOrArray.forEach(async (fileItem, index) => {
-            if (fileItem.name) {
-              logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
-              const { isValid, key } = await pushFileToS3(fileItem);
-              if (isValid) {
-                uploadedFilesKeyUrlMapping.set(fileItem.name, key);
-                const splitKey = _key.split("-");
-                if (splitKey.length > 1) {
-                  const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
-                  currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
-                } else {
-                  fields[`${_key}-${index}`] = key;
-                }
-              }
-            }
-          });
-        }
-      }
-      try {
-        await callLambda(
-          form.formID,
-          fields,
-          // pass in the language from the header content language... assume english as the default
-          req.headers?.["content-language"] ? req.headers["content-language"] : "en"
-        );
-
-        if (notifyPreview) {
-          const notifyPreviewResponse = await previewNotify(form, fields);
-          return res.status(201).json({ received: true, htmlEmail: notifyPreviewResponse });
-        } else {
-          return res.status(201).json({ received: true });
-        }
-      } catch (err) {
-        logMessage.error(err);
-        return res.status(500).json({ received: false });
-      }
+    if (submitToReliabilityQueue === false) {
+      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
+      return res.status(200).json({ received: true });
     }
+
     // Local development and Heroku
-    else if (notifyPreview) {
+    if (notifyPreview) {
       return await previewNotify(form, fields).then((response) => {
         return res.status(201).json({ received: true, htmlEmail: response });
       });
     }
-    // Set this to a 200 response as it's valid if the send to reliability queue option is off.
-    return res.status(200).json({ received: true });
+
+    // Staging or Production AWS environments
+    for (const [_key, value] of Object.entries(files)) {
+      const fileOrArray = value;
+      if (!Array.isArray(fileOrArray)) {
+        if (fileOrArray.name) {
+          logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
+          const { isValid, key } = await pushFileToS3(fileOrArray);
+          if (isValid) {
+            uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
+            const splitKey = _key.split("-");
+            if (splitKey.length > 1) {
+              const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+              currentValue[Number(splitKey[1])][splitKey[2]] = key;
+            } else {
+              fields[_key] = key;
+            }
+          }
+        }
+      } else if (Array.isArray(fileOrArray)) {
+        // An array will be returned in a field that includes multiple files
+        fileOrArray.forEach(async (fileItem, index) => {
+          if (fileItem.name) {
+            logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
+            const { isValid, key } = await pushFileToS3(fileItem);
+            if (isValid) {
+              uploadedFilesKeyUrlMapping.set(fileItem.name, key);
+              const splitKey = _key.split("-");
+              if (splitKey.length > 1) {
+                const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+                currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
+              } else {
+                fields[`${_key}-${index}`] = key;
+              }
+            }
+          }
+        });
+      }
+    }
+    try {
+      await callLambda(
+        form.formID,
+        fields,
+        // pass in the language from the header content language... assume english as the default
+        req.headers?.["content-language"] ? req.headers["content-language"] : "en"
+      );
+
+      if (notifyPreview) {
+        const notifyPreviewResponse = await previewNotify(form, fields);
+        return res.status(201).json({ received: true, htmlEmail: notifyPreviewResponse });
+      } else {
+        return res.status(201).json({ received: true });
+      }
+    } catch (err) {
+      logMessage.error(err as Error);
+      return res.status(500).json({ received: false });
+    }
   } catch (err) {
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
     if (uploadedFilesKeyUrlMapping.size > 0) {
