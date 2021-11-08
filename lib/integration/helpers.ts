@@ -375,19 +375,14 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
           formConfig && formConfig.endPage
             ? JSON.stringify(formConfig.endPage[getProperty("description", language)])
             : "";
-        router.push(
-          {
-            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
-            query: {
-              ...referrerUrl,
-              htmlEmail: htmlEmail,
-              pageText: endPageText,
-            },
+        router.push({
+          pathname: `/${language}/id/${formConfig.formID}/confirmation`,
+          query: {
+            ...referrerUrl,
+            htmlEmail: htmlEmail,
+            pageText: endPageText,
           },
-          {
-            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
-          }
-        );
+        });
       } else {
         throw Error("Server submit API returned an error");
       }
