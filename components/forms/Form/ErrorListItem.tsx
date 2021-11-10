@@ -25,7 +25,6 @@ const scrollErrorInView = (id: string) => {
  */
 const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
   const { errorKey, value } = props;
-  console.log(props);
 
   return (
     <li key={`error-${errorKey}`}>
