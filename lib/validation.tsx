@@ -195,15 +195,16 @@ export const getErrorList = (
     errorList = formElementErrors.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
-          const dynamicRowElements = Object.entries(dynamicRowErrors);
-          return dynamicRowElements.map(([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
-            return dyanamicRowElementErrorValue ? (
-              <ErrorListItem
-                errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
-                value={`${dyanamicRowElementErrorValue as string}`}
-              />
-            ) : null;
-          });
+          return Object.entries(dynamicRowErrors).map(
+            ([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
+              return dyanamicRowElementErrorValue ? (
+                <ErrorListItem
+                  errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                  value={`${dyanamicRowElementErrorValue as string}`}
+                />
+              ) : null;
+            }
+          );
         });
       } else {
         return <ErrorListItem errorKey={`${formElementKey}`} value={`${formElementErrorValue}`} />;
