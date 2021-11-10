@@ -1,9 +1,8 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
-import {retrieve} from "../pages/api/id/[form]/bearer";
+import { retrieve } from "../pages/api/id/[form]/bearer";
 
 jest.mock("next-auth/client");
-
 
 describe("Test Request methods with valid session", () => {
   beforeEach(() => {
@@ -26,6 +25,6 @@ describe("Test Request methods with valid session", () => {
       }),
     });
     retrieve(req, res);
-    expect(res.statusCode).toBe(200);    
+    expect(res.statusCode).toBe(200);
   });
 });
