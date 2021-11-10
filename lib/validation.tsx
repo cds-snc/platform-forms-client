@@ -117,9 +117,6 @@ const isFieldResponseValid = (
     case "dynamicRow":
       //set up object to store results
       // loop over rows of values
-      // need to create new variable to typecast value as you cannot
-      // call a method on a typecasted variable in the same line
-
       return (value as Array<Responses>).map((row) => {
         const rowErrors: Record<string, unknown> = {};
         for (const [responseKey, responseValue] of Object.entries(row)) {
