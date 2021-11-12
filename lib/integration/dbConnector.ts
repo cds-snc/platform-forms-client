@@ -11,7 +11,7 @@ export const dbConnector = async (): Promise<Client> => {
     return client;
   }
   throw new Error("connexion error");
-  // connect by using rds client like so
+  // TODO connect by using rds client like so
   //new RDSDataClient({ region: REGION });
 };
 export default dbConnector;
