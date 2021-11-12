@@ -1,17 +1,17 @@
-import { Pool } from "pg";
+import { Client } from "pg";
 import { logMessage } from "../logger";
+import { parse } from "pg-connection-string";
 
-const dbConnector = async (): Promise<Pool | undefined> => {
-  try {
-    if (process.env.DATABASE_URL) {
-      logMessage.debug("Connexion initialization");
-      return new Pool({
-        connectionString: process.env.DATABASE_URL,
-        idleTimeoutMillis: 30000,
-      });
-    }
-  } catch (error) {
-    logMessage.error("Error: unable to init db connexion");
+export const dbConnector = async (): Promise<Client> => {
+  if (process.env.DATABASE_URL /** if local or cypress */) {
+    logMessage.debug("Connexion initialization");
+    const dbConfig = parse(process.env.DATABASE_URL);
+    const client = new Client({ ...dbConfig });
+    // etablishing a connexion
+    await client.connect();
+    return client;
   }
+  throw new Error("connexion error");
+  // connect by using rds client like so
+  //new RDSDataClient({ region: REGION });
 };
-export default dbConnector;

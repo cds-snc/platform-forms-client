@@ -44,6 +44,7 @@
     "next-i18next": "^8.6.0",
     "notifications-node-client": "^5.0.2",
     "pg": "^8.7.1",
+    "pg-connection-string": "^2.5.0",
     "pino": "^6.13.1",
     "raw-loader": "^4.0.2",
     "react": "^17.0.2",
