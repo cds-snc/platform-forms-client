@@ -39,3 +39,4 @@ export const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promi
     res.status(400).json({ error: "Malformed API Request" });
   }
 };
+export default retrieve;
