@@ -3,7 +3,7 @@ import { getSession } from "next-auth/client";
 import * as Constants from "../../../../lib/constant";
 import { executeQuery } from "../../../../lib/integration/queryManager";
 
-const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+export const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     const session = await getSession({ req });
     // Only allow a valid user session
@@ -39,4 +39,3 @@ const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promise<void
     res.status(400).json({ error: "Malformed API Request" });
   }
 };
-export default retrieve;

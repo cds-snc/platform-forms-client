@@ -1,13 +1,12 @@
 import { Client } from "pg";
 import { logMessage } from "../logger";
-import { parse } from "pg-connection-string";
 
 export const dbConnector = async (): Promise<Client> => {
-  if (process.env.DATABASE_URL /** if local or cypress */) {
+  const connectionString: string | undefined = process.env.DATABASE_URL;
+  if (connectionString) {
     logMessage.debug("Connexion initialization");
-    const dbConfig = parse(process.env.DATABASE_URL);
-    const client = new Client({ ...dbConfig });
-    // etablishing a connexion
+    const client = new Client({ connectionString });
+    //Attempt a connexion
     await client.connect();
     return client;
   }
@@ -15,3 +14,4 @@ export const dbConnector = async (): Promise<Client> => {
   // connect by using rds client like so
   //new RDSDataClient({ region: REGION });
 };
+export default dbConnector;
