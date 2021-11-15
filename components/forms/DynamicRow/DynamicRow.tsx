@@ -4,7 +4,6 @@ import { useField } from "formik";
 import { GenerateElement } from "../../../lib/formBuilder";
 import { FormElement } from "../../../lib/types";
 import { Button } from "../index";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface DynamicGroupProps {
   name: string;
