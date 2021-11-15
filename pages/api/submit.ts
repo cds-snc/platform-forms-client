@@ -9,6 +9,7 @@ import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
+import fs from "fs";
 
 export const config = {
   api: {
@@ -108,6 +109,21 @@ const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses
     });
 };
 
+const deleteFiles = (files: formidable.Files) => {
+  for (const [_key, value] of Object.entries(files)) {
+    const fileOrArray = value;
+    if (Array.isArray(fileOrArray)) {
+      fileOrArray.forEach(async (fileItem) => {
+        fs.unlinkSync(fileItem.path);
+      });
+    } else {
+      if (fileOrArray.name) {
+        fs.unlinkSync(fileOrArray.path);
+      }
+    }
+  }
+};
+
 const processFormData = async (
   reqFields: Responses | undefined,
   files: formidable.Files,
@@ -147,14 +163,15 @@ const processFormData = async (
 
     if (submitToReliabilityQueue === false) {
       // Set this to a 200 response as it's valid if the send to reliability queue option is off.
+      deleteFiles(files);
       return res.status(200).json({ received: true });
     }
 
     // Local development and Heroku
     if (notifyPreview) {
-      return await previewNotify(form, fields).then((response) => {
-        return res.status(201).json({ received: true, htmlEmail: response });
-      });
+      deleteFiles(files);
+      const response = await previewNotify(form, fields);
+      return res.status(201).json({ received: true, htmlEmail: response });
     }
 
     // Staging or Production AWS environments
