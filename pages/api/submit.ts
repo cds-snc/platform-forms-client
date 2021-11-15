@@ -109,7 +109,7 @@ const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses
     });
 };
 
-const deleteFiles = (files: formidable.Files) => {
+const deleteLocalTempFiles = (files: formidable.Files) => {
   for (const [, value] of Object.entries(files)) {
     const fileOrArray = value;
     if (Array.isArray(fileOrArray)) {
@@ -163,13 +163,13 @@ const processFormData = async (
 
     if (submitToReliabilityQueue === false) {
       // Set this to a 200 response as it's valid if the send to reliability queue option is off.
-      deleteFiles(files);
+      deleteLocalTempFiles(files);
       return res.status(200).json({ received: true });
     }
 
     // Local development and Heroku
     if (notifyPreview) {
-      deleteFiles(files);
+      deleteLocalTempFiles(files);
       const response = await previewNotify(form, fields);
       return res.status(201).json({ received: true, htmlEmail: response });
     }
@@ -236,6 +236,8 @@ const processFormData = async (
     logMessage.error(err as Error);
 
     return res.status(500).json({ received: false });
+  } finally {
+    deleteLocalTempFiles(files);
   }
 };
 

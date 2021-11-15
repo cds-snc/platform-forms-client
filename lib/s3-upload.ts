@@ -33,13 +33,11 @@ const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
-    fs.unlinkSync(file.path);
     return {
       isValid: true,
       key: uploadParams.Key,
     };
   } catch (error) {
-    fs.unlinkSync(file.path);
     return { isValid: false, key: error as string };
   }
 };
