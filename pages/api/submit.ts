@@ -203,12 +203,7 @@ const processFormData = async (
         req.headers?.["content-language"] ? req.headers["content-language"] : "en"
       );
 
-      if (notifyPreview) {
-        const notifyPreviewResponse = await previewNotify(form, fields);
-        return res.status(201).json({ received: true, htmlEmail: notifyPreviewResponse });
-      } else {
-        return res.status(201).json({ received: true });
-      }
+      return res.status(201).json({ received: true });
     } catch (err) {
       logMessage.error(err as Error);
       return res.status(500).json({ received: false });
