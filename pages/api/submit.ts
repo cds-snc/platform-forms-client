@@ -110,7 +110,7 @@ const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses
 };
 
 const deleteFiles = (files: formidable.Files) => {
-  for (const [_key, value] of Object.entries(files)) {
+  for (const [, value] of Object.entries(files)) {
     const fileOrArray = value;
     if (Array.isArray(fileOrArray)) {
       fileOrArray.forEach(async (fileItem) => {
