@@ -175,7 +175,7 @@ const processFormData = async (
             }
           }
         }
-      } else if (Array.isArray(fileOrArray)) {
+      } else {
         // An array will be returned in a field that includes multiple files
         fileOrArray.forEach(async (fileItem, index) => {
           if (fileItem.name) {
