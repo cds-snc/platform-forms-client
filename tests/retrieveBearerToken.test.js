@@ -60,7 +60,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it("Should return a valid token associated a form (12).", async () => {
+  it("Should return a valid token associated to a form id = 12.", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
@@ -90,7 +90,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
   });
 
-  it("Shouldn't allow this request", async () => {
+  it("Shouldn't allow this request go through withoud a session", async () => {
     client.getSession.mockReturnValueOnce(undefined);
 
     const { req, res } = createMocks({
