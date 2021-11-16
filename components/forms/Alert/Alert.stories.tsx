@@ -2,6 +2,7 @@ import React from "react";
 import { Alert } from "./Alert";
 
 import { Button } from "../Button/Button";
+import ErrorListItem from "../Form/ErrorListItem";
 
 export default {
   title: "Forms/Alert",
@@ -92,5 +93,20 @@ export const slimNoIcon = (): React.ReactElement => (
 export const withCTA = (): React.ReactElement => (
   <Alert type="warning" heading="Warning status" cta={<Button type="button">Click here</Button>}>
     {testText}
+  </Alert>
+);
+
+export const formValidationErrorList = (): React.ReactElement => (
+  <Alert
+    type="error"
+    heading="Please correct the errors on the page"
+    validation={true}
+    id="1234"
+    tabIndex={0}
+  >
+    <ol className="gc-ordered-list">
+      <ErrorListItem errorKey="1.0" value="First error message." />
+      <ErrorListItem errorKey="2.0" value="Second error message." />
+    </ol>
   </Alert>
 );
