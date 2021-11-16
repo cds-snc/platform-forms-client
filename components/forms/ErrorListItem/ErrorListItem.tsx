@@ -1,6 +1,6 @@
 import React from "react";
 
-interface ErrorListProps {
+export interface ErrorListProps {
   errorKey: string;
   value: string | undefined;
 }
