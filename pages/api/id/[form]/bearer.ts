@@ -3,7 +3,7 @@ import { getSession } from "next-auth/client";
 import queryManager from "../../../../lib/integration/queryManager";
 import isRequestAllowed from "../../../../lib/middleware/httpRequestAllowed";
 
-const allowedMethods = ["GET",];
+const allowedMethods = ["GET"];
 
 export const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
@@ -29,10 +29,12 @@ async function getToken(res: NextApiResponse, formID: string) {
   if (formID) {
     //Fetching the token return list of object or an empty array
     const data = queryManager.getResult(
-      await queryManager.executeQuery("SELECT bearer_token FROM templates WHERE id = ($1)", [formID])
+      await queryManager.executeQuery("SELECT bearer_token FROM templates WHERE id = ($1)", [
+        formID,
+      ])
     );
     if (data && data.length > 0) {
-      const { bearer_token } = data[0] as unknown as BearerResponse;      
+      const { bearer_token } = data[0] as unknown as BearerResponse;
       return res.status(200).json({ token: bearer_token });
     }
     // otherwise the resource was not found
