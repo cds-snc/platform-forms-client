@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-###NBSPAdded
+### Added
 
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
+- Add error messages for all elements within dynamic rows.
 
 ### Fixed
 
