@@ -3,6 +3,15 @@ import client from "next-auth/client";
 import { retrieve } from "../pages/api/id/[form]/bearer";
 import queryManager from "../lib/integration/queryManager";
 
+jest.mock("../lib/integration/dbConnector", () => {
+  const mClient = {
+    connect: jest.fn(),
+    query: jest.fn(),
+    end: jest.fn(),
+  };
+  return jest.fn(() => mClient);
+});
+
 jest.mock("next-auth/client");
 
 describe("Test bearer token retrieve API endpoint", () => {
@@ -31,6 +40,9 @@ describe("Test bearer token retrieve API endpoint", () => {
     await retrieve(req, res);
 
     expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual(
+      expect.objectContaining({ error: "Malformed API Request" })
+    );
   });
 
   it("Should return a statusCode 200 and a Null as token's value associated to a given form (11).", async () => {
@@ -55,8 +67,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     });
 
     await retrieve(req, res);
-    const expectedValue = { token: null };
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ token: null }));
     expect(res.statusCode).toBe(200);
   });
 
@@ -85,9 +96,8 @@ describe("Test bearer token retrieve API endpoint", () => {
     });
 
     await retrieve(req, res);
-    const expectedValue = { token: "toekakdnaodk" };
     expect(res.statusCode).toBe(200);
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ token: "toekakdnaodk" }));
   });
 
   it("Shouldn't allow this request go through withoud a session", async () => {
@@ -106,6 +116,8 @@ describe("Test bearer token retrieve API endpoint", () => {
     await retrieve(req, res);
 
     expect(res.statusCode).toBe(403);
+    const expectedValue = { error: "Access Denied" };
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
   });
 
   it("Should return 404 statusCode Not Found if an empty [] value was found", async () => {
@@ -114,10 +126,8 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValueOnce(mockSession);
-    // Query result
-    const data = [];
     // Mocking query manager
-    jest.spyOn(queryManager, "getResult").mockReturnValue(data);
+    jest.spyOn(queryManager, "getResult").mockReturnValue([]);
     jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
     const { req, res } = createMocks({
@@ -126,11 +136,41 @@ describe("Test bearer token retrieve API endpoint", () => {
         "Content-Type": "application/json",
       },
       query: {
-        form: "999999999",
+        form: "23",
       },
     });
     await retrieve(req, res);
 
     expect(res.statusCode).toBe(404);
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Not Found" }));
+  });
+
+  it("It Should return 500 statusCode if there an error happens", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+    };
+    client.getSession.mockReturnValueOnce(mockSession);
+    // Mocking query manager to throw an error
+    jest.spyOn(queryManager, "getResult").mockImplementation(() => {
+      throw new Error("UnExcepted Error");
+    });
+
+    jest.spyOn(queryManager, "executeQuery").mockImplementation(() => {
+      throw new Error("UnExcepted Error");
+    });
+
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      query: {
+        form: "101",
+      },
+    });
+
+    await retrieve(req, res);
+    expect(res.statusCode).toBe(500);
   });
 });

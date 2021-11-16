@@ -21,6 +21,6 @@
       "@components/*": ["components/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/integration/queryManager.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx",],
   "exclude": ["node_modules", "types"]
 }

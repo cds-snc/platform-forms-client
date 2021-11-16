@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/client";
 import queryManager from "../../../../lib/integration/queryManager";
 import isRequestAllowed from "../../../../lib/middleware/httpRequestAllowed";
+import dbConnector from "../../../../lib/integration/dbConnector";
 
 const allowedMethods = ["GET"];
 
@@ -22,16 +23,18 @@ export const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promi
  * otherwise 400 as status code.
  * @param formID A form id
  */
-async function getToken(res: NextApiResponse, formID: string) {
+export async function getToken(res: NextApiResponse, formID: string) {
   type BearerResponse = {
     bearer_token: string;
   };
   if (formID) {
     //Fetching the token return list of object or an empty array
     const data = queryManager.getResult(
-      await queryManager.executeQuery("SELECT bearer_token FROM templates WHERE id = ($1)", [
-        formID,
-      ])
+      await queryManager.executeQuery(
+        dbConnector(),
+        "SELECT bearer_token FROM templates WHERE id = ($1)",
+        [formID]
+      )
     );
     if (data && data.length > 0) {
       const { bearer_token } = data[0] as unknown as BearerResponse;

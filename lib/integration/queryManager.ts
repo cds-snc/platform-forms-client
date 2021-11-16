@@ -1,16 +1,16 @@
 import { logMessage } from "../logger";
-import dbConnector from "./dbConnector";
-import { QueryArrayResult } from "pg";
+import { QueryArrayResult, Client } from "pg";
 
 const queryManager = {
-  async executeQuery(sql: string, params: [string]): Promise<QueryArrayResult<unknown[]>> {
+  async executeQuery(
+    client: Client,
+    sql: string,
+    params: [string]
+  ): Promise<QueryArrayResult<unknown[]>> {
     try {
-      // Get a client
-      const client = dbConnector();
-      //Stablish a connexion
+      if (!sql) throw new Error("Empty or invalid sql passed as a parameter");
+      //Establish a connexion
       await client.connect();
-      if (!sql) throw new Error("Invalid query param");
-
       return await client.query(sql, params);
     } catch (error: unknown) {
       logMessage.error(`{"error: "${error}"}`);
