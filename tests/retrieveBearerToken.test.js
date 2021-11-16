@@ -24,7 +24,7 @@ describe("Test bearer token retrieve API endpoint", () => {
         "Content-Type": "application/json",
       },
       query: {
-        form: "", // empty form ID
+        form: "", //An empty form ID
       },
     });
 
@@ -40,7 +40,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     };
     client.getSession.mockReturnValueOnce(mockSession);
     const data = [{ bearer_token: null }];
-    // mocking query manager
+    // Mocking query manager
     jest.spyOn(queryManager, "getResult").mockReturnValue(data);
     jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
@@ -66,9 +66,9 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValueOnce(mockSession);
-    // query result
+    // Query result
     const data = [{ bearer_token: "toekakdnaodk" }];
-    // mocking query manager
+    // Mocking query manager
     jest.spyOn(queryManager, "getResult").mockReturnValue(data);
     jest
       .spyOn(queryManager, "executeQuery")
@@ -114,9 +114,9 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValueOnce(mockSession);
-    // query result
+    // Query result
     const data = [];
-    // mocking query manager
+    // Mocking query manager
     jest.spyOn(queryManager, "getResult").mockReturnValue(data);
     jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
