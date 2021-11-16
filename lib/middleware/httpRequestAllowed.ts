@@ -8,9 +8,19 @@ const isRequestAllowed = (
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
       const session = await getSession({ req });
-      const requestBody = JSON.parse(req.body);
-      if (requestBody.method && methods.includes(requestBody.method)) {
-        switch (requestBody.method) {
+      let method;
+      let isAllow = false;
+      if (req.body) {
+        //TODO Should use the HTTP standard API to determine HTTP's verbs.Keeping this section for backward compatibility.
+        const requestBody = JSON.parse(req.body);
+        isAllow = requestBody.method && methods.includes(requestBody.method);
+        method = requestBody.method;
+      } else {
+        method = req.method;
+        isAllow = methods.includes(req.method ?? "");
+      }
+      if (isAllow) {
+        switch (method) {
           case "GET":
             return handler(req, res);
           default:

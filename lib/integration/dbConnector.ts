@@ -1,17 +1,10 @@
 import { Client } from "pg";
-import { logMessage } from "../logger";
 
-export const dbConnector = async (): Promise<Client> => {
-  const connectionString: string | undefined = process.env.DATABASE_URL;
-  if (connectionString) {
-    logMessage.debug("Connexion initialization");
-    const client = new Client({ connectionString });
-    //Attempt a connexion
-    await client.connect();
-    return client;
-  }
-  throw new Error("connexion error");
-  // TODO connect by using rds client like so
-  //new RDSDataClient({ region: REGION });
+const dbConnector = (connexion?: string): Client => {
+  const connectionString = connexion ?? process.env.DATABASE_URL;
+  if (!connectionString || connectionString === undefined)
+    throw Error("Invalid db configuration string");
+  const client = new Client({ connectionString });
+  return client;
 };
 export default dbConnector;

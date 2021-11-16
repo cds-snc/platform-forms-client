@@ -1,31 +1,30 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
 import { retrieve } from "../pages/api/id/[form]/bearer";
-import fetchMock from "jest-fetch-mock";
+import queryManager from "../lib/integration/queryManager";
 
 jest.mock("next-auth/client");
 
-describe("Test bearer token retrieve api endpoint", () => {
+describe("Test bearer token retrieve API endpoint", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    fetchMock.enableMocks();
   });
 
-  it("Shouldn't allow GET request without a valid form's id", async () => {
+  it("Should return an error 'Malformed API Request' 400 No formID was supplied", async () => {
     const mockSession = {
       expires: "1",
-      user: { email: "admin2@cds.ca", name: "Admin2 user", image: "null" },
+      user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
 
     client.getSession.mockReturnValueOnce(mockSession);
-    fetchMock.mockResponseOnce(JSON.stringify({ token: "akalkdfljasdlkfdsljasfdskfj" }));
 
     const { req, res } = createMocks({
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/id/1/bearer",
-        body: JSON.stringify({}),
+      },
+      query: {
+        form: "", // empty form ID
       },
     });
 
@@ -34,19 +33,73 @@ describe("Test bearer token retrieve api endpoint", () => {
     expect(res.statusCode).toBe(400);
   });
 
-  it("Shouldn't allow a request without a valid session", async () => {
-    client.getSession.mockReturnValueOnce(undefined);
-    fetchMock.mockResponseOnce(JSON.stringify({}));
+  it("Should return a statusCode 200 and a Null as token's value associated to a given form (11).", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+    };
+    client.getSession.mockReturnValueOnce(mockSession);
+    const data = [{ bearer_token: null }];
+    // mocking query manager
+    jest.spyOn(queryManager, "getResult").mockReturnValue(data);
+    jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
     const { req, res } = createMocks({
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/id/11/bearer",
-        body: JSON.stringify({}),
       },
       query: {
         form: "11",
+      },
+    });
+
+    await retrieve(req, res);
+    const expectedValue = { token: null };
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("Should return a valid token associated a form (12).", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+    };
+    client.getSession.mockReturnValueOnce(mockSession);
+    // query result
+    const data = [{ bearer_token: "toekakdnaodk" }];
+    // mocking query manager
+    jest.spyOn(queryManager, "getResult").mockReturnValue(data);
+    jest
+      .spyOn(queryManager, "executeQuery")
+      .mockReturnValue({ rows: [{ bearer_token: "toekakdnaodk" }], rowCount: 1 });
+
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      query: {
+        form: "12",
+      },
+    });
+
+    await retrieve(req, res);
+    const expectedValue = { token: "toekakdnaodk" };
+    expect(res.statusCode).toBe(200);
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
+  });
+
+  it("Shouldn't allow this request", async () => {
+    client.getSession.mockReturnValueOnce(undefined);
+
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      query: {
+        form: "45",
       },
     });
 
@@ -55,55 +108,29 @@ describe("Test bearer token retrieve api endpoint", () => {
     expect(res.statusCode).toBe(403);
   });
 
-  it("Should allow a request and return Not found (400) resource", async () => {
+  it("Should return 404 statusCode Not Found if an empty [] value was found", async () => {
     const mockSession = {
       expires: "1",
-      user: { email: "admin1@cds.ca", name: "Admin1 user", image: "null" },
+      user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
-
     client.getSession.mockReturnValueOnce(mockSession);
-    fetchMock.mockResponseOnce(JSON.stringify({ error: "Not Found" }));
+    // query result
+    const data = [];
+    // mocking query manager
+    jest.spyOn(queryManager, "getResult").mockReturnValue(data);
+    jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
     const { req, res } = createMocks({
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/id/11/bearer",
-        body: JSON.stringify({}),
       },
       query: {
-        form: "11",
+        form: "999999999",
       },
     });
     await retrieve(req, res);
-    expect(res.statusCode == 400);
-  });
 
-  it("Should return a valid token", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "admin1@cds.ca", name: "Admin1 user", image: "null" },
-    };
-
-    client.getSession.mockReturnValueOnce(mockSession);
-    fetchMock.mockResponseOnce(JSON.stringify({ token: "ajflajslfjlslajlsfjsldflaf" }));
-
-    const { req, res } = createMocks({
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/id/11/bearer",
-        body: JSON.stringify({}),
-      },
-      query: {
-        form: "11",
-      },
-      body: {
-        token: "ajflajslfjlslajlsfjsldflaf",
-      },
-    });
-
-    await retrieve(req, res);
-    expect(res.body);
+    expect(res.statusCode).toBe(404);
   });
 });
