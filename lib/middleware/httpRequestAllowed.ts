@@ -10,7 +10,7 @@ const isRequestAllowed = (
       const session = await getSession({ req });
       let method;
       let isAllow = false;
-      if (req.body) {
+      if (req.body && Object.keys(req.body).length > 0) {
         //TODO Should use the HTTP standard API to determine HTTP's verbs.Keeping this section for backward compatibility.
         const requestBody = JSON.parse(req.body);
         isAllow = requestBody.method && methods.includes(requestBody.method);

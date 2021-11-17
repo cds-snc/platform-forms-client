@@ -17,14 +17,5 @@ const queryManager = {
       throw new Error(error as string);
     }
   },
-
-  getResult(data: QueryArrayResult): unknown[][] {
-    if (data.rowCount > 0) {
-      return data.rows.map((record) => {
-        return record;
-      });
-    }
-    return [];
-  },
 };
 export default queryManager;
