@@ -51,10 +51,10 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValueOnce(mockSession);
-    const data = [{ bearer_token: null }];
     // Mocking query manager
-    jest.spyOn(queryManager, "getResult").mockReturnValue(data);
-    jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
+    jest
+      .spyOn(queryManager, "executeQuery")
+      .mockReturnValue({ rows: [{ bearer_token: null }], rowCount: 1 });
 
     const { req, res } = createMocks({
       method: "GET",
@@ -77,10 +77,7 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValueOnce(mockSession);
-    // Query result
-    const data = [{ bearer_token: "toekakdnaodk" }];
     // Mocking query manager
-    jest.spyOn(queryManager, "getResult").mockReturnValue(data);
     jest
       .spyOn(queryManager, "executeQuery")
       .mockReturnValue({ rows: [{ bearer_token: "toekakdnaodk" }], rowCount: 1 });
@@ -127,7 +124,6 @@ describe("Test bearer token retrieve API endpoint", () => {
     };
     client.getSession.mockReturnValueOnce(mockSession);
     // Mocking query manager
-    jest.spyOn(queryManager, "getResult").mockReturnValue([]);
     jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
     const { req, res } = createMocks({
@@ -151,11 +147,7 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValueOnce(mockSession);
-    // Mocking query manager to throw an error
-    jest.spyOn(queryManager, "getResult").mockImplementation(() => {
-      throw new Error("UnExcepted Error");
-    });
-
+    // Mocking executeQuery
     jest.spyOn(queryManager, "executeQuery").mockImplementation(() => {
       throw new Error("UnExcepted Error");
     });
