@@ -1,6 +1,6 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
-import { retrieve } from "../pages/api/id/[form]/bearer";
+import retrieve from "../pages/api/id/[form]/bearer";
 import queryManager from "../lib/integration/queryManager";
 
 jest.mock("../lib/integration/dbConnector", () => {
@@ -25,12 +25,13 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
 
-    client.getSession.mockReturnValueOnce(mockSession);
+    client.getSession.mockReturnValue(mockSession);
 
     const { req, res } = createMocks({
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Origin: "http://localhost:3000/api/id/8/bearer",
       },
       query: {
         form: "", //An empty form ID
@@ -38,11 +39,8 @@ describe("Test bearer token retrieve API endpoint", () => {
     });
 
     await retrieve(req, res);
-
+    expect(JSON.parse(res._getData()).error).toEqual("Malformed API Request");
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining({ error: "Malformed API Request" })
-    );
   });
 
   it("Should return a statusCode 200 and a Null as token's value associated to a given form (11).", async () => {
@@ -50,7 +48,7 @@ describe("Test bearer token retrieve API endpoint", () => {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
-    client.getSession.mockReturnValueOnce(mockSession);
+    client.getSession.mockReturnValue(mockSession);
     // Mocking query manager
     jest
       .spyOn(queryManager, "executeQuery")
@@ -76,7 +74,7 @@ describe("Test bearer token retrieve API endpoint", () => {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
-    client.getSession.mockReturnValueOnce(mockSession);
+    client.getSession.mockReturnValue(mockSession);
     // Mocking query manager
     jest
       .spyOn(queryManager, "executeQuery")
@@ -97,8 +95,8 @@ describe("Test bearer token retrieve API endpoint", () => {
     expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ token: "toekakdnaodk" }));
   });
 
-  it("Shouldn't allow this request go through withoud a session", async () => {
-    client.getSession.mockReturnValueOnce(undefined);
+  it("Shouldn't allow this request withoud a valid session", async () => {
+    client.getSession.mockReturnValue(undefined);
 
     const { req, res } = createMocks({
       method: "GET",
@@ -111,10 +109,8 @@ describe("Test bearer token retrieve API endpoint", () => {
     });
 
     await retrieve(req, res);
-
     expect(res.statusCode).toBe(403);
-    const expectedValue = { error: "Access Denied" };
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(expectedValue));
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Access Denied" }));
   });
 
   it("Should return 404 statusCode Not Found if an empty [] value was found", async () => {
@@ -122,7 +118,7 @@ describe("Test bearer token retrieve API endpoint", () => {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
-    client.getSession.mockReturnValueOnce(mockSession);
+    client.getSession.mockReturnValue(mockSession);
     // Mocking query manager
     jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
 
@@ -138,7 +134,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     await retrieve(req, res);
 
     expect(res.statusCode).toBe(404);
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Not Found" }));
+    expect(JSON.parse(res._getData()).error).toEqual("Not Found");
   });
 
   it("It Should return 500 statusCode if there an error happens", async () => {
@@ -146,7 +142,7 @@ describe("Test bearer token retrieve API endpoint", () => {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
-    client.getSession.mockReturnValueOnce(mockSession);
+    client.getSession.mockReturnValue(mockSession);
     // Mocking executeQuery
     jest.spyOn(queryManager, "executeQuery").mockImplementation(() => {
       throw new Error("UnExcepted Error");
@@ -164,5 +160,6 @@ describe("Test bearer token retrieve API endpoint", () => {
 
     await retrieve(req, res);
     expect(res.statusCode).toBe(500);
+    expect(JSON.parse(res._getData()).error).toEqual("Error on Server Side");
   });
 });
