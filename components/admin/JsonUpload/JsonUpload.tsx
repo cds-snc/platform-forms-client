@@ -40,7 +40,6 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
         return serverResponse;
       })
       .catch((err) => {
-        console.error(err);
         setSubmitting(false);
         setErrorState({ message: "Uploading Error" });
       });

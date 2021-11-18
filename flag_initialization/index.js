@@ -34,31 +34,25 @@ const createFlag = async (key, value, redis) => {
     .exec();
 };
 const initiateFlags = (redis) => {
-  console.log("Running flag initiation");
-
   return checkAll(redis)
     .then(async (currentFlags) => {
-      console.log("Checking for Depreceated Flags");
       for (const key in currentFlags) {
         if (typeof initialFlags[key] === "undefined" || initialFlags[key] === null) {
-          console.log(`Removing flag: ${key} from flag registry`);
           await removeFlag(key, redis);
         }
       }
       return checkAll(redis);
     })
     .then(async (currentFlags) => {
-      console.log("Checking for New Flags");
       for (const key in initialFlags) {
         if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
-          console.log(`Creating flag: ${key} with value ${initialFlags[key]}`);
           await createFlag(key, initialFlags[key], redis);
         }
       }
       return;
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
+      // noop
     })
     .finally(() => {
       redis.disconnect();
@@ -68,6 +62,4 @@ const initiateFlags = (redis) => {
 if (process.env.REDIS_URL) {
   const redis = new Redis(process.env.REDIS_URL);
   initiateFlags(redis);
-} else {
-  console.log("No Redis instance to initiate flags.  Application will fallback onto ioredis-mock");
 }
