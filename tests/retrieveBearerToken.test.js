@@ -95,7 +95,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ token: "toekakdnaodk" }));
   });
 
-  it("Shouldn't allow this request withoud a valid session", async () => {
+  it("Shouldn't allow this request without a valid session", async () => {
     client.getSession.mockReturnValue(undefined);
 
     const { req, res } = createMocks({
@@ -113,7 +113,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Access Denied" }));
   });
 
-  it("Should return 404 statusCode Not Found if an empty [] value was found", async () => {
+  it("Should return 404 statusCode Not Found if an empty [] value was returned", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
@@ -137,7 +137,7 @@ describe("Test bearer token retrieve API endpoint", () => {
     expect(JSON.parse(res._getData()).error).toEqual("Not Found");
   });
 
-  it("It Should return 500 statusCode if there an error happens", async () => {
+  it("Should return 500 statusCode if there's an error", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
