@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import queryManager from "../../../../lib/integration/queryManager";
+import executeQuery from "../../../../lib/integration/queryManager";
 import isRequestAllowed from "../../../../lib/middleware/httpRequestAllowed";
 import dbConnector from "../../../../lib/integration/dbConnector";
 import isUserSessionExist from "../../../../lib/middleware/HttpSessionExist";
@@ -17,13 +17,13 @@ const retrieve = async (req: NextApiRequest, res: NextApiResponse): Promise<void
  * otherwise 400 as status code.
  * @param formID A form id
  */
-export async function getToken(res: NextApiResponse, formID: string) {
+export async function getToken(res: NextApiResponse, formID: string): Promise<void> {
   type BearerResponse = {
     bearer_token: string;
   };
   if (formID) {
     //Fetching the token return list of object or an empty array
-    const resultObject = await queryManager.executeQuery(
+    const resultObject = await executeQuery(
       dbConnector(),
       "SELECT bearer_token FROM templates WHERE id = ($1)",
       [formID]

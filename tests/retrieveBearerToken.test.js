@@ -1,7 +1,10 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
 import retrieve from "../pages/api/id/[form]/bearer";
-import queryManager from "../lib/integration/queryManager";
+import executeQuery from "../lib/integration/queryManager";
+
+jest.mock("next-auth/client");
+jest.mock("../lib/integration/queryManager");
 
 jest.mock("../lib/integration/dbConnector", () => {
   const mClient = {
@@ -12,13 +15,7 @@ jest.mock("../lib/integration/dbConnector", () => {
   return jest.fn(() => mClient);
 });
 
-jest.mock("next-auth/client");
-
 describe("Test bearer token retrieve API endpoint", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   it("Should return an error 'Malformed API Request' 400 No formID was supplied", async () => {
     const mockSession = {
       expires: "1",
@@ -49,10 +46,8 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValue(mockSession);
-    // Mocking query manager
-    jest
-      .spyOn(queryManager, "executeQuery")
-      .mockReturnValue({ rows: [{ bearer_token: null }], rowCount: 1 });
+    // Mocking executeQuery to return null as bearer token value
+    executeQuery.mockReturnValue({ rows: [{ bearer_token: null }], rowCount: 1 });
 
     const { req, res } = createMocks({
       method: "GET",
@@ -75,10 +70,8 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValue(mockSession);
-    // Mocking query manager
-    jest
-      .spyOn(queryManager, "executeQuery")
-      .mockReturnValue({ rows: [{ bearer_token: "toekakdnaodk" }], rowCount: 1 });
+    // Mocking executeQuery to return a valid bearer token
+    executeQuery.mockReturnValue({ rows: [{ bearer_token: "toekakdnaodk" }], rowCount: 1 });
 
     const { req, res } = createMocks({
       method: "GET",
@@ -119,8 +112,8 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValue(mockSession);
-    // Mocking query manager
-    jest.spyOn(queryManager, "executeQuery").mockReturnValue({ rows: [], rowCount: 0 });
+    // Mocking executeQuery to return an empty array
+    executeQuery.mockReturnValue({ rows: [], rowCount: 0 });
 
     const { req, res } = createMocks({
       method: "GET",
@@ -143,8 +136,8 @@ describe("Test bearer token retrieve API endpoint", () => {
       user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
     };
     client.getSession.mockReturnValue(mockSession);
-    // Mocking executeQuery
-    jest.spyOn(queryManager, "executeQuery").mockImplementation(() => {
+    // Mocking executeQuery to throw an error
+    executeQuery.mockImplementation(() => {
       throw new Error("UnExcepted Error");
     });
 
