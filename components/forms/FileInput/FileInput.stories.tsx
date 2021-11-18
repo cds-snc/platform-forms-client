@@ -1,6 +1,7 @@
 import React from "react";
 import { FileInput } from "./FileInput";
 import { Formik } from "formik";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/FileInput",
@@ -22,7 +23,7 @@ const inputProps = {
 export const defaultFileInput = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ file: "" }}
   >

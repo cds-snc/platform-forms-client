@@ -1,6 +1,7 @@
 import React from "react";
 import { Checkbox } from "./Checkbox";
 import { Formik } from "formik";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/Checkbox",
@@ -13,7 +14,7 @@ export default {
 export const defaultCheckbox = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ a: "a" }}
   >

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "./Button";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { logMessage } from "../../../lib/logger";
 
 interface DeleteButtonProps {
   action(data?: unknown): Promise<number>;
@@ -33,7 +34,7 @@ export const DeleteButton = (props: DeleteButtonProps): React.ReactElement => {
               return;
             }
           } catch (e) {
-            console.error(e);
+            logMessage.error(e as string);
           }
         }}
         testid="confirmDelete"

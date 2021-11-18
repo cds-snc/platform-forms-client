@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import { logMessage } from "./logger";
 
 // Shout out to https://github.com/leighhalliday/nextjs-feature-flags for inspiration
 
@@ -13,7 +14,7 @@ const getRedisInstance = async (): Promise<Redis.Redis> => {
       "../flag_initialization/default_flag_settings.json"
     );
     for (const key in initialSettings) {
-      console.log(`Creating flag: ${key} with value ${true} because we're in Test mode`);
+      logMessage.log(`Creating flag: ${key} with value ${true} because we're in Test mode`);
       await mockRedisInstance.sadd("flags", key);
       await mockRedisInstance.set(`flag:${key}`, "1");
     }

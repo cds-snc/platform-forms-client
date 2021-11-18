@@ -1,6 +1,7 @@
 import React from "react";
 import { TextArea } from "./TextArea";
 import { Formik } from "formik";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/TextArea",
@@ -13,7 +14,7 @@ export default {
 export const defaultTextArea = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
@@ -24,7 +25,7 @@ export const defaultTextArea = (): React.ReactElement => (
 export const withDefaultValue = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
@@ -35,7 +36,7 @@ export const withDefaultValue = (): React.ReactElement => (
 export const withPlaceholder = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
@@ -46,7 +47,7 @@ export const withPlaceholder = (): React.ReactElement => (
 export const disabled = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
@@ -57,7 +58,7 @@ export const disabled = (): React.ReactElement => (
 export const readonly = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
