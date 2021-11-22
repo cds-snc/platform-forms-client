@@ -12,10 +12,10 @@ assignees: ''
 - [ ] Page content and Widgets
 
 ### A basic testing routine
-- [ ] Run an Automated check (using Axe DevTools or Wave)
+- [ ] Run an Automated check (using Axe DevTools or Wave) (Optional)
 - [ ] Screen Reader Resources (voiceOver, Narrator)
 
-###Keyboard Accessibility
+### Keyboard Accessibility
 - [ ] Enabling Keyboard Access (On Mac | Windows)
 - [ ] Test tab focusability and tab order
 - [ ] Check keyboard functionality

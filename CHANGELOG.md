@@ -88,3 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Forms:
   - CDS Intake Form
+
+### Added
+
+- Added secure API to retrieve bearer token.
