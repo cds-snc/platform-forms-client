@@ -10,7 +10,7 @@ const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       case "GET":
         return await getEmailListByFormID(req, res);
       default:
-        res.status(200); // TODO handle card # 491 to associate a specific an email to the form
+        res.status(200); // TODO handle card # 491 to associate a specific email to a form
         break;
     }
   } catch (err) {
