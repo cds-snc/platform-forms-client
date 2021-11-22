@@ -24,7 +24,7 @@ export async function getEmailListByFormID(
 ): Promise<void> {
   const formID = req.query.form as string;
   if (formID) {
-    //Get emails by form ID
+    //Get emails by formID
     const resultObject = await executeQuery(
       dbConnector(),
       "SELECT email FROM form_users WHERE template_id = ($1)",
