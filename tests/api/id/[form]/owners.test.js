@@ -53,7 +53,7 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     });
 
     await owners(req, res);
-    expect(JSON.parse(res._getData()).error).toEqual("Malformed API Request");
+    expect(JSON.parse(res._getData()).error).toEqual("Malformed API Request FormID not define");
     expect(res.statusCode).toBe(400);
   });
 
@@ -65,7 +65,10 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     client.getSession.mockReturnValue(mockSession);
     // Mocking executeQuery to return a list of emails
     executeQuery.mockReturnValue({
-      rows: [{ email: "test@cds.ca" }, { email: "forms@cds.ca" }],
+      rows: [
+        { id: "1", email: "test@cds.ca" },
+        { id: "2", email: "forms@cds.ca" },
+      ],
       rowCount: 2,
     });
     const { req, res } = createMocks({
@@ -80,7 +83,10 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     });
     await owners(req, res);
     expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining(["test@cds.ca", "forms@cds.ca"])
+      expect.objectContaining([
+        { id: "1", email: "test@cds.ca" },
+        { id: "2", email: "forms@cds.ca" },
+      ])
     );
     expect(res.statusCode).toBe(200);
   });
@@ -92,7 +98,7 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     };
     client.getSession.mockReturnValue(mockSession);
     // Mocking executeQuery to return a list with only an email
-    executeQuery.mockReturnValue({ rows: [{ email: "oneEmail@cds.ca" }], rowCount: 1 });
+    executeQuery.mockReturnValue({ rows: [{ id: "1", email: "oneEmail@cds.ca" }], rowCount: 1 });
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -104,7 +110,9 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
       },
     });
     await owners(req, res);
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining(["oneEmail@cds.ca"]));
+    expect(JSON.parse(res._getData())).toEqual(
+      expect.objectContaining([{ id: "1", email: "oneEmail@cds.ca" }])
+    );
     expect(res.statusCode).toBe(200);
   });
 
