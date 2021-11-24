@@ -9,8 +9,12 @@ const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     switch (req.method) {
       case "GET":
         return await getEmailListByFormID(req, res);
+      case "PUT":
+        return await activateOrDeactivateFormOwners(req, res);
+      case "POST":
+        // TODO handle card # 491 to associate a specific email to a form
+        break;
       default:
-        res.status(200); // TODO handle card # 491 to associate a specific email to a form
         break;
     }
   } catch (err) {
@@ -45,5 +49,41 @@ export async function getEmailListByFormID(
   //Could not find formID in the path
   return res.status(400).json({ error: "Malformed API Request" });
 }
+/**
+ * Can activate and deactivate all the owners associated to a specific form.
+ * It should expect to find a payload in the request body like:
+ * { "email": "forms@cds.ca", "active":"0/1"}
+ * "email": The email of the user associated to the form
+ * "active": Boolean value indicating whether the form owner is active or not
+ * @param req
+ * @param res
+ */
+export async function activateOrDeactivateFormOwners(
+  req: NextApiRequest,
+  res: NextApiResponse
+): Promise<void> {
+  //Extract req body
+  const requestBody =
+    req.body && Object.keys(req.body).length > 0 ? JSON.parse(req.body) : undefined;
+  //Payload validation
+  if (!requestBody?.email || !requestBody?.active) {
+    //Invalid payload
+    return res.status(400).json({ error: "Invalid payload" });
+  }
 
-export default isRequestAllowed(["GET", "POST"], isUserSessionExist(owners));
+  const formID = req.query.form as string;
+  const { email, active } = requestBody;
+  if (!formID) return res.status(400).json({ error: "Malformed API Request" });
+  //Update form_users's records
+  const resultObject = await executeQuery(
+    dbConnector(),
+    "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3)",
+    [active, formID, email as string]
+  );
+  //A record was updated
+  if (resultObject.rowCount > 0) return res.status(200).json({});
+  //A 404 status code for a form Not Found in form_users
+  return res.status(404).json({ error: "Form or email Not Found" });
+}
+
+export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));

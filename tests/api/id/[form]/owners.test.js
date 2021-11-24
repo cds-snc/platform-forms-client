@@ -140,7 +140,7 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
       user: { email: "forms@cds.ca", name: "forms" },
     };
     client.getSession.mockReturnValue(mockSession);
-    // Mocking executeQuery to throw an error
+    //Mocking executeQuery to throw an error
     executeQuery.mockImplementation(() => {
       throw new Error("Error");
     });
@@ -160,4 +160,117 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     expect(res.statusCode).toBe(500);
     expect(JSON.parse(res._getData()).error).toEqual("Error on Server Side");
   });
+});
+
+describe("Test activate and deactivate a form's owners API endpoint", () => {
+  it("Should return 400 invalid payload error(active) field/value is missing", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "forms@cds.ca", name: "forms" },
+    };
+    client.getSession.mockReturnValue(mockSession);
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000/api/id/11/owners",
+      },
+      body: JSON.stringify({
+        email: "forms@cds.ca",
+        active: "",
+      }),
+      query: {
+        form: "11",
+      },
+    });
+    await owners(req, res);
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual(
+      expect.objectContaining({ error: "Invalid payload" })
+    );
+  });
+
+  it("Should return 400 invalid payload error(email) field/value is missing", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "forms@cds.ca", name: "forms" },
+    };
+    client.getSession.mockReturnValue(mockSession);
+
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: "",
+        active: "1",
+      }),
+      query: {
+        form: "20",
+      },
+    });
+    await owners(req, res);
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual(
+      expect.objectContaining({ error: "Invalid payload" })
+    );
+  });
+
+  it("Should return 404 Form or email Not Found in form_users", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "forms@cds.ca", name: "forms" },
+    };
+    // Mocking executeQuery it returns 0 updated rows
+    executeQuery.mockReturnValue({ rows: [], rowCount: 0 });
+
+    client.getSession.mockReturnValue(mockSession);
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: "forms@cds.ca",
+        active: "1",
+      }),
+      query: {
+        form: "10",
+      },
+    });
+    await owners(req, res);
+    expect(res.statusCode).toBe(404);
+    expect(JSON.parse(res._getData())).toEqual(
+      expect.objectContaining({ error: "Form or email Not Found" })
+    );
+  });
+
+  test.each([0, 1])(
+    "Should return 200 status code: owners are deactivated/activated",
+    async (elem) => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //Mocking executeQuery
+      executeQuery.mockReturnValue({ rows: [], rowCount: `${elem}` + 1 });
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "forms@cds.ca",
+          active: `${elem}`,
+        }),
+        query: {
+          form: "12",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(200);
+    }
+  );
 });
