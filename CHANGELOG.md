@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
 
+### Added
+
+- `<br>` in long description string now create new lines
+
 ### Fixed
 
 - Top left corner logo is now more accessible as it tells the user that clicking on it will get him back to the home page
