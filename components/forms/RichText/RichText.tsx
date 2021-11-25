@@ -28,7 +28,7 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   return (
     <div data-testid="richText" className={classes} id={id}>
       <Markdown options={{ forceBlock: false, overrides: { h1: { component: H1 } } }}>
-        {Array.isArray(children) ? children.join() : children}
+        {Array.isArray(children) ? children.join("<br>") : children}
       </Markdown>
     </div>
   );
