@@ -3,7 +3,7 @@ import classnames from "classnames";
 import Markdown from "markdown-to-jsx";
 
 interface RichTextProps {
-  children?: string[] | string | undefined;
+  children?: string | undefined;
   id?: string;
   className?: string;
 }
@@ -25,10 +25,11 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   }
 
   const classes = classnames("gc-richText", className);
+  console.log(children);
   return (
     <div data-testid="richText" className={classes} id={id}>
-      <Markdown options={{ forceBlock: false, overrides: { h1: { component: H1 } } }}>
-        {Array.isArray(children) ? children.join("<br>") : children}
+      <Markdown options={{ forceBlock: true, overrides: { h1: { component: H1 } } }}>
+        {children}
       </Markdown>
     </div>
   );

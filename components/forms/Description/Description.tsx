@@ -2,7 +2,7 @@ import React, { Children } from "react";
 import classnames from "classnames";
 
 interface DescriptionProps {
-  children: React.ReactNode;
+  children: string | undefined;
   id?: string;
   className?: string;
 }
@@ -11,7 +11,7 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
   const { children, className, id } = props;
 
   const classes = classnames("gc-description", className);
-  const descriptions = Children.toArray(children) ?? undefined;
+  const descriptions = children ? children.split("<br>") : [];
 
   return (
     <div id={`desc-${id}`}>

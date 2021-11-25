@@ -102,7 +102,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const placeHolder = element.properties[getProperty("placeholder", lang)] ?? "";
 
   const descriptionPerLocale = element.properties[getProperty("description", lang)];
-  const description = descriptionPerLocale ? descriptionPerLocale.toString().split("<br>") : "";
+  const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
     case "textField":
