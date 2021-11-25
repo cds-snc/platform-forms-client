@@ -51,7 +51,7 @@ export async function getEmailListByFormID(
 }
 /**
  * Can activate and deactivate all the owners associated to a specific form.
- * It should expect to find a payload in the request body like:
+ * It expects to find a payload in the request body like:
  * { "email": "forms@cds.ca", "active":"0/1"}
  * "email": The email of the user associated to the form
  * "active": Boolean value indicating whether the form owner is active or not
@@ -62,26 +62,26 @@ export async function activateOrDeactivateFormOwners(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  //Extract req body
+  //Extracting req body
   const requestBody =
     req.body && Object.keys(req.body).length > 0 ? JSON.parse(req.body) : undefined;
   //Payload validation
   if (!requestBody?.email || !requestBody?.active) {
     //Invalid payload
-    return res.status(400).json({ error: "Invalid payload" });
+    return res.status(400).json({ error: "Invalid payload fields are not define" });
   }
 
   const formID = req.query.form as string;
   const { email, active } = requestBody;
-  if (!formID) return res.status(400).json({ error: "Malformed API Request" });
+  if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   //Update form_users's records
   const resultObject = await executeQuery(
     dbConnector(),
-    "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3)",
+    "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3) RETURNING id",
     [active, formID, email as string]
   );
-  //A record was updated
-  if (resultObject.rowCount > 0) return res.status(200).json({});
+  //A record was updated and return ids [ { "id": 1 } etc.. ]
+  if (resultObject.rowCount > 0) return res.status(200).json(resultObject.rows);
   //A 404 status code for a form Not Found in form_users
   return res.status(404).json({ error: "Form or email Not Found" });
 }

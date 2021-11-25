@@ -186,7 +186,7 @@ describe("Test activate and deactivate a form's owners API endpoint", () => {
     await owners(req, res);
     expect(res.statusCode).toBe(400);
     expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining({ error: "Invalid payload" })
+      expect.objectContaining({ error: "Invalid payload fields are not define" })
     );
   });
 
@@ -213,7 +213,7 @@ describe("Test activate and deactivate a form's owners API endpoint", () => {
     await owners(req, res);
     expect(res.statusCode).toBe(400);
     expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining({ error: "Invalid payload" })
+      expect.objectContaining({ error: "Invalid payload fields are not define" })
     );
   });
 
@@ -254,8 +254,9 @@ describe("Test activate and deactivate a form's owners API endpoint", () => {
         user: { email: "forms@cds.ca", name: "forms" },
       };
       client.getSession.mockReturnValue(mockSession);
+
       //Mocking executeQuery
-      executeQuery.mockReturnValue({ rows: [], rowCount: `${elem}` + 1 });
+      executeQuery.mockReturnValue({ rows: [{ id: 1 }], rowCount: `${elem}` + 1 });
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -271,6 +272,7 @@ describe("Test activate and deactivate a form's owners API endpoint", () => {
       });
       await owners(req, res);
       expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining([{ id: 1 }]));
     }
   );
 });
