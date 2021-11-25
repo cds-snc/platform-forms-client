@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import classnames from "classnames";
 
 interface DescriptionProps {
@@ -11,11 +11,18 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
   const { children, className, id } = props;
 
   const classes = classnames("gc-description", className);
+  const descriptions = Children.toArray(children) ?? undefined;
 
   return (
-    <p data-testid="description" className={classes} id={`desc-${id}`}>
-      {children}
-    </p>
+    <div id={`desc-${id}`}>
+      {descriptions.map((child, index) => {
+        return (
+          <p data-testid="description" className={classes} key={index}>
+            {child}
+          </p>
+        );
+      })}
+    </div>
   );
 };
 
