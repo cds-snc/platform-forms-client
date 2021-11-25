@@ -25,7 +25,6 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   }
 
   const classes = classnames("gc-richText", className);
-  console.log(children);
   return (
     <div data-testid="richText" className={classes} id={id}>
       <Markdown options={{ forceBlock: true, overrides: { h1: { component: H1 } } }}>
