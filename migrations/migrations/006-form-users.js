@@ -6,7 +6,8 @@ const createFormUsersTable = `
     temporary_token TEXT,
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT template_id_email_unique UNIQUE (template_id,email)
   );
 `;
 module.exports.generateSql = () => `${createFormUsersTable}`;

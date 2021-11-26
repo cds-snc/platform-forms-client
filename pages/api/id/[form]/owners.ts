@@ -12,9 +12,7 @@ const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       case "PUT":
         return await activateOrDeactivateFormOwners(req, res);
       case "POST":
-        // TODO handle card # 491 to associate a specific email to a form
-        break;
-      default:
+        // TODO handle card #491 to associate a specific email to a form
         break;
     }
   } catch (err) {
@@ -31,27 +29,20 @@ export async function getEmailListByFormID(
     //Get emails by formID
     const resultObject = await executeQuery(
       dbConnector(),
-      "SELECT email FROM form_users WHERE template_id = ($1)",
+      "SELECT id, email, active FROM form_users WHERE template_id = ($1)",
       [formID]
     );
-    type EmailListResponse = { email: string };
     //Return all emails associated with formID
-    if (resultObject.rowCount > 0)
-      return res.status(200).json(
-        resultObject.rows.map((elem) => {
-          const { email } = elem as unknown as EmailListResponse;
-          return email;
-        })
-      );
+    if (resultObject.rowCount > 0) return res.status(200).json(resultObject.rows);
     //Otherwise a 404 form Not Found
     return res.status(404).json({ error: "Form Not Found" });
   }
   //Could not find formID in the path
-  return res.status(400).json({ error: "Malformed API Request" });
+  return res.status(400).json({ error: "Malformed API Request FormID not define" });
 }
 /**
- * Can activate and deactivate all the owners associated to a specific form.
- * It expects to find a payload in the request body like:
+ * It will activate and deactivate all the owners associated to a specific form.
+ * This function is expecting to find a payload in the request body like:
  * { "email": "forms@cds.ca", "active":"0/1"}
  * "email": The email of the user associated to the form
  * "active": Boolean value indicating whether the form owner is active or not
@@ -85,5 +76,6 @@ export async function activateOrDeactivateFormOwners(
   //A 404 status code for a form Not Found in form_users
   return res.status(404).json({ error: "Form or email Not Found" });
 }
-
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));
+
+
