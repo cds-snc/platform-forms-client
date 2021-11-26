@@ -8,9 +8,11 @@ const isRequestAllowed = (
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
       const session = await getSession({ req });
-      const requestBody = JSON.parse(req.body);
-      if (requestBody.method && methods.includes(requestBody.method)) {
-        switch (requestBody.method) {
+      const requestBody =
+        req.body && Object.keys(req.body).length > 0 ? JSON.parse(req.body) : undefined;
+      const method = requestBody?.method ? requestBody.method : req.method;
+      if (methods.includes(method)) {
+        switch (method) {
           case "GET":
             return handler(req, res);
           default:

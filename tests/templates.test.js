@@ -1,10 +1,8 @@
 import { createMocks } from "node-mocks-http";
 import templates from "../pages/api/templates";
 import client from "next-auth/client";
-import validFormTemplate from "./validFormTemplate.json";
-import brokenFormTemplate from "./brokenFormTemplate.json";
-
-import fetchMock from "jest-fetch-mock";
+import validFormTemplate from "./data/validFormTemplate.json";
+import brokenFormTemplate from "./data/brokenFormTemplate.json";
 
 global.TextEncoder = require("util").TextEncoder;
 global.TextDecoder = require("util").TextDecoder;
@@ -62,9 +60,6 @@ jest.mock("@aws-sdk/client-lambda", () => {
 });
 
 describe("Test JSON validation scenarios", () => {
-  beforeEach(() => {
-    fetchMock.enableMocks();
-  });
   it("Should pass with valid JSON", async () => {
     const mockSession = {
       expires: "1",
@@ -72,8 +67,6 @@ describe("Test JSON validation scenarios", () => {
     };
 
     client.getSession.mockReturnValueOnce(mockSession);
-
-    fetchMock.mockResponseOnce(JSON.stringify({ testing: 300 }));
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -98,8 +91,6 @@ describe("Test JSON validation scenarios", () => {
     };
 
     client.getSession.mockReturnValueOnce([mockSession, false]);
-
-    fetchMock.mockResponseOnce(JSON.stringify({ testing: 300 }));
     const { req, res } = createMocks({
       method: "POST",
       headers: {
