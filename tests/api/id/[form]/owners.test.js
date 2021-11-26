@@ -83,7 +83,7 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     });
     await owners(req, res);
     expect(JSON.parse(res._getData())).toEqual(
-    expect.objectContaining([
+      expect.objectContaining([
         { id: "1", email: "test@cds.ca", active: "1" },
         { id: "2", email: "forms@cds.ca", active: "0" },
       ])

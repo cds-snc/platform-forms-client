@@ -77,5 +77,3 @@ export async function activateOrDeactivateFormOwners(
   return res.status(404).json({ error: "Form or email Not Found" });
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));
-
-
