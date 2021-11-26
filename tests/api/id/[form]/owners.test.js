@@ -66,8 +66,8 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     // Mocking executeQuery to return a list of emails
     executeQuery.mockReturnValue({
       rows: [
-        { id: "1", email: "test@cds.ca" },
-        { id: "2", email: "forms@cds.ca" },
+        { id: "1", email: "test@cds.ca", active: "1" },
+        { id: "2", email: "forms@cds.ca", active: "0" },
       ],
       rowCount: 2,
     });
@@ -84,8 +84,8 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     await owners(req, res);
     expect(JSON.parse(res._getData())).toEqual(
       expect.objectContaining([
-        { id: "1", email: "test@cds.ca" },
-        { id: "2", email: "forms@cds.ca" },
+        { id: "1", email: "test@cds.ca", active: "1" },
+        { id: "2", email: "forms@cds.ca", active: "0" },
       ])
     );
     expect(res.statusCode).toBe(200);
@@ -98,7 +98,10 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     };
     client.getSession.mockReturnValue(mockSession);
     // Mocking executeQuery to return a list with only an email
-    executeQuery.mockReturnValue({ rows: [{ id: "1", email: "oneEmail@cds.ca" }], rowCount: 1 });
+    executeQuery.mockReturnValue({
+      rows: [{ id: "1", email: "oneEmail@cds.ca", active: "1" }],
+      rowCount: 1,
+    });
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -111,7 +114,7 @@ describe("Test Owners : retrieve list of emails API endpoint", () => {
     });
     await owners(req, res);
     expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining([{ id: "1", email: "oneEmail@cds.ca" }])
+      expect.objectContaining([{ id: "1", email: "oneEmail@cds.ca", active: "1" }])
     );
     expect(res.statusCode).toBe(200);
   });

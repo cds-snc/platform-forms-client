@@ -7,7 +7,7 @@ const createFormUsersTable = `
     active BOOLEAN NOT NULL DEFAULT TRUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(template_id,active)
+    CONSTRAINT template_id_email_unique UNIQUE (template_id,email)
   );
 `;
 module.exports.generateSql = () => `${createFormUsersTable}`;

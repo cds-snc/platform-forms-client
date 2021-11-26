@@ -27,7 +27,7 @@ export async function getEmailListByFormID(
     //Get emails by formID
     const resultObject = await executeQuery(
       dbConnector(),
-      "SELECT id, email FROM form_users WHERE template_id = ($1)",
+      "SELECT id, email, active FROM form_users WHERE template_id = ($1)",
       [formID]
     );
     //Return all emails associated with formID
