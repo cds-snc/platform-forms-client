@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { Formik } from "formik";
 import { FileInput } from "./FileInput";
-import { logMessage } from "../../../lib/logger";
+import { logMessage } from "@lib/logger";
 
 const inputProps = {
   key: "pdf",

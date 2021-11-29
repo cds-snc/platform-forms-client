@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "./Button";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
-import { logMessage } from "../../../lib/logger";
+import { logMessage } from "@lib/logger";
 
 interface DeleteButtonProps {
   action(data?: unknown): Promise<number>;
