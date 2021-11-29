@@ -333,7 +333,7 @@ async function _getFormByStatus(
 
 async function _getFormByID(
   formID: string,
-  mockedFormFile: string
+  mockedFormFile?: string
 ): Promise<PublicFormSchemaProperties | null> {
   // for cypress tests we want to return a dummy form from a local file
   // as opposed to needing to hit a staging endpoint
