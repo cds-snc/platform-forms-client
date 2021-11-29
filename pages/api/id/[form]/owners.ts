@@ -54,26 +54,33 @@ export async function activateOrDeactivateFormOwners(
   res: NextApiResponse
 ): Promise<void> {
   //Extracting req body
-  const requestBody =
-    req.body && Object.keys(req.body).length > 0 ? JSON.parse(req.body) : undefined;
+  const requestBody = req.body ? JSON.parse(req.body) : undefined;
   //Payload validation
   if (!requestBody?.email || !requestBody?.active) {
     //Invalid payload
     return res.status(400).json({ error: "Invalid payload fields are not define" });
+  } else {
+    const { email } = requestBody; // TODO email should also be checked i.e (valid Gov email). See #491
+    let { active } = requestBody;
+    try {
+      active = Boolean(JSON.parse(active));
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ error: "Invalid field value: active must be 1/0 or true/false" });
+    }
+    const formID = req.query.form as string;
+    if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
+    //Update form_users's records
+    const resultObject = await executeQuery(
+      dbConnector(),
+      "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3) RETURNING id",
+      [active, formID, email as string]
+    );
+    //A record was updated and return ids [ { "id": 1 } etc.. ]
+    if (resultObject.rowCount > 0) return res.status(200).json(resultObject.rows);
+    //A 404 status code for a form Not Found in form_users
+    return res.status(404).json({ error: "Form or email Not Found" });
   }
-
-  const formID = req.query.form as string;
-  const { email, active } = requestBody;
-  if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
-  //Update form_users's records
-  const resultObject = await executeQuery(
-    dbConnector(),
-    "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3) RETURNING id",
-    [active, formID, email as string]
-  );
-  //A record was updated and return ids [ { "id": 1 } etc.. ]
-  if (resultObject.rowCount > 0) return res.status(200).json(resultObject.rows);
-  //A 404 status code for a form Not Found in form_users
-  return res.status(404).json({ error: "Form or email Not Found" });
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));
