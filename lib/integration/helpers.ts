@@ -283,6 +283,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
             ...referrerUrl,
             htmlEmail: htmlEmail,
             pageText: endPageText,
+            mockedFormFile: formikBag.props.mockedFormFile,
           },
         });
       } else {

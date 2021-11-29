@@ -1,3 +1,4 @@
+import fs from "fs";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { logger, logMessage } from "../logger";
 import {
@@ -330,7 +331,24 @@ async function _getFormByStatus(
   return [];
 }
 
-async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
+async function _getFormByID(
+  formID: string,
+  mockedFormFile: string
+): Promise<PublicFormSchemaProperties | null> {
+  // for cypress tests we want to return a dummy form from a local file
+  // as opposed to needing to hit a staging endpoint
+  // additionally we use an environment variable to enable or disable this
+  // as in a production setting this could be dangerous as one could potentially
+  // error bomb our queue if this is left enabled
+  if (mockedFormFile && process.env.ALLOW_MOCK_FORMS) {
+    const mockedForm = JSON.parse(
+      fs.readFileSync(
+        `${__dirname.split("/").slice(0, -5).join("/")}/tests/data/${mockedFormFile}.json`,
+        { encoding: "utf8" }
+      )
+    );
+    return mockedForm.form;
+  }
   const response = await crudTemplates({ method: "GET", formID: formID });
   const { records } = response.data;
   if (records?.length === 1 && records[0].formConfig.form) {
