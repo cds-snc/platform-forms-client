@@ -341,9 +341,12 @@ async function _getFormByID(
   // as in a production setting this could be dangerous as one could potentially
   // error bomb our queue if this is left enabled
   if (mockedFormFile && process.env.ALLOW_MOCK_FORMS) {
+    const folderPathSplit = __dirname.split("/");
     const mockedForm = JSON.parse(
       fs.readFileSync(
-        `${__dirname.split("/").slice(0, -5).join("/")}/tests/data/${mockedFormFile}.json`,
+        `${folderPathSplit
+          .slice(0, folderPathSplit.indexOf("platform-forms-client") + 1)
+          .join("/")}/tests/data/${mockedFormFile}.json`,
         { encoding: "utf8" }
       )
     );
