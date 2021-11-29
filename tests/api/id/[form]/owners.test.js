@@ -102,7 +102,7 @@ describe("/id/[forms]/owners", () => {
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return a list with only an email
       executeQuery.mockReturnValue({
-        rows: [{ id: "1", email: "oneEmail@cds.ca", active: "1" }],
+        rows: [{ id: "1", email: "oneEmail@cds.ca", active: true }],
         rowCount: 1,
       });
       const { req, res } = createMocks({
@@ -117,7 +117,7 @@ describe("/id/[forms]/owners", () => {
       });
       await owners(req, res);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining([{ id: "1", email: "oneEmail@cds.ca", active: "1" }])
+        expect.objectContaining([{ id: "1", email: "oneEmail@cds.ca", active: true }])
       );
       expect(res.statusCode).toBe(200);
     });
