@@ -34,7 +34,7 @@ export const DeleteButton = (props: DeleteButtonProps): React.ReactElement => {
               return;
             }
           } catch (e) {
-            logMessage.error(e as string);
+            logMessage.error(e as Error);
           }
         }}
         testid="confirmDelete"

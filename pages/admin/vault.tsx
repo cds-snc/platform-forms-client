@@ -221,7 +221,7 @@ const AdminVault: React.FC = () => {
           try {
             await removeAllSubmissions();
           } catch (e) {
-            logMessage.error(e as string);
+            logMessage.error(e as Error);
           }
         }}
         testid="confirmDelete"
