@@ -345,7 +345,7 @@ async function _getFormByID(
     const mockedForm = JSON.parse(
       fs.readFileSync(
         `${folderPathSplit
-          .slice(0, folderPathSplit.indexOf("platform-forms-client") + 1)
+          .slice(0, folderPathSplit.lastIndexOf("platform-forms-client") + 1)
           .join("/")}/tests/data/${mockedFormFile}.json`,
         { encoding: "utf8" }
       )
