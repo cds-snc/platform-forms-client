@@ -9,6 +9,8 @@ const dynamicRowData = {
   properties: {
     titleEn: "",
     titleFr: "",
+    placeholderEn: "Amount Owning",
+    placeholderFr: " Montant Due",
     validation: {
       required: false,
     },
@@ -69,8 +71,8 @@ const formConfig = {
 };
 
 describe.each([
-  ["en", "Add Row"],
-  ["fr", "Ajouter Element"],
+  ["en", "Add Amount Owning"],
+  ["fr", "Ajouter Montant Due"],
 ])("Generate a dynamic row", (lang, buttonText) => {
   afterEach(cleanup);
   describe("renders without errors", () => {
@@ -110,6 +112,9 @@ describe.each([
           <GenerateElement element={dynamicRowData} language={lang} />
         </Form>
       );
+      // mocking scroll into view function (not implemented in jsdom)
+      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
       fireEvent.click(screen.getByRole("button", { name: buttonText }));
       // There is only 1 row on initiation
