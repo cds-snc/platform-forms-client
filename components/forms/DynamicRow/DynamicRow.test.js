@@ -70,10 +70,7 @@ const formConfig = {
   elements: [dynamicRowData],
 };
 
-describe.each([
-  ["en", "Add Amount Owning"],
-  ["fr", "Ajouter Montant Due"],
-])("Generate a dynamic row", (lang, buttonText) => {
+describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
   afterEach(cleanup);
   describe("renders without errors", () => {
     test("...initialState", () => {
@@ -105,7 +102,6 @@ describe.each([
           })
         );
     });
-
     test("Add a row", () => {
       render(
         <Form formConfig={formConfig} t={(key) => key} language={lang}>
@@ -116,7 +112,7 @@ describe.each([
       window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
-      fireEvent.click(screen.getByRole("button", { name: buttonText }));
+      fireEvent.click(screen.getByTestId("add-row-button-1"));
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
       // All children are present in row 1
@@ -151,6 +147,40 @@ describe.each([
           screen.queryAllByRole("textbox", {
             name: dynamicRowData.properties.subElements[2].properties[titleProp],
           })[1]
+        );
+    });
+    test("Delete a row", () => {
+      render(
+        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+          <GenerateElement element={dynamicRowData} language={lang} />
+        </Form>
+      );
+      // mocking scroll into view function (not implemented in jsdom)
+      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
+      // Add a new row to ensure we have 2 rows
+      fireEvent.click(screen.getByTestId("add-row-button-1"));
+
+      const titleProp = lang === "en" ? "titleEn" : "titleFr";
+      fireEvent.click(screen.getByTestId("delete-row-button-1.1"));
+      // There is only 1 row on initiation
+      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
+      // All children are present in row 1
+      expect(screen.getByTestId("dynamic-row-1"))
+        .toContainElement(
+          screen.queryAllByRole("textbox", {
+            name: dynamicRowData.properties.subElements[0].properties[titleProp],
+          })[0]
+        )
+        .toContainElement(
+          screen.queryAllByRole("textbox", {
+            name: dynamicRowData.properties.subElements[1].properties[titleProp],
+          })[0]
+        )
+        .toContainElement(
+          screen.queryAllByRole("textbox", {
+            name: dynamicRowData.properties.subElements[2].properties[titleProp],
+          })[0]
         );
     });
   });
