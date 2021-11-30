@@ -10,6 +10,8 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "../components/forms";
+import ErrorListItem from "../components/forms/ErrorListItem/ErrorListItem";
+import { isServer } from "./tsUtils";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -62,26 +64,13 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
   return type ? REGEX_CONFIG[type] : null;
 };
 
-/**
- * scrollErrorInView [private] is called when you click on an error link at the top of the form
- * @param id The id of the input field that has the error and we need to focus
- */
-const scrollErrorInView = (id: string) => {
-  const inputElement = document.getElementById(id);
-  const labelElement = document.getElementById(`label-${id}`);
-  if (labelElement && inputElement) {
-    inputElement.focus();
-    labelElement.scrollIntoView();
-  }
-};
-
 const isFieldResponseValid = (
   value: unknown,
   componentType: string,
   formElement: FormElement,
   validator: ValidationProperties,
   t: TFunction
-): string | null | Responses => {
+): string | null | Record<string, unknown>[] => {
   switch (componentType) {
     case "textField": {
       const typedValue = value as string;
@@ -126,40 +115,34 @@ const isFieldResponseValid = (
       break;
     }
     case "dynamicRow":
-      if (formElement.properties.subElements) {
-        //set up object to store results
-        const errors: Responses = {};
-        // loop over rows of values
-        // need to create new variable to typecast value as you cannot
-        // call a method on a typecasted variable in the same line
-        const values = value as Array<Record<string, string | Array<string>>>;
-        for (const [rowValueIndex, rowValue] of values.entries()) {
-          for (const [k, v] of Object.entries(rowValue)) {
-            // get the relevant sub-element based on the current key which is the absolute
-            // index of the sub-element definition in the form configuration
-            const subElement = formElement.properties.subElements[parseInt(k)];
-            // if the sub element has validation enabled and a subId defined then we
-            // can validate
-            if (subElement.properties.validation && subElement.subId) {
-              const validatorResult = isFieldResponseValid(
-                v,
+      //set up object to store results
+      // loop over rows of values
+      return (value as Array<Responses>).map((row) => {
+        const rowErrors: Record<string, unknown> = {};
+        for (const [responseKey, responseValue] of Object.entries(row)) {
+          if (
+            formElement.properties.subElements &&
+            formElement.properties.subElements[parseInt(responseKey)]
+          ) {
+            const subElement = formElement.properties.subElements[parseInt(responseKey)];
+
+            if (subElement?.properties?.validation) {
+              const validationError = isFieldResponseValid(
+                responseValue,
                 subElement.type,
                 subElement,
                 subElement.properties.validation,
                 t
               );
-              if (validatorResult) {
-                // Split the sub id since it's dynamic. The first value in the array is static
-                // The second value in the array is the row. The third value in the array is the subElement order
-                const splitSubId = subElement.subId.split(".");
-                errors[`${splitSubId[0]}.${rowValueIndex}.${splitSubId[2]}`] = validatorResult;
-              }
+              rowErrors[responseKey] = validationError;
+            } else {
+              rowErrors[responseKey] = null;
             }
           }
         }
-        return errors;
-      }
-      break;
+        return rowErrors;
+      });
+
     case "richText":
       break;
     default:
@@ -174,11 +157,10 @@ const isFieldResponseValid = (
  * @param props
  */
 export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
-  let errors: Responses = {};
+  const errors: Responses = {};
 
   for (const item in values) {
     const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
-
     if (!formElement) return errors;
 
     if (formElement.properties.validation) {
@@ -189,12 +171,8 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
         formElement.properties.validation,
         props.t
       );
-      if (result && typeof result === "object") {
-        errors = {
-          ...errors,
-          ...result,
-        };
-      } else if (result) {
+
+      if (result) {
         errors[item] = result;
       }
     }
@@ -208,31 +186,26 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
 export const getErrorList = (
   props: InnerFormProps & FormikProps<FormValues>
 ): JSX.Element | null => {
-  let errorList = null;
-  const errorEntries = Object.entries(props.errors);
-  if (props.touched && errorEntries.length) {
-    errorList = errorEntries.map(([key, value], index) => {
-      return (
-        <li key={`error-${index}`}>
-          <a
-            href={`#${key}`}
-            className="gc-error-link"
-            key={index}
-            onKeyDown={(e) => {
-              if (e.code === "Space") {
-                e.preventDefault();
-                scrollErrorInView(key);
-              }
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              scrollErrorInView(key);
-            }}
-          >
-            {value}
-          </a>
-        </li>
-      );
+  let errorList;
+  const formElementErrors = Object.entries(props.errors);
+  if (props.touched && formElementErrors.length) {
+    errorList = formElementErrors.map(([formElementKey, formElementErrorValue]) => {
+      if (Array.isArray(formElementErrorValue)) {
+        return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
+          return Object.entries(dynamicRowErrors).map(
+            ([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
+              return dyanamicRowElementErrorValue ? (
+                <ErrorListItem
+                  errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                  value={`${dyanamicRowElementErrorValue as string}`}
+                />
+              ) : null;
+            }
+          );
+        });
+      } else {
+        return <ErrorListItem errorKey={`${formElementKey}`} value={`${formElementErrorValue}`} />;
+      }
     });
   }
   return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
@@ -245,7 +218,7 @@ export const setFocusOnErrorMessage = (
   props: InnerFormProps & FormikProps<FormValues>,
   errorId: string
 ): void => {
-  if (typeof window !== "undefined" && props && props.errors && props.touched && errorId) {
+  if (!isServer() && props && props.errors && props.touched && errorId) {
     const errorAlert = document.getElementById(errorId);
     if (errorAlert && typeof errorAlert !== "undefined") {
       errorAlert.focus();

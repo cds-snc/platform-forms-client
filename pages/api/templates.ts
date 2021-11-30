@@ -1,4 +1,4 @@
-import { crudTemplates } from "../../lib/dataLayer";
+import { crudTemplates } from "../../lib/integration/crud";
 import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
 import validate from "../../lib/middleware/jsonValidator";
 import templatesSchema from "../../lib/middleware/schemas/templates.schema.json";

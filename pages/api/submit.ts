@@ -3,11 +3,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import formidable, { Fields, Files } from "formidable";
 import convertMessage from "@lib/markdown";
-import { getFormByID, getSubmissionByID, rehydrateFormResponses } from "@lib/dataLayer";
+import { getFormByID, rehydrateFormResponses } from "@lib/integration/helpers";
+import { getSubmissionByID } from "@lib/integration/helpers";
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
+import fs from "fs";
 
 export const config = {
   api: {
@@ -52,7 +54,7 @@ const submit = async (
   }
 };
 
-const callLambda = async (formID: string, fields: Responses) => {
+const callLambda = async (formID: string, fields: Responses, language: string) => {
   const submission = await getSubmissionByID(formID);
 
   const encoder = new TextEncoder();
@@ -62,26 +64,26 @@ const callLambda = async (formID: string, fields: Responses) => {
     Payload: encoder.encode(
       JSON.stringify({
         formID,
+        language,
         responses: fields,
         submission,
       })
     ),
   });
-  return await lambdaClient
-    .send(command)
-    .then((response) => {
-      const decoder = new TextDecoder();
-      const payload = decoder.decode(response.Payload);
-      if (response.FunctionError || !JSON.parse(payload).status) {
-        throw Error("Submission API could not process form response");
-      } else {
-        logMessage.info("Submission Lambda Client successfully triggered");
-      }
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      throw new Error("Could not process request with Lambda Submission function");
-    });
+
+  try {
+    const response = await lambdaClient.send(command);
+    const decoder = new TextDecoder();
+    const payload = decoder.decode(response.Payload);
+    if (response.FunctionError || !JSON.parse(payload).status) {
+      throw new Error("Submission API could not process form response");
+    } else {
+      logMessage.info("Submission Lambda Client successfully triggered");
+    }
+  } catch (err) {
+    logMessage.error(err);
+    throw new Error("Could not process request with Lambda Submission function");
+  }
 };
 
 const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
@@ -105,6 +107,21 @@ const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses
       logMessage.error(err);
       return "<h1>Could not preview HTML / Error in processing </h2>";
     });
+};
+
+const deleteLocalTempFiles = (files: formidable.Files) => {
+  for (const [, value] of Object.entries(files)) {
+    const fileOrArray = value;
+    if (Array.isArray(fileOrArray)) {
+      fileOrArray.forEach(async (fileItem) => {
+        fs.unlinkSync(fileItem.path);
+      });
+    } else {
+      if (fileOrArray.name) {
+        fs.unlinkSync(fileOrArray.path);
+      }
+    }
+  }
 };
 
 const processFormData = async (
@@ -144,68 +161,70 @@ const processFormData = async (
       responses: reqFields,
     });
 
+    if (submitToReliabilityQueue === false) {
+      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
+      deleteLocalTempFiles(files);
+      return res.status(200).json({ received: true });
+    }
+
+    // Local development and Heroku
+    if (notifyPreview) {
+      deleteLocalTempFiles(files);
+      const response = await previewNotify(form, fields);
+      return res.status(201).json({ received: true, htmlEmail: response });
+    }
+
     // Staging or Production AWS environments
-    if (submitToReliabilityQueue) {
-      for (const [_key, value] of Object.entries(files)) {
-        const fileOrArray = value;
-        if (!Array.isArray(fileOrArray)) {
-          if (fileOrArray.name) {
-            logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
-            const { isValid, key } = await pushFileToS3(fileOrArray);
+    for (const [_key, value] of Object.entries(files)) {
+      const fileOrArray = value;
+      if (!Array.isArray(fileOrArray)) {
+        if (fileOrArray.name) {
+          logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
+          const { isValid, key } = await pushFileToS3(fileOrArray);
+          if (isValid) {
+            uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
+            const splitKey = _key.split("-");
+            if (splitKey.length > 1) {
+              const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+              currentValue[Number(splitKey[1])][splitKey[2]] = key;
+            } else {
+              fields[_key] = key;
+            }
+          }
+        }
+      } else {
+        // An array will be returned in a field that includes multiple files
+        fileOrArray.forEach(async (fileItem, index) => {
+          if (fileItem.name) {
+            logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
+            const { isValid, key } = await pushFileToS3(fileItem);
             if (isValid) {
-              uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
+              uploadedFilesKeyUrlMapping.set(fileItem.name, key);
               const splitKey = _key.split("-");
               if (splitKey.length > 1) {
                 const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
-                currentValue[Number(splitKey[1])][splitKey[2]] = key;
+                currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
               } else {
-                fields[_key] = key;
+                fields[`${_key}-${index}`] = key;
               }
             }
           }
-        } else if (Array.isArray(fileOrArray)) {
-          // An array will be returned in a field that includes multiple files
-          fileOrArray.forEach(async (fileItem, index) => {
-            if (fileItem.name) {
-              logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
-              const { isValid, key } = await pushFileToS3(fileItem);
-              if (isValid) {
-                uploadedFilesKeyUrlMapping.set(fileItem.name, key);
-                const splitKey = _key.split("-");
-                if (splitKey.length > 1) {
-                  const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
-                  currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
-                } else {
-                  fields[`${_key}-${index}`] = key;
-                }
-              }
-            }
-          });
-        }
-      }
-      return await callLambda(form.formID, fields)
-        .then(async () => {
-          if (notifyPreview) {
-            await previewNotify(form, fields).then((response) => {
-              return res.status(201).json({ received: true, htmlEmail: response });
-            });
-          } else {
-            return res.status(201).json({ received: true });
-          }
-        })
-        .catch((err) => {
-          logMessage.error(err);
-          return res.status(500).json({ received: false });
         });
+      }
     }
-    // Local development and Heroku
-    else if (notifyPreview) {
-      return await previewNotify(form, fields).then((response) => {
-        return res.status(201).json({ received: true, htmlEmail: response });
-      });
+    try {
+      await callLambda(
+        form.formID,
+        fields,
+        // pass in the language from the header content language... assume english as the default
+        req.headers?.["content-language"] ? req.headers["content-language"] : "en"
+      );
+
+      return res.status(201).json({ received: true });
+    } catch (err) {
+      logMessage.error(err as Error);
+      return res.status(500).json({ received: false });
     }
-    // Set this to a 200 response as it's valid if the send to reliability queue option is off.
-    return res.status(200).json({ received: true });
   } catch (err) {
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
     if (uploadedFilesKeyUrlMapping.size > 0) {
@@ -217,6 +236,8 @@ const processFormData = async (
     logMessage.error(err as Error);
 
     return res.status(500).json({ received: false });
+  } finally {
+    deleteLocalTempFiles(files);
   }
 };
 

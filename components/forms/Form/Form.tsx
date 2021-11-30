@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { withFormik, FormikProps } from "formik";
 import { getFormInitialValues } from "../../../lib/formBuilder";
 import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../../lib/validation";
-import { submitToAPI } from "../../../lib/dataLayer";
+import { submitToAPI } from "../../../lib/integration/helpers";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";

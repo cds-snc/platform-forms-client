@@ -3,10 +3,11 @@ import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../lib/auth";
-import { getFormByID } from "../../lib/dataLayer";
+import { getFormByID } from "../../lib/integration/helpers";
 import convertMessage from "../../lib/markdown";
 import { Button, RichText } from "../../components/forms";
 import { PublicFormSchemaProperties } from "../../lib/types";
+import { logMessage } from "@lib/logger";
 
 interface ResponseListInterface {
   Items: {
@@ -66,7 +67,7 @@ const FormResponse = ({
           }
         })
         .catch((err) => {
-          console.error(err);
+          logMessage.error(err);
         });
     }
   };
@@ -178,7 +179,7 @@ const AdminVault: React.FC = () => {
           setResponses(response.data);
         })
         .catch((err) => {
-          console.error(err);
+          logMessage.error(err);
           setResponses({ Items: [] });
         });
     } else {
@@ -201,7 +202,7 @@ const AdminVault: React.FC = () => {
             setResponses({ Items: [] });
           })
           .catch((err) => {
-            console.error(err);
+            logMessage.error(err);
             setResponses({ Items: [] });
           });
       } else {
@@ -220,7 +221,7 @@ const AdminVault: React.FC = () => {
           try {
             await removeAllSubmissions();
           } catch (e) {
-            console.error(e);
+            logMessage.error(e as Error);
           }
         }}
         testid="confirmDelete"

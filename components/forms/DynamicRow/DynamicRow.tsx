@@ -4,7 +4,6 @@ import { useField } from "formik";
 import { GenerateElement } from "../../../lib/formBuilder";
 import { FormElement } from "../../../lib/types";
 import { Button } from "../index";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface DynamicGroupProps {
   name: string;
@@ -35,22 +34,26 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const { className, legend, error, rowElements, lang } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState([rowElements]);
-  const [initialValue, setInitialValues] = useState({});
 
   useEffect(() => {
-    setInitialValues(field.value[0]);
+    //there are rows that were added to the form other than its initialvalues.
+    if (field.value.length > 1) {
+      //Refreshing rows from Formik's state
+      setRows(Array(field.value.length).fill(rowElements));
+    }
   }, []);
 
   const addRow = () => {
-    field.value.push(initialValue);
+    // Set the newly added row'initial value (plucked out of initialValues)
+    field.value.push(meta.initialValue ? meta.initialValue[0] : {});
     helpers.setValue(field.value);
     setRows([...rows, rowElements]);
   };
 
   const deleteRow = (index: number) => {
-    field.value.splice(index, index + 1);
+    field.value.splice(index, 1);
     helpers.setValue(field.value);
-    rows.splice(index, index + 1);
+    rows.splice(index, 1);
     setRows([...rows]);
   };
 
@@ -59,8 +62,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   return (
     <fieldset name={field.name} data-testid={`formGroup-${field.name}`} className={classes}>
       <legend>{legend}</legend>
-
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
 
       {rows.map((row, index) => {
         return (

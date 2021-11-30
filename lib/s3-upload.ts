@@ -38,7 +38,7 @@ const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
       key: uploadParams.Key,
     };
   } catch (error) {
-    return { isValid: false, key: error };
+    return { isValid: false, key: error as string };
   }
 };
 
