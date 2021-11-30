@@ -88,7 +88,7 @@ async function _getFormByStatus(
         return [];
       })
       .catch((err) => {
-        console.error(err);
+        logMessage.error(err);
         throw new Error("Cannot get forms by status");
       });
   }
@@ -137,7 +137,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
         return null;
       })
       .catch((err) => {
-        console.error(err);
+        logMessage.error(err);
       });
   }
 }

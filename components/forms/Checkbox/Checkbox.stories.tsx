@@ -3,6 +3,7 @@ import { Story } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
 import { Formik } from "formik";
 import { MultipleChoiceProps } from "@lib/types";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/Checkbox",
