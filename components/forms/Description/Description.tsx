@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 
-interface DescriptionProps {
+export interface DescriptionProps {
   children: React.ReactNode;
   id?: string;
   className?: string;
