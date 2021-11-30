@@ -1,6 +1,7 @@
 import React from "react";
 import { Radio } from "./Radio";
 import { Formik } from "formik";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/Radio",
@@ -13,7 +14,7 @@ export default {
 export const defaultRadio = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-radio": "" }}
   >
@@ -24,7 +25,7 @@ export const defaultRadio = (): React.ReactElement => (
 export const selected = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-radio": "" }}
   >
@@ -35,7 +36,7 @@ export const selected = (): React.ReactElement => (
 export const disabled = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-radio": "" }}
   >
