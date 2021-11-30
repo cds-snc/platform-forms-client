@@ -91,7 +91,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
       {title ? <div className="gc-label">{title}</div> : null}
       {description ? <Description id={`${field.name}-desc`}>{description}</Description> : null}
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       {rows.map((row, index) => {
         return (
           <fieldset
@@ -105,7 +104,12 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
             <legend>
               {rowLabel ? rowLabel : "Item"} - {index + 1}
             </legend>
-            <DynamicRow elements={row} name={`${field.name}.${index}`} lang={lang} />
+            <DynamicRow
+              key={`${field.name}.${index}`}
+              elements={row}
+              name={`${field.name}.${index}`}
+              lang={lang}
+            />
             {rows.length > 1 && (
               <Button
                 type="button"
