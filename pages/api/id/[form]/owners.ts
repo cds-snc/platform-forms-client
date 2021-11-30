@@ -61,7 +61,6 @@ export async function activateOrDeactivateFormOwners(
     return res.status(400).json({ error: "Invalid payload fields are not define" });
   }
   const { email, active } = requestBody; // TODO email should be checked i.e (valid Gov email). See #491
-
   const formID = req.query.form as string;
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   //Update form_users's records
