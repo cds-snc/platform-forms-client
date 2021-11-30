@@ -16,7 +16,7 @@ export default {
       return (
         <Formik
           onSubmit={(values) => {
-            console.log(values);
+            logMessage.info(values);
           }}
           initialValues={{ a: "a" }}
         >
