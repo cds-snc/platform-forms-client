@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createRef } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
-import { GenerateElement } from "../../../lib/formBuilder";
+import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button } from "../index";
 import { Description } from "../index";
