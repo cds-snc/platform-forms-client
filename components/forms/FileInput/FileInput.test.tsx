@@ -2,6 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { Formik } from "formik";
 import { FileInput } from "./FileInput";
+import { logMessage } from "@lib/logger";
 
 const inputProps = {
   key: "pdf",
@@ -16,7 +17,7 @@ describe("FileInput component", () => {
     const { queryByTestId } = render(
       <Formik
         onSubmit={(values) => {
-          console.log(values);
+          logMessage.log(values);
         }}
         initialValues={{ pdf: { file: "", name: "", src: "" } }}
       >

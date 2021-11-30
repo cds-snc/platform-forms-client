@@ -42,7 +42,7 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
   // map checkboxes
   return (
     <Field component="div" data-testid={type} name={name}>
-      {meta.touched && meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
       {choices}
     </Field>
   );

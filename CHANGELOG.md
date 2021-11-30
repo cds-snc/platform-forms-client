@@ -7,16 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-###NBSPAdded
+### Added
 
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
+- Add error messages for all elements within dynamic rows. [#520](https://github.com/cds-snc/platform-forms-client/pull/520)
 
-### Fixed
+## [1.0.3] 2021-11-25
 
-- Top left corner logo is now more accessible as it tells the user that clicking on it will get him back to the home page
-- Harmonized RichText and Checkbox/Radio label max width depending on screen ratio.
-- Fixed mixed async/await and promise style in `processFormData` and `callLambda`
-- Fixed naming of `submit.tsx` to `submit.ts`
+### Added
+
+- Story template v1.0 [#433](https://github.com/cds-snc/platform-forms-client/pull/433)
+- Handle file input in dynamic row components [#445](https://github.com/cds-snc/platform-forms-client/pull/445)
+- Form templates json validation [#447](https://github.com/cds-snc/platform-forms-client/pull/447)
+- Delete Dynamic Rows [#470](https://github.com/cds-snc/platform-forms-client/pull/470)
+- Add language of submission to submission data [#519](https://github.com/cds-snc/platform-forms-client/pull/519)
+- Create secure API to retrieve bearer token for a specific form [#525](https://github.com/cds-snc/platform-forms-client/pull/525)
+- Add bearer token to templates [#526](https://github.com/cds-snc/platform-forms-client/pull/526)
+
+### Changed
+
+- Removed the intl phone component [#459](https://github.com/cds-snc/platform-forms-client/pull/459)
+- Refactor datalayer code [#510](https://github.com/cds-snc/platform-forms-client/pull/510)
+
+### Fixed
+
+- Fix dynamic row highlighing [#442](https://github.com/cds-snc/platform-forms-client/pull/442)
+- Make screen reader announce heading on confirmation page [#444](https://github.com/cds-snc/platform-forms-client/pull/444)
+- Harmonized RichText and Checkbox/Radio label max width depending on screen ratio [#460](https://github.com/cds-snc/platform-forms-client/pull/460)
+- Improve accessibility for top left corner logo [#477](https://github.com/cds-snc/platform-forms-client/pull/477)
+- Enable users to navigate through checkboxes and radion buttons with context [#478](https://github.com/cds-snc/platform-forms-client/pull/478)
+- Fixed mixed async/await and promise style in `processFormData` and `callLambda` [#519](https://github.com/cds-snc/platform-forms-client/pull/519)
+- Fixed naming of `submit.tsx` to `submit.ts` [#519](https://github.com/cds-snc/platform-forms-client/pull/519)
+
+### Security
+
+- Move POSTGRES_PASSWORD to .env file [#446](https://github.com/cds-snc/platform-forms-client/pull/446)
+- Add security headers and Content Security Policy [#452](https://github.com/cds-snc/platform-forms-client/pull/452)
+- Fix hashes repeated in Content Security Policy [#457](https://github.com/cds-snc/platform-forms-client/pull/457)
+- Upgrade ioredis from 4.27.6 to 4.27.9 [#461](https://github.com/cds-snc/platform-forms-client/pull/461)
+- Upgrade dotenv from 9.0.0 to 10.0.0 [#462](https://github.com/cds-snc/platform-forms-client/pull/462)
+- Upgrade postgres-migrations from 5.1.1 to 5.3.0 [#463](https://github.com/cds-snc/platform-forms-client/pull/463)
+- Upgrade swr from 0.5.6 to 1.0.1 [#464](https://github.com/cds-snc/platform-forms-client/pull/464)
+- Upgrade next from 11.1.0 to 11.1.2 [#465](https://github.com/cds-snc/platform-forms-client/pull/465)
+- Delete files after s3 upload [#523](https://github.com/cds-snc/platform-forms-client/pull/523)
 
 ## [1.0.2] 2021-09-21
 

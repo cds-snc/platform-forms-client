@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Label, TextInput, Button } from "@components/forms";
 import { Formik, Form } from "formik";
+import { logMessage } from "@lib/logger";
 
 export const CreateOrganisation = (): React.ReactElement => {
   const { t } = useTranslation("organisations");
@@ -16,7 +17,7 @@ export const CreateOrganisation = (): React.ReactElement => {
       <Formik
         initialValues={{ orgNameEn: "", orgNameFr: "" }}
         onSubmit={async (values) => {
-          console.log(values);
+          logMessage.info(values);
           return await axios({
             url: "/api/organisations",
             method: "POST",
@@ -34,7 +35,7 @@ export const CreateOrganisation = (): React.ReactElement => {
               return serverResponse;
             })
             .catch((err) => {
-              console.error(err);
+              logMessage.error(err);
             });
         }}
       >

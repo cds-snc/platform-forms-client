@@ -53,4 +53,17 @@ describe("Dynamic Row Functionality", { baseUrl: "http://localhost:3000" }, () =
     // should have 2 rows left
     cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 2);
   });
+
+  it("Should display errors when an empty form is submitted", () => {
+    cy.visit(`/en/id/${formID}`);
+    cy.get("[type='submit']").click();
+    cy.get(".gc-error-link").should("have.length", 8);
+    cy.get(".gc-error-message").should("have.length", 8);
+    cy.get("[id='7.0.0']").should("have.css", "border-color", "rgb(185, 28, 28)");
+    // add second row
+    cy.get("[data-testid='add-row-button-3']").click();
+    cy.get("[type='submit']").click();
+    cy.get(".gc-error-link").should("have.length", 9);
+    cy.get(".gc-error-message").should("have.length", 9);
+  });
 });
