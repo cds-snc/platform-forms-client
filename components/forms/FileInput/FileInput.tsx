@@ -64,9 +64,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.touched && meta.error ? (
-        <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>
-      ) : null}
+      {meta.error ? <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage> : null}
 
       <div className={classes} data-testid="file">
         <div
@@ -83,7 +81,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           aria-disabled={disabled}
           aria-labelledby={`${ariaLabelledBy}`}
           aria-describedby={`${name}_file_selected ${ariaDescribedBy} ${
-            meta.touched && meta.error ? `${name}_error` : null
+            meta.error ? `${name}_error` : null
           }`}
         >
           <span aria-hidden={true}>{t("file-upload-button-text")}</span>

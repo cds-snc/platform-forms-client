@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 require("dotenv").config();
 const { createDb, migrate } = require("postgres-migrations");
 var parse = require("pg-connection-string").parse;
