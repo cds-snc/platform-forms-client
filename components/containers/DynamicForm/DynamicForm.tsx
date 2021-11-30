@@ -25,18 +25,13 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const currentForm = getRenderedForm(formConfig, language);
   const formTitle = formConfig[getProperty("title", language)] as string;
   const router = useRouter();
-  const { step, urlQuery, htmlEmail } = router.query;
+  const { step, htmlEmail } = router.query;
   const notifyPreviewFlag = useFlag("notifyPreview");
 
   // render text pages
   if (step == "confirmation") {
     return (
-      <TextPage
-        formConfig={formConfig}
-        step={step}
-        urlQuery={urlQuery as string | undefined}
-        htmlEmail={htmlEmail as string | undefined}
-      ></TextPage>
+      <TextPage formConfig={formConfig} htmlEmail={htmlEmail as string | undefined}></TextPage>
     );
   }
 
