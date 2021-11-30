@@ -218,7 +218,7 @@ describe("/id/[forms]/owners", () => {
         },
         body: JSON.stringify({
           email: "",
-          active: "1",
+          active: true,
         }),
         query: {
           form: "20",
@@ -247,7 +247,7 @@ describe("/id/[forms]/owners", () => {
         },
         body: JSON.stringify({
           email: "forms@cds.ca",
-          active: "1",
+          active: true,
         }),
         query: {
           form: "10",
@@ -277,7 +277,7 @@ describe("/id/[forms]/owners", () => {
           },
           body: JSON.stringify({
             email: "forms@cds.ca",
-            active: `${elem}`,
+            active: true,
           }),
           query: {
             form: "12",
@@ -288,31 +288,5 @@ describe("/id/[forms]/owners", () => {
         expect(JSON.parse(res._getData())).toEqual(expect.objectContaining([{ id: 1 }]));
       }
     );
-    it("Should return 400 with invalid field value: active must be 1/0 or true/false", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
-      };
-      client.getSession.mockReturnValue(mockSession);
-
-      const { req, res } = createMocks({
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: "forms@cds-snc.ca",
-          active: "adfasf",
-        }),
-        query: {
-          form: "3",
-        },
-      });
-      await owners(req, res);
-      expect(res.statusCode).toBe(400);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Invalid field value: active must be 1/0 or true/false" })
-      );
-    });
   });
 });
