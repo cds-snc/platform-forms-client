@@ -126,3 +126,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added secure API to retrieve bearer token.
 - Create secure API to retrieve list of emails associated with a form.
+- Create secure API to deactivate a form owner associated with a form
