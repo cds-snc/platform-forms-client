@@ -80,8 +80,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     helpers.setValue(field.value);
     rows.splice(index, 1);
     setRows([...rows]);
-    // if deleteRow exists index will always be > 0
-    setFocussedRow(index - 1);
+    setFocussedRow(index > 0 ? index - 1 : 0);
   };
 
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
