@@ -13,10 +13,8 @@ import {
   PublicFormSchemaProperties,
 } from "../types";
 
-
 // Get the form json object by using the form ID
 // Returns => json object of form
-
 async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | undefined> {
   try {
     const response = await axios({
