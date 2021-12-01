@@ -12,13 +12,14 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
 
   const classes = classnames("gc-description", className);
   return (
-    <div id={`desc-${id}`}>
+    <div id={`desc-${id}`} className={classes} data-testid="description">
       {children
-        ? children.split("<br>").map((child, index) => {
+        ? children.split("<br>").map((child, index, childrenArray) => {
             return (
-              <p data-testid="description" className={classes} key={index}>
+              <React.Fragment key={index}>
                 {child}
-              </p>
+                {index !== childrenArray.length - 1 ? <br /> : null}
+              </React.Fragment>
             );
           })
         : null}
@@ -27,3 +28,4 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
 };
 
 export default Description;
+6;
