@@ -36,7 +36,6 @@ Please complete the following items in the checklist before you request a review
 - [ ] The PR does not introduce any new issues such as failed tests, console warnings or new bugs.
 - [ ] If this PR adds a package have you ensured its licensed correctly and does not add additional security issues?
 - [ ] Is the code clean, readable and maintainable? Is it easy to understand and comprehend.
-- [ ] Have you removed unnecessary lines such as `console.log` statements?
 - [ ] Does your code have adequate comprehensible comments? Do new functions have [docstrings](https://tsdoc.org/)?
 - [ ] Have you modified the change log and updated any relevant documentation?
 - [ ] Is there adequate test coverage? Both unit tests and end-to-end tests where applicable?

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Flags initial state values
 const Redis = require("ioredis");
 require("dotenv").config({ path: "../.env" });

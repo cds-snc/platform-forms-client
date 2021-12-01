@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { FormDBConfigProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
 import Loader from "../../globals/Loader";
+import { logMessage } from "@lib/logger";
 
 interface JSONUploadProps {
   form?: FormDBConfigProperties;
@@ -40,7 +41,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
         return serverResponse;
       })
       .catch((err) => {
-        console.error(err);
+        logMessage.error(err);
         setSubmitting(false);
         setErrorState({ message: "Uploading Error" });
       });
