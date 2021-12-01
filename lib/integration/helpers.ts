@@ -219,10 +219,10 @@ function handleDynamicForm(
           break;
       }
     });
-    rowCollector.unshift(`${rowLabel} ${rIndex + 1}`);
+    rowCollector.unshift(`${String.fromCharCode(13)}***${rowLabel} ${rIndex + 1}***`);
     return rowCollector.join(String.fromCharCode(13));
   });
-  responseCollector.unshift(title);
+  responseCollector.unshift(`**${title}**`);
   collector.push(responseCollector.join(String.fromCharCode(13)));
 }
 
@@ -241,7 +241,7 @@ function handleArrayResponse(title: string, response: Array<string>, collector: 
       return;
     }
   }
-  collector.push(`**${title}**${String.fromCharCode(13)}-  No response`);
+  collector.push(`**${title}**${String.fromCharCode(13)}No response`);
 }
 
 function handleTextResponse(title: string, response: string, collector: Array<string>) {
