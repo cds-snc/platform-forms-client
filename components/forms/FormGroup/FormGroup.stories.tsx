@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import { Label } from "../Label/Label";
 import { TextInput } from "../TextInput/TextInput";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/FormGroup",
@@ -13,7 +14,7 @@ export default {
 export const textInputFormGroup = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
@@ -27,7 +28,7 @@ export const textInputFormGroup = (): React.ReactElement => (
 export const textInputErrorFormGroup = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >

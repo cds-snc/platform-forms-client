@@ -1,6 +1,7 @@
 import React from "react";
 import { TextInput } from "./TextInput";
 import { Formik } from "formik";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/TextInput",
@@ -13,7 +14,7 @@ export default {
 export const defaultTextInput = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
     initialValues={{ "input-type-text": "" }}
   >
