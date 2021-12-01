@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
 - Add error messages for all elements within dynamic rows. [#520](https://github.com/cds-snc/platform-forms-client/pull/520)
 - POST method to /id/[form]/bearer that allows the refreshing of bearer tokens
+- `<br>` in long description string now create new lines
 
 ## [1.0.3] 2021-11-25
 
@@ -24,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add language of submission to submission data [#519](https://github.com/cds-snc/platform-forms-client/pull/519)
 - Create secure API to retrieve bearer token for a specific form [#525](https://github.com/cds-snc/platform-forms-client/pull/525)
 - Add bearer token to templates [#526](https://github.com/cds-snc/platform-forms-client/pull/526)
+
+### Fixed
 
 ### Changed
 
