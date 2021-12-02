@@ -5,7 +5,6 @@ import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button } from "../index";
 import { Description } from "../index";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface DynamicGroupProps {
   name: string;
@@ -51,12 +50,13 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   }, []);
 
   useEffect(() => {
-    // Fill state will refs for each existing row
-    setRowRefs((rowRefs) =>
-      Array(rows.length + 1)
-        .fill(null)
-        .map((_, index) => rowRefs[index] || createRef())
-    );
+    // Fill state will refs for each existing
+    const newRowRefs = [];
+    for (let i = 0; i <= rows.length; i++) {
+      newRowRefs[i] = rowRefs[i] || createRef();
+    }
+    setRowRefs(newRowRefs);
+
     // Trigger on any change to the length of the rows state
   }, [rows.length]);
 
