@@ -405,6 +405,44 @@ A browser-native file upload field
 
 `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
+### Dynamic Row
+
+A container question that allows for the addition of one or more grouped fields.
+
+> Add rendered component here as an example
+
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
+
+```json
+{
+  "id": "123456789",
+  "type": "dynamicRow",
+  "properties": {
+    "titleEn": "string",
+    "titleFr": "string",
+    "placehoderEn": "string",
+    "placeholderFr": "string",
+    "descriptionEn": "string",
+    "descriptionFr": "string",
+    "subElements": [
+      // Array of Question types
+    ]
+  }
+}
+```
+
+`id`: The unique id for the object (`string`)
+
+`titleEn / titleFr`: Input label (`string`)
+
+`placeholderEn / placeholderFr`: Text that will appear as the heading of each row. (`string`)
+
+`descriptionEn / descriptionFr`: Secondary paragraph/text of a question or element that provides additional context beyond the label `string`)
+
+`subElements`: An array of question objects that will make up the row grouping of fields (`array`)
+
 ### Rich text via markdown/mdx
 
 An option to add rich text to the form via [markdown](https://guides.github.com/features/mastering-markdown/).

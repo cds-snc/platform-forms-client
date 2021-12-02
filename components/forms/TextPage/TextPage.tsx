@@ -13,11 +13,9 @@ import { getProperty } from "../../../lib/formBuilder";
 interface TextPageProps {
   formConfig: FormSchemaProperties;
   htmlEmail: string | undefined;
-  urlQuery: string | undefined;
-  step: string | string[] | undefined;
 }
 
-const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undefined) => {
+const getPageContent = (t: TFunction, pageText: string, urlQuery: string | null) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{pageText}</RichText>;
@@ -40,13 +38,18 @@ const getPageContent = (t: TFunction, pageText: string, urlQuery: string | undef
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { t, i18n } = useTranslation("confirmation");
-  const { urlQuery, htmlEmail, formConfig } = props;
+  const { formConfig, htmlEmail } = props;
   const language = i18n.language as string;
 
   const pageText =
     formConfig && formConfig.endPage
       ? formConfig.endPage[getProperty("description", language)]
       : "";
+
+  const urlQuery =
+    formConfig && formConfig.endPage
+      ? formConfig.endPage[getProperty("referrerUrl", language)]
+      : null;
 
   // autoFocus h1 element of page to ensure its read out
   useEffect(() => {

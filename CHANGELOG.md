@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - POST method to /id/[form]/bearer that allows the refreshing of bearer tokens
 - `<br>` in long description string now create new lines
 
+### Fixed
+
+- When Adding a new row in Dynamic Row the focus automatically moves, and scrolls, to the heading of the new row.
+- When deleting a row in Dynamic Row the focus and scroll moves to the heading of the previous row.
+- For local development fixed the Preview Notify email functionality that was previously broken
+- Validation on Dynamic row was preventing form submission when no validation errors were being found.
+
 ## [1.0.3] 2021-11-25
 
 ### Added
