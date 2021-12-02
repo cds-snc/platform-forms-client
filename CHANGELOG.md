@@ -11,7 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
 - Add error messages for all elements within dynamic rows. [#520](https://github.com/cds-snc/platform-forms-client/pull/520)
-- `<br>` in long description string now create new lines
+- `<br>` in long description string now creates new lines
+
+### Fixed
+
+- When Adding a new row in Dynamic Row the focus automatically moves, and scrolls, to the heading of the new row.
+- When deleting a row in Dynamic Row the focus and scroll moves to the heading of the previous row.
+- For local development fixed the Preview Notify email functionality that was previously broken
+- Validation on Dynamic row was preventing form submission when no validation errors were being found.
 
 ## [1.0.3] 2021-11-25
 
