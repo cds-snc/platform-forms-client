@@ -170,6 +170,10 @@ A simple text input where the `title` property is used as the input's label.
 
 > Add rendered component here as an example
 
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
+
 ```json
 {
   "id": "123456789",
@@ -207,6 +211,10 @@ A simple muli-line text input where the `title` property is used as the input's 
 
 > Add rendered component here as an example
 
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
+
 ```json
 {
   "id": "123456789",
@@ -243,6 +251,10 @@ A simple muli-line text input where the `title` property is used as the input's 
 A dropdown / select menu element that allows for a single selection.
 
 > Add rendered componenet here
+
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
 
 ```json
 {
@@ -282,6 +294,10 @@ A radio button selection group that allows for a single selection
 
 > Add rendered component here
 
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
+
 ```json
 {
   "id":"123456789",
@@ -317,6 +333,10 @@ A radio button selection group that allows for a single selection
 A checkbox selection group that allows for a single or multiple selection
 
 > Add rendered component here
+
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
 
 ```json
 {
@@ -354,6 +374,10 @@ A browser-native file upload field
 
 > Add rendered component here as an example
 
+**_Tips_**
+
+- To add a linebreak in the description field add `<br>` in the string where you would like a linebreak.
+
 ```json
 {
   "id": 9,
@@ -387,12 +411,19 @@ An option to add rich text to the form via [markdown](https://guides.github.com/
 
 > Add rendered component here as an example
 
+**_Tips_**
+
+- To add a linebreak add `<br>` in the string where you would like a linebreak.
+- When adding a linebreak ensure that are 2 spaces after headings or other special formatting character.
+  - Good: `# I'm a title <br>Text on new line"`
+  - Bad: `"# I'm a title<br>Text on new line"`
+
 ```json
 {
   "id": 15,
   "type": "richText",
   "properties": {
-    "descriptionEn": "#### Organization Primary Address \n Follow up text, below the heading.",
+    "descriptionEn": "#### Organization Primary Address  <br>Follow up text, below the heading.",
     "descriptionFr": "#### Adresse principale de l’organismen",
     "charLimit": 5000,
     "validation": {
