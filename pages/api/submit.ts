@@ -81,7 +81,7 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
       logMessage.info("Submission Lambda Client successfully triggered");
     }
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
     throw new Error("Could not process request with Lambda Submission function");
   }
 };
@@ -162,16 +162,15 @@ const processFormData = async (
     });
 
     if (submitToReliabilityQueue === false) {
-      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
       deleteLocalTempFiles(files);
-      return res.status(200).json({ received: true });
-    }
 
-    // Local development and Heroku
-    if (notifyPreview) {
-      deleteLocalTempFiles(files);
-      const response = await previewNotify(form, fields);
-      return res.status(201).json({ received: true, htmlEmail: response });
+      // Local development and Heroku
+      if (notifyPreview) {
+        const response = await previewNotify(form, fields);
+        return res.status(201).json({ received: true, htmlEmail: response });
+      }
+      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
+      return res.status(200).json({ received: true });
     }
 
     // Staging or Production AWS environments

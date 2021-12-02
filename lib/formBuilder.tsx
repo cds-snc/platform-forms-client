@@ -99,7 +99,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     | "tel"
     | "url";
 
-  const placeHolder = element.properties[getProperty("placeholder", lang)] ?? "";
+  const placeHolderPerLocale = element.properties[getProperty("placeholder", lang)];
+  const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
 
   const descriptionPerLocale = element.properties[getProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
@@ -228,7 +229,14 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case "dynamicRow": {
       return (
-        <DynamicGroup name={`${id}`} legend={labelText} rowElements={subElements} lang={lang} />
+        <DynamicGroup
+          name={`${id}`}
+          title={labelText}
+          description={description}
+          rowLabel={placeHolder}
+          rowElements={subElements}
+          lang={lang}
+        />
       );
     }
     default:
