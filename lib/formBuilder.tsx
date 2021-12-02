@@ -22,7 +22,7 @@ export function getProperty(field: string, lang: string): string {
     }
     return field + lang.charAt(0).toUpperCase() + lang.slice(1);
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
     throw err;
   }
 }
@@ -40,7 +40,7 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 
     return localeChoices;
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
     throw err;
   }
 }

@@ -15,7 +15,8 @@
 }
 
 .gc-error-message + .gc-input-text,
-.gc-error-message + .gc-textarea {
+.gc-error-message + .gc-textarea,
+.gc-error-message + .gc-dropdown {
   @apply border-red-700;
 }
 

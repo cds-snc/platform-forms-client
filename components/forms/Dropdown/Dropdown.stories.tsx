@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { Dropdown } from "./Dropdown";
+import { logMessage } from "@lib/logger";
 
 export default {
   title: "Forms/Dropdown",
@@ -31,7 +32,7 @@ export const defaultDropdown = (): React.ReactElement => (
   <Formik
     initialValues={{ dropdown: "" }}
     onSubmit={(values) => {
-      console.log(values);
+      logMessage.log(values);
     }}
   >
     <Dropdown id="dropdown" name="dropdown" choices={choices} />
