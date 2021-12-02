@@ -1,7 +1,6 @@
 import axios from "axios";
 import { logger, logMessage } from "../logger";
 import type { FormikBag } from "formik";
-import { getProperty } from "../formBuilder";
 import {
   FormElement,
   Responses,
