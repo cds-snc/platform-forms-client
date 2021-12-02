@@ -1,9 +1,7 @@
 import axios from "axios";
 import { logger, logMessage } from "../logger";
-import { isServer } from "../tsUtils";
 import type { FormikBag } from "formik";
 import { getProperty } from "../formBuilder";
-import { crudTemplates } from "./crud";
 import {
   FormElement,
   Responses,
@@ -12,107 +10,14 @@ import {
   DynamicFormProps,
   FileInputResponse,
   Submission,
-  CrudTemplateResponse,
   PublicFormSchemaProperties,
-  SubmissionProperties,
 } from "../types";
-
-// Get the submission format by using the form ID
-// Returns => json object of the submission details.
-async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
-  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
-    const { records } = response.data;
-    if (records?.length === 1 && records[0].formConfig?.submission) {
-      return {
-        ...records[0].formConfig?.submission,
-      };
-    }
-    return null;
-  });
-}
-
-// Get an array of form schemas based on the publishing status
-// Returns -> Array of form schemas
-async function _getFormByStatus(
-  status: boolean
-): Promise<(PublicFormSchemaProperties | undefined)[]> {
-  if (isServer()) {
-    return crudTemplates({ method: "GET" }).then((response) => {
-      const { records } = response.data;
-      if (records && records?.length > 0) {
-        return records
-          .map((record) => {
-            if (record.formConfig.publishingStatus === status) {
-              return {
-                formID: record.formID,
-                ...record.formConfig.form,
-                publishingStatus: record.formConfig.publishingStatus,
-                displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
-              };
-            }
-          })
-          .filter((val) => typeof val !== "undefined" && val !== null);
-      }
-      return [];
-    });
-  } else {
-    return await axios({
-      url: "/api/templates",
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: {
-        method: "GET",
-      },
-      timeout: 5000,
-    })
-      .then((response) => {
-        const {
-          data: { records: records },
-        } = response.data as CrudTemplateResponse;
-        if (records && records?.length > 0) {
-          return records
-            .map((record) => {
-              if (record.formConfig?.publishingStatus === status) {
-                return {
-                  formID: record.formID,
-                  ...record.formConfig?.form,
-                  publishingStatus: record.formConfig?.publishingStatus,
-                  displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
-                };
-              }
-            })
-            .filter((val) => typeof val !== "undefined" && val !== null);
-        }
-        return [];
-      })
-      .catch((err) => {
-        logMessage.error(err);
-        throw new Error("Cannot get forms by status");
-      });
-  }
-}
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-
-async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
-  if (isServer()) {
-    return crudTemplates({ method: "GET", formID: formID }).then((response) => {
-      const { records } = response.data;
-      if (records?.length === 1 && records[0].formConfig.form) {
-        return {
-          formID,
-          ...records[0].formConfig.form,
-          publishingStatus: records[0].formConfig.publishingStatus,
-          displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-        };
-      }
-      return null;
-    });
-  } else {
-    return await axios({
+async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | undefined> {
+  try {
+    const response = await axios({
       url: "/api/templates",
       method: "POST",
       headers: {
@@ -123,22 +28,18 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
         method: "GET",
       },
       timeout: 5000,
-    })
-      .then((response) => {
-        const { records } = response.data.data;
-        if (records?.length === 1 && records[0].formConfig.form) {
-          return {
-            formID,
-            ...records[0].formConfig?.form,
-            publishingStatus: records[0].formConfig.publishingStatus,
-            displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-          };
-        }
-        return null;
-      })
-      .catch((err) => {
-        logMessage.error(err);
-      });
+    });
+    const { records } = response.data.data;
+    if (records?.length === 1 && records[0].formConfig.form) {
+      return {
+        formID,
+        ...records[0].formConfig?.form,
+        publishingStatus: records[0].formConfig.publishingStatus,
+        displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
+      };
+    }
+  } catch (err) {
+    logMessage.error(err);
   }
 }
 
@@ -464,8 +365,6 @@ function _rehydrateCheckBoxResponse(response: Response) {
 }
 
 export const getFormByID = logger(_getFormByID);
-export const getFormByStatus = logger(_getFormByStatus);
-export const getSubmissionByID = logger(_getSubmissionByID);
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);
