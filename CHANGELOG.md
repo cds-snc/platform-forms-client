@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
 - Add error messages for all elements within dynamic rows. [#520](https://github.com/cds-snc/platform-forms-client/pull/520)
-- `<br>` in long description string now creates new lines
+- POST method to /id/[form]/bearer that allows the refreshing of bearer tokens
+- `<br>` in long description string now create new lines
 
 ### Fixed
 
