@@ -277,6 +277,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
           pathname: `/${language}/id/${formConfig.formID}/confirmation`,
           query: {
             htmlEmail: htmlEmail,
+            mockedFormFile: formikBag.props.mockedFormFile,
           },
         });
       } else {
