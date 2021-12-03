@@ -14,8 +14,9 @@ const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       case "PUT":
         return await activateOrDeactivateFormOwners(req, res);
       case "POST":
-        return await associateOwnerEmailToForm(req, res);
-        break;
+        return await addEmailToForm(req, res);
+      default:
+        return res.status(400).json({ error: "Bad Request" });
     }
   } catch (err) {
     res.status(500).json({ error: `Error on Server Side` });
@@ -76,12 +77,19 @@ export async function activateOrDeactivateFormOwners(
   //A 404 status code for a form Not Found in form_users
   return res.status(404).json({ error: "Form or email Not Found" });
 }
-
-export async function associateOwnerEmailToForm(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-): Promise<void> {
-  //Getting request body
+/**
+* This method aims to create a unique binding between a form template and a user
+* who can access the data later on. Here are some requirements that must be satisfied
+* in order to associate users to collect a form's data
+* Rule 1: A valid GC email domain
+* Rule 2: From ID must exist
+* Rule 3: An email has to be unique to a template
+ * @param req
+ * @param res
+ * @returns
+ */
+export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  //Get request body
   const requestBody = req.body ? JSON.parse(req.body) : undefined;
   //Valid payload
   if (!requestBody?.email || !isValidGovEmail(requestBody.email, emailDomainList.domains)) {
@@ -89,8 +97,9 @@ export async function associateOwnerEmailToForm(
   }
 
   const formID = req.query.form as string;
+  //FormID must be defined
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
-  //Checking if formID exists in db otherwise return 404
+  //Checking if formID exists in db return true or false
   const isFormIDExistResult = await executeQuery(
     dbConnector(),
     "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1))",
@@ -99,26 +108,36 @@ export async function associateOwnerEmailToForm(
   if (!isFormIDExistResult) return res.status(404).json({ error: "FormID does not exist" });
 
   const { email } = requestBody;
-  //An email has to be unique for the specific formID
-  const count = await executeQuery(
+  //Checking if the email hasn't been associated before to this template
+  const countResult = await executeQuery(
     dbConnector(),
     "SELECT count (*) FROM form_users WHERE template_id = ($1) AND email = ($2)",
     [formID, email as string]
   );
-
-  switch (count.rowCount) {
-    case 0:
-      //Creating an ownership record template <-> email(owner)
-      const create = await executeQuery(
+  type Count = {
+    count?: string;
+  };
+  const { count } = countResult.rows[0] as Count;
+  let result;
+  switch (count) {
+    case "0":
+      //Creating an association link record template <-> email(data's owner)
+      result = await executeQuery(
         dbConnector(),
         "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
         [formID, email as string]
-      );    
-      return res.status(200).json({ success: create.rows });
-    case 1:
-      return res.status(400).json({ error: "This email was already associeted with this form ID" });
+      );
+      return res.status(200).json({ success: result.rows[0] });
+    case "1":
+      //This email is already binded to the current template
+      return res
+        .status(400)
+        .json({ error: "This email was already associeted with the same form ID" });
     default:
-      return res.status(400).json({ error: "This email is not unique for the specified template" });
+      //Not allowed
+      return res
+        .status(400)
+        .json({ error: "This email is not unique for to the specified template" });
   }
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));

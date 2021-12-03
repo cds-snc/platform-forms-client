@@ -289,4 +289,193 @@ describe("/id/[forms]/owners", () => {
       }
     );
   });
+
+  describe("POST: Associate an email to a template data API endpoint", () => {
+    it("Should return 404 FormID doesn't exist in db", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //Mocking db result to check if formID exist in db.
+      executeQuery.mockReturnValue(false);
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test@gc.ca",
+        }),
+        query: {
+          form: "888",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(404);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "FormID does not exist" })
+      );
+    });
+
+    it("Should create a new record and return 200 code along with the id", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //1-Return true for formID exist in db. 2- count=0 for email not associated 3- Return the id of the newly created record.
+      executeQuery
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce({ rows: [{ count: "0" }], rowCount: 0 })
+        .mockReturnValueOnce({ rows: [{ id: 1 }], rowCount: 0 });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test9@gc.ca",
+        }),
+        query: {
+          form: "9",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          success: {
+            id: 1,
+          },
+        })
+      );
+    });
+
+    it("Should return 400 with this email was already associeted with the same form ID", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //Return true formID exists in db. And one record was found
+      executeQuery
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce({ rows: [{ count: "1" }], rowCount: 0 });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test10@gc.ca",
+        }),
+        query: {
+          form: "10",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          error: "This email was already associeted with the same form ID",
+        })
+      );
+    });
+
+    it("Should return 400 with this email is not unique for to the specified template", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //Return true formID exists in db and 2 meaning more than one record wast found
+      executeQuery
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce({ rows: [{ count: "2" }], rowCount: 0 });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test14@gc.ca",
+        }),
+        query: {
+          form: "14",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "This email is not unique for to the specified template" })
+      );
+    });
+
+    it("Should return 400 undefined formID was not supplied", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "forms@cds-snc.ca",
+        }),
+        query: {
+          form: undefined,
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "Malformed API Request Invalid formID" })
+      );
+    });
+
+    test.each([
+      "",
+      "wrongEmail.gc.ca",
+      undefined,
+      "testNotValidGovDomainName@google.com",
+      "@gc.ca",
+    ])(
+      "Should return 400 status code wiht invalid email in payload for all those cases",
+      async (elem) => {
+        const mockSession = {
+          expires: "1",
+          user: { email: "forms@cds.ca", name: "forms" },
+        };
+        client.getSession.mockReturnValue(mockSession);
+
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: elem,
+          }),
+          query: {
+            form: "23",
+          },
+        });
+        await owners(req, res);
+        expect(res.statusCode).toBe(400);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({ error: "Invalid email in payload" })
+        );
+      }
+    );
+  });
+
+  //END
 });
