@@ -19,7 +19,7 @@ const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
         return res.status(400).json({ error: "Bad Request" });
     }
   } catch (err) {
-    res.status(500).json({ error: `Error on Server Side` });
+    res.status(500).json({ error: "Error on Server Side" });
   }
 };
 
@@ -31,7 +31,7 @@ export async function getEmailListByFormID(
   if (formID) {
     //Get emails by formID
     const resultObject = await executeQuery(
-      dbConnector(),
+      await dbConnector(),
       "SELECT id, email, active FROM form_users WHERE template_id = ($1)",
       [formID]
     );
@@ -68,7 +68,7 @@ export async function activateOrDeactivateFormOwners(
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   //Update form_users's records
   const resultObject = await executeQuery(
-    dbConnector(),
+    await dbConnector(),
     "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3) RETURNING id",
     [active, formID, email as string]
   );

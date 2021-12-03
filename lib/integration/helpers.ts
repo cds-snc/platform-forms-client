@@ -1,7 +1,6 @@
 import axios from "axios";
 import { logger, logMessage } from "../logger";
 import type { FormikBag } from "formik";
-import { getProperty } from "../formBuilder";
 import {
   FormElement,
   Responses,
@@ -77,6 +76,7 @@ function handleType(question: FormElement, response: Response, collector: Array<
     case "dynamicRow":
       handleDynamicForm(
         qTitle,
+        question.properties.placeholderEn,
         response as Array<Responses>,
         question.properties.subElements as FormElement[],
         collector
@@ -85,11 +85,14 @@ function handleType(question: FormElement, response: Response, collector: Array<
     case "fileInput":
       handleTextResponse(qTitle, response as string, collector);
       break;
+    case "richText":
+      collector.push(`${question.properties.descriptionEn}`);
   }
 }
 
 function handleDynamicForm(
   title: string,
+  rowLabel = "Item",
   response: Array<Responses>,
   question: Array<FormElement>,
   collector: Array<string>
@@ -111,12 +114,15 @@ function handleDynamicForm(
         case "checkbox":
           handleArrayResponse(qTitle, row[qIndex] as Array<string>, rowCollector);
           break;
+
+        default:
+          break;
       }
     });
-    rowCollector.unshift(`Item ${rIndex + 1}`);
+    rowCollector.unshift(`${String.fromCharCode(13)}***${rowLabel} ${rIndex + 1}***`);
     return rowCollector.join(String.fromCharCode(13));
   });
-  responseCollector.unshift(title);
+  responseCollector.unshift(`**${title}**`);
   collector.push(responseCollector.join(String.fromCharCode(13)));
 }
 
@@ -125,26 +131,26 @@ function handleArrayResponse(title: string, response: Array<string>, collector: 
     if (Array.isArray(response)) {
       const responses = response
         .map((item) => {
-          return `- ${item}`;
+          return `-  ${item}`;
         })
         .join(String.fromCharCode(13));
-      collector.push(`${title}${String.fromCharCode(13)}${responses}`);
+      collector.push(`**${title}**${String.fromCharCode(13)}${responses}`);
       return;
     } else {
       handleTextResponse(title, response, collector);
       return;
     }
   }
-  collector.push(`${title}${String.fromCharCode(13)}- No response`);
+  collector.push(`**${title}**${String.fromCharCode(13)}No response`);
 }
 
 function handleTextResponse(title: string, response: string, collector: Array<string>) {
   if (response !== undefined && response !== null && response !== "") {
-    collector.push(`${title}${String.fromCharCode(13)}-${response}`);
+    collector.push(`**${title}**${String.fromCharCode(13)}${response}`);
     return;
   }
 
-  collector.push(`${title}${String.fromCharCode(13)}- No Response`);
+  collector.push(`**${title}**${String.fromCharCode(13)}No Response`);
 }
 
 function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
@@ -265,23 +271,12 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
   })
     .then((serverResponse) => {
       if (serverResponse.data.received === true) {
-        const referrerUrl =
-          formConfig && formConfig.endPage
-            ? {
-                referrerUrl: formConfig.endPage[getProperty("referrerUrl", language)],
-              }
-            : null;
         const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
-        const endPageText =
-          formConfig && formConfig.endPage
-            ? JSON.stringify(formConfig.endPage[getProperty("description", language)])
-            : "";
+
         router.push({
           pathname: `/${language}/id/${formConfig.formID}/confirmation`,
           query: {
-            ...referrerUrl,
             htmlEmail: htmlEmail,
-            pageText: endPageText,
             mockedFormFile: formikBag.props.mockedFormFile,
           },
         });

@@ -114,10 +114,15 @@ const isFieldResponseValid = (
       }
       break;
     }
-    case "dynamicRow":
+    case "dynamicRow": {
       //set up object to store results
       // loop over rows of values
-      return (value as Array<Responses>).map((row) => {
+
+      // deterministic switch to return an error object or not
+      // required because returning any object (including nulls) blocks the submit action
+      let dynamicRowHasErrors = false;
+
+      const groupErrors = (value as Array<Responses>).map((row) => {
         const rowErrors: Record<string, unknown> = {};
         for (const [responseKey, responseValue] of Object.entries(row)) {
           if (
@@ -135,6 +140,9 @@ const isFieldResponseValid = (
                 t
               );
               rowErrors[responseKey] = validationError;
+              if (validationError !== null) {
+                dynamicRowHasErrors = true;
+              }
             } else {
               rowErrors[responseKey] = null;
             }
@@ -142,7 +150,12 @@ const isFieldResponseValid = (
         }
         return rowErrors;
       });
-
+      if (!dynamicRowHasErrors) {
+        break;
+      } else {
+        return groupErrors;
+      }
+    }
     case "richText":
       break;
     default:
