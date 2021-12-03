@@ -11,6 +11,7 @@ export const isServer = (): boolean => {
 
 /**
  * Check if an email has GC valid domain name.
+ * It returns true if emai is a valid GC email otherwise false.
  * @param email
  * @param extensions
  * @returns boolean

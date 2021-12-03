@@ -476,6 +476,4 @@ describe("/id/[forms]/owners", () => {
       }
     );
   });
-
-  //END
 });
