@@ -78,12 +78,12 @@ export async function activateOrDeactivateFormOwners(
   return res.status(404).json({ error: "Form or email Not Found" });
 }
 /**
-* This method aims to create a unique binding between a form template and a user
-* who can access the data later on. Here are some requirements that must be satisfied
-* in order to associate users to collect a form's data
-* Rule 1: A valid GC email domain
-* Rule 2: From ID must exist
-* Rule 3: An email has to be unique to a template
+ * This method aims to create a unique binding between a form template and a user
+ * who can access the data later on. Here are some requirements that must be satisfied
+ * in order to associate users to collect a form's data
+ * Rule 1: A valid GC email domain
+ * Rule 2: From ID must exist
+ * Rule 3: An email has to be unique to a template
  * @param req
  * @param res
  * @returns
