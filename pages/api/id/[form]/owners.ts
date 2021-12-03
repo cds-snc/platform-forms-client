@@ -3,6 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbConnector from "../../../../lib/integration/dbConnector";
 import isUserSessionExist from "../../../../lib/middleware/HttpSessionExist";
 import executeQuery from "../../../../lib/integration/queryManager";
+import { isValidGovEmail } from "@lib/tsUtils";
+import emailDomainList from "@lib/email.domains.json";
 
 const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
@@ -12,7 +14,7 @@ const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       case "PUT":
         return await activateOrDeactivateFormOwners(req, res);
       case "POST":
-        // TODO handle card #491 to associate a specific email to a form
+        return await associateOwnerEmailToForm(req, res);
         break;
     }
   } catch (err) {
@@ -73,5 +75,50 @@ export async function activateOrDeactivateFormOwners(
   if (resultObject.rowCount > 0) return res.status(200).json(resultObject.rows);
   //A 404 status code for a form Not Found in form_users
   return res.status(404).json({ error: "Form or email Not Found" });
+}
+
+export async function associateOwnerEmailToForm(
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+): Promise<void> {
+  //Getting request body
+  const requestBody = req.body ? JSON.parse(req.body) : undefined;
+  //Valid payload
+  if (!requestBody?.email || !isValidGovEmail(requestBody.email, emailDomainList.domains)) {
+    return res.status(400).json({ error: "Invalid email in payload" });
+  }
+
+  const formID = req.query.form as string;
+  if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
+  //Checking if formID exists in db otherwise return 404
+  const isFormIDExistResult = await executeQuery(
+    dbConnector(),
+    "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1))",
+    [formID]
+  );
+  if (!isFormIDExistResult) return res.status(404).json({ error: "FormID does not exist" });
+
+  const { email } = requestBody;
+  //An email has to be unique for the specific formID
+  const count = await executeQuery(
+    dbConnector(),
+    "SELECT count (*) FROM form_users WHERE template_id = ($1) AND email = ($2)",
+    [formID, email as string]
+  );
+
+  switch (count.rowCount) {
+    case 0:
+      //Creating an ownership record template <-> email(owner)
+      const create = await executeQuery(
+        dbConnector(),
+        "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
+        [formID, email as string]
+      );    
+      return res.status(200).json({ success: create.rows });
+    case 1:
+      return res.status(400).json({ error: "This email was already associeted with this form ID" });
+    default:
+      return res.status(400).json({ error: "This email is not unique for the specified template" });
+  }
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));

@@ -8,3 +8,23 @@ export function hasOwnProperty<X extends Record<string, unknown>, Y extends Prop
 export const isServer = (): boolean => {
   return typeof window === "undefined";
 };
+
+/**
+ * Check if an email has GC valid domain name.
+ * @param email
+ * @param extensions
+ * @returns boolean
+ */
+export const isValidGovEmail = (email: string, domains: string[]): boolean => {
+  const reg = new RegExp(
+    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.([a-zA-Z0-9-]{2,}))+$"
+  );
+  if (!email || !domains || !reg.test(email)) {
+    return false;
+  }
+
+  //Get domain i.e gc.ca
+  const emailDomain = email.substring(email.lastIndexOf("@") + 1);
+  //EmailDomain exists
+  return domains.includes(emailDomain.toString());
+};
