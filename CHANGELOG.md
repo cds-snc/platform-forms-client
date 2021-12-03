@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - When deleting a row in Dynamic Row the focus and scroll moves to the heading of the previous row.
 - For local development fixed the Preview Notify email functionality that was previously broken
 - Validation on Dynamic row was preventing form submission when no validation errors were being found.
+- Google Tag manger requried 'connect-src' in the content security policy to correctly load
 
 ## [1.0.3] 2021-11-25
 
