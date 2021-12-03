@@ -101,7 +101,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   //Checking if formID exists in db return true or false
   const isFormIDExistResult = await executeQuery(
-    dbConnector(),
+    await dbConnector(),
     "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1))",
     [formID]
   );
@@ -110,7 +110,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
   const { email } = requestBody;
   //Checking if the email hasn't been associated before to this template
   const countResult = await executeQuery(
-    dbConnector(),
+    await dbConnector(),
     "SELECT count (*) FROM form_users WHERE template_id = ($1) AND email = ($2)",
     [formID, email as string]
   );
@@ -123,7 +123,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     case "0":
       //Creating an association link record template <-> email(data's owner)
       result = await executeQuery(
-        dbConnector(),
+        await dbConnector(),
         "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
         [formID, email as string]
       );
