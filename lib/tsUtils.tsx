@@ -23,7 +23,6 @@ export const isValidGovEmail = (email: string, domains: string[]): boolean => {
   if (!email || !domains || !reg.test(email)) {
     return false;
   }
-
   //Get domain i.e gc.ca
   const emailDomain = email.substring(email.lastIndexOf("@") + 1);
   //EmailDomain exists
