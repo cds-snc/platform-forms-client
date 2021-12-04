@@ -325,7 +325,9 @@ describe("/id/[forms]/owners", () => {
         user: { email: "forms@cds.ca", name: "forms" },
       };
       client.getSession.mockReturnValue(mockSession);
-      //1-Return true for formID exist in db. 2- count=0 for email not associated 3- Return the id of the newly created record.
+      // return true for formID exist in db.
+      // count=0 for email not yet associated
+      // return the id of the newly created record.
       executeQuery
         .mockReturnValueOnce(true)
         .mockReturnValueOnce({ rows: [{ count: "0" }], rowCount: 0 })
@@ -417,7 +419,7 @@ describe("/id/[forms]/owners", () => {
       );
     });
 
-    it("Should return 400 undefined formID was not supplied", async () => {
+    it("Should return 400 undefined formID was supplied", async () => {
       const mockSession = {
         expires: "1",
         user: { email: "forms@cds.ca", name: "forms" },

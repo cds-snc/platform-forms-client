@@ -115,7 +115,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     "SELECT count (*) FROM form_users WHERE template_id = ($1) AND email = ($2)",
     [formID, email as string]
   );
-  
+
   type Count = { count?: string };
   const { count } = countResult.rows[0] as Count;
   let result;
@@ -128,11 +128,11 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
         [formID, email as string]
       );
       return res.status(200).json({ success: result.rows[0] });
-    case "1":     
+    case "1":
       return res
         .status(400)
         .json({ error: "This email was already associeted with the same form ID" });
-    default:      
+    default:
       return res.status(400).json({ error: "Multiple records found for this template" });
   }
 }
