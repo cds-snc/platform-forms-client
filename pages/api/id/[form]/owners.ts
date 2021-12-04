@@ -79,19 +79,18 @@ export async function activateOrDeactivateFormOwners(
 }
 /**
  * This method aims to create a unique binding between a form template and a user
- * who can access the data later on. Here are some requirements that must be satisfied
+ * who needs to access the form's data later on. Here are some requirements that must be satisfied
  * in order to associate users to collect a form's data
- * Rule 1: A valid GC email domain
- * Rule 2: FromID must exist
- * Rule 3: An email has to be unique to a template
- * @param req
- * @param res
- * @returns
+ * Rule 1: a valid government email address
+ * Rule 2: the FromID/template must exist
+ * Rule 3: the email must not be already associated to the template
+ * @param req The request object
+ * @param res The response object
  */
 export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   //Get request body
   const requestBody = req.body ? JSON.parse(req.body) : undefined;
-  //Check the payload's content
+  //Checkimg the payload's content
   if (!requestBody?.email || !isValidGovEmail(requestBody.email, emailDomainList.domains)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
@@ -109,7 +108,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
   if (!exists) return res.status(404).json({ error: "FormID does not exist" });
 
   const { email } = requestBody;
-  //May return true if the email is associated otherwse false
+  //May return true if the email is associated otherwise false
   const emailTieToFormResult = await executeQuery(
     await dbConnector(),
     "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1) AND email = ($2))",

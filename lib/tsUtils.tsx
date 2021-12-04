@@ -10,11 +10,11 @@ export const isServer = (): boolean => {
 };
 
 /**
- * Check if an email has GC valid domain name.
- * It returns true if emai is a valid GC email otherwise false.
- * @param email
- * @param extensions
- * @returns boolean
+ * This function checks if a given email is a government valid email.
+ * And it returns true if the email is a valid GC email otherwise false.
+ * @param email A valid government email
+ * @param domains The list of GC domains
+ * @returns {boolean} The validation result
  */
 export const isValidGovEmail = (email: string, domains: string[]): boolean => {
   const reg = new RegExp(
@@ -23,8 +23,8 @@ export const isValidGovEmail = (email: string, domains: string[]): boolean => {
   if (!email || !domains || !reg.test(email)) {
     return false;
   }
-  //Get domain i.e gc.ca
+  //Get the domain from email
   const emailDomain = email.substring(email.lastIndexOf("@") + 1);
-  //EmailDomain exists
+  //Check the email's domain against the list of domains
   return domains.includes(emailDomain.toString());
 };
