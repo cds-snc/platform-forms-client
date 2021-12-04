@@ -82,7 +82,7 @@ export async function activateOrDeactivateFormOwners(
  * who can access the data later on. Here are some requirements that must be satisfied
  * in order to associate users to collect a form's data
  * Rule 1: A valid GC email domain
- * Rule 2: From ID must exist
+ * Rule 2: FromID must exist
  * Rule 3: An email has to be unique to a template
  * @param req
  * @param res
@@ -91,49 +91,43 @@ export async function activateOrDeactivateFormOwners(
 export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   //Get request body
   const requestBody = req.body ? JSON.parse(req.body) : undefined;
-  //Valid payload
+  //Check the payload's content
   if (!requestBody?.email || !isValidGovEmail(requestBody.email, emailDomainList.domains)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
-
   const formID = req.query.form as string;
-  //FormID must be defined
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
-  //checking if formID exists in db return true or false
-  //return true if it exists otherwise false
+  //Checking if formID exists in db return true or false
+  //May return true if it exists otherwise false
   const isFormIDExistResult = await executeQuery(
     await dbConnector(),
     "SELECT exists(SELECT 1 FROM templates WHERE id = ($1))",
     [formID]
   );
-  if (!isFormIDExistResult) return res.status(404).json({ error: "FormID does not exist" });
+  type ARowExists = { exists?: boolean };
+  const { exists } = isFormIDExistResult.rows[0] as ARowExists;
+  if (!exists) return res.status(404).json({ error: "FormID does not exist" });
 
   const { email } = requestBody;
-  //Checking if the email hasn't been associated before to this template
-  const countResult = await executeQuery(
+  //May return true if the email is associated otherwse false
+  const emailTieToFormResult = await executeQuery(
     await dbConnector(),
-    "SELECT count (*) FROM form_users WHERE template_id = ($1) AND email = ($2)",
+    "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1) AND email = ($2))",
     [formID, email as string]
   );
-
-  type Count = { count?: string };
-  const { count } = countResult.rows[0] as Count;
-  let result;
-  switch (count) {
-    case "0":
-      //Creating an association link record template <-> email(data's owner)
-      result = await executeQuery(
-        await dbConnector(),
-        "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
-        [formID, email as string]
-      );
-      return res.status(200).json({ success: result.rows[0] });
-    case "1":
-      return res
-        .status(400)
-        .json({ error: "This email was already associeted with the same form ID" });
-    default:
-      return res.status(400).json({ error: "Multiple records found for this template" });
+  const isEmailTieToForm = emailTieToFormResult.rows[0] as ARowExists;
+  //The template is not linked to the email
+  if (!isEmailTieToForm.exists) {
+    const result = await executeQuery(
+      await dbConnector(),
+      "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
+      [formID, email as string]
+    );
+    return res.status(200).json({ success: result.rows[0] });
+  } else {
+    return res
+      .status(400)
+      .json({ error: "This email was already associeted with the same form ID" });
   }
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));

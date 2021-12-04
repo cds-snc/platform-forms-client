@@ -298,7 +298,7 @@ describe("/id/[forms]/owners", () => {
       };
       client.getSession.mockReturnValue(mockSession);
       //Mocking db result to check if formID exist in db.
-      executeQuery.mockReturnValue(false);
+      executeQuery.mockReturnValue({ rows: [{ exists: false }] });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -326,12 +326,12 @@ describe("/id/[forms]/owners", () => {
       };
       client.getSession.mockReturnValue(mockSession);
       // return true for formID exist in db.
-      // count=0 for email not yet associated
+      // return false for email is not yet associated
       // return the id of the newly created record.
       executeQuery
-        .mockReturnValueOnce(true)
-        .mockReturnValueOnce({ rows: [{ count: "0" }], rowCount: 0 })
-        .mockReturnValueOnce({ rows: [{ id: 1 }], rowCount: 0 });
+        .mockReturnValueOnce({ rows: [{ exists: true }] })
+        .mockReturnValueOnce({ rows: [{ exists: false }] })
+        .mockReturnValueOnce({ rows: [{ id: 1 }] });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -364,8 +364,8 @@ describe("/id/[forms]/owners", () => {
       client.getSession.mockReturnValue(mockSession);
       //Return true formID exists in db. And one record was found
       executeQuery
-        .mockReturnValueOnce(true)
-        .mockReturnValueOnce({ rows: [{ count: "1" }], rowCount: 0 });
+        .mockReturnValueOnce({ rows: [{ exists: true }] })
+        .mockReturnValueOnce({ rows: [{ exists: true }] });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -397,8 +397,8 @@ describe("/id/[forms]/owners", () => {
       //Return true if formID exists in db
       //2 as count value which means more than one record wast found
       executeQuery
-        .mockReturnValueOnce(true)
-        .mockReturnValueOnce({ rows: [{ count: "2" }], rowCount: 0 });
+        .mockReturnValueOnce({ rows: [{ exists: true }] })
+        .mockReturnValueOnce({ rows: [{ exists: true }] });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -415,7 +415,9 @@ describe("/id/[forms]/owners", () => {
       await owners(req, res);
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Multiple records found for this template" })
+        expect.objectContaining({
+          error: "This email was already associeted with the same form ID",
+        })
       );
     });
 
