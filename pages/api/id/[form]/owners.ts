@@ -4,7 +4,7 @@ import dbConnector from "../../../../lib/integration/dbConnector";
 import isUserSessionExist from "../../../../lib/middleware/HttpSessionExist";
 import executeQuery from "../../../../lib/integration/queryManager";
 import { isValidGovEmail } from "@lib/tsUtils";
-import emailDomainList from "@lib/email.domains.json";
+import emailDomainList from "../../../../email.domains.json";
 
 const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
