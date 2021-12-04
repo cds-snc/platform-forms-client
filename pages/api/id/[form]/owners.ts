@@ -63,7 +63,7 @@ export async function activateOrDeactivateFormOwners(
     //Invalid payload
     return res.status(400).json({ error: "Invalid payload fields are not define" });
   }
-  const { email, active } = requestBody; // TODO email should be checked i.e (valid Gov email). See #491
+  const { email, active } = requestBody;
   const formID = req.query.form as string;
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   //Update form_users's records
@@ -93,16 +93,17 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
   const requestBody = req.body ? JSON.parse(req.body) : undefined;
   //Valid payload
   if (!requestBody?.email || !isValidGovEmail(requestBody.email, emailDomainList.domains)) {
-    return res.status(400).json({ error: "Invalid email in payload" });
+    return res.status(400).json({ error: "The email is not a valid GC email" });
   }
 
   const formID = req.query.form as string;
   //FormID must be defined
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
-  //Checking if formID exists in db return true or false
+  //checking if formID exists in db return true or false
+  //return true if it exists otherwise false
   const isFormIDExistResult = await executeQuery(
     await dbConnector(),
-    "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1))",
+    "SELECT exists(SELECT 1 FROM templates WHERE id = ($1))",
     [formID]
   );
   if (!isFormIDExistResult) return res.status(404).json({ error: "FormID does not exist" });
@@ -114,9 +115,8 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     "SELECT count (*) FROM form_users WHERE template_id = ($1) AND email = ($2)",
     [formID, email as string]
   );
-  type Count = {
-    count?: string;
-  };
+  
+  type Count = { count?: string };
   const { count } = countResult.rows[0] as Count;
   let result;
   switch (count) {
@@ -128,16 +128,12 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
         [formID, email as string]
       );
       return res.status(200).json({ success: result.rows[0] });
-    case "1":
-      //This email is already binded to the current template
+    case "1":     
       return res
         .status(400)
         .json({ error: "This email was already associeted with the same form ID" });
-    default:
-      //Not allowed
-      return res
-        .status(400)
-        .json({ error: "This email is not unique for to the specified template" });
+    default:      
+      return res.status(400).json({ error: "Multiple records found for this template" });
   }
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));

@@ -392,7 +392,8 @@ describe("/id/[forms]/owners", () => {
         user: { email: "forms@cds.ca", name: "forms" },
       };
       client.getSession.mockReturnValue(mockSession);
-      //Return true formID exists in db and 2 meaning more than one record wast found
+      //Return true if formID exists in db
+      //2 as count value which means more than one record wast found
       executeQuery
         .mockReturnValueOnce(true)
         .mockReturnValueOnce({ rows: [{ count: "2" }], rowCount: 0 });
@@ -412,7 +413,7 @@ describe("/id/[forms]/owners", () => {
       await owners(req, res);
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "This email is not unique for to the specified template" })
+        expect.objectContaining({ error: "Multiple records found for this template" })
       );
     });
 
@@ -471,7 +472,7 @@ describe("/id/[forms]/owners", () => {
         await owners(req, res);
         expect(res.statusCode).toBe(400);
         expect(JSON.parse(res._getData())).toEqual(
-          expect.objectContaining({ error: "Invalid email in payload" })
+          expect.objectContaining({ error: "The email is not a valid GC email" })
         );
       }
     );
