@@ -1,5 +1,6 @@
 import React from "react";
-import { Description } from "./Description";
+import { Story } from "@storybook/react";
+import { Description, DescriptionProps } from "./Description";
 
 export default {
   title: "Forms/Description",
@@ -9,6 +10,11 @@ export default {
   },
 };
 
-export const defaultDescription = (): React.ReactElement => (
-  <Description>This is a description</Description>
+const Template: Story<DescriptionProps> = (args: DescriptionProps) => (
+  <Description {...args}>{args.children}</Description>
 );
+
+export const defaultDescription = Template.bind({});
+defaultDescription.args = {
+  children: "This is a description",
+};
