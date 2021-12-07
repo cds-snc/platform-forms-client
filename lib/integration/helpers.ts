@@ -1,9 +1,6 @@
 import axios from "axios";
 import { logger, logMessage } from "../logger";
-import { isServer } from "../tsUtils";
 import type { FormikBag } from "formik";
-import { getProperty } from "../formBuilder";
-import { crudTemplates } from "./crud";
 import {
   FormElement,
   Responses,
@@ -12,107 +9,14 @@ import {
   DynamicFormProps,
   FileInputResponse,
   Submission,
-  CrudTemplateResponse,
   PublicFormSchemaProperties,
-  SubmissionProperties,
 } from "../types";
-
-// Get the submission format by using the form ID
-// Returns => json object of the submission details.
-async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
-  return crudTemplates({ method: "GET", formID: formID }).then((response) => {
-    const { records } = response.data;
-    if (records?.length === 1 && records[0].formConfig?.submission) {
-      return {
-        ...records[0].formConfig?.submission,
-      };
-    }
-    return null;
-  });
-}
-
-// Get an array of form schemas based on the publishing status
-// Returns -> Array of form schemas
-async function _getFormByStatus(
-  status: boolean
-): Promise<(PublicFormSchemaProperties | undefined)[]> {
-  if (isServer()) {
-    return crudTemplates({ method: "GET" }).then((response) => {
-      const { records } = response.data;
-      if (records && records?.length > 0) {
-        return records
-          .map((record) => {
-            if (record.formConfig.publishingStatus === status) {
-              return {
-                formID: record.formID,
-                ...record.formConfig.form,
-                publishingStatus: record.formConfig.publishingStatus,
-                displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
-              };
-            }
-          })
-          .filter((val) => typeof val !== "undefined" && val !== null);
-      }
-      return [];
-    });
-  } else {
-    return await axios({
-      url: "/api/templates",
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: {
-        method: "GET",
-      },
-      timeout: 5000,
-    })
-      .then((response) => {
-        const {
-          data: { records: records },
-        } = response.data as CrudTemplateResponse;
-        if (records && records?.length > 0) {
-          return records
-            .map((record) => {
-              if (record.formConfig?.publishingStatus === status) {
-                return {
-                  formID: record.formID,
-                  ...record.formConfig?.form,
-                  publishingStatus: record.formConfig?.publishingStatus,
-                  displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
-                };
-              }
-            })
-            .filter((val) => typeof val !== "undefined" && val !== null);
-        }
-        return [];
-      })
-      .catch((err) => {
-        logMessage.error(err);
-        throw new Error("Cannot get forms by status");
-      });
-  }
-}
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-
-async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
-  if (isServer()) {
-    return crudTemplates({ method: "GET", formID: formID }).then((response) => {
-      const { records } = response.data;
-      if (records?.length === 1 && records[0].formConfig.form) {
-        return {
-          formID,
-          ...records[0].formConfig.form,
-          publishingStatus: records[0].formConfig.publishingStatus,
-          displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-        };
-      }
-      return null;
-    });
-  } else {
-    return await axios({
+async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | undefined> {
+  try {
+    const response = await axios({
       url: "/api/templates",
       method: "POST",
       headers: {
@@ -123,22 +27,18 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
         method: "GET",
       },
       timeout: 5000,
-    })
-      .then((response) => {
-        const { records } = response.data.data;
-        if (records?.length === 1 && records[0].formConfig.form) {
-          return {
-            formID,
-            ...records[0].formConfig?.form,
-            publishingStatus: records[0].formConfig.publishingStatus,
-            displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-          };
-        }
-        return null;
-      })
-      .catch((err) => {
-        logMessage.error(err);
-      });
+    });
+    const { records } = response.data.data;
+    if (records?.length === 1 && records[0].formConfig.form) {
+      return {
+        formID,
+        ...records[0].formConfig?.form,
+        publishingStatus: records[0].formConfig.publishingStatus,
+        displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
+      };
+    }
+  } catch (err) {
+    logMessage.error(err);
   }
 }
 
@@ -176,6 +76,7 @@ function handleType(question: FormElement, response: Response, collector: Array<
     case "dynamicRow":
       handleDynamicForm(
         qTitle,
+        question.properties.placeholderEn,
         response as Array<Responses>,
         question.properties.subElements as FormElement[],
         collector
@@ -184,11 +85,14 @@ function handleType(question: FormElement, response: Response, collector: Array<
     case "fileInput":
       handleTextResponse(qTitle, response as string, collector);
       break;
+    case "richText":
+      collector.push(`${question.properties.descriptionEn}`);
   }
 }
 
 function handleDynamicForm(
   title: string,
+  rowLabel = "Item",
   response: Array<Responses>,
   question: Array<FormElement>,
   collector: Array<string>
@@ -210,12 +114,15 @@ function handleDynamicForm(
         case "checkbox":
           handleArrayResponse(qTitle, row[qIndex] as Array<string>, rowCollector);
           break;
+
+        default:
+          break;
       }
     });
-    rowCollector.unshift(`Item ${rIndex + 1}`);
+    rowCollector.unshift(`${String.fromCharCode(13)}***${rowLabel} ${rIndex + 1}***`);
     return rowCollector.join(String.fromCharCode(13));
   });
-  responseCollector.unshift(title);
+  responseCollector.unshift(`**${title}**`);
   collector.push(responseCollector.join(String.fromCharCode(13)));
 }
 
@@ -224,26 +131,26 @@ function handleArrayResponse(title: string, response: Array<string>, collector: 
     if (Array.isArray(response)) {
       const responses = response
         .map((item) => {
-          return `- ${item}`;
+          return `-  ${item}`;
         })
         .join(String.fromCharCode(13));
-      collector.push(`${title}${String.fromCharCode(13)}${responses}`);
+      collector.push(`**${title}**${String.fromCharCode(13)}${responses}`);
       return;
     } else {
       handleTextResponse(title, response, collector);
       return;
     }
   }
-  collector.push(`${title}${String.fromCharCode(13)}- No response`);
+  collector.push(`**${title}**${String.fromCharCode(13)}No response`);
 }
 
 function handleTextResponse(title: string, response: string, collector: Array<string>) {
   if (response !== undefined && response !== null && response !== "") {
-    collector.push(`${title}${String.fromCharCode(13)}-${response}`);
+    collector.push(`**${title}**${String.fromCharCode(13)}${response}`);
     return;
   }
 
-  collector.push(`${title}${String.fromCharCode(13)}- No Response`);
+  collector.push(`**${title}**${String.fromCharCode(13)}No Response`);
 }
 
 function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
@@ -364,23 +271,13 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
   })
     .then((serverResponse) => {
       if (serverResponse.data.received === true) {
-        const referrerUrl =
-          formConfig && formConfig.endPage
-            ? {
-                referrerUrl: formConfig.endPage[getProperty("referrerUrl", language)],
-              }
-            : null;
         const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
-        const endPageText =
-          formConfig && formConfig.endPage
-            ? JSON.stringify(formConfig.endPage[getProperty("description", language)])
-            : "";
+
         router.push({
           pathname: `/${language}/id/${formConfig.formID}/confirmation`,
           query: {
-            ...referrerUrl,
             htmlEmail: htmlEmail,
-            pageText: endPageText,
+            mockedFormFile: formikBag.props.mockedFormFile,
           },
         });
       } else {
@@ -468,8 +365,6 @@ function _rehydrateCheckBoxResponse(response: Response) {
 }
 
 export const getFormByID = logger(_getFormByID);
-export const getFormByStatus = logger(_getFormByStatus);
-export const getSubmissionByID = logger(_getSubmissionByID);
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);

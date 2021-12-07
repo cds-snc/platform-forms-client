@@ -3,8 +3,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import formidable, { Fields, Files } from "formidable";
 import convertMessage from "@lib/markdown";
-import { getFormByID, rehydrateFormResponses } from "@lib/integration/helpers";
-import { getSubmissionByID } from "@lib/integration/helpers";
+import { rehydrateFormResponses } from "@lib/integration/helpers";
+import { getFormByID, getSubmissionByID } from "@lib/integration/crud";
 import { logMessage } from "@lib/logger";
 import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
@@ -81,7 +81,7 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
       logMessage.info("Submission Lambda Client successfully triggered");
     }
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
     throw new Error("Could not process request with Lambda Submission function");
   }
 };
@@ -162,16 +162,15 @@ const processFormData = async (
     });
 
     if (submitToReliabilityQueue === false) {
-      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
       deleteLocalTempFiles(files);
-      return res.status(200).json({ received: true });
-    }
 
-    // Local development and Heroku
-    if (notifyPreview) {
-      deleteLocalTempFiles(files);
-      const response = await previewNotify(form, fields);
-      return res.status(201).json({ received: true, htmlEmail: response });
+      // Local development and Heroku
+      if (notifyPreview) {
+        const response = await previewNotify(form, fields);
+        return res.status(201).json({ received: true, htmlEmail: response });
+      }
+      // Set this to a 200 response as it's valid if the send to reliability queue option is off.
+      return res.status(200).json({ received: true });
     }
 
     // Staging or Production AWS environments

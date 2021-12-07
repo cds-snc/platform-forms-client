@@ -1,3 +1,4 @@
+import fs from "fs";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { logger, logMessage } from "../logger";
 import {
@@ -5,6 +6,8 @@ import {
   CrudTemplateResponse,
   CrudOrganisationResponse,
   CrudTemplateInput,
+  SubmissionProperties,
+  PublicFormSchemaProperties,
 } from "../types";
 import { organisationCache, formCache } from "../cache";
 
@@ -132,7 +135,6 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     FunctionName: process.env.TEMPLATES_API ?? "Templates",
     Payload: encoder.encode(JSON.stringify(getConfig(payload))),
   });
-
   return await lambdaClient
     .send(command)
     .then((response) => {
@@ -294,5 +296,77 @@ async function _crudOrganisations(
     });
 }
 
+// Get the submission format by using the form ID
+// Returns => json object of the submission details.
+async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
+  const response = await crudTemplates({ method: "GET", formID: formID });
+  const { records } = response.data;
+  if (records?.length === 1 && records[0].formConfig?.submission) {
+    return {
+      ...records[0].formConfig?.submission,
+    };
+  }
+  return null;
+}
+
+async function _getFormByStatus(
+  status: boolean
+): Promise<(PublicFormSchemaProperties | undefined)[]> {
+  const response = await crudTemplates({ method: "GET" });
+  const { records } = response.data;
+  if (records && records?.length > 0) {
+    return records
+      .map((record) => {
+        if (record.formConfig.publishingStatus === status) {
+          return {
+            formID: record.formID,
+            ...record.formConfig.form,
+            publishingStatus: record.formConfig.publishingStatus,
+            displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
+          };
+        }
+      })
+      .filter((val) => typeof val !== "undefined" && val !== null);
+  }
+  return [];
+}
+
+async function _getFormByID(
+  formID: string,
+  mockedFormFile?: string
+): Promise<PublicFormSchemaProperties | null> {
+  // for cypress tests we want to return a dummy form from a local file
+  // as opposed to needing to hit a staging endpoint
+  // additionally we use an environment variable to enable or disable this
+  // as in a production setting this could be dangerous as one could potentially
+  // error bomb our queue if this is left enabled
+  if (mockedFormFile && process.env.ALLOW_MOCK_FORMS) {
+    const folderPathSplit = __dirname.split("/");
+    const mockedForm = JSON.parse(
+      fs.readFileSync(
+        `${folderPathSplit
+          .slice(0, folderPathSplit.lastIndexOf("platform-forms-client") + 1)
+          .join("/")}/tests/data/${mockedFormFile}.json`,
+        { encoding: "utf8" }
+      )
+    );
+    return mockedForm.form;
+  }
+  const response = await crudTemplates({ method: "GET", formID: formID });
+  const { records } = response.data;
+  if (records?.length === 1 && records[0].formConfig.form) {
+    return {
+      formID,
+      ...records[0].formConfig.form,
+      publishingStatus: records[0].formConfig.publishingStatus,
+      displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
+    };
+  }
+  return null;
+}
+
 export const crudOrganisations = logger(_crudOrganisationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
+export const getFormByID = logger(_getFormByID);
+export const getFormByStatus = logger(_getFormByStatus);
+export const getSubmissionByID = logger(_getSubmissionByID);

@@ -2,6 +2,8 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
  */
+const { pathsToModuleNameMapper } = require("ts-jest/utils");
+const { compilerOptions } = require("./tsconfig");
 
 module.exports = {
   testPathIgnorePatterns: [
@@ -12,11 +14,11 @@ module.exports = {
   ],
   moduleNameMapper: {
     "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules",
-    "^@lib/(.*)": "<rootDir>/lib/$1",
+    ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   },
   clearMocks: true,
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+    "\\.[jt]sx?$": "babel-jest",
   },
   setupFilesAfterEnv: ["<rootDir>/lib/tests/setupTests.ts", "jest-chain"],
   testEnvironment: "jsdom",

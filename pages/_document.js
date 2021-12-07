@@ -19,6 +19,7 @@ function getCsp() {
   csp += `img-src 'self' https: data:;`;
   csp += `font-src 'self' fonts.gstatic.com;`;
   csp += `frame-src www.googletagmanager.com;`;
+  csp += `connect-src 'self' www.googletagmanager.com www.google-analytics.com`;
   return csp;
 }
 

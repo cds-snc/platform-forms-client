@@ -11,6 +11,7 @@ import { useFlag } from "../../../lib/hooks/flags";
 
 interface DynamicFormProps {
   formConfig: PublicFormSchemaProperties;
+  mockedFormFile?: string;
 }
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
@@ -18,25 +19,20 @@ interface DynamicFormProps {
 */
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
-  const { formConfig } = props;
+  const { formConfig, mockedFormFile } = props;
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formConfig, language);
   const formTitle = formConfig[getProperty("title", language)] as string;
   const router = useRouter();
-  const { step, urlQuery, htmlEmail } = router.query;
+  const { step, htmlEmail } = router.query;
   const notifyPreviewFlag = useFlag("notifyPreview");
 
   // render text pages
   if (step == "confirmation") {
     return (
-      <TextPage
-        formConfig={formConfig}
-        step={step}
-        urlQuery={urlQuery as string | undefined}
-        htmlEmail={htmlEmail as string | undefined}
-      ></TextPage>
+      <TextPage formConfig={formConfig} htmlEmail={htmlEmail as string | undefined}></TextPage>
     );
   }
 
@@ -52,6 +48,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         router={router}
         t={t}
         notifyPreviewFlag={notifyPreviewFlag}
+        mockedFormFile={mockedFormFile}
       >
         {currentForm}
       </Form>

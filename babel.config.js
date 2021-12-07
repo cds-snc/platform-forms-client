@@ -9,7 +9,7 @@ module.exports = {
   overrides: [
     {
       test: ["./node_modules/pino"],
-      presets: [["@babel/preset-env", { targets: { ie: "11" } }]],
+      presets: [["@babel/preset-env", { targets: { ie: "11" } }], "@babel/preset-typescript"],
     },
   ],
 };

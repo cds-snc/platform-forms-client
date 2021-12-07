@@ -7,10 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.0.4] 2021-12-3
+
 ### Added
 
 - Add language of form submission to the Next JS submission API and lambda through the `Content-Language` HTTP header
 - Add error messages for all elements within dynamic rows. [#520](https://github.com/cds-snc/platform-forms-client/pull/520)
+- POST method to /id/[form]/bearer that allows the refreshing of bearer tokens
+- `<br>` in long description string now create new lines [#541](https://github.com/cds-snc/platform-forms-client/pull/541)
+
+### Fixed
+
+- When Adding a new row in Dynamic Row the focus automatically moves, and scrolls, to the heading of the new row. [#547](https://github.com/cds-snc/platform-forms-client/pull/547)
+- When deleting a row in Dynamic Row the focus and scroll moves to the heading of the previous row. [#547](https://github.com/cds-snc/platform-forms-client/pull/547)
+- For local development fixed the Preview Notify email functionality that was previously broken [#547](https://github.com/cds-snc/platform-forms-client/pull/547)
+- Validation on Dynamic row was preventing form submission when no validation errors were being found. [#547](https://github.com/cds-snc/platform-forms-client/pull/547)
+- Google Tag manger requried 'connect-src' in the content security policy to correctly load [#548](https://github.com/cds-snc/platform-forms-client/pull/548)
 
 ## [1.0.3] 2021-11-25
 
@@ -23,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add language of submission to submission data [#519](https://github.com/cds-snc/platform-forms-client/pull/519)
 - Create secure API to retrieve bearer token for a specific form [#525](https://github.com/cds-snc/platform-forms-client/pull/525)
 - Add bearer token to templates [#526](https://github.com/cds-snc/platform-forms-client/pull/526)
+
+### Fixed
 
 ### Changed
 
@@ -126,3 +140,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added secure API to retrieve bearer token.
 - Create secure API to retrieve list of emails associated with a form.
+- Create secure API to deactivate a form owner associated with a form
