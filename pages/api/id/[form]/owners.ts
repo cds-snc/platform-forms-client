@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import dbConnector from "../../../../lib/integration/dbConnector";
 import isUserSessionExist from "../../../../lib/middleware/HttpSessionExist";
 import executeQuery from "../../../../lib/integration/queryManager";
-import { isValidGovEmail } from "@lib/tsUtils";
+import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
 
 const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
@@ -96,37 +96,22 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
   }
   const formID = req.query.form as string;
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
-  //Checking if formID exists in db return true or false
-  //May return true if it exists otherwise false
-  const isFormIDExistResult = await executeQuery(
-    await dbConnector(),
-    "SELECT exists(SELECT 1 FROM templates WHERE id = ($1))",
-    [formID]
-  );
-  type ARowExists = { exists?: boolean };
-  const { exists } = isFormIDExistResult.rows[0] as ARowExists;
-  if (!exists) return res.status(404).json({ error: "FormID does not exist" });
-
-  const { email } = requestBody;
-  //May return true if the email is associated otherwise false
-  const emailTieToFormResult = await executeQuery(
-    await dbConnector(),
-    "SELECT exists(SELECT 1 FROM form_users WHERE template_id = ($1) AND email = ($2))",
-    [formID, email as string]
-  );
-  const isEmailTieToForm = emailTieToFormResult.rows[0] as ARowExists;
-  //The template is not linked to the email
-  if (!isEmailTieToForm.exists) {
+  try {
     const result = await executeQuery(
       await dbConnector(),
       "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
-      [formID, email as string]
+      [formID, requestBody.email as string]
     );
     return res.status(200).json({ success: result.rows[0] });
-  } else {
-    return res
-      .status(400)
-      .json({ error: "This email was already associeted with the same form ID" });
+  } catch (error) {
+    const message = error.message as unknown as string;
+    //formID foreign key violation
+    if (message.includes("violates foreign key constraint")) {
+      return res.status(400).json({ error: "The formID does not exist" });
+      //violating email and template_id uniqueness
+    } else if (message.includes("violates unique constraint template_id_email_unique")) {
+      return res.status(400).json({ error: "This email is already binded to this form" });
+    }
   }
 }
 export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));

@@ -291,14 +291,16 @@ describe("/id/[forms]/owners", () => {
   });
 
   describe("POST: Associate an email to a template data API endpoint", () => {
-    it("Should return 404 FormID doesn't exist in db", async () => {
+    it("Should return 400 FormID doesn't exist in db", async () => {
       const mockSession = {
         expires: "1",
         user: { email: "forms@cds.ca", name: "forms" },
       };
       client.getSession.mockReturnValue(mockSession);
-      //Mocking db result to check if formID exist in db.
-      executeQuery.mockReturnValue({ rows: [{ exists: false }] });
+      //Mocking db result by throwing constraint violation error.
+      executeQuery.mockImplementation(async () => {
+        throw new Error("duplicate key value violates unique constraint template_id_email_unique");
+      });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -313,9 +315,11 @@ describe("/id/[forms]/owners", () => {
         },
       });
       await owners(req, res);
-      expect(res.statusCode).toBe(404);
+      expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "FormID does not exist" })
+        expect.objectContaining({
+          error: "This email is already binded to this form",
+        })
       );
     });
 
@@ -325,13 +329,8 @@ describe("/id/[forms]/owners", () => {
         user: { email: "forms@cds.ca", name: "forms" },
       };
       client.getSession.mockReturnValue(mockSession);
-      // return true for formID exist in db.
-      // return false for email is not yet associated
       // return the id of the newly created record.
-      executeQuery
-        .mockReturnValueOnce({ rows: [{ exists: true }] })
-        .mockReturnValueOnce({ rows: [{ exists: false }] })
-        .mockReturnValueOnce({ rows: [{ id: 1 }] });
+      executeQuery.mockReturnValueOnce({ rows: [{ id: 1 }] });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -356,17 +355,18 @@ describe("/id/[forms]/owners", () => {
       );
     });
 
-    it("Should return 400 with this email was already associeted with the same form ID", async () => {
+    it("Should return 400 with a message the formID doest not exist", async () => {
       const mockSession = {
         expires: "1",
         user: { email: "forms@cds.ca", name: "forms" },
       };
       client.getSession.mockReturnValue(mockSession);
-      //Return true formID exists in db. And one record was found
-      executeQuery
-        .mockReturnValueOnce({ rows: [{ exists: true }] })
-        .mockReturnValueOnce({ rows: [{ exists: true }] });
-
+      //Mocking db result by throwing constraint violation error.
+      executeQuery.mockImplementation(async () => {
+        throw new Error(
+          "insert or update on table form_users violates foreign key constraint form_users_template_id_fkey"
+        );
+      });
       const { req, res } = createMocks({
         method: "POST",
         headers: {
@@ -383,40 +383,7 @@ describe("/id/[forms]/owners", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
-          error: "This email was already associeted with the same form ID",
-        })
-      );
-    });
-
-    it("Should return 400 with this email is not unique for to the specified template", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
-      };
-      client.getSession.mockReturnValue(mockSession);
-      //Return true if formID exists in db
-      //2 as count value which means more than one record wast found
-      executeQuery
-        .mockReturnValueOnce({ rows: [{ exists: true }] })
-        .mockReturnValueOnce({ rows: [{ exists: true }] });
-
-      const { req, res } = createMocks({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: "test14@gc.ca",
-        }),
-        query: {
-          form: "14",
-        },
-      });
-      await owners(req, res);
-      expect(res.statusCode).toBe(400);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({
-          error: "This email was already associeted with the same form ID",
+          error: "The formID does not exist",
         })
       );
     });
