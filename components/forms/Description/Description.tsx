@@ -1,7 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 
-interface DescriptionProps {
+export interface DescriptionProps {
   children: string | undefined;
   id?: string;
   className?: string;
@@ -28,4 +28,3 @@ export const Description = (props: DescriptionProps): React.ReactElement => {
 };
 
 export default Description;
-6;
