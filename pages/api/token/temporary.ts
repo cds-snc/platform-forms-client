@@ -7,6 +7,7 @@ import validate, {
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { formUser } from "@lib/types-database";
+import { QueryResult } from "pg";
 
 const checkRequestPayload = (
   handler: (
@@ -50,14 +51,16 @@ const handler = async (
   }
 };
 
-async function getForm(formID: string, email: string): Promise<unknown> {
-  const resultObject = await executeQuery(
-    await dbConnector(),
-    "SELECT id, email, active FROM form_users WHERE template_id = ($1) and email = ($2)",
-    [formID, email]
-  );
+async function getForm(formID: string, email: string): Promise<string | undefined> {
+  const resultObject = await (<Promise<QueryResult>>(
+    executeQuery(
+      await dbConnector(),
+      "SELECT id, email, active FROM form_users WHERE template_id = ($1) and email = ($2)",
+      [formID, email]
+    )
+  ));
   if (resultObject.rowCount === 1) {
-    return resultObject.rows[0]["email"];
+    return (resultObject.rows[0] as formUser).email;
   } else {
     return undefined;
   }
