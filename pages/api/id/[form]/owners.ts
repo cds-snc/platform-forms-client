@@ -109,7 +109,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     if (message.includes("violates foreign key constraint")) {
       return res.status(400).json({ error: "The formID does not exist" });
       //violating email and template_id uniqueness
-    } else if (message.includes("violates unique constraint template_id_email_unique")) {
+    } else if (message.includes("violates unique constraint")) {
       return res.status(400).json({ error: "This email is already binded to this form" });
     }
   }
