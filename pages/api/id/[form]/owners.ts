@@ -58,8 +58,12 @@ export async function activateOrDeactivateFormOwners(
 ): Promise<void> {
   //Extracting req body
   const requestBody = req.body ? JSON.parse(req.body) : undefined;
-  //Payload validation fix: false case scenario
-  if (!requestBody?.email || !requestBody.hasOwnProperty('active') || typeof requestBody.active !== "boolean") {
+  //Payload validation fix: true case scenario
+  if (
+    !requestBody?.email ||
+    requestBody.active === undefined ||
+    typeof requestBody.active !== "boolean"
+  ) {
     //Invalid payload
     return res.status(400).json({ error: "Invalid payload fields are not define" });
   }
