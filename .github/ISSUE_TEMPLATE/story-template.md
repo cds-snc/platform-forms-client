@@ -24,3 +24,4 @@ So that [*goal they are trying to achieve*]
 - [ ] *visual elements* observe colour contrast requirements. 
 - [ ] manual accessibility testing meet WCAG 2.1 AA requirements.
 - [ ] risk register is updated to reflect new risks and their treatments. Treatments are implemented or a new card is created.
+- [ ] *feature* collects the data intended, stores, and submits it in the correct format via email, API, or other retrieval method
