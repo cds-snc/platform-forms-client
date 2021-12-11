@@ -59,11 +59,7 @@ export async function activateOrDeactivateFormOwners(
   //Extracting req body
   const requestBody = req.body ? JSON.parse(req.body) : undefined;
   //Payload validation fix: true case scenario
-  if (
-    !requestBody?.email ||
-    requestBody.active === undefined ||
-    typeof requestBody.active !== "boolean"
-  ) {
+  if (!requestBody?.email || typeof requestBody.active !== "boolean") {
     //Invalid payload
     return res.status(400).json({ error: "Invalid payload fields are not define" });
   }
@@ -108,10 +104,10 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     );
     return res.status(200).json({ success: result.rows[0] });
   } catch (error) {
-    const message = error.message as unknown as string;
+    const message = error.message;
     //formID foreign key violation
     if (message.includes("violates foreign key constraint")) {
-      return res.status(400).json({ error: "The formID does not exist" });
+      return res.status(404).json({ error: "The formID does not exist" });
       //violating email and template_id uniqueness
     } else if (message.includes("violates unique constraint")) {
       return res.status(400).json({ error: "This email is already binded to this form" });
