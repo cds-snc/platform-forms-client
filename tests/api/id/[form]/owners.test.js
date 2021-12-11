@@ -380,7 +380,7 @@ describe("/id/[forms]/owners", () => {
         },
       });
       await owners(req, res);
-      expect(res.statusCode).toBe(400);
+      expect(res.statusCode).toBe(404);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           error: "The formID does not exist",
