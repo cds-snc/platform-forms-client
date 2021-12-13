@@ -289,4 +289,163 @@ describe("/id/[forms]/owners", () => {
       }
     );
   });
+
+  describe("POST: Associate an email to a template data API endpoint", () => {
+    it("Should return 400 FormID doesn't exist in db", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //Mocking db result by throwing constraint violation error.
+      executeQuery.mockImplementation(async () => {
+        throw new Error("duplicate key value violates unique constraint template_id_email_unique");
+      });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test@gc.ca",
+        }),
+        query: {
+          form: "888",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          error: "This email is already binded to this form",
+        })
+      );
+    });
+
+    it("Should create a new record and return 200 code along with the id", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      // return the id of the newly created record.
+      executeQuery.mockReturnValueOnce({ rows: [{ id: 1 }] });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test9@gc.ca",
+        }),
+        query: {
+          form: "9",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          success: {
+            id: 1,
+          },
+        })
+      );
+    });
+
+    it("Should return 400 with a message the formID doest not exist", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      //Mocking db result by throwing constraint violation error.
+      executeQuery.mockImplementation(async () => {
+        throw new Error(
+          "insert or update on table form_users violates foreign key constraint form_users_template_id_fkey"
+        );
+      });
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "test10@gc.ca",
+        }),
+        query: {
+          form: "10",
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(404);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          error: "The formID does not exist",
+        })
+      );
+    });
+
+    it("Should return 400 undefined formID was supplied", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms" },
+      };
+      client.getSession.mockReturnValue(mockSession);
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "forms@cds-snc.ca",
+        }),
+        query: {
+          form: undefined,
+        },
+      });
+      await owners(req, res);
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "Malformed API Request Invalid formID" })
+      );
+    });
+
+    test.each([
+      "",
+      "wrongEmail.gc.ca",
+      undefined,
+      "testNotValidGovDomainName@google.com",
+      "@gc.ca",
+    ])(
+      "Should return 400 status code wiht invalid email in payload for all those cases",
+      async (elem) => {
+        const mockSession = {
+          expires: "1",
+          user: { email: "forms@cds.ca", name: "forms" },
+        };
+        client.getSession.mockReturnValue(mockSession);
+
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: elem,
+          }),
+          query: {
+            form: "23",
+          },
+        });
+        await owners(req, res);
+        expect(res.statusCode).toBe(400);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({ error: "The email is not a valid GC email" })
+        );
+      }
+    );
+  });
 });

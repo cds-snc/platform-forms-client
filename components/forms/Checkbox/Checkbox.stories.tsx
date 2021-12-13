@@ -1,6 +1,8 @@
 import React from "react";
+import { Story } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
 import { Formik } from "formik";
+import { MultipleChoiceProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
 
 export default {
@@ -9,19 +11,30 @@ export default {
   parameters: {
     info: `Checkbox component`,
   },
+  decorators: [
+    (Story: React.ComponentClass<unknown>): unknown => {
+      return (
+        <Formik
+          onSubmit={(values) => {
+            logMessage.info(values);
+          }}
+          initialValues={{ a: "a" }}
+        >
+          <Story />
+        </Formik>
+      );
+    },
+  ],
 };
 
-export const defaultCheckbox = (): React.ReactElement => (
-  <Formik
-    onSubmit={(values) => {
-      logMessage.log(values);
-    }}
-    initialValues={{ a: "a" }}
-  >
-    <Checkbox id="checkbox" name="checkbox" label="My Checkbox" />
-  </Formik>
-);
+const Template: Story<MultipleChoiceProps & JSX.IntrinsicElements["input"]> = (
+  args: MultipleChoiceProps & JSX.IntrinsicElements["input"]
+) => <Checkbox {...args} />;
 
+export const defaultCheckbox = Template.bind({});
+defaultCheckbox.args = {
+  label: "My Checkbox",
+};
 defaultCheckbox.parameters = {
   docs: {
     source: {
