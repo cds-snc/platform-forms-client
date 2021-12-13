@@ -8,6 +8,7 @@ import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { formUser } from "@lib/types-database";
 import { QueryResult } from "pg";
+import { logMessage } from "@lib/logger";
 
 const checkRequestPayload = (
   handler: (
@@ -48,6 +49,7 @@ const handler = async (
     if (form) {
       const temporaryToken = createTemporaryToken(email);
       await updateTemporaryToken(temporaryToken, email, formID);
+      logMessage.info(`Temporary Token Generated: Form ID: ${formID} Email: ${email}`);
       res.status(200).json({ message: "success" });
     }
   } catch (err) {
