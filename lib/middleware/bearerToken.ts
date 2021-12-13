@@ -14,10 +14,7 @@ const validate = (
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
       const token = getBearerToken(req);
-      const bearerTokenPayload = jwt.verify(
-        token,
-        Buffer.from(process.env.TOKEN_SECRET || "", "base64")
-      );
+      const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
       return handler(req, res, bearerTokenPayload);
     } catch (err) {
       res.status(403).json({ error: "Missing or invalid bearer token." });

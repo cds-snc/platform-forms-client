@@ -1,6 +1,7 @@
 import { createMocks } from "node-mocks-http";
 import temporary from "../../../pages/api/token/temporary";
 import executeQuery from "@lib/integration/queryManager";
+import jwt from "jsonwebtoken";
 
 jest.mock("next-auth/client");
 jest.mock("@lib/integration/queryManager");
@@ -16,20 +17,19 @@ jest.mock("@lib/integration/dbConnector", () => {
 
 describe("TemporaryBearerToken tests", () => {
   beforeAll(() => {
-    process.env.TOKEN_SECRET =
-      "MLMv7j0TuYARvmNMmWXo6fKvM4o6nv/aUi9ryX38ZH+L1bkrnD1ObOQ8JAUmHCBq7Iy7otZcyAagBLHVKvvYaIpmMuxmARQ97jUVG16Jkpkp1wXOPsrF9zwew6TpczyHkHgX5EuLg2MeBuiT/qJACs1J0apruOOJCg/gOtkjB4c=";
+    process.env.TOKEN_SECRET = "some_secret_some_secret_some_secret_some_secret";
   });
   afterAll(() => {
     delete process.env.TOKEN_SECRET;
   });
 
   it("works as expected", async () => {
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
     const { req, res } = createMocks({
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
-        authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzAwOTE2NjUsImZvcm1JRCI6MX0.pxwKv_aG4lEHgK1Ex1IM1RjU4KlrZasxmBL1hUxQqPQ",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         method: "POST",
@@ -47,13 +47,13 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error with invalid payload", async () => {
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
     const { req, res } = createMocks({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
-        authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzAwOTE2NjUsImZvcm1JRCI6MX0.pxwKv_aG4lEHgK1Ex1IM1RjU4KlrZasxmBL1hUxQqPQ",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         method: null,
@@ -65,13 +65,16 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error with invalid bearer token", async () => {
+    const token = jwt.sign(
+      { formID: "1", exp: 1636501665 },
+      "wrong_secret_wrong_secret_wrong_secret_wrong_secret_wrong_secret_wrong_secret"
+    );
     const { req, res } = createMocks({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
-        authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjEwMDAwMDAwMDAsInRlc3QiOiJ0ZXN0In0.ZFJFHQcR7ugOYi0nN9E_8yqxJJgUkyjtejVGYqgSHkc",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         method: null,
