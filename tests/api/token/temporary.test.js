@@ -18,9 +18,11 @@ jest.mock("@lib/integration/dbConnector", () => {
 describe("TemporaryBearerToken tests", () => {
   beforeAll(() => {
     process.env.TOKEN_SECRET = "some_secret_some_secret_some_secret_some_secret";
+    process.env.TOKEN_SECRET_WRONG = "wrong_secret_wrong_secret_wrong_secret_wrong_secret";
   });
   afterAll(() => {
     delete process.env.TOKEN_SECRET;
+    delete process.env.TOKEN_SECRET_WRONG;
   });
 
   it("works as expected", async () => {
@@ -65,10 +67,7 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error with invalid bearer token", async () => {
-    const token = jwt.sign(
-      { formID: "1", exp: 1636501665 },
-      "wrong_secret_wrong_secret_wrong_secret_wrong_secret_wrong_secret_wrong_secret"
-    );
+    const token = jwt.sign({ formID: "1", exp: 1636501665 }, process.env.TOKEN_SECRET_WRONG);
     const { req, res } = createMocks({
       method: "POST",
       headers: {
