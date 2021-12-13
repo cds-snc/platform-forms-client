@@ -75,6 +75,12 @@ jobs:
           json='{"product": "cds-snc/forms", "revision": "${{github.sha}}", "urls":["https://forms-staging.cdssandbox.xyz", "https://forms-staging.cdssandbox.xyz/fr"], "spider": 1}'
           curl -X POST -H 'X-API-KEY: ${{ secrets.A11Y_TRACKER_KEY }}' --data "$json" https://api.a11y.cdssandbox.xyz/v1
 
+      - name: Run scan websites
+        run: |
+          curl -s https://scan-websites.alpha.canada.ca > /dev/null
+          sleep 60
+          curl -X GET -H 'X-API-KEY: ${{ secrets.SCAN_WEBSITES_KEY }}' -H 'X-TEMPLATE-TOKEN: ${{ secrets.SCAN_WEBSITES_TEMPLATE }}' https://scan-websites.alpha.canada.ca/scans/start
+
       - name: Logout of Amazon ECR
         if: always()
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
