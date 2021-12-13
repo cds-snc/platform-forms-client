@@ -6,5 +6,4 @@ export interface formUser {
   active: boolean;
   created_at: Date;
   updated_at: Date;
-  [key: string]: unknown;
 }

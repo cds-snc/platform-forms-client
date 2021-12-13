@@ -1,5 +1,18 @@
 import { createMocks } from "node-mocks-http";
 import temporary from "../../../pages/api/token/temporary";
+import executeQuery from "@lib/integration/queryManager";
+
+jest.mock("next-auth/client");
+jest.mock("@lib/integration/queryManager");
+
+jest.mock("@lib/integration/dbConnector", () => {
+  const mockClient = {
+    connect: jest.fn(),
+    query: jest.fn(),
+    end: jest.fn(),
+  };
+  return jest.fn(() => mockClient);
+});
 
 describe("TemporaryBearerToken tests", () => {
   beforeAll(() => {
@@ -16,12 +29,17 @@ describe("TemporaryBearerToken tests", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
         authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzAwOTE2NjUsInRlc3QiOiJ0ZXN0In0.emQOmEtFmg16QulAI2MD_0O5o5X1-xScsaTEVsAHA3k",
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzAwOTE2NjUsImZvcm1JRCI6MX0.pxwKv_aG4lEHgK1Ex1IM1RjU4KlrZasxmBL1hUxQqPQ",
       },
       body: JSON.stringify({
         method: "POST",
         email: "test@cds-snc.ca",
       }),
+    });
+
+    executeQuery.mockReturnValue({
+      rows: [{ id: "1", email: "test@cds-snc.ca", active: true }],
+      rowCount: 1,
     });
 
     await temporary(req, res);
@@ -35,7 +53,7 @@ describe("TemporaryBearerToken tests", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
         authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzAwOTE2NjUsInRlc3QiOiJ0ZXN0In0.emQOmEtFmg16QulAI2MD_0O5o5X1-xScsaTEVsAHA3k",
+          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzAwOTE2NjUsImZvcm1JRCI6MX0.pxwKv_aG4lEHgK1Ex1IM1RjU4KlrZasxmBL1hUxQqPQ",
       },
       body: JSON.stringify({
         method: null,

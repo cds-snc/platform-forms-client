@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
+import { QueryResult } from "pg";
 
 export interface BearerTokenPayload {
   formID?: string;
@@ -34,25 +35,28 @@ const getBearerToken = (req: NextApiRequest) => {
 };
 
 export const createTemporaryToken = (email: string): string => {
-  return jwt.sign(
-    {
-      email: email,
-    },
-    process.env.TOKEN_SECRET || "",
-    { expiresIn: "7d" }
-  );
+  if (process.env.TOKEN_SECRET) {
+    return jwt.sign(
+      {
+        email: email,
+      },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "7d" }
+    );
+  } else {
+    throw new Error("Could not create temporary token: TOKEN_SECRET not defined.");
+  }
 };
 
-export const saveTemporaryToken = async (
-  template_id: number,
-  email: string,
+export const updateTemporaryToken = async (
   temporary_token: string,
-  formID: string
-): Promise<void> => {
-  const responseObject = await executeQuery(
+  email: string,
+  template_id: string
+): Promise<QueryResult> => {
+  return executeQuery(
     await dbConnector(),
-    "INSERT INTO forms_users (template_id, email, temporary_token, active, created_at) VALUES (($1), ($2), ($3), ($4), ($5)",
-    [template_id, email, temporary_token, true, Date.now()]
+    "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3)",
+    [temporary_token, email, template_id]
   );
 };
 

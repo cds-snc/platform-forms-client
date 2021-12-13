@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import validate, {
   BearerTokenPayload,
   createTemporaryToken,
-  saveTemporaryToken,
+  updateTemporaryToken,
 } from "@lib/middleware/bearerToken";
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
@@ -39,28 +39,32 @@ const handler = async (
 ) => {
   try {
     // TODO: create temporary token
-    if (bearerTokenPayload.formID == undefined) {
+    const formID = bearerTokenPayload.formID;
+    if (formID == undefined) {
+      res.status(403).json({ error: "Invalid form request." });
       return;
     }
-    const form = await getForm(bearerTokenPayload.formID || "", email);
-    const temporaryToken = createTemporaryToken(email);
-    // saveTemporaryToken(temporaryToken);
-    res.status(200).json("success");
+    const form = await getForm(formID, email);
+    if (form) {
+      const temporaryToken = createTemporaryToken(email);
+      await updateTemporaryToken(temporaryToken, email, formID);
+      res.status(200).json({ message: "success" });
+    }
   } catch (err) {
     res.status(500).json({ error: "Malformed API Request" });
   }
 };
 
-async function getForm(formID: string, email: string): Promise<string | undefined> {
+async function getForm(formID: string, email: string): Promise<formUser | undefined> {
   const resultObject = await (<Promise<QueryResult>>(
     executeQuery(
       await dbConnector(),
-      "SELECT id, email, active FROM form_users WHERE template_id = ($1) and email = ($2)",
+      "SELECT id, email FROM form_users WHERE template_id = ($1) and email = ($2) and active = true",
       [formID, email]
     )
   ));
   if (resultObject.rowCount === 1) {
-    return (resultObject.rows[0] as formUser).email;
+    return resultObject.rows[0] as formUser;
   } else {
     return undefined;
   }
