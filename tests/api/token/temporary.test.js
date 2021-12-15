@@ -28,13 +28,13 @@ describe("TemporaryBearerToken tests", () => {
   it("creates a temporary token and updates the database", async () => {
     const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
     const { req, res } = createMocks({
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        method: "POST",
         email: "test@cds-snc.ca",
       }),
     });
