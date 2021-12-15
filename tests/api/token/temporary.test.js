@@ -25,7 +25,7 @@ describe("TemporaryBearerToken tests", () => {
     delete process.env.TOKEN_SECRET_WRONG;
   });
 
-  it("works as expected", async () => {
+  it("creates a temporary token and updates the database", async () => {
     const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
     const { req, res } = createMocks({
       headers: {
