@@ -39,7 +39,6 @@ const handler = async (
   email: string
 ) => {
   try {
-    // TODO: create temporary token
     const formID = bearerTokenPayload.formID;
     if (formID == undefined) {
       res.status(403).json({ error: "Invalid form request." });
