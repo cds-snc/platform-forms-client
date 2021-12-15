@@ -44,13 +44,10 @@ const handler = async (
       res.status(403).json({ error: "Invalid form request." });
       return;
     }
-    const form = await getForm(formID, email);
-    if (form) {
-      const temporaryToken = createTemporaryToken(email);
-      await updateTemporaryToken(temporaryToken, email, formID);
-      logMessage.info(`Temporary Token Generated: Form ID: ${formID} Email: ${email}`);
-      res.status(200).json({ message: "success" });
-    }
+    const temporaryToken = createTemporaryToken(email);
+    await updateTemporaryToken(temporaryToken, email, formID);
+    logMessage.info(`Temporary Token Requested: Form ID: ${formID} Email: ${email}`);
+    res.status(200).json({ message: "success" });
   } catch (err) {
     res.status(500).json({ error: "Malformed API Request" });
   }
