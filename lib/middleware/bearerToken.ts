@@ -14,6 +14,10 @@ const validate = (
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
       const token = getBearerToken(req);
+      if ((await checkBearerToken(token)) === false) {
+        res.status(403).json({ error: "Missing or invalid bearer token." });
+        return;
+      }
       const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
       return handler(req, res, bearerTokenPayload);
     } catch (err) {
@@ -31,6 +35,15 @@ const getBearerToken = (req: NextApiRequest) => {
   }
 };
 
+const checkBearerToken = async (bearerToken: string): Promise<boolean> => {
+  const queryResults = await executeQuery(
+    await dbConnector(),
+    "SELECT bearer_token from templates WHERE bearer_token = ($1)",
+    [bearerToken]
+  );
+  return queryResults.rowCount > 0;
+};
+
 export const createTemporaryToken = (email: string): string => {
   if (process.env.TOKEN_SECRET) {
     return jwt.sign(
@@ -46,14 +59,14 @@ export const createTemporaryToken = (email: string): string => {
 };
 
 export const updateTemporaryToken = async (
-  temporary_token: string,
+  temporaryToken: string,
   email: string,
-  template_id: string
+  templateId: string
 ): Promise<QueryResult> => {
   return executeQuery(
     await dbConnector(),
     "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3) and active = true",
-    [temporary_token, email, template_id]
+    [temporaryToken, email, templateId]
   );
 };
 
