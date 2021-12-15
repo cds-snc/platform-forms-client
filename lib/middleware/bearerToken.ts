@@ -52,7 +52,7 @@ export const updateTemporaryToken = async (
 ): Promise<QueryResult> => {
   return executeQuery(
     await dbConnector(),
-    "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3)",
+    "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3) and active = true",
     [temporary_token, email, template_id]
   );
 };
