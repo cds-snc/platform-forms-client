@@ -37,7 +37,11 @@ const handler = async (
       res.status(403).json({ error: "Invalid form request." });
       return;
     }
-    const temporaryToken = createTemporaryToken(email);
+    if (!process.env.TOKEN_SECRET) {
+      res.status(403).json({ error: "Invalid request." });
+      return;
+    }
+    const temporaryToken = createTemporaryToken(email, process.env.TOKEN_SECRET);
     await updateTemporaryToken(temporaryToken, email, formID);
     logMessage.info(`Temporary Token Requested: Form ID: ${formID} Email: ${email}`);
     res.status(200).json({ message: "success" });
@@ -47,12 +51,13 @@ const handler = async (
 };
 
 const createTemporaryToken = (email: string): string => {
+const createTemporaryToken = (email: string, tokenSecret: string): string => {
   if (process.env.TOKEN_SECRET) {
     return jwt.sign(
       {
         email: email,
       },
-      process.env.TOKEN_SECRET,
+      tokenSecret,
       { expiresIn: "7d" }
     );
   } else {
