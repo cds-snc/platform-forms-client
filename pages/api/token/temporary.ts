@@ -3,6 +3,7 @@ import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
 import validate, { BearerTokenPayload } from "@lib/middleware/bearerToken";
 
+import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { QueryResult } from "pg";
 
@@ -16,13 +17,9 @@ const checkRequestPayload = (
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse, options?: unknown): Promise<unknown> => {
     const requestBody = JSON.parse(req.body);
-    try {
-      if (requestBody?.email) {
-        return handler(req, res, options as BearerTokenPayload, requestBody["email"]);
-      } else {
-        res.status(400).json({ error: "Invalid payload" });
-      }
-    } catch (err) {
+    if (requestBody?.email) {
+      return handler(req, res, options as BearerTokenPayload, requestBody["email"]);
+    } else {
       res.status(400).json({ error: "Invalid payload" });
     }
   };
