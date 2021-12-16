@@ -1,10 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import validate, {
-  BearerTokenPayload,
-  createTemporaryToken,
-  updateTemporaryToken,
-} from "@lib/middleware/bearerToken";
+import dbConnector from "@lib/integration/dbConnector";
+import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
+import validate, { BearerTokenPayload } from "@lib/middleware/bearerToken";
+
+import { NextApiRequest, NextApiResponse } from "next";
+import { QueryResult } from "pg";
 
 const checkRequestPayload = (
   handler: (
@@ -47,6 +47,32 @@ const handler = async (
   } catch (err) {
     res.status(500).json({ error: "Malformed API Request" });
   }
+};
+
+const createTemporaryToken = (email: string): string => {
+  if (process.env.TOKEN_SECRET) {
+    return jwt.sign(
+      {
+        email: email,
+      },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "7d" }
+    );
+  } else {
+    throw new Error("Could not create temporary token: TOKEN_SECRET not defined.");
+  }
+};
+
+const updateTemporaryToken = async (
+  temporaryToken: string,
+  email: string,
+  templateId: string
+): Promise<QueryResult> => {
+  return executeQuery(
+    await dbConnector(),
+    "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3) and active = true",
+    [temporaryToken, email, templateId]
+  );
 };
 
 export default validate(checkRequestPayload(handler));

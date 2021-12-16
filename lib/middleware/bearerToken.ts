@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
-import { QueryResult } from "pg";
 
 export interface BearerTokenPayload {
   formID?: string;
@@ -42,32 +41,6 @@ const checkBearerToken = async (bearerToken: string): Promise<boolean> => {
     [bearerToken]
   );
   return queryResults.rowCount > 0;
-};
-
-export const createTemporaryToken = (email: string): string => {
-  if (process.env.TOKEN_SECRET) {
-    return jwt.sign(
-      {
-        email: email,
-      },
-      process.env.TOKEN_SECRET,
-      { expiresIn: "7d" }
-    );
-  } else {
-    throw new Error("Could not create temporary token: TOKEN_SECRET not defined.");
-  }
-};
-
-export const updateTemporaryToken = async (
-  temporaryToken: string,
-  email: string,
-  templateId: string
-): Promise<QueryResult> => {
-  return executeQuery(
-    await dbConnector(),
-    "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3) and active = true",
-    [temporaryToken, email, templateId]
-  );
 };
 
 export default validate;
