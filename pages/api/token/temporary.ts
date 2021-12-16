@@ -1,12 +1,19 @@
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
-import validate, { BearerTokenPayload } from "@lib/middleware/bearerToken";
+import validate from "@lib/middleware/bearerToken";
+import { BearerTokenPayload } from "@lib/types";
 
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { QueryResult } from "pg";
 
+/**
+ * Verifies that the payload for the request is valid.
+ *
+ * @param handler - the function that will be called from the promise
+ * @returns a promise
+ */
 const checkRequestPayload = (
   handler: (
     req: NextApiRequest,
@@ -25,6 +32,15 @@ const checkRequestPayload = (
   };
 };
 
+/**
+ * Verifies that the payload for the request is valid.
+ *
+ * @param req - the api request
+ * @param res - the api response
+ * @param bearerTokenPayload - the payload from the bearer token used in the authorization
+ * @param email - the email for the user making the request, found in the body of the api request
+ * @returns a promise
+ */
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -50,7 +66,15 @@ const handler = async (
   }
 };
 
-const createTemporaryToken = (email: string): string => {
+/**
+ * Create and return a JWT with a short expiry date
+ * @param email - The email for the user making the request
+ * @param tokenSecret - The token secret needed to sign
+ * @returns a JWT string
+ *
+ * @throws
+ * This exception is thrown if the tokenSecret is invalid
+ */
 const createTemporaryToken = (email: string, tokenSecret: string): string => {
   if (tokenSecret?.length > 0) {
     return jwt.sign(
@@ -61,10 +85,17 @@ const createTemporaryToken = (email: string, tokenSecret: string): string => {
       { expiresIn: "7d" }
     );
   } else {
-    throw new Error("Could not create temporary token: TOKEN_SECRET not defined.");
+    throw new Error("Could not create temporary token: Invalid token secret.");
   }
 };
 
+/**
+ * Save a temporary token to the form_users table in the database for a specific user and form
+ * @param temporaryToken
+ * @param email
+ * @param templateId
+ * @returns the query result
+ */
 const updateTemporaryToken = async (
   temporaryToken: string,
   email: string,

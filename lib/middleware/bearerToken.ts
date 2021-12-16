@@ -3,10 +3,12 @@ import jwt from "jsonwebtoken";
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 
-export interface BearerTokenPayload {
-  formID?: string;
-}
-
+/**
+ * This is a middleware function that will validate the bearer token in the authorization header
+ *
+ * @param handler - the function to be executed next in the API call
+ * @returns either the handler to be executed next in the API call, or updates the res status and returns void
+ */
 const validate = (
   handler: (req: NextApiRequest, res: NextApiResponse, options?: unknown) => void
 ) => {
@@ -25,6 +27,15 @@ const validate = (
   };
 };
 
+/**
+ * Extracts the bearer token from the authorization header
+ *
+ * @param req - the api request containing the authorization header
+ * @returns The bearer token string
+ *
+ * @throws
+ * This exception is thrown if the bearer token is not found
+ */
 const getBearerToken = (req: NextApiRequest) => {
   const authHeader = String(req.headers["authorization"] || "");
   if (authHeader.startsWith("Bearer ")) {
@@ -34,6 +45,12 @@ const getBearerToken = (req: NextApiRequest) => {
   }
 };
 
+/**
+ * Checks the existance of the bearer token in the database
+ *
+ * @param bearerToken - the token to look for in the `templates` table in the database
+ * @returns boolean result of existance of bearerToken in the database
+ */
 const checkBearerToken = async (bearerToken: string): Promise<boolean> => {
   const queryResults = await executeQuery(
     await dbConnector(),

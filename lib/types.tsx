@@ -216,3 +216,6 @@ export type UploadResult = {
   isValid: boolean;
   key: string;
 };
+export interface BearerTokenPayload {
+  formID?: string;
+}
