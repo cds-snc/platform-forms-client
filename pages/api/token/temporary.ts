@@ -52,7 +52,7 @@ const handler = async (
 
 const createTemporaryToken = (email: string): string => {
 const createTemporaryToken = (email: string, tokenSecret: string): string => {
-  if (process.env.TOKEN_SECRET) {
+  if (tokenSecret?.length > 0) {
     return jwt.sign(
       {
         email: email,
