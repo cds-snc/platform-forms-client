@@ -4,10 +4,6 @@ import validate, {
   createTemporaryToken,
   updateTemporaryToken,
 } from "@lib/middleware/bearerToken";
-import dbConnector from "@lib/integration/dbConnector";
-import executeQuery from "@lib/integration/queryManager";
-import { formUser } from "@lib/types-database";
-import { QueryResult } from "pg";
 import { logMessage } from "@lib/logger";
 
 const checkRequestPayload = (
@@ -52,20 +48,5 @@ const handler = async (
     res.status(500).json({ error: "Malformed API Request" });
   }
 };
-
-async function getForm(formID: string, email: string): Promise<formUser | undefined> {
-  const resultObject = await (<Promise<QueryResult>>(
-    executeQuery(
-      await dbConnector(),
-      "SELECT id, email FROM form_users WHERE template_id = ($1) and email = ($2) and active = true",
-      [formID, email]
-    )
-  ));
-  if (resultObject.rowCount === 1) {
-    return resultObject.rows[0] as formUser;
-  } else {
-    return undefined;
-  }
-}
 
 export default validate(checkRequestPayload(handler));
