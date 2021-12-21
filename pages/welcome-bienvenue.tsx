@@ -20,7 +20,7 @@ const Home = () => {
               <h2>Create forms for your department</h2>
               <p>Try forms if you work in the federal government</p>
             </div>
-            <div className="welcome-grid-item self-center">
+            <div className="welcome-grid-item">
               <img alt="Works on multiple device types" src="/img/phone_and_mac.png" />
             </div>
           </div>
@@ -29,7 +29,7 @@ const Home = () => {
       <div className="gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="welcome-grid-item self-center">
+            <div className="welcome-grid-item">
               <img alt="Custom forms" src="/img/custom_form.png" />
             </div>
             <div className="welcome-grid-item">
@@ -64,7 +64,7 @@ const Home = () => {
                 <li>Developers working on improving workflow and tooling for public servants</li>
               </ul>
             </div>
-            <div className="welcome-grid-item self-center">
+            <div className="welcome-grid-item ">
               <img alt="built for you" src="/img/built_for_you.png" />
             </div>
           </div>
@@ -73,7 +73,7 @@ const Home = () => {
       <div className="gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="welcome-grid-item self-center">
+            <div className="welcome-grid-item ">
               <img alt="Pricing" src="/img/pricing.png" />
             </div>
             <div className="welcome-grid-item">

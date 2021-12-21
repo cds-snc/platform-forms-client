@@ -14,11 +14,13 @@
   li {
     @apply mb-4;
   }
-
+  img {
+    @apply object-contain object-center;
+  }
   .welcome-grid {
-    @apply grid grid-cols-2 gap-6 justify-center;
+    @apply grid grid-cols-2 gap-10 justify-center;
   }
   .welcome-grid-item {
-    @apply p-10 px-3;
+    @apply py-10;
   }
 }
