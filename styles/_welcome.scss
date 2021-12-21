@@ -5,14 +5,14 @@
 .gc-welcome-container {
   margin-left: 12rem;
   margin-right: 12rem;
-  @apply text-sm text-left;
+  @apply text-sm;
 
   h2 {
     @apply md:text-small_h2 text-h2 mb-5;
   }
   p,
   li {
-    @apply mb-4;
+    @apply mb-4 text-left;
   }
   img {
     @apply object-contain object-center;
@@ -22,5 +22,9 @@
   }
   .welcome-grid-item {
     @apply py-10;
+  }
+
+  button {
+    @apply mb-0;
   }
 }

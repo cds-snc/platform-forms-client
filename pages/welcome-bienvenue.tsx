@@ -2,7 +2,7 @@
 import React from "react";
 
 import { useTranslation } from "next-i18next";
-import Image from "next/image";
+import { Button } from "@components/forms";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { GetStaticProps } from "next";
@@ -13,10 +13,10 @@ const Home = () => {
   return (
     <div>
       <h1 className="sr-only">{t("title")}</h1>
-      <div className="gc-welcome-bg-container bg-blue-800">
+      <div className="bg-blue-800 gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="welcome-grid-item text-white-default align-middle">
+            <div className="align-middle welcome-grid-item text-white-default">
               <h2>Create forms for your department</h2>
               <p>Try forms if you work in the federal government</p>
             </div>
@@ -88,9 +88,9 @@ const Home = () => {
         </div>
       </div>
       <div className="gc-welcome-bg-container bg-gray-background">
-        <div className="gc-welcome-container py-10">
+        <div className="py-10 gc-welcome-container">
           <h2 className="text-center">These teams are already using Forms</h2>
-          <div className="welcome-grid mt-10">
+          <div className="mt-10 welcome-grid">
             <div>
               <p>
                 I absolutely love this Forms services. It saved me and my team a lot of time when
@@ -110,6 +110,18 @@ const Home = () => {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="bg-blue-800 gc-welcome-bg-container">
+        <div className="py-10 text-center gc-welcome-container text-white-default">
+          <h2>Try Forms now</h2>
+          <div className="mb-6">
+            Create an account and start sending out test messages right away!
+          </div>
+
+          <Button type="button" secondary={true}>
+            Contact Us
+          </Button>
         </div>
       </div>
     </div>
