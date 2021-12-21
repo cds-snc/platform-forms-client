@@ -8,7 +8,7 @@ import { getProperty } from "../lib/formBuilder";
 import { formCache } from "../lib/cache";
 
 const Home = ({ formsList }) => {
-  const { t, i18n } = useTranslation("welcome");
+  const { t, i18n } = useTranslation("forms");
   const LinksList = () => {
     return formsList.map((form) => {
       return (
@@ -84,7 +84,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       formsList: await formsList(),
-      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+      ...(await serverSideTranslations(context.locale, ["common", "forms"])),
     }, // will be passed to the page component as props
   };
 }

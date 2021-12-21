@@ -6,6 +6,7 @@ import PhaseBanner from "./PhaseBanner";
 import SkipLink from "./SkipLink";
 import Fip from "./Fip";
 import AdminNav from "./AdminNav";
+import GlobalNav from "./GlobalNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
 
@@ -44,7 +45,7 @@ const Base = ({ children }) => {
           <header>
             {shouldDisplayAlphaBanner && <PhaseBanner />}
             <Fip formConfig={formConfig} />
-            {isAdmin && <AdminNav user={children.props.user} />}
+            {isAdmin ? <AdminNav user={children.props.user} /> : <GlobalNav />}
           </header>
         )}
         <main id="content">{children}</main>

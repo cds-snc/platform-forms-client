@@ -1,0 +1,24 @@
+.gc-welcome-bg-container {
+  margin-left: -12rem;
+  margin-right: -12rem;
+}
+.gc-welcome-container {
+  margin-left: 12rem;
+  margin-right: 12rem;
+  @apply text-sm text-left;
+
+  h2 {
+    @apply md:text-small_h2 text-h2 mb-5;
+  }
+  p,
+  li {
+    @apply mb-4;
+  }
+
+  .welcome-grid {
+    @apply grid grid-cols-2 gap-6 justify-center;
+  }
+  .welcome-grid-item {
+    @apply p-10 px-3;
+  }
+}

@@ -1,4 +1,9 @@
 {
+  "navigation": {
+    "forms": "Forms",
+    "documentation": "Documentation",
+    "contact": "Contact Us"
+  },
   "footer": {
     "privacy": {
       "link": "/en/privacy-confidentialite",

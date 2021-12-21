@@ -6,4 +6,5 @@
     "storybook-static/static/locales"
   ],
   "jest.jestCommandLine": "yarn test",
+  "i18n-ally.keystyle": "nested",
 }
