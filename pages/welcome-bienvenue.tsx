@@ -16,11 +16,14 @@ const Home = () => {
       <div className="bg-blue-800 gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="align-middle welcome-grid-item text-white-default">
+            <div className="welcome-grid-item text-white-default">
               <h2>Create forms for your department</h2>
               <p>Try forms if you work in the federal government</p>
+              <Button type="button" secondary={true}>
+                Contact Us
+              </Button>
             </div>
-            <div className="welcome-grid-item">
+            <div className="self-center welcome-grid-item md:hidden">
               <img alt="Works on multiple device types" src="/img/phone_and_mac.png" />
             </div>
           </div>
@@ -29,7 +32,7 @@ const Home = () => {
       <div className="gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="welcome-grid-item">
+            <div className="self-center welcome-grid-item md:hidden">
               <img alt="Custom forms" src="/img/custom_form.png" />
             </div>
             <div className="welcome-grid-item">
@@ -64,7 +67,7 @@ const Home = () => {
                 <li>Developers working on improving workflow and tooling for public servants</li>
               </ul>
             </div>
-            <div className="welcome-grid-item ">
+            <div className="self-center welcome-grid-item md:hidden">
               <img alt="built for you" src="/img/built_for_you.png" />
             </div>
           </div>
@@ -73,7 +76,7 @@ const Home = () => {
       <div className="gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="welcome-grid-item ">
+            <div className="self-center welcome-grid-item md:hidden">
               <img alt="Pricing" src="/img/pricing.png" />
             </div>
             <div className="welcome-grid-item">
