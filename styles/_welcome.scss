@@ -2,9 +2,7 @@
   @apply xs:-mx-4 md:-mx-8 lg:-mx-16 xl:-mx-32 xxl:-mx-48 -mx-64;
 }
 .gc-welcome-container {
-  margin-left: 12rem;
-  margin-right: 12rem;
-  @apply text-sm;
+  @apply text-sm xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64;
 
   .welcome-grid {
     @apply grid grid-cols-2 md:grid-cols-1 gap-10 justify-center;
