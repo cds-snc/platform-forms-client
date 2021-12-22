@@ -6,6 +6,7 @@ import executeQuery from "@lib/integration/queryManager";
 import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
 import dbConnector from "@lib/integration/dbConnector";
 import isUserSessionExist from "@lib/middleware/HttpSessionExist";
+import { QueryResult } from "pg";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {
@@ -81,24 +82,35 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
  */
 export async function getToken(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   type BearerResponse = {
-    bearer_token: string;
+    bearerToken: string;
   };
   const formID = req.query.form as string;
   if (formID) {
     //Fetching the token return list of object or an empty array
-    const resultObject = await executeQuery(
-      await dbConnector(),
-      "SELECT bearer_token FROM templates WHERE id = ($1)",
-      [formID]
-    );
+    const resultObject = await getTokenById(formID);
     const data = resultObject.rowCount > 0 ? resultObject.rows : [];
     if (data && data.length > 0) {
-      const { bearer_token } = data[0] as unknown as BearerResponse;
-      return res.status(200).json({ token: bearer_token });
+      const { bearerToken } = data[0] as unknown as BearerResponse;
+      return res.status(200).json({ token: bearerToken });
     }
     // otherwise the resource was not found
     return res.status(404).json({ error: "Not Found" });
   }
   return res.status(400).json({ error: "form ID parameter was not provided in the resource path" });
 }
+
+/**
+ * Will return the query including the bearerToken from the database
+ * @param formID - The id of the form
+ * @returns the query result
+ */
+export const getTokenById = async (formID: string): Promise<QueryResult> => {
+  //Fetching the token return list of object or an empty array
+  return executeQuery(
+    await dbConnector(),
+    "SELECT bearer_token as bearerToken FROM templates WHERE id = ($1)",
+    [formID]
+  );
+};
+
 export default isRequestAllowed(["GET", "POST"], isUserSessionExist(handler));

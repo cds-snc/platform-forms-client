@@ -15,6 +15,7 @@ export interface FormDBConfigProperties {
   formID: number;
   formConfig?: FormDefinitionProperties;
   organization?: boolean;
+  bearerToken?: string;
 }
 
 export interface FormSchemaProperties {
@@ -216,3 +217,6 @@ export type UploadResult = {
   isValid: boolean;
   key: string;
 };
+export interface BearerTokenPayload {
+  formID?: string;
+}

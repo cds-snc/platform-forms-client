@@ -1,11 +1,11 @@
 import { logMessage } from "../logger";
-import { QueryArrayResult, Client } from "pg";
+import { QueryResult, Client } from "pg";
 
 const executeQuery = async (
   client: Client,
   sql: string,
   params: string[]
-): Promise<QueryArrayResult<unknown[]>> => {
+): Promise<QueryResult<unknown[]>> => {
   try {
     if (!sql) throw new Error("Empty or invalid sql passed as a parameter");
     return await client.query(sql, params);
