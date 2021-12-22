@@ -28,15 +28,6 @@ const Base = ({ children }) => {
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
       </Head>
-      <noscript>
-        <iframe
-          src="https://www.googletagmanager.com/ns.html?id=GTM-W3ZVVX5"
-          title="Google Tag Manager Iframe Window"
-          height="0"
-          width="0"
-          style={{ display: "none", visibility: "hidden" }}
-        ></iframe>
-      </noscript>
 
       <SkipLink />
       <div className={classes}>
