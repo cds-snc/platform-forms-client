@@ -1,28 +1,27 @@
 .gc-welcome-bg-container {
-  margin-left: -12rem;
-  margin-right: -12rem;
+  @apply xs:-mx-4 md:-mx-8 lg:-mx-16 xl:-mx-32 xxl:-mx-48 -mx-64;
 }
 .gc-welcome-container {
   margin-left: 12rem;
   margin-right: 12rem;
   @apply text-sm;
 
-  h2 {
-    @apply md:text-small_h2 md:text-center text-h2 mb-5;
-  }
-  p,
-  li {
-    @apply mb-4 text-left;
-  }
-
   .welcome-grid {
     @apply grid grid-cols-2 md:grid-cols-1 gap-10 justify-center;
   }
   .welcome-grid-item {
     @apply py-10 align-middle;
+
+    h2 {
+      @apply md:text-small_h2 text-left md:text-center text-h2 mb-5;
+    }
+    p,
+    li {
+      @apply mb-4 text-left;
+    }
   }
 
   button {
-    @apply mb-0;
+    @apply mb-0 mt-6;
   }
 }

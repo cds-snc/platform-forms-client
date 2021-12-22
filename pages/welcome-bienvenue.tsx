@@ -16,7 +16,7 @@ const Home = () => {
       <div className="bg-blue-800 gc-welcome-bg-container">
         <div className="gc-welcome-container">
           <div className="welcome-grid">
-            <div className="welcome-grid-item text-white-default">
+            <div className="text-center welcome-grid-item text-white-default">
               <h2>Create forms for your department</h2>
               <p>Try forms if you work in the federal government</p>
               <Button type="button" secondary={true}>
@@ -118,9 +118,7 @@ const Home = () => {
       <div className="bg-blue-800 gc-welcome-bg-container">
         <div className="py-10 text-center gc-welcome-container text-white-default">
           <h2>Try Forms now</h2>
-          <div className="mb-6">
-            Create an account and start sending out test messages right away!
-          </div>
+          <div>Create an account and start sending out test messages right away!</div>
 
           <Button type="button" secondary={true}>
             Contact Us
