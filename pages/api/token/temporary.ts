@@ -50,8 +50,7 @@ const handler = async (
   try {
     const formID = bearerTokenPayload.formID;
     if (formID == undefined) {
-      res.status(403).json({ error: "Invalid form request." });
-      return;
+      return res.status(403).json({ error: "Invalid form request." });
     }
     if (!process.env.TOKEN_SECRET) {
       return res.status(403).json({ error: "Invalid request." });
