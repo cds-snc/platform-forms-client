@@ -52,7 +52,7 @@ describe("/id/[form]/bearer", () => {
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return null as bearer token value
-      executeQuery.mockReturnValue({ rows: [{ bearer_token: null }], rowCount: 1 });
+      executeQuery.mockReturnValue({ rows: [{ bearerToken: null }], rowCount: 1 });
 
       const { req, res } = createMocks({
         method: "GET",
@@ -76,7 +76,7 @@ describe("/id/[form]/bearer", () => {
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return a valid bearer token
-      executeQuery.mockReturnValue({ rows: [{ bearer_token: "toekakdnaodk" }], rowCount: 1 });
+      executeQuery.mockReturnValue({ rows: [{ bearerToken: "testBearerToken" }], rowCount: 1 });
 
       const { req, res } = createMocks({
         method: "GET",
@@ -91,7 +91,7 @@ describe("/id/[form]/bearer", () => {
       await retrieve(req, res);
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ token: "toekakdnaodk" })
+        expect.objectContaining({ token: "testBearerToken" })
       );
     });
 

@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
+import { getTokenById } from "../../pages/api/id/[form]/bearer";
+import { BearerTokenPayload, FormDBConfigProperties } from "@lib/types";
 
 /**
  * This is a middleware function that will validate the bearer token in the authorization header
@@ -15,11 +17,16 @@ const validate = (
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
       const token = getBearerToken(req);
-      if ((await checkBearerToken(token)) === false) {
+      const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
+      if (
+        (
+          (await getTokenById((bearerTokenPayload as BearerTokenPayload).formID || ""))
+            .rows[0] as FormDBConfigProperties
+        ).bearerToken === token
+      ) {
         res.status(403).json({ error: "Missing or invalid bearer token." });
         return;
       }
-      const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
       return handler(req, res, bearerTokenPayload);
     } catch (err) {
       res.status(403).json({ error: "Missing or invalid bearer token." });

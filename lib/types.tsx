@@ -15,6 +15,7 @@ export interface FormDBConfigProperties {
   formID: number;
   formConfig?: FormDefinitionProperties;
   organization?: boolean;
+  bearerToken?: string;
 }
 
 export interface FormSchemaProperties {
