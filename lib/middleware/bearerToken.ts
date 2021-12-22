@@ -22,10 +22,10 @@ const validate = (
             .rows[0] as FormDBConfigProperties
         ).bearerToken === token
       ) {
-        res.status(403).json({ error: "Missing or invalid bearer token." });
-        return;
+        return handler(req, res, bearerTokenPayload);
+      } else {
+        return res.status(403).json({ error: "Missing or invalid bearer token." });
       }
-      return handler(req, res, bearerTokenPayload);
     } catch (err) {
       res.status(403).json({ error: "Missing or invalid bearer token." });
     }

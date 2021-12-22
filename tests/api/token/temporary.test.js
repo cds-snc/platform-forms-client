@@ -39,9 +39,18 @@ describe("TemporaryBearerToken tests", () => {
       }),
     });
 
-    executeQuery.mockReturnValue({
-      rows: [{ id: "1", email: "test@cds-snc.ca", active: true }],
-      rowCount: 1,
+    executeQuery.mockImplementation((client, sql) => {
+      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
+        return {
+          rows: [{ bearerToken: token }],
+          rowCount: 1,
+        };
+      } else {
+        return {
+          rows: [{ id: "1", email: "test@cds-snc.ca", active: true }],
+          rowCount: 1,
+        };
+      }
     });
 
     await temporary(req, res);
