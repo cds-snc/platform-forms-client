@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
-import dbConnector from "@lib/integration/dbConnector";
-import executeQuery from "@lib/integration/queryManager";
 import { getTokenById } from "../../pages/api/id/[form]/bearer";
 import { BearerTokenPayload, FormDBConfigProperties } from "@lib/types";
 
