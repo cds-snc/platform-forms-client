@@ -54,8 +54,7 @@ const handler = async (
       return;
     }
     if (!process.env.TOKEN_SECRET) {
-      res.status(403).json({ error: "Invalid request." });
-      return;
+      return res.status(403).json({ error: "Invalid request." });
     }
     const temporaryToken = createTemporaryToken(email, process.env.TOKEN_SECRET);
     await updateTemporaryToken(temporaryToken, email, formID);
