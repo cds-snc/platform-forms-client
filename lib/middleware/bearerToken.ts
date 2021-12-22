@@ -52,19 +52,4 @@ const getBearerToken = (req: NextApiRequest) => {
   }
 };
 
-/**
- * Checks the existance of the bearer token in the database
- *
- * @param bearerToken - the token to look for in the `templates` table in the database
- * @returns boolean result of existance of bearerToken in the database
- */
-const checkBearerToken = async (bearerToken: string): Promise<boolean> => {
-  const queryResults = await executeQuery(
-    await dbConnector(),
-    "SELECT bearer_token from templates WHERE bearer_token = ($1)",
-    [bearerToken]
-  );
-  return queryResults.rowCount > 0;
-};
-
 export default validate;
