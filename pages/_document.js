@@ -170,6 +170,17 @@ class MyDocument extends Document {
           {this.props.currentUrl === "forms-formulaires.alpha.canada.ca" ? GoogleTagScript : null}
         </CustomHead>
         <body>
+          {this.props.currentUrl === "forms-formulaires.alpha.canada.ca" ? (
+            <noscript>
+              <iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-W3ZVVX5"
+                title="Google Tag Manager Iframe Window"
+                height="0"
+                width="0"
+                style={{ display: "none", visibility: "hidden" }}
+              ></iframe>
+            </noscript>
+          ) : null}
           <Main />
           <NextScript />
         </body>
