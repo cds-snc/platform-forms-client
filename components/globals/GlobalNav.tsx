@@ -1,19 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const GlobalNav = (): React.ReactElement => {
   const { t, i18n } = useTranslation("common");
+
+  const [mobileMenuState, setMobileMenuState] = useState(false);
+
+  const router = useRouter();
+
+  const links = [
+    { i18nText: "navigation.forms", href: "/forms", internalLink: true },
+    {
+      i18nText: "navigation.documentation",
+      href: "https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page",
+      internalLink: false,
+    },
+    { i18nText: "navigation.contact", href: "/id/21", internalLink: true },
+  ];
+
+  const mobileMenuSwitch = () => {
+    setMobileMenuState((current) => {
+      return !current;
+    });
+  };
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setMobileMenuState(false);
+    };
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router]);
+
   return (
     <nav className="gc-nav-menu">
       <div className="nav-container">
-        <Link href={`/${i18n.language}/forms`}>{t("navigation.forms")}</Link>
-        <Link href="https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page">
-          {t("navigation.documentation")}
-        </Link>
-        <Link href={`/${i18n.language}/id/21`}>{t("navigation.contact")}</Link>
+        {links.map((link, index) => {
+          return (
+            <Link
+              key={index}
+              href={link.internalLink ? `/${i18n.language}${link.href}` : link.href}
+            >
+              {t(link.i18nText)}
+            </Link>
+          );
+        })}
       </div>
-      <div className="mobile-container">
+      <button className="mobile-menu-button" onClick={mobileMenuSwitch}>
         <svg
           className="w-6 h-6 text-gray-500"
           x-show="!showMenu"
@@ -26,29 +64,21 @@ const GlobalNav = (): React.ReactElement => {
         >
           <path d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
+      </button>
+      <div className={mobileMenuState ? "mobile-container" : "hidden"}>
+        {links.map((link, index) => {
+          return (
+            <Link
+              key={index}
+              href={link.internalLink ? `/${i18n.language}${link.href}` : link.href}
+            >
+              {t(link.i18nText)}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
-
-  /*
-  return (
-    <nav className="gc-nav-menu">
-      <ul className="gc-horizontal-list">
-        <li className="gc-horizontal-item">
-          <Link href={`/${i18n.language}/forms`}>{t("navigation.forms")}</Link>
-        </li>
-        <li className="gc-horizontal-item">
-          <Link href="https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page">
-            {t("navigation.documentation")}
-          </Link>
-        </li>
-        <li className="gc-horizontal-item">
-          <Link href={`/${i18n.language}/id/21`}>{t("navigation.contact")}</Link>
-        </li>
-      </ul>
-    </nav>
-  );
-*/
 };
 
 export default GlobalNav;

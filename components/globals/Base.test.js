@@ -12,6 +12,17 @@ const formConfigTest = {
   elements: [],
 };
 
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      events: {
+        on: () => null,
+        off: () => null,
+      },
+    };
+  },
+}));
+
 describe("Generate the Base structure of a page", () => {
   afterEach(cleanup);
 
