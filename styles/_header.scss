@@ -23,26 +23,39 @@
 
 // GLOBAL NAVIGATION STYLES
 .gc-nav-menu {
-  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 bg-gray-background py-4 px-64;
+  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 bg-gray-background py-4 px-64 mb-4;
 
   .nav-container {
-    @apply md:hidden flex items-center space-x-7;
+    @apply md:hidden;
     a {
       @apply no-underline;
       color: #284162;
     }
     a:hover,
-    a:focus-visible {
-      border-bottom: 3px solid #26374a;
+    a:active {
+      @apply bg-gray-selected;
+      border-bottom: 3px solid #445568;
+    }
+    ul {
+      @apply flex items-center list-none space-x-7;
     }
   }
   .mobile-menu-button {
     @apply hidden md:flex;
   }
   .mobile-container {
-    @apply flex-col;
+    @apply flex-col hidden md:flex;
     a {
       @apply no-underline block text-sm px-2 py-4;
+    }
+
+    a:hover,
+    a:active {
+      @apply bg-gray-selected;
+    }
+
+    ul {
+      @apply flex flex-col list-none;
     }
   }
 }

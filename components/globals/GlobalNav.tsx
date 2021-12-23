@@ -39,17 +39,21 @@ const GlobalNav = (): React.ReactElement => {
 
   return (
     <nav className="gc-nav-menu">
+      <h2 id="mainmenulabel" className="sr-only">
+        {t("navigation.sr-label")}
+      </h2>
       <div className="nav-container">
-        {links.map((link, index) => {
-          return (
-            <Link
-              key={index}
-              href={link.internalLink ? `/${i18n.language}${link.href}` : link.href}
-            >
-              {t(link.i18nText)}
-            </Link>
-          );
-        })}
+        <ul>
+          {links.map((link, index) => {
+            return (
+              <li key={index}>
+                <Link href={link.internalLink ? `/${i18n.language}${link.href}` : link.href}>
+                  {t(link.i18nText)}
+                </Link>
+              </li>
+            );
+          })}{" "}
+        </ul>
       </div>
       <button className="mobile-menu-button" onClick={mobileMenuSwitch}>
         <svg
@@ -66,16 +70,17 @@ const GlobalNav = (): React.ReactElement => {
         </svg>
       </button>
       <div className={mobileMenuState ? "mobile-container" : "hidden"}>
-        {links.map((link, index) => {
-          return (
-            <Link
-              key={index}
-              href={link.internalLink ? `/${i18n.language}${link.href}` : link.href}
-            >
-              {t(link.i18nText)}
-            </Link>
-          );
-        })}
+        <ul>
+          {links.map((link, index) => {
+            return (
+              <li key={index}>
+                <Link href={link.internalLink ? `/${i18n.language}${link.href}` : link.href}>
+                  {t(link.i18nText)}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </nav>
   );
