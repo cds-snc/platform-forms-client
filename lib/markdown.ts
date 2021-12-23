@@ -1,5 +1,5 @@
 import json2md from "json2md";
-import logger from "../lib/logger";
+import logger from "./logger";
 import { Submission } from "./types";
 import { extractFormData } from "./integration/helpers";
 
