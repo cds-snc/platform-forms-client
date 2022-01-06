@@ -7,6 +7,7 @@ import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
 import dbConnector from "@lib/integration/dbConnector";
 import isUserSessionExist from "@lib/middleware/HttpSessionExist";
 import { QueryResult } from "pg";
+import { BearerResponse } from "@lib/types";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {
@@ -54,7 +55,7 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
     // return the id and the updated bearer_token field
     const responseObject = await executeQuery(
       await dbConnector(),
-      'UPDATE templates SET bearer_token = ($1) WHERE id = ($2) RETURNING id, bearer_token as "bearerToken"',
+      'UPDATE templates SET bearer_token = ($1) WHERE id = ($2) RETURNING bearer_token as "bearerToken"',
       [token, formID]
     );
     // if we do not have any rows this means the record was not found return a 404
@@ -81,9 +82,6 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
  * @param res The response object containing all that is needed to return a response
  */
 export async function getToken(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  type BearerResponse = {
-    bearerToken: string;
-  };
   const formID = req.query.form as string;
   if (formID) {
     //Fetching the token return list of object or an empty array

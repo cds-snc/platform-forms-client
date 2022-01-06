@@ -220,3 +220,7 @@ export type UploadResult = {
 export interface BearerTokenPayload {
   formID?: string;
 }
+
+export type BearerResponse = {
+  bearerToken: string;
+};
