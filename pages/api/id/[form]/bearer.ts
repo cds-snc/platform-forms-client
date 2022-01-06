@@ -54,7 +54,7 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
     // return the id and the updated bearer_token field
     const responseObject = await executeQuery(
       await dbConnector(),
-      "UPDATE templates SET bearer_token = ($1) WHERE id = ($2) RETURNING id, bearer_token",
+      'UPDATE templates SET bearer_token = ($1) WHERE id = ($2) RETURNING id, bearer_token as "bearerToken"',
       [token, formID]
     );
     // if we do not have any rows this means the record was not found return a 404
@@ -108,7 +108,7 @@ export const getTokenById = async (formID: string): Promise<QueryResult> => {
   //Fetching the token return list of object or an empty array
   return executeQuery(
     await dbConnector(),
-    "SELECT bearer_token as bearerToken FROM templates WHERE id = ($1)",
+    'SELECT bearer_token as "bearerToken" FROM templates WHERE id = ($1)',
     [formID]
   );
 };
