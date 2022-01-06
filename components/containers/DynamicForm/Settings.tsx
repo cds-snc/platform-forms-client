@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { logMessage } from "../../../lib/logger";
 import { FormDBConfigProperties } from "../../../lib/types";
+import { Button } from "@components/forms";
 
 interface FormSettingsProps {
   form: FormDBConfigProperties;
@@ -36,6 +37,27 @@ const handleDelete = async (formID: number) => {
   return resp.status | resp;
 };
 
+const handleRefreshBearerToken = async (formID: number) => {
+  // redirect to view templates page on success
+  try {
+    const serverResponse = await axios({
+      url: `/api/id/${formID}/bearer`,
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        formID: formID,
+      },
+      timeout: 0,
+    });
+    return serverResponse;
+  } catch (err) {
+    logMessage.error(err);
+    return err;
+  }
+};
+
 export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const { form } = props;
   const router = useRouter();
@@ -55,7 +77,18 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       <div data-testid="formID" className="mb-4">
         Form ID: {form.formID}
       </div>
-      <h2>Edit Form Config File:</h2>
+      <div>
+        {t("settings.bearerToken")} {form.bearerToken}
+        <Button
+          type="button"
+          onClick={async () => {
+            handleRefreshBearerToken(form.formID);
+          }}
+        >
+          Refresh
+        </Button>
+      </div>
+      <h2>{t("settings.edit")}</h2>
       <JSONUpload form={form}></JSONUpload>
       <br />
       <div>
