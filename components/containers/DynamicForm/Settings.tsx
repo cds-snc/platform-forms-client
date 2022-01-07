@@ -7,6 +7,8 @@ import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { BearerResponse, FormDBConfigProperties } from "@lib/types";
 import { Button } from "@components/forms";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 
 interface FormSettingsProps {
   form: FormDBConfigProperties;
@@ -75,35 +77,48 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("settings.title")}</h1>
-      <div>{newText}</div>
-      <div data-testid="formID" className="mb-4">
-        Form ID: {form.formID}
-      </div>
-      <div>
-        {t("settings.bearerToken")} {bearerTokenState}
-        <Button
-          type="button"
-          onClick={async () => {
-            const { bearerToken } = (await handleRefreshBearerToken(
-              form.formID
-            )) as unknown as BearerResponse;
-            setBearerTokenState(bearerToken);
-          }}
-        >
-          Refresh
-        </Button>
-      </div>
-      <h2>{t("settings.edit")}</h2>
-      <JSONUpload form={form}></JSONUpload>
-      <br />
-      <div>
-        <DeleteButton
-          action={handleDelete}
-          data={form.formID}
-          redirect={`/admin/view-templates`}
-        ></DeleteButton>
-      </div>
+      <Tabs>
+        <TabList>
+          <Tab>JSON Template</Tab>
+          <Tab>Bearer Token</Tab>
+        </TabList>
+
+        <TabPanel>
+          <h1 className="gc-h1">{t("settings.title")}</h1>
+          <div>{newText}</div>
+          <div data-testid="formID" className="mb-4">
+            Form ID: {form.formID}
+          </div>
+          <h2>{t("settings.edit")}</h2>
+          <JSONUpload form={form}></JSONUpload>
+          <br />
+          <div>
+            <DeleteButton
+              action={handleDelete}
+              data={form.formID}
+              redirect={`/admin/view-templates`}
+            ></DeleteButton>
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <div>
+            {t("settings.bearerToken")}{" "}
+            <input type="text" className="gc-input-text" value={bearerTokenState} />
+            <br />
+            <Button
+              type="button"
+              onClick={async () => {
+                const { bearerToken } = (await handleRefreshBearerToken(
+                  form.formID
+                )) as unknown as BearerResponse;
+                setBearerTokenState(bearerToken);
+              }}
+            >
+              {t("settings.refreshButton")}
+            </Button>
+          </div>
+        </TabPanel>
+      </Tabs>
     </>
   );
 };

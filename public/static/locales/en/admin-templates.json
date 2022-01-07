@@ -17,7 +17,8 @@
     "confirm-delete": "Confirm Delete",
     "new": "The Form was successfully created",
     "formID": "Form ID:",
-    "bearerToken": "Bearer Token:",
+    "bearerToken": "Current Token:",
+    "refreshButton": "Refresh Token",
     "edit": "Edit Form Config File:"
   }
 }
