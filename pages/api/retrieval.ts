@@ -6,8 +6,8 @@ import { BearerTokenPayload, VaultFormResponses } from "@lib/types";
 import validate from "@lib/middleware/bearerToken";
 
 /**
- * EntryPoint of retrieval Api. It caries out a request to the right method
- * otherwise return 500 error status code.
+ * EntryPoint of retrieval Api. It carries a request to the right method
+ * otherwise returns 500 error status code.
  * @param req
  * @param res
  * @param bearerTokenPayload
