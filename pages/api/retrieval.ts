@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
 import { logMessage } from "@lib/logger";
 import { DynamoDBClient, QueryCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { BearerTokenPayload, VaultFormResponses } from "@lib/types";
+import { BearerTokenPayload } from "@lib/types";
 import validate from "@lib/middleware/bearerToken";
 
 /**
@@ -47,7 +47,7 @@ export async function getFormResponses(
     const formID = bearerTokenPayload?.formID;
     if (!formID) return res.status(404).json({ error: "Bad Request" });
     //A list to store submissionIDs
-    let submissionIDlist: string[] = [];
+    let submissionIDlist: (string | undefined)[] | undefined = [];
     try {
       //Create dynamodb client
       const db = new DynamoDBClient({ region: process.env.AWS_REGION ?? "ca-central-1" });
@@ -67,16 +67,14 @@ export async function getFormResponses(
         ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved",
       };
       //Get form's responses for formID
-      const formResponses = (await db.send(
-        new QueryCommand(getItemsDbParams)
-      )) as VaultFormResponses;
+      const formResponses = await db.send(new QueryCommand(getItemsDbParams));
       //Collecting items submissionIDs for logging and updating items.
-      submissionIDlist = formResponses.Items.map((response) => {
+      submissionIDlist = formResponses?.Items?.map((response) => {
         return response.SubmissionID.S;
       });
-      if (formResponses.Count > 0) {
+      if (formResponses && formResponses.Count && formResponses.Count > 0) {
         //Preparing a query to set records's attribute Retrieved to 1.
-        for (const submissionID of submissionIDlist) {
+        for (const submissionID of submissionIDlist as string[]) {
           //Create a new statement object
           const updateItem = {
             TableName: "Vault",

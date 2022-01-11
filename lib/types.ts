@@ -220,7 +220,3 @@ export type UploadResult = {
 export interface BearerTokenPayload {
   formID?: string;
 }
-export interface VaultFormResponses {
-  Items: { [key: string]: unknown | undefined } | Record<string, unknown> | unknown;
-  Count: number;
-}
