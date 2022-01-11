@@ -122,7 +122,6 @@ describe("/api/retrieval", () => {
       expires: "1",
       user: { email: "forms@cds.ca", name: "forms" },
     };
-    process.env.TOKEN_SECRET = "super-secret-code";
     const token = jwt.sign(
       {
         formID: 1,
