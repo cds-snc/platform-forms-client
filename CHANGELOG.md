@@ -146,3 +146,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create secure API to retrieve list of emails associated with a form.
 - Create secure API to deactivate a form owner associated with a form
 - Create secure API to associate emails to a specific form.
+- Replace the retrieval Api lambda implementation by an App backEnd API.
