@@ -1,4 +1,4 @@
-describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:3000" }, () => {
+describe("CDS Platform Intake Form functionality", () => {
   let formConfig = null,
     formID = null;
   before(() => {
@@ -6,7 +6,7 @@ describe("CDS Platform Intake Form functionality", { baseUrl: "http://localhost:
     const body = {
       method: "GET",
     };
-    cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
+    cy.request("/api/templates", JSON.stringify(body)).then((response) => {
       const record = response.body.data.records.find(
         (rec) => rec.formConfig.internalTitleEn === "Work with CDS on a Digital Form"
       );
