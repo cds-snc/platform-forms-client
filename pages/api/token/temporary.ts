@@ -7,6 +7,7 @@ import { BearerTokenPayload } from "@lib/types";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { QueryResult } from "pg";
+import { NotifyClient } from "notifications-node-client";
 
 /**
  * Verifies that the payload for the request is valid.
@@ -49,18 +50,28 @@ const handler = async (
 ) => {
   try {
     const formID = bearerTokenPayload.formID;
+
     if (formID == undefined) {
       return res.status(403).json({ error: "Invalid form request." });
     }
     if (!process.env.TOKEN_SECRET) {
       return res.status(403).json({ error: "Invalid request." });
     }
+
     const temporaryToken = createTemporaryToken(email, process.env.TOKEN_SECRET);
     await updateTemporaryToken(temporaryToken, email, formID);
+    await sendTemporaryTokenByEmail(email, temporaryToken);
+
     logMessage.info(`Temporary Token Requested: Form ID: ${formID} Email: ${email}`);
     res.status(200).json({ message: "success" });
-  } catch (err) {
-    res.status(500).json({ error: "Malformed API Request" });
+  } catch (error) {
+    let errorMessage = "Malformed API Request";
+
+    if ((error as Error).message.includes("Could not send temporary token by email")) {
+      errorMessage = "GC Notify service failed to send temporary token";
+    }
+
+    res.status(500).json({ error: errorMessage });
   }
 };
 
@@ -104,6 +115,26 @@ const updateTemporaryToken = async (
     "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3) and active = true",
     [temporaryToken, email, templateId]
   );
+};
+
+const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) => {
+  const notifyClient = new NotifyClient(
+    "https://api.notification.canada.ca",
+    process.env.NOTIFY_API_KEY
+  );
+
+  // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
+  return await notifyClient
+    .sendEmail("61cec9c4-64ca-4e4d-b4d2-a0e931c44422", email, {
+      personalisation: {
+        temporaryToken: temporaryToken,
+      },
+      reference: null,
+    })
+    .catch((error: Error) => {
+      logMessage.error(error);
+      throw new Error("Could not send temporary token by email.");
+    });
 };
 
 export default validate(checkRequestPayload(handler));
