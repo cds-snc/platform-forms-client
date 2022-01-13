@@ -1,4 +1,4 @@
-describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" }, () => {
+describe("TSB Contact Form functionality", () => {
   let formConfig = null,
     formID = null;
 
@@ -7,7 +7,7 @@ describe("TSB Contact Form functionality", { baseUrl: "http://localhost:3000" },
     const body = {
       method: "GET",
     };
-    cy.request("http://localhost:3000/api/templates", JSON.stringify(body)).then((response) => {
+    cy.request("/api/templates", JSON.stringify(body)).then((response) => {
       const record = response.body.data.records.find(
         (rec) => rec.formConfig.internalTitleEn === "Contact Us - TSB"
       );
