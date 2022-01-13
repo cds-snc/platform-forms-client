@@ -70,7 +70,7 @@ describe("/api/retrieval", () => {
     await retrieval(req, res);
     expect(res.statusCode).toBe(400);
     expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining({ error: "Invalid paylaod value found maxRecords" })
+      expect.objectContaining({ error: "Invalid payload value found maxRecords" })
     );
   });
 

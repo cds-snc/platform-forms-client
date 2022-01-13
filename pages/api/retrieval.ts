@@ -41,7 +41,7 @@ export async function getFormResponses(
 ): Promise<void> {
   const { maxRecords } = req.query;
   if (!maxRecords || parseInt(maxRecords as string) < 0 || parseInt(maxRecords as string) >= 11) {
-    return res.status(400).json({ error: "Invalid paylaod value found maxRecords" });
+    return res.status(400).json({ error: "Invalid payload value found maxRecords" });
   } else {
     //Get formID from the bearer token
     const formID = bearerTokenPayload?.formID;
