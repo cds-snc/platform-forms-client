@@ -43,7 +43,7 @@ export async function getFormResponses(
   if (!maxRecords || parseInt(maxRecords as string) < 0 || parseInt(maxRecords as string) >= 11) {
     return res.status(400).json({ error: "Invalid paylaod value found maxRecords" });
   } else {
-    //Get formID form the bearer token
+    //Get formID from the bearer token
     const formID = bearerTokenPayload?.formID;
     if (!formID) return res.status(404).json({ error: "Bad Request" });
     //A list to store submissionIDs
