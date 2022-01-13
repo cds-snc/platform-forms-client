@@ -5,7 +5,7 @@ const A11Y_OPTIONS = {
   },
 };
 
-describe("Accessibility (A11Y) Check", { baseUrl: "http://localhost:3000" }, () => {
+describe("Accessibility (A11Y) Check", () => {
   it("Welcome Page Passes accessibility tests", () => {
     cy.visit("/en/welcome-bienvenue");
     cy.injectAxe();
@@ -17,7 +17,7 @@ describe("Accessibility (A11Y) Check", { baseUrl: "http://localhost:3000" }, () 
     const body = {
       method: "GET",
     };
-    cy.request("http://localhost:3000/api/templates", JSON.stringify(body))
+    cy.request("/api/templates", JSON.stringify(body))
       .then((response) => {
         response.body.data.records.forEach((rec) => {
           if (rec.formConfig.publishingStatus) {

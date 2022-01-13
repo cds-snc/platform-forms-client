@@ -5,8 +5,8 @@ const A11Y_OPTIONS = {
   },
 };
 
-describe("Forms Functionality", { baseUrl: "http://localhost:3000" }, () => {
-  describe("text field tests", { baseUrl: "http://localhost:3000" }, () => {
+describe("Forms Functionality", () => {
+  describe("text field tests", () => {
     it("renders the form", () => {
       cy.visit(`/en/id/1?mockedFormFile=textFieldTestForm`);
       cy.get("h1").contains("Text Field Test Form");

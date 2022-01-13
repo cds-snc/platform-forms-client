@@ -1,4 +1,4 @@
-describe("Dynamic Row Functionality", { baseUrl: "http://localhost:3000" }, () => {
+describe("Dynamic Row Functionality", () => {
   const formID = 76; // Form: Copyright Board of Canada - Proposed Tariff Filing Form
 
   beforeEach(() => {
