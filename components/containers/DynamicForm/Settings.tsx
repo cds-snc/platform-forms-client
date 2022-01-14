@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import JSONUpload from "../../admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
 import { DeleteButton } from "../../forms/Button/DeleteButton";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
-import { BearerResponse, FormDBConfigProperties } from "@lib/types";
-import { Button } from "@components/forms";
+import { FormDBConfigProperties } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 
 interface FormSettingsProps {
   form: FormDBConfigProperties;
@@ -39,31 +39,10 @@ const handleDelete = async (formID: number) => {
   return resp.status | resp;
 };
 
-/**
- * Connects to the database and refreshes the bearer token for the specified form ID.
- *
- * @param formID
- * @returns the response data from the server
- */
-const handleRefreshBearerToken = async (formID: number) => {
-  try {
-    const serverResponse = await axios({
-      url: `/api/id/${formID}/bearer`,
-      method: "POST",
-      timeout: 0,
-    });
-    return serverResponse.data;
-  } catch (err) {
-    logMessage.error(err);
-    return err;
-  }
-};
-
 export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const { form } = props;
   const router = useRouter();
   const { t } = useTranslation("admin-templates");
-  const [bearerTokenState, setBearerTokenState] = useState("");
   const newText =
     router.query && router.query.newForm ? (
       <p className="gc-confirmation-banner">{t("settings.new")}</p>
@@ -71,16 +50,12 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       ""
     );
 
-  useEffect(() => {
-    setBearerTokenState(form.bearerToken ? form.bearerToken : "");
-  }, []);
-
   return (
     <>
       <Tabs>
         <TabList>
-          <Tab>JSON Template</Tab>
-          <Tab>Bearer Token</Tab>
+          <Tab>{t("settings.tabLabels.jsonUpload")}</Tab>
+          <Tab>{t("settings.tabLabels.bearerToken")}</Tab>
         </TabList>
 
         <TabPanel>
@@ -101,22 +76,7 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
           </div>
         </TabPanel>
         <TabPanel>
-          <div>
-            {t("settings.bearerToken")}{" "}
-            <input type="text" className="gc-input-text" value={bearerTokenState} />
-            <br />
-            <Button
-              type="button"
-              onClick={async () => {
-                const { bearerToken } = (await handleRefreshBearerToken(
-                  form.formID
-                )) as unknown as BearerResponse;
-                setBearerTokenState(bearerToken);
-              }}
-            >
-              {t("settings.refreshButton")}
-            </Button>
-          </div>
+          <BearerRefresh form={form}></BearerRefresh>
         </TabPanel>
       </Tabs>
     </>

@@ -19,6 +19,10 @@
     "formID": "Form ID:",
     "bearerToken": "Current Token:",
     "refreshButton": "Refresh Token",
-    "edit": "Edit Form Config File:"
+    "edit": "Edit Form Config File:",
+    "tabLabels": {
+      "jsonUpload": "JSON Upload",
+      "bearerToken": "Bearer Token"
+    }    
   }
 }
