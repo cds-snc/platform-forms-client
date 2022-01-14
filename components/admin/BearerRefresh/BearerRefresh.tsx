@@ -9,38 +9,46 @@ interface BearerRefreshProps {
   form?: FormDBConfigProperties;
 }
 
-/**
- * Connects to the database and refreshes the bearer token for the specified form ID.
- *
- * @param formID
- * @returns the response data from the server
- */
-const handleRefreshBearerToken = async (formID: number) => {
-  try {
-    const serverResponse = await axios({
-      url: `/api/id/${formID}/bearer`,
-      method: "POST",
-      timeout: 0,
-    });
-    return serverResponse.data;
-  } catch (err) {
-    logMessage.error(err as Error);
-    return err;
-  }
-};
-
 const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
   const { form } = props;
   const [bearerTokenState, setBearerTokenState] = useState("");
   const { t } = useTranslation("admin-templates");
+  const [errorState, setErrorState] = useState({ message: "" });
 
   useEffect(() => {
     setBearerTokenState(form?.bearerToken ? form.bearerToken : "");
   }, []);
 
+  /**
+   * Connects to the database and refreshes the bearer token for the specified form ID.
+   *
+   * @param formID
+   * @returns the response data from the server
+   */
+  const handleRefreshBearerToken = async (formID: number) => {
+    try {
+      const serverResponse = await axios({
+        url: `/api/id/${formID}/bearer`,
+        method: "POST",
+        timeout: 0,
+      });
+      setErrorState({ message: "" });
+      return serverResponse.data;
+    } catch (err) {
+      logMessage.error(err as Error);
+      setErrorState({ message: "Unable to refresh bearer token." });
+      return err;
+    }
+  };
+
   return (
     <>
-      {t("settings.bearerToken")}{" "}
+      {errorState.message ? (
+        <p role="alert" data-testid="alert">
+          {errorState.message}
+        </p>
+      ) : null}
+      {t("settings.bearerToken")}
       <input readOnly type="text" className="gc-input-text" value={bearerTokenState} />
       <br />
       <Button
