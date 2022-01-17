@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   core: {
     builder: "webpack5",
@@ -15,6 +17,8 @@ module.exports = {
         "sass-loader",
       ],
     });
+    config.resolve.alias = {...config.resolve.alias, "@lib": path.resolve(__dirname, "../lib")}
+    config.resolve.alias = {...config.resolve.alias, "@components": path.resolve(__dirname, "../components")}
 
     config.resolve.alias = {
       ...config.resolve.alias,
