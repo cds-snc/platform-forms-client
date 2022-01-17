@@ -39,7 +39,7 @@ For local development of the NextJS application but leveraging the AWS backend (
 NOTIFY_API_KEY= // Can be found in LastPass
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
-ORGANISATIONS_API=Organisations
+ORGANIZATIONS_API=Organizations
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
 GOOGLE_CLIENT_ID= // Can be found in LastPass
@@ -166,7 +166,7 @@ Pour le développement local de l'application NextJS mais en s'appuyant sur le b
 NOTIFY_API_KEY= // Can be found in LastPass
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
-ORGANISATIONS_API=Organisations
+ORGANIZATIONS_API=Organizations
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
 GOOGLE_CLIENT_ID= // Can be found in LastPass

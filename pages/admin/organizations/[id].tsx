@@ -1,7 +1,7 @@
-import OrganizationSettings from "../../../components/containers/Admin/Organisations/OrganisationSettings";
+import OrganizationSettings from "../../../components/containers/Admin/Organizations/OrganizationSettings";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../../lib/auth";
-import { crudOrganisations } from "@lib/integration/crud";
+import { crudOrganizations } from "@lib/integration/crud";
 import { GetServerSideProps } from "next";
 
 export const getServerSideProps: GetServerSideProps = requireAuthentication(async (context) => {
@@ -9,18 +9,18 @@ export const getServerSideProps: GetServerSideProps = requireAuthentication(asyn
 
   const payload = {
     method: "GET",
-    organisationID: orgId,
+    organizationID: orgId,
   };
 
-  const lambdaResult = await crudOrganisations(payload);
+  const lambdaResult = await crudOrganizations(payload);
 
   if (context.locale && lambdaResult.data.records && lambdaResult.data.records.length > 0) {
     return {
       props: {
-        organisation: lambdaResult.data.records[0],
+        organization: lambdaResult.data.records[0],
         ...(await serverSideTranslations(context && context.locale ? context.locale : "", [
           "common",
-          "organisations",
+          "organizations",
           "admin-templates",
         ])),
       },
@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = requireAuthentication(asyn
   // if no form returned, 404
   return {
     redirect: {
-      // We can redirect to a 'Organisation does not exist page' in the future
+      // We can redirect to a 'Organization does not exist page' in the future
       destination: `/${context.locale}/404`,
       permanent: false,
     },

@@ -1,7 +1,7 @@
 import Redis from "ioredis";
 import {
   CrudTemplateResponse,
-  CrudOrganisationResponse,
+  CrudOrganizationResponse,
   PublicFormSchemaProperties,
 } from "@lib/types";
 import { logMessage } from "./logger";
@@ -58,7 +58,7 @@ const modifyValue = async (
   template:
     | CrudTemplateResponse
     | (PublicFormSchemaProperties | undefined)[]
-    | CrudOrganisationResponse
+    | CrudOrganizationResponse
 ) => {
   const redis = await checkConnection();
   if (redis) {
@@ -104,24 +104,24 @@ const unpublishedPut = async (
 };
 
 /*
-  Organisations
+  Organizations
 */
 
-const organisationIDCheck = async (
-  organisationID: string
-): Promise<CrudOrganisationResponse | null> => {
-  return checkValue(`organisations:${organisationID}`);
+const organizationIDCheck = async (
+  organizationID: string
+): Promise<CrudOrganizationResponse | null> => {
+  return checkValue(`organizations:${organizationID}`);
 };
 
-const organisationIDPut = async (
-  organisationID: string,
-  organisation: CrudOrganisationResponse
+const organizationIDPut = async (
+  organizationID: string,
+  organization: CrudOrganizationResponse
 ): Promise<void> => {
-  return modifyValue(`organisations:${organisationID}`, organisation);
+  return modifyValue(`organizations:${organizationID}`, organization);
 };
 
-const organisationIDDelete = async (organisationID: string): Promise<void> => {
-  return deleteValue(`organisations:${organisationID}`);
+const organizationIDDelete = async (organizationID: string): Promise<void> => {
+  return deleteValue(`organizations:${organizationID}`);
 };
 
 export const formCache = {
@@ -141,11 +141,11 @@ export const formCache = {
   },
 };
 
-export const organisationCache = {
+export const organizationCache = {
   cacheAvailable,
-  organisationID: {
-    check: organisationIDCheck,
-    set: organisationIDPut,
-    invalidate: organisationIDDelete,
+  organizationID: {
+    check: organizationIDCheck,
+    set: organizationIDPut,
+    invalidate: organizationIDDelete,
   },
 };

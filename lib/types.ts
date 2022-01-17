@@ -185,27 +185,27 @@ export interface CrudTemplateResponse {
   };
 }
 
-// CRUD Operations for Organisations
-export type Organisation = {
-  organisationID: string;
-  organisationNameEn: string;
-  organisationNameFr: string;
+// CRUD Operations for Organizations
+export type Organization = {
+  organizationID: string;
+  organizationNameEn: string;
+  organizationNameFr: string;
 };
 
-export interface CrudOrganisationInput {
+export interface CrudOrganizationInput {
   method: string;
-  organisationID?: string; // UUID
-  organisationNameEn?: string;
-  organisationNameFr?: string;
+  organizationID?: string; // UUID
+  organizationNameEn?: string;
+  organizationNameFr?: string;
 }
 
-export interface CrudOrganisationResponse {
+export interface CrudOrganizationResponse {
   data: {
     records?: [
       {
-        organisationID: string;
-        organisationNameEn?: string;
-        organisationNameFr?: string;
+        organizationID: string;
+        organizationNameEn?: string;
+        organizationNameFr?: string;
       }
     ];
   };
