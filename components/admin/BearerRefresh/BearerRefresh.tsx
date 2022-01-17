@@ -5,7 +5,7 @@ import axios from "axios";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 
-interface BearerRefreshProps {
+export interface BearerRefreshProps {
   form?: FormDBConfigProperties;
 }
 
@@ -36,7 +36,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
       return serverResponse.data;
     } catch (err) {
       logMessage.error(err as Error);
-      setErrorState({ message: "Unable to refresh bearer token." });
+      setErrorState({ message: t("settings.bearerTokenRefreshError") });
       return err;
     }
   };

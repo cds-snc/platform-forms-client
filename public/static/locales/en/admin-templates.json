@@ -19,6 +19,7 @@
     "formID": "Form ID:",
     "bearerToken": "Current Token:",
     "refreshButton": "Refresh Token",
+    "bearerTokenRefreshError": "Unable to refresh bearer token.",
     "edit": "Edit Form Config File:",
     "tabLabels": {
       "jsonUpload": "JSON Upload",
