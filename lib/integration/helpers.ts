@@ -267,7 +267,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
     },
     data: formDataObject,
     // If development mode disable timeout
-    timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
+    timeout: process.env.NODE_ENV === "production" ? 15000 : 0,
   })
     .then((serverResponse) => {
       if (serverResponse.data.received === true) {
