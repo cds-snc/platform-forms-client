@@ -11869,7 +11869,7 @@ normalize-url@^6.1.0:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.1.0.tgz#40d0885b535deffe3f3147bec877d05fe4c5668a"
   integrity sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==
 
-notifications-node-client@^5.0.2:
+notifications-node-client@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/notifications-node-client/-/notifications-node-client-5.1.0.tgz#975e6b604ac94600d873111b6ea7e452d6dd8fcd"
   integrity sha512-a3aoSZPHSc/8VaccfGvKKsIZ/crqbglP9dNvg0pHHTgWi6BYiJc+Md7wOPizzEPACa+SKdifs06VY8ktbTzySA==
