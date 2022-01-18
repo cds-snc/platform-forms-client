@@ -52,6 +52,7 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
   return (
     <>
+      <h1 className="gc-h1">{t("settings.title")}</h1>
       <Tabs>
         <TabList>
           <Tab>{t("settings.tabLabels.jsonUpload")}</Tab>
@@ -59,7 +60,6 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         </TabList>
 
         <TabPanel>
-          <h1 className="gc-h1">{t("settings.title")}</h1>
           <div>{newText}</div>
           <div data-testid="formID" className="mb-4">
             Form ID: {form.formID}
