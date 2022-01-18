@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- A UI with tabs on the Form Settings page.
+- A tab on the Form Settings page that allows the user to see and refresh the bearer token.
+
 ### Fixed
 
 - Google Tag manager iframe will no longer appear in other environment other then staging. [#563](https://github.com/cds-snc/platform-forms-client/pull/563)
