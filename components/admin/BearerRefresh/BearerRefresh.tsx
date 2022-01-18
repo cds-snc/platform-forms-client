@@ -48,8 +48,16 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
           {errorState.message}
         </p>
       ) : null}
-      {t("settings.bearerToken")}
-      <input readOnly type="text" className="gc-input-text" value={bearerTokenState} />
+      <h2>{t("settings.bearerToken")}</h2>
+      <textarea
+        id="bearerToken"
+        rows={3}
+        name="bearerToken"
+        className="gc-textarea full-height font-mono"
+        data-testid="bearerToken"
+        defaultValue={bearerTokenState}
+        readOnly
+      ></textarea>
       <br />
       <Button
         type="button"
