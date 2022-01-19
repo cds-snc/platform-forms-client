@@ -1,4 +1,4 @@
-describe("Welcome Page", { baseUrl: "http://localhost:3000/" }, () => {
+describe("Welcome Page", () => {
   it("En page renders", () => {
     cy.visit("/en/welcome-bienvenue");
     cy.get("h1").should("contain", "Welcome to Forms");
