@@ -41,7 +41,7 @@ const validate = (
  * @throws
  * This exception is thrown if the bearer token is not found
  */
-const getBearerToken = (req: NextApiRequest) => {
+export const getBearerToken = (req: NextApiRequest): string => {
   const authHeader = String(req.headers["authorization"] || "");
   if (authHeader.startsWith("Bearer ")) {
     return authHeader.substring(7, authHeader.length);

@@ -30,7 +30,7 @@ describe("/api/retrieval", () => {
     delete process.env.TOKEN_SECRET;
   });
 
-  it("Should return 400 status code with a msg missing maxRecords query parameters", async () => {
+  it("Should return 400 status code b/c formID is undefined", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "forms@cds.ca", name: "forms" },
@@ -51,30 +51,20 @@ describe("/api/retrieval", () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/retrieval?maxRecords=",
+        Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
       query: {
-        maxRecords: "",
+        maxRecords: "10",
+        formID: "",
       },
-    });
-
-    executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
-        return {
-          rows: [{ bearerToken: token }],
-          rowCount: 1,
-        };
-      }
     });
     await retrieval(req, res);
     expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res._getData())).toEqual(
-      expect.objectContaining({ error: "Invalid paylaod value found maxRecords" })
-    );
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad Request" }));
   });
 
-  it("Should return 400 status code with an invalid formID found ", async () => {
+  it("Should return 400 status code with Invalid paylaod value found maxRecords ", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "forms@cds.ca", name: "forms" },
@@ -99,22 +89,15 @@ describe("/api/retrieval", () => {
         authorization: `Bearer ${token}`,
       },
       query: {
-        maxRecords: "1",
+        maxRecords: "11",
+        formID: "22",
       },
     });
-
-    executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
-        return {
-          rows: [{ bearerToken: token }],
-          rowCount: 1,
-        };
-      }
-    });
-
     await retrieval(req, res);
-    expect(res.statusCode).toBe(404);
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad Request" }));
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual(
+      expect.objectContaining({ error: "Invalid paylaod value found maxRecords" })
+    );
   });
 
   it("Should return a list of form responses with 200 status code", async () => {
@@ -140,22 +123,33 @@ describe("/api/retrieval", () => {
         authorization: `Bearer ${token}`,
       },
       query: {
-        maxRecords: "2",
+        maxRecords: "8",
+        formID: "22",
       },
     });
+    const expectedRow = {
+      template_id: 1,
+      email: "forms@cds.ca",
+      temporary_token: token,
+      active: true,
+    };
 
     executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
+      if (
+        sql.includes(
+          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+        )
+      ) {
         return {
-          rows: [{ bearerToken: token }],
+          rows: [{ ...expectedRow }],
           rowCount: 1,
         };
       }
     });
     const dynamodbExpectedReponses = {
       Items: [
-        { FormID: "1", SubmissionID: "12", FormSubmission: true },
-        { FormID: "2", SubmissionID: "21", FormSubmission: true },
+        { FormID: { S: "1" }, SubmissionID: { S: "12" }, FormSubmission: true },
+        { FormID: { S: "2" }, SubmissionID: { S: "21" }, FormSubmission: true },
       ],
     };
     dynamoClient.send.mockImplementation(() => {
@@ -167,14 +161,59 @@ describe("/api/retrieval", () => {
     expect(JSON.parse(res._getData())).toEqual(
       expect.objectContaining({
         responses: [
-          { FormID: "1", SubmissionID: "12", FormSubmission: true },
-          { FormID: "2", SubmissionID: "21", FormSubmission: true },
+          { FormID: { S: "1" }, SubmissionID: { S: "12" }, FormSubmission: true },
+          { FormID: { S: "2" }, SubmissionID: { S: "21" }, FormSubmission: true },
         ],
       })
     );
   });
 
-  it("Should return 500 status code whenever dynamodb throws an error", async () => {
+  it("Should return a status code 403 Missing or invalid bearer token because no record was found in db", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "forms@cds.ca", name: "forms" },
+    };
+    const token = jwt.sign(
+      {
+        formID: 1,
+      },
+      process.env.TOKEN_SECRET,
+      {
+        expiresIn: "1y",
+      }
+    );
+    client.getSession.mockReturnValue(mockSession);
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+        authorization: `Bearer ${token}`,
+      },
+      query: {
+        maxRecords: "10",
+        formID: "14",
+      },
+    });
+
+    executeQuery.mockImplementation((client, sql) => {
+      if (
+        sql.includes(
+          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+        )
+      ) {
+        return {
+          rows: [{}],
+          rowCount: 1,
+        };
+      }
+    });
+
+    await retrieval(req, res);
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("Should return 500 status code if it fails to fetch/send command to dynamoDb", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "forms@cds.ca", name: "forms" },
@@ -193,17 +232,28 @@ describe("/api/retrieval", () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/retrieval?maxRecords=5",
+        Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
       query: {
         maxRecords: "5",
+        formID: "23",
       },
     });
+    const expectedRow = {
+      template_id: 1,
+      email: "forms@cds.ca",
+      temporary_token: token,
+      active: true,
+    };
     executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
+      if (
+        sql.includes(
+          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+        )
+      ) {
         return {
-          rows: [{ bearerToken: token }],
+          rows: [expectedRow],
           rowCount: 1,
         };
       }
@@ -216,7 +266,7 @@ describe("/api/retrieval", () => {
     expect(res.statusCode).toBe(500);
   });
 
-  it("Should return an empty list of form's responses with 200 status code", async () => {
+  it("Should return 200 status code and an empty list of form's responses", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "forms@cds.ca", name: "forms" },
@@ -235,17 +285,29 @@ describe("/api/retrieval", () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Origin: "http://localhost:3000/api/retrieval?maxRecords=10",
+        Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
       query: {
         maxRecords: "10",
+        formID: "12",
       },
     });
+
+    const expectedRow = {
+      template_id: 1,
+      email: "forms@cds.ca",
+      temporary_token: token,
+      active: true,
+    };
     executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
+      if (
+        sql.includes(
+          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+        )
+      ) {
         return {
-          rows: [{ bearerToken: token }],
+          rows: [expectedRow],
           rowCount: 1,
         };
       }
