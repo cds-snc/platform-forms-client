@@ -10,8 +10,7 @@ const allowedMethods = ["GET", "INSERT", "UPDATE", "DELETE"];
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await getSession({ req });
-    const requestBody = JSON.parse(req.body);
-    const response = await crudTemplates({ ...requestBody, session });
+    const response = await crudTemplates({ ...req.body, session });
     if (response) {
       res.status(200).json(response);
     } else {
