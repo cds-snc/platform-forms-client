@@ -2,7 +2,6 @@ import Document, { Html, Head, Main, NextScript } from "next/document";
 import React from "react";
 import crypto from "crypto";
 
-//import { useFlag } from "../lib/hooks/flags";
 let scriptHashes = [];
 let externalScripts = [];
 
