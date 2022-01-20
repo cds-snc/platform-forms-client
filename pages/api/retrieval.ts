@@ -16,7 +16,7 @@ import jwt from "jsonwebtoken";
    -H "Accept: application/json"
    -H "Authorization: Bearer {token}"
  * 
- * This method fetchs form responses up to the maximum number (maxRecords) that was specified.
+ * It will fetch form's responses up to the maximum number (maxRecords) that was specified.
  * It required to have a valid bearer token which must carry a valid formID. When all these conditons are met,
  * Not only it should return form reponses but also mark those responses as retrieved by updating the attribute Retrieved
  * from 0 to 1.
@@ -35,7 +35,7 @@ async function getFormResponses(
   try {
     //Create dynamodb client
     const db = new DynamoDBClient({ region: process.env.AWS_REGION ?? "ca-central-1" });
-    //Create form responses db param
+    //Create form's responses db param
     //NB: A filter expression is applied after a Query finishes, but before the results are returned.
     //Therefore, a Query consumes the same amount of read capacity, regardless of whether a filter expression is present.
     const getItemsDbParams = {
@@ -59,7 +59,7 @@ async function getFormResponses(
     if (formResponses && formResponses.Count && formResponses.Count > 0) {
       //Preparing a query to set records's attribute Retrieved to 1.
       for (const submissionID of submissionIDlist as string[]) {
-        //Create a new statement object
+        //Create a new update object statement
         const updateItem = {
           TableName: "Vault",
           Key: {
@@ -82,10 +82,9 @@ async function getFormResponses(
         await db.send(new UpdateItemCommand(updateItem));
       }
     }
-    //Return form data
+    //Return responses data
     return res.status(200).json({ responses: formResponses.Items });
   } catch (error) {
-    //logging submissionIDs
     logMessage.warn(`Possible data loss for these submissionIDs`);
     //print submission ids as string
     logMessage.warn(submissionIDlist ? submissionIDlist.toString() : "Empty submissionID list");
@@ -95,7 +94,7 @@ async function getFormResponses(
 }
 
 /**
- * This method will make sure that the incoming request is valid by enforcing a set of
+ * This function will make sure that the incoming request is valid by enforcing a set of
  * rules.
  * Request parameters :
  *  - The maxRecords exists and it ranges between 1 and 10.
@@ -107,7 +106,7 @@ async function getFormResponses(
  *  - The record found in the database includes the email, active, and template_id fields
  *  - The email on the token record matches the email in the payload.
  *  - The active flag boolean is true.
- * @param handler - A method to retrieve a form responses
+ * @param handler - A method to retrieve form's responses
  * @returns
  */
 export const formResponsesReqValidator = (
@@ -144,7 +143,7 @@ export const formResponsesReqValidator = (
         return res.status(403).json({ error: "Missing or invalid bearer token." });
       }
     } catch (err) {
-      //Token verification
+      //Token verification has failed
       res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
     }
   };
@@ -153,7 +152,7 @@ export const formResponsesReqValidator = (
  * It returns an active record from form_users table base upon a formID/template_id and an email.
  * @param formID - The id of the form
  * @param email - The email that is associated to the formID
- * @returns A form_user's record
+ * @returns A form_user's record with active field i.e [{ active: true }]
  */
 const getFormUserRecordByFormIDAndEmail = async (
   formID: string,
