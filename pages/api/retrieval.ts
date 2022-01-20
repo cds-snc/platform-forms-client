@@ -10,7 +10,7 @@ import { QueryResult } from "pg";
 import jwt from "jsonwebtoken";
 
 /**
- * Request verd : GET
+ * Request type: GET
  * USAGE: 
  * curl http://localhost:3000/api/retrieval?maxRecords=10&formID=1
    -H "Accept: application/json"
