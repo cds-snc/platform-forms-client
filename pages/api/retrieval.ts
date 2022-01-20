@@ -25,7 +25,7 @@ import jwt from "jsonwebtoken";
  * @param maxRecords 
  * @returns 
  */
-export async function getFormResponses(
+async function getFormResponses(
   res: NextApiResponse,
   formID: string,
   maxRecords: number
@@ -155,14 +155,14 @@ export const formResponsesReqValidator = (
  * @param email - The email that is associated to the formID
  * @returns A form_user's record
  */
-export const getFormUserRecordByFormIDAndEmail = async (
+const getFormUserRecordByFormIDAndEmail = async (
   formID: string,
   email: string
 ): Promise<QueryResult> => {
   //Retrieving a tokenRecord or return an empty array
   return executeQuery(
     await dbConnector(),
-    "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true",
+    "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true",
     [formID, email]
   );
 };

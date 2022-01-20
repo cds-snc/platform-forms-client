@@ -30,7 +30,7 @@ describe("/api/retrieval", () => {
     delete process.env.TOKEN_SECRET;
   });
 
-  it("Should return 400 status code b/c formID is undefined", async () => {
+  it("Should return 400 status code b/c formID is an empty string", async () => {
     const mockSession = {
       expires: "1",
       user: { email: "forms@cds.ca", name: "forms" },
@@ -57,6 +57,40 @@ describe("/api/retrieval", () => {
       query: {
         maxRecords: "10",
         formID: "",
+      },
+    });
+    await retrieval(req, res);
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad Request" }));
+  });
+
+  it("Should return 400 status code b/c formID is undefined", async () => {
+    const mockSession = {
+      expires: "1",
+      user: { email: "forms@cds.ca", name: "forms" },
+    };
+    const token = jwt.sign(
+      {
+        formID: 1,
+      },
+      process.env.TOKEN_SECRET,
+      {
+        expiresIn: "1y",
+      }
+    );
+
+    client.getSession.mockReturnValue(mockSession);
+
+    const { req, res } = createMocks({
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+        authorization: `Bearer ${token}`,
+      },
+      query: {
+        maxRecords: "10",
+        formID: undefined,
       },
     });
     await retrieval(req, res);
@@ -137,7 +171,7 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
         )
       ) {
         return {
@@ -199,7 +233,7 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
         )
       ) {
         return {
@@ -249,7 +283,7 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
         )
       ) {
         return {
@@ -303,7 +337,7 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT * FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
         )
       ) {
         return {
