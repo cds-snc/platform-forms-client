@@ -115,11 +115,11 @@ export const formResponsesReqValidator = (
 ) => {
   return async function (req: NextApiRequest, res: NextApiResponse): Promise<unknown> {
     try {
-      //Default value to zero if it's undefined
+      //Default value to 10 if it's undefined
       const { maxRecords = 10, formID } = req.query;
       //Get formID form the baerer token
       if (!formID) return res.status(400).json({ error: "Bad Request" });
-      //Check an empty string
+      //Check an empty object or string
       const expectedMaxRecords = parseInt(!maxRecords ? "10" : (maxRecords as string));
       //Range is 1- 10
       if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
