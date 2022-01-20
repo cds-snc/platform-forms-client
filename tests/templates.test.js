@@ -73,10 +73,10 @@ describe("Test JSON validation scenarios", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
-      body: {
+      body: JSON.stringify({
         formConfig: validFormTemplate,
         method: "INSERT",
-      },
+      }),
     });
 
     await templates(req, res);
@@ -97,10 +97,10 @@ describe("Test JSON validation scenarios", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
-      body: {
+      body: JSON.stringify({
         formConfig: brokenFormTemplate,
         method: "INSERT",
-      },
+      }),
     });
 
     await templates(req, res);

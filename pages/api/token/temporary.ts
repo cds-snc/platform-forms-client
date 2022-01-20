@@ -24,7 +24,7 @@ const checkRequestPayload = (
   ) => void
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse, options?: unknown): Promise<unknown> => {
-    const requestBody = req.body;
+    const requestBody = JSON.parse(req.body);
     if (requestBody?.email) {
       return handler(req, res, options as BearerTokenPayload, requestBody["email"]);
     } else {

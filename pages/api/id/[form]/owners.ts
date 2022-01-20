@@ -57,7 +57,7 @@ export async function activateOrDeactivateFormOwners(
   res: NextApiResponse
 ): Promise<void> {
   //Extracting req body
-  const requestBody = req.body ? req.body : undefined;
+  const requestBody = req.body ? JSON.parse(req.body) : undefined;
   //Payload validation fix: true case scenario
   if (!requestBody?.email || typeof requestBody.active !== "boolean") {
     //Invalid payload
@@ -89,7 +89,7 @@ export async function activateOrDeactivateFormOwners(
  */
 export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   //Get request body
-  const requestBody = req.body ? req.body : undefined;
+  const requestBody = req.body ? JSON.parse(req.body) : undefined;
   //Checkimg the payload's content
   if (!requestBody?.email || !isValidGovEmail(requestBody.email, emailDomainList.domains)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
