@@ -1,9 +1,14 @@
 import React from "react";
-import { cleanup, render, fireEvent, screen, act } from "@testing-library/react";
+import { cleanup, render, fireEvent, screen, act, waitFor } from "@testing-library/react";
+import { useRouter } from "next/router";
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
 
 jest.mock("axios");
+jest.mock("next/router", () => ({
+  useRouter: jest.fn(),
+}));
+
 describe("JSON Upload Component", () => {
   afterEach(cleanup);
   const formConfig = { test: "test JSON" };
@@ -38,10 +43,16 @@ describe("JSON Upload Component", () => {
     mockedAxios.mockResolvedValue({
       status: 200,
     });
+
+    useRouter.mockImplementation(() => ({ replace: jest.fn(), push: jest.fn() }));
+
     render(<JSONUpload form={form}></JSONUpload>);
     await act(async () => {
-      await fireEvent.click(screen.queryByTestId("upload"));
+      fireEvent.click(screen.queryByTestId("upload"));
     });
-    expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
+
+    waitFor(() => {
+      expect(screen.queryByTestId("submitStatus")).toBeInTheDocumen;
+    });
   });
 });
