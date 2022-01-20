@@ -161,13 +161,6 @@ describe("/api/retrieval", () => {
         formID: "22",
       },
     });
-    const expectedRow = {
-      template_id: 1,
-      email: "forms@cds.ca",
-      temporary_token: token,
-      active: true,
-    };
-
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
@@ -175,7 +168,7 @@ describe("/api/retrieval", () => {
         )
       ) {
         return {
-          rows: [{ ...expectedRow }],
+          rows: [{ active: true }],
           rowCount: 1,
         };
       }
@@ -274,12 +267,7 @@ describe("/api/retrieval", () => {
         formID: "23",
       },
     });
-    const expectedRow = {
-      template_id: 1,
-      email: "forms@cds.ca",
-      temporary_token: token,
-      active: true,
-    };
+
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
@@ -287,7 +275,7 @@ describe("/api/retrieval", () => {
         )
       ) {
         return {
-          rows: [expectedRow],
+          rows: [{ active: true }],
           rowCount: 1,
         };
       }
@@ -327,13 +315,6 @@ describe("/api/retrieval", () => {
         formID: "12",
       },
     });
-
-    const expectedRow = {
-      template_id: 1,
-      email: "forms@cds.ca",
-      temporary_token: token,
-      active: true,
-    };
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
@@ -341,7 +322,7 @@ describe("/api/retrieval", () => {
         )
       ) {
         return {
-          rows: [expectedRow],
+          rows: [{ active: true }],
           rowCount: 1,
         };
       }
