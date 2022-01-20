@@ -11,7 +11,6 @@ import jwt from "jsonwebtoken";
 
 /**
  * Request verd : GET
- * A sample url to test this endpoint:
  * USAGE: 
  * curl http://localhost:3000/api/retrieval?maxRecords=10&formID=1
    -H "Accept: application/json"
@@ -134,7 +133,7 @@ export const formResponsesReqValidator = (
         process.env.TOKEN_SECRET || ""
       ) as BearerTokenPayload;
       const { email } = bearerTokenPayload;
-      //Checking if a formUserRecord exists for the given bearerToken.
+      //Check if a formUserRecord exists for the given bearerToken.
       const formUserRecord = (
         await getFormUserRecordByFormIDAndEmail(formID as string, email as string)
       ).rows[0] as FormUserDBConfigProperties;
