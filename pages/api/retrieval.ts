@@ -98,7 +98,7 @@ export async function getFormResponses(
  * This method will make sure that the incoming request is valid by enforcing a set of
  * rules.
  * Request parameters :
- *  - The maxRecords exists and ranges between 1 and 10.
+ *  - The maxRecords exists and it ranges between 1 and 10.
  *  - A formID exists and is valid i.e 78
  * BearerToken :
  *  - Must contains an email address
@@ -119,7 +119,7 @@ export const formResponsesReqValidator = (
       const { maxRecords = 10, formID } = req.query;
       //Get formID form the baerer token
       if (!formID) return res.status(400).json({ error: "Bad Request" });
-      //Check an empty string before proceding
+      //Check an empty string
       const expectedMaxRecords = parseInt(!maxRecords ? "10" : (maxRecords as string));
       //Range is 1- 10
       if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
