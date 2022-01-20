@@ -50,9 +50,9 @@ describe("TemporaryBearerToken tests", () => {
         Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
-      body: {
+      body: JSON.stringify({
         email: "test@cds-snc.ca",
-      },
+      }),
     });
 
     executeQuery.mockImplementation((client, sql) => {
@@ -100,9 +100,9 @@ describe("TemporaryBearerToken tests", () => {
         Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
-      body: {
+      body: JSON.stringify({
         method: null,
-      },
+      }),
     });
 
     await temporary(req, res);
@@ -120,9 +120,9 @@ describe("TemporaryBearerToken tests", () => {
         Origin: "http://localhost:3000",
         authorization: `Bearer ${token}`,
       },
-      body: {
+      body: JSON.stringify({
         email: "test@cds-snc.ca",
-      },
+      }),
     });
 
     executeQuery.mockImplementation((client, sql) => {

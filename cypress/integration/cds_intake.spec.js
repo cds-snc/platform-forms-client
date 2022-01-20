@@ -6,7 +6,7 @@ describe("CDS Intake Form functionality", () => {
     const body = {
       method: "GET",
     };
-    cy.request("/api/templates", body).then((response) => {
+    cy.request("/api/templates", JSON.stringify(body)).then((response) => {
       const record = response.body.data.records.find(
         (rec) => rec.formConfig.internalTitleEn === "CDS Intake Form"
       );

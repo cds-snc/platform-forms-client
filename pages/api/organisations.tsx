@@ -21,7 +21,7 @@ const organisations = async (req: NextApiRequest, res: NextApiResponse): Promise
   try {
     const session = await getSession({ req });
 
-    const requestBody = req.body;
+    const requestBody = JSON.parse(req.body);
 
     if (isAllowed(session, requestBody.method)) {
       return crudOrganisations({ ...requestBody, session })
