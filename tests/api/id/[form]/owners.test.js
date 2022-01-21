@@ -189,10 +189,10 @@ describe("/id/[forms]/owners", () => {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000/api/id/11/owners",
         },
-        body: JSON.stringify({
+        body: {
           email: "forms@cds.ca",
           active: "",
-        }),
+        },
         query: {
           form: "11",
         },
@@ -216,10 +216,10 @@ describe("/id/[forms]/owners", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           email: "",
           active: true,
-        }),
+        },
         query: {
           form: "20",
         },
@@ -245,10 +245,10 @@ describe("/id/[forms]/owners", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           email: "forms@cds.ca",
           active: true,
-        }),
+        },
         query: {
           form: "10",
         },
@@ -275,10 +275,10 @@ describe("/id/[forms]/owners", () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
+          body: {
             email: "forms@cds.ca",
             active: true,
-          }),
+          },
           query: {
             form: "12",
           },
@@ -307,9 +307,9 @@ describe("/id/[forms]/owners", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           email: "test@gc.ca",
-        }),
+        },
         query: {
           form: "888",
         },
@@ -337,9 +337,9 @@ describe("/id/[forms]/owners", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           email: "test9@gc.ca",
-        }),
+        },
         query: {
           form: "9",
         },
@@ -372,9 +372,9 @@ describe("/id/[forms]/owners", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           email: "test10@gc.ca",
-        }),
+        },
         query: {
           form: "10",
         },
@@ -399,9 +399,9 @@ describe("/id/[forms]/owners", () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: {
           email: "forms@cds-snc.ca",
-        }),
+        },
         query: {
           form: undefined,
         },
@@ -433,9 +433,9 @@ describe("/id/[forms]/owners", () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
+          body: {
             email: elem,
-          }),
+          },
           query: {
             form: "23",
           },

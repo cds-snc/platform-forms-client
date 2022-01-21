@@ -17,7 +17,7 @@ describe("Accessibility (A11Y) Check", () => {
     const body = {
       method: "GET",
     };
-    cy.request("/api/templates", JSON.stringify(body))
+    cy.request("/api/templates", body)
       .then((response) => {
         response.body.data.records.forEach((rec) => {
           if (rec.formConfig.publishingStatus) {
