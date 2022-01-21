@@ -10,13 +10,14 @@ import { QueryResult } from "pg";
 import jwt from "jsonwebtoken";
 
 /**
+ * @description
  * Request type: GET
  * USAGE: 
  * curl http://localhost:3000/api/retrieval?maxRecords=10&formID=1
    -H "Accept: application/json"
    -H "Authorization: Bearer {token}"
  * 
- * It will fetch form's responses up to the maximum number (maxRecords) that was specified.
+ * Will fetch form's responses up to the maximum number (maxRecords) that was specified.
  * It required to have a valid bearer token which must carry a valid formID. When all these conditons are met,
  * Not only it should return form reponses but also mark those responses as retrieved by updating the attribute Retrieved
  * from 0 to 1.
@@ -94,6 +95,7 @@ async function getFormResponses(
 }
 
 /**
+ * @description
  * This function will make sure that the incoming request is valid by enforcing a set of
  * rules.
  * Request parameters :
