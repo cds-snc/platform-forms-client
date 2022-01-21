@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, fireEvent, screen, act, waitFor } from "@testing-library/react";
+import { cleanup, render, fireEvent, screen, act } from "@testing-library/react";
 
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
@@ -49,8 +49,6 @@ describe("JSON Upload Component", () => {
       fireEvent.click(screen.queryByTestId("upload"));
     });
 
-    await waitFor(() => {
-      expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
-    });
+    expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
   });
 });
