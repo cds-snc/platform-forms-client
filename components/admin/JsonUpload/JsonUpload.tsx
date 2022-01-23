@@ -27,7 +27,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       url: "/api/templates",
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       data: {
         formConfig: JSON.parse(jsonConfig),
