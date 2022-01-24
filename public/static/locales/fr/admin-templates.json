@@ -16,8 +16,14 @@
     "delete-check": "Êtes-vous sûr de vouloir supprimer ce formulaire ?",
     "confirm-delete": "Confirmer Supprimer",
     "new": "Le formulaire a été créé avec succès",
-    "formID": "Form ID:",
-    "bearerToken": "Bearer Token:",
-    "edit": "Edit Form Config File:"
+    "formID": "ID de formulaire :",
+    "bearerToken": "Bearer Token :",
+    "refreshButton": "Refresh Token",
+    "bearerTokenRefreshError": "Unable to refresh bearer token.",
+    "edit": "Edit Form Config File:",
+    "tabLabels": {
+      "jsonUpload": "JSON Upload",
+      "bearerToken": "Bearer Token"
+    }
   }
 }
