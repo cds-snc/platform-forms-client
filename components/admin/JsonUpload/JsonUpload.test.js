@@ -1,9 +1,14 @@
 import React from "react";
 import { cleanup, render, fireEvent, screen, act } from "@testing-library/react";
+
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
 
 jest.mock("axios");
+// Mock out the useRefresh hook because without a rerender the component will be stuck in loading state
+jest.mock("../../../lib/hooks/useRefresh", () => ({
+  useRefresh: jest.fn(() => ({ refreshData: jest.fn(), isRefreshing: false })),
+}));
 describe("JSON Upload Component", () => {
   afterEach(cleanup);
   const formConfig = { test: "test JSON" };
@@ -38,10 +43,12 @@ describe("JSON Upload Component", () => {
     mockedAxios.mockResolvedValue({
       status: 200,
     });
+
     render(<JSONUpload form={form}></JSONUpload>);
     await act(async () => {
-      await fireEvent.click(screen.queryByTestId("upload"));
+      fireEvent.click(screen.queryByTestId("upload"));
     });
+
     expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
   });
 });
