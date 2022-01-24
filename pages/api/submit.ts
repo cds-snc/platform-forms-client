@@ -20,6 +20,7 @@ export const config = {
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
+  endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
 });
 
 const submit = async (

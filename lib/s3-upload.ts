@@ -7,7 +7,11 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client
 
 import formidable from "formidable";
 
-const s3Client = new S3Client({ region: process.env.AWS_REGION ?? "ca-central-1" });
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION ?? "ca-central-1",
+  endpoint: process.env.LOCAL_S3_ENDPOINT,
+  forcePathStyle: process.env.LOCAL_S3_ENDPOINT ? true : undefined,
+});
 
 const bucketName: string =
   process.env.RELIABILITY_FILE_STORAGE ?? "forms-staging-reliability-file-storage";
