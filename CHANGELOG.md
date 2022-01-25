@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Create secure API to deactivate a form owner associated with a form
+- Create secure API to associate emails to a specific form.
 - Send email through GC Notify when a new temporary token is generated
+- Replace the retrieval Api lambda implementation by an App backEnd API.
 
 ### Fixed
 
@@ -23,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add error messages for all elements within dynamic rows. [#520](https://github.com/cds-snc/platform-forms-client/pull/520)
 - POST method to /id/[form]/bearer that allows the refreshing of bearer tokens
 - `<br>` in long description string now create new lines [#541](https://github.com/cds-snc/platform-forms-client/pull/541)
+- Added secure API to retrieve bearer token.
+- Create secure API to retrieve list of emails associated with a form.
 
 ### Fixed
 
@@ -144,10 +149,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Forms:
   - CDS Intake Form
 
-### Added
-
-- Added secure API to retrieve bearer token.
-- Create secure API to retrieve list of emails associated with a form.
-- Create secure API to deactivate a form owner associated with a form
-- Create secure API to associate emails to a specific form.
-- Replace the retrieval Api lambda implementation by an App backEnd API.
