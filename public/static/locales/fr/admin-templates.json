@@ -8,7 +8,7 @@
   "view": {
     "title": "Voir le modèle des formulaires",
     "update": "Modifier",
-    "formID": "ID de formulaire:"
+    "formID": "Identifiant du formulaire:"
   },
   "settings": {
     "title": "Paramètres du formulaire",
@@ -16,14 +16,14 @@
     "delete-check": "Êtes-vous sûr de vouloir supprimer ce formulaire ?",
     "confirm-delete": "Confirmer Supprimer",
     "new": "Le formulaire a été créé avec succès",
-    "formID": "ID de formulaire :",
-    "bearerToken": "Bearer Token :",
-    "refreshButton": "Refresh Token",
-    "bearerTokenRefreshError": "Unable to refresh bearer token.",
-    "edit": "Edit Form Config File:",
+    "formID": "Identifiant du formulaire :",
+    "bearerToken": "Jeton d'accès :",
+    "refreshButton": "Renouveler le jeton d'accès",
+    "bearerTokenRefreshError": "Le renouvellement du jeton d'accès n'a pas fonctionné.",
+    "edit": "Modifier le formulaire :",
     "tabLabels": {
-      "jsonUpload": "JSON Upload",
-      "bearerToken": "Bearer Token"
+      "jsonUpload": "Téléversement JSON",
+      "bearerToken": "Jeton d'accès"
     }
   }
 }
