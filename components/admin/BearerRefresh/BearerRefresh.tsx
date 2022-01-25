@@ -7,7 +7,7 @@ import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 
 export interface BearerRefreshProps {
-  form?: FormDBConfigProperties;
+  form: FormDBConfigProperties;
 }
 
 const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
@@ -59,7 +59,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
         readOnly
       ></textarea>
       <br />
-      <Button type="button" onClick={() => handleRefreshBearerToken(form?.formID)}>
+      <Button type="button" onClick={() => handleRefreshBearerToken(form.formID)}>
         {t("settings.refreshButton")}
       </Button>
     </>
