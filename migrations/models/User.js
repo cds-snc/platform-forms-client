@@ -15,7 +15,7 @@ export const UserSchema = {
       type: "boolean",
       nullable: false,
     },
-    organisation: {
+    organization: {
       type: "uuid",
       nullable: true,
     },

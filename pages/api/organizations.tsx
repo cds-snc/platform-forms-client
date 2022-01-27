@@ -1,4 +1,4 @@
-import { crudOrganisations } from "../../lib/integration/crud";
+import { crudOrganizations } from "../../lib/integration/crud";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "../../lib/logger";
 import { getSession } from "next-auth/client";
@@ -17,14 +17,14 @@ const isAllowed = (session: Session | null, method: string) => {
   }
 };
 
-const organisations = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const organizations = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     const session = await getSession({ req });
 
     const requestBody = req.body;
 
     if (isAllowed(session, requestBody.method)) {
-      return crudOrganisations({ ...requestBody, session })
+      return crudOrganizations({ ...requestBody, session })
         .then((response) => {
           if (response) {
             res.status(200).json(response);
@@ -44,4 +44,4 @@ const organisations = async (req: NextApiRequest, res: NextApiResponse): Promise
   }
 };
 
-export default organisations;
+export default organizations;

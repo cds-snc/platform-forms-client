@@ -1,31 +1,31 @@
 import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Organisation } from "@lib/types";
+import { Organization } from "@lib/types";
 import { DeleteButton } from "@components/forms";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 
-interface OrganisationSettingsProps {
-  organisation: Organisation;
+interface OrganizationSettingsProps {
+  organization: Organization;
 }
 
-const handleDelete = async (organisationID: string) => {
+const handleDelete = async (organizationID: string) => {
   // redirect to view templates page on success
   const resp = await axios({
-    url: "/api/organisations",
+    url: "/api/organizations",
     method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",
     },
     data: {
       method: "DELETE",
-      organisationID: organisationID,
+      organizationID: organizationID,
     },
     timeout: 0,
   })
     .then((serverResponse) => {
-      //success - redirect to organisations list page
+      //success - redirect to organizations list page
       return serverResponse;
     })
     .catch((err) => {
@@ -35,9 +35,9 @@ const handleDelete = async (organisationID: string) => {
   return resp.status | resp;
 };
 
-export const OrganisationSettings = (props: OrganisationSettingsProps): React.ReactElement => {
-  const { t, i18n } = useTranslation("organisations");
-  const { organisation } = props;
+export const OrganizationSettings = (props: OrganizationSettingsProps): React.ReactElement => {
+  const { t, i18n } = useTranslation("organizations");
+  const { organization } = props;
 
   return (
     <>
@@ -50,25 +50,25 @@ export const OrganisationSettings = (props: OrganisationSettingsProps): React.Re
         <p>
           {t("settings.name")}
           {i18n.language === "en"
-            ? organisation.organisationNameEn
-            : organisation.organisationNameFr}
+            ? organization.organizationNameEn
+            : organization.organizationNameFr}
         </p>
       </div>
       <div>
         <p>
           {t("settings.id")}
-          {organisation.organisationID}
+          {organization.organizationID}
         </p>
       </div>
       <div>
         <DeleteButton
           action={handleDelete}
-          data={organisation.organisationID}
-          redirect={`/admin/organisations`}
+          data={organization.organizationID}
+          redirect={`/admin/organizations`}
         ></DeleteButton>
       </div>
     </>
   );
 };
 
-export default OrganisationSettings;
+export default OrganizationSettings;
