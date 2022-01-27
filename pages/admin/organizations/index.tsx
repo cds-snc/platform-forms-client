@@ -1,15 +1,15 @@
-import Organisations from "../../../components/containers/Admin/Organisations/Organisations";
+import Organizations from "../../../components/containers/Admin/Organizations/Organizations";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../../lib/auth";
-import { crudOrganisations } from "@lib/integration/crud";
+import { crudOrganizations } from "@lib/integration/crud";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   {
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
-    const lambdaResult = await crudOrganisations({ method: "GET" });
+    const lambdaResult = await crudOrganizations({ method: "GET" });
 
-    const organisations =
+    const organizations =
       lambdaResult?.data?.records && lambdaResult.data.records.length > 0
         ? lambdaResult.data.records
         : [];
@@ -17,8 +17,8 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     if (context.locale) {
       return {
         props: {
-          organisations: organisations,
-          ...(await serverSideTranslations(context.locale, ["common", "organisations"])),
+          organizations: organizations,
+          ...(await serverSideTranslations(context.locale, ["common", "organizations"])),
         }, // will be passed to the page component as props
       };
     }
@@ -26,4 +26,4 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   }
 });
 
-export default Organisations;
+export default Organizations;

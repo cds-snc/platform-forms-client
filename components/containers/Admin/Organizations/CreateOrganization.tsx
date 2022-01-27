@@ -6,8 +6,8 @@ import { Label, TextInput, Button } from "@components/forms";
 import { Formik, Form } from "formik";
 import { logMessage } from "@lib/logger";
 
-export const CreateOrganisation = (): React.ReactElement => {
-  const { t } = useTranslation("organisations");
+export const CreateOrganization = (): React.ReactElement => {
+  const { t } = useTranslation("organizations");
 
   return (
     <>
@@ -19,15 +19,15 @@ export const CreateOrganisation = (): React.ReactElement => {
         onSubmit={async (values) => {
           logMessage.info(values);
           return await axios({
-            url: "/api/organisations",
+            url: "/api/organizations",
             method: "POST",
             headers: {
               "Content-Type": "multipart/form-data",
             },
             data: {
               method: "INSERT",
-              organisationNameEn: values.orgNameEn,
-              organisationNameFr: values.orgNameFr,
+              organizationNameEn: values.orgNameEn,
+              organizationNameFr: values.orgNameFr,
             },
             timeout: 0,
           })
@@ -41,11 +41,11 @@ export const CreateOrganisation = (): React.ReactElement => {
       >
         <Form>
           <Label htmlFor="orgNameEn" required={true}>
-            Organisation Name (English)
+            Organization Name (English)
           </Label>
           <TextInput id="orgNameEn" name="orgNameEn" type="text" required={true}></TextInput>
           <Label htmlFor="orgNameFr" required={true}>
-            Organisation Name (French)
+            Organization Name (French)
           </Label>
           <TextInput id="orgNameFr" name="orgNameFr" type="text" required={true}></TextInput>
           <Button type="submit">Submit</Button>
@@ -55,4 +55,4 @@ export const CreateOrganisation = (): React.ReactElement => {
   );
 };
 
-export default CreateOrganisation;
+export default CreateOrganization;
