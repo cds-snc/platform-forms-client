@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
 import { logMessage } from "@lib/logger";
 import { DynamoDBClient, QueryCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { FormUserDBConfigProperties, BearerTokenPayload } from "@lib/types";
+import { BearerTokenPayload } from "@lib/types";
 import { getBearerToken } from "@lib/middleware/bearerToken";
 import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
@@ -32,7 +32,7 @@ async function getFormResponses(
   maxRecords: number
 ): Promise<void> {
   //A list to store submissionIDs
-  let submissionIDlist: (string | undefined)[] | undefined = [];
+  let submissionIDlist: (string | undefined)[] = [];
   try {
     //Create dynamodb client
     const db = new DynamoDBClient({ region: process.env.AWS_REGION ?? "ca-central-1" });
@@ -54,10 +54,11 @@ async function getFormResponses(
     //Get form's responses for formID
     const formResponses = await db.send(new QueryCommand(getItemsDbParams));
     //Collecting items submissionIDs for logging and updating items.
-    submissionIDlist = formResponses?.Items?.map((response) => {
-      return response.SubmissionID.S;
-    });
-    if (formResponses && formResponses.Count && formResponses.Count > 0) {
+    submissionIDlist =
+      formResponses?.Items?.map((response) => {
+        return response.SubmissionID.S;
+      }) ?? [];
+    if (formResponses.Count && formResponses.Count > 0) {
       //Preparing a query to set records's attribute Retrieved to 1.
       for (const submissionID of submissionIDlist as string[]) {
         //Create a new update object statement
@@ -117,11 +118,14 @@ export const formResponsesReqValidator = (
   return async function (req: NextApiRequest, res: NextApiResponse): Promise<unknown> {
     try {
       //Default value to 10 if it's undefined
-      const { maxRecords = 10, formID } = req.query;
-      //Get formID form the baerer token
+      const { maxRecords = "10", formID } = req.query;
+      //Check that formID and maxRecords aren't repeated
+      if (Array.isArray(formID) || Array.isArray(maxRecords))
+        return res.status(400).json({ error: "Bad Request" });
+      //Get formID form the bearer token
       if (!formID) return res.status(400).json({ error: "Bad Request" });
       //Check an empty object or string
-      const expectedMaxRecords = parseInt(!maxRecords ? "10" : (maxRecords as string));
+      const expectedMaxRecords = parseInt(maxRecords);
       //Range is 1- 10
       if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
         return res.status(400).json({ error: "Invalid paylaod value found maxRecords" });
@@ -134,13 +138,11 @@ export const formResponsesReqValidator = (
         process.env.TOKEN_SECRET || ""
       ) as BearerTokenPayload;
       const { email } = bearerTokenPayload;
-      //Check if a formUserRecord exists for the given bearerToken.
-      const formUserRecord = (
-        await getFormUserRecordByFormIDAndEmail(formID as string, email as string)
-      ).rows[0] as FormUserDBConfigProperties;
-      if (formUserRecord?.active) {
+      //Check if an active formUserRecord exists for the given bearerToken.
+      const { exists } = (await checkActiveFormUserRecord(formID, email as string)).rows[0];
+      if (exists) {
         //Moving forward to fetch form's responses
-        return handler(res, formID as string, expectedMaxRecords);
+        return handler(res, formID, expectedMaxRecords);
       } else {
         return res.status(403).json({ error: "Missing or invalid bearer token." });
       }
@@ -150,20 +152,17 @@ export const formResponsesReqValidator = (
     }
   };
 };
-/**
+/*@description
  * It returns an active record from form_users table base upon a formID/template_id and an email.
  * @param formID - The id of the form
  * @param email - The email that is associated to the formID
  * @returns A form_user's record with active field i.e [{ active: true }]
  */
-const getFormUserRecordByFormIDAndEmail = async (
-  formID: string,
-  email: string
-): Promise<QueryResult> => {
+const checkActiveFormUserRecord = async (formID: string, email: string): Promise<QueryResult> => {
   //Retrieving a tokenRecord or return an empty array
   return executeQuery(
     await dbConnector(),
-    "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true",
+    "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)",
     [formID, email]
   );
 };

@@ -221,9 +221,3 @@ export interface BearerTokenPayload {
   formID?: string;
   email?: string;
 }
-export interface FormUserDBConfigProperties {
-  template_id?: string;
-  email?: string;
-  temporary_token?: string;
-  active?: boolean;
-}
