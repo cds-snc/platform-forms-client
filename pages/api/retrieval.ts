@@ -140,12 +140,8 @@ export const formResponsesReqValidator = (
       const { email } = bearerTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       const { exists } = (await checkActiveFormUserRecord(formID, email as string)).rows[0];
-      if (exists) {
-        //Moving forward to fetch form's responses
-        return handler(res, formID, expectedMaxRecords);
-      } else {
-        return res.status(403).json({ error: "Missing or invalid bearer token." });
-      }
+      if (exists) return handler(res, formID, expectedMaxRecords);
+      return res.status(403).json({ error: "Missing or invalid bearer token." });
     } catch (err) {
       //Token verification has failed
       res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
