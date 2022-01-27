@@ -1,8 +1,8 @@
 import { Button } from "@components/forms";
+import Loader from "@components/globals/Loader";
 import { logMessage } from "@lib/logger";
 import { BearerResponse, FormDBConfigProperties } from "@lib/types";
 import axios from "axios";
-import server from "i18next-hmr/server";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 
@@ -15,6 +15,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
   const [bearerTokenState, setBearerTokenState] = useState("");
   const { t } = useTranslation("admin-templates");
   const [errorState, setErrorState] = useState({ message: "" });
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     setBearerTokenState(form?.bearerToken ? form.bearerToken : "");
@@ -27,6 +28,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
    */
   const handleRefreshBearerToken = async (formID: number | undefined) => {
     try {
+      setSubmitting(true);
       setErrorState({ message: "" });
       const serverResponse = await axios({
         url: `/api/id/${formID}/bearer`,
@@ -38,30 +40,37 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
     } catch (err) {
       logMessage.error(err as Error);
       setErrorState({ message: t("settings.bearerTokenRefreshError") });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <>
-      {errorState.message ? (
-        <p role="alert" data-testid="alert">
-          {errorState.message}
-        </p>
-      ) : null}
-      <h2>{t("settings.bearerToken")}</h2>
-      <textarea
-        id="bearerToken"
-        rows={3}
-        name="bearerToken"
-        className="gc-textarea full-height font-mono"
-        data-testid="bearerToken"
-        defaultValue={bearerTokenState}
-        readOnly
-      ></textarea>
-      <br />
-      <Button type="button" onClick={() => handleRefreshBearerToken(form.formID)}>
-        {t("settings.refreshButton")}
-      </Button>
+      {submitting ? (
+        <Loader message="Loading..." />
+      ) : (
+        <>
+          {errorState.message ? (
+            <p role="alert" data-testid="alert">
+              {errorState.message}
+            </p>
+          ) : null}
+          <h2>{t("settings.bearerToken")}</h2>
+          <textarea
+            id="bearerToken"
+            rows={3}
+            name="bearerToken"
+            className="gc-textarea full-height font-mono"
+            data-testid="bearerToken"
+            defaultValue={bearerTokenState}
+            readOnly
+          ></textarea>
+          <Button type="button" onClick={() => handleRefreshBearerToken(form.formID)}>
+            {t("settings.refreshButton")}
+          </Button>
+        </>
+      )}
     </>
   );
 };
