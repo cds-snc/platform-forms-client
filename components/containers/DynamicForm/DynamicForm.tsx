@@ -7,7 +7,7 @@ import { TextPage } from "../../forms/TextPage/TextPage";
 import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
 import { PublicFormSchemaProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
-import { useFlag } from "../../../lib/hooks/flags";
+import { useFlag } from "../../../lib/hooks/useFlag";
 
 interface DynamicFormProps {
   formConfig: PublicFormSchemaProperties;

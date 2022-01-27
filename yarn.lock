@@ -7170,7 +7170,14 @@ create-react-context@0.3.0:
     gud "^1.0.0"
     warning "^4.0.3"
 
-cross-fetch@3.1.4, cross-fetch@^3.0.4:
+cross-fetch@3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
+  integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
+  dependencies:
+    node-fetch "2.6.7"
+
+cross-fetch@^3.0.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
   integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
@@ -9795,12 +9802,12 @@ i18next-hmr@^1.7.5:
   resolved "https://registry.yarnpkg.com/i18next-hmr/-/i18next-hmr-1.7.5.tgz#3925f54da18fb67df06fd3bb71c2867da8102347"
   integrity sha512-V3cFY8xHjtF2X5zI6PHKrEsN7jrh0inUz9Xz2QEoY+7UQ1/LGC6pHrm1JPArBx4Y0JuzMpoCkrC1nFTHxLNleA==
 
-i18next-http-backend@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-1.3.0.tgz#fcafb9583cf2942a9c669bd1868ec84a11410536"
-  integrity sha512-49Sf7Dt6GHeFYlCcCTwD39bkaiw7ld8RlGCXw6ZERabN7SXaLM6qRGnd+XbFdPhJHNMHvt/38XiRtJcEgu5Arg==
+i18next-http-backend@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-1.3.2.tgz#ce6aff7aa60b6170e006d62b8f9cc1b3de55413e"
+  integrity sha512-SfcoUmsSWnc2LYsDsCq5TCg18cxJXvXymX9N37V+qqMKQY8Gf0rWkjOnRd20sMK633Dq4NF9tvqPbOiFJ49Kbw==
   dependencies:
-    cross-fetch "3.1.4"
+    cross-fetch "3.1.5"
 
 i18next@^19.7.0:
   version "19.9.2"
@@ -12366,6 +12373,13 @@ node-fetch@2.6.1, node-fetch@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
+node-fetch@2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
 
 node-html-parser@1.4.9:
   version "1.4.9"
@@ -16243,6 +16257,11 @@ tr46@^2.1.0:
   dependencies:
     punycode "^2.1.1"
 
+tr46@~0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  integrity sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=
+
 trim-trailing-lines@^1.0.0:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/trim-trailing-lines/-/trim-trailing-lines-1.1.4.tgz#bd4abbec7cc880462f10b2c8b5ce1d8d1ec7c2c0"
@@ -16889,6 +16908,11 @@ web-namespaces@^1.0.0:
   resolved "https://registry.yarnpkg.com/web-namespaces/-/web-namespaces-1.1.4.tgz#bc98a3de60dadd7faefc403d1076d529f5e030ec"
   integrity sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==
 
+webidl-conversions@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  integrity sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=
+
 webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
@@ -17050,6 +17074,14 @@ whatwg-mimetype@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/whatwg-mimetype/-/whatwg-mimetype-2.3.0.tgz#3d4b1e0312d2079879f826aff18dbeeca5960fbf"
   integrity sha512-M4yMwr6mAnQz76TbJm914+gPpB/nCwvZbJU28cUD6dR004SAxDLOOSUaB1JDRqLtaOV/vi0IC5lEAGFgrjGv/g==
+
+whatwg-url@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  integrity sha1-lmRU6HZUYuN2RNNib2dCzotwll0=
+  dependencies:
+    tr46 "~0.0.3"
+    webidl-conversions "^3.0.0"
 
 whatwg-url@^7.0.0:
   version "7.1.0"

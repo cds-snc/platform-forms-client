@@ -5,6 +5,7 @@ import { FormDBConfigProperties } from "../../../lib/types";
 import { useRouter } from "next/router";
 import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
+import { useRefresh } from "@lib/hooks/useRefresh";
 
 interface JSONUploadProps {
   form?: FormDBConfigProperties;
@@ -18,7 +19,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const [submitStatus, setSubmitStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorState, setErrorState] = useState({ message: "" });
-
+  const { refreshData, isRefreshing } = useRefresh([form]);
   const formID = form ? form.formID : null;
   const router = useRouter();
 
@@ -27,7 +28,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       url: "/api/templates",
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       data: {
         formConfig: JSON.parse(jsonConfig),
@@ -82,12 +83,13 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
               // update the page text to show a success
               setSubmitStatus(t("upload.success"));
               setSubmitting(false);
+              await refreshData();
             }
           }}
           method="POST"
           encType="multipart/form-data"
         >
-          {submitting ? (
+          {submitting || isRefreshing ? (
             <Loader message="Loading..." />
           ) : (
             <>
