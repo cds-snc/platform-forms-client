@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A UI with tabs on the Form Settings page. [#486](https://github.com/cds-snc/platform-forms-client/pull/573)
 - A tab on the Form Settings page that allows the user to see and refresh the bearer token.
 
+### Changed
+
+- Renamed `organisation` to `organization` which has an impact on the API access path
+
 ### Fixed
 
 - Google Tag manager iframe will no longer appear in other environment other then staging. [#563](https://github.com/cds-snc/platform-forms-client/pull/563)
@@ -88,7 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use a cache to fill frequent requests to the Template API to reduce overall load on Lambdas
 - Enable support for development using local Lambdas
-- Enable support for organisations and organisation management through the admin panel
+- Enable support for organizations and organization management through the admin panel
 - Added validation on FileInput component to ensure the type and size of the file is valid
 - Added `displayAlphaBanner` property to JSON form template. Defaulted to true for existing forms.
 - Added updated phone number input that includes an international code drop down.
