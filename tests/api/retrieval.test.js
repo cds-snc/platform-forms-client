@@ -164,11 +164,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
         )
       ) {
         return {
-          rows: [{ active: true }],
+          rows: [{ exists: true }],
           rowCount: 1,
         };
       }
@@ -226,7 +226,7 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
         )
       ) {
         return {
@@ -271,11 +271,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
         )
       ) {
         return {
-          rows: [{ active: true }],
+          rows: [{ exists: true }],
           rowCount: 1,
         };
       }
@@ -318,11 +318,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT active FROM form_users WHERE template_id = ($1) and email = ($2) and active = true"
+          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
         )
       ) {
         return {
-          rows: [{ active: true }],
+          rows: [{ exists: true }],
           rowCount: 1,
         };
       }
