@@ -2,14 +2,14 @@ import fs from "fs";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { logger, logMessage } from "../logger";
 import {
-  CrudOrganisationInput,
+  CrudOrganizationInput,
   CrudTemplateResponse,
-  CrudOrganisationResponse,
+  CrudOrganizationResponse,
   CrudTemplateInput,
   SubmissionProperties,
   PublicFormSchemaProperties,
 } from "../types";
-import { organisationCache, formCache } from "../cache";
+import { organizationCache, formCache } from "../cache";
 
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
@@ -156,29 +156,29 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     });
 }
 
-// CRUD for Organisations
-async function _crudOrganisationsWithCache(
-  payload: CrudOrganisationInput
-): Promise<CrudOrganisationResponse> {
-  if (payload.method === "GET" && payload.organisationID) {
-    const cachedValue = await organisationCache.organisationID.check(payload.organisationID);
+// CRUD for Organizations
+async function _crudOrganizationsWithCache(
+  payload: CrudOrganizationInput
+): Promise<CrudOrganizationResponse> {
+  if (payload.method === "GET" && payload.organizationID) {
+    const cachedValue = await organizationCache.organizationID.check(payload.organizationID);
     if (cachedValue) {
       return cachedValue;
     }
   }
 
-  return await _crudOrganisations(payload).then((response) => {
+  return await _crudOrganizations(payload).then((response) => {
     switch (payload.method) {
       case "GET":
-        if (payload.organisationID) {
-          organisationCache.organisationID.set(payload.organisationID, response);
+        if (payload.organizationID) {
+          organizationCache.organizationID.set(payload.organizationID, response);
         }
         break;
       case "DELETE":
       case "UPDATE":
       case "INSERT":
-        if (payload.organisationID) {
-          organisationCache.organisationID.invalidate(payload.organisationID);
+        if (payload.organizationID) {
+          organizationCache.organizationID.invalidate(payload.organizationID);
         }
         break;
       default:
@@ -189,35 +189,35 @@ async function _crudOrganisationsWithCache(
   });
 }
 
-async function _crudOrganisations(
-  payload: CrudOrganisationInput
-): Promise<CrudOrganisationResponse> {
-  const getConfig = (payload: CrudOrganisationInput) => {
-    const { method, organisationID, organisationNameEn, organisationNameFr } = payload;
+async function _crudOrganizations(
+  payload: CrudOrganizationInput
+): Promise<CrudOrganizationResponse> {
+  const getConfig = (payload: CrudOrganizationInput) => {
+    const { method, organizationID, organizationNameEn, organizationNameFr } = payload;
 
     switch (payload.method) {
       case "GET":
         return {
           method,
-          organisationID,
+          organizationID,
         };
       case "INSERT":
         return {
           method,
-          organisationNameEn,
-          organisationNameFr,
+          organizationNameEn,
+          organizationNameFr,
         };
       case "UPDATE":
         return {
           method,
-          organisationID,
-          organisationNameEn,
-          organisationNameFr,
+          organizationID,
+          organizationNameEn,
+          organizationNameFr,
         };
       case "DELETE":
         return {
           method: "DELETE",
-          organisationID,
+          organizationID,
         };
       default:
         return {
@@ -227,7 +227,7 @@ async function _crudOrganisations(
   };
 
   if (process.env.CYPRESS && payload.method !== "GET") {
-    logMessage.info("Organisations CRUD API in Test Mode");
+    logMessage.info("Organizations CRUD API in Test Mode");
     const timer = () => {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -244,9 +244,9 @@ async function _crudOrganisations(
             data: {
               records: [
                 {
-                  organisationID: "11111111-1111-1111-1111-111111111111",
-                  organisationNameEn: "Test",
-                  organisationNAmeFr: "Test",
+                  organizationID: "11111111-1111-1111-1111-111111111111",
+                  organizationNameEn: "Test",
+                  organizationNAmeFr: "Test",
                 },
               ],
             },
@@ -273,7 +273,7 @@ async function _crudOrganisations(
   });
   const encoder = new TextEncoder();
   const command = new InvokeCommand({
-    FunctionName: process.env.ORGANISATIONS_API ?? "Organisations",
+    FunctionName: process.env.ORGANIZATIONS_API ?? "Organizations",
     Payload: encoder.encode(JSON.stringify(getConfig(payload))),
   });
 
@@ -283,16 +283,16 @@ async function _crudOrganisations(
       const decoder = new TextDecoder();
       const respPayload = decoder.decode(response.Payload);
       if (response.FunctionError) {
-        logMessage.info("Lambda Organisations Client not successful");
+        logMessage.info("Lambda Organizations Client not successful");
         return null;
       } else {
-        logMessage.info("Lambda Organisations Client successfully triggered");
+        logMessage.info("Lambda Organizations Client successfully triggered");
         return JSON.parse(respPayload);
       }
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error("Could not process request with Lambda Organisations function");
+      throw new Error("Could not process request with Lambda Organizations function");
     });
 }
 
@@ -365,7 +365,7 @@ async function _getFormByID(
   return null;
 }
 
-export const crudOrganisations = logger(_crudOrganisationsWithCache);
+export const crudOrganizations = logger(_crudOrganizationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
 export const getFormByID = logger(_getFormByID);
 export const getFormByStatus = logger(_getFormByStatus);

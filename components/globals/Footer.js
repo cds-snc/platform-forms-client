@@ -1,10 +1,9 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 import { isSplashPage } from "../../lib/routeUtils";
 
 const Footer = () => {
-  const { t, i18n } = useTranslation("common");
+  const { t } = useTranslation("common");
 
   return (
     <footer className="gc-footer" data-testid="footer">
@@ -13,12 +12,16 @@ const Footer = () => {
           {isSplashPage() ? null : (
             <ul className="gc-horizontal-list">
               <li className="gc-horizontal-item">
-                <Link href={t("footer.privacy.link")} locale={i18n.language}>
+                {/* Docs when and why to use _blank/noopener https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/target 
+                https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel#attr-noreferrer */}
+                <a href={t("footer.privacy.link")} target="_blank" rel="noreferrer">
                   {t("footer.privacy.desc")}
-                </Link>
+                </a>
               </li>
               <li className="gc-horizontal-item">
-                <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
+                <a href={t("footer.terms.link")} target="_blank" rel="noreferrer">
+                  {t("footer.terms.desc")}
+                </a>
               </li>
             </ul>
           )}

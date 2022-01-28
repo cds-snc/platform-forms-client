@@ -14,10 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Send email through GC Notify when a new temporary token is generated
 - Replace the retrieval Api lambda implementation by an App backEnd API.
 
+### Changed
+
+- Renamed `organisation` to `organization` which has an impact on the API access path
+
 ### Fixed
 
 - Google Tag manager iframe will no longer appear in other environment other then staging. [#563](https://github.com/cds-snc/platform-forms-client/pull/563)
 - Form configuration upload now correctly displays the updated configuration instead of displaying old values. [#579](https://github.com/cds-snc/platform-forms-client/pull/597)
+- Clicking a link clears the form. [#498](https://github.com/cds-snc/platform-forms-client/issues/498)
 
 ## [1.0.4] 2021-12-3
 
@@ -91,7 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use a cache to fill frequent requests to the Template API to reduce overall load on Lambdas
 - Enable support for development using local Lambdas
-- Enable support for organisations and organisation management through the admin panel
+- Enable support for organizations and organization management through the admin panel
 - Added validation on FileInput component to ensure the type and size of the file is valid
 - Added `displayAlphaBanner` property to JSON form template. Defaulted to true for existing forms.
 - Added updated phone number input that includes an international code drop down.
