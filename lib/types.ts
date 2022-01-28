@@ -222,5 +222,5 @@ export interface BearerTokenPayload {
 }
 
 export type BearerResponse = {
-  bearerToken: string;
+  token: string;
 };

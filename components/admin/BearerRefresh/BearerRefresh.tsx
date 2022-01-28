@@ -1,32 +1,53 @@
 import { Button } from "@components/forms";
 import Loader from "@components/globals/Loader";
 import { logMessage } from "@lib/logger";
-import { BearerResponse, FormDBConfigProperties } from "@lib/types";
+import { BearerResponse } from "@lib/types";
 import axios from "axios";
+import server from "i18next-hmr/server";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 
 export interface BearerRefreshProps {
-  form: FormDBConfigProperties;
+  formID: number;
 }
 
 const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
-  const { form } = props;
+  const { formID } = props;
   const [bearerTokenState, setBearerTokenState] = useState("");
   const { t } = useTranslation("admin-templates");
   const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setBearerTokenState(form?.bearerToken ? form.bearerToken : "");
+    setBearerTokenState("");
+    getBearerToken(formID);
   }, []);
+
+  const getBearerToken = async (formID: number) => {
+    try {
+      setSubmitting(true);
+      setErrorState({ message: "" });
+      const serverResponse = await axios({
+        url: `/api/id/${formID}/bearer`,
+        method: "GET",
+        timeout: 0,
+      });
+      const { token } = serverResponse.data as unknown as BearerResponse;
+      setBearerTokenState(token);
+    } catch (err) {
+      logMessage.error(err as Error);
+      setErrorState({ message: t("settings.bearerTokenRefreshError") });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   /**
    * Connects to the database and refreshes the bearer token for the specified form ID.
    *
    * @param formID
    */
-  const handleRefreshBearerToken = async (formID: number | undefined) => {
+  const handleRefreshBearerToken = async (formID: number) => {
     try {
       setSubmitting(true);
       setErrorState({ message: "" });
@@ -66,7 +87,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
             defaultValue={bearerTokenState}
             readOnly
           ></textarea>
-          <Button type="button" onClick={() => handleRefreshBearerToken(form.formID)}>
+          <Button type="button" onClick={() => handleRefreshBearerToken(formID)}>
             {t("settings.refreshButton")}
           </Button>
         </>

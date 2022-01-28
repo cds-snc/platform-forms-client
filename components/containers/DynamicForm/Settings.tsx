@@ -76,7 +76,7 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
           </div>
         </TabPanel>
         <TabPanel>
-          <BearerRefresh form={form}></BearerRefresh>
+          <BearerRefresh formID={form.formID}></BearerRefresh>
         </TabPanel>
       </Tabs>
     </>
