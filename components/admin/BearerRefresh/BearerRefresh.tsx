@@ -3,7 +3,6 @@ import Loader from "@components/globals/Loader";
 import { logMessage } from "@lib/logger";
 import { BearerResponse } from "@lib/types";
 import axios from "axios";
-import server from "i18next-hmr/server";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 
@@ -56,8 +55,8 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
         method: "POST",
         timeout: 0,
       });
-      const { bearerToken } = serverResponse.data as unknown as BearerResponse;
-      setBearerTokenState(bearerToken);
+      const { token } = serverResponse.data as unknown as BearerResponse;
+      setBearerTokenState(token);
     } catch (err) {
       logMessage.error(err as Error);
       setErrorState({ message: t("settings.bearerTokenRefreshError") });
