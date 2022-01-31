@@ -28,7 +28,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
       const serverResponse = await axios({
         url: `/api/id/${formID}/bearer`,
         method: "GET",
-        timeout: 0,
+        timeout: 60000,
       });
       const { bearerToken } = serverResponse.data as unknown as BearerResponse;
       setBearerTokenState(bearerToken);
@@ -52,7 +52,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
       const serverResponse = await axios({
         url: `/api/id/${formID}/bearer`,
         method: "POST",
-        timeout: 0,
+        timeout: 60000,
       });
       const { bearerToken } = serverResponse.data as unknown as BearerResponse;
       setBearerTokenState(bearerToken);
