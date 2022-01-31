@@ -18,7 +18,6 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setBearerTokenState("");
     getBearerToken(formID);
   }, []);
 
