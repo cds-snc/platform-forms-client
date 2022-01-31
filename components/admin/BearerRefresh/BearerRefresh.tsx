@@ -31,8 +31,8 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
         method: "GET",
         timeout: 0,
       });
-      const { token } = serverResponse.data as unknown as BearerResponse;
-      setBearerTokenState(token);
+      const { bearerToken } = serverResponse.data as unknown as BearerResponse;
+      setBearerTokenState(bearerToken);
     } catch (err) {
       logMessage.error(err as Error);
       setErrorState({ message: t("settings.bearerTokenRefreshError") });
@@ -55,8 +55,8 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
         method: "POST",
         timeout: 0,
       });
-      const { token } = serverResponse.data as unknown as BearerResponse;
-      setBearerTokenState(token);
+      const { bearerToken } = serverResponse.data as unknown as BearerResponse;
+      setBearerTokenState(bearerToken);
     } catch (err) {
       logMessage.error(err as Error);
       setErrorState({ message: t("settings.bearerTokenRefreshError") });
