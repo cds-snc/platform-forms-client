@@ -22,7 +22,7 @@ const handleDelete = async (organizationID: string) => {
       method: "DELETE",
       organizationID: organizationID,
     },
-    timeout: 0,
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   })
     .then((serverResponse) => {
       //success - redirect to organizations list page

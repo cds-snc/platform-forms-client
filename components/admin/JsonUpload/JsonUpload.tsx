@@ -35,7 +35,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
         method: formID ? "UPDATE" : "INSERT",
         formID: formID,
       },
-      timeout: 0,
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     })
       .then((serverResponse) => {
         setJsonConfig("");

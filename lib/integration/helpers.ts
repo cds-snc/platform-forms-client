@@ -26,7 +26,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
         formID: formID,
         method: "GET",
       },
-      timeout: 5000,
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
     const { records } = response.data.data;
     if (records?.length === 1 && records[0].formConfig.form) {

@@ -29,7 +29,7 @@ export const CreateOrganization = (): React.ReactElement => {
               organizationNameEn: values.orgNameEn,
               organizationNameFr: values.orgNameFr,
             },
-            timeout: 0,
+            timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
           })
             .then((serverResponse) => {
               return serverResponse;
