@@ -89,7 +89,7 @@ export async function getToken(req: NextApiRequest, res: NextApiResponse): Promi
     const data = resultObject.rowCount > 0 ? resultObject.rows : [];
     if (data && data.length > 0) {
       const { bearerToken } = data[0] as unknown as BearerResponse;
-      return res.status(200).json({ token: bearerToken });
+      return res.status(200).json({ bearerToken: bearerToken });
     }
     // otherwise the resource was not found
     return res.status(404).json({ error: "Not Found" });
