@@ -1,24 +1,25 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
 import { logMessage } from "@lib/logger";
-import { DynamoDBClient, QueryCommand, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
-import { BearerTokenPayload } from "@lib/types";
-import { getBearerToken } from "@lib/middleware/bearerToken";
-import executeQuery from "@lib/integration/queryManager";
-import dbConnector from "@lib/integration/dbConnector";
-import jwt from "jsonwebtoken";
+import {
+  DynamoDBClient,
+  QueryCommand,
+  UpdateItemCommand,
+  QueryCommandOutput,
+} from "@aws-sdk/client-dynamodb";
+import checkIfValidTemporaryToken from "@lib/middleware/httpRequestHasValidTempToken";
 
 /**
  * @description
  * Request type: GET
  * USAGE: 
- * curl http://localhost:3000/api/retrieval?maxRecords=10&formID=1
+ * curl http://gc-forms/api/retrieval?maxRecords=10&formID=1
    -H "Accept: application/json"
    -H "Authorization: Bearer {token}"
- * 
+
+ * - The maxRecords exists and it ranges between 1 and 10.
  * Will fetch form's responses up to the maximum number (maxRecords) that was specified.
- * It required to have a valid bearer token which must carry a valid formID. When all these conditons are met,
- * Not only it should return form reponses but also mark those responses as retrieved by updating the attribute Retrieved
+ * It will return form's reponses but also mark those responses as retrieved by updating the attribute Retrieved
  * from 0 to 1.
  * @param res 
  * @param formID 
@@ -26,15 +27,26 @@ import jwt from "jsonwebtoken";
  * @returns 
  */
 async function getFormResponses(
+  req: NextApiRequest,
   res: NextApiResponse,
-  formID: string,
-  maxRecords: number
+  formID: string
 ): Promise<void> {
+  //Default value to 10 if it's undefined
+  const { maxRecords = "10" } = req.query;
+  //Check maxRecords aren't repeated
+  if (Array.isArray(maxRecords) || !formID) return res.status(400).json({ error: "Bad Request" });
+  const expectedMaxRecords = parseInt(maxRecords);
+  //Range is 1- 10
+  if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
+    return res.status(400).json({ error: "Invalid paylaod value found maxRecords" });
+  }
   //A list to store submissionIDs
   let submissionIDlist: (string | undefined)[] = [];
+  let formResponses: QueryCommandOutput;
+  let db: DynamoDBClient;
   try {
     //Create dynamodb client
-    const db = new DynamoDBClient({ region: process.env.AWS_REGION ?? "ca-central-1" });
+    db = new DynamoDBClient({ region: process.env.AWS_REGION ?? "ca-central-1" });
     //Create form's responses db param
     //NB: A filter expression is applied after a Query finishes, but before the results are returned.
     //Therefore, a Query consumes the same amount of read capacity, regardless of whether a filter expression is present.
@@ -51,7 +63,14 @@ async function getFormResponses(
       ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved",
     };
     //Get form's responses for formID
-    const formResponses = await db.send(new QueryCommand(getItemsDbParams));
+    formResponses = await db.send(new QueryCommand(getItemsDbParams));
+  } catch (error) {
+    logMessage.error(error);
+    return res
+      .status(500)
+      .json({ responses: "Error on Server Side when fetching form's responses" });
+  }
+  try {
     //Collecting items submissionIDs for logging and updating items.
     submissionIDlist =
       formResponses?.Items?.map((response) => {
@@ -80,7 +99,7 @@ async function getFormResponses(
           ReturnValues: "NONE",
         };
         //Update one item at the time
-        await db.send(new UpdateItemCommand(updateItem));
+        await db?.send(new UpdateItemCommand(updateItem));
       }
     }
     //Return responses data
@@ -94,76 +113,5 @@ async function getFormResponses(
   }
 }
 
-/**
- * @description
- * This function will make sure that the incoming request is valid by enforcing a set of
- * rules.
- * Request parameters :
- *  - The maxRecords exists and it ranges between 1 and 10.
- *  - A formID exists and is valid i.e 78
- * BearerToken :
- *  - Must contains an email address
- *  - It has not expired
- *  - It exists in our Database
- *  - The record found in the database includes the email, active, and template_id fields
- *  - The email on the token record matches the email in the payload.
- *  - The active flag boolean is true.
- * @param handler - A method to retrieve form's responses
- * @returns
- */
-export const formResponsesReqValidator = (
-  handler: (res: NextApiResponse, formID: string, maxRecords: number) => void
-) => {
-  return async function (req: NextApiRequest, res: NextApiResponse): Promise<unknown> {
-    try {
-      //Default value to 10 if it's undefined
-      const { maxRecords = "10", formID } = req.query;
-      //Check that formID and maxRecords aren't repeated
-      if (Array.isArray(formID) || Array.isArray(maxRecords))
-        return res.status(400).json({ error: "Bad Request" });
-      //Get formID form the bearer token
-      if (!formID) return res.status(400).json({ error: "Bad Request" });
-      //Check an empty object or string
-      const expectedMaxRecords = parseInt(maxRecords);
-      //Range is 1- 10
-      if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
-        return res.status(400).json({ error: "Invalid paylaod value found maxRecords" });
-      }
-      //Get the token from request object
-      const token = getBearerToken(req);
-      //Verify the token
-      const bearerTokenPayload = jwt.verify(
-        token,
-        process.env.TOKEN_SECRET || ""
-      ) as BearerTokenPayload;
-      const { email } = bearerTokenPayload;
-      //Check if an active formUserRecord exists for the given bearerToken.
-      if (await isTokenExists(formID, email as string, token))
-        return handler(res, formID, expectedMaxRecords);
-      return res.status(403).json({ error: "Missing or invalid bearer token." });
-    } catch (err) {
-      //Token verification has failed
-      res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
-    }
-  };
-};
-/*@description
- * It returns true if there is an active token otherwise false.
- * @param formID - The id of the form
- * @param email - The email that is associated to the formID
- * @token - The temporary token
- * @returns true or false
- */
-const isTokenExists = async (formID: string, email: string, token: string): Promise<boolean> => {
-  return (
-    (
-      await executeQuery(
-        await dbConnector(),
-        "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true",
-        [formID, email, token]
-      )
-    ).rows.length === 1
-  );
-};
 // Only a GET request is allowed
-export default isRequestAllowed(["GET"], formResponsesReqValidator(getFormResponses));
+export default isRequestAllowed(["GET"], checkIfValidTemporaryToken(getFormResponses));

@@ -1,5 +1,4 @@
 import { createMocks } from "node-mocks-http";
-import client from "next-auth/client";
 import retrieval from "../../pages/api/retrieval";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import executeQuery from "@lib/integration/queryManager";
@@ -31,10 +30,6 @@ describe("/api/retrieval", () => {
   });
 
   it("Should return 400 status code b/c formID is an empty string", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
     const token = jwt.sign(
       {
         formID: 1,
@@ -44,8 +39,6 @@ describe("/api/retrieval", () => {
         expiresIn: "1y",
       }
     );
-
-    client.getSession.mockReturnValue(mockSession);
 
     const { req, res } = createMocks({
       method: "GET",
@@ -65,10 +58,6 @@ describe("/api/retrieval", () => {
   });
 
   it("Should return 400 status code b/c formID is undefined", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
     const token = jwt.sign(
       {
         formID: 1,
@@ -78,9 +67,6 @@ describe("/api/retrieval", () => {
         expiresIn: "1y",
       }
     );
-
-    client.getSession.mockReturnValue(mockSession);
-
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -98,23 +84,16 @@ describe("/api/retrieval", () => {
     expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad Request" }));
   });
 
-  it("Should return 400 status code with Invalid paylaod value found maxRecords ", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
+  it("Should return 400 status when maxRecord is out of the range 1-10", async () => {
     const token = jwt.sign(
       {
-        formID: undefined,
+        email: "forms@cds.ca",
       },
       process.env.TOKEN_SECRET,
       {
         expiresIn: "1y",
       }
     );
-
-    client.getSession.mockReturnValue(mockSession);
-
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -127,6 +106,18 @@ describe("/api/retrieval", () => {
         formID: "22",
       },
     });
+    executeQuery.mockImplementation((client, sql) => {
+      if (
+        sql.includes(
+          "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
+        )
+      ) {
+        return {
+          rows: [{ column: 1 }],
+          rowCount: 1,
+        };
+      }
+    });
     await retrieval(req, res);
     expect(res.statusCode).toBe(400);
     expect(JSON.parse(res._getData())).toEqual(
@@ -135,10 +126,6 @@ describe("/api/retrieval", () => {
   });
 
   it("Should return a list of form responses with 200 status code", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
     const token = jwt.sign(
       {
         formID: 1,
@@ -148,7 +135,6 @@ describe("/api/retrieval", () => {
         expiresIn: "1y",
       }
     );
-    client.getSession.mockReturnValue(mockSession);
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -196,10 +182,6 @@ describe("/api/retrieval", () => {
   });
 
   it("Should return a status code 403 Missing or invalid bearer token because no record was found in db", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
     const token = jwt.sign(
       {
         formID: 1,
@@ -209,7 +191,7 @@ describe("/api/retrieval", () => {
         expiresIn: "1y",
       }
     );
-    client.getSession.mockReturnValue(mockSession);
+
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -241,10 +223,6 @@ describe("/api/retrieval", () => {
   });
 
   it("Should return 500 status code if it fails to fetch/send command to dynamoDb", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
     const token = jwt.sign(
       {
         formID: 2,
@@ -254,7 +232,6 @@ describe("/api/retrieval", () => {
         expiresIn: "1y",
       }
     );
-    client.getSession.mockReturnValue(mockSession);
     const { req, res } = createMocks({
       method: "GET",
       headers: {
@@ -289,10 +266,6 @@ describe("/api/retrieval", () => {
   });
 
   it("Should return 200 status code and an empty list of form's responses", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms" },
-    };
     const token = jwt.sign(
       {
         formID: 3,
@@ -302,7 +275,7 @@ describe("/api/retrieval", () => {
         expiresIn: "1y",
       }
     );
-    client.getSession.mockReturnValue(mockSession);
+
     const { req, res } = createMocks({
       method: "GET",
       headers: {
