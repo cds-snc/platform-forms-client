@@ -6,7 +6,6 @@ import { BearerTokenPayload } from "@lib/types";
 import { getBearerToken } from "@lib/middleware/bearerToken";
 import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
-import { QueryResult } from "pg";
 import jwt from "jsonwebtoken";
 
 /**
@@ -130,7 +129,7 @@ export const formResponsesReqValidator = (
       if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
         return res.status(400).json({ error: "Invalid paylaod value found maxRecords" });
       }
-      //Get token from request
+      //Get the token from request object
       const token = getBearerToken(req);
       //Verify the token
       const bearerTokenPayload = jwt.verify(
@@ -139,8 +138,8 @@ export const formResponsesReqValidator = (
       ) as BearerTokenPayload;
       const { email } = bearerTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
-      const { exists } = (await checkActiveFormUserRecord(formID, email as string)).rows[0];
-      if (exists) return handler(res, formID, expectedMaxRecords);
+      if (await isTokenExists(formID, email as string, token))
+        return handler(res, formID, expectedMaxRecords);
       return res.status(403).json({ error: "Missing or invalid bearer token." });
     } catch (err) {
       //Token verification has failed
@@ -149,17 +148,21 @@ export const formResponsesReqValidator = (
   };
 };
 /*@description
- * It returns an active record from form_users table base upon a formID/template_id and an email.
+ * It returns true if there is an active token otherwise false.
  * @param formID - The id of the form
  * @param email - The email that is associated to the formID
- * @returns A form_user's record with active field i.e [{ active: true }]
+ * @token - The temporary token
+ * @returns true or false
  */
-const checkActiveFormUserRecord = async (formID: string, email: string): Promise<QueryResult> => {
-  //Retrieving a tokenRecord or return an empty array
-  return executeQuery(
-    await dbConnector(),
-    "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)",
-    [formID, email]
+const isTokenExists = async (formID: string, email: string, token: string): Promise<boolean> => {
+  return (
+    (
+      await executeQuery(
+        await dbConnector(),
+        "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true",
+        [formID, email, token]
+      )
+    ).rows.length === 1
   );
 };
 // Only a GET request is allowed

@@ -164,11 +164,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
+          "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
         )
       ) {
         return {
-          rows: [{ exists: true }],
+          rows: [{ column: 1 }],
           rowCount: 1,
         };
       }
@@ -226,11 +226,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
+          "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
         )
       ) {
         return {
-          rows: [{}],
+          rows: [],
           rowCount: 1,
         };
       }
@@ -271,11 +271,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
+          "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
         )
       ) {
         return {
-          rows: [{ exists: true }],
+          rows: [{ column: 1 }],
           rowCount: 1,
         };
       }
@@ -318,11 +318,11 @@ describe("/api/retrieval", () => {
     executeQuery.mockImplementation((client, sql) => {
       if (
         sql.includes(
-          "SELECT EXISTS(SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and active = true)"
+          "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
         )
       ) {
         return {
-          rows: [{ exists: true }],
+          rows: [{ column: 1 }],
           rowCount: 1,
         };
       }
