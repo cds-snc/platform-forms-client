@@ -65,7 +65,7 @@ describe("/id/[form]/bearer", () => {
       });
 
       await retrieve(req, res);
-      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ token: null }));
+      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ bearerToken: null }));
       expect(res.statusCode).toBe(200);
     });
 
@@ -91,7 +91,7 @@ describe("/id/[form]/bearer", () => {
       await retrieve(req, res);
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ token: "testBearerToken" })
+        expect.objectContaining({ bearerToken: "testBearerToken" })
       );
     });
 

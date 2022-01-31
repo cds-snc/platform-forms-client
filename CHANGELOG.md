@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Send email through GC Notify when a new temporary token is generated
+- A UI with tabs on the Form Settings page. [#486](https://github.com/cds-snc/platform-forms-client/pull/573)
+- A tab on the Form Settings page that allows the user to see and refresh the bearer token.
 
 ### Changed
 
