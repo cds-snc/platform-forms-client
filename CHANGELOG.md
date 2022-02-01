@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create secure API to deactivate a form owner associated with a form
 - Create secure API to associate emails to a specific form.
 - Send email through GC Notify when a new temporary token is generated
-- Replace the retrieval Api lambda implementation by an App backEnd API.
+- A UI with tabs on the Form Settings page. [#486](https://github.com/cds-snc/platform-forms-client/pull/573)
+- A tab on the Form Settings page that allows the user to see and refresh the bearer token.
+- Replace the retrieval Api lambda implementation by an App backEnd API. [#481](https://github.com/cds-snc/platform-forms-client/issues/481)
 
 ### Changed
 

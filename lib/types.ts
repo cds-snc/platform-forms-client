@@ -223,3 +223,7 @@ export interface BearerTokenPayload {
 export interface TemporaryTokenPayload {
   email: string;
 }
+
+export type BearerResponse = {
+  bearerToken: string;
+};

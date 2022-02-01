@@ -56,7 +56,7 @@ describe("TemporaryBearerToken tests", () => {
     });
 
     executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
+      if (sql.includes('SELECT bearer_token as "bearerToken" FROM templates')) {
         return {
           rows: [{ bearerToken: token }],
           rowCount: 1,
@@ -126,7 +126,7 @@ describe("TemporaryBearerToken tests", () => {
     });
 
     executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes("SELECT bearer_token as bearerToken FROM templates")) {
+      if (sql.includes('SELECT bearer_token as "bearerToken" FROM templates')) {
         return {
           rows: [{ bearerToken: token }],
           rowCount: 1,
