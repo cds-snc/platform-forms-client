@@ -53,7 +53,7 @@ async function getFormResponses(
     const getItemsDbParams = {
       TableName: "Vault",
       IndexName: "retrieved-index",
-      Limit: maxRecords,
+      Limit: expectedMaxRecords,
       //Cannot use partitin key or sort key such as formID and Retrieved attribute in keyConditionExpression simultaneously
       KeyConditionExpression: "Retrieved = :zero",
       ExpressionAttributeValues: { ":formID": { S: formID }, ":zero": { N: "0" } },
