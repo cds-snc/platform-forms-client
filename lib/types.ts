@@ -218,7 +218,10 @@ export type UploadResult = {
   key: string;
 };
 export interface BearerTokenPayload {
-  formID?: string;
+  formID: string;
+}
+export interface TemporaryTokenPayload {
+  email: string;
 }
 
 export type BearerResponse = {
