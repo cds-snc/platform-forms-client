@@ -23,7 +23,11 @@
     "edit": "Edit Form Config File:",
     "tabLabels": {
       "jsonUpload": "JSON Upload",
-      "bearerToken": "Bearer Token"
-    }    
+      "bearerToken": "Bearer Token",
+      "formAccess": "Form Access"
+    },
+    "formAccess": {
+      "formOwnersError": "Unable to retrieve form owners."
+    }
   }
 }
