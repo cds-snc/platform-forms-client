@@ -25,6 +25,7 @@
     "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.44.0",
     "@aws-sdk/client-lambda": "^3.27.0",
     "@aws-sdk/client-s3": "^3.27.0",
     "@types/pg": "^8.6.1",
