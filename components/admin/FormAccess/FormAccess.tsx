@@ -88,7 +88,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
       }
     } catch (err) {
       logMessage.error(err as Error);
-      setErrorState({ message: t("settings.bearerTokenRefreshError") });
+      setErrorState({ message: t("settings.formAccess.updateError") });
     } finally {
       setSubmitting(false);
     }
@@ -117,9 +117,12 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrorState({ message: "" });
     const newEmail = e.target.newFormOwnerEmail.value;
     if (isValidGovEmail(newEmail, emailDomainList.domains)) {
       addEmailToForm(newEmail);
+    } else {
+      setErrorState({ message: t("settings.formAccess.invalidEmailError") });
     }
   };
 
