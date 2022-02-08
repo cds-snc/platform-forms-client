@@ -149,8 +149,11 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               type="text"
               name="newFormOwnerEmail"
               onChange={handleEmailInputChange}
+              defaultValue={newEmail}
             />
-            <Button type="submit">Add Email</Button>
+            <Button type="submit" disabled={newEmail === ""}>
+              Add Email
+            </Button>
           </form>
         </>
       )}
