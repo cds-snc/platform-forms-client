@@ -199,7 +199,7 @@ export interface ProcessedFile {
   buffer: Buffer;
 }
 // CRUD Operations for Organizations
-type Organization = {
+export type Organization = {
   organizationID: string;
   organizationNameEn: string;
   organizationNameFr: string;
