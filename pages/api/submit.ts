@@ -1,21 +1,32 @@
 import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
+import {
+  SubmissionRequestBody,
+  SubmissionParsedRequest,
+  FileInputResponse,
+  ProcessedFile,
+  PublicFormSchemaProperties,
+  Response,
+  Responses,
+} from "@lib/types";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import formidable, { Fields, Files } from "formidable";
 import convertMessage from "@lib/markdown";
 import { rehydrateFormResponses } from "@lib/integration/helpers";
 import { getFormByID, getSubmissionByID } from "@lib/integration/crud";
 import { logMessage } from "@lib/logger";
-import { PublicFormSchemaProperties, Responses } from "@lib/types";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
-import fs from "fs";
+import { fileTypeFromBuffer } from "file-type";
+import { Readable } from "stream";
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+export const acceptedFileMimeTypes =
+  "application/pdf,.csv,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";
 
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
@@ -28,32 +39,31 @@ const submit = async (
   res: NextApiResponse
 ): Promise<void | NodeJS.Timeout> => {
   try {
-    const incomingForm = new formidable.IncomingForm({ maxFileSize: 8000000 }); // Set to 8 MB and override default of 200 MB
-    // we have to return a response for the NextJS handler. So we create a Promise which will be resolved
-    // with the data from the IncomingForm parse callback
-    const data = (await new Promise(function (resolve, reject) {
-      incomingForm.parse(req, (err, fields, files) => {
-        if (err) {
-          reject(err);
-        }
-        resolve({ fields, files });
-      });
-    })) as
-      | {
-          fields: Fields;
-          files: Files;
-        }
-      | string;
-
-    if (typeof data === "string") {
-      throw new Error(data);
-    }
-    return await processFormData(data.fields as Fields, data.files as Files, res, req);
+    // we use the raw stream as opposed to enabling bodyParsing as NextJS enforces a 5mb limit on payload if bodyParsing is enabled
+    // https://nextjs.org/docs/messages/api-routes-body-size-limit
+    const stringBody = await streamToString(req);
+    const incomingFormJSON = JSON.parse(stringBody) as SubmissionRequestBody;
+    // We process the data into fields and files. Base64 file data is converted into buffers
+    const data = await parseRequestData(incomingFormJSON);
+    return await processFormData(data.fields, data.files, res, req);
   } catch (err) {
     logMessage.error(err as Error);
     return res.status(500).json({ received: false });
   }
 };
+
+/**
+ * This function takes the request stream and parses the chunks into a concatenated string
+ * @param stream {Readable} - The request stream from which to convert to a concatenated string
+ */
+function streamToString(stream: Readable): Promise<string> {
+  const chunks: Buffer[] = [];
+  return new Promise((resolve, reject) => {
+    stream.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    stream.on("error", (err) => reject(err));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+  });
+}
 
 const callLambda = async (formID: string, fields: Responses, language: string) => {
   const submission = await getSubmissionByID(formID);
@@ -110,24 +120,123 @@ const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses
     });
 };
 
-const deleteLocalTempFiles = (files: formidable.Files) => {
-  for (const [, value] of Object.entries(files)) {
-    const fileOrArray = value;
-    if (Array.isArray(fileOrArray)) {
-      fileOrArray.forEach(async (fileItem) => {
-        fs.unlinkSync(fileItem.path);
-      });
-    } else {
-      if (fileOrArray.name) {
-        fs.unlinkSync(fileOrArray.path);
+/**
+ * This function takes raw request JSON and parses the fields and files.
+ * Base64 from the JSON will be transformed into File objects in which the underlying
+ * file will be located in a temporary folder which is created using the tmp package.
+ * @param requestBody {SubmissionRequestBody} - the raw request data to process
+ */
+const parseRequestData = async (
+  requestBody: SubmissionRequestBody
+): Promise<SubmissionParsedRequest> => {
+  return await Object.keys(requestBody).reduce(
+    async (prev, current) => {
+      const previousValueResolved = await prev;
+      const keyPairValue = requestBody[current];
+      // in the case that the value is a string value this is a field
+      if (typeof keyPairValue === "string") {
+        return {
+          ...previousValueResolved,
+          fields: {
+            ...previousValueResolved.fields,
+            [current]: keyPairValue,
+          },
+        };
       }
-    }
+      // in the case of an array we need to determine if this is a file array or a string array
+      // which determines if the keypair is a file or a field
+      else if (Array.isArray(keyPairValue)) {
+        // copy array to avoid mutating raw request data
+        const arrayValue = [...keyPairValue];
+        // if its an empty array or the first value is a string type we just assume that it's a field
+        if (arrayValue.length === 0 || typeof arrayValue[0] === "string") {
+          return {
+            ...previousValueResolved,
+            fields: {
+              ...previousValueResolved.fields,
+              [current]: arrayValue as string[],
+            },
+          };
+        }
+        // otherwise we assume its a file
+        else if (typeof arrayValue[0] === "object") {
+          return {
+            ...previousValueResolved,
+            files: {
+              ...previousValueResolved.files,
+              [current]: await Promise.all(
+                arrayValue.map(async (fileObj) => {
+                  return await processFileData(fileObj as FileInputResponse);
+                })
+              ),
+            },
+          };
+        }
+      } else if (typeof keyPairValue === "object") {
+        return {
+          ...previousValueResolved,
+          files: {
+            ...previousValueResolved.files,
+            [current]: await processFileData(keyPairValue as FileInputResponse),
+          },
+        };
+      }
+      return previousValueResolved;
+    },
+    Promise.resolve({
+      fields: {},
+      files: {},
+    } as SubmissionParsedRequest)
+  );
+};
+
+/**
+ * This function will take a FileInputResponse object and return File object should
+ * the file conform to expected mimetypes and size. Otherwise an error will be thrown
+ * @param fileObj
+ */
+const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFile> => {
+  // if we have a size key present in the data then we can simply throw an error if
+  // that number is greater than 8mb. We do not depend on this however. This is simply
+  // to be more efficient. Regardless if this parameter is less than 8mb the size will still be checked
+  if (typeof fileObj?.size === "number" && fileObj.size / 1048576 > 8) {
+    throw new Error("FileSizeError: A file has been uploaded that is greater than 8mb in size");
   }
+  // process Base64 encoded data
+  if (typeof fileObj?.name === "string" && typeof fileObj?.file === "string") {
+    // base64 string should be data URL https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
+    const fileData = fileObj.file.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+    if (fileData?.length !== 3) {
+      throw new Error(`FileTypeError: The file ${fileObj.name} was not a valid data URL`);
+    }
+    // create buffer with fileData
+    const fileBuff = Buffer.from(fileData[2], "base64");
+    // if the buffer is larger then 8mb then this is larger than the filesize that's allowed
+    if (Buffer.byteLength(fileBuff) / 1048576 > 8) {
+      throw new Error(
+        `FileSizeError: The file ${fileObj.name} has been uploaded that is greater than 8mb in size`
+      );
+    }
+    // determine the real mime type of the file from the buffer
+    const mimeType = await fileTypeFromBuffer(fileBuff);
+    if (!mimeType || !acceptedFileMimeTypes.includes(mimeType.mime)) {
+      throw new Error(
+        `FileTypeError: The file ${fileObj.name} has been uploaded has an unacceptable mime type of ${mimeType}`
+      );
+    }
+    return {
+      name: fileObj.name,
+      buffer: fileBuff,
+    };
+  }
+  throw new Error(
+    "FileObjectInvalid: A file object does not have the needed properties to process it"
+  );
 };
 
 const processFormData = async (
-  reqFields: Responses | undefined,
-  files: formidable.Files,
+  reqFields: Record<string, Response>,
+  files: Record<string, ProcessedFile | ProcessedFile[]>,
   res: NextApiResponse,
   req: NextApiRequest
 ) => {
@@ -163,8 +272,6 @@ const processFormData = async (
     });
 
     if (submitToReliabilityQueue === false) {
-      deleteLocalTempFiles(files);
-
       // Local development and Heroku
       if (notifyPreview) {
         const response = await previewNotify(form, fields);
@@ -236,8 +343,6 @@ const processFormData = async (
     logMessage.error(err as Error);
 
     return res.status(500).json({ received: false });
-  } finally {
-    deleteLocalTempFiles(files);
   }
 };
 

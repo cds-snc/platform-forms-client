@@ -53,11 +53,26 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
       // number of files uploaded or file list in file_output
       const newFile = e.target.files[0];
       if (newFile) {
-        reader.onloadend = () => setFileName(newFile.name);
-        if (newFile.name !== fileName) {
-          reader.readAsDataURL(newFile);
-          setValue({ file: newFile, src: reader, name: newFile.name, size: newFile.size });
-        }
+        // AWS WAF blocks files with random characters in their metadata
+        // as such file uploads with images are blocked from being submitted
+        // to the API. One of the recommended solutions is to base64 encode the image
+        // on the client side before submitting to the API.
+        // see https://aws.amazon.com/premiumsupport/knowledge-center/waf-upload-blocked-files/
+        reader.readAsDataURL(newFile);
+        // react dispatch functions will not work within reader callbacks
+        // this we need to wait for reader readyState to be true
+        reader.onloadend = () => {
+          if (newFile.name !== fileName) {
+            setFileName(newFile.name);
+            setValue({
+              file: reader.result?.toString(),
+              src: reader,
+              name: newFile.name,
+              size: newFile.size,
+              type: newFile.type,
+            });
+          }
+        };
       }
     }
   };

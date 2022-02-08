@@ -98,7 +98,13 @@ const isFieldResponseValid = (
     }
     case "fileInput": {
       //TODO need refactoring.
-      const typedValue = value as { file: File; src: FileReader; name: string; size: number };
+      const typedValue = value as {
+        file: File | string;
+        src: FileReader;
+        name: string;
+        size: number;
+        type: string;
+      };
       if ((validator.required && typedValue === undefined) || typedValue === null)
         return t("input-validation.required");
       if (validator.required && typedValue && typedValue.file === null)
@@ -107,8 +113,7 @@ const isFieldResponseValid = (
       if (typedValue?.size > 8000000) return t("input-validation.file-size-too-large");
       if (
         typedValue?.file &&
-        acceptedFileMimeTypes.split(",").find((value) => value === typedValue.file.type) ===
-          undefined
+        acceptedFileMimeTypes.split(",").find((value) => value === typedValue.type) === undefined
       ) {
         return t("input-validation.file-type-invalid");
       }
