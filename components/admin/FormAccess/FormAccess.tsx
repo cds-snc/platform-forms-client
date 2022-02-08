@@ -99,14 +99,16 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
       if (formOwner.active) {
         return (
           <>
-            <p key={formOwner.id}>{formOwner.email}</p>
-            <Button
-              type="button"
-              destructive={true}
-              onClick={() => activateOrDeactivateFormOwners(formOwner.email, false)}
-            >
-              X
-            </Button>
+            <li key={formOwner.id} className="flex items-center">
+              <Button
+                type="button"
+                destructive
+                onClick={() => activateOrDeactivateFormOwners(formOwner.email, false)}
+              >
+                X
+              </Button>
+              <p className="ml-4">{formOwner.email}</p>
+            </li>
           </>
         );
       }
@@ -132,14 +134,11 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               {errorState.message}
             </p>
           ) : null}
-          <h2>Form Access</h2>
-          {formOwnerUI()}
+          <ul className="space-y-4">{formOwnerUI()}</ul>
           <hr />
-          <form onSubmit={handleSubmit}>
-            <input className={"gc-input-text"} type="text" name="newFormOwnerEmail" />
-            <button type="submit" className="gc-button" data-testid="upload">
-              Add Email
-            </button>
+          <form onSubmit={handleSubmit} className="flex items-center">
+            <input className="gc-input-text" type="text" name="newFormOwnerEmail" />
+            <Button type="submit">Add Email</Button>
           </form>
         </>
       )}
