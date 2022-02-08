@@ -14,7 +14,7 @@ const validate = (
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
-      const token = getBearerToken(req);
+      const token = extractBearerTokenFromReq(req);
       const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
       if (
         (
@@ -41,7 +41,7 @@ const validate = (
  * @throws
  * This exception is thrown if the bearer token is not found
  */
-const getBearerToken = (req: NextApiRequest) => {
+export const extractBearerTokenFromReq = (req: NextApiRequest): string => {
   const authHeader = String(req.headers["authorization"] || "");
   if (authHeader.startsWith("Bearer ")) {
     return authHeader.substring(7, authHeader.length);
