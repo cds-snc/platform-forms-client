@@ -18,6 +18,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
   const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
 
   useEffect(() => {
     getFormOwners();
@@ -115,15 +116,18 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorState({ message: "" });
-    const newEmail = e.target.newFormOwnerEmail.value;
     if (isValidGovEmail(newEmail, emailDomainList.domains)) {
       addEmailToForm(newEmail);
     } else {
       setErrorState({ message: t("settings.formAccess.invalidEmailError") });
     }
+  };
+
+  const handleEmailInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEmail(event.target.value);
   };
 
   return (
@@ -139,8 +143,13 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
           ) : null}
           <ul className="space-y-4">{formOwnerUI()}</ul>
           <hr />
-          <form onSubmit={handleSubmit} className="flex items-center">
-            <input className="gc-input-text" type="text" name="newFormOwnerEmail" />
+          <form onSubmit={handleEmailSubmit} className="flex items-center">
+            <input
+              className="gc-input-text"
+              type="text"
+              name="newFormOwnerEmail"
+              onChange={handleEmailInputChange}
+            />
             <Button type="submit">Add Email</Button>
           </form>
         </>
