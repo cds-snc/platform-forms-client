@@ -97,22 +97,19 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
 
   const formOwnerUI = () => {
     return formOwners.map((formOwner) => {
-      if (formOwner.active) {
-        return (
-          <>
-            <li key={formOwner.id} className="flex items-center">
-              <Button
-                type="button"
-                destructive
-                onClick={() => activateOrDeactivateFormOwners(formOwner.email, false)}
-              >
-                X
-              </Button>
-              <p className="ml-4">{formOwner.email}</p>
-            </li>
-          </>
-        );
-      }
+      return (
+        <>
+          <li key={formOwner.id} className="flex items-center">
+            <Button
+              type="submit"
+              onClick={() => activateOrDeactivateFormOwners(formOwner.email, !formOwner.active)}
+            >
+              {formOwner.active ? t("disable") : t("enable")}
+            </Button>
+            <p className="ml-4">{formOwner.email}</p>
+          </li>
+        </>
+      );
     });
   };
 
