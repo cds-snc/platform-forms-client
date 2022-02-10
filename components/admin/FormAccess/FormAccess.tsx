@@ -81,11 +81,17 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
         },
       });
       if (serverResponse.status === 200) {
-        setFormOwners(
-          formOwners.filter((formOwner) => {
-            return formOwner.email !== email;
-          })
+        const updatedFormOwnerIndex = formOwners.findIndex(
+          (formOwner) => formOwner.email === email
         );
+        const newFormOwners = [...formOwners];
+        newFormOwners[updatedFormOwnerIndex] = {
+          ...newFormOwners[updatedFormOwnerIndex],
+          active: active,
+        };
+        setFormOwners(newFormOwners);
+      } else {
+        setErrorState({ message: t("settings.formAccess.updateError") });
       }
     } catch (err) {
       logMessage.error(err as Error);
