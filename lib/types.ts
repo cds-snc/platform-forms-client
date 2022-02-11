@@ -227,3 +227,11 @@ export interface TemporaryTokenPayload {
 export type BearerResponse = {
   bearerToken: string;
 };
+
+// User Types
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  admin: boolean;
+}

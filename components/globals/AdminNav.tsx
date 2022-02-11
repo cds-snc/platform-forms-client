@@ -22,6 +22,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
           <Link href="/admin/vault">Form Vault</Link>
         </li>
         <li className="gc-horizontal-item">
+          <Link href="/admin/users">Users</Link>
+        </li>
+        <li className="gc-horizontal-item">
           <Link href="/admin/upload">Upload Form</Link>
         </li>
         <li className="gc-horizontal-item">
