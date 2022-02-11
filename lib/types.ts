@@ -227,3 +227,9 @@ export interface TemporaryTokenPayload {
 export type BearerResponse = {
   bearerToken: string;
 };
+
+export type FormOwner = {
+  id: number;
+  email: string;
+  active: boolean;
+};
