@@ -23,7 +23,13 @@
     "edit": "Edit Form Config File:",
     "tabLabels": {
       "jsonUpload": "JSON Upload",
-      "bearerToken": "Bearer Token"
-    }    
+      "bearerToken": "Bearer Token",
+      "formAccess": "Form Access"
+    },
+    "formAccess": {
+      "formOwnersError": "Unable to retrieve form owners.",
+      "invalidEmailError": "The email is not a valid Government of Canada email.",
+      "updateError": "Unable to update the access for the selected email."
+    }
   }
 }
