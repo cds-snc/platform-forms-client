@@ -17,6 +17,8 @@ import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
+import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
+import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { Readable } from "stream";
 
 export const config = {
@@ -24,9 +26,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-export const acceptedFileMimeTypes =
-  "application/pdf,.csv,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";
 
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
@@ -205,7 +204,7 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
   // process Base64 encoded data
   if (typeof fileObj?.name === "string" && typeof fileObj?.file === "string") {
     // base64 string should be data URL https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
-    const fileData = fileObj.file.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+    const fileData = fileObj.file.match(/^data:([A-Za-z-+./]+);base64,(.+)$/);
     if (fileData?.length !== 3) {
       throw new Error(`FileTypeError: The file ${fileObj.name} was not a valid data URL`);
     }
@@ -218,10 +217,32 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
       );
     }
     // determine the real mime type of the file from the buffer
-    const mimeType = await fileTypeFromBuffer(fileBuff);
-    if (!mimeType || !acceptedFileMimeTypes.includes(mimeType.mime)) {
+    const magic = new Magic(MAGIC_MIME_TYPE);
+    // promisify the magic.detect call so that it works cleanly with the async function
+    const detectFilePromise = (): Promise<string | string[]> => {
+      return new Promise((resolve, reject) => {
+        magic.detect(fileBuff, (err, result) => {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(result);
+        });
+      });
+    };
+    // use mmmagic lib to detect mime types for text files
+    const mimeTypemmmagic = (await detectFilePromise()) as string;
+    // use file-type to detect mime types for binary files
+    const mimeTypefilebuff = await fileTypeFromBuffer(fileBuff);
+    if (
+      (!mimeTypefilebuff || !acceptedFileMimeTypes.includes(mimeTypefilebuff.mime)) &&
+      (!mimeTypemmmagic || !acceptedFileMimeTypes.includes(mimeTypemmmagic))
+    ) {
       throw new Error(
-        `FileTypeError: The file ${fileObj.name} has been uploaded has an unacceptable mime type of ${mimeType}`
+        `FileTypeError: The file ${
+          fileObj.name
+        } has been uploaded has an unacceptable mime type of ${
+          mimeTypefilebuff ? mimeTypefilebuff.mime : mimeTypemmmagic
+        }`
       );
     }
     return {
