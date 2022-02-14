@@ -148,7 +148,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
           <hr />
           <form onSubmit={handleEmailSubmit} className="flex items-center">
             <input
-              className="gc-input-text"
+              className="mb-2 gc-input-text"
               type="text"
               name="newFormOwnerEmail"
               onChange={handleEmailInputChange}
