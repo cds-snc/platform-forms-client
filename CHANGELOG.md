@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A tab on the Form Settings page that allows the user to see and refresh the bearer token.
 - A tab on the Form Settings page that allows form access to be enabled / disabled for users.
 - Replace the retrieval Api lambda implementation by an App backEnd API. [#481](https://github.com/cds-snc/platform-forms-client/issues/481)
+- Log error when we failed to generate a temporary token (will be used to trigger an alarm in AWS CloudWatch)
 
 ### Changed
 
@@ -157,4 +158,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Forms:
   - CDS Intake Form
-
