@@ -229,13 +229,14 @@ const processFileData = async (fileObj: FileInputResponse): Promise<ProcessedFil
         });
       });
     };
-    // use mmmagic lib to detect mime types for text files
-    const mimeTypemmmagic = (await detectFilePromise()) as string;
-    // use file-type to detect mime types for binary files
-    const mimeTypefilebuff = await fileTypeFromBuffer(fileBuff);
+    // use mmmagic lib to detect mime types for text files and file-type for binary files
+    const [mimeTypefilebuff, mimeTypemmmagic] = await Promise.all([
+      fileTypeFromBuffer(fileBuff),
+      detectFilePromise(),
+    ]);
     if (
       (!mimeTypefilebuff || !acceptedFileMimeTypes.includes(mimeTypefilebuff.mime)) &&
-      (!mimeTypemmmagic || !acceptedFileMimeTypes.includes(mimeTypemmmagic))
+      (!mimeTypemmmagic || !acceptedFileMimeTypes.includes(mimeTypemmmagic as string))
     ) {
       throw new Error(
         `FileTypeError: The file ${
