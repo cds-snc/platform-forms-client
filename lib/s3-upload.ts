@@ -1,11 +1,8 @@
-import { ReadStream } from "fs";
-import fs from "fs";
 import { v4 as uuid } from "uuid";
-import { UploadResult } from "./types";
+import { ProcessedFile, UploadResult } from "./types";
 import { logMessage } from "./logger";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-
-import formidable from "formidable";
+import { Readable } from "stream";
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION ?? "ca-central-1",
@@ -22,9 +19,12 @@ const bucketName: string =
  * @param file
  * @returns
  */
-const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
+const uploadFileToS3 = async (file: ProcessedFile): Promise<UploadResult> => {
   try {
-    const data = await readStream2buffer(fs.createReadStream(file.path));
+    const stream = new Readable();
+    stream.push(file.buffer);
+    stream.push(null);
+    const data = await readStream2buffer(stream);
     const objectKey = `form_attachments/${new Date().toISOString().slice(0, 10)}/${uuid()}/${
       file.name
     }`;
@@ -51,7 +51,7 @@ const uploadFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
  * @param mystream
  * @returns buffer array.
  */
-const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
+const readStream2buffer = (fileStream: Readable): Promise<Buffer> => {
   return new Promise<Buffer>((resolve, reject) => {
     const _buf: Uint8Array[] = [];
     fileStream.on("data", (datachunk) => {
@@ -72,11 +72,9 @@ const readStream2buffer = (fileStream: ReadStream): Promise<Buffer> => {
 
 /**
  * Push a given file to a temporary S3
- * @param fileOrArray
- * @param reqFields
- * @param key
+ * @param file
  */
-const pushFileToS3 = async (file: formidable.File): Promise<UploadResult> => {
+const pushFileToS3 = async (file: ProcessedFile): Promise<UploadResult> => {
   // Set bucket name default value to something actual value once known
   const uploadResult: UploadResult = await uploadFileToS3(file);
   const { isValid, key } = uploadResult;
