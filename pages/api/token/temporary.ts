@@ -65,6 +65,8 @@ const handler = async (
     logMessage.info(`Temporary Token Requested: Form ID: ${formID} Email: ${email}`);
     res.status(200).json({ message: "success" });
   } catch (error) {
+    logMessage.error("Failed to generate temporary token.");
+
     let errorMessage = "Malformed API Request";
 
     if ((error as Error).message.includes("Could not send temporary token by email")) {
