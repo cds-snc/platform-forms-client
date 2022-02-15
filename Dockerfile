@@ -9,19 +9,19 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:14-alpine
+FROM node:14
 
 COPY migrations /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:14-alpine
+FROM node:14
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:14-alpine
+FROM node:14
 LABEL maintainer="-"
 
 ARG GITHUB_SHA_ARG
