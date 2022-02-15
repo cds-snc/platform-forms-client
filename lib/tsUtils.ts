@@ -8,3 +8,6 @@ export function hasOwnProperty<X extends Record<string, unknown>, Y extends Prop
 export const isServer = (): boolean => {
   return typeof window === "undefined";
 };
+
+export const acceptedFileMimeTypes =
+  "application/pdf,text/plain,text/csv,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.apple.numbers";

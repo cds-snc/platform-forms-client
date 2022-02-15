@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Google Tag manager iframe will no longer appear in other environment other then staging. [#563](https://github.com/cds-snc/platform-forms-client/pull/563)
 - Form configuration upload now correctly displays the updated configuration instead of displaying old values. [#579](https://github.com/cds-snc/platform-forms-client/pull/597)
 - Clicking a link clears the form. [#498](https://github.com/cds-snc/platform-forms-client/issues/498)
+- AWS WAF blocking image uploads. [#434](https://github.com/cds-snc/platform-forms-client/issues/434)
 
 ## [1.0.4] 2021-12-3
 

@@ -149,9 +149,8 @@ export interface InnerFormProps {
 
 export type FileInputResponse = {
   name: string;
-  file: File;
-  src: FileReader;
-  [key: string]: string | File | FileReader;
+  file: string;
+  [key: string]: string | number | File | FileReader;
 };
 
 export interface AuthenticatedUser {
@@ -185,6 +184,20 @@ export interface CrudTemplateResponse {
   };
 }
 
+// Submission
+export interface SubmissionRequestBody {
+  [key: string]: string | string[] | FileInputResponse | FileInputResponse[];
+}
+
+export type SubmissionParsedRequest = {
+  fields: Record<string, Response>;
+  files: Record<string, ProcessedFile | ProcessedFile[]>;
+};
+
+export interface ProcessedFile {
+  name: string;
+  buffer: Buffer;
+}
 // CRUD Operations for Organizations
 export type Organization = {
   organizationID: string;
