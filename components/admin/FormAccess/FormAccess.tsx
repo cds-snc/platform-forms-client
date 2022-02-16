@@ -1,4 +1,4 @@
-import { Button } from "@components/forms";
+import { Button, TextInput } from "@components/forms";
 import { logMessage } from "@lib/logger";
 import Loader from "@components/globals/Loader";
 import { FormOwner } from "@lib/types";
@@ -153,9 +153,10 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               name="newFormOwnerEmail"
               onChange={handleEmailInputChange}
               defaultValue={newEmail}
+              aria-label={t("settings.formAccess.addEmailAriaLabel")}
             />
             <Button type="submit" disabled={newEmail === ""}>
-              Add Email
+              {t("settings.formAccess.addEmailButton")}
             </Button>
           </form>
         </>

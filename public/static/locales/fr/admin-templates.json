@@ -3,7 +3,8 @@
     "title": "Téléverser un modèle de formulaire JSON",
     "edit-title": "Modifier le modèle de formulaire JSON",
     "submit": "Téléverser",
-    "success": "JSON téléversé avec succès."
+    "success": "JSON téléversé avec succès.",
+    "jsonConfigAriaLabel": "Modèle de formulaire"
   },
   "view": {
     "title": "Voir le modèle des formulaires",
@@ -17,10 +18,13 @@
     "confirm-delete": "Confirmer Supprimer",
     "new": "Le formulaire a été créé avec succès",
     "formID": "Identifiant du formulaire :",
-    "bearerToken": "Jeton d'accès :",
-    "refreshButton": "Renouveler le jeton d'accès",
-    "bearerTokenRefreshError": "Le renouvellement du jeton d'accès n'a pas fonctionné.",
     "edit": "Modifier le formulaire :",
+    "bearerToken": {
+      "current": "Jeton d'accès :",
+      "refreshButton": "Renouveler le jeton d'accès",
+      "refreshError": "Le renouvellement du jeton d'accès n'a pas fonctionné.",
+      "currentAriaLabel": "Jeton d'accès"
+    },
     "tabLabels": {
       "jsonUpload": "Téléversement JSON",
       "bearerToken": "Jeton d'accès",
@@ -29,7 +33,9 @@
     "formAccess": {
       "formOwnersError": "La récupération des propriétaires de formulaire n'a pas fonctionné.",
       "invalidEmailError": "L'adresse email n'est pas une adresse valide du gouvernement du Canada.",
-      "updateError": "La modification d'accès pour l'adresse email sélectionnée n'a pas fonctionné."
+      "updateError": "La modification d'accès pour l'adresse email sélectionnée n'a pas fonctionné.",
+      "addEmailButton": "Ajouter l'adresse email",
+      "addEmailAriaLabel": "Email"
     }
   }
 }
