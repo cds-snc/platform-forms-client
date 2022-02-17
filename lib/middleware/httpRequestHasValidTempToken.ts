@@ -22,7 +22,13 @@ import jwt from "jsonwebtoken";
  * @returns
  */
 export function checkIfValidTemporaryToken(
-  handler: (req: NextApiRequest, res: NextApiResponse, formID: string) => void
+  handler: (
+    req: NextApiRequest,
+    res: NextApiResponse,
+    formID: string,
+    email?: string,
+    bearerToken?: string
+  ) => void
 ) {
   return async function (req: NextApiRequest, res: NextApiResponse): Promise<unknown> {
     try {
@@ -42,7 +48,7 @@ export function checkIfValidTemporaryToken(
       const { email } = temporaryTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       if (await isTokenExists(formID, email as string, token)) {
-        return handler(req, res, formID);
+        return handler(req, res, formID, email, token);
       }
       return res.status(403).json({ error: "Missing or invalid bearer token." });
     } catch (err) {
