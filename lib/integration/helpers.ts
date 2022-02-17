@@ -154,7 +154,7 @@ function handleTextResponse(title: string, response: string, collector: Array<st
 }
 
 function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
-  const formData = new FormData();
+  const formData = {} as { [key: string]: string | FileInputResponse };
 
   const formElementsWithoutRichTextComponents = form.elements.filter(
     (element) => !["richText"].includes(element.type)
@@ -163,11 +163,11 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
   for (const element of formElementsWithoutRichTextComponents) {
     const result = _handleDynamicRowTypeIfNeeded(element, values[element.id]);
     for (const tuple of result) {
-      formData.append(tuple[0], tuple[1]);
+      formData[tuple[0]] = tuple[1];
     }
   }
 
-  formData.append("formID", form.formID);
+  formData["formID"] = form.formID;
 
   return formData;
 }
@@ -175,7 +175,7 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
 function _handleDynamicRowTypeIfNeeded(
   element: FormElement,
   value: Response
-): [string, string | Blob][] {
+): [string, string | FileInputResponse][] {
   if (element.type === "dynamicRow") {
     if (element.properties.subElements === undefined) return [];
 
@@ -198,7 +198,7 @@ function _handleDynamicRowTypeIfNeeded(
               return result
                 ? ([[`${element.id}-${responseIndex}-${subElementIndex}`, result[1]]] as [
                     string,
-                    string | Blob
+                    string | FileInputResponse
                   ][])
                 : [];
             })
@@ -216,7 +216,7 @@ function _handleDynamicRowTypeIfNeeded(
 function _handleFormDataType(
   element: FormElement,
   value: Response
-): [string, string | Blob] | undefined {
+): [string, string | FileInputResponse] | undefined {
   switch (element.type) {
     case "textField":
     case "textArea":
@@ -239,8 +239,13 @@ function _handleFormDataType(
   }
 }
 
-function _handleFormDataFileInput(key: string, value: FileInputResponse): [string, string | Blob] {
-  return value.file ? [key, value.file] : _handleFormDataText(key, "");
+function _handleFormDataFileInput(
+  key: string,
+  value: FileInputResponse
+): [string, FileInputResponse | string] {
+  return value.file
+    ? [key, { file: value.file, name: value.name, size: value.size, type: value.type }]
+    : _handleFormDataText(key, "");
 }
 
 function _handleFormDataText(key: string, value: string): [string, string] {
@@ -262,10 +267,10 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
     url: "/api/submit",
     method: "POST",
     headers: {
-      "Content-Type": "multipart/form-data",
       "Content-Language": language,
     },
     data: formDataObject,
+
     // If development mode disable timeout
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   })
