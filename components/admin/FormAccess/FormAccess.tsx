@@ -155,7 +155,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               defaultValue={newEmail}
               aria-label={t("settings.formAccess.addEmailAriaLabel")}
             />
-            <Button type="submit" disabled={newEmail === ""}>
+            <Button type="submit" disabled={newEmail === ""} testid="add-email">
               {t("settings.formAccess.addEmailButton")}
             </Button>
           </form>
