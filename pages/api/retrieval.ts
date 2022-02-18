@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
+import isRequestAllowed from "@lib/middleware/httpMethodAllowed";
 import { logMessage } from "@lib/logger";
 import {
   DynamoDBClient,

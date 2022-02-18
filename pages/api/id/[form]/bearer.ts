@@ -3,7 +3,7 @@ import { getSession } from "next-auth/client";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
-import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
+import isRequestAllowed from "@lib/middleware/httpMethodAllowed";
 import dbConnector from "@lib/integration/dbConnector";
 import isUserSessionExist from "@lib/middleware/HttpSessionExist";
 import { QueryResult } from "pg";

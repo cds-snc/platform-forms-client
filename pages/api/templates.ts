@@ -1,5 +1,5 @@
 import { crudTemplates } from "../../lib/integration/crud";
-import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
+import isRequestAllowed from "../../lib/middleware/httpMethodAllowed";
 import validate from "../../lib/middleware/jsonValidator";
 import templatesSchema from "../../lib/middleware/schemas/templates.schema.json";
 import { getSession } from "next-auth/client";

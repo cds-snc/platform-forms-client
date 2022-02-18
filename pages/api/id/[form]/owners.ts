@@ -1,4 +1,4 @@
-import isRequestAllowed from "../../../../lib/middleware/httpRequestAllowed";
+import isRequestAllowed from "../../../../lib/middleware/httpMethodAllowed";
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnector from "../../../../lib/integration/dbConnector";
 import isUserSessionExist from "../../../../lib/middleware/HttpSessionExist";

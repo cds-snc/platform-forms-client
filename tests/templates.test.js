@@ -92,14 +92,13 @@ describe("Test JSON validation scenarios", () => {
 
     client.getSession.mockReturnValueOnce([mockSession, false]);
     const { req, res } = createMocks({
-      method: "POST",
+      method: "INSERT",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
       body: {
         formConfig: brokenFormTemplate,
-        method: "INSERT",
       },
     });
 
