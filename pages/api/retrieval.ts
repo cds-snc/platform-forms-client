@@ -29,7 +29,9 @@ import checkIfValidTemporaryToken from "@lib/middleware/httpRequestHasValidTempT
 async function getFormResponses(
   req: NextApiRequest,
   res: NextApiResponse,
-  formID: string
+  formID: string,
+  email?: string,
+  bearerToken?: string
 ): Promise<void> {
   //Default value to 10 if it's undefined
   const { maxRecords = "10" } = req.query;
@@ -102,6 +104,12 @@ async function getFormResponses(
         await db?.send(new UpdateItemCommand(updateItem));
       }
     }
+
+    // log level is warn because in production level info is not being forwarded to CloudWatch
+    logMessage.warn(
+      `user:${email} retrieved form responses from form ID:${formID} at:${Date.now()} using token:${bearerToken}`
+    );
+
     //Return responses data
     return res.status(200).json({ responses: formResponses.Items });
   } catch (error) {
