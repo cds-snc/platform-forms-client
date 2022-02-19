@@ -43,7 +43,7 @@
     "lint-staged": "^12.1.2",
     "markdown-to-jsx": "^7.1.1",
     "mmmagic": "^0.5.3",
-    "next": "^11.1.4",
+    "next": "^12.1.0",
     "next-auth": "^3.28.0",
     "next-i18next": "^8.6.0",
     "notifications-node-client": "^5.1.0",
