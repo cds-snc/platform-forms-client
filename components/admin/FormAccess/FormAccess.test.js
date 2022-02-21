@@ -71,4 +71,28 @@ describe("Form Access Component", () => {
     });
     expect(screen.findByRole("alert")).toBeInTheDocument;
   });
+
+  it("submits a new email address for a form that does not exist", async () => {
+    const testEmailAddress = "test@cds-snc.ca";
+
+    mockedAxios.mockResolvedValue({
+      status: 200,
+      data: [{}],
+    });
+    await act(async () => {
+      render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    });
+    const input = screen.getByLabelText("settings.formAccess.addEmailAriaLabel");
+    await act(async () => {
+      fireEvent.change(input, { target: { value: testEmailAddress } });
+    });
+    await act(async () => {
+      mockedAxios.mockResolvedValue({
+        status: 404,
+        data: { error: "The formID does not exist" },
+      });
+      fireEvent.click(screen.getByTestId("add-email"));
+    });
+    expect(screen.findByRole("alert")).toBeInTheDocument;
+  });
 });
