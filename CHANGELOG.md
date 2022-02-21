@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace the retrieval Api lambda implementation by an App backEnd API. [#481](https://github.com/cds-snc/platform-forms-client/issues/481)
 - Log error when we detect that an expired bearer token has been used (will be used to trigger an alarm in AWS CloudWatch)
 - Log error when we failed to generate a temporary token (will be used to trigger an alarm in AWS CloudWatch)
+- Log user access to retrieval API
 
 ### Changed
 
