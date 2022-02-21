@@ -25,13 +25,7 @@ describe("Form Access Component", () => {
 
     mockedAxios.mockResolvedValue({
       status: 200,
-      data: [
-        {
-          id: 4,
-          email: testEmailAddress,
-          active: true,
-        },
-      ],
+      data: [{}],
     });
     await act(async () => {
       render(<FormAccess formID={formConfig.formID}></FormAccess>);
@@ -52,5 +46,29 @@ describe("Form Access Component", () => {
       fireEvent.click(screen.getByTestId("add-email"));
     });
     expect(screen.findByText(testEmailAddress)).toBeInTheDocument;
+  });
+
+  it("submits a new email address that is not a Government of Canada email, and receives an error from the API", async () => {
+    const testEmailAddress = "test@test.ca";
+
+    mockedAxios.mockResolvedValue({
+      status: 200,
+      data: [{}],
+    });
+    await act(async () => {
+      render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    });
+    const input = screen.getByLabelText("settings.formAccess.addEmailAriaLabel");
+    await act(async () => {
+      fireEvent.change(input, { target: { value: testEmailAddress } });
+    });
+    await act(async () => {
+      mockedAxios.mockResolvedValue({
+        status: 400,
+        data: { error: "The email is not a valid GC email" },
+      });
+      fireEvent.click(screen.getByTestId("add-email"));
+    });
+    expect(screen.findByRole("alert")).toBeInTheDocument;
   });
 });
