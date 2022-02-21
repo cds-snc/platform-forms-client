@@ -101,20 +101,18 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
     }
   };
 
-  const formOwnerUI = () => {
-    return formOwners.map((formOwner) => {
+  const formOwnerUI = (owners: FormOwner[]) => {
+    return owners.map((owner) => {
       return (
-        <>
-          <li key={formOwner.id} className="flex items-center">
-            <Button
-              type="submit"
-              onClick={() => activateOrDeactivateFormOwners(formOwner.email, !formOwner.active)}
-            >
-              {formOwner.active ? t("disable") : t("enable")}
-            </Button>
-            <p className="ml-4">{formOwner.email}</p>
-          </li>
-        </>
+        <li key={owner.id} className="flex items-center">
+          <Button
+            type="submit"
+            onClick={() => activateOrDeactivateFormOwners(owner.email, !owner.active)}
+          >
+            {owner.active ? t("disable") : t("enable")}
+          </Button>
+          <p className="ml-4">{owner.email}</p>
+        </li>
       );
     });
   };
@@ -144,7 +142,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               {errorState.message}
             </p>
           ) : null}
-          <ul className="space-y-4">{formOwnerUI()}</ul>
+          <ul className="space-y-4">{formOwnerUI(formOwners)}</ul>
           <hr />
           <form onSubmit={handleEmailSubmit} className="flex items-center">
             <input
