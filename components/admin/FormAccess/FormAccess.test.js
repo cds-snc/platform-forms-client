@@ -12,7 +12,7 @@ describe("Form Access Component", () => {
   it("renders without errors", async () => {
     mockedAxios.mockResolvedValue({
       status: 200,
-      data: [{}],
+      data: [],
     });
     await act(async () => {
       render(<FormAccess formID={formConfig.formID}></FormAccess>);
@@ -25,7 +25,7 @@ describe("Form Access Component", () => {
 
     mockedAxios.mockResolvedValue({
       status: 200,
-      data: [{}],
+      data: [],
     });
     await act(async () => {
       render(<FormAccess formID={formConfig.formID}></FormAccess>);
@@ -53,7 +53,7 @@ describe("Form Access Component", () => {
 
     mockedAxios.mockResolvedValue({
       status: 200,
-      data: [{}],
+      data: [],
     });
     await act(async () => {
       render(<FormAccess formID={formConfig.formID}></FormAccess>);
@@ -77,7 +77,7 @@ describe("Form Access Component", () => {
 
     mockedAxios.mockResolvedValue({
       status: 200,
-      data: [{}],
+      data: [],
     });
     await act(async () => {
       render(<FormAccess formID={formConfig.formID}></FormAccess>);
