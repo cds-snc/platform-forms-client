@@ -7,6 +7,7 @@ import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../email.domains.json";
+import server from "i18next-hmr/server";
 
 export interface FormAccessProps {
   formID: number;
@@ -56,8 +57,12 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
           email: email,
         },
       });
-      if (serverResponse.status === 200) {
-        setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
+      switch (serverResponse.status) {
+        case 200:
+          setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
+          break;
+        default:
+          setErrorState({ message: serverResponse.data["error"] });
       }
     } catch (err) {
       logMessage.error(err as Error);
@@ -102,6 +107,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
   };
 
   const formOwnerUI = (owners: FormOwner[]) => {
+    if (owners.length < 1) return;
     return owners.map((owner) => {
       return (
         <li key={owner.id} className="flex items-center">
