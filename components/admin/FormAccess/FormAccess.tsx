@@ -7,7 +7,6 @@ import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../email.domains.json";
-import server from "i18next-hmr/server";
 
 export interface FormAccessProps {
   formID: number;
