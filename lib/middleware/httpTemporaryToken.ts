@@ -5,6 +5,9 @@ import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
 import jwt from "jsonwebtoken";
 
+const blocked = true;
+const pass = false;
+
 /**
  * @description
  * This middleware will make sure that the incoming request is valid by enforcing a set of
@@ -21,17 +24,24 @@ import jwt from "jsonwebtoken";
  * @param handler - A function to be called
  * @returns
  */
-export function checkIfValidTemporaryToken(
-  handler: (req: NextApiRequest, res: NextApiResponse, formID: string) => void
-) {
-  return async function (req: NextApiRequest, res: NextApiResponse): Promise<unknown> {
+const checkIfValidTemporaryToken = (): ((
+  req: NextApiRequest,
+  res: NextApiResponse
+) => Promise<boolean>) => {
+  return async function (req: NextApiRequest, res: NextApiResponse): Promise<boolean> {
     try {
       //Default value to 10 if it's undefined
       const { formID } = req.query;
       //Check that formID and maxRecords aren't repeated
-      if (Array.isArray(formID)) return res.status(400).json({ error: "Bad Request" });
+      if (Array.isArray(formID)) {
+        res.status(400).json({ error: "Bad Request" });
+        return blocked;
+      }
       //Get formID form the bearer token
-      if (!formID) return res.status(400).json({ error: "Bad Request" });
+      if (!formID) {
+        res.status(400).json({ error: "Bad Request" });
+        return blocked;
+      }
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
       //Verify the token
@@ -42,15 +52,17 @@ export function checkIfValidTemporaryToken(
       const { email } = temporaryTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       if (await isTokenExists(formID, email as string, token)) {
-        return handler(req, res, formID);
+        return pass;
       }
-      return res.status(403).json({ error: "Missing or invalid bearer token." });
+      res.status(403).json({ error: "Missing or invalid bearer token." });
+      return blocked;
     } catch (err) {
       //Token verification has failed
       res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
+      return blocked;
     }
   };
-}
+};
 
 /*@description
  * It returns true if there is an active token otherwise false.
