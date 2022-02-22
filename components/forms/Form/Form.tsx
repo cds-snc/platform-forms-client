@@ -19,8 +19,7 @@ declare global {
  * @param props
  */
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
-  const { children, handleSubmit, t } = props;
-  const [submitting, setSubmitting] = useState(false);
+  const { children, handleSubmit, t, isSubmitting } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(0);
 
@@ -33,7 +32,6 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   useEffect(() => {
     if (formStatusError) {
       setFocusOnErrorMessage(props, serverErrorId);
-      setSubmitting(false);
     }
 
     if (!props.isValid && !canFocusOnError) {
@@ -41,18 +39,16 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
         setCanFocusOnError(true);
         setLastSubmitCount(props.submitCount);
       }
-      setSubmitting(false);
     } else if (!props.isValid) {
       setFocusOnErrorMessage(props, errorId);
       setCanFocusOnError(false);
-      setSubmitting(false);
     }
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   return (
     <>
-      {submitting ? (
-        <Loader loading={submitting} message={t("loading")} />
+      {isSubmitting ? (
+        <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
         <>
           {formStatusError ? (
@@ -74,11 +70,8 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
             id="form"
             data-testid="form"
             onSubmit={(e) => {
-              setSubmitting(true);
               handleSubmit(e);
             }}
-            method="POST"
-            encType="multipart/form-data"
             noValidate
           >
             {children}
@@ -111,6 +104,7 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
 
   handleSubmit: async (values, formikBag) => {
     try {
+      formikBag.setSubmitting(true);
       await submitToAPI(values as Responses, formikBag);
     } catch (err) {
       logMessage.error(err as Error);
