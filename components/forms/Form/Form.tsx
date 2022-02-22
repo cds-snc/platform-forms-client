@@ -47,7 +47,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 
   return (
     <>
-      {isSubmitting ? (
+      {isSubmitting || (props.submitCount > 0 && props.isValid) ? (
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
         <>
