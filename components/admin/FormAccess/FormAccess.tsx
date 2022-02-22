@@ -56,8 +56,12 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
           email: email,
         },
       });
-      if (serverResponse.status === 200) {
-        setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
+      switch (serverResponse.status) {
+        case 200:
+          setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
+          break;
+        default:
+          setErrorState({ message: serverResponse.data["error"] });
       }
     } catch (err) {
       logMessage.error(err as Error);
@@ -101,20 +105,19 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
     }
   };
 
-  const formOwnerUI = () => {
-    return formOwners.map((formOwner) => {
+  const formOwnerUI = (owners: FormOwner[]) => {
+    if (owners.length < 1) return;
+    return owners.map((owner) => {
       return (
-        <>
-          <li key={formOwner.id} className="flex items-center">
-            <Button
-              type="submit"
-              onClick={() => activateOrDeactivateFormOwners(formOwner.email, !formOwner.active)}
-            >
-              {formOwner.active ? t("disable") : t("enable")}
-            </Button>
-            <p className="ml-4">{formOwner.email}</p>
-          </li>
-        </>
+        <li key={owner.id} className="flex items-center">
+          <Button
+            type="submit"
+            onClick={() => activateOrDeactivateFormOwners(owner.email, !owner.active)}
+          >
+            {owner.active ? t("disable") : t("enable")}
+          </Button>
+          <p className="ml-4">{owner.email}</p>
+        </li>
       );
     });
   };
@@ -144,18 +147,19 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               {errorState.message}
             </p>
           ) : null}
-          <ul className="space-y-4">{formOwnerUI()}</ul>
+          <ul className="space-y-4">{formOwnerUI(formOwners)}</ul>
           <hr />
           <form onSubmit={handleEmailSubmit} className="flex items-center">
             <input
-              className="gc-input-text"
+              className="mb-2 gc-input-text mr-2"
               type="text"
               name="newFormOwnerEmail"
               onChange={handleEmailInputChange}
               defaultValue={newEmail}
+              aria-label={t("settings.formAccess.addEmailAriaLabel")}
             />
-            <Button type="submit" disabled={newEmail === ""}>
-              Add Email
+            <Button type="submit" disabled={newEmail === ""} testid="add-email">
+              {t("settings.formAccess.addEmailButton")}
             </Button>
           </form>
         </>

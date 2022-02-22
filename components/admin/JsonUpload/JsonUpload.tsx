@@ -108,6 +108,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 onChange={(e) => {
                   setJsonConfig(e.currentTarget.value);
                 }}
+                aria-label={t("upload.jsonConfigAriaLabel")}
               ></textarea>
               <div>
                 <button type="submit" className="gc-button" data-testid="upload">
