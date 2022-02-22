@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.1.0] 22-02-22
+
 ### Added
 
 - Create secure API to deactivate a form owner associated with a form
