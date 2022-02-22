@@ -1,6 +1,5 @@
 import React from "react";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, render, screen, act } from "@testing-library/react";
 import Form from "./Form";
 import mockedDataLayer from "../../../lib/integration/helpers";
 
@@ -30,18 +29,25 @@ describe("Generate a form component", () => {
       .toContainElement(screen.getByTestId("test-child"));
   });
   describe("Form Functionality", () => {
+    let mockedSubmitFunction;
+    beforeEach(() => {
+      mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
+    });
+    afterEach(() => {
+      mockedSubmitFunction.mockRestore();
+    });
     afterAll(() => {
-      cleanup;
+      cleanup();
     });
 
-    test("Form is submitted", () => {
-      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
-
-      userEvent.click(screen.getByRole("button", { type: "submit" }));
-      const mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
-      waitFor(() => {
-        expect(mockedSubmitFunction).toBeCalledTimes(1);
+    it("Form is submitted", async () => {
+      await act(async () => {
+        await render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
       });
+      await act(async () => {
+        await screen.getByRole("button", { type: "submit" }).click();
+      });
+      expect(mockedSubmitFunction).toBeCalledTimes(1);
     });
   });
 });
