@@ -1,15 +1,15 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
 import retrieve from "../../../../pages/api/id/[form]/bearer";
-import executeQuery from "../../../../lib/integration/queryManager";
+import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";
-import { logMessage } from "../../../../lib/logger";
-import { checkLogs } from "../../../../lib/jestUtils";
+import { logMessage } from "@lib/logger";
+import { checkLogs } from "@lib/jestUtils";
 
 jest.mock("next-auth/client");
-jest.mock("../../../../lib/integration/queryManager");
+jest.mock("@lib/integration/queryManager");
 
-jest.mock("../../../../lib/integration/dbConnector", () => {
+jest.mock("@lib/integration/dbConnector", () => {
   const mClient = {
     connect: jest.fn(),
     query: jest.fn(),

@@ -1,12 +1,12 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
 import owners from "../../../../pages/api/id/[form]/owners";
-import executeQuery from "../../../../lib/integration/queryManager";
+import executeQuery from "@lib/integration/queryManager";
 
 jest.mock("next-auth/client");
-jest.mock("../../../../lib/integration/queryManager");
+jest.mock("@lib/integration/queryManager");
 
-jest.mock("../../../../lib/integration/dbConnector", () => {
+jest.mock("@lib/integration/dbConnector", () => {
   const mClient = {
     connect: jest.fn(),
     query: jest.fn(),
