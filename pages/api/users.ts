@@ -7,7 +7,6 @@ import isMethodAllowed from "@lib/middleware/httpMethodAllowed";
 import isUserSessionExist from "@lib/middleware/httpSessionExists";
 
 const allowedMethods = ["GET", "POST"];
-const authenticatedMethods = ["POST"];
 
 const getMethod = async (res: NextApiResponse) => {
   const users = await getUsers();
@@ -39,7 +38,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   }
 };
 
-export default middleware(
-  [isMethodAllowed(allowedMethods), isUserSessionExist(authenticatedMethods)],
-  handler
-);
+export default middleware([isMethodAllowed(allowedMethods), isUserSessionExist()], handler);
