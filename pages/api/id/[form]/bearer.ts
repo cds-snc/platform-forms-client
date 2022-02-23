@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
 import httpMethodAllowed from "@lib/middleware/httpMethodAllowed";
-import httpSessionExists from "@lib/middleware/HttpSessionExists";
+import httpSessionExists from "@lib/middleware/httpSessionExists";
 import dbConnector from "@lib/integration/dbConnector";
 import { QueryResult } from "pg";
 import { BearerResponse } from "@lib/types";

@@ -2,9 +2,6 @@ import { MiddlewareReturn } from "@lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors } from "./cors";
 
-const blocked = true;
-const pass = false;
-
 /**
  * Checks if the HTTP method of the request is part of the allowed list
  * @param methods Array of acceptable HTTP methods

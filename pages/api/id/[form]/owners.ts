@@ -1,5 +1,5 @@
 import httpMethodAllowed from "@lib/middleware/httpMethodAllowed";
-import httpSessionExists from "@lib/middleware/HttpSessionExists";
+import httpSessionExists from "@lib/middleware/httpSessionExists";
 import middleware from "@lib/middleware/middleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnector from "@lib/integration/dbConnector";
