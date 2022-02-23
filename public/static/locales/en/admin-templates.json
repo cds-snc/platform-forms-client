@@ -3,7 +3,8 @@
     "title": "Upload a form Configuration file",
     "edit-title": "Edit a form Configuration file",
     "submit": "Upload",
-    "success": "JSON successfully uploaded."
+    "success": "JSON successfully uploaded.",
+    "jsonConfigAriaLabel": "Form Configuration"
   },
   "view": {
     "title": "View Form Templates",
@@ -17,13 +18,24 @@
     "confirm-delete": "Confirm Delete",
     "new": "The Form was successfully created",
     "formID": "Form ID:",
-    "bearerToken": "Current Token:",
-    "refreshButton": "Refresh Token",
-    "bearerTokenRefreshError": "Unable to refresh bearer token.",
     "edit": "Edit Form Config File:",
     "tabLabels": {
       "jsonUpload": "JSON Upload",
-      "bearerToken": "Bearer Token"
-    }    
+      "bearerToken": "Bearer Token",
+      "formAccess": "Form Access"
+    },
+    "bearerToken": {
+      "current": "Current Token:",
+      "refreshButton": "Refresh Token",
+      "refreshError": "Unable to refresh bearer token.",
+      "currentAriaLabel": "Current token"
+    },
+    "formAccess": {
+      "formOwnersError": "Unable to retrieve form owners.",
+      "invalidEmailError": "The email is not a valid Government of Canada email.",
+      "updateError": "Unable to update the access for the selected email.",
+      "addEmailButton": "Add Email",
+      "addEmailAriaLabel": "Email"
+    }
   }
 }

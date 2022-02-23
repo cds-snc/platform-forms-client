@@ -34,7 +34,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
       setBearerTokenState(bearerToken);
     } catch (err) {
       logMessage.error(err as Error);
-      setErrorState({ message: t("settings.bearerTokenRefreshError") });
+      setErrorState({ message: t("settings.bearerToken.refreshError") });
     } finally {
       setSubmitting(false);
     }
@@ -58,7 +58,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
       setBearerTokenState(bearerToken);
     } catch (err) {
       logMessage.error(err as Error);
-      setErrorState({ message: t("settings.bearerTokenRefreshError") });
+      setErrorState({ message: t("settings.bearerToken.refreshError") });
     } finally {
       setSubmitting(false);
     }
@@ -75,7 +75,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
               {errorState.message}
             </p>
           ) : null}
-          <h2>{t("settings.bearerToken")}</h2>
+          <h2>{t("settings.bearerToken.current")}</h2>
           <textarea
             id="bearerToken"
             rows={3}
@@ -84,9 +84,10 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
             data-testid="bearerToken"
             defaultValue={bearerTokenState}
             readOnly
+            aria-label={t("settings.bearerToken.currentAriaLabel")}
           ></textarea>
           <Button type="button" onClick={() => handleRefreshBearerToken(formID)}>
-            {t("settings.refreshButton")}
+            {t("settings.bearerToken.refreshButton")}
           </Button>
         </>
       )}

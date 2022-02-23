@@ -9,6 +9,7 @@ import { FormDBConfigProperties } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
+import FormAccess from "@components/admin/FormAccess/FormAccess";
 
 interface FormSettingsProps {
   form: FormDBConfigProperties;
@@ -60,6 +61,7 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         <TabList>
           <Tab>{t("settings.tabLabels.jsonUpload")}</Tab>
           <Tab>{t("settings.tabLabels.bearerToken")}</Tab>
+          <Tab>{t("settings.tabLabels.formAccess")}</Tab>
         </TabList>
 
         <TabPanel>
@@ -77,6 +79,9 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         </TabPanel>
         <TabPanel>
           <BearerRefresh formID={form.formID}></BearerRefresh>
+        </TabPanel>
+        <TabPanel>
+          <FormAccess formID={form.formID}></FormAccess>
         </TabPanel>
       </Tabs>
     </>

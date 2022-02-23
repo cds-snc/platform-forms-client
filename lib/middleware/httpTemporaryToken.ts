@@ -46,7 +46,7 @@ const httpTemporaryToken = (): MiddlewareRequest => {
       const { email } = temporaryTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       if (await isTokenExists(formID, email as string, token)) {
-        return { pass: true };
+        return { pass: true, props: { email, temporaryToken: token } };
       }
       res.status(403).json({ error: "Missing or invalid bearer token." });
       return { pass: false };

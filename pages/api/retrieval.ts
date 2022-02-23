@@ -9,6 +9,7 @@ import {
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
 import checkIfValidTemporaryToken from "@lib/middleware/httpTemporaryToken";
+import { MiddlewareProps } from "@lib/types";
 
 /**
  * @description
@@ -27,7 +28,11 @@ import checkIfValidTemporaryToken from "@lib/middleware/httpTemporaryToken";
  * @param maxRecords 
  * @returns 
  */
-async function getFormResponses(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+async function getFormResponses(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  { email, temporaryToken }: MiddlewareProps
+): Promise<void> {
   //Default value to 10 if it's undefined
   const { maxRecords = "10", formID } = req.query;
   //Check maxRecords aren't repeated
@@ -100,6 +105,12 @@ async function getFormResponses(req: NextApiRequest, res: NextApiResponse): Prom
         await db?.send(new UpdateItemCommand(updateItem));
       }
     }
+
+    // log level is warn because in production level info is not being forwarded to CloudWatch
+    logMessage.warn(
+      `user:${email} retrieved form responses from form ID:${formID} at:${Date.now()} using token:${temporaryToken}`
+    );
+
     //Return responses data
     return res.status(200).json({ responses: formResponses.Items });
   } catch (error) {

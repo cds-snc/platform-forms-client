@@ -14,7 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Send email through GC Notify when a new temporary token is generated
 - A UI with tabs on the Form Settings page. [#486](https://github.com/cds-snc/platform-forms-client/pull/573)
 - A tab on the Form Settings page that allows the user to see and refresh the bearer token.
+- A tab on the Form Settings page that allows form access to be enabled / disabled for users.
 - Replace the retrieval Api lambda implementation by an App backEnd API. [#481](https://github.com/cds-snc/platform-forms-client/issues/481)
+- Log error when we detect that an expired bearer token has been used (will be used to trigger an alarm in AWS CloudWatch)
+- Log error when we failed to generate a temporary token (will be used to trigger an alarm in AWS CloudWatch)
+- Log user access to retrieval API
 
 ### Changed
 
@@ -25,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Google Tag manager iframe will no longer appear in other environment other then staging. [#563](https://github.com/cds-snc/platform-forms-client/pull/563)
 - Form configuration upload now correctly displays the updated configuration instead of displaying old values. [#579](https://github.com/cds-snc/platform-forms-client/pull/597)
 - Clicking a link clears the form. [#498](https://github.com/cds-snc/platform-forms-client/issues/498)
+- AWS WAF blocking image uploads. [#434](https://github.com/cds-snc/platform-forms-client/issues/434)
+- Form scrolling up on submit after fixing errors from first submit. [#160](https://github.com/cds-snc/platform-forms-client/issues/160)
 
 ## [1.0.4] 2021-12-3
 
@@ -156,4 +162,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Forms:
   - CDS Intake Form
-
