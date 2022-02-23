@@ -76,9 +76,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
           >
             {children}
             <div className="buttons">
-              <Button className="gc-button" type="submit">
-                {t("submitButton")}
-              </Button>
+              <Button type="submit">{t("submitButton")}</Button>
             </div>
           </form>
         </>
