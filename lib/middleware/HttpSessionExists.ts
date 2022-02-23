@@ -1,7 +1,6 @@
 import { MiddlewareReturn } from "@lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
-import { ExtendedSession } from "@lib/types";
+import { isAdmin } from "@lib/auth";
 
 const useMethods = (req: NextApiRequest, methods?: string[]) => {
   if (methods && req.method) {
@@ -20,10 +19,9 @@ const useMethods = (req: NextApiRequest, methods?: string[]) => {
 
 const httpSessionExists = (methods?: string[]) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    const session: ExtendedSession | null = await getSession({ req });
-    const adminSession = session ? session.user?.admin : false;
+    const session = await isAdmin({ req });
 
-    if (useMethods(req, methods) && !adminSession) {
+    if (useMethods(req, methods) && !session) {
       res.status(403).json({ error: "Access Denied" });
       return { pass: false };
     }

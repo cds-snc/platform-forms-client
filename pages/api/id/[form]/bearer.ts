@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
+import { isAdmin } from "@lib/auth";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
@@ -39,7 +39,7 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
   const formID = req.query.form as string;
   if (formID) {
     // get the session which is important for traceability purposes in logs
-    const session = await getSession({ req });
+    const session = await isAdmin({ req });
     // create the bearer token with the payload being the form ID
     // and signed by the token secret. The expiry time for this token is set to be one
     // year

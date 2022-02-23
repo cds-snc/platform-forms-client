@@ -1,4 +1,4 @@
-import { getSession } from "next-auth/client";
+import { getSession, GetSessionOptions } from "next-auth/client";
 import { GetServerSidePropsResult, GetServerSidePropsContext } from "next";
 import { hasOwnProperty } from "./tsUtils";
 import { ExtendedSession } from "./types";
@@ -45,3 +45,16 @@ export function requireAuthentication(
     return innerFunctionProps;
   };
 }
+
+export const isAdmin = async (
+  reqOrContext?: GetSessionOptions
+): Promise<ExtendedSession | null> => {
+  // If server side, 'req' must be passed to getSession
+  const session: ExtendedSession | null = reqOrContext
+    ? await getSession(reqOrContext)
+    : await getSession();
+  if (session && session.user?.admin) {
+    return session;
+  }
+  return null;
+};

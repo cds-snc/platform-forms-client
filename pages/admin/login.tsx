@@ -1,10 +1,10 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/client";
+import { isAdmin } from "@lib/auth";
 import Login from "../../components/containers/Auth/Login";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await isAdmin(context);
 
   if (session) {
     // If user, redirect to admin

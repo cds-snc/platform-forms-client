@@ -3,14 +3,14 @@ import isMethodAllowed from "@lib/middleware/httpMethodAllowed";
 import jsonValidator from "@lib/middleware/jsonValidator";
 import middleware from "@lib/middleware/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
-import { getSession } from "next-auth/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import { isAdmin } from "@lib/auth";
 
 const allowedMethods = ["GET", "INSERT", "UPDATE", "DELETE"];
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await getSession({ req });
+    const session = await isAdmin({ req });
     const response = await crudTemplates({ ...req.body, session });
     if (response) {
       res.status(200).json(response);
