@@ -1,10 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import { getTokenById } from "../../pages/api/id/[form]/bearer";
-import { BearerTokenPayload, FormDBConfigProperties } from "@lib/types";
-
-const blocked = true;
-const pass = false;
+import {
+  BearerTokenPayload,
+  FormDBConfigProperties,
+  MiddlewareRequest,
+  MiddlewareReturn,
+} from "@lib/types";
 
 /**
  * This is a middleware function that will validate the bearer token in the authorization header
@@ -12,8 +14,8 @@ const pass = false;
  * @param handler - the function to be executed next in the API call
  * @returns either the handler to be executed next in the API call, or updates the res status and returns void
  */
-const validate = (): ((req: NextApiRequest, res: NextApiResponse) => Promise<boolean>) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<boolean> => {
+const httpBearerToken = (): MiddlewareRequest => {
+  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       const token = extractBearerTokenFromReq(req);
       const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
@@ -23,14 +25,14 @@ const validate = (): ((req: NextApiRequest, res: NextApiResponse) => Promise<boo
             .rows[0] as FormDBConfigProperties
         ).bearerToken === token
       ) {
-        return pass;
+        return { pass: true, props: { formID: (bearerTokenPayload as BearerTokenPayload).formID } };
       } else {
         res.status(403).json({ error: "Missing or invalid bearer token." });
-        return blocked;
+        return { pass: false };
       }
     } catch (err) {
       res.status(403).json({ error: "Missing or invalid bearer token." });
-      return blocked;
+      return { pass: false };
     }
   };
 };
@@ -53,4 +55,4 @@ export const extractBearerTokenFromReq = (req: NextApiRequest): string => {
   }
 };
 
-export default validate;
+export default httpBearerToken;

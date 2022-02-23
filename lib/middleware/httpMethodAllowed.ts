@@ -1,3 +1,4 @@
+import { MiddlewareReturn } from "@lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors } from "./cors";
 
@@ -10,27 +11,27 @@ const pass = false;
  * @returns boolean, true if middleware blocked the request
  */
 
-const methodAllowed = (methods: string[]) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<boolean> => {
+const httpMethodAllowed = (methods: string[]) => {
+  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       const requestBody = req.body && Object.keys(req.body).length > 0 ? req.body : undefined;
       const method = requestBody?.method ? requestBody.method : req.method;
       if (!methods.includes(method)) {
         res.status(403).json({ error: "HTTP Method Forbidden" });
-        return blocked;
+        return { pass: false };
       }
 
       // Also check CORS by evaluating the origin of the request
       const blockedByCors = await cors({ origin: "*", methods: methods })(req, res);
-      if (blockedByCors) {
-        return blocked;
+      if (!blockedByCors.pass) {
+        return { pass: false };
       }
-      return pass;
+      return { pass: true };
     } catch {
       res.status(500).json({ error: "Malformed API Request" });
-      return blocked;
+      return { pass: false };
     }
   };
 };
 
-export default methodAllowed;
+export default httpMethodAllowed;

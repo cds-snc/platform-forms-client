@@ -1,37 +1,15 @@
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
-import validate from "@lib/middleware/bearerToken";
-import { BearerTokenPayload } from "@lib/types";
+import httpMethodAllowed from "@lib/middleware/httpMethodAllowed";
+import httpBearerTokenCheck from "@lib/middleware/httpBearerToken";
+import middleware from "@lib/middleware/middleware";
+import { BearerTokenPayload, MiddlewareProps } from "@lib/types";
 
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { QueryResult } from "pg";
 import { NotifyClient } from "notifications-node-client";
-
-/**
- * Verifies that the payload for the request is valid.
- *
- * @param handler - the function that will be called from the promise
- * @returns a promise
- */
-const checkRequestPayload = (
-  handler: (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    bearerTokenPayload: BearerTokenPayload,
-    email: string
-  ) => void
-) => {
-  return async (req: NextApiRequest, res: NextApiResponse, options?: unknown): Promise<unknown> => {
-    const requestBody = req.body;
-    if (requestBody?.email) {
-      return handler(req, res, options as BearerTokenPayload, requestBody["email"]);
-    } else {
-      res.status(400).json({ error: "Invalid payload" });
-    }
-  };
-};
 
 /**
  * Verifies that the payload for the request is valid.
@@ -42,20 +20,18 @@ const checkRequestPayload = (
  * @param email - the email for the user making the request, found in the body of the api request
  * @returns a promise
  */
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  bearerTokenPayload: BearerTokenPayload,
-  email: string
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse, { formID }: MiddlewareProps) => {
   try {
-    const formID = bearerTokenPayload.formID;
-
     if (formID == undefined) {
       return res.status(403).json({ error: "Invalid form request." });
     }
     if (!process.env.TOKEN_SECRET) {
-      return res.status(403).json({ error: "Invalid request." });
+      return res.status(500).json({ error: "Server cannot respond at this time" });
+    }
+
+    const email = req.body["email"];
+    if (!email) {
+      res.status(400).json({ error: "Invalid payload" });
     }
 
     const temporaryToken = createTemporaryToken(email, process.env.TOKEN_SECRET);
@@ -137,4 +113,4 @@ const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) 
     });
 };
 
-export default validate(checkRequestPayload(handler));
+export default middleware([httpMethodAllowed(["POST"]), httpBearerTokenCheck()], handler);

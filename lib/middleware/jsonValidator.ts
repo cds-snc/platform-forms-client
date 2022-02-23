@@ -1,35 +1,30 @@
+import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { Schema, Validator } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const blocked = true;
-const pass = false;
 
 export type ValidateOptions = {
   jsonKey: string;
 };
 
-const validate = (
-  schema: Schema,
-  options: ValidateOptions
-): ((req: NextApiRequest, res: NextApiResponse) => Promise<boolean>) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<boolean> => {
+const jsonValidator = (schema: Schema, options: ValidateOptions): MiddlewareRequest => {
+  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       if (req.method === "GET") {
-        return pass;
+        return { pass: true };
       }
       const validator = new Validator();
       const validatorResult = validator.validate(req.body[options.jsonKey], schema);
       if (validatorResult.valid) {
-        return pass;
+        return { pass: true };
       } else {
         res.status(400).json({ error: validatorResult.errors.toString() });
-        return blocked;
+        return { pass: false };
       }
     } catch {
       res.status(500).json({ error: "Malformed API Request" });
-      return blocked;
+      return { pass: false };
     }
   };
 };
 
-export default validate;
+export default jsonValidator;

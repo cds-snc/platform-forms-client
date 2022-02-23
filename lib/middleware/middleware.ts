@@ -1,4 +1,5 @@
 import { logMessage } from "@lib/logger";
+import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 
 /**
@@ -8,21 +9,23 @@ import { NextApiRequest, NextApiResponse } from "next";
  * @returns
  */
 const middleware = (
-  middlewareArray: Array<(req: NextApiRequest, res: NextApiResponse) => Promise<boolean>>,
-  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+  middlewareArray: Array<MiddlewareRequest>,
+  handler: (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => Promise<void>
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
       let blockedByMiddleware = false;
+      let props = {};
       for (const middlewareLayer of middlewareArray) {
-        const blocked = await middlewareLayer(req, res);
-        if (blocked) {
-          blockedByMiddleware = blocked;
+        const { pass, props: middlewareProps } = await middlewareLayer(req, res, props);
+        if (!pass) {
+          blockedByMiddleware = true;
           break;
         }
+        props = { ...props, ...middlewareProps };
       }
       if (!blockedByMiddleware) {
-        await handler(req, res);
+        await handler(req, res, props);
       }
     } catch (e) {
       logMessage.error(e as Error);

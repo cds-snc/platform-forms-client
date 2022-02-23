@@ -15,7 +15,7 @@ export default NextAuth({
   ],
 
   // A database is optional, but required to persist accounts in a database
-  database: process.env.DATABASE_URL ?? null,
+  database: process.env.DATABASE_URL ?? undefined,
 
   adapter: process.env.DATABASE_URL
     ? Adapters.TypeORM.Adapter(process.env.DATABASE_URL, {
@@ -23,5 +23,18 @@ export default NextAuth({
           User: Models.User,
         },
       })
-    : null,
+    : undefined,
+  callbacks: {
+    async session(session, user) {
+      // Add info like 'role' or 'admin' to session object
+      const extendedInfo = {
+        user: {
+          ...session.user,
+          admin: user.admin,
+        },
+      };
+      const extendedSession = { ...session, ...extendedInfo };
+      return extendedSession;
+    },
+  },
 });

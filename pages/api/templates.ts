@@ -1,6 +1,6 @@
 import { crudTemplates } from "@lib/integration/crud";
 import isMethodAllowed from "@lib/middleware/httpMethodAllowed";
-import validate from "@lib/middleware/jsonValidator";
+import jsonValidator from "@lib/middleware/jsonValidator";
 import middleware from "@lib/middleware/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { getSession } from "next-auth/client";
@@ -23,6 +23,6 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default middleware(
-  [isMethodAllowed(allowedMethods), validate(templatesSchema, { jsonKey: "formConfig" })],
+  [isMethodAllowed(allowedMethods), jsonValidator(templatesSchema, { jsonKey: "formConfig" })],
   templates
 );

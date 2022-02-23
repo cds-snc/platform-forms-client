@@ -3,25 +3,26 @@ import { getSession } from "next-auth/client";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
-import isRequestAllowed from "@lib/middleware/httpMethodAllowed";
+import httpMethodAllowed from "@lib/middleware/httpMethodAllowed";
+import httpSessionExists from "@lib/middleware/HttpSessionExists";
 import dbConnector from "@lib/integration/dbConnector";
-import isUserSessionExist from "@lib/middleware/HttpSessionExist";
 import { QueryResult } from "pg";
 import { BearerResponse } from "@lib/types";
+import middleware from "@lib/middleware/middleware";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {
     try {
       return await getToken(req, res);
     } catch (err) {
-      logMessage.error(err);
+      logMessage.error(err as Error);
       return res.status(500).json({ error: "Internal Service Error" });
     }
   } else if (req.method === "POST") {
     try {
       return await createToken(req, res);
     } catch (err) {
-      logMessage.error(err);
+      logMessage.error(err as Error);
       return res.status(500).json({ error: "Internal Service Error" });
     }
   }
@@ -111,4 +112,4 @@ export const getTokenById = async (formID: string): Promise<QueryResult> => {
   );
 };
 
-export default isRequestAllowed(["GET", "POST"], isUserSessionExist(handler));
+export default middleware([httpMethodAllowed(["GET", "POST"]), httpSessionExists()], handler);

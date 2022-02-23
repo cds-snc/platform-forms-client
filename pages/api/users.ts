@@ -4,7 +4,7 @@ import middleware from "@lib/middleware/middleware";
 import { getUsers, adminRole } from "@lib/users";
 
 import isMethodAllowed from "@lib/middleware/httpMethodAllowed";
-import isUserSessionExist from "@lib/middleware/HttpSessionExist";
+import isUserSessionExist from "@lib/middleware/HttpSessionExists";
 
 const allowedMethods = ["GET", "POST"];
 const authenticatedMethods = ["POST"];

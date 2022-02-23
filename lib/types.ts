@@ -1,6 +1,8 @@
 import { ChangeEvent } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Session, User } from "next-auth";
 
 export interface FormDefinitionProperties {
   internalTitleEn?: string;
@@ -228,10 +230,28 @@ export type BearerResponse = {
   bearerToken: string;
 };
 
+export interface MiddlewareReturn {
+  pass: boolean;
+  props?: MiddlewareProps;
+}
+
+export type MiddlewareRequest = (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  props?: Record<string, unknown>
+) => Promise<MiddlewareReturn>;
+
+export interface MiddlewareProps {
+  formID?: string;
+  session?: Session;
+}
+
 // User Types
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  admin: boolean;
+
+export interface AuthenticatedUser extends User {
+  admin?: boolean;
+}
+
+export interface ExtendedSession extends Session {
+  user?: AuthenticatedUser;
 }

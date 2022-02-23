@@ -1,12 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { TemporaryTokenPayload } from "@lib/types";
-import { extractBearerTokenFromReq } from "@lib/middleware/bearerToken";
+import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
+import { extractBearerTokenFromReq } from "@lib/middleware/httpBearerToken";
 import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
 import jwt from "jsonwebtoken";
-
-const blocked = true;
-const pass = false;
 
 /**
  * @description
@@ -24,23 +21,20 @@ const pass = false;
  * @param handler - A function to be called
  * @returns
  */
-const checkIfValidTemporaryToken = (): ((
-  req: NextApiRequest,
-  res: NextApiResponse
-) => Promise<boolean>) => {
-  return async function (req: NextApiRequest, res: NextApiResponse): Promise<boolean> {
+const httpTemporaryToken = (): MiddlewareRequest => {
+  return async function (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> {
     try {
       //Default value to 10 if it's undefined
       const { formID } = req.query;
-      //Check that formID and maxRecords aren't repeated
+      //Check that formID isn't repeated
       if (Array.isArray(formID)) {
         res.status(400).json({ error: "Bad Request" });
-        return blocked;
+        return { pass: false };
       }
       //Get formID form the bearer token
       if (!formID) {
         res.status(400).json({ error: "Bad Request" });
-        return blocked;
+        return { pass: false };
       }
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
@@ -52,14 +46,14 @@ const checkIfValidTemporaryToken = (): ((
       const { email } = temporaryTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       if (await isTokenExists(formID, email as string, token)) {
-        return pass;
+        return { pass: true };
       }
       res.status(403).json({ error: "Missing or invalid bearer token." });
-      return blocked;
+      return { pass: false };
     } catch (err) {
       //Token verification has failed
       res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
-      return blocked;
+      return { pass: false };
     }
   };
 };
@@ -83,4 +77,4 @@ const isTokenExists = async (formID: string, email: string, token: string): Prom
   );
 };
 
-export default checkIfValidTemporaryToken;
+export default httpTemporaryToken;

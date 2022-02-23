@@ -27,15 +27,12 @@ import checkIfValidTemporaryToken from "@lib/middleware/httpTemporaryToken";
  * @param maxRecords 
  * @returns 
  */
-async function getFormResponses(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  formID: string
-): Promise<void> {
+async function getFormResponses(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   //Default value to 10 if it's undefined
-  const { maxRecords = "10" } = req.query;
+  const { maxRecords = "10", formID } = req.query;
   //Check maxRecords aren't repeated
-  if (Array.isArray(maxRecords) || !formID) return res.status(400).json({ error: "Bad Request" });
+  if (Array.isArray(maxRecords) || Array.isArray(formID) || !formID)
+    return res.status(400).json({ error: "Bad Request" });
   const expectedMaxRecords = parseInt(maxRecords);
   //Range is 1- 10
   if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
@@ -66,7 +63,7 @@ async function getFormResponses(
     //Get form's responses for formID
     formResponses = await db.send(new QueryCommand(getItemsDbParams));
   } catch (error) {
-    logMessage.error(error);
+    logMessage.error(error as Error);
     return res
       .status(500)
       .json({ responses: "Error on Server Side when fetching form's responses" });
@@ -109,10 +106,13 @@ async function getFormResponses(
     logMessage.warn(`Possible data loss for these submissionIDs`);
     //print submission ids as string
     logMessage.warn(submissionIDlist ? submissionIDlist.toString() : "Empty submissionID list");
-    logMessage.error(error);
+    logMessage.error(error as Error);
     return res.status(500).json({ responses: "Error on Server Side" });
   }
 }
 
 // Only a GET request is allowed
-export default middleware([ isRequestAllowed(["GET"], checkIfValidTemporaryToken()], getFormResponses));
+export default middleware(
+  [isRequestAllowed(["GET"]), checkIfValidTemporaryToken()],
+  getFormResponses
+);
