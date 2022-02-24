@@ -2,6 +2,12 @@
   "name": "gcforms",
   "version": "1.0.0",
   "private": true,
+  "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
   "scripts": {
     "dev:mem": "yarn migrate && yarn initialize && NODE_OPTIONS='--inspect --max_old_space_size=4096' next dev",
     "dev": "yarn migrate && yarn initialize && NODE_OPTIONS='--inspect' next dev",

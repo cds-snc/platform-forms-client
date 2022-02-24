@@ -17,6 +17,7 @@ module.exports = {
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   },
   clearMocks: true,
+  preset: "ts-jest",
   transform: {
     "\\.[jt]sx?$": "babel-jest",
   },
