@@ -2,9 +2,6 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/en/configuration.html
  */
-const { pathsToModuleNameMapper } = require("ts-jest");
-const { compilerOptions } = require("./tsconfig");
-
 module.exports = {
   testPathIgnorePatterns: [
     "<rootDir>/.next/",
@@ -14,10 +11,10 @@ module.exports = {
   ],
   moduleNameMapper: {
     "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules",
-    ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
+    "^@lib/(.*)$": "<rootDir>/lib/$1",
+    "^@components/(.*)$": "<rootDir>/components/$1",
   },
   clearMocks: true,
-  preset: "ts-jest",
   transform: {
     "\\.[jt]sx?$": "babel-jest",
   },
