@@ -3,12 +3,10 @@ import { isAdmin } from "@lib/auth";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
-import httpMethodAllowed from "@lib/middleware/httpMethodAllowed";
-import httpSessionExists from "@lib/middleware/httpSessionExists";
+import { httpMethodAllowed, sessionExists, middleware } from "@lib/middleware";
 import dbConnector from "@lib/integration/dbConnector";
 import { QueryResult } from "pg";
 import { BearerResponse } from "@lib/types";
-import middleware from "@lib/middleware/middleware";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {
@@ -112,4 +110,4 @@ export const getTokenById = async (formID: string): Promise<QueryResult> => {
   );
 };
 
-export default middleware([httpMethodAllowed(["GET", "POST"]), httpSessionExists()], handler);
+export default middleware([httpMethodAllowed(["GET", "POST"]), sessionExists()], handler);

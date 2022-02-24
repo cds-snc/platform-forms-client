@@ -10,7 +10,7 @@ import { logMessage } from "../logger";
  * @param handler - the function to be executed next in the API call
  * @returns either the handler to be executed next in the API call, or updates the res status and returns void
  */
-const httpBearerToken = (): MiddlewareRequest => {
+export const validBearerToken = (): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       const token = extractBearerTokenFromReq(req);
@@ -49,5 +49,3 @@ export const extractBearerTokenFromReq = (req: NextApiRequest): string => {
     throw new Error("Missing bearer token.");
   }
 };
-
-export default httpBearerToken;

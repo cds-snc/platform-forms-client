@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
-import { extractBearerTokenFromReq } from "@lib/middleware/httpBearerToken";
+import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
 import jwt from "jsonwebtoken";
@@ -21,7 +21,7 @@ import jwt from "jsonwebtoken";
  * @param handler - A function to be called
  * @returns
  */
-const httpTemporaryToken = (): MiddlewareRequest => {
+export const validTemporaryToken = (): MiddlewareRequest => {
   return async function (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> {
     try {
       //Default value to 10 if it's undefined
@@ -76,5 +76,3 @@ const isTokenExists = async (formID: string, email: string, token: string): Prom
     ).rows.length === 1
   );
 };
-
-export default httpTemporaryToken;

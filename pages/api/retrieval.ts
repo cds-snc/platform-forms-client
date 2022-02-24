@@ -1,14 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import isRequestAllowed from "@lib/middleware/httpMethodAllowed";
+
 import { logMessage } from "@lib/logger";
-import middleware from "@lib/middleware/middleware";
+import { middleware, httpMethodAllowed, validTemporaryToken } from "@lib/middleware";
 import {
   DynamoDBClient,
   QueryCommand,
   UpdateItemCommand,
   QueryCommandOutput,
 } from "@aws-sdk/client-dynamodb";
-import checkIfValidTemporaryToken from "@lib/middleware/httpTemporaryToken";
 import { MiddlewareProps } from "@lib/types";
 
 /**
@@ -123,7 +122,4 @@ async function getFormResponses(
 }
 
 // Only a GET request is allowed
-export default middleware(
-  [isRequestAllowed(["GET"]), checkIfValidTemporaryToken()],
-  getFormResponses
-);
+export default middleware([httpMethodAllowed(["GET"]), validTemporaryToken()], getFormResponses);

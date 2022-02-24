@@ -1,10 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import middleware from "@lib/middleware/middleware";
+import { middleware, httpMethodAllowed, sessionExists } from "@lib/middleware";
 import { getUsers, adminRole } from "@lib/users";
-
-import isMethodAllowed from "@lib/middleware/httpMethodAllowed";
-import isUserSessionExist from "@lib/middleware/httpSessionExists";
 
 const allowedMethods = ["GET", "POST"];
 
@@ -38,4 +35,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   }
 };
 
-export default middleware([isMethodAllowed(allowedMethods), isUserSessionExist()], handler);
+export default middleware([httpMethodAllowed(allowedMethods), sessionExists()], handler);

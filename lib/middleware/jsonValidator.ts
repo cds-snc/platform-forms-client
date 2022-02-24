@@ -6,7 +6,7 @@ export type ValidateOptions = {
   jsonKey: string;
 };
 
-const jsonValidator = (schema: Schema, options: ValidateOptions): MiddlewareRequest => {
+export const jsonValidator = (schema: Schema, options: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       if (req.method === "GET") {
@@ -26,5 +26,3 @@ const jsonValidator = (schema: Schema, options: ValidateOptions): MiddlewareRequ
     }
   };
 };
-
-export default jsonValidator;

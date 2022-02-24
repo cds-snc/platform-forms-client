@@ -8,7 +8,7 @@ import { NextApiRequest, NextApiResponse } from "next";
  * @param handler Api handler function
  * @returns
  */
-const middleware = (
+export const middleware = (
   middlewareArray: Array<MiddlewareRequest>,
   handler: (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => Promise<void>
 ) => {
@@ -33,5 +33,3 @@ const middleware = (
     }
   };
 };
-
-export default middleware;

@@ -17,7 +17,7 @@ const useMethods = (req: NextApiRequest, methods?: string[]) => {
  * @returns boolean, true if middleware blocked the request
  */
 
-const httpSessionExists = (methods?: string[]) => {
+export const sessionExists = (methods?: string[]) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     const session = await isAdmin({ req });
 
@@ -35,4 +35,3 @@ const httpSessionExists = (methods?: string[]) => {
     return { pass: true };
   };
 };
-export default httpSessionExists;

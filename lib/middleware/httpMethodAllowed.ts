@@ -8,7 +8,7 @@ import { cors } from "./cors";
  * @returns boolean, true if middleware blocked the request
  */
 
-const httpMethodAllowed = (methods: string[]) => {
+export const httpMethodAllowed = (methods: string[]) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       const requestBody = req.body && Object.keys(req.body).length > 0 ? req.body : undefined;
@@ -30,5 +30,3 @@ const httpMethodAllowed = (methods: string[]) => {
     }
   };
 };
-
-export default httpMethodAllowed;
