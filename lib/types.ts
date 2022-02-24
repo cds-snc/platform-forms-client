@@ -264,11 +264,12 @@ export interface MiddlewareProps {
 // User Types
 
 export interface AuthenticatedUser extends User {
-  admin?: boolean;
+  id?: number;
+  admin: boolean;
 }
 
 export interface ExtendedSession extends Session {
-  user?: AuthenticatedUser;
+  user: AuthenticatedUser;
 }
 export type FormOwner = {
   id: number;

@@ -1,36 +1,81 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { getUsers } from "@lib/users";
-import { User } from "@lib/types";
-import { Button } from "@components/forms";
-import React from "react";
-import { TFunction, useTranslation } from "next-i18next";
 import { logMessage } from "@lib/logger";
+import { getUsers } from "@lib/users";
+import { AuthenticatedUser } from "@lib/types";
+import { Button } from "@components/forms";
+import { useRefresh } from "@lib/hooks/useRefresh";
+import React from "react";
+import axios from "axios";
+import { TFunction, useTranslation } from "next-i18next";
 
-const AdminEnable = ({ isAdmin, t }: { isAdmin: boolean; t: TFunction }) => {
-  const testFn = () => {
-    logMessage.info(`I'm now ${!isAdmin ? "Enabled" : "Disabled"}`);
-  };
+interface AdminAuthenticatedUser extends AuthenticatedUser {
+  id: number;
+  admin: boolean;
+}
+
+interface UserProps {
+  users: AdminAuthenticatedUser[];
+}
+
+interface UserRowProps {
+  user: AuthenticatedUser;
+  t: TFunction;
+}
+
+const updateAdminValue = async (userID: number, isAdmin: boolean) => {
+  return await axios({
+    url: `/api/users`,
+    method: "POST",
+    data: {
+      userID,
+      isAdmin,
+    },
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+  }).catch((e) => {
+    logMessage.error(e);
+  });
+};
+
+const AdminEnable = ({
+  isAdmin,
+  t,
+  userID,
+}: {
+  isAdmin: boolean;
+  t: TFunction;
+  userID: number;
+}) => {
+  const { refreshData, isRefreshing } = useRefresh([isAdmin]);
   return (
-    <Button type="button" className="w-32 py-2 px-4" onClick={() => testFn()}>
+    <Button
+      type="button"
+      className="w-32 py-2 px-4"
+      onClick={() => updateAdminValue(userID, !isAdmin).then(() => refreshData())}
+      disabled={isRefreshing}
+    >
       {isAdmin ? t("disable") : t("enable")}
     </Button>
   );
 };
 
-const UserRow = ({ user, t }: { user: User; t: TFunction }) => {
-  return (
-    <tr id={`${user.id}`} className="border-b-1">
-      <td>{user.email}</td>
-      <td>{user.admin ? t("true") : t("false")}</td>
-      <td>
-        <AdminEnable isAdmin={user.admin} t={t} />
-      </td>
-    </tr>
-  );
+const UserRow = ({ user, t }: UserRowProps) => {
+  // Logic check for user.id simplifies typescript check
+  if (user.id) {
+    return (
+      <tr id={`${user.id}`} className="border-b-1">
+        <td>{user.email}</td>
+        <td>{user.admin ? t("true") : t("false")}</td>
+        <td>
+          <AdminEnable isAdmin={user.admin} userID={user.id} t={t} />
+        </td>
+      </tr>
+    );
+  }
+  return null;
 };
 
-const Users = ({ users }: { users: User[] }): React.ReactElement => {
+const Users = ({ users }: UserProps): React.ReactElement => {
   const { t } = useTranslation("admin-users");
   return (
     <>
@@ -58,7 +103,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     localeProps = await serverSideTranslations(context.locale, ["common", "admin-users"]);
   }
 
-  const users = await getUsers();
+  const users = (await getUsers()).filter((user) => user.id);
 
   return { props: { ...localeProps, users } };
 });

@@ -4,7 +4,7 @@ import { logMessage } from "@lib/logger";
 import httpMethodAllowed from "@lib/middleware/httpMethodAllowed";
 import httpBearerTokenCheck from "@lib/middleware/httpBearerToken";
 import middleware from "@lib/middleware/middleware";
-import { BearerTokenPayload, MiddlewareProps } from "@lib/types";
+import { MiddlewareProps } from "@lib/types";
 
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";

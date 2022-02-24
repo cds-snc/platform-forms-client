@@ -1,12 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { getTokenById } from "../../pages/api/id/[form]/bearer";
-import {
-  BearerTokenPayload,
-  FormDBConfigProperties,
-  MiddlewareRequest,
-  MiddlewareReturn,
-} from "@lib/types";
+import { BearerTokenPayload, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { logMessage } from "../logger";
 
 /**
@@ -19,14 +14,10 @@ const httpBearerToken = (): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       const token = extractBearerTokenFromReq(req);
-      const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
-      if (
-        (
-          (await getTokenById((bearerTokenPayload as BearerTokenPayload).formID || ""))
-            .rows[0] as FormDBConfigProperties
-        ).bearerToken === token
-      ) {
-        return { pass: true, props: { formID: (bearerTokenPayload as BearerTokenPayload).formID } };
+      const { formID } = jwt.verify(token, process.env.TOKEN_SECRET ?? "") as BearerTokenPayload;
+      const tokenID = await getTokenById(formID);
+      if (tokenID.rows[0].bearerToken === token) {
+        return { pass: true, props: { formID } };
       } else {
         res.status(403).json({ error: "Missing or invalid bearer token." });
         return { pass: false };

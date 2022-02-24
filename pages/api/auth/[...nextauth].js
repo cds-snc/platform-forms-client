@@ -30,7 +30,7 @@ export default NextAuth({
       const extendedInfo = {
         user: {
           ...session.user,
-          admin: user.admin,
+          admin: user.admin ?? false,
         },
       };
       const extendedSession = { ...session, ...extendedInfo };
