@@ -7,6 +7,8 @@ jest.mock("../../../lib/integration/helpers", () => ({
   submitToAPI: jest.fn(() => {}),
 }));
 
+jest.useFakeTimers();
+
 const formConfig = {
   id: 1,
   version: 1,
@@ -42,12 +44,32 @@ describe("Generate a form component", () => {
 
     it("Form is submitted", async () => {
       await act(async () => {
-        await render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+        render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
       });
+
+      const submitButton = screen.getByRole("button", { type: "submit" });
+
+      // complete the timeout to allow the form to be submitted
+      jest.runAllTimers();
+
       await act(async () => {
-        await screen.getByRole("button", { type: "submit" }).click();
+        submitButton.click();
       });
+      expect(submitButton).not.toBeDisabled();
       expect(mockedSubmitFunction).toBeCalledTimes(1);
+    });
+
+    it("Form is not submitted because not enough time has passed", async () => {
+      await act(async () => {
+        render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+      });
+
+      const submitButton = screen.getByRole("button", { type: "submit" });
+      await act(async () => {
+        submitButton.click();
+      });
+      expect(submitButton).toBeDisabled();
+      expect(mockedSubmitFunction).not.toHaveBeenCalled();
     });
   });
 });

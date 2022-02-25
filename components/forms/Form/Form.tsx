@@ -27,6 +27,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
+  const [formSubmitTimeout, setFormSubmitTimeout] = useState(false);
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -44,6 +45,17 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
       setCanFocusOnError(false);
     }
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
+
+  useEffect(() => {
+    // timeout to prevent form from being submitted too quickly
+    const millisPerFormElement = 2000;
+    setTimeout(
+      () => {
+        setFormSubmitTimeout(true);
+      },
+      children ? React.Children.count(children) * millisPerFormElement : 0
+    );
+  }, [formSubmitTimeout]);
 
   return (
     <>
@@ -76,7 +88,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
           >
             {children}
             <div className="buttons">
-              <Button type="submit">{t("submitButton")}</Button>
+              <Button type="submit" disabled={!formSubmitTimeout}>
+                {t("submitButton")}
+              </Button>
             </div>
           </form>
         </>

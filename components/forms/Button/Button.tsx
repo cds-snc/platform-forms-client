@@ -25,6 +25,7 @@ export const Button = (
       "gc-button--secondary": secondary,
       "gc-button--base": base,
       "gc-button--destructive": destructive,
+      "gc-button--disabled": disabled,
     },
     className
   );

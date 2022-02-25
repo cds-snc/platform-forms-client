@@ -210,6 +210,13 @@
   }
 }
 
+.gc-button--disabled {
+  @apply bg-gray-800;
+  &:hover {
+    @apply bg-gray-800;
+  }
+}
+
 .gc-label {
   @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
   &.required > span {
