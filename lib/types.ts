@@ -2,7 +2,7 @@ import { ChangeEvent } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Session, User } from "next-auth";
+import { Session } from "next-auth";
 
 export interface FormDefinitionProperties {
   internalTitleEn?: string;
@@ -155,12 +155,6 @@ export type FileInputResponse = {
   [key: string]: string | number | File | FileReader;
 };
 
-export interface AuthenticatedUser {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-}
-
 export type MultipleChoiceProps = {
   id: string;
   name: string;
@@ -263,14 +257,6 @@ export interface MiddlewareProps {
 
 // User Types
 
-export interface AuthenticatedUser extends User {
-  id?: number;
-  admin: boolean;
-}
-
-export interface ExtendedSession extends Session {
-  user: AuthenticatedUser;
-}
 export type FormOwner = {
   id: number;
   email: string;

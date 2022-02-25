@@ -1,26 +1,19 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
+import { User } from "next-auth";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
-import { AuthenticatedUser } from "@lib/types";
 import { Button } from "@components/forms";
 import { useRefresh } from "@lib/hooks/useRefresh";
 import React from "react";
 import axios from "axios";
 import { TFunction, useTranslation } from "next-i18next";
 
-interface AdminAuthenticatedUser extends AuthenticatedUser {
+// We're filtering out all the undefined fields in getServerSideProps
+// Extending interface locally to be easier to read
+interface AuthenticatedUser extends User {
   id: number;
   admin: boolean;
-}
-
-interface UserProps {
-  users: AdminAuthenticatedUser[];
-}
-
-interface UserRowProps {
-  user: AuthenticatedUser;
-  t: TFunction;
 }
 
 const updateAdminValue = async (userID: number, isAdmin: boolean) => {
@@ -59,6 +52,11 @@ const AdminEnable = ({
   );
 };
 
+interface UserRowProps {
+  user: AuthenticatedUser;
+  t: TFunction;
+}
+
 const UserRow = ({ user, t }: UserRowProps) => {
   // Logic check for user.id simplifies typescript check
   if (user.id) {
@@ -74,6 +72,10 @@ const UserRow = ({ user, t }: UserRowProps) => {
   }
   return null;
 };
+
+interface UserProps {
+  users: AuthenticatedUser[];
+}
 
 const Users = ({ users }: UserProps): React.ReactElement => {
   const { t } = useTranslation("admin-users");
@@ -103,7 +105,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     localeProps = await serverSideTranslations(context.locale, ["common", "admin-users"]);
   }
 
-  const users = (await getUsers()).filter((user) => user.id);
+  const users = (await getUsers()).filter((user) => user.id) as AuthenticatedUser[];
 
   return { props: { ...localeProps, users } };
 });

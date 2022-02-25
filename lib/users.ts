@@ -1,18 +1,19 @@
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
-import { AuthenticatedUser } from "@lib/types";
+import { User } from "next-auth";
+
 import { logMessage } from "./logger";
 
 /**
  * Get all users
  * @returns An array of all Users
  */
-export const getUsers = async (): Promise<AuthenticatedUser[]> => {
+export const getUsers = async (): Promise<User[]> => {
   const result = await executeQuery(
     await dbConnector(),
     "SELECT id, name, email, admin FROM users"
   );
-  return result.rows as AuthenticatedUser[];
+  return result.rows as User[];
 };
 
 /**
