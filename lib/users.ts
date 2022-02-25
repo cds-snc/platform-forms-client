@@ -12,7 +12,10 @@ export const getUsers = async (): Promise<User[]> => {
   const result = await executeQuery(
     await dbConnector(),
     "SELECT id, name, email, admin FROM users"
-  );
+  ).catch((e) => {
+    logMessage.error(e);
+    return { rows: [] };
+  });
   return result.rows as User[];
 };
 
