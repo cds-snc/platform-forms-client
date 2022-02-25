@@ -206,8 +206,21 @@ export const getErrorList = (
 ): JSX.Element | null => {
   let errorList;
   const formElementErrors = Object.entries(props.errors);
-  if (props.touched && formElementErrors.length) {
-    errorList = formElementErrors.map(([formElementKey, formElementErrorValue]) => {
+  if (formElementErrors.length === 0) {
+    return null;
+  }
+  if (props.children === undefined) {
+    return null;
+  }
+  const formElements = Object.entries(props.children as Array<unknown>);
+  if (formElements.length === 0) {
+    return null;
+  }
+
+  const formElementErrorsDisplayOrder = sortElementErrors(formElementErrors, formElements);
+
+  if (props.touched && formElementErrorsDisplayOrder.length) {
+    errorList = formElementErrorsDisplayOrder.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           return Object.entries(dynamicRowErrors).map(
@@ -227,6 +240,36 @@ export const getErrorList = (
     });
   }
   return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
+};
+
+/**
+ * sortElementErrors sorts the error list to display correctly
+ * @param formElementErrors A list of errors sorted in ascending order
+ * @param formElements A list of form elements as displayed on the page
+ * @returns a list of errors sorted against the "layout" order from the JSON config
+ */
+const sortElementErrors = (
+  formElementErrors: [string, string | undefined][],
+  formElements: [string, unknown][]
+) => {
+  // extract the order of the displayed elements from the list of React Nodes passed in, and store in array
+  const formElementsDisplayOrder: number[] = [];
+  formElements.forEach((element) => {
+    if (element && element[1]) {
+      formElementsDisplayOrder.push(Reflect.get(element[1] as Record<string, unknown>, "key"));
+    }
+  });
+
+  // match the order of the errors against the displayed elements
+  const formElementErrorsDisplayOrder: [string, string | undefined][] = [];
+  formElementsDisplayOrder.forEach((element) => {
+    formElementErrors.forEach((elementError) => {
+      if (element == parseInt(elementError[0])) {
+        formElementErrorsDisplayOrder.push(elementError);
+      }
+    });
+  });
+  return formElementErrorsDisplayOrder;
 };
 
 /**
