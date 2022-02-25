@@ -1,24 +1,7 @@
 describe("TSB Contact Form functionality", () => {
-  let formConfig = null,
-    formID = null;
-
-  before(() => {
-    // Find the JSON configuration
-    const body = {
-      method: "GET",
-    };
-    cy.request("/api/templates", body).then((response) => {
-      const record = response.body.data.records.find(
-        (rec) => rec.formConfig.internalTitleEn === "Contact Us - TSB"
-      );
-      formConfig = record.formConfig;
-      formID = record.formID;
-    });
-  });
-
   it("TSB Contact Form renders", () => {
-    cy.visit(`/en/id/${formID}`);
-    cy.get("h1").contains(formConfig.form.titleEn);
+    cy.visit("/en/id/1?mockedFormFile=tsbContactTestForm");
+    cy.get("h1").contains("Transportation Safety Board of Canada general enquiries");
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa").should("have.value", "Santa");
@@ -35,7 +18,7 @@ describe("TSB Contact Form functionality", () => {
   });
   it("Submit the Form", () => {
     cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
-    cy.url().should("include", `/en/id/${formID}/confirmation`);
+    cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");
     cy.get("#content").contains(
