@@ -6,5 +6,6 @@
   "true": "True",
   "false": "False",
   "enable": "Enable",
-  "disable": "Disable"
+  "disable": "Disable",
+  "a11y-diable-desc": "Change administrative priveleges for"
 }

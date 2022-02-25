@@ -33,18 +33,19 @@ const updateAdminValue = async (userID: number, isAdmin: boolean) => {
 const AdminEnable = ({
   isAdmin,
   t,
-  userID,
+  user,
 }: {
   isAdmin: boolean;
   t: TFunction;
-  userID: number;
+  user: AuthenticatedUser;
 }) => {
   const { refreshData, isRefreshing } = useRefresh([isAdmin]);
   return (
     <Button
       type="button"
       className="w-32 py-2 px-4"
-      onClick={() => updateAdminValue(userID, !isAdmin).then(() => refreshData())}
+      ariaProps={{ "aria-describedby": `${t("a11y-diable-desc")} ${user.name}` }}
+      onClick={() => updateAdminValue(user.id, !isAdmin).then(() => refreshData())}
       disabled={isRefreshing}
     >
       {isAdmin ? t("disable") : t("enable")}
@@ -61,11 +62,11 @@ const UserRow = ({ user, t }: UserRowProps) => {
   // Logic check for user.id simplifies typescript check
   if (user.id) {
     return (
-      <tr id={`${user.id}`} className="border-b-1">
-        <td>{user.email}</td>
+      <tr className="border-b-1">
+        <td id={`email-${user.id}`}>{user.email}</td>
         <td>{user.admin ? t("true") : t("false")}</td>
         <td>
-          <AdminEnable isAdmin={user.admin} userID={user.id} t={t} />
+          <AdminEnable isAdmin={user.admin} user={user} t={t} />
         </td>
       </tr>
     );

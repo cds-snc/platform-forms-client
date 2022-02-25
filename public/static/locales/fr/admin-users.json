@@ -6,5 +6,6 @@
   "true": "Oui",
   "false": "Non",
   "enable": "Activer",
-  "disable": "Désactiver"
+  "disable": "Désactiver",
+  "a11y-diable-desc": "Modifier les droits d'administrateur pour"
 }
