@@ -48,9 +48,7 @@ const AdminEnable = ({
       disabled={isRefreshing}
     >
       {isAdmin ? t("disable") : t("enable")}
-      <span id={`user-${user.id}`} className="sr-only">{`${t("a11y-diable-desc")} ${
-        user.name
-      }`}</span>
+      <span className="sr-only">{`${t("a11y-diable-desc")} ${user.name}`}</span>
     </Button>
   );
 };
@@ -65,7 +63,7 @@ const UserRow = ({ user, t }: UserRowProps) => {
   if (user.id) {
     return (
       <tr className="border-b-1">
-        <td id={`email-${user.id}`}>{user.email}</td>
+        <td>{user.email}</td>
         <td>{user.admin ? t("true") : t("false")}</td>
         <td>
           <AdminEnable isAdmin={user.admin} user={user} t={t} />
