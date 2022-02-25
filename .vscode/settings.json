@@ -1,9 +1,0 @@
-{
-  "prettier.configPath": ".prettierrc.json",
-  "prettier.useEditorConfig": false,
-  "i18n-ally.localesPaths": [
-    "public/static/locales",
-    "storybook-static/static/locales"
-  ],
-  "jest.jestCommandLine": "yarn test",
-}
