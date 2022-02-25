@@ -17,13 +17,14 @@ export default NextAuth({
   // A database is optional, but required to persist accounts in a database
   database: process.env.DATABASE_URL,
 
-  adapter: process.env.DATABASE_URL
-    ? Adapters.TypeORM.Adapter(process.env.DATABASE_URL, {
-        models: {
-          User: Models.User,
-        },
-      })
-    : undefined,
+  adapter:
+    process.env.DATABASE_URL &&
+    Adapters.TypeORM.Adapter(process.env.DATABASE_URL, {
+      models: {
+        User: Models.User,
+      },
+    }),
+
   callbacks: {
     async session(session, user) {
       // Add info like 'role' or 'admin' to session object
