@@ -58,7 +58,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
     return () => {
       clearTimeout(formSubmitTimeout);
     };
-  }, [formSubmitDelay]);
+  });
 
   return (
     <>
