@@ -44,11 +44,13 @@ const AdminEnable = ({
     <Button
       type="button"
       className="w-32 py-2 px-4"
-      ariaProps={{ "aria-describedby": `${t("a11y-diable-desc")} ${user.name}` }}
       onClick={() => updateAdminValue(user.id, !isAdmin).then(() => refreshData())}
       disabled={isRefreshing}
     >
       {isAdmin ? t("disable") : t("enable")}
+      <span id={`user-${user.id}`} className="sr-only">{`${t("a11y-diable-desc")} ${
+        user.name
+      }`}</span>
     </Button>
   );
 };
