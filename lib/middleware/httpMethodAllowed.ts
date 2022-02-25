@@ -19,6 +19,7 @@ export const httpMethodAllowed = (methods: string[]) => {
       }
 
       // Also check CORS by evaluating the origin of the request
+      // TODO: Modify origin to acceptable parameter
       const blockedByCors = await cors({ origin: "*", methods: methods })(req, res);
       if (!blockedByCors.pass) {
         return { pass: false };
