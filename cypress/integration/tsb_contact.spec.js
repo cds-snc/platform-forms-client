@@ -34,9 +34,7 @@ describe("TSB Contact Form functionality", () => {
       .should("have.value", "Contacting the Transportion Safety Board for a personal inquiry");
   });
   it("Submit the Form", () => {
-    cy.clock(new Date());
-    cy.tick(30000);
-    cy.get("button").contains("Submit").click();
+    cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
     cy.url().should("include", `/en/id/${formID}/confirmation`);
     cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");

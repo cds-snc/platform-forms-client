@@ -40,9 +40,7 @@ describe("CDS Intake Form functionality", () => {
       );
   });
   it("Submit the Form", () => {
-    cy.clock(new Date());
-    cy.tick(30000);
-    cy.get("button").contains("Submit").click();
+    cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
     cy.url().should("include", "/confirmation");
     cy.get("h1").should("have.focus");
   });
