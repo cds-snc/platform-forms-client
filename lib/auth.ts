@@ -6,6 +6,12 @@ import { hasOwnProperty } from "./tsUtils";
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
 }
+
+/**
+ * Verifies if their is a session and redirects user as required.
+ * @param innerFunction Next JS getServerSideProps resolver function
+ * @returns Context with a 'user' object if there is a session detected
+ */
 export function requireAuthentication(
   innerFunction: (
     ctx: GetServerSidePropsAuthContext
@@ -46,6 +52,11 @@ export function requireAuthentication(
   };
 }
 
+/**
+ * Checks if session exists and if it belongs to a user with administrative priveleges
+ * @param reqOrContext Request or Context Object
+ * @returns session if exists otherwise null
+ */
 export const isAdmin = async (reqOrContext?: GetSessionOptions): Promise<Session | null> => {
   // If server side, 'req' must be passed to getSession
   const session = reqOrContext ? await getSession(reqOrContext) : await getSession();
