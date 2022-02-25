@@ -49,10 +49,9 @@ describe("Generate a form component", () => {
 
       const submitButton = screen.getByRole("button", { type: "submit" });
 
-      // complete the timeout to allow the form to be submitted
-      jest.runAllTimers();
-
       await act(async () => {
+        // complete the timeout to allow the form to be submitted
+        jest.runAllTimers();
         submitButton.click();
       });
       expect(submitButton).not.toBeDisabled();
