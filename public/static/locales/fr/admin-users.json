@@ -1,10 +1,10 @@
 {
-  "title": "Manage Users",
-  "username": "User Name",
-  "email": "Email Address",
-  "admin": "Administrator",
-  "true": "True",
-  "false": "False",
-  "enabled": "Enable",
-  "disable": "Éteindre"
+  "title": "Gérer les utilisateurs",
+  "username": "Nom d'utilisateur",
+  "email": "Addresse de courriel",
+  "admin": "Administrateur",
+  "true": "Oui",
+  "false": "Non",
+  "enable": "Activer",
+  "disable": "Désactiver"
 }
