@@ -65,13 +65,18 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
               {errorList}
             </Alert>
           ) : null}
-
+          {/**
+           * method attribute needs to stay here in case javascript does not load
+           * otherwise GET request will be sent which will result in leaking all the user data
+           * to the URL
+           */}
           <form
             id="form"
             data-testid="form"
             onSubmit={(e) => {
               handleSubmit(e);
             }}
+            method="POST"
             noValidate
           >
             {children}
