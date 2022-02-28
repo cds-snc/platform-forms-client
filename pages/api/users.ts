@@ -3,14 +3,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, httpMethodAllowed, sessionExists } from "@lib/middleware";
 import { getUsers, adminRole } from "@lib/users";
 
-const allowedMethods = ["GET", "POST"];
+const allowedMethods = ["GET", "PUT"];
 
-const getMethod = async (res: NextApiResponse) => {
+const getUserAdminStatus = async (res: NextApiResponse) => {
   const users = await getUsers();
   res.status(200).json({ users });
 };
 
-const postMethod = async (req: NextApiRequest, res: NextApiResponse) => {
+const updateUserAdminStatus = async (req: NextApiRequest, res: NextApiResponse) => {
   const { userID, isAdmin } = req.body;
   if (typeof userID === "undefined" || typeof isAdmin === "undefined") {
     return res.status(400).json({ error: "Malformed Request" });
@@ -26,11 +26,11 @@ const postMethod = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   switch (req.method) {
-    case "POST":
-      await postMethod(req, res);
+    case "PUT":
+      await updateUserAdminStatus(req, res);
       break;
     case "GET":
-      await getMethod(res);
+      await getUserAdminStatus(res);
       break;
   }
 };

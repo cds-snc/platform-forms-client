@@ -23,7 +23,7 @@ export const getUsers = async (): Promise<User[]> => {
  * Modifies the Admin role on a user
  * @param isAdmin
  * @param userID
- * @returns boolean that indicates success for failure
+ * @returns boolean that indicates success or failure
  */
 export const adminRole = async (isAdmin: boolean, userID: number): Promise<boolean> => {
   try {
@@ -31,9 +31,9 @@ export const adminRole = async (isAdmin: boolean, userID: number): Promise<boole
       isAdmin.toString(),
       userID.toString(),
     ]);
+    return true;
   } catch (e) {
     logMessage.error(e as Error);
     return false;
   }
-  return true;
 };

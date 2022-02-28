@@ -19,7 +19,7 @@ interface AuthenticatedUser extends User {
 const updateAdminValue = async (userID: number, isAdmin: boolean) => {
   return await axios({
     url: `/api/users`,
-    method: "POST",
+    method: "PUT",
     data: {
       userID,
       isAdmin,
