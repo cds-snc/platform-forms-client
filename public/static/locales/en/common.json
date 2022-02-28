@@ -14,9 +14,9 @@
   },
   "skip-link": "Skip to main content",
   "fip": {
-    "link": "/",
+    "link": "http://canada.ca/en.html",
     "text": "Symbol of the Government of Canada",
-    "label": "Navigate to the home page"
+    "label": "Government of Canada Home page"
   },
   "preview": {
     "title": "Preview a Form from JSON config",
