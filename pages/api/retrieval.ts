@@ -35,8 +35,10 @@ async function getFormResponses(
   //Default value to 10 if it's undefined
   const { maxRecords = "10", formID } = req.query;
   //Check maxRecords aren't repeated
-  if (Array.isArray(maxRecords) || Array.isArray(formID) || !formID)
+  if (Array.isArray(maxRecords) || Array.isArray(formID) || !formID) {
     return res.status(400).json({ error: "Bad Request" });
+  }
+
   const expectedMaxRecords = parseInt(maxRecords);
   //Range is 1- 10
   if (expectedMaxRecords < 1 || expectedMaxRecords > 10) {
