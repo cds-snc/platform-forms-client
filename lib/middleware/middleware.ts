@@ -14,19 +14,14 @@ export const middleware = (
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-      let blockedByMiddleware = false;
       let props = {};
       for (const middlewareLayer of middlewareArray) {
         const { pass, props: middlewareProps } = await middlewareLayer(req, res, props);
-        if (!pass) {
-          blockedByMiddleware = true;
-          break;
-        }
+        if (!pass) return;
+
         props = { ...props, ...middlewareProps };
       }
-      if (!blockedByMiddleware) {
-        await handler(req, res, props);
-      }
+      await handler(req, res, props);
     } catch (e) {
       logMessage.error(e as Error);
       res.status(500).json({ error: "Server Middleware Error" });
