@@ -206,10 +206,7 @@ export const getErrorList = (
 ): JSX.Element | null => {
   let errorList;
   const formElementErrors = Object.entries(props.errors);
-  if (formElementErrors.length === 0) {
-    return null;
-  }
-  if (props.children === undefined) {
+  if (formElementErrors.length === 0 || props.children === undefined) {
     return null;
   }
   const formElements = Object.entries(props.children as Array<unknown>);
