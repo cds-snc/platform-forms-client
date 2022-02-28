@@ -11,8 +11,5 @@ export const checkLogs = (logs: Array<Array<string>>, message: string): boolean 
     }
   });
 
-  if (foundLogs.length > 0) {
-    return true;
-  }
-  return false;
+  return foundLogs.length > 0;
 };
