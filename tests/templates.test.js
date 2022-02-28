@@ -63,7 +63,7 @@ describe("Test JSON validation scenarios", () => {
   it("Should pass with valid JSON", async () => {
     const mockSession = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", image: "null" },
+      user: { email: "a@b.com", name: "Testing Forms", image: "null", admin: true },
     };
 
     client.getSession.mockReturnValueOnce(mockSession);
@@ -87,18 +87,19 @@ describe("Test JSON validation scenarios", () => {
   it("Should fail with invalid JSON", async () => {
     const mockSession = {
       expires: "1",
-      user: { email: "a", name: "Delta", image: "c" },
+      user: { email: "a", name: "Delta", image: "c", admin: true },
     };
 
     client.getSession.mockReturnValueOnce([mockSession, false]);
     const { req, res } = createMocks({
-      method: "INSERT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
       body: {
         formConfig: brokenFormTemplate,
+        method: "INSERT",
       },
     });
 
