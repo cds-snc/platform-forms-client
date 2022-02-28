@@ -371,7 +371,8 @@
     box-shadow: 0 0 0 2px white;
     outline: solid 2px #303fc3;
     outline-offset: 2px;
-    @apply bg-gray-300;
+    @apply bg-blue-focus;
+    @apply text-gray-50;    
   }
 
   &:active {
@@ -381,6 +382,7 @@
   }
   &:hover {
     @apply bg-gray-300;
+    @apply text-black-default;
   }
 }
 
