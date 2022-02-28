@@ -37,7 +37,7 @@
     "file-size-too-large": "Veuillez sélectionner un fichier plus petit",
     "file-type-invalid": "Veuillez sélectionner un autre type de fichier"
   },
-  "required-field": "Champ obligatoire",
+  "required-field": "obligatoire",
   "file-upload-button-text": "Téléverser un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",

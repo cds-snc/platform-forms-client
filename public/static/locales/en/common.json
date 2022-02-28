@@ -37,7 +37,7 @@
     "file-size-too-large": "Please select a smaller file",
     "file-type-invalid": "Please select a different file type"
   },
-  "required-field": "Required Field",
+  "required-field": "required",
   "file-upload-button-text": "Upload a file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
