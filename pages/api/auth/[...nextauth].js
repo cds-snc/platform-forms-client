@@ -36,8 +36,7 @@ export default NextAuth({
           admin: user.admin ?? false,
         },
       };
-      const extendedSession = { ...session, ...extendedInfo };
-      return extendedSession;
+      return { ...session, ...extendedInfo };
     },
   },
 });
