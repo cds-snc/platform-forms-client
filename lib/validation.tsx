@@ -202,22 +202,29 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
  * @param props
  */
 export const getErrorList = (
-  props: InnerFormProps & FormikProps<FormValues>
+  props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps
 ): JSX.Element | null => {
+  if (!props.formConfig) {
+    return null;
+  }
   let errorList;
-  const formElementErrors = Object.entries(props.errors);
-  if (formElementErrors.length === 0 || props.children === undefined) {
-    return null;
-  }
-  const formElements = Object.entries(props.children as Array<unknown>);
-  if (formElements.length === 0) {
+  const formElementErrors: [string, string | undefined][] = Object.entries(props.errors);
+  const layout: string[] = props.formConfig.layout;
+  if (formElementErrors.length === 0 || layout.length === 0) {
     return null;
   }
 
-  const formElementErrorsDisplayOrder = sortElementErrors(formElementErrors, formElements);
+  const sortedFormElementErrors: [string, string | undefined][] = [];
+  layout.map((element) => {
+    formElementErrors.filter((elementError) => {
+      if (elementError && elementError[0] == element) {
+        sortedFormElementErrors.push(elementError);
+      }
+    });
+  });
 
-  if (props.touched && formElementErrorsDisplayOrder.length) {
-    errorList = formElementErrorsDisplayOrder.map(([formElementKey, formElementErrorValue]) => {
+  if (props.touched && sortedFormElementErrors.length) {
+    errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           return Object.entries(dynamicRowErrors).map(
@@ -237,36 +244,6 @@ export const getErrorList = (
     });
   }
   return errorList && errorList.length ? <ol className="gc-ordered-list">{errorList}</ol> : null;
-};
-
-/**
- * sortElementErrors sorts the error list to display correctly
- * @param formElementErrors A list of errors sorted in ascending order
- * @param formElements A list of form elements as displayed on the page
- * @returns a list of errors sorted against the "layout" order from the JSON config
- */
-const sortElementErrors = (
-  formElementErrors: [string, string | undefined][],
-  formElements: [string, unknown][]
-) => {
-  // extract the order of the displayed elements from the list of React Nodes passed in, and store in array
-  const formElementsDisplayOrder: number[] = [];
-  formElements.forEach((element) => {
-    if (element && element[1]) {
-      formElementsDisplayOrder.push(Reflect.get(element[1] as Record<string, unknown>, "key"));
-    }
-  });
-
-  // match the order of the errors against the displayed elements
-  const formElementErrorsDisplayOrder: [string, string | undefined][] = [];
-  formElementsDisplayOrder.forEach((element) => {
-    formElementErrors.forEach((elementError) => {
-      if (element == parseInt(elementError[0])) {
-        formElementErrorsDisplayOrder.push(elementError);
-      }
-    });
-  });
-  return formElementErrorsDisplayOrder;
 };
 
 /**
