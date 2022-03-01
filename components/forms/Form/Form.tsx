@@ -7,6 +7,7 @@ import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
 import Loader from "../../globals/Loader";
+import axios from "axios";
 
 declare global {
   interface Window {
@@ -28,6 +29,40 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
+  const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY;
+  const isCaptchaEnable = process.env.IS_CAPTCHA_ENABLE === "true";
+
+  const handleRecaptcha = (e) => {
+    logMessage.debug(`Captcha On ${isCaptchaEnable}`);
+    //prevent submit
+    e.preventDefault();
+    window.grecaptcha.ready(() => {
+      window.grecaptcha.execute(SITE_KEY, { action: "submit" }).then(async (token) => {
+        const res = await verifyToken(token);
+        logMessage.debug(res);
+      });
+    });
+  };
+
+  const verifyToken = async (token: string) => {
+    // call a backend API to verify reCAPTCHA response
+    try {
+      return await axios({
+        url: "/api/verify",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          userToken: token,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 80000,
+      });
+    } catch (error) {
+      logMessage.error(error);
+    }
+  };
+
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
     if (formStatusError) {
@@ -43,6 +78,32 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
       setFocusOnErrorMessage(props, errorId);
       setCanFocusOnError(false);
     }
+
+    const loadScriptFromURL = (id: string, url: string, callback) => {
+      const isScriptExist = document.getElementById(id);
+
+      if (!isScriptExist) {
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        script.id = id;
+        script.onload = function () {
+          if (callback) callback();
+        };
+        document.body.appendChild(script);
+      }
+
+      if (isScriptExist && callback) callback();
+    };
+
+    // load the script by passing the URL
+    loadScriptFromURL(
+      "recaptcha-key",
+      `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`,
+      function () {
+        logMessage.debug("Script loaded!");
+      }
+    );
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   return (
@@ -74,6 +135,8 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
             id="form"
             data-testid="form"
             onSubmit={(e) => {
+              //handleCaptcha;
+              //TODO hanble score before submit
               handleSubmit(e);
             }}
             method="POST"
@@ -81,7 +144,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
           >
             {children}
             <div className="buttons">
-              <Button type="submit">{t("submitButton")}</Button>
+              <Button type="submit" onClick={isCaptchaEnable ? handleRecaptcha : undefined}>
+                {t("submitButton")}
+              </Button>
             </div>
           </form>
         </>
