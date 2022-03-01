@@ -10,19 +10,19 @@ export const jsonValidator = (schema: Schema, options: ValidateOptions): Middlew
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       if (req.method === "GET") {
-        return { pass: true };
+        return { next: true };
       }
       const validator = new Validator();
       const validatorResult = validator.validate(req.body[options.jsonKey], schema);
       if (validatorResult.valid) {
-        return { pass: true };
+        return { next: true };
       } else {
         res.status(400).json({ error: validatorResult.errors.toString() });
-        return { pass: false };
+        return { next: false };
       }
     } catch {
       res.status(500).json({ error: "Malformed API Request" });
-      return { pass: false };
+      return { next: false };
     }
   };
 };

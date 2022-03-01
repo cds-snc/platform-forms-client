@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { logMessage } from "@lib/logger";
-import { middleware, httpMethodAllowed, validTemporaryToken } from "@lib/middleware";
+import { middleware, cors, validTemporaryToken } from "@lib/middleware";
 import {
   DynamoDBClient,
   QueryCommand,
@@ -124,4 +124,7 @@ async function getFormResponses(
 }
 
 // Only a GET request is allowed
-export default middleware([httpMethodAllowed(["GET"]), validTemporaryToken()], getFormResponses);
+export default middleware(
+  [cors({ allowedMethods: ["GET"] }), validTemporaryToken()],
+  getFormResponses
+);

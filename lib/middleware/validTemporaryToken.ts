@@ -29,12 +29,12 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       //Check that formID isn't repeated
       if (Array.isArray(formID)) {
         res.status(400).json({ error: "Bad Request" });
-        return { pass: false };
+        return { next: false };
       }
       //Get formID form the bearer token
       if (!formID) {
         res.status(400).json({ error: "Bad Request" });
-        return { pass: false };
+        return { next: false };
       }
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
@@ -46,14 +46,14 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       const { email } = temporaryTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       if (await isTokenExists(formID, email as string, token)) {
-        return { pass: true, props: { email, temporaryToken: token } };
+        return { next: true, props: { email, temporaryToken: token } };
       }
       res.status(403).json({ error: "Missing or invalid bearer token." });
-      return { pass: false };
+      return { next: false };
     } catch (err) {
       //Token verification has failed
       res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
-      return { pass: false };
+      return { next: false };
     }
   };
 };

@@ -3,7 +3,7 @@ import { isAdmin } from "@lib/auth";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
-import { httpMethodAllowed, sessionExists, middleware } from "@lib/middleware";
+import { cors, sessionExists, middleware } from "@lib/middleware";
 import dbConnector from "@lib/integration/dbConnector";
 import { QueryResult } from "pg";
 import { BearerResponse } from "@lib/types";
@@ -110,4 +110,4 @@ export const getTokenById = async (formID: string): Promise<QueryResult> => {
   );
 };
 
-export default middleware([httpMethodAllowed(["GET", "POST"]), sessionExists()], handler);
+export default middleware([cors({ allowedMethods: ["GET", "POST"] }), sessionExists()], handler);

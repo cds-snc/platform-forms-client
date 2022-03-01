@@ -1,5 +1,5 @@
 export { middleware } from "./middleware";
-export { httpMethodAllowed } from "./httpMethodAllowed";
+export { cors } from "./cors";
 export { sessionExists } from "./sessionExists";
 export { validBearerToken } from "./validBearerToken";
 export { validTemporaryToken } from "./validTemporaryToken";

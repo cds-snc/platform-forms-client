@@ -2,7 +2,7 @@ import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
 
-import { middleware, httpMethodAllowed, validBearerToken } from "@lib/middleware";
+import { middleware, cors, validBearerToken } from "@lib/middleware";
 import { MiddlewareProps } from "@lib/types";
 
 import jwt from "jsonwebtoken";
@@ -114,4 +114,4 @@ const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) 
     });
 };
 
-export default middleware([httpMethodAllowed(["POST"]), validBearerToken()], handler);
+export default middleware([cors({ allowedMethods: ["POST"] }), validBearerToken()], handler);

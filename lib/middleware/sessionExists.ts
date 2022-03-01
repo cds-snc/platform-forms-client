@@ -23,15 +23,15 @@ export const sessionExists = (methods?: string[]) => {
 
     if (useMethods(req, methods) && !session) {
       res.status(403).json({ error: "Access Denied" });
-      return { pass: false };
+      return { next: false };
     }
 
     // If there is a session, return the session as props
     if (session) {
-      return { pass: true, props: { session } };
+      return { next: true, props: { session } };
     }
 
     // If there is no session but the method is not required to be authenticated
-    return { pass: true };
+    return { next: true };
   };
 };

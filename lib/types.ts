@@ -238,7 +238,7 @@ export type BearerResponse = {
 };
 
 export interface MiddlewareReturn {
-  pass: boolean;
+  next: boolean;
   props?: MiddlewareProps;
 }
 

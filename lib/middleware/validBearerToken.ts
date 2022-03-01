@@ -17,17 +17,17 @@ export const validBearerToken = (): MiddlewareRequest => {
       const { formID } = jwt.verify(token, process.env.TOKEN_SECRET ?? "") as BearerTokenPayload;
       const tokenID = await getTokenById(formID);
       if (tokenID.rows[0].bearerToken === token) {
-        return { pass: true, props: { formID } };
+        return { next: true, props: { formID } };
       } else {
         res.status(403).json({ error: "Missing or invalid bearer token." });
-        return { pass: false };
+        return { next: false };
       }
     } catch (err) {
       if (err instanceof TokenExpiredError) {
         logMessage.error("An expired bearer token has been used.");
       }
       res.status(403).json({ error: "Missing or invalid bearer token." });
-      return { pass: false };
+      return { next: false };
     }
   };
 };

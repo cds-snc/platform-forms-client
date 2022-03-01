@@ -1,4 +1,4 @@
-import { middleware, httpMethodAllowed, sessionExists } from "@lib/middleware";
+import { middleware, cors, sessionExists } from "@lib/middleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import dbConnector from "@lib/integration/dbConnector";
 
@@ -114,4 +114,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     }
   }
 }
-export default middleware([httpMethodAllowed(["GET", "POST", "PUT"]), sessionExists()], handler);
+export default middleware(
+  [cors({ allowedMethods: ["GET", "POST", "PUT"] }), sessionExists()],
+  handler
+);
