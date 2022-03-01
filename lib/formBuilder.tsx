@@ -325,7 +325,7 @@ const _getFormInitialValues = (formConfig: PublicFormSchemaProperties, language:
   return initialValues;
 };
 
-type GenerateElementProps = {
+export type GenerateElementProps = {
   element: FormElement;
   language: string;
 };

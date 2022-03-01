@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { withFormik, FormikProps } from "formik";
-import { getFormInitialValues } from "../../../lib/formBuilder";
-import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../../lib/validation";
-import { submitToAPI } from "../../../lib/integration/helpers";
+import { GenerateElementProps, getFormInitialValues } from "@lib/formBuilder";
+import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/validation";
+import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
-import { logMessage } from "../../../lib/logger";
-import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
+import { logMessage } from "@lib/logger";
+import { FormValues, InnerFormProps, DynamicFormProps, Responses, FormElement } from "@lib/types";
 import Loader from "../../globals/Loader";
 
 declare global {
@@ -18,8 +18,8 @@ declare global {
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
-  const { children, handleSubmit, t, isSubmitting } = props;
+const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps) => {
+  const { children, handleSubmit, t, isSubmitting, formConfig } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(0);
 
@@ -48,13 +48,22 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
 
   useEffect(() => {
     // timeout to prevent form from being submitted too quickly
+    const baseDelay = 2000;
     const millisPerFormElement = 2000;
-    const formSubmitTimeout = setTimeout(
-      () => {
-        setFormSubmitDelay(true);
-      },
-      children ? React.Children.count(children) * millisPerFormElement : 0
-    );
+    const numberOfRequiredElements = React.Children.toArray(children).filter((child) => {
+      try {
+        return (
+          ((child as ReactElement).props as GenerateElementProps).element.properties.validation
+            ?.required == true
+        );
+      } catch {
+        return 0;
+      }
+    }).length;
+
+    const formSubmitTimeout = setTimeout(() => {
+      setFormSubmitDelay(true);
+    }, baseDelay + numberOfRequiredElements * millisPerFormElement);
     return () => {
       clearTimeout(formSubmitTimeout);
     };
@@ -96,9 +105,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
           >
             {children}
             <div className="buttons">
-              <Button type="submit" disabled={!formSubmitDelay}>
-                {t("submitButton")}
-              </Button>
+              <Button type="submit">{t("submitButton")}</Button>
             </div>
           </form>
         </>

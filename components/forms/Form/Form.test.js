@@ -58,7 +58,7 @@ describe("Generate a form component", () => {
       expect(mockedSubmitFunction).toBeCalledTimes(1);
     });
 
-    it("Form is not submitted because not enough time has passed", async () => {
+    it.skip("Form is not submitted because not enough time has passed", async () => {
       await act(async () => {
         render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
       });
