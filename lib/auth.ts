@@ -35,7 +35,7 @@ export function requireAuthentication(
     if (!session.user?.admin) {
       return {
         redirect: {
-          destination: `/${context.locale}/welcome-bienvenue/`,
+          destination: `/${context.locale}/admin/unauthorized/`,
           permanent: false,
         },
       };
