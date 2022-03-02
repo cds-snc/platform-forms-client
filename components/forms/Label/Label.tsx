@@ -32,14 +32,12 @@ export const Label = (props: LabelProps): React.ReactElement => {
     <>
       {children}
       {required && (
-        <>
-          &nbsp;
-          <span data-testid="required" aria-hidden>
-            ({t("required")})
-          </span>
-          <i className="visually-hidden">{t("required-field")}</i>
-        </>
+        <span data-testid="required" aria-hidden>
+          {" "}
+          ({t("required")})
+        </span>
       )}
+      {required && <i className="visually-hidden">{t("required-field")}</i>}
       {hint && <span className="gc-hint">{hint}</span>}
     </>
   );
