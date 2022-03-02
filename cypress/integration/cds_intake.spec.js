@@ -1,23 +1,7 @@
 describe("CDS Intake Form functionality", () => {
-  let formConfig = null,
-    formID = null;
-  before(() => {
-    //Get form JSON configuration
-    const body = {
-      method: "GET",
-    };
-    cy.request("/api/templates", body).then((response) => {
-      const record = response.body.data.records.find(
-        (rec) => rec.formConfig.internalTitleEn === "CDS Intake Form"
-      );
-      formConfig = record.formConfig;
-      formID = record.formID;
-    });
-  });
-
   it("CDS Intake Form renders", () => {
-    cy.visit(`/en/id/${formID}`);
-    cy.get("h1").contains(formConfig.form.titleEn);
+    cy.visit("/en/id/1?mockedFormFile=cdsIntakeTestForm");
+    cy.get("h1").contains("CDS Intake Form");
   });
   it("Fill out the form", () => {
     cy.get("input[id='1']").type("Santa").should("have.value", "Santa");

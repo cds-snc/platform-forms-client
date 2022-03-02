@@ -1,9 +1,6 @@
 describe("Dynamic Row Functionality", () => {
-  const formID = 76; // Form: Copyright Board of Canada - Proposed Tariff Filing Form
-
-  // TODO: Mock the config of the form so it's always the same for this test.
   it("Adds then deletes a dynamic row", () => {
-    cy.visit(`/en/id/${formID}`);
+    cy.visit("/en/id/1?mockedFormFile=dynamicRowsTestForm");
     cy.get("[data-testid='add-row-button-3']").click();
     cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 2);
     cy.get("[data-testid='add-row-button-3']").should("have.length", 1);
@@ -16,7 +13,7 @@ describe("Dynamic Row Functionality", () => {
   });
 
   it("Reinitialize a dynamic row's state after an error occurs", () => {
-    cy.visit(`/en/id/${formID}`);
+    cy.visit("/en/id/1?mockedFormFile=dynamicRowsTestForm");
     cy.get("[data-testid='formGroup-3']")
       .find("[data-testid='dropdown']")
       .select("Artisti")
@@ -38,7 +35,7 @@ describe("Dynamic Row Functionality", () => {
 
   // https://github.com/cds-snc/platform-forms-client/issues/511
   it("Should have 2 rows left when a middle row is deleted", () => {
-    cy.visit(`/en/id/${formID}`);
+    cy.visit("/en/id/1?mockedFormFile=dynamicRowsTestForm");
     // add second row
     cy.get("[data-testid='add-row-button-3']").click();
     // add third row
@@ -52,8 +49,8 @@ describe("Dynamic Row Functionality", () => {
   });
 
   it("Should display errors when an empty form is submitted", () => {
-    cy.visit(`/en/id/${formID}`);
-    cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
+    cy.visit("/en/id/1?mockedFormFile=dynamicRowsTestForm");
+    cy.get("[type='submit']").click();
     cy.get(".gc-error-link").should("have.length", 8);
     cy.get(".gc-error-message").should("have.length", 8);
     cy.get("[id='7.0.0']").should("have.css", "border-color", "rgb(185, 28, 28)");

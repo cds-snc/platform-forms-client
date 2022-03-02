@@ -1,23 +1,7 @@
 describe("CDS Platform Intake Form functionality", () => {
-  let formConfig = null,
-    formID = null;
-  before(() => {
-    //Get form JSON configuration
-    const body = {
-      method: "GET",
-    };
-    cy.request("/api/templates", body).then((response) => {
-      const record = response.body.data.records.find(
-        (rec) => rec.formConfig.internalTitleEn === "Work with CDS on a Digital Form"
-      );
-      formConfig = record.formConfig;
-      formID = record.formID;
-    });
-  });
-
   it("CDS Platform Intake Form renders", () => {
-    cy.visit(`/en/id/${formID}`);
-    cy.get("h1").contains(formConfig.form.titleEn);
+    cy.visit("/en/id/1?mockedFormFile=platformIntakeTestForm");
+    cy.get("h1").contains("Work with CDS on a Digital Form");
   });
   it("Fill out the form", () => {
     cy.get("input[id='2']").type("Santa Claus").should("have.value", "Santa Claus");
@@ -32,8 +16,8 @@ describe("CDS Platform Intake Form functionality", () => {
       .should("have.value", "Call me at my work number");
   });
   it("Submit the Form", () => {
-    cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
-    cy.url().should("include", `/en/id/${formID}/confirmation`);
+    cy.get("[type='submit']").click();
+    cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Your submission has been received");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/sig-blk-en.svg");
     cy.get("#content").contains(

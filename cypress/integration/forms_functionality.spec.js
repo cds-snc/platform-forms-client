@@ -8,7 +8,7 @@ const A11Y_OPTIONS = {
 describe("Forms Functionality", () => {
   describe("text field tests", () => {
     it("renders the form", () => {
-      cy.visit(`/en/id/1?mockedFormFile=textFieldTestForm`);
+      cy.visit("/en/id/1?mockedFormFile=textFieldTestForm");
       cy.get("h1").contains("Text Field Test Form");
     });
     it("the form with the text fields is fully accessible", () => {
