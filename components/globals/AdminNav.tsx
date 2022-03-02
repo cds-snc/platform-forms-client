@@ -9,39 +9,39 @@ type AdminNavProps = {
 };
 
 const AdminNav = (props: AdminNavProps): React.ReactElement => {
-  const { i18n } = useTranslation("admin-login");
+  const { i18n, t } = useTranslation("common");
   const user = props.user;
 
   return (
     <nav className="gc-admin">
       <ul className="gc-horizontal-list">
         <li className="gc-horizontal-item">
-          <Link href="/admin/">Dashboard</Link>
+          <Link href="/admin/">{t("adminNav.dashboard")}</Link>
         </li>
         <li className="gc-horizontal-item">
-          <Link href="/admin/vault">Form Vault</Link>
+          <Link href="/admin/vault">{t("adminNav.vault")}</Link>
         </li>
         <li className="gc-horizontal-item">
-          <Link href="/admin/users">Users</Link>
+          <Link href="/admin/users">{t("adminNav.users")}</Link>
         </li>
         <li className="gc-horizontal-item">
-          <Link href="/admin/upload">Upload Form</Link>
+          <Link href="/admin/upload">{t("adminNav.upload")}</Link>
         </li>
         <li className="gc-horizontal-item">
-          <Link href="/admin/view-templates">Form templates</Link>
+          <Link href="/admin/view-templates">{t("adminNav.templates")}</Link>
         </li>
         <li className="gc-horizontal-item">
-          <Link href="/admin/flags">Feature Settings</Link>
+          <Link href="/admin/flags">{t("adminNav.features")}</Link>
         </li>
         <li className="gc-horizontal-item">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>
-              Login
+              {t("adminNav.login")}
             </Link>
           )}
           {user && user.name && (
             <button className="gc-button-link" onClick={() => signOut()}>
-              Logout
+              {t("adminNav.logout")}
             </button>
           )}
         </li>
