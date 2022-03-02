@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log error when we detect that an expired bearer token has been used (will be used to trigger an alarm in AWS CloudWatch)
 - Log error when we failed to generate a temporary token (will be used to trigger an alarm in AWS CloudWatch)
 - Log user access to retrieval API
+- Implementation and accessibility testing of reCAPTCHA V3. [#570](https://github.com/cds-snc/platform-forms-client/issues/570)
 
 ### Changed
 
