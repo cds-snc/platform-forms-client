@@ -246,3 +246,9 @@ export type FormOwner = {
   email: string;
   active: boolean;
 };
+
+export type ReCaptchaResponse = {
+  challenge_ts: string;
+  score: number;
+  success: boolean;
+};

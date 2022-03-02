@@ -5,7 +5,13 @@ import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../..
 import { submitToAPI } from "../../../lib/integration/helpers";
 import { Button, Alert } from "../index";
 import { logMessage } from "../../../lib/logger";
-import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "../../../lib/types";
+import {
+  FormValues,
+  InnerFormProps,
+  DynamicFormProps,
+  Responses,
+  ReCaptchaResponse,
+} from "../../../lib/types";
 import Loader from "../../globals/Loader";
 import axios from "axios";
 
@@ -30,21 +36,28 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
   const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY;
-  const isCaptchaEnable = process.env.IS_CAPTCHA_ENABLE === "true";
+  const isReCaptchaEnableOnSite = process.env.RECAPTCHA_ENABLE === "true";
 
-  const handleRecaptcha = (e) => {
-    logMessage.debug(`Captcha On ${isCaptchaEnable}`);
-    //prevent submit
+  const handleSubmitWithRecaptcha = (e) => {
+    // avoid multiple re-call while on submit state.
+    if (isSubmitting) return false;
+    logMessage.debug(`reCaptcha On :  ${isReCaptchaEnableOnSite}`);
     e.preventDefault();
     window.grecaptcha.ready(() => {
+      // get reCAPTCHA response
       window.grecaptcha.execute(SITE_KEY, { action: "submit" }).then(async (token) => {
-        const res = await verifyToken(token);
-        logMessage.debug(res);
+        await sendRecaptchaToken(token).then((res) => {
+          const recaptchaRes = res?.data as ReCaptchaResponse;
+          logMessage.warn(recaptchaRes);
+          // assuming you're not a Robot
+          // continue submission process
+          handleSubmit(e);
+        });
       });
     });
   };
 
-  const verifyToken = async (token: string) => {
+  const sendRecaptchaToken = async (token: string) => {
     // call a backend API to verify reCAPTCHA response
     try {
       return await axios({
@@ -79,31 +92,39 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
       setCanFocusOnError(false);
     }
 
-    const loadScriptFromURL = (id: string, url: string, callback) => {
+    const loadScriptFromURL = (id: string, url: string, callback?: () => void) => {
       const isScriptExist = document.getElementById(id);
-
+      //calls once when a form is rendered
       if (!isScriptExist) {
-        const script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = url;
-        script.id = id;
-        script.onload = function () {
+        const newScript = document.createElement("script");
+        newScript.type = "text/javascript";
+        newScript.src = url;
+        newScript.id = id;
+        newScript.onload = function () {
           if (callback) callback();
         };
-        document.body.appendChild(script);
+        document.body.appendChild(newScript);
       }
-
       if (isScriptExist && callback) callback();
     };
 
-    // load the script by passing the URL
-    loadScriptFromURL(
-      "recaptcha-key",
-      `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`,
-      function () {
-        logMessage.debug("Script loaded!");
-      }
-    );
+    if (isReCaptchaEnableOnSite && !isSubmitting) {
+      // add a listener
+      const formElement = document.getElementById("form");
+      formElement?.addEventListener("submit", handleSubmitWithRecaptcha);
+      // load the script by passing the URL
+      loadScriptFromURL(
+        "recaptcha-key",
+        `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`,
+        function () {
+          logMessage.debug("Script loaded!");
+        }
+      );
+      // no reCAPTCHA default behavior
+    } else if (!isSubmitting) {
+      const formElement = document.getElementById("form");
+      formElement?.addEventListener("submit", handleSubmit);
+    }
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   return (
@@ -131,22 +152,10 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
            * otherwise GET request will be sent which will result in leaking all the user data
            * to the URL
            */}
-          <form
-            id="form"
-            data-testid="form"
-            onSubmit={(e) => {
-              //handleCaptcha;
-              //TODO hanble score before submit
-              handleSubmit(e);
-            }}
-            method="POST"
-            noValidate
-          >
+          <form id="form" data-testid="form" method="POST" noValidate>
             {children}
             <div className="buttons">
-              <Button type="submit" onClick={isCaptchaEnable ? handleRecaptcha : undefined}>
-                {t("submitButton")}
-              </Button>
+              <Button type="submit">{t("submitButton")}</Button>
             </div>
           </form>
         </>
