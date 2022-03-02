@@ -21,13 +21,15 @@ declare global {
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps) => {
   const { children, handleSubmit, t, isSubmitting, formConfig } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
-  const [lastSubmitCount, setLastSubmitCount] = useState(0);
+  const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-  const [formSubmitDelay, setFormSubmitDelay] = useState(false);
+  const [submitTimer, setSubmitTimer] = useState(0);
+  const [intervalID, setIntervalID] = useState(0);
+  const [buttonInterval, setButtonInterval] = useState(0);
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -47,9 +49,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   useEffect(() => {
-    // timeout to prevent form from being submitted too quickly
-    const baseDelay = 2000;
-    const millisPerFormElement = 2000;
+    // calculate initial delay for submit timer
+    const secondsBaseDelay = 2;
+    const secondsPerFormElement = 2;
     const numberOfRequiredElements = React.Children.toArray(children).filter((child) => {
       try {
         return (
@@ -61,13 +63,22 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
       }
     }).length;
 
-    const formSubmitTimeout = setTimeout(() => {
-      setFormSubmitDelay(true);
-    }, baseDelay + numberOfRequiredElements * millisPerFormElement);
+    const submitDelay = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
+    setSubmitTimer(submitDelay);
+  }, []);
+
+  useEffect(() => {
+    // timeout to prevent form from being submitted too quickly
+    let timeoutId = 0;
+    if (submitTimer > 0) {
+      timeoutId = setTimeout(() => {
+        setSubmitTimer((submitTimer) => submitTimer - 1);
+      }, 1000) as unknown as number;
+    }
     return () => {
-      clearTimeout(formSubmitTimeout);
+      clearTimeout(timeoutId);
     };
-  });
+  }, [submitTimer]);
 
   return (
     <>
@@ -104,6 +115,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             noValidate
           >
             {children}
+            {submitTimer > 0 && <div>Try again in {submitTimer} seconds.</div>}
             <div className="buttons">
               <Button type="submit">{t("submitButton")}</Button>
             </div>
