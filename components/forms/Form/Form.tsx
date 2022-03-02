@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { withFormik, FormikProps } from "formik";
-import { getFormInitialValues } from "../../../lib/formBuilder";
-import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "../../../lib/validation";
-import { submitToAPI } from "../../../lib/integration/helpers";
+import { getFormInitialValues } from "@lib/formBuilder";
+import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/validation";
+import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
-import { logMessage } from "../../../lib/logger";
+import { logMessage } from "@lib/logger";
 import {
   FormValues,
   InnerFormProps,
   DynamicFormProps,
   Responses,
   ReCaptchaResponse,
-} from "../../../lib/types";
+} from "@lib/types";
 import Loader from "../../globals/Loader";
 import axios from "axios";
 
@@ -38,7 +38,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY;
   const isReCaptchaEnableOnSite = process.env.RECAPTCHA_ENABLE === "true";
 
-  const handleSubmitWithRecaptcha = (e: React.FormEvent<EventTarget>) => {
+  const handleSubmitWithReCAPTCHA = (e: React.FormEvent<EventTarget>) => {
     // avoid multiple re-call while on submit state.
     if (isSubmitting) return false;
     logMessage.debug(`reCaptcha On :  ${isReCaptchaEnableOnSite}`);
@@ -46,34 +46,34 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
     window.grecaptcha.ready(() => {
       // get reCAPTCHA response
       window.grecaptcha.execute(SITE_KEY, { action: "submit" }).then(async (token) => {
-        await sendRecaptchaToken(token).then((res) => {
-          const recaptchaRes = res?.data as ReCaptchaResponse;
-          logMessage.warn(recaptchaRes);
-          // assuming you're not a Robot
-          // continue submission process
-          handleSubmit(e);
-        });
+        sendRecaptchaToken(token)
+          .then((res) => {
+            const recaptchaRes = res?.data as ReCaptchaResponse;
+            logMessage.warn(recaptchaRes);
+            // assuming you're not a Robot
+            // continue submission process
+            handleSubmit(e);
+          })
+          .catch((error) => {
+            logMessage.error(error);
+          });
       });
     });
   };
 
   const sendRecaptchaToken = async (token: string) => {
     // call a backend API to verify reCAPTCHA response
-    try {
-      return await axios({
-        url: "/api/verify",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          userToken: token,
-        },
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 80000,
-      });
-    } catch (error) {
-      logMessage.error(error);
-    }
+    return await axios({
+      url: "/api/verify",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        userToken: token,
+      },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 80000,
+    });
   };
 
   //  If there are errors on the page, set focus the first error field
@@ -111,7 +111,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
     if (isReCaptchaEnableOnSite && !isSubmitting) {
       // add a listener
       const formElement = document.getElementById("form");
-      formElement?.addEventListener("submit", handleSubmitWithRecaptcha);
+      formElement?.addEventListener("submit", handleSubmitWithReCAPTCHA);
       // load the script by passing the URL
       loadScriptFromURL(
         "recaptcha-key",
