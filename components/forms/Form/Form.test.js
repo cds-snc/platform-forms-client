@@ -1,9 +1,9 @@
 import React from "react";
 import { cleanup, render, screen, act } from "@testing-library/react";
 import Form from "./Form";
-import mockedDataLayer from "../../../lib/integration/helpers";
+import mockedDataLayer from "@lib/integration/helpers";
 
-jest.mock("../../../lib/integration/helpers", () => ({
+jest.mock("@lib/integration/helpers", () => ({
   submitToAPI: jest.fn(() => {}),
 }));
 
@@ -30,45 +30,45 @@ describe("Generate a form component", () => {
       .toBeInTheDocument()
       .toContainElement(screen.getByTestId("test-child"));
   });
-  describe("Form Functionality", () => {
-    let mockedSubmitFunction;
-    beforeEach(() => {
-      mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
-    });
-    afterEach(() => {
-      mockedSubmitFunction.mockRestore();
-    });
-    afterAll(() => {
-      cleanup();
-    });
+});
 
-    it("Form is submitted", async () => {
-      await act(async () => {
-        render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
-      });
-
-      const submitButton = screen.getByRole("button", { type: "submit" });
-
-      await act(async () => {
-        // complete the timeout to allow the form to be submitted
-        jest.runAllTimers();
-        submitButton.click();
-      });
-      expect(submitButton).not.toBeDisabled();
-      expect(mockedSubmitFunction).toBeCalledTimes(1);
+describe("Form Functionality", () => {
+  let mockedSubmitFunction;
+  beforeEach(async () => {
+    mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
+    await act(async () => {
+      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
     });
+  });
+  afterEach(() => {
+    mockedSubmitFunction.mockRestore();
+  });
+  afterAll(() => {
+    cleanup();
+  });
 
-    it.skip("Form is not submitted because not enough time has passed", async () => {
-      await act(async () => {
-        render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
-      });
+  it("there is 1 and only 1 submit button", async () => {
+    expect(await screen.findAllByRole("button", { type: "submit" })).toHaveLength(1);
+  });
 
-      const submitButton = screen.getByRole("button", { type: "submit" });
-      await act(async () => {
-        submitButton.click();
-      });
-      expect(submitButton).toBeDisabled();
-      expect(mockedSubmitFunction).not.toHaveBeenCalled();
+  it("Form is submitted", async () => {
+    const submitButton = screen.getByRole("button", { type: "submit" });
+
+    await act(async () => {
+      // complete the timeout to allow the form to be submitted
+      jest.runAllTimers();
+      submitButton.click();
     });
+    expect(submitButton).not.toBeDisabled();
+    expect(mockedSubmitFunction).toBeCalledTimes(1);
+  });
+
+  it.skip("Form is not submitted because not enough time has passed", async () => {
+    const submitButton = screen.getByRole("button", { type: "submit" });
+    await act(async () => {
+      submitButton.click();
+    });
+    expect(submitButton).toBeDisabled();
+    expect(mockedSubmitFunction).not.toHaveBeenCalled();
   });
 });
