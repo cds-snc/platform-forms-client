@@ -204,24 +204,18 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
 export const getErrorList = (
   props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps
 ): JSX.Element | null => {
-  if (!props.formConfig) {
+  if (!props.formConfig || !props.errors) {
     return null;
   }
   let errorList;
-  const formElementErrors: [string, string | undefined][] = Object.entries(props.errors);
-  const layout: string[] = props.formConfig.layout;
-  if (formElementErrors.length === 0 || layout.length === 0) {
-    return null;
-  }
 
-  const sortedFormElementErrors: [string, string | undefined][] = [];
-  layout.map((element) => {
-    formElementErrors.filter((elementError) => {
-      if (elementError && elementError[0] == element) {
-        sortedFormElementErrors.push(elementError);
-      }
+  const sortedFormElementErrors = props.formConfig.layout
+    .filter((element) => {
+      return element in props.errors;
+    })
+    .map((element) => {
+      return [element, props.errors[element]];
     });
-  });
 
   if (props.touched && sortedFormElementErrors.length) {
     errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
