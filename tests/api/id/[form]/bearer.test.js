@@ -1,6 +1,6 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
-import retrieve from "../../../../pages/api/id/[form]/bearer";
+import retrieve from "@pages/api/id/[form]/bearer";
 import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";

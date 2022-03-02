@@ -1,5 +1,5 @@
 import { createMocks } from "node-mocks-http";
-import templates from "../pages/api/templates";
+import templates from "@pages/api/templates";
 import client from "next-auth/client";
 import validFormTemplate from "./data/validFormTemplate.json";
 import brokenFormTemplate from "./data/brokenFormTemplate.json";

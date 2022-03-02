@@ -1,5 +1,5 @@
 import { createMocks } from "node-mocks-http";
-import retrieval from "../../pages/api/retrieval";
+import retrieval from "@pages/api/retrieval";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";

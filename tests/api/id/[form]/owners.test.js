@@ -1,6 +1,6 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
-import owners from "../../../../pages/api/id/[form]/owners";
+import owners from "@pages/api/id/[form]/owners";
 import executeQuery from "@lib/integration/queryManager";
 
 jest.mock("next-auth/client");

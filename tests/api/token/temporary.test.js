@@ -1,5 +1,5 @@
 import { createMocks } from "node-mocks-http";
-import temporary from "../../../pages/api/token/temporary";
+import temporary from "@pages/api/token/temporary";
 import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";
 
