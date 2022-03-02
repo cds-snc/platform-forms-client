@@ -38,7 +38,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
   const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY;
   const isReCaptchaEnableOnSite = process.env.RECAPTCHA_ENABLE === "true";
 
-  const handleSubmitWithRecaptcha = (e) => {
+  const handleSubmitWithRecaptcha = (e: React.FormEvent<EventTarget>) => {
     // avoid multiple re-call while on submit state.
     if (isSubmitting) return false;
     logMessage.debug(`reCaptcha On :  ${isReCaptchaEnableOnSite}`);
