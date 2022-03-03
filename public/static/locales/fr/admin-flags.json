@@ -29,6 +29,10 @@
     "notifyPreview": {
       "title": "Prévisualiser par e-mail",
       "description": "Sur la page de confirmation après la soumission, affichez une copie de l'e-mail envoyé à l'administrateur du formulaire"
+    },
+    "reCHAPTCHA": {
+      "title": "Je ne suis pas un robot",
+      "description": "Active la function Je ne suis pas un robot à tous les formulaires avant leur soumission"
     }
   }
 }

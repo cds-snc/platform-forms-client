@@ -5,6 +5,7 @@ import { checkOne } from "../../../lib/flags";
 
 export async function getServerSideProps(context) {
   const unpublishedForms = await checkOne("unpublishedForms");
+  const isReCaptchaEnableOnSite = await checkOne("reCHAPTCHA");
   let form = null;
   const formId = context.params.form;
   const isEmbeddable = (context.query.embed && context.query.embed == "true") || null;
@@ -30,12 +31,12 @@ export async function getServerSideProps(context) {
       },
     };
   }
-
   return {
     props: {
       mockedFormFile: mockedFormFile,
       formConfig: form,
       isEmbeddable: isEmbeddable,
+      isReCaptchaEnableOnSite: isReCaptchaEnableOnSite,
       ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
     }, // will be passed to the page component as props
   };

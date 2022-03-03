@@ -29,6 +29,10 @@
     "notifyPreview": {
       "title": "Notify Email Preview",
       "description": "On the confirmation page after submission display a copy of the email sent to the form administrator"
+    },
+    "reCHAPTCHA": {
+      "title": "ReCAPTCHA",
+      "description": "Enable reCHAPTCHA on forms before submission"
     }
   }
 }

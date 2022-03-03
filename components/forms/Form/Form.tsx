@@ -5,19 +5,17 @@ import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/val
 import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
-import {
-  FormValues,
-  InnerFormProps,
-  DynamicFormProps,
-  Responses,
-  ReCaptchaResponse,
-} from "@lib/types";
+import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
 import Loader from "../../globals/Loader";
 import axios from "axios";
 
 declare global {
   interface Window {
     dataLayer: Array<unknown>;
+    grecaptcha: {
+      execute: (arg1: string | undefined, arg2: Record<string, unknown>) => Promise<string>;
+      ready: (arg: () => void) => void;
+    };
   }
 }
 
@@ -25,43 +23,41 @@ declare global {
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
-  const { children, handleSubmit, t, isSubmitting } = props;
+const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps) => {
+  const { children, handleSubmit, t, isSubmitting, isReCaptchaEnableOnSite } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(0);
-
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY;
-  const isReCaptchaEnableOnSite = process.env.RECAPTCHA_ENABLE === "true";
-
-  const handleSubmitWithReCAPTCHA = (e: React.FormEvent<EventTarget>) => {
-    // avoid multiple re-call while on submit state.
-    if (isSubmitting) return false;
-    logMessage.debug(`reCaptcha On :  ${isReCaptchaEnableOnSite}`);
-    e.preventDefault();
-    window.grecaptcha.ready(() => {
-      // get reCAPTCHA response
-      window.grecaptcha.execute(SITE_KEY, { action: "submit" }).then(async (token) => {
-        sendRecaptchaToken(token)
-          .then((res) => {
-            const recaptchaRes = res?.data as ReCaptchaResponse;
-            logMessage.warn(recaptchaRes);
-            // assuming you're not a Robot
-            // continue submission process
-            handleSubmit(e);
-          })
-          .catch((error) => {
-            logMessage.error(error);
+  const handleFormSubmission = (evt: React.FormEvent<HTMLFormElement>) => {
+    if (isReCaptchaEnableOnSite) {
+      evt.preventDefault();
+      window.grecaptcha.ready(() => {
+        // get reCAPTCHA response
+        window.grecaptcha
+          .execute(process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY, { action: "submit" })
+          .then(async (clientToken: string) => {
+            sendClientTokenForVerification(clientToken)
+              .then((res) => {
+                const { score, success } = res.data;
+                logMessage.warn(`score : ${score}  status: ${success}`);
+                // assuming you're not a Robot and  submit
+                handleSubmit(evt);
+              })
+              .catch((error) => {
+                logMessage.error(error);
+              });
           });
       });
-    });
+    } else {
+      handleSubmit(evt);
+    }
   };
 
-  const sendRecaptchaToken = async (token: string) => {
+  const sendClientTokenForVerification = async (token: string) => {
     // call a backend API to verify reCAPTCHA response
     return await axios({
       url: "/api/verify",
@@ -72,7 +68,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
       data: {
         userToken: token,
       },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 80000,
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
   };
 
@@ -90,40 +86,6 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
     } else if (!props.isValid) {
       setFocusOnErrorMessage(props, errorId);
       setCanFocusOnError(false);
-    }
-
-    const loadScriptFromURL = (id: string, url: string, callback?: () => void) => {
-      const isScriptExist = document.getElementById(id);
-      //calls once when a form is rendered
-      if (!isScriptExist) {
-        const newScript = document.createElement("script");
-        newScript.type = "text/javascript";
-        newScript.src = url;
-        newScript.id = id;
-        newScript.onload = function () {
-          if (callback) callback();
-        };
-        document.body.appendChild(newScript);
-      }
-      if (isScriptExist && callback) callback();
-    };
-
-    if (isReCaptchaEnableOnSite && !isSubmitting) {
-      // add a listener
-      const formElement = document.getElementById("form");
-      formElement?.addEventListener("submit", handleSubmitWithReCAPTCHA);
-      // load the script by passing the URL
-      loadScriptFromURL(
-        "recaptcha-key",
-        `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`,
-        function () {
-          logMessage.debug("Script loaded!");
-        }
-      );
-      // no reCAPTCHA default behavior
-    } else if (!isSubmitting) {
-      const formElement = document.getElementById("form");
-      formElement?.addEventListener("submit", handleSubmit);
     }
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
@@ -152,7 +114,15 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
            * otherwise GET request will be sent which will result in leaking all the user data
            * to the URL
            */}
-          <form id="form" data-testid="form" method="POST" noValidate>
+          <form
+            id="form"
+            data-testid="form"
+            method="POST"
+            onSubmit={(e) => {
+              handleFormSubmission(e);
+            }}
+            noValidate
+          >
             {children}
             <div className="buttons">
               <Button type="submit">{t("submitButton")}</Button>

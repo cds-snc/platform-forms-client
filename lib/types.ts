@@ -139,6 +139,7 @@ export interface DynamicFormProps {
   notifyPreviewFlag: boolean;
   mockedFormFile?: string;
   t: TFunction;
+  isReCaptchaEnableOnSite?: boolean;
 }
 
 export interface InnerFormProps {
@@ -245,10 +246,4 @@ export type FormOwner = {
   id: number;
   email: string;
   active: boolean;
-};
-
-export type ReCaptchaResponse = {
-  challenge_ts: string;
-  score: number;
-  success: boolean;
 };
