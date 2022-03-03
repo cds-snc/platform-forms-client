@@ -5,7 +5,8 @@ import { checkOne } from "../../../lib/flags";
 
 export async function getServerSideProps(context) {
   const unpublishedForms = await checkOne("unpublishedForms");
-  const isReCaptchaEnableOnSite = await checkOne("reCHAPTCHA");
+  const isReCaptchaEnableOnSite =
+    process.env.CYPRESS === "true" ? false : await checkOne("reCHAPTCHA");
   let form = null;
   const formId = context.params.form;
   const isEmbeddable = (context.query.embed && context.query.embed == "true") || null;

@@ -21,10 +21,3 @@ import "./commands";
 
 // Import Axe-Core library
 import "cypress-axe";
-
-Cypress.on("window:before:load", (win) => {
-  win.grecaptcha = {
-    execute: () => {},
-    ready: () => {},
-  };
-});
