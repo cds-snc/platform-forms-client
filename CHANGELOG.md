@@ -23,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure display order of error list matches the display order of the form elements.
 - Implementation and accessibility testing of reCAPTCHA V3. [#570](https://github.com/cds-snc/platform-forms-client/issues/570)
 
-
 ### Changed
 
 - Renamed `organisation` to `organization` which has an impact on the API access path
