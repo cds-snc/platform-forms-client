@@ -71,4 +71,11 @@ describe("Form Functionality", () => {
     expect(submitButton).toBeDisabled();
     expect(mockedSubmitFunction).not.toHaveBeenCalled();
   });
+
+  it("shows the alert after pressing submit if the timer hasn't expired", async () => {
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    const submitButton = screen.getByRole("button", { type: "submit" });
+    submitButton.click();
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+  });
 });

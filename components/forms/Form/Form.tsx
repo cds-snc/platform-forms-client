@@ -7,6 +7,7 @@ import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses, FormElement } from "@lib/types";
 import Loader from "../../globals/Loader";
+import classNames from "classnames";
 
 declare global {
   interface Window {
@@ -27,9 +28,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
+  const [submitDelay, setSubmitDelay] = useState(0);
   const [submitTimer, setSubmitTimer] = useState(0);
-  const [intervalID, setIntervalID] = useState(0);
-  const [buttonInterval, setButtonInterval] = useState(0);
+  const [submitTooEarly, setSubmitTooEarly] = useState(false);
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -63,9 +64,10 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
       }
     }).length;
 
-    const submitDelay = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
-    setSubmitTimer(submitDelay);
-  }, []);
+    const submitDelaySeconds = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
+    setSubmitDelay(submitDelaySeconds);
+    setSubmitTimer(submitDelaySeconds);
+  }, [submitDelay]);
 
   useEffect(() => {
     // timeout to prevent form from being submitted too quickly
@@ -79,6 +81,14 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
       clearTimeout(timeoutId);
     };
   }, [submitTimer]);
+
+  /*
+  useEffect(() => {
+    if (submitTimer === 0) {
+      setSubmitTooEarly(false);
+    }
+  }, [submitTimer, submitTooEarly]);
+  */
 
   return (
     <>
@@ -109,15 +119,44 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             id="form"
             data-testid="form"
             onSubmit={(e) => {
+              if (submitTimer) {
+                setSubmitTooEarly(true);
+                if (submitTimer < 5) setSubmitTimer(5);
+                e.preventDefault();
+                return;
+              }
+              setSubmitTooEarly(false);
               handleSubmit(e);
             }}
             method="POST"
             noValidate
           >
             {children}
-            {submitTimer > 0 && <div>Try again in {submitTimer} seconds.</div>}
-            <div className="buttons">
-              <Button type="submit">{t("submitButton")}</Button>
+            <div
+              className={classNames({
+                "border-l-2": submitTimer >= 0 && submitTooEarly,
+                "border-red-default": submitTimer >= 0 && submitTooEarly,
+                "border-green-default": submitTimer == 0 && submitTooEarly,
+                "pl-3": submitTimer >= 0 && submitTooEarly,
+              })}
+            >
+              {submitTimer > 0 && submitTooEarly && (
+                <div role="alert">
+                  <p className="gc-label text-red-default">
+                    Button can not be used in less than {submitDelay} seconds.
+                  </p>
+                  <p className="gc-description">Try again in {submitTimer} seconds.</p>
+                </div>
+              )}
+              {submitTimer == 0 && submitTooEarly && (
+                <div role="alert">
+                  <p className="gc-label text-green-default">The form is ready.</p>
+                  <p className="gc-description">You can try this button again now.</p>
+                </div>
+              )}
+              <div className="buttons">
+                <Button type="submit">{t("submitButton")}</Button>
+              </div>
             </div>
           </form>
         </>
