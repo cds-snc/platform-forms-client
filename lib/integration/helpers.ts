@@ -38,7 +38,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
       };
     }
   } catch (err) {
-    logMessage.error(err);
+    logMessage.error(err as Error);
   }
 }
 
