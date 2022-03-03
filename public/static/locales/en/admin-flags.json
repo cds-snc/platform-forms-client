@@ -32,7 +32,7 @@
     },
     "reCHAPTCHA": {
       "title": "ReCAPTCHA",
-      "description": "Enable reCHAPTCHA on forms before submission"
+      "description": "Enable protected by reCHAPTCHA on forms before submission"
     }
   }
 }

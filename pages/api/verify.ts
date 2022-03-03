@@ -6,8 +6,7 @@ const allowedMethods = ["POST"];
 
 const verifyReCaptchaToken = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const requestBody = req.body;
-    const { userToken } = requestBody;
+    const { userToken } = req.body;
     if (userToken) {
       const reCAPTCHASecret = process.env.RECAPTACHA_V3_SECRET_KEY;
       const response = await axios({

@@ -13,6 +13,7 @@ declare global {
   interface Window {
     dataLayer: Array<unknown>;
     grecaptcha: {
+      // TODO Maybe a better way to address
       execute: (arg1: string | undefined, arg2: Record<string, unknown>) => Promise<string>;
       ready: (arg: () => void) => void;
     };
@@ -33,28 +34,24 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
   const handleFormSubmission = (evt: React.FormEvent<HTMLFormElement>) => {
-    if (isReCaptchaEnableOnSite) {
-      evt.preventDefault();
-      window.grecaptcha.ready(() => {
-        // get reCAPTCHA response
-        window.grecaptcha
-          .execute(process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY, { action: "submit" })
-          .then(async (clientToken: string) => {
-            sendClientTokenForVerification(clientToken)
-              .then((res) => {
-                const { score, success } = res.data;
-                logMessage.warn(`score : ${score}  status: ${success}`);
-                // assuming you're not a Robot and  submit
-                handleSubmit(evt);
-              })
-              .catch((error) => {
-                logMessage.error(error);
-              });
-          });
-      });
-    } else {
-      handleSubmit(evt);
-    }
+    evt.preventDefault();
+    window.grecaptcha.ready(() => {
+      // get reCAPTCHA response
+      window.grecaptcha
+        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY, { action: "submit" })
+        .then(async (clientToken: string) => {
+          sendClientTokenForVerification(clientToken)
+            .then((res) => {
+              const { score, success } = res.data;
+              logMessage.warn(`score : ${score}  status: ${success}`);
+              // assuming you're not a Robot and  submit
+              handleSubmit(evt);
+            })
+            .catch((error) => {
+              logMessage.error(error);
+            });
+        });
+    });
   };
 
   const sendClientTokenForVerification = async (token: string) => {
@@ -119,7 +116,11 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             data-testid="form"
             method="POST"
             onSubmit={(e) => {
-              handleFormSubmission(e);
+              if (isReCaptchaEnableOnSite) {
+                handleFormSubmission(e);
+              } else {
+                handleSubmit(e);
+              }
             }}
             noValidate
           >

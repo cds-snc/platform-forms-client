@@ -32,7 +32,7 @@
     },
     "reCHAPTCHA": {
       "title": "Je ne suis pas un robot",
-      "description": "Active la function Je ne suis pas un robot à tous les formulaires avant leur soumission"
+      "description": "Active la protection Je ne suis pas un robot pour tous les formulaires avant leur soumission"
     }
   }
 }
