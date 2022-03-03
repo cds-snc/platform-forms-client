@@ -49,7 +49,7 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
     expect(screen.getByText(radioButtonData.properties.choices[0][lang])).toBeInTheDocument();
     expect(screen.getByText(radioButtonData.properties.choices[1][lang])).toBeInTheDocument();
     // Field is required
-    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    expect(screen.queryByTestId("required")).toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).toBeRequired();
     });
@@ -63,7 +63,7 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
         <GenerateElement element={radioButtonData} language={lang} />
       </Form>
     );
-    expect(screen.queryByTestId("asterisk")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("required")).not.toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
       expect(input).not.toBeRequired();
     });

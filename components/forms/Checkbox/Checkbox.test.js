@@ -84,6 +84,6 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
       </Form>
     );
 
-    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    expect(screen.queryByTestId("required")).toBeInTheDocument();
   });
 });
