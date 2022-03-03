@@ -7,7 +7,11 @@ const allowedMethods = ["GET", "PUT"];
 
 const getUserAdminStatus = async (res: NextApiResponse) => {
   const users = await getUsers();
-  res.status(200).json({ users });
+  if (users.length === 0) {
+    res.status(500).json({ error: "Could not process request" });
+  } else {
+    res.status(200).json({ users });
+  }
 };
 
 const updateUserAdminStatus = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -15,10 +19,12 @@ const updateUserAdminStatus = async (req: NextApiRequest, res: NextApiResponse) 
   if (typeof userID === "undefined" || typeof isAdmin === "undefined") {
     return res.status(400).json({ error: "Malformed Request" });
   }
-  const success = await adminRole(isAdmin, userID);
+  const [success, userFound] = await adminRole(isAdmin, userID);
 
-  if (success) {
+  if (success && userFound) {
     res.status(200).send("Success");
+  } else if (success) {
+    res.status(404).json({ error: "User not found" });
   } else {
     res.status(500).json({ error: "Could not process request" });
   }

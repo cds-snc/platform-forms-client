@@ -25,17 +25,18 @@ export const getUsers = async (): Promise<User[]> => {
  * Modifies the Admin role on a user
  * @param isAdmin
  * @param userID
- * @returns boolean that indicates success or failure
+ * @returns boolean that indicates success or failure and if a user exists
  */
-export const adminRole = async (isAdmin: boolean, userID: number): Promise<boolean> => {
+export const adminRole = async (isAdmin: boolean, userID: number): Promise<[boolean, boolean]> => {
   try {
-    await executeQuery(await dbConnector(), "UPDATE users SET admin = ($1) WHERE id = ($2)", [
-      isAdmin.toString(),
-      userID.toString(),
-    ]);
-    return true;
+    const result = await executeQuery(
+      await dbConnector(),
+      "UPDATE users SET admin = ($1) WHERE id = ($2)",
+      [isAdmin.toString(), userID.toString()]
+    );
+    return [true, Boolean(result.rowCount)];
   } catch (e) {
     logMessage.error(e as Error);
-    return false;
+    return [false, false];
   }
 };

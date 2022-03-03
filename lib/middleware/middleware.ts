@@ -21,7 +21,7 @@ export const middleware = (
 
         props = { ...props, ...middlewareProps };
       }
-      await handler(req, res, props);
+      return handler(req, res, props);
     } catch (e) {
       logMessage.error(e as Error);
       res.status(500).json({ error: "Server Middleware Error" });

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
-import { getTokenById } from "@pages/api/id/[form]/bearer";
+import { getTokenById } from "../../pages/api/id/[form]/bearer";
 import { BearerTokenPayload, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { logMessage } from "../logger";
 
