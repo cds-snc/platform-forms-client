@@ -24,7 +24,7 @@ import "cypress-axe";
 
 Cypress.on("window:before:load", (win) => {
   win.grecaptcha = {
-    execute: Function,
-    ready: Function,
+    execute: () => {},
+    ready: () => {},
   };
 });
