@@ -33,10 +33,3 @@ describe("Accessibility (A11Y) Check", () => {
       });
   });
 });
-
-/*
-          cy.log(form);
-          cy.visit(`/en/id/${form.formID}`);
-          cy.injectAxe();
-          cy.checkA11y(null, A11Y_OPTIONS);
-          */

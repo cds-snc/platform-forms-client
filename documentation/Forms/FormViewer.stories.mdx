@@ -108,6 +108,7 @@ Example:
         "placeholderFr": "",
         "description": "",
         "charLimit": 100,
+        "autoComplete": "name",
         "validation": {
           "required": true
         }
@@ -202,6 +203,8 @@ A simple text input where the `title` property is used as the input's label.
 `descriptionEn / descriptionFr`: Secondary paragraph/text of a question or element that provides additional context beyond the label `string`)
 
 `charLimit`: The maximum number of characters that can be submitted through the input
+
+`autoComplete`: When appropropriate, a string for the autoComplete token to identify the field. A list of acceptable tokens can be found here: https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill-detail-tokens
 
 `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
