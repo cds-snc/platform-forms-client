@@ -223,17 +223,25 @@ export const getErrorList = (
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           return Object.entries(dynamicRowErrors).map(
             ([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
-              return dyanamicRowElementErrorValue ? (
-                <ErrorListItem
-                  errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
-                  value={`${dyanamicRowElementErrorValue as string}`}
-                />
-              ) : null;
+              return (
+                dyanamicRowElementErrorValue && (
+                  <li key={`error-${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}>
+                    <ErrorListItem
+                      errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                      value={`${dyanamicRowElementErrorValue as string}`}
+                    />
+                  </li>
+                )
+              );
             }
           );
         });
       } else {
-        return <ErrorListItem errorKey={`${formElementKey}`} value={`${formElementErrorValue}`} />;
+        return (
+          <li key={`error-${formElementKey}`}>
+            <ErrorListItem errorKey={`${formElementKey}`} value={`${formElementErrorValue}`} />
+          </li>
+        );
       }
     });
   }
