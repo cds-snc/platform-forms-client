@@ -202,12 +202,23 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
  * @param props
  */
 export const getErrorList = (
-  props: InnerFormProps & FormikProps<FormValues>
+  props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps
 ): JSX.Element | null => {
+  if (!props.formConfig || !props.errors) {
+    return null;
+  }
   let errorList;
-  const formElementErrors = Object.entries(props.errors);
-  if (props.touched && formElementErrors.length) {
-    errorList = formElementErrors.map(([formElementKey, formElementErrorValue]) => {
+
+  const sortedFormElementErrors = props.formConfig.layout
+    .filter((element) => {
+      return element in props.errors;
+    })
+    .map((element) => {
+      return [element, props.errors[element]];
+    });
+
+  if (props.touched && sortedFormElementErrors.length) {
+    errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
         return formElementErrorValue.map((dynamicRowErrors, dynamicRowIndex) => {
           return Object.entries(dynamicRowErrors).map(
