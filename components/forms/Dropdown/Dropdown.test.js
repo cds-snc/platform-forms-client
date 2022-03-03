@@ -121,7 +121,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
         <GenerateElement element={dropdownData} language={lang} />
       </Form>
     );
-    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    expect(screen.queryByTestId("required")).toBeInTheDocument();
     dropdownData.properties.validation.required = false;
   });
 });
