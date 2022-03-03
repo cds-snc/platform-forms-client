@@ -27,23 +27,24 @@ const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
   const { errorKey, value } = props;
 
   return (
-    <a
-      href={`#${errorKey}`}
-      className="gc-error-link"
-      key={errorKey}
-      onKeyDown={(e) => {
-        if (e.code === "Space") {
+    <li>
+      <a
+        href={`#${errorKey}`}
+        className="gc-error-link"
+        onKeyDown={(e) => {
+          if (e.code === "Space") {
+            e.preventDefault();
+            scrollErrorInView(errorKey);
+          }
+        }}
+        onClick={(e) => {
           e.preventDefault();
           scrollErrorInView(errorKey);
-        }
-      }}
-      onClick={(e) => {
-        e.preventDefault();
-        scrollErrorInView(errorKey);
-      }}
-    >
-      {value}
-    </a>
+        }}
+      >
+        {value}
+      </a>
+    </li>
   );
 };
 

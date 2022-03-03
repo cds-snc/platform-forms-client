@@ -225,12 +225,11 @@ export const getErrorList = (
             ([dyanamicRowElementKey, dyanamicRowElementErrorValue]) => {
               return (
                 dyanamicRowElementErrorValue && (
-                  <li key={`error-${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}>
-                    <ErrorListItem
-                      errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
-                      value={`${dyanamicRowElementErrorValue as string}`}
-                    />
-                  </li>
+                  <ErrorListItem
+                    key={`error-${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                    errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
+                    value={`${dyanamicRowElementErrorValue as string}`}
+                  />
                 )
               );
             }
@@ -238,9 +237,11 @@ export const getErrorList = (
         });
       } else {
         return (
-          <li key={`error-${formElementKey}`}>
-            <ErrorListItem errorKey={`${formElementKey}`} value={`${formElementErrorValue}`} />
-          </li>
+          <ErrorListItem
+            key={`error-${formElementKey}`}
+            errorKey={`${formElementKey}`}
+            value={`${formElementErrorValue}`}
+          />
         );
       }
     });
