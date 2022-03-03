@@ -49,7 +49,7 @@ describe("Generate a text area", () => {
     expect(screen.getByText(description)).toBeInTheDocument();
     // Field marked as required and have aria described by
     expect(screen.getByRole("textbox")).toBeRequired().toHaveAccessibleDescription(description);
-    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    expect(screen.queryByTestId("required")).toBeInTheDocument();
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
   });

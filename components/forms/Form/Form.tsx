@@ -95,10 +95,10 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
         <>
-          {formStatusError ? (
+          {formStatusError && (
             <Alert type="error" heading={formStatusError} tabIndex={0} id={serverErrorId} />
-          ) : null}
-          {errorList ? (
+          )}
+          {errorList && (
             <Alert
               type="error"
               heading={t("input-validation.heading")}
@@ -108,7 +108,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             >
               {errorList}
             </Alert>
-          ) : null}
+          )}
           {/**
            * method attribute needs to stay here in case javascript does not load
            * otherwise GET request will be sent which will result in leaking all the user data
