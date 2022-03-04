@@ -14,9 +14,11 @@ const getRedisInstance = async (): Promise<Redis.Redis> => {
     );
     for (const key in initialSettings) {
       // eslint-disable-next-line no-console
-      console.log(`Creating flag: ${key} with value ${true} because we're in Test mode`);
+      console.log(
+        `Creating flag: ${key} with value ${initialSettings[key]} because we're in Test mode`
+      );
       await mockRedisInstance.sadd("flags", key);
-      await mockRedisInstance.set(`flag:${key}`, "1");
+      await mockRedisInstance.set(`flag:${key}`, initialSettings[key] ? "1" : "0");
     }
     return mockRedisInstance;
   }
