@@ -18,7 +18,7 @@ declare global {
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
+const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps) => {
   const { children, handleSubmit, t, isSubmitting } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(0);
@@ -51,10 +51,10 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
         <>
-          {formStatusError ? (
+          {formStatusError && (
             <Alert type="error" heading={formStatusError} tabIndex={0} id={serverErrorId} />
-          ) : null}
-          {errorList ? (
+          )}
+          {errorList && (
             <Alert
               type="error"
               heading={t("input-validation.heading")}
@@ -64,7 +64,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues>) => {
             >
               {errorList}
             </Alert>
-          ) : null}
+          )}
           {/**
            * method attribute needs to stay here in case javascript does not load
            * otherwise GET request will be sent which will result in leaking all the user data

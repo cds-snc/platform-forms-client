@@ -27,11 +27,10 @@ const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
   const { errorKey, value } = props;
 
   return (
-    <li key={`error-${errorKey}`}>
+    <li>
       <a
         href={`#${errorKey}`}
         className="gc-error-link"
-        key={errorKey}
         onKeyDown={(e) => {
           if (e.code === "Space") {
             e.preventDefault();

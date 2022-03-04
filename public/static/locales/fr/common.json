@@ -14,9 +14,9 @@
   },
   "skip-link": "Passer au contenu principal",
   "fip": {
-    "link": "/",
+    "link": "http://canada.ca/fr.html",
     "text": "Symbole du gouvernement du Canada",
-    "label": "Accéder à la page d'accueil"
+    "label": "Gouvernement du Canada page d'accueil"
   },
   "preview": {
     "title": "Prévisualisation à partir de configuration JSON",
@@ -37,6 +37,7 @@
     "file-size-too-large": "Veuillez sélectionner un fichier plus petit",
     "file-type-invalid": "Veuillez sélectionner un autre type de fichier"
   },
+  "required": "obligatoire",
   "required-field": "Champ obligatoire",
   "file-upload-button-text": "Téléverser un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",

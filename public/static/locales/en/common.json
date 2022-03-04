@@ -14,9 +14,9 @@
   },
   "skip-link": "Skip to main content",
   "fip": {
-    "link": "/",
+    "link": "http://canada.ca/en.html",
     "text": "Symbol of the Government of Canada",
-    "label": "Navigate to the home page"
+    "label": "Government of Canada Home page"
   },
   "preview": {
     "title": "Preview a Form from JSON config",
@@ -37,6 +37,7 @@
     "file-size-too-large": "Please select a smaller file",
     "file-type-invalid": "Please select a different file type"
   },
+  "required": "required",
   "required-field": "Required Field",
   "file-upload-button-text": "Upload a file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
