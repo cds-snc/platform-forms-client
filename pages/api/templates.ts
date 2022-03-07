@@ -5,12 +5,12 @@ import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 
-const allowedMethods = ["GET", "INSERT", "UPDATE", "DELETE"];
+const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await isAdmin({ req });
-    const response = await crudTemplates({ ...req.body, session });
+    const response = await crudTemplates({ ...req.body, method: req.method, session });
     if (response) {
       res.status(200).json(response);
     } else {

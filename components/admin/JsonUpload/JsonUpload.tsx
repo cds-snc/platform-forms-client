@@ -26,13 +26,12 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const handleSubmit = async (formID: number | null) => {
     return await axios({
       url: "/api/templates",
-      method: "POST",
+      method: formID ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
       },
       data: {
         formConfig: JSON.parse(jsonConfig),
-        method: formID ? "UPDATE" : "INSERT",
         formID: formID,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,

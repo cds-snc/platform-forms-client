@@ -125,6 +125,6 @@ async function getFormResponses(
 
 // Only a GET request is allowed
 export default middleware(
-  [cors({ allowedMethods: ["GET"] }), validTemporaryToken()],
+  [cors({ allowedMethods: ["GET", "DELETE"] }), validTemporaryToken()],
   getFormResponses
 );

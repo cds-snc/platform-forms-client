@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Aligned HTTP methods on API requests to decommission request body `method` property.
+
+## [1.1.0] 2022-03-04
+
 ### Added
 
 - Create secure API to deactivate a form owner associated with a form

@@ -38,8 +38,9 @@ export const cors = ({
 }) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      const requestBody = req.body && Object.keys(req.body).length > 0 ? req.body : undefined;
-      const method = requestBody?.method ? requestBody.method : req.method;
+      const method = req.method;
+      // If method is undefined throw an Error. Function is not implemented properly
+      if (!method) throw new Error("Function must be called from an instance of http.server");
 
       const corsResponse = await corsHandler({ origin, methods: allowedMethods })(req, res);
       if (!corsResponse.next) {

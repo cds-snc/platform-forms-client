@@ -22,7 +22,7 @@ export const CreateOrganization = (): React.ReactElement => {
             url: "/api/organizations",
             method: "POST",
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
             },
             data: {
               method: "INSERT",
