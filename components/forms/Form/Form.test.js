@@ -59,17 +59,7 @@ describe("Form Functionality", () => {
       jest.runAllTimers();
       submitButton.click();
     });
-    expect(submitButton).not.toBeDisabled();
     expect(mockedSubmitFunction).toBeCalledTimes(1);
-  });
-
-  it.skip("Form is not submitted because not enough time has passed", async () => {
-    const submitButton = screen.getByRole("button", { type: "submit" });
-    await act(async () => {
-      submitButton.click();
-    });
-    expect(submitButton).toBeDisabled();
-    expect(mockedSubmitFunction).not.toHaveBeenCalled();
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
