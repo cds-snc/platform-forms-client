@@ -8,7 +8,9 @@ const isRequestAllowed = (
   return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
     try {
       const session = await getSession({ req });
-      const method = req.method ?? "";
+      const method = req.method;
+      // If method is undefined throw an Error. Function is not implemented properly
+      if (!method) throw new Error("Function must be called from an instance of http.server");
       if (methods.includes(method)) {
         switch (method) {
           case "GET":
