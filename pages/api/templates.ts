@@ -5,12 +5,12 @@ import templatesSchema from "../../lib/middleware/schemas/templates.schema.json"
 import { getSession } from "next-auth/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const allowedMethods = ["GET", "INSERT", "UPDATE", "DELETE"];
+const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await getSession({ req });
-    const response = await crudTemplates({ ...req.body, session });
+    const response = await crudTemplates({ ...req.body, method: req.method, session });
     if (response) {
       res.status(200).json(response);
     } else {

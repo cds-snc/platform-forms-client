@@ -48,11 +48,11 @@ const FormResponse = ({
     if (submissionID) {
       await axios({
         url: "/api/retrieval",
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json ",
         },
-        data: { formID, responseID: submissionID, action: "DELETE" },
+        data: { formID, responseID: submissionID },
       })
         .then(() => {
           if (submissionArray.length === 1) {
@@ -169,11 +169,11 @@ const AdminVault: React.FC = () => {
     if (formID) {
       await axios({
         url: "/api/retrieval",
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json ",
         },
-        data: { formID, action: "GET" },
+        data: { formID },
       })
         .then((response) => {
           setResponses(response.data);
@@ -192,11 +192,11 @@ const AdminVault: React.FC = () => {
       if (formID) {
         await axios({
           url: "/api/retrieval",
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json ",
           },
-          data: { formID, action: "DELETE" },
+          data: { formID },
         })
           .then(() => {
             setResponses({ Items: [] });

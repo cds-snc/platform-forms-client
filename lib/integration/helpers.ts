@@ -18,13 +18,12 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
   try {
     const response = await axios({
       url: "/api/templates",
-      method: "POST",
+      method: "GET",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       data: {
         formID: formID,
-        method: "GET",
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });

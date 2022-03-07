@@ -122,4 +122,4 @@ async function getFormResponses(
 }
 
 // Only a GET request is allowed
-export default isRequestAllowed(["GET"], checkIfValidTemporaryToken(getFormResponses));
+export default isRequestAllowed(["GET", "DELETE"], checkIfValidTemporaryToken(getFormResponses));

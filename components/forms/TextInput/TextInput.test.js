@@ -18,6 +18,7 @@ const textInputData = {
     placeholderFr: "Je ne sais pas",
     descriptionEn: "This is a description",
     descriptionFr: "Voice une description",
+    autoComplete: "name",
     validation: {
       required: true,
     },
@@ -49,8 +50,19 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
     expect(screen.getByText(description)).toBeInTheDocument();
     // Field marked as required
     expect(screen.getByRole("textbox")).toBeRequired().toHaveAccessibleDescription(description);
-    expect(screen.queryByTestId("asterisk")).toBeInTheDocument();
+    expect(screen.queryByTestId("required")).toBeInTheDocument();
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
+  });
+});
+
+describe("Check attributes on rendered text input", () => {
+  it("has the correct autoComplete value", () => {
+    render(
+      <Form t={(key) => key}>
+        <GenerateElement element={textInputData} language={"en"} />
+      </Form>
+    );
+    expect(screen.getByRole("textbox").hasAttribute("autoComplete").valueOf("name"));
   });
 });

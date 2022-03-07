@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Aligned HTTP methods on API requests to decommission request body `method` property.
+
+## [1.1.0] 2022-03-04
+
 ### Added
 
 - Create secure API to deactivate a form owner associated with a form
@@ -19,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log error when we detect that an expired bearer token has been used (will be used to trigger an alarm in AWS CloudWatch)
 - Log error when we failed to generate a temporary token (will be used to trigger an alarm in AWS CloudWatch)
 - Log user access to retrieval API
+- Replace the asterisk on required fields with copy: "(required)"
+- Ensure display order of error list matches the display order of the form elements.
 - Prevent submission of form for a delayed period of time to help prevent spam submissions
 
 ### Changed
