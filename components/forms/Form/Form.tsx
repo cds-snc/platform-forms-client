@@ -82,14 +82,6 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
     };
   }, [submitTimer]);
 
-  /*
-  useEffect(() => {
-    if (submitTimer === 0) {
-      setSubmitTooEarly(false);
-    }
-  }, [submitTimer, submitTooEarly]);
-  */
-
   return (
     <>
       {isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
@@ -121,6 +113,13 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             onSubmit={(e) => {
               if (submitTimer) {
                 setSubmitTooEarly(true);
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                  event: "form_submission_spam_trigger",
+                  formID: formConfig.formID,
+                  formTitle: formConfig.titleEn,
+                  submitTime: submitDelay - submitTimer,
+                });
                 if (submitTimer < 5) setSubmitTimer(5);
                 e.preventDefault();
                 return;
