@@ -18,25 +18,26 @@ const lambdaClient = new LambdaClient({
 });
 
 async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
-  if (payload.method === "GET" && payload.formID) {
-    const cachedValue = await formCache.formID.check(payload.formID);
+  const { method, formID } = payload;
+  if (method === "GET" && formID) {
+    const cachedValue = await formCache.formID.check(formID);
     if (cachedValue) {
       return cachedValue;
     }
   }
 
   return await _crudTemplates(payload).then((response) => {
-    switch (payload.method) {
+    switch (method) {
       case "GET":
-        if (payload.formID) {
-          formCache.formID.set(payload.formID, response);
+        if (formID) {
+          formCache.formID.set(formID, response);
         }
         break;
       case "POST":
       case "PUT":
       case "DELETE":
-        if (payload.formID) {
-          formCache.formID.invalidate(payload.formID);
+        if (formID) {
+          formCache.formID.invalidate(formID);
         }
         break;
       default:
@@ -51,7 +52,7 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
   const getConfig = (payload: CrudTemplateInput) => {
     const { method, formID, formConfig } = payload;
 
-    switch (payload.method) {
+    switch (method) {
       case "GET":
         return {
           method: "GET",
