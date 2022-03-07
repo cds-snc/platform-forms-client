@@ -43,5 +43,13 @@
   "file-upload-no-file-selected": "No file currently selected",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
   "title": "GC Forms - Formulaires GC",
-  "loading": "We are processing your form submission.  Please wait."
+  "loading": "We are processing your form submission.  Please wait.",
+  "spam-error": {
+    "error-part-1": "Button can not be used in less than",
+    "error-part-2": "seconds.",
+    "prompt-part-1": "Try again in",
+    "prompt-part-2": "seconds.",
+    "success-message": "The button's ready.",
+    "success-prompt": "You can try this button again now."
+  }
 }

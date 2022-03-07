@@ -43,5 +43,13 @@
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "server-error": "Oups, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
   "title": "GC Forms - Formulaires GC",
-  "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter."
+  "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter.",
+  "spam-error": {
+    "error-part-1": "Impossible d'utiliser le bouton avant",
+    "error-part-2": "secondes de délai.",
+    "prompt-part-1": "Réessayez dans",
+    "prompt-part-2": "secondes.",
+    "success-message": "Le bouton est prêt à être utilisé.",
+    "success-prompt": "Vous pouvez maintenant réessayer le bouton."
+  }
 }

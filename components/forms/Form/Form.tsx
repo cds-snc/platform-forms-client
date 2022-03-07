@@ -5,7 +5,7 @@ import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/val
 import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
-import { FormValues, InnerFormProps, DynamicFormProps, Responses, FormElement } from "@lib/types";
+import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 
@@ -142,15 +142,17 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
               {submitTimer > 0 && submitTooEarly && (
                 <div role="alert">
                   <p className="gc-label text-red-default">
-                    Button can not be used in less than {submitDelay} seconds.
+                    {t("spam-error.error-part-1")} {submitDelay} {t("spam-error.error-part-2")}
                   </p>
-                  <p className="gc-description">Try again in {submitTimer} seconds.</p>
+                  <p className="gc-description">
+                    {t("spam-error.prompt-part-1")} {submitTimer} {t("spam-error.prompt-part-2")}
+                  </p>
                 </div>
               )}
               {submitTimer == 0 && submitTooEarly && (
                 <div role="alert">
-                  <p className="gc-label text-green-default">The form is ready.</p>
-                  <p className="gc-description">You can try this button again now.</p>
+                  <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
+                  <p className="gc-description">{t("spam-error.success-prompt")}</p>
                 </div>
               )}
               <div className="buttons">
