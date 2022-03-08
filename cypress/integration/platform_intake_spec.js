@@ -16,6 +16,8 @@ describe("CDS Platform Intake Form functionality", () => {
       .should("have.value", "Call me at my work number");
   });
   it("Submit the Form", () => {
+    cy.clock();
+    cy.tick(60000);
     cy.get("[type='submit']").click();
     cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Your submission has been received");

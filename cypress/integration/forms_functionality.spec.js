@@ -16,7 +16,9 @@ describe("Forms Functionality", () => {
       cy.checkA11y(null, A11Y_OPTIONS);
     });
     it("the form displays an error when it is submitted and the text field is required", () => {
-      cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
+      cy.clock();
+      cy.tick(60000);
+      cy.get("[type='submit']").click();
       cy.checkA11y(null, A11Y_OPTIONS);
       cy.get("h2.gc-h3").contains("Please correct the errors on the page");
       cy.get("div.gc-alert__body a").contains("Please complete the required field to continue");
@@ -27,7 +29,9 @@ describe("Forms Functionality", () => {
     it("fills the text field successfully and submits the form", () => {
       cy.reload();
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
-      cy.get("[type='submit']", { timeout: 60000 }).should("not.be.disabled").click();
+      cy.clock();
+      cy.tick(60000);
+      cy.get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
   });
