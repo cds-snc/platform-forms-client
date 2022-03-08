@@ -24,8 +24,7 @@ describe("Dynamic Row Functionality", () => {
     cy.get("[data-testid='add-row-button-3']").click();
     // should have 3 rows
     cy.get("[data-testid='formGroup-3']").find("[data-testid='dropdown']").should("have.length", 3);
-    cy.clock();
-    cy.tick(60000);
+    cy.wait();
     cy.get("[type='submit']").click();
     // add another row
     cy.get("[data-testid='add-row-button-3']").click();
@@ -52,16 +51,14 @@ describe("Dynamic Row Functionality", () => {
 
   it("Should display errors when an empty form is submitted", () => {
     cy.visit("/en/id/1?mockedFormFile=dynamicRowsTestForm");
-    cy.clock();
-    cy.tick(60000);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(20000);
     cy.get("[type='submit']").click();
     cy.get(".gc-error-link").should("have.length", 8);
     cy.get(".gc-error-message").should("have.length", 8);
     cy.get("[id='7.0.0']").should("have.css", "border-color", "rgb(185, 28, 28)");
     // add second row
     cy.get("[data-testid='add-row-button-3']").click();
-    cy.clock();
-    cy.tick(60000);
     cy.get("[type='submit']").click();
     cy.get(".gc-error-link").should("have.length", 9);
     cy.get(".gc-error-message").should("have.length", 9);

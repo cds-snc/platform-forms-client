@@ -24,8 +24,8 @@ describe("CDS Intake Form functionality", () => {
       );
   });
   it("Submit the Form", () => {
-    cy.clock();
-    cy.tick(60000);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(7000);
     cy.get("[type='submit']").click();
     cy.url().should("include", "/confirmation");
     cy.get("h1").should("have.focus");

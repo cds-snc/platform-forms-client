@@ -16,8 +16,8 @@ describe("Forms Functionality", () => {
       cy.checkA11y(null, A11Y_OPTIONS);
     });
     it("the form displays an error when it is submitted and the text field is required", () => {
-      cy.clock();
-      cy.tick(60000);
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(12000);
       cy.get("[type='submit']").click();
       cy.checkA11y(null, A11Y_OPTIONS);
       cy.get("h2.gc-h3").contains("Please correct the errors on the page");
@@ -29,8 +29,8 @@ describe("Forms Functionality", () => {
     it("fills the text field successfully and submits the form", () => {
       cy.reload();
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
-      cy.clock();
-      cy.tick(60000);
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(12000);
       cy.get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
