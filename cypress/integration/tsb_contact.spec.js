@@ -13,8 +13,8 @@ describe("TSB Contact Form functionality", () => {
       .type("Specifying what 'other' means")
       .should("have.value", "Specifying what 'other' means");
     cy.get("textarea[id='6']")
-      .type("Contacting the Transportion Safety Board for a personal inquiry")
-      .should("have.value", "Contacting the Transportion Safety Board for a personal inquiry");
+      .type("Contacting the Transportation Safety Board for a personal inquiry")
+      .should("have.value", "Contacting the Transportation Safety Board for a personal inquiry");
   });
   it("Submit the Form", () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting

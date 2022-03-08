@@ -17,7 +17,7 @@ describe("Forms Functionality", () => {
     });
     it("the form displays an error when it is submitted and the text field is required", () => {
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(12000);
+      cy.wait(5000);
       cy.get("[type='submit']").click();
       cy.checkA11y(null, A11Y_OPTIONS);
       cy.get("h2.gc-h3").contains("Please correct the errors on the page");
@@ -30,9 +30,26 @@ describe("Forms Functionality", () => {
       cy.reload();
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(12000);
+      cy.wait(5000);
       cy.get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
+  });
+});
+
+describe("Forms Functionality - Submit Delay", () => {
+  it("should display alert message when submitting too quickly", () => {
+    cy.visit("/en/id/1?mockedFormFile=textFieldTestForm");
+    cy.get("[type='submit']").click();
+    cy.get("[role='alert']").should("be.visible");
+    cy.get("[role='alert']").contains("Button can not be used");
+  });
+  it("should display the 'button ready' alert after waiting for delay", () => {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.get("[role='alert']").contains("The button's ready.");
+  });
+  it("should attempt to submit the button after in the 'button ready' state", () => {
+    cy.get("[type='submit']").click();
   });
 });
