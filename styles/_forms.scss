@@ -119,7 +119,7 @@
 
   ul,
   ol {
-    @apply mb-10;
+    @apply mb-10 list-inside;
   }
 
   a:visited {
@@ -372,7 +372,7 @@
     outline: solid 2px #303fc3;
     outline-offset: 2px;
     @apply bg-blue-focus;
-    @apply text-gray-50;    
+    @apply text-gray-50;
   }
 
   &:active {
