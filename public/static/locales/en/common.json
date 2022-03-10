@@ -42,9 +42,9 @@
   "file-upload-button-text": "Upload a file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
-  "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
+  "server-error": "Oops, looks like there was a problem submitting your form. Please try again later.",
   "title": "GC Forms - Formulaires GC",
-  "loading": "We are processing your form submission.  Please wait.",
+  "loading": "We are processing your form submission. Please wait.",
   "spam-error": {
     "error-part-1": "Button can not be used in less than",
     "error-part-2": "seconds.",
