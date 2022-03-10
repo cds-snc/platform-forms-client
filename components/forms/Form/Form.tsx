@@ -58,6 +58,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
     const secondsBaseDelay = 2;
     const secondsPerFormElement = 2;
     const numberOfRequiredElements = formConfig.elements.filter((element) => {
+      if (!element) {
+        return false;
+      }
       return element.properties.validation?.required === true;
     }).length;
 
