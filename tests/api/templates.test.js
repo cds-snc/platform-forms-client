@@ -1,8 +1,8 @@
 import { createMocks } from "node-mocks-http";
-import templates from "../pages/api/templates";
+import templates from "@pages/api/templates";
 import client from "next-auth/client";
-import validFormTemplate from "./data/validFormTemplate.json";
-import brokenFormTemplate from "./data/brokenFormTemplate.json";
+import validFormTemplate from "../data/validFormTemplate.json";
+import brokenFormTemplate from "../data/brokenFormTemplate.json";
 
 global.TextEncoder = require("util").TextEncoder;
 global.TextDecoder = require("util").TextDecoder;
@@ -63,7 +63,7 @@ describe("Test JSON validation scenarios", () => {
   it("Should pass with valid JSON", async () => {
     const mockSession = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", image: "null" },
+      user: { email: "a@b.com", name: "Testing Forms", image: "null", admin: true },
     };
 
     client.getSession.mockReturnValueOnce(mockSession);
@@ -87,7 +87,7 @@ describe("Test JSON validation scenarios", () => {
   it("Should fail with invalid JSON", async () => {
     const mockSession = {
       expires: "1",
-      user: { email: "a", name: "Delta", image: "c" },
+      user: { email: "a", name: "Delta", image: "c", admin: true },
     };
 
     client.getSession.mockReturnValueOnce([mockSession, false]);

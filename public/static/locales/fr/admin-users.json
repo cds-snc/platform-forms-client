@@ -1,0 +1,11 @@
+{
+  "title": "Gérer les utilisateurs",
+  "username": "Nom d'utilisateur",
+  "email": "Adresse de courriel",
+  "admin": "Administrateur",
+  "true": "Oui",
+  "false": "Non",
+  "enable": "Activer",
+  "disable": "Désactiver",
+  "a11y-diable-desc": "les droits d'administrateur pour"
+}

@@ -4,8 +4,8 @@ import { QueryResult, Client } from "pg";
 const executeQuery = async (
   client: Client,
   sql: string,
-  params: string[]
-): Promise<QueryResult<unknown[]>> => {
+  params?: string[]
+): Promise<QueryResult> => {
   try {
     if (!sql) throw new Error("Empty or invalid sql passed as a parameter");
     return await client.query(sql, params);

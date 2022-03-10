@@ -44,5 +44,15 @@
   "file-upload-no-file-selected": "No file currently selected",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
   "title": "GC Forms - Formulaires GC",
-  "loading": "We are processing your form submission.  Please wait."
+  "loading": "We are processing your form submission.  Please wait.",
+  "adminNav": {
+    "dashboard": "Home",
+    "vault": "Vault",
+    "users": "Users",
+    "upload": "Template Upload",
+    "templates": "Templates",
+    "features": "Options",
+    "login": "Login",
+    "logout": "Logout"
+  }
 }

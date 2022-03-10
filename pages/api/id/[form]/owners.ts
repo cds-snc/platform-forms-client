@@ -1,12 +1,12 @@
-import isRequestAllowed from "../../../../lib/middleware/httpRequestAllowed";
+import { middleware, cors, sessionExists } from "@lib/middleware";
 import { NextApiRequest, NextApiResponse } from "next";
-import dbConnector from "../../../../lib/integration/dbConnector";
-import isUserSessionExist from "../../../../lib/middleware/HttpSessionExist";
-import executeQuery from "../../../../lib/integration/queryManager";
+import dbConnector from "@lib/integration/dbConnector";
+
+import executeQuery from "@lib/integration/queryManager";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
 
-const owners = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     switch (req.method) {
       case "GET":
@@ -104,7 +104,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     );
     return res.status(200).json({ success: result.rows[0] });
   } catch (error) {
-    const message = error.message;
+    const message = (error as Error).message;
     //formID foreign key violation
     if (message.includes("violates foreign key constraint")) {
       return res.status(404).json({ error: "The formID does not exist" });
@@ -114,4 +114,7 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     }
   }
 }
-export default isRequestAllowed(["GET", "POST", "PUT"], isUserSessionExist(owners));
+export default middleware(
+  [cors({ allowedMethods: ["GET", "POST", "PUT"] }), sessionExists()],
+  handler
+);
