@@ -41,7 +41,7 @@
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "lint-staged": "^12.1.2",
-    "markdown-to-jsx": "^7.1.1",
+    "markdown-to-jsx": "^7.1.7",
     "mmmagic": "^0.5.3",
     "next": "^11.1.4",
     "next-auth": "^3.28.0",

@@ -122,6 +122,10 @@
     @apply mb-10;
   }
 
+  ol {
+    @apply list-inside;
+  }
+
   a:visited {
     @apply text-purple-default;
   }
@@ -372,7 +376,7 @@
     outline: solid 2px #303fc3;
     outline-offset: 2px;
     @apply bg-blue-focus;
-    @apply text-gray-50;    
+    @apply text-gray-50;
   }
 
   &:active {
