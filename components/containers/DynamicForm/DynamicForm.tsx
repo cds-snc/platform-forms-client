@@ -4,10 +4,10 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
 import { TextPage } from "../../forms/TextPage/TextPage";
-import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
-import { DynamicFormProps } from "../../../lib/types";
+import { getProperty, getRenderedForm } from "@lib/formBuilder";
+import { DynamicFormProps } from "@lib/types";
 import { useRouter } from "next/router";
-import { useFlag } from "../../../lib/hooks/useFlag";
+import { useFlag } from "@lib/hooks/useFlag";
 import Script from "next/script";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
@@ -38,11 +38,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
       <Head>
         <title>{formTitle}</title>
       </Head>
-      {isReCaptchaEnableOnSite ? (
-        <Script src={reChaptchaScriptURL} strategy="beforeInteractive" />
-      ) : (
-        ""
-      )}
+      {isReCaptchaEnableOnSite && <Script src={reChaptchaScriptURL} strategy="beforeInteractive" />}
       <h1 className="gc-h1">{formTitle}</h1>
       <Form
         formConfig={formConfig}

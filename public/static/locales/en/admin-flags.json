@@ -31,7 +31,7 @@
       "description": "On the confirmation page after submission display a copy of the email sent to the form administrator"
     },
     "reCHAPTCHA": {
-      "title": "ReCAPTCHA",
+      "title": "I am not a robot",
       "description": "Enable protected by reCHAPTCHA on forms before submission"
     }
   }

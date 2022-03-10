@@ -1,4 +1,4 @@
-import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
+import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 

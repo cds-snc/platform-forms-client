@@ -33,7 +33,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const handleFormSubmission = (evt: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     window.grecaptcha.ready(() => {
       // get reCAPTCHA response
@@ -117,7 +117,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             method="POST"
             onSubmit={(e) => {
               if (isReCaptchaEnableOnSite) {
-                handleFormSubmission(e);
+                handleSubmitReCaptcha(e);
               } else {
                 handleSubmit(e);
               }
