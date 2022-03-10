@@ -50,24 +50,21 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   useEffect(() => {
+    if (!formConfig) {
+      return;
+    }
+
     // calculate initial delay for submit timer
     const secondsBaseDelay = 2;
     const secondsPerFormElement = 2;
-    const numberOfRequiredElements = React.Children.toArray(children).filter((child) => {
-      try {
-        return (
-          ((child as ReactElement).props as GenerateElementProps).element.properties.validation
-            ?.required == true
-        );
-      } catch {
-        return false;
-      }
+    const numberOfRequiredElements = formConfig.elements.filter((element) => {
+      return element.properties.validation?.required === true;
     }).length;
 
     const submitDelaySeconds = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
     setSubmitDelay(submitDelaySeconds);
     setSubmitTimer(submitDelaySeconds);
-  }, []);
+  }, [formConfig]);
 
   useEffect(() => {
     // timeout to prevent form from being submitted too quickly
