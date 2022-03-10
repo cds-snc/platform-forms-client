@@ -28,7 +28,8 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  //  If there are errors on the page, set focus the first error field
+  // If there are errors on the page, set focus the first error field
+  // Testing nothing.
   useEffect(() => {
     if (formStatusError) {
       setFocusOnErrorMessage(props, serverErrorId);
