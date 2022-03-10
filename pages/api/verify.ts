@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
+import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
 import axios from "axios";
 
 const allowedMethods = ["POST"];
