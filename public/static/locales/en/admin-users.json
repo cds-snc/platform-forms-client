@@ -1,0 +1,11 @@
+{
+  "title": "Manage Users",
+  "username": "User Name",
+  "email": "Email Address",
+  "admin": "Administrator",
+  "true": "True",
+  "false": "False",
+  "enable": "Enable",
+  "disable": "Disable",
+  "a11y-diable-desc": "administrative priveleges for"
+}

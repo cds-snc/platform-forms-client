@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/client";
+import { isAdmin } from "@lib/auth";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import executeQuery from "@lib/integration/queryManager";
-import isRequestAllowed from "@lib/middleware/httpRequestAllowed";
+import { cors, sessionExists, middleware } from "@lib/middleware";
 import dbConnector from "@lib/integration/dbConnector";
-import isUserSessionExist from "@lib/middleware/HttpSessionExist";
 import { QueryResult } from "pg";
 import { BearerResponse } from "@lib/types";
 
@@ -14,14 +13,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
     try {
       return await getToken(req, res);
     } catch (err) {
-      logMessage.error(err);
+      logMessage.error(err as Error);
       return res.status(500).json({ error: "Internal Service Error" });
     }
   } else if (req.method === "POST") {
     try {
       return await createToken(req, res);
     } catch (err) {
-      logMessage.error(err);
+      logMessage.error(err as Error);
       return res.status(500).json({ error: "Internal Service Error" });
     }
   }
@@ -38,7 +37,7 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
   const formID = req.query.form as string;
   if (formID) {
     // get the session which is important for traceability purposes in logs
-    const session = await getSession({ req });
+    const session = await isAdmin({ req });
     // create the bearer token with the payload being the form ID
     // and signed by the token secret. The expiry time for this token is set to be one
     // year
@@ -111,4 +110,4 @@ export const getTokenById = async (formID: string): Promise<QueryResult> => {
   );
 };
 
-export default isRequestAllowed(["GET", "POST"], isUserSessionExist(handler));
+export default middleware([cors({ allowedMethods: ["GET", "POST"] }), sessionExists()], handler);

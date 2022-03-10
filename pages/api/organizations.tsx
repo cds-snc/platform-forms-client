@@ -1,7 +1,7 @@
 import { crudOrganizations } from "../../lib/integration/crud";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { logMessage } from "../../lib/logger";
-import { getSession } from "next-auth/client";
+import { logMessage } from "@lib/logger";
+import { isAdmin } from "@lib/auth";
 import { Session } from "next-auth";
 
 const isAllowed = (session: Session | null, method: string) => {
@@ -19,7 +19,7 @@ const isAllowed = (session: Session | null, method: string) => {
 
 const organizations = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
-    const session = await getSession({ req });
+    const session = await isAdmin({ req });
 
     const requestBody = req.body;
 

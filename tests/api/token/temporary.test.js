@@ -1,5 +1,5 @@
 import { createMocks } from "node-mocks-http";
-import temporary from "../../../pages/api/token/temporary";
+import temporary from "@pages/api/token/temporary";
 import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";
 
@@ -74,7 +74,23 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error with invalid payload", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: JSON.stringify({
+        method: null,
+      }),
+    });
+
+    await temporary(req, res);
+    expect(res.statusCode).toEqual(403);
+  });
+
+  it("throws error with invalid bearer token", async () => {
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET_WRONG, { expiresIn: "1y" });
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -85,24 +101,6 @@ describe("TemporaryBearerToken tests", () => {
       body: JSON.stringify({
         method: null,
       }),
-    });
-
-    await temporary(req, res);
-    expect(res.statusCode).toEqual(400);
-  });
-
-  it("throws error with invalid bearer token", async () => {
-    const token = jwt.sign({ formID: "1", exp: 1636501665 }, process.env.TOKEN_SECRET_WRONG);
-    const { req, res } = createMocks({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-        authorization: `Bearer ${token}`,
-      },
-      body: {
-        method: null,
-      },
     });
 
     await temporary(req, res);

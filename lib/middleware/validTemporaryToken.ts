@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { TemporaryTokenPayload } from "@lib/types";
-import { extractBearerTokenFromReq } from "@lib/middleware/bearerToken";
+import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
+import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
 import jwt from "jsonwebtoken";
@@ -21,23 +21,21 @@ import jwt from "jsonwebtoken";
  * @param handler - A function to be called
  * @returns
  */
-export function checkIfValidTemporaryToken(
-  handler: (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    formID: string,
-    email?: string,
-    bearerToken?: string
-  ) => void
-) {
-  return async function (req: NextApiRequest, res: NextApiResponse): Promise<unknown> {
+export const validTemporaryToken = (): MiddlewareRequest => {
+  return async function (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> {
     try {
       //Default value to 10 if it's undefined
       const { formID } = req.query;
-      //Check that formID and maxRecords aren't repeated
-      if (Array.isArray(formID)) return res.status(400).json({ error: "Bad Request" });
+      //Check that formID isn't repeated
+      if (Array.isArray(formID)) {
+        res.status(400).json({ error: "Bad Request" });
+        return { next: false };
+      }
       //Get formID form the bearer token
-      if (!formID) return res.status(400).json({ error: "Bad Request" });
+      if (!formID) {
+        res.status(400).json({ error: "Bad Request" });
+        return { next: false };
+      }
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
       //Verify the token
@@ -48,15 +46,17 @@ export function checkIfValidTemporaryToken(
       const { email } = temporaryTokenPayload;
       //Check if an active formUserRecord exists for the given bearerToken.
       if (await isTokenExists(formID, email as string, token)) {
-        return handler(req, res, formID, email, token);
+        return { next: true, props: { email, temporaryToken: token } };
       }
-      return res.status(403).json({ error: "Missing or invalid bearer token." });
+      res.status(403).json({ error: "Missing or invalid bearer token." });
+      return { next: false };
     } catch (err) {
       //Token verification has failed
       res.status(403).json({ error: "Missing or invalid bearer token or unknown error." });
+      return { next: false };
     }
   };
-}
+};
 
 /*@description
  * It returns true if there is an active token otherwise false.
@@ -76,5 +76,3 @@ const isTokenExists = async (formID: string, email: string, token: string): Prom
     ).rows.length === 1
   );
 };
-
-export default checkIfValidTemporaryToken;

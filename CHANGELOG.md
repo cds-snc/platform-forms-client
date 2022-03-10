@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Aligned HTTP methods on API requests to decommission request body `method` property.
+- Changed CSS on ordered and unordered lists to align with beginning of page text.
+
+## [1.1.0] 2022-03-04
+
 ### Added
 
 - Create secure API to deactivate a form owner associated with a form
@@ -26,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed `organisation` to `organization` which has an impact on the API access path
+- Modified the middleware functionality and separation of scopes between middlewares
+- A user now needs to have an enabled admin flag (user table) to access the Admin Pages
+- An admin user can now add and remove administrative priveleges from other users.
 
 ### Fixed
 

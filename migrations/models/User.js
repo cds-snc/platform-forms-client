@@ -14,6 +14,7 @@ export const UserSchema = {
     admin: {
       type: "boolean",
       nullable: false,
+      default: false,
     },
     organization: {
       type: "uuid",

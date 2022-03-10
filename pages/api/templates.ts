@@ -1,16 +1,16 @@
-import { crudTemplates } from "../../lib/integration/crud";
-import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
-import validate from "../../lib/middleware/jsonValidator";
-import templatesSchema from "../../lib/middleware/schemas/templates.schema.json";
-import { getSession } from "next-auth/client";
-import { NextApiRequest, NextApiResponse } from "next";
+import { crudTemplates } from "@lib/integration/crud";
 
-const allowedMethods = ["GET", "INSERT", "UPDATE", "DELETE"];
+import { middleware, jsonValidator, cors } from "@lib/middleware";
+import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
+import { NextApiRequest, NextApiResponse } from "next";
+import { isAdmin } from "@lib/auth";
+
+const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await getSession({ req });
-    const response = await crudTemplates({ ...req.body, session });
+    const session = await isAdmin({ req });
+    const response = await crudTemplates({ ...req.body, method: req.method, session });
     if (response) {
       res.status(200).json(response);
     } else {
@@ -21,7 +21,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default isRequestAllowed(
-  allowedMethods,
-  validate(templatesSchema, templates, { jsonKey: "formConfig" })
+export default middleware(
+  [cors({ allowedMethods }), jsonValidator(templatesSchema, { jsonKey: "formConfig" })],
+  templates
 );

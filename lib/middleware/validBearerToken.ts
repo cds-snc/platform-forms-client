@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { getTokenById } from "../../pages/api/id/[form]/bearer";
-import { BearerTokenPayload, FormDBConfigProperties } from "@lib/types";
+import { BearerTokenPayload, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { logMessage } from "../logger";
 
 /**
@@ -10,28 +10,24 @@ import { logMessage } from "../logger";
  * @param handler - the function to be executed next in the API call
  * @returns either the handler to be executed next in the API call, or updates the res status and returns void
  */
-const validate = (
-  handler: (req: NextApiRequest, res: NextApiResponse, options?: unknown) => void
-) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<unknown> => {
+export const validBearerToken = (): MiddlewareRequest => {
+  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       const token = extractBearerTokenFromReq(req);
-      const bearerTokenPayload = jwt.verify(token, process.env.TOKEN_SECRET || "");
-      if (
-        (
-          (await getTokenById((bearerTokenPayload as BearerTokenPayload).formID || ""))
-            .rows[0] as FormDBConfigProperties
-        ).bearerToken === token
-      ) {
-        return handler(req, res, bearerTokenPayload);
+      const { formID } = jwt.verify(token, process.env.TOKEN_SECRET ?? "") as BearerTokenPayload;
+      const tokenID = await getTokenById(formID);
+      if (tokenID.rows[0].bearerToken === token) {
+        return { next: true, props: { formID } };
       } else {
-        return res.status(403).json({ error: "Missing or invalid bearer token." });
+        res.status(403).json({ error: "Missing or invalid bearer token." });
+        return { next: false };
       }
     } catch (err) {
       if (err instanceof TokenExpiredError) {
         logMessage.error("An expired bearer token has been used.");
       }
       res.status(403).json({ error: "Missing or invalid bearer token." });
+      return { next: false };
     }
   };
 };
@@ -53,5 +49,3 @@ export const extractBearerTokenFromReq = (req: NextApiRequest): string => {
     throw new Error("Missing bearer token.");
   }
 };
-
-export default validate;

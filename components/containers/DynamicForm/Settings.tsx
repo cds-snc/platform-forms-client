@@ -19,15 +19,14 @@ const handleDelete = async (formID: number) => {
   // redirect to view templates page on success
   const resp = await axios({
     url: "/api/templates",
-    method: "POST",
+    method: "DELETE",
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
     data: {
-      method: "DELETE",
       formID: formID,
     },
-    timeout: 0,
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   })
     .then((serverResponse) => {
       //success - redirect to view-templates page
