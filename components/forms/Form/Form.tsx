@@ -60,7 +60,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
             ?.required == true
         );
       } catch {
-        return 0;
+        return false;
       }
     }).length;
 
