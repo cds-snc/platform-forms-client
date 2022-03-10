@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Aligned HTTP methods on API requests to decommission request body `method` property.
+- Changed CSS on ordered and unordered lists to align with beginning of page text.
 
 ## [1.1.0] 2022-03-04
 
