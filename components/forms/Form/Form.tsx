@@ -67,7 +67,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
     const submitDelaySeconds = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
     setSubmitDelay(submitDelaySeconds);
     setSubmitTimer(submitDelaySeconds);
-  }, [submitDelay]);
+  }, []);
 
   useEffect(() => {
     // timeout to prevent form from being submitted too quickly
