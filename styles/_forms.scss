@@ -119,7 +119,11 @@
 
   ul,
   ol {
-    @apply mb-10 list-inside;
+    @apply mb-10;
+  }
+
+  ol {
+    @apply list-inside;
   }
 
   a:visited {
