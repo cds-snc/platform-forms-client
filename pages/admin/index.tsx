@@ -1,12 +1,12 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { AuthenticatedUser } from "../../lib/types";
 import { requireAuthentication } from "../../lib/auth";
 import Link from "next/link";
+import { User } from "next-auth";
 
 type AdminWelcomeProps = {
-  user: AuthenticatedUser;
+  user: User;
 };
 
 const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => {

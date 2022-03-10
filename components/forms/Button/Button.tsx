@@ -11,13 +11,24 @@ interface ButtonProps {
   disabled?: boolean;
   destructive?: boolean;
   testid?: string;
+  ariaProps?: React.AriaAttributes;
 }
 
 export const Button = (
   props: ButtonProps & JSX.IntrinsicElements["button"]
 ): React.ReactElement => {
-  const { type, children, secondary, base, onClick, className, testid, destructive, disabled } =
-    props;
+  const {
+    type,
+    children,
+    secondary,
+    base,
+    onClick,
+    className,
+    testid,
+    destructive,
+    disabled,
+    ariaProps,
+  } = props;
 
   const classes = classnames(
     "gc-button",
@@ -36,6 +47,7 @@ export const Button = (
       onClick={onClick}
       data-testid={testid ? testid : "button"}
       disabled={disabled}
+      {...ariaProps}
     >
       {children}
     </button>

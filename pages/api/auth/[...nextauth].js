@@ -15,13 +15,28 @@ export default NextAuth({
   ],
 
   // A database is optional, but required to persist accounts in a database
-  database: process.env.DATABASE_URL ?? null,
+  database: process.env.DATABASE_URL,
 
-  adapter: process.env.DATABASE_URL
-    ? Adapters.TypeORM.Adapter(process.env.DATABASE_URL, {
-        models: {
-          User: Models.User,
+  adapter:
+    process.env.DATABASE_URL &&
+    Adapters.TypeORM.Adapter(process.env.DATABASE_URL, {
+      models: {
+        User: Models.User,
+      },
+    }),
+
+  callbacks: {
+    async session(session, user) {
+      // Add info like 'role' or 'admin' to session object
+      const extendedInfo = {
+        user: {
+          ...session.user,
+          // set the value explicitly to admin if `user.admin` does not exist.
+          // user.admin is undefined if it's the first time a user logs in.
+          admin: user.admin ?? false,
         },
-      })
-    : null,
+      };
+      return { ...session, ...extendedInfo };
+    },
+  },
 });

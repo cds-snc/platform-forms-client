@@ -52,5 +52,15 @@
     "prompt-part-2": "seconds.",
     "success-message": "The button's ready.",
     "success-prompt": "You can try this button again now."
+  },
+  "adminNav": {
+    "dashboard": "Home",
+    "vault": "Vault",
+    "users": "Users",
+    "upload": "Template Upload",
+    "templates": "Templates",
+    "features": "Options",
+    "login": "Login",
+    "logout": "Logout"
   }
 }

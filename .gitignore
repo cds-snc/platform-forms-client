@@ -88,3 +88,6 @@ storybook-static/
 
 # VS Code Counter module
 .VSCodeCounter
+
+# VS Code Settings untracking
+.vscode/settings.json

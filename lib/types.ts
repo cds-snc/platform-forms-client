@@ -1,6 +1,8 @@
 import { ChangeEvent } from "react";
 import { TFunction } from "next-i18next";
 import { NextRouter } from "next/router";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Session } from "next-auth";
 
 export interface FormDefinitionProperties {
   internalTitleEn?: string;
@@ -153,12 +155,6 @@ export type FileInputResponse = {
   [key: string]: string | number | File | FileReader;
 };
 
-export interface AuthenticatedUser {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-}
-
 export type MultipleChoiceProps = {
   id: string;
   name: string;
@@ -240,6 +236,26 @@ export interface TemporaryTokenPayload {
 export type BearerResponse = {
   bearerToken: string;
 };
+
+export interface MiddlewareReturn {
+  next: boolean;
+  props?: MiddlewareProps;
+}
+
+export type MiddlewareRequest = (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  props?: Record<string, unknown>
+) => Promise<MiddlewareReturn>;
+
+export interface MiddlewareProps {
+  formID?: string;
+  session?: Session;
+  email?: string;
+  temporaryToken?: string;
+}
+
+// User Types
 
 export type FormOwner = {
   id: number;

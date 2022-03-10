@@ -3,7 +3,7 @@ module.exports = {
   plugins: ["@emotion"],
   env: {
     test: {
-      plugins: ["transform-require-context"],
+      plugins: ["transform-require-context", "dynamic-import-node"],
     },
   },
   overrides: [

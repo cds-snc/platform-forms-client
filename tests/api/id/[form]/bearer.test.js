@@ -1,14 +1,15 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
-import retrieve from "../../../../pages/api/id/[form]/bearer";
-import executeQuery from "../../../../lib/integration/queryManager";
+import retrieve from "@pages/api/id/[form]/bearer";
+import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";
-import { logMessage } from "../../../../lib/logger";
+import { logMessage } from "@lib/logger";
+import { checkLogs } from "@lib/jestUtils";
 
 jest.mock("next-auth/client");
-jest.mock("../../../../lib/integration/queryManager");
+jest.mock("@lib/integration/queryManager");
 
-jest.mock("../../../../lib/integration/dbConnector", () => {
+jest.mock("@lib/integration/dbConnector", () => {
   const mClient = {
     connect: jest.fn(),
     query: jest.fn(),
@@ -22,7 +23,7 @@ describe("/id/[form]/bearer", () => {
     it("Should return 400 if form ID was not supplied in the path", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
 
       client.getSession.mockReturnValue(mockSession);
@@ -48,7 +49,7 @@ describe("/id/[form]/bearer", () => {
     it("Should return a 200 status code and Null as token's value should the form exist but no token is present", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return null as bearer token value
@@ -72,7 +73,7 @@ describe("/id/[form]/bearer", () => {
     it("Should return a 200 status code and a valid token if it exists for a form.", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return a valid bearer token
@@ -118,7 +119,7 @@ describe("/id/[form]/bearer", () => {
     it("Should return 404 status code if no form was found", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return an empty array
@@ -142,7 +143,7 @@ describe("/id/[form]/bearer", () => {
     it("Should return 500 status code if there's an unexpected error", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to throw an error
@@ -197,7 +198,7 @@ describe("/id/[form]/bearer", () => {
 
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
 
@@ -222,15 +223,17 @@ describe("/id/[form]/bearer", () => {
       const decodedToken = jwt.verify(token, "some_secret");
       expect(decodedToken.formID).toBe(1);
 
-      expect(logMessageDebugSpy.mock.calls.length).toBe(1);
-      expect(logMessageDebugSpy.mock.calls[0][0]).toBe(
-        "A bearer token was refreshed for form 1 by user Admin user"
-      );
+      expect(
+        checkLogs(
+          logMessageDebugSpy.mock.calls,
+          "A bearer token was refreshed for form 1 by user Admin user"
+        )
+      ).toBeTruthy;
     });
     it("Should return a 404 status code if the form is not found", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
 
@@ -252,15 +255,17 @@ describe("/id/[form]/bearer", () => {
 
       expect(res.statusCode).toBe(404);
       expect(JSON.parse(res._getData()).error).toBe("Not Found");
-      expect(logMessageDebugSpy.mock.calls.length).toBe(1);
-      expect(logMessageDebugSpy.mock.calls[0][0]).toBe(
-        "A bearer token was attempted to be created for form 1 by user Admin user but the form does not exist"
-      );
+      expect(
+        checkLogs(
+          logMessageDebugSpy.mock.calls,
+          "A bearer token was attempted to be created for form 1 by user Admin user but the form does not exist"
+        )
+      ).toBeTruthy;
     });
     it("Should return a 400 status code if the form parameter is not provided", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
 
@@ -299,7 +304,7 @@ describe("/id/[form]/bearer", () => {
     it("Should return a 500 status code if any unexpected error occurs", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null" },
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
 

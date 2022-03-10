@@ -1,12 +1,12 @@
 import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
-import owners from "../../../../pages/api/id/[form]/owners";
-import executeQuery from "../../../../lib/integration/queryManager";
+import owners from "@pages/api/id/[form]/owners";
+import executeQuery from "@lib/integration/queryManager";
 
 jest.mock("next-auth/client");
-jest.mock("../../../../lib/integration/queryManager");
+jest.mock("@lib/integration/queryManager");
 
-jest.mock("../../../../lib/integration/dbConnector", () => {
+jest.mock("@lib/integration/dbConnector", () => {
   const mClient = {
     connect: jest.fn(),
     query: jest.fn(),
@@ -40,7 +40,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return an error 'Malformed API Request'", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user" },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true },
       };
 
       client.getSession.mockReturnValue(mockSession);
@@ -63,7 +63,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return all the emails associated with the form ID.", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user" },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return a list of emails
@@ -97,7 +97,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return a list that contains only one email", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user" },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return a list with only an email
@@ -125,7 +125,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 404 form ID can't be found or a form has no emails associated", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user" },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return an empty list
@@ -151,7 +151,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 500 as statusCode if there's db's error", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to throw an error
@@ -180,7 +180,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 400 invalid payload error(active) field/value is missing", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       const { req, res } = createMocks({
@@ -207,7 +207,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 400 invalid payload error(email) field/value is missing", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
 
@@ -234,7 +234,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 404 Form or email Not Found in form_users", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       // Mocking executeQuery it returns 0 updated rows
       executeQuery.mockReturnValue({ rows: [], rowCount: 0 });
@@ -264,7 +264,7 @@ describe("/id/[forms]/owners", () => {
       async (elem) => {
         const mockSession = {
           expires: "1",
-          user: { email: "forms@cds.ca", name: "forms" },
+          user: { email: "forms@cds.ca", name: "forms", admin: true },
         };
         client.getSession.mockReturnValue(mockSession);
 
@@ -294,7 +294,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 400 FormID doesn't exist in db", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       //Mocking db result by throwing constraint violation error.
@@ -326,7 +326,7 @@ describe("/id/[forms]/owners", () => {
     it("Should create a new record and return 200 code along with the id", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       // return the id of the newly created record.
@@ -358,7 +358,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 400 with a message the formID doest not exist", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       //Mocking db result by throwing constraint violation error.
@@ -391,7 +391,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return 400 undefined formID was supplied", async () => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true },
       };
       client.getSession.mockReturnValue(mockSession);
       const { req, res } = createMocks({
@@ -424,7 +424,7 @@ describe("/id/[forms]/owners", () => {
       async (elem) => {
         const mockSession = {
           expires: "1",
-          user: { email: "forms@cds.ca", name: "forms" },
+          user: { email: "forms@cds.ca", name: "forms", admin: true },
         };
         client.getSession.mockReturnValue(mockSession);
 

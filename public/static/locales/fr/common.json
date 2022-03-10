@@ -52,5 +52,15 @@
     "prompt-part-2": "secondes.",
     "success-message": "Le bouton est prêt à être utilisé.",
     "success-prompt": "Vous pouvez maintenant réessayer le bouton."
+  },
+  "adminNav": {
+    "dashboard": "Accueil",
+    "vault": "Coffre",
+    "users": "Usagers",
+    "upload": "Téléchargement de modèle",
+    "templates": "Modèles",
+    "features": "Options",
+    "login": "Connexion",
+    "logout": "Déconnexion"
   }
 }
