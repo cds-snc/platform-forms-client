@@ -13,6 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.LAMBDA_AWS_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.LAMBDA_AWS_SECRET}}
       ALLOW_MOCK_FORMS: 1
+      NEXTAUTH_URL: http://localhost:3000
     steps:
       - name: Checkout
         uses: actions/checkout@v1
