@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import isRequestAllowed from "../../lib/middleware/httpRequestAllowed";
+import { cors, middleware } from "@lib/middleware";
 import axios from "axios";
-
-const allowedMethods = ["POST"];
 
 const verifyReCaptchaToken = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -23,4 +21,4 @@ const verifyReCaptchaToken = async (req: NextApiRequest, res: NextApiResponse) =
   }
 };
 
-export default isRequestAllowed(allowedMethods, verifyReCaptchaToken);
+export default middleware([cors({ allowedMethods: ["POST"] })], verifyReCaptchaToken);
