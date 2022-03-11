@@ -57,12 +57,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
     // calculate initial delay for submit timer
     const secondsBaseDelay = 2;
     const secondsPerFormElement = 2;
-    const numberOfRequiredElements = formConfig.elements.filter((element) => {
-      if (!element) {
-        return false;
-      }
-      return element.properties.validation?.required === true;
-    }).length;
+    const numberOfRequiredElements = formConfig.elements.filter(
+      (element) => element.properties.validation?.required === true
+    ).length;
 
     const submitDelaySeconds = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
     setSubmitDelay(submitDelaySeconds);
