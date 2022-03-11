@@ -88,6 +88,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               fileInputRef.current?.click();
+              e.preventDefault();
             }
           }}
           className="gc-file-input-upload-button"
