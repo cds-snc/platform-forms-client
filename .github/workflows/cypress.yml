@@ -23,7 +23,7 @@ jobs:
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
           config: baseUrl=http://localhost:3000
-          parallel: true
+          parallel: false
           group: "Form E2E Tests"
       - uses: actions/upload-artifact@v1
         if: failure()
