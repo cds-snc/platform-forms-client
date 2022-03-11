@@ -1,6 +1,6 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { withFormik, FormikProps } from "formik";
-import { GenerateElementProps, getFormInitialValues } from "@lib/formBuilder";
+import { getFormInitialValues } from "@lib/formBuilder";
 import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/validation";
 import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
