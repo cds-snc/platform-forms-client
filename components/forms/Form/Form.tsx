@@ -70,9 +70,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
     // timeout to prevent form from being submitted too quickly
     let timeoutId = 0;
     if (submitTimer > 0) {
-      timeoutId = setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         setSubmitTimer((submitTimer) => submitTimer - 1);
-      }, 1000) as unknown as number;
+      }, 1000);
     }
     return () => {
       clearTimeout(timeoutId);
