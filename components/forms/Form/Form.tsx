@@ -40,23 +40,24 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    window.grecaptcha.ready(() => {
-      // get reCAPTCHA response
-      window.grecaptcha
-        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY, { action: "submit" })
-        .then(async (clientToken: string) => {
-          await sendClientTokenForVerification(clientToken)
-            .then((res) => {
-              const { score, success } = res.data;
-              logMessage.warn(`score : ${score}  status: ${success}`);
-              // assuming you're not a Robot and  submit
-              handleSubmit(evt);
-            })
-            .catch((error) => {
-              logMessage.error(error);
-            });
-        });
-    });
+    try {
+      window.grecaptcha.ready(async () => {
+        // get reCAPTCHA response
+        const clientToken = await window.grecaptcha.execute(
+          process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY,
+          { action: "submit" }
+        );
+        if (clientToken) {
+          const scoreData = await sendClientTokenForVerification(clientToken);
+          const { score, success } = scoreData.data;
+          logMessage.warn(`score : ${score}  status: ${success}`);
+          // assuming you're not a Robot
+          handleSubmit(evt);
+        }
+      });
+    } catch (error) {
+      logMessage.error(error as string);
+    }
   };
 
   const sendClientTokenForVerification = async (token: string) => {
