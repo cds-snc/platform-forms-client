@@ -30,9 +30,9 @@
       "title": "Notify Email Preview",
       "description": "On the confirmation page after submission display a copy of the email sent to the form administrator"
     },
-    "reCHAPTCHA": {
+    "reCaptcha": {
       "title": "I am not a robot",
-      "description": "Enable protected by reCHAPTCHA on forms before submission"
+      "description": "Enable protected by reCaptcha on forms before submission"
     }
   }
 }
