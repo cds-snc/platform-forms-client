@@ -8,6 +8,9 @@ import { logMessage } from "@lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
 import Loader from "../../globals/Loader";
 import axios from "axios";
+import { useFlag } from "@lib/hooks/useFlag";
+import { reCaptcha } from "@lib/cspScripts";
+import Script from "next/script";
 
 declare global {
   interface Window {
@@ -25,13 +28,15 @@ declare global {
  * @param props
  */
 const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps) => {
-  const { children, handleSubmit, t, isSubmitting, isReCaptchaEnableOnSite } = props;
+  const { children, handleSubmit, t, isSubmitting } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(0);
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
+
+  const isReCaptchaEnableOnSite = useFlag("reCaptcha");
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -40,7 +45,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
       window.grecaptcha
         .execute(process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY, { action: "submit" })
         .then(async (clientToken: string) => {
-          sendClientTokenForVerification(clientToken)
+          await sendClientTokenForVerification(clientToken)
             .then((res) => {
               const { score, success } = res.data;
               logMessage.warn(`score : ${score}  status: ${success}`);
@@ -88,6 +93,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
 
   return (
     <>
+      {isReCaptchaEnableOnSite && <Script src={reCaptcha} strategy="beforeInteractive" />}
       {isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
