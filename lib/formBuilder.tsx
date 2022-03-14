@@ -217,12 +217,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               {labelText}
             </Label>
           ) : null}
-          {description ? <Description>{description}</Description> : null}
+          {description ? <Description id={`${id}`}>{description}</Description> : null}
           <FileInput
             id={`${id}`}
             name={`${id}`}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
-            ariaLabelledBy={`label-${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : `label-${id}`}
             fileType={element.properties.fileType}
             required={isRequired}
           />

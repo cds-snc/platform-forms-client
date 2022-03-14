@@ -28,7 +28,9 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   return (
     <div data-testid="richText" className={classes} id={id}>
       <Markdown options={{ forceBlock: true, overrides: { h1: { component: H1 } } }}>
-        {children.replace(/<br>/g, `${String.fromCharCode(10)}`)}
+        {children
+          .replace(/<br>/g, `${String.fromCharCode(10)}`)
+          .replace(/href/g, "rel='noreferrer' target='_blank' href")}
       </Markdown>
     </div>
   );
