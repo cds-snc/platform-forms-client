@@ -42,6 +42,7 @@
   "file-upload-button-text": "Upload a file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
+  "dropdown-initial-option-text": "No selection",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
   "title": "GC Forms - Formulaires GC",
   "loading": "We are processing your form submission.  Please wait.",

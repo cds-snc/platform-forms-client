@@ -97,7 +97,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
       .toBeInTheDocument()
       .toHaveAccessibleDescription(description)
       .toHaveClass("gc-dropdown")
-      .toHaveDisplayValue("");
+      .toHaveDisplayValue("dropdown-initial-option-text");
     expect(
       screen.getByRole("combobox", {
         name: title,
