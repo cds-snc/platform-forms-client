@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Log user access to retrieval API
 - Replace the asterisk on required fields with copy: "(required)"
 - Ensure display order of error list matches the display order of the form elements.
+- Prevent submission of form for a delayed period of time to help prevent spam submissions
 
 ### Changed
 

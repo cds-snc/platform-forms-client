@@ -29,6 +29,10 @@
     "notifyPreview": {
       "title": "Prévisualiser par e-mail",
       "description": "Sur la page de confirmation après la soumission, affichez une copie de l'e-mail envoyé à l'administrateur du formulaire"
+    },
+    "formTimer": {
+      "title": "Minuteur de formulaire",
+      "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
     }
   }
 }

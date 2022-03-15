@@ -3,5 +3,6 @@
   "vault": false,
   "unpublishedForms": false,
   "submitToReliabilityQueue": false,
-  "notifyPreview": false
+  "notifyPreview": false,
+  "formTimer": false
 }
