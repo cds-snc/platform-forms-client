@@ -6,6 +6,7 @@ import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
+import { useFlag } from "@lib/hooks/useFlag";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 
@@ -31,6 +32,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const [submitDelay, setSubmitDelay] = useState(0);
   const [submitTimer, setSubmitTimer] = useState(0);
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
+  const timerActive = useFlag("formTimer");
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -50,21 +52,20 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   useEffect(() => {
-    if (!formConfig) {
-      return;
-    }
-
     // calculate initial delay for submit timer
-    const secondsBaseDelay = 2;
-    const secondsPerFormElement = 2;
-    const numberOfRequiredElements = formConfig.elements.filter(
-      (element) => element.properties.validation?.required === true
-    ).length;
+    if (timerActive) {
+      const secondsBaseDelay = 2;
+      const secondsPerFormElement = 2;
+      const numberOfRequiredElements = formConfig.elements.filter(
+        (element) => element.properties.validation?.required === true
+      ).length;
 
-    const submitDelaySeconds = secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
-    setSubmitDelay(submitDelaySeconds);
-    setSubmitTimer(submitDelaySeconds);
-  }, [formConfig]);
+      const submitDelaySeconds =
+        secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
+      setSubmitDelay(submitDelaySeconds);
+      setSubmitTimer(submitDelaySeconds);
+    }
+  }, [timerActive]);
 
   useEffect(() => {
     // timeout to prevent form from being submitted too quickly

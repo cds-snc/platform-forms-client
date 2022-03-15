@@ -9,6 +9,10 @@ jest.mock("@lib/integration/helpers", () => ({
 
 jest.useFakeTimers();
 
+jest.mock("@lib/hooks/useFlag", () => ({
+  useFlag: jest.fn(() => true),
+}));
+
 const formConfig = {
   id: 1,
   version: 1,
