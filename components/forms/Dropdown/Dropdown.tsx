@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
+import { useTranslation } from "next-i18next";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 interface DropdownProps {
@@ -17,8 +18,6 @@ interface DropdownOptionProps {
   value: string;
 }
 
-const InitialDropdownOption = <option hidden value=""></option>;
-
 const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
   return <option value={props.value}>{props.name}</option>;
 };
@@ -26,9 +25,13 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
   const { id, className, choices, required, ariaDescribedBy } = props;
 
+  const { t } = useTranslation("common");
+
   const classes = classnames("gc-dropdown", className);
 
   const [field, meta] = useField(props);
+
+  const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
 
   const options = choices.map((choice, i) => {
     const innerId = `${id}-${i}`;
@@ -48,7 +51,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         aria-describedby={ariaDescribedBy}
         {...field}
       >
-        {InitialDropdownOption}
+        {initialDropdownOption}
         {options}
       </select>
     </>

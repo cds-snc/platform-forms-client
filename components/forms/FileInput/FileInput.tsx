@@ -12,7 +12,6 @@ interface FileInputProps {
   hint?: React.ReactNode;
   fileType?: string | undefined;
   ariaDescribedBy?: string;
-  ariaLabelledBy?: string;
   disabled?: boolean;
   required?: boolean;
   allowMulti?: boolean;
@@ -30,7 +29,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   const { t } = useTranslation("common");
 
-  const { name, disabled, allowMulti, required, ariaDescribedBy, ariaLabelledBy } = props;
+  const { name, disabled, allowMulti, required, ariaDescribedBy } = props;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
@@ -88,16 +87,19 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               fileInputRef.current?.click();
+              e.preventDefault();
             }
           }}
           className="gc-file-input-upload-button"
           aria-disabled={disabled}
-          aria-labelledby={`${ariaLabelledBy}`}
+          aria-labelledby="file-input-button-text"
           aria-describedby={`${name}_file_selected ${ariaDescribedBy} ${
             meta.error ? `${name}_error` : null
           }`}
         >
-          <span aria-hidden={true}>{t("file-upload-button-text")}</span>
+          <span id="file-input-button-text" aria-hidden={true}>
+            {t("file-upload-button-text")}
+          </span>
 
           <input
             ref={fileInputRef}
