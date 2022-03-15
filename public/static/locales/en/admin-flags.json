@@ -33,6 +33,10 @@
     "reCaptcha": {
       "title": "I am not a robot",
       "description": "Enable protected by reCaptcha on forms before submission"
+    },
+    "formTimer": {
+      "title": "Form Timer",
+      "description": "Wait a specific amount of time before being allowed to submit the form"
     }
   }
 }

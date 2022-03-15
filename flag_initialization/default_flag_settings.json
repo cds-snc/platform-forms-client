@@ -4,5 +4,6 @@
   "unpublishedForms": false,
   "submitToReliabilityQueue": false,
   "notifyPreview": false,
-  "reCaptcha": false
+  "reCaptcha": false,
+  "formTimer": false
 }

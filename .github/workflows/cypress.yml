@@ -13,6 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.LAMBDA_AWS_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.LAMBDA_AWS_SECRET}}
       ALLOW_MOCK_FORMS: 1
+      NEXTAUTH_URL: http://localhost:3000
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -23,7 +24,7 @@ jobs:
           wait-on: "http://localhost:3000"
           command: yarn cypress:headless
           config: baseUrl=http://localhost:3000
-          parallel: true
+          parallel: false
           group: "Form E2E Tests"
       - uses: actions/upload-artifact@v1
         if: failure()
