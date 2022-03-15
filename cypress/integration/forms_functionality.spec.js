@@ -38,6 +38,17 @@ describe("Forms Functionality", () => {
 });
 
 describe("Forms Functionality - Submit Delay", () => {
+  beforeEach(() => {
+    cy.intercept(
+      { method: "GET", url: "/api/flags/formTimer/check" },
+      {
+        statusCode: 200,
+        body: {
+          status: true,
+        },
+      }
+    );
+  });
   it("should display alert message when submitting too quickly", () => {
     cy.visit("/en/id/1?mockedFormFile=textFieldTestForm");
     cy.get("[type='submit']").click();
