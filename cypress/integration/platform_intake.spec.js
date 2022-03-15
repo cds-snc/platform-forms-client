@@ -16,8 +16,6 @@ describe("CDS Platform Intake Form functionality", () => {
       .should("have.value", "Call me at my work number");
   });
   it("Submit the Form", () => {
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(12000);
     cy.get("[type='submit']").click();
     cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Your submission has been received");

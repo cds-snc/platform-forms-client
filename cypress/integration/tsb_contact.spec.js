@@ -17,8 +17,6 @@ describe("TSB Contact Form functionality", () => {
       .should("have.value", "Contacting the Transportation Safety Board for a personal inquiry");
   });
   it("Submit the Form", () => {
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(12000);
     cy.get("[type='submit']").click();
     cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Thank you for your message");

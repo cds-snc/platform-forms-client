@@ -5,5 +5,5 @@
   "submitToReliabilityQueue": false,
   "notifyPreview": false,
   "reCaptcha": false,
-  "formTimer": true
+  "formTimer": false
 }
