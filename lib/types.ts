@@ -141,6 +141,7 @@ export interface DynamicFormProps {
   notifyPreviewFlag: boolean;
   mockedFormFile?: string;
   t: TFunction;
+  isReCaptchaEnableOnSite?: boolean;
 }
 
 export interface InnerFormProps {

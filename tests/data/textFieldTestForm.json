@@ -10,7 +10,7 @@
     "titleFr": "TExt Field Test Form (FR)",
     "emailSubjectEn": "Test Form Subject",
     "emailSubjectFr": "Test Form Subject FR",
-    "layout": [1,2,3],
+    "layout": [1, 2],
     "elements": [
       {
         "id": 1,

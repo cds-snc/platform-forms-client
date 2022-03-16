@@ -10,7 +10,14 @@ jest.mock("@lib/integration/helpers", () => ({
 jest.useFakeTimers();
 
 jest.mock("@lib/hooks/useFlag", () => ({
-  useFlag: jest.fn(() => true),
+  useFlag: jest.fn((flag) => {
+    switch (flag) {
+      case "formTimer":
+        return true;
+      case "reCaptcha":
+        return false;
+    }
+  }),
 }));
 
 const formConfig = {

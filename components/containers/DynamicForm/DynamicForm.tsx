@@ -4,15 +4,10 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
 import { TextPage } from "../../forms/TextPage/TextPage";
-import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
-import { PublicFormSchemaProperties } from "../../../lib/types";
+import { getProperty, getRenderedForm } from "@lib/formBuilder";
+import { DynamicFormProps } from "@lib/types";
 import { useRouter } from "next/router";
-import { useFlag } from "../../../lib/hooks/useFlag";
-
-interface DynamicFormProps {
-  formConfig: PublicFormSchemaProperties;
-  mockedFormFile?: string;
-}
+import { useFlag } from "@lib/hooks/useFlag";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
