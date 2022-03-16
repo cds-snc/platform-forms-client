@@ -86,6 +86,7 @@ export interface ElementProperties {
   placeholderFr?: string;
   descriptionEn?: string;
   descriptionFr?: string;
+  charLimit?: number;
   validation?: ValidationProperties | undefined;
   choices?: Array<PropertyChoices>;
   subElements?: Array<FormElement>;
@@ -94,6 +95,7 @@ export interface ElementProperties {
   isSectional?: boolean;
   [key: string]:
     | string
+    | number
     | boolean
     | Array<PropertyChoices>
     | Array<FormElement>

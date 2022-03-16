@@ -133,6 +133,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
+            maxLength={element.properties.charLimit}
           />
         </div>
       );

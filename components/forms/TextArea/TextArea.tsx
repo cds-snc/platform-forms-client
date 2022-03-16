@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -16,15 +16,30 @@ export interface TextAreaProps {
 export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
-  const { id, className, ariaDescribedBy, required, children, placeholder } = props;
+  const { id, className, ariaDescribedBy, required, children, placeholder, maxLength } = props;
 
   const classes = classnames("gc-textarea", className);
 
-  const [field, meta] = useField(props);
+  const [field, meta, helpers] = useField(props);
+
+  const [remainingCharacters, setRemainingCharacters] = useState(0);
+
+  useEffect(() => {
+    if (maxLength) {
+      setRemainingCharacters(maxLength);
+    }
+  }, []);
+
+  const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    helpers.setValue(event.target.value);
+    if (maxLength) {
+      setRemainingCharacters(maxLength - event.target.value.length);
+    }
+  };
 
   return (
     <>
-      {meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
       <textarea
         data-testid="textarea"
         className={classes}
@@ -33,9 +48,11 @@ export const TextArea = (
         aria-describedby={ariaDescribedBy}
         placeholder={placeholder}
         {...field}
+        onChange={handleTextAreaChange}
       >
         {children}
       </textarea>
+      {maxLength && <div>You have {remainingCharacters} characters left.</div>}
     </>
   );
 };
