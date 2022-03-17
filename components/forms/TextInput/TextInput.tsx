@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -21,9 +21,25 @@ export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElement
 export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
 export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete } = props;
-  const [field, meta] = useField(props);
+  const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
+    props;
+  const [field, meta, helpers] = useField(props);
   const classes = classnames("gc-input-text", className);
+
+  const [remainingCharacters, setRemainingCharacters] = useState(0);
+
+  useEffect(() => {
+    if (maxLength) {
+      setRemainingCharacters(maxLength);
+    }
+  }, []);
+
+  const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    helpers.setValue(event.target.value);
+    if (maxLength) {
+      setRemainingCharacters(maxLength - event.target.value.length);
+    }
+  };
 
   return (
     <>
@@ -38,7 +54,16 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         aria-describedby={ariaDescribedBy}
         placeholder={placeholder}
         {...field}
+        onChange={handleTextInputChange}
       />
+      {maxLength && remainingCharacters >= 0 && (
+        <div>You have {remainingCharacters} characters left.</div>
+      )}
+      {maxLength && remainingCharacters < 0 && (
+        <div className="gc-error-message">
+          You have {remainingCharacters * -1} characters too many.
+        </div>
+      )}
     </>
   );
 };

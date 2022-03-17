@@ -119,6 +119,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
+            maxLength={element.properties.validation?.maxLength}
           />
         </div>
       );
