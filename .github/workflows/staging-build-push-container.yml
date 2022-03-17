@@ -38,9 +38,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Form Viewer
-        run: docker build -t base \
-        --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
-        --build-arg NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY:$RECAPTCHA_V3_SITE_KEY .
+        run: |
+          docker build -t base \
+            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
+            --build-arg NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY:$RECAPTCHA_V3_SITE_KEY .
 
       - name: Configure Staging AWS credentials
         id: aws-form-viewer
