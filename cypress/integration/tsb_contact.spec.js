@@ -1,6 +1,10 @@
 describe("TSB Contact Form functionality", () => {
+  beforeEach(() => {
+    cy.useFlag("formTimer", false);
+  });
+
   it("TSB Contact Form renders", () => {
-    cy.visit("/en/id/1?mockedFormFile=tsbContactTestForm");
+    cy.mockForm("../../tests/data/tsbContactTestForm.json");
     cy.get("h1").contains("Transportation Safety Board of Canada general enquiries");
   });
   it("Fill out the form", () => {

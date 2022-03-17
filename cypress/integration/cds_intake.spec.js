@@ -1,8 +1,12 @@
 describe("CDS Intake Form functionality", () => {
+  beforeEach(() => {
+    cy.useFlag("formTimer", false);
+  });
   it("CDS Intake Form renders", () => {
-    cy.visit("/en/id/1?mockedFormFile=cdsIntakeTestForm");
+    cy.mockForm("../../tests/data/cdsIntakeTestForm.json");
     cy.get("h1").contains("CDS Intake Form");
   });
+
   it("Fill out the form", () => {
     cy.get("input[id='1']").type("Santa").should("have.value", "Santa");
     cy.get("input[id='2']")

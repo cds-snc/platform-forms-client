@@ -23,3 +23,36 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("mockForm", (file) => {
+  cy.fixture(file).then((mockedForm) => {
+    cy.visit("/en/id/test", {
+      onBeforeLoad: (win) => {
+        let nextData;
+
+        Object.defineProperty(win, "__NEXT_DATA__", {
+          set(serverSideProps) {
+            // here is our change to modify the injected parsed data
+            serverSideProps.props.pageProps.formConfig = mockedForm.form;
+            nextData = serverSideProps;
+          },
+          get() {
+            return nextData;
+          },
+        });
+      },
+    });
+  });
+});
+
+Cypress.Commands.add("useFlag", (flagName, value) => {
+  cy.intercept(
+    { method: "GET", url: `/api/flags/${flagName}/check` },
+    {
+      statusCode: 200,
+      body: {
+        data: value,
+      },
+    }
+  ).as(flagName);
+});

@@ -1,6 +1,10 @@
 describe("CDS Platform Intake Form functionality", () => {
+  beforeEach(() => {
+    cy.useFlag("formTimer", false);
+  });
+
   it("CDS Platform Intake Form renders", () => {
-    cy.visit("/en/id/1?mockedFormFile=platformIntakeTestForm");
+    cy.mockForm("../../tests/data/platformIntakeTestForm.json");
     cy.get("h1").contains("Work with CDS on a Digital Form");
   });
   it("Fill out the form", () => {
