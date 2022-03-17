@@ -5,6 +5,9 @@ ENV NODE_ENV=production
 COPY . /src
 WORKDIR /src
 
+ARG NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY
+ENV NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY=$NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY
+
 RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
@@ -29,7 +32,6 @@ ENV GITHUB_SHA=$GITHUB_SHA_ARG
 
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
-
 
 WORKDIR /src
 
