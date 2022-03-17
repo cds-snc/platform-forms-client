@@ -73,8 +73,6 @@ There are 2 main parts to the structure:
 
    ​ `description`: Secondary paragraph of question or element that provides additional context beyond the title (`string`)
 
-   ​ `charLimit`: The maximum number of characters that can be submitted through the input
-
    ​ `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
 Example:
@@ -107,10 +105,10 @@ Example:
         "placeholderEn": "",
         "placeholderFr": "",
         "description": "",
-        "charLimit": 100,
         "autoComplete": "name",
         "validation": {
-          "required": true
+          "required": true,
+          "maxLength": 100
         }
       }
     },
@@ -123,9 +121,9 @@ Example:
         "placeholderEn": "",
         "placeholderFr": "",
         "description": "",
-        "charLimit": 100,
         "validation": {
-          "required": false
+          "required": false,
+          "maxLength": 100,
         }
       }
     },
@@ -138,9 +136,9 @@ Example:
         "placeholderEn": "",
         "placeholderFr": "",
         "description": "",
-        "charLimit": 100,
         "validation": {
-          "required": false
+          "required": false,
+          "maxLength": 100
         }
       }
     },
@@ -153,9 +151,9 @@ Example:
         "placeholderEn": "",
         "placeholderFr": "",
         "description": "",
-        "charLimit": 100,
         "validation": {
-          "required": false
+          "required": false,
+          "maxLength": 100
         }
       }
     }
@@ -186,9 +184,9 @@ A simple text input where the `title` property is used as the input's label.
     "placeholderFr": "string",
     "descriptionEn": "string",
     "descriptionFr": "string",
-    "charLimit": 100,
     "validation": {
-      "required": false
+      "required": false,
+      "maxLength": 100
     }
   }
 }
@@ -201,8 +199,6 @@ A simple text input where the `title` property is used as the input's label.
 `placeholderEn / placeholderFr`: Text that will appear in the text input field as a placeholder (`string`)
 
 `descriptionEn / descriptionFr`: Secondary paragraph/text of a question or element that provides additional context beyond the label `string`)
-
-`charLimit`: The maximum number of characters that can be submitted through the input
 
 `autoComplete`: When appropropriate, a string for the autoComplete token to identify the field. A list of acceptable tokens can be found here: https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill-detail-tokens
 
@@ -229,9 +225,9 @@ A simple muli-line text input where the `title` property is used as the input's 
     "placeholderFr": "string",
     "descriptionEn": "string",
     "descriptionFr": "string",
-    "charLimit": 100,
     "validation": {
-      "required": false
+      "required": false,
+      "maxLength": 100
     }
   }
 }
@@ -244,8 +240,6 @@ A simple muli-line text input where the `title` property is used as the input's 
 `placeholderEn / placeholderFr`: Text that will appear in the text input field as a placeholder (`string`)
 
 `descriptionEn / descriptionFr`: Secondary paragraph/text of a question or element that provides additional context beyond the label `string`)
-
-`charLimit`: The maximum number of characters that can be submitted through the input
 
 `required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
 
@@ -466,9 +460,9 @@ An option to add rich text to the form via [markdown](https://guides.github.com/
   "properties": {
     "descriptionEn": "#### Organization Primary Address  <br>Follow up text, below the heading.",
     "descriptionFr": "#### Adresse principale de l’organismen",
-    "charLimit": 5000,
     "validation": {
-      "required": false
+      "required": false,
+      "maxLength": 5000
     }
   }
 },
@@ -480,20 +474,25 @@ An option to add rich text to the form via [markdown](https://guides.github.com/
 
 `descriptionEn / descriptionFr`: Secondary paragraph/text of a question or element that provides additional context beyond the label `string`)
 
-`charLimit`: The maximum number of characters that can be submitted through the input
-
-`required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
-
 ### Validation and error messages
 
-Every field has a key `validation` that can contain the values below. The type can be "email", "alphanumeric", "text", "name", "number", "phone", "date" and if those aren't relevant, you can provide a custom regular expression within "regex".
+Every field has a key `validation` that can contain the values below.
 
 ```json
 "validation": {
   "required": true,
   "type": "email",
   "regex": "",
+  `maxLength`: 100,
   "descriptionEN": ""
   "descriptionFR": ""
 }
 ```
+
+`type`: Options: "email", "alphanumeric", "text", "name", "number", "phone", "date".
+
+`regex`: If the pre-deinfed types are not available, a custom regular expression against which to validate the text.
+
+`maxLength`: The maximum number of characters that can be submitted through the input
+
+`required`: A boolean flag identifying if the question element is a mandatory for submission (`bool`)
