@@ -9,7 +9,7 @@
     "start": "yarn migrate && yarn initialize && next start -p ${PORT:-3000}",
     "migrate": "cd ./migrations && yarn migrate && cd ..",
     "initialize": "cd ./flag_initialization && yarn initialize && cd ..",
-    "start:test": "CYPRESS=true ALLOW_MOCK_FORMS=true next start",
+    "start:test": "CYPRESS=true next start",
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix .",

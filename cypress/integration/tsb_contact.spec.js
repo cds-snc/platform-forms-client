@@ -1,13 +1,13 @@
 describe("TSB Contact Form functionality", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
+    cy.mockForm("../../tests/data/tsbContactTestForm.json");
   });
 
   it("TSB Contact Form renders", () => {
-    cy.mockForm("../../tests/data/tsbContactTestForm.json");
     cy.get("h1").contains("Transportation Safety Board of Canada general enquiries");
   });
-  it("Fill out the form", () => {
+  it("Fill out and Submit the form", () => {
     cy.get("input[id='2']").type("Santa").should("have.value", "Santa");
     cy.get("input[id='3']")
       .type("santa@northpole.global")
@@ -19,8 +19,7 @@ describe("TSB Contact Form functionality", () => {
     cy.get("textarea[id='6']")
       .type("Contacting the Transportation Safety Board for a personal inquiry")
       .should("have.value", "Contacting the Transportation Safety Board for a personal inquiry");
-  });
-  it("Submit the Form", () => {
+
     cy.get("[type='submit']").click();
     cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Thank you for your message");

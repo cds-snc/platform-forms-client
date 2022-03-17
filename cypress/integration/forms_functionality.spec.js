@@ -1,10 +1,3 @@
-const A11Y_OPTIONS = {
-  runOnly: {
-    type: "tag",
-    values: ["wcag21aa", "wcag2aa", "best-practice", "section508"],
-  },
-};
-
 describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
@@ -13,8 +6,6 @@ describe("Forms Functionality", () => {
     });
     it("the form displays an error when it is submitted and a field is required", () => {
       cy.get("[type='submit']").click();
-      // Check form error state accessibility
-      cy.checkA11y(null, A11Y_OPTIONS);
       cy.get("h2.gc-h3").contains("Please correct the errors on the page");
       cy.get("div.gc-alert__body a").contains("Please complete the required field to continue");
       cy.get("div.gc-alert__body a").click();
@@ -33,17 +24,20 @@ describe("Forms Functionality", () => {
       cy.mockForm("../../tests/data/textFieldTestForm.json");
     });
     it("should display alert message when submitting too quickly", () => {
+      cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
       cy.get("[role='alert']").contains("Button can not be used");
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
+      cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(6000);
       cy.get("[role='alert']").contains("The button's ready.");
     });
     it("should submit the button after the proper delay", () => {
+      cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(6000);
