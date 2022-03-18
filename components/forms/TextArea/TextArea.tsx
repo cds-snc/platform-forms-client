@@ -52,11 +52,11 @@ export const TextArea = (
       >
         {children}
       </textarea>
-      {maxLength && remainingCharacters >= 0 && (
-        <div>You have {remainingCharacters} characters left.</div>
+      {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
+        <div id="character-count-message">You have {remainingCharacters} characters left.</div>
       )}
       {maxLength && remainingCharacters < 0 && (
-        <div className="gc-error-message">
+        <div id="character-count-message" className="gc-error-message">
           You have {remainingCharacters * -1} characters too many.
         </div>
       )}
