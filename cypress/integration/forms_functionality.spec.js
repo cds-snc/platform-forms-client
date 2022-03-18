@@ -5,7 +5,7 @@ const A11Y_OPTIONS = {
   },
 };
 
-describe("Forms Functionality", () => {
+describe.skip("Forms Functionality", () => {
   describe("text field tests", () => {
     it("renders the form", () => {
       cy.visit("/en/id/1?mockedFormFile=textFieldTestForm");
@@ -37,7 +37,7 @@ describe("Forms Functionality", () => {
   });
 });
 
-describe("Forms Functionality - Submit Delay", () => {
+describe.skip("Forms Functionality - Submit Delay", () => {
   beforeEach(() => {
     cy.intercept(
       { method: "GET", url: "/api/flags/formTimer/check" },
@@ -62,5 +62,34 @@ describe("Forms Functionality - Submit Delay", () => {
   });
   it("should attempt to submit the button after in the 'button ready' state", () => {
     cy.get("[type='submit']").click();
+  });
+});
+
+describe("Forms Functionality - Character Counts", () => {
+  beforeEach(() => {
+    cy.visit("/en/id/1?mockedFormFile=textFieldTestForm");
+  });
+
+  it("does not display any message when not enough characters have been typed in", () => {
+    cy.get("input[id='2']").type("This is 21 characters");
+    cy.get("div[id='character-count-message']").should("not.exist");
+  });
+
+  it("displays a message with the number of characters remaining", () => {
+    cy.get("input[id='2']").type("This is 35 characters This is 35 ch");
+    cy.get("div[id='character-count-message']").contains("You have 5 characters left.");
+  });
+
+  it("displays an error message indicating too many characters", () => {
+    cy.get("input[id='2']").type("This is 48 characters This is 48 characters This");
+    cy.get("div[id='character-count-message']").contains("You have 8 characters too many.");
+  });
+
+  it("won't submit the form if the number of characters is too many", () => {
+    cy.get("input[id='2']").type("This is too many characters. This is too many characters.");
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.get("[type='submit']").click();
+    cy.get("h2.gc-h3").contains("Please correct the errors on the page");
   });
 });

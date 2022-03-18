@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import { CharacterCountMessages } from "@lib/types";
 
 interface RequiredTextInputProps {
   id: string;
   name: string;
   type: "text" | "email" | "name" | "number" | "password" | "search" | "tel" | "url";
+  characterCountMessages: CharacterCountMessages;
 }
 
 interface CustomTextInputProps {
@@ -21,8 +23,17 @@ export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElement
 export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
 
 export const TextInput = (props: TextInputProps): React.ReactElement => {
-  const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
-    props;
+  const {
+    id,
+    type,
+    className,
+    required,
+    ariaDescribedBy,
+    placeholder,
+    autoComplete,
+    maxLength,
+    characterCountMessages,
+  } = props;
   const [field, meta, helpers] = useField(props);
   const classes = classnames("gc-input-text", className);
 
@@ -57,11 +68,14 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         onChange={handleTextInputChange}
       />
       {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
-        <div id="character-count-message">You have {remainingCharacters} characters left.</div>
+        <div id={"character-count-message-" + id}>
+          {characterCountMessages.part1} {remainingCharacters} {characterCountMessages.part2}
+        </div>
       )}
       {maxLength && remainingCharacters < 0 && (
-        <div id="character-count-message" className="gc-error-message">
-          You have {remainingCharacters * -1} characters too many.
+        <div id={"character-count-message-" + id} className="gc-error-message">
+          {characterCountMessages.part1Error} {remainingCharacters * -1}{" "}
+          {characterCountMessages.part2Error}
         </div>
       )}
     </>

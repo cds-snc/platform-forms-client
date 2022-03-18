@@ -4,10 +4,10 @@ import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form } from "../../forms/Form/Form";
 import { TextPage } from "../../forms/TextPage/TextPage";
-import { getProperty, getRenderedForm } from "../../../lib/formBuilder";
-import { PublicFormSchemaProperties } from "../../../lib/types";
+import { getProperty, getRenderedForm } from "@lib/formBuilder";
+import { PublicFormSchemaProperties } from "@lib/types";
 import { useRouter } from "next/router";
-import { useFlag } from "../../../lib/hooks/useFlag";
+import { useFlag } from "@lib/hooks/useFlag";
 
 interface DynamicFormProps {
   formConfig: PublicFormSchemaProperties;
@@ -23,7 +23,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
-  const currentForm = getRenderedForm(formConfig, language);
+  const currentForm = getRenderedForm(formConfig, language, t);
   const formTitle = formConfig[getProperty("title", language)] as string;
   const router = useRouter();
   const { step, htmlEmail } = router.query;

@@ -36,7 +36,7 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
   test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language={lang} />
+        <GenerateElement element={textInputData} language={lang} t={(key) => key} />
       </Form>
     );
     const title =
@@ -66,7 +66,7 @@ describe("Check attributes on rendered text input", () => {
   it("has the correct autoComplete value", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language={"en"} />
+        <GenerateElement element={textInputData} language={"en"} t={(key) => key} />
       </Form>
     );
     expect(screen.getByRole("textbox").hasAttribute("autoComplete").valueOf("name"));
@@ -75,10 +75,12 @@ describe("Check attributes on rendered text input", () => {
 
 describe("Verfify character count restrictions", () => {
   let screen;
+  let t;
   beforeEach(() => {
+    t = (key) => key;
     screen = render(
       <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language={"en"} />
+        <GenerateElement element={textInputData} language={"en"} t={(key) => key} />
       </Form>
     );
   });
@@ -92,12 +94,20 @@ describe("Verfify character count restrictions", () => {
   it("displays a message with the number of characters remaining", () => {
     const textInput = screen.getByRole("textbox");
     userEvent.type(textInput, "This is 35 characters This is 35 ch");
-    expect(screen.getByText("You have 5 characters left.")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        t("formElements.characterCount.part1") + " 5 " + t("formElements.characterCount.part2")
+      )
+    ).toBeInTheDocument();
   });
 
-  it("displays a message indicating too many characters", () => {
+  it("displays an error message indicating too many characters", () => {
     const textInput = screen.getByRole("textbox");
     userEvent.type(textInput, "This is 48 characters This is 48 characters This");
-    expect(screen.getByText("You have 8 characters too many.")).toBeInTheDocument();
+    screen.getByText(
+      t("formElements.characterCount.part1-error") +
+        " 8 " +
+        t("formElements.characterCount.part2-error")
+    );
   });
 });

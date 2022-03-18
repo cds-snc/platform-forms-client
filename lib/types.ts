@@ -265,3 +265,10 @@ export type FormOwner = {
   email: string;
   active: boolean;
 };
+
+export type CharacterCountMessages = {
+  part1: string;
+  part2: string;
+  part1Error: string;
+  part2Error: string;
+};
