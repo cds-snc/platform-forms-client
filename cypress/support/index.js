@@ -27,3 +27,7 @@ Cypress.on("uncaught:exception", () => {
   // failing the test
   return false;
 });
+
+beforeEach(() => {
+  cy.useFlag("reCaptcha", false);
+});
