@@ -29,7 +29,5 @@ Cypress.on("uncaught:exception", () => {
 });
 
 beforeEach(() => {
-  cy.useFlag("submitToReliabilityQueue", false);
-  cy.useFlag("notifyPreview", false);
   cy.useFlag("reCaptcha", false);
 });

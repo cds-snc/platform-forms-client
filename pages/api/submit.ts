@@ -277,11 +277,6 @@ const processFormData = async (
       }`
     );
 
-    if (process.env.CYPRESS) {
-      logMessage.info("Not Sending to Backend Processing - Test mode");
-      return await setTimeout(() => res.status(200).json({ received: true }), 1000);
-    }
-
     const form = await getFormByID(reqFields.formID as string);
 
     if (!form) {

@@ -14,7 +14,7 @@ import { useFlag } from "@lib/hooks/useFlag";
 */
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
-  const { formConfig, mockedFormFile } = props;
+  const { formConfig } = props;
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
@@ -43,7 +43,6 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         router={router}
         t={t}
         notifyPreviewFlag={notifyPreviewFlag}
-        mockedFormFile={mockedFormFile}
       >
         {currentForm}
       </Form>

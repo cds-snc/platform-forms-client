@@ -33,7 +33,7 @@ Cypress.Commands.add("mockForm", (file) => {
         Object.defineProperty(win, "__NEXT_DATA__", {
           set(serverSideProps) {
             // here is our change to modify the injected parsed data
-            serverSideProps.props.pageProps.formConfig = mockedForm.form;
+            serverSideProps.props.pageProps.formConfig = { ...mockedForm.form, formID: "test" };
             nextData = serverSideProps;
           },
           get() {
@@ -41,6 +41,16 @@ Cypress.Commands.add("mockForm", (file) => {
           },
         });
       },
+    });
+
+    cy.intercept("_next/data/*/en/id/test/confirmation.json*", (req) => {
+      // prevent the server from responding with 304
+      // without an actual object
+      delete req.headers["if-none-match"];
+      return req.continue((res) => {
+        // let's use the same test greeting
+        res.body.pageProps.formConfig = { ...mockedForm.form, formID: "test" };
+      });
     });
   });
 });
@@ -51,7 +61,7 @@ Cypress.Commands.add("useFlag", (flagName, value) => {
     {
       statusCode: 200,
       body: {
-        data: value,
+        status: value,
       },
     }
   ).as(flagName);

@@ -8,7 +8,6 @@ export async function getServerSideProps(context) {
   let form = null;
   const formId = context.params.form;
   const isEmbeddable = (context.query.embed && context.query.embed == "true") || null;
-  const mockedFormFile = context.query.mockedFormFile ?? null;
 
   if (formId === "preview-form" && context.query) {
     // If we're previewing a form, get the object from the query string
@@ -17,11 +16,13 @@ export async function getServerSideProps(context) {
     form = parsedForm && parsedForm.form ? parsedForm.form : null;
   } else {
     //Otherwise, get the form object via the dataLayer library
-    form = await getFormByID(context.params.form, mockedFormFile);
+    form = await getFormByID(context.params.form);
   }
-  // Only retrieve publish ready forms if isProduction
 
-  if (!form || (!form.publishingStatus && !unpublishedForms)) {
+  // Redirect if form doesn't exist and
+  // Only retrieve publish ready forms if isProduction
+  // Short circuit only if Cypress testing
+  if ((!form || (!form?.publishingStatus && !unpublishedForms)) && !process.env.CYPRESS) {
     return {
       redirect: {
         // We can redirect to a 'Form does not exist page' in the future
@@ -32,7 +33,6 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      mockedFormFile: mockedFormFile,
       formConfig: form,
       isEmbeddable: isEmbeddable,
       ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
