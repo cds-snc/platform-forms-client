@@ -81,56 +81,6 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     }
   };
 
-  if (process.env.CYPRESS && payload.method !== "GET") {
-    logMessage.info("Templates CRUD API in Test Mode");
-    const timer = () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(undefined);
-        }, 1000);
-      });
-    };
-
-    return timer().then(() => {
-      const { method, formConfig } = payload;
-      switch (method) {
-        case "INSERT":
-          return {
-            data: {
-              records: [
-                {
-                  formID: "TEST",
-                  formConfig: formConfig ?? {
-                    publishingStatus: false,
-                    submission: {},
-                    form: {
-                      titleEn: "test",
-                      titleFr: "test",
-                      layout: [],
-                      elements: [],
-                    },
-                  },
-                  organization: false,
-                },
-              ],
-            },
-          };
-        case "UPDATE":
-          return {
-            data: {},
-          };
-        case "DELETE":
-          return {
-            data: {},
-          };
-        default:
-          return {
-            data: {},
-          };
-      }
-    });
-  }
-
   const encoder = new TextEncoder();
   const command = new InvokeCommand({
     FunctionName: process.env.TEMPLATES_API ?? "Templates",
@@ -226,47 +176,6 @@ async function _crudOrganizations(
         };
     }
   };
-
-  if (process.env.CYPRESS && payload.method !== "GET") {
-    logMessage.info("Organizations CRUD API in Test Mode");
-    const timer = () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(undefined);
-        }, 1000);
-      });
-    };
-
-    return timer().then(() => {
-      const { method } = payload;
-      switch (method) {
-        case "POST":
-          return {
-            data: {
-              records: [
-                {
-                  organizationID: "11111111-1111-1111-1111-111111111111",
-                  organizationNameEn: "Test",
-                  organizationNAmeFr: "Test",
-                },
-              ],
-            },
-          };
-        case "PUT":
-          return {
-            data: {},
-          };
-        case "DELETE":
-          return {
-            data: {},
-          };
-        default:
-          return {
-            data: {},
-          };
-      }
-    });
-  }
 
   const lambdaClient = new LambdaClient({
     region: "ca-central-1",
