@@ -1,6 +1,8 @@
 describe("Welcome Page", () => {
-  it("En page renders", () => {
+  beforeEach(() => {
     cy.visit("/en/welcome-bienvenue");
+  });
+  it("En page renders", () => {
     cy.get("h1").should("contain", "Welcome to Forms");
   });
   it("Change page language", () => {
