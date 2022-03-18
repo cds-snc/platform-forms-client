@@ -49,10 +49,9 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
     try {
       window.grecaptcha.ready(async () => {
         // get reCAPTCHA response
-        const clientToken = await window.grecaptcha.execute(
-          process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY,
-          { action: "submit" }
-        );
+        const clientToken = await window.grecaptcha.execute(formConfig.reCaptchaID, {
+          action: "submit",
+        });
         if (clientToken) {
           const scoreData = await sendClientTokenForVerification(clientToken);
           const { score, success } = scoreData.data;
@@ -129,7 +128,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
 
   return (
     <>
-      {isReCaptchaEnableOnSite && <Script src={reCaptcha} strategy="beforeInteractive" />}
+      <Script src={reCaptcha} strategy="beforeInteractive" />
       {isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
