@@ -9,6 +9,7 @@ on:
 env:
   ECR_REPOSITORY: form_viewer_production
   GITHUB_SHA: ${{ github.sha }}
+  RECAPTCHA_V3_SITE_KEY: 6LfJDN4eAAAAAGvdRF7ZnQ7ciqdo1RQnQDFmh0VY
 
 jobs:
   push-production:
