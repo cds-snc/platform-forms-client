@@ -29,7 +29,17 @@ export const withDefaultValue = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" defaultValue="Change me" />
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      defaultValue="Change me"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
