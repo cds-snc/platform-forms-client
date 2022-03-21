@@ -43,7 +43,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
 
   useExternalScript(
-    `https://www.google.com/recaptcha/api.js?render=${formConfig.reCaptchaID}`,
+    `https://www.google.com/recaptcha/api.js?render=${formConfig?.reCaptchaID}`,
     isReCaptchaEnableOnSite
   );
 
