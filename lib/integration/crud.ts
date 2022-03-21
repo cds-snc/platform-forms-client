@@ -261,7 +261,9 @@ const _onlyIncludePublicProperties = async ({
         formID: template.formID,
         publishingStatus: template.formConfig.publishingStatus,
         displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
-        reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+        ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+          reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+        }),
         ...template.formConfig.form,
       };
     });
