@@ -161,7 +161,7 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
     }
   }
 
-  formData["formID"] = form.formID;
+  formData["formID"] = `${form.formID}`;
 
   return formData;
 }
