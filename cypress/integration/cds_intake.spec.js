@@ -1,9 +1,13 @@
 describe("CDS Intake Form functionality", () => {
+  beforeEach(() => {
+    cy.useFlag("formTimer", false);
+    cy.mockForm("../../tests/data/cdsIntakeTestForm.json");
+  });
   it("CDS Intake Form renders", () => {
-    cy.visit("/en/id/1?mockedFormFile=cdsIntakeTestForm");
     cy.get("h1").contains("CDS Intake Form");
   });
-  it("Fill out the form", () => {
+
+  it("Fill out and Submit the form", () => {
     cy.get("input[id='1']").type("Santa").should("have.value", "Santa");
     cy.get("input[id='2']")
       .type("santa@northpole.global")
@@ -22,10 +26,7 @@ describe("CDS Intake Form functionality", () => {
         "have.value",
         "Canadian Digital Service has been in the news so much lately because of the COVID Alert App."
       );
-  });
-  it("Submit the Form", () => {
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(7000);
+
     cy.get("[type='submit']").click();
     cy.url().should("include", "/confirmation");
     cy.get("h1").should("have.focus");

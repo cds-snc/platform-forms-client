@@ -1,9 +1,13 @@
 describe("CDS Platform Intake Form functionality", () => {
+  beforeEach(() => {
+    cy.useFlag("formTimer", false);
+    cy.mockForm("../../tests/data/platformIntakeTestForm.json");
+  });
+
   it("CDS Platform Intake Form renders", () => {
-    cy.visit("/en/id/1?mockedFormFile=platformIntakeTestForm");
     cy.get("h1").contains("Work with CDS on a Digital Form");
   });
-  it("Fill out the form", () => {
+  it("Fill out and Submit the form", () => {
     cy.get("input[id='2']").type("Santa Claus").should("have.value", "Santa Claus");
     cy.get("input[id='3']")
       .type("santaclaus@northpole.global")
@@ -14,10 +18,7 @@ describe("CDS Platform Intake Form functionality", () => {
     cy.get("input[id='7']")
       .type("Call me at my work number")
       .should("have.value", "Call me at my work number");
-  });
-  it("Submit the Form", () => {
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(12000);
+
     cy.get("[type='submit']").click();
     cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Your submission has been received");

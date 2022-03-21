@@ -30,6 +30,10 @@
       "title": "Prévisualiser par e-mail",
       "description": "Sur la page de confirmation après la soumission, affichez une copie de l'e-mail envoyé à l'administrateur du formulaire"
     },
+    "reCatpcha": {
+      "title": "Je ne suis pas un robot",
+      "description": "Active la protection Je ne suis pas un robot pour tous les formulaires avant leur soumission"
+    },
     "formTimer": {
       "title": "Minuteur de formulaire",
       "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"

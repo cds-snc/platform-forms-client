@@ -6,13 +6,21 @@ import { submitToAPI } from "@lib/integration/helpers";
 import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
+import axios from "axios";
 import { useFlag } from "@lib/hooks/useFlag";
+import { reCaptcha } from "@lib/cspScripts";
+import Script from "next/script";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 
 declare global {
   interface Window {
     dataLayer: Array<unknown>;
+    grecaptcha: {
+      // Maybe a better way to do this
+      execute: (arg1: string | undefined, arg2: Record<string, unknown>) => Promise<string>;
+      ready: (arg: () => void) => void;
+    };
   }
 }
 
@@ -33,6 +41,45 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const [submitTimer, setSubmitTimer] = useState(0);
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const timerActive = useFlag("formTimer");
+
+  const isReCaptchaEnableOnSite = useFlag("reCaptcha");
+
+  const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    try {
+      window.grecaptcha.ready(async () => {
+        // get reCAPTCHA response
+        const clientToken = await window.grecaptcha.execute(
+          process.env.NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY,
+          { action: "submit" }
+        );
+        if (clientToken) {
+          const scoreData = await sendClientTokenForVerification(clientToken);
+          const { score, success } = scoreData.data;
+          logMessage.warn(`score : ${score}  status: ${success}`);
+          // assuming you're not a Robot
+          handleSubmit(evt);
+        }
+      });
+    } catch (error) {
+      logMessage.error(error as string);
+    }
+  };
+
+  const sendClientTokenForVerification = async (token: string) => {
+    // call a backend API to verify reCAPTCHA response
+    return await axios({
+      url: "/api/verify",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        userToken: token,
+      },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
+  };
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -82,6 +129,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
 
   return (
     <>
+      {isReCaptchaEnableOnSite && <Script src={reCaptcha} strategy="beforeInteractive" />}
       {isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (
@@ -108,6 +156,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
           <form
             id="form"
             data-testid="form"
+            method="POST"
             onSubmit={(e) => {
               if (submitTimer) {
                 setSubmitTooEarly(true);
@@ -123,9 +172,13 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
                 return;
               }
               setSubmitTooEarly(false);
-              handleSubmit(e);
+
+              if (isReCaptchaEnableOnSite) {
+                handleSubmitReCaptcha(e);
+              } else {
+                handleSubmit(e);
+              }
             }}
-            method="POST"
             noValidate
           >
             {children}

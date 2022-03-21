@@ -30,6 +30,10 @@
       "title": "Notify Email Preview",
       "description": "On the confirmation page after submission display a copy of the email sent to the form administrator"
     },
+    "reCaptcha": {
+      "title": "I am not a robot",
+      "description": "Enable protected by reCaptcha on forms before submission"
+    },
     "formTimer": {
       "title": "Form Timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"

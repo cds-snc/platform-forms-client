@@ -142,8 +142,8 @@ export interface DynamicFormProps {
   language: string;
   router: NextRouter;
   notifyPreviewFlag: boolean;
-  mockedFormFile?: string;
   t: TFunction;
+  isReCaptchaEnableOnSite?: boolean;
 }
 
 export interface InnerFormProps {
