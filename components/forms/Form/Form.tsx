@@ -7,9 +7,7 @@ import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
 import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
 import axios from "axios";
-import { useFlag } from "@lib/hooks/useFlag";
-import { reCaptcha } from "@lib/cspScripts";
-import Script from "next/script";
+import { useFlag, useExternalScript } from "@lib/hooks";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 
@@ -43,6 +41,11 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
   const timerActive = useFlag("formTimer");
 
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
+
+  useExternalScript(
+    `https://www.google.com/recaptcha/api.js?render=${formConfig.reCaptchaID}`,
+    isReCaptchaEnableOnSite
+  );
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -128,7 +131,6 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
 
   return (
     <>
-      <Script src={reCaptcha} strategy="beforeInteractive" />
       {isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
         <Loader loading={isSubmitting} message={t("loading")} />
       ) : (

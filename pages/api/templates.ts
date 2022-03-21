@@ -1,4 +1,4 @@
-import { crudTemplates } from "@lib/integration/crud";
+import { crudTemplates, onlyIncludePublicProperties } from "@lib/integration/crud";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
@@ -8,25 +8,6 @@ import { CrudTemplateResponse, PublicFormSchemaProperties } from "@lib/types";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
-
-const onlyIncludePublicProperties = async ({
-  data: { records },
-}: CrudTemplateResponse): Promise<{ data: Array<PublicFormSchemaProperties> }> => {
-  if (records) {
-    const sanitizedResponse = records.map((template) => {
-      return {
-        formID: template.formID,
-        publishingStatus: template.formConfig.publishingStatus,
-        displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
-        reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-        ...template.formConfig.form,
-      };
-    });
-    return { data: sanitizedResponse };
-  } else {
-    throw new Error("No records found");
-  }
-};
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
