@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Add a character limit to `text input` and `textarea`
+
 ### Fixed
 
 - Aligned HTTP methods on API requests to decommission request body `method` property.
