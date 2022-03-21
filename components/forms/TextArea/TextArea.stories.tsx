@@ -18,7 +18,16 @@ export const defaultTextArea = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" />
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -50,7 +59,17 @@ export const withPlaceholder = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" placeholder="Enter value" />
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      placeholder="Enter value"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -61,7 +80,17 @@ export const disabled = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" disabled />
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      disabled
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -72,7 +101,17 @@ export const readonly = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" readOnly />
+    <TextArea
+      id="input-type-text"
+      name="input-type-text"
+      readOnly
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
