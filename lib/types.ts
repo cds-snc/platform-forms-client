@@ -43,6 +43,7 @@ export interface PublicFormSchemaProperties extends FormSchemaProperties {
   formID: string;
   publishingStatus: boolean;
   displayAlphaBanner: boolean;
+  reCaptchaID?: string;
 }
 
 export type allFormElements =
