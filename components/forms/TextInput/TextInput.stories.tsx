@@ -18,7 +18,17 @@ export const defaultTextInput = (): React.ReactElement => (
     }}
     initialValues={{ "input-type-text": "" }}
   >
-    <TextInput id="input-type-text" name="input-type-text" type="text" />
+    <TextInput
+      id="input-type-text"
+      name="input-type-text"
+      type="text"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 

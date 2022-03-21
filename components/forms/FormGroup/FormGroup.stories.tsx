@@ -20,7 +20,17 @@ export const textInputFormGroup = (): React.ReactElement => (
   >
     <FormGroup name="formGroup">
       <Label htmlFor="input-type-text">Text input label</Label>
-      <TextInput id="input-type-text" name="input-type-text" type="text" />
+      <TextInput
+        id="input-type-text"
+        name="input-type-text"
+        type="text"
+        characterCountMessages={{
+          part1: "You have",
+          part2: "characters left.",
+          part1Error: "You have",
+          part2Error: "characters too many.",
+        }}
+      />
     </FormGroup>
   </Formik>
 );
@@ -37,7 +47,17 @@ export const textInputErrorFormGroup = (): React.ReactElement => (
         Text input label
       </Label>
       <ErrorMessage>Helpful error message</ErrorMessage>
-      <TextInput id="input-type-text" name="input-type-text" type="text" />
+      <TextInput
+        id="input-type-text"
+        name="input-type-text"
+        type="text"
+        characterCountMessages={{
+          part1: "You have",
+          part2: "characters left.",
+          part1Error: "You have",
+          part2Error: "characters too many.",
+        }}
+      />
     </FormGroup>
   </Formik>
 );
