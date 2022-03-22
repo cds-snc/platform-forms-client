@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
 import { logMessage } from "@lib/logger";
 import { middleware, cors, validTemporaryToken, jsonValidator } from "@lib/middleware";
 import retrievalSchema from "@lib/middleware/schemas/retrieval.schema.json";
