@@ -25,14 +25,9 @@ export const validTemporaryToken = (): MiddlewareRequest => {
   return async function (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> {
     try {
       //Default value to 10 if it's undefined
-      const { formID } = req.query;
+      const formID = req.query.form;
       //Check that formID isn't repeated
-      if (Array.isArray(formID)) {
-        res.status(400).json({ error: "Bad Request" });
-        return { next: false };
-      }
-      //Get formID form the bearer token
-      if (!formID) {
+      if (Array.isArray(formID) || !formID) {
         res.status(400).json({ error: "Bad Request" });
         return { next: false };
       }
