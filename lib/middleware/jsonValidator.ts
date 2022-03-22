@@ -6,14 +6,17 @@ export type ValidateOptions = {
   jsonKey: string;
 };
 
-export const jsonValidator = (schema: Schema, options: ValidateOptions): MiddlewareRequest => {
+export const jsonValidator = (schema: Schema, options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
       if (req.method === "GET") {
         return { next: true };
       }
       const validator = new Validator();
-      const validatorResult = validator.validate(req.body[options.jsonKey], schema);
+      const validatorResult = validator.validate(
+        options?.jsonKey ? req.body[options.jsonKey] : req.body,
+        schema
+      );
       if (validatorResult.valid) {
         return { next: true };
       } else {
