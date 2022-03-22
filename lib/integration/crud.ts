@@ -1,4 +1,3 @@
-import fs from "fs";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { logger, logMessage } from "../logger";
 import {
