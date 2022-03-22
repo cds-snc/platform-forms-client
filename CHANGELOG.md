@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add a character limit to `text input` and `textarea`
+- Add a character limit to `text input` and `textarea` [#691](https://github.com/cds-snc/platform-forms-client/pull/691)
+- ReCAPTCHA V3 added on form submission
 
 ### Fixed
 
@@ -18,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Open links from richText component in new Tab.
 - Improved/fixed accessibility for file input component
 - Fixed dropdown initial value not being displayed the same way across browsers
+- Only public form template properties are available to unauthenticated sessions
 
 ## [1.1.0] 2022-03-04
 

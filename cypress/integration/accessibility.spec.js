@@ -19,8 +19,8 @@ describe("Accessibility (A11Y) Check", () => {
     };
     cy.request("/api/templates", body)
       .then((response) => {
-        response.body.data.records.forEach((rec) => {
-          if (rec.formConfig.publishingStatus) {
+        response.body.data.forEach((rec) => {
+          if (rec.publishingStatus) {
             forms.push(rec.formID);
           }
         });

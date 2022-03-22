@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { logMessage } from "@lib/logger";
-import { middleware, cors, validTemporaryToken } from "@lib/middleware";
+import { middleware, cors, validTemporaryToken, sessionExists } from "@lib/middleware";
 import {
   DynamoDBClient,
   QueryCommand,

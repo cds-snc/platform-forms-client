@@ -1,7 +1,7 @@
-import { getFormByID } from "../../../lib/integration/crud";
-import DynamicForm from "../../../components/containers/DynamicForm/DynamicForm";
+import { getFormByID } from "@lib/integration/crud";
+import DynamicForm from "@components/containers/DynamicForm/DynamicForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { checkOne } from "../../../lib/flags";
+import { checkOne } from "@lib/flags";
 
 export async function getServerSideProps(context) {
   const unpublishedForms = await checkOne("unpublishedForms");
