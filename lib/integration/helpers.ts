@@ -27,14 +27,9 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
-    const { records } = response.data.data;
-    if (records?.length === 1 && records[0].formConfig.form) {
-      return {
-        formID,
-        ...records[0].formConfig?.form,
-        publishingStatus: records[0].formConfig.publishingStatus,
-        displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-      };
+    const { data }: { data: Array<PublicFormSchemaProperties> } = response.data;
+    if (data?.length === 1 && data[0].formID) {
+      return data[0];
     }
   } catch (err) {
     logMessage.error(err as Error);
@@ -166,7 +161,7 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
     }
   }
 
-  formData["formID"] = form.formID;
+  formData["formID"] = `${form.formID}`;
 
   return formData;
 }

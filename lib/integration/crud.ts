@@ -242,21 +242,40 @@ async function _getFormByStatus(
 }
 
 async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
-  const response = await crudTemplates({ method: "GET", formID: formID });
-  const { records } = response.data;
-  if (records?.length === 1 && records[0].formConfig.form) {
-    return {
-      formID,
-      ...records[0].formConfig.form,
-      publishingStatus: records[0].formConfig.publishingStatus,
-      displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-    };
+  try {
+    const response = await crudTemplates({ method: "GET", formID: formID });
+    const sanitizedResponse = await onlyIncludePublicProperties(response);
+    return sanitizedResponse.data[0];
+  } catch (e) {
+    logMessage.error(e as Error);
+    return null;
   }
-  return null;
 }
+
+const _onlyIncludePublicProperties = async ({
+  data: { records },
+}: CrudTemplateResponse): Promise<{ data: Array<PublicFormSchemaProperties> }> => {
+  if (records) {
+    const sanitizedResponse = records.map((template) => {
+      return {
+        formID: template.formID,
+        publishingStatus: template.formConfig.publishingStatus,
+        displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
+        ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+          reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+        }),
+        ...template.formConfig.form,
+      };
+    });
+    return { data: sanitizedResponse };
+  } else {
+    throw new Error("No records found");
+  }
+};
 
 export const crudOrganizations = logger(_crudOrganizationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
 export const getFormByID = logger(_getFormByID);
 export const getFormByStatus = logger(_getFormByStatus);
 export const getSubmissionByID = logger(_getSubmissionByID);
+export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);

@@ -9,7 +9,6 @@ on:
 env:
   ECR_REPOSITORY: form_viewer_production
   GITHUB_SHA: ${{ github.sha }}
-  RECAPTCHA_V3_SITE_KEY: 6LfJDN4eAAAAAGvdRF7ZnQ7ciqdo1RQnQDFmh0VY
 
 jobs:
   push-production:
@@ -42,9 +41,8 @@ jobs:
       - name: Build Form Viewer
         run: |
           docker build -t base \
-            --build-arg PRODUCTION_ENV=true
-            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
-            --build-arg NEXT_PUBLIC_RECAPTCHA_V3_SITE_KEY=$RECAPTCHA_V3_SITE_KEY .
+          --build-arg PRODUCTION_ENV=true
+          --build-arg GITHUB_SHA_ARG=$GITHUB_SHA .
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer
