@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved/fixed accessibility for file input component
 - Fixed dropdown initial value not being displayed the same way across browsers
 - Only public form template properties are available to unauthenticated sessions
-- Set `Retrieved` value to 0 on initial push to vault table in the Reliability Queue
+- Set `Retrieved` value to 0 on initial push to vault table in the Reliability Queue [#191](https://github.com/cds-snc/forms-terraform/pull/191)
 
 ### Changed
 
