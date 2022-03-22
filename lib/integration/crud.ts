@@ -81,56 +81,6 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
     }
   };
 
-  if (process.env.CYPRESS && payload.method !== "GET") {
-    logMessage.info("Templates CRUD API in Test Mode");
-    const timer = () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(undefined);
-        }, 1000);
-      });
-    };
-
-    return timer().then(() => {
-      const { method, formConfig } = payload;
-      switch (method) {
-        case "INSERT":
-          return {
-            data: {
-              records: [
-                {
-                  formID: "TEST",
-                  formConfig: formConfig ?? {
-                    publishingStatus: false,
-                    submission: {},
-                    form: {
-                      titleEn: "test",
-                      titleFr: "test",
-                      layout: [],
-                      elements: [],
-                    },
-                  },
-                  organization: false,
-                },
-              ],
-            },
-          };
-        case "UPDATE":
-          return {
-            data: {},
-          };
-        case "DELETE":
-          return {
-            data: {},
-          };
-        default:
-          return {
-            data: {},
-          };
-      }
-    });
-  }
-
   const encoder = new TextEncoder();
   const command = new InvokeCommand({
     FunctionName: process.env.TEMPLATES_API ?? "Templates",
@@ -227,47 +177,6 @@ async function _crudOrganizations(
     }
   };
 
-  if (process.env.CYPRESS && payload.method !== "GET") {
-    logMessage.info("Organizations CRUD API in Test Mode");
-    const timer = () => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(undefined);
-        }, 1000);
-      });
-    };
-
-    return timer().then(() => {
-      const { method } = payload;
-      switch (method) {
-        case "POST":
-          return {
-            data: {
-              records: [
-                {
-                  organizationID: "11111111-1111-1111-1111-111111111111",
-                  organizationNameEn: "Test",
-                  organizationNAmeFr: "Test",
-                },
-              ],
-            },
-          };
-        case "PUT":
-          return {
-            data: {},
-          };
-        case "DELETE":
-          return {
-            data: {},
-          };
-        default:
-          return {
-            data: {},
-          };
-      }
-    });
-  }
-
   const lambdaClient = new LambdaClient({
     region: "ca-central-1",
     endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
@@ -332,42 +241,41 @@ async function _getFormByStatus(
   return [];
 }
 
-async function _getFormByID(
-  formID: string,
-  mockedFormFile?: string
-): Promise<PublicFormSchemaProperties | null> {
-  // for cypress tests we want to return a dummy form from a local file
-  // as opposed to needing to hit a staging endpoint
-  // additionally we use an environment variable to enable or disable this
-  // as in a production setting this could be dangerous as one could potentially
-  // error bomb our queue if this is left enabled
-  if (mockedFormFile && process.env.ALLOW_MOCK_FORMS) {
-    const folderPathSplit = __dirname.split("/");
-    const mockedForm = JSON.parse(
-      fs.readFileSync(
-        `${folderPathSplit
-          .slice(0, folderPathSplit.lastIndexOf("platform-forms-client") + 1)
-          .join("/")}/tests/data/${mockedFormFile}.json`,
-        { encoding: "utf8" }
-      )
-    );
-    return mockedForm.form;
+async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
+  try {
+    const response = await crudTemplates({ method: "GET", formID: formID });
+    const sanitizedResponse = await onlyIncludePublicProperties(response);
+    return sanitizedResponse.data[0];
+  } catch (e) {
+    logMessage.error(e as Error);
+    return null;
   }
-  const response = await crudTemplates({ method: "GET", formID: formID });
-  const { records } = response.data;
-  if (records?.length === 1 && records[0].formConfig.form) {
-    return {
-      formID,
-      ...records[0].formConfig.form,
-      publishingStatus: records[0].formConfig.publishingStatus,
-      displayAlphaBanner: records[0].formConfig.displayAlphaBanner ?? true,
-    };
-  }
-  return null;
 }
+
+const _onlyIncludePublicProperties = async ({
+  data: { records },
+}: CrudTemplateResponse): Promise<{ data: Array<PublicFormSchemaProperties> }> => {
+  if (records) {
+    const sanitizedResponse = records.map((template) => {
+      return {
+        formID: template.formID,
+        publishingStatus: template.formConfig.publishingStatus,
+        displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
+        ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+          reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+        }),
+        ...template.formConfig.form,
+      };
+    });
+    return { data: sanitizedResponse };
+  } else {
+    throw new Error("No records found");
+  }
+};
 
 export const crudOrganizations = logger(_crudOrganizationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
 export const getFormByID = logger(_getFormByID);
 export const getFormByStatus = logger(_getFormByStatus);
 export const getSubmissionByID = logger(_getSubmissionByID);
+export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);

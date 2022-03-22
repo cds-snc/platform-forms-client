@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import React from "react";
-import crypto from "crypto";
-import { googleTagManager, reCaptcha } from "@lib/cspScripts";
+import { googleTagManager, cspHashOf } from "@lib/cspScripts";
 
 let scriptHashes = [];
 let externalScripts = [];
@@ -29,12 +28,6 @@ const GoogleTagScript = React.createElement("script", {
     __html: googleTagManager,
   },
 });
-
-const cspHashOf = (text) => {
-  const hash = crypto.createHash("sha256");
-  hash.update(text);
-  return `'sha256-${hash.digest("base64")}'`;
-};
 
 class StrictStaticCSP extends Head {
   constructor() {
@@ -95,7 +88,6 @@ class StrictStaticCSP extends Head {
     // Don't add the hashes again if they already exist in the array
     this.addHashes(cspHashOf(nextJsSPA));
     this.addHashes(cspHashOf(googleTagManager));
-    this.addHashes(cspHashOf(reCaptcha));
 
     // return an empty array so NextJS doesn't duplicate the addition of the scripts to Head.
     return [];
@@ -146,7 +138,8 @@ class MyDocument extends Document {
     const initialProps = await Document.getInitialProps(ctx);
     // Get the current host url so we can see if we're in Prod.
     const currentUrl = ctx.req?.headers?.host;
-    return { ...initialProps, currentUrl: currentUrl };
+
+    return { ...initialProps, currentUrl };
   }
 
   render() {

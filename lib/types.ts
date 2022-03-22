@@ -43,6 +43,7 @@ export interface PublicFormSchemaProperties extends FormSchemaProperties {
   formID: string;
   publishingStatus: boolean;
   displayAlphaBanner: boolean;
+  reCaptchaID?: string;
 }
 
 export type allFormElements =
@@ -139,7 +140,6 @@ export interface DynamicFormProps {
   language: string;
   router: NextRouter;
   notifyPreviewFlag: boolean;
-  mockedFormFile?: string;
   t: TFunction;
   isReCaptchaEnableOnSite?: boolean;
 }
