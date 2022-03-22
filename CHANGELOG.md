@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ReCAPTCHA V3 added on form submission
+- Implementation of the DELETE method to take a string array of SubmissionIDs and mark the relevant items as retrieved and return the same list as a response if its successful [#694](https://github.com/cds-snc/platform-forms-client/pull/694)
 
 ### Fixed
 
@@ -19,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved/fixed accessibility for file input component
 - Fixed dropdown initial value not being displayed the same way across browsers
 - Only public form template properties are available to unauthenticated sessions
+- Set `Retrieved` value to 0 on initial push to vault table in the Reliability Queue
+
+### Changed
+
+- Moved the retrieval API to be under the path `id/[form]/retrieval`.This is to make the API experience more consistent by having the form ID passed in via the url parameter as opposed to a separate query argument [#694](https://github.com/cds-snc/platform-forms-client/pull/694)
+- Usage of DynamoDocumentDBClient to deal with native JS types instead of DynamoDB serializations [#694](https://github.com/cds-snc/platform-forms-client/pull/694)
+- Removed maxRecord query argument. This presented little value to the user. The retrieval API will now always return a maximum of up to 10 values at a time. [#694](https://github.com/cds-snc/platform-forms-client/pull/694)
 
 ## [1.1.0] 2022-03-04
 
