@@ -3,18 +3,8 @@ import { logMessage } from "@lib/logger";
 import { middleware, cors, validTemporaryToken, jsonValidator } from "@lib/middleware";
 import retrievalSchema from "@lib/middleware/schemas/retrieval.schema.json";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  UpdateCommand,
-  QueryCommandOutput,
-} from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps } from "@lib/types";
-
-interface ResponseListResult {
-  formResponses: QueryCommandOutput;
-  documentClient: DynamoDBDocumentClient;
-}
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -52,48 +42,6 @@ function connectToDynamo(): DynamoDBDocumentClient {
 }
 
 /**
- * Helper function to retrieve up to 10 form responses from dynamoDB
- * using the retrieved-index
- * @param res - The NextJS response object
- * @param formID - The relevant form ID from which to retrieve form responses
- */
-async function getLatestResponseList(
-  res: NextApiResponse,
-  formID: string
-): Promise<ResponseListResult | boolean> {
-  try {
-    const documentClient = connectToDynamo();
-    //Create form's responses db param
-    //NB: A filter expression is applied after a Query finishes, but before the results are returned.
-    //Therefore, a Query consumes the same amount of read capacity, regardless of whether a filter expression is present.
-    const getItemsDbParams = {
-      TableName: "Vault",
-      IndexName: "retrieved-index",
-      Limit: 10,
-      //Cannot use partitin key or sort key such as formID and Retrieved attribute in keyConditionExpression simultaneously
-      ExpressionAttributeValues: {
-        ":formID": formID,
-        ":retrieved": 0,
-      },
-      KeyConditionExpression: "Retrieved = :retrieved",
-      FilterExpression: "FormID = :formID",
-      //A filter expression cannot contain partition key or sort key attributes.
-      //You need to specify those attributes in the key condition expression, not the filter expression.
-      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved",
-    };
-    //Get form's responses for formID
-    return {
-      formResponses: await documentClient.send(new QueryCommand(getItemsDbParams)),
-      documentClient,
-    };
-  } catch (error) {
-    logMessage.error(error as Error);
-    res.status(500).json({ error: "Error on Server Side when fetching form's responses" });
-  }
-  return false;
-}
-
-/**
  * Request type: GET
  * USAGE:
  * curl http://gc-forms/api/id/1/retrieval
@@ -114,12 +62,28 @@ async function getFormResponses(
   email?: string,
   temporaryToken?: string
 ): Promise<void> {
-  const result = await getLatestResponseList(res, formID);
-  // function will return false if there is an error. The response will have
-  // already been set so we do not need to continue with the function execution
-  if (result) {
-    const { formResponses } = result as ResponseListResult;
-    // log level is warn because in production level info is not being forwarded to CloudWatch
+  try {
+    const documentClient = connectToDynamo();
+    //Create form's responses db param
+    //NB: A filter expression is applied after a Query finishes, but before the results are returned.
+    //Therefore, a Query consumes the same amount of read capacity, regardless of whether a filter expression is present.
+    const getItemsDbParams = {
+      TableName: "Vault",
+      IndexName: "retrieved-index",
+      Limit: 10,
+      //Cannot use partitin key or sort key such as formID and Retrieved attribute in keyConditionExpression simultaneously
+      ExpressionAttributeValues: {
+        ":formID": formID,
+        ":retrieved": 0,
+      },
+      KeyConditionExpression: "Retrieved = :retrieved",
+      FilterExpression: "FormID = :formID",
+      //A filter expression cannot contain partition key or sort key attributes.
+      //You need to specify those attributes in the key condition expression, not the filter expression.
+      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved",
+    };
+
+    const formResponses = await documentClient.send(new QueryCommand(getItemsDbParams));
     logMessage.warn(
       `user:${email} retrieved form responses [${formResponses.Items?.map(
         (response) => response.SubmissionID
@@ -127,6 +91,9 @@ async function getFormResponses(
     );
 
     return res.status(200).json({ responses: formResponses.Items });
+  } catch (error) {
+    logMessage.error(error as Error);
+    res.status(500).json({ error: "Error on Server Side when fetching form's responses" });
   }
 }
 
@@ -196,7 +163,6 @@ async function deleteFormResponses(
   }
 }
 
-// Only a GET request is allowed
 export default middleware(
   [
     cors({ allowedMethods: ["GET", "DELETE"] }),
