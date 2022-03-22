@@ -1,9 +1,9 @@
 import React from "react";
-import { Field, useField } from "formik";
+import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Checkbox from "../Checkbox/Checkbox";
 import Radio from "../Radio/Radio";
-import { MultipleChoiceProps } from "../../../lib/types";
+import { MultipleChoiceProps } from "@lib/types";
 
 interface MultipleChoiceGroupProps {
   className?: string;
@@ -14,7 +14,7 @@ interface MultipleChoiceGroupProps {
 }
 
 export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.ReactElement => {
-  const { className, choicesProps, name, type, ariaDescribedBy } = props;
+  const { className, choicesProps, type, ariaDescribedBy } = props;
 
   // field contains name, value, onChange, and other required Form attributes.
   const [field, meta] = useField(props);
@@ -41,10 +41,10 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
 
   // map checkboxes
   return (
-    <Field component="div" data-testid={type} name={name}>
-      {meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+    <>
+      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
       {choices}
-    </Field>
+    </>
   );
 };
 
