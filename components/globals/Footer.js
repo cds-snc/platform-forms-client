@@ -10,17 +10,15 @@ const Footer = () => {
       <div className="gc-footer-container items-start">
         <div>
           {!isSplashPage() && (
-            <ul className="gc-horizontal-list">
-              <li className="gc-horizontal-item">
-                {t("footer.terms.disclaimer")}
-                <br />
-                {t("footer.terms.desc-preface")}
-                <a href={t("footer.terms.link")} target="_blank" rel="noreferrer">
-                  {t("footer.terms.desc")}
-                </a>
-                .
-              </li>
-            </ul>
+            <>
+              {t("footer.terms.disclaimer")}
+              <br />
+              {t("footer.terms.desc-preface")}
+              <a href={t("footer.terms.link")} target="_blank" rel="noreferrer">
+                {t("footer.terms.desc")}
+              </a>
+              .
+            </>
           )}
         </div>
         <div>
