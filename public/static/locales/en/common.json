@@ -1,11 +1,9 @@
 {
   "footer": {
-    "privacy": {
-      "link": "/en/privacy-confidentialite",
-      "desc": "Privacy policy"
-    },
     "terms": {
+      "disclaimer": "This form is hosted by the Canadian Digital Service.",
       "link": "https://digital.canada.ca/legal/terms/",
+      "desc-preface": "Learn more by visiting the ",
       "desc": "Terms and conditions"
     }
   },

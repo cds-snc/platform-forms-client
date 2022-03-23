@@ -1,12 +1,10 @@
 {
   "footer": {
-    "privacy": {
-      "link": "/fr/privacy-confidentialite",
-      "desc": "Politique de confidentialité"
-    },
     "terms": {
+      "disclaimer": "Ce formulaire est hébergé par le Service numérique canadien.",
       "link": "https://numerique.canada.ca/transparence/avis/",
-      "desc": "Avis"
+      "desc-preface": "Pour en savoir plus, consultez les ",
+      "desc": "modalités de service"
     }
   },
   "phase": {
