@@ -62,7 +62,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         type={type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
-        aria-describedby={ariaDescribedBy}
+        aria-describedby={`${meta.error} ${"character-count-message-" + id} ${ariaDescribedBy}`}
         placeholder={placeholder}
         {...field}
         onChange={handleTextInputChange}

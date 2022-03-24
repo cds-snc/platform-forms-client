@@ -56,7 +56,7 @@ export const TextArea = (
         className={classes}
         id={id}
         required={required}
-        aria-describedby={ariaDescribedBy}
+        aria-describedby={`${meta.error} ${"character-count-message-" + id} ${ariaDescribedBy}`}
         placeholder={placeholder}
         {...field}
         onChange={handleTextAreaChange}
