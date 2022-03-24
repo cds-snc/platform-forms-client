@@ -16,11 +16,11 @@ export const defaultTextInput = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <TextInput
-      id="input-type-text"
-      name="input-type-text"
+      id="inputTypeText"
+      name="inputTypeText"
       type="text"
       characterCountMessages={{
         part1: "You have",

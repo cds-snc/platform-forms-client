@@ -16,11 +16,11 @@ export const defaultTextArea = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <TextArea
-      id="input-type-text"
-      name="input-type-text"
+      id="inputTypeText"
+      name="inputTypeText"
       characterCountMessages={{
         part1: "You have",
         part2: "characters left.",
@@ -36,11 +36,11 @@ export const withDefaultValue = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <TextArea
-      id="input-type-text"
-      name="input-type-text"
+      id="inputTypeText"
+      name="inputTypeText"
       defaultValue="Change me"
       characterCountMessages={{
         part1: "You have",
@@ -57,11 +57,11 @@ export const withPlaceholder = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <TextArea
-      id="input-type-text"
-      name="input-type-text"
+      id="inputTypeText"
+      name="inputTypeText"
       placeholder="Enter value"
       characterCountMessages={{
         part1: "You have",
@@ -78,11 +78,11 @@ export const disabled = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <TextArea
-      id="input-type-text"
-      name="input-type-text"
+      id="inputTypeText"
+      name="inputTypeText"
       disabled
       characterCountMessages={{
         part1: "You have",
@@ -99,11 +99,11 @@ export const readonly = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <TextArea
-      id="input-type-text"
-      name="input-type-text"
+      id="inputTypeText"
+      name="inputTypeText"
       readOnly
       characterCountMessages={{
         part1: "You have",
