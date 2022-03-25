@@ -50,13 +50,15 @@ export const TextArea = (
 
   return (
     <>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
       <textarea
         data-testid="textarea"
         className={classes}
         id={id}
         required={required}
-        aria-describedby={`${meta.error} ${"character-count-message-" + id} ${ariaDescribedBy}`}
+        aria-describedby={`${"errorMessage" + id} 
+          ${"characterCountMessage" + id} 
+          ${ariaDescribedBy}`}
         placeholder={placeholder}
         {...field}
         onChange={handleTextAreaChange}
@@ -64,12 +66,12 @@ export const TextArea = (
         {children}
       </textarea>
       {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
-        <div id={"character-count-message" + id}>
+        <div id={"characterCountMessage" + id}>
           {characterCountMessages.part1} {remainingCharacters} {characterCountMessages.part2}
         </div>
       )}
       {maxLength && remainingCharacters < 0 && (
-        <div id={"character-count-message" + id} className="gc-error-message">
+        <div id={"characterCountMmessage" + id} className="gc-error-message">
           {characterCountMessages.part1Error} {remainingCharacters * -1}{" "}
           {characterCountMessages.part2Error}
         </div>

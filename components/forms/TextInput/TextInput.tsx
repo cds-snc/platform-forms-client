@@ -54,7 +54,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.error ? <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage> : null}
       <input
         data-testid="textInput"
         className={classes}
@@ -62,18 +62,20 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         type={type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
-        aria-describedby={`${meta.error} ${"character-count-message-" + id} ${ariaDescribedBy}`}
+        aria-describedby={`${"errorMessage" + id} 
+          ${"characterCountMessage" + id}
+          ${ariaDescribedBy}`}
         placeholder={placeholder}
         {...field}
         onChange={handleTextInputChange}
       />
       {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
-        <div id={"character-count-message-" + id}>
+        <div id={"characterCountMessage" + id}>
           {characterCountMessages.part1} {remainingCharacters} {characterCountMessages.part2}
         </div>
       )}
       {maxLength && remainingCharacters < 0 && (
-        <div id={"character-count-message-" + id} className="gc-error-message">
+        <div id={"characterCountMessage" + id} className="gc-error-message">
           {characterCountMessages.part1Error} {remainingCharacters * -1}{" "}
           {characterCountMessages.part2Error}
         </div>
