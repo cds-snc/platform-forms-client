@@ -14,10 +14,7 @@ const Footer = () => {
               {t("footer.terms.disclaimer")}
               <br />
               {t("footer.terms.desc-preface")}
-              <a href={t("footer.terms.link")} target="_blank" rel="noreferrer">
-                {t("footer.terms.desc")}
-              </a>
-              .
+              <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>.
             </>
           )}
         </div>
