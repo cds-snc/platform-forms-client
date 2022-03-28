@@ -52,6 +52,16 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
     }
   };
 
+  const remainingCharactersMessage =
+    characterCountMessages.part1 + " " + remainingCharacters + " " + characterCountMessages.part2;
+
+  const tooManyCharactersMessage =
+    characterCountMessages.part1Error +
+    " " +
+    remainingCharacters * -1 +
+    " " +
+    characterCountMessages.part2Error;
+
   return (
     <>
       {meta.error ? <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage> : null}
@@ -62,22 +72,21 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         type={type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
-        aria-describedby={`${"errorMessage" + id} 
-          ${"characterCountMessage" + id}
-          ${ariaDescribedBy}`}
+        aria-describedby={`${"errorMessage" + id} ${
+          "characterCountMessage" + id
+        } ${ariaDescribedBy}`}
         placeholder={placeholder}
         {...field}
         onChange={handleTextInputChange}
       />
       {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
-        <div id={"characterCountMessage" + id}>
-          {characterCountMessages.part1} {remainingCharacters} {characterCountMessages.part2}
+        <div id={"characterCountMessage" + id} aria-live="polite">
+          {remainingCharactersMessage}
         </div>
       )}
       {maxLength && remainingCharacters < 0 && (
-        <div id={"characterCountMessage" + id} className="gc-error-message">
-          {characterCountMessages.part1Error} {remainingCharacters * -1}{" "}
-          {characterCountMessages.part2Error}
+        <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
+          {tooManyCharactersMessage}
         </div>
       )}
     </>
