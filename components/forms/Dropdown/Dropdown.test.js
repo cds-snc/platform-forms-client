@@ -85,7 +85,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language={lang} />
+        <GenerateElement element={dropdownData} language={lang} t={(key) => key} />
       </Form>
     );
     const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr,
@@ -118,7 +118,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
     dropdownData.properties.validation.required = true;
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language={lang} />
+        <GenerateElement element={dropdownData} language={lang} t={(key) => key} />
       </Form>
     );
     expect(screen.queryByTestId("required")).toBeInTheDocument();

@@ -33,9 +33,9 @@
           "placeholderFr": "text field 1 placeholder (FR)",
           "descriptionEn": "text field 1 description",
           "descriptionFr": "text field 1 description (FR)",
-          "charLimit": 100,
           "validation": {
-            "required": true
+            "required": true,
+            "maxLength": 40
           }
         }
       }

@@ -25,7 +25,7 @@ describe("Generate a text area", () => {
   test.each([["en"], ["fr"]])("renders properly", (lang) => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={richTextData} language={lang} />
+        <GenerateElement element={richTextData} language={lang} t={(key) => key} />
       </Form>
     );
     const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr,
@@ -52,7 +52,7 @@ describe("Generate a text area", () => {
     };
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={emptyRichTextData} language="en" />
+        <GenerateElement element={emptyRichTextData} language="en" t={(key) => key} />
       </Form>
     );
     expect(screen.queryByRole("label")).not.toBeInTheDocument();

@@ -13,6 +13,7 @@ import {
   MultipleChoiceGroup,
 } from "../components/forms";
 import { FormElement, PropertyChoices, PublicFormSchemaProperties } from "./types";
+import { TFunction } from "next-i18next";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
@@ -46,7 +47,7 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 }
 
 // This function renders the form elements with passed in properties.
-function _buildForm(element: FormElement, lang: string): ReactElement {
+function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElement {
   const id = element.subId ?? element.id;
 
   const choices =
@@ -119,6 +120,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
+            maxLength={element.properties.validation?.maxLength}
+            characterCountMessages={{
+              part1: t("formElements.characterCount.part1"),
+              part2: t("formElements.characterCount.part2"),
+              part1Error: t("formElements.characterCount.part1-error"),
+              part2Error: t("formElements.characterCount.part2-error"),
+            }}
           />
         </div>
       );
@@ -133,6 +141,13 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             required={isRequired}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
+            maxLength={element.properties.validation?.maxLength}
+            characterCountMessages={{
+              part1: t("formElements.characterCount.part1"),
+              part2: t("formElements.characterCount.part2"),
+              part1Error: t("formElements.characterCount.part1-error"),
+              part2Error: t("formElements.characterCount.part2-error"),
+            }}
           />
         </div>
       );
@@ -236,6 +251,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           rowLabel={placeHolder}
           rowElements={subElements}
           lang={lang}
+          t={t}
         />
       );
     }
@@ -250,7 +266,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
  * @param formToRender
  * @param language
  */
-const _getRenderedForm = (formConfig: PublicFormSchemaProperties, language: string) => {
+const _getRenderedForm = (
+  formConfig: PublicFormSchemaProperties,
+  language: string,
+  t: TFunction
+) => {
   if (!formConfig) {
     return null;
   }
@@ -260,7 +280,7 @@ const _getRenderedForm = (formConfig: PublicFormSchemaProperties, language: stri
       (element: FormElement) => element.id === parseInt(item)
     );
     if (element) {
-      return <GenerateElement key={element.id} element={element} language={language} />;
+      return <GenerateElement key={element.id} element={element} language={language} t={t} />;
     } else {
       logMessage.error(`Failed component ID look up ${item} on form ID ${formConfig.formID}`);
     }
@@ -328,10 +348,11 @@ const _getFormInitialValues = (formConfig: PublicFormSchemaProperties, language:
 type GenerateElementProps = {
   element: FormElement;
   language: string;
+  t: TFunction;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
-  const { element, language } = props;
-  const generatedElement = _buildForm(element, language);
+  const { element, language, t } = props;
+  const generatedElement = _buildForm(element, language, t);
   return <>{generatedElement}</>;
 };
 

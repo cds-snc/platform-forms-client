@@ -163,7 +163,7 @@
 
   .gc-input-radio:last-of-type,
   .gc-input-checkbox:last-of-type {
-    @apply md:mb-10 mb-14 pb-0;
+    @apply md:mb-10 pb-0;
   }
 }
 
@@ -229,7 +229,7 @@
 }
 
 .gc-textarea {
-  @apply md:text-small_base md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 mb-14 w-3/4 h-40;
+  @apply md:text-small_base md:w-full text-base text-gray-700 border-solid block border-2 border-black-form py-3 px-2 mt-2 w-3/4 h-40;
   &.full-height {
     @apply h-auto;
   }
@@ -237,6 +237,10 @@
   &:focus {
     @apply outline-none border-blue-focus shadow-input;
   }
+}
+
+.focus-group {
+  @apply mb-14;
 }
 
 .focus-group:focus-within {
@@ -251,7 +255,7 @@
 
 .gc-input-text {
   border: solid 2px black;
-  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 mb-14 w-96;
+  @apply md:w-full md:text-small_base text-base text-gray-700 border-2 py-3 px-2 mt-2 w-96;
 
   &:focus {
     @apply outline-none border-blue-focus shadow-input;

@@ -33,7 +33,8 @@
     "phone": "Please enter a valid telephone number",
     "regex": "Please enter the correct format",
     "file-size-too-large": "Please select a smaller file",
-    "file-type-invalid": "Please select a different file type"
+    "file-type-invalid": "Please select a different file type",
+    "too-many-characters": "Please shorten your response."
   },
   "required": "required",
   "required-field": "Required Field",
@@ -61,5 +62,13 @@
     "features": "Options",
     "login": "Login",
     "logout": "Logout"
+  },
+  "formElements": {
+    "characterCount": {
+      "part1": "You have",
+      "part2": "characters left.",
+      "part1-error": "You have",
+      "part2-error": "characters too many."
+    }
   }
 }

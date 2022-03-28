@@ -16,9 +16,18 @@ export const defaultTextArea = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" />
+    <TextArea
+      id="inputTypeText"
+      name="inputTypeText"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -27,9 +36,19 @@ export const withDefaultValue = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" defaultValue="Change me" />
+    <TextArea
+      id="inputTypeText"
+      name="inputTypeText"
+      defaultValue="Change me"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -38,9 +57,19 @@ export const withPlaceholder = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" placeholder="Enter value" />
+    <TextArea
+      id="inputTypeText"
+      name="inputTypeText"
+      placeholder="Enter value"
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -49,9 +78,19 @@ export const disabled = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" disabled />
+    <TextArea
+      id="inputTypeText"
+      name="inputTypeText"
+      disabled
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
@@ -60,9 +99,19 @@ export const readonly = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
-    <TextArea id="input-type-text" name="input-type-text" readOnly />
+    <TextArea
+      id="inputTypeText"
+      name="inputTypeText"
+      readOnly
+      characterCountMessages={{
+        part1: "You have",
+        part2: "characters left.",
+        part1Error: "You have",
+        part2Error: "characters too many.",
+      }}
+    />
   </Formik>
 );
 
