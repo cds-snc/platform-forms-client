@@ -4,7 +4,6 @@ import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware"
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
-import { CrudTemplateResponse, PublicFormSchemaProperties } from "@lib/types";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];

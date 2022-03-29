@@ -37,7 +37,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
           ({t("required")})
         </span>
       )}
-      {required && <i className="visually-hidden">{t("required-field")}</i>}
+      {group && required && <i className="visually-hidden">{t("required-field")}</i>}
       {hint && <span className="gc-hint">{hint}</span>}
     </>
   );
