@@ -1,32 +1,126 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/example.json",
+    "$id": "http://example.com/example.json",       
     "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
+    "title": "GC Forms Alpha Schema",
+    "description": "A schema to define a Forms configuration.",
     "default": {},
     "examples": [
     ],
+    "properties": {
+        "internalTitleEn": {
+            "description": "The displayed title of the form to the user in English",
+            "$id": "#/properties/internalTitleEn",
+            "type": "string"
+        },
+        "internalTitleFr": {
+            "description": "The displayed title of the form to the user in French",
+            "$id": "#/properties/internalTitleFr",
+            "type": "string"
+        },
+        "publishingStatus": {
+            "description": "If set to false, the link to the form will not appear on the main page, rather under 'sandbox'",
+            "$id": "#/properties/publishingStatus",
+            "type": "boolean"
+        },
+        "form": {
+            "type": "object",
+            "properties": {
+                "elements": {
+                    "description": "A list of elements contained within the form.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/element"
+                    }
+                }
+            },
+            "required": ["elements"]
+        }
+    },
     "required": [
         "form",
         "submission",
         "internalTitleEn",
         "internalTitleFr",
         "publishingStatus"
-    ],
-    "properties": {
-        "internalTitleEn": {
-            "$id": "#/properties/internalTitleEn",
-            "type": "string"
+    ],    
+    "additionalProperties": true,
+
+    "$defs": {
+        "element": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The unique id for the object",
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["textField", "textArea", "dropdown", "radio", "checkbox", "fileInput", "dynamicRow", "richText"]
+                },
+                "properties": {
+                    "type": "$defs/elementProperties"
+                }
+            },
+            "required": ["id", "type", "properties"]
         },
-        "internalTitleFr": {
-            "$id": "#/properties/internalTitleFr",
-            "type": "string"
+        "elementProperties": {
+            "type": "object",
+            "properties": {
+                "titleEN": {
+                    "description": "Input label in English",
+                    "type": "string"                
+                },
+                "titleFR": {
+                    "description": "Input label in French",
+                    "type": "string"
+                },
+                "placeholderEn": {
+                    "description": "Text that will appear in the text input field as a placeholder in English",
+                    "type": "string"
+                },
+                "placeholderFr": {
+                    "description": "Text that will appear in the text input field as a placeholder in French",
+                    "type": "string"
+                },
+                "descriptionEn": {
+                    "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
+                    "type": "string"                
+                },
+                "descriptionFr": {
+                    "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
+                    "type": "string"
+                },
+                "validation": {
+                    "type": "$defs/validation"
+                }                
+            }            
         },
-        "publishingStatus": {
-            "$id": "#/properties/publishingStatus",
-            "type": "boolean"
+        "validation": {
+            "type": "object",
+            "properties": {
+                "required": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["email", "alphanumeric", "text", "name", "number", "phone", "date"]
+                },
+                "regex": {
+                    "type": "string"
+                },
+                "maxLegth": {
+                    "description": "The maximum number of characters that can be entered in a textinput or textarea.",
+                    "type": "number"
+                },
+                "descriptionEN": {
+                    "type": "string"
+                },
+                "descriptionFR": {
+                    "type": "string"
+                }
+            }
         }
-    },
-    "additionalProperties": true
+
+    }
 }
