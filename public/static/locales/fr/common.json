@@ -1,12 +1,10 @@
 {
   "footer": {
-    "privacy": {
-      "link": "/fr/privacy-confidentialite",
-      "desc": "Politique de confidentialité"
-    },
     "terms": {
-      "link": "https://numerique.canada.ca/transparence/avis/",
-      "desc": "Avis"
+      "disclaimer": "Ce formulaire est hébergé par le Service numérique canadien.",
+      "link": "/fr/terms-avis",
+      "desc-preface": "Pour en savoir plus, consultez les ",
+      "desc": "modalités de service"
     }
   },
   "phase": {
@@ -35,7 +33,8 @@
     "phone": "Veuillez entrer un numéro de téléphone valide",
     "regex": "Veuillez utiliser le bon format",
     "file-size-too-large": "Veuillez sélectionner un fichier plus petit",
-    "file-type-invalid": "Veuillez sélectionner un autre type de fichier"
+    "file-type-invalid": "Veuillez sélectionner un autre type de fichier",
+    "too-many-characters": "Veuillez raccourcir votre réponse."
   },
   "required": "obligatoire",
   "required-field": "Champ obligatoire",
@@ -63,5 +62,13 @@
     "features": "Options",
     "login": "Connexion",
     "logout": "Déconnexion"
+  },
+  "formElements": {
+    "characterCount": {
+      "part1": "Il vous reste",
+      "part2": "caractères.",
+      "part1-error": "Vous avez",
+      "part2-error": "caractères de trop."
+    }
   }
 }

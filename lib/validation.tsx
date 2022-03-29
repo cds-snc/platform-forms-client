@@ -83,11 +83,15 @@ const isFieldResponseValid = (
           return currentRegex.error;
         }
       }
+      if (validator.maxLength && (value as string).length > validator.maxLength)
+        return t("input-validation.too-many-characters");
       break;
     }
     case "textArea": {
       const typedValue = value as string;
       if (validator.required && !typedValue) return t("input-validation.required");
+      if (validator.maxLength && (value as string).length > validator.maxLength)
+        return t("input-validation.too-many-characters");
       break;
     }
     case "checkbox":

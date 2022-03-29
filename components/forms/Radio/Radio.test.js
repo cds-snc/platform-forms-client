@@ -32,7 +32,7 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
   test("renders without errors", () => {
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={radioButtonData} language={lang} />
+        <GenerateElement element={radioButtonData} language={lang} t={(key) => key} />
       </Form>
     );
     const title =
@@ -60,7 +60,7 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
     radioButtonData.properties.validation.required = false;
     render(
       <Form t={(key) => key}>
-        <GenerateElement element={radioButtonData} language={lang} />
+        <GenerateElement element={radioButtonData} language={lang} t={(key) => key} />
       </Form>
     );
     expect(screen.queryByTestId("required")).not.toBeInTheDocument();

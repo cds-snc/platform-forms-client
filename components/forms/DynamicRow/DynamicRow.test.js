@@ -77,7 +77,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("...initialState", () => {
       render(
         <Form formConfig={formConfig} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
 
@@ -106,7 +106,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Add a row", () => {
       render(
         <Form formConfig={formConfig} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -153,7 +153,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Delete a row", () => {
       render(
         <Form formConfig={formConfig} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)
@@ -187,7 +187,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Data reorders properly after row deletion", () => {
       render(
         <Form formConfig={formConfig} t={(key) => key} language={lang}>
-          <GenerateElement element={dynamicRowData} language={lang} />
+          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
       // mocking scroll into view function (not implemented in jsdom)

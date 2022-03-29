@@ -18,7 +18,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
-  const currentForm = getRenderedForm(formConfig, language);
+  const currentForm = getRenderedForm(formConfig, language, t);
   const formTitle = formConfig[getProperty("title", language)] as string;
   const router = useRouter();
   const { step, htmlEmail } = router.query;

@@ -75,6 +75,7 @@ export interface ValidationProperties {
   required: boolean;
   type?: string;
   regex?: string;
+  maxLength?: number;
   descriptionEN?: string;
   descriptionFR?: string;
   [key: string]: unknown;
@@ -87,6 +88,7 @@ export interface ElementProperties {
   placeholderFr?: string;
   descriptionEn?: string;
   descriptionFr?: string;
+  charLimit?: number;
   validation?: ValidationProperties | undefined;
   choices?: Array<PropertyChoices>;
   subElements?: Array<FormElement>;
@@ -95,6 +97,7 @@ export interface ElementProperties {
   isSectional?: boolean;
   [key: string]:
     | string
+    | number
     | boolean
     | Array<PropertyChoices>
     | Array<FormElement>
@@ -262,4 +265,11 @@ export type FormOwner = {
   id: number;
   email: string;
   active: boolean;
+};
+
+export type CharacterCountMessages = {
+  part1: string;
+  part2: string;
+  part1Error: string;
+  part2Error: string;
 };

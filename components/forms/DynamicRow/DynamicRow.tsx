@@ -5,6 +5,7 @@ import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
 import { Button } from "../index";
 import { Description } from "../index";
+import { TFunction } from "next-i18next";
 
 interface DynamicGroupProps {
   name: string;
@@ -13,6 +14,7 @@ interface DynamicGroupProps {
   rowLabel?: string;
   rowElements: Array<FormElement>;
   lang: string;
+  t: TFunction;
   className?: string;
   error?: boolean;
   value?: string;
@@ -22,20 +24,21 @@ interface DynamicRowProps {
   elements: Array<FormElement>;
   lang: string;
   name: string;
+  t: TFunction;
 }
 
 const DynamicRow = (props: DynamicRowProps) => {
-  const { name, elements, lang } = props;
+  const { name, elements, lang, t } = props;
   const rowGroup = elements.map((subItem, subIndex) => {
     subItem.subId = `${name}.${subIndex}`;
-    return <GenerateElement key={subItem.subId} element={subItem} language={lang} />;
+    return <GenerateElement key={subItem.subId} element={subItem} language={lang} t={t} />;
   });
 
   return <div>{rowGroup}</div>;
 };
 
 export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
-  const { className, title, description, rowLabel = "Item", error, rowElements, lang } = props;
+  const { className, title, description, rowLabel = "Item", error, rowElements, lang, t } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState([rowElements]);
   const [rowRefs, setRowRefs] = useState<Array<React.RefObject<HTMLFieldSetElement>>>([]);
@@ -108,6 +111,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               elements={row}
               name={`${field.name}.${index}`}
               lang={lang}
+              t={t}
             />
             {rows.length > 1 && (
               <Button

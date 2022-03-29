@@ -16,11 +16,21 @@ export const textInputFormGroup = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <FormGroup name="formGroup">
-      <Label htmlFor="input-type-text">Text input label</Label>
-      <TextInput id="input-type-text" name="input-type-text" type="text" />
+      <Label htmlFor="inputTypeText">Text input label</Label>
+      <TextInput
+        id="inputTypeText"
+        name="inputTypeText"
+        type="text"
+        characterCountMessages={{
+          part1: "You have",
+          part2: "characters left.",
+          part1Error: "You have",
+          part2Error: "characters too many.",
+        }}
+      />
     </FormGroup>
   </Formik>
 );
@@ -30,14 +40,24 @@ export const textInputErrorFormGroup = (): React.ReactElement => (
     onSubmit={(values) => {
       logMessage.log(values);
     }}
-    initialValues={{ "input-type-text": "" }}
+    initialValues={{ inputTypeText: "" }}
   >
     <FormGroup name="formGroupError" error>
-      <Label htmlFor="input-type-text" error>
+      <Label htmlFor="inputTypeText" error>
         Text input label
       </Label>
       <ErrorMessage>Helpful error message</ErrorMessage>
-      <TextInput id="input-type-text" name="input-type-text" type="text" />
+      <TextInput
+        id="inputTypeText"
+        name="inputTypeText"
+        type="text"
+        characterCountMessages={{
+          part1: "You have",
+          part2: "characters left.",
+          part1Error: "You have",
+          part2Error: "characters too many.",
+        }}
+      />
     </FormGroup>
   </Formik>
 );
