@@ -117,6 +117,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             id={`${id}`}
             name={`${id}`}
             required={isRequired}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
@@ -126,7 +127,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
               part1Error: t("formElements.characterCount.part1-error"),
               part2Error: t("formElements.characterCount.part2-error"),
             }}
-            {...(description ? { ariaDescribedBy: `desc-${id}` } : {})}
           />
         </div>
       );
@@ -139,6 +139,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             id={`${id}`}
             name={`${id}`}
             required={isRequired}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
             characterCountMessages={{
@@ -147,7 +148,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
               part1Error: t("formElements.characterCount.part1-error"),
               part2Error: t("formElements.characterCount.part2-error"),
             }}
-            {...(description ? { ariaDescribedBy: `desc-${id}` } : {})}
           />
         </div>
       );
