@@ -11,7 +11,7 @@ export interface TextAreaProps {
   className?: string;
   required?: boolean;
   children?: React.ReactNode;
-  ariaDescribedBy?: string | null;
+  ariaDescribedBy?: string;
   placeholder?: string;
 }
 
