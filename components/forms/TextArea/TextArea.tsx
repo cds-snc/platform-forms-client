@@ -11,7 +11,7 @@ export interface TextAreaProps {
   className?: string;
   required?: boolean;
   children?: React.ReactNode;
-  ariaDescribedBy?: string;
+  ariaDescribedBy?: string | null;
   placeholder?: string;
 }
 
@@ -58,6 +58,15 @@ export const TextArea = (
     " " +
     characterCountMessages.part2Error;
 
+  const ariaDescribedByIds = () => {
+    const returnValue = [];
+    if (meta.error) returnValue.push("errorMessage" + id);
+    if (maxLength && (remainingCharacters < 0 || remainingCharacters < maxLength * 0.25))
+      returnValue.push("characterCountMessage" + id);
+    if (ariaDescribedBy) returnValue.push(ariaDescribedBy);
+    return returnValue.length > 0 ? { "aria-describedby": returnValue.join(" ") } : {};
+  };
+
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
@@ -66,10 +75,8 @@ export const TextArea = (
         className={classes}
         id={id}
         required={required}
-        aria-describedby={`${"errorMessage" + id} ${
-          "characterCountMessage" + id
-        } ${ariaDescribedBy}`}
         placeholder={placeholder}
+        {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextAreaChange}
       >

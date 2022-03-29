@@ -111,13 +111,12 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
             type={textType}
             id={`${id}`}
             name={`${id}`}
             required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
@@ -127,6 +126,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
               part1Error: t("formElements.characterCount.part1-error"),
               part2Error: t("formElements.characterCount.part2-error"),
             }}
+            {...(description ? { ariaDescribedBy: `desc-${id}` } : {})}
           />
         </div>
       );
@@ -134,12 +134,11 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <TextArea
             id={`${id}`}
             name={`${id}`}
             required={isRequired}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
             characterCountMessages={{
@@ -148,6 +147,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
               part1Error: t("formElements.characterCount.part1-error"),
               part2Error: t("formElements.characterCount.part2-error"),
             }}
+            {...(description ? { ariaDescribedBy: `desc-${id}` } : {})}
           />
         </div>
       );
@@ -165,7 +165,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
             type="checkbox"
             name={`${id}`}
@@ -189,7 +189,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
             type="radio"
             name={`${id}`}
@@ -203,7 +203,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <Dropdown
             id={`${id}`}
             name={`${id}`}
@@ -232,7 +232,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
               {labelText}
             </Label>
           ) : null}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <FileInput
             id={`${id}`}
             name={`${id}`}

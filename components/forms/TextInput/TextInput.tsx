@@ -62,6 +62,15 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
     " " +
     characterCountMessages.part2Error;
 
+  const ariaDescribedByIds = () => {
+    const returnValue = [];
+    if (meta.error) returnValue.push("errorMessage" + id);
+    if (maxLength && (remainingCharacters < 0 || remainingCharacters < maxLength * 0.25))
+      returnValue.push("characterCountMessage" + id);
+    if (ariaDescribedBy) returnValue.push(ariaDescribedBy);
+    return returnValue.length > 0 ? { "aria-describedby": returnValue.join(" ") } : {};
+  };
+
   return (
     <>
       {meta.error ? <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage> : null}
@@ -72,10 +81,8 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
         type={type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
-        aria-describedby={`${"errorMessage" + id} ${
-          "characterCountMessage" + id
-        } ${ariaDescribedBy}`}
         placeholder={placeholder}
+        {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
       />
