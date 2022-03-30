@@ -23,7 +23,6 @@ const textAreaData = {
     placeholderFr: "Quelque chose difficile",
     descriptionEn: "Here be a description",
     descriptionFr: "Pour décrire, ou pas décire..",
-    charLimit: 100,
     validation: {
       required: true,
       maxLength: 40,
