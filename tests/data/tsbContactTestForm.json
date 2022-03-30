@@ -32,7 +32,6 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "charLimit": 200,
           "validation": {
             "required": false
           },
@@ -46,7 +45,6 @@
         "properties": {
           "titleEn": "Full name",
           "titleFr": "Nom complet",
-          "charLimit": 100,
           "validation": {
             "type": "name",
             "required": true
@@ -62,7 +60,6 @@
         "properties": {
           "titleEn": "Email",
           "titleFr": "Courriel",
-          "charLimit": 100,
           "validation": {
             "type": "email",
             "required": true
@@ -109,7 +106,6 @@
           ],
           "titleEn": "What kind of information do you need?",
           "titleFr": "Dites-nous de quel type de renseignements vous avez besoin.",
-          "charLimit": 100,
           "validation": {
             "required": false
           },
@@ -123,7 +119,6 @@
         "properties": {
           "titleEn": "If you checked Other, please specify",
           "titleFr": "Si vous avez coché Autres, veuillez préciser",
-          "charLimit": 100,
           "validation": {
             "type": "text",
             "required": false
@@ -140,7 +135,6 @@
         "properties": {
           "titleEn": "Message",
           "titleFr": "Votre message",
-          "charLimit": 800,
           "validation": {
             "required": true
           },
@@ -174,7 +168,6 @@
           ],
           "titleEn": "Notifications",
           "titleFr": "Notifications",
-          "charLimit": 100,
           "validation": {
             "required": false
           },

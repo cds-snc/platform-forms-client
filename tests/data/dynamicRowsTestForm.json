@@ -31,7 +31,6 @@
         "id": 1,
         "type": "richText",
         "properties": {
-          "charLimit": 5000,
           "validation": {
             "required": false
           },
@@ -43,7 +42,6 @@
         "id": 2,
         "type": "richText",
         "properties": {
-          "charLimit": 5000,
           "validation": {
             "required": false
           },
@@ -65,7 +63,6 @@
               "id": 4,
               "type": "richText",
               "properties": {
-                "charLimit": 5000,
                 "validation": {
                   "required": false
                 },
@@ -163,7 +160,6 @@
         "id": 6,
         "type": "richText",
         "properties": {
-          "charLimit": 5000,
           "validation": {
             "required": false
           },
@@ -187,7 +183,6 @@
               "properties": {
                 "titleEn": "Name of Representative",
                 "titleFr": "[fr] Name of Representative",
-                "charLimit": 100,
                 "validation": {
                   "type": "text",
                   "required": true
@@ -203,7 +198,6 @@
               "properties": {
                 "titleEn": "Email Address of Representative",
                 "titleFr": "[fr] Email Address of Representative",
-                "charLimit": 100,
                 "validation": {
                   "type": "text",
                   "required": true
@@ -217,7 +211,6 @@
               "id": 10,
               "type": "richText",
               "properties": {
-                "charLimit": 5000,
                 "validation": {
                   "required": false
                 },
@@ -232,7 +225,6 @@
         "id": 11,
         "type": "richText",
         "properties": {
-          "charLimit": 5000,
           "validation": {
             "required": false
           },
@@ -256,7 +248,6 @@
               "properties": {
                 "titleEn": "Proposed Tariff Title",
                 "titleFr": "[fr] Proposed Tariff Title",
-                "charLimit": 100,
                 "validation": {
                   "type": "text",
                   "required": true
@@ -273,7 +264,6 @@
               "properties": {
                 "titleEn": "Proposed Tariff Period (Start Date)",
                 "titleFr": "[fr] Proposed Tariff Period (Start Date)",
-                "charLimit": 100,
                 "validation": {
                   "type": "date",
                   "required": true
@@ -290,7 +280,6 @@
               "properties": {
                 "titleEn": "Proposed Tariff Period (End Date)",
                 "titleFr": "[FR] - End date of the tariff",
-                "charLimit": 100,
                 "validation": {
                   "type": "date",
                   "required": true
@@ -305,7 +294,6 @@
               "id": 16,
               "type": "richText",
               "properties": {
-                "charLimit": 5000,
                 "validation": {
                   "required": false
                 },
@@ -347,7 +335,6 @@
               "properties": {
                 "titleEn": "Changes From Previously Approved Tariff",
                 "titleFr": "[FR] - Changes From Previously Approved Tariff",
-                "charLimit": 100,
                 "validation": {
                   "type": "text",
                   "required": false
@@ -392,7 +379,6 @@
               "properties": {
                 "titleEn": "Additional comments",
                 "titleFr": "[FR] - Additional comments",
-                "charLimit": 100,
                 "validation": {
                   "type": "text",
                   "required": false
@@ -407,7 +393,6 @@
               "id": 23,
               "type": "richText",
               "properties": {
-                "charLimit": 5000,
                 "validation": {
                   "required": false
                 },
