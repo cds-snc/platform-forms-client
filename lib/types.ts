@@ -88,7 +88,6 @@ export interface ElementProperties {
   placeholderFr?: string;
   descriptionEn?: string;
   descriptionFr?: string;
-  charLimit?: number;
   validation?: ValidationProperties | undefined;
   choices?: Array<PropertyChoices>;
   subElements?: Array<FormElement>;

@@ -25,7 +25,6 @@
         "properties": {
           "titleEn": "",
           "titleFr": "",
-          "charLimit": 200,
           "validation": {
             "required": false
           },
@@ -39,7 +38,6 @@
         "properties": {
           "titleEn": "Full name",
           "titleFr": "Nom au complet",
-          "charLimit": 100,
           "validation": {
             "type": "name",
             "required": true
@@ -54,7 +52,6 @@
         "properties": {
           "titleEn": "Work email",
           "titleFr": "Courriel professionnel",
-          "charLimit": 100,
           "validation": {
             "type": "email",
             "required": true
@@ -67,7 +64,6 @@
         "properties": {
           "titleEn": "Which department do you work for?",
           "titleFr": "Pour quel ministère travaillez-vous?",
-          "charLimit": 100,
           "validation": {
             "required": false
           },
@@ -82,7 +78,6 @@
         "properties": {
           "titleEn": "Work phone number",
           "titleFr": "Numéro de téléphone professionnel",
-          "charLimit": 100,
           "validation": {
             "type": "phone",
             "required": false
@@ -113,7 +108,6 @@
           ],
           "titleEn": "How can we work together?",
           "titleFr": "Comment pouvons-nous collaborer?",
-          "charLimit": 100,
           "validation": {
             "required": false
           },
@@ -127,7 +121,6 @@
         "properties": {
           "titleEn": "Please specify",
           "titleFr": "Veuillez spécifier",
-          "charLimit": 100,
           "validation": {
             "required": false
           },

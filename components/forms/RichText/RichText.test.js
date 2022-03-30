@@ -13,7 +13,6 @@ const richTextData = {
       "Thank you so much for your interest in the Canadian Digital Service’s Forms product.",
     descriptionFr:
       "Merci beaucoup de l’intérêt que vous portez au produit de Formulaire du Service Numérique Canadien.",
-    charLimit: 200,
     validation: {
       required: false,
     },
