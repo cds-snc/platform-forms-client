@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implementation of the DELETE method to take a string array of SubmissionIDs and mark the relevant items as retrieved and return the same list as a response if its successful [#694](https://github.com/cds-snc/platform-forms-client/pull/694)
 - Consolidated the Privacy and Terms and Conditions pages with updated content. [#698](https://github.com/cds-snc/platform-forms-client/pull/698)
 - New `/changelog` page. [#246](https://github.com/cds-snc/platform-forms-client/issues/246)
+- New `maxNumberOfRows` property in JSON template for DynamicRow component configuration [#528](https://github.com/cds-snc/platform-forms-client/issues/528)
 
 ### Fixed
 

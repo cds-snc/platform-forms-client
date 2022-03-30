@@ -94,6 +94,7 @@ export interface ElementProperties {
   fileType?: string | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
+  maxNumberOfRows?: number;
   [key: string]:
     | string
     | number
