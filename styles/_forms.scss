@@ -203,14 +203,16 @@
 }
 
 .gc-button--secondary {
-  @apply bg-gray-200 border-1 border-gray-400 text-black-default font-bold py-2 px-6 rounded-lg mb-14;
+  @apply mb-14 mr-5 bg-gray-300 text-black-default;
+
   &:hover {
-    @apply bg-gray-300;
-    @apply text-black-default;
+    @apply bg-gray-500;
   }
 }
+
 .gc-button--destructive {
-  @apply bg-red-destructive;
+  @apply mb-14 mr-5 bg-red-destructive;
+
   &:hover {
     @apply bg-red-hover;
   }

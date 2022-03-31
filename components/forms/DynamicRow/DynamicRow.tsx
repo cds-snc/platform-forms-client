@@ -133,29 +133,31 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               lang={lang}
               t={t}
             />
-            {rows.length > 1 && (
-              <Button
-                type="button"
-                secondary={true}
-                onClick={() => deleteRow(index)}
-                testid={`delete-row-button-${field.name}.${index}`}
-              >
-                {`${lang === "en" ? "Delete" : "Supprimer"} ${rowLabel} ${index + 1}`}
-              </Button>
-            )}
+            <div>
+              {!hasReachedMaxNumberOfRows && index === rows.length - 1 && (
+                <Button
+                  type="button"
+                  secondary={true}
+                  onClick={addRow}
+                  testid={`add-row-button-${field.name}`}
+                >
+                  {`${lang === "en" ? "Add" : "Ajouter"} ${rowLabel}`}
+                </Button>
+              )}
+              {rows.length > 1 && (
+                <Button
+                  type="button"
+                  destructive={true}
+                  onClick={() => deleteRow(index)}
+                  testid={`delete-row-button-${field.name}.${index}`}
+                >
+                  {`${lang === "en" ? "Delete" : "Supprimer"} ${rowLabel} ${index + 1}`}
+                </Button>
+              )}
+            </div>
           </fieldset>
         );
       })}
-      {!hasReachedMaxNumberOfRows && (
-        <Button
-          type="button"
-          secondary={true}
-          onClick={addRow}
-          testid={`add-row-button-${field.name}`}
-        >
-          {`${lang === "en" ? "Add" : "Ajouter"} ${rowLabel}`}
-        </Button>
-      )}
     </div>
   );
 };
