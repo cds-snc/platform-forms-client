@@ -70,5 +70,9 @@
       "part1-error": "You have",
       "part2-error": "characters too many."
     }
+  },
+  "dynamicRow": {
+    "add": "Add",
+    "delete": "Delete"
   }
 }

@@ -141,7 +141,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={addRow}
                   testid={`add-row-button-${field.name}`}
                 >
-                  {`${lang === "en" ? "Add" : "Ajouter"} ${rowLabel}`}
+                  {`${t("dynamicRow.add")} ${rowLabel}`}
                 </Button>
               )}
               {rows.length > 1 && (
@@ -151,7 +151,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={() => deleteRow(index)}
                   testid={`delete-row-button-${field.name}.${index}`}
                 >
-                  {`${lang === "en" ? "Delete" : "Supprimer"} ${rowLabel} ${index + 1}`}
+                  {`${t("dynamicRow.delete")} ${rowLabel} ${index + 1}`}
                 </Button>
               )}
             </div>
