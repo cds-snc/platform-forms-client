@@ -15,6 +15,7 @@ const dynamicRowData = {
     validation: {
       required: false,
     },
+    maxNumberOfRows: 3,
     subElements: [
       {
         id: 1,
@@ -215,6 +216,34 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       const fieldValues = fields.map((field) => field.value);
       // values 1,2,3 were deleted with row 1
       expect(fieldValues).toEqual(["3", "4", "5", "6", "7", "8"]);
+    });
+
+    test("Maximum number of rows", async () => {
+      render(
+        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+          <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
+        </Form>
+      );
+
+      // mocking scroll into view function (not implemented in jsdom)
+      window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
+      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
+
+      fireEvent.click(screen.getByTestId("add-row-button-1"));
+
+      expect(screen.queryAllByTestId("add-row-button-1")).toHaveLength(1);
+      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
+
+      fireEvent.click(screen.getByTestId("add-row-button-1"));
+
+      expect(screen.queryAllByTestId("add-row-button-1")).toHaveLength(0);
+      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(3);
+
+      fireEvent.click(screen.getByTestId("delete-row-button-1.0"));
+
+      expect(screen.queryAllByTestId("add-row-button-1")).toHaveLength(1);
+      expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
     });
   });
 });

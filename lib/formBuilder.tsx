@@ -252,6 +252,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           rowElements={subElements}
           lang={lang}
           t={t}
+          maxNumberOfRows={element.properties.maxNumberOfRows}
         />
       );
     }

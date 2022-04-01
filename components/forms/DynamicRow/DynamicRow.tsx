@@ -18,6 +18,7 @@ interface DynamicGroupProps {
   className?: string;
   error?: boolean;
   value?: string;
+  maxNumberOfRows?: number;
 }
 
 interface DynamicRowProps {
@@ -38,11 +39,22 @@ const DynamicRow = (props: DynamicRowProps) => {
 };
 
 export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
-  const { className, title, description, rowLabel = "Item", error, rowElements, lang, t } = props;
+  const {
+    className,
+    title,
+    description,
+    rowLabel = "Item",
+    error,
+    rowElements,
+    lang,
+    t,
+    maxNumberOfRows,
+  } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState([rowElements]);
   const [rowRefs, setRowRefs] = useState<Array<React.RefObject<HTMLFieldSetElement>>>([]);
   const [focussedRow, setFocussedRow] = useState<number | null>(null);
+  const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
 
   useEffect(() => {
     //there are rows that were added to the form other than its initialvalues.
@@ -70,7 +82,15 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     }
   }, [focussedRow]);
 
+  useEffect(() => {
+    if (maxNumberOfRows) {
+      setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
+    }
+  }, [rows.length]);
+
   const addRow = () => {
+    if (hasReachedMaxNumberOfRows) return;
+
     // Set the newly added row'initial value (plucked out of initialValues)
     field.value.push(meta.initialValue ? meta.initialValue[0] : {});
     helpers.setValue(field.value);
@@ -113,27 +133,31 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               lang={lang}
               t={t}
             />
-            {rows.length > 1 && (
-              <Button
-                type="button"
-                secondary={true}
-                onClick={() => deleteRow(index)}
-                testid={`delete-row-button-${field.name}.${index}`}
-              >
-                {`${lang === "en" ? "Delete" : "Supprimer"} ${rowLabel} ${index + 1}`}
-              </Button>
-            )}
+            <div>
+              {!hasReachedMaxNumberOfRows && index === rows.length - 1 && (
+                <Button
+                  type="button"
+                  secondary={true}
+                  onClick={addRow}
+                  testid={`add-row-button-${field.name}`}
+                >
+                  {`${t("dynamicRow.add")} ${rowLabel}`}
+                </Button>
+              )}
+              {rows.length > 1 && (
+                <Button
+                  type="button"
+                  destructive={true}
+                  onClick={() => deleteRow(index)}
+                  testid={`delete-row-button-${field.name}.${index}`}
+                >
+                  {`${t("dynamicRow.delete")} ${rowLabel} ${index + 1}`}
+                </Button>
+              )}
+            </div>
           </fieldset>
         );
       })}
-      <Button
-        type="button"
-        secondary={true}
-        onClick={addRow}
-        testid={`add-row-button-${field.name}`}
-      >
-        {`${lang === "en" ? "Add" : "Ajouter"} ${rowLabel}`}
-      </Button>
     </div>
   );
 };
