@@ -30,9 +30,27 @@ const textAreaData = {
   },
 };
 
+const textAreaData2 = {
+  id: 2,
+  type: "textArea",
+  properties: {
+    titleEn: "What is the problem you are facing",
+    titleFr: "Quel est le problème auquel vous êtes confronté?",
+    placeholderEn: "Something difficult",
+    placeholderFr: "Quelque chose difficile",
+    descriptionEn: "",
+    descriptionFr: "",
+    charLimit: 100,
+    validation: {
+      required: true,
+      maxLength: 40,
+    },
+  },
+};
+
 describe("Generate a text area", () => {
   afterEach(cleanup);
-  test.each([["en"], ["fr"]])("renders without errors", (lang) => {
+  it.each([["en"], ["fr"]])("renders without errors", (lang) => {
     render(
       <Form t={(key) => key}>
         <GenerateElement element={textAreaData} language={lang} t={(key) => key} />
@@ -96,5 +114,44 @@ describe("Verfify character count restrictions", () => {
         " 8 " +
         t("formElements.characterCount.part2-error")
     );
+  });
+});
+
+describe("Accessibility tests for the textarea component.", () => {
+  let screen;
+  let t;
+  beforeEach(() => {
+    t = (key) => key;
+    screen = render(
+      <Form t={(key) => key}>
+        <GenerateElement element={textAreaData2} language={"en"} t={(key) => key} />
+      </Form>
+    );
+  });
+  it("checks the `aria-describedby` attribute", () => {
+    // initial attribute has no value since the description is empty.
+    expect(screen.getByRole("textbox")).toBeRequired().not.toHaveAccessibleDescription();
+  });
+
+  it("after typing some characters, the attribute is updated to indicate how many characters are left.", () => {
+    const textInput = screen.getByRole("textbox");
+    userEvent.type(textInput, "This is 35 characters This is 35 ch");
+    expect(screen.getByRole("textbox"))
+      .toBeRequired()
+      .toHaveAccessibleDescription(
+        t("formElements.characterCount.part1") + " 5 " + t("formElements.characterCount.part2")
+      );
+  });
+
+  it("after typing more characters than the maxLength, the attribute is updated to indicate how many characters are too many.", () => {
+    const textInput = screen.getByRole("textbox");
+    userEvent.type(textInput, "This is 48 characters This is 48 characters This");
+    expect(screen.getByRole("textbox"))
+      .toBeRequired()
+      .toHaveAccessibleDescription(
+        t("formElements.characterCount.part1-error") +
+          " 8 " +
+          t("formElements.characterCount.part2-error")
+      );
   });
 });

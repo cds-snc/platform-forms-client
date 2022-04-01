@@ -111,7 +111,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
             type={textType}
             id={`${id}`}
@@ -134,7 +134,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <TextArea
             id={`${id}`}
             name={`${id}`}
@@ -165,7 +165,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
             type="checkbox"
             name={`${id}`}
@@ -189,7 +189,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <FormGroup name={`${id}`} ariaDescribedBy={description ? `desc-${id}` : undefined}>
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
             type="radio"
             name={`${id}`}
@@ -203,7 +203,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       return (
         <div className="focus-group">
           {labelComponent}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <Dropdown
             id={`${id}`}
             name={`${id}`}
@@ -232,7 +232,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
               {labelText}
             </Label>
           ) : null}
-          {description ? <Description id={`${id}`}>{description}</Description> : null}
+          {description && <Description id={`${id}`}>{description}</Description>}
           <FileInput
             id={`${id}`}
             name={`${id}`}
