@@ -43,7 +43,11 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       .catch((err) => {
         logMessage.error(err);
         setSubmitting(false);
-        setErrorState({ message: "Uploading Error" });
+        if ((err.response.data.error as string).includes("JSON Validation Error: ")) {
+          setErrorState({ message: err.response.data.error });
+        } else {
+          setErrorState({ message: "Uploading Error" });
+        }
       });
   };
 
