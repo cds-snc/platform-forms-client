@@ -352,7 +352,7 @@ describe("/api/retrieval", () => {
       await retrieval(req, res);
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
-        error: "instance does not meet minimum length of 1",
+        error: "JSON Validation Error: instance does not meet minimum length of 1",
       });
     });
 
@@ -397,7 +397,7 @@ describe("/api/retrieval", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error:
-          "instance[0] is not of a type(s) string,instance[1] is not of a type(s) string,instance[2] is not of a type(s) string",
+          "JSON Validation Error: instance[0] is not of a type(s) string,instance[1] is not of a type(s) string,instance[2] is not of a type(s) string",
       });
     });
 
@@ -441,7 +441,7 @@ describe("/api/retrieval", () => {
       await retrieval(req, res);
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
-        error: "instance is not of a type(s) array",
+        error: "JSON Validation Error: instance is not of a type(s) array",
       });
     });
 
