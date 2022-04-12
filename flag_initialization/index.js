@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 // Flags initial state values
 const Redis = require("ioredis");
-const { logMessage } = require("../lib/logger");
 require("dotenv").config({ path: "../.env" });
 const initialFlags = require("./default_flag_settings");
 
@@ -36,24 +35,24 @@ const createFlag = async (key, value, redis) => {
     .exec();
 };
 const initiateFlags = (redis) => {
-  logMessage.debug("Running flag initiation");
+  console.log("Running flag initiation");
 
   return checkAll(redis)
     .then(async (currentFlags) => {
-      logMessage.debug("Checking for Depreceated Flags");
+      console.log("Checking for Depreceated Flags");
       for (const key in currentFlags) {
         if (typeof initialFlags[key] === "undefined" || initialFlags[key] === null) {
-          logMessage.debug(`Removing flag: ${key} from flag registry`);
+          console.log(`Removing flag: ${key} from flag registry`);
           await removeFlag(key, redis);
         }
       }
       return checkAll(redis);
     })
     .then(async (currentFlags) => {
-      logMessage.debug("Checking for New Flags");
+      console.log("Checking for New Flags");
       for (const key in initialFlags) {
         if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
-          logMessage.debug(`Creating flag: ${key} with value ${initialFlags[key]}`);
+          console.log(`Creating flag: ${key} with value ${initialFlags[key]}`);
           await createFlag(key, initialFlags[key], redis);
         }
       }
@@ -71,7 +70,5 @@ if (process.env.REDIS_URL) {
   const redis = new Redis(process.env.REDIS_URL);
   initiateFlags(redis);
 } else {
-  logMessage.debug(
-    "No Redis instance to initiate flags.  Application will fallback onto ioredis-mock"
-  );
+  console.log("No Redis instance to initiate flags.  Application will fallback onto ioredis-mock");
 }
