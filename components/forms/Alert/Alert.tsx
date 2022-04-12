@@ -19,7 +19,7 @@ export const Alert = ({
   className,
   validation,
   ...props
-}: AlertProps & React.HTMLAttributes<HTMLDivElement>): React.ReactElement => {
+}: AlertProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
   const classes = classnames(
     "gc-alert",
     {
