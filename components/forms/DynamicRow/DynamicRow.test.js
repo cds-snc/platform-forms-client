@@ -1,6 +1,5 @@
 import React from "react";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
@@ -87,22 +86,22 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
       // All children are present in row 1
-      expect(screen.getByTestId("dynamic-row-1"))
-        .toContainElement(
-          screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties[titleProp],
-          })
-        )
-        .toContainElement(
-          screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties[titleProp],
-          })
-        )
-        .toContainElement(
-          screen.getByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties[titleProp],
-          })
-        );
+      const dynamicRow = screen.getByTestId("dynamic-row-1");
+      expect(dynamicRow).toContainElement(
+        screen.getByRole("textbox", {
+          name: dynamicRowData.properties.subElements[0].properties[titleProp],
+        })
+      );
+      expect(dynamicRow).toContainElement(
+        screen.getByRole("textbox", {
+          name: dynamicRowData.properties.subElements[1].properties[titleProp],
+        })
+      );
+      expect(dynamicRow).toContainElement(
+        screen.getByRole("textbox", {
+          name: dynamicRowData.properties.subElements[2].properties[titleProp],
+        })
+      );
     });
     test("Add a row", () => {
       render(
@@ -117,39 +116,39 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       fireEvent.click(screen.getByTestId("add-row-button-1"));
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
+      const dynamicRow = screen.getByTestId("dynamic-row-1");
       // All children are present in row 1
-      expect(screen.getByTestId("dynamic-row-1"))
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties[titleProp],
-          })[0]
-        )
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties[titleProp],
-          })[0]
-        )
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties[titleProp],
-          })[0]
-        );
-      expect(screen.getByTestId("dynamic-row-2"))
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties[titleProp],
-          })[1]
-        )
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties[titleProp],
-          })[1]
-        )
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties[titleProp],
-          })[1]
-        );
+      expect(dynamicRow).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[0].properties[titleProp],
+        })[0]
+      );
+      expect(dynamicRow).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[1].properties[titleProp],
+        })[0]
+      );
+      expect(dynamicRow).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[2].properties[titleProp],
+        })[0]
+      );
+      const dynamicRow2 = screen.getByTestId("dynamic-row-2");
+      expect(dynamicRow2).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[0].properties[titleProp],
+        })[1]
+      );
+      expect(dynamicRow2).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[1].properties[titleProp],
+        })[1]
+      );
+      expect(dynamicRow2).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[2].properties[titleProp],
+        })[1]
+      );
     });
     test("Delete a row", () => {
       render(
@@ -168,22 +167,22 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
       // All children are present in row 1
-      expect(screen.getByTestId("dynamic-row-1"))
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[0].properties[titleProp],
-          })[0]
-        )
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[1].properties[titleProp],
-          })[0]
-        )
-        .toContainElement(
-          screen.queryAllByRole("textbox", {
-            name: dynamicRowData.properties.subElements[2].properties[titleProp],
-          })[0]
-        );
+      const dynamicRow = screen.getByTestId("dynamic-row-1");
+      expect(dynamicRow).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[0].properties[titleProp],
+        })[0]
+      );
+      expect(dynamicRow).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[1].properties[titleProp],
+        })[0]
+      );
+      expect(dynamicRow).toContainElement(
+        screen.queryAllByRole("textbox", {
+          name: dynamicRowData.properties.subElements[2].properties[titleProp],
+        })[0]
+      );
     });
     test("Data reorders properly after row deletion", () => {
       render(
@@ -203,7 +202,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       // Fill Fields with Data.
 
       screen.queryAllByRole("textbox").forEach((field, index) => {
-        userEvent.type(field, index.toString());
+        fireEvent.change(field, { target: { value: index.toString() } });
       });
 
       // Delete first Row

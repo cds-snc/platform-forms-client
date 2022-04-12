@@ -58,7 +58,8 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
       expect(screen.getByText(input[lang])).toBeInTheDocument();
     });
     screen.getAllByRole("checkbox").forEach((input) => {
-      expect(input).toHaveClass("gc-input-checkbox__input").not.toBeChecked();
+      expect(input).toHaveClass("gc-input-checkbox__input");
+      expect(input).not.toBeChecked();
     });
     // Proper linked description to element
     expect(screen.getByRole("group")).toHaveAccessibleDescription(description);

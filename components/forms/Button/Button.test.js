@@ -34,6 +34,6 @@ describe("Button component", () => {
       </Button>
     );
     fireEvent.click(screen.getByRole("button", { name: "Click Me" }));
-    expect(mockOnClick).toHaveBeenCalled().toHaveBeenCalledTimes(1);
+    expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 });

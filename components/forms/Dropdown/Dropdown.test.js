@@ -93,11 +93,11 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
         lang === "en"
           ? dropdownData.properties.descriptionEn
           : dropdownData.properties.descriptionFr;
-    expect(screen.queryByTestId("dropdown"))
-      .toBeInTheDocument()
-      .toHaveAccessibleDescription(description)
-      .toHaveClass("gc-dropdown")
-      .toHaveDisplayValue("dropdown-initial-option-text");
+    const dropdown = screen.queryByTestId("dropdown");
+    expect(dropdown).toBeInTheDocument();
+    expect(dropdown).toHaveAccessibleDescription(description);
+    expect(dropdown).toHaveClass("gc-dropdown");
+    expect(dropdown).toHaveDisplayValue("dropdown-initial-option-text");
     expect(
       screen.getByRole("combobox", {
         name: title,

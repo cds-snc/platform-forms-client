@@ -1,6 +1,6 @@
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, render, screen, fireEvent } from "@testing-library/react";
+
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
@@ -55,7 +55,9 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
     // Description properly renders
     expect(screen.getByText(description)).toBeInTheDocument();
     // Field marked as required
-    expect(screen.getByRole("textbox")).toBeRequired().toHaveAccessibleDescription(description);
+    const renderedTextBox = screen.getByRole("textbox");
+    expect(renderedTextBox).toBeRequired();
+    expect(renderedTextBox).toHaveAccessibleDescription(description);
     expect(screen.queryByTestId("required")).toBeInTheDocument();
     // Placeholder properly renders
     expect(screen.getByPlaceholderText(placeholder)).toBeInTheDocument();
@@ -75,9 +77,8 @@ describe("Check attributes on rendered text input", () => {
 
 describe("Verfify character count restrictions", () => {
   let screen;
-  let t;
+
   beforeEach(() => {
-    t = (key) => key;
     screen = render(
       <Form t={(key) => key}>
         <GenerateElement element={textInputData} language={"en"} t={(key) => key} />
@@ -87,27 +88,27 @@ describe("Verfify character count restrictions", () => {
 
   it("does not display any message when not enough characters have been typed in", () => {
     const textInput = screen.getByRole("textbox");
-    userEvent.type(textInput, "This is 21 characters");
+    fireEvent.change(textInput, { target: { value: "This is 21 characters" } });
     expect(screen.queryByText("characters left.")).not.toBeInTheDocument();
   });
 
   it("displays a message with the number of characters remaining", () => {
     const textInput = screen.getByRole("textbox");
-    userEvent.type(textInput, "This is 35 characters This is 35 ch");
+    fireEvent.change(textInput, { target: { value: "This is 35 characters This is 35 ch" } });
     expect(
       screen.getByText(
-        t("formElements.characterCount.part1") + " 5 " + t("formElements.characterCount.part2")
+        "formElements.characterCount.part1" + " 5 " + "formElements.characterCount.part2"
       )
     ).toBeInTheDocument();
   });
 
   it("displays an error message indicating too many characters", () => {
     const textInput = screen.getByRole("textbox");
-    userEvent.type(textInput, "This is 48 characters This is 48 characters This");
+    fireEvent.change(textInput, {
+      target: { value: "This is 48 characters This is 48 characters This" },
+    });
     screen.getByText(
-      t("formElements.characterCount.part1-error") +
-        " 8 " +
-        t("formElements.characterCount.part2-error")
+      "formElements.characterCount.part1-error" + " 8 " + "formElements.characterCount.part2-error"
     );
   });
 });
