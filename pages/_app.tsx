@@ -1,4 +1,4 @@
-import "react-app-polyfill/ie9";
+import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
 import React from "react";
 
