@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 require("dotenv").config();
 const { createDb, migrate } = require("postgres-migrations");
-const { logMessage } = require("../lib/logger");
 var parse = require("pg-connection-string").parse;
 
 const main = async function () {
@@ -19,14 +18,14 @@ const main = async function () {
   }
 
   if (dbConfig.host && dbConfig.database) {
-    logMessage.debug("Running Migrations");
+    console.log("Running Migrations");
     await createDb(dbConfig.database, {
       ...dbConfig,
       defaultDatabase: "postgres", // defaults to "postgres"
     });
     await migrate(dbConfig, "./migrations");
   } else {
-    logMessage.debug("No Database Configured");
+    console.log("No Database Configured");
   }
 };
 
