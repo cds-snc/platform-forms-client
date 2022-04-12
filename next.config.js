@@ -26,7 +26,6 @@ module.exports = {
     includePaths: [path.join(__dirname, "styles")],
   },
   reactStrictMode: true,
-  distDir: "testBuild",
   poweredByHeader: false,
   swcMinify: true,
   compiler: {
