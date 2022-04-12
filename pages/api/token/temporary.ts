@@ -95,14 +95,15 @@ const updateTemporaryToken = async (
 };
 
 const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) => {
+  const sendTempTokenTemplateID = process.env.TEMPORAY_TOKEN_TEMPLATE_ID;
   const notifyClient = new NotifyClient(
-    "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY
+    process.env.GC_NOTIFY_URL,
+    process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
   );
 
   // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
   return await notifyClient
-    .sendEmail("61cec9c4-64ca-4e4d-b4d2-a0e931c44422", email, {
+    .sendEmail(sendTempTokenTemplateID, email, {
       personalisation: {
         temporaryToken: temporaryToken,
       },
