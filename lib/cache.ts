@@ -4,7 +4,7 @@ import {
   CrudOrganizationResponse,
   PublicFormSchemaProperties,
 } from "@lib/types";
-import { logMessage } from "./logger";
+import { logMessage } from "@lib/logger";
 
 const cacheAvailable: boolean = process.env.REDIS_URL ? true : false;
 
@@ -38,7 +38,7 @@ const checkValue = async (checkParameter: string) => {
   if (redis) {
     const value = await redis.get(checkParameter);
     if (value) {
-      logMessage.info(`Using Cached value for ${checkParameter}`);
+      logMessage.debug(`Using Cached value for ${checkParameter}`);
       return JSON.parse(value);
     }
   }
@@ -49,7 +49,7 @@ const deleteValue = async (deleteParameter: string) => {
   const redis = await checkConnection();
   if (redis) {
     redis.del(deleteParameter);
-    logMessage.info(`Deleting Cached value for ${deleteParameter}`);
+    logMessage.debug(`Deleting Cached value for ${deleteParameter}`);
   }
 };
 
@@ -63,7 +63,7 @@ const modifyValue = async (
   const redis = await checkConnection();
   if (redis) {
     redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
-    logMessage.info(`Updating Cached value for ${modifyParameter}`);
+    logMessage.debug(`Updating Cached value for ${modifyParameter}`);
   }
 };
 

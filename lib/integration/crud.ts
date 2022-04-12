@@ -1,5 +1,5 @@
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import { logger, logMessage } from "../logger";
+import { logger, logMessage } from "@lib/logger";
 import {
   CrudOrganizationInput,
   CrudTemplateResponse,
@@ -93,10 +93,10 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
       if (response.FunctionError) {
         //throw Error("Templates API could not process json");
         // temporary more graceful failure here
-        logMessage.info("Lambda Template Client not successful");
+        logMessage.debug("Lambda Template Client not successful");
         return null;
       } else {
-        logMessage.info("Lambda Template Client successfully triggered");
+        logMessage.debug("Lambda Template Client successfully triggered");
         return JSON.parse(respPayload);
       }
     })
@@ -192,10 +192,10 @@ async function _crudOrganizations(
       const decoder = new TextDecoder();
       const respPayload = decoder.decode(response.Payload);
       if (response.FunctionError) {
-        logMessage.info("Lambda Organizations Client not successful");
+        logMessage.debug("Lambda Organizations Client not successful");
         return null;
       } else {
-        logMessage.info("Lambda Organizations Client successfully triggered");
+        logMessage.debug("Lambda Organizations Client successfully triggered");
         return JSON.parse(respPayload);
       }
     })

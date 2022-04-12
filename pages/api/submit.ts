@@ -87,8 +87,6 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
     const payload = decoder.decode(response.Payload);
     if (response.FunctionError || !JSON.parse(payload).status) {
       throw new Error("Submission API could not process form response");
-    } else {
-      logMessage.info("Submission Lambda Client successfully triggered");
     }
   } catch (err) {
     logMessage.error(err as Error);
@@ -303,7 +301,6 @@ const processFormData = async (
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
-          logMessage.info(`uploading: ${_key} - filename ${fileOrArray.name} `);
           const { isValid, key } = await pushFileToS3(fileOrArray);
           if (isValid) {
             uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
@@ -320,7 +317,6 @@ const processFormData = async (
         // An array will be returned in a field that includes multiple files
         fileOrArray.forEach(async (fileItem, index) => {
           if (fileItem.name) {
-            logMessage.info(`uploading: ${_key} - filename ${fileItem.name} `);
             const { isValid, key } = await pushFileToS3(fileItem);
             if (isValid) {
               uploadedFilesKeyUrlMapping.set(fileItem.name, key);
@@ -353,7 +349,6 @@ const processFormData = async (
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
     if (uploadedFilesKeyUrlMapping.size > 0) {
       uploadedFilesKeyUrlMapping.forEach(async (value, key) => {
-        logMessage.info(`deletion of key : ${key}  -  value: ${value}`);
         await deleteObject(key);
       });
     }
