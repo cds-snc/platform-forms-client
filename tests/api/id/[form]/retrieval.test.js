@@ -306,8 +306,8 @@ describe("/api/retrieval", () => {
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(["dfhkwehfewhf", "fewfewfewfew"]);
       expect(documentClient.send.mock.calls.length).toBe(2);
-      expect(logMessage.warn.mock.calls.length).toBe(1);
-      expect(logMessage.warn.mock.calls[0][0]).toContain(
+      expect(logMessage.info.mock.calls.length).toBe(1);
+      expect(logMessage.info.mock.calls[0][0]).toContain(
         `user:test@cds-snc.ca marked form responses [dfhkwehfewhf,fewfewfewfew] from form ID:22 as retrieved at:1 using token:${token}`
       );
     });

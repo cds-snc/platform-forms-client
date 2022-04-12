@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logger, logMessage } from "../logger";
+import { logger, logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
 import {
   FormElement,

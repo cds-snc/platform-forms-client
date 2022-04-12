@@ -58,7 +58,7 @@ const InnerForm = (props: InnerFormProps & FormikProps<FormValues> & DynamicForm
         if (clientToken) {
           const scoreData = await sendClientTokenForVerification(clientToken);
           const { score, success } = scoreData.data;
-          logMessage.warn(`score : ${score}  status: ${success}`);
+          logMessage.info(`score : ${score}  status: ${success}`);
           // assuming you're not a Robot
           handleSubmit(evt);
         }

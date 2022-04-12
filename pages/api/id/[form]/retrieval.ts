@@ -84,7 +84,7 @@ async function getFormResponses(
     };
 
     const formResponses = await documentClient.send(new QueryCommand(getItemsDbParams));
-    logMessage.warn(
+    logMessage.info(
       `user:${email} retrieved form responses [${formResponses.Items?.map(
         (response) => response.SubmissionID
       )}] from form ID:${formID} at:${Date.now()} using token:${temporaryToken}`
@@ -142,8 +142,7 @@ async function deleteFormResponses(
       submissionIDlist.push(submissionID);
     }
 
-    // log level is warn because in production level info is not being forwarded to CloudWatch
-    logMessage.warn(
+    logMessage.info(
       `user:${email} marked form responses [${submissionIDlist}] from form ID:${formID} as retrieved at:${Date.now()} using token:${temporaryToken}`
     );
 

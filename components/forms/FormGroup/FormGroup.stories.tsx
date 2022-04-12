@@ -14,7 +14,7 @@ export default {
 export const textInputFormGroup = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >
@@ -38,7 +38,7 @@ export const textInputFormGroup = (): React.ReactElement => (
 export const textInputErrorFormGroup = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >

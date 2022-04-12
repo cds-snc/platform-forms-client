@@ -1,5 +1,5 @@
 import React, { ReactElement, Fragment } from "react";
-import { logger, logMessage } from "./logger";
+import { logger, logMessage } from "@lib/logger";
 import {
   Dropdown,
   Label,

@@ -32,7 +32,7 @@ export const defaultDropdown = (): React.ReactElement => (
   <Formik
     initialValues={{ dropdown: "" }}
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
   >
     <Dropdown id="dropdown" name="dropdown" choices={choices} />

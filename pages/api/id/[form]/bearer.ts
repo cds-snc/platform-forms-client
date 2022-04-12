@@ -59,13 +59,13 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
     );
     // if we do not have any rows this means the record was not found return a 404
     if (responseObject.rowCount === 0) {
-      logMessage.debug(
+      logMessage.warn(
         `A bearer token was attempted to be created for form ${formID} by user ${session?.user?.name} but the form does not exist`
       );
       return res.status(404).json({ error: "Not Found" });
     }
     // return the record with the id and the updated bearer token. Log the success
-    logMessage.debug(
+    logMessage.info(
       `A bearer token was refreshed for form ${formID} by user ${session?.user?.name}`
     );
     return res.status(200).json(responseObject.rows[0]);
