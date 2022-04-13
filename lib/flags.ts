@@ -1,7 +1,6 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
 
-
 /**
  * Create new mocked Redis instance and populate it with values
  */
@@ -12,10 +11,13 @@ const loadMockedValues = async () => {
     const { default: initialSettings }: { default: Record<string, boolean> } = await import(
       "../flag_initialization/default_flag_settings.json"
     );
-    for (const [key, value] of Object.entries(initialSettings)) {
-      logMessage.debug(`Creating flag: ${key} with value ${value} (Mocked Redis)`);
+    for (const key in initialSettings) {
+      logMessage.info(
+        `Creating flag: ${key} with value ${initialSettings[key]} because we're in Test mode`
+      );
       await redis.sadd("flags", key);
-      await redis.set(`flag:${key}`, value ? "1" : "0");
+      await redis.set(`flag:${key}`, initialSettings[key] ? "1" : "0");
+    }
   }
 };
 
