@@ -273,3 +273,26 @@ export type CharacterCountMessages = {
   part1Error: string;
   part2Error: string;
 };
+
+// Admin logs
+
+export enum AdminLogAction {
+  Create = "Create",
+  Read = "Read",
+  Update = "Update",
+  Delete = "Delete",
+}
+
+export enum AdminLogEvent {
+  GrantAdminRole = "GrantAdminRole",
+  RevokeAdminRole = "RevokeAdminRole",
+  UploadForm = "UploadForm",
+  UpdateForm = "UpdateForm",
+  DeleteForm = "DeleteForm",
+  RefreshBearerToken = "RefreshBearerToken",
+  GrantInitialFormAccess = "GrantInitialFormAccess",
+  GrantFormAccess = "GrantFormAccess",
+  RevokeFormAccess = "RevokeFormAccess",
+  EnableFeature = "EnableFeature",
+  DisableFeature = "DisableFeature",
+}
