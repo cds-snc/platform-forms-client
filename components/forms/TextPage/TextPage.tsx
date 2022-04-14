@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
-import { FormSchemaProperties } from "../../../lib/types";
+import { FormSchemaProperties } from "@lib/types";
 import { TFunction } from "next-i18next";
-import { getProperty } from "../../../lib/formBuilder";
+import { getProperty } from "@lib/formBuilder";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -60,12 +60,12 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
     <>
       {getPageContent(t, pageText, urlQuery)}
 
-      {htmlEmail ? (
+      {htmlEmail && (
         <div className="p-5 mt-5 border-double border-gray-400 border-4">
           <h2>Email to Form Owner Below:</h2>
           <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };

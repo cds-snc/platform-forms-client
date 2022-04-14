@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { MultipleChoiceProps } from "../../../lib/types";
+import { MultipleChoiceProps } from "@lib/types";
 import { Description } from "../Description/Description";
 
 export const Checkbox = (
@@ -10,12 +10,10 @@ export const Checkbox = (
 
   return (
     <div className="gc-input-checkbox">
-      {ariaDescribedBy ? (
+      {ariaDescribedBy && (
         <Description id={id} className="gc-form-group-context">
           {ariaDescribedBy}
         </Description>
-      ) : (
-        ""
       )}
       <Field
         className="gc-input-checkbox__input"

@@ -142,11 +142,11 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
         <Loader message="Loading..." />
       ) : (
         <>
-          {errorState.message ? (
+          {errorState.message && (
             <p role="alert" data-testid="alert">
               {errorState.message}
             </p>
-          ) : null}
+          )}
           <ul className="space-y-4">{formOwnerUI(formOwners)}</ul>
           <hr />
           <form onSubmit={handleEmailSubmit} className="flex items-center">

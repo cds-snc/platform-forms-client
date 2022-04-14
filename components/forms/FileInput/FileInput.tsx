@@ -76,7 +76,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.error ? <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage> : null}
+      {meta.error && <ErrorMessage id={`${name}_error`}>{meta.error}</ErrorMessage>}
 
       <div className={classes} data-testid="file">
         <div

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "../../lib/auth";
+import { requireAuthentication } from "@lib/auth";
 import Link from "next/link";
 import { User } from "next-auth";
 
@@ -21,7 +21,7 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
           <h3 className="gc-h3">
             {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
           </h3>
-          {user.image ? <img src={user.image} alt="profile" className="rounded-full" /> : null}
+          {user.image && <img src={user.image} alt="profile" className="rounded-full" />}
           <p className="text-sm mb-8">
             {t("logged-in")} {user.email}
           </p>

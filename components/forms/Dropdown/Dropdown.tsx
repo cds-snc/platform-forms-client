@@ -41,7 +41,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   return (
     <>
-      {meta.error ? <ErrorMessage>{meta.error}</ErrorMessage> : null}
+      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
       <select
         data-testid="dropdown"
