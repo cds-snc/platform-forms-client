@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { FormDBConfigProperties } from "../../../lib/types";
+import { FormDBConfigProperties } from "@lib/types";
 import { useRouter } from "next/router";
 import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
@@ -96,11 +96,11 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             <Loader message="Loading..." />
           ) : (
             <>
-              {errorState.message ? (
+              {errorState.message && (
                 <p role="alert" data-testid="alert">
                   {errorState.message}
                 </p>
-              ) : null}
+              )}
               <textarea
                 id="jsonInput"
                 rows={20}

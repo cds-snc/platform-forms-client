@@ -111,8 +111,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
-      {title ? <div className="gc-label">{title}</div> : null}
-      {description ? <Description id={`${field.name}-desc`}>{description}</Description> : null}
+      {title && <div className="gc-label">{title}</div>}
+      {description && <Description id={`${field.name}-desc`}>{description}</Description>}
       {rows.map((row, index) => {
         return (
           <fieldset

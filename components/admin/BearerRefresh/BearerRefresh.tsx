@@ -70,11 +70,11 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
         <Loader message="Loading..." />
       ) : (
         <>
-          {errorState.message ? (
+          {errorState.message && (
             <p role="alert" data-testid="alert">
               {errorState.message}
             </p>
-          ) : null}
+          )}
           <h2>{t("settings.bearerToken.current")}</h2>
           <textarea
             id="bearerToken"
