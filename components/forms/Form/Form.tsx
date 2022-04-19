@@ -3,6 +3,7 @@ import { withFormik, FormikProps } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/validation";
 import { submitToAPI } from "@lib/integration/helpers";
+import { useFormTimer } from "@lib/hooks";
 import { Button, Alert } from "../index";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
@@ -40,10 +41,8 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-  const [submitDelay, setSubmitDelay] = useState(0);
-  const [submitTimer, setSubmitTimer] = useState(0);
-  const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const timerActive = useFlag("formTimer");
+  const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
 
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
 
@@ -51,6 +50,8 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
     `https://www.google.com/recaptcha/api.js?render=${formConfig?.reCaptchaID}`,
     isReCaptchaEnableOnSite
   );
+
+  const [submitTooEarly, setSubmitTooEarly] = useState(false);
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -106,7 +107,9 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     // calculate initial delay for submit timer
+    logMessage.info(`Timer Active flag is : ${timerActive}`);
     if (timerActive) {
       const secondsBaseDelay = 2;
       const secondsPerFormElement = 2;
@@ -116,26 +119,24 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
 
       const submitDelaySeconds =
         secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
-      setSubmitDelay(submitDelaySeconds);
-      setSubmitTimer(submitDelaySeconds);
+      startTimer(submitDelaySeconds);
+      // Initiate a callback to ensure that state of submit button is correctly displayed
+      timeoutId = setTimeout(() => {
+        checkTimer();
+      }, submitDelaySeconds * 1000);
+    } else {
+      disableTimer();
     }
+
+    return () => {
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [timerActive]);
 
-  useEffect(() => {
-    // timeout to prevent form from being submitted too quickly
-    let timeoutId = 0;
-    if (submitTimer > 0) {
-      timeoutId = window.setTimeout(() => {
-        setSubmitTimer((submitTimer) => submitTimer - 1);
-      }, 1000);
-    }
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [submitTimer]);
-
   return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
-    <Loader loading={isSubmitting} message={t("loading")} />
+    <Loader message={t("loading")} />
   ) : (
     <>
       {formStatusError && (
@@ -162,20 +163,24 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
         data-testid="form"
         method="POST"
         onSubmit={(e) => {
-          if (submitTimer) {
-            setSubmitTooEarly(true);
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-              event: "form_submission_spam_trigger",
-              formID: formConfig.formID,
-              formTitle: formConfig.titleEn,
-              submitTime: submitDelay - submitTimer,
-            });
-            if (submitTimer < 5) setSubmitTimer(5);
-            e.preventDefault();
-            return;
+          e.preventDefault();
+          if (timerActive) {
+            if (!formTimerState.canSubmit) {
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                event: "form_submission_spam_trigger",
+                formID: formConfig.formID,
+                formTitle: formConfig.titleEn,
+                submitTime: formTimerState.remainingTime,
+              });
+              setSubmitTooEarly(true);
+              // In case the useEffect timer failed check again
+              //formTimerDispatch({ type: "check" });
+              return;
+            }
+            // Only change state if submitTooEarly is already set to true
+            submitTooEarly && setSubmitTooEarly(false);
           }
-          setSubmitTooEarly(false);
 
           if (isReCaptchaEnableOnSite) {
             handleSubmitReCaptcha(e);
@@ -188,28 +193,30 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
         {children}
         <div
           className={classNames({
-            "border-l-2": submitTimer >= 0 && submitTooEarly,
-            "border-red-default": submitTimer >= 0 && submitTooEarly,
-            "border-green-default": submitTimer == 0 && submitTooEarly,
-            "pl-3": submitTimer >= 0 && submitTooEarly,
+            "border-l-2": submitTooEarly,
+            "border-red-default": submitTooEarly,
+            "border-green-default": formTimerState.remainingTime === 0 && submitTooEarly,
+            "pl-3": submitTooEarly,
           })}
         >
-          {submitTimer > 0 && submitTooEarly && (
-            <div role="alert">
-              <p className="gc-label text-red-default">
-                {t("spam-error.error-part-1")} {submitDelay} {t("spam-error.error-part-2")}
-              </p>
-              <p className="gc-description">
-                {t("spam-error.prompt-part-1")} {submitTimer} {t("spam-error.prompt-part-2")}
-              </p>
-            </div>
-          )}
-          {submitTimer == 0 && submitTooEarly && (
-            <div role="alert">
-              <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
-              <p className="gc-description">{t("spam-error.success-prompt")}</p>
-            </div>
-          )}
+          {submitTooEarly &&
+            (formTimerState.remainingTime > 0 ? (
+              <div role="alert">
+                <p className="gc-label text-red-default">
+                  {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
+                  {t("spam-error.error-part-2")}
+                </p>
+                <p className="gc-description">
+                  {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
+                  {t("spam-error.prompt-part-2")}
+                </p>
+              </div>
+            ) : (
+              <div role="alert">
+                <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
+                <p className="gc-description">{t("spam-error.success-prompt")}</p>
+              </div>
+            ))}
           <div className="buttons">
             <Button type="submit">{t("submitButton")}</Button>
           </div>
