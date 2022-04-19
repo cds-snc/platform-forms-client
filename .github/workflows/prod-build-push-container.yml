@@ -41,7 +41,7 @@ jobs:
       - name: Build Form Viewer
         run: |
           docker build -t base \
-          --build-arg PRODUCTION_ENV=true
+          --build-arg PRODUCTION_ENV=true \
           --build-arg GITHUB_SHA_ARG=$GITHUB_SHA .
 
       - name: Configure Production AWS credentials
