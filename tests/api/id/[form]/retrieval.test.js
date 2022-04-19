@@ -508,4 +508,67 @@ describe("/api/retrieval", () => {
       expect(logMessage.error.mock.calls[0][0]).toEqual(new Error("some error"));
     });
   });
+
+  describe("GET", () => {
+    it("Should return a list of form responses including Security attributes", async () => {
+      const token = jwt.sign(
+        {
+          email: "test@cds-snc.ca",
+          form: 100,
+        },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1y",
+        }
+      );
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000/api/retrieval?numRecords=4",
+          authorization: `Bearer ${token}`,
+        },
+        query: {
+          form: "100",
+        },
+      });
+      executeQuery.mockImplementation((client, sql) => {
+        if (
+          sql.includes(
+            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
+          )
+        ) {
+          return {
+            rows: [{ column: 1 }],
+            rowCount: 1,
+          };
+        }
+      });
+      const dynamodbExpectedReponses = {
+        Items: [
+          { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protectd B" },
+          { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protectd B" },
+          { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protectd B" },
+          { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protectd B" },
+        ],
+      };
+      documentClient.send.mockImplementation(() => {
+        return dynamodbExpectedReponses;
+      });
+      DynamoDBClient.mockReturnValue(dynamoClient);
+      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+      await retrieval(req, res);
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          responses: [
+            { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protectd B" },
+            { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protectd B" },
+            { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protectd B" },
+            { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protectd B" },
+          ],
+        })
+      );
+    });
+  });
 });

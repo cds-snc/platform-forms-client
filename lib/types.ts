@@ -7,6 +7,7 @@ import { Session } from "next-auth";
 export interface FormDefinitionProperties {
   internalTitleEn?: string;
   internalTitleFr?: string;
+  securityAttribute: string;
   publishingStatus: boolean;
   submission: SubmissionProperties;
   displayAlphaBanner?: boolean;
@@ -44,6 +45,7 @@ export interface PublicFormSchemaProperties extends FormSchemaProperties {
   publishingStatus: boolean;
   displayAlphaBanner: boolean;
   reCaptchaID?: string;
+  securityAttribute: string;
 }
 
 export type allFormElements =

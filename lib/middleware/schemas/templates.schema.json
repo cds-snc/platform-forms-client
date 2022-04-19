@@ -7,6 +7,11 @@
   "default": {},
   "examples": [],
   "properties": {
+    "securityAttribute":{
+      "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
+      "$id": "#/properties/securityAttribute",
+      "type": "string"
+    },
     "internalTitleEn": {
       "description": "The displayed title of the form to the user in English",
       "$id": "#/properties/internalTitleEn",
@@ -34,9 +39,9 @@
         }
       },
       "required": ["elements"]
-    }
+    }    
   },
-  "required": ["form", "submission", "internalTitleEn", "internalTitleFr", "publishingStatus"],
+  "required": ["form", "submission", "internalTitleEn", "internalTitleFr", "publishingStatus", "securityAttribute"],
   "additionalProperties": true,
 
   "$defs": {
