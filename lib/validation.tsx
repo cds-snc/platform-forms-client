@@ -94,7 +94,15 @@ const isFieldResponseValid = (
         return t("input-validation.too-many-characters");
       break;
     }
-    case "checkbox":
+    case "checkbox": {
+      if (
+        validator.required &&
+        (value === undefined || !Array.isArray(value) || !(value as Array<string>).length)
+      ) {
+        return t("input-validation.required");
+      }
+      break;
+    }
     case "radio":
     case "dropdown": {
       if (validator.required && value === undefined) return t("input-validation.required");
