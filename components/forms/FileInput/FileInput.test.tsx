@@ -17,7 +17,7 @@ describe("FileInput component", () => {
     const { queryByTestId } = render(
       <Formik
         onSubmit={(values) => {
-          logMessage.log(values);
+          logMessage.debug(values);
         }}
         initialValues={{ pdf: { file: "", name: "", src: "" } }}
       >

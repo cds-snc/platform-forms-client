@@ -17,7 +17,6 @@ export const CreateOrganization = (): React.ReactElement => {
       <Formik
         initialValues={{ orgNameEn: "", orgNameFr: "" }}
         onSubmit={async (values) => {
-          logMessage.info(values);
           return await axios({
             url: "/api/organizations",
             method: "POST",

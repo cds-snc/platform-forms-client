@@ -1,4 +1,4 @@
-import { logMessage } from "../../lib/logger";
+import { logMessage } from "@lib/logger";
 
 const log = (req, res) => {
   try {

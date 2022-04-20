@@ -1,4 +1,4 @@
-import { logMessage } from "../logger";
+import { logMessage } from "@lib/logger";
 import { QueryResult, Client } from "pg";
 
 const executeQuery = async (

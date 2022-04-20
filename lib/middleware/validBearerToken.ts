@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { getTokenById } from "../../pages/api/id/[form]/bearer";
 import { BearerTokenPayload, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { logMessage } from "../logger";
+import { logMessage } from "@lib/logger";
 
 /**
  * This is a middleware function that will validate the bearer token in the authorization header
@@ -24,7 +24,7 @@ export const validBearerToken = (): MiddlewareRequest => {
       }
     } catch (err) {
       if (err instanceof TokenExpiredError) {
-        logMessage.error("An expired bearer token has been used.");
+        logMessage.warn("An expired bearer token has been used.");
       }
       res.status(403).json({ error: "Missing or invalid bearer token." });
       return { next: false };
