@@ -34,15 +34,13 @@ describe("Forms Functionality", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(6000);
-      cy.get("[role='alert']").contains("The button's ready.");
+      cy.wait(6000).get("[role='alert']").contains("The button's ready.");
     });
     it("should submit the button after the proper delay", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(6000);
-      cy.get("[type='submit']").click();
+      cy.wait(6000).get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
   });
