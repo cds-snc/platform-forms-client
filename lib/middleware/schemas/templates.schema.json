@@ -34,6 +34,19 @@
         }
       },
       "required": ["elements"]
+    },
+    "submission": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "The email address to which the form submission should be sent.",
+          "type": "string"
+        },
+        "vault": {
+          "description": "If set to true, the form submission will be saved in the vault.",
+          "type": "boolean"
+        }
+      }
     }
   },
   "required": ["form", "submission", "internalTitleEn", "internalTitleFr", "publishingStatus"],
