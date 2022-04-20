@@ -232,7 +232,7 @@ async function _getFormByStatus(
             ...record.formConfig.form,
             publishingStatus: record.formConfig.publishingStatus,
             displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
-            securityAttribute: record.formConfig?.securityAttribute ?? "undefined",
+            securityAttribute: record.formConfig?.securityAttribute ?? null,
           };
         }
       })
@@ -260,7 +260,7 @@ const _onlyIncludePublicProperties = async ({
       return {
         formID: template.formID,
         publishingStatus: template.formConfig.publishingStatus,
-        securityAttribute: template.formConfig?.securityAttribute ?? "undefined",
+        securityAttribute: template.formConfig?.securityAttribute ?? null,
         displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
         ...(process.env.RECAPTCHA_V3_SITE_KEY && {
           reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
