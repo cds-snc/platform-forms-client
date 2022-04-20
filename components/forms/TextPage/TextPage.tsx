@@ -25,7 +25,7 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
     return <RichText className="confirmation">{pageText}</RichText>;
   }
 
-  const { t } = useTranslation();
+  const { t } = useTranslation("confirmation");
 
   // Otherwise, display the default confirmation text
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
