@@ -2,6 +2,7 @@ import React from "react";
 import { cleanup, render, screen, act, fireEvent, waitFor } from "@testing-library/react";
 import Form from "./Form";
 import { submitToAPI } from "@lib/integration/helpers";
+import { useFlag } from "@lib/hooks/useFlag";
 
 jest.mock("@lib/integration/helpers", () => {
   const originalModule = jest.requireActual("@lib/integration/helpers");
@@ -33,6 +34,8 @@ jest.mock("@lib/hooks", () => {
           return false;
         case "submitToReliabilityQueue":
           return false;
+        default:
+          return useFlag(flag);
       }
     }),
     useFormTimer: jest.fn(() => [

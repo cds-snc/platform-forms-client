@@ -1,4 +1,5 @@
 import "@testing-library/jest-dom";
+import initialSettings from "../../flag_initialization/default_flag_settings.json";
 
 jest.mock("next/config", () => () => ({
   publicRuntimeConfig: {
@@ -15,4 +16,12 @@ jest.mock("react-i18next", () => ({
       },
     };
   },
+}));
+
+jest.mock("@lib/integration/redisConnector", () => ({
+  getRedisInstance: jest.fn(),
+}));
+
+jest.mock("@lib/hooks/useFlag", () => ({
+  useFlag: jest.fn((flag) => (initialSettings as Record<string, boolean>)[flag]),
 }));

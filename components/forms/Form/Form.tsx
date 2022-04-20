@@ -109,7 +109,6 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
     // calculate initial delay for submit timer
-    logMessage.info(`Timer Active flag is : ${timerActive}`);
     if (timerActive) {
       const secondsBaseDelay = 2;
       const secondsPerFormElement = 2;
