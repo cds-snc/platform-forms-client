@@ -6,28 +6,41 @@ import {
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
 
-const cacheAvailable: boolean = process.env.REDIS_URL ? true : false;
+// If NODE_ENV is in test mode (Jest Tests) do not use the cache
+const cacheAvailable: boolean =
+  process.env.REDIS_URL && process.env.NODE_ENV !== "test" ? true : false;
 
 // Return a random number between 30 and 60
 const randomCacheExpiry = () => Math.floor(Math.random() * 30 + 30);
 
 const checkValue = async (checkParameter: string) => {
-  const redis = await getRedisInstance();
-  if (redis) {
-    const value = await redis.get(checkParameter);
-    if (value) {
-      logMessage.debug(`Using Cached value for ${checkParameter}`);
-      return JSON.parse(value);
+  if (cacheAvailable) {
+    try {
+      const redis = await getRedisInstance();
+      const value = await redis.get(checkParameter);
+      if (value) {
+        logMessage.debug(`Using Cached value for ${checkParameter}`);
+        return JSON.parse(value);
+      }
+    } catch (e) {
+      logMessage.error(e as Error);
+      throw new Error("Could not connect to cache");
     }
   }
+
   return null;
 };
 
 const deleteValue = async (deleteParameter: string) => {
-  const redis = await getRedisInstance();
-  if (redis) {
+  if (!cacheAvailable) return;
+  try {
+    const redis = await getRedisInstance();
+
     redis.del(deleteParameter);
     logMessage.debug(`Deleting Cached value for ${deleteParameter}`);
+  } catch (e) {
+    logMessage.error(e as Error);
+    throw new Error("Could not connect to cache");
   }
 };
 
@@ -38,10 +51,15 @@ const modifyValue = async (
     | (PublicFormSchemaProperties | undefined)[]
     | CrudOrganizationResponse
 ) => {
-  const redis = await getRedisInstance();
-  if (redis) {
+  if (!cacheAvailable) return;
+  try {
+    const redis = await getRedisInstance();
+
     redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(template));
     logMessage.debug(`Updating Cached value for ${modifyParameter}`);
+  } catch (e) {
+    logMessage.error(e as Error);
+    throw new Error("Could not connect to cache");
   }
 };
 

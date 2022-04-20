@@ -3,14 +3,8 @@ import Redis from "ioredis";
 let redisConnection: Redis | null = null;
 
 const createRedisInstance = async (): Promise<Redis> => {
-  if (process.env.REDIS_URL && !(process.env.NODE_ENV === "test")) {
-    return new Redis(process.env.REDIS_URL);
-  } else {
-    // not ideal but works when you don't have local redis running.
-    const { default: MockRedis } = await import("ioredis-mock");
-    const mockRedisInstance: Redis = new MockRedis();
-    return mockRedisInstance;
-  }
+  if (!process.env.REDIS_URL) throw new Error("No Redis URL is configured");
+  return new Redis(process.env.REDIS_URL);
 };
 
 export const getRedisInstance = async (): Promise<Redis> => {
@@ -23,4 +17,6 @@ export const getRedisInstance = async (): Promise<Redis> => {
   }
 };
 
-getRedisInstance().then((redis) => (redisConnection = redis));
+if (!process.env.ISOLATED_INSTANCE) {
+  getRedisInstance().then((redis) => (redisConnection = redis));
+}

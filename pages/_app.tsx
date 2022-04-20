@@ -10,8 +10,8 @@ import i18nextConfig from "../next-i18next.config";
 
 const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div suppressHydrationWarning={Boolean(process.env.CYPRESS)}>
-      {typeof window === "undefined" && process.env.CYPRESS ? null : children}
+    <div suppressHydrationWarning={Boolean(process.env.ISOLATED_INSTANCE)}>
+      {typeof window === "undefined" && process.env.ISOLATED_INSTANCE ? null : children}
     </div>
   );
 };

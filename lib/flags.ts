@@ -1,52 +1,18 @@
-import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
-
-/**
- * Create new mocked Redis instance and populate it with values
- */
-const loadMockedValues = async () => {
-  // If we're using the in memory mocked version of Redis we need to load in initial values
-  if (!process.env.REDIS_URL) {
-    const redis = await getRedisInstance();
-    const { default: initialSettings }: { default: Record<string, boolean> } = await import(
-      "../flag_initialization/default_flag_settings.json"
-    );
-    for (const key in initialSettings) {
-      logMessage.info(
-        `Creating flag: ${key} with value ${initialSettings[key]} because we're in Test mode`
-      );
-      await redis.sadd("flags", key);
-      await redis.set(`flag:${key}`, initialSettings[key] ? "1" : "0");
-    }
-  }
-};
-
-// Loads mocked values into ioredis-mock
-loadMockedValues();
+import flagInitialSettings from "../flag_initialization/default_flag_settings.json";
 
 export const createFlag = async (key: string, value: boolean): Promise<void> => {
   const redis = await getRedisInstance();
-  if (process.env.REDIS_URL) {
-    await redis
-      .multi()
-      .sadd("flags", key)
-      .set(`flag:${key}`, value ? "1" : "0")
-      .exec();
-  } else {
-    // ioredis-mock does not support multi()
-    await redis.sadd("flags", key);
-    await redis.set(`flag:${key}`, value ? "1" : "0");
-  }
+  await redis
+    .multi()
+    .sadd("flags", key)
+    .set(`flag:${key}`, value ? "1" : "0")
+    .exec();
 };
 
 export const enableFlag = async (key: string): Promise<void> => {
   const redis = await getRedisInstance();
-  if (process.env.REDIS_URL) {
-    await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
-  } else {
-    await redis.sadd("flags", key);
-    redis.set(`flag:${key}`, "1");
-  }
+  await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
 };
 
 export const disableFlag = async (key: string): Promise<void> => {
@@ -66,6 +32,9 @@ const getKeys = async () => {
 };
 
 export const checkOne = async (key: string): Promise<boolean> => {
+  if (process.env.ISOLATED_INSTANCE) {
+    return (flagInitialSettings as Record<string, boolean>)[key];
+  }
   const redis = await getRedisInstance();
   const value = await redis.get(`flag:${key}`);
   return value === "1";

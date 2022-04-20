@@ -18,7 +18,7 @@ const lambdaClient = new LambdaClient({
 
 async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
   const { method, formID } = payload;
-  if (method === "GET" && formID) {
+  if (formCache.cacheAvailable && method === "GET" && formID) {
     const cachedValue = await formCache.formID.check(formID);
     if (cachedValue) {
       return cachedValue;
@@ -26,21 +26,23 @@ async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<Crud
   }
 
   return await _crudTemplates(payload).then((response) => {
-    switch (method) {
-      case "GET":
-        if (formID) {
-          formCache.formID.set(formID, response);
-        }
-        break;
-      case "POST":
-      case "PUT":
-      case "DELETE":
-        if (formID) {
-          formCache.formID.invalidate(formID);
-        }
-        break;
-      default:
-        break;
+    if (formCache.cacheAvailable) {
+      switch (method) {
+        case "GET":
+          if (formID) {
+            formCache.formID.set(formID, response);
+          }
+          break;
+        case "POST":
+        case "PUT":
+        case "DELETE":
+          if (formID) {
+            formCache.formID.invalidate(formID);
+          }
+          break;
+        default:
+          break;
+      }
     }
 
     return response;
@@ -110,7 +112,7 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
 async function _crudOrganizationsWithCache(
   payload: CrudOrganizationInput
 ): Promise<CrudOrganizationResponse> {
-  if (payload.method === "GET" && payload.organizationID) {
+  if (organizationCache.cacheAvailable && payload.method === "GET" && payload.organizationID) {
     const cachedValue = await organizationCache.organizationID.check(payload.organizationID);
     if (cachedValue) {
       return cachedValue;
@@ -118,23 +120,24 @@ async function _crudOrganizationsWithCache(
   }
 
   return await _crudOrganizations(payload).then((response) => {
-    switch (payload.method) {
-      case "GET":
-        if (payload.organizationID) {
-          organizationCache.organizationID.set(payload.organizationID, response);
-        }
-        break;
-      case "DELETE":
-      case "UPDATE":
-      case "INSERT":
-        if (payload.organizationID) {
-          organizationCache.organizationID.invalidate(payload.organizationID);
-        }
-        break;
-      default:
-        break;
+    if (organizationCache.cacheAvailable) {
+      switch (payload.method) {
+        case "GET":
+          if (payload.organizationID) {
+            organizationCache.organizationID.set(payload.organizationID, response);
+          }
+          break;
+        case "DELETE":
+        case "UPDATE":
+        case "INSERT":
+          if (payload.organizationID) {
+            organizationCache.organizationID.invalidate(payload.organizationID);
+          }
+          break;
+        default:
+          break;
+      }
     }
-
     return response;
   });
 }

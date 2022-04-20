@@ -22,7 +22,7 @@ export async function getServerSideProps(context) {
   // Redirect if form doesn't exist and
   // Only retrieve publish ready forms if isProduction
   // Short circuit only if Cypress testing
-  if ((!form || (!form?.publishingStatus && !unpublishedForms)) && !process.env.CYPRESS) {
+  if (!form || (!form?.publishingStatus && !unpublishedForms)) {
     return {
       redirect: {
         // We can redirect to a 'Form does not exist page' in the future
