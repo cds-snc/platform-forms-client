@@ -46,7 +46,7 @@
       "required": ["elements"]
     }    
   },
-  "required": ["form", "submission", "internalTitleEn", "internalTitleFr", "publishingStatus", "securityAttribute"],
+  "required": ["form", "submission", "internalTitleEn", "internalTitleFr", "publishingStatus"],
   "additionalProperties": true,
 
   "$defs": {
