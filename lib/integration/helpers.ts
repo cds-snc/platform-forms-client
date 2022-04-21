@@ -162,7 +162,6 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
   }
 
   formData["formID"] = `${form.formID}`;
-  //add security attribtue
   formData.securityAttribute = `${form.securityAttribute}`;
 
   return formData;

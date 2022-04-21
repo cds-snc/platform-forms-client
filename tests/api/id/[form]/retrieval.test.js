@@ -546,10 +546,10 @@ describe("/api/retrieval", () => {
       });
       const dynamodbExpectedReponses = {
         Items: [
-          { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protectd B" },
-          { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protectd B" },
-          { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protectd B" },
-          { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protectd B" },
+          { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
+          { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
+          { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
+          { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
         ],
       };
       documentClient.send.mockImplementation(() => {
@@ -562,10 +562,10 @@ describe("/api/retrieval", () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           responses: [
-            { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protectd B" },
-            { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protectd B" },
-            { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protectd B" },
-            { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protectd B" },
+            { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
+            { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
+            { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
+            { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
           ],
         })
       );

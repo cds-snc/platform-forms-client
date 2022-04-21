@@ -9,8 +9,13 @@
   "properties": {
     "securityAttribute":{
       "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
-      "$id": "#/properties/securityAttribute",
-      "type": "string"
+      "$id": "#/properties/securityAttribute",       
+      "type": "string",
+      "enum": [
+          "Protected A",
+          "Protected B",
+          "Unclassified"      
+        ]      
     },
     "internalTitleEn": {
       "description": "The displayed title of the form to the user in English",
