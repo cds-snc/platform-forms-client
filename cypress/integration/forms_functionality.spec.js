@@ -20,33 +20,33 @@ describe("Forms Functionality", () => {
   });
 
   describe("Submit Delay", () => {
-    beforeEach(() => {
+    it("should display alert message when submitting too quickly", () => {
       cy.useFlag("formTimer", true);
       cy.mockForm("../../tests/data/textFieldTestForm.json");
-    });
-    it("should display alert message when submitting too quickly", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
       cy.get("[role='alert']").contains("Button can not be used");
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
+      cy.clock();
+      cy.useFlag("formTimer", true);
+      cy.mockForm("../../tests/data/textFieldTestForm.json");
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
+      cy.tick(1000);
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
       cy.get("[role='alert']").contains("Button can not be used");
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(6000);
+      cy.tick(6000);
       cy.get("[role='alert']").contains("The button's ready.");
     });
     it("should submit the button after the proper delay", () => {
+      cy.clock();
+      cy.useFlag("formTimer", true);
+      cy.mockForm("../../tests/data/textFieldTestForm.json");
+      cy.tick(1000);
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
-      cy.get("[type='submit']").click();
-      cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button can not be used");
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(6000);
-      cy.get("[role='alert']").contains("The button's ready.");
+      cy.tick(6000);
       cy.get("[type='submit']").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
