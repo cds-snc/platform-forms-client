@@ -76,6 +76,7 @@ export interface ValidationProperties {
   type?: string;
   regex?: string;
   maxLength?: number;
+  all: boolean;
   descriptionEN?: string;
   descriptionFR?: string;
   [key: string]: unknown;
