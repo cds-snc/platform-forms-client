@@ -58,7 +58,7 @@ const Flags: React.FC = () => {
           </tbody>
         </table>
       ) : (
-        <Loader loading={true} message={t("loading")} />
+        <Loader message={t("loading")} />
       )}
     </>
   );

@@ -143,14 +143,14 @@ export interface DynamicFormProps {
   language: string;
   router: NextRouter;
   notifyPreviewFlag: boolean;
-  t: TFunction;
   isReCaptchaEnableOnSite?: boolean;
+  children?: (JSX.Element | undefined)[] | null;
+  t: TFunction;
 }
 
 export interface InnerFormProps {
   children?: React.ReactNode;
   language: string;
-  t: TFunction;
 }
 
 export type FileInputResponse = {
