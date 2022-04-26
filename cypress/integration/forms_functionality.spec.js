@@ -1,5 +1,5 @@
 describe("Forms Functionality", () => {
-  describe("text field tests", () => {
+  describe.skip("text field tests", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", false);
       cy.mockForm("../../tests/data/textFieldTestForm.json");
@@ -19,7 +19,7 @@ describe("Forms Functionality", () => {
     });
   });
 
-  describe("Submit Delay", () => {
+  describe.skip("Submit Delay", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", true);
       cy.mockForm("../../tests/data/textFieldTestForm.json");
@@ -48,7 +48,7 @@ describe("Forms Functionality", () => {
   });
 });
 
-describe("Forms Functionality - Character Counts", () => {
+describe.skip("Forms Functionality - Character Counts", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
     cy.mockForm("../../tests/data/textFieldTestForm.json");
@@ -82,21 +82,20 @@ describe("Forms Functionality - Attestation", () => {
     cy.mockForm("../../tests/data/attestationTestForm.json");
   });
 
-  it("Renders properly", () => {
+  it.skip("Renders properly", () => {
     cy.get("body").contains("all checkboxes required");
   });
 
-  it("Displays error when submitting form without checking both boxes", () => {
+  it.skip("Displays error when submitting form without checking both boxes", () => {
     cy.get("[type='submit']").click();
     cy.get("li").contains("Read and check all boxes to confirm the items in this section.");
     cy.get("p").contains("Read and check all boxes to confirm the items in this section.");
   });
 
   it("Submits properly", () => {
-    cy.get("input[id='14.1']").check();
-    cy.get("input[id='14.2']").check();
+    cy.get("div[data-testid='1.0']").click();
+    cy.get("[data-testid='1.1']").click();
     cy.get("[type='submit']").click();
-    cy.get("li").contains("Read and check all boxes to confirm the items in this section.");
-    cy.get("p").contains("Read and check all boxes to confirm the items in this section.");
+    cy.get("h1").contains("Your submission has been received");
   });
 });

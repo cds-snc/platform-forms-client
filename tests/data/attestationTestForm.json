@@ -1,14 +1,14 @@
 {
     "form": {
       "layout": [
-        14
+        1
       ],
       "titleEn": "Lemonade Stand Funding",
       "titleFr": "Financement des stands de limonade",
       "version": 1,
       "elements": [
         {
-          "id": 14,
+          "id": 1,
           "type": "checkbox",
           "properties": {
             "titleEn": "Do you attest that the information you are providing is true and correct to your knowledge?",
