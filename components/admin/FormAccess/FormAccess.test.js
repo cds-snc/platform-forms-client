@@ -1,5 +1,6 @@
 import React from "react";
-import { cleanup, render, fireEvent, screen, act } from "@testing-library/react";
+import { cleanup, render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
 import FormAccess from "./FormAccess";
@@ -28,6 +29,7 @@ describe("Form Access Component", () => {
   });
 
   it("submits a new email address and display it in the list", async () => {
+    userEvent.setup();
     const testEmailAddress = "test@cds-snc.ca";
     mockedAxios.mockResolvedValue({
       status: 200,
@@ -43,7 +45,8 @@ describe("Form Access Component", () => {
     render(<FormAccess formID={formConfig.formID}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
-    fireEvent.change(input, { target: { value: testEmailAddress } });
+
+    await userEvent.type(input, testEmailAddress);
 
     mockedAxios.mockResolvedValueOnce({
       status: 200,
@@ -53,11 +56,14 @@ describe("Form Access Component", () => {
         },
       },
     });
-    fireEvent.click(screen.getByTestId("add-email"));
+
+    await userEvent.click(screen.getByTestId("add-email"));
+
     expect(await screen.findByText(testEmailAddress)).toBeInTheDocument;
   });
 
   it("submits a new email address for a form that does not exist, and receives an error from the API", async () => {
+    userEvent.setup();
     const testEmailAddress = "test@cds-snc.ca";
     mockedAxios
       .mockResolvedValueOnce({
@@ -80,14 +86,15 @@ describe("Form Access Component", () => {
     });
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
+    await userEvent.type(input, testEmailAddress);
 
-    await fireEvent.change(input, { target: { value: testEmailAddress } });
+    await userEvent.click(screen.getByTestId("add-email"));
 
-    await fireEvent.click(screen.getByTestId("add-email"));
     expect(await screen.findByTestId("alert")).toBeInTheDocument;
   });
 
   it("submits a new email address that is not a Government of Canada email, and receives an error from the API", async () => {
+    userEvent.setup();
     const testEmailAddress = "test@test.ca";
 
     mockedAxios
@@ -109,9 +116,9 @@ describe("Form Access Component", () => {
     render(<FormAccess formID={formConfig.formID}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
-    await fireEvent.change(input, { target: { value: testEmailAddress } });
+    await userEvent.type(input, testEmailAddress);
+    await userEvent.click(screen.getByTestId("add-email"));
 
-    await fireEvent.click(screen.getByTestId("add-email"));
     expect(await screen.findByRole("alert")).toBeInTheDocument;
   });
 });

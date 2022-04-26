@@ -1,5 +1,6 @@
 import React from "react";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
@@ -47,6 +48,7 @@ const formConfig = {
 describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
   afterEach(cleanup);
   test("renders without errors", () => {
+    userEvent.setup();
     render(
       <Form formConfig={formConfig} t={(key) => key} language={lang}>
         <GenerateElement element={checkboxData} language={lang} t={(key) => key} />
@@ -65,8 +67,8 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
     expect(screen.getByRole("group")).toHaveAccessibleDescription(description);
 
     // Check the boxes
-    screen.getAllByRole("checkbox").forEach((input) => {
-      fireEvent.click(input);
+    screen.getAllByRole("checkbox").forEach(async (input) => {
+      await userEvent.click(input);
     });
 
     const resultsArray = checkboxData.properties.choices.map((object) => {
