@@ -2,6 +2,7 @@ import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
 import owners from "@pages/api/id/[form]/owners";
 import executeQuery from "@lib/integration/queryManager";
+import { logAdminActivity } from "@lib/adminLogs";
 
 jest.mock("next-auth/client");
 jest.mock("@lib/integration/queryManager");
@@ -14,6 +15,10 @@ jest.mock("@lib/integration/dbConnector", () => {
   };
   return jest.fn(() => mClient);
 });
+
+jest.mock("@lib/adminLogs", () => ({
+  logAdminActivity: jest.fn(),
+}));
 
 describe("/id/[forms]/owners", () => {
   describe("GET: Retrieve list of emails API endpoint", () => {
@@ -288,6 +293,43 @@ describe("/id/[forms]/owners", () => {
         expect(JSON.parse(res._getData())).toEqual(expect.objectContaining([{ id: 1 }]));
       }
     );
+
+    test.each([0, 1])(
+      "Should log admin activity if PUT API call completed successfully",
+      async (elem) => {
+        const mockSession = {
+          expires: "1",
+          user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
+        };
+        client.getSession.mockReturnValue(mockSession);
+
+        //Mocking executeQuery
+        executeQuery.mockReturnValue({ rows: [{ id: 1 }], rowCount: `${elem}` + 1 });
+        const { req, res } = createMocks({
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "forms@cds.ca",
+            active: true,
+          },
+          query: {
+            form: "12",
+          },
+        });
+
+        await owners(req, res);
+
+        expect(res.statusCode).toBe(200);
+        expect(logAdminActivity).toHaveBeenCalledWith(
+          1,
+          "Update",
+          "GrantFormAccess",
+          "Access to form id: 12 has been granted for email: forms@cds.ca"
+        );
+      }
+    );
   });
 
   describe("POST: Associate an email to a template data API endpoint", () => {
@@ -447,5 +489,39 @@ describe("/id/[forms]/owners", () => {
         );
       }
     );
+
+    it("Should log admin activity if POST API call completed successfully", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
+      };
+      client.getSession.mockReturnValue(mockSession);
+
+      // return the id of the newly created record.
+      executeQuery.mockReturnValueOnce({ rows: [{ id: 1 }] });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          email: "test9@gc.ca",
+        },
+        query: {
+          form: "9",
+        },
+      });
+
+      await owners(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        1,
+        "Create",
+        "GrantInitialFormAccess",
+        "Email: test9@gc.ca has been given access to form id: 9"
+      );
+    });
   });
 });

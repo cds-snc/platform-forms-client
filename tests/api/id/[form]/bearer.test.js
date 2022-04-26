@@ -5,6 +5,7 @@ import executeQuery from "@lib/integration/queryManager";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import { checkLogs } from "@lib/jestUtils";
+import { logAdminActivity } from "@lib/adminLogs";
 
 jest.mock("next-auth/client");
 jest.mock("@lib/integration/queryManager");
@@ -17,6 +18,10 @@ jest.mock("@lib/integration/dbConnector", () => {
   };
   return jest.fn(() => mClient);
 });
+
+jest.mock("@lib/adminLogs", () => ({
+  logAdminActivity: jest.fn(),
+}));
 
 describe("/id/[form]/bearer", () => {
   describe("GET", () => {
@@ -328,6 +333,46 @@ describe("/id/[form]/bearer", () => {
       expect(JSON.parse(res._getData()).error).toBe("Internal Service Error");
       expect(logMessageErrorSpy.mock.calls.length).toBe(1);
       expect(logMessageErrorSpy.mock.calls[0][0]).toEqual(new Error("some error"));
+    });
+
+    it("Should log admin activity if API call completed successfully", async () => {
+      executeQuery.mockImplementationOnce((client, sql, values) => {
+        return {
+          rowCount: 1,
+          rows: [
+            {
+              id: values[1],
+              token: values[0],
+            },
+          ],
+        };
+      });
+
+      const mockSession = {
+        expires: "1",
+        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true, id: 1 },
+      };
+      client.getSession.mockReturnValue(mockSession);
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Length": 0,
+        },
+        query: {
+          form: 1,
+        },
+      });
+
+      await retrieve(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        1,
+        "Update",
+        "RefreshBearerToken",
+        "Bearer token for form id: 1 has been refreshed"
+      );
     });
   });
 });

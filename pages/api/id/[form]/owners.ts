@@ -5,16 +5,23 @@ import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
+import { AdminLogAction, AdminLogEvent, MiddlewareProps } from "@lib/types";
+import { Session } from "next-auth";
+import { logAdminActivity } from "@lib/adminLogs";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  { session }: MiddlewareProps
+): Promise<void> => {
   try {
     switch (req.method) {
       case "GET":
         return await getEmailListByFormID(req, res);
       case "PUT":
-        return await activateOrDeactivateFormOwners(req, res);
+        return await activateOrDeactivateFormOwners(req, res, session);
       case "POST":
-        return await addEmailToForm(req, res);
+        return await addEmailToForm(req, res, session);
       default:
         return res.status(400).json({ error: "Bad Request" });
     }
@@ -54,7 +61,8 @@ export async function getEmailListByFormID(
  */
 export async function activateOrDeactivateFormOwners(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
+  session?: Session
 ): Promise<void> {
   //Extracting req body
   const requestBody = req.body ? req.body : undefined;
@@ -72,6 +80,16 @@ export async function activateOrDeactivateFormOwners(
     "UPDATE form_users SET active=($1) WHERE template_id = ($2) AND email = ($3) RETURNING id",
     [active, formID, email as string]
   );
+
+  if (session && session.user.id) {
+    await logAdminActivity(
+      session.user.id,
+      AdminLogAction.Update,
+      active ? AdminLogEvent.GrantFormAccess : AdminLogEvent.RevokeFormAccess,
+      `Access to form id: ${formID} has been ${active ? "granted" : "revoked"} for email: ${email}`
+    );
+  }
+
   //A record was updated and return ids [ { "id": 1 } etc.. ]
   if (resultObject.rowCount > 0) return res.status(200).json(resultObject.rows);
   //A 404 status code for a form Not Found in form_users
@@ -87,7 +105,11 @@ export async function activateOrDeactivateFormOwners(
  * @param req The request object
  * @param res The response object
  */
-export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+export async function addEmailToForm(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session?: Session
+): Promise<void> {
   //Get request body
   const requestBody = req.body ? req.body : undefined;
   //Checkimg the payload's content
@@ -95,13 +117,24 @@ export async function addEmailToForm(req: NextApiRequest, res: NextApiResponse):
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
   const formID = req.query.form as string;
+  const email = requestBody.email as string;
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   try {
     const result = await executeQuery(
       await dbConnector(),
       "INSERT INTO form_users (template_id, email) VALUES ($1, $2) RETURNING id",
-      [formID, requestBody.email as string]
+      [formID, email]
     );
+
+    if (session && session.user.id) {
+      await logAdminActivity(
+        session.user.id,
+        AdminLogAction.Create,
+        AdminLogEvent.GrantInitialFormAccess,
+        `Email: ${email} has been given access to form id: ${formID}`
+      );
+    }
+
     return res.status(200).json({ success: result.rows[0] });
   } catch (error) {
     const message = (error as Error).message;
