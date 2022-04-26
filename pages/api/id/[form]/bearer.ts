@@ -6,7 +6,8 @@ import executeQuery from "@lib/integration/queryManager";
 import { cors, sessionExists, middleware } from "@lib/middleware";
 import dbConnector from "@lib/integration/dbConnector";
 import { QueryResult } from "pg";
-import { BearerResponse } from "@lib/types";
+import { AdminLogAction, AdminLogEvent, BearerResponse } from "@lib/types";
+import { logAdminActivity } from "@lib/adminLogs";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {
@@ -68,6 +69,16 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
     logMessage.info(
       `A bearer token was refreshed for form ${formID} by user ${session?.user?.name}`
     );
+
+    if (session && session.user.id) {
+      await logAdminActivity(
+        session.user.id,
+        AdminLogAction.Update,
+        AdminLogEvent.RefreshBearerToken,
+        `Bearer token for form id: ${formID} has been refreshed`
+      );
+    }
+
     return res.status(200).json(responseObject.rows[0]);
   }
   return res.status(400).json({ error: "form ID parameter was not provided in the resource path" });
