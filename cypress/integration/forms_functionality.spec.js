@@ -75,3 +75,28 @@ describe("Forms Functionality - Character Counts", () => {
     cy.get("h2.gc-h3").contains("Please correct the errors on the page");
   });
 });
+
+describe("Forms Functionality - Attestation", () => {
+  beforeEach(() => {
+    cy.useFlag("formTimer", false);
+    cy.mockForm("../../tests/data/attestationTestForm.json");
+  });
+
+  it("Renders properly", () => {
+    cy.get("body").contains("all checkboxes required");
+  });
+
+  it("Displays error when submitting form without checking both boxes", () => {
+    cy.get("[type='submit']").click();
+    cy.get("li").contains("Read and check all boxes to confirm the items in this section.");
+    cy.get("p").contains("Read and check all boxes to confirm the items in this section.");
+  });
+
+  it("Submits properly", () => {
+    cy.get("input[id='14.1']").check();
+    cy.get("input[id='14.2']").check();
+    cy.get("[type='submit']").click();
+    cy.get("li").contains("Read and check all boxes to confirm the items in this section.");
+    cy.get("p").contains("Read and check all boxes to confirm the items in this section.");
+  });
+});
