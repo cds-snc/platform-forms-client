@@ -136,6 +136,10 @@
         },
         "descriptionFR": {
           "type": "string"
+        },
+        "all": {
+          "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
+          "type": "boolean"
         }
       }
     }
