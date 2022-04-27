@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:16
 
 ENV NODE_ENV=production
 
@@ -9,19 +9,19 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:14
+FROM node:16
 
 COPY migrations /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:14
+FROM node:16
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:14
+FROM node:16
 LABEL maintainer="-"
 
 ARG GITHUB_SHA_ARG

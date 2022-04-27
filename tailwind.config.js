@@ -1,4 +1,4 @@
-const { colors } = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
 
 module.exports = {
   theme: {
@@ -69,6 +69,7 @@ module.exports = {
       xxs: { max: "290px" },
     },
     colors: {
+      current: "currentColor",
       red: {
         ...colors.red,
         100: "#f3e9e8",
@@ -77,7 +78,7 @@ module.exports = {
         hover: "#4E1504",
       },
       purple: {
-        ...colors.purple,
+        ...colors.violet,
         default: "#6300C7",
       },
       white: {
@@ -113,11 +114,11 @@ module.exports = {
         800: "#2d3748",
       },
       yellow: {
-        ...colors.yellow,
+        ...colors.amber,
         default: "#ffbf47",
       },
       green: {
-        ...colors.green,
+        ...colors.emerald,
         default: "#00703C",
         darker: "#005930",
       },
@@ -151,9 +152,6 @@ module.exports = {
       100: "100,",
     },
   },
-  variants: {
-    extend: {},
-  },
-  purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  plugins: [require("tailwindcss"), require("precss"), require("autoprefixer")],
+  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  plugins: [],
 };

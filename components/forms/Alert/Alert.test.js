@@ -13,10 +13,10 @@ describe("Alert component", () => {
         {text}
       </Alert>
     );
-    expect(screen.getByRole("alert"))
-      .toHaveClass("gc-alert--success")
-      .toHaveTextContent(text)
-      .toHaveTextContent("Success status");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveClass("gc-alert--success");
+    expect(alert).toHaveTextContent(text);
+    expect(alert).toHaveTextContent("Success status");
   });
   test("success warning", () => {
     render(
@@ -24,10 +24,10 @@ describe("Alert component", () => {
         {text}
       </Alert>
     );
-    expect(screen.getByRole("alert"))
-      .toHaveClass("gc-alert--warning")
-      .toHaveTextContent(text)
-      .toHaveTextContent("Warning status");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveClass("gc-alert--warning");
+    expect(alert).toHaveTextContent(text);
+    expect(alert).toHaveTextContent("Warning status");
   });
   test("error alert", () => {
     render(
@@ -35,10 +35,10 @@ describe("Alert component", () => {
         {text}
       </Alert>
     );
-    expect(screen.getByRole("alert"))
-      .toHaveClass("gc-alert--error")
-      .toHaveTextContent(text)
-      .toHaveTextContent("Error status");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveClass("gc-alert--error");
+    expect(alert).toHaveTextContent(text);
+    expect(alert).toHaveTextContent("Error status");
   });
   test("info alert", () => {
     render(
@@ -46,10 +46,10 @@ describe("Alert component", () => {
         {text}
       </Alert>
     );
-    expect(screen.getByRole("alert"))
-      .toHaveClass("gc-alert--info")
-      .toHaveTextContent(text)
-      .toHaveTextContent("Info status");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveClass("gc-alert--info");
+    expect(alert).toHaveTextContent(text);
+    expect(alert).toHaveTextContent("Info status");
   });
   test("validation alert", () => {
     render(
@@ -57,9 +57,9 @@ describe("Alert component", () => {
         {text}
       </Alert>
     );
-    expect(screen.getByRole("alert"))
-      .toHaveClass("gc-alert--validation")
-      .toHaveTextContent(text)
-      .toHaveTextContent("Validation status");
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveClass("gc-alert--validation");
+    expect(alert).toHaveTextContent(text);
+    expect(alert).toHaveTextContent("Validation status");
   });
 });

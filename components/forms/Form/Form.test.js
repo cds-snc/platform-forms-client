@@ -1,24 +1,54 @@
 import React from "react";
-import { cleanup, render, screen, act } from "@testing-library/react";
+import { cleanup, render, screen, act, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Form from "./Form";
-import mockedDataLayer from "@lib/integration/helpers";
+import { submitToAPI } from "@lib/integration/helpers";
+import { useFlag } from "@lib/hooks/useFlag";
 
-jest.mock("@lib/integration/helpers", () => ({
-  submitToAPI: jest.fn(() => {}),
-}));
+jest.mock("@lib/integration/helpers", () => {
+  const originalModule = jest.requireActual("@lib/integration/helpers");
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: jest.fn(),
+    submitToAPI: jest.fn(),
+  };
+});
 
-jest.useFakeTimers();
+let mockFormTimerState = {
+  canSubmit: true,
+  remainingTime: 0,
+  timerDelay: 0,
+  timeLock: 0,
+};
 
-jest.mock("@lib/hooks/useFlag", () => ({
-  useFlag: jest.fn((flag) => {
-    switch (flag) {
-      case "formTimer":
-        return true;
-      case "reCaptcha":
-        return false;
-    }
-  }),
-}));
+jest.mock("@lib/hooks", () => {
+  const originalModule = jest.requireActual("@lib/hooks");
+  return {
+    __esModule: true,
+    ...originalModule,
+    useFlag: jest.fn((flag) => {
+      switch (flag) {
+        case "formTimer":
+          return true;
+        case "reCaptcha":
+          return false;
+        case "submitToReliabilityQueue":
+          return false;
+        default:
+          return useFlag(flag);
+      }
+    }),
+    useFormTimer: jest.fn(() => [
+      mockFormTimerState,
+      {
+        startTimer: jest.fn(),
+        checkTimer: jest.fn(),
+        disableTimer: jest.fn(),
+      },
+    ]),
+  };
+});
 
 const formConfig = {
   id: 1,
@@ -26,7 +56,36 @@ const formConfig = {
   titleEn: "Test Form",
   titleFr: "Formulaire de test",
   layout: [1, 2],
-  elements: [],
+  elements: [
+    {
+      id: 1,
+      type: "textField",
+      properties: {
+        titleEn: "What is your full name?",
+        titleFr: "Quel est votre nom complet?",
+        validation: {
+          required: false,
+        },
+        description: "",
+        placeholderEn: "",
+        placeholderFr: "",
+      },
+    },
+    {
+      id: 2,
+      type: "textField",
+      properties: {
+        titleEn: "What is your email address?",
+        titleFr: "Quelle est votre adresse électronique?",
+        validation: {
+          required: false,
+        },
+        description: "",
+        placeholderEn: "",
+        placeholderFr: "",
+      },
+    },
+  ],
 };
 
 describe("Generate a form component", () => {
@@ -37,46 +96,54 @@ describe("Generate a form component", () => {
         <div data-testid="test-child"></div>
       </Form>
     );
-    expect(screen.getByTestId("form"))
-      .toBeInTheDocument()
-      .toContainElement(screen.getByTestId("test-child"));
+    const renderedForm = screen.getByTestId("form");
+    expect(renderedForm).toBeInTheDocument();
+    expect(renderedForm).toContainElement(screen.getByTestId("test-child"));
   });
 });
 
 describe("Form Functionality", () => {
-  let mockedSubmitFunction;
-  beforeEach(async () => {
-    mockedSubmitFunction = jest.spyOn(mockedDataLayer, "submitToAPI");
-    await act(async () => {
-      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
-    });
-  });
-  afterEach(() => {
-    mockedSubmitFunction.mockRestore();
-  });
   afterAll(() => {
     cleanup();
   });
 
   it("there is 1 and only 1 submit button", async () => {
+    act(() => {
+      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+    });
     expect(await screen.findAllByRole("button", { type: "submit" })).toHaveLength(1);
   });
 
-  it("Form is submitted", async () => {
-    const submitButton = screen.getByRole("button", { type: "submit" });
-
-    await act(async () => {
-      // complete the timeout to allow the form to be submitted
-      jest.runAllTimers();
-      submitButton.click();
+  it("Form can be submitted", async () => {
+    userEvent.setup();
+    act(() => {
+      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
     });
-    expect(mockedSubmitFunction).toBeCalledTimes(1);
+    expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
+
+    await act(async () => await userEvent.click(screen.getByRole("button", { type: "submit" })));
+
+    await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    userEvent.setup();
+    mockFormTimerState = {
+      canSubmit: false,
+      remainingTime: 5,
+      timerDelay: 5,
+      timeLock: 0,
+    };
+    act(() => {
+      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+    });
     const submitButton = screen.getByRole("button", { type: "submit" });
-    submitButton.click();
+    await waitFor(() => expect(submitButton).toBeInTheDocument());
+
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+
+    await act(async () => await userEvent.click(screen.getByRole("button", { type: "submit" })));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(submitToAPI).not.toBeCalled();
   });
 });

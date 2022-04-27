@@ -7,9 +7,9 @@ describe("ErrorMessage component", () => {
   const text = "This is an error";
   it("renders without errors", () => {
     render(<ErrorMessage>{text}</ErrorMessage>);
-    expect(screen.queryByTestId("errorMessage"))
-      .toBeInTheDocument()
-      .toHaveClass("gc-error-message");
+    const errorMessage = screen.queryByTestId("errorMessage");
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveClass("gc-error-message");
     expect(screen.getByRole("alert")).toBeInTheDocument();
     expect(screen.queryByText(text)).toBeInTheDocument();
   });

@@ -144,14 +144,14 @@ export interface DynamicFormProps {
   language: string;
   router: NextRouter;
   notifyPreviewFlag: boolean;
-  t: TFunction;
   isReCaptchaEnableOnSite?: boolean;
+  children?: (JSX.Element | undefined)[] | null;
+  t: TFunction;
 }
 
 export interface InnerFormProps {
   children?: React.ReactNode;
   language: string;
-  t: TFunction;
 }
 
 export type FileInputResponse = {
@@ -274,3 +274,26 @@ export type CharacterCountMessages = {
   part1Error: string;
   part2Error: string;
 };
+
+// Admin logs
+
+export enum AdminLogAction {
+  Create = "Create",
+  Read = "Read",
+  Update = "Update",
+  Delete = "Delete",
+}
+
+export enum AdminLogEvent {
+  GrantAdminRole = "GrantAdminRole",
+  RevokeAdminRole = "RevokeAdminRole",
+  UploadForm = "UploadForm",
+  UpdateForm = "UpdateForm",
+  DeleteForm = "DeleteForm",
+  RefreshBearerToken = "RefreshBearerToken",
+  GrantInitialFormAccess = "GrantInitialFormAccess",
+  GrantFormAccess = "GrantFormAccess",
+  RevokeFormAccess = "RevokeFormAccess",
+  EnableFeature = "EnableFeature",
+  DisableFeature = "DisableFeature",
+}

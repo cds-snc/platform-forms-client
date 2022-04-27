@@ -1,5 +1,6 @@
 import React from "react";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
@@ -82,7 +83,8 @@ const dropdownData = {
 
 describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   afterEach(cleanup);
-  test("renders without errors", () => {
+  test("renders without errors", async () => {
+    userEvent.setup();
     render(
       <Form t={(key) => key}>
         <GenerateElement element={dropdownData} language={lang} t={(key) => key} />
@@ -93,11 +95,11 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
         lang === "en"
           ? dropdownData.properties.descriptionEn
           : dropdownData.properties.descriptionFr;
-    expect(screen.queryByTestId("dropdown"))
-      .toBeInTheDocument()
-      .toHaveAccessibleDescription(description)
-      .toHaveClass("gc-dropdown")
-      .toHaveDisplayValue("dropdown-initial-option-text");
+    const dropdown = screen.queryByTestId("dropdown");
+    expect(dropdown).toBeInTheDocument();
+    expect(dropdown).toHaveAccessibleDescription(description);
+    expect(dropdown).toHaveClass("gc-dropdown");
+    expect(dropdown).toHaveDisplayValue("dropdown-initial-option-text");
     expect(
       screen.getByRole("combobox", {
         name: title,
@@ -105,11 +107,9 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
     ).toBeInTheDocument();
 
     // Change value
-    fireEvent.select(screen.queryByTestId("dropdown"), {
-      target: {
-        value: dropdownData.properties.choices[2][lang],
-      },
-    });
+    await userEvent.selectOptions(screen.queryByTestId("dropdown"), [
+      dropdownData.properties.choices[2][lang],
+    ]);
     expect(screen.getByTestId("dropdown")).toHaveDisplayValue(
       dropdownData.properties.choices[2][lang]
     );

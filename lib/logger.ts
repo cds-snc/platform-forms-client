@@ -20,7 +20,9 @@ export const logMessage = pino({
     level: (label) => ({ level: label }),
   },
   base: null,
-  prettyPrint: process.env.DEBUG || process.env.NODE_ENV === "development" ? true : false,
+  ...((process.env.DEBUG || process.env.NODE_ENV === "development") && {
+    transport: { target: "pino-pretty" },
+  }),
 });
 
 export const logger =
