@@ -97,7 +97,7 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
 const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
   const templateID = process.env.TEMPLATE_ID;
   const notify = new NotifyClient(
-    process.env.GC_NOTIFY_URL,
+    "https://api.notification.canada.ca",
     process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
   );
 
