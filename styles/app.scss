@@ -1,5 +1,7 @@
-@import "~tailwindcss/base";
-@import "~tailwindcss/components";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Noto+Sans:wght@400;700");
 
 // Custom Variables
 @import "./_mixins";
@@ -10,5 +12,4 @@
 @import "./_header";
 
 // Tailwind Utilities needs to be loaded last to use inline
-@import "~tailwindcss/utilities";
-
+@import "tailwindcss/utilities";

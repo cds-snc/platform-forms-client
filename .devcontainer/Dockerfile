@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:16
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
@@ -8,7 +8,7 @@ COPY migrations /src
 WORKDIR /src
 RUN yarn install 
 
-FROM node:14
+FROM node:16
 
 
 ARG USERNAME=vscode
@@ -19,7 +19,7 @@ COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install
 
-FROM node:14
+FROM node:16
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
@@ -30,7 +30,7 @@ WORKDIR /src
 
 RUN yarn install 
 
-FROM node:14
+FROM node:16
 LABEL maintainer="-"
 
 ARG USERNAME=vscode

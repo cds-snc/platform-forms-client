@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
--Data classification attributes. [#701](https://github.com/cds-snc/platform-forms-client/issues/701)
+- Logging admin activity in database [#700](https://github.com/cds-snc/platform-forms-client/issues/700)
+- Data classification attributes. [#701](https://github.com/cds-snc/platform-forms-client/issues/701)
 
 ### Fixed
 
 ### Changed
+
+- Upgraded NextJS and other associated GCForms dependencies to next major version. [#725](https://github.com/cds-snc/platform-forms-client/pull/725)
+
 ## [1.2.0] 2022-04-19
 
 ### Added
@@ -41,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed maxRecord query argument. This presented little value to the user. The retrieval API will now always return a maximum of up to 10 values at a time. [#694](https://github.com/cds-snc/platform-forms-client/pull/694)
 - Design of DynamicRow component buttons [#528](https://github.com/cds-snc/platform-forms-client/issues/528)
 - Logging strategy. Now sending info, warn and error log types to AWS [#699](https://github.com/cds-snc/platform-forms-client/issues/699)
+- Upgraded NextJS and other associated GCForms dependencies to next major version. [#725](https://github.com/cds-snc/platform-forms-client/pull/725)
 
 ## [1.1.0] 2022-03-04
 

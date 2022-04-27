@@ -2,6 +2,7 @@ import { createMocks } from "node-mocks-http";
 import client from "next-auth/client";
 import users from "@pages/api/users";
 import executeQuery from "@lib/integration/queryManager";
+import { logAdminActivity } from "@lib/adminLogs";
 
 jest.mock("next-auth/client");
 jest.mock("@lib/integration/queryManager");
@@ -14,6 +15,10 @@ jest.mock("@lib/integration/dbConnector", () => {
   };
   return jest.fn(() => mClient);
 });
+
+jest.mock("@lib/adminLogs", () => ({
+  logAdminActivity: jest.fn(),
+}));
 
 describe("Users API endpoint", () => {
   describe("GET: Retrieve list of users", () => {
@@ -228,6 +233,40 @@ describe("Users API endpoint", () => {
       expect(res.statusCode).toBe(404);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "User not found" })
+      );
+    });
+
+    it("Should successfully handle PUT request", async () => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
+      };
+      client.getSession.mockReturnValue(mockSession);
+
+      executeQuery.mockReturnValue({
+        rows: [{ id: "2", email: "test@cds.ca", admin: false }],
+        rowCount: 1,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          userID: "2",
+          isAdmin: "true",
+        },
+      });
+
+      await users(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        1,
+        "Update",
+        "GrantAdminRole",
+        "Admin role has been granted for user id: 2"
       );
     });
   });

@@ -31,6 +31,7 @@ export default NextAuth({
       const extendedInfo = {
         user: {
           ...session.user,
+          id: user.id,
           // set the value explicitly to admin if `user.admin` does not exist.
           // user.admin is undefined if it's the first time a user logs in.
           admin: user.admin ?? false,

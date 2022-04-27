@@ -1,5 +1,6 @@
 import React from "react";
-import { cleanup, render, fireEvent, screen, act } from "@testing-library/react";
+import { cleanup, render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
@@ -24,6 +25,7 @@ describe("JSON Upload Component", () => {
     expect(screen.queryByTestId("jsonInput").value).toBe(JSON.stringify(formConfig, null, 2));
   });
   test("It shows an error message if invalid json is entered", async () => {
+    userEvent.setup();
     const form = {
       formConfig: undefined,
     };
@@ -32,11 +34,13 @@ describe("JSON Upload Component", () => {
     });
     render(<JSONUpload form={form}></JSONUpload>);
     await act(async () => {
-      await fireEvent.click(screen.queryByTestId("upload"));
+      await userEvent.click(screen.queryByTestId("upload"));
     });
+
     expect(screen.queryByTestId("alert")).toBeInTheDocument();
   });
   test("It shows a success message if valid json is entered", async () => {
+    userEvent.setup();
     const form = {
       formConfig: formConfig,
     };
@@ -46,7 +50,7 @@ describe("JSON Upload Component", () => {
 
     render(<JSONUpload form={form}></JSONUpload>);
     await act(async () => {
-      fireEvent.click(screen.queryByTestId("upload"));
+      await userEvent.click(screen.queryByTestId("upload"));
     });
 
     expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
