@@ -1,5 +1,5 @@
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { Schema, Validator } from "jsonschema";
+import { Schema, Validator, ValidatorResult } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export type ValidateOptions = {
@@ -13,14 +13,16 @@ export const jsonValidator = (schema: Schema, options?: ValidateOptions): Middle
         return { next: true };
       }
       const validator = new Validator();
-      const validatorResult = validator.validate(
+      const validatorResult: ValidatorResult = validator.validate(
         options?.jsonKey ? req.body[options.jsonKey] : req.body,
         schema
       );
       if (validatorResult.valid) {
         return { next: true };
       } else {
-        res.status(400).json({ error: validatorResult.errors.toString() });
+        res
+          .status(400)
+          .json({ error: "JSON Validation Error: " + validatorResult.errors.toString() });
         return { next: false };
       }
     } catch {

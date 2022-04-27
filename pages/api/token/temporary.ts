@@ -97,7 +97,7 @@ const updateTemporaryToken = async (
 const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) => {
   const sendTempTokenTemplateID = process.env.TEMPORAY_TOKEN_TEMPLATE_ID;
   const notifyClient = new NotifyClient(
-    process.env.GC_NOTIFY_URL,
+    "https://api.notification.canada.ca",
     process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
   );
 

@@ -47,18 +47,20 @@ const AdminEnable = ({
       onClick={() => updateAdminValue(user.id, !isAdmin).then(() => refreshData())}
       disabled={isRefreshing}
     >
-      {isAdmin ? t("disable") : t("enable")}
-      <span className="sr-only">{`${t("a11y-diable-desc")} ${user.name}`}</span>
+      <>
+        {isAdmin ? t("disable") : t("enable")}
+        <span className="sr-only">{`${t("a11y-diable-desc")} ${user.name}`}</span>
+      </>
     </Button>
   );
 };
 
 interface UserRowProps {
   user: AuthenticatedUser;
-  t: TFunction;
 }
 
-const UserRow = ({ user, t }: UserRowProps) => {
+const UserRow = ({ user }: UserRowProps) => {
+  const { t } = useTranslation();
   // Logic check for user.id simplifies typescript check
   if (user.id) {
     return (
@@ -90,7 +92,7 @@ const Users = ({ users }: UserProps): React.ReactElement => {
             <th>{t("admin")}</th>
           </tr>
           {users.map((user) => {
-            return <UserRow key={user.id} user={user} t={t} />;
+            return <UserRow key={user.id} user={user} />;
           })}
         </table>
       </div>

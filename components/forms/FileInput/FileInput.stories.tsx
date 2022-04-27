@@ -23,7 +23,7 @@ const inputProps = {
 export const defaultFileInput = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ file: "" }}
   >

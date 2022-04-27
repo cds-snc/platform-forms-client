@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
-import { FormSchemaProperties } from "../../../lib/types";
-import { TFunction } from "next-i18next";
-import { getProperty } from "../../../lib/formBuilder";
+import { FormSchemaProperties } from "@lib/types";
+import { getProperty } from "@lib/formBuilder";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -15,11 +14,18 @@ interface TextPageProps {
   htmlEmail: string | undefined;
 }
 
-const getPageContent = (t: TFunction, pageText: string, urlQuery: string | null) => {
+interface PageContextProps {
+  pageText: string;
+  urlQuery: string | null;
+}
+
+const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{pageText}</RichText>;
   }
+
+  const { t } = useTranslation("confirmation");
 
   // Otherwise, display the default confirmation text
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
@@ -37,7 +43,7 @@ const getPageContent = (t: TFunction, pageText: string, urlQuery: string | null)
 };
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
-  const { t, i18n } = useTranslation("confirmation");
+  const { i18n } = useTranslation("confirmation");
   const { formConfig, htmlEmail } = props;
   const language = i18n.language as string;
 
@@ -58,14 +64,14 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
 
   return (
     <>
-      {getPageContent(t, pageText, urlQuery)}
+      <PageContent pageText={pageText} urlQuery={urlQuery} />
 
-      {htmlEmail ? (
+      {htmlEmail && (
         <div className="p-5 mt-5 border-double border-gray-400 border-4">
           <h2>Email to Form Owner Below:</h2>
           <div className="pt-5 email-preview">{parse(htmlEmail)}</div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };

@@ -2,7 +2,7 @@ import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { User } from "next-auth";
 
-import { logMessage } from "./logger";
+import { logMessage } from "@lib/logger";
 
 /**
  * Get all users

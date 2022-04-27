@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 import { ProcessedFile, UploadResult } from "./types";
-import { logMessage } from "./logger";
+import { logMessage } from "@lib/logger";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 

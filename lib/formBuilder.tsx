@@ -1,5 +1,5 @@
 import React, { ReactElement, Fragment } from "react";
-import { logger, logMessage } from "./logger";
+import { logger, logMessage } from "@lib/logger";
 import {
   Dropdown,
   Label,
@@ -215,14 +215,14 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     case "richText":
       return (
         <>
-          {labelText ? <h3 className="gc-h3">{labelText}</h3> : null}
+          {labelText && <h3 className="gc-h3">{labelText}</h3>}
           <RichText>{description}</RichText>
         </>
       );
     case "fileInput":
       return (
         <div className="focus-group">
-          {labelText ? (
+          {labelText && (
             <Label
               key={`label-${id}`}
               id={`label-${id}`}
@@ -231,7 +231,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             >
               {labelText}
             </Label>
-          ) : null}
+          )}
           {description && <Description id={`${id}`}>{description}</Description>}
           <FileInput
             id={`${id}`}

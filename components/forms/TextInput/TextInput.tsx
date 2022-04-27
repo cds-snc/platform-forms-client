@@ -73,7 +73,7 @@ export const TextInput = (props: TextInputProps): React.ReactElement => {
 
   return (
     <>
-      {meta.error ? <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage> : null}
+      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
       <input
         data-testid="textInput"
         className={classes}

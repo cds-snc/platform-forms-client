@@ -2,6 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers, adminRole } from "@lib/users";
+import { AdminLogAction, AdminLogEvent, MiddlewareProps } from "@lib/types";
+import { logAdminActivity } from "@lib/adminLogs";
+import { Session } from "next-auth";
 
 const allowedMethods = ["GET", "PUT"];
 
@@ -14,7 +17,11 @@ const getUserAdminStatus = async (res: NextApiResponse) => {
   }
 };
 
-const updateUserAdminStatus = async (req: NextApiRequest, res: NextApiResponse) => {
+const updateUserAdminStatus = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session?: Session
+) => {
   const { userID, isAdmin } = req.body;
   if (typeof userID === "undefined" || typeof isAdmin === "undefined") {
     return res.status(400).json({ error: "Malformed Request" });
@@ -22,6 +29,14 @@ const updateUserAdminStatus = async (req: NextApiRequest, res: NextApiResponse) 
   const [success, userFound] = await adminRole(isAdmin, userID);
 
   if (success && userFound) {
+    if (session && session.user.id) {
+      await logAdminActivity(
+        session.user.id,
+        AdminLogAction.Update,
+        isAdmin ? AdminLogEvent.GrantAdminRole : AdminLogEvent.RevokeAdminRole,
+        `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userID}`
+      );
+    }
     res.status(200).send("Success");
   } else if (success) {
     res.status(404).json({ error: "User not found" });
@@ -30,10 +45,14 @@ const updateUserAdminStatus = async (req: NextApiRequest, res: NextApiResponse) 
   }
 };
 
-const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  { session }: MiddlewareProps
+): Promise<void> => {
   switch (req.method) {
     case "PUT":
-      await updateUserAdminStatus(req, res);
+      await updateUserAdminStatus(req, res, session);
       break;
     case "GET":
       await getUserAdminStatus(res);

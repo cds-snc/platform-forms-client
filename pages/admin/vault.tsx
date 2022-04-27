@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "../../lib/auth";
-import { getFormByID } from "../../lib/integration/helpers";
-import convertMessage from "../../lib/markdown";
+import { requireAuthentication } from "@lib/auth";
+import { getFormByID } from "@lib/integration/helpers";
+import convertMessage from "@lib/markdown";
 import { Button, RichText } from "../../components/forms";
-import { PublicFormSchemaProperties } from "../../lib/types";
+import { PublicFormSchemaProperties } from "@lib/types";
 import { logMessage } from "@lib/logger";
 
 interface ResponseListInterface {
@@ -112,7 +112,7 @@ const FormResponse = ({
         <RichText className="email-preview">{response}</RichText>
       </div>
       <div className="inline-block justify-center flex space-x-20">
-        {index > 0 ? (
+        {index > 0 && (
           <Button
             className="gc-button rounded-lg float-left"
             type="button"
@@ -124,9 +124,9 @@ const FormResponse = ({
           >
             {t("backButton")}
           </Button>
-        ) : null}
+        )}
 
-        {index < submissionArray.length - 1 ? (
+        {index < submissionArray.length - 1 && (
           <Button
             className="gc-button rounded-lg float-right"
             type="button"
@@ -138,7 +138,7 @@ const FormResponse = ({
           >
             {t("nextButton")}
           </Button>
-        ) : null}
+        )}
       </div>
     </>
   );

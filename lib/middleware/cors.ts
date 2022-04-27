@@ -4,7 +4,7 @@ import { logMessage } from "@lib/logger";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 
 const corsHandler = (options: Cors.CorsOptions): MiddlewareRequest => {
-  logMessage.info("Initializing Cors options");
+  logMessage.debug("Initializing Cors options");
   const initializedCors = Cors({ ...options });
 
   return (req: NextApiRequest, res: NextApiResponse) =>

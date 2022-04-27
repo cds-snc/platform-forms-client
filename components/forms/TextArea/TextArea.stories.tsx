@@ -14,7 +14,7 @@ export default {
 export const defaultTextArea = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >
@@ -34,7 +34,7 @@ export const defaultTextArea = (): React.ReactElement => (
 export const withDefaultValue = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >
@@ -55,7 +55,7 @@ export const withDefaultValue = (): React.ReactElement => (
 export const withPlaceholder = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >
@@ -76,7 +76,7 @@ export const withPlaceholder = (): React.ReactElement => (
 export const disabled = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >
@@ -97,7 +97,7 @@ export const disabled = (): React.ReactElement => (
 export const readonly = (): React.ReactElement => (
   <Formik
     onSubmit={(values) => {
-      logMessage.log(values);
+      logMessage.debug(values);
     }}
     initialValues={{ inputTypeText: "" }}
   >

@@ -1,7 +1,7 @@
 import pino from "pino";
 // create pino loggger
 export const logMessage = pino({
-  level: process.env.DEBUG ? "debug" : process.env.NODE_ENV === "development" ? "info" : "warn",
+  level: process.env.NODE_ENV === "development" ? "debug" : "info",
   browser: {
     asObject: true,
     transmit: {
@@ -20,7 +20,9 @@ export const logMessage = pino({
     level: (label) => ({ level: label }),
   },
   base: null,
-  prettyPrint: process.env.DEBUG || process.env.NODE_ENV === "development" ? true : false,
+  ...((process.env.DEBUG || process.env.NODE_ENV === "development") && {
+    transport: { target: "pino-pretty" },
+  }),
 });
 
 export const logger =
