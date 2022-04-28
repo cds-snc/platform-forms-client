@@ -1,5 +1,5 @@
 describe("Forms Functionality", () => {
-  describe.skip("text field tests", () => {
+  describe("text field tests", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", false);
       cy.mockForm("../../tests/data/textFieldTestForm.json");
