@@ -90,7 +90,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               e.preventDefault();
             }
           }}
-          className="gc-file-input-upload-button"
+          className="gc-button gc-button--secondary gc-file-input-upload-button"
           aria-disabled={disabled}
           aria-labelledby="file-input-button-text"
           aria-describedby={`${name}_file_selected ${ariaDescribedBy} ${
