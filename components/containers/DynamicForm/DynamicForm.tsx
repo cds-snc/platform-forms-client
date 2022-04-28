@@ -7,7 +7,6 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { DynamicFormProps } from "@lib/types";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
-import { csrfToken } from "next-auth/client";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step

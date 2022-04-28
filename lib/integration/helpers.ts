@@ -262,6 +262,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
     method: "POST",
     headers: {
       "Content-Language": language,
+      "CSRF-Token": csrfToken,
     },
     data: formDataObject,
 

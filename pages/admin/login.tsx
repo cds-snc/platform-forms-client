@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/client";
+import { getSession, getCsrfToken } from "next-auth/client";
 import Login from "@components/containers/Auth/Login";
-import { getCsrfToken } from "next-auth/client";
+import PropTypes from "prop-types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
