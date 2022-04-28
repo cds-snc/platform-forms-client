@@ -2,6 +2,7 @@ import { getFormByID } from "@lib/integration/crud";
 import DynamicForm from "@components/containers/DynamicForm/DynamicForm";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "@lib/flags";
+import { getCsrfToken } from "next-auth/client";
 
 export async function getServerSideProps(context) {
   const unpublishedForms = await checkOne("unpublishedForms");
@@ -35,6 +36,7 @@ export async function getServerSideProps(context) {
     props: {
       formConfig: form,
       isEmbeddable: isEmbeddable,
+      csrfToken: await getCsrfToken(context),
       ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
     }, // will be passed to the page component as props
   };

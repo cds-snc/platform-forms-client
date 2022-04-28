@@ -251,7 +251,7 @@ function _handleFormDataArray(key: string, value: Array<string>): [string, strin
 }
 
 async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormProps, FormValues>) {
-  const { language, router, formConfig, notifyPreviewFlag } = formikBag.props;
+  const { language, router, formConfig, notifyPreviewFlag, csrfToken } = formikBag.props;
   const { setStatus } = formikBag;
 
   const formDataObject = _buildFormDataObject(formConfig, values);

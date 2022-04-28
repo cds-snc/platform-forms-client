@@ -31,7 +31,7 @@ declare global {
 const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicFormProps> = (
   props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps
 ) => {
-  const { children, handleSubmit, isSubmitting, formConfig } = props;
+  const { children, handleSubmit, isSubmitting, formConfig, csrfToken } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
@@ -219,6 +219,7 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
           <div className="buttons">
             <Button type="submit">{t("submitButton")}</Button>
           </div>
+          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
         </div>
       </form>
     </>

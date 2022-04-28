@@ -146,6 +146,7 @@ export interface DynamicFormProps {
   isReCaptchaEnableOnSite?: boolean;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
+  csrfToken: string;
 }
 
 export interface InnerFormProps {

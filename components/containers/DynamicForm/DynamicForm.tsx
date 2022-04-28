@@ -7,13 +7,14 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { DynamicFormProps } from "@lib/types";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
+import { csrfToken } from "next-auth/client";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
 */
 
 export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
-  const { formConfig } = props;
+  const { formConfig, csrfToken } = props;
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
@@ -42,6 +43,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
         router={router}
         t={t}
         notifyPreviewFlag={notifyPreviewFlag}
+        csrfToken={csrfToken}
       >
         {currentForm}
       </Form>
