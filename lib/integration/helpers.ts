@@ -11,6 +11,7 @@ import {
   Submission,
   PublicFormSchemaProperties,
 } from "../types";
+import { getCsrfToken } from "next-auth/client";
 
 // Get the form json object by using the form ID
 // Returns => json object of form
@@ -262,6 +263,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
     method: "POST",
     headers: {
       "Content-Language": language,
+      "X-CSRF-Token": (await getCsrfToken()) as string,
     },
     data: formDataObject,
 

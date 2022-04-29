@@ -20,6 +20,7 @@ import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { Readable } from "stream";
+import { middleware, cors, csrfProtected } from "@lib/middleware";
 
 export const config = {
   api: {
@@ -358,4 +359,4 @@ const processFormData = async (
   }
 };
 
-export default submit;
+export default middleware([cors({ allowedMethods: ["POST"] }), csrfProtected()], submit);
