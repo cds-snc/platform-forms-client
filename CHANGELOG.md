@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Logging admin activity in database [#700](https://github.com/cds-snc/platform-forms-client/issues/700)
+- Add Cross-Site Request Forgery (CSRF) [#716] (https://github.com/cds-snc/platform-forms-client/issues/716)
 
 ### Fixed
 
