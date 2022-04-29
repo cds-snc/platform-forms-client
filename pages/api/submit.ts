@@ -34,10 +34,7 @@ const lambdaClient = new LambdaClient({
   endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
 });
 
-const submit = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<void | NodeJS.Timeout> => {
+const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     // we use the raw stream as opposed to enabling bodyParsing as NextJS enforces a 5mb limit on payload if bodyParsing is enabled
     // https://nextjs.org/docs/messages/api-routes-body-size-limit

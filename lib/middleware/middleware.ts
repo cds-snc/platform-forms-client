@@ -10,13 +10,9 @@ import { NextApiRequest, NextApiResponse } from "next";
  */
 export const middleware = (
   middlewareArray: Array<MiddlewareRequest>,
-  handler: (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    props: MiddlewareProps
-  ) => Promise<void | NodeJS.Timeout>
+  handler: (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => Promise<void>
 ) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<void | NodeJS.Timeout> => {
+  return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
       let props = {};
       for (const middlewareLayer of middlewareArray) {
