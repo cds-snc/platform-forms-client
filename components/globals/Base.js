@@ -8,7 +8,7 @@ import Fip from "./Fip";
 import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
-import { SecurityAttributeBadge } from "./SecurityBadge";
+import SecurityAttributeBadge from "./SecurityBadge";
 
 const Base = ({ children }) => {
   const formConfig =
