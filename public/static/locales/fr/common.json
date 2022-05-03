@@ -76,7 +76,7 @@
     "delete": "Supprimer"
   },
   "securityAttributeBadge": {
-    "protected-desc": "Protegé une fois rempli.",
-    "desc": "Non Protegé."
+    "protected-desc": " une fois rempli",
+    "desc": "Non classifié"
   }
 }

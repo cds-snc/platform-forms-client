@@ -76,7 +76,7 @@
     "delete": "Delete"
   },
   "securityAttributeBadge": {  
-    "protected-desc": "Protected when completed.",
-    "desc": "Unprotected"
+    "protected-desc": " when complete",
+    "desc": "unclassified"
   }
 }
