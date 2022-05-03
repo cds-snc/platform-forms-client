@@ -36,7 +36,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
       <Head>
         <title>{formTitle}</title>
       </Head>
-      {formConfig?.securityAttribute && (
+      {formConfig.securityAttribute && (
         <SecurityAttributeBadge
           securityLevel={formConfig.securityAttribute}
         ></SecurityAttributeBadge>

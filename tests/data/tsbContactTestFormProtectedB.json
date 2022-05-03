@@ -1,15 +1,17 @@
 {
   "form": {
     "brand": {
-      "name": "tsb-bst",
-      "urlEn": "https://bst-tsb.gc.ca/eng/index.html",
-      "urlFr": "https://bst-tsb.gc.ca/fra/index.html",
-      "logoEn": "/img/tsb-en.png",
-      "logoFr": "/img/tsb-fr.png",
-      "logoTitleEn": "Protected B Transportation Safety Board of Canada",
-      "logoTitleFr": "Protected B Bureau de la sécurité des transports du Canada"
+      "name": "cds-snc",
+      "urlEn": "https://digital.canada.ca/",
+      "urlFr": "https://numerique.canada.ca/",
+      "logoEn": "https://digital.canada.ca/img/cds/cds-lockup-ko-en.svg",
+      "logoFr": "https://numerique.canada.ca/img/cds/cds-lockup-ko-fr.svg",
+      "logoTitleEn": "Canadian Digital Service",
+      "logoTitleFr": "Service numérique canadien"
     },
     "layout": [
+      8,
+      10,
       1,
       2,
       3,
@@ -19,35 +21,39 @@
       7
     ],
     "endPage": {
-      "descriptionEn": "#Thank you for your message \n\r The Transportation Safety Board of Canada will respond to you within a week. \n\r <a href='https://www.tsb.gc.ca/eng/index.html'>Go back.</a>",
-      "descriptionFr": "#Merci pour votre message  \n\r Le Bureau de la sécurité des transports du Canada vous répondra d’ici une semaine. \n\r <a href='https://www.tsb.gc.ca/fra/index.html'>Retour.</a>"
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "referrerUrlEn": "https://digital.canada.ca/",
+      "referrerUrlFr": "https://numerique.canada.ca/"
     },
-    "titleEn": "Protected B Transportation Safety Board of Canada general enquiries",
-    "titleFr": "Demandes de renseignements au Bureau de la sécurité des transports du Canada",
+    "titleEn": "Raphael Test - CDS Intake Form",
+    "titleFr": "Raphael Test - SNC Formulaire d'admission",
     "version": 1,
     "elements": [
       {
         "id": 1,
-        "type": "richText",
+        "type": "textField",
         "properties": {
-          "titleEn": "",
-          "titleFr": "",
+          "titleEn": "What is your full name?",
+          "titleFr": "Quel est votre nom complet?",
           "validation": {
-            "required": false
+            "required": true,
+            "maxLength": 100
           },
-          "descriptionEn": "Thank you for your interest in the TSB. Send your question using the form below. \n\r Find out how <a href='https://www.tsb.gc.ca/eng/avis-notices/avis-notices.html#priv'>the TSB protects your privacy</a>.",
-          "descriptionFr": "Merci de vous intéresser au BST. Faites-nous parvenir vos questions en utilisant le formulaire suivant. \n\r Apprenez comment <a href='https://www.tsb.gc.ca/fra/avis-notices/avis-notices.html#priv'>le BST protége votre confidentialité</a>."
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
         }
       },
       {
         "id": 2,
         "type": "textField",
         "properties": {
-          "titleEn": "Full name",
-          "titleFr": "Nom complet",
+          "titleEn": "What is your email address?",
+          "titleFr": "Quelle est votre adresse électronique?",
           "validation": {
-            "type": "name",
-            "required": true
+            "required": true,
+            "maxLength": 100
           },
           "description": "",
           "placeholderEn": "",
@@ -58,132 +64,221 @@
         "id": 3,
         "type": "textField",
         "properties": {
-          "titleEn": "Email",
-          "titleFr": "Courriel",
+          "titleEn": "What department do you work for?",
+          "titleFr": "Pour quel service travaillez-vous?",
           "validation": {
-            "type": "email",
-            "required": true
+            "required": false,
+            "maxLength": 100
           },
-          "descriptionEn": "",
-          "descriptionFr": "",
+          "description": "",
           "placeholderEn": "",
           "placeholderFr": ""
         }
       },
       {
         "id": 4,
-        "type": "checkbox",
+        "type": "textField",
         "properties": {
-          "choices": [
-            {
-              "en": "Access to Information and Privacy (ATIP)",
-              "fr": "Accès à l’information et protection des renseignements personnels (AIPRP)"
-            },
-            {
-              "en": "Air, marine, pipeline, or rail accident or incident",
-              "fr": "Accident ou incident de transport aérien, ferroviaire, maritime ou pipelinier"
-            },
-            {
-              "en": "Copyright and permissions",
-              "fr": "Droit d’auteur et permissions"
-            },
-            {
-              "en": "Investigation report or lab report",
-              "fr": "Rapport d’enquête ou de laboratoire"
-            },
-            {
-              "en": "Statistics",
-              "fr": "Site Web"
-            },
-            {
-              "en": "Website",
-              "fr": "Statistiques"
-            },
-            {
-              "en": "Other",
-              "fr": "Autres"
-            }
-          ],
-          "titleEn": "What kind of information do you need?",
-          "titleFr": "Dites-nous de quel type de renseignements vous avez besoin.",
+          "titleEn": "What is the name of your service?",
+          "titleFr": "Quel est le nom de votre service?",
+          "charLimit": 100,
           "validation": {
             "required": false
           },
-          "descriptionEn": "Select all that apply.",
-          "descriptionFr": "Cocher toutes les cases qui s’appliquent"
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
         }
       },
       {
         "id": 5,
-        "type": "textField",
+        "type": "textArea",
         "properties": {
-          "titleEn": "If you checked Other, please specify",
-          "titleFr": "Si vous avez coché Autres, veuillez préciser",
+          "titleEn": "What is the problem you are facing",
+          "titleFr": "Quel est le problème auquel vous êtes confronté?",
           "validation": {
-            "type": "text",
-            "required": false
+            "required": false,
+            "maxLength": 100
           },
-          "descriptionEn": "Tell us the subject of your question. e.g., training, jobs",
-          "descriptionFr": "Dites-nous le sujet de votre question, p. ex. formation, emploi.",
+          "description": "",
           "placeholderEn": "",
           "placeholderFr": ""
         }
       },
       {
         "id": 6,
-        "type": "textArea",
+        "type": "textField",
         "properties": {
-          "titleEn": "Message",
-          "titleFr": "Votre message",
+          "titleEn": "What is your timeline?",
+          "titleFr": "Quel est votre calendrier?",
+          "charLimit": 100,
           "validation": {
-            "required": true
+            "required": false
           },
-          "descriptionEn": "Any relevant details or specific questions",
-          "descriptionFr": "Donnez-nous des détails qui nous aideront à vous aider, p. ex. URL, dates, lieux.",
+          "description": "",
           "placeholderEn": "",
           "placeholderFr": ""
         }
       },
       {
         "id": 7,
-        "type": "checkbox",
+        "type": "textArea",
         "properties": {
-          "choices": [
-            {
-              "en": "Air (daily)",
-              "fr": "Aérien (quotidien)"
-            },
-            {
-              "en": "Marine (daily)",
-              "fr": "Ferroviaire (quotidien)"
-            },
-            {
-              "en": "Pipeline (monthly)",
-              "fr": "Maritime (quotidien)"
-            },
-            {
-              "en": "Rail (daily)",
-              "fr": "Pipelinier (mensuel)"
-            }
-          ],
-          "titleEn": "Notifications",
-          "titleFr": "Notifications",
+          "titleEn": "How did you hear about us?",
+          "titleFr": "Comment avez-vous entendu parler de nous?",
+          "charLimit": 100,
           "validation": {
             "required": false
           },
-          "descriptionEn": "I would like to receive notifications of transportation accidents and incidents.",
-          "descriptionFr": "J’aimerais être prévenu des accidents et incidents de transport"
+          "descriptionEn": "Text for description",
+          "descriptionFr": "Texte pour la description"
+        }
+      },
+      {
+        "id": 8,
+        "type": "dynamicRow",
+        "properties": {
+          "titleEn": "I'm the title",
+          "titleFr": "Je suis le titre",
+          "validation": {
+            "required": true
+          },
+          "subElements": [
+            {
+              "id": 2,
+              "type": "richText",
+              "properties": {
+                "charLimit": 5000,
+                "validation": {
+                  "required": false
+                },
+                "descriptionEn": "If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below.",
+                "descriptionFr": "[FR] - If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below."
+              }
+            },
+            {
+              "id": 1,
+              "type": "dropdown",
+              "properties": {
+                "choices": [
+                  {
+                    "en": "Access Copyright",
+                    "fr": "Access Copyright"
+                  },
+                  {
+                    "en": "Artisti",
+                    "fr": "Artisti"
+                  },
+                  {
+                    "en": "Border Broadcasters Inc",
+                    "fr": "Border Broadcasters Inc"
+                  },
+                  {
+                    "en": "Canadian Broadcasters Rights Agency",
+                    "fr": "Agences des droits des radiodiffuseurs canadiens"
+                  },
+                  {
+                    "en": "Copyright Collective of Canada",
+                    "fr": "Société de perception de droit d’auteur du Canada"
+                  },
+                  {
+                    "en": "Canadian Musical Reproduction Rights Agency",
+                    "fr": "Agence canadienne des droits de reproduction musicaux"
+                  },
+                  {
+                    "en": "Connect Music Licensing",
+                    "fr": "Connect Music Licensing"
+                  },
+                  {
+                    "en": "Canadian Private Copying Collective",
+                    "fr": "Société canadienne de perception de la copie privée"
+                  },
+                  {
+                    "en": "Canadian Retransmission Collective",
+                    "fr": "Société collective de retransmission du Canada"
+                  },
+                  {
+                    "en": "Canadian Retransmission Right Association",
+                    "fr": "Association du droit de retransmission canadien"
+                  },
+                  {
+                    "en": "Direct Response Television Collective Inc.",
+                    "fr": "Société de gestion collective de publicité directe télévisuelle inc."
+                  },
+                  {
+                    "en": "FWS Joint Sports Claimants Inc",
+                    "fr": "FWS Joint Sports Claimants Inc"
+                  },
+                  {
+                    "en": "Major League Baseball Collective of Canada, Inc.",
+                    "fr": "Société de perception de la ligue de baseball majeure du Canada, inc."
+                  },
+                  {
+                    "en": "Re:Sound Music Licensing Company",
+                    "fr": "Ré:Sonne - Société de gestion de la musique"
+                  },
+                  {
+                    "en": "Society of Composers, Authors and Music Publishers of Canada",
+                    "fr": "Société canadienne des auteurs, compositeurs et éditeurs de musique"
+                  },
+                  {
+                    "en": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec",
+                    "fr": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec"
+                  },
+                  {
+                    "en": "Société québécoise de gestion collective des droits de reproduction",
+                    "fr": "Société québécoise de gestion collective des droits de reproduction"
+                  }
+                ],
+                "titleEn": "On behalf of which Collective Society are you filing the proposed tariff(s)?",
+                "titleFr": "[fr] On behalf of which Collective Society are you filing the proposed tariff(s)?",
+                "validation": {
+                  "required": true
+                },
+                "descriptionEn": "",
+                "descriptionFr": ""
+              }
+            },
+            {
+              "id": 9,
+              "type": "fileInput",
+              "properties": {
+                "titleEn": "Upload your profile image",
+                "titleFr": "Télécharger votre image de profil",
+                "fileType": "image/*,.pdf",
+                "descriptionEn": "Provide an image of yourself to add to your profile on the website",
+                "descriptionFr": "Ajouter une photo de vous meme a votre profil sur le site web"
+              }
+            }
+          ],
+          "placeholderEn": "Row",
+          "placeholderFr": "Ranger"
+        }
+      },
+      {
+        "id": 10,
+        "type": "richText",
+        "properties": {
+          "titleEn": "Info",
+          "titleFr": "Info",
+          "charLimit": 1000,
+          "validation": {
+            "required": false
+          },
+          "descriptionEn": "Please provide us with your contact information so that we can mail your documents to you.",
+          "descriptionFr": "Veuillez nous fournir vos coordonnées afin que nous puissions vous envoyer vos documents",
+          "placeholderEn": "",
+          "placeholderFr": ""
         }
       }
     ],
-    "emailSubjectEn": "TSB general enquiries",
-    "emailSubjectFr": "Renseignements généraux BST"
+    "startPage": {}
   },
   "submission": {
-    "email": "forms-formulaires@cds-snc.ca"
+    "vault": true
   },
-  "internalTitleEn": "Contact Us - TSB",
-  "internalTitleFr": "Nous joindre - BST",
-  "publishingStatus": true,
-  "securityAttribute": "Unclassified"
+  "internalTitleEn": "Raphael Test 0 - CDS Intake Form",
+  "internalTitleFr": "Raphael Test 0 - SNC Formulaire d'admission",
+  "publishingStatus": false,
+  "securityAttribute": "Protected B"
 }
