@@ -8,6 +8,7 @@ import Fip from "./Fip";
 import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "../../lib/routeUtils";
+import { SecurityAttributeBadge } from "./SecurityBadge";
 
 const Base = ({ children }) => {
   const formConfig =
@@ -38,7 +39,15 @@ const Base = ({ children }) => {
             {isAdmin && <AdminNav user={children.props.user} />}
           </header>
         )}
-        <main id="content">{children}</main>
+
+        <main id="content">
+          {formConfig?.securityAttribute && (
+            <SecurityAttributeBadge
+              securityLevel={formConfig.securityAttribute}
+            ></SecurityAttributeBadge>
+          )}
+          {children}
+        </main>
         {!isEmbeddable && <Footer />}
       </div>
     </>

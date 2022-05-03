@@ -298,3 +298,8 @@ export enum AdminLogEvent {
   EnableFeature = "EnableFeature",
   DisableFeature = "DisableFeature",
 }
+
+export interface SecurityAttributeBadgeProps {
+  securityLevel: string;
+  className?: string;
+}

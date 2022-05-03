@@ -74,5 +74,9 @@
   "dynamicRow": {
     "add": "Add",
     "delete": "Delete"
+  },
+  "securityAttributeBadge": {  
+    "protected-desc": "Protected when completed.",
+    "desc": "Unprotected"
   }
 }

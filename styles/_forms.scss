@@ -461,3 +461,7 @@
     @apply font-bold md:text-small_p;
   }
 }
+
+.gc-security-badge {
+    @apply bg-red-100 text-red-700 text-small_sm font-semibold mr-2 px-0 py-0.5 rounded dark:bg-red-200 dark:text-red-900;
+}
