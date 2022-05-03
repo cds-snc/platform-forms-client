@@ -9,7 +9,11 @@ const SecurityAttributeBadge = (props: SecurityAttributeBadgeProps) => {
     : props.securityLevel + t("securityAttributeBadge.desc");
   return (
     <div className={props.className}>
-      <span className="gc-security-badge" aria-describedby="security-attribute-desc">
+      <span
+        id="security-attribute-content"
+        className="gc-security-badge"
+        aria-describedby="security-attribute-desc"
+      >
         {content}
       </span>
       <p id="security-attribute-desc" hidden={true}>
