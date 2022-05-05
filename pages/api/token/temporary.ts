@@ -98,7 +98,7 @@ const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) 
   const sendTempTokenTemplateID = process.env.TEMPORARY_TOKEN_TEMPLATE_ID;
   const notifyClient = new NotifyClient(
     "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
+    process.env.NOTIFY_API_KEY
   );
 
   // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
