@@ -1,4 +1,4 @@
-name: Staging — Push container to ECR
+name: "Staging — Push container to ECR"
 
 on:
   push:
