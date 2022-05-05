@@ -6,10 +6,10 @@ describe("TSB Contact Form with security attribute (Protected B)", () => {
   });
 
   it("TSB Contact Form renders", () => {
-    cy.get("h1").contains("Raphael Test - CDS Intake Form");
+    cy.get("h1").contains("Protected CDS Intake Form");
   });
 
   it("Should render the badge", () => {
-    cy.get("#security-attribute-content").contains("Protected B when complete");
+    cy.get("[data-testid='security-badge']").contains("Protected B when complete");
   });
 });

@@ -10,15 +10,8 @@
       "logoTitleFr": "Service numérique canadien"
     },
     "layout": [
-      8,
-      10,
       1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7
+      2
     ],
     "endPage": {
       "descriptionEn": "",
@@ -26,8 +19,8 @@
       "referrerUrlEn": "https://digital.canada.ca/",
       "referrerUrlFr": "https://numerique.canada.ca/"
     },
-    "titleEn": "Raphael Test - CDS Intake Form",
-    "titleFr": "Raphael Test - SNC Formulaire d'admission",
+    "titleEn": "Protected CDS Intake Form",
+    "titleFr": "SNC Formulaire d'admission",
     "version": 1,
     "elements": [
       {
@@ -37,8 +30,7 @@
           "titleEn": "What is your full name?",
           "titleFr": "Quel est votre nom complet?",
           "validation": {
-            "required": true,
-            "maxLength": 100
+            "required": true
           },
           "description": "",
           "placeholderEn": "",
@@ -52,233 +44,21 @@
           "titleEn": "What is your email address?",
           "titleFr": "Quelle est votre adresse électronique?",
           "validation": {
-            "required": true,
-            "maxLength": 100
-          },
-          "description": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 3,
-        "type": "textField",
-        "properties": {
-          "titleEn": "What department do you work for?",
-          "titleFr": "Pour quel service travaillez-vous?",
-          "validation": {
-            "required": false,
-            "maxLength": 100
-          },
-          "description": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 4,
-        "type": "textField",
-        "properties": {
-          "titleEn": "What is the name of your service?",
-          "titleFr": "Quel est le nom de votre service?",
-          "charLimit": 100,
-          "validation": {
-            "required": false
-          },
-          "description": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 5,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "What is the problem you are facing",
-          "titleFr": "Quel est le problème auquel vous êtes confronté?",
-          "validation": {
-            "required": false,
-            "maxLength": 100
-          },
-          "description": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 6,
-        "type": "textField",
-        "properties": {
-          "titleEn": "What is your timeline?",
-          "titleFr": "Quel est votre calendrier?",
-          "charLimit": 100,
-          "validation": {
-            "required": false
-          },
-          "description": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 7,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "How did you hear about us?",
-          "titleFr": "Comment avez-vous entendu parler de nous?",
-          "charLimit": 100,
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Text for description",
-          "descriptionFr": "Texte pour la description"
-        }
-      },
-      {
-        "id": 8,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "I'm the title",
-          "titleFr": "Je suis le titre",
-          "validation": {
             "required": true
           },
-          "subElements": [
-            {
-              "id": 2,
-              "type": "richText",
-              "properties": {
-                "charLimit": 5000,
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below.",
-                "descriptionFr": "[FR] - If you are filing a joint tariff, please add the other collective(s). You can add another collective society, up to ten, by clicking 'add row' below."
-              }
-            },
-            {
-              "id": 1,
-              "type": "dropdown",
-              "properties": {
-                "choices": [
-                  {
-                    "en": "Access Copyright",
-                    "fr": "Access Copyright"
-                  },
-                  {
-                    "en": "Artisti",
-                    "fr": "Artisti"
-                  },
-                  {
-                    "en": "Border Broadcasters Inc",
-                    "fr": "Border Broadcasters Inc"
-                  },
-                  {
-                    "en": "Canadian Broadcasters Rights Agency",
-                    "fr": "Agences des droits des radiodiffuseurs canadiens"
-                  },
-                  {
-                    "en": "Copyright Collective of Canada",
-                    "fr": "Société de perception de droit d’auteur du Canada"
-                  },
-                  {
-                    "en": "Canadian Musical Reproduction Rights Agency",
-                    "fr": "Agence canadienne des droits de reproduction musicaux"
-                  },
-                  {
-                    "en": "Connect Music Licensing",
-                    "fr": "Connect Music Licensing"
-                  },
-                  {
-                    "en": "Canadian Private Copying Collective",
-                    "fr": "Société canadienne de perception de la copie privée"
-                  },
-                  {
-                    "en": "Canadian Retransmission Collective",
-                    "fr": "Société collective de retransmission du Canada"
-                  },
-                  {
-                    "en": "Canadian Retransmission Right Association",
-                    "fr": "Association du droit de retransmission canadien"
-                  },
-                  {
-                    "en": "Direct Response Television Collective Inc.",
-                    "fr": "Société de gestion collective de publicité directe télévisuelle inc."
-                  },
-                  {
-                    "en": "FWS Joint Sports Claimants Inc",
-                    "fr": "FWS Joint Sports Claimants Inc"
-                  },
-                  {
-                    "en": "Major League Baseball Collective of Canada, Inc.",
-                    "fr": "Société de perception de la ligue de baseball majeure du Canada, inc."
-                  },
-                  {
-                    "en": "Re:Sound Music Licensing Company",
-                    "fr": "Ré:Sonne - Société de gestion de la musique"
-                  },
-                  {
-                    "en": "Society of Composers, Authors and Music Publishers of Canada",
-                    "fr": "Société canadienne des auteurs, compositeurs et éditeurs de musique"
-                  },
-                  {
-                    "en": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec",
-                    "fr": "Société de gestion collective des droits des producteurs de phonogrammes et vidéogrammes du Québec"
-                  },
-                  {
-                    "en": "Société québécoise de gestion collective des droits de reproduction",
-                    "fr": "Société québécoise de gestion collective des droits de reproduction"
-                  }
-                ],
-                "titleEn": "On behalf of which Collective Society are you filing the proposed tariff(s)?",
-                "titleFr": "[fr] On behalf of which Collective Society are you filing the proposed tariff(s)?",
-                "validation": {
-                  "required": true
-                },
-                "descriptionEn": "",
-                "descriptionFr": ""
-              }
-            },
-            {
-              "id": 9,
-              "type": "fileInput",
-              "properties": {
-                "titleEn": "Upload your profile image",
-                "titleFr": "Télécharger votre image de profil",
-                "fileType": "image/*,.pdf",
-                "descriptionEn": "Provide an image of yourself to add to your profile on the website",
-                "descriptionFr": "Ajouter une photo de vous meme a votre profil sur le site web"
-              }
-            }
-          ],
-          "placeholderEn": "Row",
-          "placeholderFr": "Ranger"
-        }
-      },
-      {
-        "id": 10,
-        "type": "richText",
-        "properties": {
-          "titleEn": "Info",
-          "titleFr": "Info",
-          "charLimit": 1000,
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Please provide us with your contact information so that we can mail your documents to you.",
-          "descriptionFr": "Veuillez nous fournir vos coordonnées afin que nous puissions vous envoyer vos documents",
+          "description": "",
           "placeholderEn": "",
           "placeholderFr": ""
         }
-      }
+      }     
     ],
     "startPage": {}
   },
   "submission": {
-    "vault": true
+    "email": "fitore.jaha.price@cds-snc.ca"
   },
-  "internalTitleEn": "Raphael Test 0 - CDS Intake Form",
-  "internalTitleFr": "Raphael Test 0 - SNC Formulaire d'admission",
+  "internalTitleEn": "Protected CDS Intake Form",
+  "internalTitleFr": " Protected SNC Formulaire d'admission",
   "publishingStatus": false,
   "securityAttribute": "Protected B"
 }

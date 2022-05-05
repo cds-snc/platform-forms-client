@@ -10,7 +10,7 @@ const SecurityAttributeBadge = (props: SecurityAttributeBadgeProps) => {
   return (
     <div className={props.className}>
       <span
-        id="security-attribute-content"
+        data-testid="security-badge"
         className="gc-security-badge"
         aria-describedby="security-attribute-desc"
       >
