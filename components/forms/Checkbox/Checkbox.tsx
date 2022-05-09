@@ -9,7 +9,7 @@ export const Checkbox = (
   const { id, label, required, name, ariaDescribedBy } = props;
 
   return (
-    <div className="gc-input-checkbox">
+    <div className="gc-input-checkbox" data-testid={id}>
       {ariaDescribedBy && (
         <Description id={id} className="gc-form-group-context">
           {ariaDescribedBy}
