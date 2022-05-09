@@ -70,6 +70,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       htmlFor={`${id}`}
       className={isRequired ? "required" : ""}
       required={isRequired}
+      validation={element.properties.validation}
       group={["radio", "checkbox"].indexOf(element.type) !== -1}
     >
       {labelText}
