@@ -3,10 +3,10 @@ import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { getCsrfToken } from "next-auth/client";
 import { logMessage } from "@lib/logger";
 
-export const csrfProtected = (methods: string[]): MiddlewareRequest => {
+export const csrfProtected = (allowMethods: string[]): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (methods && req.method && methods.includes(req.method)) {
+      if (allowMethods && req.method && allowMethods.includes(req.method)) {
         const csrfToken = await getCsrfToken({ req });
         if (!csrfToken) throw Error("Invalid Csrf Token found");
         if (csrfToken === req.headers["x-csrf-token"]) {

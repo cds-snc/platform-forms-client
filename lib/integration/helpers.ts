@@ -290,7 +290,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
         setStatus("Error");
       });
   } else {
-    logMessage.error("Undefined CSRF token");
+    logMessage.error("Undefined CSRF Token");
     setStatus("Error");
   }
 }
