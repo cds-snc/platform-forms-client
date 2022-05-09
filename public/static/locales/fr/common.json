@@ -34,9 +34,11 @@
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Veuillez sélectionner un fichier plus petit.",
     "file-type-invalid": "Veuillez sélectionner un autre type de fichier.",
-    "too-many-characters": "Veuillez raccourcir votre réponse."
+    "too-many-characters": "Veuillez raccourcir votre réponse.",
+    "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section."
   },
   "required": "obligatoire",
+  "all-required": "toutes les cases à cocher sont obligatoires",
   "required-field": "Champ obligatoire",
   "file-upload-button-text": "Téléverser un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",

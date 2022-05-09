@@ -1,6 +1,7 @@
 import React from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
+import { ValidationProperties } from "@lib/types";
 
 interface LabelProps {
   children: React.ReactNode;
@@ -11,11 +12,13 @@ interface LabelProps {
   hint?: React.ReactNode;
   srOnly?: boolean;
   required?: boolean;
+  validation?: ValidationProperties;
   group?: boolean;
 }
 
 export const Label = (props: LabelProps): React.ReactElement => {
-  const { children, htmlFor, className, error, hint, srOnly, required, id, group } = props;
+  const { children, htmlFor, className, error, hint, srOnly, required, validation, id, group } =
+    props;
 
   const classes = classnames(
     {
@@ -34,10 +37,14 @@ export const Label = (props: LabelProps): React.ReactElement => {
       {required && (
         <span data-testid="required" aria-hidden>
           {" "}
-          ({t("required")})
+          ({validation?.all ? t("all-required") : t("required")})
         </span>
       )}
-      {group && required && <i className="visually-hidden">{t("required-field")}</i>}
+      {group && required && (
+        <i className="visually-hidden">
+          {validation?.all ? t("all-required") : t("required-field")}
+        </i>
+      )}
       {hint && <span className="gc-hint">{hint}</span>}
     </>
   );
