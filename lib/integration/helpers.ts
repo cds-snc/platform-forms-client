@@ -256,38 +256,43 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
   const { setStatus } = formikBag;
 
   const formDataObject = _buildFormDataObject(formConfig, values);
+  const token = await getCsrfToken();
+  if (token) {
+    //making a post request to the submit API
+    return await axios({
+      url: "/api/submit",
+      method: "POST",
+      headers: {
+        "Content-Language": language,
+        "X-CSRF-Token": token,
+      },
+      data: formDataObject,
 
-  //making a post request to the submit API
-  return await axios({
-    url: "/api/submit",
-    method: "POST",
-    headers: {
-      "Content-Language": language,
-      "X-CSRF-Token": (await getCsrfToken()) as string,
-    },
-    data: formDataObject,
-
-    // If development mode disable timeout
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-  })
-    .then((serverResponse) => {
-      if (serverResponse.data.received === true) {
-        const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
-
-        router.push({
-          pathname: `/${language}/id/${formConfig.formID}/confirmation`,
-          query: {
-            htmlEmail: htmlEmail,
-          },
-        });
-      } else {
-        throw Error("Server submit API returned an error");
-      }
+      // If development mode disable timeout
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     })
-    .catch((err) => {
-      logMessage.error(err);
-      setStatus("Error");
-    });
+      .then((serverResponse) => {
+        if (serverResponse.data.received === true) {
+          const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
+
+          router.push({
+            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
+            query: {
+              htmlEmail: htmlEmail,
+            },
+          });
+        } else {
+          throw Error("Server submit API returned an error");
+        }
+      })
+      .catch((err) => {
+        logMessage.error(err);
+        setStatus("Error");
+      });
+  } else {
+    logMessage.error("Undefined CSRF token");
+    setStatus("Error");
+  }
 }
 function _rehydrateFormResponses(payload: Submission) {
   const { form, responses } = payload;

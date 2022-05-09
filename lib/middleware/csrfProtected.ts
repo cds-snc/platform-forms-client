@@ -1,19 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { getCsrfToken } from "next-auth/client";
+import { logMessage } from "@lib/logger";
 
-export const csrfProtected = (): MiddlewareRequest => {
+export const csrfProtected = (methods: string[]): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      const csrfToken = (await getCsrfToken({ req })) as string;
-
-      if (csrfToken !== String(req.headers["x-csrf-token"] || "")) {
-        res.status(400).json({ error: "Invalid csrf token" });
-        return { next: false };
+      if (methods && req.method && methods.includes(req.method)) {
+        const csrfToken = await getCsrfToken({ req });
+        if (!csrfToken) throw Error("Invalid Csrf Token found");
+        if (csrfToken === req.headers["x-csrf-token"]) {
+          return { next: true };
+        } else {
+          res.status(403).json({ error: "Access Denied" });
+          return { next: false };
+        }
       } else {
-        return { next: true };
+        res.status(405).json({ error: "Method Not Allowed" });
+        return { next: false };
       }
-    } catch {
+    } catch (error) {
+      logMessage.error(error);
       res.status(500).json({ error: "Malformed API Request" });
       return { next: false };
     }

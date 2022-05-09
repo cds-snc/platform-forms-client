@@ -356,4 +356,4 @@ const processFormData = async (
   }
 };
 
-export default middleware([cors({ allowedMethods: ["POST"] }), csrfProtected()], submit);
+export default middleware([cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])], submit);
