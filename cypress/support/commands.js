@@ -33,7 +33,12 @@ Cypress.Commands.add("mockForm", (file) => {
         Object.defineProperty(win, "__NEXT_DATA__", {
           set(serverSideProps) {
             // here is our change to modify the injected parsed data
-            serverSideProps.props.pageProps.formConfig = { ...mockedForm.form, formID: "test" };
+            //Caution why dont we push mockedForm instead of mockedForm.form ?
+            serverSideProps.props.pageProps.formConfig = {
+              ...mockedForm.form,
+              securityAttribute: mockedForm.securityAttribute,
+              formID: "test",
+            };
             nextData = serverSideProps;
           },
           get() {

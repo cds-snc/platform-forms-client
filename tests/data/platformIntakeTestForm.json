@@ -138,5 +138,6 @@
   },
   "internalTitleEn": "Work with CDS on a Digital Form",
   "internalTitleFr": "Travailler avec le SNC sur un formulaire numérique",
-  "publishingStatus": true
+  "publishingStatus": true,
+  "securityAttribute": "Unclassified"
 }

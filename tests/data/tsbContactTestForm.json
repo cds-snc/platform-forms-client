@@ -184,5 +184,6 @@
   },
   "internalTitleEn": "Contact Us - TSB",
   "internalTitleFr": "Nous joindre - BST",
-  "publishingStatus": true
+  "publishingStatus": true,
+  "securityAttribute": "Unclassified"
 }

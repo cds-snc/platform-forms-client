@@ -7,6 +7,7 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { DynamicFormProps } from "@lib/types";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
+import SecurityAttributeBadge from "@components/globals/SecurityBadge";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
@@ -35,6 +36,11 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
       <Head>
         <title>{formTitle}</title>
       </Head>
+      {formConfig.securityAttribute && (
+        <SecurityAttributeBadge
+          securityLevel={formConfig.securityAttribute}
+        ></SecurityAttributeBadge>
+      )}
       <h1 className="gc-h1">{formTitle}</h1>
       <Form
         formConfig={formConfig}
