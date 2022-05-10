@@ -28,6 +28,8 @@ export const config = {
   },
 };
 
+const protectedMethods = ["POST", "PUT"];
+
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
@@ -356,4 +358,7 @@ const processFormData = async (
   }
 };
 
-export default middleware([cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])], submit);
+export default middleware(
+  [cors({ allowedMethods: ["GET", "POST", "PUT", "DELETE"] }), csrfProtected(protectedMethods)],
+  submit
+);

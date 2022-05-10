@@ -3,12 +3,13 @@ import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { getCsrfToken } from "next-auth/client";
 import { logMessage } from "@lib/logger";
 
-export const csrfProtected = (allowMethods: string[]): MiddlewareRequest => {
+export const csrfProtected = (protectedMethods: string[]): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (allowMethods && req.method && allowMethods.includes(req.method)) {
+      if (isProtected(req, protectedMethods)) {
         const csrfToken = await getCsrfToken({ req });
         if (!csrfToken) throw Error("Invalid Csrf Token found");
+
         if (csrfToken === req.headers["x-csrf-token"]) {
           return { next: true };
         } else {
@@ -16,8 +17,8 @@ export const csrfProtected = (allowMethods: string[]): MiddlewareRequest => {
           return { next: false };
         }
       } else {
-        res.status(405).json({ error: "Method Not Allowed" });
-        return { next: false };
+        //allow unrestricted method
+        return { next: true };
       }
     } catch (error) {
       logMessage.error(error);
@@ -25,4 +26,11 @@ export const csrfProtected = (allowMethods: string[]): MiddlewareRequest => {
       return { next: false };
     }
   };
+};
+
+const isProtected = (req: NextApiRequest, methods: string[]) => {
+  if (req.method) {
+    return methods.includes(req.method);
+  }
+  return false;
 };
