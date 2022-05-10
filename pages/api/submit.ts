@@ -96,10 +96,7 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
 
 const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
   const templateID = process.env.TEMPLATE_ID;
-  const notify = new NotifyClient(
-    "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
-  );
+  const notify = new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
 
   const emailBody = await convertMessage({ form, responses: fields });
   const messageSubject = form.emailSubjectEn ? form.emailSubjectEn : form.titleEn;
