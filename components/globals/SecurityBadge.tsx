@@ -6,7 +6,7 @@ const SecurityAttributeBadge = (props: SecurityAttributeBadgeProps) => {
   const { t } = useTranslation("common");
   const content = props.securityLevel.toLowerCase().includes("protected")
     ? props.securityLevel + t("securityAttributeBadge.protected-desc")
-    : props.securityLevel + t("securityAttributeBadge.desc");
+    : t("securityAttributeBadge.desc");
   return (
     <div className={props.className}>
       <span
