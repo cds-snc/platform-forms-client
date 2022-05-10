@@ -162,7 +162,7 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
   }
 
   formData["formID"] = `${form.formID}`;
-  formData.securityAttribute = form.securityAttribute ?? "";
+  formData.securityAttribute = form.securityAttribute ?? "Unclassified";
 
   return formData;
 }
