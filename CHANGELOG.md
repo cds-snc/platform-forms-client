@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Logging admin activity in database [#700](https://github.com/cds-snc/platform-forms-client/issues/700)
+- Data classification attributes. [#701](https://github.com/cds-snc/platform-forms-client/issues/701)
 
 ### Fixed
 

@@ -80,7 +80,7 @@ async function getFormResponses(
       FilterExpression: "FormID = :formID",
       //A filter expression cannot contain partition key or sort key attributes.
       //You need to specify those attributes in the key condition expression, not the filter expression.
-      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved",
+      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
     };
 
     const formResponses = await documentClient.send(new QueryCommand(getItemsDbParams));
