@@ -2,8 +2,8 @@ import React from "react";
 import { Story } from "@storybook/react";
 import { Checkbox } from "./Checkbox";
 import { Formik } from "formik";
-import { MultipleChoiceProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { ChoiceFieldProps } from "@lib/types";
 
 export default {
   title: "Forms/Checkbox",
@@ -27,8 +27,8 @@ export default {
   ],
 };
 
-const Template: Story<MultipleChoiceProps & JSX.IntrinsicElements["input"]> = (
-  args: MultipleChoiceProps & JSX.IntrinsicElements["input"]
+const Template: Story<ChoiceFieldProps & JSX.IntrinsicElements["input"]> = (
+  args: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ) => <Checkbox {...args} />;
 
 export const defaultCheckbox = Template.bind({});

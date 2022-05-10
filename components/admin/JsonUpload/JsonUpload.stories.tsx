@@ -1,4 +1,5 @@
 import React from "react";
+import { FormElementTypes } from "@lib/types";
 import { JSONUpload } from "./JsonUpload";
 
 export default {
@@ -16,13 +17,14 @@ const testForm = {
       email: "test@test.com",
     },
     form: {
+      version: "1",
       titleEn: "Test JSON!",
       titleFr: "Test JSON!",
       layout: ["1"],
       elements: [
         {
           id: 1,
-          type: "button",
+          type: FormElementTypes.textField,
           properties: {
             titleEn: "test Element!",
             titleFr: "test Element!",
@@ -33,6 +35,4 @@ const testForm = {
   },
 };
 
-export const populatedJSONUpload = (): React.ReactElement => (
-  <JSONUpload form={testForm}></JSONUpload>
-);
+export const populatedJSONUpload = (): React.ReactElement => <JSONUpload form={testForm} />;

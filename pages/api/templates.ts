@@ -5,7 +5,7 @@ import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 import { logAdminActivity } from "@lib/adminLogs";
-import { AdminLogAction, AdminLogEvent } from "@lib/types";
+import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -44,7 +44,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       if (req.method === "GET") {
-        const publicTemplates = await onlyIncludePublicProperties(response);
+        const publicTemplates = onlyIncludePublicProperties(response);
         res.status(200).json(publicTemplates);
       } else {
         res.status(200).json(response);

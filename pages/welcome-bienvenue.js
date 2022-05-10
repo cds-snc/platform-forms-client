@@ -14,7 +14,7 @@ const Home = ({ formsList }) => {
       return (
         <li key={`link-${form.formID}`}>
           <Link href={`/id/${form.formID}`} locale={i18n.language}>
-            {form[getProperty("title", i18n.language)].toString()}
+            {form.formConfig.form[getProperty("title", i18n.language)].toString()}
           </Link>
         </li>
       );

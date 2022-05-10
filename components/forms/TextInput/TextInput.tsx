@@ -1,28 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, HTMLInputTypeAttribute } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import { CharacterCountMessages } from "@lib/types";
+import { InputFieldProps, CharacterCountMessages } from "@lib/types";
 
-interface RequiredTextInputProps {
-  id: string;
-  name: string;
-  type: "text" | "email" | "name" | "number" | "password" | "search" | "tel" | "url";
+export interface TextInputProps extends InputFieldProps {
+  type: HTMLInputTypeAttribute;
   characterCountMessages: CharacterCountMessages;
-}
-
-interface CustomTextInputProps {
-  className?: string;
-  required?: boolean;
-  ariaDescribedBy?: string;
   placeholder?: string;
 }
 
-export type OptionalTextInputProps = CustomTextInputProps & JSX.IntrinsicElements["input"];
-
-export type TextInputProps = RequiredTextInputProps & OptionalTextInputProps;
-
-export const TextInput = (props: TextInputProps): React.ReactElement => {
+export const TextInput = (
+  props: TextInputProps & JSX.IntrinsicElements["input"]
+): React.ReactElement => {
   const {
     id,
     type,

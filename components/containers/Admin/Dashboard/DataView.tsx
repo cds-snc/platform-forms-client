@@ -1,12 +1,11 @@
 import React, { Fragment } from "react";
-//import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FormDBConfigProperties } from "@lib/types";
+import { FormRecord } from "@lib/types";
 
 interface DataViewProps {
-  templatesJSON: Array<FormDBConfigProperties>;
+  templatesJSON: Array<FormRecord>;
 }
 
 export const DataView = (props: DataViewProps): React.ReactElement => {
@@ -30,7 +29,7 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
   );
 };
 
-const DataElement = (props: { template: FormDBConfigProperties }): React.ReactElement => {
+const DataElement = (props: { template: FormRecord }): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
   const { template } = props;
   const formID = template.formID;

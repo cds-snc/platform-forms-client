@@ -1,37 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { withFormik, FormikProps } from "formik";
+import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
-import { validateOnSubmit, getErrorList, setFocusOnErrorMessage } from "@lib/validation";
+import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
 import { submitToAPI } from "@lib/integration/helpers";
-import { useFormTimer } from "@lib/hooks";
-import { Button, Alert } from "../index";
+import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
+import { Alert, Button } from "../index";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
-import { FormValues, InnerFormProps, DynamicFormProps, Responses } from "@lib/types";
 import axios from "axios";
-import { useFlag, useExternalScript } from "@lib/hooks";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
+import { DynamicFormProps } from "@components/containers/DynamicForm/DynamicForm";
+import { Responses } from "@lib/types";
 
-declare global {
-  interface Window {
-    dataLayer: Array<unknown>;
-    grecaptcha: {
-      // Maybe a better way to do this
-      execute: (arg1: string | undefined, arg2: Record<string, unknown>) => Promise<string>;
-      ready: (arg: () => void) => void;
-    };
-  }
+export interface InnerFormProps {
+  children?: React.ReactNode;
+  language: string;
 }
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicFormProps> = (
-  props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps
-) => {
-  const { children, handleSubmit, isSubmitting, formConfig } = props;
+const InnerForm: React.FC<
+  InnerFormProps & FormikProps<{ [key: string]: unknown }> & DynamicFormProps
+> = (props: InnerFormProps & FormikProps<{ [key: string]: unknown }> & DynamicFormProps) => {
+  const { children, handleSubmit, isSubmitting, formRecord } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
@@ -47,7 +41,7 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
 
   useExternalScript(
-    `https://www.google.com/recaptcha/api.js?render=${formConfig?.reCaptchaID}`,
+    `https://www.google.com/recaptcha/api.js?render=${formRecord?.formConfig?.reCaptchaID}`,
     isReCaptchaEnableOnSite
   );
 
@@ -58,7 +52,7 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
     try {
       window.grecaptcha.ready(async () => {
         // get reCAPTCHA response
-        const clientToken = await window.grecaptcha.execute(formConfig.reCaptchaID, {
+        const clientToken = await window.grecaptcha.execute(formRecord.formConfig.reCaptchaID, {
           action: "submit",
         });
         if (clientToken) {
@@ -74,9 +68,9 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
     }
   };
 
-  const sendClientTokenForVerification = async (token: string) => {
+  const sendClientTokenForVerification = (token: string) => {
     // call a backend API to verify reCAPTCHA response
-    return await axios({
+    return axios({
       url: "/api/verify",
       method: "POST",
       headers: {
@@ -112,7 +106,7 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
     if (timerActive) {
       const secondsBaseDelay = 2;
       const secondsPerFormElement = 2;
-      const numberOfRequiredElements = formConfig.elements.filter(
+      const numberOfRequiredElements = formRecord.formConfig.form.elements.filter(
         (element) => element.properties.validation?.required === true
       ).length;
 
@@ -168,8 +162,8 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
                 event: "form_submission_spam_trigger",
-                formID: formConfig.formID,
-                formTitle: formConfig.titleEn,
+                formID: formRecord.formID,
+                formTitle: formRecord.formConfig.form.titleEn,
                 submitTime: formTimerState.remainingTime,
               });
               setSubmitTooEarly(true);
@@ -229,14 +223,15 @@ const InnerForm: React.FC<InnerFormProps & FormikProps<FormValues> & DynamicForm
  * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-export const Form = withFormik<DynamicFormProps, FormValues>({
+export const Form = withFormik<DynamicFormProps, { [key: string]: unknown }>({
   validateOnChange: false,
 
   validateOnBlur: false,
 
   enableReinitialize: true, // needed when switching languages
 
-  mapPropsToValues: (props) => getFormInitialValues(props.formConfig, props.language) as FormValues,
+  mapPropsToValues: (props) =>
+    getFormInitialValues(props.formRecord, props.language) as { [key: string]: unknown },
 
   validate: (values, props) => validateOnSubmit(values, props),
 
@@ -249,8 +244,8 @@ export const Form = withFormik<DynamicFormProps, FormValues>({
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "form_submission_trigger",
-        formID: formikBag.props.formConfig.formID,
-        formTitle: formikBag.props.formConfig.titleEn,
+        formID: formikBag.props.formRecord.formID,
+        formTitle: formikBag.props.formRecord.formConfig.form.titleEn,
       });
 
       formikBag.setSubmitting(false);

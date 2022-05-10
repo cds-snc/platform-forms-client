@@ -1,8 +1,8 @@
 //import getConfig from "next/config";
 import DataView from "../../components/containers/Admin/Dashboard/DataView";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { crudTemplates } from "../../lib/integration/crud";
-import { requireAuthentication } from "../../lib/auth";
+import { crudTemplates } from "@lib/integration/crud";
+import { requireAuthentication } from "@lib/auth";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   {
@@ -11,10 +11,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
 
     const lambdaResult = await crudTemplates({ method: "GET" });
     const templatesJSON =
-      lambdaResult &&
-      lambdaResult.data &&
-      lambdaResult.data.records &&
-      lambdaResult.data.records.length > 0
+      lambdaResult?.data?.records && lambdaResult?.data?.records.length > 0
         ? lambdaResult.data.records
         : [];
 

@@ -5,14 +5,14 @@ import { DeleteButton } from "../../forms/Button/DeleteButton";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
-import { FormDBConfigProperties } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
 
 interface FormSettingsProps {
-  form: FormDBConfigProperties;
+  form: FormRecord;
 }
 
 const handleDelete = async (formID: number) => {
@@ -66,21 +66,21 @@ export const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         <TabPanel>
           <div>{newText}</div>
           <h2>{t("settings.edit")}</h2>
-          <JSONUpload form={form}></JSONUpload>
+          <JSONUpload form={form} />
           <br />
           <div>
             <DeleteButton
               action={handleDelete}
               data={form.formID}
               redirect={`/admin/view-templates`}
-            ></DeleteButton>
+            />
           </div>
         </TabPanel>
         <TabPanel>
-          <BearerRefresh formID={form.formID}></BearerRefresh>
+          <BearerRefresh formID={form.formID} />
         </TabPanel>
         <TabPanel>
-          <FormAccess formID={form.formID}></FormAccess>
+          <FormAccess formID={form.formID} />
         </TabPanel>
       </Tabs>
     </>

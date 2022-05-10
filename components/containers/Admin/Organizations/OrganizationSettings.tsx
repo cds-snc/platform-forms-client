@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Organization } from "@lib/types";
 import { DeleteButton } from "@components/forms";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
+import { Organization } from "@lib/types";
 
 interface OrganizationSettingsProps {
   organization: Organization;
@@ -65,7 +65,7 @@ export const OrganizationSettings = (props: OrganizationSettingsProps): React.Re
           action={handleDelete}
           data={organization.organizationID}
           redirect={`/admin/organizations`}
-        ></DeleteButton>
+        />
       </div>
     </>
   );

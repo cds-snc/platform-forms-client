@@ -46,6 +46,7 @@ export const CreateOrganization = (): React.ReactElement => {
             id="orgNameEn"
             name="orgNameEn"
             type="text"
+            label="Organization Name"
             required={true}
             characterCountMessages={{
               part1: t("formElements.characterCount.part1"),
@@ -53,7 +54,7 @@ export const CreateOrganization = (): React.ReactElement => {
               part1Error: t("formElements.characterCount.part1-error"),
               part2Error: t("formElements.characterCount.part2-error"),
             }}
-          ></TextInput>
+          />
           <Label htmlFor="orgNameFr" required={true}>
             Organization Name (French)
           </Label>
@@ -61,6 +62,7 @@ export const CreateOrganization = (): React.ReactElement => {
             id="orgNameFr"
             name="orgNameFr"
             type="text"
+            label="Nom de Organization"
             required={true}
             characterCountMessages={{
               part1: t("formElements.characterCount.part1"),
@@ -68,7 +70,7 @@ export const CreateOrganization = (): React.ReactElement => {
               part1Error: t("formElements.characterCount.part1-error"),
               part2Error: t("formElements.characterCount.part2-error"),
             }}
-          ></TextInput>
+          />
           <Button type="submit">Submit</Button>
         </Form>
       </Formik>

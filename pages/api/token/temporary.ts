@@ -3,12 +3,12 @@ import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
 
 import { middleware, cors, validBearerToken } from "@lib/middleware";
-import { MiddlewareProps } from "@lib/types";
 
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { QueryResult } from "pg";
 import { NotifyClient } from "notifications-node-client";
+import { MiddlewareProps } from "@lib/types";
 
 /**
  * Verifies that the payload for the request is valid.

@@ -33,7 +33,7 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      formConfig: form,
+      formRecord: form,
       isEmbeddable: isEmbeddable,
       ...(await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"])),
     }, // will be passed to the page component as props

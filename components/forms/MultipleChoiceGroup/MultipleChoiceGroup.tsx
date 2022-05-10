@@ -3,14 +3,11 @@ import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Checkbox from "../Checkbox/Checkbox";
 import Radio from "../Radio/Radio";
-import { MultipleChoiceProps } from "@lib/types";
+import { ChoiceFieldProps, InputFieldProps } from "@lib/types";
 
-interface MultipleChoiceGroupProps {
-  className?: string;
-  choicesProps: Array<MultipleChoiceProps>;
-  name: string;
+interface MultipleChoiceGroupProps extends InputFieldProps {
+  choicesProps: Array<ChoiceFieldProps>;
   type: "checkbox" | "radio";
-  ariaDescribedBy?: string;
 }
 
 export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.ReactElement => {
@@ -27,7 +24,7 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
         name={field.name}
         className={className}
         ariaDescribedBy={ariaDescribedBy}
-      ></Checkbox>
+      />
     ) : (
       <Radio
         {...choice}
@@ -35,7 +32,7 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
         name={field.name}
         className={className}
         ariaDescribedBy={ariaDescribedBy}
-      ></Radio>
+      />
     );
   });
 

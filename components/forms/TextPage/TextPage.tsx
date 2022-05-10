@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../../components/forms";
-import { FormSchemaProperties } from "@lib/types";
 import { getProperty } from "@lib/formBuilder";
+import { PublicFormRecord } from "@lib/types";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
 */
 
 interface TextPageProps {
-  formConfig: FormSchemaProperties;
+  formRecord: PublicFormRecord;
   htmlEmail: string | undefined;
 }
 
@@ -44,17 +44,17 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
-  const { formConfig, htmlEmail } = props;
+  const { formRecord, htmlEmail } = props;
   const language = i18n.language as string;
 
   const pageText =
-    formConfig && formConfig.endPage
-      ? formConfig.endPage[getProperty("description", language)]
+    formRecord.formConfig && formRecord.formConfig.form.endPage
+      ? formRecord.formConfig.form.endPage[getProperty("description", language)]
       : "";
 
   const urlQuery =
-    formConfig && formConfig.endPage
-      ? formConfig.endPage[getProperty("referrerUrl", language)]
+    formRecord.formConfig && formRecord.formConfig.form.endPage
+      ? formRecord.formConfig.form.endPage[getProperty("referrerUrl", language)]
       : null;
 
   // autoFocus h1 element of page to ensure its read out
