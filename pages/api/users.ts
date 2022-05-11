@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers, adminRole } from "@lib/users";
 import { AdminLogAction, AdminLogEvent, MiddlewareProps } from "@lib/types";

@@ -10,7 +10,6 @@ import { logMessage } from "@lib/logger";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock, checkLogs } from "@jestUtils";
 import { Prisma } from "@prisma/client";
-import { JWTDecodeParams } from "next-auth/jwt";
 
 jest.mock("next-auth/react");
 
