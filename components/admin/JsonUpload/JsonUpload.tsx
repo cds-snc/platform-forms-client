@@ -23,7 +23,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const formID = form ? form.formID : null;
   const router = useRouter();
 
-  const handleSubmit = async (formID: number | null) => {
+  const handleSubmit = async (formID: string | null) => {
     return await axios({
       url: "/api/templates",
       method: formID ? "PUT" : "POST",

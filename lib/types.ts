@@ -15,7 +15,7 @@ export interface FormDefinitionProperties {
 }
 
 export interface FormDBConfigProperties {
-  formID: number;
+  formID: string;
   formConfig?: FormDefinitionProperties;
   organization?: boolean;
   bearerToken?: string;
@@ -265,7 +265,7 @@ export interface MiddlewareProps {
 // User Types
 
 export type FormOwner = {
-  id: number;
+  id: string;
   email: string;
   active: boolean;
 };
