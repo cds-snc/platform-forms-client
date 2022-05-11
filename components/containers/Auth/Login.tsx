@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { signIn } from "next-auth/client";
+import { signIn } from "next-auth/react";
 
 import { Button } from "../../forms";
 

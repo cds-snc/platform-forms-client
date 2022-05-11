@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 
 const Unauthorized: React.FC = () => {

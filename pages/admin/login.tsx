@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 import Login from "@components/containers/Auth/Login";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
