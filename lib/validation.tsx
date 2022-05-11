@@ -90,11 +90,19 @@ const isFieldResponseValid = (
       break;
     }
     case FormElementTypes.checkbox: {
-      if (
-        validator.required &&
-        (value === undefined || !Array.isArray(value) || !(value as Array<string>).length)
-      ) {
-        return t("input-validation.required");
+      if (validator.required) {
+        if (
+          validator.all &&
+          (value === undefined ||
+            !Array.isArray(value) ||
+            (value as Array<string>).length != formElement.properties.choices?.length)
+        ) {
+          return t("input-validation.all-checkboxes-required");
+        } else {
+          if (value === undefined || !Array.isArray(value) || !(value as Array<string>).length) {
+            return t("input-validation.required");
+          }
+        }
       }
       break;
     }

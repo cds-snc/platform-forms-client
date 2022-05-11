@@ -7,6 +7,16 @@
   "default": {},
   "examples": [],
   "properties": {
+    "securityAttribute":{
+      "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
+      "$id": "#/properties/securityAttribute",       
+      "type": "string",
+      "enum": [
+          "Protected A",
+          "Protected B",
+          "Unclassified"      
+        ]      
+    },
     "internalTitleEn": {
       "description": "The displayed title of the form to the user in English",
       "$id": "#/properties/internalTitleEn",
@@ -34,6 +44,7 @@
         }
       },
       "required": ["elements"]
+
     },
     "submission": {
       "type": "object",
@@ -136,6 +147,10 @@
         },
         "descriptionFR": {
           "type": "string"
+        },
+        "all": {
+          "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
+          "type": "boolean"
         }
       }
     }

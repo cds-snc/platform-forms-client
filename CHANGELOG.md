@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Logging admin activity in database [#700](https://github.com/cds-snc/platform-forms-client/issues/700)
+- Data classification attributes. [#701](https://github.com/cds-snc/platform-forms-client/issues/701)
 
 ### Fixed
 
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Upgraded NextJS and other associated GCForms dependencies to next major version. [#725](https://github.com/cds-snc/platform-forms-client/pull/725)
 - Redesigned file input button [#713](https://github.com/cds-snc/platform-forms-client/issues/713)
+- Removed list of published forms from welcome page. [#712](https://github.com/cds-snc/platform-forms-client/issues/712)
 
 ## [1.2.0] 2022-04-19
 
@@ -28,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consolidated the Privacy and Terms and Conditions pages with updated content. [#698](https://github.com/cds-snc/platform-forms-client/pull/698)
 - New `/changelog` page. [#246](https://github.com/cds-snc/platform-forms-client/issues/246)
 - New `maxNumberOfRows` property in JSON template for DynamicRow component configuration [#528](https://github.com/cds-snc/platform-forms-client/issues/528)
+- Create a second GC Notify service account. [#698](https://github.com/cds-snc/platform-forms-client/issues/696)
 
 ### Fixed
 

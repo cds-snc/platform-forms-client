@@ -1,25 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getFormByStatus } from "../lib/integration/crud";
-import { getProperty } from "../lib/formBuilder";
-import { formCache } from "../lib/cache";
 
-const Home = ({ formsList }) => {
-  const { t, i18n } = useTranslation("welcome");
-  const LinksList = () => {
-    return formsList.map((form) => {
-      return (
-        <li key={`link-${form.formID}`}>
-          <Link href={`/id/${form.formID}`} locale={i18n.language}>
-            {form.formConfig.form[getProperty("title", i18n.language)].toString()}
-          </Link>
-        </li>
-      );
-    });
-  };
+const Home = () => {
+  const { t } = useTranslation("welcome");
 
   return (
     <>
@@ -28,13 +12,6 @@ const Home = ({ formsList }) => {
         <div>
           <h2>{t("product.title")}</h2>
           <p>{t("product.text")}</p>
-        </div>
-
-        <div>
-          <h2>{t("formList.title")}</h2>
-          <ul className="link-list custom">
-            <LinksList />
-          </ul>
         </div>
 
         <div>
@@ -65,27 +42,11 @@ const Home = ({ formsList }) => {
   );
 };
 
-Home.propTypes = {
-  formsList: PropTypes.array.isRequired,
-};
 export async function getServerSideProps(context) {
-  const formsList = async () => {
-    return await formCache.published.check().then(async (cachedValue) => {
-      if (cachedValue) {
-        return cachedValue;
-      }
-      return await getFormByStatus(true).then((freshValue) => {
-        formCache.published.set(freshValue);
-        return freshValue;
-      });
-    });
-  };
-
   return {
     props: {
-      formsList: await formsList(),
       ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
-    }, // will be passed to the page component as props
+    },
   };
 }
 

@@ -7,6 +7,7 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { NextRouter, useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
 import { PublicFormRecord } from "@lib/types";
+import SecurityAttributeBadge from "@components/globals/SecurityBadge";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
@@ -35,9 +36,7 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
 
   // render text pages
   if (step == "confirmation") {
-    return (
-      <TextPage formRecord={formRecord} htmlEmail={htmlEmail as string | undefined}></TextPage>
-    );
+    return <TextPage formRecord={formRecord} htmlEmail={htmlEmail as string | undefined} />;
   }
 
   return (
@@ -45,6 +44,9 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
       <Head>
         <title>{formTitle}</title>
       </Head>
+      {formRecord.formConfig.securityAttribute && (
+        <SecurityAttributeBadge securityLevel={formRecord.formConfig.securityAttribute} />
+      )}
       <h1 className="gc-h1">{formTitle}</h1>
       <Form
         formRecord={formRecord}

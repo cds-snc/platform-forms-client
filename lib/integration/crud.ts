@@ -259,6 +259,7 @@ const _onlyIncludePublicProperties = ({
         formConfig: {
           publishingStatus: template.formConfig.publishingStatus,
           displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
+          securityAttribute: template.formConfig.securityAttribute ?? "Unclassified",
           ...(process.env.RECAPTCHA_V3_SITE_KEY && {
             reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
           }),

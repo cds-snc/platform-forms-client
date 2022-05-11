@@ -13,6 +13,7 @@ const testForm = {
   formID: 1,
   formConfig: {
     publishingStatus: true,
+    securityAttribute: "Unclassified",
     submission: {
       email: "test@test.com",
     },

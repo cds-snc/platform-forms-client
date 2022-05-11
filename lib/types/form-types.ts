@@ -123,6 +123,7 @@ export interface FormConfiguration {
   submission: SubmissionProperties;
   displayAlphaBanner?: boolean;
   form: FormProperties;
+  securityAttribute: string;
   reCaptchaID?: string;
 }
 
