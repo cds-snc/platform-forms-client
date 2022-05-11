@@ -1,19 +1,9 @@
 import { createMocks } from "node-mocks-http";
 import { validBearerToken } from "@lib/middleware";
-import executeQuery from "@lib/integration/queryManager";
-import jwt from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
+import { prismaMock } from "@jestUtils";
 
 jest.mock("next-auth/react");
-jest.mock("@lib/integration/queryManager");
-
-jest.mock("@lib/integration/dbConnector", () => {
-  const mockClient = {
-    connect: jest.fn(),
-    query: jest.fn(),
-    end: jest.fn(),
-  };
-  return jest.fn(() => mockClient);
-});
 
 describe("bearerToken tests", () => {
   beforeAll(() => {
@@ -24,7 +14,9 @@ describe("bearerToken tests", () => {
   });
 
   it("contains a valid bearer token", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET as Secret, {
+      expiresIn: "1y",
+    });
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -33,17 +25,18 @@ describe("bearerToken tests", () => {
       },
     });
 
-    executeQuery.mockReturnValue({
-      rows: [{ bearerToken: token }],
-      rowCount: 1,
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      bearerToken: token,
     });
 
-    await validBearerToken(req, res);
+    await validBearerToken()(req, res);
     expect(res.statusCode).toBe(200);
   });
 
   it("checks that there is no valid bearer token in the database", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET as Secret, {
+      expiresIn: "1y",
+    });
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -52,10 +45,7 @@ describe("bearerToken tests", () => {
       },
     });
 
-    executeQuery.mockReturnValue({
-      rows: [],
-      rowCount: 0,
-    });
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
     await validBearerToken()(req, res);
     expect(res.statusCode).toBe(403);
@@ -71,7 +61,7 @@ describe("bearerToken tests", () => {
   });
 
   it("rejects an expired bearer token", async () => {
-    const token = jwt.sign({ formID: "1", exp: 1636501665 }, process.env.TOKEN_SECRET);
+    const token = jwt.sign({ formID: "1", exp: 1636501665 }, process.env.TOKEN_SECRET as Secret);
     const { req, res } = createMocks({
       method: "POST",
       headers: {
