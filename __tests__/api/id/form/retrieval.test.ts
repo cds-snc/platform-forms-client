@@ -1,38 +1,22 @@
 import { createMocks } from "node-mocks-http";
 import retrieval from "@pages/api/id/[form]/retrieval";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import executeQuery from "@lib/integration/queryManager";
+import { mockClient } from "aws-sdk-client-mock";
+import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { prismaMock } from "@jestUtils";
 import { logMessage } from "@lib/logger";
-import jwt from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
 
-jest.mock("next-auth/client");
-jest.mock("@aws-sdk/client-dynamodb");
-jest.mock("@aws-sdk/lib-dynamodb");
-jest.mock("@lib/integration/queryManager");
+jest.mock("next-auth/react");
 jest.mock("@lib/logger");
+const mockLogMessage = jest.mocked(logMessage, true);
 
-jest.mock("@lib/integration/dbConnector", () => {
-  const mockClient = {
-    connect: jest.fn(),
-    query: jest.fn(),
-    end: jest.fn(),
-  };
-  return jest.fn(() => mockClient);
-});
-
-const dynamoClient = {
-  send: jest.fn(),
-};
-
-const documentClient = {
-  send: jest.fn(),
-};
+const ddbMock = mockClient(DynamoDBDocumentClient);
 
 describe("/api/retrieval", () => {
-  let dateNowSpy;
+  let dateNowSpy: jest.SpyInstance;
   beforeEach(() => {
     dateNowSpy = jest.spyOn(Date, "now");
+    ddbMock.reset();
   });
   afterEach(() => {
     dateNowSpy.mockRestore();
@@ -50,7 +34,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -76,7 +60,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -94,19 +78,8 @@ describe("/api/retrieval", () => {
         },
       });
 
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [],
-            rowCount: 1,
-          };
-        }
-      });
-
+      //Mock bearer token not being found
+      prismaMock.template.findUnique.mockResolvedValue(null);
       await retrieval(req, res);
       expect(res.statusCode).toBe(403);
     });
@@ -118,7 +91,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           form: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -134,36 +107,43 @@ describe("/api/retrieval", () => {
           form: "22",
         },
       });
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+
       const dynamodbExpectedReponses = {
         Items: [
-          { FormID: "1", SubmissionID: "12", FormSubmission: true },
-          { FormID: "2", SubmissionID: "21", FormSubmission: true },
+          {
+            FormID: "1",
+            SubmissionID: "12",
+            FormSubmission: true,
+            SecurityAttribute: "Protected B",
+          },
+          {
+            FormID: "2",
+            SubmissionID: "21",
+            FormSubmission: true,
+            SecurityAttribute: "Protected B",
+          },
         ],
       };
-      documentClient.send.mockImplementation(() => {
-        return dynamodbExpectedReponses;
-      });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+      ddbMock.on(QueryCommand).resolves(dynamodbExpectedReponses);
       await retrieval(req, res);
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           responses: [
-            { FormID: "1", SubmissionID: "12", FormSubmission: true },
-            { FormID: "2", SubmissionID: "21", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "12",
+              FormSubmission: true,
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "2",
+              SubmissionID: "21",
+              FormSubmission: true,
+              SecurityAttribute: "Protected B",
+            },
           ],
         })
       );
@@ -175,7 +155,7 @@ describe("/api/retrieval", () => {
           formID: 2,
           email: "test@cds-snc.ca",
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -191,24 +171,10 @@ describe("/api/retrieval", () => {
           form: "23",
         },
       });
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+      ddbMock.on(QueryCommand).rejects("I'm an Error");
 
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
-      documentClient.send.mockImplementation(() => {
-        throw new Error("Error");
-      });
       await retrieval(req, res);
       expect(res.statusCode).toBe(500);
     });
@@ -218,7 +184,7 @@ describe("/api/retrieval", () => {
         {
           formID: 3,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -235,26 +201,12 @@ describe("/api/retrieval", () => {
           form: "12",
         },
       });
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
-
-      documentClient.send = jest.fn(() => {
-        return {
-          Items: [],
-        };
-      });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+      const dynamodbExpectedReponses = {
+        Items: [],
+      };
+      ddbMock.on(QueryCommand).resolves(dynamodbExpectedReponses);
       await retrieval(req, res);
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual({ responses: [] });
@@ -268,7 +220,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -285,29 +237,16 @@ describe("/api/retrieval", () => {
           form: "22",
         },
       });
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
-
-      documentClient.send = jest.fn(() => {});
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
-      logMessage.warn.mockImplementation(() => {});
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+      ddbMock.on(UpdateCommand).resolves;
+      mockLogMessage.warn.mockImplementation(jest.fn());
       await retrieval(req, res);
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(["dfhkwehfewhf", "fewfewfewfew"]);
-      expect(documentClient.send.mock.calls.length).toBe(2);
-      expect(logMessage.info.mock.calls.length).toBe(1);
-      expect(logMessage.info.mock.calls[0][0]).toContain(
+      expect(ddbMock.commandCalls(UpdateCommand).length).toBe(2);
+      expect(mockLogMessage.info.mock.calls.length).toBe(1);
+      expect(mockLogMessage.info.mock.calls[0][0]).toContain(
         `user:test@cds-snc.ca marked form responses [dfhkwehfewhf,fewfewfewfew] from form ID:22 as retrieved at:1 using token:${token}`
       );
     });
@@ -318,7 +257,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -335,19 +274,8 @@ describe("/api/retrieval", () => {
           form: "22",
         },
       });
-
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
 
       await retrieval(req, res);
       expect(res.statusCode).toBe(400);
@@ -362,7 +290,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -380,19 +308,8 @@ describe("/api/retrieval", () => {
         },
       });
 
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
-
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
       await retrieval(req, res);
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
@@ -407,7 +324,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -425,18 +342,8 @@ describe("/api/retrieval", () => {
         },
       });
 
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
 
       await retrieval(req, res);
       expect(res.statusCode).toBe(400);
@@ -451,7 +358,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           formID: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -469,106 +376,41 @@ describe("/api/retrieval", () => {
         },
       });
 
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
-      let callCount = 0;
-      documentClient.send = jest.fn(() => {
-        if (callCount > 0) {
-          throw new Error("some error");
-        }
-        callCount += 1;
-      });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
-      logMessage.warn.mockImplementation(() => {});
-      logMessage.error.mockImplementation(() => {});
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+      ddbMock
+        .on(UpdateCommand, {
+          Key: {
+            SubmissionID: "fsdfdsfsdf",
+            FormID: "22",
+          },
+        })
+        .rejects("This is an Error")
+        .on(UpdateCommand, {
+          TableName: "Vault",
+          Key: {
+            SubmissionID: "dfdsfdsfds",
+            FormID: "22",
+          },
+        }).resolves;
+
+      mockLogMessage.warn.mockImplementation(jest.fn());
+      mockLogMessage.error.mockImplementation(jest.fn());
+
       await retrieval(req, res);
       expect(res.statusCode).toBe(500);
       expect(JSON.parse(res._getData())).toEqual({
         error: "Error on Server Side",
       });
-      expect(logMessage.warn.mock.calls.length).toBe(2);
-      expect(logMessage.warn.mock.calls[0][0]).toBe(
+      expect(mockLogMessage.warn.mock.calls.length).toBe(2);
+      expect(mockLogMessage.warn.mock.calls[0][0]).toBe(
         "Some submissions were potentially not marked as retrieved"
       );
-      expect(logMessage.warn.mock.calls[1][0]).toBe(
+      expect(mockLogMessage.warn.mock.calls[1][0]).toBe(
         "The following submissions were not marked as retrieved: [fsdfdsfsdf]"
       );
-      expect(logMessage.error.mock.calls.length).toBe(1);
-      expect(logMessage.error.mock.calls[0][0]).toEqual(new Error("some error"));
-    });
-  });
-
-  describe("GET", () => {
-    it("Should return a list of form responses including Security attributes", async () => {
-      const token = jwt.sign(
-        {
-          email: "test@cds-snc.ca",
-          form: 100,
-        },
-        process.env.TOKEN_SECRET,
-        {
-          expiresIn: "1y",
-        }
-      );
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://localhost:3000/api/retrieval?numRecords=4",
-          authorization: `Bearer ${token}`,
-        },
-        query: {
-          form: "100",
-        },
-      });
-      executeQuery.mockImplementation((client, sql) => {
-        if (
-          sql.includes(
-            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
-          )
-        ) {
-          return {
-            rows: [{ column: 1 }],
-            rowCount: 1,
-          };
-        }
-      });
-      const dynamodbExpectedReponses = {
-        Items: [
-          { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
-          { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
-          { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
-          { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
-        ],
-      };
-      documentClient.send.mockImplementation(() => {
-        return dynamodbExpectedReponses;
-      });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
-      await retrieval(req, res);
-      expect(res.statusCode).toBe(200);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({
-          responses: [
-            { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
-            { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
-            { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
-            { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
-          ],
-        })
-      );
+      expect(mockLogMessage.error.mock.calls.length).toBe(1);
+      expect(mockLogMessage.error.mock.calls[0][0]).toEqual(new Error("This is an Error"));
     });
   });
 });

@@ -2,7 +2,7 @@ describe("TSB Contact Form with security attribute (Protected B)", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
     cy.useFlag("reCaptcha", false);
-    cy.mockForm("../../tests/data/tsbContactTestFormProtectedB.json");
+    cy.mockForm("../../__fixtures__/tsbContactTestFormProtectedB.json");
   });
 
   it("TSB Contact Form renders", () => {

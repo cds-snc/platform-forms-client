@@ -1,19 +1,16 @@
+/**
+ * @jest-environment node
+ */
+
 import { createMocks } from "node-mocks-http";
 import temporary from "@pages/api/token/temporary";
-import executeQuery from "@lib/integration/queryManager";
-import jwt from "jsonwebtoken";
+import jwt, { Secret } from "jsonwebtoken";
+import { prismaMock } from "@jestUtils";
+import { getTokenById } from "@pages/api/id/[form]/bearer";
 
-jest.mock("next-auth/client");
-jest.mock("@lib/integration/queryManager");
-
-jest.mock("@lib/integration/dbConnector", () => {
-  const mockClient = {
-    connect: jest.fn(),
-    query: jest.fn(),
-    end: jest.fn(),
-  };
-  return jest.fn(() => mockClient);
-});
+jest.mock("next-auth/react");
+jest.mock("@pages/api/id/[form]/bearer");
+const mockedGetTokenById = jest.mocked(getTokenById, true);
 
 let IsGCNotifyServiceAvailable = true;
 
@@ -42,7 +39,9 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("creates a temporary token and updates the database", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET as Secret, {
+      expiresIn: "1y",
+    });
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -54,19 +53,20 @@ describe("TemporaryBearerToken tests", () => {
         email: "test@cds-snc.ca",
       },
     });
-
-    executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes('SELECT bearer_token as "bearerToken" FROM templates')) {
-        return {
-          rows: [{ bearerToken: token }],
-          rowCount: 1,
-        };
-      } else {
-        return {
-          rows: [{ id: "1", email: "test@cds-snc.ca", active: true }],
-          rowCount: 1,
-        };
-      }
+    mockedGetTokenById.mockResolvedValue({ bearerToken: token });
+    (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      templateID: 1,
+      email: "test@cds-snc.ca",
+      active: true,
+    });
+    prismaMock.formUser.update.mockResolvedValue({
+      id: 3,
+      templateID: 1,
+      email: "test@cds-snc.ca",
+      temporaryToken: token,
+      active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     await temporary(req, res);
@@ -80,9 +80,9 @@ describe("TemporaryBearerToken tests", () => {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
       },
-      body: JSON.stringify({
+      body: {
         method: null,
-      }),
+      },
     });
 
     await temporary(req, res);
@@ -90,27 +90,9 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error with invalid bearer token", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET_WRONG, { expiresIn: "1y" });
-    const { req, res } = createMocks({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        method: null,
-      }),
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET_WRONG as Secret, {
+      expiresIn: "1y",
     });
-
-    await temporary(req, res);
-    expect(res.statusCode).toEqual(403);
-  });
-
-  it("throws error with GC Notify service unavailable", async () => {
-    IsGCNotifyServiceAvailable = false;
-
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET, { expiresIn: "1y" });
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -123,21 +105,50 @@ describe("TemporaryBearerToken tests", () => {
       },
     });
 
-    executeQuery.mockImplementation((client, sql) => {
-      if (sql.includes('SELECT bearer_token as "bearerToken" FROM templates')) {
-        return {
-          rows: [{ bearerToken: token }],
-          rowCount: 1,
-        };
-      } else {
-        return {
-          rows: [{ id: "1", email: "test@cds-snc.ca", active: true }],
-          rowCount: 1,
-        };
-      }
+    // Mock bearer token not being found
+    prismaMock.template.findUnique.mockResolvedValue(null);
+
+    await temporary(req, res);
+    expect(res.statusCode).toEqual(403);
+  });
+
+  it("throws error with GC Notify service unavailable", async () => {
+    IsGCNotifyServiceAvailable = false;
+
+    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET as Secret, {
+      expiresIn: "1y",
+    });
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+        authorization: `Bearer ${token}`,
+      },
+      body: {
+        email: "test@cds-snc.ca",
+      },
+    });
+    mockedGetTokenById.mockResolvedValue({ bearerToken: token });
+    (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      templateID: 1,
+      email: "test@cds-snc.ca",
+      active: true,
+    });
+    prismaMock.formUser.update.mockResolvedValue({
+      id: 3,
+      templateID: 1,
+      email: "test@cds-snc.ca",
+      temporaryToken: token,
+      active: true,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     await temporary(req, res);
     expect(res.statusCode).toEqual(500);
+    expect(JSON.parse(res._getData())).toMatchObject({
+      error: "GC Notify service failed to send temporary token",
+    });
   });
 });

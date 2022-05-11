@@ -1,27 +1,25 @@
+/**
+ * @jest-environment node
+ */
 import { createMocks } from "node-mocks-http";
-import client from "next-auth/client";
+
+import { getSession } from "next-auth/react";
 import users from "@pages/api/users";
-import executeQuery from "@lib/integration/queryManager";
+import { prismaMock } from "@jestUtils";
+import { Prisma } from "@prisma/client";
 import { logAdminActivity } from "@lib/adminLogs";
 
-jest.mock("next-auth/client");
-jest.mock("@lib/integration/queryManager");
+jest.mock("next-auth/react");
 
-jest.mock("@lib/integration/dbConnector", () => {
-  const mClient = {
-    connect: jest.fn(),
-    query: jest.fn(),
-    end: jest.fn(),
-  };
-  return jest.fn(() => mClient);
-});
+//Needed in the typescript version of the test so types are inferred correclty
+const mockGetSession = jest.mocked(getSession, true);
 
 jest.mock("@lib/adminLogs", () => ({
   logAdminActivity: jest.fn(),
 }));
 
 describe("Users API endpoint", () => {
-  describe("GET: Retrieve list of users", () => {
+  describe("Access Control", () => {
     it("Shouldn't allow a request without a session", async () => {
       const { req, res } = createMocks({
         method: "GET",
@@ -35,7 +33,7 @@ describe("Users API endpoint", () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Access Denied" })
       );
-      expect(executeQuery).toBeCalledTimes(0);
+      expect(prismaMock.user.findMany).toBeCalledTimes(0);
     });
     it("Shouldn't allow a request without an admin session", async () => {
       const { req, res } = createMocks({
@@ -49,78 +47,16 @@ describe("Users API endpoint", () => {
         user: { email: "forms@cds.ca", name: "forms user", admin: false },
       };
 
-      client.getSession.mockReturnValue(mockSession);
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
 
       await users(req, res);
       expect(res.statusCode).toBe(403);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Access Denied" })
       );
-      expect(executeQuery).toBeCalledTimes(0);
+      expect(prismaMock.user.findMany).toBeCalledTimes(0);
     });
 
-    it("Should return all users", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
-      // Mocking executeQuery to return a list of emails
-      executeQuery.mockReturnValue({
-        rows: [
-          { id: "1", email: "test@cds.ca", admin: true },
-          { id: "2", email: "forms@cds.ca", admin: false },
-          { id: "3", email: "forms_2@cds.ca", admin: false },
-        ],
-        rowCount: 3,
-      });
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://localhost:3000",
-        },
-      });
-      await users(req, res);
-      expect(JSON.parse(res._getData())).toMatchObject({
-        users: [
-          { id: "1", email: "test@cds.ca", admin: true },
-          { id: "2", email: "forms@cds.ca", admin: false },
-          { id: "3", email: "forms_2@cds.ca", admin: false },
-        ],
-      });
-
-      expect(res.statusCode).toBe(200);
-    });
-
-    it("Should return empty array if there's db's error", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
-      // Mocking executeQuery to throw an error
-      executeQuery.mockImplementation(() => {
-        throw new Error("Error");
-      });
-
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://localhost:3000",
-        },
-      });
-
-      await users(req, res);
-      expect(res.statusCode).toBe(500);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Could not process request" })
-      );
-    });
-  });
-
-  describe("PUT: Change admin status on user", () => {
     it("Shouldn't allow a request without an admin session", async () => {
       const { req, res } = createMocks({
         method: "PUT",
@@ -137,14 +73,14 @@ describe("Users API endpoint", () => {
         user: { email: "forms@cds.ca", name: "forms user", admin: false },
       };
 
-      client.getSession.mockReturnValue(mockSession);
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
 
       await users(req, res);
       expect(res.statusCode).toBe(403);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Access Denied" })
       );
-      expect(executeQuery).toBeCalledTimes(0);
+      expect(prismaMock.user.update).toBeCalledTimes(0);
     });
     it("Shouldn't allow a request without a session", async () => {
       const { req, res } = createMocks({
@@ -163,15 +99,108 @@ describe("Users API endpoint", () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Access Denied" })
       );
-      expect(executeQuery).toBeCalledTimes(0);
+      expect(prismaMock.user.update).toBeCalledTimes(0);
     });
-
-    it("Should return 400 invalid payload error when isAdmin is missing", async () => {
+  });
+  describe("GET", () => {
+    beforeAll(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
+        user: { email: "forms@cds.ca", name: "forms", admin: true, id: "1" },
       };
-      client.getSession.mockReturnValue(mockSession);
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+    });
+    afterAll(() => {
+      mockGetSession.mockReset();
+    });
+    it("Should return all users", async () => {
+      // Mocking executeQuery to return a list of emails
+      (prismaMock.user.findMany as jest.MockedFunction<any>).mockResolvedValue([
+        {
+          id: "1",
+          email: "test@cds.ca",
+          admin: true,
+          name: "Zoe",
+        },
+        {
+          id: "2",
+          email: "forms@cds.ca",
+          admin: false,
+          name: "Joe",
+        },
+        {
+          id: "3",
+          email: "forms_2@cds.ca",
+          admin: false,
+          name: "Boe",
+        },
+      ]);
+
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+      });
+      await users(req, res);
+      expect(JSON.parse(res._getData())).toEqual({
+        users: [
+          {
+            id: "1",
+            email: "test@cds.ca",
+            admin: true,
+            name: "Zoe",
+          },
+          {
+            id: "2",
+            email: "forms@cds.ca",
+            admin: false,
+            name: "Joe",
+          },
+          {
+            id: "3",
+            email: "forms_2@cds.ca",
+            admin: false,
+            name: "Boe",
+          },
+        ],
+      });
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it("Should return empty array if there's db's error", async () => {
+      prismaMock.user.findMany.mockRejectedValue(new Error("Error Thown"));
+
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+      });
+
+      await users(req, res);
+      expect(res.statusCode).toBe(500);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "Could not process request" })
+      );
+    });
+  });
+
+  describe("PUT", () => {
+    beforeEach(() => {
+      const mockSession = {
+        expires: "1",
+        user: { email: "forms@cds.ca", name: "forms", admin: true, id: "1" },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+    });
+    afterEach(() => {
+      mockGetSession.mockReset();
+    });
+    it("Should return 400 invalid payload error when isAdmin is missing", async () => {
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -189,11 +218,6 @@ describe("Users API endpoint", () => {
       );
     });
     it("Should return 400 invalid payload error when userID is missing", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -211,14 +235,12 @@ describe("Users API endpoint", () => {
       );
     });
     it("Should return 404 if userID is not found", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
       // Mocking executeQuery it returns 0 updated rows
-      executeQuery.mockReturnValue({ rows: [], rowCount: 0 });
 
-      client.getSession.mockReturnValue(mockSession);
+      prismaMock.user.update.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("Unknown Entry", "P2025", "4.3.2")
+      );
+
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -237,17 +259,14 @@ describe("Users API endpoint", () => {
     });
 
     it("Should successfully handle PUT request", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
-      };
-      client.getSession.mockReturnValue(mockSession);
-
-      executeQuery.mockReturnValue({
-        rows: [{ id: "2", email: "test@cds.ca", admin: false }],
-        rowCount: 1,
+      prismaMock.user.update.mockResolvedValue({
+        id: "2",
+        email: "forms@cds.ca",
+        admin: true,
+        emailVerified: null,
+        image: null,
+        name: "Joe",
       });
-
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -263,7 +282,7 @@ describe("Users API endpoint", () => {
 
       expect(res.statusCode).toBe(200);
       expect(logAdminActivity).toHaveBeenCalledWith(
-        1,
+        "1",
         "Update",
         "GrantAdminRole",
         "Admin role has been granted for user id: 2"

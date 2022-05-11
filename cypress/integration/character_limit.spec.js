@@ -1,7 +1,7 @@
 describe("Forms Functionality - Character Counts", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
-    cy.mockForm("../../tests/data/textFieldTestForm.json");
+    cy.mockForm("../../__fixtures__/textFieldTestForm.json");
   });
 
   it("does not display any message when not enough characters have been typed in", () => {

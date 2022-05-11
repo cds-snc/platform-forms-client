@@ -34,7 +34,7 @@ describe("Accessibility (A11Y) Check", () => {
   });
 
   it("Check error state accessibility", () => {
-    cy.mockForm("../../tests/data/cdsIntakeTestForm.json");
+    cy.mockForm("../../__fixtures__/cdsIntakeTestForm.json");
     cy.injectAxe();
     cy.checkA11y(null, A11Y_OPTIONS);
   });

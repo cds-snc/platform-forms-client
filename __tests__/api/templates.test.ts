@@ -1,14 +1,19 @@
+/**
+ * @jest-environment node
+ */
 import { createMocks } from "node-mocks-http";
 import templates from "@pages/api/templates";
-import client from "next-auth/client";
-import validFormTemplate from "../data/validFormTemplate.json";
-import brokenFormTemplate from "../data/brokenFormTemplate.json";
+import { getSession } from "next-auth/react";
+import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
+import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { logAdminActivity } from "@lib/adminLogs";
+import { TextDecoder, TextEncoder } from "util";
 
-global.TextEncoder = require("util").TextEncoder;
-global.TextDecoder = require("util").TextDecoder;
+//Needed in the typescript version of the test so types are inferred correclty
+const mockGetSession = jest.mocked(getSession, true);
+jest.mock("@lib/adminLogs");
 
-jest.mock("next-auth/client");
+jest.mock("next-auth/react");
 
 jest.mock("@aws-sdk/client-lambda", () => {
   return {
@@ -65,13 +70,18 @@ jest.mock("@lib/adminLogs", () => ({
 }));
 
 describe("Test JSON validation scenarios", () => {
-  it("Should successfully handle a POST request to create a template", async () => {
+  beforeEach(() => {
     const mockSession = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", admin: true, id: 1 },
+      user: { email: "a@b.com", name: "Testing Forms", admin: true, id: "1" },
     };
-    client.getSession.mockReturnValue(mockSession);
 
+    mockGetSession.mockResolvedValue(mockSession);
+  });
+  afterEach(() => {
+    mockGetSession.mockReset();
+  });
+  it("Should successfully handle a POST request to create a template", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -87,7 +97,7 @@ describe("Test JSON validation scenarios", () => {
 
     expect(res.statusCode).toBe(200);
     expect(logAdminActivity).toHaveBeenCalledWith(
-      1,
+      "1",
       "Create",
       "UploadForm",
       "Form id: 8 has been uploaded"
@@ -95,12 +105,6 @@ describe("Test JSON validation scenarios", () => {
   });
 
   it("Should fail with invalid JSON", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "a@c.com", name: "Delta", image: "c", admin: true },
-    };
-
-    client.getSession.mockReturnValueOnce(mockSession);
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -118,12 +122,6 @@ describe("Test JSON validation scenarios", () => {
   });
 
   it("Should successfully handle PUT request", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
-    };
-    client.getSession.mockReturnValue(mockSession);
-
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
@@ -139,7 +137,7 @@ describe("Test JSON validation scenarios", () => {
 
     expect(res.statusCode).toBe(200);
     expect(logAdminActivity).toHaveBeenCalledWith(
-      1,
+      "1",
       "Update",
       "UpdateForm",
       "Form id: 8 has been updated"
@@ -147,12 +145,6 @@ describe("Test JSON validation scenarios", () => {
   });
 
   it("Should successfully handle DELETE request", async () => {
-    const mockSession = {
-      expires: "1",
-      user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
-    };
-    client.getSession.mockReturnValue(mockSession);
-
     const { req, res } = createMocks({
       method: "DELETE",
       headers: {
@@ -168,7 +160,7 @@ describe("Test JSON validation scenarios", () => {
 
     expect(res.statusCode).toBe(200);
     expect(logAdminActivity).toHaveBeenCalledWith(
-      1,
+      "1",
       "Delete",
       "DeleteForm",
       "Form id: 8 has been deleted"

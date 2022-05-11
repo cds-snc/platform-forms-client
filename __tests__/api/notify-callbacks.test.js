@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { createMocks } from "node-mocks-http";
 import notifyCallback from "../../pages/api/notify-callback";
 import { SQSClient } from "@aws-sdk/client-sqs";

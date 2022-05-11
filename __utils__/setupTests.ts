@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import initialSettings from "../../flag_initialization/default_flag_settings.json";
+import initialSettings from "../flag_initialization/default_flag_settings.json";
 
 jest.mock("next/config", () => () => ({
   publicRuntimeConfig: {

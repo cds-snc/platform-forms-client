@@ -1,32 +1,47 @@
-import { createMocks } from "node-mocks-http";
-import client from "next-auth/client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * @jest-environment node
+ */
+
+import { createMocks, RequestMethod } from "node-mocks-http";
+import { getSession } from "next-auth/react";
 import owners from "@pages/api/id/[form]/owners";
-import executeQuery from "@lib/integration/queryManager";
 import { logAdminActivity } from "@lib/adminLogs";
+import { prismaMock } from "@jestUtils";
+import { Prisma } from "@prisma/client";
 
-jest.mock("next-auth/client");
-jest.mock("@lib/integration/queryManager");
+jest.mock("next-auth/react");
 
-jest.mock("@lib/integration/dbConnector", () => {
-  const mClient = {
-    connect: jest.fn(),
-    query: jest.fn(),
-    end: jest.fn(),
-  };
-  return jest.fn(() => mClient);
-});
+//Needed in the typescript version of the test so types are inferred correclty
+const mockGetSession = jest.mocked(getSession, true);
 
 jest.mock("@lib/adminLogs", () => ({
   logAdminActivity: jest.fn(),
 }));
 
 describe("/id/[forms]/owners", () => {
-  describe("GET: Retrieve list of emails API endpoint", () => {
-    it("Shouldn't allow a request without a valid session", async () => {
-      client.getSession.mockReturnValue(undefined);
+  describe("Access Control", () => {
+    test.each(["GET", "POST", "PUT"])(
+      "Shouldn't allow a request without a valid session",
+      async (httpVerb) => {
+        const { req, res } = createMocks({
+          method: httpVerb as RequestMethod,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          query: {
+            form: "1",
+          },
+        });
 
+        await owners(req, res);
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toMatchObject({ error: "Access Denied" });
+      }
+    );
+    test.each(["DELETE", "PATCH"])("Shouldn't allow an unaccepted method", async (httpVerb) => {
       const { req, res } = createMocks({
-        method: "GET",
+        method: httpVerb as RequestMethod,
         headers: {
           "Content-Type": "application/json",
         },
@@ -37,18 +52,19 @@ describe("/id/[forms]/owners", () => {
 
       await owners(req, res);
       expect(res.statusCode).toBe(403);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Access Denied" })
-      );
+      expect(JSON.parse(res._getData())).toMatchObject({ error: "HTTP Method Forbidden" });
     });
-
-    it("Should return an error 'Malformed API Request'", async () => {
+  });
+  describe("GET: Retrieve list of emails API endpoint", () => {
+    beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true, id: "1" },
       };
 
-      client.getSession.mockReturnValue(mockSession);
+      mockGetSession.mockResolvedValue(mockSession);
+    });
+    it("Should return an error 'Malformed API Request'", async () => {
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -66,19 +82,13 @@ describe("/id/[forms]/owners", () => {
     });
 
     it("Should return all the emails associated with the form ID.", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
-      // Mocking executeQuery to return a list of emails
-      executeQuery.mockReturnValue({
-        rows: [
-          { id: "1", email: "test@cds.ca", active: true },
-          { id: "2", email: "forms@cds.ca", active: false },
-        ],
-        rowCount: 2,
-      });
+      // Mocking query to return a list of emails
+
+      (prismaMock.formUser.findMany as jest.MockedFunction<any>).mockResolvedValue([
+        { id: 1, email: "test@cds.ca", active: true },
+        { id: 2, email: "forms@cds.ca", active: false },
+      ]);
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -90,26 +100,16 @@ describe("/id/[forms]/owners", () => {
         },
       });
       await owners(req, res);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining([
-          { id: "1", email: "test@cds.ca", active: true },
-          { id: "2", email: "forms@cds.ca", active: false },
-        ])
-      );
+      expect(JSON.parse(res._getData())).toEqual([
+        { id: 1, email: "test@cds.ca", active: true },
+        { id: 2, email: "forms@cds.ca", active: false },
+      ]);
+
       expect(res.statusCode).toBe(200);
     });
 
     it("Should return a list that contains only one email", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
       // Mocking executeQuery to return a list with only an email
-      executeQuery.mockReturnValue({
-        rows: [{ id: "1", email: "oneEmail@cds.ca", active: true }],
-        rowCount: 1,
-      });
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -120,21 +120,23 @@ describe("/id/[forms]/owners", () => {
           form: "1",
         },
       });
+      (prismaMock.formUser.findMany as jest.MockedFunction<any>).mockResolvedValue([
+        {
+          id: 1,
+          email: "oneEmail@cds.ca",
+          active: true,
+        },
+      ]);
       await owners(req, res);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining([{ id: "1", email: "oneEmail@cds.ca", active: true }])
-      );
+      expect(JSON.parse(res._getData())).toMatchObject([
+        { id: 1, email: "oneEmail@cds.ca", active: true },
+      ]);
       expect(res.statusCode).toBe(200);
     });
 
-    it("Should return 404 form ID can't be found or a form has no emails associated", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
+    it("Should return an empty array if form has no emails associated", async () => {
       // Mocking executeQuery to return an empty list
-      executeQuery.mockReturnValue({ rows: [], rowCount: 0 });
+      prismaMock.formUser.findMany.mockResolvedValue([]);
 
       const { req, res } = createMocks({
         method: "GET",
@@ -147,22 +149,15 @@ describe("/id/[forms]/owners", () => {
       });
 
       await owners(req, res);
-      expect(res.statusCode).toBe(404);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Form Not Found" })
-      );
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual([]);
     });
 
-    it("Should return 500 as statusCode if there's db's error", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
-      // Mocking executeQuery to throw an error
-      executeQuery.mockImplementation(() => {
-        throw new Error("Error");
-      });
+    it("Should return 404 as statusCode if there's db's error", async () => {
+      // Mocking prisma to throw an error
+      prismaMock.user.findMany.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
+      );
 
       const { req, res } = createMocks({
         method: "GET",
@@ -176,18 +171,13 @@ describe("/id/[forms]/owners", () => {
       });
 
       await owners(req, res);
-      expect(res.statusCode).toBe(500);
-      expect(JSON.parse(res._getData()).error).toEqual("Error on Server Side");
+      expect(res.statusCode).toBe(404);
+      expect(JSON.parse(res._getData()).error).toEqual("Form Not Found");
     });
   });
 
   describe("PUT: Activate and deactivate a form's owners API endpoint", () => {
     it("Should return 400 invalid payload error(active) field/value is missing", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -210,12 +200,6 @@ describe("/id/[forms]/owners", () => {
     });
 
     it("Should return 400 invalid payload error(email) field/value is missing", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
-
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -237,14 +221,11 @@ describe("/id/[forms]/owners", () => {
     });
 
     it("Should return 404 Form or email Not Found in form_users", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      // Mocking executeQuery it returns 0 updated rows
-      executeQuery.mockReturnValue({ rows: [], rowCount: 0 });
+      // Mocking prisma to throw an error
+      prismaMock.formUser.update.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("Unknown User", "P2025", "4.3.2")
+      );
 
-      client.getSession.mockReturnValue(mockSession);
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -267,14 +248,12 @@ describe("/id/[forms]/owners", () => {
     test.each([0, 1])(
       "Should return 200 status code: owners are deactivated/activated",
       async (elem) => {
-        const mockSession = {
-          expires: "1",
-          user: { email: "forms@cds.ca", name: "forms", admin: true },
-        };
-        client.getSession.mockReturnValue(mockSession);
+        //Mocking prisma
+        (prismaMock.formUser.update as jest.MockedFunction<any>).mockResolvedValue({
+          id: elem,
+          active: true,
+        });
 
-        //Mocking executeQuery
-        executeQuery.mockReturnValue({ rows: [{ id: 1 }], rowCount: `${elem}` + 1 });
         const { req, res } = createMocks({
           method: "PUT",
           headers: {
@@ -290,40 +269,9 @@ describe("/id/[forms]/owners", () => {
         });
         await owners(req, res);
         expect(res.statusCode).toBe(200);
-        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining([{ id: 1 }]));
-      }
-    );
-
-    test.each([0, 1])(
-      "Should log admin activity if PUT API call completed successfully",
-      async (elem) => {
-        const mockSession = {
-          expires: "1",
-          user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
-        };
-        client.getSession.mockReturnValue(mockSession);
-
-        //Mocking executeQuery
-        executeQuery.mockReturnValue({ rows: [{ id: 1 }], rowCount: `${elem}` + 1 });
-        const { req, res } = createMocks({
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: {
-            email: "forms@cds.ca",
-            active: true,
-          },
-          query: {
-            form: "12",
-          },
-        });
-
-        await owners(req, res);
-
-        expect(res.statusCode).toBe(200);
+        expect(JSON.parse(res._getData())).toMatchObject({ id: elem, active: true });
         expect(logAdminActivity).toHaveBeenCalledWith(
-          1,
+          "1",
           "Update",
           "GrantFormAccess",
           "Access to form id: 12 has been granted for email: forms@cds.ca"
@@ -333,17 +281,11 @@ describe("/id/[forms]/owners", () => {
   });
 
   describe("POST: Associate an email to a template data API endpoint", () => {
-    it("Should return 400 FormID doesn't exist in db", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
+    it("Should return 400 FormID doesn't exist or User already assigned in db", async () => {
       //Mocking db result by throwing constraint violation error.
-      executeQuery.mockImplementation(async () => {
-        throw new Error("duplicate key value violates unique constraint template_id_email_unique");
-      });
-
+      prismaMock.formUser.create.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
+      );
       const { req, res } = createMocks({
         method: "POST",
         headers: {
@@ -360,20 +302,17 @@ describe("/id/[forms]/owners", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
-          error: "This email is already binded to this form",
+          error: "The formID does not exist or User is already assigned",
         })
       );
     });
 
     it("Should create a new record and return 200 code along with the id", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
       // return the id of the newly created record.
-      executeQuery.mockReturnValueOnce({ rows: [{ id: 1 }] });
 
+      (prismaMock.formUser.create as jest.MockedFunction<any>).mockResolvedValue({
+        id: 1,
+      });
       const { req, res } = createMocks({
         method: "POST",
         headers: {
@@ -397,45 +336,7 @@ describe("/id/[forms]/owners", () => {
       );
     });
 
-    it("Should return 400 with a message the formID doest not exist", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
-      //Mocking db result by throwing constraint violation error.
-      executeQuery.mockImplementation(async () => {
-        throw new Error(
-          "insert or update on table form_users violates foreign key constraint form_users_template_id_fkey"
-        );
-      });
-      const { req, res } = createMocks({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          email: "test10@gc.ca",
-        },
-        query: {
-          form: "10",
-        },
-      });
-      await owners(req, res);
-      expect(res.statusCode).toBe(404);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({
-          error: "The formID does not exist",
-        })
-      );
-    });
-
     it("Should return 400 undefined formID was supplied", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true },
-      };
-      client.getSession.mockReturnValue(mockSession);
       const { req, res } = createMocks({
         method: "POST",
         headers: {
@@ -464,12 +365,6 @@ describe("/id/[forms]/owners", () => {
     ])(
       "Should return 400 status code wiht invalid email in payload for all those cases",
       async (elem) => {
-        const mockSession = {
-          expires: "1",
-          user: { email: "forms@cds.ca", name: "forms", admin: true },
-        };
-        client.getSession.mockReturnValue(mockSession);
-
         const { req, res } = createMocks({
           method: "POST",
           headers: {
@@ -491,14 +386,10 @@ describe("/id/[forms]/owners", () => {
     );
 
     it("Should log admin activity if POST API call completed successfully", async () => {
-      const mockSession = {
-        expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true, id: 1 },
-      };
-      client.getSession.mockReturnValue(mockSession);
-
       // return the id of the newly created record.
-      executeQuery.mockReturnValueOnce({ rows: [{ id: 1 }] });
+      (prismaMock.formUser.create as jest.MockedFunction<any>).mockResolvedValue({
+        id: 1,
+      });
 
       const { req, res } = createMocks({
         method: "POST",
@@ -517,7 +408,7 @@ describe("/id/[forms]/owners", () => {
 
       expect(res.statusCode).toBe(200);
       expect(logAdminActivity).toHaveBeenCalledWith(
-        1,
+        "1",
         "Create",
         "GrantInitialFormAccess",
         "Email: test9@gc.ca has been given access to form id: 9"
