@@ -1,5 +1,4 @@
-import dbConnector from "@lib/integration/dbConnector";
-import executeQuery from "@lib/integration/queryManager";
+import { prisma } from "./integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { AdminLogAction, AdminLogEvent } from "./types";
 
@@ -17,11 +16,14 @@ export const logAdminActivity = async (
   description: string
 ): Promise<void> => {
   try {
-    await executeQuery(
-      await dbConnector(),
-      "INSERT INTO admin_logs (user_id, action, event, description) VALUES ($1, $2, $3, $4)",
-      [userId, action, event, description]
-    );
+    await prisma.adminLog.create({
+      data: {
+        userId,
+        action,
+        event,
+        description,
+      },
+    });
   } catch (error) {
     logMessage.error(error as Error);
   }

@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
 import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
-import executeQuery from "@lib/integration/queryManager";
-import dbConnector from "@lib/integration/dbConnector";
+import { prisma } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 
 /**
@@ -61,13 +60,13 @@ export const validTemporaryToken = (): MiddlewareRequest => {
  * @returns true or false
  */
 const isTokenExists = async (formID: string, email: string, token: string): Promise<boolean> => {
-  return (
-    (
-      await executeQuery(
-        await dbConnector(),
-        "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true",
-        [formID, email, token]
-      )
-    ).rows.length === 1
+  return Boolean(
+    await prisma.formUser.count({
+      where: {
+        templateId: formID,
+        email: email,
+        temporaryToken: token,
+      },
+    })
   );
 };

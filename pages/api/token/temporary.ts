@@ -1,5 +1,5 @@
-import dbConnector from "@lib/integration/dbConnector";
-import executeQuery from "@lib/integration/queryManager";
+import { prisma } from "@lib/integration/prismaConnector";
+import { Prisma } from "@prisma/client";
 import { logMessage } from "@lib/logger";
 
 import { middleware, cors, validBearerToken } from "@lib/middleware";
@@ -7,9 +7,7 @@ import { MiddlewareProps } from "@lib/types";
 
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
-import { QueryResult } from "pg";
 import { NotifyClient } from "notifications-node-client";
-
 /**
  * Verifies that the payload for the request is valid.
  *
@@ -41,6 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, { formID }: Mi
     res.status(200).json({ message: "success" });
   } catch (error) {
     logMessage.error("Failed to generate temporary token.");
+    logMessage.error(error);
 
     let errorMessage = "Malformed API Request";
 
@@ -82,16 +81,43 @@ const createTemporaryToken = (email: string, tokenSecret: string): string => {
  * @param templateId
  * @returns the query result
  */
-const updateTemporaryToken = async (
-  temporaryToken: string,
-  email: string,
-  templateId: string
-): Promise<QueryResult> => {
-  return executeQuery(
-    await dbConnector(),
-    "UPDATE form_users SET temporary_token = ($1), updated_at = current_timestamp WHERE email = ($2) and template_id = ($3) and active = true",
-    [temporaryToken, email, templateId]
-  );
+const updateTemporaryToken = async (temporaryToken: string, email: string, templateId: string) => {
+  try {
+    // Throws an error is user is not found
+    const user = await prisma.formUser.findUnique({
+      where: {
+        templateId_email: {
+          email: email,
+          templateId: templateId,
+        },
+      },
+      select: {
+        email: true,
+        templateId: true,
+        active: true,
+      },
+    });
+    if (user?.active) {
+      await prisma.formUser.update({
+        where: {
+          templateId_email: {
+            email: user.email,
+            templateId: user.templateId,
+          },
+        },
+        data: {
+          temporaryToken: temporaryToken,
+        },
+      });
+    } else {
+      throw new Error("User is not found or not active");
+    }
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+      throw new Error("User is not found or not active");
+    }
+    throw e;
+  }
 };
 
 const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) => {
