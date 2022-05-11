@@ -28,8 +28,7 @@ export const config = {
   },
 };
 
-const protectedMethods = ["POST", "PUT"];
-
+const protectedMethods = ["POST"];
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
