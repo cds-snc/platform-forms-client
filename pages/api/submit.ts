@@ -64,7 +64,12 @@ function streamToString(stream: Readable): Promise<string> {
   });
 }
 
-const callLambda = async (formID: string, fields: Responses, language: string) => {
+const callLambda = async (
+  formID: string,
+  fields: Responses,
+  language: string,
+  securityAttribute: string
+) => {
   const submission = await getSubmissionByID(formID);
 
   const encoder = new TextEncoder();
@@ -77,6 +82,7 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
         language,
         responses: fields,
         submission,
+        securityAttribute,
       })
     ),
   });
@@ -96,10 +102,7 @@ const callLambda = async (formID: string, fields: Responses, language: string) =
 
 const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
   const templateID = process.env.TEMPLATE_ID;
-  const notify = new NotifyClient(
-    "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY ?? "thisIsATestKey"
-  );
+  const notify = new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
 
   const emailBody = await convertMessage({ form, responses: fields });
   const messageSubject = form.emailSubjectEn ? form.emailSubjectEn : form.titleEn;
@@ -337,7 +340,8 @@ const processFormData = async (
         form.formID,
         fields,
         // pass in the language from the header content language... assume english as the default
-        req.headers?.["content-language"] ? req.headers["content-language"] : "en"
+        req.headers?.["content-language"] ? req.headers["content-language"] : "en",
+        reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Unclassified"
       );
 
       return res.status(201).json({ received: true });
