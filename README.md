@@ -102,6 +102,11 @@ Browse application on `http://localhost:3000`
 
 There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
 
+### Grant yourself admin access locally
+- Login using your email via Google SSO
+- Retrieve your users id from the users table in the formsDB `select * from users where email='YOUR_EMAIL'`
+- Update the record to elevate yourself as an admin `UPDATE users SET admin=true WHERE id=YOUR_ID`
+
 ### Notify integration
 
 To send a form submission to an email address, you should configure the following environment variables in a `.env` file:
