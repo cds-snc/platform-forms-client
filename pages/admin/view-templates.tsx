@@ -9,14 +9,23 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
 
-    const lambdaResult = await crudTemplates({ method: "GET" });
-    const templatesJSON =
-      lambdaResult &&
-      lambdaResult.data &&
-      lambdaResult.data.records &&
-      lambdaResult.data.records.length > 0
-        ? lambdaResult.data.records
-        : [];
+    const templatesJSON: unknown[] = [];
+
+    const getTemplatesFromLambda = async (limit = 13, offset = 0) => {
+      const lambdaResult = await crudTemplates({ method: "GET", limit: limit, offset: offset });
+
+      if (!lambdaResult || !lambdaResult.data || !lambdaResult.data.records) {
+        return;
+      }
+
+      Array.prototype.push.apply(templatesJSON, lambdaResult.data.records);
+
+      if (!(lambdaResult.data.records.length < limit)) {
+        await getTemplatesFromLambda(limit, offset + limit);
+      }
+    };
+
+    await getTemplatesFromLambda();
 
     if (context.locale) {
       return {

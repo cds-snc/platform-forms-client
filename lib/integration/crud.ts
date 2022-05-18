@@ -51,13 +51,15 @@ async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<Crud
 
 async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
   const getConfig = (payload: CrudTemplateInput) => {
-    const { method, formID, formConfig } = payload;
+    const { method, formID, formConfig, limit, offset } = payload;
 
     switch (method) {
       case "GET":
         return {
           method: "GET",
           formID,
+          limit,
+          offset,
         };
       case "POST":
         return {
