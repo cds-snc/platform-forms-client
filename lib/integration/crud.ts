@@ -246,6 +246,14 @@ async function _getFormByStatus(
   return [];
 }
 
+/**
+ * Recursively calls lambda function to retrieve the forms (templates) from the database
+ * @param templates the array which the records will be added to, then recursively passed to the next `getForms()` call
+ * @param limit the number of records to fetch from the database
+ * @param offest the record to start from
+ * @returns an array of all the forms (templates) from the database
+ */
+
 const _getForms = async (templates: unknown[] = [], limit = 50, offset = 0): Promise<unknown[]> => {
   try {
     const lambdaResult = await crudTemplates({ method: "GET", limit: limit, offset: offset });
