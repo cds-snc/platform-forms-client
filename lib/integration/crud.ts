@@ -246,6 +246,28 @@ async function _getFormByStatus(
   return [];
 }
 
+const _getForms = async (templates: unknown[] = [], limit = 50, offset = 0): Promise<unknown[]> => {
+  try {
+    const lambdaResult = await crudTemplates({ method: "GET", limit: limit, offset: offset });
+
+    if (!lambdaResult?.data?.records) {
+      return templates;
+    }
+
+    Array.prototype.push.apply(templates, lambdaResult.data.records);
+
+    if (lambdaResult.data.records.length === limit) {
+      // There could be more records in the database, so get the next batch
+      return await _getForms(templates, limit, offset + limit);
+    } else {
+      return templates;
+    }
+  } catch (e) {
+    logMessage.error(e as Error);
+    return [];
+  }
+};
+
 async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
   try {
     const response = await crudTemplates({ method: "GET", formID: formID });
@@ -281,6 +303,7 @@ const _onlyIncludePublicProperties = async ({
 
 export const crudOrganizations = logger(_crudOrganizationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
+export const getForms = logger(_getForms);
 export const getFormByID = logger(_getFormByID);
 export const getFormByStatus = logger(_getFormByStatus);
 export const getSubmissionByID = logger(_getSubmissionByID);
