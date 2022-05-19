@@ -250,11 +250,19 @@ async function _getFormByStatus(
  * Recursively calls lambda function to retrieve the forms (templates) from the database
  * @param templates the array which the records will be added to, then recursively passed to the next `getForms()` call
  * @param limit the number of records to fetch from the database
- * @param offest the record to start from
+ * @param offset the record to start from
  * @returns an array of all the forms (templates) from the database
  */
 
-const _getForms = async (templates: unknown[] = [], limit = 50, offset = 0): Promise<unknown[]> => {
+const _getForms = async (
+  templates: CrudTemplateResponse = {
+    data: {
+      records: [],
+    },
+  },
+  limit = 50,
+  offset = 0
+): Promise<CrudTemplateResponse> => {
   try {
     const lambdaResult = await crudTemplates({ method: "GET", limit: limit, offset: offset });
 
@@ -262,7 +270,15 @@ const _getForms = async (templates: unknown[] = [], limit = 50, offset = 0): Pro
       return templates;
     }
 
-    templates = templates.concat(lambdaResult.data.records);
+    if (templates.data.records) {
+      templates.data.records = templates.data.records.concat(lambdaResult.data.records);
+    } else {
+      templates = {
+        data: {
+          records: [...lambdaResult.data.records],
+        },
+      };
+    }
 
     if (lambdaResult.data.records.length === limit) {
       // There could be more records in the database, so get the next batch
@@ -272,7 +288,7 @@ const _getForms = async (templates: unknown[] = [], limit = 50, offset = 0): Pro
     }
   } catch (e) {
     logMessage.error(e as Error);
-    return [];
+    return templates;
   }
 };
 
