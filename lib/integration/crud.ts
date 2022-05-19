@@ -262,7 +262,7 @@ const _getForms = async (templates: unknown[] = [], limit = 50, offset = 0): Pro
       return templates;
     }
 
-    Array.prototype.push.apply(templates, lambdaResult.data.records);
+    templates = templates.concat(lambdaResult.data.records);
 
     if (lambdaResult.data.records.length === limit) {
       // There could be more records in the database, so get the next batch
