@@ -51,13 +51,15 @@ async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<Crud
 
 async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
   const getConfig = (payload: CrudTemplateInput) => {
-    const { method, formID, formConfig } = payload;
+    const { method, formID, formConfig, limit, offset } = payload;
 
     switch (method) {
       case "GET":
         return {
           method: "GET",
           formID,
+          limit,
+          offset,
         };
       case "POST":
         return {
@@ -244,6 +246,52 @@ async function _getFormByStatus(
   return [];
 }
 
+/**
+ * Recursively calls lambda function to retrieve the forms (templates) from the database
+ * @param templates the array which the records will be added to, then recursively passed to the next `getForms()` call
+ * @param limit the number of records to fetch from the database
+ * @param offset the record to start from
+ * @returns an array of all the forms (templates) from the database
+ */
+
+const _getForms = async (
+  templates: CrudTemplateResponse = {
+    data: {
+      records: [],
+    },
+  },
+  limit = 50,
+  offset = 0
+): Promise<CrudTemplateResponse> => {
+  try {
+    const lambdaResult = await crudTemplates({ method: "GET", limit: limit, offset: offset });
+
+    if (!lambdaResult?.data?.records) {
+      return templates;
+    }
+
+    if (templates.data.records) {
+      templates.data.records = templates.data.records.concat(lambdaResult.data.records);
+    } else {
+      templates = {
+        data: {
+          records: [...lambdaResult.data.records],
+        },
+      };
+    }
+
+    if (lambdaResult.data.records.length === limit) {
+      // There could be more records in the database, so get the next batch
+      return await _getForms(templates, limit, offset + limit);
+    } else {
+      return templates;
+    }
+  } catch (e) {
+    logMessage.error(e as Error);
+    return templates;
+  }
+};
+
 async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
   try {
     const response = await crudTemplates({ method: "GET", formID: formID });
@@ -279,6 +327,7 @@ const _onlyIncludePublicProperties = async ({
 
 export const crudOrganizations = logger(_crudOrganizationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
+export const getForms = logger(_getForms);
 export const getFormByID = logger(_getFormByID);
 export const getFormByStatus = logger(_getFormByStatus);
 export const getSubmissionByID = logger(_getSubmissionByID);
