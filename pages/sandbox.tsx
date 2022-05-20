@@ -14,16 +14,6 @@ interface SandboxProps {
 }
 const Sandbox = ({ formsList }: SandboxProps) => {
   const { t, i18n } = useTranslation("welcome");
-  const LinksList = () => {
-    return formsList.map((form) => {
-      const formTitle = form.formConfig.form[getProperty("title", i18n.language)];
-      return (
-        <li key={`link-${form.formID}`}>
-          <Link href={`/id/${form.formID}`}>{formTitle && formTitle.toString()}</Link>
-        </li>
-      );
-    });
-  };
 
   return (
     <>
@@ -37,7 +27,14 @@ const Sandbox = ({ formsList }: SandboxProps) => {
         <div>
           <h2>{t("formList.title")}</h2>
           <ul className="link-list custom">
-            <LinksList />
+            {formsList.map((form) => {
+              const formTitle = form.formConfig.form[getProperty("title", i18n.language)];
+              return (
+                <li key={`link-${form.formID}`}>
+                  <Link href={`/id/${form.formID}`}>{formTitle && formTitle.toString()}</Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
