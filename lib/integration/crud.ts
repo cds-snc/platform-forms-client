@@ -226,7 +226,7 @@ async function _getSubmissionByID(formID: string): Promise<SubmissionProperties 
 async function _getFormByStatus(
   status: boolean
 ): Promise<(PublicFormSchemaProperties | undefined)[]> {
-  const response = await crudTemplates({ method: "GET" });
+  const response = await _getForms();
   const { records } = response.data;
   if (records && records?.length > 0) {
     return records
