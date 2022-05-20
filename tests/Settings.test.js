@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { FormSettings } from "./Settings";
+import FormSettings from "../pages/id/[form]/settings";
 import mockedAxios from "axios";
 import { useRouter } from "next/router";
 

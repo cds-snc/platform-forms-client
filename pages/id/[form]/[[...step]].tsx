@@ -1,3 +1,6 @@
+import { getFormByID } from "@lib/integration/crud";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { checkOne } from "@lib/flags";
 import React from "react";
 import classnames from "classnames";
 import { TFunction, useTranslation } from "next-i18next";
@@ -8,6 +11,7 @@ import { NextRouter, useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
 import { PublicFormRecord } from "@lib/types";
 import SecurityAttributeBadge from "@components/globals/SecurityBadge";
+import { GetServerSideProps } from "next";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
@@ -59,6 +63,60 @@ export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
       </Form>
     </div>
   );
+};
+
+// Redirects to 404 page
+function redirect(locale: string | undefined) {
+  return {
+    redirect: {
+      // We can redirect to a 'Form does not exist page' in the future
+      destination: `/${locale}/404`,
+      permanent: false,
+    },
+  };
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const unpublishedForms = await checkOne("unpublishedForms");
+  let form = null;
+  const formId = context.params?.form;
+  const isEmbeddable = context.query?.embed == "true" || null;
+
+  if (formId === "preview-form" && context.query?.formObject) {
+    // If we're previewing a form, get the object from the query string
+
+    // If more then one formObject param is passed in short circuit back to 404
+    if (Array.isArray(context.query?.formObject)) return redirect(context.locale);
+    const queryObj = context.query.formObject;
+    const parsedForm = JSON.parse(queryObj);
+    form = parsedForm.form ?? null;
+  } else {
+    //Otherwise, get the form object via the dataLayer library
+    // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
+    if (
+      !context.params?.form ||
+      Array.isArray(context.params.form) ||
+      isNaN(parseInt(context.params.form))
+    )
+      return redirect(context.locale);
+
+    form = await getFormByID(parseInt(context.params.form));
+  }
+
+  // Redirect if form doesn't exist and
+  // Only retrieve publish ready forms if isProduction
+  // Short circuit only if Cypress testing
+  if (!form || (!form?.publishingStatus && !unpublishedForms)) {
+    return redirect(context.locale);
+  }
+  return {
+    props: {
+      formRecord: form,
+      isEmbeddable: isEmbeddable,
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"]))),
+    }, // will be passed to the page component as props
+  };
 };
 
 export default DynamicForm;
