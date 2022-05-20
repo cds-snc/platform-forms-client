@@ -78,7 +78,7 @@ In your main forms .env file, DATABASE_URL can be filled in as followed (replace
 `DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
 
 As an example, here's the DB string with the example values from above:
-`DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB`
+`DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB`
 
 Run in development mode:
 
@@ -91,6 +91,11 @@ Browse application on `http://localhost:3000`
 ## Configuration
 
 There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
+
+### Grant yourself admin access locally
+- Login using your email via Google SSO
+- Retrieve your users id from the users table in the formsDB `select * from users where email='YOUR_EMAIL'`
+- Update the record to elevate yourself as an admin `UPDATE users SET admin=true WHERE id=YOUR_ID`
 
 ### Notify integration
 

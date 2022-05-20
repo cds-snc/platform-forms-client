@@ -175,6 +175,8 @@ export interface CrudTemplateInput {
   method: string;
   formID?: string;
   formConfig?: FormDefinitionProperties;
+  limit?: number;
+  offset?: number;
 }
 
 export interface CrudTemplateResponse {
