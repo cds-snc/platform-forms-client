@@ -277,26 +277,27 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
  * @param element
  * @param language
  */
-const _getElementInitialValue = (element: FormElement, language: string): Response | undefined => {
+const _getElementInitialValue = (element: FormElement, language: string): Response => {
   switch (element.type) {
+    // Radio and dropdown resolve to string values
+    case FormElementTypes.radio:
+    case FormElementTypes.dropdown:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
       return "";
     case FormElementTypes.checkbox:
-    case FormElementTypes.radio:
-    case FormElementTypes.dropdown:
-      return undefined;
+      return [];
     case FormElementTypes.fileInput:
       return { file: null, src: null, name: "", size: 0 };
     case FormElementTypes.dynamicRow: {
-      const dynamicRowInitialValue: Record<string, unknown> =
+      const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          if (!["richText"].includes(currentValue.type)) {
+          if (![FormElementTypes.richText].includes(currentValue.type)) {
             accumulator[subElementID] = _getElementInitialValue(currentValue, language);
           }
           return accumulator;
-        }, {} as Record<string, unknown>) ?? {};
+        }, {} as Responses) ?? {};
       return [dynamicRowInitialValue];
     }
     default:
@@ -320,10 +321,7 @@ const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): 
   formRecord.formConfig.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
-      const initialValue = _getElementInitialValue(element, language);
-      if (initialValue) {
-        initialValues[element.id] = initialValue;
-      }
+      initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
   return initialValues;
