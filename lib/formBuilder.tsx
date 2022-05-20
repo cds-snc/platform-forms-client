@@ -12,7 +12,14 @@ import {
   TextArea,
   TextInput,
 } from "../components/forms";
-import { FormElement, FormElementTypes, PropertyChoices, PublicFormRecord } from "@lib/types";
+import {
+  FormElement,
+  FormElementTypes,
+  PropertyChoices,
+  PublicFormRecord,
+  Responses,
+  Response,
+} from "@lib/types";
 import { TFunction } from "next-i18next";
 
 // This function is used for the i18n change of form labels
@@ -270,10 +277,7 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
  * @param element
  * @param language
  */
-const _getElementInitialValue = (
-  element: FormElement,
-  language: string
-): Record<string, unknown> | Record<string, unknown>[] | string | undefined => {
+const _getElementInitialValue = (element: FormElement, language: string): Response | undefined => {
   switch (element.type) {
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
@@ -306,17 +310,20 @@ const _getElementInitialValue = (
  * @param formRecord
  * @param language
  */
-const _getFormInitialValues = (formRecord: PublicFormRecord, language: string) => {
+const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
   if (!formRecord?.formConfig) {
-    return null;
+    return {};
   }
 
-  const initialValues: Record<string, unknown> = {};
+  const initialValues: Responses = {};
 
   formRecord.formConfig.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
-      initialValues[element.id] = _getElementInitialValue(element, language);
+      const initialValue = _getElementInitialValue(element, language);
+      if (initialValue) {
+        initialValues[element.id] = initialValue;
+      }
     });
 
   return initialValues;

@@ -1,12 +1,16 @@
 import React from "react";
-import { FormElement, ValidationProperties, FormElementTypes, Responses } from "@lib/types";
+import {
+  FormElement,
+  ValidationProperties,
+  FormElementTypes,
+  Responses,
+  PublicFormRecord,
+} from "@lib/types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import ErrorListItem from "../components/forms/ErrorListItem/ErrorListItem";
 import { isServer } from "./tsUtils";
-import { DynamicFormProps } from "@components/containers/DynamicForm/DynamicForm";
-import { InnerFormProps } from "@components/forms/Form/Form";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -190,8 +194,11 @@ const isFieldResponseValid = (
  * @param props
  */
 export const validateOnSubmit = (
-  values: { [key: string]: unknown },
-  props: DynamicFormProps
+  values: Responses,
+  props: {
+    formRecord: PublicFormRecord;
+    t: TFunction;
+  }
 ): Responses => {
   const errors: Responses = {};
 
@@ -221,8 +228,9 @@ export const validateOnSubmit = (
  * getErrorList is called to show validation errors at the top of the Form
  * @param props
  */
+
 export const getErrorList = (
-  props: InnerFormProps & FormikProps<{ [key: string]: unknown }> & DynamicFormProps
+  props: { formRecord: PublicFormRecord } & FormikProps<Responses>
 ): JSX.Element | null => {
   if (!props.formRecord?.formConfig?.form || !props.errors) {
     return null;
@@ -272,10 +280,7 @@ export const getErrorList = (
 /**
  * setFocusOnErrorMessage is called if form validation fails and ensures the users can see the messages
  */
-export const setFocusOnErrorMessage = (
-  props: InnerFormProps & FormikProps<{ [key: string]: unknown }>,
-  errorId: string
-): void => {
+export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: string): void => {
   if (!isServer() && props && props.errors && props.touched && errorId) {
     const errorAlert = document.getElementById(errorId);
     if (errorAlert && typeof errorAlert !== "undefined") {

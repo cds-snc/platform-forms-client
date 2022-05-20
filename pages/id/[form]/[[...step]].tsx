@@ -3,11 +3,11 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "@lib/flags";
 import React from "react";
 import classnames from "classnames";
-import { TFunction, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { Form, TextPage } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
-import { NextRouter, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
 import { PublicFormRecord } from "@lib/types";
 import SecurityAttributeBadge from "@components/globals/SecurityBadge";
@@ -17,18 +17,7 @@ import { GetServerSideProps } from "next";
     form text page based on the step
 */
 
-export interface DynamicFormProps {
-  formRecord: PublicFormRecord;
-  language: string;
-  router: NextRouter;
-  notifyPreviewFlag: boolean;
-  isReCaptchaEnableOnSite?: boolean;
-  children?: (JSX.Element | undefined)[] | null;
-  t: TFunction;
-}
-
-export const DynamicForm = (props: DynamicFormProps): React.ReactElement => {
-  const { formRecord } = props;
+const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.ReactElement => {
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
@@ -119,4 +108,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default DynamicForm;
+export default RenderForm;
