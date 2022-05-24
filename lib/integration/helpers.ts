@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NextRouter } from "next/router";
 import { logger, logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
 import {
@@ -9,7 +10,6 @@ import {
   Response,
   Responses,
 } from "@lib/types";
-import { DynamicFormProps } from "@components/containers/DynamicForm/DynamicForm";
 import { Submission } from "@lib/types/submission-types";
 
 // Get the form json object by using the form ID
@@ -253,7 +253,15 @@ function _handleFormDataArray(key: string, value: Array<string>): [string, strin
 
 async function _submitToAPI(
   values: Responses,
-  formikBag: FormikBag<DynamicFormProps, { [key: string]: unknown }>
+  formikBag: FormikBag<
+    {
+      formRecord: PublicFormRecord;
+      language: string;
+      router: NextRouter;
+      notifyPreviewFlag: boolean;
+    },
+    Responses
+  >
 ) {
   const { language, router, formRecord, notifyPreviewFlag } = formikBag.props;
   const { setStatus } = formikBag;

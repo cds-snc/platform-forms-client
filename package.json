@@ -20,7 +20,6 @@
     "cypress:headless": "cypress run --browser chrome --headless",
     "build-storybook": "build-storybook -s public --no-dll",
     "storybook": "start-storybook -s public -p 6006",
-    "heroku-postbuild": "cd ./migrations && yarn install && cd ../flag_initialization && yarn install && cd .. &&  yarn build",
     "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"
   },
   "dependencies": {

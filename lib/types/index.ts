@@ -35,5 +35,3 @@ export { AdminLogAction, AdminLogEvent } from "./utility-types";
 export type { BearerTokenPayload, TemporaryTokenPayload, BearerResponse } from "./retrieval-types";
 
 export type { FormOwner } from "./user-types";
-
-export class PublicFormRecords {}

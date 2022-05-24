@@ -6,25 +6,20 @@ import { submitToAPI } from "@lib/integration/helpers";
 import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
 import { Alert, Button } from "../index";
 import { logMessage } from "@lib/logger";
-import { useTranslation } from "next-i18next";
+import { useTranslation, TFunction } from "next-i18next";
 import axios from "axios";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
-import { DynamicFormProps } from "@components/containers/DynamicForm/DynamicForm";
-import { Responses } from "@lib/types";
+import { Responses, PublicFormRecord } from "@lib/types";
+import { NextRouter } from "next/router";
 
-export interface InnerFormProps {
-  children?: React.ReactNode;
-  language: string;
-}
+type InnerFormProps = FormProps & FormikProps<Responses>;
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
  */
-const InnerForm: React.FC<
-  InnerFormProps & FormikProps<{ [key: string]: unknown }> & DynamicFormProps
-> = (props: InnerFormProps & FormikProps<{ [key: string]: unknown }> & DynamicFormProps) => {
+const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { children, handleSubmit, isSubmitting, formRecord } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
@@ -219,25 +214,35 @@ const InnerForm: React.FC<
   );
 };
 
+interface FormProps {
+  formRecord: PublicFormRecord;
+  language: string;
+  router: NextRouter;
+  notifyPreviewFlag: boolean;
+  isReCaptchaEnableOnSite?: boolean;
+  children?: (JSX.Element | undefined)[] | null;
+  t: TFunction;
+}
+
 /**
  * This is the main Form component that wraps "InnerForm" withFormik hook, giving all of its components context
  * @param props
  */
-export const Form = withFormik<DynamicFormProps, { [key: string]: unknown }>({
+
+export const Form = withFormik<FormProps, Responses>({
   validateOnChange: false,
 
   validateOnBlur: false,
 
   enableReinitialize: true, // needed when switching languages
 
-  mapPropsToValues: (props) =>
-    getFormInitialValues(props.formRecord, props.language) as { [key: string]: unknown },
+  mapPropsToValues: (props) => getFormInitialValues(props.formRecord, props.language),
 
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values as Responses, formikBag);
+      await submitToAPI(values, formikBag);
     } catch (err) {
       logMessage.error(err as Error);
     } finally {

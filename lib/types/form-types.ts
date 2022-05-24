@@ -145,4 +145,6 @@ export interface TemplateLambdaInput {
   method: string;
   formID?: number;
   formConfig?: FormConfiguration;
+  limit?: number;
+  offset?: number;
 }
