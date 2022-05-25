@@ -70,3 +70,11 @@ jobs:
       - name: Logout of Staging Amazon ECR
         if: always()
         run: docker logout ${{ steps.login-ecr-staging.outputs.registry }}
+
+      - name: Generate platform-forms-client/app/docker SBOM
+        uses: cds-snc/security-tools/.github/actions/generate-sbom@665cf9050b81028ef96c28980cfb09930bf0187f # renovate: tag=v1
+        with:
+          dependency_track_api_key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
+          docker_image: $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          project_name: forms-client/app/docker
+          project_type: docker        

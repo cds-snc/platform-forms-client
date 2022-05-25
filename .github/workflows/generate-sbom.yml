@@ -1,0 +1,29 @@
+name: Generate SBOM
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - yarn.lock
+      - .github/workflows/generate-sbom.yml
+  push:
+    branches:
+      - main
+    paths:
+      - yarn.lock
+      - .github/workflows/generate-sbom.yml
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate app SBOM
+        uses: cds-snc/security-tools/.github/actions/generate-sbom@665cf9050b81028ef96c28980cfb09930bf0187f # renovate: tag=v1
+        with:
+          dependency_track_api_key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
+          project_name: forms-client/app
+          project_type: node      
