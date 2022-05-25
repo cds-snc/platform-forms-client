@@ -5,7 +5,7 @@ import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 import { logAdminActivity } from "@lib/adminLogs";
-import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
+import { AdminLogAction, AdminLogEvent } from "@lib/types";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];

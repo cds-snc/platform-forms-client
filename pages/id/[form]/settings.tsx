@@ -91,25 +91,13 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  const formID = context && context.params && context.params.form ? context.params.form : undefined;
+  const formID = context?.params?.form ? parseInt(context.params.form as string) : undefined;
 
-  if (formID) {
+  if (formID === formID) {
     // get form info from db
-    let formIDNumber;
-    try {
-      formIDNumber = parseInt(formID as string);
-    } catch (e) {
-      return {
-        redirect: {
-          // We can redirect to a 'Form does not exist page' in the future
-          destination: `/${context.locale}/404`,
-          permanent: false,
-        },
-      };
-    }
     const payload = {
       method: "GET",
-      formID: formIDNumber,
+      formID: formID,
     };
     const lambdaResult = await crudTemplates(payload);
 

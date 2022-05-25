@@ -28,6 +28,7 @@ export type {
   MiddlewareReturn,
   MiddlewareRequest,
   MiddlewareProps,
+  HTMLTextInputTypeAttribute,
 } from "./utility-types";
 
 export { AdminLogAction, AdminLogEvent } from "./utility-types";

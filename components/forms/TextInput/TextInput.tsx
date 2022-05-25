@@ -1,11 +1,11 @@
-import React, { useEffect, useState, HTMLInputTypeAttribute } from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import { InputFieldProps, CharacterCountMessages } from "@lib/types";
+import { InputFieldProps, CharacterCountMessages, HTMLTextInputTypeAttribute } from "@lib/types";
 
 export interface TextInputProps extends InputFieldProps {
-  type: HTMLInputTypeAttribute;
+  type: HTMLTextInputTypeAttribute;
   characterCountMessages: CharacterCountMessages;
   placeholder?: string;
 }

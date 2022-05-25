@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
+import { HTMLInputTypeAttribute } from "react";
 
 export interface LambdaResponse<T> {
   data: {
@@ -50,3 +51,13 @@ export enum AdminLogEvent {
   EnableFeature = "EnableFeature",
   DisableFeature = "DisableFeature",
 }
+
+export type HTMLTextInputTypeAttribute =
+  | "text"
+  | "email"
+  | "name"
+  | "number"
+  | "password"
+  | "search"
+  | "tel"
+  | "url";

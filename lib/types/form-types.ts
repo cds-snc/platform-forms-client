@@ -2,7 +2,8 @@
  * This file contains all type definitions relevant with dealing with form configuration
  * and templates.
  */
-import { ChangeEvent, HTMLInputTypeAttribute } from "react";
+import { ChangeEvent } from "react";
+import { HTMLTextInputTypeAttribute } from "./utility-types";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -12,7 +13,7 @@ import { ChangeEvent, HTMLInputTypeAttribute } from "react";
 // individual field
 export interface ValidationProperties {
   required: boolean;
-  type?: HTMLInputTypeAttribute;
+  type?: HTMLTextInputTypeAttribute;
   regex?: string;
   maxLength?: number;
   descriptionEN?: string;
