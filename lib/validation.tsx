@@ -112,7 +112,9 @@ const isFieldResponseValid = (
     }
     case FormElementTypes.radio:
     case FormElementTypes.dropdown: {
-      if (validator.required && value === undefined) return t("input-validation.required");
+      if (validator.required && (value === undefined || value === "")) {
+        return t("input-validation.required");
+      }
       break;
     }
     case FormElementTypes.fileInput: {

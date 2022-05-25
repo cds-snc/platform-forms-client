@@ -15,7 +15,7 @@ describe("Forms Functionality", () => {
     it("fills the text field successfully and submits the form", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
-      cy.get("#submitted-thank-you").contains("Submitted thank you!");
+      cy.get("h1").contains("Submitted thank you!");
     });
   });
 
@@ -48,7 +48,7 @@ describe("Forms Functionality", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.tick(6000);
       cy.get("[type='submit']").click();
-      cy.get("#submitted-thank-you").contains("Submitted thank you!");
+      cy.get("h1").contains("Submitted thank you!");
     });
   });
 });

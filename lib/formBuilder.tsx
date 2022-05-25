@@ -42,11 +42,9 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
       return [];
     }
 
-    const localeChoices = choices.map((choice) => {
+    return choices.map((choice) => {
       return choice[lang];
     });
-
-    return localeChoices;
   } catch (err) {
     logMessage.error(err as Error);
     throw err;

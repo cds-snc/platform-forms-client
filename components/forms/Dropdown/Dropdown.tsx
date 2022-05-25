@@ -31,8 +31,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const options = choices.map((choice, i) => {
     const innerId = `${id}-${i}`;
-    const value = field.value ? field.value[innerId] : field.value;
-    return <DropdownOption key={`key-${innerId}`} value={value} name={choice} />;
+    return <DropdownOption key={`key-${innerId}`} value={choice} name={choice} />;
   });
 
   return (
