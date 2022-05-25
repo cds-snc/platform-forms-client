@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
-import { HTMLInputTypeAttribute } from "react";
 
 export interface LambdaResponse<T> {
   data: {

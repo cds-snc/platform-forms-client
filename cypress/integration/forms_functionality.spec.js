@@ -2,6 +2,7 @@ describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", false);
+      cy.useFlag("submitToReliabilityQueue", false);
       cy.mockForm("../../tests/data/textFieldTestForm.json");
     });
     it("the form displays an error when it is submitted and a field is required", () => {
@@ -15,7 +16,7 @@ describe("Forms Functionality", () => {
     it("fills the text field successfully and submits the form", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
-      cy.get("h1").contains("Submitted thank you!");
+      cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
   });
 
@@ -48,7 +49,7 @@ describe("Forms Functionality", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.tick(6000);
       cy.get("[type='submit']").click();
-      cy.get("h1").contains("Submitted thank you!");
+      cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
   });
 });

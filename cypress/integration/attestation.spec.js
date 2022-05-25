@@ -1,6 +1,7 @@
 describe("Attestation functionality", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
+    cy.useFlag("submitToReliabilityQueue", false);
     cy.mockForm("../../tests/data/attestationTestForm.json");
   });
 

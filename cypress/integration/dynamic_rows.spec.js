@@ -1,6 +1,7 @@
 describe("Dynamic Row Functionality", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
+    cy.useFlag("submitToReliabilityQueue", false);
     cy.mockForm("../../tests/data/dynamicRowsTestForm.json");
   });
   it("Adds then deletes a dynamic row", () => {
