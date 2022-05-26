@@ -73,6 +73,8 @@ jobs:
 
       - name: Generate forms-client/app/docker SBOM
         uses: cds-snc/security-tools/.github/actions/generate-sbom@4c6b386722985552f3f008d04279a3f01402cc35 # renovate: tag=v1
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr-staging.outputs.registry }}        
         with:
           dependency_track_api_key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
           docker_image: $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
