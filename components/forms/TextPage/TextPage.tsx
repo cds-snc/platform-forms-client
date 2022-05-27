@@ -44,18 +44,19 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
-  const { formRecord, htmlEmail } = props;
+  const {
+    formRecord: {
+      formConfig: {
+        form: { endPage },
+      },
+    },
+    htmlEmail,
+  } = props;
   const language = i18n.language as string;
 
-  const pageText =
-    formRecord.formConfig && formRecord.formConfig.form.endPage
-      ? formRecord.formConfig.form.endPage[getProperty("description", language)]
-      : "";
+  const pageText = endPage ? endPage[getProperty("description", language)] : "";
 
-  const urlQuery =
-    formRecord.formConfig && formRecord.formConfig.form.endPage
-      ? formRecord.formConfig.form.endPage[getProperty("referrerUrl", language)]
-      : null;
+  const urlQuery = endPage ? endPage[getProperty("referrerUrl", language)] : null;
 
   // autoFocus h1 element of page to ensure its read out
   useEffect(() => {

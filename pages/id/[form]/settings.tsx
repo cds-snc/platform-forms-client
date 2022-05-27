@@ -93,7 +93,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 export const getServerSideProps = requireAuthentication(async (context) => {
   const formID = context?.params?.form ? parseInt(context.params.form as string) : undefined;
 
-  if (formID === formID) {
+  if (formID && !isNaN(formID)) {
     // get form info from db
     const payload = {
       method: "GET",

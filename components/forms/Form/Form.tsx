@@ -20,7 +20,15 @@ type InnerFormProps = FormProps & FormikProps<Responses>;
  * @param props
  */
 const InnerForm: React.FC<InnerFormProps> = (props) => {
-  const { children, handleSubmit, isSubmitting, formRecord } = props;
+  const {
+    children,
+    handleSubmit,
+    isSubmitting,
+    formRecord: {
+      formID,
+      formConfig: { reCaptchaID, form },
+    },
+  } = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
@@ -36,7 +44,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
 
   useExternalScript(
-    `https://www.google.com/recaptcha/api.js?render=${formRecord?.formConfig?.reCaptchaID}`,
+    `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
     isReCaptchaEnableOnSite
   );
 
@@ -47,7 +55,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     try {
       window.grecaptcha.ready(async () => {
         // get reCAPTCHA response
-        const clientToken = await window.grecaptcha.execute(formRecord.formConfig.reCaptchaID, {
+        const clientToken = await window.grecaptcha.execute(reCaptchaID, {
           action: "submit",
         });
         if (clientToken) {
@@ -101,7 +109,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     if (timerActive) {
       const secondsBaseDelay = 2;
       const secondsPerFormElement = 2;
-      const numberOfRequiredElements = formRecord.formConfig.form.elements.filter(
+      const numberOfRequiredElements = form.elements.filter(
         (element) => element.properties.validation?.required === true
       ).length;
 
@@ -157,8 +165,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
                 event: "form_submission_spam_trigger",
-                formID: formRecord.formID,
-                formTitle: formRecord.formConfig.form.titleEn,
+                formID: formID,
+                formTitle: form.titleEn,
                 submitTime: formTimerState.remainingTime,
               });
               setSubmitTooEarly(true);

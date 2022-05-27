@@ -2,7 +2,6 @@ describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", false);
-      cy.useFlag("submitToReliabilityQueue", false);
       cy.mockForm("../../tests/data/textFieldTestForm.json");
     });
     it("the form displays an error when it is submitted and a field is required", () => {
