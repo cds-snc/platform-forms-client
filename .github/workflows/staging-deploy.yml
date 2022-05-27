@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Post to Slack
         run: |
-          json='{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Unable to deploy Staging form viewer: <https://github.com/cds-snc/platform-forms-client/actions/workflows/staging-build-push-container.yml|ECR push failed>"}}]}'
+          json='{"channel":"#forms-deploy-activities", "blocks":[{"type":"section","text":{"type":"mrkdwn","text":":red: Unable to deploy Staging form viewer: <https://github.com/cds-snc/platform-forms-client/actions/workflows/staging-build-push-container.yml|ECR push failed>"}}]}'
           curl -X POST -H 'Content-type: application/json' --data "$json" ${{ secrets.FORMS_DEV_SLACK_WEBHOOK }}
           exit 1
 
