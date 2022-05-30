@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { FormDBConfigProperties } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";
 import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks/useRefresh";
 
 interface JSONUploadProps {
-  form?: FormDBConfigProperties;
+  form?: FormRecord;
 }
 
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
@@ -112,7 +112,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                   setJsonConfig(e.currentTarget.value);
                 }}
                 aria-label={t("upload.jsonConfigAriaLabel")}
-              ></textarea>
+              />
               <div>
                 <button type="submit" className="gc-button" data-testid="upload">
                   {t("upload.submit")}

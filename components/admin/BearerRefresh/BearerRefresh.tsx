@@ -1,10 +1,10 @@
 import { Button } from "@components/forms";
 import Loader from "@components/globals/Loader";
 import { logMessage } from "@lib/logger";
-import { BearerResponse } from "@lib/types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
+import { BearerResponse } from "@lib/types";
 
 export interface BearerRefreshProps {
   formID: number;
@@ -85,7 +85,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
             defaultValue={bearerTokenState}
             readOnly
             aria-label={t("settings.bearerToken.currentAriaLabel")}
-          ></textarea>
+          />
           <Button type="button" onClick={() => handleRefreshBearerToken(formID)}>
             {t("settings.bearerToken.refreshButton")}
           </Button>

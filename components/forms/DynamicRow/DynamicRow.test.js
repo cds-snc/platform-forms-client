@@ -63,13 +63,18 @@ const dynamicRowData = {
   },
 };
 
-const formConfig = {
-  id: 1,
-  version: 1,
-  titleEn: "Test Form",
-  titleFr: "Formulaire de test",
-  layout: [1],
-  elements: [dynamicRowData],
+const formRecord = {
+  formID: 1,
+  formConfig: {
+    form: {
+      id: 1,
+      version: 1,
+      titleEn: "Test Form",
+      titleFr: "Formulaire de test",
+      layout: [1],
+      elements: [dynamicRowData],
+    },
+  },
 };
 
 describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
@@ -77,7 +82,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
   describe("renders without errors", () => {
     test("...initialState", () => {
       render(
-        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <Form formRecord={formRecord} t={(key) => key} language={lang}>
           <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
@@ -107,7 +112,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Add a row", async () => {
       userEvent.setup();
       render(
-        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <Form formRecord={formRecord} t={(key) => key} language={lang}>
           <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
@@ -155,7 +160,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Delete a row", async () => {
       userEvent.setup();
       render(
-        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <Form formRecord={formRecord} t={(key) => key} language={lang}>
           <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
@@ -190,7 +195,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Data reorders properly after row deletion", async () => {
       userEvent.setup();
       render(
-        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <Form formRecord={formRecord} t={(key) => key} language={lang}>
           <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );
@@ -224,7 +229,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
     test("Maximum number of rows", async () => {
       userEvent.setup();
       render(
-        <Form formConfig={formConfig} t={(key) => key} language={lang}>
+        <Form formRecord={formRecord} t={(key) => key} language={lang}>
           <GenerateElement element={dynamicRowData} language={lang} t={(key) => key} />
         </Form>
       );

@@ -1,15 +1,16 @@
 import json2md from "json2md";
 import logger from "@lib/logger";
-import { Submission } from "./types";
 import { extractFormData } from "./integration/helpers";
+import { Submission } from "@lib/types";
 
 export default logger((formResponse: Submission): string => {
-  const subjectEn = formResponse.form.emailSubjectEn
-    ? formResponse.form.emailSubjectEn
-    : formResponse.form.titleEn;
-  const subjectFr = formResponse.form.emailSubjectFr
-    ? formResponse.form.emailSubjectFr
-    : formResponse.form.titleFr;
+  const formResponseFormObject = formResponse.form.formConfig.form;
+  const subjectEn = formResponseFormObject.emailSubjectEn
+    ? formResponseFormObject.emailSubjectEn
+    : formResponseFormObject.titleEn;
+  const subjectFr = formResponseFormObject.emailSubjectFr
+    ? formResponseFormObject.emailSubjectFr
+    : formResponseFormObject.titleFr;
 
   const title = `${subjectEn} / ${subjectFr}`;
 

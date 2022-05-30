@@ -26,7 +26,7 @@
 
 Cypress.Commands.add("mockForm", (file) => {
   cy.fixture(file).then((mockedForm) => {
-    cy.visit("/en/id/test", {
+    cy.visit("/en/id/1", {
       onBeforeLoad: (win) => {
         let nextData;
 
@@ -34,10 +34,12 @@ Cypress.Commands.add("mockForm", (file) => {
           set(serverSideProps) {
             // here is our change to modify the injected parsed data
             //Caution why dont we push mockedForm instead of mockedForm.form ?
-            serverSideProps.props.pageProps.formConfig = {
-              ...mockedForm.form,
-              securityAttribute: mockedForm.securityAttribute,
-              formID: "test",
+            serverSideProps.props.pageProps.formRecord = {
+              formID: 1,
+              formConfig: {
+                securityAttribute: mockedForm.securityAttribute,
+                form: mockedForm.form,
+              },
             };
             nextData = serverSideProps;
           },
@@ -48,13 +50,13 @@ Cypress.Commands.add("mockForm", (file) => {
       },
     });
 
-    cy.intercept("_next/data/*/en/id/test/confirmation.json*", (req) => {
+    cy.intercept("_next/data/*/en/id/1/confirmation.json*", (req) => {
       // prevent the server from responding with 304
       // without an actual object
       delete req.headers["if-none-match"];
       return req.continue((res) => {
         // let's use the same test greeting
-        res.body.pageProps.formConfig = { ...mockedForm.form, formID: "test" };
+        res.body.pageProps.formRecord = { formID: 1, formConfig: { form: mockedForm.form } };
       });
     });
   });

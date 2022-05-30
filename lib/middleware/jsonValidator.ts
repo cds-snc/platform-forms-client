@@ -1,6 +1,6 @@
-import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { Schema, Validator, ValidatorResult } from "jsonschema";
 import { NextApiRequest, NextApiResponse } from "next";
+import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 
 export type ValidateOptions = {
   jsonKey: string;

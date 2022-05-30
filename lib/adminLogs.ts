@@ -1,7 +1,7 @@
 import dbConnector from "@lib/integration/dbConnector";
 import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
-import { AdminLogAction, AdminLogEvent } from "./types";
+import { AdminLogAction, AdminLogEvent } from "@lib/types";
 
 /**
  * Logs usage of privileged functions by admins
