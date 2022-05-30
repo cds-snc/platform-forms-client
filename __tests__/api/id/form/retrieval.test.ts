@@ -18,15 +18,19 @@ describe("/api/retrieval", () => {
     dateNowSpy = jest.spyOn(Date, "now");
     ddbMock.reset();
   });
+
   afterEach(() => {
     dateNowSpy.mockRestore();
   });
+
   beforeAll(() => {
     process.env.TOKEN_SECRET = "gc-form-super-secret-code";
   });
+
   afterAll(() => {
     delete process.env.TOKEN_SECRET;
   });
+
   describe("all methods", () => {
     it("Should return 400 status code b/c formID is undefined", async () => {
       const token = jwt.sign(
@@ -54,6 +58,7 @@ describe("/api/retrieval", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad Request" }));
     });
+
     it("Should return a status code 403 Missing or invalid bearer token because no record was found in db", async () => {
       const token = jwt.sign(
         {
@@ -84,6 +89,7 @@ describe("/api/retrieval", () => {
       expect(res.statusCode).toBe(403);
     });
   });
+
   describe("GET", () => {
     it("Should return a list of form responses with 200 status code", async () => {
       const token = jwt.sign(
@@ -96,6 +102,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -128,6 +135,7 @@ describe("/api/retrieval", () => {
       };
       ddbMock.on(QueryCommand).resolves(dynamodbExpectedReponses);
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
@@ -149,6 +157,157 @@ describe("/api/retrieval", () => {
       );
     });
 
+    it("Should return a list of form responses that have been returned in a paginated way by the AWS DynamoDB SDK", async () => {
+      const token = jwt.sign(
+        {
+          email: "test@cds-snc.ca",
+          form: 1,
+        },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1y",
+        }
+      );
+
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000/api/retrieval?numRecords=2",
+          authorization: `Bearer ${token}`,
+        },
+        query: {
+          form: "22",
+        },
+      });
+
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+
+      ddbMock
+        .on(QueryCommand, {
+          ExclusiveStartKey: undefined,
+        })
+        .resolves({
+          Items: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 1,
+        })
+        .on(QueryCommand, {
+          ExclusiveStartKey: 1,
+        })
+        .resolves({
+          Items: [
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+          ],
+          LastEvaluatedKey: undefined,
+        });
+
+      await retrieval(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          responses: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+          ],
+        })
+      );
+    });
+
+    it("Should return a list of 10 (max) form responses that have been returned in a paginated way by the AWS DynamoDB SDK", async () => {
+      const token = jwt.sign(
+        {
+          email: "test@cds-snc.ca",
+          form: 1,
+        },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1y",
+        }
+      );
+
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000/api/retrieval?numRecords=2",
+          authorization: `Bearer ${token}`,
+        },
+        query: {
+          form: "22",
+        },
+      });
+
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+
+      ddbMock
+        .on(QueryCommand)
+        .resolvesOnce({
+          Items: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 1,
+        })
+        .resolvesOnce({
+          Items: [
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+            { FormID: "1", SubmissionID: "5", FormSubmission: true },
+            { FormID: "1", SubmissionID: "6", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 2,
+        })
+        .resolvesOnce({
+          Items: [
+            { FormID: "1", SubmissionID: "7", FormSubmission: true },
+            { FormID: "1", SubmissionID: "8", FormSubmission: true },
+            { FormID: "1", SubmissionID: "9", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 3,
+        })
+        .resolvesOnce({
+          Items: [{ FormID: "1", SubmissionID: "10", FormSubmission: true }],
+          LastEvaluatedKey: 4,
+        })
+        .resolves({
+          Items: [
+            { FormID: "1", SubmissionID: "11", FormSubmission: true },
+            { FormID: "1", SubmissionID: "12", FormSubmission: true },
+            { FormID: "1", SubmissionID: "13", FormSubmission: true },
+          ],
+          LastEvaluatedKey: undefined,
+        });
+
+      await retrieval(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          responses: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+            { FormID: "1", SubmissionID: "5", FormSubmission: true },
+            { FormID: "1", SubmissionID: "6", FormSubmission: true },
+            { FormID: "1", SubmissionID: "7", FormSubmission: true },
+            { FormID: "1", SubmissionID: "8", FormSubmission: true },
+            { FormID: "1", SubmissionID: "9", FormSubmission: true },
+            { FormID: "1", SubmissionID: "10", FormSubmission: true },
+          ],
+        })
+      );
+    });
+
     it("Should return 500 status code if it fails to fetch/send command to dynamoDb", async () => {
       const token = jwt.sign(
         {
@@ -160,6 +319,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -176,6 +336,7 @@ describe("/api/retrieval", () => {
       ddbMock.on(QueryCommand).rejects("I'm an Error");
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(500);
     });
 
@@ -208,10 +369,12 @@ describe("/api/retrieval", () => {
       };
       ddbMock.on(QueryCommand).resolves(dynamodbExpectedReponses);
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual({ responses: [] });
     });
   });
+
   describe("DELETE", () => {
     it("Should delete a list of form responses with 200 status code and return ids deleted", async () => {
       dateNowSpy.mockReturnValue(1);
@@ -225,6 +388,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -242,6 +406,7 @@ describe("/api/retrieval", () => {
       ddbMock.on(UpdateCommand).resolves;
       mockLogMessage.warn.mockImplementation(jest.fn());
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(["dfhkwehfewhf", "fewfewfewfew"]);
       expect(ddbMock.commandCalls(UpdateCommand).length).toBe(2);
@@ -262,6 +427,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -278,6 +444,7 @@ describe("/api/retrieval", () => {
       prismaMock.formUser.count.mockResolvedValue(1);
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error: "JSON Validation Error: instance does not meet minimum length of 1",
@@ -295,6 +462,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -311,6 +479,7 @@ describe("/api/retrieval", () => {
       // Mock good temporary token
       prismaMock.formUser.count.mockResolvedValue(1);
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error:
@@ -329,6 +498,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -346,6 +516,7 @@ describe("/api/retrieval", () => {
       prismaMock.formUser.count.mockResolvedValue(1);
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error: "JSON Validation Error: instance is not of a type(s) array",
@@ -363,6 +534,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -398,6 +570,7 @@ describe("/api/retrieval", () => {
       mockLogMessage.error.mockImplementation(jest.fn());
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(500);
       expect(JSON.parse(res._getData())).toEqual({
         error: "Error on Server Side",
@@ -411,6 +584,58 @@ describe("/api/retrieval", () => {
       );
       expect(mockLogMessage.error.mock.calls.length).toBe(1);
       expect(mockLogMessage.error.mock.calls[0][0]).toEqual(new Error("This is an Error"));
+    });
+  });
+
+  describe("GET", () => {
+    it("Should return a list of form responses including Security attributes", async () => {
+      const token = jwt.sign(
+        {
+          email: "test@cds-snc.ca",
+          form: 100,
+        },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1y",
+        }
+      );
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000/api/retrieval?numRecords=4",
+          authorization: `Bearer ${token}`,
+        },
+        query: {
+          form: "100",
+        },
+      });
+
+      // Mock good temporary token
+      prismaMock.formUser.count.mockResolvedValue(1);
+
+      ddbMock.on(QueryCommand).resolves({
+        Items: [
+          { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
+          { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
+          { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
+          { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
+        ],
+      });
+
+      await retrieval(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          responses: [
+            { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
+            { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
+            { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
+            { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
+          ],
+        })
+      );
     });
   });
 });
