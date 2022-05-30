@@ -1,8 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
-import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
 jest.mock("formik", () => ({
@@ -35,11 +33,7 @@ const textInputData = {
 describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
   afterEach(cleanup);
   test("renders without errors", () => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language={lang} t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={textInputData} language={lang} t={(key) => key} />);
     const title =
         lang === "en" ? textInputData.properties.titleEn : textInputData.properties.titleFr,
       description =
@@ -67,11 +61,7 @@ describe.each([["en"], ["fr"]])("Generate a text input", (lang) => {
 
 describe("Check attributes on rendered text input", () => {
   it("has the correct autoComplete value", () => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language={"en"} t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={textInputData} language={"en"} t={(key) => key} />);
     expect(screen.getByRole("textbox").hasAttribute("autoComplete").valueOf("name"));
   });
 });
@@ -80,11 +70,7 @@ describe("Verfify character count restrictions", () => {
   let screen;
 
   beforeEach(() => {
-    screen = render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textInputData} language={"en"} t={(key) => key} />
-      </Form>
-    );
+    screen = render(<GenerateElement element={textInputData} language={"en"} t={(key) => key} />);
   });
 
   it("does not display any message when not enough characters have been typed in", async () => {

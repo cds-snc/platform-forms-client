@@ -1,6 +1,5 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
 const richTextData = {
@@ -22,11 +21,7 @@ const richTextData = {
 describe("Generate a text area", () => {
   afterEach(cleanup);
   test.each([["en"], ["fr"]])("renders properly", (lang) => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={richTextData} language={lang} t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={richTextData} language={lang} t={(key) => key} />);
     const title = lang === "en" ? richTextData.properties.titleEn : richTextData.properties.titleFr,
       description =
         lang === "en"
@@ -49,11 +44,7 @@ describe("Generate a text area", () => {
         descriptionFr: "",
       },
     };
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={emptyRichTextData} language="en" t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={emptyRichTextData} language="en" t={(key) => key} />);
     expect(screen.queryByRole("label")).not.toBeInTheDocument();
     expect(screen.queryByTestId("richText")).not.toBeInTheDocument();
   });

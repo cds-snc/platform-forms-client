@@ -50,50 +50,54 @@ jest.mock("@lib/hooks", () => {
   };
 });
 
-const formConfig = {
-  id: 1,
-  version: 1,
-  titleEn: "Test Form",
-  titleFr: "Formulaire de test",
-  layout: [1, 2],
-  elements: [
-    {
+const formRecord = {
+  formConfig: {
+    form: {
       id: 1,
-      type: "textField",
-      properties: {
-        titleEn: "What is your full name?",
-        titleFr: "Quel est votre nom complet?",
-        validation: {
-          required: false,
+      version: 1,
+      titleEn: "Test Form",
+      titleFr: "Formulaire de test",
+      layout: [1, 2],
+      elements: [
+        {
+          id: 1,
+          type: "textField",
+          properties: {
+            titleEn: "What is your full name?",
+            titleFr: "Quel est votre nom complet?",
+            validation: {
+              required: false,
+            },
+            description: "",
+            placeholderEn: "",
+            placeholderFr: "",
+          },
         },
-        description: "",
-        placeholderEn: "",
-        placeholderFr: "",
-      },
-    },
-    {
-      id: 2,
-      type: "textField",
-      properties: {
-        titleEn: "What is your email address?",
-        titleFr: "Quelle est votre adresse électronique?",
-        validation: {
-          required: false,
+        {
+          id: 2,
+          type: "textField",
+          properties: {
+            titleEn: "What is your email address?",
+            titleFr: "Quelle est votre adresse électronique?",
+            validation: {
+              required: false,
+            },
+            description: "",
+            placeholderEn: "",
+            placeholderFr: "",
+          },
         },
-        description: "",
-        placeholderEn: "",
-        placeholderFr: "",
-      },
+      ],
     },
-  ],
+  },
 };
 
 describe("Generate a form component", () => {
   afterEach(cleanup);
   test("...with fake children", () => {
     render(
-      <Form formConfig={formConfig} language="en" t={(key) => key}>
-        <div data-testid="test-child"></div>
+      <Form formRecord={formRecord} language="en" t={(key) => key}>
+        <div data-testid="test-child" />
       </Form>
     );
     const renderedForm = screen.getByTestId("form");
@@ -109,7 +113,7 @@ describe("Form Functionality", () => {
 
   it("there is 1 and only 1 submit button", async () => {
     act(() => {
-      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     });
     expect(await screen.findAllByRole("button", { type: "submit" })).toHaveLength(1);
   });
@@ -117,7 +121,7 @@ describe("Form Functionality", () => {
   it("Form can be submitted", async () => {
     userEvent.setup();
     act(() => {
-      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     });
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
@@ -135,7 +139,7 @@ describe("Form Functionality", () => {
       timeLock: 0,
     };
     act(() => {
-      render(<Form formConfig={formConfig} language="en" t={(key) => key}></Form>);
+      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     });
     const submitButton = screen.getByRole("button", { type: "submit" });
     await waitFor(() => expect(submitButton).toBeInTheDocument());

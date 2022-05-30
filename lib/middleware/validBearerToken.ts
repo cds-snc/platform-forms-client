@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
-import { getTokenById } from "../../pages/api/id/[form]/bearer";
-import { BearerTokenPayload, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
+import { getTokenById } from "@pages/api/id/[form]/bearer";
 import { logMessage } from "@lib/logger";
+import { BearerTokenPayload, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 
 /**
  * This is a middleware function that will validate the bearer token in the authorization header

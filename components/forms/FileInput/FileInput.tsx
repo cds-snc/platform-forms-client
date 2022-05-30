@@ -4,16 +4,12 @@ import classNames from "classnames";
 import { useTranslation } from "next-i18next";
 import { ErrorMessage } from "../index";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
+import { InputFieldProps } from "@lib/types";
 
-interface FileInputProps {
-  id: string;
-  name: string;
+interface FileInputProps extends InputFieldProps {
   error?: boolean;
   hint?: React.ReactNode;
   fileType?: string | undefined;
-  ariaDescribedBy?: string;
-  disabled?: boolean;
-  required?: boolean;
   allowMulti?: boolean;
 }
 export type FileEventTarget = React.ChangeEvent<HTMLInputElement> & {

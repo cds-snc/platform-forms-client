@@ -3,11 +3,12 @@ import { Prisma } from "@prisma/client";
 import { logMessage } from "@lib/logger";
 
 import { middleware, cors, validBearerToken } from "@lib/middleware";
-import { MiddlewareProps } from "@lib/types";
 
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NotifyClient } from "notifications-node-client";
+import { MiddlewareProps } from "@lib/types";
+
 /**
  * Verifies that the payload for the request is valid.
  *

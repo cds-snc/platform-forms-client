@@ -4,10 +4,11 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
-import { AdminLogAction, AdminLogEvent, MiddlewareProps } from "@lib/types";
 import { Session } from "next-auth";
 import { logAdminActivity } from "@lib/adminLogs";
 import { logMessage } from "@lib/logger";
+import { MiddlewareProps } from "@lib/types";
+import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
 
 const handler = async (
   req: NextApiRequest,

@@ -6,8 +6,8 @@ import { requireAuthentication } from "@lib/auth";
 import { getFormByID } from "@lib/integration/helpers";
 import convertMessage from "@lib/markdown";
 import { Button, RichText } from "../../components/forms";
-import { PublicFormSchemaProperties } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { PublicFormRecord } from "@lib/types";
 
 interface ResponseListInterface {
   Items: {
@@ -27,7 +27,7 @@ const FormResponse = ({
   Items,
   formSchema,
   fetchResponses,
-}: ResponseListInterface & { formSchema?: PublicFormSchemaProperties } & {
+}: ResponseListInterface & { formSchema?: PublicFormRecord } & {
   fetchResponses: () => void;
 }) => {
   const [index, setIndex] = useState(0);
@@ -147,7 +147,7 @@ const AdminVault: React.FC = () => {
   const { t } = useTranslation("admin-vault");
 
   const [formID, setFormID] = useState("");
-  const [formSchema, setFormSchema] = useState<PublicFormSchemaProperties | undefined>(undefined);
+  const [formSchema, setFormSchema] = useState<PublicFormRecord | undefined>(undefined);
   const [responses, setResponses] = useState<ResponseListInterface>({ Items: [] });
 
   const handleSubmit = async (event: React.FormEvent) => {

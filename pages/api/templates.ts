@@ -47,7 +47,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       if (req.method === "GET") {
-        const publicTemplates = await onlyIncludePublicProperties(response);
+        const publicTemplates = onlyIncludePublicProperties(response);
         res.status(200).json(publicTemplates);
       } else {
         res.status(200).json(response);

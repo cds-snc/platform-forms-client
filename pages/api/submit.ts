@@ -1,14 +1,5 @@
 import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
-import {
-  SubmissionRequestBody,
-  SubmissionParsedRequest,
-  FileInputResponse,
-  ProcessedFile,
-  PublicFormSchemaProperties,
-  Response,
-  Responses,
-} from "@lib/types";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import convertMessage from "@lib/markdown";
 import { rehydrateFormResponses } from "@lib/integration/helpers";
@@ -20,6 +11,14 @@ import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { Readable } from "stream";
+import {
+  PublicFormRecord,
+  Response,
+  Responses,
+  FileInputResponse,
+  SubmissionRequestBody,
+} from "@lib/types";
+import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
 
 export const config = {
   api: {
@@ -65,7 +64,7 @@ function streamToString(stream: Readable): Promise<string> {
 }
 
 const callLambda = async (
-  formID: string,
+  formID: number,
   fields: Responses,
   language: string,
   securityAttribute: string
@@ -100,12 +99,14 @@ const callLambda = async (
   }
 };
 
-const previewNotify = async (form: PublicFormSchemaProperties, fields: Responses) => {
+const previewNotify = async (form: PublicFormRecord, fields: Responses) => {
   const templateID = process.env.TEMPLATE_ID;
   const notify = new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
 
   const emailBody = await convertMessage({ form, responses: fields });
-  const messageSubject = form.emailSubjectEn ? form.emailSubjectEn : form.titleEn;
+  const messageSubject = form.formConfig.form.emailSubjectEn
+    ? form.formConfig.form.emailSubjectEn
+    : form.formConfig.form.titleEn;
   return await notify
     .previewTemplateById(templateID, {
       subject: messageSubject,
@@ -134,7 +135,7 @@ const parseRequestData = async (
       const previousValueResolved = await prev;
       const keyPairValue = requestBody[current];
       // in the case that the value is a string value this is a field
-      if (typeof keyPairValue === "string") {
+      if (typeof keyPairValue === "string" || typeof keyPairValue === "number") {
         return {
           ...previousValueResolved,
           fields: {
@@ -278,7 +279,7 @@ const processFormData = async (
       }`
     );
 
-    const form = await getFormByID(reqFields.formID as string);
+    const form = await getFormByID(reqFields.formID as number);
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });
@@ -289,7 +290,7 @@ const processFormData = async (
       responses: reqFields,
     });
 
-    if (submitToReliabilityQueue === false) {
+    if (!submitToReliabilityQueue) {
       // Local development and Heroku
       if (notifyPreview) {
         const response = await previewNotify(form, fields);
@@ -318,7 +319,8 @@ const processFormData = async (
         }
       } else {
         // An array will be returned in a field that includes multiple files
-        fileOrArray.forEach(async (fileItem, index) => {
+        for (const fileItem of fileOrArray) {
+          const index = fileOrArray.indexOf(fileItem);
           if (fileItem.name) {
             const { isValid, key } = await pushFileToS3(fileItem);
             if (isValid) {
@@ -332,7 +334,7 @@ const processFormData = async (
               }
             }
           }
-        });
+        }
       }
     }
     try {

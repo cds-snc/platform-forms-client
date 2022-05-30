@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -7,20 +6,14 @@ import { getFormByStatus } from "../lib/integration/crud";
 import { getProperty } from "../lib/formBuilder";
 import { checkOne } from "../lib/flags";
 import { formCache } from "../lib/cache";
+import { GetServerSideProps } from "next";
+import { PublicFormRecord } from "@lib/types";
 
-const Sandbox = ({ formsList }) => {
+interface SandboxProps {
+  formsList: Array<PublicFormRecord>;
+}
+const Sandbox = ({ formsList }: SandboxProps) => {
   const { t, i18n } = useTranslation("welcome");
-  const LinksList = () => {
-    return formsList.map((form) => {
-      return (
-        <li key={`link-${form.formID}`}>
-          <Link href={`/id/${form.formID}`}>
-            {form[getProperty("title", i18n.language)].toString()}
-          </Link>
-        </li>
-      );
-    });
-  };
 
   return (
     <>
@@ -34,7 +27,14 @@ const Sandbox = ({ formsList }) => {
         <div>
           <h2>{t("formList.title")}</h2>
           <ul className="link-list custom">
-            <LinksList />
+            {formsList.map((form) => {
+              const formTitle = form.formConfig.form[getProperty("title", i18n.language)];
+              return (
+                <li key={`link-${form.formID}`}>
+                  <Link href={`/id/${form.formID}`}>{formTitle && formTitle.toString()}</Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -73,10 +73,7 @@ const Sandbox = ({ formsList }) => {
   );
 };
 
-Sandbox.propTypes = {
-  formsList: PropTypes.array.isRequired,
-};
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const sandboxActive = await checkOne("sandbox");
 
   if (!sandboxActive) {
@@ -97,9 +94,9 @@ export async function getServerSideProps(context) {
   return {
     props: {
       formsList: await formsList(),
-      ...(await serverSideTranslations(context.locale, ["common", "welcome"])),
+      ...(context.locale && (await serverSideTranslations(context.locale, ["common", "welcome"]))),
     }, // will be passed to the page component as props
   };
-}
+};
 
 export default Sandbox;

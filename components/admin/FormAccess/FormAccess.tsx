@@ -1,12 +1,12 @@
 import { Button } from "@components/forms";
 import { logMessage } from "@lib/logger";
 import Loader from "@components/globals/Loader";
-import { FormOwner } from "@lib/types";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../email.domains.json";
+import { FormOwner } from "@lib/types";
 
 export interface FormAccessProps {
   formID: string;

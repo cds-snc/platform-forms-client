@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
 import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import { prisma } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
+import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
 
 /**
  * @description

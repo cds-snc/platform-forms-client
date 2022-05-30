@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
+import { Formik } from "formik";
 
 const radioButtonData = {
   id: 1,
@@ -31,9 +31,9 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
   afterEach(cleanup);
   test("renders without errors", () => {
     render(
-      <Form t={(key) => key}>
+      <Formik onSubmit={() => {}}>
         <GenerateElement element={radioButtonData} language={lang} t={(key) => key} />
-      </Form>
+      </Formik>
     );
     const title =
         lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr,
@@ -59,9 +59,9 @@ describe.each([["en"], ["fr"]])("Generate a radio button", (lang) => {
   test("not required displays properly", () => {
     radioButtonData.properties.validation.required = false;
     render(
-      <Form t={(key) => key}>
+      <Formik onSubmit={() => {}}>
         <GenerateElement element={radioButtonData} language={lang} t={(key) => key} />
-      </Form>
+      </Formik>
     );
     expect(screen.queryByTestId("required")).not.toBeInTheDocument();
     screen.getAllByRole("radio").forEach((input) => {
