@@ -163,7 +163,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           form: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -227,7 +227,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           form: 1,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
@@ -594,7 +594,7 @@ describe("/api/retrieval", () => {
           email: "test@cds-snc.ca",
           form: 100,
         },
-        process.env.TOKEN_SECRET,
+        process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1y",
         }
