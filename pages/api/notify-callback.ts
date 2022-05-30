@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
 import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { cors, middleware } from "@lib/middleware";
-import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
+import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 

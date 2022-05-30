@@ -3,7 +3,12 @@ import { logMessage } from "@lib/logger";
 import { middleware, cors, validTemporaryToken, jsonValidator } from "@lib/middleware";
 import retrievalSchema from "@lib/middleware/schemas/retrieval.schema.json";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  QueryCommandInput,
+  UpdateCommand,
+} from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps } from "@lib/types";
 
 /**
@@ -23,7 +28,7 @@ const handler = async (
   if (req.method === "DELETE") {
     await deleteFormResponses(req, res, formID, email, temporaryToken);
   } else {
-    await getFormResponses(req, res, formID, email, temporaryToken);
+    await getFormResponses(res, formID, email, temporaryToken);
   }
 };
 
@@ -49,14 +54,12 @@ function connectToDynamo(): DynamoDBDocumentClient {
    -H "Authorization: Bearer {token}"
 
  * This method will fetch up to 10 form responses and return them to the user
- * @param req - The NextJS request object
  * @param res - The NextJS response object
  * @param formID - The form ID from which to retrieve responses
  * @param email - The email of the authenticated user carrying out the request
  * @param temporaryToken - The valid JWT temporary token of the authenticated user carrying out the request
  */
 async function getFormResponses(
-  req: NextApiRequest,
   res: NextApiResponse,
   formID: string,
   email?: string,
@@ -64,33 +67,53 @@ async function getFormResponses(
 ): Promise<void> {
   try {
     const documentClient = connectToDynamo();
-    //Create form's responses db param
-    //NB: A filter expression is applied after a Query finishes, but before the results are returned.
-    //Therefore, a Query consumes the same amount of read capacity, regardless of whether a filter expression is present.
-    const getItemsDbParams = {
-      TableName: "Vault",
-      IndexName: "retrieved-index",
-      Limit: 10,
-      //Cannot use partitin key or sort key such as formID and Retrieved attribute in keyConditionExpression simultaneously
-      ExpressionAttributeValues: {
-        ":formID": formID,
-        ":retrieved": 0,
-      },
-      KeyConditionExpression: "Retrieved = :retrieved",
-      FilterExpression: "FormID = :formID",
-      //A filter expression cannot contain partition key or sort key attributes.
-      //You need to specify those attributes in the key condition expression, not the filter expression.
-      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
-    };
 
-    const formResponses = await documentClient.send(new QueryCommand(getItemsDbParams));
+    let accumulatedResponses: { [key: string]: unknown }[] = [];
+    let lastEvaluatedKey = null;
+
+    while (lastEvaluatedKey !== undefined) {
+      //Create form's responses db param
+      //NB: A filter expression is applied after a Query finishes, but before the results are returned.
+      //Therefore, a Query consumes the same amount of read capacity, regardless of whether a filter expression is present.
+      const getItemsDbParams: QueryCommandInput = {
+        TableName: "Vault",
+        IndexName: "retrieved-index",
+        // Just being smart and try to get just what we need to get to a maximum of 10 responses
+        Limit: 10 - accumulatedResponses.length,
+        ExclusiveStartKey: lastEvaluatedKey ?? undefined,
+        //Cannot use partitin key or sort key such as formID and Retrieved attribute in keyConditionExpression simultaneously
+        ExpressionAttributeValues: {
+          ":formID": formID,
+          ":retrieved": 0,
+        },
+        KeyConditionExpression: "Retrieved = :retrieved",
+        FilterExpression: "FormID = :formID",
+        //A filter expression cannot contain partition key or sort key attributes.
+        //You need to specify those attributes in the key condition expression, not the filter expression.
+        ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
+      };
+
+      const response = await documentClient.send(new QueryCommand(getItemsDbParams));
+
+      if (response.Items) {
+        accumulatedResponses = accumulatedResponses.concat(response.Items);
+      }
+
+      // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
+      if (accumulatedResponses.length >= 10) {
+        lastEvaluatedKey = undefined;
+      } else {
+        lastEvaluatedKey = response.LastEvaluatedKey;
+      }
+    }
+
     logMessage.info(
-      `user:${email} retrieved form responses [${formResponses.Items?.map(
+      `user:${email} retrieved form responses [${accumulatedResponses.map(
         (response) => response.SubmissionID
       )}] from form ID:${formID} at:${Date.now()} using token:${temporaryToken}`
     );
 
-    return res.status(200).json({ responses: formResponses.Items });
+    return res.status(200).json({ responses: accumulatedResponses });
   } catch (error) {
     logMessage.error(error as Error);
     res.status(500).json({ error: "Error on Server Side when fetching form's responses" });

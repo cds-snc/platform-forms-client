@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
+import { Formik } from "formik";
 
 const radioButtonData = {
   id: 1,
@@ -31,9 +31,9 @@ describe.each([["en"], ["fr"]])("Generate a form group", (lang) => {
   afterEach(cleanup);
   test("renders properly", () => {
     render(
-      <Form t={(key) => key}>
+      <Formik onSubmit={() => {}}>
         <GenerateElement element={radioButtonData} language={lang} t={(key) => key} />
-      </Form>
+      </Formik>
     );
     const title =
         lang === "en" ? radioButtonData.properties.titleEn : radioButtonData.properties.titleFr,

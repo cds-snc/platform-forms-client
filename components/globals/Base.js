@@ -7,17 +7,17 @@ import SkipLink from "./SkipLink";
 import Fip from "./Fip";
 import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
-import { getPageClassNames } from "../../lib/routeUtils";
+import { getPageClassNames } from "@lib/routeUtils";
 
 const Base = ({ children }) => {
-  const formConfig =
-    children && children.props && children.props.formConfig ? children.props.formConfig : null;
-  const classes = getPageClassNames(formConfig);
+  const formRecord =
+    children && children.props && children.props.formRecord ? children.props.formRecord : null;
+  const classes = getPageClassNames(formRecord);
 
   const isAdmin = children && children.props && children.props.user;
-  const isEmbeddable = formConfig && children && children.props && children.props.isEmbeddable;
+  const isEmbeddable = formRecord && children && children.props && children.props.isEmbeddable;
 
-  const shouldDisplayAlphaBanner = formConfig ? formConfig.displayAlphaBanner : true;
+  const shouldDisplayAlphaBanner = formRecord ? formRecord.formConfig.displayAlphaBanner : true;
   const { t } = useTranslation("common");
 
   return (
@@ -34,7 +34,7 @@ const Base = ({ children }) => {
         {!isEmbeddable && (
           <header>
             {shouldDisplayAlphaBanner && <PhaseBanner />}
-            <Fip formConfig={formConfig} />
+            <Fip formRecord={formRecord} />
             {isAdmin && <AdminNav user={children.props.user} />}
           </header>
         )}

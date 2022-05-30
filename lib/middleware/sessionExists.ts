@@ -1,6 +1,6 @@
-import { MiddlewareReturn } from "@lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
+import { MiddlewareReturn } from "@lib/types";
 
 const useMethods = (req: NextApiRequest, methods?: string[]) => {
   if (methods && req.method) {

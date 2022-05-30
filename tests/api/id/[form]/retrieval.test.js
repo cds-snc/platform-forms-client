@@ -1,48 +1,46 @@
 import { createMocks } from "node-mocks-http";
 import retrieval from "@pages/api/id/[form]/retrieval";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { mockClient } from "aws-sdk-client-mock";
 import executeQuery from "@lib/integration/queryManager";
 import { logMessage } from "@lib/logger";
 import jwt from "jsonwebtoken";
 
 jest.mock("next-auth/client");
-jest.mock("@aws-sdk/client-dynamodb");
-jest.mock("@aws-sdk/lib-dynamodb");
 jest.mock("@lib/integration/queryManager");
 jest.mock("@lib/logger");
 
 jest.mock("@lib/integration/dbConnector", () => {
-  const mockClient = {
+  const client = {
     connect: jest.fn(),
     query: jest.fn(),
     end: jest.fn(),
   };
-  return jest.fn(() => mockClient);
+  return jest.fn(() => client);
 });
 
-const dynamoClient = {
-  send: jest.fn(),
-};
-
-const documentClient = {
-  send: jest.fn(),
-};
+const ddbMock = mockClient(DynamoDBDocumentClient);
 
 describe("/api/retrieval", () => {
   let dateNowSpy;
+
   beforeEach(() => {
     dateNowSpy = jest.spyOn(Date, "now");
+    ddbMock.reset();
   });
+
   afterEach(() => {
     dateNowSpy.mockRestore();
   });
+
   beforeAll(() => {
     process.env.TOKEN_SECRET = "gc-form-super-secret-code";
   });
+
   afterAll(() => {
     delete process.env.TOKEN_SECRET;
   });
+
   describe("all methods", () => {
     it("Should return 400 status code b/c formID is undefined", async () => {
       const token = jwt.sign(
@@ -70,6 +68,7 @@ describe("/api/retrieval", () => {
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad Request" }));
     });
+
     it("Should return a status code 403 Missing or invalid bearer token because no record was found in db", async () => {
       const token = jwt.sign(
         {
@@ -111,6 +110,7 @@ describe("/api/retrieval", () => {
       expect(res.statusCode).toBe(403);
     });
   });
+
   describe("GET", () => {
     it("Should return a list of form responses with 200 status code", async () => {
       const token = jwt.sign(
@@ -123,6 +123,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -134,6 +135,7 @@ describe("/api/retrieval", () => {
           form: "22",
         },
       });
+
       executeQuery.mockImplementation((client, sql) => {
         if (
           sql.includes(
@@ -146,24 +148,193 @@ describe("/api/retrieval", () => {
           };
         }
       });
-      const dynamodbExpectedReponses = {
+
+      ddbMock.on(QueryCommand).resolves({
         Items: [
           { FormID: "1", SubmissionID: "12", FormSubmission: true },
           { FormID: "2", SubmissionID: "21", FormSubmission: true },
         ],
-      };
-      documentClient.send.mockImplementation(() => {
-        return dynamodbExpectedReponses;
       });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           responses: [
             { FormID: "1", SubmissionID: "12", FormSubmission: true },
             { FormID: "2", SubmissionID: "21", FormSubmission: true },
+          ],
+        })
+      );
+    });
+
+    it("Should return a list of form responses that have been returned in a paginated way by the AWS DynamoDB SDK", async () => {
+      const token = jwt.sign(
+        {
+          email: "test@cds-snc.ca",
+          form: 1,
+        },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1y",
+        }
+      );
+
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000/api/retrieval?numRecords=2",
+          authorization: `Bearer ${token}`,
+        },
+        query: {
+          form: "22",
+        },
+      });
+
+      executeQuery.mockImplementation((client, sql) => {
+        if (
+          sql.includes(
+            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
+          )
+        ) {
+          return {
+            rows: [{ column: 1 }],
+            rowCount: 1,
+          };
+        }
+      });
+
+      ddbMock
+        .on(QueryCommand, {
+          ExclusiveStartKey: undefined,
+        })
+        .resolves({
+          Items: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 1,
+        })
+        .on(QueryCommand, {
+          ExclusiveStartKey: 1,
+        })
+        .resolves({
+          Items: [
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+          ],
+          LastEvaluatedKey: undefined,
+        });
+
+      await retrieval(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          responses: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+          ],
+        })
+      );
+    });
+
+    it("Should return a list of 10 (max) form responses that have been returned in a paginated way by the AWS DynamoDB SDK", async () => {
+      const token = jwt.sign(
+        {
+          email: "test@cds-snc.ca",
+          form: 1,
+        },
+        process.env.TOKEN_SECRET,
+        {
+          expiresIn: "1y",
+        }
+      );
+
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000/api/retrieval?numRecords=2",
+          authorization: `Bearer ${token}`,
+        },
+        query: {
+          form: "22",
+        },
+      });
+
+      executeQuery.mockImplementation((client, sql) => {
+        if (
+          sql.includes(
+            "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true"
+          )
+        ) {
+          return {
+            rows: [{ column: 1 }],
+            rowCount: 1,
+          };
+        }
+      });
+
+      ddbMock
+        .on(QueryCommand)
+        .resolvesOnce({
+          Items: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 1,
+        })
+        .resolvesOnce({
+          Items: [
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+            { FormID: "1", SubmissionID: "5", FormSubmission: true },
+            { FormID: "1", SubmissionID: "6", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 2,
+        })
+        .resolvesOnce({
+          Items: [
+            { FormID: "1", SubmissionID: "7", FormSubmission: true },
+            { FormID: "1", SubmissionID: "8", FormSubmission: true },
+            { FormID: "1", SubmissionID: "9", FormSubmission: true },
+          ],
+          LastEvaluatedKey: 3,
+        })
+        .resolvesOnce({
+          Items: [{ FormID: "1", SubmissionID: "10", FormSubmission: true }],
+          LastEvaluatedKey: 4,
+        })
+        .resolves({
+          Items: [
+            { FormID: "1", SubmissionID: "11", FormSubmission: true },
+            { FormID: "1", SubmissionID: "12", FormSubmission: true },
+            { FormID: "1", SubmissionID: "13", FormSubmission: true },
+          ],
+          LastEvaluatedKey: undefined,
+        });
+
+      await retrieval(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({
+          responses: [
+            { FormID: "1", SubmissionID: "1", FormSubmission: true },
+            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+            { FormID: "1", SubmissionID: "3", FormSubmission: true },
+            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+            { FormID: "1", SubmissionID: "5", FormSubmission: true },
+            { FormID: "1", SubmissionID: "6", FormSubmission: true },
+            { FormID: "1", SubmissionID: "7", FormSubmission: true },
+            { FormID: "1", SubmissionID: "8", FormSubmission: true },
+            { FormID: "1", SubmissionID: "9", FormSubmission: true },
+            { FormID: "1", SubmissionID: "10", FormSubmission: true },
           ],
         })
       );
@@ -180,6 +351,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "GET",
         headers: {
@@ -204,12 +376,11 @@ describe("/api/retrieval", () => {
           };
         }
       });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
-      documentClient.send.mockImplementation(() => {
-        throw new Error("Error");
-      });
+
+      ddbMock.on(QueryCommand).rejects();
+
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(500);
     });
 
@@ -235,6 +406,7 @@ describe("/api/retrieval", () => {
           form: "12",
         },
       });
+
       executeQuery.mockImplementation((client, sql) => {
         if (
           sql.includes(
@@ -248,18 +420,17 @@ describe("/api/retrieval", () => {
         }
       });
 
-      documentClient.send = jest.fn(() => {
-        return {
-          Items: [],
-        };
+      ddbMock.on(QueryCommand).resolves({
+        Items: [],
       });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual({ responses: [] });
     });
   });
+
   describe("DELETE", () => {
     it("Should delete a list of form responses with 200 status code and return ids deleted", async () => {
       dateNowSpy.mockReturnValue(1);
@@ -273,6 +444,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -285,6 +457,7 @@ describe("/api/retrieval", () => {
           form: "22",
         },
       });
+
       executeQuery.mockImplementation((client, sql) => {
         if (
           sql.includes(
@@ -298,14 +471,15 @@ describe("/api/retrieval", () => {
         }
       });
 
-      documentClient.send = jest.fn(() => {});
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+      ddbMock.on(UpdateCommand).resolves();
+
       logMessage.warn.mockImplementation(() => {});
+
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(["dfhkwehfewhf", "fewfewfewfew"]);
-      expect(documentClient.send.mock.calls.length).toBe(2);
+      expect(ddbMock.commandCalls(UpdateCommand).length).toBe(2);
       expect(logMessage.info.mock.calls.length).toBe(1);
       expect(logMessage.info.mock.calls[0][0]).toContain(
         `user:test@cds-snc.ca marked form responses [dfhkwehfewhf,fewfewfewfew] from form ID:22 as retrieved at:1 using token:${token}`
@@ -323,6 +497,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -350,6 +525,7 @@ describe("/api/retrieval", () => {
       });
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error: "JSON Validation Error: instance does not meet minimum length of 1",
@@ -367,6 +543,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -394,6 +571,7 @@ describe("/api/retrieval", () => {
       });
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error:
@@ -412,6 +590,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -439,6 +618,7 @@ describe("/api/retrieval", () => {
       });
 
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData())).toEqual({
         error: "JSON Validation Error: instance is not of a type(s) array",
@@ -456,6 +636,7 @@ describe("/api/retrieval", () => {
           expiresIn: "1y",
         }
       );
+
       const { req, res } = createMocks({
         method: "DELETE",
         headers: {
@@ -481,18 +662,14 @@ describe("/api/retrieval", () => {
           };
         }
       });
-      let callCount = 0;
-      documentClient.send = jest.fn(() => {
-        if (callCount > 0) {
-          throw new Error("some error");
-        }
-        callCount += 1;
-      });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+
+      ddbMock.on(UpdateCommand).resolvesOnce().rejects("some error");
+
       logMessage.warn.mockImplementation(() => {});
       logMessage.error.mockImplementation(() => {});
+
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(500);
       expect(JSON.parse(res._getData())).toEqual({
         error: "Error on Server Side",
@@ -544,20 +721,18 @@ describe("/api/retrieval", () => {
           };
         }
       });
-      const dynamodbExpectedReponses = {
+
+      ddbMock.on(QueryCommand).resolves({
         Items: [
           { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
           { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
           { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
           { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
         ],
-      };
-      documentClient.send.mockImplementation(() => {
-        return dynamodbExpectedReponses;
       });
-      DynamoDBClient.mockReturnValue(dynamoClient);
-      DynamoDBDocumentClient.from.mockReturnValue(documentClient);
+
       await retrieval(req, res);
+
       expect(res.statusCode).toBe(200);
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({

@@ -1,16 +1,13 @@
 import classnames from "classnames";
 import { useRouter } from "next/router";
-import { FormSchemaProperties } from "./types";
+import { PublicFormRecord } from "@lib/types";
 
-export const getPageClassNames = (formConfig: FormSchemaProperties): string => {
+export const getPageClassNames = (formRecord: PublicFormRecord): string => {
   const pageNameUrl = getPageNameUrl();
-  const brandName = formConfig && formConfig.brand ? formConfig.brand.name : "";
-  const classes = classnames(
-    "outer-container",
-    `page${pageNameUrl.replace(/\//g, "-")}`,
-    brandName
-  );
-  return classes;
+  const brandName = formRecord?.formConfig?.form?.brand
+    ? formRecord.formConfig.form.brand.name
+    : "";
+  return classnames("outer-container", `page${pageNameUrl.replace(/\//g, "-")}`, brandName);
 };
 
 export const getPageNameUrl = (): string => {

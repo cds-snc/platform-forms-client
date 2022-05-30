@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
 import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import executeQuery from "@lib/integration/queryManager";
 import dbConnector from "@lib/integration/dbConnector";
 import jwt from "jsonwebtoken";
+import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
 
 /**
  * @description
