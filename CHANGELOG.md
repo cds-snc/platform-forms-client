@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed retrieval API not returning all existing responses
+- Removed the security attribute from the page. But the backend remains untouched.  
 
 ### Changed
 
