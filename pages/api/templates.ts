@@ -1,4 +1,4 @@
-import { crudTemplates, onlyIncludePublicProperties } from "@lib/integration/crud";
+import { crudTemplates, onlyIncludePublicProperties, getForms } from "@lib/integration/crud";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
@@ -13,7 +13,10 @@ const authenticatedMethods = ["POST", "PUT", "DELETE"];
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await isAdmin({ req });
-    const response = await crudTemplates({ ...req.body, method: req.method, session });
+    const response =
+      req.method === "GET"
+        ? await getForms()
+        : await crudTemplates({ ...req.body, method: req.method, session });
     if (response) {
       if (session && session.user.id && ["POST", "PUT", "DELETE"].includes(req.method as string)) {
         const formId = response.data.records ? response.data.records[0].formID : req.body.formID;
@@ -44,7 +47,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       if (req.method === "GET") {
-        const publicTemplates = await onlyIncludePublicProperties(response);
+        const publicTemplates = onlyIncludePublicProperties(response);
         res.status(200).json(publicTemplates);
       } else {
         res.status(200).json(response);

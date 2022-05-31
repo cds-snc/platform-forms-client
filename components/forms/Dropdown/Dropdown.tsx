@@ -3,14 +3,10 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { useTranslation } from "next-i18next";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import { InputFieldProps } from "@lib/types";
 
-interface DropdownProps {
-  id: string;
-  name: string;
-  className?: string;
+interface DropdownProps extends InputFieldProps {
   choices: string[];
-  required?: boolean;
-  ariaDescribedBy?: string;
 }
 
 interface DropdownOptionProps {
@@ -35,8 +31,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const options = choices.map((choice, i) => {
     const innerId = `${id}-${i}`;
-    const value = field.value ? field.value[innerId] : field.value;
-    return <DropdownOption key={`key-${innerId}`} value={value} name={choice} />;
+    return <DropdownOption key={`key-${innerId}`} value={choice} name={choice} />;
   });
 
   return (

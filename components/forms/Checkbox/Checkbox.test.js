@@ -1,8 +1,8 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
+import { Formik } from "formik";
 
 const checkboxData = {
   id: 8,
@@ -36,23 +36,14 @@ const checkboxData = {
   },
 };
 
-const formConfig = {
-  id: 1,
-  version: 1,
-  titleEn: "Test Form",
-  titleFr: "Formulaire de test",
-  layout: [1],
-  elements: [checkboxData],
-};
-
 describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
   afterEach(cleanup);
   test("renders without errors", () => {
     userEvent.setup();
     render(
-      <Form formConfig={formConfig} t={(key) => key} language={lang}>
+      <Formik onSubmit={() => {}}>
         <GenerateElement element={checkboxData} language={lang} t={(key) => key} />
-      </Form>
+      </Formik>
     );
     const description =
       lang === "en" ? checkboxData.properties.descriptionEn : checkboxData.properties.descriptionFr;
@@ -82,9 +73,9 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
   test("required elements display correctly", () => {
     checkboxData.properties.validation.required = true;
     render(
-      <Form formConfig={formConfig} t={(key) => key} language={lang}>
+      <Formik onSubmit={() => {}}>
         <GenerateElement element={checkboxData} language={lang} t={(key) => key} />
-      </Form>
+      </Formik>
     );
 
     expect(screen.queryByTestId("required")).toBeInTheDocument();

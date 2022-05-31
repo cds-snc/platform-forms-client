@@ -7,11 +7,12 @@ export const csrfProtected = (protectedMethods: string[]): MiddlewareRequest => 
     try {
       if (isProtected(req, protectedMethods)) {
         const csrfToken = await getCsrfToken({ req });
-        if (!csrfToken || csrfToken !== req.headers["x-csrf-token"]) {
+        if (csrfToken && csrfToken === req.headers["x-csrf-token"]) {
+          return { next: true };
+        } else {
           res.status(403).json({ error: "Access Denied" });
           return { next: false };
         }
-        return { next: true };
       } else {
         //allow unrestricted method
         return { next: true };

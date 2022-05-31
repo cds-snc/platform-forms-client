@@ -1,8 +1,4 @@
-import {
-  CrudTemplateResponse,
-  CrudOrganizationResponse,
-  PublicFormSchemaProperties,
-} from "@lib/types";
+import { LambdaResponse, FormRecord, PublicFormRecord, Organization } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
 
@@ -47,9 +43,9 @@ const deleteValue = async (deleteParameter: string) => {
 const modifyValue = async (
   modifyParameter: string,
   template:
-    | CrudTemplateResponse
-    | (PublicFormSchemaProperties | undefined)[]
-    | CrudOrganizationResponse
+    | LambdaResponse<Omit<FormRecord, "bearerToken">>
+    | (PublicFormRecord | undefined)[]
+    | LambdaResponse<Organization>
 ) => {
   if (!cacheAvailable) return;
   try {
@@ -67,35 +63,38 @@ const modifyValue = async (
   Forms
 */
 
-const formIDCheck = async (formID: string): Promise<CrudTemplateResponse | null> => {
+const formIDCheck = async (
+  formID: number
+): Promise<LambdaResponse<Omit<FormRecord, "bearerToken">> | null> => {
   return checkValue(`form:config:${formID}`);
 };
 
-const formIDDelete = async (formID: string): Promise<void> => {
+const formIDDelete = async (formID: number): Promise<void> => {
   return deleteValue(`form:config:${formID}`);
 };
 
-const formIDPut = async (formID: string, template: CrudTemplateResponse): Promise<void> => {
+const formIDPut = async (
+  formID: number,
+  template: LambdaResponse<Omit<FormRecord, "bearerToken">>
+): Promise<void> => {
   return modifyValue(`form:config:${formID}`, template);
 };
 
-const publishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
+const publishedCheck = async (): Promise<(PublicFormRecord | undefined)[] | null> => {
   return checkValue(`form:published`);
 };
 
-const publishedPut = async (
-  templates: (PublicFormSchemaProperties | undefined)[]
-): Promise<void> => {
+const publishedPut = async (templates: (PublicFormRecord | undefined)[]): Promise<void> => {
   return modifyValue(`form:published`, templates);
 };
 
-const unpublishedCheck = async (): Promise<(PublicFormSchemaProperties | undefined)[] | null> => {
+const unpublishedCheck = async (): Promise<
+  (LambdaResponse<Omit<FormRecord, "bearerToken">> | undefined)[] | null
+> => {
   return checkValue(`form:unpublished`);
 };
 
-const unpublishedPut = async (
-  templates: (PublicFormSchemaProperties | undefined)[]
-): Promise<void> => {
+const unpublishedPut = async (templates: (PublicFormRecord | undefined)[]): Promise<void> => {
   return modifyValue(`form:unpublished`, templates);
 };
 
@@ -105,13 +104,13 @@ const unpublishedPut = async (
 
 const organizationIDCheck = async (
   organizationID: string
-): Promise<CrudOrganizationResponse | null> => {
+): Promise<LambdaResponse<Organization> | null> => {
   return checkValue(`organizations:${organizationID}`);
 };
 
 const organizationIDPut = async (
   organizationID: string,
-  organization: CrudOrganizationResponse
+  organization: LambdaResponse<Organization>
 ): Promise<void> => {
   return modifyValue(`organizations:${organizationID}`, organization);
 };

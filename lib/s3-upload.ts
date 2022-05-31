@@ -1,8 +1,9 @@
 import { v4 as uuid } from "uuid";
-import { ProcessedFile, UploadResult } from "./types";
 import { logMessage } from "@lib/logger";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
+import { ProcessedFile } from "@lib/types/submission-types";
+import { UploadResult } from "@lib/types";
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION ?? "ca-central-1",

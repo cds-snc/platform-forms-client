@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import { CharacterCountMessages } from "@lib/types";
+import { InputFieldProps, CharacterCountMessages } from "@lib/types";
 
-export interface TextAreaProps {
-  id: string;
-  name: string;
+export interface TextAreaProps extends InputFieldProps {
   characterCountMessages: CharacterCountMessages;
-  className?: string;
-  required?: boolean;
   children?: React.ReactNode;
-  ariaDescribedBy?: string;
   placeholder?: string;
 }
 

@@ -2,9 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers, adminRole } from "@lib/users";
-import { AdminLogAction, AdminLogEvent, MiddlewareProps } from "@lib/types";
 import { logAdminActivity } from "@lib/adminLogs";
 import { Session } from "next-auth";
+import { MiddlewareProps } from "@lib/types";
+import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
 
 const allowedMethods = ["GET", "PUT"];
 

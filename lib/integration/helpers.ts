@@ -1,21 +1,21 @@
 import axios from "axios";
+import { NextRouter } from "next/router";
 import { logger, logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
 import {
-  FormElement,
-  Responses,
-  Response,
-  FormValues,
-  DynamicFormProps,
   FileInputResponse,
-  Submission,
-  PublicFormSchemaProperties,
+  FormElement,
+  FormElementTypes,
+  PublicFormRecord,
+  Response,
+  Responses,
 } from "../types";
+import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/client";
 
 // Get the form json object by using the form ID
 // Returns => json object of form
-async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | undefined> {
+async function _getFormByID(formID: string): Promise<PublicFormRecord | undefined> {
   try {
     const response = await axios({
       url: "/api/templates",
@@ -28,7 +28,7 @@ async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties 
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
-    const { data }: { data: Array<PublicFormSchemaProperties> } = response.data;
+    const { data }: { data: Array<PublicFormRecord> } = response.data;
     if (data?.length === 1 && data[0].formID) {
       return data[0];
     }
@@ -42,8 +42,8 @@ export function extractFormData(submission: Submission): Array<string> {
   const formResponses = submission.responses;
   const formOrigin = submission.form;
   const dataCollector: Array<string> = [];
-  formOrigin.layout.map((qID) => {
-    const question = formOrigin.elements.find(
+  formOrigin.formConfig.form.layout.map((qID) => {
+    const question = formOrigin.formConfig.form.elements.find(
       (element: FormElement) => element.id === parseInt(qID)
     );
     if (question) {
@@ -58,17 +58,17 @@ function handleType(question: FormElement, response: Response, collector: Array<
   // Do we detect lang submission or output with mixed lang?
   const qTitle = question.properties.titleEn;
   switch (question.type) {
-    case "textField":
-    case "textArea":
-    case "dropdown":
-    case "radio":
+    case FormElementTypes.textField:
+    case FormElementTypes.textArea:
+    case FormElementTypes.dropdown:
+    case FormElementTypes.radio:
       handleTextResponse(qTitle, response as string, collector);
       break;
 
-    case "checkbox":
+    case FormElementTypes.checkbox:
       handleArrayResponse(qTitle, response as Array<string>, collector);
       break;
-    case "dynamicRow":
+    case FormElementTypes.dynamicRow:
       handleDynamicForm(
         qTitle,
         question.properties.placeholderEn,
@@ -77,10 +77,10 @@ function handleType(question: FormElement, response: Response, collector: Array<
         collector
       );
       break;
-    case "fileInput":
+    case FormElementTypes.fileInput:
       handleTextResponse(qTitle, response as string, collector);
       break;
-    case "richText":
+    case FormElementTypes.richText:
       collector.push(`${question.properties.descriptionEn}`);
   }
 }
@@ -98,15 +98,15 @@ function handleDynamicForm(
       // Add i18n here eventually?
       const qTitle = qItem.properties.titleEn;
       switch (qItem.type) {
-        case "textField":
-        case "textArea":
-        case "dropdown":
-        case "radio":
-        case "fileInput":
+        case FormElementTypes.textField:
+        case FormElementTypes.textArea:
+        case FormElementTypes.dropdown:
+        case FormElementTypes.radio:
+        case FormElementTypes.fileInput:
           handleTextResponse(qTitle, row[qIndex] as string, rowCollector);
           break;
 
-        case "checkbox":
+        case FormElementTypes.checkbox:
           handleArrayResponse(qTitle, row[qIndex] as Array<string>, rowCollector);
           break;
 
@@ -148,11 +148,11 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`**${title}**${String.fromCharCode(13)}No Response`);
 }
 
-function _buildFormDataObject(form: PublicFormSchemaProperties, values: Responses) {
+function _buildFormDataObject(form: PublicFormRecord, values: Responses) {
   const formData = {} as { [key: string]: string | FileInputResponse };
 
-  const formElementsWithoutRichTextComponents = form.elements.filter(
-    (element) => !["richText"].includes(element.type)
+  const formElementsWithoutRichTextComponents = form.formConfig.form.elements.filter(
+    (element) => ![FormElementTypes.richText].includes(element.type)
   );
 
   for (const element of formElementsWithoutRichTextComponents) {
@@ -163,7 +163,7 @@ function _buildFormDataObject(form: PublicFormSchemaProperties, values: Response
   }
 
   formData["formID"] = `${form.formID}`;
-  formData.securityAttribute = form.securityAttribute ?? "Unclassified";
+  formData["securityAttribute"] = form.formConfig.securityAttribute ?? "Unclassified";
 
   return formData;
 }
@@ -172,7 +172,7 @@ function _handleDynamicRowTypeIfNeeded(
   element: FormElement,
   value: Response
 ): [string, string | FileInputResponse][] {
-  if (element.type === "dynamicRow") {
+  if (element.type === FormElementTypes.dynamicRow) {
     if (element.properties.subElements === undefined) return [];
 
     const responses = value as Responses[];
@@ -214,23 +214,23 @@ function _handleFormDataType(
   value: Response
 ): [string, string | FileInputResponse] | undefined {
   switch (element.type) {
-    case "textField":
-    case "textArea":
+    case FormElementTypes.textField:
+    case FormElementTypes.textArea:
       // string
       return _handleFormDataText(element.id.toString(), value as string);
-    case "dropdown":
-    case "radio":
+    case FormElementTypes.dropdown:
+    case FormElementTypes.radio:
       return value instanceof Object
         ? _handleFormDataText(element.id.toString(), "")
-        : _handleFormDataText(element.id.toString(), value);
-    case "checkbox":
+        : _handleFormDataText(element.id.toString(), value as string);
+    case FormElementTypes.checkbox:
       // array of strings
       return Array.isArray(value)
         ? _handleFormDataArray(element.id.toString(), value as Array<string>)
         : _handleFormDataText(element.id.toString(), "");
-    case "fileInput":
+    case FormElementTypes.fileInput:
       return _handleFormDataFileInput(element.id.toString(), value as FileInputResponse);
-    case "richText":
+    case FormElementTypes.richText:
       return undefined;
   }
 }
@@ -252,11 +252,22 @@ function _handleFormDataArray(key: string, value: Array<string>): [string, strin
   return [key, JSON.stringify({ value: value })];
 }
 
-async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormProps, FormValues>) {
-  const { language, router, formConfig, notifyPreviewFlag } = formikBag.props;
+async function _submitToAPI(
+  values: Responses,
+  formikBag: FormikBag<
+    {
+      formRecord: PublicFormRecord;
+      language: string;
+      router: NextRouter;
+      notifyPreviewFlag: boolean;
+    },
+    Responses
+  >
+) {
+  const { language, router, formRecord, notifyPreviewFlag } = formikBag.props;
   const { setStatus } = formikBag;
 
-  const formDataObject = _buildFormDataObject(formConfig, values);
+  const formDataObject = _buildFormDataObject(formRecord, values);
   const token = await getCsrfToken();
   if (token) {
     //making a post request to the submit API
@@ -277,7 +288,7 @@ async function _submitToAPI(values: Responses, formikBag: FormikBag<DynamicFormP
           const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
 
           router.push({
-            pathname: `/${language}/id/${formConfig.formID}/confirmation`,
+            pathname: `/${language}/id/${formRecord.formID}/confirmation`,
             query: {
               htmlEmail: htmlEmail,
             },
@@ -300,15 +311,15 @@ function _rehydrateFormResponses(payload: Submission) {
 
   const rehydratedResponses: Responses = {};
 
-  form.elements
-    .filter((element) => !["richText"].includes(element.type))
+  form.formConfig.form.elements
+    .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((question: FormElement) => {
       switch (question.type) {
-        case "checkbox": {
+        case FormElementTypes.checkbox: {
           rehydratedResponses[question.id] = _rehydrateCheckBoxResponse(responses[question.id]);
           break;
         }
-        case "dynamicRow": {
+        case FormElementTypes.dynamicRow: {
           const filteredResponses: [string, Response][] = Object.entries(responses)
             .filter(([key]) => {
               const splitKey = key.split("-");

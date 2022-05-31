@@ -1,7 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "../Form/Form";
 import { GenerateElement } from "@lib/formBuilder";
 
 jest.mock("formik", () => ({
@@ -51,11 +50,7 @@ const textAreaData2 = {
 describe("Generate a text area", () => {
   afterEach(cleanup);
   it.each([["en"], ["fr"]])("renders without errors", (lang) => {
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textAreaData} language={lang} t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={textAreaData} language={lang} t={(key) => key} />);
     const title = lang === "en" ? textAreaData.properties.titleEn : textAreaData.properties.titleFr,
       description =
         lang === "en"
@@ -83,11 +78,7 @@ describe("Generate a text area", () => {
 describe("Verfify character count restrictions", () => {
   let screen;
   beforeEach(() => {
-    screen = render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textAreaData} language={"en"} t={(key) => key} />
-      </Form>
-    );
+    screen = render(<GenerateElement element={textAreaData} language={"en"} t={(key) => key} />);
   });
 
   it("does not display any message when not enough characters have been typed in", async () => {
@@ -123,11 +114,7 @@ describe("Accessibility tests for the textarea component.", () => {
   let screen;
 
   beforeEach(() => {
-    screen = render(
-      <Form t={(key) => key}>
-        <GenerateElement element={textAreaData2} language={"en"} t={(key) => key} />
-      </Form>
-    );
+    screen = render(<GenerateElement element={textAreaData2} language={"en"} t={(key) => key} />);
   });
   it("checks the `aria-describedby` attribute", () => {
     // initial attribute has no value since the description is empty.

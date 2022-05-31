@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed retrieval API not returning all existing responses
+
 ### Changed
 
 - Upgraded NextJS and other associated GCForms dependencies to next major version. [#725](https://github.com/cds-snc/platform-forms-client/pull/725)
