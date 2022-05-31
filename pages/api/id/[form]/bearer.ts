@@ -4,9 +4,8 @@ import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import { prisma } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
-import { logAdminActivity } from "@lib/adminLogs";
+import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { Prisma } from "@prisma/client";
-import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {

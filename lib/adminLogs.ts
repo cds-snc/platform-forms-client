@@ -1,6 +1,29 @@
 import { prisma } from "./integration/prismaConnector";
 import { logMessage } from "@lib/logger";
-import { AdminLogAction, AdminLogEvent } from "@lib/types";
+
+export enum AdminLogAction {
+  Create = "Create",
+  Read = "Read",
+  Update = "Update",
+  Delete = "Delete",
+}
+
+export enum AdminLogEvent {
+  GrantAdminRole = "GrantAdminRole",
+  RevokeAdminRole = "RevokeAdminRole",
+  UploadForm = "UploadForm",
+  UpdateForm = "UpdateForm",
+  DeleteForm = "DeleteForm",
+  RefreshBearerToken = "RefreshBearerToken",
+  GrantInitialFormAccess = "GrantInitialFormAccess",
+  GrantFormAccess = "GrantFormAccess",
+  RevokeFormAccess = "RevokeFormAccess",
+  EnableFeature = "EnableFeature",
+  DisableFeature = "DisableFeature",
+}
+
+type AdminLogActionStrings = keyof typeof AdminLogAction;
+type AdminLogEventStrings = keyof typeof AdminLogEvent;
 
 /**
  * Logs usage of privileged functions by admins
@@ -11,8 +34,8 @@ import { AdminLogAction, AdminLogEvent } from "@lib/types";
  */
 export const logAdminActivity = async (
   userId: string,
-  action: AdminLogAction,
-  event: AdminLogEvent,
+  action: AdminLogActionStrings,
+  event: AdminLogEventStrings,
   description: string
 ): Promise<void> => {
   try {

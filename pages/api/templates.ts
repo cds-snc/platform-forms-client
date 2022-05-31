@@ -4,8 +4,7 @@ import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware"
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
-import { logAdminActivity } from "@lib/adminLogs";
-import { AdminLogAction, AdminLogEvent } from "@lib/types";
+import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];

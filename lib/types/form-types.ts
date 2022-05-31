@@ -130,7 +130,7 @@ export interface FormConfiguration {
 
 // defines the fields for the form record that is available to unauthenticated users
 export interface PublicFormRecord {
-  formID: number;
+  formID: string;
   formConfig: Omit<FormConfiguration, "internalTitleEn" | "internalTitleFr" | "submission">;
   organization?: boolean;
 }
@@ -144,7 +144,7 @@ export interface FormRecord extends PublicFormRecord {
 // the object that is passed to the crud function which calls the template lambda
 export interface TemplateLambdaInput {
   method: string;
-  formID?: number;
+  formID?: string;
   formConfig?: FormConfiguration;
   limit?: number;
   offset?: number;

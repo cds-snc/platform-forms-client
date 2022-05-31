@@ -7,7 +7,7 @@ import { getSession } from "next-auth/react";
 import retrieve from "@pages/api/id/[form]/bearer";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
-import { logAdminActivity } from "@lib/adminLogs";
+import * as adminLogs from "@lib/adminLogs";
 import { prismaMock, checkLogs } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 
@@ -17,9 +17,6 @@ jest.mock("next-auth/react");
 const mockGetSession = jest.mocked(getSession, true);
 const mockLogMessage = jest.mocked(logMessage, true);
 
-jest.mock("@lib/adminLogs", () => ({
-  logAdminActivity: jest.fn(),
-}));
 jest.mock("@lib/logger");
 
 describe("/id/[form]/bearer", () => {
@@ -287,6 +284,8 @@ describe("/id/[form]/bearer", () => {
           form: 1,
         },
       });
+
+      const logAdminActivity = jest.spyOn(adminLogs, "logAdminActivity");
 
       await retrieve(req, res);
 

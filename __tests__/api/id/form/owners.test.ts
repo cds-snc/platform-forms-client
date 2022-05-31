@@ -6,7 +6,7 @@
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { getSession } from "next-auth/react";
 import owners from "@pages/api/id/[form]/owners";
-import { logAdminActivity } from "@lib/adminLogs";
+import * as logAdmin from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 
@@ -14,10 +14,6 @@ jest.mock("next-auth/react");
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getSession, true);
-
-jest.mock("@lib/adminLogs", () => ({
-  logAdminActivity: jest.fn(),
-}));
 
 describe("/id/[forms]/owners", () => {
   describe("Access Control", () => {
@@ -267,6 +263,8 @@ describe("/id/[forms]/owners", () => {
             form: "12",
           },
         });
+
+        const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
         await owners(req, res);
         expect(res.statusCode).toBe(200);
         expect(JSON.parse(res._getData())).toMatchObject({ id: elem, active: true });
@@ -403,7 +401,7 @@ describe("/id/[forms]/owners", () => {
           form: "9",
         },
       });
-
+      const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
       await owners(req, res);
 
       expect(res.statusCode).toBe(200);

@@ -6,12 +6,11 @@ import templates from "@pages/api/templates";
 import { getSession } from "next-auth/react";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
-import { logAdminActivity } from "@lib/adminLogs";
+import * as logAdmin from "@lib/adminLogs";
 import { TextDecoder, TextEncoder } from "util";
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getSession, true);
-jest.mock("@lib/adminLogs");
 
 jest.mock("next-auth/react");
 
@@ -65,10 +64,6 @@ jest.mock("@aws-sdk/client-lambda", () => {
   };
 });
 
-jest.mock("@lib/adminLogs", () => ({
-  logAdminActivity: jest.fn(),
-}));
-
 describe("Test JSON validation scenarios", () => {
   beforeEach(() => {
     const mockSession = {
@@ -92,6 +87,8 @@ describe("Test JSON validation scenarios", () => {
         formConfig: validFormTemplate,
       },
     });
+
+    const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
 
     await templates(req, res);
 
@@ -133,6 +130,8 @@ describe("Test JSON validation scenarios", () => {
       },
     });
 
+    const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
+
     await templates(req, res);
 
     expect(res.statusCode).toBe(200);
@@ -155,6 +154,8 @@ describe("Test JSON validation scenarios", () => {
         formID: 1,
       },
     });
+
+    const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
 
     await templates(req, res);
 

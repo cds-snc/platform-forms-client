@@ -7,16 +7,12 @@ import { getSession } from "next-auth/react";
 import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
-import { logAdminActivity } from "@lib/adminLogs";
+import * as logAdmin from "@lib/adminLogs";
 
 jest.mock("next-auth/react");
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getSession, true);
-
-jest.mock("@lib/adminLogs", () => ({
-  logAdminActivity: jest.fn(),
-}));
 
 describe("Users API endpoint", () => {
   describe("Access Control", () => {
@@ -266,6 +262,7 @@ describe("Users API endpoint", () => {
         emailVerified: null,
         image: null,
         name: "Joe",
+        organizationId: "1",
       });
       const { req, res } = createMocks({
         method: "PUT",
@@ -277,6 +274,8 @@ describe("Users API endpoint", () => {
           isAdmin: "true",
         },
       });
+
+      const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
 
       await users(req, res);
 
