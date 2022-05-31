@@ -9,7 +9,7 @@ import {
   PublicFormRecord,
   Response,
   Responses,
-} from "../types";
+} from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/client";
 
