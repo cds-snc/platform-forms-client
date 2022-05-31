@@ -1,4 +1,4 @@
-import { LambdaResponse, FormRecord, PublicFormRecord, Organization } from "@lib/types";
+import { LambdaResponse, FormRecord, PublicFormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
 
@@ -42,10 +42,7 @@ const deleteValue = async (deleteParameter: string) => {
 
 const modifyValue = async (
   modifyParameter: string,
-  template:
-    | LambdaResponse<Omit<FormRecord, "bearerToken">>
-    | (PublicFormRecord | undefined)[]
-    | LambdaResponse<Organization>
+  template: LambdaResponse<Omit<FormRecord, "bearerToken">> | (PublicFormRecord | undefined)[]
 ) => {
   if (!cacheAvailable) return;
   try {
@@ -98,27 +95,6 @@ const unpublishedPut = async (templates: (PublicFormRecord | undefined)[]): Prom
   return modifyValue(`form:unpublished`, templates);
 };
 
-/*
-  Organizations
-*/
-
-const organizationIDCheck = async (
-  organizationID: string
-): Promise<LambdaResponse<Organization> | null> => {
-  return checkValue(`organizations:${organizationID}`);
-};
-
-const organizationIDPut = async (
-  organizationID: string,
-  organization: LambdaResponse<Organization>
-): Promise<void> => {
-  return modifyValue(`organizations:${organizationID}`, organization);
-};
-
-const organizationIDDelete = async (organizationID: string): Promise<void> => {
-  return deleteValue(`organizations:${organizationID}`);
-};
-
 export const formCache = {
   cacheAvailable,
   formID: {
@@ -133,14 +109,5 @@ export const formCache = {
   unpublished: {
     check: unpublishedCheck,
     set: unpublishedPut,
-  },
-};
-
-export const organizationCache = {
-  cacheAvailable,
-  organizationID: {
-    check: organizationIDCheck,
-    set: organizationIDPut,
-    invalidate: organizationIDDelete,
   },
 };

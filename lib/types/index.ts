@@ -20,8 +20,6 @@ export type {
   ChoiceFieldProps,
 } from "./component-utility-types";
 
-export type { Organization, OrganizationLambdaInput } from "./organization-types";
-
 export type {
   LambdaResponse,
   UploadResult,

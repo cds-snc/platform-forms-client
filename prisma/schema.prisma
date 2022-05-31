@@ -49,13 +49,6 @@ model FormUser {
   @@unique([templateId, email])
 }
 
-model Organization {
-  id     String  @id @default(cuid())
-  nameEn String? 
-  nameFr String? 
-  users  User[]
-}
-
 model Session {
   id           String   @id @default(cuid())
   userId       String
@@ -67,7 +60,6 @@ model Session {
 model Template {
   id           String         @id @default(cuid())
   jsonConfig  Json?
-  organization String?      @db.Uuid
   bearerToken String?
   formUsers   FormUser[]
 }
@@ -79,8 +71,6 @@ model User {
   emailVerified DateTime?
   image         String?
   admin         Boolean?       @default(false)
-  organizationId  String?        
-  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   accounts      Account[]
   admin_logs    AdminLog[]
   sessions      Session[]

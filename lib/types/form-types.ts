@@ -132,7 +132,6 @@ export interface FormConfiguration {
 export interface PublicFormRecord {
   formID: string;
   formConfig: Omit<FormConfiguration, "internalTitleEn" | "internalTitleFr" | "submission">;
-  organization?: boolean;
 }
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes

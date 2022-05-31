@@ -96,6 +96,7 @@ ALTER TABLE "templates" RENAME TO "Template";
 ALTER TABLE "Template" DROP CONSTRAINT "templates_pkey";
 ALTER TABLE "Template" RENAME COLUMN "bearer_token" TO "bearerToken";
 ALTER TABLE "Template" RENAME COLUMN "json_config" TO "jsonConfig";
+ALTER TABLE "Template" DROP COLUMN "organization";
 ALTER TABLE "Template"
 ALTER COLUMN "id" DROP DEFAULT,
 ALTER COLUMN "id" SET DATA TYPE TEXT,
@@ -105,9 +106,8 @@ DROP SEQUENCE "templates_id_seq";
 -- AlterTable
 ALTER TABLE "users" RENAME TO "User";
 ALTER TABLE "User" DROP CONSTRAINT "users_pkey";
-ALTER TABLE "User" RENAME COLUMN "organization" TO "organizationId";
+ALTER TABLE "User" DROP COLUMN "organization";
 ALTER TABLE "User"
-ALTER COLUMN "organizationId" SET DATA TYPE TEXT,
 ALTER COLUMN "id" DROP DEFAULT,
 ALTER COLUMN "id" SET DATA TYPE TEXT,
 DROP COLUMN "emailVerified",
@@ -127,15 +127,6 @@ DROP TABLE "sessions";
 
 -- DROP Table
 DROP TABLE "organizations";
-
--- CreateTable
-CREATE TABLE "Organization" (
-    "id" TEXT NOT NULL,
-    "nameEn" TEXT,
-    "nameFr" TEXT,
-
-    CONSTRAINT "Organization_pkey" PRIMARY KEY ("id")
-);
 
 -- CreateTable
 CREATE TABLE "Session" (
@@ -183,6 +174,3 @@ ALTER TABLE "FormUser" ADD CONSTRAINT "FormUser_templateId_fkey" FOREIGN KEY ("t
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

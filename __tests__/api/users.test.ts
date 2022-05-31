@@ -262,7 +262,6 @@ describe("Users API endpoint", () => {
         emailVerified: null,
         image: null,
         name: "Joe",
-        organizationId: "1",
       });
       const { req, res } = createMocks({
         method: "PUT",

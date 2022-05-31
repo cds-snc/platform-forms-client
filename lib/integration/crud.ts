@@ -1,14 +1,12 @@
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { logger, logMessage } from "@lib/logger";
-import { organizationCache, formCache } from "../cache";
+import { formCache } from "../cache";
 import {
   PublicFormRecord,
   TemplateLambdaInput,
   SubmissionProperties,
-  OrganizationLambdaInput,
   LambdaResponse,
   FormRecord,
-  Organization,
 } from "@lib/types";
 
 const lambdaClient = new LambdaClient({
@@ -112,106 +110,6 @@ async function _crudTemplates(
     .catch((err) => {
       logMessage.error(err);
       throw new Error("Could not process request with Lambda Templates function");
-    });
-}
-
-// CRUD for Organizations
-async function _crudOrganizationsWithCache(
-  payload: OrganizationLambdaInput
-): Promise<LambdaResponse<Organization>> {
-  if (organizationCache.cacheAvailable && payload.method === "GET" && payload.organizationID) {
-    const cachedValue = await organizationCache.organizationID.check(payload.organizationID);
-    if (cachedValue) {
-      return cachedValue;
-    }
-  }
-
-  return await _crudOrganizations(payload).then((response) => {
-    if (organizationCache.cacheAvailable) {
-      switch (payload.method) {
-        case "GET":
-          if (payload.organizationID) {
-            organizationCache.organizationID.set(payload.organizationID, response);
-          }
-          break;
-        case "DELETE":
-        case "UPDATE":
-        case "INSERT":
-          if (payload.organizationID) {
-            organizationCache.organizationID.invalidate(payload.organizationID);
-          }
-          break;
-        default:
-          break;
-      }
-    }
-    return response;
-  });
-}
-
-async function _crudOrganizations(
-  payload: OrganizationLambdaInput
-): Promise<LambdaResponse<Organization>> {
-  const getConfig = (payload: OrganizationLambdaInput) => {
-    const { method, organizationID, organizationNameEn, organizationNameFr } = payload;
-
-    switch (payload.method) {
-      case "GET":
-        return {
-          method,
-          organizationID,
-        };
-      case "POST":
-        return {
-          method,
-          organizationNameEn,
-          organizationNameFr,
-        };
-      case "PUT":
-        return {
-          method,
-          organizationID,
-          organizationNameEn,
-          organizationNameFr,
-        };
-      case "DELETE":
-        return {
-          method: "DELETE",
-          organizationID,
-        };
-      default:
-        return {
-          method: "UNDEFINED",
-        };
-    }
-  };
-
-  const lambdaClient = new LambdaClient({
-    region: "ca-central-1",
-    endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
-  });
-  const encoder = new TextEncoder();
-  const command = new InvokeCommand({
-    FunctionName: process.env.ORGANIZATIONS_API ?? "Organizations",
-    Payload: encoder.encode(JSON.stringify(getConfig(payload))),
-  });
-
-  return await lambdaClient
-    .send(command)
-    .then((response) => {
-      const decoder = new TextDecoder();
-      const respPayload = decoder.decode(response.Payload);
-      if (response.FunctionError) {
-        logMessage.debug("Lambda Organizations Client not successful");
-        return null;
-      } else {
-        logMessage.debug("Lambda Organizations Client successfully triggered");
-        return JSON.parse(respPayload);
-      }
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      throw new Error("Could not process request with Lambda Organizations function");
     });
 }
 
@@ -320,7 +218,6 @@ const _onlyIncludePublicProperties = ({
   }
 };
 
-export const crudOrganizations = logger(_crudOrganizationsWithCache);
 export const crudTemplates = logger(_crudTemplatesWithCache);
 export const getForms = logger(_getForms);
 export const getFormByID = logger(_getFormByID);
