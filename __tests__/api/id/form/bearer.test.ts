@@ -189,7 +189,7 @@ describe("/id/[form]/bearer", () => {
       expect(id).toEqual(1);
       const decodedToken = jwt.verify(bearerToken, "some_secret");
 
-      expect((decodedToken as { formID: number }).formID).toBe(1);
+      expect((decodedToken as { formID: string }).formID).toBe(1);
 
       expect(
         checkLogs(

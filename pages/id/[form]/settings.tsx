@@ -18,7 +18,7 @@ interface FormSettingsProps {
   form: FormRecord;
 }
 
-const handleDelete = async (formID: number) => {
+const handleDelete = async (formID: string) => {
   // redirect to view templates page on success
   const resp = await axios({
     url: "/api/templates",

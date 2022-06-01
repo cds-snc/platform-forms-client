@@ -115,7 +115,7 @@ async function _crudTemplates(
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
-async function _getSubmissionByID(formID: number): Promise<SubmissionProperties | null> {
+async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
   const response = await crudTemplates({ method: "GET", formID: formID });
   const { records } = response.data;
   if (records?.length === 1 && records[0].formConfig?.submission) {
@@ -184,7 +184,7 @@ const _getForms = async (
   }
 };
 
-async function _getFormByID(formID: number): Promise<PublicFormRecord | null> {
+async function _getFormByID(formID: string): Promise<PublicFormRecord | null> {
   try {
     const response = await crudTemplates({ method: "GET", formID: formID });
     const sanitizedResponse = onlyIncludePublicProperties(response);

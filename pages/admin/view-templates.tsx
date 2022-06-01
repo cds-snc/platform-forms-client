@@ -39,7 +39,7 @@ const DataElement = (props: { template: FormRecord }): React.ReactElement => {
   const formID = template.formID;
   const router = useRouter();
 
-  const redirectToSettings = (formID: number) => {
+  const redirectToSettings = (formID: string) => {
     router.push({
       pathname: `/${i18n.language}/id/${formID}/settings`,
     });

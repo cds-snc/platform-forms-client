@@ -64,7 +64,7 @@ function streamToString(stream: Readable): Promise<string> {
 }
 
 const callLambda = async (
-  formID: number,
+  formID: string,
   fields: Responses,
   language: string,
   securityAttribute: string
@@ -279,7 +279,7 @@ const processFormData = async (
       }`
     );
 
-    const form = await getFormByID(reqFields.formID as number);
+    const form = await getFormByID(reqFields.formID);
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });

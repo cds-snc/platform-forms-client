@@ -61,17 +61,17 @@ const modifyValue = async (
 */
 
 const formIDCheck = async (
-  formID: number
+  formID: string
 ): Promise<LambdaResponse<Omit<FormRecord, "bearerToken">> | null> => {
   return checkValue(`form:config:${formID}`);
 };
 
-const formIDDelete = async (formID: number): Promise<void> => {
+const formIDDelete = async (formID: string): Promise<void> => {
   return deleteValue(`form:config:${formID}`);
 };
 
 const formIDPut = async (
-  formID: number,
+  formID: string,
   template: LambdaResponse<Omit<FormRecord, "bearerToken">>
 ): Promise<void> => {
   return modifyValue(`form:config:${formID}`, template);
