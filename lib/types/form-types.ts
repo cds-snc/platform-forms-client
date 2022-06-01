@@ -96,7 +96,6 @@ export interface BrandProperties {
 
 // defines the fields for the main form configuration object
 export interface FormProperties {
-  id?: string;
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;

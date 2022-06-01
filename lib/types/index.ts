@@ -29,8 +29,6 @@ export type {
   HTMLTextInputTypeAttribute,
 } from "./utility-types";
 
-export { AdminLogAction, AdminLogEvent } from "./utility-types";
-
 export type { BearerTokenPayload, TemporaryTokenPayload, BearerResponse } from "./retrieval-types";
 
 export type { FormOwner } from "./user-types";
