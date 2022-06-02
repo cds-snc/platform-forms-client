@@ -12,9 +12,7 @@ services:
       - 3000:3000
     expose: 
       - 3000
-    links: 
-      - db
-      - redis
+
   db:
     image: postgres:11.2
     environment:
@@ -29,6 +27,7 @@ services:
       - "-c"
       - "listen_addresses=*"
     restart: always
+
   redis:
     restart: always
     image: redis:latest
@@ -36,5 +35,3 @@ services:
       - "6379:6379"
     expose:
       - 6379
-
-
