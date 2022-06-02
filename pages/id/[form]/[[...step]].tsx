@@ -10,7 +10,6 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
 import { PublicFormRecord } from "@lib/types";
-import SecurityAttributeBadge from "@components/globals/SecurityBadge";
 import { GetServerSideProps } from "next";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
@@ -37,9 +36,6 @@ const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.Rea
       <Head>
         <title>{formTitle}</title>
       </Head>
-      {formRecord.formConfig.securityAttribute && (
-        <SecurityAttributeBadge securityLevel={formRecord.formConfig.securityAttribute} />
-      )}
       <h1 className="gc-h1">{formTitle}</h1>
       <Form
         formRecord={formRecord}

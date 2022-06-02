@@ -82,9 +82,13 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     </Label>
   ) : null;
 
-  const textType = element.properties?.validation?.type
-    ? element.properties.validation.type
-    : "text";
+  const textType =
+    element.properties?.validation?.type &&
+    ["email", "name", "number", "password", "search", "tel", "url"].includes(
+      element.properties.validation.type
+    )
+      ? element.properties.validation.type
+      : "text";
 
   const placeHolderPerLocale = element.properties[getProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
