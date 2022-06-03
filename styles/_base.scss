@@ -113,26 +113,6 @@ ul.custom {
   }
 }
 
-/* Admin styling */
-ul.data_list {
-  @apply list-none;
-  li {
-    @apply border-2 border-solid border-gray-400 cursor-pointer inline-block overflow-hidden break-words;
-    max-height: 100px;
-    max-width: 100%;
-    width: 100%;
-    font-family: monospace;
-    margin: 0 1rem;
-
-    div.update-buttons {
-      display: inline-block;
-    }
-    div.form-title {
-      max-width: 70%;
-    }
-  }
-}
-
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
 
 ol {

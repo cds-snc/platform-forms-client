@@ -6,7 +6,6 @@ export type {
   PublicFormRecord,
   SubmissionProperties,
   FormRecord,
-  TemplateLambdaInput,
 } from "./form-types";
 export { FormElementTypes } from "./form-types";
 

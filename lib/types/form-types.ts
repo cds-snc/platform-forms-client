@@ -125,6 +125,7 @@ export interface FormConfiguration {
   form: FormProperties;
   securityAttribute: string;
   reCaptchaID?: string;
+  [key: string]: unknown;
 }
 
 // defines the fields for the form record that is available to unauthenticated users
@@ -137,13 +138,4 @@ export interface PublicFormRecord {
 export interface FormRecord extends PublicFormRecord {
   formConfig: FormConfiguration;
   bearerToken?: string;
-}
-
-// the object that is passed to the crud function which calls the template lambda
-export interface TemplateLambdaInput {
-  method: string;
-  formID?: string;
-  formConfig?: FormConfiguration;
-  limit?: number;
-  offset?: number;
 }

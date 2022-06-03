@@ -45,13 +45,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  if (context.locale) {
-    return {
-      props: { ...(await serverSideTranslations(context.locale, ["common", "admin-login"])) },
-    };
-  }
-
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-login"]))),
+    },
+  };
 };
 
 export default Login;

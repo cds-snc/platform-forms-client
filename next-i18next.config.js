@@ -5,5 +5,5 @@ module.exports = {
     locales: ["en", "fr"],
   },
   localePath: path.resolve("./public/static/locales"),
-  reloadOnPrerender: process.env.NODE_ENV === "development" ? true : false,
+  ...(process.env.NODE_ENV !== "production" && { reloadOnPrerender: true }),
 };

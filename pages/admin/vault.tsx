@@ -292,14 +292,12 @@ const AdminVault: React.FC = () => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  if (context.locale) {
-    return {
-      props: {
-        ...(await serverSideTranslations(context.locale, ["common", "admin-vault"])),
-      },
-    };
-  }
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-vault"]))),
+    },
+  };
 });
 
 export default AdminVault;

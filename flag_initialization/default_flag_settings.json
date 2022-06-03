@@ -1,5 +1,4 @@
 {
-  "sandbox": true,
   "vault": false,
   "unpublishedForms": true,
   "submitToReliabilityQueue": false,

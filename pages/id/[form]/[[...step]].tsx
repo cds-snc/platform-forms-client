@@ -1,4 +1,4 @@
-import { getFormByID } from "@lib/integration/crud";
+import { getTemplateByID } from "@lib/templates";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "@lib/flags";
 import React from "react";
@@ -64,10 +64,10 @@ function redirect(locale: string | undefined) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const unpublishedForms = await checkOne("unpublishedForms");
   let form = null;
-  const formId = context.params?.form;
+  const formID = context.params?.form;
   const isEmbeddable = context.query?.embed == "true" || null;
 
-  if (formId === "preview-form" && context.query?.formObject) {
+  if (formID === "preview-form" && context.query?.formObject) {
     // If we're previewing a form, get the object from the query string
 
     // If more then one formObject param is passed in short circuit back to 404
@@ -78,14 +78,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } else {
     //Otherwise, get the form object via the dataLayer library
     // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
-    if (
-      !context.params?.form ||
-      Array.isArray(context.params.form) ||
-      isNaN(parseInt(context.params.form))
-    )
-      return redirect(context.locale);
+    if (!formID || Array.isArray(formID)) return redirect(context.locale);
 
-    form = await getFormByID(parseInt(context.params.form));
+    form = await getTemplateByID(formID);
   }
 
   // Redirect if form doesn't exist and

@@ -65,14 +65,12 @@ const Flags: React.FC = () => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  if (context.locale) {
-    return {
-      props: {
-        ...(await serverSideTranslations(context.locale, ["common", "admin-flags"])),
-      },
-    };
-  }
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-flags"]))),
+    },
+  };
 });
 
 export default Flags;

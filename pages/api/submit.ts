@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import convertMessage from "@lib/markdown";
 import { rehydrateFormResponses } from "@lib/helpers";
-import { getFormByID, getSubmissionByID } from "@lib/integration/crud";
+import { getTemplateByID, getSubmissionTypeByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
@@ -69,7 +69,7 @@ const callLambda = async (
   language: string,
   securityAttribute: string
 ) => {
-  const submission = await getSubmissionByID(formID);
+  const submission = await getSubmissionTypeByID(formID);
 
   const encoder = new TextEncoder();
 
@@ -279,7 +279,7 @@ const processFormData = async (
       }`
     );
 
-    const form = await getFormByID(reqFields.formID as string);
+    const form = await getTemplateByID(reqFields.formID as string);
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });

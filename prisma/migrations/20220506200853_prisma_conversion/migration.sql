@@ -100,6 +100,7 @@ ALTER TABLE "Template" DROP COLUMN "organization";
 ALTER TABLE "Template"
 ALTER COLUMN "id" DROP DEFAULT,
 ALTER COLUMN "id" SET DATA TYPE TEXT,
+ALTER COLUMN "jsonConfig" SET NOT NULL,
 ADD CONSTRAINT "Template_pkey" PRIMARY KEY ("id");
 DROP SEQUENCE "templates_id_seq";
 

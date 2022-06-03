@@ -1,4 +1,4 @@
-import { LambdaResponse, FormRecord, PublicFormRecord } from "@lib/types";
+import { FormRecord, PublicFormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
 
@@ -40,10 +40,7 @@ const deleteValue = async (deleteParameter: string) => {
   }
 };
 
-const modifyValue = async (
-  modifyParameter: string,
-  template: LambdaResponse<Omit<FormRecord, "bearerToken">> | (PublicFormRecord | undefined)[]
-) => {
+const modifyValue = async (modifyParameter: string, template: FormRecord | string[]) => {
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
@@ -60,9 +57,7 @@ const modifyValue = async (
   Forms
 */
 
-const formIDCheck = async (
-  formID: string
-): Promise<LambdaResponse<Omit<FormRecord, "bearerToken">> | null> => {
+const formIDCheck = async (formID: string): Promise<FormRecord | null> => {
   return checkValue(`form:config:${formID}`);
 };
 
@@ -70,10 +65,7 @@ const formIDDelete = async (formID: string): Promise<void> => {
   return deleteValue(`form:config:${formID}`);
 };
 
-const formIDPut = async (
-  formID: string,
-  template: LambdaResponse<Omit<FormRecord, "bearerToken">>
-): Promise<void> => {
+const formIDPut = async (formID: string, template: FormRecord): Promise<void> => {
   return modifyValue(`form:config:${formID}`, template);
 };
 
@@ -81,17 +73,17 @@ const publishedCheck = async (): Promise<(PublicFormRecord | undefined)[] | null
   return checkValue(`form:published`);
 };
 
-const publishedPut = async (templates: (PublicFormRecord | undefined)[]): Promise<void> => {
+const publishedPut = async (templates: string[]): Promise<void> => {
   return modifyValue(`form:published`, templates);
 };
 
 const unpublishedCheck = async (): Promise<
-  (LambdaResponse<Omit<FormRecord, "bearerToken">> | undefined)[] | null
+  (Array<Omit<FormRecord, "bearerToken">> | undefined)[] | null
 > => {
   return checkValue(`form:unpublished`);
 };
 
-const unpublishedPut = async (templates: (PublicFormRecord | undefined)[]): Promise<void> => {
+const unpublishedPut = async (templates: string[]): Promise<void> => {
   return modifyValue(`form:unpublished`, templates);
 };
 

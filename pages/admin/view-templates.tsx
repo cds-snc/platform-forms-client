@@ -1,42 +1,26 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getForms } from "@lib/integration/crud";
+import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
+import { getProperty } from "@lib/formBuilder";
 
 import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FormRecord } from "@lib/types";
 
 interface DataViewProps {
-  templatesJSON: Array<FormRecord>;
+  templates: Array<{
+    formID: string;
+    titleEn: string;
+    titleFr: string;
+    publishingStatus: boolean;
+    [key: string]: string | boolean;
+  }>;
 }
 
 const DataView = (props: DataViewProps): React.ReactElement => {
-  const { t } = useTranslation("admin-templates");
-
-  const jsonElements = props.templatesJSON.map((template): React.ReactElement => {
-    return <DataElement template={template} key={props.templatesJSON.indexOf(template)} />;
-  });
-
-  return (
-    <>
-      <Head>
-        <title>Data View</title>
-      </Head>
-
-      <h1 className="gc-h1">{t("view.title")}</h1>
-      <ul className="data_list">
-        <Fragment>{jsonElements}</Fragment>
-      </ul>
-    </>
-  );
-};
-
-const DataElement = (props: { template: FormRecord }): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
-  const { template } = props;
-  const formID = template.formID;
+  const { templates } = props;
   const router = useRouter();
 
   const redirectToSettings = (formID: string) => {
@@ -44,34 +28,58 @@ const DataElement = (props: { template: FormRecord }): React.ReactElement => {
       pathname: `/${i18n.language}/id/${formID}/settings`,
     });
   };
+  const redirectToForm = (formID: string) => {
+    router.push({
+      pathname: `/${i18n.language}/id/${formID}`,
+    });
+  };
 
-  let title = "";
-  if (template.formConfig) {
-    if (i18n.language === "en")
-      title = template.formConfig.internalTitleEn
-        ? template.formConfig.internalTitleEn
-        : template.formConfig.form.titleEn;
-    else if (i18n.language === "fr")
-      title = template.formConfig.internalTitleFr
-        ? template.formConfig.internalTitleFr
-        : template.formConfig.form.titleFr;
-  }
   return (
-    <li>
-      <div className="pb-4 m-auto px-4">
-        <div className="update-buttons mr-4">
-          <button onClick={() => redirectToSettings(formID)} className="gc-button">
-            {t("view.update")}
-          </button>
-        </div>
-        <div className="inline-block break-words form-title">
-          <p>
-            {t("view.formID")} {formID}
-          </p>
-          <p>{title}</p>
-        </div>
-      </div>
-    </li>
+    <>
+      <Head>
+        <title>{t("view.title")}</title>
+      </Head>
+
+      <h1 className="gc-h1">{t("view.title")}</h1>
+      <table className="w-full table-auto  border border-4 border-gray-400">
+        <thead className="border border-4 border-gray-400">
+          <tr>
+            <th>{t("view.formTitle")}</th>
+            <th>{t("view.status")}</th>
+            <th className="w-1/12">{t("view.update")}</th>
+            <th className="w-1/12">{t("view.view")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {templates.map((template) => {
+            return (
+              <tr key={template.formID} className="border-t-4 border-b-1 border-gray-400">
+                <td className="pl-4">{template[getProperty("title", i18n.language)]} </td>
+                <td className="text-center">
+                  {template.publishingStatus ? t("view.published") : t("view.draft")}
+                </td>
+                <td>
+                  <button
+                    onClick={() => redirectToSettings(template.formID)}
+                    className="gc-button w-full"
+                  >
+                    {t("view.update")}
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => redirectToForm(template.formID)}
+                    className="gc-button w-full"
+                  >
+                    {t("view.view")}
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </>
   );
 };
 
@@ -80,11 +88,25 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
 
-    const templatesJSON = await getForms();
+    const templates = (await getAllTemplates()).map((template) => {
+      const {
+        formID,
+        formConfig: {
+          form: { titleEn, titleFr },
+          publishingStatus,
+        },
+      } = template;
+      return {
+        formID,
+        titleEn,
+        titleFr,
+        publishingStatus,
+      };
+    });
 
     return {
       props: {
-        templatesJSON: templatesJSON.data.records,
+        templates,
         ...(context.locale &&
           (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
       }, // will be passed to the page component as props

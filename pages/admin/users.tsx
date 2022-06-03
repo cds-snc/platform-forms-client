@@ -107,12 +107,13 @@ const Users = ({ users }: UserProps): React.ReactElement => {
 export default Users;
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  let localeProps = {};
-  if (context.locale) {
-    localeProps = await serverSideTranslations(context.locale, ["common", "admin-users"]);
-  }
-
   const users = (await getUsers()).filter((user) => user.id) as AuthenticatedUser[];
 
-  return { props: { ...localeProps, users } };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-users"]))),
+      users,
+    },
+  };
 });

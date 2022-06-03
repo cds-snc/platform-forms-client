@@ -59,7 +59,7 @@ model Session {
 
 model Template {
   id           String         @id @default(cuid())
-  jsonConfig  Json?
+  jsonConfig  Json
   bearerToken String?
   formUsers   FormUser[]
 }

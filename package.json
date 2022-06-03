@@ -2,6 +2,9 @@
   "name": "gcforms",
   "version": "1.0.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "scripts": {
     "dev:mem": "yarn migrate && yarn initialize && NODE_OPTIONS='--inspect --max_old_space_size=4096' next dev",
     "dev": "yarn migrate && yarn prisma:dev && yarn initialize && NODE_OPTIONS='--inspect' next dev",
