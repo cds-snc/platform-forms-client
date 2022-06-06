@@ -7,62 +7,12 @@ import { getSession } from "next-auth/react";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import * as logAdmin from "@lib/adminLogs";
-import { TextDecoder, TextEncoder } from "util";
+import { prismaMock } from "@jestUtils";
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getSession, true);
 
 jest.mock("next-auth/react");
-
-jest.mock("@aws-sdk/client-lambda", () => {
-  return {
-    LambdaClient: jest.fn(() => {
-      return {
-        send: jest.fn((command) => {
-          const encoder = new TextEncoder();
-          const decoder = new TextDecoder();
-          const payload = JSON.parse(decoder.decode(command.Payload));
-          const supported = ["GET", "UPDATE", "INSERT", "DELETE"];
-
-          if (supported.indexOf(payload.method) === -1) {
-            return Promise.resolve({
-              FunctionError: "Unsupported",
-            });
-          } else if (payload.formID === "1") {
-            return Promise.resolve({
-              Payload: encoder.encode(
-                JSON.stringify({
-                  data: {
-                    records: [
-                      {
-                        formConfig: {
-                          submission: {
-                            vault: true,
-                          },
-                        },
-                      },
-                    ],
-                  },
-                })
-              ),
-            });
-          } else {
-            return Promise.resolve({
-              Payload: encoder.encode(
-                JSON.stringify({
-                  data: { records: [{ formID: 8 }] },
-                })
-              ),
-            });
-          }
-        }),
-      };
-    }),
-    InvokeCommand: jest.fn((payload) => {
-      return payload;
-    }),
-  };
-});
 
 describe("Test JSON validation scenarios", () => {
   beforeEach(() => {
@@ -77,6 +27,16 @@ describe("Test JSON validation scenarios", () => {
     mockGetSession.mockReset();
   });
   it("Should successfully handle a POST request to create a template", async () => {
+    (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
+      id: "8",
+      jsonConfig: validFormTemplate,
+    });
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+      id: "8",
+      jsonConfig: validFormTemplate,
+    });
+
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -119,6 +79,11 @@ describe("Test JSON validation scenarios", () => {
   });
 
   it("Should successfully handle PUT request", async () => {
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+      id: "8",
+      jsonConfig: validFormTemplate,
+    });
+
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
@@ -126,6 +91,7 @@ describe("Test JSON validation scenarios", () => {
         Origin: "http://localhost:3000",
       },
       body: {
+        formID: "8",
         formConfig: validFormTemplate,
       },
     });
@@ -144,6 +110,11 @@ describe("Test JSON validation scenarios", () => {
   });
 
   it("Should successfully handle DELETE request", async () => {
+    (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
+      id: "8",
+      jsonConfig: validFormTemplate,
+    });
+
     const { req, res } = createMocks({
       method: "DELETE",
       headers: {
@@ -151,7 +122,7 @@ describe("Test JSON validation scenarios", () => {
         Origin: "http://localhost:3000",
       },
       body: {
-        formID: 1,
+        formID: "8",
       },
     });
 

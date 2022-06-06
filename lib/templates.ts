@@ -9,7 +9,7 @@ import jwt, { Secret } from "jsonwebtoken";
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
 async function _getSubmissionTypeByID(formID: string): Promise<SubmissionProperties | null> {
-  const jsonConfig = await prisma.template.findUnique({
+  const template = await prisma.template.findUnique({
     where: {
       id: formID,
     },
@@ -17,8 +17,8 @@ async function _getSubmissionTypeByID(formID: string): Promise<SubmissionPropert
       jsonConfig: true,
     },
   });
-  if (jsonConfig) {
-    return (jsonConfig as Prisma.JsonObject as FormConfiguration).submission;
+  if (template?.jsonConfig) {
+    return (template.jsonConfig as Prisma.JsonObject as FormConfiguration).submission;
   }
 
   return null;
@@ -75,6 +75,10 @@ async function _createTemplate(config: FormConfiguration): Promise<FormRecord | 
         data: {
           bearerToken,
         },
+        select: {
+          id: true,
+          jsonConfig: true,
+        },
       })
     );
   } catch (e) {
@@ -104,6 +108,10 @@ async function _updateTemplate(
       data: {
         jsonConfig: formConfig as Prisma.JsonObject,
       },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
     });
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(updatedTempate);
@@ -127,6 +135,10 @@ async function _deleteTemplate(formID: string): Promise<FormRecord | null> {
     const deletedTemplate = await prisma.template.delete({
       where: {
         id: formID,
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
       },
     });
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);

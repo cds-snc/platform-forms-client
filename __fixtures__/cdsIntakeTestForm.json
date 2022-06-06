@@ -9,15 +9,7 @@
       "logoTitleEn": "Canadian Digital Service",
       "logoTitleFr": "Service numérique canadien"
     },
-    "layout": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7
-    ],
+    "layout": [1, 2, 3, 4, 5, 6, 7],
     "endPage": {
       "descriptionEn": "",
       "descriptionFr": "",
@@ -26,7 +18,7 @@
     },
     "titleEn": "CDS Intake Form",
     "titleFr": "SNC Formulaire d'admission",
-    "version": 1,
+    "version": "1",
     "elements": [
       {
         "id": 1,

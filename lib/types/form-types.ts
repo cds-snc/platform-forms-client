@@ -68,7 +68,7 @@ export enum FormElementTypes {
 export interface FormElement {
   id: number;
   subId?: string;
-  type: FormElementTypes;
+  type: keyof typeof FormElementTypes;
   properties: ElementProperties;
   onchange?: (event: ChangeEvent) => void;
 }
@@ -101,15 +101,14 @@ export interface FormProperties {
   emailSubjectEn?: string;
   emailSubjectFr?: string;
   version: string;
-  layout: Array<string>;
+  layout: Array<number>;
   brand?: BrandProperties;
   elements: Array<FormElement>;
   endPage?: Record<string, string>;
   [key: string]:
     | string
     | boolean
-    | Array<string>
-    | Array<FormElement>
+    | Array<string | number | FormElement>
     | Record<string, string>
     | BrandProperties
     | undefined;

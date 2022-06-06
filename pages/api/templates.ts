@@ -38,7 +38,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
           session.user.id,
           AdminLogAction.Update,
           AdminLogEvent.UpdateForm,
-          `Form id: ${req.body.formId} has been updated`
+          `Form id: ${req.body.formID} has been updated`
         );
       }
       if (req.method === "DELETE") {
@@ -46,7 +46,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
           session.user.id,
           AdminLogAction.Delete,
           AdminLogEvent.DeleteForm,
-          `Form id: ${req.body.formId} has been deleted`
+          `Form id: ${req.body.formID} has been deleted`
         );
       }
     }
