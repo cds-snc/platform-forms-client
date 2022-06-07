@@ -12,6 +12,7 @@ jobs:
     env:
       NEXTAUTH_URL: http://localhost:3000
       ISOLATED_INSTANCE: 1
+      # Needed although no DB is available for Prisma Client to initialize
       DATABASE_URL: postgres://postgres:password@localhost:5432/formsDB
     steps:
       - name: Checkout
