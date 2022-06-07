@@ -15,6 +15,13 @@ const mockGetSession = jest.mocked(getSession, true);
 jest.mock("next-auth/react");
 
 describe("Test JSON validation scenarios", () => {
+  beforeAll(() => {
+    process.env.TOKEN_SECRET = "testsecret";
+  });
+
+  afterAll(() => {
+    delete process.env.TOKEN_SECRET;
+  });
   beforeEach(() => {
     const mockSession = {
       expires: "1",

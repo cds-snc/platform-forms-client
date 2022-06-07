@@ -16,7 +16,7 @@
     "prisma:dev": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "initialize": "cd ./flag_initialization && yarn initialize && cd ..",
-    "start:test": "ISOLATED_INSTANCE=true DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB next start",
+    "start:test": "ISOLATED_INSTANCE=true next start",
     "dev:test": "ISOLATED_INSTANCE=true NODE_OPTIONS='--inspect' next dev",
     "lint": "eslint . ",
     "lint:report": "eslint --output-file eslint_report.json --format json . --ext .js,.jsx,.ts,.tsx",

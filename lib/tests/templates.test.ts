@@ -22,6 +22,13 @@ const structuredClone = <T>(obj: T): T => {
 };
 
 describe("Template CRUD functions", () => {
+  beforeAll(() => {
+    process.env.TOKEN_SECRET = "testsecret";
+  });
+
+  afterAll(() => {
+    delete process.env.TOKEN_SECRET;
+  });
   test("Create a Template", async () => {
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
