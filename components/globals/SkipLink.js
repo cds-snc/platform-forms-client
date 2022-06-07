@@ -9,7 +9,7 @@ const SkipLink = () => {
   const { t } = useTranslation("common");
   return (
     <>
-      {!mounted ? null : (
+      {mounted && (
         <>
           <nav aria-label={t("skip-link")}>
             <div id="skip-link-container">

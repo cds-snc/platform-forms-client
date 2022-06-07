@@ -27,7 +27,7 @@ const Base = ({ children }) => {
 
   return (
     <>
-      {!mounted ? null : (
+      {mounted && (
         <>
           <Head>
             <title>{t("title")}</title>
