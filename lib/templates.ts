@@ -6,22 +6,40 @@ import { Prisma } from "@prisma/client";
 import { FormConfiguration } from "./types/form-types";
 import jwt, { Secret } from "jsonwebtoken";
 
+/**
+ * Filters Prisma Connection vs DB errors
+ * @param e Error object
+ * @param returnValue Value to return back to called function
+ * @returns returnValue object
+ */
+const primsaErrors = <Error, T>(e: Error, returnValue: T): T => {
+  if (e instanceof Prisma.PrismaClientKnownRequestError) {
+    logMessage.warn(e as Error);
+  }
+  if (!process.env.ISOLATED_INSTANCE) logMessage.error(e as Error);
+  return returnValue;
+};
+
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
 async function _getSubmissionTypeByID(formID: string): Promise<SubmissionProperties | null> {
-  const template = await prisma.template.findUnique({
-    where: {
-      id: formID,
-    },
-    select: {
-      jsonConfig: true,
-    },
-  });
-  if (template?.jsonConfig) {
-    return (template.jsonConfig as Prisma.JsonObject as FormConfiguration).submission;
-  }
+  try {
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        jsonConfig: true,
+      },
+    });
+    if (template?.jsonConfig) {
+      return (template.jsonConfig as Prisma.JsonObject as FormConfiguration).submission;
+    }
 
-  return null;
+    return null;
+  } catch (e) {
+    return primsaErrors(e, null);
+  }
 }
 
 /**
@@ -31,15 +49,21 @@ async function _getSubmissionTypeByID(formID: string): Promise<SubmissionPropert
  */
 
 async function _getTemplateByStatus(status: boolean): Promise<(PublicFormRecord | undefined)[]> {
-  const templates = (await prisma.template.findMany()).map((template) => _parseTemplate(template));
-  const sanitizedResponse = templates.map((template) => onlyIncludePublicProperties(template));
-  if (sanitizedResponse && sanitizedResponse?.length > 0) {
-    return sanitizedResponse.filter(
-      (val) =>
-        typeof val !== "undefined" && val !== null && val.formConfig.publishingStatus === status
+  try {
+    const templates = (await prisma.template.findMany()).map((template) =>
+      _parseTemplate(template)
     );
+    const sanitizedResponse = templates.map((template) => onlyIncludePublicProperties(template));
+    if (sanitizedResponse && sanitizedResponse?.length > 0) {
+      return sanitizedResponse.filter(
+        (val) =>
+          typeof val !== "undefined" && val !== null && val.formConfig.publishingStatus === status
+      );
+    }
+    return [];
+  } catch (e) {
+    return primsaErrors(e, []);
   }
-  return [];
 }
 
 /**
@@ -82,12 +106,7 @@ async function _createTemplate(config: FormConfiguration): Promise<FormRecord | 
       })
     );
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      logMessage.warn(e as Error);
-      return null;
-    } else {
-      throw e;
-    }
+    return primsaErrors(e, null);
   }
 }
 
@@ -116,12 +135,7 @@ async function _updateTemplate(
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(updatedTempate);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      logMessage.warn(e as Error);
-      return null;
-    } else {
-      throw e;
-    }
+    return primsaErrors(e, null);
   }
 }
 
@@ -144,12 +158,7 @@ async function _deleteTemplate(formID: string): Promise<FormRecord | null> {
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(deletedTemplate);
   } catch (e) {
-    if (e instanceof Prisma.PrismaClientKnownRequestError) {
-      logMessage.warn(e as Error);
-      return null;
-    } else {
-      throw e;
-    }
+    return primsaErrors(e, null);
   }
 }
 
@@ -167,8 +176,7 @@ async function _getAllTemplates(): Promise<Array<FormRecord>> {
     });
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
-    logMessage.error(e as Error);
-    return [];
+    return primsaErrors(e, []);
   }
 }
 
@@ -206,8 +214,7 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
 
     return parsedTemplate;
   } catch (e) {
-    logMessage.error(e as Error);
-    return null;
+    return primsaErrors(e, null);
   }
 }
 

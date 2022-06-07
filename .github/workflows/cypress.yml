@@ -10,10 +10,11 @@ jobs:
     name: Cypress
     runs-on: ubuntu-latest
     env:
+      # Needed for Next Auth to initialize
       NEXTAUTH_URL: http://localhost:3000
-      ISOLATED_INSTANCE: 1
-      # Needed although no DB is available for Prisma Client to initialize
-      DATABASE_URL: postgres://postgres:password@localhost:5432/formsDB
+      TOKEN_SECRET: testKey
+      GOOGLE_CLIENT_ID: testClientID
+      GOOGLE_CLIENT_SECRET: testClientSecret
     steps:
       - name: Checkout
         uses: actions/checkout@v1
