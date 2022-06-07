@@ -54,7 +54,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
       if (Array.isArray(response)) {
         const publicTemplates = response.map((template) => onlyIncludePublicProperties(template));
-        res.status(200).json(publicTemplates);
+        return res.status(200).json(publicTemplates);
       } else {
         const publicTemplate = onlyIncludePublicProperties(response);
         return res.status(200).json(publicTemplate);

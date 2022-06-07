@@ -21,7 +21,7 @@ const testForm = {
       version: "1",
       titleEn: "Test JSON!",
       titleFr: "Test JSON!",
-      layout: ["1"],
+      layout: [1],
       elements: [
         {
           id: 1,

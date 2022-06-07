@@ -8,15 +8,6 @@ interface CustomNodeJsGlobal {
 }
 declare const global: CustomNodeJsGlobal;
 
-if (process.env.ISOLATED_INSTANCE) {
-  // If there is no DB for prisma to connect to it will throw an error.
-  // This creates a fake DB that will accept a connection but
-  // will not process and query requests.
-  import("__utils__/prismaIsolated").then(({ createFakeDB }) => {
-    createFakeDB();
-  });
-}
-
 export const prisma =
   global.prisma ||
   new PrismaClient({

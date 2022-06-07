@@ -269,6 +269,9 @@ const processFormData = async (
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
     const notifyPreview = await checkOne("notifyPreview");
 
+    // If we're testing in a no DB environment don't try to process
+    if (process.env.ISOLATED_INSTANCE) return res.status(200).json({ received: true });
+
     if (!reqFields) {
       return res.status(400).json({ error: "No form submitted with request" });
     }

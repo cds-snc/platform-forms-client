@@ -43,7 +43,7 @@ export function extractFormData(submission: Submission): Array<string> {
   const dataCollector: Array<string> = [];
   formOrigin.formConfig.form.layout.map((qID) => {
     const question = formOrigin.formConfig.form.elements.find(
-      (element: FormElement) => element.id === parseInt(qID)
+      (element: FormElement) => element.id === qID
     );
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);

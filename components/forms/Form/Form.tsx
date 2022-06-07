@@ -28,7 +28,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       formID,
       formConfig: { reCaptchaID, form },
     },
-  } = props;
+  }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 

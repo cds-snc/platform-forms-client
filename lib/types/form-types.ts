@@ -68,7 +68,7 @@ export enum FormElementTypes {
 export interface FormElement {
   id: number;
   subId?: string;
-  type: keyof typeof FormElementTypes;
+  type: FormElementTypes;
   properties: ElementProperties;
   onchange?: (event: ChangeEvent) => void;
 }
@@ -127,10 +127,19 @@ export interface FormConfiguration {
   [key: string]: unknown;
 }
 
+export interface PublicFormConfiguration {
+  publishingStatus: boolean;
+  displayAlphaBanner?: boolean;
+  form: FormProperties;
+  securityAttribute: string;
+  reCaptchaID?: string;
+  [key: string]: unknown;
+}
+
 // defines the fields for the form record that is available to unauthenticated users
 export interface PublicFormRecord {
   formID: string;
-  formConfig: Omit<FormConfiguration, "internalTitleEn" | "internalTitleFr" | "submission">;
+  formConfig: PublicFormConfiguration;
 }
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes
