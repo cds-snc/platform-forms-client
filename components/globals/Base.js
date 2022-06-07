@@ -26,29 +26,31 @@ const Base = ({ children }) => {
   const { t } = useTranslation("common");
 
   return (
-    mounted && (
-      <>
-        <Head>
-          <title>{t("title")}</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-          <meta charSet="utf-8" />
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-        </Head>
+    <>
+      {!mounted ? null : (
+        <>
+          <Head>
+            <title>{t("title")}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            <meta charSet="utf-8" />
+            <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+          </Head>
 
-        <SkipLink />
-        <div className={classes}>
-          {!isEmbeddable && (
-            <header>
-              {shouldDisplayAlphaBanner && <PhaseBanner />}
-              <Fip formRecord={formRecord} />
-              {isAdmin && <AdminNav user={children.props.user} />}
-            </header>
-          )}
-          <main id="content">{children}</main>
-          {!isEmbeddable && <Footer />}
-        </div>
-      </>
-    )
+          <SkipLink />
+          <div className={classes}>
+            {!isEmbeddable && (
+              <header>
+                {shouldDisplayAlphaBanner && <PhaseBanner />}
+                <Fip formRecord={formRecord} />
+                {isAdmin && <AdminNav user={children.props.user} />}
+              </header>
+            )}
+            <main id="content">{children}</main>
+            {!isEmbeddable && <Footer />}
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

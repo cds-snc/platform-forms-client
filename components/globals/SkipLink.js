@@ -8,15 +8,19 @@ const SkipLink = () => {
   }, []);
   const { t } = useTranslation("common");
   return (
-    mounted && (
-      <nav aria-label={t("skip-link")}>
-        <div id="skip-link-container">
-          <a href="#content" id="skip-link">
-            {t("skip-link")}
-          </a>
-        </div>
-      </nav>
-    )
+    <>
+      {!mounted ? null : (
+        <>
+          <nav aria-label={t("skip-link")}>
+            <div id="skip-link-container">
+              <a href="#content" id="skip-link">
+                {t("skip-link")}
+              </a>
+            </div>
+          </nav>
+        </>
+      )}
+    </>
   );
 };
 
