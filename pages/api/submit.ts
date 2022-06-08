@@ -11,6 +11,7 @@ import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { Readable } from "stream";
+import { middleware, cors, csrfProtected } from "@lib/middleware";
 import {
   PublicFormRecord,
   Response,
@@ -26,16 +27,14 @@ export const config = {
   },
 };
 
+const protectedMethods = ["POST"];
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
   retryMode: "standard",
   endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
 });
 
-const submit = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<void | NodeJS.Timeout> => {
+const submit = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     // we use the raw stream as opposed to enabling bodyParsing as NextJS enforces a 5mb limit on payload if bodyParsing is enabled
     // https://nextjs.org/docs/messages/api-routes-body-size-limit
@@ -364,4 +363,7 @@ const processFormData = async (
   }
 };
 
-export default submit;
+export default middleware(
+  [cors({ allowedMethods: ["GET", "POST", "PUT", "DELETE"] }), csrfProtected(protectedMethods)],
+  submit
+);
