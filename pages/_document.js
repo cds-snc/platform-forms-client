@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
+import BrowserIncompatibility from "./browser-incompatibility";
 
 let scriptHashes = [];
 let externalScripts = [];
@@ -165,6 +166,9 @@ class MyDocument extends Document {
               ></iframe>
             </noscript>
           )}
+          <noscript>
+            <BrowserIncompatibility />
+          </noscript>
           <Main />
           <NextScript />
         </body>
