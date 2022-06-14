@@ -268,8 +268,13 @@ const processFormData = async (
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
     const notifyPreview = await checkOne("notifyPreview");
 
-    // If we're testing in a no DB environment don't try to process
-    if (process.env.ISOLATED_INSTANCE) return res.status(200).json({ received: true });
+    // Do not process if in TEST mode
+    if (process.env.APP_ENV === "test") {
+      logMessage.info(
+        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
+      );
+      return res.status(200).json({ received: true });
+    }
 
     if (!reqFields) {
       return res.status(400).json({ error: "No form submitted with request" });
@@ -280,14 +285,6 @@ const processFormData = async (
         reqFields ? reqFields.formID : "No form attached"
       }`
     );
-
-    // Do not process if in TEST mode
-    if (process.env.APP_ENV === "test") {
-      logMessage.info(
-        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
-      );
-      return res.status(200).json({ received: true });
-    }
 
     const form = await getTemplateByID(reqFields.formID as string);
 

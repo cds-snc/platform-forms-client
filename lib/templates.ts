@@ -16,7 +16,7 @@ const primsaErrors = <Error, T>(e: Error, returnValue: T): T => {
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
     logMessage.warn(e as Error);
   }
-  if (!process.env.ISOLATED_INSTANCE) logMessage.error(e as Error);
+  if (process.env.APP_ENV !== "test") logMessage.error(e as Error);
   return returnValue;
 };
 
