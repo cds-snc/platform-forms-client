@@ -2,7 +2,7 @@ name: "Staging — Push container to ECR"
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
 
 env:
   ECR_REPOSITORY: form_viewer_staging
@@ -19,6 +19,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           checkName: Jest
           ref: ${{ github.sha }}
+
       - name: Wait for Cypress tests to pass
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-cypress-tests
@@ -26,6 +27,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           checkName: Cypress
           ref: ${{ github.sha }}
+
       - name: Wait for ESLint tests to pass
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-eslint-tests
@@ -33,6 +35,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           checkName: eslint_merge
           ref: ${{ github.sha }}
+
       - name: Checkout
         uses: actions/checkout@v2
 
