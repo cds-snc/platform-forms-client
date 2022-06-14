@@ -17,6 +17,7 @@ export const getRedisInstance = async (): Promise<Redis> => {
   }
 };
 
-if (!process.env.ISOLATED_INSTANCE) {
+// If there is a Redis URL configured instantiate the connection
+if (process.env.REDIS_URL) {
   getRedisInstance().then((redis) => (redisConnection = redis));
 }

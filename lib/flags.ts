@@ -32,7 +32,7 @@ const getKeys = async () => {
 };
 
 export const checkOne = async (key: string): Promise<boolean> => {
-  if (process.env.ISOLATED_INSTANCE) {
+  if (process.env.APP_ENV === "test") {
     return (flagInitialSettings as Record<string, boolean>)[key];
   }
   const redis = await getRedisInstance();
