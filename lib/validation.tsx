@@ -1,12 +1,11 @@
 import React from "react";
 import {
-  FormValues,
-  DynamicFormProps,
-  InnerFormProps,
-  Responses,
-  ValidationProperties,
   FormElement,
-} from "./types";
+  ValidationProperties,
+  FormElementTypes,
+  Responses,
+  PublicFormRecord,
+} from "@lib/types";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
@@ -72,7 +71,7 @@ const isFieldResponseValid = (
   t: TFunction
 ): string | null | Record<string, unknown>[] => {
   switch (componentType) {
-    case "textField": {
+    case FormElementTypes.textField: {
       const typedValue = value as string;
       if (validator.required && !typedValue) return t("input-validation.required");
       const currentRegex = getRegexByType(validator.type, t, value as string);
@@ -87,14 +86,14 @@ const isFieldResponseValid = (
         return t("input-validation.too-many-characters");
       break;
     }
-    case "textArea": {
+    case FormElementTypes.textArea: {
       const typedValue = value as string;
       if (validator.required && !typedValue) return t("input-validation.required");
       if (validator.maxLength && (value as string).length > validator.maxLength)
         return t("input-validation.too-many-characters");
       break;
     }
-    case "checkbox": {
+    case FormElementTypes.checkbox: {
       if (validator.required) {
         if (
           validator.all &&
@@ -111,12 +110,14 @@ const isFieldResponseValid = (
       }
       break;
     }
-    case "radio":
-    case "dropdown": {
-      if (validator.required && value === undefined) return t("input-validation.required");
+    case FormElementTypes.radio:
+    case FormElementTypes.dropdown: {
+      if (validator.required && (value === undefined || value === "")) {
+        return t("input-validation.required");
+      }
       break;
     }
-    case "fileInput": {
+    case FormElementTypes.fileInput: {
       //TODO need refactoring.
       const typedValue = value as {
         file: File | string;
@@ -139,7 +140,7 @@ const isFieldResponseValid = (
       }
       break;
     }
-    case "dynamicRow": {
+    case FormElementTypes.dynamicRow: {
       //set up object to store results
       // loop over rows of values
 
@@ -181,7 +182,7 @@ const isFieldResponseValid = (
         return groupErrors;
       }
     }
-    case "richText":
+    case FormElementTypes.richText:
       break;
     default:
       throw `Validation for component ${componentType} is not handled`;
@@ -194,11 +195,19 @@ const isFieldResponseValid = (
  * @param values
  * @param props
  */
-export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): Responses => {
+export const validateOnSubmit = (
+  values: Responses,
+  props: {
+    formRecord: PublicFormRecord;
+    t: TFunction;
+  }
+): Responses => {
   const errors: Responses = {};
 
   for (const item in values) {
-    const formElement = props.formConfig.elements.find((element) => element.id == parseInt(item));
+    const formElement = props.formRecord.formConfig.form.elements.find(
+      (element) => element.id == parseInt(item)
+    );
     if (!formElement) return errors;
 
     if (formElement.properties.validation) {
@@ -221,15 +230,16 @@ export const validateOnSubmit = (values: FormValues, props: DynamicFormProps): R
  * getErrorList is called to show validation errors at the top of the Form
  * @param props
  */
+
 export const getErrorList = (
-  props: InnerFormProps & FormikProps<FormValues> & DynamicFormProps
+  props: { formRecord: PublicFormRecord } & FormikProps<Responses>
 ): JSX.Element | null => {
-  if (!props.formConfig || !props.errors) {
+  if (!props.formRecord?.formConfig?.form || !props.errors) {
     return null;
   }
   let errorList;
 
-  const sortedFormElementErrors = props.formConfig.layout
+  const sortedFormElementErrors = props.formRecord.formConfig.form.layout
     .filter((element) => {
       return element in props.errors;
     })
@@ -272,10 +282,7 @@ export const getErrorList = (
 /**
  * setFocusOnErrorMessage is called if form validation fails and ensures the users can see the messages
  */
-export const setFocusOnErrorMessage = (
-  props: InnerFormProps & FormikProps<FormValues>,
-  errorId: string
-): void => {
+export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: string): void => {
   if (!isServer() && props && props.errors && props.touched && errorId) {
     const errorAlert = document.getElementById(errorId);
     if (errorAlert && typeof errorAlert !== "undefined") {

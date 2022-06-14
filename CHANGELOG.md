@@ -10,17 +10,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Logging admin activity in database [#700](https://github.com/cds-snc/platform-forms-client/issues/700)
+- Add Cross-Site Request Forgery (CSRF) [#716] (https://github.com/cds-snc/platform-forms-client/issues/716)
 - Data classification attributes. [#701](https://github.com/cds-snc/platform-forms-client/issues/701)
 
 ### Fixed
 
 - Fixed retrieval API not returning all existing responses
+- Removed the security attribute from the viewport.
 
 ### Changed
 
 - Upgraded NextJS and other associated GCForms dependencies to next major version. [#725](https://github.com/cds-snc/platform-forms-client/pull/725)
 - Redesigned file input button [#713](https://github.com/cds-snc/platform-forms-client/issues/713)
 - Removed list of published forms from welcome page. [#712](https://github.com/cds-snc/platform-forms-client/issues/712)
+- Changed ISOLATED_INSTANCE for APP_ENV [#825](https://github.com/cds-snc/platform-forms-client/pull/825)
 
 ## [1.2.0] 2022-04-19
 

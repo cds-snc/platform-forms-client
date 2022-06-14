@@ -1,6 +1,6 @@
 import { logMessage } from "@lib/logger";
-import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
 import { NextApiRequest, NextApiResponse } from "next";
+import { MiddlewareProps, MiddlewareRequest } from "@lib/types";
 
 /**
  * Middleware function that iterates through middleware resolvers

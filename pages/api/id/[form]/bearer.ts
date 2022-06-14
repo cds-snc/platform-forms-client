@@ -6,8 +6,9 @@ import executeQuery from "@lib/integration/queryManager";
 import { cors, sessionExists, middleware } from "@lib/middleware";
 import dbConnector from "@lib/integration/dbConnector";
 import { QueryResult } from "pg";
-import { AdminLogAction, AdminLogEvent, BearerResponse } from "@lib/types";
 import { logAdminActivity } from "@lib/adminLogs";
+import { BearerResponse } from "@lib/types";
+import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {

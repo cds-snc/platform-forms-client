@@ -1,18 +1,25 @@
-import React, { ReactElement, Fragment } from "react";
+import React, { ReactElement } from "react";
 import { logger, logMessage } from "@lib/logger";
 import {
-  Dropdown,
-  Label,
-  TextInput,
-  TextArea,
-  FormGroup,
-  FileInput,
-  DynamicGroup,
   Description,
-  RichText,
+  Dropdown,
+  DynamicGroup,
+  FileInput,
+  FormGroup,
+  Label,
   MultipleChoiceGroup,
+  RichText,
+  TextArea,
+  TextInput,
 } from "../components/forms";
-import { FormElement, PropertyChoices, PublicFormSchemaProperties } from "./types";
+import {
+  FormElement,
+  FormElementTypes,
+  PropertyChoices,
+  PublicFormRecord,
+  Responses,
+  Response,
+} from "@lib/types";
 import { TFunction } from "next-i18next";
 
 // This function is used for the i18n change of form labels
@@ -35,11 +42,9 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
       return [];
     }
 
-    const localeChoices = choices.map((choice) => {
+    return choices.map((choice) => {
       return choice[lang];
     });
-
-    return localeChoices;
   } catch (err) {
     logMessage.error(err as Error);
     throw err;
@@ -77,29 +82,13 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     </Label>
   ) : null;
 
-  // get text field types in order to be more specific in <input> definition, and allow for browser autofill (best practice)
-  function getTextType(element: FormElement): string {
-    if (element.properties && element.properties.validation && element.properties.validation.type) {
-      switch (element.properties.validation.type) {
-        case "email":
-          return "email";
-        case "phone":
-          return "tel";
-        case "name":
-          return "name";
-      }
-    }
-    return "text";
-  }
-  const textType = getTextType(element) as
-    | "text"
-    | "email"
-    | "name"
-    | "number"
-    | "password"
-    | "search"
-    | "tel"
-    | "url";
+  const textType =
+    element.properties?.validation?.type &&
+    ["email", "name", "number", "password", "search", "tel", "url"].includes(
+      element.properties.validation.type
+    )
+      ? element.properties.validation.type
+      : "text";
 
   const placeHolderPerLocale = element.properties[getProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
@@ -108,7 +97,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
-    case "textField":
+    case FormElementTypes.textField:
       return (
         <div className="focus-group">
           {labelComponent}
@@ -131,7 +120,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           />
         </div>
       );
-    case "textArea":
+    case FormElementTypes.textArea:
       return (
         <div className="focus-group">
           {labelComponent}
@@ -152,7 +141,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           />
         </div>
       );
-    case "checkbox": {
+    case FormElementTypes.checkbox: {
       const checkboxItems = choices.map((choice, index) => {
         return {
           key: `${id}.${index}`,
@@ -168,15 +157,15 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
-            type="checkbox"
+            type={FormElementTypes.checkbox}
             name={`${id}`}
             choicesProps={checkboxItems}
             ariaDescribedBy={labelText ? labelText : undefined}
-          ></MultipleChoiceGroup>
+          />
         </FormGroup>
       );
     }
-    case "radio": {
+    case FormElementTypes.radio: {
       const radioItems = choices.map((choice, index) => {
         return {
           key: `${id}.${index}`,
@@ -192,15 +181,15 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <MultipleChoiceGroup
-            type="radio"
+            type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}
             ariaDescribedBy={labelText ? labelText : undefined}
-          ></MultipleChoiceGroup>
+          />
         </FormGroup>
       );
     }
-    case "dropdown":
+    case FormElementTypes.dropdown:
       return (
         <div className="focus-group">
           {labelComponent}
@@ -213,14 +202,14 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           />
         </div>
       );
-    case "richText":
+    case FormElementTypes.richText:
       return (
         <>
           {labelText && <h3 className="gc-h3">{labelText}</h3>}
           <RichText>{description}</RichText>
         </>
       );
-    case "fileInput":
+    case FormElementTypes.fileInput:
       return (
         <div className="focus-group">
           {labelText && (
@@ -243,7 +232,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           />
         </div>
       );
-    case "dynamicRow": {
+    case FormElementTypes.dynamicRow: {
       return (
         <DynamicGroup
           name={`${id}`}
@@ -265,59 +254,52 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
 /**
  * DynamicForm calls this function to build the entire form, from JSON
  * getRenderedForm
- * @param formToRender
+ * @param formRecord
  * @param language
  */
-const _getRenderedForm = (
-  formConfig: PublicFormSchemaProperties,
-  language: string,
-  t: TFunction
-) => {
-  if (!formConfig) {
+const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
+  if (!formRecord?.formConfig) {
     return null;
   }
 
-  return formConfig.layout.map((item: string) => {
-    const element = formConfig.elements.find(
+  return formRecord.formConfig.form.layout.map((item: string) => {
+    const element = formRecord.formConfig.form.elements.find(
       (element: FormElement) => element.id === parseInt(item)
     );
     if (element) {
       return <GenerateElement key={element.id} element={element} language={language} t={t} />;
     } else {
-      logMessage.error(`Failed component ID look up ${item} on form ID ${formConfig.formID}`);
+      logMessage.error(`Failed component ID look up ${item} on form ID ${formRecord.formID}`);
     }
   });
 };
 
 /**
  * _getFormInitialValues calls this function to set the initial value for an element
- * @param formConfig
+ * @param element
  * @param language
  */
-
-const _getElementInitialValue = (
-  element: FormElement,
-  language: string
-): Record<string, unknown> | Record<string, unknown>[] | string | undefined => {
+const _getElementInitialValue = (element: FormElement, language: string): Response => {
   switch (element.type) {
-    case "textField":
-    case "textArea":
+    // Radio and dropdown resolve to string values
+    case FormElementTypes.radio:
+    case FormElementTypes.dropdown:
+    case FormElementTypes.textField:
+    case FormElementTypes.textArea:
       return "";
-    case "checkbox":
-    case "radio":
-    case "dropdown":
-      return undefined;
-    case "fileInput":
+    case FormElementTypes.checkbox:
+      return [];
+    case FormElementTypes.fileInput:
       return { file: null, src: null, name: "", size: 0 };
-    case "dynamicRow": {
-      const dynamicRowInitialValue: Record<string, unknown> =
+    case FormElementTypes.dynamicRow: {
+      const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
-          if (!["richText"].includes(currentValue.type)) {
+          if (![FormElementTypes.richText].includes(currentValue.type)) {
             accumulator[subElementID] = _getElementInitialValue(currentValue, language);
           }
           return accumulator;
-        }, {} as Record<string, unknown>) ?? {};
+        }, {} as Responses) ?? {};
       return [dynamicRowInitialValue];
     }
     default:
@@ -328,18 +310,18 @@ const _getElementInitialValue = (
 /**
  * DynamicForm calls this function to set the initial form values
  * getFormInitialValues
- * @param formConfig
+ * @param formRecord
  * @param language
  */
-const _getFormInitialValues = (formConfig: PublicFormSchemaProperties, language: string) => {
-  if (!formConfig) {
-    return null;
+const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
+  if (!formRecord?.formConfig) {
+    return {};
   }
 
-  const initialValues: Record<string, unknown> = {};
+  const initialValues: Responses = {};
 
-  formConfig.elements
-    .filter((element) => !["richText"].includes(element.type))
+  formRecord.formConfig.form.elements
+    .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);
     });

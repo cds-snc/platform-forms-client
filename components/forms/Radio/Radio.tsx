@@ -1,10 +1,10 @@
 import React from "react";
 import { Field } from "formik";
-import { MultipleChoiceProps } from "../../../lib/types";
 import { Description } from "../Description/Description";
+import { ChoiceFieldProps } from "@lib/types";
 
 export const Radio = (
-  props: MultipleChoiceProps & JSX.IntrinsicElements["input"]
+  props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
   const { id, label, required, name, ariaDescribedBy } = props;
 

@@ -1,7 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "../Form/Form";
 import { GenerateElement } from "../../../lib/formBuilder";
 
 jest.mock("formik", () => ({
@@ -85,11 +84,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   afterEach(cleanup);
   test("renders without errors", async () => {
     userEvent.setup();
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language={lang} t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={dropdownData} language={lang} t={(key) => key} />);
     const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr,
       description =
         lang === "en"
@@ -116,11 +111,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   });
   test("required elements display properly", () => {
     dropdownData.properties.validation.required = true;
-    render(
-      <Form t={(key) => key}>
-        <GenerateElement element={dropdownData} language={lang} t={(key) => key} />
-      </Form>
-    );
+    render(<GenerateElement element={dropdownData} language={lang} t={(key) => key} />);
     expect(screen.queryByTestId("required")).toBeInTheDocument();
     dropdownData.properties.validation.required = false;
   });

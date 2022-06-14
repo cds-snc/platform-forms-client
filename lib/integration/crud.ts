@@ -1,14 +1,15 @@
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { logger, logMessage } from "@lib/logger";
-import {
-  CrudOrganizationInput,
-  CrudTemplateResponse,
-  CrudOrganizationResponse,
-  CrudTemplateInput,
-  SubmissionProperties,
-  PublicFormSchemaProperties,
-} from "../types";
 import { organizationCache, formCache } from "../cache";
+import {
+  PublicFormRecord,
+  TemplateLambdaInput,
+  SubmissionProperties,
+  OrganizationLambdaInput,
+  LambdaResponse,
+  FormRecord,
+  Organization,
+} from "@lib/types";
 
 const lambdaClient = new LambdaClient({
   region: "ca-central-1",
@@ -16,7 +17,9 @@ const lambdaClient = new LambdaClient({
   endpoint: process.env.LOCAL_LAMBDA_ENDPOINT,
 });
 
-async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
+async function _crudTemplatesWithCache(
+  payload: TemplateLambdaInput
+): Promise<LambdaResponse<Omit<FormRecord, "bearerToken">>> {
   const { method, formID } = payload;
   if (formCache.cacheAvailable && method === "GET" && formID) {
     const cachedValue = await formCache.formID.check(formID);
@@ -49,8 +52,10 @@ async function _crudTemplatesWithCache(payload: CrudTemplateInput): Promise<Crud
   });
 }
 
-async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateResponse> {
-  const getConfig = (payload: CrudTemplateInput) => {
+async function _crudTemplates(
+  payload: TemplateLambdaInput
+): Promise<LambdaResponse<Omit<FormRecord, "bearerToken">>> {
+  const getConfig = (payload: TemplateLambdaInput) => {
     const { method, formID, formConfig, limit, offset } = payload;
 
     switch (method) {
@@ -112,8 +117,8 @@ async function _crudTemplates(payload: CrudTemplateInput): Promise<CrudTemplateR
 
 // CRUD for Organizations
 async function _crudOrganizationsWithCache(
-  payload: CrudOrganizationInput
-): Promise<CrudOrganizationResponse> {
+  payload: OrganizationLambdaInput
+): Promise<LambdaResponse<Organization>> {
   if (organizationCache.cacheAvailable && payload.method === "GET" && payload.organizationID) {
     const cachedValue = await organizationCache.organizationID.check(payload.organizationID);
     if (cachedValue) {
@@ -145,9 +150,9 @@ async function _crudOrganizationsWithCache(
 }
 
 async function _crudOrganizations(
-  payload: CrudOrganizationInput
-): Promise<CrudOrganizationResponse> {
-  const getConfig = (payload: CrudOrganizationInput) => {
+  payload: OrganizationLambdaInput
+): Promise<LambdaResponse<Organization>> {
+  const getConfig = (payload: OrganizationLambdaInput) => {
     const { method, organizationID, organizationNameEn, organizationNameFr } = payload;
 
     switch (payload.method) {
@@ -212,7 +217,7 @@ async function _crudOrganizations(
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
-async function _getSubmissionByID(formID: string): Promise<SubmissionProperties | null> {
+async function _getSubmissionByID(formID: number): Promise<SubmissionProperties | null> {
   const response = await crudTemplates({ method: "GET", formID: formID });
   const { records } = response.data;
   if (records?.length === 1 && records[0].formConfig?.submission) {
@@ -223,25 +228,14 @@ async function _getSubmissionByID(formID: string): Promise<SubmissionProperties 
   return null;
 }
 
-async function _getFormByStatus(
-  status: boolean
-): Promise<(PublicFormSchemaProperties | undefined)[]> {
+async function _getFormByStatus(status: boolean): Promise<(PublicFormRecord | undefined)[]> {
   const response = await _getForms();
-  const { records } = response.data;
-  if (records && records?.length > 0) {
-    return records
-      .map((record) => {
-        if (record.formConfig.publishingStatus === status) {
-          return {
-            formID: record.formID,
-            ...record.formConfig.form,
-            publishingStatus: record.formConfig.publishingStatus,
-            displayAlphaBanner: record.formConfig.displayAlphaBanner ?? true,
-            securityAttribute: record.formConfig.securityAttribute ?? "Unclassified",
-          };
-        }
-      })
-      .filter((val) => typeof val !== "undefined" && val !== null);
+  const sanitizedResponse = onlyIncludePublicProperties(response);
+  if (sanitizedResponse && sanitizedResponse?.length > 0) {
+    return sanitizedResponse.filter(
+      (val) =>
+        typeof val !== "undefined" && val !== null && val.formConfig.publishingStatus === status
+    );
   }
   return [];
 }
@@ -255,14 +249,14 @@ async function _getFormByStatus(
  */
 
 const _getForms = async (
-  templates: CrudTemplateResponse = {
+  templates: LambdaResponse<Omit<FormRecord, "bearerToken">> = {
     data: {
       records: [],
     },
   },
   limit = 50,
   offset = 0
-): Promise<CrudTemplateResponse> => {
+): Promise<LambdaResponse<Omit<FormRecord, "bearerToken">>> => {
   try {
     const lambdaResult = await crudTemplates({ method: "GET", limit: limit, offset: offset });
 
@@ -292,34 +286,35 @@ const _getForms = async (
   }
 };
 
-async function _getFormByID(formID: string): Promise<PublicFormSchemaProperties | null> {
+async function _getFormByID(formID: number): Promise<PublicFormRecord | null> {
   try {
     const response = await crudTemplates({ method: "GET", formID: formID });
-    const sanitizedResponse = await onlyIncludePublicProperties(response);
-    return sanitizedResponse.data[0];
+    const sanitizedResponse = onlyIncludePublicProperties(response);
+    return sanitizedResponse[0];
   } catch (e) {
     logMessage.error(e as Error);
     return null;
   }
 }
 
-const _onlyIncludePublicProperties = async ({
+const _onlyIncludePublicProperties = ({
   data: { records },
-}: CrudTemplateResponse): Promise<{ data: Array<PublicFormSchemaProperties> }> => {
+}: LambdaResponse<Omit<FormRecord, "bearerToken">>): Array<PublicFormRecord> => {
   if (records) {
-    const sanitizedResponse = records.map((template) => {
+    return records.map((template) => {
       return {
         formID: template.formID,
-        publishingStatus: template.formConfig.publishingStatus,
-        securityAttribute: template.formConfig.securityAttribute ?? "Unclassified",
-        displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
-        ...(process.env.RECAPTCHA_V3_SITE_KEY && {
-          reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-        }),
-        ...template.formConfig.form,
+        formConfig: {
+          publishingStatus: template.formConfig.publishingStatus,
+          displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
+          securityAttribute: template.formConfig.securityAttribute ?? "Unclassified",
+          ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+            reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+          }),
+          form: template.formConfig.form,
+        },
       };
     });
-    return { data: sanitizedResponse };
   } else {
     throw new Error("No records found");
   }
