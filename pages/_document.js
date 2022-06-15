@@ -1,7 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
-import BrowserIncompatibility from "./browser-incompatibility";
+import IncompatibleBrowser from "./incompatible-browser";
+const noJsScss = `#__next {display:none;}`;
 
 let scriptHashes = [];
 let externalScripts = [];
@@ -167,7 +168,11 @@ class MyDocument extends Document {
             </noscript>
           )}
           <noscript>
-            <BrowserIncompatibility />
+            <style type="text/css">{noJsScss}</style>
+            {/* <BrowserIncompatibility
+              pageData={this.props.__NEXT_DATA__.props.pageProps.formRecord}
+            /> */}
+            <IncompatibleBrowser formProps={this.props.__NEXT_DATA__.props.pageProps.formRecord} />
           </noscript>
           <Main />
           <NextScript />
