@@ -10,9 +10,7 @@ export const logMessage = pino({
       level: process.env.NODE_ENV === "production" ? "error" : "info",
       send: async (level, logEvent) => {
         const token = await getCsrfToken();
-        const msg = sanitizeErrorObject(
-          Array.isArray(logEvent.messages) ? logEvent.messages[0] : logEvent.messages
-        );
+        const msg = logEvent.messages.map((message) => sanitizeErrorObject(message));
         const headers = {
           type: "application/json",
           "X-CSRF-Token": token,
