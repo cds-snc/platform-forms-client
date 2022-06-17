@@ -87,6 +87,7 @@ ALTER TABLE "FormUser" RENAME COLUMN "temporary_token" TO "temporaryToken";
 ALTER TABLE "FormUser"
 ALTER COLUMN "templateId" SET DATA TYPE TEXT,
 ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "updated_at" DROP DEFAULT,
 ALTER COLUMN "id" SET DATA TYPE TEXT,
 ADD CONSTRAINT "FormUser_pkey" PRIMARY KEY ("id");
 DROP SEQUENCE "form_users_id_seq";
