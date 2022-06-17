@@ -109,33 +109,35 @@ describe("Log API Endpoint", () => {
   it("Rejects if wrong CSRF token is provided", async () => {
     const token = "superSecretToken";
     mockedGetCsrfToken.mockResolvedValue(token);
-    const msg = {
-      stack:
-        "Error: Request failed with status code 403\n    at createError (webpack-internal:///./node_modules/axios/lib/core/createError.js:16:15)\n    at settle (webpack-internal:///./node_modules/axios/lib/core/settle.js:17:12)\n    at XMLHttpRequest.onloadend (webpack-internal:///./node_modules/axios/lib/adapters/xhr.js:66:7)",
-      config: {
-        transitional: {
-          silentJSONParsing: true,
-          forcedJSONParsing: true,
-          clarifyTimeoutError: false,
+    const msg = [
+      {
+        stack:
+          "Error: Request failed with status code 403\n    at createError (webpack-internal:///./node_modules/axios/lib/core/createError.js:16:15)\n    at settle (webpack-internal:///./node_modules/axios/lib/core/settle.js:17:12)\n    at XMLHttpRequest.onloadend (webpack-internal:///./node_modules/axios/lib/adapters/xhr.js:66:7)",
+        config: {
+          transitional: {
+            silentJSONParsing: true,
+            forcedJSONParsing: true,
+            clarifyTimeoutError: false,
+          },
+          transformRequest: [null],
+          transformResponse: [null],
+          timeout: 0,
+          xsrfCookieName: "XSRF-TOKEN",
+          xsrfHeaderName: "X-XSRF-TOKEN",
+          maxContentLength: -1,
+          maxBodyLength: -1,
+          headers: {
+            Accept: "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            "Content-Language": "en",
+            "X-CSRF-Token": "cfc3bde20adde711ec4f8f2ab7b9fbff13fc2440d2d0ff2d8c48ceeb544541c0",
+          },
+          url: "/api/submit",
+          method: "post",
         },
-        transformRequest: [null],
-        transformResponse: [null],
-        timeout: 0,
-        xsrfCookieName: "XSRF-TOKEN",
-        xsrfHeaderName: "X-XSRF-TOKEN",
-        maxContentLength: -1,
-        maxBodyLength: -1,
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-          "Content-Language": "en",
-          "X-CSRF-Token": "cfc3bde20adde711ec4f8f2ab7b9fbff13fc2440d2d0ff2d8c48ceeb544541c0",
-        },
-        url: "/api/submit",
-        method: "post",
+        status: 403,
       },
-      status: 403,
-    };
+    ];
     const level = "info";
     const headers = {
       type: "application/json",

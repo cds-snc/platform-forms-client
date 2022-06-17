@@ -5,7 +5,7 @@ import { middleware, cors, csrfProtected } from "@lib/middleware";
 
 const log = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
-    const { msg, level = "info" }: { msg: Record<string, unknown>; level: Level } = req.body;
+    const { msg, level = "info" }: { msg: Record<string, unknown>[]; level: Level } = req.body;
     logMessage[level](`Client Side log: ${JSON.stringify(msg)}`);
   } catch (err) {
     logMessage.error(err);
