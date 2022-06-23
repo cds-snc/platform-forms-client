@@ -27,7 +27,7 @@ export const TextInput = (
   const [field, meta, helpers] = useField(props);
   const classes = classnames("gc-input-text", className);
 
-  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ? maxLength : 0);
+  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     helpers.setValue(event.target.value);

@@ -28,7 +28,7 @@ export const TextArea = (
 
   const [field, meta, helpers] = useField(props);
 
-  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ? maxLength : 0);
+  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     helpers.setValue(event.target.value);
