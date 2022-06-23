@@ -46,6 +46,34 @@ function connectToDynamo(): DynamoDBDocumentClient {
   return DynamoDBDocumentClient.from(db);
 }
 
+interface dynamoDBItem {
+  FormID: { S: string };
+  SubmissionID: { S: string };
+  FormSubmission: { S: string };
+  [key: string]: Record<string, string>;
+}
+
+/**
+ * Parses DynamoDB Item into vault response object
+ * @param response DynamoDB Vault Item
+ * @returns Object representative of Item
+ */
+const parseToObject = (response: dynamoDBItem) => {
+  const {
+    FormID: formID,
+    SubmissionID: submissionID,
+    FormSubmission: formSubmission,
+    SecurityAttribute: securityAttribute,
+  } = response;
+
+  return {
+    formID,
+    submissionID,
+    formSubmission,
+    securityAttribute,
+  };
+};
+
 /**
  * Request type: GET
  * USAGE:
@@ -95,8 +123,10 @@ async function getFormResponses(
 
       const response = await documentClient.send(new QueryCommand(getItemsDbParams));
 
-      if (response.Items) {
-        accumulatedResponses = accumulatedResponses.concat(response.Items);
+      if (response.Items?.length) {
+        accumulatedResponses = accumulatedResponses.concat(
+          response.Items.map((response) => parseToObject(response as dynamoDBItem))
+        );
       }
 
       // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
@@ -109,7 +139,7 @@ async function getFormResponses(
 
     logMessage.info(
       `user:${email} retrieved form responses [${accumulatedResponses.map(
-        (response) => response.SubmissionID
+        (response) => response.submissionID
       )}] from form ID:${formID} at:${Date.now()} using token:${temporaryToken}`
     );
 
