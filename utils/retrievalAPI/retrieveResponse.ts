@@ -79,27 +79,33 @@ const main = async () => {
   try {
     const email = await getValue("Email address to authenticate with:");
     const formID = await getValue("Form ID of responses to retrieve:");
-    //const bearer = await getValue(`Bearer Token for form id ${formID}:`);
+    let temporaryTokenExists = "";
+    while (!["y", "n"].includes(temporaryTokenExists)) {
+      temporaryTokenExists = await getValue("Do you already have a valid temporary token? (y/n)");
+    }
 
-    console.log("Generating Temporary Token...");
-    /*
-    // Generate Temporary Token
-    axios({
-      method: "post",
-      url: `${formsUrl}/api/token/temporary`,
-      headers: {
-        authorization: `Bearer ${bearer}`,
-      },
-      data: {
-        email,
-      },
-      timeout: 10000,
-    }).catch((error) => {
-      console.log("Could not generate temporary token");
-      throw error;
-    });
-*/
-    console.log(`Please check email ${email} for tempoary token`);
+    if (temporaryTokenExists === "n") {
+      const bearer = await getValue(`Bearer Token for form id ${formID}:`);
+      console.log("Generating Temporary Token...");
+      // Generate Temporary Token
+      axios({
+        method: "post",
+        url: `${formsUrl}/api/token/temporary`,
+        headers: {
+          authorization: `Bearer ${bearer}`,
+        },
+        data: {
+          email,
+        },
+        timeout: 10000,
+      }).catch((error) => {
+        console.log("Could not generate temporary token");
+        throw error;
+      });
+
+      console.log(`Please check email ${email} for tempoary token`);
+    }
+
     const temporaryToken = await getValue("Temporary Token:");
     let allResponsesRetrieved = false;
     let totalResponses = 0;
