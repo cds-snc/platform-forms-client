@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -28,13 +28,7 @@ export const TextArea = (
 
   const [field, meta, helpers] = useField(props);
 
-  const [remainingCharacters, setRemainingCharacters] = useState(0);
-
-  useEffect(() => {
-    if (maxLength) {
-      setRemainingCharacters(maxLength);
-    }
-  }, []);
+  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
   const handleTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     helpers.setValue(event.target.value);
