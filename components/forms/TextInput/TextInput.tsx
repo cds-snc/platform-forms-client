@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
@@ -27,13 +27,7 @@ export const TextInput = (
   const [field, meta, helpers] = useField(props);
   const classes = classnames("gc-input-text", className);
 
-  const [remainingCharacters, setRemainingCharacters] = useState(0);
-
-  useEffect(() => {
-    if (maxLength) {
-      setRemainingCharacters(maxLength);
-    }
-  }, []);
+  const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     helpers.setValue(event.target.value);
