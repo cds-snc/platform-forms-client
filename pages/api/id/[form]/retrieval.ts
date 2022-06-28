@@ -46,34 +46,6 @@ function connectToDynamo(): DynamoDBDocumentClient {
   return DynamoDBDocumentClient.from(db);
 }
 
-interface dynamoDBItem {
-  FormID: { S: string };
-  SubmissionID: { S: string };
-  FormSubmission: { S: string };
-  [key: string]: Record<string, string>;
-}
-
-/**
- * Parses DynamoDB Item into vault response object
- * @param response DynamoDB Vault Item
- * @returns Object representative of Item
- */
-const parseToObject = (response: dynamoDBItem) => {
-  const {
-    FormID: formID,
-    SubmissionID: submissionID,
-    FormSubmission: formSubmission,
-    SecurityAttribute: securityAttribute,
-  } = response;
-
-  return {
-    formID,
-    submissionID,
-    formSubmission,
-    securityAttribute,
-  };
-};
-
 /**
  * Request type: GET
  * USAGE:
@@ -125,7 +97,19 @@ async function getFormResponses(
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
-          response.Items.map((response) => parseToObject(response as dynamoDBItem))
+          response.Items.map(
+            ({
+              FormID: formID,
+              SubmissionID: submissionID,
+              FormSubmission: formSubmission,
+              SecurityAttribute: securityAttribute,
+            }) => ({
+              formID,
+              submissionID,
+              formSubmission,
+              securityAttribute,
+            })
+          )
         );
       }
 
