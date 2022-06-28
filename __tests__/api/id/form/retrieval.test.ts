@@ -122,13 +122,13 @@ describe("/api/retrieval", () => {
           {
             FormID: "1",
             SubmissionID: "12",
-            FormSubmission: true,
+            FormSubmission: "true",
             SecurityAttribute: "Protected B",
           },
           {
-            FormID: "2",
+            FormID: "1",
             SubmissionID: "21",
-            FormSubmission: true,
+            FormSubmission: "true",
             SecurityAttribute: "Protected B",
           },
         ],
@@ -141,16 +141,16 @@ describe("/api/retrieval", () => {
         expect.objectContaining({
           responses: [
             {
-              FormID: "1",
-              SubmissionID: "12",
-              FormSubmission: true,
-              SecurityAttribute: "Protected B",
+              formID: "1",
+              submissionID: "12",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
             },
             {
-              FormID: "2",
-              SubmissionID: "21",
-              FormSubmission: true,
-              SecurityAttribute: "Protected B",
+              formID: "1",
+              submissionID: "21",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
             },
           ],
         })
@@ -190,8 +190,18 @@ describe("/api/retrieval", () => {
         })
         .resolves({
           Items: [
-            { FormID: "1", SubmissionID: "1", FormSubmission: true },
-            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "1",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "2",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
           ],
           LastEvaluatedKey: 1,
         })
@@ -200,8 +210,18 @@ describe("/api/retrieval", () => {
         })
         .resolves({
           Items: [
-            { FormID: "1", SubmissionID: "3", FormSubmission: true },
-            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "3",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "4",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
           ],
           LastEvaluatedKey: undefined,
         });
@@ -212,10 +232,30 @@ describe("/api/retrieval", () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           responses: [
-            { FormID: "1", SubmissionID: "1", FormSubmission: true },
-            { FormID: "1", SubmissionID: "2", FormSubmission: true },
-            { FormID: "1", SubmissionID: "3", FormSubmission: true },
-            { FormID: "1", SubmissionID: "4", FormSubmission: true },
+            {
+              formID: "1",
+              submissionID: "1",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "2",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "3",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "4",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
           ],
         })
       );
@@ -252,37 +292,104 @@ describe("/api/retrieval", () => {
         .on(QueryCommand)
         .resolvesOnce({
           Items: [
-            { FormID: "1", SubmissionID: "1", FormSubmission: true },
-            { FormID: "1", SubmissionID: "2", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "1",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "2",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
           ],
           LastEvaluatedKey: 1,
         })
         .resolvesOnce({
           Items: [
-            { FormID: "1", SubmissionID: "3", FormSubmission: true },
-            { FormID: "1", SubmissionID: "4", FormSubmission: true },
-            { FormID: "1", SubmissionID: "5", FormSubmission: true },
-            { FormID: "1", SubmissionID: "6", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "3",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "4",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "5",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "6",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
           ],
           LastEvaluatedKey: 2,
         })
         .resolvesOnce({
           Items: [
-            { FormID: "1", SubmissionID: "7", FormSubmission: true },
-            { FormID: "1", SubmissionID: "8", FormSubmission: true },
-            { FormID: "1", SubmissionID: "9", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "7",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "8",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "9",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
           ],
           LastEvaluatedKey: 3,
         })
         .resolvesOnce({
-          Items: [{ FormID: "1", SubmissionID: "10", FormSubmission: true }],
+          Items: [
+            {
+              FormID: "1",
+              SubmissionID: "10",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+          ],
           LastEvaluatedKey: 4,
         })
         .resolves({
           Items: [
-            { FormID: "1", SubmissionID: "11", FormSubmission: true },
-            { FormID: "1", SubmissionID: "12", FormSubmission: true },
-            { FormID: "1", SubmissionID: "13", FormSubmission: true },
+            {
+              FormID: "1",
+              SubmissionID: "11",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "12",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
+            {
+              FormID: "1",
+              SubmissionID: "13",
+              FormSubmission: "true",
+              SecurityAttribute: "Protected B",
+            },
           ],
           LastEvaluatedKey: undefined,
         });
@@ -293,16 +400,66 @@ describe("/api/retrieval", () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({
           responses: [
-            { FormID: "1", SubmissionID: "1", FormSubmission: true },
-            { FormID: "1", SubmissionID: "2", FormSubmission: true },
-            { FormID: "1", SubmissionID: "3", FormSubmission: true },
-            { FormID: "1", SubmissionID: "4", FormSubmission: true },
-            { FormID: "1", SubmissionID: "5", FormSubmission: true },
-            { FormID: "1", SubmissionID: "6", FormSubmission: true },
-            { FormID: "1", SubmissionID: "7", FormSubmission: true },
-            { FormID: "1", SubmissionID: "8", FormSubmission: true },
-            { FormID: "1", SubmissionID: "9", FormSubmission: true },
-            { FormID: "1", SubmissionID: "10", FormSubmission: true },
+            {
+              formID: "1",
+              submissionID: "1",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "2",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "3",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "4",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "5",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "6",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "7",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "8",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "9",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
+            {
+              formID: "1",
+              submissionID: "10",
+              formSubmission: "true",
+              securityAttribute: "Protected B",
+            },
           ],
         })
       );
@@ -584,58 +741,6 @@ describe("/api/retrieval", () => {
       );
       expect(mockLogMessage.error.mock.calls.length).toBe(1);
       expect(mockLogMessage.error.mock.calls[0][0]).toEqual(new Error("This is an Error"));
-    });
-  });
-
-  describe("GET", () => {
-    it("Should return a list of form responses including Security attributes", async () => {
-      const token = jwt.sign(
-        {
-          email: "test@cds-snc.ca",
-          form: 100,
-        },
-        process.env.TOKEN_SECRET as Secret,
-        {
-          expiresIn: "1y",
-        }
-      );
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://localhost:3000/api/retrieval?numRecords=4",
-          authorization: `Bearer ${token}`,
-        },
-        query: {
-          form: "100",
-        },
-      });
-
-      // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
-
-      ddbMock.on(QueryCommand).resolves({
-        Items: [
-          { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
-          { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
-          { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
-          { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
-        ],
-      });
-
-      await retrieval(req, res);
-
-      expect(res.statusCode).toBe(200);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({
-          responses: [
-            { FormID: "01", SubmissionID: "51", SecurityAttribute: "Protected B" },
-            { FormID: "02", SubmissionID: "52", SecurityAttribute: "Protected B" },
-            { FormID: "03", SubmissionID: "53", SecurityAttribute: "Protected B" },
-            { FormID: "03", SubmissionID: "54", SecurityAttribute: "Protected B" },
-          ],
-        })
-      );
     });
   });
 });

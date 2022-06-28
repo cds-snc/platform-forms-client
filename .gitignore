@@ -91,3 +91,6 @@ storybook-static/
 
 # VS Code Settings untracking
 .vscode/settings.json
+
+# Utils retrieval output
+responses.csv

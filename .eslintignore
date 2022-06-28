@@ -1,3 +1,5 @@
 # Ignore Compiled Storybook
 /storybook-static
-/public/static/scripts/polyfills
+/public/static/scripts/
+# Ignore Utils Folder
+/utils
