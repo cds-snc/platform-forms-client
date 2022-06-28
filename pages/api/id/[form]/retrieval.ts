@@ -95,8 +95,22 @@ async function getFormResponses(
 
       const response = await documentClient.send(new QueryCommand(getItemsDbParams));
 
-      if (response.Items) {
-        accumulatedResponses = accumulatedResponses.concat(response.Items);
+      if (response.Items?.length) {
+        accumulatedResponses = accumulatedResponses.concat(
+          response.Items.map(
+            ({
+              FormID: formID,
+              SubmissionID: submissionID,
+              FormSubmission: formSubmission,
+              SecurityAttribute: securityAttribute,
+            }) => ({
+              formID,
+              submissionID,
+              formSubmission,
+              securityAttribute,
+            })
+          )
+        );
       }
 
       // We either manually stop the paginated request when we have 10 or more items or we let it finish on its own
@@ -109,7 +123,7 @@ async function getFormResponses(
 
     logMessage.info(
       `user:${email} retrieved form responses [${accumulatedResponses.map(
-        (response) => response.SubmissionID
+        (response) => response.submissionID
       )}] from form ID:${formID} at:${Date.now()} using token:${temporaryToken}`
     );
 
