@@ -19,7 +19,7 @@ const Home = () => {
           <p>{t("design.text")}</p>
           <ul className="link-list custom">
             <li>
-              <a href="https://cds-snc.github.io/platform-forms-client/">
+              <a href="https://cds-snc.github.io/platform-forms-client/main">
                 {t("design.system.title")}
               </a>
             </li>
