@@ -112,6 +112,18 @@ const main = async () => {
 
     // Retrieve Responses
 
+    let continueWithRetrieval = "";
+    while (!["y", "n"].includes(continueWithRetrieval)) {
+      continueWithRetrieval = await getValue(
+        "By continuing you accept that responses will be downloaded and removed from GC Forms System? (y/n)"
+      );
+    }
+
+    if (continueWithRetrieval === "n") {
+      console.log("Cancelling retrieval and exiting.");
+      return;
+    }
+
     while (!allResponsesRetrieved) {
       console.log("Retrieving responses...");
       const { responses } = await getResponses(formID, temporaryToken);
