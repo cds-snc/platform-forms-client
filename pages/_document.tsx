@@ -1,12 +1,4 @@
-import Document, {
-  Html,
-  Head,
-  Main,
-  NextScript,
-  OriginProps,
-  DocumentContext,
-  DocumentInitialProps,
-} from "next/document";
+import Document, { Html, Head, Main, NextScript, OriginProps } from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
 
@@ -217,36 +209,25 @@ class StrictStaticCSP extends Head {
 
 const CustomHead = process.env.NODE_ENV === "production" ? StrictStaticCSP : Head;
 class MyDocument extends Document {
-  static async getInitialProps(
-    ctx: DocumentContext
-  ): Promise<DocumentInitialProps & { currentUrl: string | undefined }> {
-    const initialProps = await Document.getInitialProps(ctx);
-    // Get the current host url so we can see if we're in Prod.
-    const currentUrl = ctx.req?.headers?.host;
-
-    return { ...initialProps, currentUrl };
-  }
-
   render() {
     return (
       <Html>
         <CustomHead>
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
-
-          {/*this.props.currentUrl === "forms-formulaires.alpha.canada.ca" && GoogleTagScript*/}
+          {GoogleTagScript}
         </CustomHead>
         <body>
-          {/*this.props.currentUrl === "forms-formulaires.alpha.canada.ca" && (
-            <noscript>
-              <iframe
-                src="https://www.googletagmanager.com/ns.html?id=GTM-W3ZVVX5"
-                title="Google Tag Manager Iframe Window"
-                height="0"
-                width="0"
-                style={{ display: "none", visibility: "hidden" }}
-              ></iframe>
-            </noscript>
-          )*/}
+          {/* Will only run if Browser does not have JS enabled */}
+          <noscript>
+            <iframe
+              src="https://www.googletagmanager.com/ns.html?id=GTM-W3ZVVX5"
+              title="Google Tag Manager Iframe Window"
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            ></iframe>
+          </noscript>
+
           <Main />
           <NextScript />
         </body>
