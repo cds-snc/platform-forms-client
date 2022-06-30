@@ -13,5 +13,5 @@ export const googleTagManager = `
 export const cspHashOf = (text: string): string => {
   const hash = crypto.createHash("sha256");
   hash.update(text);
-  return `'sha256-${hash.digest("base64")}'`;
+  return `sha256-${hash.digest("base64")}`;
 };
