@@ -233,10 +233,10 @@ class MyDocument extends Document {
         <CustomHead>
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
 
-          {this.props.currentUrl === "forms-formulaires.alpha.canada.ca" && GoogleTagScript}
+          {/*this.props.currentUrl === "forms-formulaires.alpha.canada.ca" && GoogleTagScript*/}
         </CustomHead>
         <body>
-          {this.props.currentUrl === "forms-formulaires.alpha.canada.ca" && (
+          {/*this.props.currentUrl === "forms-formulaires.alpha.canada.ca" && (
             <noscript>
               <iframe
                 src="https://www.googletagmanager.com/ns.html?id=GTM-W3ZVVX5"
@@ -246,7 +246,7 @@ class MyDocument extends Document {
                 style={{ display: "none", visibility: "hidden" }}
               ></iframe>
             </noscript>
-          )}
+          )*/}
           <Main />
           <NextScript />
         </body>
