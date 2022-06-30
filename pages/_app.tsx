@@ -1,12 +1,13 @@
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import { appWithTranslation } from "next-i18next";
 import { Provider } from "next-auth/client";
 import Base from "../components/globals/Base";
 import "../styles/app.scss";
 import i18nextConfig from "../next-i18next.config";
+import { NextPage } from "next";
 
 /*
 This component disables SSR when in testing mode.
@@ -22,15 +23,21 @@ const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
+//JS disabled and Not supported page do not follow the same layout as the rest of the app, added per page layout so those pages do not inherit base layout
+//https://nextjs.org/docs/basic-features/layouts
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
-const MyApp: React.FunctionComponent<AppProps> = ({ Component, pageProps }: AppProps) => {
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp: React.FunctionComponent<AppProps> = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout ?? ((page) => <Base>{page}</Base>);
   return (
     <Provider session={pageProps.session}>
-      <SafeHydrate>
-        <Base>
-          <Component {...pageProps} />
-        </Base>
-      </SafeHydrate>
+      <SafeHydrate>{getLayout(<Component {...pageProps} />)}</SafeHydrate>
     </Provider>
   );
 };

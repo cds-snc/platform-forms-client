@@ -10,6 +10,7 @@
 @import "./_base";
 @import "./_forms";
 @import "./_header";
+@import "./incompatible";
 
 // Tailwind Utilities needs to be loaded last to use inline
 @import "tailwindcss/utilities";
