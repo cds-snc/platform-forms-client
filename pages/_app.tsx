@@ -18,8 +18,8 @@ which generates a warning in the browser console.
 
 const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div suppressHydrationWarning={Boolean(process.env.ISOLATED_INSTANCE)}>
-      {typeof window === "undefined" && process.env.ISOLATED_INSTANCE ? null : children}
+    <div suppressHydrationWarning={Boolean(process.env.APP_ENV === "test")}>
+      {typeof window === "undefined" && process.env.APP_ENV === "test" ? null : children}
     </div>
   );
 };

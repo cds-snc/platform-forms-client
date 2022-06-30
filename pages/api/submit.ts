@@ -278,6 +278,14 @@ const processFormData = async (
       }`
     );
 
+    // Do not process if in TEST mode
+    if (process.env.APP_ENV === "test") {
+      logMessage.info(
+        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
+      );
+      return res.status(200).json({ received: true });
+    }
+
     const form = await getFormByID(reqFields.formID as number);
 
     if (!form) {

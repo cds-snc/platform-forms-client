@@ -14,7 +14,7 @@ function getCsp() {
   csp += `form-action 'self';`;
   csp += `default-src 'self';`;
   csp += `script-src 'self' 'strict-dynamic' ${scriptHashes.join(" ")} ${
-    process.env.ISOLATED_INSTANCE ? "'unsafe-eval'" : ""
+    process.env.APP_ENV === "test" ? "'unsafe-eval'" : ""
   } 'unsafe-inline' https:;`;
   csp += `style-src 'self' fonts.googleapis.com 'unsafe-inline' data:;`;
   csp += `img-src 'self' https: data:;`;
