@@ -1,6 +1,6 @@
 .main-div {
     display: block;
-    @apply xs:mx-4 sm:mx-4 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64;
+    @apply xs:mx-4 sm:mx-4 lg:mx-16 xl:mx-32 xxl:mx-48;
 }
 
 .fip {
@@ -8,7 +8,7 @@
 }
 
 .flag {
-    @apply xxs:w-flag-fold xs:w-flag-5s md:w-56 w-flag-desktop;
+    @apply xxs:w-flag-fold xs:w-flag-5s md:w-44 w-flag-desktop;
 }
 
 .bottom-border {

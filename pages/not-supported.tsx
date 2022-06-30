@@ -22,56 +22,59 @@ const NotSupported = ({
 
   return (
     <>
-      <div className="main-div">
-        <div className="content-div" style={{ flexDirection: "column" }}>
-          <div id="en">
-            <div className="fip">
-              <div className="flag">
-                {brandImg?.brand ? (
-                  <BrandPage formData={formInfo} lang={lang} />
-                ) : (
-                  <DefaultPage lang={lang} />
-                )}
+      <title>{t("notSupported.title")}</title>
+      <main role="main">
+        <div className="main-div">
+          <div className="content-div" style={{ flexDirection: "column" }}>
+            <div id="en">
+              <div className="fip">
+                <div className="flag">
+                  {brandImg?.brand ? (
+                    <BrandPage formData={formInfo} lang={lang} />
+                  ) : (
+                    <DefaultPage lang={lang} />
+                  )}
+                </div>
+                <LanguageToggle />
               </div>
-              <LanguageToggle />
-            </div>
-            <h1>{t("notSupported.title")}</h1>
+              <h1>{t("notSupported.title")}</h1>
 
-            <p>{t("notSupported.body1")}</p>
-            <div className="copy-link">
-              <div className="link-box border">{`${host}/${router.locale}${router.asPath}`}</div>
-              <button
-                className="link-btn"
-                onClick={() => {
-                  navigator.clipboard.writeText(`${host}/${router.locale}${router.asPath}`);
-                }}
-              >
-                {t("notSupported.copy-link")}
-              </button>
-            </div>
+              <p>{t("notSupported.body1")}</p>
+              <div className="copy-link">
+                <div className="link-box border">{`${host}/${router.locale}${router.asPath}`}</div>
+                <button
+                  className="link-btn"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${host}/${router.locale}${router.asPath}`);
+                  }}
+                >
+                  {t("notSupported.copy-link")}
+                </button>
+              </div>
 
-            <div>
-              <p>{t("notSupported.body2")}</p>
+              <div>
+                <p>{t("notSupported.body2")}</p>
+              </div>
+              <ul>
+                <li>
+                  <a href={t("notSupported.chrome-link")}>Chrome</a>
+                </li>
+                <li>
+                  <a href={t("notSupported.edge-link")}>Edge</a>
+                </li>
+                <li>
+                  <a href={t("notSupported.mozilla-link")}>Firefox</a>
+                </li>
+                <li>
+                  <a href={t("notSupported.safari-link")}>
+                    Safari {t("notSupported.safari-description")}
+                  </a>
+                </li>
+              </ul>
             </div>
-            <ul>
-              <li>
-                <a href={t("notSupported.chrome-link")}>Chrome</a>
-              </li>
-              <li>
-                <a href={t("notSupported.edge-link")}>Edge</a>
-              </li>
-              <li>
-                <a href={t("notSupported.mozilla-link")}>Firefox</a>
-              </li>
-              <li>
-                <a href={t("notSupported.safari-link")}>
-                  Safari {t("notSupported.safari-description")}
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
-      </div>
+      </main>
       <Footer formData={formInfo} lang={lang} />
     </>
   );

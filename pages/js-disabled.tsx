@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { PublicFormRecord } from "@lib/types";
+import Head from "next/head";
 
 const JSDisabled = ({
   formProps,
@@ -12,57 +13,64 @@ const JSDisabled = ({
 
   return (
     <>
-      <div className="main-div">
-        <div
-          className="content-div"
-          style={{
-            flexDirection: lang == "en" ? "column" : "column-reverse",
-            justifyContent: "space-around",
-          }}
-        >
-          <div id="en">
-            <div className="fip">
-              <div className="flag">
-                {brandImg?.brand ? (
-                  <img src={brandImg?.brand?.logoEn} alt={brandImg?.brand?.logoTitleEn} />
-                ) : (
-                  <img src="/img/sig-blk-en.svg" alt="GoC" />
-                )}
+      <title>
+        {lang == "en"
+          ? "You need JavaScript to use this website."
+          : "JavaScript est requis pour consulter ce site Web."}
+      </title>
+      <main role="main">
+        <div className="main-div">
+          <div
+            className="content-div"
+            style={{
+              flexDirection: lang == "en" ? "column" : "column-reverse",
+              justifyContent: "space-around",
+            }}
+          >
+            <div id="en">
+              <div className="fip">
+                <div className="flag">
+                  {brandImg?.brand ? (
+                    <img src={brandImg?.brand?.logoEn} alt={brandImg?.brand?.logoTitleEn} />
+                  ) : (
+                    <img src="/img/sig-blk-en.svg" alt="Symbol of the Government of Canada" />
+                  )}
+                </div>
+                <a href="#fr">Francais</a>
               </div>
-              <a href="#fr">Francais</a>
+              <h1>You need JavaScript to use this website.</h1>
+              <p>This browser either does not support JavaScript or scripts are being blocked.</p>
+              <p>
+                Use a web browser that supports JavaScript or allow scripts in your browser. See the
+                broswer’s help to find out more.
+              </p>
             </div>
-            <h1>You need JavaScript to use this website.</h1>
-            <p>This browser either does not support JavaScript or scripts are being blocked.</p>
-            <p>
-              Use a web browser that supports JavaScript or allow scripts in your browser. See the
-              broswer’s help to find out more.
-            </p>
-          </div>
-          <span className="div-border"></span>
-          <div id="fr">
-            <div className="fip">
-              <div className="flag">
-                {brandImg?.brand ? (
-                  <img src={brandImg?.brand?.logoFr} alt={brandImg?.brand?.logoTitleFr} />
-                ) : (
-                  <img src="/img/sig-blk-fr.svg" alt="GoC" />
-                )}
+            <span className="div-border"></span>
+            <div id="fr">
+              <div className="fip">
+                <div className="flag">
+                  {brandImg?.brand ? (
+                    <img src={brandImg?.brand?.logoFr} alt={brandImg?.brand?.logoTitleFr} />
+                  ) : (
+                    <img src="/img/sig-blk-fr.svg" alt="Symbole du gouvernement du Canada" />
+                  )}
+                </div>
+                <a href="#en">English</a>
               </div>
-              <a href="#en">English</a>
+              <h1>JavaScript est requis pour consulter ce site Web.</h1>
+              <p>
+                Il est possible que votre navigateur ne prenne pas en charge JavaScript ou qu’il
+                bloque les scripts.
+              </p>
+              <p>
+                Dans ce cas, il est recommandé d’utiliser un navigateur Web qui prend en charge
+                JavaScript ou exécute des scripts. Consultez la rubrique d’aide du navigateur pour
+                en savoir plus.
+              </p>
             </div>
-            <h1>JavaScript est requis pour consulter ce site Web.</h1>
-            <p>
-              Il est possible que votre navigateur ne prenne pas en charge JavaScript ou qu’il
-              bloque les scripts.
-            </p>
-            <p>
-              Dans ce cas, il est recommandé d’utiliser un navigateur Web qui prend en charge
-              JavaScript ou exécute des scripts. Consultez la rubrique d’aide du navigateur pour en
-              savoir plus.
-            </p>
           </div>
         </div>
-      </div>
+      </main>
       <Footer formData={formProps} lang={lang} />
     </>
   );
