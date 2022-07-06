@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `/changelog` page. [#246](https://github.com/cds-snc/platform-forms-client/issues/246)
 - New `maxNumberOfRows` property in JSON template for DynamicRow component configuration [#528](https://github.com/cds-snc/platform-forms-client/issues/528)
 - Create a second GC Notify service account. [#698](https://github.com/cds-snc/platform-forms-client/issues/696)
-
+- Make configurable GC branding in the footer. [#804](https://github.com/cds-snc/platform-forms-client/issues/804)
 ### Fixed
 
 - Aligned HTTP methods on API requests to decommission request body `method` property.
