@@ -39,7 +39,13 @@ const Base = ({ children }) => {
           </header>
         )}
         <main id="content">{children}</main>
-        {!isEmbeddable && <Footer />}
+        {!isEmbeddable && (
+          <Footer
+            disableGcBranding={
+              children.props.formRecord?.formConfig?.form?.brand?.disableGcBranding
+            }
+          />
+        )}
       </div>
     </>
   );
