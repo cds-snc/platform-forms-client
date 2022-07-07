@@ -136,18 +136,28 @@ NotSupported.getLayout = function (page: ReactElement) {
   return <>{page}</>;
 };
 
+const getFormIDFromURL = (url: string) => {
+  const regex = /\/(id.+)/;
+  const regexResult = url.match(regex);
+  let splitURLPath;
+  if (regexResult) {
+    splitURLPath = regexResult[0].split("/");
+    return splitURLPath[splitURLPath.length - 1];
+  }
+};
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const con = (await context.req.headers) || "not";
+  const con = await context.req.headers;
   let localeProps = {};
   let formConfig;
-  let split;
   if (context.locale) {
     localeProps = await serverSideTranslations(context.locale, ["common", "not-supported"]);
   }
   if (con.referer) {
-    const url = new URL(con.referer);
-    split = url.pathname.split("/");
-    formConfig = await getFormByID(parseInt(split[split.length - 1]));
+    const formId = getFormIDFromURL(con.referer);
+    if (formId) {
+      formConfig = await getFormByID(parseInt(formId));
+    }
     return {
       props: {
         ...(context.locale && localeProps),
