@@ -47,6 +47,43 @@
           "description": "The displayed title of the form to the user in French",
           "$id": "#/properties/titleFr",
           "type": "string"
+        },
+        "brand": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "description": "The brand name.",
+              "type": "string"
+            },
+            "urlEn": {
+              "description": "Url for english version of the site.",
+              "type": "string"
+            },
+            "urlFr": {
+              "description": "url for a french version of the site.",
+              "type": "string"
+            },
+            "logoEn": {
+              "description": "English logo path.",
+              "type": "string"
+            },
+            "logoFr": {
+              "description": "French logo path.",
+              "type": "string"
+            },
+            "logoTitleEn": {
+              "description": "logo title.",
+              "type": "string"
+            },
+            "logoTitleFr": {
+              "description": "logo title.",
+              "type": "string"
+            },
+            "disableGCBranding": {
+              "description": "If set to true, GC branding will not be rendered in the footer.",
+              "type": "boolean"
+            }
+          }
         }
       },
       "required": ["elements", "titleEn", "titleFr"]

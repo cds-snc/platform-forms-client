@@ -132,7 +132,7 @@ const sendTemporaryTokenByEmail = async (email: string, temporaryToken: string) 
   return await notifyClient
     .sendEmail(sendTempTokenTemplateID, email, {
       personalisation: {
-        temporaryToken: temporaryToken,
+        temporaryToken: `\`${temporaryToken}\``,
       },
       reference: null,
     })
