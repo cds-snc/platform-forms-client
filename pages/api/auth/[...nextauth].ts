@@ -26,10 +26,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     session: {
       strategy: "database",
       // Seconds - How long until an idle session expires and is no longer valid.
-      updateAge: 24 * 60 * 60, // 24 hours
+      maxAge: 2 * 60 * 60, // 2 hours
       // Seconds - Throttle how frequently to write to database to extend a session.
       // Use it to limit write operations. Set to 0 to always update the database.
-      maxAge: 2 * 60 * 60, // 2 hours
+      updateAge: 24 * 60 * 60, // 24 hours
     },
     pages: {
       signIn: "/admin/login",
