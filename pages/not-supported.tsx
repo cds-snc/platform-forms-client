@@ -24,11 +24,11 @@ const NotSupported = ({
     <>
       <title>{t("notSupported.title")}</title>
       <main role="main">
-        <div className="main-div">
-          <div className="content-div" style={{ flexDirection: "column" }}>
+        <div className="block xs:mx-4 sm:mx-4 lg:mx-16 xl:mx-32 xxl:mx-48">
+          <div className="flex flex-col md:h-auto" style={{ height: "80vh" }}>
             <div id="en">
-              <div className="fip">
-                <div className="flag">
+              <div className="flex justify-between items-center my-10">
+                <div className="xxs:w-flag-fold xs:w-flag-5s md:w-44 w-flag-desktop">
                   {brandImg?.brand ? (
                     <BrandPage formData={formInfo} lang={lang} />
                   ) : (
@@ -37,13 +37,13 @@ const NotSupported = ({
                 </div>
                 <LanguageToggle />
               </div>
-              <h1>{t("notSupported.title")}</h1>
+              <h1 className="md:text-small_h1 text-h1 mb-10">{t("notSupported.title")}</h1>
 
-              <p>{t("notSupported.body1")}</p>
-              <div className="copy-link">
-                <div className="link-box border">{`${host}/${router.locale}${router.asPath}`}</div>
+              <p className="my-8">{t("notSupported.body1")}</p>
+              <div className="flex sm:justify-between">
+                <div className="mr-2 w-1/3 h-full py-1 px-2 border-1 border-gray-600 lg:w-auto xl:w-auto sm:w-auto sm:mr-0">{`${host}/${router.locale}${router.asPath}`}</div>
                 <button
-                  className="link-btn"
+                  className="bg-gray-300 hover:bg-gray-400 active:bg-gray-400 py-1 px-4 sm:p-0.5"
                   onClick={() => {
                     navigator.clipboard.writeText(`${host}/${router.locale}${router.asPath}`);
                   }}
@@ -53,9 +53,9 @@ const NotSupported = ({
               </div>
 
               <div>
-                <p>{t("notSupported.body2")}</p>
+                <p className="my-8">{t("notSupported.body2")}</p>
               </div>
-              <ul>
+              <ul className="list-none p-0">
                 <li>
                   <a href={t("notSupported.chrome-link")}>Chrome</a>
                 </li>
@@ -84,22 +84,25 @@ const Footer = ({ formData, lang }: { formData: PublicFormRecord; lang: string }
   const brandImg = formData?.formConfig?.form;
   const { t } = useTranslation("common");
   return (
-    <footer className="incompatible-footer">
-      <div className="incompatible-footer-container">
-        <div className="terms-class">
+    <footer className="lg:mt-10 border-0 mt-16">
+      <div className="border-t-4 border-gray-900 py-10 flex flex-col px-64 lg:px-16 xl:px-32 sm:py-2 sm:px-6">
+        <div className="md:mb-10 flex self-start xxl:flex self-start">
           <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
         </div>
 
-        <div className="fip-class">
+        <div className="flex self-end sm:flex sm:self-start">
           {brandImg?.brand ? (
             <img
               alt={lang == "en" ? brandImg?.brand?.logoTitleEn : brandImg?.brand?.logoTitleFr}
               src={lang == "en" ? brandImg?.brand?.logoEn : brandImg?.brand?.logoFr}
+              className="xxs:w-flag-fold xs:w-flag-5s md:w-56 w-flag-5s"
             />
-          ) : lang == "en" ? (
-            <img src="/img/sig-blk-en.svg" alt={t("fip.text")} />
           ) : (
-            <img src="/img/sig-blk-fr.svg" alt={t("fip.text")} />
+            <img
+              src={lang == "en" ? "/img/sig-blk-en.svg" : "/img/sig-blk-fr.svg"}
+              alt={t("fip.text")}
+              className="xxs:w-flag-fold xs:w-flag-5s md:w-56 w-flag-5s"
+            />
           )}
         </div>
       </div>

@@ -5,7 +5,7 @@ const middleware = (req: NextRequest) => {
 
   const url = req.nextUrl;
 
-  if (browser?.indexOf("Internet Explorer")) {
+  if (browser == "Internet Explorer") {
     return NextResponse.rewrite(`${url.origin}/not-supported`);
   }
 };
