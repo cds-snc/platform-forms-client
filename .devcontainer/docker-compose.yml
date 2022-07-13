@@ -26,10 +26,10 @@ services:
       - "postgres"
       - "-c"
       - "listen_addresses=*"
-    restart: always
+    restart: unless-stopped
 
   redis:
-    restart: always
+    restart: unless-stopped
     image: redis:latest
     ports:
       - "6379:6379"
