@@ -1,8 +1,9 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import PropTypes from "prop-types";
 import { isSplashPage } from "@lib/routeUtils";
 
-const Footer = () => {
+const Footer = ({ disableGcBranding }) => {
   const { t } = useTranslation("common");
 
   return (
@@ -18,12 +19,18 @@ const Footer = () => {
             </>
           )}
         </div>
-        <div>
-          <img alt={t("fip.text")} src="/img/wmms-blk.svg" />
-        </div>
+        {!disableGcBranding && (
+          <div>
+            <img alt={t("fip.text")} src="/img/wmms-blk.svg" />
+          </div>
+        )}
       </div>
     </footer>
   );
+};
+
+Footer.propTypes = {
+  disableGcBranding: PropTypes.bool,
 };
 
 export default Footer;

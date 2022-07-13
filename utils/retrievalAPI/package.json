@@ -1,0 +1,17 @@
+{
+  "name": "retrieve_responses",
+  "version": "0.1.0",
+  "description": "Retrieve form respones from the retrieval API",
+  "main": "retrieveResponse.ts",
+  "scripts": {
+    "retrieve": "ts-node retrieveResponse.ts"
+  },
+  "keywords": [],
+  "author": "Bryan Robitaille",
+  "dependencies": {
+    "@types/node": "^18.0.0",
+    "csv-writer": "^1.6.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  }
+}

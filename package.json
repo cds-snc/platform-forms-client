@@ -56,7 +56,6 @@
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.55.0",
-    "aws-sdk-client-mock": "^0.6.2",
     "@babel/core": "^7.17.8",
     "@babel/preset-typescript": "^7.16.7",
     "@next/eslint-plugin-next": "^12.1.4",
@@ -87,6 +86,7 @@
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
     "autoprefixer": "^10.4.4",
+    "aws-sdk-client-mock": "^0.6.2",
     "axe-core": "^4.4.1",
     "babel-jest": "^27.5.1",
     "babel-loader": "^8.2.4",
