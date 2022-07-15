@@ -75,13 +75,6 @@ jobs:
           wait-for-service-stability: true
           codedeploy-appspec: ${{ github.workspace }}/form-viewer-appspec.json
 
-      - name: Run a11y tracker
-        run: |
-          curl -s https://api.a11y.cdssandbox.xyz/v1/reports\?recent\=true > /dev/null
-          sleep 60
-          json='{"product": "cds-snc/forms", "revision": "${{ github.event.workflow_run.head_sha }}", "urls":["https://forms-staging.cdssandbox.xyz", "https://forms-staging.cdssandbox.xyz/fr"], "spider": 1}'
-          curl -X POST -H 'X-API-KEY: ${{ secrets.A11Y_TRACKER_KEY }}' --data "$json" https://api.a11y.cdssandbox.xyz/v1
-
       - name: Run scan websites
         run: |
           curl -s https://scan-websites.alpha.canada.ca > /dev/null
