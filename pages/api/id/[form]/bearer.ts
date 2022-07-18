@@ -2,13 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
-import executeQuery from "@lib/integration/queryManager";
+import { prisma } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
-import dbConnector from "@lib/integration/dbConnector";
-import { QueryResult } from "pg";
-import { logAdminActivity } from "@lib/adminLogs";
-import { BearerResponse } from "@lib/types";
-import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
+import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { Prisma } from "@prisma/client";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   if (req.method === "GET") {
@@ -54,33 +51,43 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
     );
     // update the row with the new bearer token
     // return the id and the updated bearer_token field
-    const responseObject = await executeQuery(
-      await dbConnector(),
-      'UPDATE templates SET bearer_token = ($1) WHERE id = ($2) RETURNING bearer_token as "bearerToken"',
-      [token, formID]
-    );
-    // if we do not have any rows this means the record was not found return a 404
-    if (responseObject.rowCount === 0) {
-      logMessage.warn(
-        `A bearer token was attempted to be created for form ${formID} by user ${session?.user?.name} but the form does not exist`
-      );
-      return res.status(404).json({ error: "Not Found" });
-    }
-    // return the record with the id and the updated bearer token. Log the success
-    logMessage.info(
-      `A bearer token was refreshed for form ${formID} by user ${session?.user?.name}`
-    );
+    try {
+      const updatedBearerToken = await prisma.template.update({
+        where: {
+          id: formID,
+        },
+        data: {
+          bearerToken: token,
+        },
+        select: {
+          id: true,
+          bearerToken: true,
+        },
+      });
 
-    if (session && session.user.id) {
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        AdminLogEvent.RefreshBearerToken,
-        `Bearer token for form id: ${formID} has been refreshed`
+      // return the record with the id and the updated bearer token. Log the success
+      logMessage.info(
+        `A bearer token was refreshed for form ${formID} by user ${session?.user?.name}`
       );
+      if (session && session.user.id) {
+        await logAdminActivity(
+          session.user.id,
+          AdminLogAction.Update,
+          AdminLogEvent.RefreshBearerToken,
+          `Bearer token for form id: ${formID} has been refreshed`
+        );
+      }
+      return res.status(200).json(updatedBearerToken);
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+        logMessage.warn(
+          `A bearer token was attempted to be created for form ${formID} by user ${session?.user?.name} but the form does not exist`
+        );
+        return res.status(404).json({ error: "Not Found" });
+      }
+      // Continue the error chain if it isn't an object not found error
+      throw e;
     }
-
-    return res.status(200).json(responseObject.rows[0]);
   }
   return res.status(400).json({ error: "form ID parameter was not provided in the resource path" });
 }
@@ -95,12 +102,10 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
 export async function getToken(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const formID = req.query.form as string;
   if (formID) {
-    //Fetching the token return list of object or an empty array
-    const resultObject = await getTokenById(formID);
-    const data = resultObject.rowCount > 0 ? resultObject.rows : [];
-    if (data && data.length > 0) {
-      const { bearerToken } = data[0] as unknown as BearerResponse;
-      return res.status(200).json({ bearerToken: bearerToken });
+    //Fetching the token returns the bearer token or null.
+    const result = await getTokenById(formID);
+    if (typeof result?.bearerToken !== "undefined") {
+      return res.status(200).json({ bearerToken: result.bearerToken });
     }
     // otherwise the resource was not found
     return res.status(404).json({ error: "Not Found" });
@@ -113,13 +118,17 @@ export async function getToken(req: NextApiRequest, res: NextApiResponse): Promi
  * @param formID - The id of the form
  * @returns the query result
  */
-export const getTokenById = async (formID: string): Promise<QueryResult> => {
-  //Fetching the token return list of object or an empty array
-  return executeQuery(
-    await dbConnector(),
-    'SELECT bearer_token as "bearerToken" FROM templates WHERE id = ($1)',
-    [formID]
-  );
+export const getTokenById = async (
+  formID: string
+): Promise<{ bearerToken: string | null } | null> => {
+  return await prisma.template.findUnique({
+    where: {
+      id: formID,
+    },
+    select: {
+      bearerToken: true,
+    },
+  });
 };
 
 export default middleware([cors({ allowedMethods: ["GET", "POST"] }), sessionExists()], handler);

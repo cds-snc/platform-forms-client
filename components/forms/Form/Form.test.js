@@ -2,11 +2,11 @@ import React from "react";
 import { cleanup, render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Form from "./Form";
-import { submitToAPI } from "@lib/integration/helpers";
+import { submitToAPI } from "@lib/helpers";
 import { useFlag } from "@lib/hooks/useFlag";
 
-jest.mock("@lib/integration/helpers", () => {
-  const originalModule = jest.requireActual("@lib/integration/helpers");
+jest.mock("@lib/helpers", () => {
+  const originalModule = jest.requireActual("@lib/helpers");
   return {
     __esModule: true,
     ...originalModule,

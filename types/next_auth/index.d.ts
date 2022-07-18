@@ -12,7 +12,7 @@ declare module "next-auth" {
   }
 
   interface User extends DefaultUser {
-    id?: number;
-    admin?: boolean;
+    id: string;
+    admin: boolean | null;
   }
 }

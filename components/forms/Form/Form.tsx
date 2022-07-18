@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
-import { submitToAPI } from "@lib/integration/helpers";
+import { submitToAPI } from "@lib/helpers";
 import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
 import { Alert, Button } from "../index";
 import { logMessage } from "@lib/logger";
@@ -28,7 +28,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       formID,
       formConfig: { reCaptchaID, form },
     },
-  } = props;
+  }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 

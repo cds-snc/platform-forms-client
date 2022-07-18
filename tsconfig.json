@@ -19,7 +19,9 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@components/*": ["components/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@jestFixtures/*": ["__fixtures__/*"],
+      "@jestUtils": ["__utils__"]
     },
     "incremental": true
   },

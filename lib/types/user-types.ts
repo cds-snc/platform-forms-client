@@ -1,5 +1,5 @@
 export interface FormOwner {
-  id: number;
+  id: string;
   email: string;
   active: boolean;
 }

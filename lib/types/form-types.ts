@@ -98,21 +98,19 @@ export interface BrandProperties {
 
 // defines the fields for the main form configuration object
 export interface FormProperties {
-  id?: string;
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;
   emailSubjectFr?: string;
   version: string;
-  layout: Array<string>;
+  layout: Array<number>;
   brand?: BrandProperties;
   elements: Array<FormElement>;
   endPage?: Record<string, string>;
   [key: string]:
     | string
     | boolean
-    | Array<string>
-    | Array<FormElement>
+    | Array<string | number | FormElement>
     | Record<string, string>
     | BrandProperties
     | undefined;
@@ -128,26 +126,26 @@ export interface FormConfiguration {
   form: FormProperties;
   securityAttribute: string;
   reCaptchaID?: string;
+  [key: string]: unknown;
+}
+
+export interface PublicFormConfiguration {
+  publishingStatus: boolean;
+  displayAlphaBanner?: boolean;
+  form: FormProperties;
+  securityAttribute: string;
+  reCaptchaID?: string;
+  [key: string]: unknown;
 }
 
 // defines the fields for the form record that is available to unauthenticated users
 export interface PublicFormRecord {
-  formID: number;
-  formConfig: Omit<FormConfiguration, "internalTitleEn" | "internalTitleFr" | "submission">;
-  organization?: boolean;
+  formID: string;
+  formConfig: PublicFormConfiguration;
 }
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes
 export interface FormRecord extends PublicFormRecord {
   formConfig: FormConfiguration;
   bearerToken?: string;
-}
-
-// the object that is passed to the crud function which calls the template lambda
-export interface TemplateLambdaInput {
-  method: string;
-  formID?: number;
-  formConfig?: FormConfiguration;
-  limit?: number;
-  offset?: number;
 }

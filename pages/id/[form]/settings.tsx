@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { crudTemplates } from "@lib/integration/crud";
+import { getTemplateByID } from "@lib/templates";
 import React from "react";
 import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
@@ -18,7 +18,7 @@ interface FormSettingsProps {
   form: FormRecord;
 }
 
-const handleDelete = async (formID: number) => {
+const handleDelete = async (formID: string) => {
   // redirect to view templates page on success
   const resp = await axios({
     url: "/api/templates",
@@ -90,34 +90,39 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   );
 };
 
+const redirect = (locale: string | undefined) => {
+  return {
+    redirect: {
+      // We can redirect to a 'Form does not exist page' in the future
+      destination: `/${locale}/404`,
+      permanent: false,
+    },
+  };
+};
+
 export const getServerSideProps = requireAuthentication(async (context) => {
-  const formID = context?.params?.form ? parseInt(context.params.form as string) : undefined;
+  const formID = context?.params?.form;
 
-  if (formID && !isNaN(formID)) {
+  // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
+  if (!formID || Array.isArray(formID)) return redirect(context.locale);
+
+  if (formID) {
     // get form info from db
-    const payload = {
-      method: "GET",
-      formID: formID,
-    };
-    const lambdaResult = await crudTemplates(payload);
 
-    if (context.locale && lambdaResult.data.records && lambdaResult.data.records.length > 0) {
+    const template = await getTemplateByID(formID);
+
+    if (template) {
       return {
         props: {
-          form: lambdaResult.data.records[0],
-          ...(await serverSideTranslations(context.locale, ["common", "admin-templates"])),
+          form: template,
+          ...(context.locale &&
+            (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
         },
       };
     }
   }
   // if no form returned, 404
-  return {
-    redirect: {
-      // We can redirect to a 'Form does not exist page' in the future
-      destination: `/${context.locale}/404`,
-      permanent: false,
-    },
-  };
+  return redirect(context.locale);
 });
 
 export default FormSettings;

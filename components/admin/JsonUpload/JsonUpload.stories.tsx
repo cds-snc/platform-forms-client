@@ -10,7 +10,7 @@ export default {
 export const defaultJSONUpload = (): React.ReactElement => <JSONUpload></JSONUpload>;
 
 const testForm = {
-  formID: 1,
+  formID: "1",
   formConfig: {
     publishingStatus: true,
     securityAttribute: "Unclassified",
@@ -21,7 +21,7 @@ const testForm = {
       version: "1",
       titleEn: "Test JSON!",
       titleFr: "Test JSON!",
-      layout: ["1"],
+      layout: [1],
       elements: [
         {
           id: 1,

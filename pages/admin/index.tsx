@@ -21,6 +21,7 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
           <h3 className="gc-h3">
             {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
           </h3>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           {user.image && <img src={user.image} alt="profile" className="rounded-full" />}
           <p className="text-sm mb-8">
             {t("logged-in")} {user.email}
@@ -48,14 +49,12 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  if (context.locale) {
-    return {
-      props: {
-        ...(await serverSideTranslations(context.locale, ["common", "admin-login"])),
-      },
-    };
-  }
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-login"]))),
+    },
+  };
 });
 
 export default AdminWelcome;

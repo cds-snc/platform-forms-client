@@ -5,15 +5,12 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  if (context.locale) {
-    return {
-      props: {
-        ...(await serverSideTranslations(context.locale, ["common", "admin-templates"])),
-      },
-    };
-  }
-
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
+    },
+  };
 });
 
 const Upload = (): React.ReactElement => {

@@ -30,27 +30,6 @@ export interface MiddlewareProps {
   temporaryToken?: string;
 }
 
-export enum AdminLogAction {
-  Create = "Create",
-  Read = "Read",
-  Update = "Update",
-  Delete = "Delete",
-}
-
-export enum AdminLogEvent {
-  GrantAdminRole = "GrantAdminRole",
-  RevokeAdminRole = "RevokeAdminRole",
-  UploadForm = "UploadForm",
-  UpdateForm = "UpdateForm",
-  DeleteForm = "DeleteForm",
-  RefreshBearerToken = "RefreshBearerToken",
-  GrantInitialFormAccess = "GrantInitialFormAccess",
-  GrantFormAccess = "GrantFormAccess",
-  RevokeFormAccess = "RevokeFormAccess",
-  EnableFeature = "EnableFeature",
-  DisableFeature = "DisableFeature",
-}
-
 export type HTMLTextInputTypeAttribute =
   | "text"
   | "email"

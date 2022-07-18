@@ -6,7 +6,6 @@ export type {
   PublicFormRecord,
   SubmissionProperties,
   FormRecord,
-  TemplateLambdaInput,
 } from "./form-types";
 export { FormElementTypes } from "./form-types";
 
@@ -20,8 +19,6 @@ export type {
   ChoiceFieldProps,
 } from "./component-utility-types";
 
-export type { Organization, OrganizationLambdaInput } from "./organization-types";
-
 export type {
   LambdaResponse,
   UploadResult,
@@ -30,8 +27,6 @@ export type {
   MiddlewareProps,
   HTMLTextInputTypeAttribute,
 } from "./utility-types";
-
-export { AdminLogAction, AdminLogEvent } from "./utility-types";
 
 export type { BearerTokenPayload, TemporaryTokenPayload, BearerResponse } from "./retrieval-types";
 

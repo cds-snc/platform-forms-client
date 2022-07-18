@@ -1,6 +1,6 @@
-import dbConnector from "@lib/integration/dbConnector";
-import executeQuery from "@lib/integration/queryManager";
 import { User } from "next-auth";
+import { prisma } from "@lib/integration/prismaConnector";
+import { Prisma } from "@prisma/client";
 
 import { logMessage } from "@lib/logger";
 
@@ -10,11 +10,16 @@ import { logMessage } from "@lib/logger";
  */
 export const getUsers = async (): Promise<User[]> => {
   try {
-    const result = await executeQuery(
-      await dbConnector(),
-      "SELECT id, name, email, admin FROM users"
-    );
-    return result.rows as User[];
+    const users: User[] = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        admin: true,
+      },
+    });
+
+    return users;
   } catch (e) {
     logMessage.error(e as Error);
     return [];
@@ -27,16 +32,23 @@ export const getUsers = async (): Promise<User[]> => {
  * @param userID
  * @returns boolean that indicates success or failure and if a user exists
  */
-export const adminRole = async (isAdmin: boolean, userID: number): Promise<[boolean, boolean]> => {
+export const adminRole = async (isAdmin: boolean, userID: string): Promise<[boolean, boolean]> => {
   try {
-    const result = await executeQuery(
-      await dbConnector(),
-      "UPDATE users SET admin = ($1) WHERE id = ($2)",
-      [isAdmin.toString(), userID.toString()]
-    );
-    return [true, Boolean(result.rowCount)];
+    const user = await prisma.user.update({
+      where: {
+        id: userID,
+      },
+      data: {
+        admin: isAdmin,
+      },
+    });
+    return [true, Boolean(user)];
   } catch (e) {
     logMessage.error(e as Error);
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+      // Error P2025: Record to update not found.
+      return [true, false];
+    }
     return [false, false];
   }
 };

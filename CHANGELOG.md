@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded NextJS and other associated GCForms dependencies to next major version. [#725](https://github.com/cds-snc/platform-forms-client/pull/725)
 - Redesigned file input button [#713](https://github.com/cds-snc/platform-forms-client/issues/713)
 - Removed list of published forms from welcome page. [#712](https://github.com/cds-snc/platform-forms-client/issues/712)
+- Upgraded Next-Auth to version 4 & modified backed to use Prisma [#739](https://github.com/cds-snc/platform-forms-client/pull/739)
 - Changed ISOLATED_INSTANCE for APP_ENV [#825](https://github.com/cds-snc/platform-forms-client/pull/825)
 
 ## [1.2.0] 2022-04-19

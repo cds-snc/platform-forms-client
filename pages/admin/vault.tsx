@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { getFormByID } from "@lib/integration/helpers";
+import { getFormByID } from "@lib/helpers";
 import convertMessage from "@lib/markdown";
 import { Button, RichText } from "../../components/forms";
 import { logMessage } from "@lib/logger";
@@ -292,14 +292,12 @@ const AdminVault: React.FC = () => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  if (context.locale) {
-    return {
-      props: {
-        ...(await serverSideTranslations(context.locale, ["common", "admin-vault"])),
-      },
-    };
-  }
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-vault"]))),
+    },
+  };
 });
 
 export default AdminVault;

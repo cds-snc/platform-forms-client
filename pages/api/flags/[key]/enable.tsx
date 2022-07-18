@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 import { enableFlag, checkAll } from "@lib/flags";
-import { logAdminActivity } from "@lib/adminLogs";
-import { AdminLogAction, AdminLogEvent } from "@lib/types";
+import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   const session = await isAdmin({ req });
