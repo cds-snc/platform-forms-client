@@ -1,0 +1,8 @@
+{
+    "title": "Sign in",
+    "emailLabel": "Email",
+    "signInKeyLabel": "Form sign-in key",
+    "signInKeyDescription": "Enter the form sign in key emailed to you when you were provided access to the form.",
+    "signInKeyForgot": "Forgot your form sign-in key?",
+    "signInKeyReset": "Request a reset."
+}
