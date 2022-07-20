@@ -6,5 +6,6 @@
     "signInKeyForgot": "Forgot your form sign-in key?",
     "signInKeyReset": "Request a reset.",
     "loginErrorHeading": "Problems on this page:",
-    "loginErrorMessage": "Form sign-in key doesn't match our records. Double-check and try again."
+    "loginEmailErrorMessage": "Form sign-in key and email do not match our records. Double-check your email is correct.",
+    "loginSignInErrorMessage": "Form sign-in key and email do not match our records. Double-check your sign-in key is correct."
 }

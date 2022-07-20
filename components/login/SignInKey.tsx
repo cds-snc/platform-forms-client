@@ -39,12 +39,12 @@ const SignInKey = (): React.ReactElement => {
         }
       } catch (err) {
         setErrorState({
-          message: t("loginErrorMessage"),
+          message: t("loginSignInErrorMessage"),
         });
       }
     } else {
       setErrorState({
-        message: t("loginErrorMessage"),
+        message: t("loginSignInErrorMessage"),
       });
     }
   };
@@ -58,8 +58,9 @@ const SignInKey = (): React.ReactElement => {
       )}
       <form onSubmit={handleLoginSubmit}>
         <Label htmlFor="inputTypeText">{t("emailLabel")}</Label>
+        {errorState.message && <p className="gc-error-message">{t("loginEmailErrorMessage")}</p>}
         <input
-          className="mb-2 gc-input-text mr-2"
+          className="mb-10 gc-input-text mr-2"
           type="text"
           name="loginEmail"
           value={loginEmail}

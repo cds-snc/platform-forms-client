@@ -8,7 +8,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="gc-homepage">
+      <div>
         <h1 className="gc-h1">{t("title")}</h1>
         <SignInKey></SignInKey>
       </div>
