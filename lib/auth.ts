@@ -73,7 +73,6 @@ export const isAdmin = async ({
   req: NextApiRequest;
   res: NextApiResponse;
 }): Promise<Session | null> => {
-  // If server side, 'req' must be passed to getSession
   const session = await getServerSession({ req, res }, authOptions);
   if (session && session.user?.admin) {
     return session;
