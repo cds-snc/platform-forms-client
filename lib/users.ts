@@ -1,6 +1,7 @@
 import { User } from "next-auth";
-import { prisma } from "@lib/integration/prismaConnector";
-import { Prisma } from "@prisma/client";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { FormUser, Prisma } from "@prisma/client";
+import { JWT } from "next-auth";
 
 import { logMessage } from "@lib/logger";
 
@@ -21,22 +22,69 @@ export const getUsers = async (): Promise<User[]> => {
 
     return users;
   } catch (e) {
-    logMessage.error(e as Error);
-    return [];
+    return prismaErrors(e, []);
+  }
+};
+
+export const getFormUser = async (userId: string): Promise<FormUser | null> => {
+  try {
+    return await prisma.formUser.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+  } catch (e) {
+    return prismaErrors(e, null);
+  }
+};
+
+/**
+ * Get a user
+ * @returns An array of all Users
+ */
+export const getOrCreateUser = async (userToken: JWT): Promise<User | null> => {
+  try {
+    if (!userToken.email) throw new Error("Email address does not exist on token");
+    const user: User | null = await prisma.user.findUnique({
+      where: {
+        email: userToken.email,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        admin: true,
+      },
+    });
+
+    // If a user already exists return the record
+    if (user !== null) return user;
+
+    // User does not exist, create and return a record
+    const { name, email, picture: image } = userToken;
+    return await prisma.user.create({
+      data: {
+        name,
+        email,
+        image,
+      },
+    });
+  } catch (e) {
+    return prismaErrors(e, null);
   }
 };
 
 /**
  * Modifies the Admin role on a user
  * @param isAdmin
- * @param userID
+ * @param userId
  * @returns boolean that indicates success or failure and if a user exists
  */
-export const adminRole = async (isAdmin: boolean, userID: string): Promise<[boolean, boolean]> => {
+export const adminRole = async (isAdmin: boolean, userId: string): Promise<[boolean, boolean]> => {
   try {
     const user = await prisma.user.update({
       where: {
-        id: userID,
+        id: userId,
       },
       data: {
         admin: isAdmin,
