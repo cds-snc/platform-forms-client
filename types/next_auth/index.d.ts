@@ -13,6 +13,9 @@ declare module "next-auth" {
       lastLoginTime?: Date;
       role?: string;
       acceptableUse?: boolean;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
     };
   }
 
