@@ -5,6 +5,6 @@
     "signInKeyDescription": "Enter the form sign in key emailed to you when you were provided access to the form.",
     "signInKeyForgot": "Forgot your form sign-in key?",
     "signInKeyReset": "Request a reset.",
-    "loginErrorLabel": "Problems on this page:",
+    "loginErrorHeading": "Problems on this page:",
     "loginErrorMessage": "Form sign-in key doesn't match our records. Double-check and try again."
 }
