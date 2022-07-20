@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import emailDomainList from "../../email.domains.json";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { logMessage } from "@lib/logger";
-import LoginError from "./LoginError";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
 
 const SignInKey = (): React.ReactElement => {
