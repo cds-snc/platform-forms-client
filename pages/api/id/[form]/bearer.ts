@@ -69,9 +69,9 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
       logMessage.info(
         `A bearer token was refreshed for form ${formID} by user ${session?.user?.name}`
       );
-      if (session && session.user.id) {
+      if (session && session.user.userId) {
         await logAdminActivity(
-          session.user.id,
+          session.user.userId,
           AdminLogAction.Update,
           AdminLogEvent.RefreshBearerToken,
           `Bearer token for form id: ${formID} has been refreshed`
