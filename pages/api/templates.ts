@@ -19,7 +19,7 @@ const authenticatedMethods = ["POST", "PUT", "DELETE"];
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await isAdmin({ req });
+    const session = await isAdmin({ req, res });
     const response = await templateCRUD({ method: req.method, ...req.body });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });

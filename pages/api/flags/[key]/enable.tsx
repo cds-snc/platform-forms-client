@@ -4,7 +4,7 @@ import { enableFlag, checkAll } from "@lib/flags";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const session = await isAdmin({ req });
+  const session = await isAdmin({ req, res });
   if (session) {
     const key = req.query.key as string;
     await enableFlag(key);
