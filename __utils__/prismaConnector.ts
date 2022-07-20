@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import {
   PrismaClientInitializationError,
   PrismaClientKnownRequestError,
@@ -8,11 +8,15 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime";
 
-jest.mock("@lib/integration/prismaConnector", () => ({
-  __esModule: true,
-  default: jest.fn(),
-  prisma: mockDeep<PrismaClient>(),
-}));
+jest.mock("@lib/integration/prismaConnector", () => {
+  const originalModule = jest.requireActual("@lib/integration/prismaConnector");
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: jest.fn(),
+    prisma: mockDeep<PrismaClient>(),
+  };
+});
 
 beforeEach(() => {
   mockReset(prismaMock);
