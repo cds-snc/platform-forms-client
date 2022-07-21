@@ -83,9 +83,10 @@ const SignInKey = (): React.ReactElement => {
           className="mb-10 gc-input-text mr-2"
           type="text"
           name="loginEmail"
-          aria-label={t("email")}
           id="loginEmail"
+          data-testid="loginEmail"
           onChange={handleChange}
+          aria-label={t("emailLabel")}
         />
         <Label htmlFor="inputTypeText">{t("signInKeyLabel")}</Label>
         <Description id={`form-sign-in-key`}>{t("signInKeyDescription")}</Description>

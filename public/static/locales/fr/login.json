@@ -1,0 +1,11 @@
+{
+    "title": "Sign in",
+    "emailLabel": "Email",
+    "signInKeyLabel": "Form sign-in key",
+    "signInKeyDescription": "Enter the form sign in key emailed to you when you were provided access to the form.",
+    "signInKeyForgot": "Forgot your form sign-in key?",
+    "signInKeyReset": "Request a reset.",
+    "loginErrorHeading": "Problems on this page:",
+    "loginEmailErrorMessage": "Form sign-in key and email do not match our records. Double-check your email is correct.",
+    "loginSignInErrorMessage": "Form sign-in key and email do not match our records. Double-check your sign-in key is correct."
+}
