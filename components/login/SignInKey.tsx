@@ -1,21 +1,43 @@
 import { Alert, Button, Description, Label } from "@components/forms";
 import { isValidGovEmail } from "@lib/validation";
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import emailDomainList from "../../email.domains.json";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
 
+interface FormAction {
+  name: string;
+  value: string;
+}
+
+const formReducer = (state: Record<string, string>, action: FormAction) => {
+  return {
+    ...state,
+    [action.name]: action.value,
+  };
+};
+
 const SignInKey = (): React.ReactElement => {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [signInKey, setSignInKey] = useState("");
+  //const [loginEmail, setLoginEmail] = useState("");
+  const [formData, setFormData] = useReducer(formReducer, {});
   const [errorState, setErrorState] = useState({ message: "" });
 
   const { t } = useTranslation("login");
 
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFormData({
+      name: event.target.name,
+      value: event.target.value,
+    });
+  };
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorState({ message: "" });
+    const loginEmail = formData["loginEmail"];
     if (isValidGovEmail(loginEmail, emailDomainList.domains)) {
       try {
         const serverResponse = await axios({
@@ -23,7 +45,7 @@ const SignInKey = (): React.ReactElement => {
           method: "POST",
           headers: {
             "Content-Type": "application/json ",
-            Authorization: `Bearer ${signInKey}`,
+            Authorization: `Bearer ${formData["signInKey"]}`,
           },
           data: {
             email: loginEmail,
@@ -61,9 +83,9 @@ const SignInKey = (): React.ReactElement => {
           className="mb-10 gc-input-text mr-2"
           type="text"
           name="loginEmail"
-          value={loginEmail}
-          onChange={(e) => setLoginEmail(e.target.value)}
           aria-label={t("email")}
+          id="loginEmail"
+          onChange={handleChange}
         />
         <Label htmlFor="inputTypeText">{t("signInKeyLabel")}</Label>
         <Description id={`form-sign-in-key`}>{t("signInKeyDescription")}</Description>
@@ -75,8 +97,7 @@ const SignInKey = (): React.ReactElement => {
           className="gc-textarea full-height font-mono"
           data-testid="signInKey"
           aria-label={t("signInKeyLabel")}
-          value={signInKey}
-          onChange={(e) => setSignInKey(e.target.value)}
+          onChange={handleChange}
         />
         <br />
         <Button type="submit" testid="add-email">
