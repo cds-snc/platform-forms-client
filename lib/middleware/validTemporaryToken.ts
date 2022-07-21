@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { validTemporaryToken as validateToken } from "@lib/auth";
+import { validateTemporaryToken } from "@lib/auth";
 
 /**
  * @description
@@ -32,7 +32,7 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
 
-      const user = await validateToken(token);
+      const user = await validateTemporaryToken(token);
 
       if (user !== null) return { next: true, props: { email: user.email, temporaryToken: token } };
 

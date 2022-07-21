@@ -6,7 +6,7 @@ import { JWT } from "next-auth";
 import { logMessage } from "@lib/logger";
 
 /**
- * Get all users
+ * Get all Users
  * @returns An array of all Users
  */
 export const getUsers = async (): Promise<User[]> => {
@@ -26,6 +26,11 @@ export const getUsers = async (): Promise<User[]> => {
   }
 };
 
+/**
+ * Get a FormUser
+ * @param userId FormUser Id
+ * @returns FormUser Object
+ */
 export const getFormUser = async (userId: string): Promise<FormUser | null> => {
   try {
     return await prisma.formUser.findUnique({
@@ -39,8 +44,8 @@ export const getFormUser = async (userId: string): Promise<FormUser | null> => {
 };
 
 /**
- * Get a user
- * @returns An array of all Users
+ * Get or Create a user if a record does not exist
+ * @returns A User Object
  */
 export const getOrCreateUser = async (userToken: JWT): Promise<User | null> => {
   try {

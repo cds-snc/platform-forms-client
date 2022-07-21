@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { logMessage } from "@lib/logger";
-import { validTemporaryToken } from "@lib/auth";
+import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
 
 const prisma = new PrismaClient();
@@ -27,11 +27,11 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         temporaryToken: { label: "Temporary Token", type: "text" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         // If the temporary token is missing don't process further
         if (!credentials?.temporaryToken) return null;
 
-        const user = await validTemporaryToken(credentials.temporaryToken);
+        const user = await validateTemporaryToken(credentials.temporaryToken);
 
         if (user) {
           // Type limitations on the Class only allow the return of id and email.
@@ -64,8 +64,8 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, account }) {
-      // Persist the OAuth access_token to the token right after signin
-
+      // Account is only available on the first callback after a login.
+      // Since this is the initial creation of the JWT we add the properties
       switch (account?.provider) {
         case "google": {
           const user = await getOrCreateUser(token as JWT);

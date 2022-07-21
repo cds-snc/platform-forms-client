@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { mockDeep, mockReset, DeepMockProxy } from "jest-mock-extended";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma } from "@lib/integration/prismaConnector";
 import {
   PrismaClientInitializationError,
   PrismaClientKnownRequestError,

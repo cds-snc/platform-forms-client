@@ -85,7 +85,7 @@ export const isAdmin = async ({
  * @param token string of temporary token
  * @returns a user or null if token / user is inactive
  */
-export const validTemporaryToken = async (token: string) => {
+export const validateTemporaryToken = async (token: string) => {
   try {
     const { email, formID } = jwt.verify(
       token,
