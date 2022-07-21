@@ -3,8 +3,6 @@ import { validBearerToken } from "@lib/middleware";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
 
-jest.mock("next-auth/react");
-
 describe("bearerToken tests", () => {
   beforeAll(() => {
     process.env.TOKEN_SECRET = "some_secret_some_secret_some_secret_some_secret";
