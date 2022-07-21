@@ -8,43 +8,53 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([provider, providerAccountId])
 }
 
 model AdminLog {
   id          Int      @id @default(autoincrement())
-  userId     String
+  userId      String
   timestamp   DateTime @default(now()) @db.Timestamptz(6)
-  action      String   
-  event       String   
+  action      String
+  event       String
   description String?
-  user       User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user        User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model AccessLog {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  timestamp DateTime @default(now()) @db.Timestamptz(6)
+  action    String
+  user      FormUser @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
 }
 
 model FormUser {
-  id              String       @id @default(cuid())
+  id             String      @id @default(cuid())
   templateId     String
-  email           String    @db.VarChar(80)
+  email          String      @db.VarChar(80)
   temporaryToken String?
-  active          Boolean   @default(true)
-  created_at      DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime  @updatedAt @db.Timestamptz(6)
-  template       Template @relation(fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  active         Boolean     @default(true)
+  created_at     DateTime    @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime    @updatedAt @db.Timestamptz(6)
+  template       Template    @relation(fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  accessLogs     AccessLog[]
 
   @@unique([templateId, email])
 }
@@ -53,24 +63,24 @@ model Session {
   id           String   @id @default(cuid())
   userId       String
   expires      DateTime
-  sessionToken String @unique(map: "session_token")
-  user        User  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sessionToken String   @unique(map: "session_token")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Template {
-  id           String         @id @default(cuid())
+  id          String     @id @default(cuid())
   jsonConfig  Json
   bearerToken String?
   formUsers   FormUser[]
 }
 
 model User {
-  id            String            @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String?        @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
-  admin         Boolean?       @default(false)
+  admin         Boolean?   @default(false)
   accounts      Account[]
   admin_logs    AdminLog[]
   sessions      Session[]
