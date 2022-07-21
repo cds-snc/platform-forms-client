@@ -73,7 +73,9 @@ const SignInKey = (): React.ReactElement => {
     <>
       {errorState.message && (
         <Alert type="error" heading={t("loginErrorHeading")}>
-          <ErrorListItem value={errorState.message} errorKey="signInKey" />
+          <ul>
+            <ErrorListItem value={errorState.message} errorKey="signInKey" />
+          </ul>
         </Alert>
       )}
       <form onSubmit={handleLoginSubmit}>
