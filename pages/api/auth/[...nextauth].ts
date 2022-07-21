@@ -105,8 +105,6 @@ export const authOptions: NextAuthOptions = {
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
-
-      logMessage.info(session);
       return session;
     },
   },
