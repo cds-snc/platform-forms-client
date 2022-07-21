@@ -82,7 +82,7 @@ model User {
   image         String?
   admin         Boolean?   @default(false)
   accounts      Account[]
-  admin_logs    AdminLog[]
+  adminLogs    AdminLog[]
   sessions      Session[]
 }
 
