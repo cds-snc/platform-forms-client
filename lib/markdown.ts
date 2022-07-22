@@ -1,6 +1,6 @@
 import json2md from "json2md";
 import logger from "@lib/logger";
-import { extractFormData } from "./integration/helpers";
+import { extractFormData } from "./helpers";
 import { Submission } from "@lib/types";
 
 export default logger((formResponse: Submission): string => {

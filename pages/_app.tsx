@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import React from "react";
 
 import { appWithTranslation } from "next-i18next";
-import { Provider } from "next-auth/client";
+import { SessionProvider } from "next-auth/react";
 import Base from "../components/globals/Base";
 import "../styles/app.scss";
 import i18nextConfig from "../next-i18next.config";
@@ -23,15 +23,24 @@ const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const MyApp: React.FunctionComponent<AppProps> = ({ Component, pageProps }: AppProps) => {
+const MyApp: React.FunctionComponent<AppProps> = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) => {
   return (
-    <Provider session={pageProps.session}>
+    <SessionProvider
+      session={session}
+      // Re-fetch session every 30 minutes
+      refetchInterval={30 * 60}
+      // Re-fetches session when window is focused
+      refetchOnWindowFocus={true}
+    >
       <SafeHydrate>
         <Base>
           <Component {...pageProps} />
         </Base>
       </SafeHydrate>
-    </Provider>
+    </SessionProvider>
   );
 };
 

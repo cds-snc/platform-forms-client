@@ -12,11 +12,11 @@ import { TFunction, useTranslation } from "next-i18next";
 // We're filtering out all the undefined fields in getServerSideProps
 // Extending interface locally to be easier to read
 interface AuthenticatedUser extends User {
-  id: number;
+  id: string;
   admin: boolean;
 }
 
-const updateAdminValue = async (userID: number, isAdmin: boolean) => {
+const updateAdminValue = async (userID: string, isAdmin: boolean) => {
   return await axios({
     url: `/api/users`,
     method: "PUT",
@@ -87,13 +87,17 @@ const Users = ({ users }: UserProps): React.ReactElement => {
       <h1 className="gc-h1">{t("title")}</h1>
       <div className="shadow-lg border-4">
         <table className="table-auto min-w-full text-center ">
-          <tr className="border-b-2">
-            <th>{t("email")}</th>
-            <th>{t("admin")}</th>
-          </tr>
-          {users.map((user) => {
-            return <UserRow key={user.id} user={user} />;
-          })}
+          <thead>
+            <tr className="border-b-2">
+              <th>{t("email")}</th>
+              <th>{t("admin")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => {
+              return <UserRow key={user.id} user={user} />;
+            })}
+          </tbody>
         </table>
       </div>
     </>
@@ -103,12 +107,13 @@ const Users = ({ users }: UserProps): React.ReactElement => {
 export default Users;
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  let localeProps = {};
-  if (context.locale) {
-    localeProps = await serverSideTranslations(context.locale, ["common", "admin-users"]);
-  }
-
   const users = (await getUsers()).filter((user) => user.id) as AuthenticatedUser[];
 
-  return { props: { ...localeProps, users } };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-users"]))),
+      users,
+    },
+  };
 });

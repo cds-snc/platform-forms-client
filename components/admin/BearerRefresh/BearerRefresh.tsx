@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { BearerResponse } from "@lib/types";
 
 export interface BearerRefreshProps {
-  formID: number;
+  formID: string;
 }
 
 const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
@@ -21,7 +21,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
     getBearerToken(formID);
   }, []);
 
-  const getBearerToken = async (formID: number) => {
+  const getBearerToken = async (formID: string) => {
     try {
       setSubmitting(true);
       setErrorState({ message: "" });
@@ -45,7 +45,7 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
    *
    * @param formID
    */
-  const handleRefreshBearerToken = async (formID: number) => {
+  const handleRefreshBearerToken = async (formID: string) => {
     try {
       setSubmitting(true);
       setErrorState({ message: "" });

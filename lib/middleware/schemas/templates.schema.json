@@ -7,23 +7,19 @@
   "default": {},
   "examples": [],
   "properties": {
-    "securityAttribute":{
+    "securityAttribute": {
       "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
-      "$id": "#/properties/securityAttribute",       
+      "$id": "#/properties/securityAttribute",
       "type": "string",
-      "enum": [
-          "Protected A",
-          "Protected B",
-          "Unclassified"      
-        ]      
+      "enum": ["Protected A", "Protected B", "Unclassified"]
     },
     "internalTitleEn": {
-      "description": "The displayed title of the form to the user in English",
+      "description": "The internal title of the form in English",
       "$id": "#/properties/internalTitleEn",
       "type": "string"
     },
     "internalTitleFr": {
-      "description": "The displayed title of the form to the user in French",
+      "description": "The internal title of the form in French",
       "$id": "#/properties/internalTitleFr",
       "type": "string"
     },
@@ -42,7 +38,17 @@
             "$ref": "#/$defs/element"
           }
         },
-        "brand":{
+        "titleEn": {
+          "description": "The displayed title of the form to the user in English",
+          "$id": "#/properties/titleEn",
+          "type": "string"
+        },
+        "titleFr": {
+          "description": "The displayed title of the form to the user in French",
+          "$id": "#/properties/titleFr",
+          "type": "string"
+        },
+        "brand": {
           "type": "object",
           "properties": {
             "name": {
@@ -79,9 +85,8 @@
             }
           }
         }
-
       },
-      "required": ["elements"]       
+      "required": ["elements", "titleEn", "titleFr"]
     },
     "submission": {
       "type": "object",
@@ -97,7 +102,7 @@
       }
     }
   },
-  "required": ["form", "submission", "internalTitleEn", "internalTitleFr", "publishingStatus"],
+  "required": ["form", "submission", "publishingStatus"],
   "additionalProperties": true,
 
   "$defs": {

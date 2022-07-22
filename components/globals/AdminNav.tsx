@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 
 type AdminNavProps = {

@@ -9,7 +9,7 @@ import emailDomainList from "../../../email.domains.json";
 import { FormOwner } from "@lib/types";
 
 export interface FormAccessProps {
-  formID: number;
+  formID: string;
 }
 
 const FormAccess = (props: FormAccessProps): React.ReactElement => {

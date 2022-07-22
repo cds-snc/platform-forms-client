@@ -2,8 +2,8 @@ import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import convertMessage from "@lib/markdown";
-import { rehydrateFormResponses } from "@lib/integration/helpers";
-import { getFormByID, getSubmissionByID } from "@lib/integration/crud";
+import { rehydrateFormResponses } from "@lib/helpers";
+import { getTemplateByID, getSubmissionTypeByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
@@ -63,12 +63,12 @@ function streamToString(stream: Readable): Promise<string> {
 }
 
 const callLambda = async (
-  formID: number,
+  formID: string,
   fields: Responses,
   language: string,
   securityAttribute: string
 ) => {
-  const submission = await getSubmissionByID(formID);
+  const submission = await getSubmissionTypeByID(formID);
 
   const encoder = new TextEncoder();
 
@@ -268,6 +268,14 @@ const processFormData = async (
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
     const notifyPreview = await checkOne("notifyPreview");
 
+    // Do not process if in TEST mode
+    if (process.env.APP_ENV === "test") {
+      logMessage.info(
+        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
+      );
+      return res.status(200).json({ received: true });
+    }
+
     if (!reqFields) {
       return res.status(400).json({ error: "No form submitted with request" });
     }
@@ -278,15 +286,7 @@ const processFormData = async (
       }`
     );
 
-    // Do not process if in TEST mode
-    if (process.env.APP_ENV === "test") {
-      logMessage.info(
-        `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
-      );
-      return res.status(200).json({ received: true });
-    }
-
-    const form = await getFormByID(reqFields.formID as number);
+    const form = await getTemplateByID(reqFields.formID as string);
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });

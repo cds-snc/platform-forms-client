@@ -1,10 +1,10 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { signIn } from "next-auth/client";
+import { signIn } from "next-auth/react";
 
 import { Button } from "@components/forms";
 
@@ -45,13 +45,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  if (context.locale) {
-    return {
-      props: { ...(await serverSideTranslations(context.locale, ["common", "admin-login"])) },
-    };
-  }
-
-  return { props: {} };
+  return {
+    props: {
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "admin-login"]))),
+    },
+  };
 };
 
 export default Login;

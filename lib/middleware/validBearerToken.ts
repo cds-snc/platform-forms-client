@@ -16,7 +16,7 @@ export const validBearerToken = (): MiddlewareRequest => {
       const token = extractBearerTokenFromReq(req);
       const { formID } = jwt.verify(token, process.env.TOKEN_SECRET ?? "") as BearerTokenPayload;
       const tokenID = await getTokenById(formID);
-      if (tokenID.rows[0].bearerToken === token) {
+      if (tokenID?.bearerToken === token) {
         return { next: true, props: { formID } };
       } else {
         res.status(403).json({ error: "Missing or invalid bearer token." });

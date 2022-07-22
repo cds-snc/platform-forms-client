@@ -9,9 +9,11 @@ jobs:
     name: Cypress
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.LAMBDA_AWS_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.LAMBDA_AWS_SECRET}}
+      # Needed for Next Auth to initialize
       NEXTAUTH_URL: http://localhost:3000
+      TOKEN_SECRET: testKey
+      GOOGLE_CLIENT_ID: testClientID
+      GOOGLE_CLIENT_SECRET: testClientSecret
       APP_ENV: test
     steps:
       - name: Checkout

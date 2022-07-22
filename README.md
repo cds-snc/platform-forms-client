@@ -15,6 +15,7 @@ This is a [Next.js](https://nextjs.org/) and is built with:
 - Sass (Syntactically Awesome Style Sheets) for reusable styles
 - [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
 - [PostCSS](https://postcss.org/)
+- [Prisma](https://www.prisma.io/)
 
 ## Running locally
 
@@ -39,7 +40,6 @@ For local development of the NextJS application but leveraging the AWS backend (
 NOTIFY_API_KEY= // Can be found in LastPass
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
-ORGANIZATIONS_API=Organizations
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
 GOOGLE_CLIENT_ID= // Can be found in LastPass
@@ -69,20 +69,9 @@ Run postgres by using the following command
 docker-compose up -d db
 ```
 
+A GUI manager is installed with prisma and can be launched with `yarn prisma:studio`
 You can optionally install a gui manager like PgAdmin if you would like.
-
-in `/migrations`, fill in the separate .env file.
-
-```
-DB_NAME=formsDB
-DB_USERNAME=postgres
-DB_PASSWORD=chummy
-DB_HOST=localhost
-```
-
-Note if running in devcontainers on vscode the DB_HOST should be of value `db`
-
-inside the `/migrations` folder, run `node index.js` to run migrations against the local database.
+For more information about developing with prisma migrate please visit: https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate
 
 In your main forms .env file, DATABASE_URL can be filled in as followed (replace values in {} with the values you used in your migrations env file)
 `DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
@@ -103,6 +92,7 @@ Browse application on `http://localhost:3000`
 There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
 
 ### Grant yourself admin access locally
+
 - Login using your email via Google SSO
 - Retrieve your users id from the users table in the formsDB `select * from users where email='YOUR_EMAIL'`
 - Update the record to elevate yourself as an admin `UPDATE users SET admin=true WHERE id=YOUR_ID`
@@ -171,7 +161,6 @@ Pour le développement local de l'application NextJS mais en s'appuyant sur le b
 NOTIFY_API_KEY= // Can be found in LastPass
 SUBMISSION_API=Submission
 TEMPLATES_API=Templates
-ORGANIZATIONS_API=Organizations
 AWS_ACCESS_KEY_ID= // Can be found in LastPass
 AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
 GOOGLE_CLIENT_ID= // Can be found in LastPass

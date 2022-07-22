@@ -1,4 +1,4 @@
-import { getSession, GetSessionOptions } from "next-auth/client";
+import { getSession, GetSessionParams } from "next-auth/react";
 import { Session } from "next-auth";
 import { GetServerSidePropsResult, GetServerSidePropsContext } from "next";
 import { hasOwnProperty } from "./tsUtils";
@@ -57,7 +57,7 @@ export function requireAuthentication(
  * @param reqOrContext Request or Context Object
  * @returns session if exists otherwise null
  */
-export const isAdmin = async (reqOrContext?: GetSessionOptions): Promise<Session | null> => {
+export const isAdmin = async (reqOrContext?: GetSessionParams): Promise<Session | null> => {
   // If server side, 'req' must be passed to getSession
   const session = reqOrContext ? await getSession(reqOrContext) : await getSession();
   if (session && session.user?.admin) {

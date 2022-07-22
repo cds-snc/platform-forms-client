@@ -18,8 +18,12 @@ const customJestConfig = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   moduleDirectories: ["node_modules", "<rootDir>/"],
   clearMocks: true,
-  setupFilesAfterEnv: ["<rootDir>/lib/tests/setupTests.ts"],
-  testEnvironment: "jest-environment-jsdom",
+  preset: "ts-jest/presets/js-with-ts",
+  setupFilesAfterEnv: [
+    "<rootDir>/__utils__/setupTests.ts",
+    "<rootDir>/__utils__/prismaConnector.ts",
+  ],
+  testEnvironment: "jsdom",
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

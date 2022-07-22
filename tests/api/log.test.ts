@@ -1,10 +1,10 @@
-import { getCsrfToken } from "next-auth/client";
+import { getCsrfToken } from "next-auth/react";
 import logApi from "@pages/api/log";
 import { createMocks } from "node-mocks-http";
 import { logMessage } from "@lib/logger";
 import { Level } from "pino";
 
-jest.mock("next-auth/client");
+jest.mock("next-auth/react");
 const mockedGetCsrfToken = jest.mocked(getCsrfToken, true);
 
 describe("Log API Endpoint", () => {

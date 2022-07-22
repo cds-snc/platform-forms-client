@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers, adminRole } from "@lib/users";
 import { logAdminActivity } from "@lib/adminLogs";
+import { AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
-import { AdminLogAction, AdminLogEvent } from "@lib/types/utility-types";
+import { logMessage } from "@lib/logger";
 
 const allowedMethods = ["GET", "PUT"];
 
@@ -28,7 +28,7 @@ const updateUserAdminStatus = async (
     return res.status(400).json({ error: "Malformed Request" });
   }
   const [success, userFound] = await adminRole(isAdmin, userID);
-
+  logMessage.info(AdminLogAction.Update);
   if (success && userFound) {
     if (session && session.user.id) {
       await logAdminActivity(

@@ -262,9 +262,9 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
     return null;
   }
 
-  return formRecord.formConfig.form.layout.map((item: string) => {
+  return formRecord.formConfig.form.layout.map((item: number) => {
     const element = formRecord.formConfig.form.elements.find(
-      (element: FormElement) => element.id === parseInt(item)
+      (element: FormElement) => element.id === item
     );
     if (element) {
       return <GenerateElement key={element.id} element={element} language={language} t={t} />;

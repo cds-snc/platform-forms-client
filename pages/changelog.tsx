@@ -37,13 +37,9 @@ const Changelog = (): React.ReactElement => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.locale) {
-    return {
-      props: { ...(await serverSideTranslations(context.locale, ["common"])) },
-    };
-  }
-
-  return { props: {} };
+  return {
+    props: { ...(context.locale && (await serverSideTranslations(context.locale, ["common"]))) },
+  };
 };
 
 export default Changelog;
