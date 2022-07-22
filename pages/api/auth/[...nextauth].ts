@@ -7,7 +7,7 @@ import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
 import { LoggingAction } from "@lib/auth";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -110,6 +110,8 @@ export const authOptions: NextAuthOptions = {
 
   events: {
     async signIn({ user }) {
+      // Not throwing an Error as it could potentially redirect the user to an Error page
+      // This error should be transparent to a user.
       try {
         const formUser = await prisma.formUser.findUnique({
           where: {
@@ -128,32 +130,35 @@ export const authOptions: NextAuthOptions = {
           });
         }
       } catch (e) {
-        logMessage.error(e);
+        prismaErrors(e, null);
       }
     },
-    async signOut({ session }) {
-      logMessage.info(session);
-      if (!session.userId) {
-        // Not throwing an Error as it could potentially redirect the user to an Error page
-        // This error should be transparent to a user.
-        logMessage.warn(`Could not record Signout, session corrupt : ${JSON.stringify(session)}`);
-        return;
-      }
-      const formUser = await prisma.formUser.findUnique({
-        where: {
-          id: session.userId as string,
-        },
-        select: {
-          id: true,
-        },
-      });
-      if (formUser) {
-        await prisma.accessLog.create({
-          data: {
-            action: LoggingAction.LOGOUT,
-            userId: session.userId as string,
+    async signOut({ token }) {
+      try {
+        if (!token.userId) {
+          // Not throwing an Error as it could potentially redirect the user to an Error page
+          // This error should be transparent to a user.
+          logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
+          return;
+        }
+        const formUser = await prisma.formUser.findUnique({
+          where: {
+            id: token.userId as string,
+          },
+          select: {
+            id: true,
           },
         });
+        if (formUser) {
+          await prisma.accessLog.create({
+            data: {
+              action: LoggingAction.LOGOUT,
+              userId: token.userId as string,
+            },
+          });
+        }
+      } catch (e) {
+        prismaErrors(e, null);
       }
     },
   },
