@@ -40,7 +40,7 @@ const SignInKey = (): React.ReactElement => {
     const loginEmail = formData["loginEmail"];
     if (isValidGovEmail(loginEmail, emailDomainList.domains)) {
       try {
-        const serverResponse = await axios({
+        await axios({
           url: "/api/token/temporary",
           method: "POST",
           headers: {
@@ -52,11 +52,7 @@ const SignInKey = (): React.ReactElement => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
-        if (serverResponse.status === 200) {
-          alert("success");
-        } else {
-          alert("error");
-        }
+        setParentStage(2);
       } catch (err) {
         setErrorState({
           message: t("loginSignInErrorMessage"),
