@@ -102,11 +102,11 @@ const SignInKey = (): React.ReactElement => {
         <Button type="submit" testid="add-email">
           Continue
         </Button>
-        <br />
-        {t("signInKeyForgot")}
-        <br />
-        {t("signInKeyReset")}
       </form>
+      <br />
+      {t("signInKeyForgot")}
+      <br />
+      {t("signInKeyReset")}
     </>
   );
 };
