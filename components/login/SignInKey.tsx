@@ -5,6 +5,7 @@ import emailDomainList from "../../email.domains.json";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
+import { LoginStageProps } from "@pages/auth/login";
 
 interface FormAction {
   name: string;
@@ -18,8 +19,8 @@ const formReducer = (state: Record<string, string>, action: FormAction) => {
   };
 };
 
-const SignInKey = (): React.ReactElement => {
-  //const [loginEmail, setLoginEmail] = useState("");
+const SignInKey = (props: LoginStageProps): React.ReactElement => {
+  const { setParentStage } = props;
   const [formData, setFormData] = useReducer(formReducer, {});
   const [errorState, setErrorState] = useState({ message: "" });
 
