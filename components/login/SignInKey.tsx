@@ -75,7 +75,7 @@ const SignInKey = (): React.ReactElement => {
         </Alert>
       )}
       <form onSubmit={handleLoginSubmit}>
-        <Label htmlFor="inputTypeText">{t("emailLabel")}</Label>
+        <Label htmlFor="loginEmail">{t("emailLabel")}</Label>
         {errorState.message && <p className="gc-error-message">{t("loginEmailErrorMessage")}</p>}
         <input
           className="mb-10 gc-input-text mr-2"
@@ -84,9 +84,8 @@ const SignInKey = (): React.ReactElement => {
           id="loginEmail"
           data-testid="loginEmail"
           onChange={handleChange}
-          aria-label={t("emailLabel")}
         />
-        <Label htmlFor="inputTypeText">{t("signInKeyLabel")}</Label>
+        <Label htmlFor="signInKey">{t("signInKeyLabel")}</Label>
         <Description id={`form-sign-in-key`}>{t("signInKeyDescription")}</Description>
         {errorState.message && <p className="gc-error-message">{errorState.message}</p>}
         <textarea
@@ -95,7 +94,6 @@ const SignInKey = (): React.ReactElement => {
           name="signInKey"
           className="gc-textarea full-height font-mono"
           data-testid="signInKey"
-          aria-label={t("signInKeyLabel")}
           onChange={handleChange}
         />
         <br />
