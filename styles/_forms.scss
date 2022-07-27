@@ -433,13 +433,7 @@
 }
 
 .gc-last-login-time{ 
-  /* Small text */
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 15px;
-  padding-bottom: 40px;
-  padding-top: 10px;
+  @apply text-sm not-italic font-sans items-center font-normal pb-10 pt-3;
   line-height: 125%;
 }
 

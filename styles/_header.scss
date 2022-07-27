@@ -110,17 +110,9 @@ header {
 }
 
 .gc-login-menu {
-  /* Sign in and Sign out */
-  height: 24px;
-  font-family: 'Noto Sans';
-  font-style: normal;
-  font-weight: 400;
+  @apply md:text-small_base text-base font-normal not-italic underline items-center h-6;
+  /* Sign in and Sign out */   
   font-size: 20px;
-  line-height: 120%;  
-  display: flex;
-  padding-left: 20%;
-  align-items: center;
-  text-align: right;
-  text-decoration-line: underline;
-  color: #2B4380;
+  line-height: 120%; 
+  color: #2B4380;  
 }
