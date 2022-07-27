@@ -108,3 +108,19 @@ header {
     }
   }
 }
+
+.gc-login-menu {
+  /* Sign in and Sign out */
+  height: 24px;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 120%;  
+  display: flex;
+  padding-left: 20%;
+  align-items: center;
+  text-align: right;
+  text-decoration-line: underline;
+  color: #2B4380;
+}

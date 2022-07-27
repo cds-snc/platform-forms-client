@@ -13,13 +13,11 @@ const Logout = () => {
     <>
       <div>
         <h2 className="gc-h2">{t("messageContent")}</h2>
-        <h4 className="pb-10">
+        <div className="gc-last-login-time">
           {t("lastLoginTime")} : {session?.user?.lastLoginTime}
-        </h4>
+        </div>
         <div className="gc-go-to-login-btn">
-          <Link data-testid="goToLogin" href={`/${i18n.language}/auth/login`}>
-            {t("goToLoginLabel")}
-          </Link>
+          <Link href={`/${i18n.language}/auth/login`}>{t("goToLoginLabel")}</Link>
         </div>
       </div>
     </>

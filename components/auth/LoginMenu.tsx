@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 
-const LoginMenu = ({ isAuthenticated, className }) => {
+const LoginMenu = ({ isAuthenticated }) => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
     signOut({ callbackUrl: "auth/logout" });
@@ -12,26 +12,21 @@ const LoginMenu = ({ isAuthenticated, className }) => {
 
   return (
     <>
-      {isAuthenticated ? (
-        <button onClick={handleClick} lang={i18n.language} className={className}>
-          {t("loginMenu.logout")}
-        </button>
-      ) : (
-        <div className={className}>
+      <div className="gc-login-menu">
+        {isAuthenticated ? (
+          <button onClick={handleClick} lang={i18n.language}>
+            {t("loginMenu.logout")}
+          </button>
+        ) : (
           <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };
 
 LoginMenu.propTypes = {
   isAuthenticated: PropTypes.bool,
-  className: PropTypes.string,
-};
-LoginMenu.defaultProps = {
-  isAuthenticated: false,
-  className: "",
 };
 
 export default LoginMenu;
