@@ -25,6 +25,6 @@
     },
     "incremental": true
   },
-  "include": ["next-env.d.ts", "types", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "types", "**/*.ts", "**/*.tsx", "components/auth/Header.js"],
   "exclude": ["node_modules", "utils"]
 }

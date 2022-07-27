@@ -99,6 +99,9 @@
 .gc-h2 {
   @apply md:text-small_h2 font-bold text-h2 pb-6;
 }
+.gc-h3 {
+  @apply md:text-small_sm font-bold text-small_p pb-6;
+}
 
 .gc-richText {
   p {
@@ -429,5 +432,13 @@
 
   p:last-of-type {
     @apply font-bold md:text-small_p;
+  }
+}
+
+.gc-go-to-login-btn {
+  a {
+    @apply bg-blue-500 hover:bg-blue-700 text-white-default font-bold py-2 px-4 rounded;
+    text-decoration: none !important;
+    background-color: #1b2736;
   }
 }
