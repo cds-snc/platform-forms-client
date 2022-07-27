@@ -4,7 +4,11 @@ import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 
-const LoginMenu = ({ isAuthenticated }) => {
+type LoginMenuProp = {
+  isAuthenticated: boolean;
+};
+
+const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
     signOut({ callbackUrl: "auth/logout" });
