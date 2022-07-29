@@ -3,6 +3,7 @@ import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import { prisma } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
+import { logMessage } from "@lib/logger";
 
 /**
  * @description
@@ -59,14 +60,23 @@ export const validTemporaryToken = (): MiddlewareRequest => {
  * @token - The temporary token
  * @returns true or false
  */
-const isTokenExists = async (formID: string, email: string, token: string): Promise<boolean> => {
-  return Boolean(
-    await prisma.formUser.count({
-      where: {
-        templateId: formID,
-        email: email,
-        temporaryToken: token,
-      },
-    })
-  );
+export const isTokenExists = async (
+  formID: string,
+  email: string,
+  token: string
+): Promise<boolean> => {
+  try {
+    return Boolean(
+      await prisma.formUser.count({
+        where: {
+          templateId: formID,
+          email: email,
+          temporaryToken: token,
+        },
+      })
+    );
+  } catch {
+    logMessage.error("isTokenExists error.");
+    return false;
+  }
 };

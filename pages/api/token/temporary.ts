@@ -37,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, { formID }: Mi
     await sendTemporaryTokenByEmail(email, temporaryToken);
 
     logMessage.info(`Temporary Token Requested: Form ID: ${formID} Email: ${email}`);
-    res.status(200).json({ message: "success" });
+    res.status(200).json({ message: "success", formID: formID });
   } catch (error) {
     logMessage.error("Failed to generate temporary token.");
     logMessage.error(error);
