@@ -116,7 +116,7 @@ const previewNotify = async (form: PublicFormRecord, fields: Responses) => {
     })
     .catch((err: Error) => {
       logMessage.error(err);
-      return "<h1>Could not preview HTML / Error in processing </h2>";
+      return "<h1>Could not preview HTML / Error in processing </h1>";
     });
 };
 
