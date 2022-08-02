@@ -5,7 +5,7 @@ import emailDomainList from "../../email.domains.json";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
-import { Credentials, LoginStageProps } from "@pages/auth/login";
+import { LoginStageProps } from "@pages/auth/login";
 
 interface FormAction {
   name: string;
@@ -20,7 +20,7 @@ const formReducer = (state: Record<string, string>, action: FormAction) => {
 };
 
 const SignInKey = (props: LoginStageProps): React.ReactElement => {
-  const { setParentStage, updateParentCredentials } = props;
+  const { setParentStage } = props;
   const [formData, setFormData] = useReducer(formReducer, {});
   const [errorState, setErrorState] = useState({ message: "" });
 
@@ -41,7 +41,7 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
     const loginEmail = formData["loginEmail"];
     if (isValidGovEmail(loginEmail, emailDomainList.domains)) {
       try {
-        const response = await axios({
+        await axios({
           url: "/api/token/temporary",
           method: "POST",
           headers: {
@@ -53,13 +53,6 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
-        if (updateParentCredentials) {
-          const credentials: Credentials = {
-            formID: response.data["formID"],
-            email: loginEmail,
-          };
-          updateParentCredentials(credentials);
-        }
         setParentStage(2);
       } catch (err) {
         setErrorState({

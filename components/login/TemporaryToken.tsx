@@ -19,7 +19,7 @@ const formReducer = (state: Record<string, string>, action: FormAction) => {
 };
 
 const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
-  const { setParentStage, credentials } = props;
+  const { setParentStage } = props;
   const [formData, setFormData] = useReducer(formReducer, {});
   const [errorState, setErrorState] = useState({ message: "" });
 
@@ -44,9 +44,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
     try {
       const response = await signIn<"credentials">("credentials", {
         redirect: false,
-        formID: credentials?.formID,
-        email: credentials?.email,
-        token: formData["temporaryToken"],
+        temporaryToken: formData["temporaryToken"],
       });
       if (response?.error) {
         setErrorState({
