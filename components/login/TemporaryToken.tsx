@@ -74,6 +74,9 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
       <div>
         <form onSubmit={handleTemporaryTokenSubmit}>
           Enter verification code
+          {errorState.message && (
+            <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
+          )}
           <input
             className="mb-10 gc-input-text mr-2"
             type="text"
