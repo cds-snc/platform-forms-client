@@ -19,7 +19,6 @@ const formReducer = (state: Record<string, string>, action: FormAction) => {
 };
 
 const SignInKey = (): React.ReactElement => {
-  //const [loginEmail, setLoginEmail] = useState("");
   const [formData, setFormData] = useReducer(formReducer, {});
   const [errorState, setErrorState] = useState({ message: "" });
 
@@ -52,7 +51,6 @@ const SignInKey = (): React.ReactElement => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
-        setParentStage(2);
       } catch (err) {
         setErrorState({
           message: t("loginSignInErrorMessage"),
