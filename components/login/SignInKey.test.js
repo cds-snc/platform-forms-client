@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import SignInKey from "./SignInKey";
@@ -12,7 +12,9 @@ jest.mock("react-i18next", () => ({
 
 describe("Login Component with Sign-In Key", () => {
   it("Renders properly.", async () => {
-    render(<SignInKey />);
+    await act(async () => {
+      render(<SignInKey />);
+    });
 
     expect(screen.getByRole("textbox", { name: "emailLabel" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "signInKeyLabel" })).toBeInTheDocument();
@@ -20,34 +22,46 @@ describe("Login Component with Sign-In Key", () => {
   });
 
   it("Displays an error if the button is pressed with empty fields.", async () => {
-    render(<SignInKey />);
+    await act(async () => {
+      render(<SignInKey />);
+    });
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button"));
+    await act(async () => {
+      await userEvent.click(screen.getByRole("button"));
+    });
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("Displays an error if the form is submitted with empty email address.", async () => {
-    render(<SignInKey />);
+    await act(async () => {
+      render(<SignInKey />);
+    });
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button"));
+    await act(async () => {
+      await userEvent.click(screen.getByRole("button"));
+    });
     expect(mockedAxios.mock.calls.length).toBe(0);
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("Displays an error if the form is submitted with incorrect values.", async () => {
-    mockedAxios.mockResolvedValueOnce({
-      status: 500,
+    mockedAxios.mockRejectedValue({
+      status: 403,
     });
-    render(<SignInKey />);
+    await act(async () => {
+      render(<SignInKey />);
+    });
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     const loginEmail = screen.getByTestId("loginEmail");
     await userEvent.type(loginEmail, "test@cds-snc.ca");
-    await userEvent.click(screen.getByRole("button"));
+    await act(async () => {
+      await userEvent.click(screen.getByRole("button"));
+    });
     expect(mockedAxios.mock.calls.length).toBe(1);
-    // expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("Does not display an error after a successful response from the server.", async () => {
@@ -55,11 +69,15 @@ describe("Login Component with Sign-In Key", () => {
       status: 200,
     });
 
-    render(<SignInKey />);
+    await act(async () => {
+      render(<SignInKey />);
+    });
 
     const loginEmail = screen.getByTestId("loginEmail");
     await userEvent.type(loginEmail, "test@cds-snc.ca");
-    await userEvent.click(screen.getByRole("button"));
+    await act(async () => {
+      await userEvent.click(screen.getByRole("button"));
+    });
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
