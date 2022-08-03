@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { Alert, Button } from "@components/forms";
+import { Alert, Button, Label } from "@components/forms";
 import { LoginStageProps } from "@pages/auth/login";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
@@ -71,7 +71,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
       )}
       <div>
         <form onSubmit={handleTemporaryTokenSubmit}>
-          Enter verification code
+          <Label htmlFor="temporaryToken">{t("temporaryTokenLabel")}</Label>
           {errorState.message && (
             <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
           )}
@@ -82,15 +82,12 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
             id="temporaryToken"
             data-testid="temporaryToken"
             onChange={handleChange}
-            aria-label={t("emailLabel")}
           />
+          <br />
           <Button type="submit" testid="add-email">
             Submit
           </Button>
         </form>
-        <Button onClick={restartLogin} type={"button"}>
-          Try again.
-        </Button>
       </div>
     </>
   );

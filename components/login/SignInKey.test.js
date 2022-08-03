@@ -64,7 +64,7 @@ describe("Login Component with Sign-In Key", () => {
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
-  it("Does not display an error after a successful response from the server.", async () => {
+  it("Receives a successful call from the server.", async () => {
     mockedAxios.mockResolvedValue({
       status: 200,
     });
@@ -79,6 +79,8 @@ describe("Login Component with Sign-In Key", () => {
       await userEvent.click(screen.getByRole("button"));
     });
     expect(mockedAxios.mock.calls.length).toBe(1);
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/token/temporary" })
+    );
   });
 });
