@@ -76,5 +76,11 @@
   "dynamicRow": {
     "add": "Ajouter",
     "delete": "Supprimer"
+  },
+  "acceptanceUsePage":{
+    "agree":"Accepter",
+    "cancel":"Annuler",
+    "welcome":"Content de vous revoir.",
+    "lastLoginTime":"Derniere connexion:"
   }
 }
