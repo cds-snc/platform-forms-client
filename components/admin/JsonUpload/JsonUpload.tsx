@@ -69,11 +69,11 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
             }
 
             const resp = await handleSubmit(formID);
-
+            logMessage.info(resp);
             // If the server returned a record, this is a new record
             // Redirect to the appropriate page
 
-            if (resp && resp.data && resp.data.data && resp.data.data.records) {
+            if (resp?.data?.data?.records) {
               const formID = resp.data.data.records[0].formID;
               router.push({
                 pathname: `/${i18n.language}/id/${formID}/settings`,
@@ -81,6 +81,8 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                   newForm: true,
                 },
               });
+              setSubmitStatus(t("upload.success"));
+              setSubmitting(false);
             } else if (resp) {
               // If not, but response was successful,
               // update the page text to show a success
@@ -117,9 +119,11 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 <button type="submit" className="gc-button" data-testid="upload">
                   {t("upload.submit")}
                 </button>
-                <span id="submitStatus" data-testid="submitStatus">
-                  {submitStatus}
-                </span>
+                {submitStatus && (
+                  <span id="submitStatus" data-testid="submitStatus">
+                    {submitStatus}
+                  </span>
+                )}
               </div>
             </>
           )}
