@@ -11,7 +11,7 @@ type LoginMenuProp = {
 const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
-    signOut({ callbackUrl: "auth/logout" });
+    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
   return (
