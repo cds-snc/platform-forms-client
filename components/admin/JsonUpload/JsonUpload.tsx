@@ -23,7 +23,53 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const formID = form ? form.formID : null;
   const router = useRouter();
 
-  const handleSubmit = async (formID: string | null) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setErrorState({ message: "" });
+    setSubmitStatus("");
+    // Test if the json config is valid
+    try {
+      JSON.parse(jsonConfig);
+    } catch {
+      setSubmitting(false);
+      setErrorState({ message: "JSON Formatting error" });
+      return;
+    }
+
+    try {
+      const response = await uploadJson(formID, jsonConfig);
+      // If the server returned a record, this is a new record
+      // Redirect to the appropriate page
+
+      if (response?.config.method === "post" && response?.data) {
+        const formID = response.data.formID;
+        router.push({
+          pathname: `/${i18n.language}/id/${formID}/settings`,
+          query: {
+            newForm: true,
+          },
+        });
+      } else {
+        // If not, but response was successful,
+        // update the page text to show a success
+        setSubmitStatus(t("upload.success"));
+        setSubmitting(false);
+        await refreshData();
+      }
+    } catch (err) {
+      logMessage.error(err);
+      setSubmitting(false);
+      if (axios.isAxiosError(err) && err.response) {
+        if ((err.response.data.error as string).includes("JSON Validation Error: ")) {
+          setErrorState({ message: err.response.data.error });
+        }
+      }
+      setErrorState({ message: "Uploading Error" });
+    }
+  };
+
+  const uploadJson = async (formID: string | null, jsonConfig: string) => {
     return await axios({
       url: "/api/templates",
       method: formID ? "PUT" : "POST",
@@ -35,65 +81,13 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
         formID: formID,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    })
-      .then((serverResponse) => {
-        setJsonConfig("");
-        return serverResponse;
-      })
-      .catch((err) => {
-        logMessage.error(err);
-        setSubmitting(false);
-        if ((err.response.data.error as string).includes("JSON Validation Error: ")) {
-          setErrorState({ message: err.response.data.error });
-        } else {
-          setErrorState({ message: "Uploading Error" });
-        }
-      });
+    });
   };
 
   return (
     <>
       <div>
-        <form
-          onSubmit={async (e) => {
-            setSubmitting(true);
-            setErrorState({ message: "" });
-            e.preventDefault();
-            // Test if the json config is valid
-            try {
-              JSON.parse(jsonConfig);
-            } catch {
-              setSubmitting(false);
-              setErrorState({ message: "JSON Formatting error" });
-              return;
-            }
-
-            const resp = await handleSubmit(formID);
-            logMessage.info(resp);
-            // If the server returned a record, this is a new record
-            // Redirect to the appropriate page
-
-            if (resp?.data?.data?.records) {
-              const formID = resp.data.data.records[0].formID;
-              router.push({
-                pathname: `/${i18n.language}/id/${formID}/settings`,
-                query: {
-                  newForm: true,
-                },
-              });
-              setSubmitStatus(t("upload.success"));
-              setSubmitting(false);
-            } else if (resp) {
-              // If not, but response was successful,
-              // update the page text to show a success
-              setSubmitStatus(t("upload.success"));
-              setSubmitting(false);
-              await refreshData();
-            }
-          }}
-          method="POST"
-          encType="multipart/form-data"
-        >
+        <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
           {submitting || isRefreshing ? (
             <Loader message="Loading..." />
           ) : (

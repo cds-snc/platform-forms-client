@@ -13,13 +13,14 @@ jest.mock("@lib/hooks/useRefresh", () => ({
 describe("JSON Upload Component", () => {
   afterEach(cleanup);
   const formConfig = { test: "test JSON" };
-  test("renders without errors", async () => {
+  it("renders without errors", async () => {
     await act(async () => {
       render(<JSONUpload></JSONUpload>);
     });
     expect(screen.queryByTestId("jsonInput")).toBeInTheDocument();
+    expect(screen.queryByTestId("submitStatus")).not.toBeInTheDocument();
   });
-  test("renders existing form JSON if passed in", async () => {
+  it("renders existing form JSON if passed in", async () => {
     const form = {
       formConfig: formConfig,
     };
@@ -28,8 +29,8 @@ describe("JSON Upload Component", () => {
     });
     expect(screen.queryByTestId("jsonInput").value).toBe(JSON.stringify(formConfig, null, 2));
   });
-  test("It shows an error message if invalid json is entered", async () => {
-    userEvent.setup();
+  it("Shows an error message if unparseable JSON is entered", async () => {
+    const user = userEvent.setup();
     const form = {
       formConfig: undefined,
     };
@@ -37,13 +38,13 @@ describe("JSON Upload Component", () => {
       render(<JSONUpload form={form}></JSONUpload>);
     });
     await act(async () => {
-      await userEvent.click(screen.queryByTestId("upload"));
+      await user.click(screen.queryByTestId("upload"));
     });
     expect(mockedAxios.mock.calls.length).toBe(0);
     expect(screen.queryByTestId("alert")).toBeInTheDocument();
   });
-  test("It shows a success message if valid json is entered", async () => {
-    userEvent.setup();
+  it("Shows a submit status message if successfully submitted to API", async () => {
+    const user = userEvent.setup();
     const form = {
       formConfig: formConfig,
     };
@@ -52,10 +53,10 @@ describe("JSON Upload Component", () => {
       render(<JSONUpload form={form}></JSONUpload>);
     });
     await act(async () => {
-      await userEvent.click(screen.queryByTestId("upload"));
+      await user.click(screen.queryByTestId("upload"));
     });
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(expect.objectContaining({ url: "/api/templates" }));
-    //expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
+    expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
   });
 });
