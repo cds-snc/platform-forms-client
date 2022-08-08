@@ -36,7 +36,7 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
   const formID = req.query.form as string;
   if (formID) {
     // get the session which is important for traceability purposes in logs
-    const session = await isAdmin({ req });
+    const session = await isAdmin({ req, res });
     // create the bearer token with the payload being the form ID
     // and signed by the token secret. The expiry time for this token is set to be one
     // year
@@ -69,9 +69,9 @@ export async function createToken(req: NextApiRequest, res: NextApiResponse): Pr
       logMessage.info(
         `A bearer token was refreshed for form ${formID} by user ${session?.user?.name}`
       );
-      if (session && session.user.id) {
+      if (session && session.user.userId) {
         await logAdminActivity(
-          session.user.id,
+          session.user.userId,
           AdminLogAction.Update,
           AdminLogEvent.RefreshBearerToken,
           `Bearer token for form id: ${formID} has been refreshed`
