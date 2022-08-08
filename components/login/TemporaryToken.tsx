@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { Alert, Button, Label } from "@components/forms";
+import { Alert, Button, Description, Label } from "@components/forms";
 import { LoginStageProps } from "@pages/auth/login";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
@@ -65,13 +65,19 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
       {errorState.message && (
         <Alert type="error" heading={t("loginErrorHeading")}>
           <ul>
-            <ErrorListItem value={errorState.message} errorKey="signInKey" />
+            <ErrorListItem value={errorState.message} errorKey="temporaryToken" />
           </ul>
         </Alert>
       )}
+      <h1 className="gc-h1">{t("temporaryTokenTitle")}</h1>
+      <Description id="instructions" className="gc-description">
+        {t("temporaryTokenInstructions")}
+      </Description>
       <div>
         <form onSubmit={handleTemporaryTokenSubmit}>
-          <Label htmlFor="temporaryToken">{t("temporaryTokenLabel")}</Label>
+          <Label htmlFor="temporaryToken" id="label-temporaryToken">
+            {t("temporaryTokenLabel")}
+          </Label>
           {errorState.message && (
             <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
           )}
