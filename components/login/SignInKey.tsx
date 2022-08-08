@@ -5,6 +5,7 @@ import emailDomainList from "../../email.domains.json";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
+import Link from "next/link";
 
 interface FormAction {
   name: string;
@@ -103,7 +104,7 @@ const SignInKey = (): React.ReactElement => {
       <br />
       {t("signInKeyForgot")}
       <br />
-      {t("signInKeyReset")}
+      <Link href="/">{t("signInKeyReset")}</Link>
     </>
   );
 };
