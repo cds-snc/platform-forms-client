@@ -20,7 +20,6 @@ const Login = () => {
   return (
     <>
       <div>
-        <h1 className="gc-h1">{t("title")}</h1>
         {loginState === 1 && <SignInKey setParentStage={setStage} />}
         {loginState === 2 && <TemporaryToken setParentStage={setStage} />}
       </div>
