@@ -15,7 +15,7 @@ describe("Temporary Token Component", () => {
     });
 
     expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    expect(screen.queryByTestId("submitButton")).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 });

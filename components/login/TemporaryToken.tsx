@@ -73,28 +73,39 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
       <Description id="instructions" className="gc-description">
         {t("temporaryTokenInstructions")}
       </Description>
-      <div>
-        <form onSubmit={handleTemporaryTokenSubmit}>
-          <Label htmlFor="temporaryToken" id="label-temporaryToken">
-            {t("temporaryTokenLabel")}
-          </Label>
-          {errorState.message && (
-            <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
-          )}
-          <input
-            className="mb-10 gc-input-text mr-2"
-            type="text"
-            name="temporaryToken"
-            id="temporaryToken"
-            data-testid="temporaryToken"
-            onChange={handleChange}
-          />
-          <br />
-          <Button type="submit" testid="add-email">
-            Submit
-          </Button>
-        </form>
-      </div>
+      <form onSubmit={handleTemporaryTokenSubmit}>
+        <Label htmlFor="temporaryToken" id="label-temporaryToken">
+          {t("temporaryTokenLabel")}
+        </Label>
+        {errorState.message && (
+          <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
+        )}
+        <input
+          className="mb-10 gc-input-text mr-2"
+          type="text"
+          name="temporaryToken"
+          id="temporaryToken"
+          data-testid="temporaryToken"
+          onChange={handleChange}
+        />
+        <br />
+        <Button type="submit" testid="submitButton">
+          Submit
+        </Button>
+      </form>
+      <br />
+      Didn&apos;t get the verificartion code?
+      <br />
+      Double-check your login key and email then{" "}
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          restartLogin();
+        }}
+      >
+        try again
+      </button>
+      .
     </>
   );
 };
