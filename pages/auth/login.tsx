@@ -9,10 +9,7 @@ const Login = () => {
 
   return (
     <>
-      <div>
-        <h1 className="gc-h1">{t("title")}</h1>
-        <SignInKey />
-      </div>
+      <SignInKey />
     </>
   );
 };

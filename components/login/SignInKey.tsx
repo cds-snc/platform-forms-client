@@ -65,6 +65,7 @@ const SignInKey = (): React.ReactElement => {
 
   return (
     <>
+      <h1 className="gc-h1">{t("title")}</h1>
       {errorState.message && (
         <Alert type="error" heading={t("loginErrorHeading")}>
           <ul>
