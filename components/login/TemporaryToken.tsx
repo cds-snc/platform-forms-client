@@ -48,14 +48,14 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
       });
       if (response?.error) {
         setErrorState({
-          message: t("loginTemporaryTokenErrorMessage"),
+          message: t("temporaryToken.errorMessage"),
         });
       } else {
         router.push({ pathname: `/${i18n.language}/auth/policy` });
       }
     } catch (err) {
       setErrorState({
-        message: t("loginTemporaryTokenErrorMessage"),
+        message: t("temporaryToken.errorMessage"),
       });
     }
   };
@@ -71,11 +71,11 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
       )}
       <h1 className="gc-h1">{t("temporaryTokenTitle")}</h1>
       <Description id="instructions" className="gc-description">
-        {t("temporaryTokenInstructions")}
+        {t("temporaryToken.instructions")}
       </Description>
       <form onSubmit={handleTemporaryTokenSubmit}>
         <Label htmlFor="temporaryToken" id="label-temporaryToken">
-          {t("temporaryTokenLabel")}
+          {t("temporaryToken.temporaryTokenLabel")}
         </Label>
         {errorState.message && (
           <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
@@ -90,20 +90,20 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
         />
         <br />
         <Button type="submit" testid="submitButton">
-          Submit
+          {t("temporaryToken.submitButton")}
         </Button>
       </form>
       <br />
-      Didn&apos;t get the verificartion code?
+      {t("temporaryToken.helpText")}
       <br />
-      Double-check your login key and email then{" "}
+      {t("temporaryToken.retryPrompt")}{" "}
       <button
         onClick={(e) => {
           e.preventDefault();
           restartLogin();
         }}
       >
-        try again
+        {t("temporaryToken.retry")}
       </button>
       .
     </>
