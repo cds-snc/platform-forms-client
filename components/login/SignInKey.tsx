@@ -75,7 +75,9 @@ const SignInKey = (): React.ReactElement => {
       )}
       <h1 className="gc-h1">{t("title")}</h1>
       <form onSubmit={handleLoginSubmit}>
-        <Label htmlFor="loginEmail">{t("emailLabel")}</Label>
+        <Label htmlFor="loginEmail" id="label-loginEmail">
+          {t("emailLabel")}
+        </Label>
         {errorState.message && <p className="gc-error-message">{t("loginEmailErrorMessage")}</p>}
         <input
           className="mb-10 gc-input-text mr-2"
@@ -85,7 +87,9 @@ const SignInKey = (): React.ReactElement => {
           data-testid="loginEmail"
           onChange={handleChange}
         />
-        <Label htmlFor="signInKey">{t("signInKeyLabel")}</Label>
+        <Label htmlFor="signInKey" id="label-signInKey">
+          {t("signInKeyLabel")}
+        </Label>
         <Description id={`form-sign-in-key`}>{t("signInKeyDescription")}</Description>
         {errorState.message && <p className="gc-error-message">{errorState.message}</p>}
         <textarea
