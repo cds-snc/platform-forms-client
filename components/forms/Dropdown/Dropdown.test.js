@@ -83,7 +83,7 @@ const dropdownData = {
 describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
   afterEach(cleanup);
   test("renders without errors", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     render(<GenerateElement element={dropdownData} language={lang} t={(key) => key} />);
     const title = lang === "en" ? dropdownData.properties.titleEn : dropdownData.properties.titleFr,
       description =
@@ -102,7 +102,7 @@ describe.each([["en"], ["fr"]])("Dropdown component", (lang) => {
     ).toBeInTheDocument();
 
     // Change value
-    await userEvent.selectOptions(screen.queryByTestId("dropdown"), [
+    await user.selectOptions(screen.queryByTestId("dropdown"), [
       dropdownData.properties.choices[2][lang],
     ]);
     expect(screen.getByTestId("dropdown")).toHaveDisplayValue(

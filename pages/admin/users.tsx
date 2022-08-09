@@ -16,12 +16,12 @@ interface AuthenticatedUser extends User {
   admin: boolean;
 }
 
-const updateAdminValue = async (userID: string, isAdmin: boolean) => {
+const updateAdminValue = async (userId: string, isAdmin: boolean) => {
   return await axios({
     url: `/api/users`,
     method: "PUT",
     data: {
-      userID,
+      userId,
       isAdmin,
     },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,

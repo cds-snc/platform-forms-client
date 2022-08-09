@@ -6,7 +6,7 @@ import { prismaMock } from "@jestUtils";
 import { logMessage } from "@lib/logger";
 import jwt, { Secret } from "jsonwebtoken";
 
-jest.mock("next-auth/react");
+jest.mock("next-auth/next");
 jest.mock("@lib/logger");
 const mockLogMessage = jest.mocked(logMessage, true);
 
@@ -115,7 +115,15 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
 
       const dynamodbExpectedReponses = {
         Items: [
@@ -182,7 +190,15 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
 
       ddbMock
         .on(QueryCommand, {
@@ -286,7 +302,15 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
 
       ddbMock
         .on(QueryCommand)
@@ -489,7 +513,15 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
       ddbMock.on(QueryCommand).rejects("I'm an Error");
 
       await retrieval(req, res);
@@ -520,7 +552,15 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
       const dynamodbExpectedReponses = {
         Items: [],
       };
@@ -559,7 +599,15 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "test@cds-snc.ca",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
       ddbMock.on(UpdateCommand).resolves;
       mockLogMessage.warn.mockImplementation(jest.fn());
       await retrieval(req, res);
@@ -598,7 +646,15 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
 
       await retrieval(req, res);
 
@@ -634,7 +690,15 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
       await retrieval(req, res);
 
       expect(res.statusCode).toBe(400);
@@ -670,7 +734,15 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
 
       await retrieval(req, res);
 
@@ -706,7 +778,15 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.count.mockResolvedValue(1);
+      prismaMock.formUser.findUnique.mockResolvedValue({
+        id: "asdf",
+        templateId: "22",
+        email: "b@d.a",
+        active: true,
+        temporaryToken: token,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
       ddbMock
         .on(UpdateCommand, {
           Key: {

@@ -19,7 +19,7 @@ const useMethods = (req: NextApiRequest, methods?: string[]) => {
 
 export const sessionExists = (methods?: string[]) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    const session = await isAdmin({ req });
+    const session = await isAdmin({ req, res });
 
     if (useMethods(req, methods) && !session) {
       res.status(403).json({ error: "Access Denied" });

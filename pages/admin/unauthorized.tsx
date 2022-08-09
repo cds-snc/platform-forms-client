@@ -1,8 +1,9 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 const Unauthorized: React.FC = () => {
   const { t } = useTranslation("admin-login");
@@ -15,7 +16,7 @@ const Unauthorized: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context, authOptions);
 
   if (session?.user.admin)
     return {

@@ -2,17 +2,17 @@
  * @jest-environment node
  */
 import { createMocks } from "node-mocks-http";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import enable from "@pages/api/flags/[key]/enable";
 import disable from "@pages/api/flags/[key]/disable";
 import check from "@pages/api/flags/[key]/check";
 import checkAllFlags from "@pages/api/flags";
 import defaultFlags from "../../flag_initialization/default_flag_settings.json";
 import * as flags from "@lib/flags";
-jest.mock("next-auth/react");
+jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getSession, true);
+const mockGetSession = jest.mocked(getServerSession, true);
 
 jest.mock("@lib/flags");
 
@@ -25,7 +25,7 @@ describe("Flags API endpoint", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true, id: "1" },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true, userId: "1" },
       };
       mockGetSession.mockResolvedValue(mockSession);
     });
