@@ -1,24 +1,10 @@
-import { logger, logMessage } from "@lib/logger";
+import { logger } from "@lib/logger";
 import { formCache } from "./cache";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import { FormConfiguration } from "./types/form-types";
 import jwt, { Secret } from "jsonwebtoken";
-
-/**
- * Filters Prisma Connection vs DB errors
- * @param e Error object
- * @param returnValue Value to return back to called function
- * @returns returnValue object
- */
-const primsaErrors = <Error, T>(e: Error, returnValue: T): T => {
-  if (e instanceof Prisma.PrismaClientKnownRequestError) {
-    logMessage.warn(e as Error);
-  }
-  if (process.env.APP_ENV !== "test") logMessage.error(e as Error);
-  return returnValue;
-};
 
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
@@ -38,7 +24,7 @@ async function _getSubmissionTypeByID(formID: string): Promise<SubmissionPropert
 
     return null;
   } catch (e) {
-    return primsaErrors(e, null);
+    return prismaErrors(e, null);
   }
 }
 
@@ -62,7 +48,7 @@ async function _getTemplateByStatus(status: boolean): Promise<(PublicFormRecord 
     }
     return [];
   } catch (e) {
-    return primsaErrors(e, []);
+    return prismaErrors(e, []);
   }
 }
 
@@ -106,7 +92,7 @@ async function _createTemplate(config: FormConfiguration): Promise<FormRecord | 
       })
     );
   } catch (e) {
-    return primsaErrors(e, null);
+    return prismaErrors(e, null);
   }
 }
 
@@ -135,7 +121,7 @@ async function _updateTemplate(
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(updatedTempate);
   } catch (e) {
-    return primsaErrors(e, null);
+    return prismaErrors(e, null);
   }
 }
 
@@ -158,7 +144,7 @@ async function _deleteTemplate(formID: string): Promise<FormRecord | null> {
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(deletedTemplate);
   } catch (e) {
-    return primsaErrors(e, null);
+    return prismaErrors(e, null);
   }
 }
 
@@ -176,7 +162,7 @@ async function _getAllTemplates(): Promise<Array<FormRecord>> {
     });
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
-    return primsaErrors(e, []);
+    return prismaErrors(e, []);
   }
 }
 
@@ -214,7 +200,7 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
 
     return parsedTemplate;
   } catch (e) {
-    return primsaErrors(e, null);
+    return prismaErrors(e, null);
   }
 }
 

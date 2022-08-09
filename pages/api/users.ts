@@ -23,19 +23,19 @@ const updateUserAdminStatus = async (
   res: NextApiResponse,
   session?: Session
 ) => {
-  const { userID, isAdmin } = req.body;
-  if (typeof userID === "undefined" || typeof isAdmin === "undefined") {
+  const { userId, isAdmin } = req.body;
+  if (typeof userId === "undefined" || typeof isAdmin === "undefined") {
     return res.status(400).json({ error: "Malformed Request" });
   }
-  const [success, userFound] = await adminRole(isAdmin, userID);
+  const [success, userFound] = await adminRole(isAdmin, userId);
   logMessage.info(AdminLogAction.Update);
   if (success && userFound) {
-    if (session && session.user.id) {
+    if (session && session.user.userId) {
       await logAdminActivity(
-        session.user.id,
+        session.user.userId,
         AdminLogAction.Update,
         isAdmin ? AdminLogEvent.GrantAdminRole : AdminLogEvent.RevokeAdminRole,
-        `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userID}`
+        `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userId}`
       );
     }
     res.status(200).send("Success");

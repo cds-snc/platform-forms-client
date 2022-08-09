@@ -4,16 +4,16 @@
  */
 
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import owners from "@pages/api/id/[form]/owners";
 import * as logAdmin from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 
-jest.mock("next-auth/react");
+jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getSession, true);
+const mockGetSession = jest.mocked(getServerSession, true);
 
 describe("/id/[forms]/owners", () => {
   describe("Access Control", () => {
@@ -55,7 +55,7 @@ describe("/id/[forms]/owners", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true, id: "1" },
+        user: { email: "forms@cds.ca", name: "forms user", admin: true, userId: "1" },
       };
 
       mockGetSession.mockResolvedValue(mockSession);

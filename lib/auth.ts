@@ -1,7 +1,16 @@
-import { getSession, GetSessionParams } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
-import { GetServerSidePropsResult, GetServerSidePropsContext } from "next";
+import {
+  GetServerSidePropsResult,
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse,
+} from "next";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
+import { TemporaryTokenPayload } from "./types";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -20,7 +29,7 @@ export function requireAuthentication(
   return async (
     context: GetServerSidePropsAuthContext
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
-    const session = await getSession(context);
+    const session = await getServerSession(context, authOptions);
 
     if (!session) {
       // If no user, redirect to login
@@ -53,15 +62,59 @@ export function requireAuthentication(
 }
 
 /**
- * Checks if session exists and if it belongs to a user with administrative priveleges
- * @param reqOrContext Request or Context Object
+ * Checks if session exists server side and if it belongs to a user with administrative priveleges
+ * @param reqOrContext Request and Response Object
  * @returns session if exists otherwise null
  */
-export const isAdmin = async (reqOrContext?: GetSessionParams): Promise<Session | null> => {
-  // If server side, 'req' must be passed to getSession
-  const session = reqOrContext ? await getSession(reqOrContext) : await getSession();
+export const isAdmin = async ({
+  req,
+  res,
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}): Promise<Session | null> => {
+  const session = await getServerSession({ req, res }, authOptions);
   if (session && session.user?.admin) {
     return session;
   }
   return null;
+};
+
+/**
+ * Verifies a temporary token against the database
+ * @param token string of temporary token
+ * @returns a user or null if token / user is inactive
+ */
+export const validateTemporaryToken = async (token: string) => {
+  try {
+    const { email, formID } = jwt.verify(
+      token,
+      process.env.TOKEN_SECRET || ""
+    ) as TemporaryTokenPayload;
+
+    const user = await prisma.formUser.findUnique({
+      where: {
+        templateId_email: {
+          email,
+          templateId: formID,
+        },
+      },
+      select: {
+        id: true,
+        templateId: true,
+        email: true,
+        active: true,
+        temporaryToken: true,
+      },
+    });
+
+    // The token could be valid but user has been made inactive since
+    if (!user?.active) return null;
+    // The user has reset the token rendering old tokens invalid
+    if (user.temporaryToken !== token) return null;
+    // The user and token are valid
+    return user;
+  } catch (error) {
+    return prismaErrors(error, null);
+  }
 };
