@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, { formID }: Mi
       res.status(400).json({ error: "Invalid payload" });
     }
 
-    const temporaryToken = createTemporaryToken(email, process.env.TOKEN_SECRET);
+    const temporaryToken = createTemporaryToken(email, formID, process.env.TOKEN_SECRET);
     await updateTemporaryToken(temporaryToken, email, formID);
     await sendTemporaryTokenByEmail(email, temporaryToken);
 
@@ -61,11 +61,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, { formID }: Mi
  * @throws
  * This exception is thrown if the tokenSecret is invalid
  */
-const createTemporaryToken = (email: string, tokenSecret: string): string => {
+const createTemporaryToken = (email: string, formID: string, tokenSecret: string): string => {
   if (tokenSecret?.length > 0) {
     return jwt.sign(
       {
-        email: email,
+        email,
+        formID,
       },
       tokenSecret,
       { expiresIn: "7d" }

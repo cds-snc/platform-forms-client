@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
-import { prisma } from "@lib/integration/prismaConnector";
-import jwt from "jsonwebtoken";
-import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
-import { logMessage } from "@lib/logger";
+import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
+import { validateTemporaryToken } from "@lib/auth";
 
 /**
  * @description
@@ -33,16 +31,11 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       }
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
-      //Verify the token
-      const temporaryTokenPayload = jwt.verify(
-        token,
-        process.env.TOKEN_SECRET || ""
-      ) as TemporaryTokenPayload;
-      const { email } = temporaryTokenPayload;
-      //Check if an active formUserRecord exists for the given bearerToken.
-      if (await isTokenExists(formID, email as string, token)) {
-        return { next: true, props: { email, temporaryToken: token } };
-      }
+
+      const user = await validateTemporaryToken(token);
+
+      if (user !== null) return { next: true, props: { email: user.email, temporaryToken: token } };
+
       res.status(403).json({ error: "Missing or invalid bearer token." });
       return { next: false };
     } catch (err) {
@@ -51,32 +44,4 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       return { next: false };
     }
   };
-};
-
-/*@description
- * It returns true if there is an active token otherwise false.
- * @param formID - The id of the form
- * @param email - The email that is associated to the formID
- * @token - The temporary token
- * @returns true or false
- */
-export const isTokenExists = async (
-  formID: string,
-  email: string,
-  token: string
-): Promise<boolean> => {
-  try {
-    return Boolean(
-      await prisma.formUser.count({
-        where: {
-          templateId: formID,
-          email: email,
-          temporaryToken: token,
-        },
-      })
-    );
-  } catch {
-    logMessage.error("isTokenExists error.");
-    return false;
-  }
 };
