@@ -10,12 +10,13 @@ import { getFormUser, getOrCreateUser } from "@lib/users";
 
 const prisma = new PrismaClient();
 
+/** issue thread https://gcdigital.slack.com/archives/C01GFD150MC/p1660059542548469
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
   process.env.NODE_ENV !== "test"
 )
   throw new Error("Missing Google Authentication Credentials");
-
+*/
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
