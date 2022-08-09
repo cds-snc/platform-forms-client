@@ -74,6 +74,7 @@ export const authOptions: NextAuthOptions = {
 
           token.admin = user.admin;
           token.userId = user.id;
+          token.authorizedForm = null;
           token.lastLoginTime = new Date();
           token.role = "admin";
           token.acceptableUse = false;
