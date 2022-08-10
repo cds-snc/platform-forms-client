@@ -123,9 +123,11 @@ export const validateTemporaryToken = async (token: string) => {
 };
 
 /**
- *
+ * Returns the URL for the page if the user is not logged in
+ * @param authRole string of the authRole from the current session
+ * @returns string for the url
  */
-const loginUrl = (authRole: string) => {
+const loginUrl = (authRole: string): string => {
   switch (authRole) {
     case UserRole.Administrator:
       return "/admin/login/";
@@ -136,9 +138,11 @@ const loginUrl = (authRole: string) => {
 };
 
 /**
- *
+ * Returns the URL for the page if the user is unauthorized
+ * @param authRole string of the authRole from the current session
+ * @returns string for the url
  */
-const unauthorizedUrl = (authRole: string) => {
+const unauthorizedUrl = (authRole: string): string => {
   switch (authRole) {
     case UserRole.Administrator:
       return "/admin/unauthorized/";
