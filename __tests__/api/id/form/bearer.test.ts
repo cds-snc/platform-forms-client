@@ -10,6 +10,7 @@ import { logMessage } from "@lib/logger";
 import * as adminLogs from "@lib/adminLogs";
 import { prismaMock, checkLogs } from "@jestUtils";
 import { Prisma } from "@prisma/client";
+import { UserRole } from "@lib/types/user-types";
 
 jest.mock("next-auth/next");
 
@@ -40,7 +41,12 @@ describe("/id/[form]/bearer", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true },
+        user: {
+          email: "admin@cds.ca",
+          name: "Admin user",
+          image: "null",
+          role: UserRole.Administrator,
+        },
       };
 
       mockGetSession.mockResolvedValue(mockSession);
@@ -160,7 +166,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          admin: true,
+          role: UserRole.Administrator,
           userId: "1",
         },
       };

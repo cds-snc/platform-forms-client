@@ -9,6 +9,7 @@ import check from "@pages/api/flags/[key]/check";
 import checkAllFlags from "@pages/api/flags";
 import defaultFlags from "../../flag_initialization/default_flag_settings.json";
 import * as flags from "@lib/flags";
+import { UserRole } from "@lib/types/user-types";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
@@ -25,7 +26,12 @@ describe("Flags API endpoint", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", admin: true, userId: "1" },
+        user: {
+          email: "forms@cds.ca",
+          name: "forms user",
+          role: UserRole.Administrator,
+          userId: "1",
+        },
       };
       mockGetSession.mockResolvedValue(mockSession);
     });

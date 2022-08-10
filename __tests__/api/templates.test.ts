@@ -8,6 +8,7 @@ import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import * as logAdmin from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
+import { UserRole } from "@lib/types/user-types";
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getServerSession, true);
@@ -25,7 +26,7 @@ describe("Test JSON validation scenarios", () => {
   beforeEach(() => {
     const mockSession = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", admin: true, userId: "1" },
+      user: { email: "a@b.com", name: "Testing Forms", role: UserRole.Administrator, userId: "1" },
     };
 
     mockGetSession.mockResolvedValue(mockSession);

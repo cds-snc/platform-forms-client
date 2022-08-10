@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
+import { UserRole } from "@lib/types/user-types";
 
 const prisma = new PrismaClient();
 
@@ -72,11 +73,10 @@ export const authOptions: NextAuthOptions = {
           if (user === null)
             throw new Error(`Could not get or create user with email: ${token.email}`);
 
-          token.admin = user.admin;
           token.userId = user.id;
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
-          token.role = "admin";
+          token.role = UserRole.Administrator;
           token.acceptableUse = false;
           break;
         }
@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          token.role = "program_administrator";
+          token.role = UserRole.ProgramAdministrator;
           token.acceptableUse = false;
         }
       }
@@ -99,9 +99,8 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
-      // Add info like 'role' or 'admin' to session object
+      // Add info like 'role' to session object
       session.user.userId = token.userId as string;
-      session.user.admin = token.admin as boolean;
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;

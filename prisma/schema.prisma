@@ -70,7 +70,7 @@ model User {
   email         String?        @unique
   emailVerified DateTime?
   image         String?
-  admin         Boolean?       @default(false)
+  role          String?        @default("program_administrator")
   accounts      Account[]
   admin_logs    AdminLog[]
   sessions      Session[]

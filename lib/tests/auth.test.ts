@@ -3,6 +3,7 @@ import { createMocks } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
+import { UserRole } from "@lib/types/user-types";
 
 jest.mock("next-auth/next");
 
@@ -30,7 +31,7 @@ describe("Test Auth lib", () => {
           email: "test@cds.ca",
           name: "test",
           image: "null",
-          admin: true,
+          role: UserRole.Administrator,
           userId: "1",
         },
       };
@@ -51,7 +52,7 @@ describe("Test Auth lib", () => {
           email: "test@cds.ca",
           name: "test",
           image: "null",
-          admin: false,
+          role: UserRole.ProgramAdministrator,
           userId: "1",
         },
       };

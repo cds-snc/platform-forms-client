@@ -4,6 +4,7 @@ import { FormUser, Prisma } from "@prisma/client";
 import { JWT } from "next-auth";
 
 import { logMessage } from "@lib/logger";
+import { UserRole } from "./types/user-types";
 
 /**
  * Get all Users
@@ -16,7 +17,7 @@ export const getUsers = async (): Promise<User[]> => {
         id: true,
         name: true,
         email: true,
-        admin: true,
+        role: true,
       },
     });
 
@@ -58,7 +59,7 @@ export const getOrCreateUser = async (userToken: JWT): Promise<User | null> => {
         id: true,
         name: true,
         email: true,
-        admin: true,
+        role: true,
       },
     });
 
@@ -92,7 +93,7 @@ export const adminRole = async (isAdmin: boolean, userId: string): Promise<[bool
         id: userId,
       },
       data: {
-        admin: isAdmin,
+        role: UserRole.Administrator,
       },
     });
     return [true, Boolean(user)];

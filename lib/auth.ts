@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { UserRole } from "./types/user-types";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -41,7 +42,7 @@ export function requireAuthentication(
       };
     }
 
-    if (!session.user?.admin) {
+    if (session.user?.role !== UserRole.Administrator) {
       return {
         redirect: {
           destination: `/${context.locale}/admin/unauthorized/`,
@@ -74,7 +75,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  if (session && session.user?.admin) {
+  if (session && session.user?.role === UserRole.Administrator) {
     return session;
   }
   return null;

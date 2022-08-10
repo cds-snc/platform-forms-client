@@ -8,6 +8,7 @@ import { signIn } from "next-auth/react";
 
 import { Button } from "@components/forms";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { UserRole } from "@lib/types/user-types";
 
 const Login = (): JSX.Element => {
   const { t } = useTranslation("admin-login");
@@ -28,7 +29,7 @@ const Login = (): JSX.Element => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context, authOptions);
 
-  if (session?.user.admin)
+  if (session?.user.role === UserRole.Administrator)
     return {
       props: {},
       redirect: {
