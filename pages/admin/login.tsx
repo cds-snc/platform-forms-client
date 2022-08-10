@@ -1,12 +1,13 @@
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { signIn } from "next-auth/react";
 
 import { Button } from "@components/forms";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 const Login = (): JSX.Element => {
   const { t } = useTranslation("admin-login");
@@ -25,7 +26,7 @@ const Login = (): JSX.Element => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context, authOptions);
 
   if (session?.user.admin)
     return {

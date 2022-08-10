@@ -99,7 +99,7 @@ const callLambda = async (
 };
 
 const previewNotify = async (form: PublicFormRecord, fields: Responses) => {
-  const templateID = process.env.TEMPLATE_ID;
+  const templateId = process.env.TEMPLATE_ID;
   const notify = new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
 
   const emailBody = await convertMessage({ form, responses: fields });
@@ -107,7 +107,7 @@ const previewNotify = async (form: PublicFormRecord, fields: Responses) => {
     ? form.formConfig.form.emailSubjectEn
     : form.formConfig.form.titleEn;
   return await notify
-    .previewTemplateById(templateID, {
+    .previewTemplateById(templateId, {
       subject: messageSubject,
       formResponse: emailBody,
     })

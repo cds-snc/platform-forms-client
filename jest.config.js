@@ -19,6 +19,7 @@ const customJestConfig = {
   moduleDirectories: ["node_modules", "<rootDir>/"],
   clearMocks: true,
   preset: "ts-jest/presets/js-with-ts",
+  setupFiles: ["<rootDir>/__utils__/jestShim.ts"],
   setupFilesAfterEnv: [
     "<rootDir>/__utils__/setupTests.ts",
     "<rootDir>/__utils__/prismaConnector.ts",
