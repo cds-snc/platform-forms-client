@@ -1,0 +1,22 @@
+name: "Test Staging Container Build"
+
+on:
+  pull_request:
+    branches: [develop]
+
+env:
+  GITHUB_SHA: ${{ github.sha }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_CLIENT_SECRET }}
+  GOOGLE_CLIENT_ID: ${{ secrets.STAGING_GOOGLE_CLIENT_ID }}
+
+jobs:
+  test-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Container
+        run: |
+          docker build -t base \
+            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
+            --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
+            --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID .
+
