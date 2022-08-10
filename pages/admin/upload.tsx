@@ -3,6 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "../../lib/auth";
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { UserRole } from "@lib/types/user-types";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   return {
@@ -11,7 +12,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
     },
   };
-});
+}, UserRole.Administrator);
 
 const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");

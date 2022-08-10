@@ -13,6 +13,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
+import { UserRole } from "@lib/types/user-types";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -123,6 +124,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   }
   // if no form returned, 404
   return redirect(context.locale);
-});
+}, UserRole.Administrator);
 
 export default FormSettings;

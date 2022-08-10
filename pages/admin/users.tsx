@@ -117,4 +117,4 @@ export const getServerSideProps = requireAuthentication(async (context) => {
       users,
     },
   };
-});
+}, UserRole.Administrator);

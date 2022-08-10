@@ -7,6 +7,7 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { UserRole } from "@lib/types/user-types";
 
 interface DataViewProps {
   templates: Array<{
@@ -114,6 +115,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
 
     return { props: {} };
   }
-});
+}, UserRole.Administrator);
 
 export default DataView;

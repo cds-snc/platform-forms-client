@@ -25,7 +25,8 @@ export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext
 export function requireAuthentication(
   innerFunction: (
     ctx: GetServerSidePropsAuthContext
-  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
+  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>,
+  authRole: string
 ) {
   return async (
     context: GetServerSidePropsAuthContext
@@ -36,16 +37,17 @@ export function requireAuthentication(
       // If no user, redirect to login
       return {
         redirect: {
-          destination: `/${context.locale}/admin/login/`,
+          destination: `/${context.locale}${loginUrl(authRole)}`,
           permanent: false,
         },
       };
     }
 
-    if (session.user?.role !== UserRole.Administrator) {
+    if (session.user?.role !== authRole) {
+      // If improper credentials, redirect to unauthorized page
       return {
         redirect: {
-          destination: `/${context.locale}/admin/unauthorized/`,
+          destination: `/${context.locale}${unauthorizedUrl(authRole)}`,
           permanent: false,
         },
       };
@@ -75,7 +77,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  if (session && session.user?.role === UserRole.Administrator) {
+  if (session?.user?.role === UserRole.Administrator) {
     return session;
   }
   return null;
@@ -117,5 +119,31 @@ export const validateTemporaryToken = async (token: string) => {
     return user;
   } catch (error) {
     return prismaErrors(error, null);
+  }
+};
+
+/**
+ *
+ */
+const loginUrl = (authRole: string) => {
+  switch (authRole) {
+    case UserRole.Administrator:
+      return "/admin/login/";
+    case UserRole.ProgramAdministrator:
+    default:
+      return "/auth/login/";
+  }
+};
+
+/**
+ *
+ */
+const unauthorizedUrl = (authRole: string) => {
+  switch (authRole) {
+    case UserRole.Administrator:
+      return "/admin/unauthorized/";
+    case UserRole.ProgramAdministrator:
+    default:
+      return "/auth/unauthorized/";
   }
 };
