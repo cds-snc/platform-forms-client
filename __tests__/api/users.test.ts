@@ -3,16 +3,16 @@
  */
 import { createMocks } from "node-mocks-http";
 
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import * as logAdmin from "@lib/adminLogs";
 
-jest.mock("next-auth/react");
+jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getSession, true);
+const mockGetSession = jest.mocked(getServerSession, true);
 
 describe("Users API endpoint", () => {
   describe("Access Control", () => {
@@ -60,7 +60,7 @@ describe("Users API endpoint", () => {
           "Content-Type": "application/json",
         },
         body: {
-          userID: "2",
+          userId: "2",
           isAdmin: "false",
         },
       });
@@ -85,7 +85,7 @@ describe("Users API endpoint", () => {
           "Content-Type": "application/json",
         },
         body: {
-          userID: "1",
+          userId: "1",
           isAdmin: "false",
         },
       });
@@ -189,7 +189,7 @@ describe("Users API endpoint", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", admin: true, id: "1" },
+        user: { email: "forms@cds.ca", name: "forms", admin: true, userId: "1" },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
     });
@@ -204,7 +204,7 @@ describe("Users API endpoint", () => {
           Origin: "http://localhost:3000/api/id/11/owners",
         },
         body: {
-          userID: "forms@cds.ca",
+          userId: "forms@cds.ca",
         },
       });
       await users(req, res);
@@ -213,7 +213,7 @@ describe("Users API endpoint", () => {
         expect.objectContaining({ error: "Malformed Request" })
       );
     });
-    it("Should return 400 invalid payload error when userID is missing", async () => {
+    it("Should return 400 invalid payload error when userId is missing", async () => {
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -230,7 +230,7 @@ describe("Users API endpoint", () => {
         expect.objectContaining({ error: "Malformed Request" })
       );
     });
-    it("Should return 404 if userID is not found", async () => {
+    it("Should return 404 if userId is not found", async () => {
       // Mocking executeQuery it returns 0 updated rows
 
       prismaMock.user.update.mockRejectedValue(
@@ -243,7 +243,7 @@ describe("Users API endpoint", () => {
           "Content-Type": "application/json",
         },
         body: {
-          userID: "2",
+          userId: "2",
           isAdmin: "true",
         },
       });
@@ -269,7 +269,7 @@ describe("Users API endpoint", () => {
           "Content-Type": "application/json",
         },
         body: {
-          userID: "2",
+          userId: "2",
           isAdmin: "true",
         },
       });

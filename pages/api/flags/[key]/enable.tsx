@@ -4,15 +4,15 @@ import { enableFlag, checkAll } from "@lib/flags";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const session = await isAdmin({ req });
+  const session = await isAdmin({ req, res });
   if (session) {
     const key = req.query.key as string;
     await enableFlag(key);
     const flags = await checkAll();
 
-    if (session.user.id) {
+    if (session.user.userId) {
       await logAdminActivity(
-        session.user.id,
+        session.user.userId,
         AdminLogAction.Update,
         AdminLogEvent.EnableFeature,
         `Feature: ${key} has been enabled`

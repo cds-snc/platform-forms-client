@@ -8,11 +8,15 @@ import {
   PrismaClientValidationError,
 } from "@prisma/client/runtime";
 
-jest.mock("@lib/integration/prismaConnector", () => ({
-  __esModule: true,
-  default: jest.fn(),
-  prisma: mockDeep<PrismaClient>(),
-}));
+jest.mock("@lib/integration/prismaConnector", () => {
+  const originalModule = jest.requireActual("@lib/integration/prismaConnector");
+  return {
+    __esModule: true,
+    ...originalModule,
+    default: jest.fn(),
+    prisma: mockDeep<PrismaClient>(),
+  };
+});
 
 beforeEach(() => {
   mockReset(prismaMock);

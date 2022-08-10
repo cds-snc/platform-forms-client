@@ -106,9 +106,9 @@ export async function activateOrDeactivateFormOwners(
       },
     });
 
-    if (session && session.user.id) {
+    if (session && session.user.userId) {
       await logAdminActivity(
-        session.user.id,
+        session.user.userId,
         AdminLogAction.Update,
         active ? AdminLogEvent.GrantFormAccess : AdminLogEvent.RevokeFormAccess,
         `Access to form id: ${formID} has been ${
@@ -165,9 +165,9 @@ export async function addEmailToForm(
       },
     });
 
-    if (session && session.user.id) {
+    if (session && session.user.userId) {
       await logAdminActivity(
-        session.user.id,
+        session.user.userId,
         AdminLogAction.Create,
         AdminLogEvent.GrantInitialFormAccess,
         `Email: ${email} has been given access to form id: ${formID}`
