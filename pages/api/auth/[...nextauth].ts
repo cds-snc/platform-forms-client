@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
           token.userId = user.id;
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
-          token.role = UserRole.Administrator;
+          token.role = user.role;
           token.acceptableUse = false;
           break;
         }
@@ -87,11 +87,10 @@ export const authOptions: NextAuthOptions = {
 
           const user = await getFormUser(token.sub);
 
-          token.admin = false;
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          token.role = UserRole.ProgramAdministrator;
+          token.role = user?.active ? UserRole.ProgramAdministrator : null; // TODO: change it so there is a "role" field for FormUser
           token.acceptableUse = false;
         }
       }
