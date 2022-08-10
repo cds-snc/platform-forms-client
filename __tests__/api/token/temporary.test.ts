@@ -55,13 +55,13 @@ describe("TemporaryBearerToken tests", () => {
     });
     mockedGetTokenById.mockResolvedValue({ bearerToken: token });
     (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      templateID: 1,
+      templateId: 1,
       email: "test@cds-snc.ca",
       active: true,
     });
     prismaMock.formUser.update.mockResolvedValue({
-      id: 3,
-      templateID: 1,
+      id: "3",
+      templateId: "1",
       email: "test@cds-snc.ca",
       temporaryToken: token,
       active: true,
@@ -131,13 +131,13 @@ describe("TemporaryBearerToken tests", () => {
     });
     mockedGetTokenById.mockResolvedValue({ bearerToken: token });
     (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      templateID: 1,
+      templateId: 1,
       email: "test@cds-snc.ca",
       active: true,
     });
     prismaMock.formUser.update.mockResolvedValue({
-      id: 3,
-      templateID: 1,
+      id: "3",
+      templateId: "1",
       email: "test@cds-snc.ca",
       temporaryToken: token,
       active: true,

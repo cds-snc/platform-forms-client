@@ -119,19 +119,19 @@ describe("Form Functionality", () => {
   });
 
   it("Form can be submitted", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     act(() => {
       render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     });
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
-    await act(async () => await userEvent.click(screen.getByRole("button", { type: "submit" })));
+    await act(async () => await user.click(screen.getByRole("button", { type: "submit" })));
 
     await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     mockFormTimerState = {
       canSubmit: false,
       remainingTime: 5,
@@ -146,7 +146,7 @@ describe("Form Functionality", () => {
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
 
-    await act(async () => await userEvent.click(screen.getByRole("button", { type: "submit" })));
+    await act(async () => await user.click(screen.getByRole("button", { type: "submit" })));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     expect(submitToAPI).not.toBeCalled();
   });
