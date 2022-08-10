@@ -14,7 +14,7 @@ const Logout = () => {
       <div>
         <h2 className="gc-h2">{t("messageContent")}</h2>
         <div className="gc-last-login-time">
-          {t("lastLoginTime")} : {session?.user?.name}
+          {t("lastLoginTime")} : {session?.user?.lastLoginTime}
         </div>
         <div className="gc-go-to-login-btn">
           <Link href={`/${i18n.language}/auth/login`}>{t("goToLoginLabel")}</Link>
