@@ -76,5 +76,9 @@
   "dynamicRow": {
     "add": "Add",
     "delete": "Delete"
+  },
+  "loginMenu":{
+    "login": "Sign in",
+    "logout": "Sign out"
   }
 }
