@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import SignInKey from "@components/login/SignInKey";
 import TemporaryToken from "@components/login/TemporaryToken";
-import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 
 export interface LoginStageProps {
@@ -10,7 +9,6 @@ export interface LoginStageProps {
 }
 
 const Login = () => {
-  const { t } = useTranslation("login");
   const [loginState, setLoginState] = useState(1);
 
   const setStage = (stage: number) => {
