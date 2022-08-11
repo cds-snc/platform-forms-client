@@ -3,7 +3,7 @@
  */
 
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
@@ -11,10 +11,10 @@ import * as adminLogs from "@lib/adminLogs";
 import { prismaMock, checkLogs } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 
-jest.mock("next-auth/react");
+jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getSession, true);
+const mockGetSession = jest.mocked(getServerSession, true);
 const mockLogMessage = jest.mocked(logMessage, true);
 
 jest.mock("@lib/logger");
@@ -156,7 +156,13 @@ describe("/id/[form]/bearer", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "admin@cds.ca", name: "Admin user", image: "null", admin: true, id: "1" },
+        user: {
+          email: "admin@cds.ca",
+          name: "Admin user",
+          image: "null",
+          admin: true,
+          userId: "1",
+        },
       };
       mockGetSession.mockResolvedValue(mockSession);
     });
