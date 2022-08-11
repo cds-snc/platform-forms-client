@@ -7,6 +7,7 @@ import { PrismaClient } from "@prisma/client";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
+import { acceptableUseCache } from "@lib/cache";
 
 const prisma = new PrismaClient();
 
@@ -77,7 +78,7 @@ export const authOptions: NextAuthOptions = {
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
           token.role = "admin";
-          token.acceptableUse = false;
+          if (!token.acceptableuse) await setAcceptableUseValueJWT(token);
           break;
         }
 
@@ -92,7 +93,7 @@ export const authOptions: NextAuthOptions = {
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
           token.role = "program_administrator";
-          token.acceptableUse = false;
+          if (!token.acceptableuse) await setAcceptableUseValueJWT(token);
         }
       }
 
@@ -109,6 +110,22 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+};
+
+/**
+ * if key exists in cache then set property to true and remove it from cache.
+ * otherwise set to false
+ * @param token
+ * @returns
+ */
+export const setAcceptableUseValueJWT = async (token: JWT) => {
+  const acceptableUseValue = await acceptableUseCache.check();
+  if (acceptableUseValue) {
+    token.acceptableUse = true;
+    acceptableUseCache.del();
+  } else {
+    token.acceptableUse = false;
+  }
 };
 
 export default NextAuth(authOptions);

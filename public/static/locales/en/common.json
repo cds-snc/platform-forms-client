@@ -77,10 +77,10 @@
     "add": "Add",
     "delete": "Delete"
   },
-  "acceptanceUsePage":{
+  "acceptableUsePage":{
     "agree":"Agree",
     "cancel":"Cancel",
     "welcome":"Welcome back",
-    "lastLoginTime":"Last log-in:"
+    "lastLoginTime":"Last log-in"
   }
 }

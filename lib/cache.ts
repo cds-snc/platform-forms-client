@@ -87,8 +87,8 @@ const unpublishedPut = async (templates: string[]): Promise<void> => {
   return modifyValue(`form:unpublished`, templates);
 };
 
-const acceptableUse = async (userID: string): Promise<string | null> => {
-  return checkValue(`auth:acceptableUse:${userID}`);
+const acceptableUseCheck = async (): Promise<string | null> => {
+  return checkValue(`auth:acceptableUse`);
 };
 
 const acceptableUsePut = async (userID: string) => {
@@ -107,6 +107,12 @@ const deleteAcceptableUse = async (): Promise<void> => {
   deleteValue(`auth:acceptableUse`);
 };
 
+export const acceptableUseCache = {
+  check: acceptableUseCheck,
+  set: acceptableUsePut,
+  del: deleteAcceptableUse,
+};
+
 export const formCache = {
   cacheAvailable,
   formID: {
@@ -121,10 +127,5 @@ export const formCache = {
   unpublished: {
     check: unpublishedCheck,
     set: unpublishedPut,
-  },
-  acceptableUse: {
-    check: acceptableUse,
-    set: acceptableUsePut,
-    del: deleteAcceptableUse,
   },
 };

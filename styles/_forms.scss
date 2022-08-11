@@ -432,7 +432,7 @@
   }
 }
 
-.gc-acceptance-use-control-btn {
+.gc-acceptable-use-control-btn {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -481,7 +481,7 @@
   flex-grow: 0;
 }
 
-.gc-acceptance-header {
+.gc-acceptable-use-header {
   @apply border-b-2 border-red-default;
 
   h1 {
@@ -493,6 +493,6 @@
   }
 }
 
-.gc-acceptance-content {
+.gc-acceptable-use-content {
   @apply pt-10;   
 }
