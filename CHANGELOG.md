@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Validation of a JSON Config to check the IDs of elements [#892](https://github.com/cds-snc/platform-forms-client/pull/892)
+
+### Fixed
+
+- Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
+
 ## [1.3.0] 2022-07-15
 
 ### Added
