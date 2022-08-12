@@ -108,3 +108,11 @@ header {
     }
   }
 }
+
+.gc-login-menu {
+  @apply md:text-small_base text-base font-normal not-italic underline items-center h-6;
+  /* Sign in and Sign out */   
+  font-size: 20px;
+  line-height: 120%; 
+  color: #2B4380;  
+}

@@ -17,5 +17,5 @@
         "retryPrompt": "Double-check your login key and email then",
         "retry": "try again",
         "errorMessage": "Incorrect verification code."
-    }    
+    }
 }
