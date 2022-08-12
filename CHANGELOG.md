@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Validation of a JSON Config to check the IDs of elements [#892](https://github.com/cds-snc/platform-forms-client/pull/892)
+- Added login page [#867](https://github.com/cds-snc/platform-forms-client/issues/867)
 
 ### Fixed
 
