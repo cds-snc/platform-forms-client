@@ -149,12 +149,14 @@ describe("/api/retrieval", () => {
         expect.objectContaining({
           responses: [
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "12",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "21",
               formSubmission: "true",
@@ -249,24 +251,28 @@ describe("/api/retrieval", () => {
         expect.objectContaining({
           responses: [
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "1",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "2",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "3",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "4",
               formSubmission: "true",
@@ -425,60 +431,70 @@ describe("/api/retrieval", () => {
         expect.objectContaining({
           responses: [
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "1",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "2",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "3",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "4",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "5",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "6",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "7",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "8",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "9",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
+              fileAttachments: [],
               formID: "1",
               submissionID: "10",
               formSubmission: "true",
