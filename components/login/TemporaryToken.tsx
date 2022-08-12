@@ -69,7 +69,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
           </ul>
         </Alert>
       )}
-      <h1 className="gc-h1">{t("temporaryTokenTitle")}</h1>
+      <h1 className="gc-h1">{t("temporaryToken.title")}</h1>
       <Description id="instructions" className="gc-description">
         {t("temporaryToken.instructions")}
       </Description>
@@ -78,7 +78,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
           {t("temporaryToken.temporaryTokenLabel")}
         </Label>
         {errorState.message && (
-          <p className="gc-error-message">{t("loginTemporaryTokenErrorMessage")}</p>
+          <p className="gc-error-message">{t("temporaryToken.errorMessage")}</p>
         )}
         <input
           className="mb-10 gc-input-text mr-2"
