@@ -1,6 +1,5 @@
 import React from "react";
-import { cleanup, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { GenerateElement } from "../../../lib/formBuilder";
 import { Formik } from "formik";
 
@@ -39,7 +38,6 @@ const checkboxData = {
 describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
   afterEach(cleanup);
   test("renders without errors", () => {
-    const user = userEvent.setup();
     render(
       <Formik onSubmit={() => {}}>
         <GenerateElement element={checkboxData} language={lang} t={(key) => key} />
@@ -59,7 +57,7 @@ describe.each([["en"], ["fr"]])("Checkbox component", (lang) => {
 
     // Check the boxes
     screen.getAllByRole("checkbox").forEach(async (input) => {
-      await user.click(input);
+      fireEvent.click(await screen.findById(input.id));
     });
 
     const resultsArray = checkboxData.properties.choices.map((object) => {

@@ -1,6 +1,5 @@
 import React from "react";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import FormSettings from "../pages/id/[form]/settings";
 import mockedAxios from "axios";
 import { useRouter } from "next/router";
@@ -25,7 +24,6 @@ describe("Form Settings Page", () => {
   });
 
   test("Delete button redirects on success", async () => {
-    const user = userEvent.setup();
     mockedAxios.mockResolvedValue({
       status: 200,
     });
@@ -36,16 +34,15 @@ describe("Form Settings Page", () => {
     }));
     render(<FormSettings form={form}></FormSettings>);
 
-    await user.click(screen.queryByTestId("delete"));
+    fireEvent.click(screen.queryByTestId("delete"));
     expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
 
-    await user.click(screen.queryByTestId("confirmDelete"));
+    fireEvent.click(screen.queryByTestId("confirmDelete"));
     waitFor(() => {
       expect(push).toHaveBeenCalled();
     });
   });
   test("Logs errors on failure", async () => {
-    const user = userEvent.setup();
     mockedAxios.mockResolvedValue({
       status: 400,
     });
@@ -55,10 +52,10 @@ describe("Form Settings Page", () => {
 
     render(<FormSettings form={form}></FormSettings>);
 
-    await user.click(screen.queryByTestId("delete"));
+    fireEvent.click(screen.queryByTestId("delete"));
     expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
 
-    await user.click(screen.queryByTestId("confirmDelete"));
+    fireEvent.click(screen.queryByTestId("confirmDelete"));
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
