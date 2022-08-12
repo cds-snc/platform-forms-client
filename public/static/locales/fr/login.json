@@ -7,5 +7,15 @@
     "signInKeyReset": "Request a reset.",
     "loginErrorHeading": "Problems on this page:",
     "loginEmailErrorMessage": "Form sign-in key and email do not match our records. Double-check your email is correct.",
-    "loginSignInErrorMessage": "Form sign-in key and email do not match our records. Double-check your sign-in key is correct."
+    "loginSignInErrorMessage": "Form sign-in key and email do not match our records. Double-check your sign-in key is correct.",
+    "temporaryToken": {
+        "title": "Check your email",
+        "instructions": "We've sent you a one-time-use, 6-digit verification code by email. It may take a a few minutes to arrive.",
+        "temporaryTokenLabel": "Enter verification code",
+        "submitButton": "Submit",
+        "helpText": "Didn't get the verification code?",
+        "retryPrompt": "Double-check your login key and email then",
+        "retry": "try again",
+        "errorMessage": "Incorrect verification code."
+    }
 }

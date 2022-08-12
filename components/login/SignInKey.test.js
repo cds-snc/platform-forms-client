@@ -13,7 +13,7 @@ jest.mock("react-i18next", () => ({
 describe("Login Component with Sign-In Key", () => {
   it("Renders properly.", async () => {
     await act(async () => {
-      render(<SignInKey />);
+      render(<SignInKey setParentStage={jest.fn()} />);
     });
 
     expect(screen.getByRole("textbox", { name: "emailLabel" })).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe("Login Component with Sign-In Key", () => {
 
   it("Displays an error if the button is pressed with empty fields.", async () => {
     await act(async () => {
-      render(<SignInKey />);
+      render(<SignInKey setParentStage={jest.fn()} />);
     });
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
@@ -65,20 +65,22 @@ describe("Login Component with Sign-In Key", () => {
   });
 
   it("Does not display an error after a successful response from the server.", async () => {
-    mockedAxios.mockResolvedValue({
-      status: 200,
-    });
+    const user = userEvent.setup();
+    mockedAxios.mockResolvedValue();
 
     await act(async () => {
-      render(<SignInKey />);
+      render(<SignInKey setParentStage={jest.fn()} />);
     });
 
     const loginEmail = screen.getByTestId("loginEmail");
-    await userEvent.type(loginEmail, "test@cds-snc.ca");
+    await user.type(loginEmail, "test@cds-snc.ca");
     await act(async () => {
-      await userEvent.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("button"));
     });
     expect(mockedAxios.mock.calls.length).toBe(1);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/token/temporary" })
+    );
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 });

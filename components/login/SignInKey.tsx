@@ -6,6 +6,7 @@ import axios from "axios";
 import { useTranslation } from "next-i18next";
 import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
 import Link from "next/link";
+import { LoginStageProps } from "@pages/auth/login";
 
 interface FormAction {
   name: string;
@@ -19,7 +20,8 @@ const formReducer = (state: Record<string, string>, action: FormAction) => {
   };
 };
 
-const SignInKey = (): React.ReactElement => {
+const SignInKey = (props: LoginStageProps): React.ReactElement => {
+  const { setParentStage } = props;
   const [formData, setFormData] = useReducer(formReducer, {});
   const [errorState, setErrorState] = useState({ message: "" });
 
@@ -52,6 +54,7 @@ const SignInKey = (): React.ReactElement => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
+        setParentStage(2);
       } catch (err) {
         setErrorState({
           message: t("loginSignInErrorMessage"),
