@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import SignInKey from "./SignInKey";
@@ -23,9 +23,7 @@ describe("Login Component with Sign-In Key", () => {
     render(<SignInKey setParentStage={jest.fn()} />);
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    await act(async () => {
-      await userEvent.click(screen.getByRole("button"));
-    });
+    fireEvent.click(screen.getByRole("button"));
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
@@ -33,9 +31,7 @@ describe("Login Component with Sign-In Key", () => {
     render(<SignInKey />);
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    await act(async () => {
-      await userEvent.click(screen.getByRole("button"));
-    });
+    fireEvent.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(0);
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
@@ -49,11 +45,9 @@ describe("Login Component with Sign-In Key", () => {
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     const loginEmail = screen.getByTestId("loginEmail");
     await userEvent.type(loginEmail, "test@cds-snc.ca");
-    await act(async () => {
-      await userEvent.click(screen.getByRole("button"));
-    });
+    fireEvent.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(1);
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
   });
 
   it("Does not display an error after a successful response from the server.", async () => {
@@ -63,9 +57,7 @@ describe("Login Component with Sign-In Key", () => {
     render(<SignInKey setParentStage={jest.fn()} />);
     const loginEmail = screen.getByTestId("loginEmail");
     await user.type(loginEmail, "test@cds-snc.ca");
-    await act(async () => {
-      await user.click(screen.getByRole("button"));
-    });
+    fireEvent.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
       expect.objectContaining({ url: "/api/token/temporary" })
