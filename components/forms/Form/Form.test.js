@@ -112,17 +112,13 @@ describe("Form Functionality", () => {
   });
 
   it("there is 1 and only 1 submit button", async () => {
-    act(() => {
-      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
-    });
+    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     expect(await screen.findAllByRole("button", { type: "submit" })).toHaveLength(1);
   });
 
   it("Form can be submitted", async () => {
     const user = userEvent.setup();
-    act(() => {
-      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
-    });
+    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
     await act(async () => await user.click(screen.getByRole("button", { type: "submit" })));
@@ -138,9 +134,8 @@ describe("Form Functionality", () => {
       timerDelay: 5,
       timeLock: 0,
     };
-    act(() => {
-      render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
-    });
+
+    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     const submitButton = screen.getByRole("button", { type: "submit" });
     await waitFor(() => expect(submitButton).toBeInTheDocument());
 

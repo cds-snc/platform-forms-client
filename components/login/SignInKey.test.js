@@ -12,9 +12,7 @@ jest.mock("react-i18next", () => ({
 
 describe("Login Component with Sign-In Key", () => {
   it("Renders properly.", async () => {
-    await act(async () => {
-      render(<SignInKey setParentStage={jest.fn()} />);
-    });
+    render(<SignInKey setParentStage={jest.fn()} />);
 
     expect(screen.getByRole("textbox", { name: "emailLabel" })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: "signInKeyLabel" })).toBeInTheDocument();
@@ -22,9 +20,7 @@ describe("Login Component with Sign-In Key", () => {
   });
 
   it("Displays an error if the button is pressed with empty fields.", async () => {
-    await act(async () => {
-      render(<SignInKey setParentStage={jest.fn()} />);
-    });
+    render(<SignInKey setParentStage={jest.fn()} />);
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     await act(async () => {
@@ -34,9 +30,7 @@ describe("Login Component with Sign-In Key", () => {
   });
 
   it("Displays an error if the form is submitted with empty email address.", async () => {
-    await act(async () => {
-      render(<SignInKey />);
-    });
+    render(<SignInKey />);
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     await act(async () => {
@@ -50,10 +44,8 @@ describe("Login Component with Sign-In Key", () => {
     mockedAxios.mockRejectedValue({
       status: 403,
     });
-    await act(async () => {
-      render(<SignInKey />);
-    });
 
+    render(<SignInKey />);
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     const loginEmail = screen.getByTestId("loginEmail");
     await userEvent.type(loginEmail, "test@cds-snc.ca");
@@ -68,10 +60,7 @@ describe("Login Component with Sign-In Key", () => {
     const user = userEvent.setup();
     mockedAxios.mockResolvedValue();
 
-    await act(async () => {
-      render(<SignInKey setParentStage={jest.fn()} />);
-    });
-
+    render(<SignInKey setParentStage={jest.fn()} />);
     const loginEmail = screen.getByTestId("loginEmail");
     await user.type(loginEmail, "test@cds-snc.ca");
     await act(async () => {
