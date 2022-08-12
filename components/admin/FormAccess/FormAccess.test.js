@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen, fireEvent } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
@@ -57,7 +57,7 @@ describe("Form Access Component", () => {
       },
     });
 
-    fireEvent.click(screen.getByTestId("add-email"));
+    await user.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByText(testEmailAddress)).toBeInTheDocument;
   });
@@ -86,7 +86,7 @@ describe("Form Access Component", () => {
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
     await user.type(input, testEmailAddress);
 
-    fireEvent.click(screen.getByTestId("add-email"));
+    await user.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByTestId("alert")).toBeInTheDocument;
   });
@@ -115,7 +115,7 @@ describe("Form Access Component", () => {
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
     await user.type(input, testEmailAddress);
-    fireEvent.click(screen.getByTestId("add-email"));
+    await user.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByRole("alert")).toBeInTheDocument;
   });
