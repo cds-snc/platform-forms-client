@@ -44,7 +44,7 @@ describe("Form Settings Page", () => {
     expect(mockedAxios).toHaveBeenCalledWith(
       expect.objectContaining({ url: "/api/templates", method: "DELETE" })
     );
-    waitFor(() => {
+    await waitFor(() => {
       expect(push).toHaveBeenCalled();
     });
   });
