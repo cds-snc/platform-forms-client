@@ -26,6 +26,6 @@ describe("Acceptable use Page", () => {
 
   it("Cancel terms of use", () => {
     cy.get(".gc-cancel-btn").click();
-    //cy.url().should("contain", "/login");
+    cy.url().should("contain", "/logout");
   });
 });

@@ -3,3 +3,7 @@ export interface FormOwner {
   email: string;
   active: boolean;
 }
+
+export enum UserRole {
+  PROGRAM_ADMINISTRATOR = "program_administator",
+}

@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { UserRole } from "./types/user-types";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -36,6 +37,22 @@ export function requireAuthentication(
       return {
         redirect: {
           destination: `/${context.locale}/admin/login/`,
+          permanent: false,
+        },
+      };
+    }
+    if (!session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
+      return {
+        redirect: {
+          destination: `/${context.locale}/auth/policy`,
+          permanent: false,
+        },
+      };
+    }
+    if (session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
+      return {
+        redirect: {
+          destination: `/${context.locale}/id/${session.user.templateID}/retrieval`,
           permanent: false,
         },
       };
