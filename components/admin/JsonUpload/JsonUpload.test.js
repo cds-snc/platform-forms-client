@@ -1,6 +1,5 @@
 import React from "react";
-import { cleanup, render, screen, act } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { cleanup, render, screen, fireEvent } from "@testing-library/react";
 
 import mockedAxios from "axios";
 import { JSONUpload } from "./JsonUpload";
@@ -14,9 +13,7 @@ describe("JSON Upload Component", () => {
   afterEach(cleanup);
   const formConfig = { test: "test JSON" };
   it("renders without errors", async () => {
-    await act(async () => {
-      render(<JSONUpload></JSONUpload>);
-    });
+    render(<JSONUpload></JSONUpload>);
     expect(screen.queryByTestId("jsonInput")).toBeInTheDocument();
     expect(screen.queryByTestId("submitStatus")).not.toBeInTheDocument();
   });
@@ -24,41 +21,30 @@ describe("JSON Upload Component", () => {
     const form = {
       formConfig: formConfig,
     };
-    await act(async () => {
-      render(<JSONUpload form={form}></JSONUpload>);
-    });
+    render(<JSONUpload form={form}></JSONUpload>);
     expect(screen.queryByTestId("jsonInput").value).toBe(JSON.stringify(formConfig, null, 2));
   });
   it("Shows an error message if unparseable JSON is entered", async () => {
-    const user = userEvent.setup();
     const form = {
       formConfig: undefined,
     };
-    await act(async () => {
-      render(<JSONUpload form={form}></JSONUpload>);
-    });
-    await act(async () => {
-      await user.click(screen.queryByTestId("upload"));
-    });
+    render(<JSONUpload form={form}></JSONUpload>);
+    fireEvent.click(screen.queryByTestId("upload"));
     expect(mockedAxios.mock.calls.length).toBe(0);
-    expect(screen.queryByTestId("alert")).toBeInTheDocument();
+    expect(await screen.findByTestId("alert")).toBeInTheDocument();
   });
   it("Shows a submit status message if successfully submitted to API", async () => {
-    const user = userEvent.setup();
     const form = {
       formConfig: formConfig,
     };
     mockedAxios.mockResolvedValue();
-    await act(async () => {
-      render(<JSONUpload form={form}></JSONUpload>);
-    });
-    await act(async () => {
-      await user.click(screen.queryByTestId("upload"));
-    });
+
+    render(<JSONUpload form={form}></JSONUpload>);
+    fireEvent.click(screen.queryByTestId("upload"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
       expect.objectContaining({ url: "/api/templates", method: "POST" })
     );
-    expect(screen.queryByTestId("submitStatus")).toBeInTheDocument();
+    expect(await screen.findByTestId("submitStatus")).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen, act } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
@@ -89,9 +89,7 @@ describe("Form Access Component", () => {
         data: { error: "The formID does not exist" },
       });
 
-    await act(async () => {
-      render(<FormAccess formID={formConfig.formID}></FormAccess>);
-    });
+    render(<FormAccess formID={formConfig.formID}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
     await user.type(input, testEmailAddress);
