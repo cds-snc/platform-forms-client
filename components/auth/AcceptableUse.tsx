@@ -17,7 +17,7 @@ const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
   const agreeAcceptableUse = async () => {
     try {
       await axios({
-        url: "/api/accetableuse",
+        url: "/api/acceptableuse",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
