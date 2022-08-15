@@ -432,6 +432,7 @@
   }
 }
 
+
 .gc-acceptable-use-control-btn {
   display: flex;
   flex-direction: row;
@@ -495,4 +496,20 @@
 
 .gc-acceptable-use-content {
   @apply pt-10;   
+
+}
+.gc-last-login-time{ 
+  @apply text-sm not-italic font-sans items-center font-normal pb-10 pt-3;
+  line-height: 125%;
+}
+
+
+.gc-go-to-login-btn {
+  a {
+    @apply bg-blue-500 hover:bg-blue-700 text-white-default font-bold py-2 px-4 rounded;
+    text-decoration: none !important;
+    background-color: #26374A;
+    ;
+  }
+
 }

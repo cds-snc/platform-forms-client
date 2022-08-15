@@ -13,6 +13,11 @@ import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import {
+  layoutIDValidator,
+  subElementsIDValidator,
+  uniqueIDValidator,
+} from "@lib/middleware/jsonIDValidator";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -101,6 +106,9 @@ export default middleware(
     cors({ allowedMethods }),
     sessionExists(authenticatedMethods),
     jsonValidator(templatesSchema, { jsonKey: "formConfig" }),
+    uniqueIDValidator({ jsonKey: "formConfig" }),
+    layoutIDValidator({ jsonKey: "formConfig" }),
+    subElementsIDValidator({ jsonKey: "formConfig" }),
   ],
   templates
 );

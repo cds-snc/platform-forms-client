@@ -82,5 +82,9 @@
     "cancel":"Annuler",
     "welcome":"Content de vous revoir.",
     "lastLoginTime":"Derniere connexion"
+  },
+  "loginMenu":{
+    "login": "Connexion",
+    "logout": "Déconnexion"
   }
 }

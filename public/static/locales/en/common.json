@@ -82,5 +82,9 @@
     "cancel":"Cancel",
     "welcome":"Welcome back",
     "lastLoginTime":"Last log-in"
+  },
+  "loginMenu":{
+    "login": "Sign in",
+    "logout": "Sign out"
   }
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import Base from "./Base";
 import Form from "../forms/Form/Form";
+import { SessionProvider } from "next-auth/react";
 
 describe("Generate the Base structure of a page", () => {
   afterEach(cleanup);
@@ -22,9 +23,11 @@ describe("Generate the Base structure of a page", () => {
     };
 
     render(
-      <Base>
-        <Form formRecord={formRecordTest} language="en" t={(key) => key} />
-      </Base>
+      <SessionProvider session={null}>
+        <Base>
+          <Form formRecord={formRecordTest} language="en" t={(key) => key} />
+        </Base>
+      </SessionProvider>
     );
 
     expect(screen.queryByTestId("PhaseBanner")).toBeInTheDocument();
@@ -45,9 +48,11 @@ describe("Generate the Base structure of a page", () => {
       },
     };
     render(
-      <Base>
-        <Form formRecord={formRecordTest} language="en" t={(key) => key} />
-      </Base>
+      <SessionProvider session={null}>
+        <Base>
+          <Form formRecord={formRecordTest} language="en" t={(key) => key} />
+        </Base>
+      </SessionProvider>
     );
 
     expect(screen.queryByTestId("PhaseBanner")).not.toBeInTheDocument();
