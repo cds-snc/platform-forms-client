@@ -40,6 +40,10 @@ describe("Form Settings Page", () => {
     expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
 
     await user.click(screen.queryByTestId("confirmDelete"));
+    expect(mockedAxios.mock.calls.length).toBe(1);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/templates", method: "DELETE" })
+    );
     waitFor(() => {
       expect(push).toHaveBeenCalled();
     });
@@ -61,5 +65,9 @@ describe("Form Settings Page", () => {
     await user.click(screen.queryByTestId("confirmDelete"));
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
+    expect(mockedAxios.mock.calls.length).toBe(1);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/templates", method: "DELETE" })
+    );
   });
 });

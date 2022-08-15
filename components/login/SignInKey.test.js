@@ -61,6 +61,9 @@ describe("Login Component with Sign-In Key", () => {
       await userEvent.click(screen.getByRole("button"));
     });
     expect(mockedAxios.mock.calls.length).toBe(1);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/token/temporary", method: "POST" })
+    );
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
@@ -79,7 +82,7 @@ describe("Login Component with Sign-In Key", () => {
     });
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/token/temporary" })
+      expect.objectContaining({ url: "/api/token/temporary", method: "POST" })
     );
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
