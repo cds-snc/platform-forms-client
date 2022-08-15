@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import LanguageToggle from "./LanguageToggle";
 import { getProperty } from "@lib/formBuilder";
 import { isSplashPage } from "@lib/routeUtils";
+import Menu from "@components/auth/LoginMenu";
 
 const Fip = (props) => {
   const { t, i18n } = useTranslation("common");
@@ -30,6 +32,7 @@ const Fip = (props) => {
 
   // Do not show the language toggle on the "splash" page
   const languageToggle = isSplashPage() ? null : <LanguageToggle />;
+  const { status } = useSession();
 
   return (
     <div data-testid="fip" className="gc-fip">
@@ -38,6 +41,7 @@ const Fip = (props) => {
           <img src={logo} alt={logoTitle} />
         </a>
       </div>
+      <Menu isAuthenticated={status === "authenticated"} />
       {languageToggle}
     </div>
   );

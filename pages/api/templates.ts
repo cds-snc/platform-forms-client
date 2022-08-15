@@ -13,21 +13,30 @@ import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
 import { isAdmin } from "@lib/auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import {
+  layoutIDValidator,
+  subElementsIDValidator,
+  uniqueIDValidator,
+} from "@lib/middleware/jsonIDValidator";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
 
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await isAdmin({ req });
+    const session = await isAdmin({ req, res });
     const response = await templateCRUD({ method: req.method, ...req.body });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
 
-    if (session && session.user.id && ["POST", "PUT", "DELETE"].includes(req.method as string)) {
+    if (
+      session &&
+      session.user.userId &&
+      ["POST", "PUT", "DELETE"].includes(req.method as string)
+    ) {
       if (req.method === "POST") {
         await logAdminActivity(
-          session.user.id,
+          session.user.userId,
           AdminLogAction.Create,
           AdminLogEvent.UploadForm,
           `Form id: ${(response as FormRecord).formID} has been uploaded`
@@ -35,7 +44,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       if (req.method === "PUT") {
         await logAdminActivity(
-          session.user.id,
+          session.user.userId,
           AdminLogAction.Update,
           AdminLogEvent.UpdateForm,
           `Form id: ${req.body.formID} has been updated`
@@ -43,7 +52,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       if (req.method === "DELETE") {
         await logAdminActivity(
-          session.user.id,
+          session.user.userId,
           AdminLogAction.Delete,
           AdminLogEvent.DeleteForm,
           `Form id: ${req.body.formID} has been deleted`
@@ -97,6 +106,9 @@ export default middleware(
     cors({ allowedMethods }),
     sessionExists(authenticatedMethods),
     jsonValidator(templatesSchema, { jsonKey: "formConfig" }),
+    uniqueIDValidator({ jsonKey: "formConfig" }),
+    layoutIDValidator({ jsonKey: "formConfig" }),
+    subElementsIDValidator({ jsonKey: "formConfig" }),
   ],
   templates
 );

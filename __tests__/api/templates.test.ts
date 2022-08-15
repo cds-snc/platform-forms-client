@@ -3,16 +3,16 @@
  */
 import { createMocks } from "node-mocks-http";
 import templates from "@pages/api/templates";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import * as logAdmin from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getSession, true);
+const mockGetSession = jest.mocked(getServerSession, true);
 
-jest.mock("next-auth/react");
+jest.mock("next-auth/next");
 
 describe("Test JSON validation scenarios", () => {
   beforeAll(() => {
@@ -25,7 +25,7 @@ describe("Test JSON validation scenarios", () => {
   beforeEach(() => {
     const mockSession = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", admin: true, id: "1" },
+      user: { email: "a@b.com", name: "Testing Forms", admin: true, userId: "1" },
     };
 
     mockGetSession.mockResolvedValue(mockSession);
