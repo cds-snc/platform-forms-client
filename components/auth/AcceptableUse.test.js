@@ -3,12 +3,12 @@ import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import AcceptableUseTerms from "./AcceptableUse";
-import { logMessage } from "@lib/logger";
+import { signOut } from "next-auth/react";
 
 jest.mock("axios");
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
+jest.mock("next-auth/react", () => ({
+  signOut: jest.fn(() => ""),
 }));
 
 describe("Acceptable use terms", () => {
@@ -40,17 +40,16 @@ describe("Acceptable use terms", () => {
 
   it("Cancel Acceptable use terms", async () => {
     const props = { userId: "2", content: "test", lastLoginTime: "" };
-    const spy = jest.spyOn(logMessage, "info");
-
-    await act(async () => {
-      render(<AcceptableUseTerms {...props} />);
-    });
+    signOut.I,
+      await act(async () => {
+        render(<AcceptableUseTerms {...props} />);
+      });
 
     await act(async () => {
       await userEvent.click(screen.getByRole("button", { name: "acceptableUsePage.cancel" }));
     });
 
-    expect(spy).toBeCalledWith(`Not implemented`);
+    expect(signOut).toBeCalled();
   });
 
   it("Renders the acceptable use page.", async () => {

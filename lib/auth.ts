@@ -52,7 +52,7 @@ export function requireAuthentication(
     if (session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
       return {
         redirect: {
-          destination: `/${context.locale}/id/${session.user.templateID}/retrieval`,
+          destination: `/${context.locale}/id/${session.user.authorizedForm}/retrieval`,
           permanent: false,
         },
       };

@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { RichText } from "../../components/forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
+import { signOut } from "next-auth/react";
 
 interface AcceptableUseProps {
   content: string;
@@ -11,7 +12,7 @@ interface AcceptableUseProps {
   userId: string;
 }
 const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const { content, lastLoginTime, userId } = props;
   const agreeAcceptableUse = async () => {
     try {
@@ -30,9 +31,9 @@ const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
       logMessage.error(err as Error);
     }
   };
+
   const cancel = async () => {
-    //Not implemented
-    logMessage.info("Not implemented");
+    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
   return (
