@@ -41,8 +41,10 @@ const Fip = (props) => {
           <img src={logo} alt={logoTitle} />
         </a>
       </div>
-      <Menu isAuthenticated={status === "authenticated"} />
-      {languageToggle}
+      <div className="inline-flex">
+        <Menu isAuthenticated={status === "authenticated"} />
+        {languageToggle}
+      </div>
     </div>
   );
 };

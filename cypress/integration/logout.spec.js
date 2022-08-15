@@ -17,8 +17,7 @@ describe("Logout Page test", () => {
     cy.get(".gc-go-to-login-btn").find("a").should("contain", "Go to login");
   });
 
-  //TODO for sake of completeness enable this test when login page is available.
-  it.skip("Go to login page", () => {
+  it("Go to login page", () => {
     cy.get(".gc-go-to-login-btn").find("a").click();
     cy.url().should("contain", "/en/auth/login");
     cy.get("h1").should("contain", "Sign in");
