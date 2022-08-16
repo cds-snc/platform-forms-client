@@ -9,7 +9,7 @@ import check from "@pages/api/flags/[key]/check";
 import checkAllFlags from "@pages/api/flags";
 import defaultFlags from "../../flag_initialization/default_flag_settings.json";
 import * as flags from "@lib/flags";
-import { UserRole } from "@lib/types/user-types";
+import { UserRole } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
@@ -29,7 +29,7 @@ describe("Flags API endpoint", () => {
         user: {
           email: "forms@cds.ca",
           name: "forms user",
-          role: UserRole.Administrator,
+          role: UserRole.administrator,
           userId: "1",
         },
       };

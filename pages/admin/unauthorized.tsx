@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { UserRole } from "@lib/types/user-types";
+import { UserRole } from "@prisma/client";
 
 const Unauthorized: React.FC = () => {
   const { t } = useTranslation("admin-login");
@@ -19,7 +19,7 @@ const Unauthorized: React.FC = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context, authOptions);
 
-  if (session?.user.role === UserRole.Administrator)
+  if (session?.user.role === UserRole.administrator)
     return {
       props: {},
       redirect: {

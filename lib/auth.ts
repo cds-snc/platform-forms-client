@@ -11,7 +11,7 @@ import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { UserRole } from "./types/user-types";
+import { UserRole } from "@prisma/client";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -86,7 +86,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  return session?.user.role === UserRole.Administrator ? session : null;
+  return session?.user.role === UserRole.administrator ? session : null;
 };
 
 /**
@@ -135,9 +135,9 @@ export const validateTemporaryToken = async (token: string) => {
  */
 const loginUrl = (authRole: UserRole): string => {
   switch (authRole) {
-    case UserRole.Administrator:
+    case UserRole.administrator:
       return "/admin/login/";
-    case UserRole.ProgramAdministrator:
+    case UserRole.program_administrator:
     default:
       return "/auth/login/";
   }
@@ -150,9 +150,9 @@ const loginUrl = (authRole: UserRole): string => {
  */
 const unauthorizedUrl = (authRole: UserRole): string => {
   switch (authRole) {
-    case UserRole.Administrator:
+    case UserRole.administrator:
       return "/admin/unauthorized/";
-    case UserRole.ProgramAdministrator:
+    case UserRole.program_administrator:
     default:
       return "/auth/unauthorized/";
   }

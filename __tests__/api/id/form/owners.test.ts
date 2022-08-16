@@ -8,8 +8,7 @@ import { getServerSession } from "next-auth/next";
 import owners from "@pages/api/id/[form]/owners";
 import * as logAdmin from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
-import { Prisma } from "@prisma/client";
-import { UserRole } from "@lib/types/user-types";
+import { Prisma, UserRole } from "@prisma/client";
 
 jest.mock("next-auth/next");
 
@@ -59,7 +58,7 @@ describe("/id/[forms]/owners", () => {
         user: {
           email: "forms@cds.ca",
           name: "forms user",
-          role: UserRole.Administrator,
+          role: UserRole.administrator,
           userId: "1",
         },
       };

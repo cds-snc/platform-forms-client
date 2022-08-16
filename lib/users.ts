@@ -1,10 +1,8 @@
 import { User } from "next-auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { FormUser, Prisma } from "@prisma/client";
+import { FormUser, Prisma, UserRole } from "@prisma/client";
 import { JWT } from "next-auth";
-
 import { logMessage } from "@lib/logger";
-import { UserRole } from "./types/user-types";
 
 /**
  * Get all Users
@@ -93,7 +91,7 @@ export const adminRole = async (isAdmin: boolean, userId: string): Promise<[bool
         id: userId,
       },
       data: {
-        role: UserRole.Administrator,
+        role: UserRole.administrator,
       },
     });
     return [true, Boolean(user)];

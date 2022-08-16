@@ -6,7 +6,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
-import { UserRole } from "@lib/types/user-types";
+import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          token.role = user?.active ? UserRole.ProgramAdministrator : null; // TODO: change it so there is a "role" field for FormUser
+          token.role = user?.active ? UserRole.program_administrator : null; // TODO: change it so there is a "role" field for FormUser
           token.acceptableUse = false;
         }
       }

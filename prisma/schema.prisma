@@ -80,10 +80,15 @@ model User {
   email         String?    @unique
   emailVerified DateTime?
   image         String?
-  role          String?        @default("program_administrator")
+  role          UserRole        @default(program_administrator)
   accounts      Account[]
   adminLogs    AdminLog[]
   sessions      Session[]
+}
+
+enum UserRole {
+  administrator
+  program_administrator
 }
 
 model VerificationToken {

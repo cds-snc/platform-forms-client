@@ -9,8 +9,7 @@ import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import * as adminLogs from "@lib/adminLogs";
 import { prismaMock, checkLogs } from "@jestUtils";
-import { Prisma } from "@prisma/client";
-import { UserRole } from "@lib/types/user-types";
+import { Prisma, UserRole } from "@prisma/client";
 
 jest.mock("next-auth/next");
 
@@ -45,7 +44,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          role: UserRole.Administrator,
+          role: UserRole.administrator,
         },
       };
 
@@ -166,7 +165,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          role: UserRole.Administrator,
+          role: UserRole.administrator,
           userId: "1",
         },
       };

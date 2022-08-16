@@ -6,9 +6,8 @@ import { createMocks } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
 import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserRole } from "@prisma/client";
 import * as logAdmin from "@lib/adminLogs";
-import { UserRole } from "@lib/types/user-types";
 
 jest.mock("next-auth/next");
 
@@ -41,7 +40,7 @@ describe("Users API endpoint", () => {
       });
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.ProgramAdministrator },
+        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.program_administrator },
       };
 
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -67,7 +66,7 @@ describe("Users API endpoint", () => {
       });
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.ProgramAdministrator },
+        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.program_administrator },
       };
 
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -103,7 +102,7 @@ describe("Users API endpoint", () => {
     beforeAll(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", role: UserRole.Administrator, id: "1" },
+        user: { email: "forms@cds.ca", name: "forms", role: UserRole.administrator, id: "1" },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
     });
@@ -116,19 +115,19 @@ describe("Users API endpoint", () => {
         {
           id: "1",
           email: "test@cds.ca",
-          role: UserRole.Administrator,
+          role: UserRole.administrator,
           name: "Zoe",
         },
         {
           id: "2",
           email: "forms@cds.ca",
-          role: UserRole.Administrator,
+          role: UserRole.administrator,
           name: "Joe",
         },
         {
           id: "3",
           email: "forms_2@cds.ca",
-          role: UserRole.ProgramAdministrator,
+          role: UserRole.program_administrator,
           name: "Boe",
         },
       ]);
@@ -146,19 +145,19 @@ describe("Users API endpoint", () => {
           {
             id: "1",
             email: "test@cds.ca",
-            role: UserRole.Administrator,
+            role: UserRole.administrator,
             name: "Zoe",
           },
           {
             id: "2",
             email: "forms@cds.ca",
-            role: UserRole.Administrator,
+            role: UserRole.administrator,
             name: "Joe",
           },
           {
             id: "3",
             email: "forms_2@cds.ca",
-            role: UserRole.ProgramAdministrator,
+            role: UserRole.program_administrator,
             name: "Boe",
           },
         ],
@@ -190,7 +189,7 @@ describe("Users API endpoint", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", role: UserRole.Administrator, userId: "1" },
+        user: { email: "forms@cds.ca", name: "forms", role: UserRole.administrator, userId: "1" },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
     });
@@ -259,7 +258,7 @@ describe("Users API endpoint", () => {
       prismaMock.user.update.mockResolvedValue({
         id: "2",
         email: "forms@cds.ca",
-        role: UserRole.Administrator,
+        role: UserRole.administrator,
         emailVerified: null,
         image: null,
         name: "Joe",
