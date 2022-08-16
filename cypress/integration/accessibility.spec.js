@@ -12,25 +12,10 @@ describe("Accessibility (A11Y) Check", () => {
     cy.checkA11y(null, A11Y_OPTIONS);
   });
 
-  it("Published Form pages Accessibility (A11Y) Check", () => {
-    let forms = [];
-    const body = {
-      method: "GET",
-    };
-    cy.request("/api/templates", body)
-      .then((response) => {
-        response.body.forEach((rec) => {
-          if (rec.formConfig.publishingStatus) {
-            forms.push(rec.formID);
-          }
-        });
-      })
-      .wrap(forms)
-      .each((form) => {
-        cy.visit(`/en/id/${form}`);
-        cy.injectAxe();
-        cy.checkA11y(null, A11Y_OPTIONS);
-      });
+  it("All components page Accessibility (A11Y) Check", () => {
+    cy.mockForm("../../__fixtures__/accessibilityTestForm.json");
+    cy.injectAxe();
+    cy.checkA11y(null, A11Y_OPTIONS);
   });
 
   it("Check error state accessibility", () => {

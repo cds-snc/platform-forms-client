@@ -42,7 +42,9 @@ describe("JSON Upload Component", () => {
     render(<JSONUpload form={form}></JSONUpload>);
     fireEvent.click(screen.queryByTestId("upload"));
     expect(mockedAxios.mock.calls.length).toBe(1);
-    expect(mockedAxios).toHaveBeenCalledWith(expect.objectContaining({ url: "/api/templates" }));
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/templates", method: "POST" })
+    );
     expect(await screen.findByTestId("submitStatus")).toBeInTheDocument();
   });
 });

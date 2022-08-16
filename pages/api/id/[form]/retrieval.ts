@@ -10,6 +10,7 @@ import {
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps } from "@lib/types";
+import { getFileAttachments } from "@lib/fileAttachments";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -107,6 +108,7 @@ async function getFormResponses(
               formID,
               submissionID,
               formSubmission,
+              fileAttachments: getFileAttachments(submissionID, formSubmission),
               securityAttribute,
             })
           )
