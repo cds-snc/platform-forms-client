@@ -25,6 +25,10 @@ describe("Form Access Component", () => {
     });
 
     render(<FormAccess formID={formConfig.formID}></FormAccess>);
+    expect(mockedAxios.mock.calls.length).toBe(1);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: `/api/id/${formConfig.formID}/owners`, method: "GET" })
+    );
     expect(await screen.findByTestId("add-email")).toBeInTheDocument();
   });
 
@@ -58,6 +62,10 @@ describe("Form Access Component", () => {
     });
 
     await user.click(screen.getByTestId("add-email"));
+    expect(mockedAxios.mock.calls.length).toBe(2);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/id/1/owners", method: "POST" })
+    );
 
     expect(await screen.findByText(testEmailAddress)).toBeInTheDocument;
   });
