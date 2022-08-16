@@ -18,6 +18,15 @@ export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext
 }
 
 /**
+ * Enum used to record Logging action events
+ */
+export enum LoggingAction {
+  LOGIN = "LOGIN",
+  LOGOUT = "LOGOUT",
+  LOCKED = "LOCKED",
+}
+
+/**
  * Verifies if their is a session and redirects user as required.
  * @param innerFunction Next JS getServerSideProps resolver function
  * @returns Context with a 'user' object if there is a session detected
