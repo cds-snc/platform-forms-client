@@ -16,7 +16,7 @@ const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
 
   return (
     <>
-      <div className="gc-login-menu">
+      <div className="gc-login-menu pr-3">
         {isAuthenticated ? (
           <button type="button" onClick={handleClick} lang={i18n.language}>
             {t("loginMenu.logout")}
