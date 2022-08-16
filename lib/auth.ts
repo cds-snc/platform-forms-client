@@ -35,7 +35,7 @@ export function requireAuthentication(
   innerFunction: (
     ctx: GetServerSidePropsAuthContext
   ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>,
-  authRole: string
+  authRole: UserRole
 ) {
   return async (
     context: GetServerSidePropsAuthContext
@@ -52,7 +52,7 @@ export function requireAuthentication(
       };
     }
 
-    if (session.user?.role !== authRole) {
+    if (session.user.role !== authRole) {
       // If improper credentials, redirect to unauthorized page
       return {
         redirect: {
@@ -86,10 +86,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  if (session?.user?.role === UserRole.Administrator) {
-    return session;
-  }
-  return null;
+  return session?.user.role === UserRole.Administrator ? session : null;
 };
 
 /**
@@ -136,7 +133,7 @@ export const validateTemporaryToken = async (token: string) => {
  * @param authRole string of the authRole from the current session
  * @returns string for the url
  */
-const loginUrl = (authRole: string): string => {
+const loginUrl = (authRole: UserRole): string => {
   switch (authRole) {
     case UserRole.Administrator:
       return "/admin/login/";
@@ -151,7 +148,7 @@ const loginUrl = (authRole: string): string => {
  * @param authRole string of the authRole from the current session
  * @returns string for the url
  */
-const unauthorizedUrl = (authRole: string): string => {
+const unauthorizedUrl = (authRole: UserRole): string => {
   switch (authRole) {
     case UserRole.Administrator:
       return "/admin/unauthorized/";
