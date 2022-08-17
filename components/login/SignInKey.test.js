@@ -47,6 +47,9 @@ describe("Login Component with Sign-In Key", () => {
     await userEvent.type(loginEmail, "test@cds-snc.ca");
     await userEvent.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(1);
+    expect(mockedAxios).toHaveBeenCalledWith(
+      expect.objectContaining({ url: "/api/token/temporary", method: "POST" })
+    );
     expect(await screen.findByRole("alert")).toBeInTheDocument();
   });
 
@@ -60,7 +63,7 @@ describe("Login Component with Sign-In Key", () => {
     await user.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/token/temporary" })
+      expect.objectContaining({ url: "/api/token/temporary", method: "POST" })
     );
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });

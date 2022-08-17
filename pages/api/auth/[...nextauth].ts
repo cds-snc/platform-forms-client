@@ -3,13 +3,12 @@ import NextAuth, { Session, JWT, NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
 import { acceptableUseCache } from "@lib/cache";
-
-const prisma = new PrismaClient();
+import { LoggingAction } from "@lib/auth";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -31,7 +30,6 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         // If the temporary token is missing don't process further
         if (!credentials?.temporaryToken) return null;
-
         const user = await validateTemporaryToken(credentials.temporaryToken);
 
         if (user) {
@@ -110,10 +108,66 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+
+  events: {
+    async signIn({ user }) {
+      // Not throwing an Error as it could potentially redirect the user to an Error page
+      // This error should be transparent to a user.
+      try {
+        const formUser = await prisma.formUser.findUnique({
+          where: {
+            id: user.id,
+          },
+          select: {
+            id: true,
+          },
+        });
+        if (formUser) {
+          await prisma.accessLog.create({
+            data: {
+              action: LoggingAction.LOGIN,
+              userId: user.id,
+            },
+          });
+        }
+      } catch (e) {
+        prismaErrors(e, null);
+      }
+    },
+    async signOut({ token }) {
+      try {
+        if (!token.userId) {
+          // Not throwing an Error as it could potentially redirect the user to an Error page
+          // This error should be transparent to a user.
+          logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
+          return;
+        }
+        const formUser = await prisma.formUser.findUnique({
+          where: {
+            id: token.userId as string,
+          },
+          select: {
+            id: true,
+          },
+        });
+        if (formUser) {
+          await prisma.accessLog.create({
+            data: {
+              action: LoggingAction.LOGOUT,
+              userId: token.userId as string,
+            },
+          });
+        }
+      } catch (e) {
+        prismaErrors(e, null);
+      }
+    },
+  },
 };
 
 /**
- * if key exists in cache then set property to true and remove it from cache.
+ * Set the acceptable Use value.
+ * if key exists in cache set the property to true and remove it from cache
  * otherwise set to false
  * @param token
  * @returns

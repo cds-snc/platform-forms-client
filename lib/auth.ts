@@ -11,10 +11,23 @@ import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { UserRole } from "./types/user-types";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
+}
+
+/**
+ * Enum used to record Logging action events
+ */
+export enum LoggingAction {
+  LOGIN = "LOGIN",
+  LOGOUT = "LOGOUT",
+  LOCKED = "LOCKED",
+}
+
+export enum UserRole {
+  PROGRAM_ADMINISTRATOR = "program_administator",
+  ADMINSITRATOR = "administrator",
 }
 
 /**
@@ -41,6 +54,7 @@ export function requireAuthentication(
         },
       };
     }
+    // redirect user on acceptable use page til he accepts the terms.
     if (!session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
       return {
         redirect: {
@@ -49,6 +63,7 @@ export function requireAuthentication(
         },
       };
     }
+    // the acceptable use term was agreed upon.Redirect user to the appropriate form retrieval page.
     if (session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
       return {
         redirect: {
