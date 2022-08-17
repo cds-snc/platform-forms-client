@@ -1,8 +1,9 @@
 import JSONUpload from "../../components/admin/JsonUpload/JsonUpload";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "../../lib/auth";
+import { requireAuthentication } from "@lib/auth";
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { UserRole } from "@prisma/client";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   return {
@@ -11,7 +12,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
     },
   };
-});
+}, UserRole.administrator);
 
 const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");

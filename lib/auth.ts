@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { UserRole } from "@prisma/client";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -33,7 +34,8 @@ export enum LoggingAction {
 export function requireAuthentication(
   innerFunction: (
     ctx: GetServerSidePropsAuthContext
-  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
+  ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>,
+  authRole: UserRole
 ) {
   return async (
     context: GetServerSidePropsAuthContext
@@ -44,16 +46,17 @@ export function requireAuthentication(
       // If no user, redirect to login
       return {
         redirect: {
-          destination: `/${context.locale}/admin/login/`,
+          destination: `/${context.locale}${loginUrl(authRole)}`,
           permanent: false,
         },
       };
     }
 
-    if (!session.user?.admin) {
+    if (session.user.role !== authRole) {
+      // If improper credentials, redirect to unauthorized page
       return {
         redirect: {
-          destination: `/${context.locale}/admin/unauthorized/`,
+          destination: `/${context.locale}${unauthorizedUrl(authRole)}`,
           permanent: false,
         },
       };
@@ -83,10 +86,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  if (session && session.user?.admin) {
-    return session;
-  }
-  return null;
+  return session?.user.role === UserRole.administrator ? session : null;
 };
 
 /**
@@ -125,5 +125,35 @@ export const validateTemporaryToken = async (token: string) => {
     return user;
   } catch (error) {
     return prismaErrors(error, null);
+  }
+};
+
+/**
+ * Returns the URL for the page if the user is not logged in
+ * @param authRole string of the authRole from the current session
+ * @returns string for the url
+ */
+const loginUrl = (authRole: UserRole): string => {
+  switch (authRole) {
+    case UserRole.administrator:
+      return "/admin/login/";
+    case UserRole.program_administrator:
+    default:
+      return "/auth/login/";
+  }
+};
+
+/**
+ * Returns the URL for the page if the user is unauthorized
+ * @param authRole string of the authRole from the current session
+ * @returns string for the url
+ */
+const unauthorizedUrl = (authRole: UserRole): string => {
+  switch (authRole) {
+    case UserRole.administrator:
+      return "/admin/unauthorized/";
+    case UserRole.program_administrator:
+    default:
+      return "/auth/unauthorized/";
   }
 };
