@@ -41,7 +41,9 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
       <div className="gc-acceptable-use-header">
         <h1>{t("acceptableUsePage.welcome")}</h1>
         <span>
-          {t("acceptableUsePage.lastLoginTime")} : {lastLoginTime}
+          <>
+            {t("acceptableUsePage.lastLoginTime")} : {lastLoginTime}
+          </>
         </span>
       </div>
       <RichText className="gc-acceptable-use-content">{content}</RichText>

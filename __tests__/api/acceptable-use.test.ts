@@ -3,6 +3,7 @@ import acceptableUse from "@pages/api/acceptableuse";
 import { acceptableUseCache } from "@lib/cache";
 
 jest.mock("@lib/cache");
+
 const mockedAcceptableUseCache = jest.mocked(acceptableUseCache, true);
 const { set } = mockedAcceptableUseCache;
 
@@ -18,7 +19,6 @@ describe("Test acceptable use endpoint", () => {
         userID: 1,
       },
     });
-
     await acceptableUse(req, res);
     expect(res.statusCode).toBe(200);
   });
