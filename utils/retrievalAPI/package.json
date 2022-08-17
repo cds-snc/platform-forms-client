@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.6.1",
     "csv-writer": "^1.6.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"
