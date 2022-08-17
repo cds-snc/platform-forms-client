@@ -25,6 +25,7 @@ export type MiddlewareRequest = (
 
 export interface MiddlewareProps {
   formID?: string;
+  formSubmission?: string;
   session?: Session;
   email?: string;
   temporaryToken?: string;

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added login page for temporary token [#900](https://github.com/cds-snc/platform-forms-client/pull/900)
 - [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
+- Added file attachment scan verdict endpoint to retrieval API [#932](https://github.com/cds-snc/platform-forms-client/pull/932)
 
 ### Fixed
 
