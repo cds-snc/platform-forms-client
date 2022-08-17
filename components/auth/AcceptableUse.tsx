@@ -9,7 +9,7 @@ import { signOut } from "next-auth/react";
 interface AcceptableUseProps {
   content: string;
   lastLoginTime?: string;
-  userId: string;
+  userId: string | undefined;
 }
 const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
   const { t, i18n } = useTranslation("common");

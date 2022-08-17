@@ -5,21 +5,21 @@ import { useSession } from "next-auth/react";
 import { requireAuthentication } from "@lib/auth";
 import AcceptableUseTerms from "@components/auth/AcceptableUse";
 
-const TermsOfUse = (props) => {
+interface TermsOfUse {
+  content: string;
+}
+const TermsOfUse = (props: TermsOfUse) => {
   const { data: session } = useSession();
-  const userId = session?.user.userId;
-  const lastLoginTime = session?.user.lastLoginTime;
+  const userId = session?.user?.userId;
+  const lastLoginTime = session?.user?.lastLoginTime ? session?.user.lastLoginTime.toString() : "";
+  const { content } = props;
 
-  const acceptableProps = { ...props, lastLoginTime, userId };
+  const acceptableProps = { content, lastLoginTime, userId };
   return (
     <>
       <AcceptableUseTerms {...acceptableProps} />
     </>
   );
-};
-
-TermsOfUse.propTypes = {
-  content: PropTypes.string.isRequired,
 };
 
 export const getStaticProps = requireAuthentication(async ({ locale }) => {

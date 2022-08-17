@@ -1,6 +1,6 @@
 /** Hard to find a way to hack requireAuthentication
- * wrapper around policy page
- * we will keep this file for reference til we find a suitable approach
+ * wrapper around policy page we will keep this file
+ * for reference til we find (if possible) a suitable approach
  **/
 describe("Acceptable use Page", () => {
   beforeEach(() => {
