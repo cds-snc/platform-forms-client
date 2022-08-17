@@ -8,7 +8,7 @@ import { signOut } from "next-auth/react";
 
 interface AcceptableUseProps {
   content: string;
-  lastLoginTime?: string;
+  lastLoginTime?: Date | string;
   userId: string | undefined;
 }
 const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {

@@ -51,8 +51,19 @@ export function requireAuthentication(
         },
       };
     }
+
+    if (session.user.role !== authRole) {
+      // If improper credentials, redirect to unauthorized page
+      return {
+        redirect: {
+          destination: `/${context.locale}${unauthorizedUrl(authRole)}`,
+          permanent: false,
+        },
+      };
+    }
+
     // redirect user on acceptable use page til he accepts the terms.
-    if (!session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
+    if (!session.user?.acceptableUse && session.user?.role === UserRole.program_administrator) {
       return {
         redirect: {
           destination: `/${context.locale}/auth/policy`,
@@ -61,20 +72,14 @@ export function requireAuthentication(
       };
     }
     // the acceptable use term was agreed upon.Redirect user to the appropriate form retrieval page.
-    if (session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
+    if (
+      session.user?.acceptableUse &&
+      session.user?.authorizedForm &&
+      session.user?.role === UserRole.program_administrator
+    ) {
       return {
         redirect: {
           destination: `/${context.locale}/id/${session.user.authorizedForm}/retrieval`,
-          permanent: false,
-        },
-      };
-    }
-
-    if (session.user.role !== authRole) {
-      // If improper credentials, redirect to unauthorized page
-      return {
-        redirect: {
-          destination: `/${context.locale}${unauthorizedUrl(authRole)}`,
           permanent: false,
         },
       };

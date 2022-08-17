@@ -10,7 +10,7 @@ interface TermsOfUse {
 const TermsOfUse = (props: TermsOfUse) => {
   const { data: session } = useSession();
   const userId = session?.user?.userId;
-  const lastLoginTime = session?.user?.lastLoginTime ? session?.user.lastLoginTime.toString() : "";
+  const lastLoginTime = session?.user?.lastLoginTime ? session?.user.lastLoginTime : "";
   const { content } = props;
 
   const acceptableProps = { content, lastLoginTime, userId };
@@ -21,13 +21,15 @@ const TermsOfUse = (props: TermsOfUse) => {
   );
 };
 
-export const getStaticProps = requireAuthentication(async ({ locale }) => {
-  const termsOfUseContent = await require(`../../public/static/content/${locale}/terms-of-use.md`);
+export const getServerSideProps = requireAuthentication(async (context) => {
+  const termsOfUseContent =
+    await require(`../../public/static/content/${context?.locale}/terms-of-use.md`);
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      ...(context.locale && (await serverSideTranslations(context?.locale, ["common"]))),
       content: termsOfUseContent ?? null,
     },
   };
 }, UserRole.program_administrator);
+
 export default TermsOfUse;
