@@ -26,7 +26,7 @@ describe("Test JSON validation scenarios", () => {
   beforeEach(() => {
     const mockSession = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", role: UserRole.administrator, userId: "1" },
+      user: { email: "a@b.com", name: "Testing Forms", role: UserRole.ADMINISTRATOR, userId: "1" },
     };
 
     mockGetSession.mockResolvedValue(mockSession);

@@ -29,7 +29,7 @@ describe("Flags API endpoint", () => {
         user: {
           email: "forms@cds.ca",
           name: "forms user",
-          role: UserRole.administrator,
+          role: UserRole.ADMINISTRATOR,
           userId: "1",
         },
       };

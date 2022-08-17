@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          token.role = user?.active ? UserRole.program_administrator : null; // TODO: change it so there is a "role" field for FormUser
+          token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
           token.acceptableUse = false;
         }
       }

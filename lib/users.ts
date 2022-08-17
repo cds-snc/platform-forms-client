@@ -91,7 +91,7 @@ export const adminRole = async (isAdmin: boolean, userId: string): Promise<[bool
         id: userId,
       },
       data: {
-        role: UserRole.administrator,
+        role: UserRole.ADMINISTRATOR,
       },
     });
     return [true, Boolean(user)];

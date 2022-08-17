@@ -86,7 +86,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  return session?.user.role === UserRole.administrator ? session : null;
+  return session?.user.role === UserRole.ADMINISTRATOR ? session : null;
 };
 
 /**
@@ -135,9 +135,9 @@ export const validateTemporaryToken = async (token: string) => {
  */
 const loginUrl = (authRole: UserRole): string => {
   switch (authRole) {
-    case UserRole.administrator:
+    case UserRole.ADMINISTRATOR:
       return "/admin/login/";
-    case UserRole.program_administrator:
+    case UserRole.PROGRAM_ADMINISTRATOR:
     default:
       return "/auth/login/";
   }
@@ -150,9 +150,9 @@ const loginUrl = (authRole: UserRole): string => {
  */
 const unauthorizedUrl = (authRole: UserRole): string => {
   switch (authRole) {
-    case UserRole.administrator:
+    case UserRole.ADMINISTRATOR:
       return "/admin/unauthorized/";
-    case UserRole.program_administrator:
+    case UserRole.PROGRAM_ADMINISTRATOR:
     default:
       return "/auth/unauthorized/";
   }

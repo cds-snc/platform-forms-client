@@ -44,7 +44,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          role: UserRole.administrator,
+          role: UserRole.ADMINISTRATOR,
         },
       };
 
@@ -165,7 +165,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          role: UserRole.administrator,
+          role: UserRole.ADMINISTRATOR,
           userId: "1",
         },
       };
