@@ -6,12 +6,12 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { signOut } from "next-auth/react";
 
-interface AcceptableUseProps {
+export interface AcceptableUseProps {
   content: string;
   lastLoginTime?: Date | string;
-  userId: string | undefined;
+  userId: string;
 }
-const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
+export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
   const { t, i18n } = useTranslation("common");
   const { content, lastLoginTime, userId } = props;
   const agreeAcceptableUse = async () => {

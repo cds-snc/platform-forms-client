@@ -31,7 +31,7 @@ describe("Test Auth lib", () => {
           email: "test@cds.ca",
           name: "test",
           image: "null",
-          role: UserRole.administrator,
+          role: UserRole.ADMINISTRATOR,
           userId: "1",
         },
       };
@@ -52,7 +52,7 @@ describe("Test Auth lib", () => {
           email: "test@cds.ca",
           name: "test",
           image: "null",
-          role: UserRole.program_administrator,
+          role: UserRole.PROGRAM_ADMINISTRATOR,
           userId: "1",
         },
       };

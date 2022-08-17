@@ -67,9 +67,9 @@ const UserRow = ({ user }: UserRowProps) => {
     return (
       <tr className="border-b-1">
         <td>{user.email}</td>
-        <td>{user.role === UserRole.administrator ? t("true") : t("false")}</td>
+        <td>{user.role === UserRole.ADMINISTRATOR ? t("true") : t("false")}</td>
         <td>
-          <AdminEnable isAdmin={user.role === UserRole.administrator} user={user} t={t} />
+          <AdminEnable isAdmin={user.role === UserRole.ADMINISTRATOR} user={user} t={t} />
         </td>
       </tr>
     );
@@ -117,4 +117,4 @@ export const getServerSideProps = requireAuthentication(async (context) => {
       users,
     },
   };
-}, UserRole.administrator);
+}, UserRole.ADMINISTRATOR);

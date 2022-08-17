@@ -63,7 +63,7 @@ export function requireAuthentication(
     }
 
     // redirect user on acceptable use page til he accepts the terms.
-    if (!session.user?.acceptableUse && session.user?.role === UserRole.program_administrator) {
+    if (!session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
       return {
         redirect: {
           destination: `/${context.locale}/auth/policy`,
@@ -75,7 +75,7 @@ export function requireAuthentication(
     if (
       session.user?.acceptableUse &&
       session.user?.authorizedForm &&
-      session.user?.role === UserRole.program_administrator
+      session.user?.role === UserRole.PROGRAM_ADMINISTRATOR
     ) {
       return {
         redirect: {
@@ -109,7 +109,7 @@ export const isAdmin = async ({
   res: NextApiResponse;
 }): Promise<Session | null> => {
   const session = await getServerSession({ req, res }, authOptions);
-  return session?.user.role === UserRole.administrator ? session : null;
+  return session?.user.role === UserRole.ADMINISTRATOR ? session : null;
 };
 
 /**
@@ -158,9 +158,9 @@ export const validateTemporaryToken = async (token: string) => {
  */
 const loginUrl = (authRole: UserRole): string => {
   switch (authRole) {
-    case UserRole.administrator:
+    case UserRole.ADMINISTRATOR:
       return "/admin/login/";
-    case UserRole.program_administrator:
+    case UserRole.PROGRAM_ADMINISTRATOR:
     default:
       return "/auth/login/";
   }
@@ -173,9 +173,9 @@ const loginUrl = (authRole: UserRole): string => {
  */
 const unauthorizedUrl = (authRole: UserRole): string => {
   switch (authRole) {
-    case UserRole.administrator:
+    case UserRole.ADMINISTRATOR:
       return "/admin/unauthorized/";
-    case UserRole.program_administrator:
+    case UserRole.PROGRAM_ADMINISTRATOR:
     default:
       return "/auth/unauthorized/";
   }

@@ -40,7 +40,7 @@ describe("Users API endpoint", () => {
       });
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.program_administrator },
+        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.PROGRAM_ADMINISTRATOR },
       };
 
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -66,7 +66,7 @@ describe("Users API endpoint", () => {
       });
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.program_administrator },
+        user: { email: "forms@cds.ca", name: "forms user", role: UserRole.PROGRAM_ADMINISTRATOR },
       };
 
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -102,7 +102,7 @@ describe("Users API endpoint", () => {
     beforeAll(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", role: UserRole.administrator, id: "1" },
+        user: { email: "forms@cds.ca", name: "forms", role: UserRole.ADMINISTRATOR, id: "1" },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
     });
@@ -115,19 +115,19 @@ describe("Users API endpoint", () => {
         {
           id: "1",
           email: "test@cds.ca",
-          role: UserRole.administrator,
+          role: UserRole.ADMINISTRATOR,
           name: "Zoe",
         },
         {
           id: "2",
           email: "forms@cds.ca",
-          role: UserRole.administrator,
+          role: UserRole.ADMINISTRATOR,
           name: "Joe",
         },
         {
           id: "3",
           email: "forms_2@cds.ca",
-          role: UserRole.program_administrator,
+          role: UserRole.PROGRAM_ADMINISTRATOR,
           name: "Boe",
         },
       ]);
@@ -145,19 +145,19 @@ describe("Users API endpoint", () => {
           {
             id: "1",
             email: "test@cds.ca",
-            role: UserRole.administrator,
+            role: UserRole.ADMINISTRATOR,
             name: "Zoe",
           },
           {
             id: "2",
             email: "forms@cds.ca",
-            role: UserRole.administrator,
+            role: UserRole.ADMINISTRATOR,
             name: "Joe",
           },
           {
             id: "3",
             email: "forms_2@cds.ca",
-            role: UserRole.program_administrator,
+            role: UserRole.PROGRAM_ADMINISTRATOR,
             name: "Boe",
           },
         ],
@@ -189,7 +189,7 @@ describe("Users API endpoint", () => {
     beforeEach(() => {
       const mockSession = {
         expires: "1",
-        user: { email: "forms@cds.ca", name: "forms", role: UserRole.administrator, userId: "1" },
+        user: { email: "forms@cds.ca", name: "forms", role: UserRole.ADMINISTRATOR, userId: "1" },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
     });
@@ -258,7 +258,7 @@ describe("Users API endpoint", () => {
       prismaMock.user.update.mockResolvedValue({
         id: "2",
         email: "forms@cds.ca",
-        role: UserRole.administrator,
+        role: UserRole.ADMINISTRATOR,
         emailVerified: null,
         image: null,
         name: "Joe",
