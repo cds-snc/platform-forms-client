@@ -72,6 +72,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context.locale, ["common", "admin-flags"]))),
     },
   };
-}, UserRole.administrator);
+}, UserRole.ADMINISTRATOR);
 
 export default Flags;

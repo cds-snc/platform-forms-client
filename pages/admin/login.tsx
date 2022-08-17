@@ -29,7 +29,7 @@ const Login = (): JSX.Element => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context, authOptions);
 
-  if (session?.user.role === UserRole.administrator)
+  if (session?.user.role === UserRole.ADMINISTRATOR)
     return {
       props: {},
       redirect: {

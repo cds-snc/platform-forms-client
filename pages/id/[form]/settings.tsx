@@ -124,6 +124,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   }
   // if no form returned, 404
   return redirect(context.locale);
-}, UserRole.administrator);
+}, UserRole.ADMINISTRATOR);
 
 export default FormSettings;

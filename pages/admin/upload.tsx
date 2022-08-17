@@ -12,7 +12,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
     },
   };
-}, UserRole.administrator);
+}, UserRole.ADMINISTRATOR);
 
 const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
