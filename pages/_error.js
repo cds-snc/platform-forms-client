@@ -7,7 +7,7 @@ function Error({ statusCode }) {
   const { t } = useTranslation("error");
   return (
     <>
-      <h1 className="gc-h1">
+      <h1>
         {t("500.title")} {statusCode}
       </h1>
       <p>{t("500.body")}</p>

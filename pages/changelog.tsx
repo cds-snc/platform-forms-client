@@ -29,7 +29,7 @@ const Changelog = (): React.ReactElement => {
 
   return (
     <>
-      <h2 className="gc-h2">Version: {version}</h2>
+      <h2>Version: {version}</h2>
       <br />
       <RichText>{changelog}</RichText>
     </>

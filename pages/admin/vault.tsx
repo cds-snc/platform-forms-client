@@ -239,9 +239,9 @@ const AdminVault: React.FC = () => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1>{t("title")}</h1>
       <div>
-        <h2 className="gc-h2">{t("subTitle")}:</h2>
+        <h2>{t("subTitle")}:</h2>
       </div>
       <div>
         <form id="form" onSubmit={handleSubmit}>

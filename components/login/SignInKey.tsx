@@ -76,7 +76,7 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
           </ul>
         </Alert>
       )}
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1>{t("title")}</h1>
       <form onSubmit={handleLoginSubmit}>
         <Label htmlFor="loginEmail" id="label-loginEmail">
           {t("emailLabel")}

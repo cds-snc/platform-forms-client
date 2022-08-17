@@ -85,7 +85,7 @@ const Users = ({ users }: UserProps): React.ReactElement => {
   const { t } = useTranslation("admin-users");
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1>{t("title")}</h1>
       <div className="shadow-lg border-4">
         <table className="table-auto min-w-full text-center ">
           <thead>

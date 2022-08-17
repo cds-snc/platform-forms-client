@@ -18,7 +18,7 @@ const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");
   return (
     <>
-      <h1 className="gc-h1">{t("upload.title")}</h1>
+      <h1>{t("upload.title")}</h1>
       <JSONUpload></JSONUpload>
     </>
   );

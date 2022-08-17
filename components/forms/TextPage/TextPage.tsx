@@ -31,9 +31,7 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
   return (
     <>
-      <h1 className="gc-h1" tabIndex={-1}>
-        {t("title")}
-      </h1>
+      <h1 tabIndex={-1}>{t("title")}</h1>
       <div>
         <p>{t("body")}</p>
       </div>
