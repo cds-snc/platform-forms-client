@@ -8,7 +8,6 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       userId?: string;
-      admin?: boolean;
       authorizedForm?: string;
       lastLoginTime?: Date;
       role?: string;
@@ -21,11 +20,10 @@ declare module "next-auth" {
 
   interface User extends DefaultUser {
     id: string;
-    admin: boolean | null;
+    role?: string | null;
   }
 
   interface JWT extends DefaultJWT {
-    admin?: boolean;
     userId?: string;
     authorizedForm?: string;
     lastLoginTime?: Date;

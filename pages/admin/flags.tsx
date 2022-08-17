@@ -5,6 +5,7 @@ import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Loader from "@components/globals/Loader";
 import { Button } from "@components/forms";
+import { UserRole } from "@prisma/client";
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json());
 
@@ -71,6 +72,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context.locale, ["common", "admin-flags"]))),
     },
   };
-});
+}, UserRole.administrator);
 
 export default Flags;

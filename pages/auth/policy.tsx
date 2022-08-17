@@ -1,10 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSession } from "next-auth/react";
 import { requireAuthentication } from "@lib/auth";
 import AcceptableUseTerms from "@components/auth/AcceptableUse";
-
+import { UserRole } from "@prisma/client";
 interface TermsOfUse {
   content: string;
 }
@@ -30,5 +29,5 @@ export const getStaticProps = requireAuthentication(async ({ locale }) => {
       content: termsOfUseContent ?? null,
     },
   };
-});
+}, UserRole.program_administrator);
 export default TermsOfUse;

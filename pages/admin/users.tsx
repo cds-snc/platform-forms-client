@@ -8,6 +8,7 @@ import { useRefresh } from "@lib/hooks/useRefresh";
 import React from "react";
 import axios from "axios";
 import { TFunction, useTranslation } from "next-i18next";
+import { UserRole } from "@prisma/client";
 
 // We're filtering out all the undefined fields in getServerSideProps
 // Extending interface locally to be easier to read
@@ -66,9 +67,9 @@ const UserRow = ({ user }: UserRowProps) => {
     return (
       <tr className="border-b-1">
         <td>{user.email}</td>
-        <td>{user.admin ? t("true") : t("false")}</td>
+        <td>{user.role === UserRole.administrator ? t("true") : t("false")}</td>
         <td>
-          <AdminEnable isAdmin={user.admin} user={user} t={t} />
+          <AdminEnable isAdmin={user.role === UserRole.administrator} user={user} t={t} />
         </td>
       </tr>
     );
@@ -116,4 +117,4 @@ export const getServerSideProps = requireAuthentication(async (context) => {
       users,
     },
   };
-});
+}, UserRole.administrator);

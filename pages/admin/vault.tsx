@@ -8,6 +8,7 @@ import convertMessage from "@lib/markdown";
 import { Button, RichText } from "../../components/forms";
 import { logMessage } from "@lib/logger";
 import { PublicFormRecord } from "@lib/types";
+import { UserRole } from "@prisma/client";
 
 interface ResponseListInterface {
   Items: {
@@ -298,6 +299,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context.locale, ["common", "admin-vault"]))),
     },
   };
-});
+}, UserRole.administrator);
 
 export default AdminVault;

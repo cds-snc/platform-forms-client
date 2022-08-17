@@ -7,6 +7,7 @@ import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
 import { acceptableUseCache } from "@lib/cache";
+import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
@@ -71,12 +72,13 @@ export const authOptions: NextAuthOptions = {
           if (user === null)
             throw new Error(`Could not get or create user with email: ${token.email}`);
 
-          token.admin = user.admin;
           token.userId = user.id;
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
           token.role = "admin";
-          if (!token.acceptableuse) await setAcceptableUseValueJWT(token);
+          token.role = user.role;
+          token.acceptableUse = false;
+
           break;
         }
 
@@ -86,21 +88,19 @@ export const authOptions: NextAuthOptions = {
 
           const user = await getFormUser(token.sub);
 
-          token.admin = false;
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          token.role = "program_administrator";
-          if (!token.acceptableuse) await setAcceptableUseValueJWT(token);
+          if (!token.acceptableuse) await setAcceptableUseValue(token);
+          token.role = user?.active ? UserRole.program_administrator : null; // TODO: change it so there is a "role" field for FormUser
         }
       }
 
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
-      // Add info like 'role' or 'admin' to session object
+      // Add info like 'role' to session object
       session.user.userId = token.userId as string;
-      session.user.admin = token.admin as boolean;
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
@@ -172,7 +172,7 @@ export const authOptions: NextAuthOptions = {
  * @param token
  * @returns
  */
-export const setAcceptableUseValueJWT = async (token: JWT) => {
+export const setAcceptableUseValue = async (token: JWT) => {
   const acceptableUseValue = await acceptableUseCache.check();
   if (acceptableUseValue) {
     token.acceptableUse = true;
