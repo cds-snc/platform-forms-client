@@ -1,4 +1,7 @@
 import { getRedisInstance } from "./integration/redisConnector";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { LoggingAction } from "@lib/auth";
+import { logMessage } from "./logger";
 
 export interface LockoutResponse {
   isLockedOut: boolean;
@@ -38,6 +41,7 @@ export async function registerFailedLoginAttempt(email: string): Promise<Lockout
 
     if (incrementedNumberOfFailedLoginAttempts >= MAX_FAILED_ATTEMPTS_ALLOWED) {
       await redis.expire(`${LOCKOUT_KEY}:${email}`, LOCKOUT_DURATION_IN_SECONDS);
+      await logLoginLockoutEvent(email);
       return {
         isLockedOut: false,
         numberOfSecondsBeforeLockoutExpires: LOCKOUT_DURATION_IN_SECONDS,
@@ -61,4 +65,32 @@ export async function registerFailedLoginAttempt(email: string): Promise<Lockout
 export async function registerSuccessfulLoginAttempt(email: string): Promise<void> {
   const redis = await getRedisInstance();
   await redis.del(`${LOCKOUT_KEY}:${email}`);
+}
+
+async function logLoginLockoutEvent(email: string): Promise<void> {
+  try {
+    const formUser = await prisma.formUser.findFirst({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (formUser) {
+      await prisma.accessLog.create({
+        data: {
+          action: LoggingAction.LOCKED,
+          userId: formUser.id,
+        },
+      });
+    } else {
+      logMessage.warn(
+        `An email address with no access to any form has been locked out. Email: ${email}`
+      );
+    }
+  } catch (e) {
+    prismaErrors(e, null);
+  }
 }
