@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { validateTemporaryToken } from "@lib/auth";
 
@@ -44,4 +43,22 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       return { next: false };
     }
   };
+};
+
+/**
+ * Extracts the bearer token from the authorization header
+ *
+ * @param req - the api request containing the authorization header
+ * @returns The bearer token string
+ *
+ * @throws
+ * This exception is thrown if the bearer token is not found
+ */
+export const extractBearerTokenFromReq = (req: NextApiRequest): string => {
+  const authHeader = String(req.headers["authorization"] || "");
+  if (authHeader.startsWith("Bearer ")) {
+    return authHeader.substring(7, authHeader.length);
+  } else {
+    throw new Error("Missing bearer token.");
+  }
 };
