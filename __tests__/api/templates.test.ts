@@ -3,7 +3,7 @@
  */
 import { createMocks } from "node-mocks-http";
 import templates from "@pages/api/templates";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import * as logAdmin from "@lib/adminLogs";
@@ -11,7 +11,7 @@ import { prismaMock } from "@jestUtils";
 import { UserRole } from "@prisma/client";
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getServerSession, true);
+const mockGetSession = jest.mocked(unstable_getServerSession, true);
 
 jest.mock("next-auth/next");
 

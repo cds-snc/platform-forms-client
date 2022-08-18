@@ -4,7 +4,7 @@
  */
 
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import owners from "@pages/api/id/[form]/owners";
 import * as logAdmin from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
@@ -13,7 +13,7 @@ import { Prisma, UserRole } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getServerSession, true);
+const mockGetSession = jest.mocked(unstable_getServerSession, true);
 
 describe("/id/[forms]/owners", () => {
   describe("Access Control", () => {
