@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { createMocks } from "node-mocks-http";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import enable from "@pages/api/flags/[key]/enable";
 import disable from "@pages/api/flags/[key]/disable";
 import check from "@pages/api/flags/[key]/check";
@@ -13,7 +13,7 @@ import { UserRole } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getServerSession, true);
+const mockGetSession = jest.mocked(unstable_getServerSession, true);
 
 jest.mock("@lib/flags");
 

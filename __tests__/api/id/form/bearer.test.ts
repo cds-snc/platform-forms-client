@@ -3,7 +3,7 @@
  */
 
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
@@ -14,7 +14,7 @@ import { Prisma, UserRole } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getServerSession, true);
+const mockGetSession = jest.mocked(unstable_getServerSession, true);
 const mockLogMessage = jest.mocked(logMessage, true);
 
 jest.mock("@lib/logger");
