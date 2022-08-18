@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { UserRole } from "@prisma/client";
@@ -17,7 +17,7 @@ const Unauthorized: React.FC = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerSession(context, authOptions);
+  const session = await unstable_getServerSession(context.req, context.res, authOptions);
 
   if (session?.user.role === UserRole.ADMINISTRATOR)
     return {

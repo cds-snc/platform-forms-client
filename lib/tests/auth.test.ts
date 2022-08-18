@@ -1,6 +1,6 @@
 import { isAdmin, validateTemporaryToken } from "@lib/auth";
 import { createMocks } from "node-mocks-http";
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
 import { UserRole } from "@prisma/client";
@@ -8,7 +8,7 @@ import { UserRole } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(getServerSession, true);
+const mockGetSession = jest.mocked(unstable_getServerSession, true);
 
 describe("Test Auth lib", () => {
   describe("isAdmin", () => {
