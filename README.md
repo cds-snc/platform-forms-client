@@ -94,8 +94,9 @@ There are some environment variables that can optionally be configured. You can 
 ### Grant yourself admin access locally
 
 - Login using your email via Google SSO
-- Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL'`
-- Update the record to elevate yourself as an admin `UPDATE "public"."User" SET admin=true WHERE id='$YOUR_ID'`
+- Connect to the local database `psql -h db -U postgres -d formsDB` 
+- Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL';`
+- Update the record to elevate yourself as an admin `UPDATE "public"."User" SET role='ADMINISTRATOR' WHERE id='$YOUR_ID';`
 
 ### Notify integration
 
