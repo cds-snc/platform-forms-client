@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import { useField } from "formik";
 import { useTranslation } from "next-i18next";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import { ErrorMessage } from "@components/forms";
 import { InputFieldProps } from "@lib/types";
 
 interface DropdownProps extends InputFieldProps {

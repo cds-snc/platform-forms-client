@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import classnames from "classnames";
 import { useField } from "formik";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import { ErrorMessage } from "@components/forms";
 import { InputFieldProps, CharacterCountMessages } from "@lib/types";
 
 export interface TextAreaProps extends InputFieldProps {
