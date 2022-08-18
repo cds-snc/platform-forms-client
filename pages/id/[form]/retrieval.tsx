@@ -1,5 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication, isAcceptableUseTermSet } from "@lib/auth";
+import { requireAuthentication } from "@lib/auth";
 import React from "react";
 import { UserRole } from "@prisma/client";
 
@@ -15,10 +15,7 @@ const retrieval = (): React.ReactElement => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  const { req, res } = context;
-
-  // acceptableUse value is not set yet
-  if (!(await isAcceptableUseTermSet({ req, res }))) {
+  if (!context.user?.acceptableUse) {
     return {
       redirect: {
         //redirect to the acceptable use page

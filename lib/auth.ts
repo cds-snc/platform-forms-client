@@ -158,20 +158,3 @@ const unauthorizedUrl = (authRole: UserRole): string => {
       return "/auth/unauthorized/";
   }
 };
-
-type NextApiRequestCustom = NextApiRequest & NextApiRequestCookies;
-/**
- * Checks if acceptableuse exists in session object
- * @param Request and Response
- * @returns boolean
- */
-export const isAcceptableUseTermSet = async ({
-  req,
-  res,
-}: {
-  req: NextApiRequestCustom;
-  res: NextApiResponse;
-}): Promise<boolean> => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  return session?.user?.acceptableUse === true;
-};
