@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
-import { RichText } from "../../../components/forms";
+import { RichText } from "@components/forms";
 import { getProperty } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 
@@ -76,5 +76,3 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
     </>
   );
 };
-
-export default TextPage;

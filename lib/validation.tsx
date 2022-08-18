@@ -9,7 +9,7 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
-import ErrorListItem from "../components/forms/ErrorListItem/ErrorListItem";
+import { ErrorListItem } from "@components/forms";
 import { isServer } from "./tsUtils";
 
 /**

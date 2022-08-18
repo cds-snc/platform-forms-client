@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "./Form";
+import { Form } from "@components/forms";
 import { submitToAPI } from "@lib/helpers";
 import { useFlag } from "@lib/hooks/useFlag";
 

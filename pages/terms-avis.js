@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { RichText } from "../components/forms/RichText/RichText";
+import { RichText } from "@components/forms";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Terms = ({ content }) => (

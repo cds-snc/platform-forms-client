@@ -1,8 +1,8 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Form from "../Form/Form";
-import { GenerateElement } from "../../../lib/formBuilder";
+import { Form } from "@components/forms";
+import { GenerateElement } from "@lib/formBuilder";
 
 const dynamicRowData = {
   id: 1,

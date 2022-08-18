@@ -4,7 +4,7 @@ import { getTemplateByID } from "@lib/templates";
 import React from "react";
 import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
-import { DeleteButton } from "@components/forms/Button/DeleteButton";
+import { DeleteButton } from "@components/forms";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { logMessage } from "@lib/logger";

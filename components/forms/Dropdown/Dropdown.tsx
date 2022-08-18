@@ -52,5 +52,3 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
     </>
   );
 };
-
-export default Dropdown;

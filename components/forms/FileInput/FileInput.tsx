@@ -127,5 +127,3 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     </>
   );
 };
-
-export default FileInput;

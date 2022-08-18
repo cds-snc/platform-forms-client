@@ -265,5 +265,3 @@ export const Form = withFormik<FormProps, Responses>({
     }
   },
 })(InnerForm);
-
-export default Form;
