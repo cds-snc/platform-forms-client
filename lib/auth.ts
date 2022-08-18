@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth/next";
+import { unstable_getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import {
   GetServerSidePropsResult,
@@ -40,7 +40,7 @@ export function requireAuthentication(
   return async (
     context: GetServerSidePropsAuthContext
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
-    const session = await getServerSession(context, authOptions);
+    const session = await unstable_getServerSession(context.req, context.res, authOptions);
 
     if (!session) {
       // If no user, redirect to login
@@ -85,7 +85,7 @@ export const isAdmin = async ({
   req: NextApiRequest;
   res: NextApiResponse;
 }): Promise<Session | null> => {
-  const session = await getServerSession({ req, res }, authOptions);
+  const session = await unstable_getServerSession(req, res, authOptions);
   return session?.user.role === UserRole.ADMINISTRATOR ? session : null;
 };
 
