@@ -1,18 +1,23 @@
 import { createMocks } from "node-mocks-http";
 import acceptableUse from "@pages/api/acceptableuse";
 import * as acceptableUseCache from "@lib/acceptableUseCache";
+import { getCsrfToken } from "next-auth/react";
 
+jest.mock("next-auth/react");
 jest.mock("@lib/acceptableUseCache");
 const mockedAcceptableUseCache = jest.mocked(acceptableUseCache, true);
 const { setAcceptableUse } = mockedAcceptableUseCache;
 
 describe("Test acceptable use endpoint", () => {
+  getCsrfToken.mockReturnValue("CsrfToken");
+
   it("Should save userID to redis cache", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
+        "x-csrf-token": "CsrfToken",
       },
       body: {
         userID: 1,
@@ -28,6 +33,7 @@ describe("Test acceptable use endpoint", () => {
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
+        "x-csrf-token": "CsrfToken",
       },
       body: {
         userID: undefined,
@@ -44,6 +50,7 @@ describe("Test acceptable use endpoint", () => {
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
+        "x-csrf-token": "CsrfToken",
       },
       body: {
         userID: 2,

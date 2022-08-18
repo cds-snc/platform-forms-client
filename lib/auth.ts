@@ -12,6 +12,7 @@ import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { UserRole } from "@prisma/client";
+import { NextApiRequestCookies } from "next/dist/server/api-utils";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;
@@ -158,6 +159,7 @@ const unauthorizedUrl = (authRole: UserRole): string => {
   }
 };
 
+type NextApiRequestCustom = NextApiRequest & NextApiRequestCookies;
 /**
  * Checks if acceptableuse exists in session object
  * @param Request and Response
@@ -167,9 +169,9 @@ export const isAcceptableUseTermSet = async ({
   req,
   res,
 }: {
-  req: NextApiRequest;
+  req: NextApiRequestCustom;
   res: NextApiResponse;
 }): Promise<boolean> => {
   const session = await getServerSession({ req, res }, authOptions);
-  return session?.user?.acceptableUse ?? false;
+  return session?.user?.acceptableUse == true;
 };

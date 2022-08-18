@@ -4,15 +4,14 @@ import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import AcceptableUseTerms from "./AcceptableUse";
 import { signOut } from "next-auth/react";
+import { getCsrfToken } from "next-auth/react";
 
 jest.mock("axios");
-
-jest.mock("next-auth/react", () => ({
-  signOut: jest.fn(() => ""),
-}));
+jest.mock("next-auth/react");
 
 describe("Acceptable use terms", () => {
   const props = { userId: "1", content: "test", lastLoginTime: "", formID: "testid" };
+  getCsrfToken.mockReturnValue("differentCsrfToken");
   it("Renders the acceptable use page.", async () => {
     await act(async () => {
       render(<AcceptableUseTerms {...props} />);

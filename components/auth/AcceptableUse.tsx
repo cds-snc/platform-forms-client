@@ -6,6 +6,7 @@ import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { getCsrfToken } from "next-auth/react";
 
 export interface AcceptableUseProps {
   content: string;
@@ -17,21 +18,29 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
   const router = useRouter();
   const { t, i18n } = useTranslation("common");
   const { content, lastLoginTime, userId, formID } = props;
-  const agreeAcceptableUse = async () => {
+
+  const agree = async () => {
+    const token = (await getCsrfToken()) as string;
     try {
-      await axios({
+      return await axios({
         url: "/api/acceptableuse",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "X-CSRF-Token": token,
         },
         data: {
           userID: userId,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      }).then(() => {
-        router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
-      });
+      })
+        .then((res) => {
+          logMessage.info("request acceptable use" + res.data);
+          router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
+        })
+        .catch((err) => {
+          logMessage.error(err);
+        });
     } catch (err) {
       logMessage.error(err as Error);
     }
@@ -53,12 +62,10 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
       </div>
       <RichText className="gc-acceptable-use-content">{content}</RichText>
       <div className="gc-acceptable-use-control-btn">
-        <button type="button" className="gc-agree-btn" onClick={agreeAcceptableUse}>
-          {" "}
+        <button type="button" className="gc-agree-btn" onClick={agree}>
           {t("acceptableUsePage.agree")}
         </button>
         <button type="button" className="gc-cancel-btn" onClick={cancel}>
-          {" "}
           {t("acceptableUsePage.cancel")}
         </button>
       </div>

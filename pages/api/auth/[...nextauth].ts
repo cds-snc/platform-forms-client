@@ -106,7 +106,13 @@ export const authOptions: NextAuthOptions = {
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
-      session.user.acceptableUse = token.acceptableUse ?? false;
+      //token.acceptableuse value is always null
+      //TODO change to session.user.acceptableUse = token.acceptableUse;
+      if (!session.user.acceptableUse && !token.acceptableUse) {
+        session.user.acceptableUse = await getAcceptableUseValue(token.userId);
+      } else {
+        session.user.acceptableUse = token.acceptableUse ?? false;
+      }
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
       return session;
@@ -146,6 +152,9 @@ export const authOptions: NextAuthOptions = {
           logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
           return;
         }
+        //remove acceptable user from the cache
+        await removeAcceptableUse(token?.userId as string);
+
         const formUser = await prisma.formUser.findUnique({
           where: {
             id: token.userId as string,
@@ -175,13 +184,21 @@ export const authOptions: NextAuthOptions = {
  * otherwise return false
  * @returns boolean
  */
-const getAcceptableUseValue = async (userId: string | undefined): Promise<boolean> => {
+const getAcceptableUseValue = async (userId: string | undefined) => {
   if (!userId) return false;
-  if (await acceptableUseCheck(userId)) {
-    removeAcceptableUse(userId);
-    return true;
-  }
-  return false;
+  const value = await acceptableUseCheck(userId);
+  if (await acceptableUseCheck(userId))
+    /** The requirement states the value must be remove from cache
+     * once it's retrieved.But
+     * The JWT token is not persisted...
+     * each time the getSession is called the value of
+     * token.acceptableuse is null. this is a hack to only removed
+     * the cache when signing out.
+     */
+    //await removeAcceptableUse(userId);
+    return value;
+
+  return value;
 };
 
 export default NextAuth(authOptions);

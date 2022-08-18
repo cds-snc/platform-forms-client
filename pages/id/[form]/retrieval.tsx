@@ -16,6 +16,7 @@ const retrieval = (): React.ReactElement => {
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   const { req, res } = context;
+
   // acceptableUse value is not set yet
   if (!(await isAcceptableUseTermSet({ req, res }))) {
     return {
