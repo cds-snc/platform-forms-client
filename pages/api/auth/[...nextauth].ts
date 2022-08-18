@@ -6,10 +6,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser } from "@lib/users";
-import { acceptableUseCache } from "@lib/cache";
 import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { acceptableUseCache } from "@lib/cache";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          if (!token.acceptableuse) await setTokenAcceptableUseValue(token);
+          if (!token.acceptableUse) await setTokenAcceptableUseValue(token);
           token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
         }
       }
@@ -175,6 +175,7 @@ export const authOptions: NextAuthOptions = {
  * @returns
  */
 export const setTokenAcceptableUseValue = async (token: JWT) => {
+  //token.acceptableUse = true;
   const acceptableUseValue = await acceptableUseCache.check();
   // if key exists in cache set the property
   if (acceptableUseValue) {

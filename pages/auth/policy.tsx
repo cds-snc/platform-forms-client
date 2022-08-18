@@ -2,8 +2,8 @@ import React from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSession } from "next-auth/react";
 import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/AcceptableUse";
-import { requireAuthentication } from "@lib/auth";
-import { logMessage } from "@lib/logger";
+import { requireAuthentication, isAcceptableUseTermSet } from "@lib/auth";
+
 import { UserRole } from "@prisma/client";
 interface TermsOfUse {
   content: string;
@@ -24,9 +24,8 @@ const TermsOfUse = (props: TermsOfUse) => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
-  logMessage.info("context");
-  const agreed = context?.user?.acceptableuse as boolean;
-  if (agreed) {
+  const { req, res } = context;
+  if (await isAcceptableUseTermSet({ req, res })) {
     return {
       redirect: {
         //redirect to retrieval page
