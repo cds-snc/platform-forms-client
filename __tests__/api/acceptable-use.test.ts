@@ -1,11 +1,10 @@
 import { createMocks } from "node-mocks-http";
 import acceptableUse from "@pages/api/acceptableuse";
-import { acceptableUseCache } from "@lib/cache";
+import * as acceptableUseCache from "@lib/acceptableUseCache";
 
-jest.mock("@lib/cache");
-
+jest.mock("@lib/acceptableUseCache");
 const mockedAcceptableUseCache = jest.mocked(acceptableUseCache, true);
-const { set } = mockedAcceptableUseCache;
+const { setAcceptableUse } = mockedAcceptableUseCache;
 
 describe("Test acceptable use endpoint", () => {
   it("Should save userID to redis cache", async () => {
@@ -51,7 +50,7 @@ describe("Test acceptable use endpoint", () => {
       },
     });
 
-    set.mockImplementationOnce(() => {
+    setAcceptableUse.mockImplementationOnce(() => {
       throw new Error("Could not connect to cache");
     });
     await acceptableUse(req, res);

@@ -87,32 +87,6 @@ const unpublishedPut = async (templates: string[]): Promise<void> => {
   return modifyValue(`form:unpublished`, templates);
 };
 
-const acceptableUseCheck = async (): Promise<string | null> => {
-  return checkValue(`auth:acceptableUse`);
-};
-
-const acceptableUsePut = async (userID: string) => {
-  if (!cacheAvailable) return;
-  try {
-    const redis = await getRedisInstance();
-
-    redis.set(`auth:acceptableUse`, userID);
-    logMessage.debug(`Updating Cached value for auth:acceptableUse`);
-  } catch (e) {
-    logMessage.error(e as Error);
-    throw new Error("Could not connect to cache");
-  }
-};
-const deleteAcceptableUse = async (): Promise<void> => {
-  deleteValue(`auth:acceptableUse`);
-};
-
-export const acceptableUseCache = {
-  check: acceptableUseCheck,
-  set: acceptableUsePut,
-  del: deleteAcceptableUse,
-};
-
 export const formCache = {
   cacheAvailable,
   formID: {

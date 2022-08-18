@@ -1,5 +1,5 @@
 import { logger } from "@lib/logger";
-import { formCache } from "./cache";
+import { formCache } from "./fromCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord } from "@lib/types";
 import { Prisma } from "@prisma/client";

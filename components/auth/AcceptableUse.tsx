@@ -30,7 +30,6 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       }).then(() => {
-        // Do not work ?
         router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
       });
     } catch (err) {

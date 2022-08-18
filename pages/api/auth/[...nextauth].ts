@@ -9,7 +9,7 @@ import { getFormUser, getOrCreateUser } from "@lib/users";
 import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { acceptableUseCache } from "@lib/cache";
+import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -91,7 +91,9 @@ export const authOptions: NextAuthOptions = {
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          if (!token.acceptableUse) await setTokenAcceptableUseValue(token);
+          if (!token.acceptableUse) {
+            token.acceptableUSe = await getAcceptableUseValue(user?.id);
+          }
           token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
         }
       }
@@ -104,7 +106,7 @@ export const authOptions: NextAuthOptions = {
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
-      session.user.acceptableUse = token.acceptableUse;
+      session.user.acceptableUse = token.acceptableUse ?? false;
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
       return session;
@@ -169,21 +171,17 @@ export const authOptions: NextAuthOptions = {
 
 /**
  * Get the acceptable Use value.
- * if key exists in cache set the property to true and remove it from cache
- * otherwise set to false
- * @param token
- * @returns
+ * if key exists in cache return value and remove the key from cache
+ * otherwise return false
+ * @returns boolean
  */
-export const setTokenAcceptableUseValue = async (token: JWT) => {
-  //token.acceptableUse = true;
-  const acceptableUseValue = await acceptableUseCache.check();
-  // if key exists in cache set the property
-  if (acceptableUseValue) {
-    token.acceptableUse = true;
-    acceptableUseCache.del();
-  } else {
-    token.acceptableUse = false;
+const getAcceptableUseValue = async (userId: string | undefined): Promise<boolean> => {
+  if (!userId) return false;
+  if (await acceptableUseCheck(userId)) {
+    removeAcceptableUse(userId);
+    return true;
   }
+  return false;
 };
 
 export default NextAuth(authOptions);
