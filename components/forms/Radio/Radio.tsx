@@ -1,6 +1,6 @@
 import React from "react";
 import { Field } from "formik";
-import { Description } from "../Description/Description";
+import { Description } from "@components/forms";
 import { ChoiceFieldProps } from "@lib/types";
 
 export const Radio = (

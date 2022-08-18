@@ -1,6 +1,6 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
-import { ErrorMessage } from "./ErrorMessage";
+import { ErrorMessage } from "@components/forms";
 
 describe("ErrorMessage component", () => {
   afterAll(cleanup);
