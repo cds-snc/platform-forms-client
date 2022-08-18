@@ -5,15 +5,18 @@ import { RichText } from "../../components/forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
 import axios from "axios";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export interface AcceptableUseProps {
   content: string;
   lastLoginTime?: Date | string;
   userId: string;
+  formID: string;
 }
 export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
+  const router = useRouter();
   const { t, i18n } = useTranslation("common");
-  const { content, lastLoginTime, userId } = props;
+  const { content, lastLoginTime, userId, formID } = props;
   const agreeAcceptableUse = async () => {
     try {
       await axios({
@@ -26,6 +29,9 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
           userID: userId,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      }).then(() => {
+        // Do not work ?
+        router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
       });
     } catch (err) {
       logMessage.error(err as Error);

@@ -1,8 +1,9 @@
 import React from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useSession } from "next-auth/react";
-import { requireAuthentication } from "@lib/auth";
 import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/AcceptableUse";
+import { requireAuthentication } from "@lib/auth";
+import { logMessage } from "@lib/logger";
 import { UserRole } from "@prisma/client";
 interface TermsOfUse {
   content: string;
@@ -11,9 +12,10 @@ const TermsOfUse = (props: TermsOfUse) => {
   const { data: session } = useSession();
   const userId = session?.user?.userId ?? "";
   const lastLoginTime = session?.user?.lastLoginTime ?? "";
+  const formID = session?.user?.authorizedForm ?? "";
   const { content } = props;
 
-  const acceptableProps: AcceptableUseProps = { content, lastLoginTime, userId };
+  const acceptableProps: AcceptableUseProps = { content, lastLoginTime, userId, formID };
   return (
     <>
       <AcceptableUseTerms {...acceptableProps} />
@@ -22,6 +24,18 @@ const TermsOfUse = (props: TermsOfUse) => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
+  logMessage.info("context");
+  const agreed = context?.user?.acceptableuse as boolean;
+  if (agreed) {
+    return {
+      redirect: {
+        //redirect to retrieval page
+        destination: `/${context.locale}/id/${context?.user?.authorizedForm}/retrieval`,
+        permanent: false,
+      },
+    };
+  }
+
   const termsOfUseContent =
     await require(`../../public/static/content/${context?.locale}/terms-of-use.md`);
   return {

@@ -12,8 +12,8 @@ jest.mock("next-auth/react", () => ({
 }));
 
 describe("Acceptable use terms", () => {
+  const props = { userId: "1", content: "test", lastLoginTime: "", formID: "testid" };
   it("Renders the acceptable use page.", async () => {
-    const props = { userId: "0", content: "test", lastLoginTime: "" };
     await act(async () => {
       render(<AcceptableUseTerms {...props} />);
     });
@@ -22,8 +22,6 @@ describe("Acceptable use terms", () => {
   });
 
   it("Agree on the acceptable use terms", async () => {
-    const props = { userId: "1", content: "test", lastLoginTime: "" };
-
     mockedAxios.mockRejectedValue({
       status: 200,
     });
@@ -39,7 +37,6 @@ describe("Acceptable use terms", () => {
   });
 
   it("Cancel Acceptable use terms", async () => {
-    const props = { userId: "2", content: "test", lastLoginTime: "" };
     signOut.I,
       await act(async () => {
         render(<AcceptableUseTerms {...props} />);
@@ -53,8 +50,6 @@ describe("Acceptable use terms", () => {
   });
 
   it("Renders the acceptable use page.", async () => {
-    const props = { userId: "3", content: "test", lastLoginTime: "" };
-
     await act(async () => {
       render(<AcceptableUseTerms {...props} />);
     });

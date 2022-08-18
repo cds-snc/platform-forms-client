@@ -62,29 +62,6 @@ export function requireAuthentication(
       };
     }
 
-    // redirect user on acceptable use page til he accepts the terms.
-    if (!session.user?.acceptableUse && session.user?.role === UserRole.PROGRAM_ADMINISTRATOR) {
-      return {
-        redirect: {
-          destination: `/${context.locale}/auth/policy`,
-          permanent: false,
-        },
-      };
-    }
-    // the acceptable use term was agreed upon.Redirect user to the appropriate form retrieval page.
-    if (
-      session.user?.acceptableUse &&
-      session.user?.authorizedForm &&
-      session.user?.role === UserRole.PROGRAM_ADMINISTRATOR
-    ) {
-      return {
-        redirect: {
-          destination: `/${context.locale}/id/${session.user.authorizedForm}/retrieval`,
-          permanent: false,
-        },
-      };
-    }
-
     context.user = { ...session.user };
 
     const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic

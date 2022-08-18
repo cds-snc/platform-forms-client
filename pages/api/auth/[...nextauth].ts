@@ -91,7 +91,7 @@ export const authOptions: NextAuthOptions = {
           token.userId = user?.id;
           token.authorizedForm = user?.templateId;
           token.lastLoginTime = new Date();
-          if (!token.acceptableuse) await setAcceptableUseValue(token);
+          if (!token.acceptableuse) await setTokenAcceptableUseValue(token);
           token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
         }
       }
@@ -105,6 +105,8 @@ export const authOptions: NextAuthOptions = {
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
+      session.user.name = token.name ?? null;
+      session.user.image = token.picture ?? null;
       return session;
     },
   },
@@ -166,14 +168,15 @@ export const authOptions: NextAuthOptions = {
 };
 
 /**
- * Set the acceptable Use value.
+ * Get the acceptable Use value.
  * if key exists in cache set the property to true and remove it from cache
  * otherwise set to false
  * @param token
  * @returns
  */
-export const setAcceptableUseValue = async (token: JWT) => {
+export const setTokenAcceptableUseValue = async (token: JWT) => {
   const acceptableUseValue = await acceptableUseCache.check();
+  // if key exists in cache set the property
   if (acceptableUseValue) {
     token.acceptableUse = true;
     acceptableUseCache.del();
