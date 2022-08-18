@@ -172,6 +172,6 @@ export const isAcceptableUseTermSet = async ({
   req: NextApiRequestCustom;
   res: NextApiResponse;
 }): Promise<boolean> => {
-  const session = await getServerSession({ req, res }, authOptions);
-  return session?.user?.acceptableUse == true;
+  const session = await unstable_getServerSession(req, res, authOptions);
+  return session?.user?.acceptableUse === true;
 };
