@@ -93,10 +93,22 @@ There are some environment variables that can optionally be configured. You can 
 
 ### Grant yourself admin access locally
 
+There are 2 ways to connect to the database. Either directly using PGAdmin or a PSQL cli tool or through Prisma Studio. Once the change is made you will need to "Log Out" using the
+
+## Connect to DataBase Directly
+
 - Login using your email via Google SSO
-- Connect to the local database `psql -h db -U postgres -d formsDB` 
+- Connect to the local database `psql -h db -U postgres -d formsDB`
 - Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL';`
 - Update the record to elevate yourself as an admin `UPDATE "public"."User" SET role='ADMINISTRATOR' WHERE id='$YOUR_ID';`
+
+## Prisma Studio
+
+- Login using your email via Google SSO
+- Launch prisma studio with `yarn prisma:studio` or if you have prisma installed globally `prisma studio`
+- A browser window will open at `localhost:5555`. Open the model `User`
+- A table will appear. Find your username in the list and double-click on the value under the `role` column to modify to "ADMINISTRATOR".
+- Click on "Save Change" button in the top menu bar once completed.
 
 ### Notify integration
 
