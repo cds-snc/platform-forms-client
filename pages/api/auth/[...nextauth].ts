@@ -92,8 +92,8 @@ export const authOptions: NextAuthOptions = {
             token.userId = user?.id;
             token.authorizedForm = user?.templateId;
             token.lastLoginTime = new Date();
-            // token doesn't persist the value once set.And every time the callback runs
-            // token.acceptable is always undefined.
+            // token doesn't persist the value of acceptableUse once set.And every time the callback runs
+            // token.acceptable is always undefined. something to do with token.sub (user or Formuser)
             if (!token.acceptableUse) {
               token.acceptableUse = await getAcceptableUseValue(user?.id);
             }
@@ -110,12 +110,12 @@ export const authOptions: NextAuthOptions = {
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
-      logMessage.debug("Session refresh token.acceptableUse value:" + token.acceptableUse);
-      if (token.acceptableUse) session.user.acceptableUse = token.acceptableUse;
+      session.user.acceptableUse = token.acceptableUse;
+      //Doc https://next-auth.js.org/configuration/callbacks#session-callback
       //TODO change to session.user.acceptableUse = token.acceptableUse;
       // if statement is only because the token.acceptableUse doesn't seem to
       // propagate the new value of acceptableUse set above in credentials.
-      if (!session.user.acceptableUse) {
+      if (!session.user.acceptableUse && token.role == UserRole.PROGRAM_ADMINISTRATOR) {
         session.user.acceptableUse = await getAcceptableUseValue(token.userId);
       }
       session.user.name = token.name ?? null;
