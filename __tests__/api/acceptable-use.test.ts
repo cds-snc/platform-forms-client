@@ -11,7 +11,7 @@ const { setAcceptableUse } = mockedAcceptableUseCache;
 describe("Test acceptable use endpoint", () => {
   getCsrfToken.mockReturnValue("CsrfToken");
 
-  it("Should save userID to redis cache", async () => {
+  it("Should set acceptableuse value to true for userID 1 and return 200", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -27,7 +27,7 @@ describe("Test acceptable use endpoint", () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it("Should return 404 if userID is undefined", async () => {
+  it("Should return 404 for undefined userID", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -44,7 +44,7 @@ describe("Test acceptable use endpoint", () => {
     expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad request" }));
   });
 
-  it("Should return 500 for any cache errors", async () => {
+  it("Should throw an error and return 500 status code", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {

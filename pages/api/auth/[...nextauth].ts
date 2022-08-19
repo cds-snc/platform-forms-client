@@ -82,20 +82,24 @@ export const authOptions: NextAuthOptions = {
           break;
         }
 
-        case "credentials": {
-          if (!token.sub)
-            throw new Error(`JWT token does not have an id for user with email ${token.email}`);
+        case "credentials":
+          {
+            if (!token.sub)
+              throw new Error(`JWT token does not have an id for user with email ${token.email}`);
 
-          const user = await getFormUser(token.sub);
+            const user = await getFormUser(token.sub);
 
-          token.userId = user?.id;
-          token.authorizedForm = user?.templateId;
-          token.lastLoginTime = new Date();
-          if (!token.acceptableUse) {
-            token.acceptableUSe = await getAcceptableUseValue(user?.id);
+            token.userId = user?.id;
+            token.authorizedForm = user?.templateId;
+            token.lastLoginTime = new Date();
+            // token doesn't persist the value once set.And every time the callback runs
+            // token.acceptable is always undefined.
+            if (!token.acceptableUse) {
+              token.acceptableUse = await getAcceptableUseValue(user?.id);
+            }
+            token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
           }
-          token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
-        }
+          break;
       }
 
       return token;
@@ -106,12 +110,13 @@ export const authOptions: NextAuthOptions = {
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
-      //token.acceptableuse value is always null
+      logMessage.debug("Session refresh token.acceptableUse value:" + token.acceptableUse);
+      if (token.acceptableUse) session.user.acceptableUse = token.acceptableUse;
       //TODO change to session.user.acceptableUse = token.acceptableUse;
-      if (!session.user.acceptableUse && !token.acceptableUse) {
+      // if statement is only because the token.acceptableUse doesn't seem to
+      // propagate the new value of acceptableUse set above in credentials.
+      if (!session.user.acceptableUse) {
         session.user.acceptableUse = await getAcceptableUseValue(token.userId);
-      } else {
-        session.user.acceptableUse = token.acceptableUse ?? false;
       }
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
@@ -152,7 +157,7 @@ export const authOptions: NextAuthOptions = {
           logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
           return;
         }
-        //remove acceptable user from the cache
+        //remove acceptable user from cache
         await removeAcceptableUse(token?.userId as string);
 
         const formUser = await prisma.formUser.findUnique({
@@ -186,19 +191,19 @@ export const authOptions: NextAuthOptions = {
  */
 const getAcceptableUseValue = async (userId: string | undefined) => {
   if (!userId) return false;
-  const value = await acceptableUseCheck(userId);
-  if (await acceptableUseCheck(userId))
-    /** The requirement states the value must be remove from cache
-     * once it's retrieved.But
-     * The JWT token is not persisted...
-     * each time the getSession is called the value of
-     * token.acceptableuse is null. this is a hack to only removed
-     * the cache when signing out.
-     */
-    //await removeAcceptableUse(userId);
+  return (await acceptableUseCheck(userId)) ? true : false;
+  /** TODO 
+  if (value) await acceptableUseCheck(userId){
+    // The requirement states that the key must be removed from cache
+    // once it's retrieved.But the JWT token is not persisted...
+    // each time JWT is refreshed the value of accceptableUse is undefined.
+    // Session relies on the JWT token to propagate acceptableuse is null.
+    // the hack here was to not removed it from cache til the sign-out.
+    // await removeAcceptableUse(userId);
     return value;
-
+  }
   return value;
+  */
 };
 
 export default NextAuth(authOptions);

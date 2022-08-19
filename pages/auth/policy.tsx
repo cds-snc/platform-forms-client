@@ -10,12 +10,13 @@ interface TermsOfUse {
 }
 const TermsOfUse = (props: TermsOfUse) => {
   const { data: session } = useSession();
-  const userId = session?.user?.userId ?? "";
-  const lastLoginTime = session?.user?.lastLoginTime ?? "";
-  const formID = session?.user?.authorizedForm ?? "";
-  const { content } = props;
 
-  const acceptableProps: AcceptableUseProps = { content, lastLoginTime, userId, formID };
+  const acceptableProps: AcceptableUseProps = {
+    content: props.content,
+    lastLoginTime: session?.user?.lastLoginTime ?? "",
+    userId: session?.user?.userId ?? "",
+    formID: session?.user?.authorizedForm ?? "",
+  };
   return (
     <>
       <AcceptableUseTerms {...acceptableProps} />

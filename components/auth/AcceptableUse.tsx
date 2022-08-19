@@ -34,8 +34,7 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       })
-        .then((res) => {
-          logMessage.info("request acceptable use" + res.data);
+        .then(() => {
           router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
         })
         .catch((err) => {
@@ -77,6 +76,7 @@ AcceptableUseTerms.propTypes = {
   content: PropTypes.string.isRequired,
   lastLoginTime: PropTypes.string,
   userId: PropTypes.string.isRequired,
+  formID: PropTypes.string.isRequired,
 };
 
 export default AcceptableUseTerms;

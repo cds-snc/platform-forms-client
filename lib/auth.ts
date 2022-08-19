@@ -12,7 +12,6 @@ import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { UserRole } from "@prisma/client";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
 
 export interface GetServerSidePropsAuthContext extends GetServerSidePropsContext {
   user?: Record<string, unknown>;

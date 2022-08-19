@@ -10,17 +10,19 @@ jest.mock("axios");
 jest.mock("next-auth/react");
 
 describe("Acceptable use terms", () => {
-  const props = { userId: "1", content: "test", lastLoginTime: "", formID: "testid" };
-  getCsrfToken.mockReturnValue("differentCsrfToken");
+  const props = { userId: "1", content: "test", lastLoginTime: "2022-17-08", formID: "testid" };
+  getCsrfToken.mockReturnValue("CsrfToken");
+
   it("Renders the acceptable use page.", async () => {
     await act(async () => {
       render(<AcceptableUseTerms {...props} />);
     });
     expect(screen.getByRole("button", { name: "acceptableUsePage.agree" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "acceptableUsePage.cancel" })).toBeInTheDocument();
+    expect(screen.getByTestId("richText")).toBeVisible();
   });
 
-  it("Agree on the acceptable use terms", async () => {
+  it("Agree on the terms of use", async () => {
     mockedAxios.mockRejectedValue({
       status: 200,
     });
@@ -35,23 +37,15 @@ describe("Acceptable use terms", () => {
     expect(mockedAxios.mock.calls.length).toBe(1);
   });
 
-  it("Cancel Acceptable use terms", async () => {
-    signOut.I,
-      await act(async () => {
-        render(<AcceptableUseTerms {...props} />);
-      });
+  it("Should cancel acceptable use terms", async () => {
+    await act(async () => {
+      render(<AcceptableUseTerms {...props} />);
+    });
 
     await act(async () => {
       await userEvent.click(screen.getByRole("button", { name: "acceptableUsePage.cancel" }));
     });
 
     expect(signOut).toBeCalled();
-  });
-
-  it("Renders the acceptable use page.", async () => {
-    await act(async () => {
-      render(<AcceptableUseTerms {...props} />);
-    });
-    expect(screen.getByTestId("richText")).toBeVisible();
   });
 });
