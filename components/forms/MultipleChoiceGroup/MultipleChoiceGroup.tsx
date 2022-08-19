@@ -1,8 +1,6 @@
 import React from "react";
 import { useField } from "formik";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import Checkbox from "../Checkbox/Checkbox";
-import Radio from "../Radio/Radio";
+import { ErrorMessage, Checkbox, Radio } from "@components/forms";
 import { ChoiceFieldProps, InputFieldProps } from "@lib/types";
 
 interface MultipleChoiceGroupProps extends InputFieldProps {
@@ -44,5 +42,3 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
     </>
   );
 };
-
-export default MultipleChoiceGroup;

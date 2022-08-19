@@ -35,5 +35,3 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
     </div>
   );
 };
-
-export default RichText;

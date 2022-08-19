@@ -23,7 +23,7 @@ const scrollErrorInView = (id: string) => {
  * @param errorKey The key for the form element for the error
  * @param value The error to be displayed
  */
-const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
+export const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
   const { errorKey, value } = props;
 
   return (
@@ -47,5 +47,3 @@ const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
     </li>
   );
 };
-
-export default ErrorListItem;

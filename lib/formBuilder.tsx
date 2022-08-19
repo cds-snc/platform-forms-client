@@ -11,7 +11,7 @@ import {
   RichText,
   TextArea,
   TextInput,
-} from "../components/forms";
+} from "@components/forms";
 import {
   FormElement,
   FormElementTypes,

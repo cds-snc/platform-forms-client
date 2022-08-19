@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { Formik } from "formik";
-import { FileInput } from "./FileInput";
+import { FileInput } from "@components/forms";
 import { logMessage } from "@lib/logger";
 
 const inputProps = {
