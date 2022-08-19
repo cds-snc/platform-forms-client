@@ -80,7 +80,7 @@ export async function activateOrDeactivateFormOwners(
 ): Promise<void> {
   try {
     //Extracting req body
-    const { email, active } = req.body;
+    const { email, active } = req.body || {};
     //Payload validation fix: true case scenario
     if (!email || typeof active !== "boolean") {
       //Invalid payload
