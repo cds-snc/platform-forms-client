@@ -80,13 +80,12 @@ export async function activateOrDeactivateFormOwners(
 ): Promise<void> {
   try {
     //Extracting req body
-    const requestBody = req.body ? req.body : undefined;
+    const { email, active } = req.body;
     //Payload validation fix: true case scenario
-    if (!requestBody?.email || typeof requestBody.active !== "boolean") {
+    if (!email || typeof active !== "boolean") {
       //Invalid payload
       return res.status(400).json({ error: "Invalid payload fields are not define" });
     }
-    const { email, active } = requestBody;
     const formID = req.query.form as string;
     if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
     //Update form_users's records
@@ -143,12 +142,9 @@ export async function addEmailToForm(
   res: NextApiResponse,
   session?: Session
 ): Promise<void> {
-  //Get request body
-  const requestBody = req.body ? req.body : undefined;
-  //Checkimg the payload's content
-
-  const email = requestBody.email;
-  if (!email || !isValidGovEmail(email, emailDomainList.domains)) {
+  //Checking the payload's content
+  const { email } = req.body;
+  if (!isValidGovEmail(email, emailDomainList.domains)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
   const formID = req.query.form as string;
