@@ -51,12 +51,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
     }
 
     const formID = await hasValidFormAccessToken(req, process.env.TOKEN_SECRET);
-
-    if (!formID) {
-      // Will let the catch block handle this case to avoid code duplication
-      throw new Error("Form access token is invalid.");
-    }
-
     const temporaryToken = createTemporaryToken(email, formID, process.env.TOKEN_SECRET);
     await updateTemporaryToken(temporaryToken, email, formID);
     await sendTemporaryTokenByEmail(email, temporaryToken);
@@ -91,17 +85,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
   }
 };
 
-async function hasValidFormAccessToken(
-  req: NextApiRequest,
-  tokenSecret: string
-): Promise<string | null> {
+async function hasValidFormAccessToken(req: NextApiRequest, tokenSecret: string): Promise<string> {
   try {
     const token = extractBearerTokenFromReq(req);
     const { formID } = jwt.verify(token, tokenSecret) as BearerTokenPayload;
     const tokenID = await getTokenById(formID);
 
     if (tokenID?.bearerToken === token) return formID;
-    else return null;
+    else throw new Error("Form access token is invalid.");
   } catch (err) {
     if (err instanceof TokenExpiredError) {
       logMessage.warn("An expired bearer token has been used.");
