@@ -4,24 +4,43 @@ import userEvent from "@testing-library/user-event";
 import FormSettings from "../pages/id/[form]/settings";
 import mockedAxios from "axios";
 import { useRouter } from "next/router";
+import validFormTemplate from "../__fixtures__/validFormTemplate.json";
 
 jest.mock("axios");
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
 
+// Mock your i18n
+jest.mock("next-i18next", () => ({
+  useTranslation: () => {
+    return {
+      t: (str) => str,
+      i18n: {
+        language: "en",
+        changeLanguage: () => Promise.resolve(),
+      },
+    };
+  },
+}));
+
 describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
     formID: 15,
-    formConfig: { test: "test JSON" },
+    formConfig: validFormTemplate,
   };
   test("renders without errors", () => {
     useRouter.mockImplementation(() => ({
       query: {},
     }));
     render(<FormSettings form={form}></FormSettings>);
-    expect(screen.queryByText("Form ID: 15")).toBeInTheDocument();
+    expect(screen.queryByText("Form Title:")).toBeInTheDocument();
+    expect(screen.getByTestId("formID")).toHaveTextContent(
+      "Public Service Award of Excellence 2020 - Nomination form"
+    );
+    expect(screen.queryByText("Form ID:")).toBeInTheDocument();
+    expect(screen.getByTestId("formID")).toHaveTextContent("15");
   });
 
   test("Delete button redirects on success", async () => {
