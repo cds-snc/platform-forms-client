@@ -4,7 +4,7 @@ import React from "react";
 
 import { appWithTranslation } from "next-i18next";
 import { SessionProvider } from "next-auth/react";
-import Base from "../components/globals/Base";
+import Base from "@components/globals/Base";
 import "../styles/app.scss";
 import i18nextConfig from "../next-i18next.config";
 

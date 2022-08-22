@@ -4,7 +4,7 @@ import { getTemplateByID } from "@lib/templates";
 import React from "react";
 import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
-import { DeleteButton } from "@components/forms/Button/DeleteButton";
+import { DeleteButton } from "@components/forms";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
@@ -14,6 +14,7 @@ import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
 import { UserRole } from "@prisma/client";
+import { getProperty } from "@lib/formBuilder";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -46,7 +47,8 @@ const handleDelete = async (formID: string) => {
 const FormSettings = (props: FormSettingsProps): React.ReactElement => {
   const { form } = props;
   const router = useRouter();
-  const { t } = useTranslation("admin-templates");
+  const { t, i18n } = useTranslation("admin-templates");
+  const language = i18n.language as string;
   const newText =
     router.query && router.query.newForm ? (
       <p className="gc-confirmation-banner">{t("settings.new")}</p>
@@ -58,7 +60,9 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
     <>
       <h1 className="gc-h1">{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
-        Form ID: {form.formID}
+        <b>Form Title:</b> {form.formConfig.form[getProperty("title", language)] as string}
+        <br />
+        <b>Form ID:</b> {form.formID}
       </div>
       <Tabs>
         <TabList>

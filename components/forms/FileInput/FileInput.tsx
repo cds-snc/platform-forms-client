@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useField } from "formik";
 import classNames from "classnames";
 import { useTranslation } from "next-i18next";
-import { ErrorMessage } from "../index";
+import { ErrorMessage } from "@components/forms";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { InputFieldProps } from "@lib/types";
 
@@ -127,5 +127,3 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     </>
   );
 };
-
-export default FileInput;

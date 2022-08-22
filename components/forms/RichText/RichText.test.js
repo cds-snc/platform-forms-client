@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import { GenerateElement } from "../../../lib/formBuilder";
+import { GenerateElement } from "@lib/formBuilder";
 
 const richTextData = {
   id: 3,
