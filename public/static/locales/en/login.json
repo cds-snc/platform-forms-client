@@ -1,21 +1,29 @@
 {
-    "title": "Sign in",
-    "emailLabel": "Email",
-    "signInKeyLabel": "Form sign-in key",
-    "signInKeyDescription": "Enter the form sign in key emailed to you when you were provided access to the form.",
-    "signInKeyForgot": "Forgot your form sign-in key?",
-    "signInKeyReset": "Request a reset (opens in new tab)",
-    "loginErrorHeading": "Problems on this page:",
-    "loginEmailErrorMessage": "Form sign-in key and email do not match our records. Double-check your email is correct.",
-    "loginSignInErrorMessage": "Form sign-in key and email do not match our records. Double-check your sign-in key is correct.",
-    "temporaryToken": {
-        "title": "Check your email",
-        "instructions": "We've sent you a one-time-use, 6-digit verification code by email. It may take a a few minutes to arrive.",
-        "temporaryTokenLabel": "Enter verification code",
-        "submitButton": "Submit",
-        "helpText": "Didn't get the verification code?",
-        "retryPrompt": "Double-check your login key and email then",
-        "retry": "try again",
-        "errorMessage": "Incorrect verification code."
-    }
+  "title": "Sign in",
+  "emailLabel": "Email",
+  "signInKeyLabel": "Form sign-in key",
+  "signInKeyDescription": "Enter the form sign in key emailed to you when you were provided access to the form.",
+  "signInKeyForgot": "Forgot your form sign-in key?",
+  "signInKeyReset": "Request a reset (opens in new tab)",
+  "loginInvalidCredentialsErrorTitle": "Account details are incorrect:",
+  "loginInvalidCredentialsErrorMessage": "Form sign-in key and email do not match our records.",
+  "loginEmailErrorMessage": "Double-check your email before trying again.",
+  "loginSignInKeyErrorMessage": "Double-check your sign-in key before trying again.",
+  "loginInternalErrorTitle": "Internal error",
+  "loginInternalErrorMessage": "Oops, something went wrong.",
+  "remainingNumberOfLoginAttemptsErrorMessagePart1": "Account will be locked after",
+  "remainingNumberOfLoginAttemptsErrorMessagePart2": "more tries.",
+  "lockoutErrorTitle": "Account locked:",
+  "lockoutDurationErrorMessagePart1": "Wait",
+  "lockoutDurationErrorMessagePart2": "seconds before trying to sign in again.",
+  "temporaryToken": {
+    "title": "Check your email",
+    "instructions": "We've sent you a one-time-use, 6-digit verification code by email. It may take a a few minutes to arrive.",
+    "temporaryTokenLabel": "Enter verification code",
+    "submitButton": "Submit",
+    "helpText": "Didn't get the verification code?",
+    "retryPrompt": "Double-check your login key and email then",
+    "retry": "try again",
+    "errorMessage": "Incorrect verification code."
+  }
 }
