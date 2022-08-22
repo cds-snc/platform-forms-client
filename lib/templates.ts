@@ -224,7 +224,12 @@ const _parseTemplate = (template: { id: string; jsonConfig: Prisma.JsonValue }):
     formID: template.id,
     // Converting to unknown first as Prisma is not aware of what is stored
     // in the JSON Object type, only that it is an object.
-    formConfig: template.jsonConfig as unknown as FormConfiguration,
+    formConfig: {
+      ...(template.jsonConfig as unknown as FormConfiguration),
+      ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+        reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+      }),
+    },
   };
 };
 
