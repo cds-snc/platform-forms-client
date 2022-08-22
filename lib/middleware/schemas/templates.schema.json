@@ -9,23 +9,23 @@
   "properties": {
     "securityAttribute": {
       "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
-      "$id": "#/properties/securityAttribute",
+      "id": "#/properties/securityAttribute",
       "type": "string",
       "enum": ["Protected A", "Protected B", "Unclassified"]
     },
     "internalTitleEn": {
       "description": "The internal title of the form in English",
-      "$id": "#/properties/internalTitleEn",
+      "id": "#/properties/internalTitleEn",
       "type": "string"
     },
     "internalTitleFr": {
       "description": "The internal title of the form in French",
-      "$id": "#/properties/internalTitleFr",
+      "id": "#/properties/internalTitleFr",
       "type": "string"
     },
     "publishingStatus": {
       "description": "If set to false, the link to the form will not appear on the main page, rather under 'sandbox'",
-      "$id": "#/properties/publishingStatus",
+      "id": "#/properties/publishingStatus",
       "type": "boolean"
     },
     "form": {
@@ -34,30 +34,68 @@
         "type": "number",
         "mimimum": 0
       },
-      "layout": {
-        "description": "A list of element IDs that determines the order or elements in the form.",
-        "type": "array",
-        "items": {
-          "$ref": "#/$defs/element/properties/id"
-        }
-      },
       "type": "object",
       "properties": {
+        "layout": {
+          "description": "A list of element IDs that determines the order or elements in the form.",
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "uniqueItems": true,
+          "examples": [2, 3, 4, 6, 9, 5]
+        },        
         "elements": {
           "description": "A list of elements contained within the form.",
           "type": "array",
           "items": {
-            "$ref": "#/$defs/element"
-          }
+            "$ref": "#/definitions/element"
+          },
+          "examples": [
+            {
+              "id": 1,
+              "type": "richText",
+              "properties": {
+                "validation": {
+                  "required": false
+                },
+                "descriptionEn": "#### Section 1: Nomination Category",
+                "descriptionFr": "#### Section 1: Catégorie de la nomination"
+              }
+            },
+            {
+              "id": 2,
+              "type": "radio",
+              "properties": {
+                "choices": [
+                  {
+                    "en": "Team nomination",
+                    "fr": "Mise en candidature d’une équipe"
+                  },
+                  {
+                    "en": "Individual Nomination",
+                    "fr": "Mise en candidature d’une personne"
+                  }
+                ],
+                "titleEn": "Is this a Team or Individual Nomination?",
+                "titleFr": "Is this a Team or Individual Nomination?",
+                "validation": {
+                  "required": true
+                },
+                "descriptionEn": "",
+                "descriptionFr": ""
+              }
+            }            
+          ]
         },
         "titleEn": {
           "description": "The displayed title of the form to the user in English",
-          "$id": "#/properties/titleEn",
+          "id": "#/properties/titleEn",
           "type": "string"
         },
         "titleFr": {
           "description": "The displayed title of the form to the user in French",
-          "$id": "#/properties/titleFr",
+          "id": "#/properties/titleFr",
           "type": "string"
         },
         "brand": {
@@ -68,11 +106,11 @@
               "type": "string"
             },
             "urlEn": {
-              "description": "Url for english version of the site.",
+              "description": "URL for English version of the site.",
               "type": "string"
             },
             "urlFr": {
-              "description": "url for a french version of the site.",
+              "description": "URL for a French version of the site.",
               "type": "string"
             },
             "logoEn": {
@@ -99,16 +137,34 @@
         },
         "emailSubjectEn": {
           "description": "The email subject used in the Notify template in English.",
-          "$id": "#/properties/emailSubjectEn",
+          "id": "#/properties/emailSubjectEn",
           "type": "string"
         },
         "emailSubjectFr": {
           "description": "The email subject used in the Notify template in French.",
-          "$id": "#/properties/emailSubjectFr",
+          "id": "#/properties/emailSubjectFr",
           "type": "string"
-        }        
+        },
+        "endPage": {
+          "description": "Content that will be displayed after a form is submitted.",
+          "type": "object",
+          "properties": {
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            },
+            "referrerUrlEn": {
+              "type": "string"
+            },
+            "referrerUrlFr": {
+              "type": "string"
+            }
+          }       
+        }       
       },
-      "required": ["elements", "titleEn", "titleFr"]
+      "required": ["elements", "layout", "titleEn", "titleFr"]
     },
     "submission": {
       "type": "object",
@@ -123,12 +179,16 @@
           "type": "boolean"
         }
       }
+    },    
+    "reCaptchaID": {
+      "type": "string",
+      "description": ""
     }
   },
   "required": ["form", "submission", "publishingStatus"],
   "additionalProperties": true,
 
-  "$defs": {
+  "definitions": {
     "element": {
       "type": "object",
       "properties": {
@@ -149,75 +209,77 @@
             "dynamicRow",
             "richText"
           ]
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "titleEN": {
+              "description": "Input label in English",
+              "type": "integer"
+            },
+            "titleFR": {
+              "description": "Input label in French",
+              "type": "string"
+            },
+            "placeholderEn": {
+              "description": "Text that will appear in the text input field as a placeholder in English",
+              "type": "string"
+            },
+            "placeholderFr": {
+              "description": "Text that will appear in the text input field as a placeholder in French",
+              "type": "string"
+            },
+            "descriptionEn": {
+              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
+              "type": "string"
+            },
+            "descriptionFr": {
+              "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
+              "type": "string"
+            },
+            "maxNumberOfRows": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "validation": {
+              "type": "object",
+              "properties": {
+                "required": {
+                  "type": "boolean"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["email", "alphanumeric", "text", "name", "number", "phone", "date"]
+                },
+                "regex": {
+                  "type": "string"
+                },
+                "maxLegth": {
+                  "description": "The maximum number of characters that can be entered in a textinput or textarea.",
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "descriptionEN": {
+                  "type": "string"
+                },
+                "descriptionFR": {
+                  "type": "string"
+                },
+                "all": {
+                  "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
+                  "type": "boolean"
+                }
+              },
+              "examples":[
+                {"validation": {
+                  "required": true
+                }}                
+              ]
+            }
+          }
         }
       },
       "required": ["id", "type", "properties"]
-    },
-    "elementProperties": {
-      "type": "object",
-      "properties": {
-        "titleEN": {
-          "description": "Input label in English",
-          "type": "string"
-        },
-        "titleFR": {
-          "description": "Input label in French",
-          "type": "string"
-        },
-        "placeholderEn": {
-          "description": "Text that will appear in the text input field as a placeholder in English",
-          "type": "string"
-        },
-        "placeholderFr": {
-          "description": "Text that will appear in the text input field as a placeholder in French",
-          "type": "string"
-        },
-        "descriptionEn": {
-          "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in English",
-          "type": "string"
-        },
-        "descriptionFr": {
-          "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
-          "type": "string"
-        },
-        "maxNumberOfRows": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "validation": {
-          "type": "#/$defs/validation"
-        }
-      }
-    },
-    "validation": {
-      "type": "object",
-      "properties": {
-        "required": {
-          "type": "boolean"
-        },
-        "type": {
-          "type": "string",
-          "enum": ["email", "alphanumeric", "text", "name", "number", "phone", "date"]
-        },
-        "regex": {
-          "type": "string"
-        },
-        "maxLegth": {
-          "description": "The maximum number of characters that can be entered in a textinput or textarea.",
-          "type": "integer",
-          "minimum": 1
-        },
-        "descriptionEN": {
-          "type": "string"
-        },
-        "descriptionFR": {
-          "type": "string"
-        },
-        "all": {
-          "description": "Used only for checkboxes, ignored on other elements. When set to true, this will require that all checkboxes be selected. Used typically for the attestation section.",
-          "type": "boolean"
-        }
-      }
     }
   }
 }
