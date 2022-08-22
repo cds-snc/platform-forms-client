@@ -92,14 +92,15 @@ export const authOptions: NextAuthOptions = {
             token.userId = user?.id;
             token.authorizedForm = user?.templateId;
             token.lastLoginTime = new Date();
-            // token doesn't persist the value of acceptableUse once set.And every time the callback runs
-            // token.acceptable is always undefined. something to do with token.sub (user or Formuser)
-            if (!token.acceptableUse) {
-              token.acceptableUse = await getAcceptableUseValue(user?.id);
-            }
+            token.acceptableUse = false;
             token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
           }
           break;
+      }
+      // The swtich case above is only run on initial JWT creation and not on any subsequent checks
+      // Any logic that needs to happen after JWT initializtion needs to be below this point.
+      if (!token.acceptableUse) {
+        token.acceptableUse = await getAcceptableUseValue(token.userId as string);
       }
 
       return token;
@@ -111,15 +112,9 @@ export const authOptions: NextAuthOptions = {
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
-      //Doc https://next-auth.js.org/configuration/callbacks#session-callback
-      //TODO change to session.user.acceptableUse = token.acceptableUse;
-      // if statement is only because the token.acceptableUse doesn't seem to
-      // propagate the new value of acceptableUse set above in credentials.
-      if (!session.user.acceptableUse && token.role == UserRole.PROGRAM_ADMINISTRATOR) {
-        session.user.acceptableUse = await getAcceptableUseValue(token.userId);
-      }
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
+      logMessage.debug(`session: ${JSON.stringify(session)}`);
       return session;
     },
   },
@@ -191,19 +186,13 @@ export const authOptions: NextAuthOptions = {
  */
 const getAcceptableUseValue = async (userId: string | undefined) => {
   if (!userId) return false;
-  return (await acceptableUseCheck(userId)) ? true : false;
-  /** TODO 
-  if (value) await acceptableUseCheck(userId){
-    // The requirement states that the key must be removed from cache
-    // once it's retrieved.But the JWT token is not persisted...
-    // each time JWT is refreshed the value of accceptableUse is undefined.
-    // Session relies on the JWT token to propagate acceptableuse is null.
-    // the hack here was to not removed it from cache til the sign-out.
-    // await removeAcceptableUse(userId);
-    return value;
-  }
-  return value;
-  */
+  const acceptableUse = await acceptableUseCheck(userId);
+
+  // The requirement states that the key must be removed from cache
+  // once it's retrieved.
+
+  if (acceptableUse) await removeAcceptableUse(userId);
+  return acceptableUse;
 };
 
 export default NextAuth(authOptions);
