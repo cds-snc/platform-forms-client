@@ -43,7 +43,7 @@
             "type": "number"
           },
           "uniqueItems": true,
-          "examples": [2, 3, 4, 6, 9, 5]
+          "examples": [[2, 3, 4, 6, 9, 5]]
         },        
         "elements": {
           "description": "A list of elements contained within the form.",

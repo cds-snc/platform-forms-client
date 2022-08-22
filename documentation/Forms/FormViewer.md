@@ -144,30 +144,17 @@ Must be one of:
 | Type | `number` |
 | ---- | -------- |
 
-**Examples:** 
+**Example:** 
 
 ```json
-2
-```
-
-```json
-3
-```
-
-```json
-4
-```
-
-```json
-6
-```
-
-```json
-9
-```
-
-```json
-5
+[
+    2,
+    3,
+    4,
+    6,
+    9,
+    5
+]
 ```
 
 ### <a name="form_elements"></a>5.2. [Required] Property `GC Forms Schema - Alpha > form > elements`
@@ -587,4 +574,4 @@ Must be one of:
 | ---- | -------- |
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2022-08-22 at 14:58:00 -0400
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2022-08-22 at 15:23:55 -0400
