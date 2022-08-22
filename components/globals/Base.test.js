@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import Base from "./Base";
-import Form from "../forms/Form/Form";
+import { Form } from "@components/forms";
 import { SessionProvider } from "next-auth/react";
 
 describe("Generate the Base structure of a page", () => {

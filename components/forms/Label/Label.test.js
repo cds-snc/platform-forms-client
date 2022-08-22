@@ -1,6 +1,6 @@
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
-import { Label } from "./Label";
+import { Label } from "@components/forms";
 
 describe("Label component", () => {
   afterEach(cleanup);

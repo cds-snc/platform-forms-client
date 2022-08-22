@@ -18,5 +18,3 @@ export const ErrorMessage = (props: ErrorMessageProps): React.ReactElement => {
     </p>
   );
 };
-
-export default ErrorMessage;

@@ -59,5 +59,3 @@ export const Label = (props: LabelProps): React.ReactElement => {
     </label>
   );
 };
-
-export default Label;

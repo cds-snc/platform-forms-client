@@ -16,10 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
 - Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 - Add Acceptable use page [#873](https://github.com/cds-snc/platform-forms-client/issues/873)
+- New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
+- Added the Form Title to the Form Settings page. [#941](https://github.com/cds-snc/platform-forms-client/issues/941)
+
 
 ### Fixed
 
 - Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
+- Fix ReCaptcha feature being broken because of missing API Key.
 
 ## [1.3.0] 2022-07-15
 
