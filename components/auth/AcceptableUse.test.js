@@ -11,7 +11,7 @@ jest.mock("next-auth/react");
 
 describe("Acceptable use terms", () => {
   const props = { userId: "1", content: "test", lastLoginTime: "2022-17-08", formID: "testid" };
-  getCsrfToken.mockReturnValue("CsrfToken");
+  getCsrfToken.mockResolvedValue("CsrfToken");
 
   it("Renders the acceptable use page.", async () => {
     await act(async () => {
