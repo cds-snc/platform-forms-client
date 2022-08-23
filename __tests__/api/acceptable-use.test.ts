@@ -1,16 +1,15 @@
 import { createMocks } from "node-mocks-http";
 import acceptableUse from "@pages/api/acceptableuse";
-import * as acceptableUseCache from "@lib/acceptableUseCache";
+import { setAcceptableUse } from "@lib/acceptableUseCache";
 import { getCsrfToken } from "next-auth/react";
 
 jest.mock("next-auth/react");
 jest.mock("@lib/acceptableUseCache");
-const mockedAcceptableUseCache = jest.mocked(acceptableUseCache, true);
-const { setAcceptableUse } = mockedAcceptableUseCache;
+const mockedSetAcceptableUse = jest.mocked(setAcceptableUse, true);
+const mockedGetCsrfToken = jest.mocked(getCsrfToken, true);
 
 describe("Test acceptable use endpoint", () => {
-  getCsrfToken.mockReturnValue("CsrfToken");
-
+  mockedGetCsrfToken.mockResolvedValue("CsrfToken");
   it("Should set acceptableuse value to true for userID 1 and return 200", async () => {
     const { req, res } = createMocks({
       method: "POST",
@@ -57,9 +56,8 @@ describe("Test acceptable use endpoint", () => {
       },
     });
 
-    setAcceptableUse.mockImplementationOnce(() => {
-      throw new Error("Could not connect to cache");
-    });
+    mockedSetAcceptableUse.mockRejectedValue(Error("Could not connect to cache"));
+
     await acceptableUse(req, res);
     expect(res.statusCode).toBe(500);
   });
