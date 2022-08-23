@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { getFormByID } from "@lib/helpers";
 import convertMessage from "@lib/markdown";
-import { Button, RichText } from "../../components/forms";
+import { Button, RichText } from "@components/forms";
 import { logMessage } from "@lib/logger";
 import { PublicFormRecord } from "@lib/types";
 import { UserRole } from "@prisma/client";

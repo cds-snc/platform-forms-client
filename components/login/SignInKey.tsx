@@ -1,10 +1,9 @@
-import { Alert, Button, Description, Label } from "@components/forms";
+import { Alert, Button, Description, Label, ErrorListItem } from "@components/forms";
 import { isValidGovEmail } from "@lib/validation";
 import React, { useReducer, useState } from "react";
 import emailDomainList from "../../email.domains.json";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
 import Link from "next/link";
 import { LoginStageProps } from "@pages/auth/login";
 

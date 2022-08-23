@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RichText } from "@components/forms/RichText/RichText";
+import { RichText } from "@components/forms";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { GetServerSideProps } from "next";

@@ -14,10 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added login page for temporary token [#900](https://github.com/cds-snc/platform-forms-client/pull/900)
 - [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
+- New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
+- Added the Form Title to the Form Settings page. [#941](https://github.com/cds-snc/platform-forms-client/issues/941)
 
 ### Fixed
 
 - Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
+- Fix ReCaptcha feature being broken because of missing API Key.
 
 ## [1.3.0] 2022-07-15
 

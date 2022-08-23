@@ -1,8 +1,7 @@
 import React, { useReducer, useState } from "react";
-import { Alert, Button, Description, Label } from "@components/forms";
+import { Alert, Button, Description, Label, ErrorListItem } from "@components/forms";
 import { LoginStageProps } from "@pages/auth/login";
 import { useTranslation } from "next-i18next";
-import ErrorListItem from "@components/forms/ErrorListItem/ErrorListItem";
 import { signIn } from "next-auth/react";
 import router from "next/router";
 

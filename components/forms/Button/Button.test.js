@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button } from "./Button";
+import { Button } from "@components/forms";
 
 describe("Button component", () => {
   afterEach(cleanup);
