@@ -114,7 +114,6 @@ export const authOptions: NextAuthOptions = {
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
-      logMessage.debug(`session: ${JSON.stringify(session)}`);
       return session;
     },
   },
