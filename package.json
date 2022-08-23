@@ -29,7 +29,8 @@
     "cypress:headless": "cypress run --browser chrome --headless",
     "build-storybook": "build-storybook -s public --no-dll",
     "storybook": "start-storybook -s public -p 6006",
-    "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"
+    "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install",
+    "generate-json-schema-docs": "generate-schema-doc ./lib/middleware/schemas/templates.schema.json ./documentation/Forms/FormViewer.md --config template_name=md"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.58.0",
