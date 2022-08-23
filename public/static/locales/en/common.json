@@ -57,6 +57,7 @@
   },
   "adminNav": {
     "dashboard": "Home",
+    "formbuilder": "Form Builder",
     "vault": "Vault",
     "users": "Users",
     "upload": "Template Upload",
