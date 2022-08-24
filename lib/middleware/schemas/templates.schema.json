@@ -11,6 +11,18 @@
   "securityAttribute": "",
   "submission": {
     "email": ""
+  },
+  "form": {
+    "version": 1,
+    "titleEn": "",
+    "titleFr": "",
+    "emailSubjectEn": "",
+    "emailSubjectFr": "",
+    "layout": [ ],
+    "brand": {},
+    "elements": [ ],
+    "startPage": {},
+    "endPage": {}
   }}],
   "properties": {
     "internalTitleEn": {
