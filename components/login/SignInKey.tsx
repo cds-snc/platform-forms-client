@@ -1,4 +1,4 @@
-import { Alert, Button, Description, Label, ErrorListItem } from "@components/forms";
+import { Alert, Button, Description, Label } from "@components/forms";
 import { isValidGovEmail } from "@lib/validation";
 import React, { useReducer, useState } from "react";
 import emailDomainList from "../../email.domains.json";
@@ -99,9 +99,7 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
     <>
       {errorMessage.title && (
         <Alert type="error" heading={errorMessage.title}>
-          <ul>
-            <ErrorListItem value={errorMessage.description} errorKey="signInKey" />
-          </ul>
+          <div>{errorMessage.description}</div>
         </Alert>
       )}
       <h1>{t("title")}</h1>
