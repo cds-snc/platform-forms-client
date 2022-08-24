@@ -68,7 +68,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
           </ul>
         </Alert>
       )}
-      <h1 className="gc-h1">{t("temporaryToken.title")}</h1>
+      <h1>{t("temporaryToken.title")}</h1>
       <Description id="instructions" className="gc-description">
         {t("temporaryToken.instructions")}
       </Description>

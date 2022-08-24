@@ -6,7 +6,7 @@ describe("Forms Functionality", () => {
     });
     it("the form displays an error when it is submitted and a field is required", () => {
       cy.get("[type='submit']").click();
-      cy.get("h2.gc-h3").contains("Please correct the errors on the page");
+      cy.get("h2").contains("Please correct the errors on the page");
       cy.get("div.gc-alert__body a").contains("Please complete the required field to continue");
       cy.get("div.gc-alert__body a").click();
       cy.get("input[id='2']").should("have.focus");

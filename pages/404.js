@@ -8,7 +8,7 @@ const PageNotFound = () => {
   const { t, i18n } = useTranslation("error");
   return (
     <>
-      <h1 className="gc-h1">{t("404.title")}</h1>
+      <h1>{t("404.title")}</h1>
 
       <div>
         <p>{t("404.body")}</p>
