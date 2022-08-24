@@ -75,7 +75,6 @@ export const authOptions: NextAuthOptions = {
           token.userId = user.id;
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
-          token.role = "admin";
           token.role = user.role;
           token.acceptableUse = false;
 
@@ -151,8 +150,6 @@ export const authOptions: NextAuthOptions = {
           logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
           return;
         }
-        //remove acceptable user from cache
-        await removeAcceptableUse(token?.userId as string);
 
         const formUser = await prisma.formUser.findUnique({
           where: {

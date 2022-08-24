@@ -11,8 +11,8 @@ import { getCsrfToken } from "next-auth/react";
 export interface AcceptableUseProps {
   content: string;
   lastLoginTime?: Date | string;
-  userId: string;
-  formID: string;
+  userId: string | undefined;
+  formID: string | undefined;
 }
 export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElement => {
   const router = useRouter();
@@ -20,26 +20,30 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
   const { content, lastLoginTime, userId, formID } = props;
 
   const agree = async () => {
-    const token = (await getCsrfToken()) as string;
+    const token = await getCsrfToken();
     try {
-      return await axios({
-        url: "/api/acceptableuse",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": token,
-        },
-        data: {
-          userID: userId,
-        },
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      })
-        .then(() => {
-          router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
+      if (token) {
+        return await axios({
+          url: "/api/acceptableuse",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token,
+          },
+          data: {
+            userID: userId,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         })
-        .catch((err) => {
-          logMessage.error(err);
-        });
+          .then(() => {
+            router.push({ pathname: `/${i18n.language}/id/${formID}/retrieval` });
+          })
+          .catch((err) => {
+            logMessage.error(err);
+          });
+      } else {
+        logMessage.error("Undefined CSRF Token");
+      }
     } catch (err) {
       logMessage.error(err as Error);
     }
@@ -70,13 +74,6 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
       </div>
     </>
   );
-};
-
-AcceptableUseTerms.propTypes = {
-  content: PropTypes.string.isRequired,
-  lastLoginTime: PropTypes.string,
-  userId: PropTypes.string.isRequired,
-  formID: PropTypes.string.isRequired,
 };
 
 export default AcceptableUseTerms;

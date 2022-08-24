@@ -1,21 +1,20 @@
 import React from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useSession } from "next-auth/react";
 import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/AcceptableUse";
 import { requireAuthentication } from "@lib/auth";
 
 import { UserRole } from "@prisma/client";
 interface TermsOfUse {
   content: string;
+  // add needed properties only
+  user: { lastLoginTime: Date | undefined; userId: string; authorizedForm: string | undefined };
 }
 const TermsOfUse = (props: TermsOfUse) => {
-  const { data: session } = useSession();
-
   const acceptableProps: AcceptableUseProps = {
     content: props.content,
-    lastLoginTime: session?.user?.lastLoginTime ?? "",
-    userId: session?.user?.userId ?? "",
-    formID: session?.user?.authorizedForm ?? "",
+    lastLoginTime: props.user.lastLoginTime,
+    userId: props.user.userId,
+    formID: props.user.authorizedForm,
   };
   return (
     <>

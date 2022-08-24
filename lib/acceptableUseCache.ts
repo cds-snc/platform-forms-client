@@ -22,8 +22,6 @@ export const removeAcceptableUse = async (userId: string): Promise<void> => {
 };
 
 export const acceptableUseCheck = async (userId: string): Promise<boolean> => {
-  // always return false for jest
-  if (process.env.APP_ENV === "test") return false;
   const redis = await getRedisInstance();
   const value = await redis.get(`auth:acceptableUse:${userId}`);
   return value === "true";
