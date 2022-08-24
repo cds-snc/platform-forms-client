@@ -8,9 +8,25 @@ import { getCsrfToken } from "next-auth/react";
 
 jest.mock("axios");
 jest.mock("next-auth/react");
+jest.mock("next-i18next", () => ({
+  useTranslation: () => {
+    return {
+      t: (str) => str,
+      i18n: {
+        language: "en",
+        changeLanguage: () => Promise.resolve(),
+      },
+    };
+  },
+}));
 
 describe("Acceptable use terms", () => {
-  const props = { userId: "1", content: "test", lastLoginTime: "2022-17-08", formID: "testid" };
+  const props = {
+    userId: "1",
+    content: "test",
+    lastLoginTime: new Date("2022-08-24"),
+    formID: "testid",
+  };
   getCsrfToken.mockResolvedValue("CsrfToken");
 
   it("Renders the acceptable use page.", async () => {
