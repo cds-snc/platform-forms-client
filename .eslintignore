@@ -3,3 +3,5 @@
 /public/static/scripts/
 # Ignore Utils Folder
 /utils
+# Ignore Generated Documetation
+/documentation/Forms

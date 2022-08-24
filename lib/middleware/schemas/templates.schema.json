@@ -5,14 +5,14 @@
   "title": "GC Forms Schema - Alpha",
   "description": "A schema to define a Forms configuration.",
   "default": {},
-  "examples": [],
+  "examples": [{"internalTitleEn": "",
+  "internalTitleFr": "",
+  "publishingStatus": false,
+  "securityAttribute": "",
+  "submission": {
+    "email": ""
+  }}],
   "properties": {
-    "securityAttribute": {
-      "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
-      "id": "#/properties/securityAttribute",
-      "type": "string",
-      "enum": ["Protected A", "Protected B", "Unclassified"]
-    },
     "internalTitleEn": {
       "description": "The internal title of the form in English",
       "id": "#/properties/internalTitleEn",
@@ -23,17 +23,22 @@
       "id": "#/properties/internalTitleFr",
       "type": "string"
     },
-    "publishingStatus": {
-      "description": "If set to false, the link to the form will not appear on the main page, rather under 'sandbox'",
-      "id": "#/properties/publishingStatus",
-      "type": "boolean"
-    },
     "form": {
       "version": {
         "description": "The version number of the form.",
         "type": "number",
         "mimimum": 0
       },
+      "titleEn": {
+        "description": "The displayed title of the form to the user in English",
+        "id": "#/properties/titleEn",
+        "type": "string"
+      },
+      "titleFr": {
+        "description": "The displayed title of the form to the user in French",
+        "id": "#/properties/titleFr",
+        "type": "string"
+      },      
       "type": "object",
       "properties": {
         "layout": {
@@ -87,16 +92,6 @@
               }
             }            
           ]
-        },
-        "titleEn": {
-          "description": "The displayed title of the form to the user in English",
-          "id": "#/properties/titleEn",
-          "type": "string"
-        },
-        "titleFr": {
-          "description": "The displayed title of the form to the user in French",
-          "id": "#/properties/titleFr",
-          "type": "string"
         },
         "brand": {
           "type": "object",
@@ -179,7 +174,18 @@
           "type": "boolean"
         }
       }
+    },
+    "publishingStatus": {
+      "description": "If set to false, the link to the form will not appear on the main page, rather under 'sandbox'",
+      "id": "#/properties/publishingStatus",
+      "type": "boolean"
     },    
+    "securityAttribute": {
+      "description": "It shows an administrator what proceduce should be taken when accessing a form's responses",
+      "id": "#/properties/securityAttribute",
+      "type": "string",
+      "enum": ["Protected A", "Protected B", "Unclassified"]
+    },     
     "reCaptchaID": {
       "type": "string",
       "description": ""
