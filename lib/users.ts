@@ -106,6 +106,11 @@ export const adminRole = async (isAdmin: boolean, userId: string): Promise<[bool
   }
 };
 
+/**
+ * Retrieves the accessLog entry for the last login for a user
+ * @param userId
+ * @returns AccessLog object
+ */
 export const userLastLogin = async (userId: string): Promise<AccessLog | null> => {
   try {
     return await prisma.accessLog.findFirst({
