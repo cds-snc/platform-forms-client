@@ -12,7 +12,7 @@ const Logout = () => {
   return (
     <>
       <div>
-        <h2 className="gc-h2">{t("messageContent")}</h2>
+        <h2>{t("messageContent")}</h2>
         <div className="gc-last-login-time">
           <>
             {t("lastLoginTime")} : {session?.user?.lastLoginTime}

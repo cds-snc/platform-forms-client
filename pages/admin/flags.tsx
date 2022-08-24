@@ -18,7 +18,7 @@ const Flags: React.FC = () => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1>{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       {flags ? (
         <table className="table-auto border-4">

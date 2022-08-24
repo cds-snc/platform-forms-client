@@ -23,7 +23,7 @@ const PreviewForm = () => {
   const { t } = useTranslation("common");
   return (
     <>
-      <h1 className="gc-h1">{t("preview.title")}</h1>
+      <h1>{t("preview.title")}</h1>
 
       <div>
         <form onSubmit={(e) => getFormData(e, router)} method="POST" encType="multipart/form-data">

@@ -205,7 +205,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     case FormElementTypes.richText:
       return (
         <>
-          {labelText && <h3 className="gc-h3">{labelText}</h3>}
+          {labelText && <h3>{labelText}</h3>}
           <RichText>{description}</RichText>
         </>
       );

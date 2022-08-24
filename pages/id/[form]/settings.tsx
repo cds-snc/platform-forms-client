@@ -4,7 +4,7 @@ import { getTemplateByID } from "@lib/templates";
 import React from "react";
 import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
-import { DeleteButton } from "@components/forms";
+import { DeleteButton, Label } from "@components/forms";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
@@ -58,7 +58,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("settings.title")}</h1>
+      <h1>{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
         <b>Form Title:</b> {form.formConfig.form[getProperty("title", language)] as string}
         <br />
@@ -73,7 +73,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
         <TabPanel>
           <div>{newText}</div>
-          <h2>{t("settings.edit")}</h2>
+          <Label htmlFor="jsonInput">{t("settings.edit")}</Label>
           <JSONUpload form={form} />
           <br />
           <div>

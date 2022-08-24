@@ -16,10 +16,10 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
 
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1>{t("title")}</h1>
       <div className="flex flex-wrap">
         <div className="flex-auto mb-10">
-          <h3 className="gc-h3">
+          <h3>
             {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
           </h3>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -30,13 +30,13 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
         </div>
 
         <div className="flex-auto mb-10 w-60">
-          <h3 className="gc-h3">Create Forms</h3>
+          <h3>Create Forms</h3>
           <p>
             <Link href="/admin/upload">Upload Form Templates</Link>
           </p>
         </div>
         <div className="flex-auto mb-10 w-60">
-          <h3 className="gc-h3">View Existing Forms</h3>
+          <h3>View Existing Forms</h3>
           <p>
             <Link href="/admin/view-templates">View Form Templates</Link>
           </p>
