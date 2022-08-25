@@ -122,7 +122,7 @@ export const userLastLogin = async (userId: string): Promise<AccessLog | null> =
         timestamp: "desc",
       },
     });
-  } catch {
-    return null;
+  } catch (e) {
+    return prismaErrors(e, null);
   }
 };
