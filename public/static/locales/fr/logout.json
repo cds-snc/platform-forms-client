@@ -1,6 +1,6 @@
 {
-    "messageContent": "Vous êtes déconnecté.",
-    "goToLoginLabel": "Connectez-vous",
-    "lastLoginTime": "Votre dernière session de connexion",
-    "title": "Déconnexion"
-} 
+  "messageContent": "Vous êtes déconnecté.",
+  "goToLoginLabel": "Connectez-vous",
+  "logoutDate": "Votre dernière session de connexion",
+  "title": "Déconnexion"
+}
