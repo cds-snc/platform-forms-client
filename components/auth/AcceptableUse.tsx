@@ -18,6 +18,9 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
   const router = useRouter();
   const { t, i18n } = useTranslation("common");
   const { content, lastLoginTime, userId, formID } = props;
+  const time = lastLoginTime
+    ? new Date(lastLoginTime).toLocaleString(`${i18n.language + "-CA"}`)
+    : undefined;
 
   const agree = async () => {
     const token = await getCsrfToken();
@@ -59,7 +62,7 @@ export const AcceptableUseTerms = (props: AcceptableUseProps): React.ReactElemen
         <h1>{t("acceptableUsePage.welcome")}</h1>
         <span>
           <>
-            {t("acceptableUsePage.lastLoginTime")} : {lastLoginTime}
+            {t("acceptableUsePage.lastLoginTime")} : {time}
           </>
         </span>
       </div>
