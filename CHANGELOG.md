@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
 - Fix ReCaptcha feature being broken because of missing API Key.
+- Fix logout session end date [#945](https://github.com/cds-snc/platform-forms-client/issues/945)
 
 ## [1.3.0] 2022-07-15
 
