@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
 - New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
+- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 
 ### Fixed
 
@@ -22,14 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix ReCaptcha feature being broken because of missing API Key.
 - Last login time on acceptable use page was not formatted properly. [#949](https://github.com/cds-snc/platform-forms-client/issues/949)
 - Fix logout session end date [#945](https://github.com/cds-snc/platform-forms-client/issues/945)
-
+- Fix last login date format [#950}(https://github.com/cds-snc/platform-forms-client/pull/950)
 
 ## [1.3.0] 2022-07-15
 
 ### Added
 
 - Make GC Branding in Footer configurable [#847](https://github.com/cds-snc/platform-forms-client/pull/847)
-- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 
 ### Fixed
 
