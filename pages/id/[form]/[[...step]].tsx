@@ -36,7 +36,7 @@ const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.Rea
       <Head>
         <title>{formTitle}</title>
       </Head>
-      <h1 className="gc-h1">{formTitle}</h1>
+      <h1>{formTitle}</h1>
       <Form
         formRecord={formRecord}
         language={language}

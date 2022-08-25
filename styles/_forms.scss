@@ -92,26 +92,9 @@
   @apply md:text-small_sm text-gray-text mb-3 text-sm w-3/4 xl:w-full;
 }
 
-.gc-h1 {
-  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
-}
-
-.gc-h2 {
-  @apply md:text-small_h2 font-bold text-h2 pb-6;
-}
-
 .gc-richText {
   p {
     @extend .gc-p;
-  }
-  h1 {
-    @extend .gc-h1;
-  }
-  h2 {
-    @extend .gc-h2;
-  }
-  h3 {
-    @extend .gc-h3;
   }
   h4 {
     @extend .gc-section-header;
@@ -165,10 +148,6 @@
   .gc-input-checkbox:last-of-type {
     @apply md:mb-10 pb-0;
   }
-}
-
-.gc-h3 {
-  @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
 }
 
 .gc-section-header {
@@ -389,7 +368,7 @@
 .page-preview-form,
 .page-en-preview-form,
 .page-fr-preview-form {
-  .gc-h1::before {
+  h1::before {
     content: "[Preview/Prévisualisation]";
     @apply mb-10 block font-bold text-green-700;
   }
