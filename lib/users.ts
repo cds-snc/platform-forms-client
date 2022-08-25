@@ -1,8 +1,9 @@
 import { User } from "next-auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { FormUser, Prisma, UserRole } from "@prisma/client";
+import { AccessLog, FormUser, Prisma, UserRole } from "@prisma/client";
 import { JWT } from "next-auth";
 import { logMessage } from "@lib/logger";
+import { LoggingAction } from "./auth";
 
 /**
  * Get all Users
@@ -102,5 +103,26 @@ export const adminRole = async (isAdmin: boolean, userId: string): Promise<[bool
       return [true, false];
     }
     return [false, false];
+  }
+};
+
+/**
+ * Retrieves the accessLog entry for the last login for a user
+ * @param userId
+ * @returns AccessLog object
+ */
+export const userLastLogin = async (userId: string): Promise<AccessLog | null> => {
+  try {
+    return await prisma.accessLog.findFirst({
+      where: {
+        userId: userId,
+        action: LoggingAction.LOGIN,
+      },
+      orderBy: {
+        timestamp: "desc",
+      },
+    });
+  } catch (e) {
+    return prismaErrors(e, null);
   }
 };

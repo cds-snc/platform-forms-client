@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
-import { getFormUser, getOrCreateUser } from "@lib/users";
+import { getFormUser, getOrCreateUser, userLastLogin } from "@lib/users";
 import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
@@ -87,10 +87,11 @@ export const authOptions: NextAuthOptions = {
               throw new Error(`JWT token does not have an id for user with email ${token.email}`);
 
             const user = await getFormUser(token.sub);
+            const lastLogin = await userLastLogin(token.sub);
 
             token.userId = user?.id;
             token.authorizedForm = user?.templateId;
-            token.lastLoginTime = new Date();
+            token.lastLoginTime = lastLogin?.timestamp;
             token.acceptableUse = false;
             token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
           }
