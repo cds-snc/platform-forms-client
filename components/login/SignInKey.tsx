@@ -1,8 +1,8 @@
-import { Alert, Button, Description, Label, ErrorListItem } from "@components/forms";
+import { Alert, Button, Description, Label } from "@components/forms";
 import { isValidGovEmail } from "@lib/validation";
 import React, { useReducer, useState } from "react";
 import emailDomainList from "../../email.domains.json";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { LoginStageProps } from "@pages/auth/login";
@@ -22,7 +22,11 @@ const formReducer = (state: Record<string, string>, action: FormAction) => {
 const SignInKey = (props: LoginStageProps): React.ReactElement => {
   const { setParentStage } = props;
   const [formData, setFormData] = useReducer(formReducer, {});
-  const [errorState, setErrorState] = useState({ message: "" });
+  const [errorMessage, setErrorMessage] = useState({
+    title: "",
+    description: "",
+    displaySpecificErrors: false,
+  });
 
   const { t } = useTranslation("login");
 
@@ -37,7 +41,7 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorState({ message: "" });
+
     const loginEmail = formData["loginEmail"];
     if (isValidGovEmail(loginEmail, emailDomainList.domains)) {
       try {
@@ -55,24 +59,47 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
         });
         setParentStage(2);
       } catch (err) {
-        setErrorState({
-          message: t("loginSignInErrorMessage"),
-        });
+        const axiosError = err as AxiosError;
+        if (axiosError.response?.status === 401) {
+          if (axiosError.response.data.remainingNumberOfAttemptsBeforeLockout) {
+            setErrorMessage({
+              title: t("loginInvalidCredentialsErrorTitle"),
+              description: `${t("remainingNumberOfLoginAttemptsErrorMessagePart1")} ${
+                axiosError.response.data.remainingNumberOfAttemptsBeforeLockout
+              } ${t("remainingNumberOfLoginAttemptsErrorMessagePart2")}`,
+              displaySpecificErrors: true,
+            });
+          } else {
+            setErrorMessage({
+              title: t("lockoutErrorTitle"),
+              description: `${t("lockoutDurationErrorMessagePart1")} ${
+                axiosError.response.data.numberOfSecondsBeforeLockoutExpires
+              } ${t("lockoutDurationErrorMessagePart2")}`,
+              displaySpecificErrors: false,
+            });
+          }
+        } else {
+          setErrorMessage({
+            title: t("loginInternalErrorTitle"),
+            description: t("loginInternalErrorMessage"),
+            displaySpecificErrors: false,
+          });
+        }
       }
     } else {
-      setErrorState({
-        message: t("loginSignInErrorMessage"),
+      setErrorMessage({
+        title: t("loginInvalidCredentialsErrorTitle"),
+        description: t("loginInvalidCredentialsErrorMessage"),
+        displaySpecificErrors: true,
       });
     }
   };
 
   return (
     <>
-      {errorState.message && (
-        <Alert type="error" heading={t("loginErrorHeading")}>
-          <ul>
-            <ErrorListItem value={errorState.message} errorKey="signInKey" />
-          </ul>
+      {errorMessage.title && (
+        <Alert type="error" heading={errorMessage.title}>
+          <div>{errorMessage.description}</div>
         </Alert>
       )}
       <h1>{t("title")}</h1>
@@ -80,7 +107,9 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
         <Label htmlFor="loginEmail" id="label-loginEmail">
           {t("emailLabel")}
         </Label>
-        {errorState.message && <p className="gc-error-message">{t("loginEmailErrorMessage")}</p>}
+        {errorMessage.displaySpecificErrors && (
+          <p className="gc-error-message">{t("loginEmailErrorMessage")}</p>
+        )}
         <input
           className="mb-10 gc-input-text mr-2"
           type="text"
@@ -93,7 +122,9 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
           {t("signInKeyLabel")}
         </Label>
         <Description id={`form-sign-in-key`}>{t("signInKeyDescription")}</Description>
-        {errorState.message && <p className="gc-error-message">{errorState.message}</p>}
+        {errorMessage.displaySpecificErrors && (
+          <p className="gc-error-message">{t("loginSignInKeyErrorMessage")}</p>
+        )}
         <textarea
           id="signInKey"
           rows={3}
