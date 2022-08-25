@@ -110,14 +110,13 @@ header {
 }
 
 .gc-login-menu {
-  @apply md:text-small_base text-base font-normal not-italic underline items-center h-6;
+  @apply md:text-small_base text-base font-normal not-italic;
   /* Sign in and Sign out */   
   font-size: 20px;
-  line-height: 134%; 
-  color: #2B4380;  
-  text-decoration: underline;
+  line-height: 28px; 
+  color: #2B4380;
   button {
     @apply shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0;
-  }
+  } 
 
 }
