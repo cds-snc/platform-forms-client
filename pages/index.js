@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <>
       <div>
-        <h1 className="gc-h1">{t("title")}</h1>
+        <h1>{t("title")}</h1>
       </div>
       <div className="border-gray-400 p-10 grid grid-cols-2 gap-x-4 max-w-2xl  w-2/4 m-auto">
         <p>

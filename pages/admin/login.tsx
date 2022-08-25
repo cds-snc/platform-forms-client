@@ -15,7 +15,7 @@ const Login = (): JSX.Element => {
 
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
+      <h1>{t("title")}</h1>
       <div>
         <h2 className="pb-10">{t("sub-title")}</h2>
         <Button type="button" onClick={() => signIn("google")}>

@@ -22,6 +22,6 @@ describe("Forms Functionality - Character Counts", () => {
   it("won't submit the form if the number of characters is too many", () => {
     cy.get("input[id='2']").type("This is too many characters. This is too many characters.");
     cy.get("[type='submit']").click();
-    cy.get("h2.gc-h3").contains("Please correct the errors on the page");
+    cy.get("h2").contains("Please correct the errors on the page");
   });
 });

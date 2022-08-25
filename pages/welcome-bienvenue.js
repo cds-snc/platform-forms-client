@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <>
       <div className="gc-homepage">
-        <h1 className="gc-h1">{t("title")}</h1>
+        <h1>{t("title")}</h1>
         <div>
           <h2>{t("product.title")}</h2>
           <p>{t("product.text")}</p>

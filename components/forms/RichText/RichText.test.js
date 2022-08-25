@@ -29,7 +29,7 @@ describe("Generate a text area", () => {
           : richTextData.properties.descriptionFr;
     // Label properly renders
     expect(screen.getByText(title)).toBeInTheDocument();
-    expect(screen.getByText(title)).toHaveClass("gc-h3");
+    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(title);
     // Description properly render
     expect(screen.getByText(description)).toBeInTheDocument();
   });
