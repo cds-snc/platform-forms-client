@@ -121,7 +121,9 @@ describe("Form Functionality", () => {
     render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { type: "submit" }));
+    await waitFor(() => {
+      user.click(screen.getByRole("button", { type: "submit" }));
+    });
 
     await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });

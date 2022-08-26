@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mockedAxios from "axios";
 import AcceptableUseTerms from "./AcceptableUse";
@@ -30,37 +30,27 @@ describe("Acceptable use terms", () => {
   getCsrfToken.mockResolvedValue("CsrfToken");
 
   it("Renders the acceptable use page.", async () => {
-    await act(async () => {
-      render(<AcceptableUseTerms {...props} />);
-    });
+    render(<AcceptableUseTerms {...props} />);
     expect(screen.getByRole("button", { name: "acceptableUsePage.agree" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "acceptableUsePage.cancel" })).toBeInTheDocument();
     expect(screen.getByTestId("richText")).toBeVisible();
   });
 
   it("Agree on the terms of use", async () => {
+    const user = userEvent.setup();
     mockedAxios.mockRejectedValue({
       status: 200,
     });
 
-    await act(async () => {
-      render(<AcceptableUseTerms {...props} />);
-    });
-
-    await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "acceptableUsePage.agree" }));
-    });
+    render(<AcceptableUseTerms {...props} />);
+    await user.click(screen.getByRole("button", { name: "acceptableUsePage.agree" }));
     expect(mockedAxios.mock.calls.length).toBe(1);
   });
 
   it("Should cancel acceptable use terms", async () => {
-    await act(async () => {
-      render(<AcceptableUseTerms {...props} />);
-    });
-
-    await act(async () => {
-      await userEvent.click(screen.getByRole("button", { name: "acceptableUsePage.cancel" }));
-    });
+    const user = userEvent.setup();
+    render(<AcceptableUseTerms {...props} />);
+    await user.click(screen.getByRole("button", { name: "acceptableUsePage.cancel" }));
 
     expect(signOut).toBeCalled();
   });

@@ -20,23 +20,26 @@ describe("Login Component with Sign-In Key", () => {
   });
 
   it("Displays an error if the button is pressed with empty fields.", async () => {
+    const user = userEvent.setup();
     render(<SignInKey setParentStage={jest.fn()} />);
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button"));
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("Displays an error if the form is submitted with empty email address.", async () => {
+    const user = userEvent.setup();
     render(<SignInKey />);
 
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button"));
+    await user.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(0);
     expect(screen.getByRole("alert")).toBeInTheDocument();
   });
 
   it("Displays an error if the form is submitted with incorrect values.", async () => {
+    const user = userEvent.setup();
     mockedAxios.mockRejectedValue({
       status: 403,
     });
@@ -44,8 +47,8 @@ describe("Login Component with Sign-In Key", () => {
     render(<SignInKey />);
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     const loginEmail = screen.getByTestId("loginEmail");
-    await userEvent.type(loginEmail, "test@cds-snc.ca");
-    await userEvent.click(screen.getByRole("button"));
+    await user.type(loginEmail, "test@cds-snc.ca");
+    await user.click(screen.getByRole("button"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
       expect.objectContaining({ url: "/api/token/temporary", method: "POST" })
