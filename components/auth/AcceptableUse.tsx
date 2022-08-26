@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import { RichText } from "../../components/forms/RichText/RichText";
 import { logMessage } from "@lib/logger";
