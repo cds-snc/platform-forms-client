@@ -39,7 +39,7 @@ describe("Acceptable use terms", () => {
   });
 
   it("Agree on the terms of use", async () => {
-    mockedAxios.mockRejectedValue({
+    mockedAxios.mockResolvedValue({
       status: 200,
     });
 
