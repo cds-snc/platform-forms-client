@@ -4,17 +4,17 @@ import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/Accepta
 import { requireAuthentication } from "@lib/auth";
 
 import { UserRole } from "@prisma/client";
+import { Session } from "next-auth";
 interface TermsOfUse {
   content: string;
-  // add needed properties only
-  user: { lastLoginTime: Date | undefined; userId: string; authorizedForm: string | undefined };
+  user: Session["user"];
 }
-const TermsOfUse = (props: TermsOfUse) => {
+const TermsOfUse = ({ content, user }: TermsOfUse) => {
   const acceptableProps: AcceptableUseProps = {
-    content: props.content,
-    lastLoginTime: props.user.lastLoginTime,
-    userId: props.user.userId,
-    formID: props.user.authorizedForm,
+    content,
+    lastLoginTime: user.lastLoginTime,
+    userId: user.userId,
+    formID: user.authorizedForm,
   };
   return (
     <>
