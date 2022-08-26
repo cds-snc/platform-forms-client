@@ -4,10 +4,6 @@ import TemporaryToken from "./TemporaryToken";
 
 jest.mock("axios");
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
-}));
-
 describe("Temporary Token Component", () => {
   it("Renders properly.", async () => {
     await act(async () => {

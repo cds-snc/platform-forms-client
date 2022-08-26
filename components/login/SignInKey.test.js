@@ -6,10 +6,6 @@ import SignInKey from "./SignInKey";
 
 jest.mock("axios");
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
-}));
-
 describe("Login Component with Sign-In Key", () => {
   it("Renders properly.", async () => {
     render(<SignInKey setParentStage={jest.fn()} />);
