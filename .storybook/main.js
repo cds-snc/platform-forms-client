@@ -21,7 +21,8 @@ module.exports = {
     config.resolve.alias = {...config.resolve.alias, "@components": path.resolve(__dirname, "../components")}
 
     config.resolve.alias = {
-      ...config.resolve.alias
+      ...config.resolve.alias,
+      "next-i18next": "react-i18next",
     };
 
     config.resolve.fallback = {
