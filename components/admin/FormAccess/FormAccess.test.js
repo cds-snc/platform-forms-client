@@ -84,7 +84,7 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({
+      .mockRejectedValueOnce({
         status: 404,
         data: { error: "The formID does not exist" },
       });

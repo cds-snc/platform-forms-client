@@ -23,7 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix ReCaptcha feature being broken because of missing API Key.
 - Last login time on acceptable use page was not formatted properly. [#949](https://github.com/cds-snc/platform-forms-client/issues/949)
 - Fix logout session end date [#945](https://github.com/cds-snc/platform-forms-client/issues/945)
-- Fix last login date format [#950}(https://github.com/cds-snc/platform-forms-client/pull/950)
+- Fix last login date format [#950](https://github.com/cds-snc/platform-forms-client/pull/950)
+- Cleared email input field after successfully adding an email to Form Access [#954](https://github.com/cds-snc/platform-forms-client/pull/954)
 
 ## [1.3.0] 2022-07-15
 
