@@ -5,10 +5,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
-import { getFormUser, getOrCreateUser } from "@lib/users";
+import { getFormUser, getOrCreateUser, userLastLogin } from "@lib/users";
 import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -76,21 +77,30 @@ export const authOptions: NextAuthOptions = {
           token.lastLoginTime = new Date();
           token.role = user.role;
           token.acceptableUse = false;
+
           break;
         }
 
-        case "credentials": {
-          if (!token.sub)
-            throw new Error(`JWT token does not have an id for user with email ${token.email}`);
+        case "credentials":
+          {
+            if (!token.sub)
+              throw new Error(`JWT token does not have an id for user with email ${token.email}`);
 
-          const user = await getFormUser(token.sub);
+            const user = await getFormUser(token.sub);
+            const lastLogin = await userLastLogin(token.sub);
 
-          token.userId = user?.id;
-          token.authorizedForm = user?.templateId;
-          token.lastLoginTime = new Date();
-          token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
-          token.acceptableUse = false;
-        }
+            token.userId = user?.id;
+            token.authorizedForm = user?.templateId;
+            token.lastLoginTime = lastLogin?.timestamp;
+            token.acceptableUse = false;
+            token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
+          }
+          break;
+      }
+      // The swtich case above is only run on initial JWT creation and not on any subsequent checks
+      // Any logic that needs to happen after JWT initializtion needs to be below this point.
+      if (!token.acceptableUse) {
+        token.acceptableUse = await getAcceptableUseValue(token.userId as string);
       }
 
       return token;
@@ -102,6 +112,8 @@ export const authOptions: NextAuthOptions = {
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
+      session.user.name = token.name ?? null;
+      session.user.image = token.picture ?? null;
       return session;
     },
   },
@@ -139,6 +151,7 @@ export const authOptions: NextAuthOptions = {
           logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
           return;
         }
+
         const formUser = await prisma.formUser.findUnique({
           where: {
             id: token.userId as string,
@@ -160,6 +173,23 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
+};
+
+/**
+ * Get the acceptable Use value.
+ * if key exists in cache return value and remove the key from cache
+ * otherwise return false
+ * @returns boolean
+ */
+const getAcceptableUseValue = async (userId: string | undefined) => {
+  if (!userId) return false;
+  const acceptableUse = await acceptableUseCheck(userId);
+
+  // The requirement states that the key must be removed from cache
+  // once it's retrieved.
+
+  if (acceptableUse) await removeAcceptableUse(userId);
+  return acceptableUse;
 };
 
 export default NextAuth(authOptions);

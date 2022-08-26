@@ -77,6 +77,12 @@
     "add": "Ajouter",
     "delete": "Supprimer"
   },
+  "acceptableUsePage":{
+    "agree":"Accepter",
+    "cancel":"Annuler",
+    "welcome":"Content de vous revoir.",
+    "lastLoginTime":"Derniere connexion"
+  },
   "loginMenu":{
     "login": "Connexion",
     "logout": "Déconnexion"
