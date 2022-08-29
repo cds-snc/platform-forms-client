@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { ElementPanel } from "../panel/ElementPanel";
+import { Modal } from "../panel/Modal";
+import { FancyButton } from "../panel/Button";
 import useTemplateStore from "../store/useTemplateStore";
 import { Import } from "./Import";
 import { Output } from "./Output";
@@ -18,8 +20,13 @@ export const Layout = () => {
     updateField,
     form: { titleEn },
   } = useTemplateStore();
+
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <>
+      <FancyButton onClick={() => setIsOpen(true)}>Show modal</FancyButton>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       <div>
         <Input
           placeholder="Form Title"
