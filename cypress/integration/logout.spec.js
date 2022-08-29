@@ -5,16 +5,16 @@ describe("Logout Page test", () => {
 
   it("Display french page version", () => {
     cy.get("button[lang='fr']").click();
-    cy.get("h2").should("contain", "Vous êtes déconnecté.");
-    cy.get(".gc-last-logout-time").should("contain", "Votre dernière session de connexion");
-    cy.get(".gc-login-menu").find("a").should("contain", "Connexion");
+    cy.get("h2").should("contain", "Vous avez fermé votre session");
+    cy.get(".gc-last-logout-time").should("contain", "Votre dernière session s'est terminée à");
+    cy.get(".gc-login-menu").find("a").should("contain", "Se connecter");
     cy.get(".gc-go-to-login-btn").should("be.visible");
   });
 
   it("Toggle page language to en", () => {
     cy.get("h2").should("contain", "You are signed out");
     cy.get(".gc-last-logout-time").should("contain", "Your last session ended at");
-    cy.get(".gc-go-to-login-btn").find("a").should("contain", "Go to login");
+    cy.get(".gc-go-to-login-btn").find("a").should("contain", "Go to Login");
   });
 
   it("Go to login page", () => {
