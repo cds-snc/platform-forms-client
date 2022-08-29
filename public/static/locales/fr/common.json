@@ -57,6 +57,7 @@
   },
   "adminNav": {
     "dashboard": "Accueil",
+    "formbuilder": "Form Builder",
     "vault": "Coffre",
     "users": "Usagers",
     "upload": "Téléchargement de modèle",
