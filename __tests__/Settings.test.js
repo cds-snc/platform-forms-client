@@ -69,7 +69,7 @@ describe("Form Settings Page", () => {
   });
   test("Logs errors on failure", async () => {
     const user = userEvent.setup();
-    mockedAxios.mockResolvedValue({
+    mockedAxios.mockRejectedValue({
       status: 400,
     });
     // I wanted to spy console.error but it didn't want to work
