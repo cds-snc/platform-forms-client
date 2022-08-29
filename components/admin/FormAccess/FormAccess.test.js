@@ -84,7 +84,7 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({
+      .mockRejectedValueOnce({
         status: 404,
         data: { error: "The formID does not exist" },
       });
@@ -114,7 +114,7 @@ describe("Form Access Component", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({
+      .mockRejectedValueOnce({
         status: 400,
         data: { error: "The email is not a valid GC email" },
       });

@@ -7,7 +7,7 @@ jest.mock("next/config", () => () => ({
   },
 }));
 
-jest.mock("react-i18next", () => ({
+jest.mock("next-i18next", () => ({
   useTranslation: () => {
     return {
       t: (str: string) => str,

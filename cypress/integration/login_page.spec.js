@@ -10,10 +10,10 @@ describe("Login Page", () => {
       cy.get("[data-testid='signInKey']");
     });
 
-    it.skip("Change page language", () => {
+    it("Change page language", () => {
       cy.get("button[lang='fr']").click();
       cy.url().should("contain", "/fr");
-      cy.get("h1").should("contain", "Bienvenue aux formulaires GC");
+      cy.get("h1").should("contain", "Se connecter");
     });
 
     it("Displays an error message when submitting an empty form.", () => {

@@ -57,6 +57,7 @@
   },
   "adminNav": {
     "dashboard": "Accueil",
+    "formbuilder": "Form Builder",
     "vault": "Coffre",
     "users": "Usagers",
     "upload": "Téléchargement de modèle",
@@ -77,8 +78,14 @@
     "add": "Ajouter",
     "delete": "Supprimer"
   },
-  "loginMenu":{
-    "login": "Connexion",
-    "logout": "Déconnexion"
+  "acceptableUsePage": {
+    "agree": "Accepter",
+    "cancel": "Annuler",
+    "welcome": "Bon retour",
+    "lastLoginTime": "Dernière session"
+  },
+  "loginMenu": {
+    "login": "Se connecter",
+    "logout": "Se déconnecter"
   }
 }

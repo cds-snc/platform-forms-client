@@ -1,22 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
-import { useSession } from "next-auth/react";
 
 const Logout = () => {
   const { i18n, t } = useTranslation("logout");
-  const { data: session } = useSession();
+  const [logoutDate, setLogoutDate] = useState("");
+
+  useEffect(() => {
+    setLogoutDate(
+      new Date().toLocaleString(`${i18n.language + "-CA"}`, {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      })
+    );
+  }, []);
 
   return (
     <>
       <div>
         <h2>{t("messageContent")}</h2>
-        <div className="gc-last-login-time">
-          <>
-            {t("lastLoginTime")} : {session?.user?.lastLoginTime}
-          </>
+        <div className="gc-last-logout-time">
+          {t("logoutDate")} : {logoutDate}
         </div>
         <div className="gc-go-to-login-btn">
           <Link href={`/${i18n.language}/auth/login`}>{t("goToLoginLabel")}</Link>

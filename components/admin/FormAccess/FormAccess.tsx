@@ -48,7 +48,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
     try {
       setSubmitting(true);
       setErrorState({ message: "" });
-      const serverResponse = await axios({
+      await axios({
         url: ownersApiUrl,
         method: "POST",
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
@@ -56,13 +56,8 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
           email: email,
         },
       });
-      switch (serverResponse.status) {
-        case 200:
-          setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
-          break;
-        default:
-          setErrorState({ message: serverResponse.data["error"] });
-      }
+      setFormOwners([...formOwners, { id: formID, email: email, active: true }]);
+      setNewEmail("");
     } catch (err) {
       logMessage.error(err as Error);
       setErrorState({ message: "Unable to add user to form." });

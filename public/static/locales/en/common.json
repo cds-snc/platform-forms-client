@@ -57,6 +57,7 @@
   },
   "adminNav": {
     "dashboard": "Home",
+    "formbuilder": "Form Builder",
     "vault": "Vault",
     "users": "Users",
     "upload": "Template Upload",
@@ -76,6 +77,12 @@
   "dynamicRow": {
     "add": "Add",
     "delete": "Delete"
+  },
+  "acceptableUsePage":{
+    "agree":"Agree",
+    "cancel":"Cancel",
+    "welcome":"Welcome back",
+    "lastLoginTime":"Last log-in"
   },
   "loginMenu":{
     "login": "Sign in",
