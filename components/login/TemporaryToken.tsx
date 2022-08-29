@@ -79,11 +79,11 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
         {errorState.message && (
           <p className="gc-error-message">{t("temporaryToken.errorMessage")}</p>
         )}
-        <input
-          className="mb-10 gc-input-text mr-2"
-          type="text"
-          name="temporaryToken"
+        <textarea
           id="temporaryToken"
+          rows={3}
+          name="temporaryToken"
+          className="gc-textarea full-height font-mono"
           data-testid="temporaryToken"
           onChange={handleChange}
         />
