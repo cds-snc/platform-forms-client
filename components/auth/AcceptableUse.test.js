@@ -38,7 +38,7 @@ describe("Acceptable use terms", () => {
 
   it("Agree on the terms of use", async () => {
     const user = userEvent.setup();
-    mockedAxios.mockRejectedValue({
+    mockedAxios.mockResolvedValue({
       status: 200,
     });
 
