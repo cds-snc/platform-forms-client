@@ -1,6 +1,5 @@
 {
   "messageContent": "You are signed out",
-  "goToLoginLabel": "Go to login",
-  "logoutDate": "Your last session ended at",
-  "title": "Sign out"
+  "goToLoginLabel": "Go to Login",
+  "logoutDate": "Your last session ended at"
 }

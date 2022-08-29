@@ -78,14 +78,14 @@
     "add": "Ajouter",
     "delete": "Supprimer"
   },
-  "acceptableUsePage":{
-    "agree":"Accepter",
-    "cancel":"Annuler",
-    "welcome":"Content de vous revoir.",
-    "lastLoginTime":"Derniere connexion"
+  "acceptableUsePage": {
+    "agree": "Accepter",
+    "cancel": "Annuler",
+    "welcome": "Bon retour",
+    "lastLoginTime": "Dernière session"
   },
-  "loginMenu":{
-    "login": "Connexion",
-    "logout": "Déconnexion"
+  "loginMenu": {
+    "login": "Se connecter",
+    "logout": "Se déconnecter"
   }
 }
