@@ -13,15 +13,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([provider, providerAccountId])
 }
@@ -42,7 +41,6 @@ model AccessLog {
   timestamp DateTime @default(now()) @db.Timestamptz(6)
   action    String
   user      FormUser @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
 }
 
 model FormUser {
@@ -78,17 +76,12 @@ model User {
   id            String     @id @default(cuid())
   name          String?
   email         String?    @unique
-  emailVerified DateTime?
   image         String?
-  role          UserRole        @default(PROGRAM_ADMINISTRATOR)
+  emailVerified DateTime?
+  role          UserRole   @default(PROGRAM_ADMINISTRATOR)
   accounts      Account[]
-  adminLogs    AdminLog[]
+  adminLogs     AdminLog[]
   sessions      Session[]
-}
-
-enum UserRole {
-  ADMINISTRATOR
-  PROGRAM_ADMINISTRATOR
 }
 
 model VerificationToken {
@@ -97,4 +90,9 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum UserRole {
+  ADMINISTRATOR
+  PROGRAM_ADMINISTRATOR
 }
