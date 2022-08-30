@@ -62,8 +62,6 @@ export interface TemplateSchema {
   publishingStatus: boolean;
 }
 
-type JSONValue = string | number | boolean | { [x: string]: JSONValue } | Array<JSONValue>;
-
 export interface ElementStore extends TemplateSchema {
   lang: keyof Language;
   moveUp: (index: number) => void;
@@ -75,7 +73,7 @@ export interface ElementStore extends TemplateSchema {
   removeChoice: (index: number, childIndex: number) => void;
   updateField: (path: string, value: string) => void;
   bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: JSONValue) => void;
+  importTemplate: (json: TemplateSchema) => void;
 }
 
 export interface ElementOption {
