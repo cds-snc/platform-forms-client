@@ -37,8 +37,10 @@ export const Import = () => {
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
       };
-    } catch (e: any) {
-      setErrors(e.message);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrors(e.message);
+      }
     }
   };
 

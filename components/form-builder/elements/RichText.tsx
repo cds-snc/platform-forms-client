@@ -14,13 +14,13 @@ const TextInput = styled.input`
   max-height: 36px;
 `;
 
-export const RichText = ({ parentIndex }: { parentIndex: number | undefined }) => {
+export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
   const {
     form: { elements },
     updateField,
   } = useTemplateStore();
-  const val = elements[parentIndex!].properties.descriptionEn;
+  const val = elements[parentIndex].properties.descriptionEn;
 
   useEffect(() => {
     if (input.current) {

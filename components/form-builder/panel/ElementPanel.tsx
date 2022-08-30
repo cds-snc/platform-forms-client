@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import useTemplateStore from "../store/useTemplateStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
-import { ElementOption, ElementType } from "../types";
+import { ElementOption, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Paragraph, Options, RichText } from "../elements";
 import {
@@ -31,7 +31,13 @@ const elementOptions = [
   { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon /> },
 ];
 
-const SelectedElement = ({ selected, item }: { selected: ElementOption; item: ElementType }) => {
+const SelectedElement = ({
+  selected,
+  item,
+}: {
+  selected: ElementOption;
+  item: ElementTypeWithIndex;
+}) => {
   let element = null;
 
   switch (selected.id) {
@@ -60,11 +66,11 @@ const SelectedElement = ({ selected, item }: { selected: ElementOption; item: El
   return element;
 };
 
-const getSelectedOption = (item: ElementType): ElementOption => {
+const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const {
     form: { elements },
   } = useTemplateStore();
-  const { type } = elements[item.index!];
+  const { type } = elements[item.index];
 
   if (!type) {
     return elementOptions[2];
@@ -87,7 +93,7 @@ const Input = styled.input`
   max-height: 36px;
 `;
 
-const Form = ({ item }: { item: ElementType }) => {
+const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const { updateField, resetChoices } = useTemplateStore();
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
@@ -110,7 +116,7 @@ const Form = ({ item }: { item: ElementType }) => {
             value={item.properties.titleEn}
             onChange={(e) => {
               updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-              resetChoices(item.index!);
+              resetChoices(item.index);
             }}
           />
         )}
