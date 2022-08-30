@@ -7,8 +7,15 @@ const StyledButton = styled.button`
   justify-content: center;
   align-items: center;
   border: none;
-  background: "white";
-  color: "#000";
+  background: white;
+  color: #000;
+  border: 1px solid #ccc;
+  margin: 5px;
+  max-height: 24px;
+
+  &:hover {
+    background: #ebebeb;
+  }
 `;
 
 export const Button = ({
