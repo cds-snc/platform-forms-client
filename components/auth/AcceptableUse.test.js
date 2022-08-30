@@ -29,7 +29,7 @@ describe("Acceptable use terms", () => {
   };
   getCsrfToken.mockResolvedValue("CsrfToken");
 
-  it("Renders the acceptable use page.", async () => {
+  it("Renders the acceptable use page.", () => {
     render(<AcceptableUseTerms {...props} />);
     expect(screen.getByRole("button", { name: "acceptableUsePage.agree" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "acceptableUsePage.cancel" })).toBeInTheDocument();
