@@ -26,7 +26,34 @@ export const Layout = () => {
   return (
     <>
       <FancyButton onClick={() => setIsOpen(true)}>Show modal</FancyButton>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Modal title="Modal title" isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <div>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+          <p>This is my modal, look at all the things it can do.</p>
+        </div>
+      </Modal>
       <div>
         <Input
           placeholder="Form Title"

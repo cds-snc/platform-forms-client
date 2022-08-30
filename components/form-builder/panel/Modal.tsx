@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button, FancyButton } from "./Button";
@@ -11,12 +11,11 @@ const StyledDiv = styled.div`
   bottom: 0;
   left: 0;
   z-index: 1050;
-  overflow: hidden;
   outline: 0;
   background-color: #ddddddaa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  overflow-x: hidden;
+  overflow-y: auto;
 
   .modal-dialog {
     max-width: 500px;
@@ -31,7 +30,8 @@ const StyledDiv = styled.div`
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
-    border: 2px solid rgba(0, 0, 0, 0.2);
+    border: 2px solid #000000;
+    box-shadow: 0px 4px 0px -1px #000000;
     border-radius: 12px;
     outline: 0;
   }
@@ -59,11 +59,41 @@ const StyledDiv = styled.div`
   }
 `;
 
-export const Modal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  if (!isOpen) {
-    return null;
-  }
+export const Modal = ({
+  title,
+  children,
+  isOpen,
+  onClose,
+}: {
+  title: string;
+  children: JSX.Element | string;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const modalContainer = useRef<HTMLDivElement>(null);
 
+  // focus modal when opened
+  useEffect(() => {
+    if (isOpen && modalContainer.current) {
+      modalContainer.current.focus();
+    }
+
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
+  }, [isOpen]);
+
+  // Trap focus in the modal
+  useEffect(() => {
+    const handleFocusIn = ({ target }: FocusEvent) => {
+      if (modalContainer.current && !modalContainer.current.contains(target as Node)) {
+        modalContainer.current.focus();
+      }
+    };
+
+    document.addEventListener("focusin", handleFocusIn);
+    return () => document.removeEventListener("focusin", handleFocusIn);
+  }, []);
+
+  // Close modal if "ESC" key is pressed
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -72,28 +102,25 @@ export const Modal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
       }
     };
 
-    // Close modal if "ESC" key is pressed
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  /* eslint-disable */
+  if (!isOpen) {
+    return null;
+  }
 
+  /* eslint-disable */
   return (
-    <>
-    <StyledDiv tabIndex={-1} role="dialog" onClick={() => onClose()}>
+    <StyledDiv tabIndex={-1} role="dialog" onClick={() => onClose()} ref={modalContainer}>
       <div className="modal-dialog" role="document" onClick={(e) => e.stopPropagation()}>
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Modal title</h5>
-            <Button icon={<Close />} onClick={() => onClose()}></Button>
+            <h2 className="modal-title">{title}</h2>
+            <Button icon={<Close />} onClick={() => onClose()}>Close</Button>
           </div>
           <div className="modal-body">
-            <p>
-              Modal body text goes here. Modal body text goes here. Modal body text goes here. Modal
-              body text goes here. Modal body text goes here. Modal body text goes here. Modal body
-              text goes here. Modal body text goes here. Modal body text goes here.
-            </p>
+            {children}
           </div>
           <div className="modal-footer">
             <FancyButton onClick={() => {}}>Save changes</FancyButton>
@@ -102,12 +129,13 @@ export const Modal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
         </div>
       </div>
     </StyledDiv>
-    </>
   );
   /* eslint-enable */
 };
 
 Modal.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
 };
