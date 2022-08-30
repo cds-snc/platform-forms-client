@@ -5,7 +5,7 @@ import TemporaryToken from "./TemporaryToken";
 jest.mock("axios");
 
 describe("Temporary Token Component", () => {
-  it("Renders properly.", async () => {
+  it("Renders properly.", () => {
     render(<TemporaryToken />);
 
     expect(screen.getByRole("textbox")).toBeInTheDocument();
