@@ -10,6 +10,6 @@
   "author": "Bryan Robitaille",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "ioredis": "^4.27.9"
+    "ioredis": "^5.2.3"
   }
 }
