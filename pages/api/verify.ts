@@ -6,7 +6,7 @@ const verifyReCaptchaToken = async (req: NextApiRequest, res: NextApiResponse) =
   try {
     const { userToken } = req.body;
     if (userToken) {
-      const reCAPTCHASecret = process.env.RECAPTACHA_V3_SECRET_KEY;
+      const reCAPTCHASecret = process.env.RECAPTCHA_V3_SECRET_KEY;
       const response = await axios({
         url: `https://www.google.com/recaptcha/api/siteverify?secret=${reCAPTCHASecret}&response=${userToken}`,
         method: "POST",

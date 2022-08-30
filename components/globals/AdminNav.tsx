@@ -19,6 +19,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
           <Link href="/admin/">{t("adminNav.dashboard")}</Link>
         </li>
         <li className="gc-horizontal-item">
+          <Link href="/admin/form-builder">{t("adminNav.formbuilder")}</Link>
+        </li>
+        <li className="gc-horizontal-item">
           <Link href="/admin/vault">{t("adminNav.vault")}</Link>
         </li>
         <li className="gc-horizontal-item">

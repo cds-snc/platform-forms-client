@@ -31,6 +31,7 @@ module.exports = {
   compiler: {
     // Remove all console.* calls
     removeConsole: true,
+    styledComponents: true,
   },
   webpack: (config) => {
     // Support reading markdown
