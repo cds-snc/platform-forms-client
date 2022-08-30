@@ -131,6 +131,7 @@ const SignInKey = (props: LoginStageProps): React.ReactElement => {
           name="signInKey"
           className="gc-textarea full-height font-mono"
           data-testid="signInKey"
+          aria-describedby="desc-form-sign-in-key"
           onChange={handleChange}
         />
         <br />
