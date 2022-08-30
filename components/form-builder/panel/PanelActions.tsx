@@ -48,7 +48,7 @@ const AddElement = styled.button`
 `;
 
 export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
-  const { remove, moveUp, moveDown, add} = useTemplateStore();
+  const { remove, moveUp, moveDown, add } = useTemplateStore();
   return (
     <Actions>
       <UpDown>
