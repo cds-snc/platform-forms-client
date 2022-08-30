@@ -24,6 +24,7 @@
     "helpText": "Vous n'avez pas obtenu de code d'authentification?",
     "retryPrompt": "Veuillez confirmer votre clé d'accès et votre adresse courriel,",
     "retry": "puis essayez à nouveau.",
+    "errorTitle": "Problèmes sur cette page:",
     "errorMessage": "Code d'authentification erroné"
   }
 }

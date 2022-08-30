@@ -62,7 +62,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
   return (
     <>
       {errorState.message && (
-        <Alert type="error" heading={t("loginErrorHeading")}>
+        <Alert type="error" heading={t("temporaryToken.errorTitle")}>
           <ul>
             <ErrorListItem value={errorState.message} errorKey="temporaryToken" />
           </ul>
