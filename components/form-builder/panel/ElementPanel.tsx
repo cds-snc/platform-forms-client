@@ -16,6 +16,7 @@ import {
   CheckIcon,
   SelectMenuIcon,
 } from "../icons";
+import { Modal } from "./Modal";
 
 const Separator = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -191,6 +192,15 @@ export const ElementPanel = () => {
     add,
   } = useTemplateStore();
 
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   if (!elements.length) {
     return (
       <button style={{ marginBottom: 20 }} className="gc-button gc-button--secondary" onClick={add}>
@@ -209,7 +219,43 @@ export const ElementPanel = () => {
               <FormWrapper>
                 <Form item={item} />
               </FormWrapper>
-              <PanelActions item={item} />
+
+              <PanelActions item={item} openModal={openModal} />
+
+              <Modal
+                title={
+                  item?.properties?.titleEn ? `Modal: ${item.properties.titleEn}` : "Modal title"
+                }
+                isOpen={modalIsOpen}
+                onClose={closeModal}
+              >
+                <div>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                  <p>This is my modal, look at all the things it can do.</p>
+                </div>
+              </Modal>
             </ElementWrapper>
           </div>
         );
@@ -220,4 +266,5 @@ export const ElementPanel = () => {
 
 ElementPanel.propTypes = {
   item: PropTypes.object,
+  onClose: PropTypes.func,
 };

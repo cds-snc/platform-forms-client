@@ -4,23 +4,15 @@ import PropTypes from "prop-types";
 import { Button, FancyButton } from "./Button";
 import { Close } from "../icons/Close";
 
-const StyledDiv = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1050;
+const StyledDialog = styled.dialog`
+  background: transparent;
+  margin: 1.75rem auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 2px solid #000000;
+  box-shadow: 0px 4px 0px -1px #000000;
+  border-radius: 12px;
   outline: 0;
-  background-color: #ddddddaa;
-
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  .modal-dialog {
-    max-width: 500px;
-    margin: 1.75rem auto;
-  }
 
   .modal-content {
     position: relative;
@@ -28,12 +20,6 @@ const StyledDiv = styled.div`
     flex-direction: column;
     width: 100%;
     pointer-events: auto;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 2px solid #000000;
-    box-shadow: 0px 4px 0px -1px #000000;
-    border-radius: 12px;
-    outline: 0;
   }
 
   .modal-header {
@@ -70,12 +56,19 @@ export const Modal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const modalContainer = useRef<HTMLDivElement>(null);
+  const modalContainer = useRef<HTMLDialogElement>(null);
+  const close = () => {
+    modalContainer.current?.close();
+    onClose();
+  };
 
   // focus modal when opened
   useEffect(() => {
     if (isOpen && modalContainer.current) {
+      modalContainer.current.showModal();
       modalContainer.current.focus();
+    } else {
+      close();
     }
 
     document.body.style.overflow = isOpen ? "hidden" : "unset";
@@ -98,7 +91,7 @@ export const Modal = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.stopPropagation();
-        onClose();
+        close();
       }
     };
 
@@ -112,23 +105,21 @@ export const Modal = ({
 
   /* eslint-disable */
   return (
-    <StyledDiv tabIndex={-1} role="dialog" onClick={() => onClose()} ref={modalContainer}>
-      <div className="modal-dialog" role="document" onClick={(e) => e.stopPropagation()}>
+    <StyledDialog tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
         <div className="modal-content">
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
-            <Button icon={<Close />} onClick={() => onClose()}>Close</Button>
+            <Button icon={<Close />} onClick={close}>Close</Button>
           </div>
           <div className="modal-body">
             {children}
           </div>
           <div className="modal-footer">
             <FancyButton onClick={() => {}}>Save changes</FancyButton>
-            <FancyButton onClick={() => onClose()}>Close</FancyButton>
+            <FancyButton onClick={close}>Close</FancyButton>
           </div>
         </div>
-      </div>
-    </StyledDiv>
+    </StyledDialog>
   );
   /* eslint-enable */
 };

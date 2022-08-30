@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { Button } from "./Button";
-import { ChevronUp, ChevronDown, Close, Duplicate } from "../icons";
+import { ChevronUp, ChevronDown, Close, Duplicate, ParagraphIcon } from "../icons";
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
@@ -21,6 +21,7 @@ const Label = styled.span`
   line-height: 38px;
   font-size: 16px;
   margin-right: 20px;
+  margin-left: 4px;
 `;
 
 const UpDown = styled.div`
@@ -70,7 +71,6 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
       >
         <Label>Duplicate</Label>
       </Button>
-
       <Button
         icon={<Close />}
         onClick={() => {
@@ -80,6 +80,9 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
         <Label>Remove</Label>
       </Button>
 
+      <Button icon={<ParagraphIcon />} onClick={() => null}>
+        <Label>More</Label>
+      </Button>
       <AddButtonWrapper>
         <AddElement onClick={add}>Add element</AddElement>
       </AddButtonWrapper>
@@ -89,4 +92,5 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
 
 PanelActions.propTypes = {
   item: PropTypes.object,
+  openModal: PropTypes.func,
 };

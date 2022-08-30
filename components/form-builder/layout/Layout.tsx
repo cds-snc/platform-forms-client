@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { ElementPanel } from "../panel/ElementPanel";
-import { Modal } from "../panel/Modal";
-import { FancyButton } from "../panel/Button";
 import useTemplateStore from "../store/useTemplateStore";
 import { Import } from "./Import";
 import { Output } from "./Output";
@@ -21,39 +19,8 @@ export const Layout = () => {
     form: { titleEn },
   } = useTemplateStore();
 
-  const [isOpen, setIsOpen] = React.useState(false);
-
   return (
     <>
-      <FancyButton onClick={() => setIsOpen(true)}>Show modal</FancyButton>
-      <Modal title="Modal title" isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <div>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-          <p>This is my modal, look at all the things it can do.</p>
-        </div>
-      </Modal>
       <div>
         <Input
           placeholder="Form Title"
