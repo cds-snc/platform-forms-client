@@ -1,6 +1,6 @@
 import create from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { moveDown, moveUp, removeElementById, incrementElementId } from "../util";
+import { moveDown, moveUp, removeElementById, incrementElementId, newlineToOptions } from "../util";
 import { ElementStore, ElementType } from "../types";
 import update from "lodash.set";
 
@@ -67,6 +67,13 @@ const useTemplateStore = create<ElementStore>()(
       set((state) => {
         state.form.elements[index].properties.choices = [];
       }),
+    bulkAddChoices: (index, bulkChoices) => {
+      set((state) => {
+        const currentChoices = state.form.elements[index].properties.choices;
+        const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
+        state.form.elements[index].properties.choices = choices;
+      });
+    },
     importTemplate: (json) =>
       set((state) => {
         state.form = json.form;

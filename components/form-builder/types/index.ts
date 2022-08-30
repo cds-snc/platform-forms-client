@@ -1,12 +1,17 @@
 import { ReactElement } from "react";
 
-interface Language {
+export interface Language {
+  en: string;
+  fr: string;
+}
+
+export interface Choice {
   en: string;
   fr: string;
 }
 
 export interface ElementProperties {
-  choices: Language[];
+  choices: Choice[];
   titleEn: string;
   titleFr: string;
   validation: {
@@ -18,9 +23,12 @@ export interface ElementProperties {
 
 export interface ElementType {
   id: number;
-  index?: number;
   type: string;
   properties: ElementProperties;
+}
+
+export interface ElementTypeWithIndex extends ElementType {
+  index: number;
 }
 
 export interface UpdatePayload {
@@ -64,7 +72,8 @@ export interface ElementStore extends TemplateSchema {
   resetChoices: (index: number) => void;
   removeChoice: (index: number, childIndex: number) => void;
   updateField: (path: string, value: string) => void;
-  importTemplate: (json: any) => void;
+  bulkAddChoices: (index: number, bulkChoices: string) => void;
+  importTemplate: (json: TemplateSchema) => void;
 }
 
 export interface ElementOption {

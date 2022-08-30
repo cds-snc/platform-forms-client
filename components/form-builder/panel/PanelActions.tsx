@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Button } from "./Button";
 import { ChevronUp, ChevronDown, Close } from "../icons";
-import { ElementType } from "../types";
+import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
 const Actions = styled.div`
@@ -23,14 +23,14 @@ const UpDown = styled.div`
   flex-direction: column;
 `;
 
-export const PanelActions = ({ item }: { item: ElementType }) => {
+export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
   const { remove, moveUp, moveDown } = useTemplateStore();
   return (
     <Actions>
       <Mover>
         <UpDown>
-          <Button icon={<ChevronUp />} onClick={() => moveUp(item.index!)} />
-          <Button icon={<ChevronDown />} onClick={() => moveDown(item.index!)} />
+          <Button icon={<ChevronUp />} onClick={() => moveUp(item.index)} />
+          <Button icon={<ChevronDown />} onClick={() => moveDown(item.index)} />
         </UpDown>
         <Button
           icon={<Close />}
