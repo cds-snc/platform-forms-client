@@ -49,11 +49,12 @@ const FancyStyledButton = styled.button`
   line-height: 1.2;
   font-weight: 400;
   position: relative;
-  padding: 5px 8px;
-  border: 2px solid black;
-  border-radius: 12px;
+  padding: 4px 10px;
+  border: 1.5px solid black;
+  border-radius: 8px;
   box-shadow: inset 0 -2px 0 #ddd;
   cursor: pointer;
+  background: #ffffff;
 
   &:hover:not(:disabled) {
     color: rgba(0, 0, 0, 0.8);

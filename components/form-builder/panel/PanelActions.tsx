@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { Button } from "./Button";
+import { Button, FancyButton } from "./Button";
 import { ChevronUp, ChevronDown, Close, Duplicate, ParagraphIcon } from "../icons";
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
@@ -84,7 +84,7 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
         <Label>More</Label>
       </Button>
       <AddButtonWrapper>
-        <AddElement onClick={add}>Add element</AddElement>
+        <FancyButton onClick={add}>Add element</FancyButton>
       </AddButtonWrapper>
     </Actions>
   );

@@ -93,6 +93,11 @@ const Input = styled.input`
   max-height: 36px;
 `;
 
+const Label = styled.label`
+  font-weight: 700;
+  display: block;
+`;
+
 const FormWrapper = styled.div`
   padding: 1.25em;
 `;
@@ -175,6 +180,31 @@ Form.propTypes = {
   item: PropTypes.object,
 };
 
+const ModalForm = ({ item }: { item: ElementTypeWithIndex }) => {
+  const { updateField, resetChoices } = useTemplateStore();
+
+  return (
+    <form>
+      <Label htmlFor="titleEn">Question title</Label>
+      <Input
+        id="titleEn"
+        type="text"
+        name={`item${item.index}`}
+        placeholder={`Question`}
+        value={item.properties.titleEn}
+        onChange={(e) => {
+          updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+          resetChoices(item.index);
+        }}
+      />
+    </form>
+  );
+};
+
+ModalForm.propTypes = {
+  item: PropTypes.object,
+};
+
 const ElementWrapper = styled.div`
   border-left: 2px solid #efefef;
   border-right: 2px solid #efefef;
@@ -224,36 +254,15 @@ export const ElementPanel = () => {
 
               <Modal
                 title={
-                  item?.properties?.titleEn ? `Modal: ${item.properties.titleEn}` : "Modal title"
+                  item?.properties?.titleEn
+                    ? `More options: ${item.properties.titleEn}`
+                    : `More options: Question ${item.index + 1}`
                 }
                 isOpen={modalIsOpen}
                 onClose={closeModal}
               >
                 <div>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
-                  <p>This is my modal, look at all the things it can do.</p>
+                  <ModalForm item={item} />
                 </div>
               </Modal>
             </ElementWrapper>

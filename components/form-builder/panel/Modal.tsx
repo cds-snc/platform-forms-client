@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
+
 import { Button, FancyButton } from "./Button";
 import { Close } from "../icons/Close";
 
 const StyledDialog = styled.dialog`
+  width: 750px; /* TODO: fix this for mobile */
+  padding: 0;
   background: transparent;
   margin: 1.75rem auto;
   background-color: #fff;
@@ -56,6 +60,7 @@ export const Modal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { t } = useTranslation("form-builder");
   const modalContainer = useRef<HTMLDialogElement>(null);
   const close = () => {
     modalContainer.current?.close();
@@ -106,17 +111,17 @@ export const Modal = ({
   /* eslint-disable */
   return (
     <StyledDialog tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
-        <div className="modal-content">
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
-            <Button icon={<Close />} onClick={close}>Close</Button>
+            <Button icon={<Close />} onClick={close}>{t("Close")}</Button>
           </div>
           <div className="modal-body">
             {children}
           </div>
           <div className="modal-footer">
-            <FancyButton onClick={() => {}}>Save changes</FancyButton>
-            <FancyButton onClick={close}>Close</FancyButton>
+            <FancyButton onClick={() => {}}>{t("Save")}</FancyButton>
+            <FancyButton onClick={close}>{t("Cancel")}</FancyButton>
           </div>
         </div>
     </StyledDialog>
