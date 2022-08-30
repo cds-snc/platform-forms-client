@@ -93,6 +93,10 @@ const Input = styled.input`
   max-height: 36px;
 `;
 
+const FormWrapper = styled.div`
+  padding: 1.25em;
+`;
+
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const { updateField, resetChoices } = useTemplateStore();
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
@@ -137,18 +141,10 @@ Form.propTypes = {
 
 const ElementWrapper = styled.div`
   border: 2px solid #efefef;
-  padding: 1.25em;
   position: relative;
   max-width: 800px;
   height: auto;
   margin-bottom: 20px;
-`;
-
-const CenterWrapper = styled.div`
-  max-width: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const ElementPanel = () => {
@@ -159,15 +155,9 @@ export const ElementPanel = () => {
 
   if (!elements.length) {
     return (
-      <CenterWrapper>
-        <button
-          style={{ marginBottom: 20 }}
-          className="gc-button gc-button--secondary"
-          onClick={add}
-        >
-          Add form element
-        </button>
-      </CenterWrapper>
+      <button style={{ marginBottom: 20 }} className="gc-button gc-button--secondary" onClick={add}>
+        Add form element
+      </button>
     );
   }
 
@@ -178,18 +168,11 @@ export const ElementPanel = () => {
         return (
           <div key={item.id}>
             <ElementWrapper className={`element-${index}`}>
-              <Form item={item} />
+              <FormWrapper>
+                <Form item={item} />
+              </FormWrapper>
               <PanelActions item={item} />
             </ElementWrapper>
-            <CenterWrapper>
-              <button
-                style={{ marginBottom: 20 }}
-                className="gc-button gc-button--secondary"
-                onClick={add}
-              >
-                Add form element
-              </button>
-            </CenterWrapper>
           </div>
         );
       })}
