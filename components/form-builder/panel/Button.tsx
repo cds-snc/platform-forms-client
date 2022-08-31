@@ -85,7 +85,7 @@ export const FancyButton = ({
   onClick,
 }: {
   children?: JSX.Element | string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }) => {
   return <FancyStyledButton onClick={onClick}>{children}</FancyStyledButton>;
 };

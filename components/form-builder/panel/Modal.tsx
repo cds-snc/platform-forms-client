@@ -65,30 +65,31 @@ export const Modal = ({
   title,
   children,
   openButton,
+  saveButton,
 }: {
   title: string;
-  children: JSX.Element | string;
+  children: React.ReactNode;
   openButton?: React.ReactElement;
+  saveButton?: React.ReactElement | string | undefined;
 }) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const changeOpen = (open: boolean) => {
     setIsOpen(open);
   };
 
-  /* eslint-disable */
   return (
     <ModalContext.Provider value={{ isOpen, changeOpen }}>
       {openButton ? (
-        <ModalButton isOpenButton={true}>{{ button: openButton }}</ModalButton>
+        <ModalButton isOpenButton={true}>{openButton}</ModalButton>
       ) : (
         <ModalButton isOpenButton={true} />
       )}
 
-    
-      <ModalContainer title={title} children={children} />
+      <ModalContainer title={title} saveButton={saveButton}>
+        {children}
+      </ModalContainer>
     </ModalContext.Provider>
   );
-  /* eslint-enable */
 };
 
 Modal.propTypes = {
@@ -96,12 +97,19 @@ Modal.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
-const ModalButton = ({
+type CallBack = (...args: any[]) => void;
+
+const callAll =
+  (...fns: Array<CallBack | undefined>) =>
+  (...args: any[]) =>
+    fns.forEach((fn) => typeof fn === "function" && fn(...args));
+
+export const ModalButton = ({
   isOpenButton,
   children,
 }: {
   isOpenButton: boolean;
-  children?: { button: React.ReactElement };
+  children?: React.ReactElement;
 }) => {
   const { changeOpen } = useContext(ModalContext);
 
@@ -113,25 +121,25 @@ const ModalButton = ({
     );
   }
 
-  const { button } = children;
-
-  // Note: this wipes out any other onClick method that exists
-  return React.cloneElement(button, {
-    onClick: () => changeOpen(isOpenButton),
+  // Note: This will not work if children is more than 1 element
+  return React.cloneElement(children, {
+    onClick: callAll(() => changeOpen(isOpenButton), children.props.onClick),
   });
 };
 
 ModalButton.propTypes = {
   isOpenButton: PropTypes.bool,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  children: PropTypes.oneOfType([PropTypes.element]),
 };
 
 export const ModalContainer = ({
   title,
   children,
+  saveButton,
 }: {
   title: string;
   children: React.ReactNode;
+  saveButton?: React.ReactElement | string | undefined;
 }) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);
@@ -191,14 +199,14 @@ export const ModalContainer = ({
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
             <ModalButton isOpenButton={false}>
-              {{ button: <Button icon={<Close />} onClick={close}>{t("Close")}</Button> }}
+              <Button icon={<Close />} onClick={close}>{t("Close")}</Button>
             </ModalButton>
           </div>
           <div className="modal-body">
             {children}
           </div>
           <div className="modal-footer">
-            <FancyButton onClick={() => {}}>{t("Save")}</FancyButton>
+            {saveButton}
             <FancyButton onClick={close}>{t("Cancel")}</FancyButton>
           </div>
         </div>

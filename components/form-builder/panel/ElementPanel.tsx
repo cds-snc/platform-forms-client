@@ -16,6 +16,8 @@ import {
   CheckIcon,
   SelectMenuIcon,
 } from "../icons";
+import { ModalButton } from "./Modal";
+import { FancyButton } from "./Button";
 
 const Separator = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -90,11 +92,6 @@ const Input = styled.input`
   width: 460px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   max-height: 36px;
-`;
-
-const Label = styled.label`
-  font-weight: 700;
-  display: block;
 `;
 
 const FormWrapper = styled.div`
@@ -179,22 +176,35 @@ Form.propTypes = {
   item: PropTypes.object,
 };
 
-const ModalForm = ({ item }: { item: ElementTypeWithIndex }) => {
-  const { updateField, resetChoices } = useTemplateStore();
+const FormLabel = styled.label`
+  font-weight: 700;
+  display: block;
+`;
 
+const ModalForm = ({
+  item,
+  properties,
+  setProperties,
+}: {
+  item: ElementTypeWithIndex;
+  properties: any;
+  setProperties: (properties: any) => void;
+}) => {
   return (
-    <form>
-      <Label htmlFor="titleEn">Question title</Label>
+    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+      <FormLabel htmlFor="titleEn">Question title</FormLabel>
       <Input
         id="titleEn"
         type="text"
         name={`item${item.index}`}
         placeholder={`Question`}
-        value={item.properties.titleEn}
-        onChange={(e) => {
-          updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-          resetChoices(item.index);
-        }}
+        value={properties.titleEn}
+        onChange={(e) =>
+          setProperties({
+            ...properties,
+            ...{ titleEn: e.target.value },
+          })
+        }
       />
     </form>
   );
@@ -204,16 +214,53 @@ ModalForm.propTypes = {
   item: PropTypes.object,
 };
 
-const ElementWrapper = styled.div`
-  border-left: 2px solid #efefef;
-  border-right: 2px solid #efefef;
-  border-top: 2px solid #efefef;
+const ElementWrapperDiv = styled.div`
+  border: 2px solid #efefef;
   border-bottom: 2px solid black;
   padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;
 `;
+
+export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
+  const {
+    form: { elements },
+  } = useTemplateStore();
+
+  const [properties, setProperties] = React.useState(elements[item.index].properties);
+
+  React.useEffect(() => {
+    setProperties((properties) => ({ ...properties, ...elements[item.index].properties }));
+  }, [item]);
+
+  const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
+    const { updateField } = useTemplateStore();
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      // loop through fields and update
+      updateField(`form.elements[${item.index}].properties.titleEn`, properties.titleEn);
+    };
+  };
+
+  return (
+    <ElementWrapperDiv className={`element-${item.index}`}>
+      <FormWrapper>
+        <Form item={item} />
+      </FormWrapper>
+      <PanelActions
+        item={item}
+        renderSaveButton={() => (
+          <ModalButton isOpenButton={false}>
+            <FancyButton onClick={handleSubmit({ item, properties })}>Save</FancyButton>
+          </ModalButton>
+        )}
+      >
+        <ModalForm item={item} properties={properties} setProperties={setProperties} />
+      </PanelActions>
+    </ElementWrapperDiv>
+  );
+};
 
 export const ElementPanel = () => {
   const {
@@ -235,13 +282,7 @@ export const ElementPanel = () => {
         const item = { ...element, index };
         return (
           <div key={item.id}>
-            <ElementWrapper className={`element-${index}`}>
-              <FormWrapper>
-                <Form item={item} />
-              </FormWrapper>
-
-              <PanelActions item={item} />
-            </ElementWrapper>
+            <ElementWrapper item={item} />
           </div>
         );
       })}

@@ -40,19 +40,17 @@ const AddButtonWrapper = styled.div`
   z-index: 999;
 `;
 
-const AddElement = styled.button`
-  background-color: #fff;
-  padding: 5px 20px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  font-size: 14px;
-  &:hover {
-    background: #ebebeb;
-  }
-`;
-
-export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
+export const PanelActions = ({
+  item,
+  renderSaveButton,
+  children,
+}: {
+  item: ElementTypeWithIndex;
+  renderSaveButton: () => React.ReactElement | string | undefined;
+  children: React.ReactNode;
+}) => {
   const { remove, moveUp, moveDown, add, duplicateElement } = useTemplateStore();
+
   return (
     <Actions>
       <UpDown>
@@ -94,8 +92,9 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
             <Label>More</Label>
           </Button>
         }
+        saveButton={renderSaveButton()}
       >
-        <p>Question title: {item.properties.titleEn || "empty"}</p>
+        {children}
       </Modal>
 
       <AddButtonWrapper>
