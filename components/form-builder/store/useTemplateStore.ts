@@ -69,7 +69,8 @@ const useTemplateStore = create<ElementStore>()(
       }),
     duplicateElement: (index) => {
       set((state) => {
-        const element = state.form.elements[index];
+        // deep copy the element
+        const element = JSON.parse(JSON.stringify(state.form.elements[index]));
         element.id = incrementElementId(state.form.elements);
         element.properties.titleEn = `${element.properties.titleEn} copy`;
         state.form.elements.push(element);
