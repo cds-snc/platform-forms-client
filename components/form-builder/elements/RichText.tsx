@@ -9,7 +9,7 @@ const OptionWrapper = styled.div`
 
 const TextInput = styled.input`
   padding: 22px;
-  width: 400px;
+  width: 460px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   max-height: 36px;
 `;
@@ -34,6 +34,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
         ref={input}
         type="text"
         value={val}
+        placeholder="Rich text"
         onChange={(e) => {
           updateField(`form.elements[${parentIndex}].properties.descriptionEn`, e.target.value);
         }}
