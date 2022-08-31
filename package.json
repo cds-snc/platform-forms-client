@@ -56,7 +56,7 @@
     "lodash.set": "^4.3.2",
     "markdown-to-jsx": "^7.1.7",
     "mmmagic": "^0.5.3",
-    "next": "^12.1.4",
+    "next": "^12.2.4",
     "next-auth": "^4.10.3",
     "next-i18next": "^11.0.0",
     "notifications-node-client": "^5.1.1",
