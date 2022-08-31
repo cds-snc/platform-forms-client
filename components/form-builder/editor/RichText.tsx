@@ -1,18 +1,7 @@
-import React, { useState, useCallback, HTMLAttributes } from "react";
-import { createEditor, Descendant, BaseEditor } from "slate";
-import { ReactEditor, Slate, Editable, withReact } from "slate-react";
-
-type CustomElement = { type: string; children: CustomText[] };
-type CustomText = { text: string; bold?: boolean; italic?: boolean };
-type Children = JSX.Element | JSX.Element[] | string | string[];
-
-declare module "slate" {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor;
-    Element: CustomElement;
-    Text: CustomText;
-  }
-}
+import React, { useState, useCallback, HTMLAttributes, useRef } from "react";
+import { createEditor, Editor, Descendant } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import { Children, CustomElement, CustomText } from "../types/slate-editor";
 
 const initialValue: Descendant[] = [
   {
@@ -107,6 +96,7 @@ const Leaf = ({
 
 export const RichText = () => {
   const [editor] = useState(() => withReact(createEditor()));
+
   const renderElement = useCallback(
     (props: { element: CustomElement }) => <Element {...props} />,
     []
@@ -118,6 +108,13 @@ export const RichText = () => {
 
   return (
     <Slate editor={editor} value={initialValue}>
+      <button
+        onClick={() => {
+          Editor.addMark(editor, "bold", true);
+        }}
+      >
+        B
+      </button>
       <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
     </Slate>
   );
