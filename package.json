@@ -66,6 +66,8 @@
     "react-app-polyfill": "^3.0.0",
     "react-dom": "^18.0.0",
     "react-tabs": "^4.2.0",
+    "slate": "^0.82.1",
+    "slate-react": "^0.82.1",
     "styled-components": "^5.3.5",
     "swr": "^1.2.2",
     "uuid": "^8.3.2",
