@@ -52,8 +52,8 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
   return (
     <Actions>
       <UpDown>
-        <Button icon={<ChevronUp />} onClick={() => moveUp(item.index!)} />
-        <Button icon={<ChevronDown />} onClick={() => moveDown(item.index!)} />
+        <Button icon={<ChevronUp />} onClick={() => moveUp(item.index)} />
+        <Button icon={<ChevronDown />} onClick={() => moveDown(item.index)} />
         <Label>Move</Label>
       </UpDown>
 
