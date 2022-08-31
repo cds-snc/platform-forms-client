@@ -19,6 +19,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const {
     form: { elements },
     updateField,
+    resetChoices,
   } = useTemplateStore();
   const val = elements[parentIndex].properties.descriptionEn;
 
@@ -37,6 +38,8 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
         placeholder="Rich text"
         onChange={(e) => {
           updateField(`form.elements[${parentIndex}].properties.descriptionEn`, e.target.value);
+          // for rich text fields we want to clear the choices array
+          resetChoices(parentIndex);
         }}
       />
     </OptionWrapper>

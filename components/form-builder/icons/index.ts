@@ -8,3 +8,4 @@ export { SelectMenuIcon } from "./SelectMenuIcon";
 export { ChevronUp } from "./ChevronUp";
 export { ChevronDown } from "./ChevronDown";
 export { Close } from "./Close";
+export { Duplicate } from "./Duplicate";
