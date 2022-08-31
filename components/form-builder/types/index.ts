@@ -15,7 +15,7 @@ export interface ElementProperties {
   titleEn: string;
   titleFr: string;
   validation: {
-    required: false;
+    required: boolean;
   };
   descriptionEn: string;
   descriptionFr: string;
@@ -71,7 +71,7 @@ export interface ElementStore extends TemplateSchema {
   addChoice: (index: number) => void;
   resetChoices: (index: number) => void;
   removeChoice: (index: number, childIndex: number) => void;
-  updateField: (path: string, value: string) => void;
+  updateField: (path: string, value: string | boolean) => void;
   bulkAddChoices: (index: number, bulkChoices: string) => void;
   importTemplate: (json: TemplateSchema) => void;
 }
