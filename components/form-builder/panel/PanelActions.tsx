@@ -7,6 +7,8 @@ import { ChevronUp, ChevronDown, Close, Duplicate, ParagraphIcon } from "../icon
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
+import { Modal } from "./Modal";
+
 const Actions = styled.div`
   position: relative;
   margin-top: 5px;
@@ -71,6 +73,7 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
       >
         <Label>Duplicate</Label>
       </Button>
+
       <Button
         icon={<Close />}
         onClick={() => {
@@ -83,6 +86,18 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
       <Button icon={<ParagraphIcon />} onClick={() => null}>
         <Label>More</Label>
       </Button>
+
+      <Modal
+        title={`Modal ${item.index + 1}`}
+        openButton={
+          <Button icon={<ParagraphIcon />} onClick={() => null}>
+            <Label>More</Label>
+          </Button>
+        }
+      >
+        <p>Question title: {item.properties.titleEn || "empty"}</p>
+      </Modal>
+
       <AddButtonWrapper>
         <FancyButton onClick={add}>Add element</FancyButton>
       </AddButtonWrapper>
@@ -92,5 +107,4 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
 
 PanelActions.propTypes = {
   item: PropTypes.object,
-  openModal: PropTypes.func,
 };

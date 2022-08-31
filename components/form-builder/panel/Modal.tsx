@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, createContext, useContext } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
@@ -49,22 +49,98 @@ const StyledDialog = styled.dialog`
   }
 `;
 
+interface IModalContext {
+  isOpen: boolean;
+  changeOpen: (open: boolean) => void;
+}
+
+const modalDefaultContext: IModalContext = {
+  isOpen: false,
+  changeOpen: () => null,
+};
+
+const ModalContext = createContext<IModalContext>(modalDefaultContext);
+
 export const Modal = ({
   title,
   children,
-  isOpen,
-  onClose,
+  openButton,
 }: {
   title: string;
   children: JSX.Element | string;
-  isOpen: boolean;
-  onClose: () => void;
+  openButton?: React.ReactElement;
+}) => {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const changeOpen = (open: boolean) => {
+    setIsOpen(open);
+  };
+
+  /* eslint-disable */
+  return (
+    <ModalContext.Provider value={{ isOpen, changeOpen }}>
+      {openButton ? (
+        <ModalButton isOpenButton={true}>{{ button: openButton }}</ModalButton>
+      ) : (
+        <ModalButton isOpenButton={true} />
+      )}
+
+    
+      <ModalContainer title={title} children={children} />
+    </ModalContext.Provider>
+  );
+  /* eslint-enable */
+};
+
+Modal.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+};
+
+const ModalButton = ({
+  isOpenButton,
+  children,
+}: {
+  isOpenButton: boolean;
+  children?: { button: React.ReactElement };
+}) => {
+  const { changeOpen } = useContext(ModalContext);
+
+  if (!children) {
+    return (
+      <button onClick={() => changeOpen(isOpenButton)}>
+        {isOpenButton ? "Open modal" : "Close modal"}
+      </button>
+    );
+  }
+
+  const { button } = children;
+
+  // Note: this wipes out any other onClick method that exists
+  return React.cloneElement(button, {
+    onClick: () => changeOpen(isOpenButton),
+  });
+};
+
+ModalButton.propTypes = {
+  isOpenButton: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+};
+
+export const ModalContainer = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { isOpen, changeOpen } = useContext(ModalContext);
+
   const modalContainer = useRef<HTMLDialogElement>(null);
+
   const close = () => {
     modalContainer.current?.close();
-    onClose();
+    changeOpen(false);
   };
 
   // focus modal when opened
@@ -114,7 +190,9 @@ export const Modal = ({
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
-            <Button icon={<Close />} onClick={close}>{t("Close")}</Button>
+            <ModalButton isOpenButton={false}>
+              {{ button: <Button icon={<Close />} onClick={close}>{t("Close")}</Button> }}
+            </ModalButton>
           </div>
           <div className="modal-body">
             {children}
@@ -129,9 +207,7 @@ export const Modal = ({
   /* eslint-enable */
 };
 
-Modal.propTypes = {
+ModalContainer.propTypes = {
   title: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
 };

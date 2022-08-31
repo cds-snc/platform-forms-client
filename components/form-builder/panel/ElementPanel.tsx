@@ -16,7 +16,6 @@ import {
   CheckIcon,
   SelectMenuIcon,
 } from "../icons";
-import { Modal } from "./Modal";
 
 const Separator = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -222,15 +221,6 @@ export const ElementPanel = () => {
     add,
   } = useTemplateStore();
 
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
   if (!elements.length) {
     return (
       <button style={{ marginBottom: 20 }} className="gc-button gc-button--secondary" onClick={add}>
@@ -250,21 +240,7 @@ export const ElementPanel = () => {
                 <Form item={item} />
               </FormWrapper>
 
-              <PanelActions item={item} openModal={openModal} />
-
-              <Modal
-                title={
-                  item?.properties?.titleEn
-                    ? `More options: ${item.properties.titleEn}`
-                    : `More options: Question ${item.index + 1}`
-                }
-                isOpen={modalIsOpen}
-                onClose={closeModal}
-              >
-                <div>
-                  <ModalForm item={item} />
-                </div>
-              </Modal>
+              <PanelActions item={item} />
             </ElementWrapper>
           </div>
         );
