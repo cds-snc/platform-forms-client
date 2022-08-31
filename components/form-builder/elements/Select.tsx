@@ -6,9 +6,6 @@ import { ElementOption, DropdownProps } from "../types";
 
 const DropDownContainer = styled.div`
   width: 250px;
-  position: absolute;
-  top: 0px;
-  right: 0px;
 `;
 
 const DropDownHeader = styled.button`

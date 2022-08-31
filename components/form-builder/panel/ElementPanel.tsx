@@ -82,19 +82,34 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
 
 const Row = styled.div`
   position: relative;
+  display: flex;
   justify-content: space-between;
-  margin-right: 80px;
 `;
 
 const Input = styled.input`
   padding: 22px;
-  width: 400px;
+  width: 460px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   max-height: 36px;
 `;
 
 const FormWrapper = styled.div`
   padding: 1.25em;
+`;
+
+const RequiredWrapper = styled.div`
+  margin-top: 20px;
+  margin-left: 10px;
+
+  & input {
+    transform: scale(1.5);
+    padding: 10px;
+  }
+
+  & div {
+    display: inline-block;
+    margin-left: 10px;
+  }
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
@@ -112,25 +127,45 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   return (
     <>
       <Row>
-        {item.type !== "richText" && (
-          <Input
-            type="text"
-            name={`item${item.index}`}
-            placeholder={`Question`}
-            value={item.properties.titleEn}
-            onChange={(e) => {
-              updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-              resetChoices(item.index);
-            }}
+        <div>
+          <Select
+            options={elementOptions}
+            selectedItem={selectedItem}
+            onChange={handleElementChange}
           />
-        )}
-        <Select
-          options={elementOptions}
-          selectedItem={selectedItem}
-          onChange={handleElementChange}
-        />
+          <RequiredWrapper>
+            <input
+              checked={item.properties.validation.required}
+              type="checkbox"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (!e.target) {
+                  return;
+                }
+                updateField(
+                  `form.elements[${item.index}].properties.validation.required`,
+                  e.target.checked
+                );
+              }}
+            />{" "}
+            <div>Required</div>
+          </RequiredWrapper>
+        </div>
+        <div>
+          {item.type !== "richText" && (
+            <Input
+              type="text"
+              name={`item${item.index}`}
+              placeholder={`Question`}
+              value={item.properties.titleEn}
+              onChange={(e) => {
+                updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+                resetChoices(item.index);
+              }}
+            />
+          )}
+          <SelectedElement item={item} selected={selectedItem} />
+        </div>
       </Row>
-      <SelectedElement item={item} selected={selectedItem} />
     </>
   );
 };
