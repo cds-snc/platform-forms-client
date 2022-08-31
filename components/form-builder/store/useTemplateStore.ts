@@ -68,7 +68,12 @@ const useTemplateStore = create<ElementStore>()(
         state.form.elements[index].properties.choices = [];
       }),
     duplicateElement: (index) => {
-      alert(index);
+      set((state) => {
+        const element = state.form.elements[index];
+        element.id = incrementElementId(state.form.elements);
+        element.properties.titleEn = `${element.properties.titleEn} copy`;
+        state.form.elements.push(element);
+      });
     },
     bulkAddChoices: (index, bulkChoices) => {
       set((state) => {
