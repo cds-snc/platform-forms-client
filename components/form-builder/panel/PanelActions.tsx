@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { Button } from "./Button";
-import { ChevronUp, ChevronDown, Close } from "../icons";
+import { ChevronUp, ChevronDown, Close, Duplicate } from "../icons";
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
@@ -20,12 +20,12 @@ const Actions = styled.div`
 const Label = styled.div`
   line-height: 38px;
   font-size: 16px;
+  margin-right: 20px;
 `;
 
 const UpDown = styled.div`
   display: flex;
   margin-left: 150px;
-  margin-right: 40px;
 `;
 
 const AddButtonWrapper = styled.div`
@@ -48,7 +48,7 @@ const AddElement = styled.button`
 `;
 
 export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
-  const { remove, moveUp, moveDown, add } = useTemplateStore();
+  const { remove, moveUp, moveDown, add, duplicateElement } = useTemplateStore();
   return (
     <Actions>
       <UpDown>
@@ -56,6 +56,15 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
         <Button icon={<ChevronDown />} onClick={() => moveDown(item.index!)} />
         <Label>Move</Label>
       </UpDown>
+
+      <Button
+        icon={<Duplicate />}
+        onClick={() => {
+          duplicateElement(item.index);
+        }}
+      ></Button>
+      <Label>Duplicate</Label>
+
       <Button
         icon={<Close />}
         onClick={() => {
@@ -63,6 +72,7 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
         }}
       ></Button>
       <Label>Remove</Label>
+
       <AddButtonWrapper>
         <AddElement onClick={add}>Add element</AddElement>
       </AddButtonWrapper>
