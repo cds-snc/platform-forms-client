@@ -4,7 +4,7 @@ import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import { Import } from "./Import";
 import { Output } from "./Output";
-import { RichText } from "../editor/RichText";
+import { RichTextEditor } from "../editor/RichTextEditor";
 
 const Input = styled.input`
   padding: 22px 10px;
@@ -24,7 +24,7 @@ export const Layout = () => {
   return (
     <>
       <div>
-        <RichText />
+        <RichTextEditor />
         <Input
           placeholder="Form Title"
           value={titleEn}
