@@ -9,9 +9,7 @@ import { Container, EditorStyles } from "./styles";
 
 export const RichTextEditor = () => {
   const [editor] = useState(() => withReact(createEditor()));
-
   const [value, setValue] = useState(initialValue);
-
   const renderElement = useCallback((props) => <Element {...props} />, []);
   const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
 

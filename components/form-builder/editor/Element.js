@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 export const Element = ({ attributes, children, element }) => {
   const style = {};
   switch (element.type) {
@@ -41,4 +43,10 @@ export const Element = ({ attributes, children, element }) => {
         </p>
       );
   }
+};
+
+Element.propTypes = {
+  attributes: PropTypes.obj,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  element: PropTypes.obj,
 };
