@@ -11,4 +11,8 @@ export const Container = styled.div`
 
 export const EditorStyles = styled.div`
   border: 1px solid #000;
+
+  h2{
+    color:green;
+  }
 `;

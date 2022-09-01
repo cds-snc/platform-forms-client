@@ -1,9 +1,8 @@
-import { Descendant, Editor, Transforms, Element as SlateElement } from "slate";
+import { Descendant, Editor, Element as SlateElement, Transforms } from "slate";
 import { ReactEditor } from "slate-react";
-
-import { Format } from "../types/slate-editor";
-
-const list_types = ["orderedList", "unorderedList"];
+import { Format} from "./slate-editor";
+const LIST_TYPES = ['numbered-list', 'bulleted-list']
+const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
 export const initialValue: Descendant[] = [
   {
@@ -13,34 +12,13 @@ export const initialValue: Descendant[] = [
       { text: "This is editable " },
       { text: "rich", bold: true },
       { text: " text, " },
-      { text: "much", italic: true },
+      { text: "much" },
       { text: " better than a " },
       { text: "!" },
     ],
   },
 ];
 
-export const toggleBlock = (editor: Editor, format: Format) => {
-  const isActive = isBlockActive(editor, format);
-  const isList = list_types.includes(format);
-  /* 
-  Transforms.unwrapNodes(editor, {
-    match: (n) => list_types.includes(!Editor.isEditor(n) && SlateElement.isElement(n) && n.type),
-    split: true,
-  });
-  */
-
-  Transforms.setNodes(editor, {
-    type: isActive ? "paragraph" : isList ? "list-item" : format,
-  });
-
-  if (isList && !isActive) {
-    Transforms.wrapNodes(editor, {
-      type: format,
-      children: [],
-    });
-  }
-};
 export const addMarkData = (editor: Editor, data: { format: Format; value: boolean }) => {
   Editor.addMark(editor, data.format, data.value);
 };
@@ -61,10 +39,52 @@ export const isMarkActive = (editor: Editor, format: Format) => {
   return marks ? marks[format] === true : false;
 };
 
-export const isBlockActive = (editor: Editor, format: Format) => {
-  const [match] = Editor.nodes(editor, {
-    match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
-  });
+export const toggleBlock = (editor:Editor, format:Format) => {
+  const isActive = isBlockActive(
+    editor,
+    format,
+    TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
+  )
+  const isList = LIST_TYPES.includes(format)
+
+  Transforms.unwrapNodes(editor, {
+    match: n =>
+      !Editor.isEditor(n) &&
+      SlateElement.isElement(n) &&
+      LIST_TYPES.includes(n.type) &&
+      !TEXT_ALIGN_TYPES.includes(format),
+    split: true,
+  })
+  let newProperties: Partial<SlateElement>
+  if (TEXT_ALIGN_TYPES.includes(format)) {
+    newProperties = {
+      align: isActive ? undefined : format,
+    }
+  } else {
+    newProperties = {
+      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+    }
+  }
+  Transforms.setNodes<SlateElement>(editor, newProperties)
+
+  if (!isActive && isList) {
+    const block = { type: format, children: [] }
+    Transforms.wrapNodes(editor, block)
+  }
+}
+
+const isBlockActive = (editor: Editor, format: Format, blockType: any) => {
+  const { selection } = editor;
+  if (!selection) return false;
+
+  console.log(blockType);
+
+  const [match] = Array.from(
+    Editor.nodes(editor, {
+      at: Editor.unhangRange(editor, selection),
+      match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n[blockType] === format,
+    })
+  );
 
   return !!match;
 };

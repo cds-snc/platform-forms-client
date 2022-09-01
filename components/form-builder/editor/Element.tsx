@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from "react";
-import { Children, CustomElement } from "../types/slate-editor";
+import { Children, CustomElement } from "./slate-editor";
 export const Element = ({
   attributes,
   children,
@@ -25,7 +25,7 @@ export const Element = ({
       );
     case "heading-one":
       return (
-        <h1 style={style} {...attributes}>
+        <h1 style={{...style, color:'#ff0000'}} {...attributes}>
           {children}
         </h1>
       );

@@ -12,6 +12,15 @@ export const Toolbar = () => {
       >
         B
       </button>
+
+      <button
+        style={{ marginLeft: 10 }}
+        onClick={() => {
+          toggleMark(editor, "italic");
+        }}
+      >
+        I
+      </button>
     </>
   );
 };

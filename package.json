@@ -100,6 +100,8 @@
     "@types/lodash.set": "^4.3.7",
     "@types/mmmagic": "^0.4.30",
     "@types/pg": "^8.6.5",
+    "@types/slate": "^0.47.11",
+    "@types/slate-react": "^0.50.1",
     "@types/react": "18.0.1",
     "@types/react-dom": "^18.0.0",
     "@types/react-tabs": "^2.3.4",

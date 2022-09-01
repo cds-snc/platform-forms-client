@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Children, CustomText } from "../types/slate-editor";
+import { Children, CustomText } from "./slate-editor";
 export const Leaf = ({
   attributes,
   children,

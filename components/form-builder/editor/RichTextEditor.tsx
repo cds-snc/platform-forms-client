@@ -4,7 +4,7 @@ import { Slate, Editable, withReact } from "slate-react";
 import { Leaf } from "./Leaf";
 import { Element } from "./Element";
 import { Toolbar } from "./ToolBar";
-import { Children, CustomElement, CustomText } from "../types/slate-editor";
+import { Children, CustomElement, CustomText } from "./slate-editor";
 import { initialValue } from "./util";
 import { Container, EditorStyles } from "./styles";
 
