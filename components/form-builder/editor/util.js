@@ -5,27 +5,7 @@ const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 export const initialValue = [
   {
     type: "paragraph",
-    children: [
-      { text: "A line of text in a paragraph." },
-      { text: "This is editable " },
-      { text: "rich", bold: true },
-      { text: " text, " },
-      { text: "much" },
-      { text: " better than a " },
-      { text: "!" },
-    ],
-  },
-  {
-    type: "heading-two",
-    children: [
-      { text: "A line of text in a paragraph." },
-      { text: "This is editable " },
-      { text: "rich", bold: true },
-      { text: " text, " },
-      { text: "much" },
-      { text: " better than a " },
-      { text: "!" },
-    ],
+    children: [{ text: "Your text" }, { text: " here", bold: true }],
   },
 ];
 

@@ -2,16 +2,10 @@ import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
+import { RichTextEditor } from "../editor/RichTextEditor";
 
 const OptionWrapper = styled.div`
   display: flex;
-`;
-
-const TextInput = styled.input`
-  padding: 22px;
-  width: 460px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  max-height: 36px;
 `;
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
@@ -29,19 +23,15 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     }
   }, []);
 
+  /*
+  updateField(`form.elements[${parentIndex}].properties.descriptionEn`, e.target.value);
+  // for rich text fields we want to clear the choices array
+  resetChoices(parentIndex);
+  */
+
   return (
     <OptionWrapper>
-      <TextInput
-        ref={input}
-        type="text"
-        value={val}
-        placeholder="Rich text"
-        onChange={(e) => {
-          updateField(`form.elements[${parentIndex}].properties.descriptionEn`, e.target.value);
-          // for rich text fields we want to clear the choices array
-          resetChoices(parentIndex);
-        }}
-      />
+      <RichTextEditor />
     </OptionWrapper>
   );
 };
