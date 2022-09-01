@@ -96,6 +96,34 @@ const Input = styled.input`
   max-height: 36px;
 `;
 
+const TextArea = styled.textarea`
+  padding: 10px;
+  width: 90%;
+  border: 2px solid #000000;
+  border-radius: 4px;
+`;
+
+const TextAreaDisabled = styled(TextArea)`
+  width: 460px;
+  font-size: 16px;
+  border: 2px solid #000000;
+  cursor: not-allowed;
+  background: #f2f2f2;
+  color: #777777;
+`;
+
+const FormLabel = styled.label`
+  font-weight: 700;
+  display: block;
+  margin-bottom: 3px;
+`;
+
+const FormLabelDisabled = styled(FormLabel)`
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: not-allowed;
+`;
+
 const FormWrapper = styled.div`
   padding: 1.25em;
 `;
@@ -116,6 +144,7 @@ const RequiredWrapper = styled.div`
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+  const { t } = useTranslation("form-builder");
   const { updateField } = useTemplateStore();
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
@@ -151,7 +180,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                   );
                 }}
               />{" "}
-              <span>Required</span>
+              <span>{t("Required")}</span>
             </label>
           </RequiredWrapper>
         </div>
@@ -160,12 +189,24 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             <Input
               type="text"
               name={`item${item.index}`}
-              placeholder={`Question`}
+              placeholder={t("Question")}
               value={item.properties.titleEn}
               onChange={(e) => {
                 updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
               }}
             />
+          )}
+          {item.properties.descriptionEn && (
+            <div>
+              <FormLabelDisabled htmlFor={`description-${item.index}`}>
+                {t("Description")}
+              </FormLabelDisabled>
+              <TextAreaDisabled
+                id={`description-${item.index}`}
+                value={item.properties.descriptionEn}
+                disabled
+              />
+            </div>
           )}
           <SelectedElement item={item} selected={selectedItem} />
         </div>
@@ -177,12 +218,6 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 Form.propTypes = {
   item: PropTypes.object,
 };
-
-const FormLabel = styled.label`
-  font-weight: 700;
-  display: block;
-  margin-bottom: 3px;
-`;
 
 const ModalRow = styled.div`
   margin-bottom: 20px;
@@ -197,13 +232,6 @@ const HintText = styled.p`
 
 const ModalInput = styled(Input)`
   width: 90%;
-`;
-
-const TextArea = styled.textarea`
-  padding: 10px;
-  width: 90%;
-  border: 2px solid #000000;
-  border-radius: 4px;
 `;
 
 const ModalSaveButton = styled(FancyButton)`
@@ -239,9 +267,9 @@ const ModalForm = ({
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
       <ModalRow>
-        <FormLabel htmlFor="titleEn">{t("Question")}</FormLabel>
+        <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("Question")}</FormLabel>
         <ModalInput
-          id="titleEn"
+          id={`titleEn--modal--${item.index}`}
           type="text"
           name={`item${item.index}`}
           placeholder={t("Question")}
@@ -261,7 +289,16 @@ const ModalForm = ({
             "The description appears below the label, and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements."
           )}
         </HintText>
-        <TextArea placeholder={t("Description")} />
+        <TextArea
+          placeholder={t("Description")}
+          onChange={(e) => {
+            setProperties({
+              ...properties,
+              ...{ descriptionEn: e.target.value },
+            });
+          }}
+          value={properties.descriptionEn}
+        />
       </ModalRow>
     </form>
   );
@@ -281,6 +318,7 @@ const ElementWrapperDiv = styled.div`
 `;
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
+  const { t } = useTranslation("form-builder");
   const {
     form: { elements },
   } = useTemplateStore();
@@ -295,8 +333,8 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
     const { updateField } = useTemplateStore();
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
-      // loop through fields and update
-      updateField(`form.elements[${item.index}].properties.titleEn`, properties.titleEn);
+      // replace all of "properties" with the new properties set in the ModalForm
+      updateField(`form.elements[${item.index}].properties`, properties);
     };
   };
 
@@ -309,7 +347,9 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
         item={item}
         renderSaveButton={() => (
           <ModalButton isOpenButton={false}>
-            <ModalSaveButton onClick={handleSubmit({ item, properties })}>Save</ModalSaveButton>
+            <ModalSaveButton onClick={handleSubmit({ item, properties })}>
+              {t("Save")}
+            </ModalSaveButton>
           </ModalButton>
         )}
       >
