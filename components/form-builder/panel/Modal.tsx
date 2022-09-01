@@ -122,11 +122,14 @@ Modal.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type CallBack = (...args: any[]) => void;
 
 const callAll =
   (...fns: Array<CallBack | undefined>) =>
-  (...args: any[]) =>
+  (
+    ...args: any[] // eslint-disable-line  @typescript-eslint/no-explicit-any
+  ) =>
     fns.forEach((fn) => typeof fn === "function" && fn(...args));
 
 export const ModalButton = ({

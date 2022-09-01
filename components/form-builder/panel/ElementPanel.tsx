@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
-import { ElementOption, ElementTypeWithIndex } from "../types";
+import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Paragraph, Options, RichText } from "../elements";
 import {
@@ -259,8 +259,8 @@ const ModalForm = ({
   setProperties,
 }: {
   item: ElementTypeWithIndex;
-  properties: any;
-  setProperties: (properties: any) => void;
+  properties: ElementProperties;
+  setProperties: (properties: ElementProperties) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -329,6 +329,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
     setProperties((properties) => ({ ...properties, ...elements[item.index].properties }));
   }, [item]);
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
     const { updateField } = useTemplateStore();
     return (e: React.MouseEvent<HTMLElement>) => {
