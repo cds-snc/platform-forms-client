@@ -23,13 +23,15 @@ export const Button = ({
   children,
   icon,
   onClick,
+  className,
 }: {
   children?: JSX.Element | string;
   icon: ReactElement;
   onClick: () => void;
+  className?: string;
 }) => {
   return (
-    <StyledButton onClick={onClick}>
+    <StyledButton onClick={onClick} className={className}>
       {icon}
       {children}
     </StyledButton>
@@ -83,14 +85,21 @@ const FancyStyledButton = styled.button`
 export const FancyButton = ({
   children,
   onClick,
+  className,
 }: {
   children?: JSX.Element | string;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
+  className?: string;
 }) => {
-  return <FancyStyledButton onClick={onClick}>{children}</FancyStyledButton>;
+  return (
+    <FancyStyledButton onClick={onClick} className={className}>
+      {children}
+    </FancyStyledButton>
+  );
 };
 
 FancyButton.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   onClick: PropTypes.func,
+  className: PropTypes.string,
 };

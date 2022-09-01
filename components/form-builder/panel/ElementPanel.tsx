@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
@@ -88,9 +89,10 @@ const Row = styled.div`
 `;
 
 const Input = styled.input`
-  padding: 22px;
+  padding: 22px 10px;
   width: 460px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 2px solid #000000;
+  border-radius: 4px;
   max-height: 36px;
 `;
 
@@ -179,6 +181,48 @@ Form.propTypes = {
 const FormLabel = styled.label`
   font-weight: 700;
   display: block;
+  margin-bottom: 3px;
+`;
+
+const ModalRow = styled.div`
+  margin-bottom: 20px;
+`;
+
+const HintText = styled.p`
+  font-size: 16.5px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  margin-top: -2px;
+`;
+
+const ModalInput = styled(Input)`
+  width: 90%;
+`;
+
+const TextArea = styled.textarea`
+  padding: 10px;
+  width: 90%;
+  border: 2px solid #000000;
+  border-radius: 4px;
+`;
+
+const ModalSaveButton = styled(FancyButton)`
+  padding: 15px 20px;
+  background: #26374a;
+  box-shadow: inset 0 -2px 0 #515963;
+  color: white;
+
+  &:hover:not(:disabled),
+  &:active,
+  &:focus {
+    color: white;
+    background: #1c578a;
+    box-shadow: inset 0 -2px 0 #7a8796;
+  }
+
+  &:hover:active {
+    background: #16446c;
+  }
 `;
 
 const ModalForm = ({
@@ -190,22 +234,35 @@ const ModalForm = ({
   properties: any;
   setProperties: (properties: any) => void;
 }) => {
+  const { t } = useTranslation("form-builder");
+
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
-      <FormLabel htmlFor="titleEn">Question title</FormLabel>
-      <Input
-        id="titleEn"
-        type="text"
-        name={`item${item.index}`}
-        placeholder={`Question`}
-        value={properties.titleEn}
-        onChange={(e) =>
-          setProperties({
-            ...properties,
-            ...{ titleEn: e.target.value },
-          })
-        }
-      />
+      <ModalRow>
+        <FormLabel htmlFor="titleEn">{t("Question")}</FormLabel>
+        <ModalInput
+          id="titleEn"
+          type="text"
+          name={`item${item.index}`}
+          placeholder={t("Question")}
+          value={properties.titleEn}
+          onChange={(e) =>
+            setProperties({
+              ...properties,
+              ...{ titleEn: e.target.value },
+            })
+          }
+        />
+      </ModalRow>
+      <ModalRow>
+        <FormLabel>{t("Description")}</FormLabel>
+        <HintText>
+          {t(
+            "The description appears below the label, and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements."
+          )}
+        </HintText>
+        <TextArea placeholder={t("Description")} />
+      </ModalRow>
     </form>
   );
 };
@@ -252,7 +309,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
         item={item}
         renderSaveButton={() => (
           <ModalButton isOpenButton={false}>
-            <FancyButton onClick={handleSubmit({ item, properties })}>Save</FancyButton>
+            <ModalSaveButton onClick={handleSubmit({ item, properties })}>Save</ModalSaveButton>
           </ModalButton>
         )}
       >

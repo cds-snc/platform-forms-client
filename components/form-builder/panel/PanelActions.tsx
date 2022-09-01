@@ -86,7 +86,7 @@ export const PanelActions = ({
       </Button>
 
       <Modal
-        title={`Modal ${item.index + 1}`}
+        title="More options"
         openButton={
           <Button icon={<ParagraphIcon />} onClick={() => null}>
             <Label>More</Label>

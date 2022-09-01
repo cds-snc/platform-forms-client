@@ -7,22 +7,29 @@ import { Button, FancyButton } from "./Button";
 import { Close } from "../icons/Close";
 
 const StyledDialog = styled.dialog`
-  width: 750px; /* TODO: fix this for mobile */
   padding: 0;
   background: transparent;
-  margin: 1.75rem auto;
-  background-color: #fff;
+  margin: 0;
   background-clip: padding-box;
-  border: 2px solid #000000;
-  box-shadow: 0px 4px 0px -1px #000000;
-  border-radius: 12px;
-  outline: 0;
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  height: 100%;
 
   .modal-content {
+    width: 750px; /* TODO: fix this for mobile */
+    margin: 1.75rem auto;
+    border: 1.5px solid #000000;
+    box-shadow: 0px 4px 0px -1px #000000;
+    background: #ffffff;
+    border-radius: 12px;
+    outline: 0;
+    max-height: none;
+    overflow-x: scroll;
+
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 100%;
     pointer-events: auto;
   }
 
@@ -31,7 +38,11 @@ const StyledDialog = styled.dialog`
     align-items: flex-start;
     justify-content: space-between;
     padding: 15px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #cacaca;
+  }
+
+  .modal-title {
+    padding-bottom: 15px;
   }
 
   .modal-body {
@@ -43,9 +54,23 @@ const StyledDialog = styled.dialog`
   .modal-footer {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     padding: 15px;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid #cacaca;
+
+    > *:first-child {
+      margin-right: 20px;
+    }
+  }
+`;
+
+const CloseButton = styled(Button)`
+  padding: 3px 5px;
+  border: 1px solid #cacaca;
+  border-radius: 2px;
+
+  svg {
+    margin-right: 3px;
   }
 `;
 
@@ -111,12 +136,13 @@ export const ModalButton = ({
   isOpenButton: boolean;
   children?: React.ReactElement;
 }) => {
+  const { t } = useTranslation("form-builder");
   const { changeOpen } = useContext(ModalContext);
 
   if (!children) {
     return (
       <button onClick={() => changeOpen(isOpenButton)}>
-        {isOpenButton ? "Open modal" : "Close modal"}
+        {isOpenButton ? t("Open modal") : t("Close modal")}
       </button>
     );
   }
@@ -131,6 +157,10 @@ ModalButton.propTypes = {
   isOpenButton: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.element]),
 };
+
+const ModalCancelButton = styled(FancyButton)`
+  padding: 15px 20px;
+`;
 
 export const ModalContainer = ({
   title,
@@ -199,7 +229,7 @@ export const ModalContainer = ({
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
             <ModalButton isOpenButton={false}>
-              <Button icon={<Close />} onClick={close}>{t("Close")}</Button>
+              <CloseButton icon={<Close />} onClick={close}>{t("Close")}</CloseButton>
             </ModalButton>
           </div>
           <div className="modal-body">
@@ -207,7 +237,7 @@ export const ModalContainer = ({
           </div>
           <div className="modal-footer">
             {saveButton}
-            <FancyButton onClick={close}>{t("Cancel")}</FancyButton>
+            <ModalCancelButton onClick={close}>{t("Cancel")}</ModalCancelButton>
           </div>
         </div>
     </StyledDialog>
