@@ -1,14 +1,5 @@
-import React, { HTMLAttributes } from "react";
-import { Children, CustomElement } from "./slate-editor";
-export const Element = ({
-  attributes,
-  children,
-  element,
-}: {
-  attributes?: HTMLAttributes<HTMLElement>;
-  children?: Children;
-  element: CustomElement;
-}) => {
+import React from "react";
+export const Element = ({ attributes, children, element }) => {
   const style = {};
   switch (element.type) {
     case "block-quote":
@@ -24,11 +15,7 @@ export const Element = ({
         </ul>
       );
     case "heading-one":
-      return (
-        <h1 style={{...style, color:'#ff0000'}} {...attributes}>
-          {children}
-        </h1>
-      );
+      return <h1 {...attributes}>{children}</h1>;
     case "heading-two":
       return (
         <h2 style={style} {...attributes}>

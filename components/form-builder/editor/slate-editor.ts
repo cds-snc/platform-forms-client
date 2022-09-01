@@ -22,13 +22,13 @@ export type HeadingElement = {
 
 export type ListItem = {
   type: "list-item";
-  align: "left" | "center" | "right" | "justify";
+  align?: "left" | "center" | "right" | "justify";
   children: CustomText[];
 };
 
 export type CustomElement = ParagraphElement | HeadingElement | ListItem;
 export type Children = JSX.Element | JSX.Element[] | string | string[];
-export type Format = "bold" | "italic";
+export type FormatType = "paragraph" | "heading" | "list-item";
 
 declare module "slate" {
   interface CustomTypes {

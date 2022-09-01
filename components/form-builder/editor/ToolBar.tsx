@@ -1,6 +1,6 @@
 import React from "react";
 import { useSlate } from "slate-react";
-import { toggleMark } from "./util";
+import { toggleMark, toggleBlock } from "./util";
 export const Toolbar = () => {
   const editor = useSlate();
   return (
@@ -20,6 +20,15 @@ export const Toolbar = () => {
         }}
       >
         I
+      </button>
+
+      <button
+        style={{ marginLeft: 10 }}
+        onClick={() => {
+          toggleBlock(editor, "heading-two");
+        }}
+      >
+        H2
       </button>
     </>
   );
