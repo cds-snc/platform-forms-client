@@ -7,6 +7,8 @@ import { Toolbar } from "./ToolBar";
 import { initialValue } from "./util";
 import { Container, EditorStyles } from "./styles";
 
+// https://github.com/ianstormtaylor/slate/blob/main/site/examples/richtext.tsx
+
 export const RichTextEditor = () => {
   const [editor] = useState(() => withReact(createEditor()));
   const [value, setValue] = useState(initialValue);

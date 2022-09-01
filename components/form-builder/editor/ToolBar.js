@@ -30,6 +30,15 @@ export const Toolbar = () => {
       >
         H2
       </button>
+
+      <button
+        style={{ marginLeft: 10 }}
+        onClick={() => {
+          toggleBlock(editor, "bulleted-list");
+        }}
+      >
+        List
+      </button>
     </>
   );
 };
