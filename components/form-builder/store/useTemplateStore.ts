@@ -67,6 +67,15 @@ const useTemplateStore = create<ElementStore>()(
       set((state) => {
         state.form.elements[index].properties.choices = [];
       }),
+    duplicateElement: (index) => {
+      set((state) => {
+        // deep copy the element
+        const element = JSON.parse(JSON.stringify(state.form.elements[index]));
+        element.id = incrementElementId(state.form.elements);
+        element.properties.titleEn = `${element.properties.titleEn} copy`;
+        state.form.elements.push(element);
+      });
+    },
     bulkAddChoices: (index, bulkChoices) => {
       set((state) => {
         const currentChoices = state.form.elements[index].properties.choices;

@@ -113,7 +113,7 @@ const RequiredWrapper = styled.div`
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
-  const { updateField, resetChoices } = useTemplateStore();
+  const { updateField } = useTemplateStore();
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
   const handleElementChange = useCallback(
@@ -159,7 +159,6 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               value={item.properties.titleEn}
               onChange={(e) => {
                 updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-                resetChoices(item.index);
               }}
             />
           )}
