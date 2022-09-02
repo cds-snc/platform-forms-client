@@ -257,11 +257,11 @@ const ModalSaveButton = styled(FancyButton)`
 const ModalForm = ({
   item,
   properties,
-  setProperties,
+  updateModalProperties,
 }: {
   item: ElementTypeWithIndex;
   properties: ElementProperties;
-  setProperties: (properties: ElementProperties) => void;
+  updateModalProperties: (index: number, properties: ElementProperties) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -276,7 +276,7 @@ const ModalForm = ({
           placeholder={t("Question")}
           value={properties.titleEn}
           onChange={(e) =>
-            setProperties({
+            updateModalProperties(item.index, {
               ...properties,
               ...{ titleEn: e.target.value },
             })
@@ -293,7 +293,7 @@ const ModalForm = ({
         <TextArea
           placeholder={t("Description")}
           onChange={(e) => {
-            setProperties({
+            updateModalProperties(item.index, {
               ...properties,
               ...{ descriptionEn: e.target.value },
             });
@@ -322,18 +322,17 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const {
     form: { elements },
+    updateField,
   } = useTemplateStore();
 
-  const { isOpen } = useModalStore();
-  const [properties, setProperties] = React.useState(elements[item.index].properties);
+  const { isOpen, modals, updateModalProperties } = useModalStore();
 
   React.useEffect(() => {
-    setProperties((properties) => ({ ...properties, ...elements[item.index].properties }));
+    updateModalProperties(item.index, elements[item.index].properties);
   }, [item, isOpen]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
-    const { updateField } = useTemplateStore();
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
       // replace all of "properties" with the new properties set in the ModalForm
@@ -351,14 +350,23 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
         item={item}
         renderSaveButton={() => (
           <ModalButton isOpenButton={false}>
-            <ModalSaveButton onClick={handleSubmit({ item, properties })}>
-              {t("Save")}
-            </ModalSaveButton>
+            {modals[item.index] && (
+              <ModalSaveButton onClick={handleSubmit({ item, properties: modals[item.index] })}>
+                {t("Save")}
+              </ModalSaveButton>
+            )}
           </ModalButton>
         )}
       >
-        <ModalForm item={item} properties={properties} setProperties={setProperties} />
+        {modals[item.index] && (
+          <ModalForm
+            item={item}
+            properties={modals[item.index]}
+            updateModalProperties={updateModalProperties}
+          />
+        )}
       </PanelActions>
+      <p>{JSON.stringify(modals[item.index])}</p>
     </ElementWrapperDiv>
   );
 };
