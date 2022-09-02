@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 import { Button, FancyButton } from "./Button";
 import { Close } from "../icons/Close";
+import { CDSHTMLDialogElement } from "../types";
 
 const StyledDialog = styled.dialog`
   padding: 0;
@@ -72,6 +73,10 @@ const CloseButton = styled(Button)`
   svg {
     margin-right: 3px;
   }
+`;
+
+const ModalCancelButton = styled(FancyButton)`
+  padding: 15px 20px;
 `;
 
 interface IModalContext {
@@ -160,45 +165,6 @@ ModalButton.propTypes = {
   isOpenButton: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.element]),
 };
-
-const ModalCancelButton = styled(FancyButton)`
-  padding: 15px 20px;
-`;
-
-/* https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts#L6282 */
-interface CDSHTMLDialogElement extends HTMLElement {
-  open: boolean;
-  returnValue: string;
-  /**
-   * Closes the dialog element.
-   *
-   * The argument, if provided, provides a return value.
-   */
-  close(returnValue?: string): void;
-  /** Displays the dialog element. */
-  show(): void;
-  showModal(): void;
-  addEventListener<K extends keyof HTMLElementEventMap>(
-    type: K,
-    listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, // eslint-disable-line  @typescript-eslint/no-explicit-any
-    options?: boolean | AddEventListenerOptions
-  ): void;
-  addEventListener(
-    type: string,
-    listener: EventListenerOrEventListenerObject,
-    options?: boolean | AddEventListenerOptions
-  ): void;
-  removeEventListener<K extends keyof HTMLElementEventMap>(
-    type: K,
-    listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, // eslint-disable-line  @typescript-eslint/no-explicit-any
-    options?: boolean | EventListenerOptions
-  ): void;
-  removeEventListener(
-    type: string,
-    listener: EventListenerOrEventListenerObject,
-    options?: boolean | EventListenerOptions
-  ): void;
-}
 
 export const ModalContainer = ({
   title,
