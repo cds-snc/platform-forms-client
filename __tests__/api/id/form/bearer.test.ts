@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
