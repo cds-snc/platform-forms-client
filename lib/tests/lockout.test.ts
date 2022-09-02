@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import Redis from "ioredis-mock";
 import {
   isUserLockedOut,

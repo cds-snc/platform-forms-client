@@ -7,9 +7,10 @@ import { unstable_getServerSession } from "next-auth/next";
 import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma, UserRole } from "@prisma/client";
-import * as logAdmin from "@lib/adminLogs";
+import { logAdminActivity } from "@lib/adminLogs";
 
 jest.mock("next-auth/next");
+jest.mock("@lib/adminLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(unstable_getServerSession, true);
@@ -273,8 +274,6 @@ describe("Users API endpoint", () => {
           isAdmin: "true",
         },
       });
-
-      const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
 
       await users(req, res);
 

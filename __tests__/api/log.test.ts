@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import { getCsrfToken } from "next-auth/react";
 import logApi from "@pages/api/log";
 import { createMocks } from "node-mocks-http";

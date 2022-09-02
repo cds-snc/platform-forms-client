@@ -13,7 +13,6 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-  rootDir: "./",
   testPathIgnorePatterns: ["<rootDir>/cypress/", "<rootDir>/public/static/scripts/"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   moduleDirectories: ["node_modules", "<rootDir>/"],
@@ -24,7 +23,15 @@ const customJestConfig = {
     "<rootDir>/__utils__/setupTests.ts",
     "<rootDir>/__utils__/prismaConnector.ts",
   ],
+  globals: {
+    "ts-jest": {
+      // The contents of this file should be what @chrisgibbs44 shared above
+      tsconfig: "tsconfig.test.json",
+    },
+  },
   testEnvironment: "jsdom",
+  collectCoverage: true,
+  collectCoverageFrom: ["**/*.{ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

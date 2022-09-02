@@ -1,16 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @jest-environment node
  */
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import owners from "@pages/api/id/[form]/owners";
-import * as logAdmin from "@lib/adminLogs";
+import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma, UserRole } from "@prisma/client";
 
 jest.mock("next-auth/next");
+jest.mock("@lib/adminLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(unstable_getServerSession, true);
@@ -269,7 +271,6 @@ describe("/id/[forms]/owners", () => {
           },
         });
 
-        const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
         await owners(req, res);
         expect(res.statusCode).toBe(200);
         expect(JSON.parse(res._getData())).toMatchObject({ id: elem, active: true });
@@ -406,7 +407,7 @@ describe("/id/[forms]/owners", () => {
           form: "9",
         },
       });
-      const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
+
       await owners(req, res);
 
       expect(res.statusCode).toBe(200);

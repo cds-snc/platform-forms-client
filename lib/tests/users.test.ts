@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import { getUsers, adminRole, getOrCreateUser, getFormUser } from "@lib/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
