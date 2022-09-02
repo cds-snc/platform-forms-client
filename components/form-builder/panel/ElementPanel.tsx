@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
+import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
 import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
@@ -323,11 +324,12 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
     form: { elements },
   } = useTemplateStore();
 
+  const { isOpen } = useModalStore();
   const [properties, setProperties] = React.useState(elements[item.index].properties);
 
   React.useEffect(() => {
     setProperties((properties) => ({ ...properties, ...elements[item.index].properties }));
-  }, [item]);
+  }, [item, isOpen]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
@@ -344,6 +346,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
       <FormWrapper>
         <Form item={item} />
       </FormWrapper>
+      <p>{JSON.stringify(isOpen)}: is open</p>
       <PanelActions
         item={item}
         renderSaveButton={() => (

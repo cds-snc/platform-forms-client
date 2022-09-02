@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { Button, FancyButton } from "./Button";
 import { Close } from "../icons/Close";
 import { CDSHTMLDialogElement } from "../types";
+import useModalStore from "../store/useModalStore";
 
 const StyledDialog = styled.dialog`
   padding: 0;
@@ -102,9 +103,11 @@ export const Modal = ({
   openButton?: React.ReactElement;
   saveButton?: React.ReactElement | string | undefined;
 }) => {
+  const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const changeOpen = (open: boolean) => {
     setIsOpen(open);
+    updateIsOpen(open);
   };
 
   return (
