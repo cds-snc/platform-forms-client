@@ -81,7 +81,6 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
 };
 
 const Row = styled.div`
-  position: relative;
   display: flex;
   justify-content: space-between;
 `;
@@ -106,7 +105,7 @@ const RequiredWrapper = styled.div`
     padding: 10px;
   }
 
-  & div {
+  & span {
     display: inline-block;
     margin-left: 10px;
   }
@@ -134,20 +133,22 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             onChange={handleElementChange}
           />
           <RequiredWrapper>
-            <input
-              checked={item.properties.validation.required}
-              type="checkbox"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (!e.target) {
-                  return;
-                }
-                updateField(
-                  `form.elements[${item.index}].properties.validation.required`,
-                  e.target.checked
-                );
-              }}
-            />{" "}
-            <div>Required</div>
+            <label>
+              <input
+                checked={item.properties.validation.required}
+                type="checkbox"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (!e.target) {
+                    return;
+                  }
+                  updateField(
+                    `form.elements[${item.index}].properties.validation.required`,
+                    e.target.checked
+                  );
+                }}
+              />{" "}
+              <span>Required</span>
+            </label>
           </RequiredWrapper>
         </div>
         <div>
