@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { Button, FancyButton } from "./Button";
-import { ChevronUp, ChevronDown, Close, Duplicate, ParagraphIcon } from "../icons";
+import { ChevronUp, ChevronDown, Close, Duplicate, MenuOpenIcon } from "../icons";
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
@@ -81,14 +81,10 @@ export const PanelActions = ({
         <Label>Remove</Label>
       </Button>
 
-      <Button icon={<ParagraphIcon />} onClick={() => null}>
-        <Label>More</Label>
-      </Button>
-
       <Modal
         title="More options"
         openButton={
-          <Button icon={<ParagraphIcon />} onClick={() => null}>
+          <Button icon={<MenuOpenIcon />} onClick={() => null}>
             <Label>More</Label>
           </Button>
         }

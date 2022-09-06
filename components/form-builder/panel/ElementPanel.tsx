@@ -345,7 +345,6 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
       <FormWrapper>
         <Form item={item} />
       </FormWrapper>
-      <p>{JSON.stringify(isOpen)}: is open</p>
       <PanelActions
         item={item}
         renderSaveButton={() => (
@@ -366,7 +365,6 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
           />
         )}
       </PanelActions>
-      <p>{JSON.stringify(modals[item.index])}</p>
     </ElementWrapperDiv>
   );
 };
