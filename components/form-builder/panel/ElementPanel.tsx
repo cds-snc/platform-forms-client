@@ -174,11 +174,14 @@ Form.propTypes = {
 };
 
 const ElementWrapper = styled.div`
-  border: 2px solid #efefef;
+  border-left: 2px solid #efefef;
+  border-right: 2px solid #efefef;
+  border-top: 2px solid #efefef;
+  border-bottom: 2px solid black;
+  padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;
-  margin-bottom: 20px;
 `;
 
 export const ElementPanel = () => {
