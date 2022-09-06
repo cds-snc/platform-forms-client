@@ -104,13 +104,15 @@ const TextArea = styled.textarea`
   border-radius: 4px;
 `;
 
-const TextAreaDisabled = styled(TextArea)`
+const DivDisabled = styled.div`
+  margin-top: 15px;
+  padding: 5px 10px;
   width: 460px;
   font-size: 16px;
-  border: 2px solid #000000;
   cursor: not-allowed;
+  border-radius: 4px;
   background: #f2f2f2;
-  color: #777777;
+  color: #6e6e6e;
 `;
 
 const FormLabel = styled.label`
@@ -119,10 +121,17 @@ const FormLabel = styled.label`
   margin-bottom: 3px;
 `;
 
-const FormLabelDisabled = styled(FormLabel)`
-  margin-top: 10px;
-  font-size: 16px;
-  cursor: not-allowed;
+const LabelHidden = styled(FormLabel)`
+  /* same as .sr-only */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 `;
 
 const FormWrapper = styled.div`
@@ -187,27 +196,21 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
         </div>
         <div>
           {item.type !== "richText" && (
-            <Input
-              type="text"
-              name={`item${item.index}`}
-              placeholder={t("Question")}
-              value={item.properties.titleEn}
-              onChange={(e) => {
-                updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-              }}
-            />
+            <>
+              <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
+              <Input
+                type="text"
+                name={`item${item.index}`}
+                placeholder={t("Question")}
+                value={item.properties.titleEn}
+                onChange={(e) => {
+                  updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+                }}
+              />
+            </>
           )}
           {item.properties.descriptionEn && (
-            <div>
-              <FormLabelDisabled htmlFor={`description-${item.index}`}>
-                {t("Description")}
-              </FormLabelDisabled>
-              <TextAreaDisabled
-                id={`description-${item.index}`}
-                value={item.properties.descriptionEn}
-                disabled
-              />
-            </div>
+            <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
         </div>
