@@ -23,12 +23,6 @@ const customJestConfig = {
     "<rootDir>/__utils__/setupTests.ts",
     "<rootDir>/__utils__/prismaConnector.ts",
   ],
-  globals: {
-    "ts-jest": {
-      // The contents of this file should be what @chrisgibbs44 shared above
-      tsconfig: "tsconfig.test.json",
-    },
-  },
   testEnvironment: "jsdom",
   collectCoverage: true,
   collectCoverageFrom: ["**/*.{ts,tsx}", "!**/*.d.ts", "!**/node_modules/**"],
