@@ -123,7 +123,7 @@
   dependencies:
     tslib "^2.3.1"
 
-"@aws-sdk/client-dynamodb@^3.58.0":
+"@aws-sdk/client-dynamodb@^3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.163.0.tgz#7b3a4c7e7e5ebdeb813781efe83fca45133ee226"
   integrity sha512-NALw3nejI4e8pYucHchYz3RyxREvr58w3FhcmmTp0u9FA4zfRN4D0+tHexdBlMGuKkdY1niSPXXDq+qefxudyA==
@@ -166,7 +166,7 @@
     tslib "^2.3.1"
     uuid "^8.3.2"
 
-"@aws-sdk/client-lambda@^3.58.0":
+"@aws-sdk/client-lambda@^3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-lambda/-/client-lambda-3.163.0.tgz#e0b02628818cf8f15f50895652882c647160ebd1"
   integrity sha512-YB9MefQ9WwOXLTUngJFF0LiJa9dMACPt6IAKFX3FYSu/yP1jFbS3+N/ULGdOoUuylKJWslpUXG4X3jFF1XhhBg==
@@ -207,7 +207,7 @@
     "@aws-sdk/util-waiter" "3.162.0"
     tslib "^2.3.1"
 
-"@aws-sdk/client-s3@^3.58.0":
+"@aws-sdk/client-s3@^3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.163.0.tgz#744d69e74237993e84912870c1c581e7ec1214ca"
   integrity sha512-pWjsVnD9kjXeS8yan8pMj6p+3yIvzR8gEpV6MDWDbJnlhD432M8WZUsFo+lkDK+2sfvGvdIg+gKd+Cb2cO8KvQ==
@@ -267,7 +267,7 @@
     fast-xml-parser "3.19.0"
     tslib "^2.3.1"
 
-"@aws-sdk/client-sqs@^3.58.0":
+"@aws-sdk/client-sqs@^3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-sqs/-/client-sqs-3.163.0.tgz#9d8fbd15bfd1c22d88e0c77bcec8156bdf68460b"
   integrity sha512-drYIE/cPDUXYhvLBjxYASPf/VVcTuT/yc3Igk03aChjiXBu5Ok0QeTJhQUYBV436k0TPaW+gfd4h1Nel9FzBMg==
@@ -587,7 +587,7 @@
   dependencies:
     tslib "^2.3.1"
 
-"@aws-sdk/lib-dynamodb@^3.58.0":
+"@aws-sdk/lib-dynamodb@^3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.163.0.tgz#db462faf89dc786dd4957e2eedf8c9033703c69b"
   integrity sha512-zOrPlqkHFa0tafpyD6wqyDShu1bRA/dtCCPXhwJZOp2Qtl0gt3OJjPOVFDyfrdcpelgvLSocPvIKZMqLCGQaQg==
@@ -13131,7 +13131,7 @@ react-docgen@^5.0.0:
     node-dir "^0.1.10"
     strip-indent "^3.0.0"
 
-react-dom@^18.0.0:
+react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -13220,7 +13220,7 @@ react-tabs@^4.2.0:
     clsx "^1.1.0"
     prop-types "^15.5.0"
 
-react@^18.0.0:
+react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
