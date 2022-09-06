@@ -1,15 +1,8 @@
 import create from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { ElementProperties } from "../types";
+import { ModalStore, ElementProperties } from "../types";
 
-export interface ModalStore {
-  isOpen: boolean;
-  modals: ElementProperties[];
-  updateIsOpen: (isOpen: boolean) => void;
-  updateModalProperties: (index: number, properties: ElementProperties) => void;
-}
-
-const defaultProperties: ElementProperties = {
+export const defaultProperties: ElementProperties = {
   choices: [],
   titleEn: "",
   titleFr: "",
@@ -32,6 +25,12 @@ const useModalStore = create<ModalStore>()(
       set((state) => {
         state.modals[index] = properties;
       }),
+    initialize: () => {
+      set((state) => {
+        state.isOpen = false;
+        state.modals = [defaultProperties];
+      });
+    },
   }))
 );
 

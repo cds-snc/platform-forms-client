@@ -79,6 +79,14 @@ export interface ElementStore extends TemplateSchema {
   initialize: () => void;
 }
 
+export interface ModalStore {
+  isOpen: boolean;
+  modals: ElementProperties[];
+  updateIsOpen: (isOpen: boolean) => void;
+  updateModalProperties: (index: number, properties: ElementProperties) => void;
+  initialize: () => void;
+}
+
 export interface ElementOption {
   id: string;
   value: string;
