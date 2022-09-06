@@ -13,11 +13,11 @@ const Actions = styled.div`
   display: flex;
   background-color: #ebebeb;
   padding-left: 20px;
-  height: 38px;
+  height: 62px;
   align-items: center;
 `;
 
-const Label = styled.div`
+const Label = styled.span`
   line-height: 38px;
   font-size: 16px;
   margin-right: 20px;
@@ -30,10 +30,11 @@ const UpDown = styled.div`
 
 const AddButtonWrapper = styled.div`
   position: absolute;
-  top: 10px;
+  top: 43px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 `;
 
 const AddElement = styled.button`
@@ -52,8 +53,12 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
   return (
     <Actions>
       <UpDown>
-        <Button icon={<ChevronUp />} onClick={() => moveUp(item.index)} />
-        <Button icon={<ChevronDown />} onClick={() => moveDown(item.index)} />
+        <Button icon={<ChevronUp />} onClick={() => moveUp(item.index)}>
+          <span className="sr-only">Move up</span>
+        </Button>
+        <Button icon={<ChevronDown />} onClick={() => moveDown(item.index)}>
+          <span className="sr-only">Move down</span>
+        </Button>
         <Label>Move</Label>
       </UpDown>
 
@@ -62,16 +67,18 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
         onClick={() => {
           duplicateElement(item.index);
         }}
-      ></Button>
-      <Label>Duplicate</Label>
+      >
+        <Label>Duplicate</Label>
+      </Button>
 
       <Button
         icon={<Close />}
         onClick={() => {
           remove(item.id);
         }}
-      ></Button>
-      <Label>Remove</Label>
+      >
+        <Label>Remove</Label>
+      </Button>
 
       <AddButtonWrapper>
         <AddElement onClick={add}>Add element</AddElement>
