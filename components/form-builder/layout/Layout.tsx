@@ -8,9 +8,9 @@ import { Output } from "./Output";
 const Input = styled.input`
   padding: 22px;
   width: 800px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   max-height: 36px;
-  margin-bottom: 20px;
+  margin-bottom: 35px;
 `;
 
 export const Layout = () => {
@@ -31,7 +31,9 @@ export const Layout = () => {
       </div>
       <ElementPanel />
       <Import />
-      <Output />
+      <div className="hidden">
+        <Output />
+      </div>
     </>
   );
 };
