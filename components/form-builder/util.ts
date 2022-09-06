@@ -1,4 +1,4 @@
-import { Language, Choice, ElementType } from "./types";
+import { Language, Choice, ElementType, FormSchema, TemplateSchema } from "./types";
 
 export const getPreviousIndex = (items: ElementType[], index: number) => {
   return index === 0 ? items.length - 1 : index - 1;
@@ -86,4 +86,33 @@ export const newlineToOptions = (
   newChoices = newChoices.slice(0, choices.length);
 
   return newChoices;
+};
+
+export const getSchema = (state: TemplateSchema) => {
+  const {
+    form: { endPage, elements, titleEn, titleFr, version, emailSubjectEn, emailSubjectFr },
+  } = state;
+
+  const form: FormSchema = {
+    layout: [],
+    endPage,
+    titleEn,
+    titleFr,
+    version,
+    elements,
+    emailSubjectEn,
+    emailSubjectFr,
+  };
+
+  form.layout = elements.map((element) => {
+    return element.id;
+  });
+
+  const schema: TemplateSchema = {
+    form,
+    submission: { email: "test@test.com" },
+    publishingStatus: true,
+  };
+
+  return schema;
 };

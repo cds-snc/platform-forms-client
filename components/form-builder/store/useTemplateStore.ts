@@ -1,6 +1,13 @@
 import create from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { moveDown, moveUp, removeElementById, incrementElementId, newlineToOptions } from "../util";
+import {
+  moveDown,
+  moveUp,
+  removeElementById,
+  incrementElementId,
+  newlineToOptions,
+  getSchema,
+} from "../util";
 import { ElementStore, ElementType } from "../types";
 import update from "lodash.set";
 
@@ -19,24 +26,26 @@ const defaultField: ElementType = {
   },
 };
 
+export const defaultForm = {
+  titleEn: "My Form",
+  titleFr: "[fr] My Form",
+  layout: [],
+  version: 1,
+  endPage: {
+    descriptionEn: "#Your submission has been received",
+    descriptionFr: "#[fr] Your submission has been received.",
+    referrerUrlEn: "",
+    referrerUrlFr: "",
+  },
+  elements: [],
+  emailSubjectEn: "",
+  emailSubjectFr: "",
+};
+
 const useTemplateStore = create<ElementStore>()(
-  immer((set) => ({
+  immer((set, get) => ({
     lang: "en",
-    form: {
-      titleEn: "My Form",
-      titleFr: "[fr] My Form",
-      layout: [],
-      version: 1,
-      endPage: {
-        descriptionEn: "#Your submission has been received",
-        descriptionFr: "#[fr] Your submission has been received.",
-        referrerUrlEn: "",
-        referrerUrlFr: "",
-      },
-      elements: [],
-      emailSubjectEn: "",
-      emailSubjectFr: "",
-    },
+    form: defaultForm,
     submission: {
       email: "test@example.com",
     },
@@ -81,6 +90,15 @@ const useTemplateStore = create<ElementStore>()(
         const currentChoices = state.form.elements[index].properties.choices;
         const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
         state.form.elements[index].properties.choices = choices;
+      });
+    },
+    getSchema: () => getSchema(get()),
+    initialize: () => {
+      set((state) => {
+        state.lang = "en";
+        state.form = defaultForm;
+        state.submission = { email: "test@example.com" };
+        state.publishingStatus = true;
       });
     },
     importTemplate: (json) =>
