@@ -18,6 +18,7 @@ export const Layout = () => {
     updateField,
     form: { titleEn },
   } = useTemplateStore();
+
   return (
     <>
       <div>

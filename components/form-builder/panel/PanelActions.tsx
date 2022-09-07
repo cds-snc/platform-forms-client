@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { Button } from "./Button";
-import { ChevronUp, ChevronDown, Close, Duplicate } from "../icons";
+import { Button, FancyButton } from "./Button";
+import { ChevronUp, ChevronDown, Close, Duplicate, MenuOpenIcon } from "../icons";
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
+
+import { Modal } from "./Modal";
 
 const Actions = styled.div`
   position: relative;
@@ -21,6 +23,7 @@ const Label = styled.span`
   line-height: 38px;
   font-size: 16px;
   margin-right: 20px;
+  margin-left: 4px;
 `;
 
 const UpDown = styled.div`
@@ -37,19 +40,17 @@ const AddButtonWrapper = styled.div`
   z-index: 999;
 `;
 
-const AddElement = styled.button`
-  background-color: #fff;
-  padding: 5px 20px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  font-size: 14px;
-  &:hover {
-    background: #ebebeb;
-  }
-`;
-
-export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
+export const PanelActions = ({
+  item,
+  renderSaveButton,
+  children,
+}: {
+  item: ElementTypeWithIndex;
+  renderSaveButton: () => React.ReactElement | string | undefined;
+  children: React.ReactNode;
+}) => {
   const { remove, moveUp, moveDown, add, duplicateElement } = useTemplateStore();
+
   return (
     <Actions>
       <UpDown>
@@ -80,8 +81,20 @@ export const PanelActions = ({ item }: { item: ElementTypeWithIndex }) => {
         <Label>Remove</Label>
       </Button>
 
+      <Modal
+        title="More options"
+        openButton={
+          <Button icon={<MenuOpenIcon />} onClick={() => null}>
+            <Label>More</Label>
+          </Button>
+        }
+        saveButton={renderSaveButton()}
+      >
+        {children}
+      </Modal>
+
       <AddButtonWrapper>
-        <AddElement onClick={add}>Add element</AddElement>
+        <FancyButton onClick={add}>Add element</FancyButton>
       </AddButtonWrapper>
     </Actions>
   );

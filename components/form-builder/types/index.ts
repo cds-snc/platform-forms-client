@@ -79,6 +79,14 @@ export interface ElementStore extends TemplateSchema {
   initialize: () => void;
 }
 
+export interface ModalStore {
+  isOpen: boolean;
+  modals: ElementProperties[];
+  updateIsOpen: (isOpen: boolean) => void;
+  updateModalProperties: (index: number, properties: ElementProperties) => void;
+  initialize: () => void;
+}
+
 export interface ElementOption {
   id: string;
   value: string;
@@ -90,4 +98,39 @@ export interface DropdownProps {
   options: ElementOption[];
   onChange?: (selectedItem: string) => void;
   ishighlighted: boolean;
+}
+
+/* https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts#L6282 */
+export interface CDSHTMLDialogElement extends HTMLElement {
+  open: boolean;
+  returnValue: string;
+  /**
+   * Closes the dialog element.
+   *
+   * The argument, if provided, provides a return value.
+   */
+  close(returnValue?: string): void;
+  /** Displays the dialog element. */
+  show(): void;
+  showModal(): void;
+  addEventListener<K extends keyof HTMLElementEventMap>(
+    type: K,
+    listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, // eslint-disable-line  @typescript-eslint/no-explicit-any
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  addEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  removeEventListener<K extends keyof HTMLElementEventMap>(
+    type: K,
+    listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, // eslint-disable-line  @typescript-eslint/no-explicit-any
+    options?: boolean | EventListenerOptions
+  ): void;
+  removeEventListener(
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | EventListenerOptions
+  ): void;
 }
