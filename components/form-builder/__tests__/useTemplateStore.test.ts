@@ -11,7 +11,7 @@ const createStore = () => {
   return result;
 };
 
-describe("Store", () => {
+describe("TemplateStore", () => {
   it("Updates the Form title", () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("My Form");
