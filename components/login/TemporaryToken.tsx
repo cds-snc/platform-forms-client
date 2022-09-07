@@ -85,6 +85,7 @@ const TemporaryToken = (props: LoginStageProps): React.ReactElement => {
           name="temporaryToken"
           className="gc-textarea full-height font-mono"
           data-testid="temporaryToken"
+          aria-describedby="desc-instructions"
           onChange={handleChange}
         />
         <br />
