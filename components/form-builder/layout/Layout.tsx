@@ -31,9 +31,7 @@ export const Layout = () => {
       </div>
       <ElementPanel />
       <Import />
-      <div className="hidden">
-        <Output />
-      </div>
+      <Output />
     </>
   );
 };

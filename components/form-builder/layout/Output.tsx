@@ -10,20 +10,29 @@ const JSONOutput = styled.pre`
   overflow: "scroll";
 `;
 
-const Separator = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  margin: 20px 0;
+const Separator = styled.hr`
+  display: block;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  cursor: pointer;
 `;
 
 export const Output = () => {
   const { stringified } = useGetTemplate();
 
+  const [showJSON, setShowJSON] = React.useState(false);
+  const handleClick = () => setShowJSON(!showJSON);
+
   return (
     <>
-      <Separator />
-      <h2 className="gc-h2">JSON Output</h2>
-      <CopyToClipboard />
-      <JSONOutput>{stringified}</JSONOutput>
+      <Separator onClick={handleClick} />
+      {showJSON && (
+        <>
+          <h2 className="gc-h2">JSON Output</h2>
+          <CopyToClipboard />
+          <JSONOutput>{stringified}</JSONOutput>
+        </>
+      )}
     </>
   );
 };
