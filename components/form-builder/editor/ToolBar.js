@@ -2,17 +2,16 @@ import React from "react";
 import { useSlate } from "slate-react";
 import { toggleMark, toggleBlock } from "./util";
 import styled from "styled-components";
+import { BulletedListIcon } from "../icons/BulletedListIcon";
 
 export const StyledToolbar = styled.div`
   background-color: #ccc;
-  padding: 10px;
+  padding: 5px 10px;
+  display: flex;
 
   & button {
-    border: 1px solid #000;
-    width: 20px;
-    height: 20px;
-    line-height: 12px;
-    font-size: 10px;
+    margin 0 8px;
+    font-size: .8em;
   }
 `;
 
@@ -25,20 +24,18 @@ export const Toolbar = () => {
           toggleMark(editor, "bold");
         }}
       >
-        B
+        <strong>B</strong>
       </button>
 
       <button
-        style={{ marginLeft: 10 }}
         onClick={() => {
           toggleMark(editor, "italic");
         }}
       >
-        I
+        <i>I</i>
       </button>
 
       <button
-        style={{ marginLeft: 10 }}
         onClick={() => {
           toggleBlock(editor, "heading-two");
         }}
@@ -47,12 +44,11 @@ export const Toolbar = () => {
       </button>
 
       <button
-        style={{ marginLeft: 10 }}
         onClick={() => {
           toggleBlock(editor, "bulleted-list");
         }}
       >
-        List
+        <BulletedListIcon />
       </button>
     </StyledToolbar>
   );

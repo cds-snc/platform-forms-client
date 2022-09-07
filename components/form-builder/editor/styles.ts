@@ -6,7 +6,6 @@ export const Container = styled.div`
 `;
 
 export const EditorStyles = styled.div`
-  padding: 22px;
   h2 {
     color: green;
   }
