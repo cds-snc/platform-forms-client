@@ -9,6 +9,7 @@ const StyledButton = styled.button`
   color: #000;
   margin: 5px;
   max-height: 24px;
+  border-radius: 8px;
 
   &:hover {
     background: #ebebeb;
@@ -26,8 +27,8 @@ export const Button = ({
   className,
 }: {
   children?: JSX.Element | string;
-  icon: ReactElement;
-  onClick: () => void;
+  icon?: ReactElement;
+  onClick: (e: React.MouseEvent<HTMLElement>) => void;
   className?: string;
 }) => {
   return (
@@ -42,26 +43,23 @@ Button.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   icon: PropTypes.element,
   onClick: PropTypes.func,
+  className: PropTypes.string,
 };
 
-const FancyStyledButton = styled.button`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+export const FancyButton = styled(Button)`
+  max-height: unset;
+  margin: unset;
   line-height: 1.2;
   font-weight: 400;
   position: relative;
-  padding: 4px 10px;
+  padding: 10px 15px;
   border: 1.5px solid black;
-  border-radius: 8px;
-  box-shadow: inset 0 -2px 0 #ddd;
   cursor: pointer;
   background: #ffffff;
 
   &:hover:not(:disabled) {
     color: rgba(0, 0, 0, 0.8);
     background: #f9f9f9;
-    box-shadow: inset 0 -2px 0 #ccc;
   }
 
   &:focus {
@@ -81,25 +79,3 @@ const FancyStyledButton = styled.button`
     cursor: not-allowed;
   }
 `;
-
-export const FancyButton = ({
-  children,
-  onClick,
-  className,
-}: {
-  children?: JSX.Element | string;
-  onClick: (e: React.MouseEvent<HTMLElement>) => void;
-  className?: string;
-}) => {
-  return (
-    <FancyStyledButton onClick={onClick} className={className}>
-      {children}
-    </FancyStyledButton>
-  );
-};
-
-FancyButton.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  onClick: PropTypes.func,
-  className: PropTypes.string,
-};
