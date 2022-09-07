@@ -88,7 +88,7 @@ export const newlineToOptions = (
   return newChoices;
 };
 
-export const getSchema = (state: TemplateSchema) => {
+export const getSchemaFromState = (state: TemplateSchema) => {
   const {
     form: { endPage, elements, titleEn, titleFr, version, emailSubjectEn, emailSubjectFr },
   } = state;

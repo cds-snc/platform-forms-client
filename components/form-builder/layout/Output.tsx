@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useGetTemplate } from "../hooks/useGetTemplate";
+import useTemplateStore from "../store/useTemplateStore";
 import { CopyToClipboard } from "./CopyToClipboard";
 
 const JSONOutput = styled.pre`
@@ -18,7 +18,8 @@ const Separator = styled.hr`
 `;
 
 export const Output = () => {
-  const { stringified } = useGetTemplate();
+  const { getSchema } = useTemplateStore();
+  const stringified = getSchema();
 
   const [showJSON, setShowJSON] = React.useState(false);
   const handleClick = () => setShowJSON(!showJSON);
