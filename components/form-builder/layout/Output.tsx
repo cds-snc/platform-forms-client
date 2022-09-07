@@ -18,8 +18,8 @@ const Separator = styled.hr`
 `;
 
 export const Output = () => {
-  const { getSerializedSchema } = useTemplateStore();
-  const stringified = getSerializedSchema();
+  const { getSchema } = useTemplateStore();
+  const stringified = getSchema();
 
   const [showJSON, setShowJSON] = React.useState(false);
   const handleClick = () => setShowJSON(!showJSON);

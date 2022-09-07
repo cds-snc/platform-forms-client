@@ -3,11 +3,11 @@ import useTemplateStore from "../store/useTemplateStore";
 
 export const CopyToClipboard = () => {
   const [isCopied, setIsCopied] = useState("");
-  const { getSerializedSchema } = useTemplateStore();
+  const { getSchema } = useTemplateStore();
 
   const handleCopyToClipboard = async () => {
     if ("clipboard" in navigator) {
-      const stringified = getSerializedSchema();
+      const stringified = getSchema();
 
       await navigator.clipboard.writeText(stringified);
       setIsCopied("(template copied)");

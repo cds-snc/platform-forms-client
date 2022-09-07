@@ -92,8 +92,7 @@ const useTemplateStore = create<ElementStore>()(
         state.form.elements[index].properties.choices = choices;
       });
     },
-    getSchema: () => getSchemaFromState(get()),
-    getSerializedSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+    getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
     initialize: () => {
       set((state) => {
         state.lang = "en";
