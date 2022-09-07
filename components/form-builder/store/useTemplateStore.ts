@@ -6,7 +6,7 @@ import {
   removeElementById,
   incrementElementId,
   newlineToOptions,
-  getSchema,
+  getSchemaFromState,
 } from "../util";
 import { ElementStore, ElementType } from "../types";
 import update from "lodash.set";
@@ -92,8 +92,8 @@ const useTemplateStore = create<ElementStore>()(
         state.form.elements[index].properties.choices = choices;
       });
     },
-    getSchema: () => getSchema(get()),
-    getSerializedSchema: () => JSON.stringify(getSchema(get()), null, 2),
+    getSchema: () => getSchemaFromState(get()),
+    getSerializedSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
     initialize: () => {
       set((state) => {
         state.lang = "en";
