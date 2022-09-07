@@ -93,6 +93,7 @@ const useTemplateStore = create<ElementStore>()(
       });
     },
     getSchema: () => getSchema(get()),
+    getSerializedSchema: () => JSON.stringify(getSchema(get()), null, 2),
     initialize: () => {
       set((state) => {
         state.lang = "en";

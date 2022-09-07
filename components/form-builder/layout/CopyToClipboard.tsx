@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useGetTemplate } from "../hooks/useGetTemplate";
+import useTemplateStore from "../store/useTemplateStore";
 
 export const CopyToClipboard = () => {
   const [isCopied, setIsCopied] = useState("");
-  const { stringified } = useGetTemplate();
+  const { getSerializedSchema } = useTemplateStore();
 
   const handleCopyToClipboard = async () => {
     if ("clipboard" in navigator) {
+      const stringified = getSerializedSchema();
+
       await navigator.clipboard.writeText(stringified);
       setIsCopied("(template copied)");
     }

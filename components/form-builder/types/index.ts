@@ -76,6 +76,7 @@ export interface ElementStore extends TemplateSchema {
   bulkAddChoices: (index: number, bulkChoices: string) => void;
   importTemplate: (json: TemplateSchema) => void;
   getSchema: () => TemplateSchema;
+  getSerializedSchema: () => string;
   initialize: () => void;
 }
 
