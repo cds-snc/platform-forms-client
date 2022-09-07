@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from "@components/forms";
 import { submitToAPI } from "@lib/helpers";
@@ -117,11 +117,13 @@ describe("Form Functionality", () => {
   });
 
   it("Form can be submitted", async () => {
-    const user = userEvent.setup();
     render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
     expect(screen.getByRole("button", { type: "submit" })).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { type: "submit" }));
+    // using `fireEvent` instead of `user.click` because it triggers a Formik update,
+    // which then throws the warning:
+    // "Warning: An update to Formik inside a test was not wrapped in act(...)."
+    fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
     await waitFor(() => expect(submitToAPI).toBeCalledTimes(1));
   });

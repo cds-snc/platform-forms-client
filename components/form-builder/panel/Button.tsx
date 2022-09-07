@@ -6,15 +6,16 @@ const StyledButton = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border: none;
-  background: white;
   color: #000;
-  border: 1px solid #ccc;
   margin: 5px;
   max-height: 24px;
 
   &:hover {
     background: #ebebeb;
+  }
+
+  svg {
+    margin-right 5px;
   }
 `;
 
