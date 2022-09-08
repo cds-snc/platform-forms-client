@@ -5,9 +5,10 @@ import styled from "styled-components";
 import { BulletedListIcon } from "../icons/BulletedListIcon";
 
 export const StyledToolbar = styled.div`
-  background-color: #ccc;
+  background-color: #ebebeb;
   padding: 5px 10px;
   display: flex;
+  height: 44px;
 
   & button {
     margin 0 8px;
