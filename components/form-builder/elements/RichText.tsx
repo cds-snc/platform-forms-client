@@ -11,11 +11,7 @@ const OptionWrapper = styled.div`
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
-  const {
-    form: { elements },
-    updateField,
-  } = useTemplateStore();
-  const val = elements[parentIndex].properties.descriptionEn;
+  const { updateField } = useTemplateStore();
 
   const [value, setValue] = useState(initialValue);
 
