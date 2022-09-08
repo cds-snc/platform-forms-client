@@ -178,7 +178,16 @@ const QuestionNumber = styled.span`
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
-  const { updateField } = useTemplateStore();
+  const {
+    form: { elements },
+    updateField,
+  } = useTemplateStore();
+
+  const questionNumber =
+    elements
+      .filter((item) => item.type != "richText")
+      .findIndex((object) => object.id === item.id) + 1;
+
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
   const handleElementChange = useCallback(
@@ -195,7 +204,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
         <div>
           {!isRichText && (
             <>
-              <QuestionNumber>{item.index + 1}</QuestionNumber>
+              <QuestionNumber>{questionNumber}</QuestionNumber>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
               <Input
                 type="text"

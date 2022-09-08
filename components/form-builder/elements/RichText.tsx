@@ -14,7 +14,6 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const {
     form: { elements },
     updateField,
-    resetChoices,
   } = useTemplateStore();
   const val = elements[parentIndex].properties.descriptionEn;
 
