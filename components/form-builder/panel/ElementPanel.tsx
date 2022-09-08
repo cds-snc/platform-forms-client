@@ -176,6 +176,7 @@ const QuestionNumber = styled.span`
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+  const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const { updateField } = useTemplateStore();
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
@@ -190,9 +191,9 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   return (
     <>
-      <Row isRichText={item.type == "richText"}>
+      <Row isRichText={isRichText}>
         <div>
-          {item.type !== "richText" && (
+          {!isRichText && (
             <>
               <QuestionNumber>{item.index + 1}</QuestionNumber>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
@@ -212,7 +213,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
           )}
           <SelectedElement item={item} selected={selectedItem} />
         </div>
-        {item.type !== "richText" && (
+        {!isRichText && (
           <>
             <div>
               <Select
