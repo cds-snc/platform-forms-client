@@ -10,6 +10,10 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <em>{children}</em>;
   }
 
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
+
   return <span {...attributes}>{children}</span>;
 };
 
