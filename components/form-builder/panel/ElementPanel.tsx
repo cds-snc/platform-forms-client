@@ -87,12 +87,13 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
 `;
 
 const Input = styled.input`
   padding: 22px 10px;
   width: 460px;
-  border: 2px solid #000000;
+  border: 1.5px solid #000000;
   border-radius: 4px;
   max-height: 36px;
 `;
@@ -153,6 +154,15 @@ const RequiredWrapper = styled.div`
   }
 `;
 
+const QuestionNumber = styled.span`
+  position: absolute;
+  background: #ebebeb;
+  left: 0;
+  margin-left: -25px;
+  padding: 7px 4px;
+  border-radius: 0 4px 4px 0;
+`;
+
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const { updateField } = useTemplateStore();
@@ -169,6 +179,27 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   return (
     <>
       <Row>
+        <div>
+          <QuestionNumber>{item.index + 1}</QuestionNumber>
+          {item.type !== "richText" && (
+            <>
+              <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
+              <Input
+                type="text"
+                name={`item${item.index}`}
+                placeholder={t("Question")}
+                value={item.properties.titleEn}
+                onChange={(e) => {
+                  updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+                }}
+              />
+            </>
+          )}
+          {item.properties.descriptionEn && (
+            <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
+          )}
+          <SelectedElement item={item} selected={selectedItem} />
+        </div>
         <div>
           <Select
             options={elementOptions}
@@ -193,26 +224,6 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               <span>{t("Required")}</span>
             </label>
           </RequiredWrapper>
-        </div>
-        <div>
-          {item.type !== "richText" && (
-            <>
-              <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
-              <Input
-                type="text"
-                name={`item${item.index}`}
-                placeholder={t("Question")}
-                value={item.properties.titleEn}
-                onChange={(e) => {
-                  updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-                }}
-              />
-            </>
-          )}
-          {item.properties.descriptionEn && (
-            <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
-          )}
-          <SelectedElement item={item} selected={selectedItem} />
         </div>
       </Row>
     </>
@@ -313,15 +324,15 @@ ModalForm.propTypes = {
 };
 
 const ElementWrapperDiv = styled.div`
-  border: 2px solid #efefef;
-  border-bottom: 2px solid black;
+  border: 1.5px solid #000000;
   padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;
+  margin-top: -1px;
 `;
 
-export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
+export const ElementWrapper = ({ item, key }: { item: ElementTypeWithIndex; key: number }) => {
   const { t } = useTranslation("form-builder");
   const {
     form: { elements },
@@ -344,7 +355,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   };
 
   return (
-    <ElementWrapperDiv className={`element-${item.index}`}>
+    <ElementWrapperDiv className={`element-${item.index}`} key={key}>
       <FormWrapper>
         <Form item={item} />
       </FormWrapper>
@@ -372,6 +383,19 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   );
 };
 
+const ElementPanelDiv = styled.div`
+  > div:first-of-type {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  > div:last-of-type,
+  > div:last-of-type .panel-actions {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+`;
+
 export const ElementPanel = () => {
   const {
     form: { elements },
@@ -387,16 +411,12 @@ export const ElementPanel = () => {
   }
 
   return (
-    <>
+    <ElementPanelDiv>
       {elements.map((element, index) => {
         const item = { ...element, index };
-        return (
-          <div key={item.id}>
-            <ElementWrapper item={item} />
-          </div>
-        );
+        return <ElementWrapper item={item} key={item.id} />;
       })}
-    </>
+    </ElementPanelDiv>
   );
 };
 

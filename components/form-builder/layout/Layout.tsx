@@ -6,11 +6,12 @@ import { Import } from "./Import";
 import { Output } from "./Output";
 
 const Input = styled.input`
-  padding: 22px;
+  padding: 22px 10px;
   width: 800px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #000000;
   max-height: 36px;
   margin-bottom: 35px;
+  border-radius: 4px;
 `;
 
 export const Layout = () => {

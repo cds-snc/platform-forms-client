@@ -88,7 +88,7 @@ export const PanelActions = ({
   const { remove, moveUp, moveDown, add, duplicateElement } = useTemplateStore();
 
   return (
-    <Actions>
+    <Actions className="panel-actions">
       <UpDown>
         <PanelButton icon={<ChevronUp />} onClick={() => moveUp(item.index)}>
           <Label>{t("Move up")}</Label>

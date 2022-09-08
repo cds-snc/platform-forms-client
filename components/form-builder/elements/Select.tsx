@@ -15,7 +15,7 @@ const DropDownHeader = styled.button`
   display: flex;
   background-color: #fff;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #000000;
   width: 100%;
   line-height: 24px;
   font-size: 16px;
