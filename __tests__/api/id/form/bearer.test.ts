@@ -2,16 +2,18 @@
  * @jest-environment node
  */
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
 import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
-import * as adminLogs from "@lib/adminLogs";
+import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock, checkLogs } from "@jestUtils";
 import { Prisma, UserRole } from "@prisma/client";
 
 jest.mock("next-auth/next");
+jest.mock("@lib/adminLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(unstable_getServerSession, true);
@@ -295,8 +297,6 @@ describe("/id/[form]/bearer", () => {
           form: 1,
         },
       });
-
-      const logAdminActivity = jest.spyOn(adminLogs, "logAdminActivity");
 
       await retrieve(req, res);
 

@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { createMocks } from "node-mocks-http";
 import temporary from "@pages/api/token/temporary";

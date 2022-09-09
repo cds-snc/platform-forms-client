@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import { createMocks } from "node-mocks-http";
 import retrieval from "@pages/api/id/[form]/retrieval";
 import { mockClient } from "aws-sdk-client-mock";
