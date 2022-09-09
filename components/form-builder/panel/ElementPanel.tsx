@@ -332,7 +332,7 @@ const ElementWrapperDiv = styled.div`
   margin-top: -1px;
 `;
 
-export const ElementWrapper = ({ item, key }: { item: ElementTypeWithIndex; key: number }) => {
+export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const {
     form: { elements },
@@ -355,7 +355,7 @@ export const ElementWrapper = ({ item, key }: { item: ElementTypeWithIndex; key:
   };
 
   return (
-    <ElementWrapperDiv className={`element-${item.index}`} key={key}>
+    <ElementWrapperDiv className={`element-${item.index}`}>
       <FormWrapper>
         <Form item={item} />
       </FormWrapper>
