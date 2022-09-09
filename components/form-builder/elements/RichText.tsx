@@ -4,6 +4,7 @@ import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../editor/RichTextEditor";
 import { initialValue } from "../editor/util";
+import { serialize } from "../editor/Markdown";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -22,8 +23,11 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   }, []);
 
   const onChange = (value: string) => {
-    setValue(JSON.parse(value));
-    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, value);
+    const parsed = JSON.parse(value);
+    const serialized = serialize({ children: parsed });
+
+    setValue(parsed);
+    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, serialized);
   };
 
   return (
