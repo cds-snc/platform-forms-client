@@ -181,6 +181,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const {
     form: { elements },
     updateField,
+    resetChoices,
   } = useTemplateStore();
 
   const questionNumber =
@@ -194,6 +195,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
       selectedItem && setSelectedItem(selectedItem);
       selectedItem && updateField(`form.elements[${item.index}].type`, selectedItem?.id);
+      selectedItem && selectedItem.id === "richText" && resetChoices(item.index);
     },
     [setSelectedItem]
   );
