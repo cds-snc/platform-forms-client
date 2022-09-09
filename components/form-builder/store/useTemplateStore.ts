@@ -51,9 +51,14 @@ const useTemplateStore = create<ElementStore>()(
     },
     publishingStatus: true,
     updateField: (path, value) => set((state) => update(state, path, value)),
-    moveUp: (index) => set((state) => ({ form: { elements: moveUp(state.form.elements, index) } })),
+    moveUp: (index) =>
+      set((state) => {
+        state.form.elements = moveUp(state.form.elements, index);
+      }),
     moveDown: (index) =>
-      set((state) => ({ form: { elements: moveDown(state.form.elements, index) } })),
+      set((state) => {
+        state.form.elements = moveDown(state.form.elements, index);
+      }),
     add: () =>
       set((state) => {
         state.form.elements.push({
@@ -63,7 +68,9 @@ const useTemplateStore = create<ElementStore>()(
         });
       }),
     remove: (elementId) =>
-      set((state) => ({ form: { elements: removeElementById(state.form.elements, elementId) } })),
+      set((state) => {
+        state.form.elements = removeElementById(state.form.elements, elementId);
+      }),
     addChoice: (index) =>
       set((state) => {
         state.form.elements[index].properties.choices.push({ en: "", fr: "" });
