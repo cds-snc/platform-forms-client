@@ -10,7 +10,7 @@ export const serialize = (node) => {
       return `**${string}**`;
     }
     if (node.italic) {
-      return `*${string}`;
+      return `*${string}*`;
     }
     return `${string}`;
   }
