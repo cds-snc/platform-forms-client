@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
+import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
-import { ElementOption, ElementTypeWithIndex } from "../types";
+import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Paragraph, Options, RichText } from "../elements";
 import {
@@ -16,6 +18,8 @@ import {
   CheckIcon,
   SelectMenuIcon,
 } from "../icons";
+import { ModalButton } from "./Modal";
+import { FancyButton } from "./Button";
 
 const Separator = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -81,16 +85,54 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
 };
 
 const Row = styled.div`
-  position: relative;
   display: flex;
   justify-content: space-between;
+  position: relative;
 `;
 
 const Input = styled.input`
-  padding: 22px;
+  padding: 22px 10px;
   width: 460px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #000000;
+  border-radius: 4px;
   max-height: 36px;
+`;
+
+const TextArea = styled.textarea`
+  padding: 10px;
+  width: 90%;
+  border: 2px solid #000000;
+  border-radius: 4px;
+`;
+
+const DivDisabled = styled.div`
+  margin-top: 15px;
+  padding: 5px 10px;
+  width: 460px;
+  font-size: 16px;
+  cursor: not-allowed;
+  border-radius: 4px;
+  background: #f2f2f2;
+  color: #6e6e6e;
+`;
+
+const FormLabel = styled.label`
+  font-weight: 700;
+  display: block;
+  margin-bottom: 3px;
+`;
+
+const LabelHidden = styled(FormLabel)`
+  /* same as .sr-only */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 `;
 
 const FormWrapper = styled.div`
@@ -106,13 +148,23 @@ const RequiredWrapper = styled.div`
     padding: 10px;
   }
 
-  & div {
+  & span {
     display: inline-block;
     margin-left: 10px;
   }
 `;
 
+const QuestionNumber = styled.span`
+  position: absolute;
+  background: #ebebeb;
+  left: 0;
+  margin-left: -25px;
+  padding: 7px 4px;
+  border-radius: 0 4px 4px 0;
+`;
+
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+  const { t } = useTranslation("form-builder");
   const { updateField } = useTemplateStore();
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
@@ -128,41 +180,50 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     <>
       <Row>
         <div>
+          <QuestionNumber>{item.index + 1}</QuestionNumber>
+          {item.type !== "richText" && (
+            <>
+              <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
+              <Input
+                type="text"
+                name={`item${item.index}`}
+                placeholder={t("Question")}
+                value={item.properties.titleEn}
+                onChange={(e) => {
+                  updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+                }}
+              />
+            </>
+          )}
+          {item.properties.descriptionEn && (
+            <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
+          )}
+          <SelectedElement item={item} selected={selectedItem} />
+        </div>
+        <div>
           <Select
             options={elementOptions}
             selectedItem={selectedItem}
             onChange={handleElementChange}
           />
           <RequiredWrapper>
-            <input
-              checked={item.properties.validation.required}
-              type="checkbox"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (!e.target) {
-                  return;
-                }
-                updateField(
-                  `form.elements[${item.index}].properties.validation.required`,
-                  e.target.checked
-                );
-              }}
-            />{" "}
-            <div>Required</div>
+            <label>
+              <input
+                checked={item.properties.validation.required}
+                type="checkbox"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (!e.target) {
+                    return;
+                  }
+                  updateField(
+                    `form.elements[${item.index}].properties.validation.required`,
+                    e.target.checked
+                  );
+                }}
+              />{" "}
+              <span>{t("Required")}</span>
+            </label>
           </RequiredWrapper>
-        </div>
-        <div>
-          {item.type !== "richText" && (
-            <Input
-              type="text"
-              name={`item${item.index}`}
-              placeholder={`Question`}
-              value={item.properties.titleEn}
-              onChange={(e) => {
-                updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
-              }}
-            />
-          )}
-          <SelectedElement item={item} selected={selectedItem} />
         </div>
       </Row>
     </>
@@ -173,15 +234,166 @@ Form.propTypes = {
   item: PropTypes.object,
 };
 
-const ElementWrapper = styled.div`
-  border-left: 2px solid #efefef;
-  border-right: 2px solid #efefef;
-  border-top: 2px solid #efefef;
-  border-bottom: 2px solid black;
+const ModalRow = styled.div`
+  margin-bottom: 20px;
+`;
+
+const HintText = styled.p`
+  font-size: 16.5px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  margin-top: -2px;
+`;
+
+const ModalInput = styled(Input)`
+  width: 90%;
+`;
+
+const ModalSaveButton = styled(FancyButton)`
+  padding: 15px 20px;
+  background: #26374a;
+  box-shadow: inset 0 -2px 0 #515963;
+  color: white;
+
+  &:hover:not(:disabled),
+  &:active,
+  &:focus {
+    color: white;
+    background: #1c578a;
+    box-shadow: inset 0 -2px 0 #7a8796;
+  }
+
+  &:hover:active {
+    background: #16446c;
+  }
+`;
+
+const ModalForm = ({
+  item,
+  properties,
+  updateModalProperties,
+}: {
+  item: ElementTypeWithIndex;
+  properties: ElementProperties;
+  updateModalProperties: (index: number, properties: ElementProperties) => void;
+}) => {
+  const { t } = useTranslation("form-builder");
+
+  return (
+    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+      <ModalRow>
+        <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("Question")}</FormLabel>
+        <ModalInput
+          id={`titleEn--modal--${item.index}`}
+          type="text"
+          name={`item${item.index}`}
+          placeholder={t("Question")}
+          value={properties.titleEn}
+          onChange={(e) =>
+            updateModalProperties(item.index, {
+              ...properties,
+              ...{ titleEn: e.target.value },
+            })
+          }
+        />
+      </ModalRow>
+      <ModalRow>
+        <FormLabel>{t("Description")}</FormLabel>
+        <HintText>
+          {t(
+            "The description appears below the label, and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements."
+          )}
+        </HintText>
+        <TextArea
+          placeholder={t("Description")}
+          onChange={(e) => {
+            updateModalProperties(item.index, {
+              ...properties,
+              ...{ descriptionEn: e.target.value },
+            });
+          }}
+          value={properties.descriptionEn}
+        />
+      </ModalRow>
+    </form>
+  );
+};
+
+ModalForm.propTypes = {
+  item: PropTypes.object,
+};
+
+const ElementWrapperDiv = styled.div`
+  border: 1.5px solid #000000;
   padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;
+  margin-top: -1px;
+`;
+
+export const ElementWrapper = ({ item, key }: { item: ElementTypeWithIndex; key: number }) => {
+  const { t } = useTranslation("form-builder");
+  const {
+    form: { elements },
+    updateField,
+  } = useTemplateStore();
+
+  const { isOpen, modals, updateModalProperties } = useModalStore();
+
+  React.useEffect(() => {
+    updateModalProperties(item.index, elements[item.index].properties);
+  }, [item, isOpen]);
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      // replace all of "properties" with the new properties set in the ModalForm
+      updateField(`form.elements[${item.index}].properties`, properties);
+    };
+  };
+
+  return (
+    <ElementWrapperDiv className={`element-${item.index}`} key={key}>
+      <FormWrapper>
+        <Form item={item} />
+      </FormWrapper>
+      <PanelActions
+        item={item}
+        renderSaveButton={() => (
+          <ModalButton isOpenButton={false}>
+            {modals[item.index] && (
+              <ModalSaveButton onClick={handleSubmit({ item, properties: modals[item.index] })}>
+                {t("Save")}
+              </ModalSaveButton>
+            )}
+          </ModalButton>
+        )}
+      >
+        {modals[item.index] && (
+          <ModalForm
+            item={item}
+            properties={modals[item.index]}
+            updateModalProperties={updateModalProperties}
+          />
+        )}
+      </PanelActions>
+    </ElementWrapperDiv>
+  );
+};
+
+const ElementPanelDiv = styled.div`
+  > div:first-of-type {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  > div:last-of-type,
+  > div:last-of-type .panel-actions {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 `;
 
 export const ElementPanel = () => {
@@ -199,24 +411,16 @@ export const ElementPanel = () => {
   }
 
   return (
-    <>
+    <ElementPanelDiv>
       {elements.map((element, index) => {
         const item = { ...element, index };
-        return (
-          <div key={item.id}>
-            <ElementWrapper className={`element-${index}`}>
-              <FormWrapper>
-                <Form item={item} />
-              </FormWrapper>
-              <PanelActions item={item} />
-            </ElementWrapper>
-          </div>
-        );
+        return <ElementWrapper item={item} key={item.id} />;
       })}
-    </>
+    </ElementPanelDiv>
   );
 };
 
 ElementPanel.propTypes = {
   item: PropTypes.object,
+  onClose: PropTypes.func,
 };

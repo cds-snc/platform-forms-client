@@ -18,7 +18,8 @@ const TextInput = styled.input`
   margin-left: 20px;
   padding: 20px;
   width: 340px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1.5px solid #000000;
+  border-radius: 4px;
   height: 24px;
 `;
 
