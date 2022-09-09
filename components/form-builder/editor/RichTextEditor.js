@@ -23,7 +23,13 @@ export const RichTextEditor = ({ value, onChange }) => {
   return (
     <Container>
       <EditorStyles>
-        <Slate editor={editor} value={value} onChange={onChange}>
+        <Slate
+          editor={editor}
+          value={value}
+          onChange={(value) => {
+            onChange(JSON.stringify(value));
+          }}
+        >
           <Toolbar />
           <StyledEditableArea>
             <Editable renderElement={renderElement} renderLeaf={renderLeaf} />
@@ -35,6 +41,6 @@ export const RichTextEditor = ({ value, onChange }) => {
 };
 
 RichTextEditor.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.object,
   onChange: PropTypes.func,
 };

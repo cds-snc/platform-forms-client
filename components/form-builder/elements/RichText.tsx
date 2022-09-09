@@ -21,16 +21,10 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     }
   }, []);
 
-  const onChange = (value: any) => {
-    setValue(value);
-    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, JSON.stringify(value));
+  const onChange = (value: string) => {
+    setValue(JSON.parse(value));
+    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, value);
   };
-
-  /*
-  updateField(`form.elements[${parentIndex}].properties.descriptionEn`, e.target.value);
-  // for rich text fields we want to clear the choices array
-  resetChoices(parentIndex);
-  */
 
   return (
     <OptionWrapper>
