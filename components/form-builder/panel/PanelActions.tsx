@@ -138,5 +138,5 @@ export const PanelActions = ({
 PanelActions.propTypes = {
   item: PropTypes.object,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  renderSaveButton: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  renderSaveButton: PropTypes.func,
 };
