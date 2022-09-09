@@ -1,10 +1,23 @@
+/*
+Refactored out into Page Component vs Server Component
+
+https://github.com/nextauthjs/next-auth/issues/4866
+unstable_getServerSession breaks Jest tests due to "node_modules/jose/" dependency
+
+Thile file tests a NextJS Page which requires both serverside and client side dependencies.
+The 'jose' lib in next-auth loads the browser version because the test environment is set to 'jsdom'.
+However the 'requireAuthentication' lib which is referenced as an import in the 'settings.tsx' file requires the mode version.
+
+***********************************************************
+*/
+
 import React from "react";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import FormSettings from "../pages/id/[form]/settings";
+import Settings from "@components/admin/TemplateDelete/Settings";
 import mockedAxios from "axios";
 import { useRouter } from "next/router";
-import validFormTemplate from "../__fixtures__/validFormTemplate.json";
+import validFormTemplate from "../../../__fixtures__/validFormTemplate.json";
 
 jest.mock("axios");
 jest.mock("next/router", () => ({
@@ -34,7 +47,7 @@ describe("Form Settings Page", () => {
     useRouter.mockImplementation(() => ({
       query: {},
     }));
-    render(<FormSettings form={form}></FormSettings>);
+    render(<Settings form={form}></Settings>);
     expect(screen.queryByText("Form Title:")).toBeInTheDocument();
     expect(screen.getByTestId("formID")).toHaveTextContent(
       "Public Service Award of Excellence 2020 - Nomination form"
@@ -53,7 +66,7 @@ describe("Form Settings Page", () => {
       asPath: "/",
       push: push,
     }));
-    render(<FormSettings form={form}></FormSettings>);
+    render(<Settings form={form}></Settings>);
 
     await user.click(screen.queryByTestId("delete"));
     expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
@@ -76,7 +89,7 @@ describe("Form Settings Page", () => {
     // for now, the handler here calls JSON.stringify so we can spy that
     const spy = jest.spyOn(JSON, "stringify");
 
-    render(<FormSettings form={form}></FormSettings>);
+    render(<Settings form={form}></Settings>);
 
     await user.click(screen.queryByTestId("delete"));
     expect(screen.queryByTestId("confirmDelete")).toBeInTheDocument();
