@@ -10,3 +10,4 @@ export { RadioEmptyIcon } from "./RadioEmptyIcon";
 export { RadioIcon } from "./RadioIcon";
 export { SelectMenuIcon } from "./SelectMenuIcon";
 export { ShortAnswerIcon } from "./ShortAnswerIcon";
+export { ThreeDotsIcon } from "./ThreeDotsIcon";

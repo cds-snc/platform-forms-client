@@ -98,6 +98,8 @@ const templateCRUD = async ({
     case "DELETE":
       if (formID) return await deleteTemplate(formID);
       throw new Error("Missing formID");
+    default:
+      throw new Error("Unsupported Method");
   }
 };
 

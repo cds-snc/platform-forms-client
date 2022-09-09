@@ -1,12 +1,14 @@
 /**
  * @jest-environment node
  */
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks } from "node-mocks-http";
 import templates from "@pages/api/templates";
 import { unstable_getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
-import * as logAdmin from "@lib/adminLogs";
+import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { UserRole } from "@prisma/client";
 
@@ -14,6 +16,7 @@ import { UserRole } from "@prisma/client";
 const mockGetSession = jest.mocked(unstable_getServerSession, true);
 
 jest.mock("next-auth/next");
+jest.mock("@lib/adminLogs");
 
 describe("Test JSON validation scenarios", () => {
   beforeAll(() => {
@@ -55,8 +58,6 @@ describe("Test JSON validation scenarios", () => {
         formConfig: validFormTemplate,
       },
     });
-
-    const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
 
     await templates(req, res);
 
@@ -104,8 +105,6 @@ describe("Test JSON validation scenarios", () => {
       },
     });
 
-    const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
-
     await templates(req, res);
 
     expect(res.statusCode).toBe(200);
@@ -133,8 +132,6 @@ describe("Test JSON validation scenarios", () => {
         formID: "8",
       },
     });
-
-    const logAdminActivity = jest.spyOn(logAdmin, "logAdminActivity");
 
     await templates(req, res);
 

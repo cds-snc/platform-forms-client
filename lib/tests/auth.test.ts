@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import { isAdmin, validateTemporaryToken } from "@lib/auth";
 import { createMocks } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
