@@ -2,7 +2,7 @@ import React from "react";
 import { useSlate } from "slate-react";
 import { toggleMark, toggleBlock } from "./util";
 import styled from "styled-components";
-import { BulletedListIcon, NumberedListIcon } from "../icons";
+import { BulletedListIcon } from "../icons";
 
 export const StyledToolbar = styled.div`
   background-color: #ebebeb;
@@ -71,14 +71,6 @@ export const Toolbar = () => {
         }}
       >
         <BulletedListIcon />
-      </button>
-
-      <button
-        onClick={() => {
-          toggleBlock(editor, "numbered-list");
-        }}
-      >
-        <NumberedListIcon />
       </button>
     </StyledToolbar>
   );

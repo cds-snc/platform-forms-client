@@ -12,6 +12,9 @@ export const serialize = (node) => {
     if (node.italic) {
       return `*${string}*`;
     }
+    if (node.underline) {
+      return `_${string}_`;
+    }
     return `${string}`;
   }
 
@@ -19,17 +22,19 @@ export const serialize = (node) => {
 
   switch (node.type) {
     case "quote":
-      return `\n> ${children}\n`;
+      return `> ${children} \n `;
     case "paragraph":
-      return `\n${children}`;
+      return `${children} \n\n `;
     case "link":
       return `[${children}](${node.url})`;
     case "heading-two":
-      return `## ${children}\n`;
+      return `\n ## ${children} \n`;
     case "heading-three":
-      return `### ${children}\n`;
+      return `\n### ${children} \n`;
+    case "bulleted-list":
+      return `${children} \n`;
     case "list-item":
-      return `- ${children}\n`;
+      return `- ${children} \n `;
     default:
       return children;
   }
