@@ -60,7 +60,7 @@
     "next-auth": "^4.10.3",
     "next-i18next": "^11.0.0",
     "notifications-node-client": "^5.1.1",
-    "pino": "^7.9.2",
+    "pino": "^8.4.2",
     "prisma": "^4.2.1",
     "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
