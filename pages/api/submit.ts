@@ -1,7 +1,5 @@
-import { NotifyClient } from "notifications-node-client";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
-import convertMessage from "@lib/markdown";
 import { rehydrateFormResponses } from "@lib/helpers";
 import { getTemplateByID, getSubmissionTypeByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
@@ -96,28 +94,6 @@ const callLambda = async (
     logMessage.error(err as Error);
     throw new Error("Could not process request with Lambda Submission function");
   }
-};
-
-const previewNotify = async (form: PublicFormRecord, fields: Responses) => {
-  const templateId = process.env.TEMPLATE_ID;
-  const notify = new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
-
-  const emailBody = await convertMessage({ form, responses: fields });
-  const messageSubject = form.formConfig.form.emailSubjectEn
-    ? form.formConfig.form.emailSubjectEn
-    : form.formConfig.form.titleEn;
-  return await notify
-    .previewTemplateById(templateId, {
-      subject: messageSubject,
-      formResponse: emailBody,
-    })
-    .then((response: { data: { html: string } }) => {
-      return response.data.html;
-    })
-    .catch((err: Error) => {
-      logMessage.error(err);
-      return "<h1>Could not preview HTML / Error in processing </h1>";
-    });
 };
 
 /**
@@ -266,7 +242,6 @@ const processFormData = async (
   const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
     const submitToReliabilityQueue = await checkOne("submitToReliabilityQueue");
-    const notifyPreview = await checkOne("notifyPreview");
 
     // Do not process if in TEST mode
     if (process.env.APP_ENV === "test") {
@@ -299,10 +274,6 @@ const processFormData = async (
 
     if (!submitToReliabilityQueue) {
       // Local development and Heroku
-      if (notifyPreview) {
-        const response = await previewNotify(form, fields);
-        return res.status(201).json({ received: true, htmlEmail: response });
-      }
       // Set this to a 200 response as it's valid if the send to reliability queue option is off.
       return res.status(200).json({ received: true });
     }
