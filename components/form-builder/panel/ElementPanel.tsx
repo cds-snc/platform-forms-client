@@ -84,10 +84,22 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   return selected && selected.length ? selected[0] : elementOptions[2];
 };
 
-const Row = styled.div`
+interface RowProps {
+  isRichText: boolean;
+}
+
+const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
+
+  & div {
+    ${({ isRichText }) =>
+      isRichText &&
+      `
+      width: 100%;
+    `}
+  }
 `;
 
 const Input = styled.input`
@@ -164,25 +176,37 @@ const QuestionNumber = styled.span`
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+  const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
-  const { updateField } = useTemplateStore();
+  const {
+    form: { elements },
+    updateField,
+    resetChoices,
+  } = useTemplateStore();
+
+  const questionNumber =
+    elements
+      .filter((item) => item.type != "richText")
+      .findIndex((object) => object.id === item.id) + 1;
+
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
       selectedItem && setSelectedItem(selectedItem);
       selectedItem && updateField(`form.elements[${item.index}].type`, selectedItem?.id);
+      selectedItem && selectedItem.id === "richText" && resetChoices(item.index);
     },
     [setSelectedItem]
   );
 
   return (
     <>
-      <Row>
+      <Row isRichText={isRichText}>
         <div>
-          <QuestionNumber>{item.index + 1}</QuestionNumber>
-          {item.type !== "richText" && (
+          {!isRichText && (
             <>
+              <QuestionNumber>{questionNumber}</QuestionNumber>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
               <Input
                 type="text"
@@ -195,36 +219,40 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               />
             </>
           )}
-          {item.properties.descriptionEn && (
+          {item.properties.descriptionEn && item.type !== "richText" && (
             <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
         </div>
-        <div>
-          <Select
-            options={elementOptions}
-            selectedItem={selectedItem}
-            onChange={handleElementChange}
-          />
-          <RequiredWrapper>
-            <label>
-              <input
-                checked={item.properties.validation.required}
-                type="checkbox"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (!e.target) {
-                    return;
-                  }
-                  updateField(
-                    `form.elements[${item.index}].properties.validation.required`,
-                    e.target.checked
-                  );
-                }}
-              />{" "}
-              <span>{t("Required")}</span>
-            </label>
-          </RequiredWrapper>
-        </div>
+        {!isRichText && (
+          <>
+            <div>
+              <Select
+                options={elementOptions}
+                selectedItem={selectedItem}
+                onChange={handleElementChange}
+              />
+              <RequiredWrapper>
+                <label>
+                  <input
+                    checked={item.properties.validation.required}
+                    type="checkbox"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      if (!e.target) {
+                        return;
+                      }
+                      updateField(
+                        `form.elements[${item.index}].properties.validation.required`,
+                        e.target.checked
+                      );
+                    }}
+                  />{" "}
+                  <span>{t("Required")}</span>
+                </label>
+              </RequiredWrapper>
+            </div>
+          </>
+        )}
       </Row>
     </>
   );
