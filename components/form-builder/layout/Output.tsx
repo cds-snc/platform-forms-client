@@ -21,19 +21,11 @@ export const Output = () => {
   const { getSchema } = useTemplateStore();
   const stringified = getSchema();
 
-  const [showJSON, setShowJSON] = React.useState(false);
-  const handleClick = () => setShowJSON(!showJSON);
-
   return (
     <>
-      <Separator onClick={handleClick} />
-      {showJSON && (
-        <>
-          <h2 className="gc-h2">JSON Output</h2>
-          <CopyToClipboard />
-          <JSONOutput>{stringified}</JSONOutput>
-        </>
-      )}
+      <h2 className="gc-h2">JSON Output</h2>
+      <CopyToClipboard />
+      <JSONOutput>{stringified}</JSONOutput>
     </>
   );
 };
