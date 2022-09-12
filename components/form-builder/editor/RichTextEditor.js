@@ -41,6 +41,6 @@ export const RichTextEditor = ({ value, onChange }) => {
 };
 
 RichTextEditor.propTypes = {
-  value: PropTypes.object,
+  value: PropTypes.array,
   onChange: PropTypes.func,
 };

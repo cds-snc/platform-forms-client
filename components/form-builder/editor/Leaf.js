@@ -18,7 +18,7 @@ export const Leaf = ({ attributes, children, leaf }) => {
 };
 
 Leaf.propTypes = {
-  attributes: PropTypes.obj,
+  attributes: PropTypes.object,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  leaf: PropTypes.obj,
+  leaf: PropTypes.object,
 };
