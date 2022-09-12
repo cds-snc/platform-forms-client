@@ -23,6 +23,7 @@ const Navigation = styled.div`
 
 const Tab = styled.span`
   text-decoration: underline;
+  cursor: pointer;
 `;
 
 export const Layout = () => {
