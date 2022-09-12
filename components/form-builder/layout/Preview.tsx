@@ -5,14 +5,7 @@ import { Form } from "@components/forms";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
-import { getProperty, getRenderedForm } from "@lib/formBuilder";
-
-const Separator = styled.hr`
-  display: block;
-  margin-top: 20px;
-  padding-bottom: 20px;
-  cursor: pointer;
-`;
+import { getRenderedForm } from "@lib/formBuilder";
 
 export const Preview = () => {
   const { getSchema } = useTemplateStore();

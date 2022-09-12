@@ -10,13 +10,6 @@ const JSONOutput = styled.pre`
   overflow: "scroll";
 `;
 
-const Separator = styled.hr`
-  display: block;
-  margin-top: 20px;
-  padding-bottom: 20px;
-  cursor: pointer;
-`;
-
 export const Output = () => {
   const { getSchema } = useTemplateStore();
   const stringified = getSchema();
