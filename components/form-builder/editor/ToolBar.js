@@ -14,10 +14,6 @@ export const StyledToolbar = styled.div`
     margin 0 8px;
     font-size: .8em;
   }
-
-  & button.underline {
-    text-decoration: underline;
-  }
 `;
 
 export const Toolbar = () => {
@@ -54,15 +50,6 @@ export const Toolbar = () => {
         }}
       >
         <i>I</i>
-      </button>
-
-      <button
-        className="underline"
-        onClick={() => {
-          toggleMark(editor, "underline");
-        }}
-      >
-        U
       </button>
 
       <button
