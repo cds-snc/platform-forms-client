@@ -53,6 +53,6 @@ export const Element = ({ attributes, children, element }) => {
 
 Element.propTypes = {
   attributes: PropTypes.object,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   element: PropTypes.object,
 };
