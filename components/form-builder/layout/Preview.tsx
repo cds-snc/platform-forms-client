@@ -1,7 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { Form } from "@components/forms";
+import { Form } from "./Form";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";
@@ -31,6 +30,7 @@ export const Preview = () => {
         router={router}
         t={t}
         notifyPreviewFlag={notifyPreviewFlag}
+        isPreview={true}
       >
         {currentForm}
       </Form>
