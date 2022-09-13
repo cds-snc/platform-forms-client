@@ -19,6 +19,7 @@ import {
   SelectMenuIcon,
 } from "../icons";
 import { ModalButton } from "./Modal";
+import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
 
 const Separator = styled.div`
@@ -153,12 +154,6 @@ const FormWrapper = styled.div`
 
 const RequiredWrapper = styled.div`
   margin-top: 20px;
-  margin-left: 10px;
-
-  & input {
-    transform: scale(1.5);
-    padding: 10px;
-  }
 
   & span {
     display: inline-block;
@@ -233,22 +228,21 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 onChange={handleElementChange}
               />
               <RequiredWrapper>
-                <label>
-                  <input
-                    checked={item.properties.validation.required}
-                    type="checkbox"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      if (!e.target) {
-                        return;
-                      }
-                      updateField(
-                        `form.elements[${item.index}].properties.validation.required`,
-                        e.target.checked
-                      );
-                    }}
-                  />{" "}
-                  <span>{t("Required")}</span>
-                </label>
+                <Checkbox
+                  id={item.index}
+                  value={`${item.index}-required`}
+                  checked={item.properties.validation.required}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (!e.target) {
+                      return;
+                    }
+                    updateField(
+                      `form.elements[${item.index}].properties.validation.required`,
+                      e.target.checked
+                    );
+                  }}
+                  label={t("Required")}
+                ></Checkbox>
               </RequiredWrapper>
             </div>
           </>
@@ -342,6 +336,9 @@ const ModalForm = ({
           }}
           value={properties.descriptionEn}
         />
+      </ModalRow>
+      <ModalRow>
+        <h3>Add rules</h3>
       </ModalRow>
     </form>
   );
