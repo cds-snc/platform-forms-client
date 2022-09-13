@@ -10,13 +10,7 @@ import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
 import { Readable } from "stream";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
-import {
-  PublicFormRecord,
-  Response,
-  Responses,
-  FileInputResponse,
-  SubmissionRequestBody,
-} from "@lib/types";
+import { Response, Responses, FileInputResponse, SubmissionRequestBody } from "@lib/types";
 import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
 
 export const config = {
