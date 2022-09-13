@@ -243,7 +243,7 @@
           "properties": {
             "titleEN": {
               "description": "Input label in English",
-              "type": "integer"
+              "type": "string"
             },
             "titleFR": {
               "description": "Input label in French",
