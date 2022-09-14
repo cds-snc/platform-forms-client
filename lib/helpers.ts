@@ -259,12 +259,11 @@ async function _submitToAPI(
       formRecord: PublicFormRecord;
       language: string;
       router: NextRouter;
-      notifyPreviewFlag: boolean;
     },
     Responses
   >
 ) {
-  const { language, router, formRecord, notifyPreviewFlag } = formikBag.props;
+  const { language, router, formRecord } = formikBag.props;
   const { setStatus } = formikBag;
 
   const formDataObject = _buildFormDataObject(formRecord, values);
@@ -285,13 +284,8 @@ async function _submitToAPI(
     })
       .then((serverResponse) => {
         if (serverResponse.data.received === true) {
-          const htmlEmail = notifyPreviewFlag ? serverResponse.data.htmlEmail : null;
-
           router.push({
             pathname: `/${language}/id/${formRecord.formID}/confirmation`,
-            query: {
-              htmlEmail: htmlEmail,
-            },
           });
         } else {
           throw Error("Server submit API returned an error");
