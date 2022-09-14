@@ -1,4 +1,4 @@
-import { getTemplateByID } from "@lib/templates";
+import { getTemplateByID, onlyIncludePublicProperties } from "@lib/templates";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "@lib/flags";
 import React from "react";
@@ -73,6 +73,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!formID || Array.isArray(formID)) return redirect(context.locale);
 
     form = await getTemplateByID(formID);
+    if (form) {
+      form = onlyIncludePublicProperties(form);
+    }
   }
 
   // Redirect if form doesn't exist and
