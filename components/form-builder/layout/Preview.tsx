@@ -1,6 +1,6 @@
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
-import { Form } from "./Form";
+import { Form } from "@components/forms";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useFlag } from "@lib/hooks/useFlag";

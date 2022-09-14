@@ -12,6 +12,7 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
+import Markdown from "markdown-to-jsx";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
@@ -38,6 +39,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
+  const formStatusSubmitted = props.status === "Submitted" ? true : false;
   const timerActive = useFlag("formTimer");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
 
@@ -131,7 +133,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [timerActive]);
 
-  return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
+  return !props.isPreview &&
+    (isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError)) ? (
     <Loader message={t("loading")} />
   ) : (
     <>
@@ -149,75 +152,84 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           {errorList}
         </Alert>
       )}
+      {formStatusSubmitted && props.isPreview && (
+        <>
+          <Markdown options={{ forceBlock: true }}>
+            {form.endPage ? form.endPage.descriptionEn : ""}
+          </Markdown>
+        </>
+      )}
       {/**
        * method attribute needs to stay here in case javascript does not load
        * otherwise GET request will be sent which will result in leaking all the user data
        * to the URL
        */}
-      <form
-        id="form"
-        data-testid="form"
-        method="POST"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (timerActive) {
-            if (!formTimerState.canSubmit) {
-              window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({
-                event: "form_submission_spam_trigger",
-                formID: formID,
-                formTitle: form.titleEn,
-                submitTime: formTimerState.remainingTime,
-              });
-              setSubmitTooEarly(true);
-              // In case the useEffect timer failed check again
-              //formTimerDispatch({ type: "check" });
-              return;
+      {!formStatusSubmitted && (
+        <form
+          id="form"
+          data-testid="form"
+          method="POST"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (timerActive) {
+              if (!formTimerState.canSubmit) {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                  event: "form_submission_spam_trigger",
+                  formID: formID,
+                  formTitle: form.titleEn,
+                  submitTime: formTimerState.remainingTime,
+                });
+                setSubmitTooEarly(true);
+                // In case the useEffect timer failed check again
+                //formTimerDispatch({ type: "check" });
+                return;
+              }
+              // Only change state if submitTooEarly is already set to true
+              submitTooEarly && setSubmitTooEarly(false);
             }
-            // Only change state if submitTooEarly is already set to true
-            submitTooEarly && setSubmitTooEarly(false);
-          }
 
-          if (isReCaptchaEnableOnSite) {
-            handleSubmitReCaptcha(e);
-          } else {
-            handleSubmit(e);
-          }
-        }}
-        noValidate
-      >
-        {children}
-        <div
-          className={classNames({
-            "border-l-2": submitTooEarly,
-            "border-red-default": submitTooEarly,
-            "border-green-default": formTimerState.remainingTime === 0 && submitTooEarly,
-            "pl-3": submitTooEarly,
-          })}
+            if (isReCaptchaEnableOnSite) {
+              handleSubmitReCaptcha(e);
+            } else {
+              handleSubmit(e);
+            }
+          }}
+          noValidate
         >
-          {submitTooEarly &&
-            (formTimerState.remainingTime > 0 ? (
-              <div role="alert">
-                <p className="gc-label text-red-default">
-                  {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
-                  {t("spam-error.error-part-2")}
-                </p>
-                <p className="gc-description">
-                  {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
-                  {t("spam-error.prompt-part-2")}
-                </p>
-              </div>
-            ) : (
-              <div role="alert">
-                <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
-                <p className="gc-description">{t("spam-error.success-prompt")}</p>
-              </div>
-            ))}
-          <div className="buttons">
-            <Button type="submit">{t("submitButton")}</Button>
+          {children}
+          <div
+            className={classNames({
+              "border-l-2": submitTooEarly,
+              "border-red-default": submitTooEarly,
+              "border-green-default": formTimerState.remainingTime === 0 && submitTooEarly,
+              "pl-3": submitTooEarly,
+            })}
+          >
+            {submitTooEarly &&
+              (formTimerState.remainingTime > 0 ? (
+                <div role="alert">
+                  <p className="gc-label text-red-default">
+                    {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
+                    {t("spam-error.error-part-2")}
+                  </p>
+                  <p className="gc-description">
+                    {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
+                    {t("spam-error.prompt-part-2")}
+                  </p>
+                </div>
+              ) : (
+                <div role="alert">
+                  <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
+                  <p className="gc-description">{t("spam-error.success-prompt")}</p>
+                </div>
+              ))}
+            <div className="buttons">
+              <Button type="submit">{t("submitButton")}</Button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
     </>
   );
 };
@@ -227,6 +239,7 @@ interface FormProps {
   language: string;
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
+  isPreview?: boolean;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
 }
@@ -248,6 +261,11 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    if (formikBag.props.isPreview) {
+      formikBag.setStatus("Submitted");
+      return;
+    }
+
     try {
       await submitToAPI(values, formikBag);
     } catch (err) {
