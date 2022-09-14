@@ -101,14 +101,14 @@ const MultipleChoiceLabel = styled.label`
     opacity: 0;
   }
   input[type="radio"]:focus + &::before {
-    -webkit-box-shadow: 0 0 0 4px #ffbf47;
-    -moz-box-shadow: 0 0 0 4px #ffbf47;
-    box-shadow: 0 0 0 4px #ffbf47;
+    -webkit-box-shadow: 0 0 0 4px #303fc3;
+    -moz-box-shadow: 0 0 0 4px #303fc3;
+    box-shadow: 0 0 0 4px #303fc3;
   }
   input[type="checkbox"]:focus + &::before {
-    -webkit-box-shadow: 0 0 0 3px #ffbf47;
-    -moz-box-shadow: 0 0 0 3px #ffbf47;
-    box-shadow: 0 0 0 3px #ffbf47;
+    -webkit-box-shadow: 0 0 0 3px #303fc3;
+    -moz-box-shadow: 0 0 0 3px #303fc3;
+    box-shadow: 0 0 0 3px #303fc3;
   }
   input:checked + &::after {
     zoom: 1;

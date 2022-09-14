@@ -153,11 +153,16 @@ const FormWrapper = styled.div`
 `;
 
 const RequiredWrapper = styled.div`
+  font-size: 16px;
   margin-top: 20px;
 
-  & span {
+  span {
     display: inline-block;
     margin-left: 10px;
+  }
+
+  label {
+    padding-top: 4px;
   }
 `;
 
@@ -290,7 +295,7 @@ const ModalSaveButton = styled(FancyButton)`
   &:hover:not(:disabled),
   &:active,
   &:focus {
-    color: white;
+    color: #ffffff;
     background: #1c578a;
     box-shadow: inset 0 -2px 0 #7a8796;
   }

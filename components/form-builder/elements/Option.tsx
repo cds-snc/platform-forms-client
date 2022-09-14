@@ -8,6 +8,10 @@ import useTemplateStore from "../store/useTemplateStore";
 const OptionWrapper = styled.div`
   display: flex;
   margin-top: 10px;
+
+  &:first-of-type {
+    margin-top: 20px;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -15,12 +19,33 @@ const IconWrapper = styled.div`
 `;
 
 const TextInput = styled.input`
+  font-size: 16px;
   margin-left: 20px;
   padding: 20px;
   width: 340px;
   border: 1.5px solid #000000;
   border-radius: 4px;
   height: 24px;
+
+  &:focus {
+    border-color: #303fc3;
+    box-shadow: 0 0 0 2.5px #303fc3;
+    outline: 0;
+  }
+`;
+
+const RemoveButton = styled(Button)`
+  max-height: none;
+  margin: 0;
+  padding: 10px;
+  border-radius: 50%;
+  margin-left: 5px;
+  background-color: #ebebeb;
+
+  svg {
+    fill: #000000;
+    margin: 0;
+  }
 `;
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
@@ -65,12 +90,13 @@ export const Option = ({
           );
         }}
       />
-      <Button
+      <RemoveButton
         icon={<Close />}
+        aria-label={`Remove ${val}`}
         onClick={() => {
           removeChoice(parentIndex, index);
         }}
-      ></Button>
+      ></RemoveButton>
     </OptionWrapper>
   );
 };
