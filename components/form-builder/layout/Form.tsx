@@ -154,7 +154,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       )}
       {formStatusSubmitted && (
         <>
-          <Markdown options={{ forceBlock: true }}>{form.endPage.descriptionEn}</Markdown>
+          <Markdown options={{ forceBlock: true }}>
+            {form.endPage ? form.endPage.descriptionEn : ""}
+          </Markdown>
         </>
       )}
       {/**
