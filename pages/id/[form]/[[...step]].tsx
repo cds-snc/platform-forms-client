@@ -8,7 +8,6 @@ import Head from "next/head";
 import { Form, TextPage } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
-import { useFlag } from "@lib/hooks/useFlag";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 
@@ -23,12 +22,11 @@ const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.Rea
   const currentForm = getRenderedForm(formRecord, language, t);
   const formTitle = formRecord.formConfig.form[getProperty("title", language)] as string;
   const router = useRouter();
-  const { step, htmlEmail } = router.query;
-  const notifyPreviewFlag = useFlag("notifyPreview");
+  const { step } = router.query;
 
   // render text pages
   if (step == "confirmation") {
-    return <TextPage formRecord={formRecord} htmlEmail={htmlEmail as string | undefined} />;
+    return <TextPage formRecord={formRecord} />;
   }
 
   return (
@@ -37,13 +35,7 @@ const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.Rea
         <title>{formTitle}</title>
       </Head>
       <h1>{formTitle}</h1>
-      <Form
-        formRecord={formRecord}
-        language={language}
-        router={router}
-        t={t}
-        notifyPreviewFlag={notifyPreviewFlag}
-      >
+      <Form formRecord={formRecord} language={language} router={router} t={t}>
         {currentForm}
       </Form>
     </div>

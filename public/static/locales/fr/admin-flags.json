@@ -26,10 +26,6 @@
       "title": "Soumettre à la file d'attente de fiabilité",
       "description": "Soumettez les réponses du formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
     },
-    "notifyPreview": {
-      "title": "Prévisualiser par e-mail",
-      "description": "Sur la page de confirmation après la soumission, affichez une copie de l'e-mail envoyé à l'administrateur du formulaire"
-    },
     "reCatpcha": {
       "title": "Je ne suis pas un robot",
       "description": "Active la protection Je ne suis pas un robot pour tous les formulaires avant leur soumission"
