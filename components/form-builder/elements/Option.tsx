@@ -7,7 +7,7 @@ import useTemplateStore from "../store/useTemplateStore";
 
 const OptionWrapper = styled.div`
   display: flex;
-  margin-top: 10px;
+  margin-top: 12px;
 
   &:first-of-type {
     margin-top: 20px;
@@ -21,7 +21,7 @@ const IconWrapper = styled.div`
 const TextInput = styled.input`
   font-size: 16px;
   margin-left: 20px;
-  padding: 20px;
+  padding: 16px 10px;
   width: 340px;
   border: 1.5px solid #000000;
   border-radius: 4px;
@@ -35,9 +35,9 @@ const TextInput = styled.input`
 `;
 
 const RemoveButton = styled(Button)`
-  max-height: none;
+  max-height: 35px;
   margin: 0;
-  padding: 10px;
+  padding: 5.5px;
   border-radius: 50%;
   margin-left: 5px;
   background-color: #ebebeb;
