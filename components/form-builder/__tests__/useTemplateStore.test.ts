@@ -54,7 +54,9 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("My Form");
     expect(result.current.form.elements).toHaveLength(1);
     expect(result.current.form.elements[0].properties.titleEn).toBe("");
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(0);
+    // By default, there is one choice available
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
+    expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
 
     // Add a choice to the element
     act(() => {
@@ -62,8 +64,8 @@ describe("TemplateStore", () => {
     });
 
     // Default choice expectations
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
-    expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+    expect(result.current.form.elements[0].properties.choices[1]).toEqual({ en: "", fr: "" });
   });
 
   it("Updates existing choices", () => {
@@ -86,21 +88,21 @@ describe("TemplateStore", () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("My Form");
 
-    // Create an element with two choices
+    // Create an element with three choices
     act(() => {
-      result.current.add();
+      result.current.add(); // one choices is added by default
       result.current.addChoice(0);
       result.current.addChoice(0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(3);
 
     // Remove one choice
     act(() => {
       result.current.removeChoice(0, 0);
     });
 
-    expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
+    expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
   });
 
   it("Moves an element up", () => {

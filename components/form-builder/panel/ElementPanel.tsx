@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -179,6 +179,14 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     resetChoices,
   } = useTemplateStore();
 
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (input.current) {
+      input.current.focus();
+    }
+  }, []);
+
   const questionNumber =
     elements
       .filter((item) => item.type != "richText")
@@ -204,6 +212,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               <QuestionNumber>{questionNumber}</QuestionNumber>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
               <Input
+                ref={input}
                 type="text"
                 name={`item${item.index}`}
                 placeholder={t("Question")}
