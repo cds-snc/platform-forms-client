@@ -238,13 +238,14 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               />
               <RequiredWrapper>
                 <Checkbox
-                  id={item.index}
-                  value={`${item.index}-required`}
+                  id={`required-${item.index}-id`}
+                  value={`required-${item.index}-value`}
                   checked={item.properties.validation.required}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (!e.target) {
                       return;
                     }
+
                     updateField(
                       `form.elements[${item.index}].properties.validation.required`,
                       e.target.checked
@@ -348,6 +349,20 @@ const ModalForm = ({
       </ModalRow>
       <ModalRow>
         <h3>Add rules</h3>
+      </ModalRow>
+      <ModalRow>
+        <Checkbox
+          id={`required-${item.index}-id-modal`}
+          value={`required-${item.index}-value-modal`}
+          checked={properties.validation.required}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            updateModalProperties(item.index, {
+              ...properties,
+              ...{ validation: { required: e.target.checked } },
+            });
+          }}
+          label={t("Required")}
+        ></Checkbox>
       </ModalRow>
     </form>
   );
