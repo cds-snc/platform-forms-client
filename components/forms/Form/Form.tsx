@@ -226,7 +226,6 @@ interface FormProps {
   formRecord: PublicFormRecord;
   language: string;
   router: NextRouter;
-  notifyPreviewFlag: boolean;
   isReCaptchaEnableOnSite?: boolean;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
