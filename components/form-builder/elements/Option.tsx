@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Close } from "../icons";
 import { Button } from "../panel";
+import { Input } from "../panel";
 import useTemplateStore from "../store/useTemplateStore";
 
 const OptionWrapper = styled.div`
@@ -18,20 +19,11 @@ const IconWrapper = styled.div`
   margin-top: 10px;
 `;
 
-const TextInput = styled.input`
+const TextInput = styled(Input)`
   font-size: 16px;
   margin-left: 20px;
   padding: 16px 10px;
   width: 340px;
-  border: 1.5px solid #000000;
-  border-radius: 4px;
-  height: 24px;
-
-  &:focus {
-    border-color: #303fc3;
-    box-shadow: 0 0 0 2.5px #303fc3;
-    outline: 0;
-  }
 `;
 
 const RemoveButton = styled(Button)`

@@ -21,6 +21,7 @@ import {
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
+import { Input } from "./Input";
 
 const Separator = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -103,23 +104,35 @@ const Row = styled.div<RowProps>`
   }
 `;
 
-const Input = styled.input`
-  padding: 22px 10px;
-  width: 460px;
-  border: 1.5px solid #000000;
-  border-radius: 4px;
-  max-height: 36px;
+const TitleInput = styled(Input)`
+  padding: 24px 10px 20px 10px;
+  border: none;
+  border-bottom: 1.5px solid #000000;
+  border-radius: 4px 4px 0 0;
+  font-weight: 700;
+
+  &:focus {
+    border-color: #000000;
+    box-shadow: none;
+    background: #ebebeb;
+  }
 `;
 
 const TextArea = styled.textarea`
   padding: 10px;
   width: 90%;
-  border: 2px solid #000000;
+  border: 1.5px solid #000000;
   border-radius: 4px;
+
+  &:focus {
+    border-color: #303fc3;
+    box-shadow: 0 0 0 2.5px #303fc3;
+    outline: 0;
+  }
 `;
 
 const DivDisabled = styled.div`
-  margin-top: 15px;
+  margin-top: 20px;
   padding: 5px 10px;
   width: 460px;
   font-size: 16px;
@@ -216,7 +229,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             <>
               <QuestionNumber>{questionNumber}</QuestionNumber>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
-              <Input
+              <TitleInput
                 ref={input}
                 type="text"
                 name={`item${item.index}`}
