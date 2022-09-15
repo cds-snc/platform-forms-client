@@ -21,7 +21,9 @@ const Footer = ({ disableGcBranding }) => {
         </div>
         {!disableGcBranding && (
           <div>
-            <img alt={t("fip.text")} src="/img/wmms-blk.svg" />
+            <picture>
+              <img alt={t("fip.text")} src="/img/wmms-blk.svg" />
+            </picture>
           </div>
         )}
       </div>
