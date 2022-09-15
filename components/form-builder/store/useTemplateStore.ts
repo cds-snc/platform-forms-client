@@ -59,9 +59,9 @@ const useTemplateStore = create<ElementStore>()(
       set((state) => {
         state.form.elements = moveDown(state.form.elements, index);
       }),
-    add: () =>
+    add: (index = 0) =>
       set((state) => {
-        state.form.elements.push({
+        state.form.elements.splice(index + 1, 0, {
           ...defaultField,
           id: incrementElementId(state.form.elements),
           type: "radio",
