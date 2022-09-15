@@ -73,9 +73,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!formID || Array.isArray(formID)) return redirect(context.locale);
 
     form = await getTemplateByID(formID);
-    if (form) {
-      form = onlyIncludePublicProperties(form);
-    }
   }
 
   // Redirect if form doesn't exist and
@@ -89,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   return {
     props: {
-      formRecord: form,
+      formRecord: onlyIncludePublicProperties(form),
       isEmbeddable: isEmbeddable,
       ...(context.locale &&
         (await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"]))),
