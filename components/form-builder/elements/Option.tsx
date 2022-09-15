@@ -54,6 +54,7 @@ export const Option = ({
   const input = useRef<HTMLInputElement>(null);
   const {
     form: { elements },
+    addChoice,
     removeChoice,
     updateField,
     lang,
@@ -66,6 +67,12 @@ export const Option = ({
       input.current.focus();
     }
   }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter") {
+      addChoice(parentIndex);
+    }
+  };
 
   return (
     <OptionWrapper>
@@ -81,6 +88,7 @@ export const Option = ({
             e.target.value
           );
         }}
+        onKeyDown={handleKeyDown}
       />
       <RemoveButton
         icon={<Close />}
