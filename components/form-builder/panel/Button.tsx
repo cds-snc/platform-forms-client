@@ -46,7 +46,7 @@ export const Button = ({
 }: {
   children?: JSX.Element | string;
   icon?: ReactElement;
-  onClick: (e: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   className?: string;
 }) => {
   return (

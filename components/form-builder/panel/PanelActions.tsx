@@ -95,21 +95,23 @@ export const PanelActions = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const { remove, moveUp, moveDown, add, duplicateElement, form } = useTemplateStore();
+  const isLastItem = item.index === form.elements.length - 1;
+  const isFirstItem = item.index === 0;
 
   return (
     <Actions className="panel-actions">
       <UpDown>
         <PanelButton
-          className={item.index == 0 ? "disabled" : ""}
+          className={isFirstItem ? "disabled" : ""}
           icon={<ChevronUp />}
-          onClick={() => moveUp(item.index)}
+          onClick={isFirstItem ? undefined : () => moveUp(item.index)}
         >
           <Label>{t("Move up")}</Label>
         </PanelButton>
         <PanelButton
-          className={item.index + 1 == form.elements.length ? "disabled" : ""}
+          className={isLastItem ? "disabled" : ""}
           icon={<ChevronDown />}
-          onClick={() => moveDown(item.index)}
+          onClick={isLastItem ? undefined : () => moveDown(item.index)}
         >
           <Label>{t("Move down")}</Label>
         </PanelButton>
