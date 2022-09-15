@@ -24,6 +24,26 @@ const PanelButton = styled(Button)`
   border: 1px solid transparent;
   padding: 20px 5px;
   transition: background 0.1s ease, border 0.1s linear;
+
+  &.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+
+    svg {
+      fill: #ccc;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: #ccc;
+      background-color: #eee;
+
+      svg {
+        fill: #ccc;
+      }
+    }
+  }
 `;
 
 const Label = styled.span`
@@ -74,15 +94,23 @@ export const PanelActions = ({
   children: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { remove, moveUp, moveDown, add, duplicateElement } = useTemplateStore();
+  const { remove, moveUp, moveDown, add, duplicateElement, form } = useTemplateStore();
 
   return (
     <Actions className="panel-actions">
       <UpDown>
-        <PanelButton icon={<ChevronUp />} onClick={() => moveUp(item.index)}>
+        <PanelButton
+          className={item.index == 0 ? "disabled" : ""}
+          icon={<ChevronUp />}
+          onClick={() => moveUp(item.index)}
+        >
           <Label>{t("Move up")}</Label>
         </PanelButton>
-        <PanelButton icon={<ChevronDown />} onClick={() => moveDown(item.index)}>
+        <PanelButton
+          className={item.index + 1 == form.elements.length ? "disabled" : ""}
+          icon={<ChevronDown />}
+          onClick={() => moveDown(item.index)}
+        >
           <Label>{t("Move down")}</Label>
         </PanelButton>
       </UpDown>
