@@ -11,14 +11,13 @@ import { getPageClassNames } from "@lib/routeUtils";
 import { UserRole } from "@prisma/client";
 
 const Base = ({ children }) => {
-  const formRecord =
-    children && children.props && children.props.formRecord ? children.props.formRecord : null;
+  const formRecord = children?.props?.formRecord;
   const classes = getPageClassNames(formRecord);
 
   const isAdmin = children?.props?.user?.role === UserRole.ADMINISTRATOR;
-  const isEmbeddable = formRecord && children && children.props && children.props.isEmbeddable;
+  const isEmbeddable = formRecord && children?.props?.isEmbeddable;
 
-  const shouldDisplayAlphaBanner = formRecord ? formRecord.formConfig.displayAlphaBanner : true;
+  const shouldDisplayAlphaBanner = formRecord?.formConfig.displayAlphaBanner ?? true;
   const { t } = useTranslation("common");
 
   return (
