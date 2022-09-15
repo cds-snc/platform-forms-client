@@ -3,7 +3,6 @@ import useTemplateStore from "../store/useTemplateStore";
 import { Form } from "@components/forms";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useFlag } from "@lib/hooks/useFlag";
 import { getRenderedForm } from "@lib/formBuilder";
 
 export const Preview = () => {
@@ -16,7 +15,6 @@ export const Preview = () => {
   };
   const router = useRouter();
   const { t, i18n } = useTranslation();
-  const notifyPreviewFlag = useFlag("notifyPreview");
   const language = i18n.language as string;
 
   const currentForm = getRenderedForm(formRecord, language, t);
@@ -24,14 +22,7 @@ export const Preview = () => {
   return (
     <>
       <h2 className="gc-h2">Preview</h2>
-      <Form
-        formRecord={formRecord}
-        language={language}
-        router={router}
-        t={t}
-        notifyPreviewFlag={notifyPreviewFlag}
-        isPreview={true}
-      >
+      <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
         {currentForm}
       </Form>
     </>
