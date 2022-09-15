@@ -6,12 +6,29 @@ import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
 import { Option } from "./Option";
 import { BulkAdd } from "./BulkAdd";
+import { Button } from "../panel/Button";
 import { ElementTypeWithIndex } from "../types";
 
-const LinkButton = styled.button`
-  margin-top: 20px;
-  margin-right: 20px;
+const LinkButton = styled(Button)`
+  margin: 0;
+  margin-top: 10px;
   text-decoration: underline;
+  background-color: transparent;
+  border-radius: 4px;
+  display: block;
+  font-size: 16px;
+
+  &:first-of-type {
+    margin-top: 20px;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    outline-offset: 4px;
+    background-color: transparent;
+    color: #000000;
+  }
 
   &:hover {
     text-decoration: none;
