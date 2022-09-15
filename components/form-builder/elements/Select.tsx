@@ -19,6 +19,13 @@ const DropDownHeader = styled.button`
   width: 100%;
   line-height: 24px;
   font-size: 16px;
+
+  &:focus,
+  &[aria-expanded="true"] {
+    border-color: #303fc3;
+    box-shadow: 0 0 0 2.5px #303fc3;
+    outline: 0;
+  }
 `;
 
 const DropDownList = styled.ul`

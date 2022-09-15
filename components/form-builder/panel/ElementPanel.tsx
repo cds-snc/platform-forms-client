@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -19,7 +19,9 @@ import {
   SelectMenuIcon,
 } from "../icons";
 import { ModalButton } from "./Modal";
+import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
+import { Input } from "./Input";
 
 const Separator = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -102,23 +104,35 @@ const Row = styled.div<RowProps>`
   }
 `;
 
-const Input = styled.input`
-  padding: 22px 10px;
-  width: 460px;
-  border: 1.5px solid #000000;
-  border-radius: 4px;
-  max-height: 36px;
+const TitleInput = styled(Input)`
+  padding: 24px 10px 20px 10px;
+  border: none;
+  border-bottom: 1.5px solid #000000;
+  border-radius: 4px 4px 0 0;
+  font-weight: 700;
+
+  &:focus {
+    border-color: #000000;
+    box-shadow: none;
+    background: #ebebeb;
+  }
 `;
 
 const TextArea = styled.textarea`
   padding: 10px;
   width: 90%;
-  border: 2px solid #000000;
+  border: 1.5px solid #000000;
   border-radius: 4px;
+
+  &:focus {
+    border-color: #303fc3;
+    box-shadow: 0 0 0 2.5px #303fc3;
+    outline: 0;
+  }
 `;
 
 const DivDisabled = styled.div`
-  margin-top: 15px;
+  margin-top: 20px;
   padding: 5px 10px;
   width: 460px;
   font-size: 16px;
@@ -152,17 +166,16 @@ const FormWrapper = styled.div`
 `;
 
 const RequiredWrapper = styled.div`
+  font-size: 16px;
   margin-top: 20px;
-  margin-left: 10px;
 
-  & input {
-    transform: scale(1.5);
-    padding: 10px;
-  }
-
-  & span {
+  span {
     display: inline-block;
     margin-left: 10px;
+  }
+
+  label {
+    padding-top: 4px;
   }
 `;
 
@@ -183,6 +196,14 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     updateField,
     resetChoices,
   } = useTemplateStore();
+
+  const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (input.current) {
+      input.current.focus();
+    }
+  }, []);
 
   const questionNumber =
     elements
@@ -208,7 +229,8 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             <>
               <QuestionNumber>{questionNumber}</QuestionNumber>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
-              <Input
+              <TitleInput
+                ref={input}
                 type="text"
                 name={`item${item.index}`}
                 placeholder={t("Question")}
@@ -233,22 +255,22 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 onChange={handleElementChange}
               />
               <RequiredWrapper>
-                <label>
-                  <input
-                    checked={item.properties.validation.required}
-                    type="checkbox"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      if (!e.target) {
-                        return;
-                      }
-                      updateField(
-                        `form.elements[${item.index}].properties.validation.required`,
-                        e.target.checked
-                      );
-                    }}
-                  />{" "}
-                  <span>{t("Required")}</span>
-                </label>
+                <Checkbox
+                  id={`required-${item.index}-id`}
+                  value={`required-${item.index}-value`}
+                  checked={item.properties.validation.required}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (!e.target) {
+                      return;
+                    }
+
+                    updateField(
+                      `form.elements[${item.index}].properties.validation.required`,
+                      e.target.checked
+                    );
+                  }}
+                  label={t("Required")}
+                ></Checkbox>
               </RequiredWrapper>
             </div>
           </>
@@ -286,7 +308,7 @@ const ModalSaveButton = styled(FancyButton)`
   &:hover:not(:disabled),
   &:active,
   &:focus {
-    color: white;
+    color: #ffffff;
     background: #1c578a;
     box-shadow: inset 0 -2px 0 #7a8796;
   }
@@ -342,6 +364,23 @@ const ModalForm = ({
           }}
           value={properties.descriptionEn}
         />
+      </ModalRow>
+      <ModalRow>
+        <h3>Add rules</h3>
+      </ModalRow>
+      <ModalRow>
+        <Checkbox
+          id={`required-${item.index}-id-modal`}
+          value={`required-${item.index}-value-modal`}
+          checked={properties.validation.required}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            updateModalProperties(item.index, {
+              ...properties,
+              ...{ validation: { required: e.target.checked } },
+            });
+          }}
+          label={t("Required")}
+        ></Checkbox>
       </ModalRow>
     </form>
   );
