@@ -15,7 +15,7 @@ const defaultField: ElementType = {
   id: 0,
   type: "",
   properties: {
-    choices: [],
+    choices: [{ en: "", fr: "" }],
     titleEn: "",
     titleFr: "",
     validation: {
