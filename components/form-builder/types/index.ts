@@ -66,7 +66,7 @@ export interface ElementStore extends TemplateSchema {
   lang: keyof Language;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
-  add: () => void;
+  add: (index?: number) => void;
   remove: (id: number) => void;
   addChoice: (index: number) => void;
   resetChoices: (index: number) => void;

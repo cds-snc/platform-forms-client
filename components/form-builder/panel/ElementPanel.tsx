@@ -471,7 +471,13 @@ export const ElementPanel = () => {
 
   if (!elements.length) {
     return (
-      <button style={{ marginBottom: 20 }} className="gc-button gc-button--secondary" onClick={add}>
+      <button
+        style={{ marginBottom: 20 }}
+        className="gc-button gc-button--secondary"
+        onClick={() => {
+          add();
+        }}
+      >
         Add form element
       </button>
     );
