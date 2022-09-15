@@ -1,6 +1,6 @@
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
-import { Form } from "@components/forms";
+import { Form } from "../preview/Form";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
