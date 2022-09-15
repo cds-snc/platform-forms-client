@@ -4,13 +4,9 @@ import useTemplateStore from "../store/useTemplateStore";
 import { sortByLayout } from "../util";
 import { validateTemplate } from "../validate";
 
-const Separator = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  margin: 20px 0;
-`;
-
 const UploadWrapper = styled.div`
   display: inline-block;
+  margin-bottom: 25px;
 `;
 
 export const Import = () => {
@@ -46,7 +42,6 @@ export const Import = () => {
 
   return (
     <>
-      <Separator />
       <h2 className="gc-h2">Import template file</h2>
       <UploadWrapper>
         <input type="file" id="file" onChange={handleChange} />
