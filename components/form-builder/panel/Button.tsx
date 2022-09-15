@@ -11,8 +11,26 @@ const StyledButton = styled.button`
   max-height: 24px;
   border-radius: 8px;
 
+  &:hover, &:focus, &:active {
+    color: #ffffff;
+
+    svg {
+      fill: #ffffff;
+    }
+  }
+
   &:hover {
-    background: #ebebeb;
+    background-color: #6a6d7b;
+  }
+
+  &:focus {
+    background-color: #303fc3;
+    outline: 3px solid #303fc3;
+    outline-offset: 2px;
+  }
+
+  &:active {
+    background-color: #c4c3c5
   }
 
   svg {
@@ -56,16 +74,6 @@ export const FancyButton = styled(Button)`
   border: 1.5px solid black;
   cursor: pointer;
   background: #ffffff;
-
-  &:hover:not(:disabled) {
-    color: rgba(0, 0, 0, 0.8);
-    background: #f9f9f9;
-  }
-
-  &:focus {
-    outline: #303fc3 2px dotted;
-    outline-offset: 2px;
-  }
 
   &:active:not(:disabled) {
     top: 2px;

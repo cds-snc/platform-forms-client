@@ -3,24 +3,41 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Close } from "../icons";
 import { Button } from "../panel";
+import { Input } from "../panel";
 import useTemplateStore from "../store/useTemplateStore";
 
 const OptionWrapper = styled.div`
   display: flex;
-  margin-top: 10px;
+  margin-top: 12px;
+
+  &:first-of-type {
+    margin-top: 20px;
+  }
 `;
 
 const IconWrapper = styled.div`
   margin-top: 10px;
 `;
 
-const TextInput = styled.input`
+const TextInput = styled(Input)`
+  font-size: 16px;
   margin-left: 20px;
-  padding: 20px;
+  padding: 16px 10px;
   width: 340px;
-  border: 1.5px solid #000000;
-  border-radius: 4px;
-  height: 24px;
+`;
+
+const RemoveButton = styled(Button)`
+  max-height: 35px;
+  margin: 0;
+  padding: 5.5px;
+  border-radius: 50%;
+  margin-left: 5px;
+  background-color: #ebebeb;
+
+  svg {
+    fill: #000000;
+    margin: 0;
+  }
 `;
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
@@ -37,6 +54,7 @@ export const Option = ({
   const input = useRef<HTMLInputElement>(null);
   const {
     form: { elements },
+    addChoice,
     removeChoice,
     updateField,
     lang,
@@ -49,6 +67,12 @@ export const Option = ({
       input.current.focus();
     }
   }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter") {
+      addChoice(parentIndex);
+    }
+  };
 
   return (
     <OptionWrapper>
@@ -64,13 +88,15 @@ export const Option = ({
             e.target.value
           );
         }}
+        onKeyDown={handleKeyDown}
       />
-      <Button
+      <RemoveButton
         icon={<Close />}
+        aria-label={`Remove ${val}`}
         onClick={() => {
           removeChoice(parentIndex, index);
         }}
-      ></Button>
+      ></RemoveButton>
     </OptionWrapper>
   );
 };

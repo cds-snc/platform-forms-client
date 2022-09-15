@@ -24,17 +24,6 @@ const PanelButton = styled(Button)`
   border: 1px solid transparent;
   padding: 20px 5px;
   transition: background 0.1s ease, border 0.1s linear;
-
-  &:hover,
-  &:focus {
-    background: #e1e1e1;
-    border: 1px solid #d1d1d1;
-  }
-
-  &:active {
-    background: #ababab;
-    border: 1px solid #6b6b6b;
-  }
 `;
 
 const Label = styled.span`

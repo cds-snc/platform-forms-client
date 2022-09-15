@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import LanguageToggle from "./LanguageToggle";
 import { getProperty } from "@lib/formBuilder";
-import { isSplashPage } from "@lib/routeUtils";
+import { isSplashPage, isPublicPage } from "@lib/routeUtils";
 import Menu from "@components/auth/LoginMenu";
 
 const Fip = (props) => {
@@ -30,20 +30,20 @@ const Fip = (props) => {
       ? formTheme[getProperty("logoTitle", i18n.language)]
       : t("fip.text");
 
-  // Do not show the language toggle on the "splash" page
-  const languageToggle = isSplashPage() ? null : <LanguageToggle />;
   const { status } = useSession();
 
   return (
     <div data-testid="fip" className="gc-fip">
       <div className="canada-flag">
         <a href={linkUrl} aria-label={t("fip.label")}>
-          <img src={logo} alt={logoTitle} />
+          <picture>
+            <img src={logo} alt={logoTitle} />
+          </picture>
         </a>
       </div>
       <div className="inline-flex">
-        <Menu isAuthenticated={status === "authenticated"} />
-        {languageToggle}
+        {!isPublicPage() && <Menu isAuthenticated={status === "authenticated"} />}
+        {!isSplashPage() && <LanguageToggle />}
       </div>
     </div>
   );
