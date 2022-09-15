@@ -218,8 +218,10 @@ describe("Template CRUD functions", () => {
     };
 
     const publicFormRecord = onlyIncludePublicProperties(formRecord as FormRecord);
-    expect(publicFormRecord).not.toHaveProperty("submission");
-    expect(publicFormRecord).not.toHaveProperty("internalTitleEn");
-    expect(publicFormRecord).not.toHaveProperty("internalTitleFr");
+    expect(publicFormRecord.formConfig).not.toHaveProperty("submission");
+    expect(publicFormRecord.formConfig).not.toHaveProperty("internalTitleEn");
+    expect(publicFormRecord.formConfig).not.toHaveProperty("internalTitleFr");
+    expect(publicFormRecord.formConfig).toHaveProperty("displayAlphaBanner");
+    expect(publicFormRecord.formConfig).toHaveProperty("securityAttribute");
   });
 });
