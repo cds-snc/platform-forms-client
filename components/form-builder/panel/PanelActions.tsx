@@ -148,7 +148,13 @@ export const PanelActions = ({
       </Modal>
 
       <AddButtonWrapper>
-        <FancyButton onClick={add}>{t("Add element")}</FancyButton>
+        <FancyButton
+          onClick={() => {
+            add(item.index);
+          }}
+        >
+          {t("Add element")}
+        </FancyButton>
       </AddButtonWrapper>
     </Actions>
   );

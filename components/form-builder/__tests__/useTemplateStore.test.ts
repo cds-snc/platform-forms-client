@@ -41,6 +41,32 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[1].properties.titleEn).toBe("");
   });
 
+  it("Inserts elements after the specified item index", () => {
+    const result = createStore();
+    expect(result.current.form.titleEn).toBe("My Form");
+
+    // Add multiple elements
+    act(() => {
+      result.current.add(0);
+      result.current.add(1);
+      result.current.add(2);
+    });
+
+    expect(result.current.form.elements[0].id).toBe(1);
+    expect(result.current.form.elements[1].id).toBe(2);
+    expect(result.current.form.elements[2].id).toBe(3);
+
+    // Insert a new element between the first two
+    act(() => {
+      result.current.add(0);
+    });
+
+    expect(result.current.form.elements[0].id).toBe(1);
+    expect(result.current.form.elements[1].id).toBe(4);
+    expect(result.current.form.elements[2].id).toBe(2);
+    expect(result.current.form.elements[3].id).toBe(3);
+  });
+
   it("Adds Choices to an Element", () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("My Form");
@@ -110,9 +136,9 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("My Form");
 
     act(() => {
-      result.current.add();
-      result.current.add();
-      result.current.add();
+      result.current.add(0);
+      result.current.add(1);
+      result.current.add(2);
     });
 
     expect(result.current.form.elements[0].id).toBe(1);
@@ -133,9 +159,9 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("My Form");
 
     act(() => {
-      result.current.add();
-      result.current.add();
-      result.current.add();
+      result.current.add(0);
+      result.current.add(1);
+      result.current.add(2);
     });
 
     expect(result.current.form.elements[0].id).toBe(1);
