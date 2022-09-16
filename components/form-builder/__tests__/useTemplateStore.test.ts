@@ -1,7 +1,6 @@
 import useTemplateStore from "../store/useTemplateStore";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import { logMessage } from "@lib/logger";
 
 const createStore = () => {
   const { result } = renderHook(() => useTemplateStore());
