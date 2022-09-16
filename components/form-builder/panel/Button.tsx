@@ -43,14 +43,16 @@ export const Button = ({
   icon,
   onClick,
   className,
+  disabled = false,
 }: {
   children?: JSX.Element | string;
   icon?: ReactElement;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   className?: string;
+  disabled?: boolean;
 }) => {
   return (
-    <StyledButton onClick={onClick} className={className}>
+    <StyledButton onClick={onClick} className={className} disabled={disabled}>
       {icon}
       {children}
     </StyledButton>

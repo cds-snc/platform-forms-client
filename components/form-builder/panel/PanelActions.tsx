@@ -37,7 +37,7 @@ const PanelButton = styled(Button)`
     &:focus,
     &:active {
       color: #ccc;
-      background-color: #eee;
+      background-color: transparent;
 
       svg {
         fill: #ccc;
@@ -111,14 +111,16 @@ export const PanelActions = ({
         <PanelButton
           className={isFirstItem ? "disabled" : ""}
           icon={<ChevronUp />}
-          onClick={isFirstItem ? undefined : () => moveUp(item.index)}
+          disabled={isFirstItem}
+          onClick={() => moveUp(item.index)}
         >
           <Label>{t("Move up")}</Label>
         </PanelButton>
         <PanelButton
           className={isLastItem ? "disabled" : ""}
           icon={<ChevronDown />}
-          onClick={isLastItem ? undefined : () => moveDown(item.index)}
+          disabled={isLastItem}
+          onClick={() => moveDown(item.index)}
         >
           <Label>{t("Move down")}</Label>
         </PanelButton>
