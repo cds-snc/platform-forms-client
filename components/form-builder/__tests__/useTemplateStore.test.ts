@@ -131,6 +131,32 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
   });
 
+  it("Duplicates an element and inserts after index of copied item", () => {
+    const result = createStore();
+    expect(result.current.form.titleEn).toBe("My Form");
+
+    // Create an element with three choices
+    act(() => {
+      result.current.add(0);
+      result.current.add(1);
+      result.current.add(2);
+
+      result.current.updateField(`form.elements[0].properties.titleEn`, "Element one");
+      result.current.updateField(`form.elements[1].properties.titleEn`, "Element two");
+      result.current.updateField(`form.elements[2].properties.titleEn`, "Element three");
+    });
+
+    expect(result.current.form.elements).toHaveLength(3);
+
+    act(() => {
+      result.current.duplicateElement(1);
+    });
+
+    expect(result.current.form.elements).toHaveLength(4);
+    expect(result.current.form.elements[2].properties.titleEn).toBe("Element two copy");
+    expect(result.current.form.elements[3].properties.titleEn).toBe("Element three");
+  });
+
   it("Moves an element up", () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("My Form");
