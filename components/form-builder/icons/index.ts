@@ -13,3 +13,4 @@ export { ShortAnswerIcon } from "./ShortAnswerIcon";
 export { ThreeDotsIcon } from "./ThreeDotsIcon";
 export { NumberedListIcon } from "./NumberedListIcon";
 export { BulletedListIcon } from "./BulletedListIcon";
+export { BackArrowIcon } from "./BackArrowIcon";

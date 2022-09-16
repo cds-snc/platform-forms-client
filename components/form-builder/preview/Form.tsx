@@ -13,8 +13,26 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
 import Markdown from "markdown-to-jsx";
+import styled from "styled-components";
+import { BackArrowIcon } from "../icons";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
+
+const Link = styled.div`
+  text-decoration: underline;
+  cursor: pointer;
+  margin: 15px 0;
+
+  & svg {
+    display: inline-block;
+  }
+`;
+
+const SubmitButtonLabel = styled.div`
+  background-color: #cbc4f5;
+  display: inline-block;
+  padding: 2px 6px;
+`;
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -154,6 +172,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       )}
       {formStatusSubmitted && props.isPreview && (
         <>
+          <Link
+            onClick={() => {
+              props.setStatus("None");
+            }}
+          >
+            <BackArrowIcon />
+            Back to form preview
+          </Link>
           <Markdown options={{ forceBlock: true }}>
             {form.endPage ? form.endPage.descriptionEn : ""}
           </Markdown>
@@ -226,6 +252,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               ))}
             <div className="buttons">
               <Button type="submit">{t("submitButton")}</Button>
+              {props.isPreview && (
+                <SubmitButtonLabel>
+                  To preview your confirmation message, click submit
+                </SubmitButtonLabel>
+              )}
             </div>
           </div>
         </form>
