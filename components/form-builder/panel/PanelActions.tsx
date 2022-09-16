@@ -94,8 +94,15 @@ export const PanelActions = ({
   children: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { remove, moveUp, moveDown, add, duplicateElement, form } = useTemplateStore();
-  const isLastItem = item.index === form.elements.length - 1;
+  const {
+    remove,
+    moveUp,
+    moveDown,
+    add,
+    duplicateElement,
+    form: { elements },
+  } = useTemplateStore();
+  const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
 
   return (
