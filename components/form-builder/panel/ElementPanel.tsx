@@ -8,7 +8,7 @@ import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
 import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
-import { ShortAnswer, Paragraph, Options, RichText } from "../elements";
+import { ShortAnswer, Paragraph, Options, RichText, RichTextLocked } from "../elements";
 import {
   ShortAnswerIcon,
   ParagraphIcon,
@@ -76,6 +76,7 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const {
     form: { elements },
   } = useTemplateStore();
+
   const { type } = elements[item.index];
 
   if (!type) {
@@ -401,6 +402,7 @@ const ElementWrapperDiv = styled.div`
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
+  const isRichText = item.type == "richText";
   const {
     form: { elements },
     updateField,
@@ -409,8 +411,10 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { isOpen, modals, updateModalProperties } = useModalStore();
 
   React.useEffect(() => {
-    updateModalProperties(item.index, elements[item.index].properties);
-  }, [item, isOpen]);
+    if (item.type != "richText") {
+      updateModalProperties(item.index, elements[item.index].properties);
+    }
+  }, [item, isOpen, isRichText]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
@@ -438,13 +442,13 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
           </ModalButton>
         )}
       >
-        {modals[item.index] && (
+        {!isRichText && modals[item.index] ? (
           <ModalForm
             item={item}
             properties={modals[item.index]}
             updateModalProperties={updateModalProperties}
           />
-        )}
+        ) : null}
       </PanelActions>
     </ElementWrapperDiv>
   );
@@ -466,29 +470,54 @@ const ElementPanelDiv = styled.div`
 export const ElementPanel = () => {
   const {
     form: { elements },
-    add,
   } = useTemplateStore();
 
-  if (!elements.length) {
-    return (
-      <button
-        style={{ marginBottom: 20 }}
-        className="gc-button gc-button--secondary"
-        onClick={() => {
-          add();
-        }}
-      >
-        Add form element
-      </button>
-    );
-  }
+  const introTextPlaceholder = [
+    {
+      type: "paragraph",
+      children: [{ text: "Add an introduction" }],
+    },
+  ];
+
+  const confirmTextPlaceholder = [
+    {
+      type: "paragraph",
+      children: [{ text: "Thank you for participating in the ice cream survey!" }],
+    },
+  ];
+
+  const policyTextPlaceholder = [
+    {
+      type: "paragraph",
+      children: [{ text: "All email addresses will be not be shared." }],
+    },
+  ];
 
   return (
     <ElementPanelDiv>
+      <RichTextLocked
+        addElement={true}
+        initialValue={introTextPlaceholder}
+        schemaProperty="introduction"
+      />
       {elements.map((element, index) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
+      <RichTextLocked
+        addElement={false}
+        initialValue={confirmTextPlaceholder}
+        schemaProperty="endPage"
+      >
+        <h3>Confirmation page and message</h3>
+      </RichTextLocked>
+      <RichTextLocked
+        addElement={false}
+        initialValue={policyTextPlaceholder}
+        schemaProperty="privacyPolicy"
+      >
+        <h3>Privacy statement</h3>
+      </RichTextLocked>
     </ElementPanelDiv>
   );
 };

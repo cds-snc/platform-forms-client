@@ -37,6 +37,14 @@ export const defaultForm = {
     referrerUrlEn: "",
     referrerUrlFr: "",
   },
+  introduction: {
+    descriptionEn: "",
+    descriptionFr: "",
+  },
+  privacyPolicy: {
+    descriptionEn: "",
+    descriptionFr: "",
+  },
   elements: [],
   emailSubjectEn: "",
   emailSubjectFr: "",

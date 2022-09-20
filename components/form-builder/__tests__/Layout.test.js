@@ -7,7 +7,7 @@ describe("Form Builder", () => {
 
   it("renders without errors", async () => {
     const { getByText } = render(<Layout />);
-    const button = getByText("Add form element");
+    const button = getByText("Add element");
     expect(button).toBeTruthy();
   });
 });

@@ -46,6 +46,14 @@ export interface FormSchema {
     referrerUrlEn: string;
     referrerUrlFr: string;
   };
+  introduction?: {
+    descriptionEn: string;
+    descriptionFr: string;
+  };
+  privacyPolicy?: {
+    descriptionEn: string;
+    descriptionFr: string;
+  };
   elements: ElementType[];
   version: number;
   emailSubjectEn: string;
