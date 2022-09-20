@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix logout session end date [#945](https://github.com/cds-snc/platform-forms-client/issues/945)
 - Fix last login date format [#950](https://github.com/cds-snc/platform-forms-client/pull/950)
 - Cleared email input field after successfully adding an email to Form Access [#954](https://github.com/cds-snc/platform-forms-client/pull/954)
+- Returned only public properties for forms [#1038](https://github.com/cds-snc/platform-forms-client/pull/1038)
 
 ### Removed
 
