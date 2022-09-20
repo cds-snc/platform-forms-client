@@ -80,6 +80,7 @@ export interface ElementStore extends TemplateSchema {
   resetChoices: (index: number) => void;
   removeChoice: (index: number, childIndex: number) => void;
   updateField: (path: string, value: string | boolean) => void;
+  unsetField: (path: string) => void;
   duplicateElement: (index: number) => void;
   bulkAddChoices: (index: number, bulkChoices: string) => void;
   importTemplate: (json: TemplateSchema) => void;

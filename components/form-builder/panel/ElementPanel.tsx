@@ -8,14 +8,15 @@ import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
 import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
-import { ShortAnswer, Paragraph, Options, RichText, RichTextLocked } from "../elements";
+import { ShortAnswer, Paragraph, Options, RichText, RichTextLocked, Email } from "../elements";
 import {
   ShortAnswerIcon,
+  CheckBoxEmptyIcon,
+  CheckIcon,
+  EmailIcon,
   ParagraphIcon,
   RadioIcon,
   RadioEmptyIcon,
-  CheckBoxEmptyIcon,
-  CheckIcon,
   SelectMenuIcon,
 } from "../icons";
 import { ModalButton } from "./Modal";
@@ -34,7 +35,8 @@ const elementOptions = [
   { id: "textArea", value: "Paragraph", icon: <ParagraphIcon />, prepend: <Separator /> },
   { id: "radio", value: "Multiple choice", icon: <RadioIcon /> },
   { id: "checkbox", value: "Checkboxes", icon: <CheckIcon /> },
-  { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon /> },
+  { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon />, prepend: <Separator /> },
+  { id: "email", value: "Email", icon: <EmailIcon /> },
 ];
 
 const SelectedElement = ({
@@ -64,6 +66,9 @@ const SelectedElement = ({
       break;
     case "dropdown":
       element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
+      break;
+    case "email":
+      element = <Email />;
       break;
     default:
       element = null;
@@ -195,6 +200,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const {
     form: { elements },
     updateField,
+    unsetField,
     resetChoices,
   } = useTemplateStore();
 
@@ -215,9 +221,18 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
-      selectedItem && setSelectedItem(selectedItem);
-      selectedItem && updateField(`form.elements[${item.index}].type`, selectedItem?.id);
-      selectedItem && selectedItem.id === "richText" && resetChoices(item.index);
+      if (selectedItem) {
+        setSelectedItem(selectedItem);
+
+        if (selectedItem.id === "email") {
+          updateField(`form.elements[${item.index}].type`, "textField");
+          updateField(`form.elements[${item.index}].properties.validation.type`, "email");
+        } else {
+          updateField(`form.elements[${item.index}].type`, selectedItem?.id);
+          unsetField(`form.elements[${item.index}].properties.validation.type`);
+        }
+        selectedItem.id === "richText" && resetChoices(item.index);
+      }
     },
     [setSelectedItem]
   );

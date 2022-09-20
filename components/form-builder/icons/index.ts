@@ -4,6 +4,7 @@ export { ChevronDown } from "./ChevronDown";
 export { ChevronUp } from "./ChevronUp";
 export { Close } from "./Close";
 export { Duplicate } from "./Duplicate";
+export { EmailIcon } from "./EmailIcon";
 export { MenuOpenIcon } from "./MenuOpenIcon";
 export { ParagraphIcon } from "./ParagraphIcon";
 export { RadioEmptyIcon } from "./RadioEmptyIcon";

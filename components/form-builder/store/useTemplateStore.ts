@@ -10,6 +10,7 @@ import {
 } from "../util";
 import { ElementStore, ElementType } from "../types";
 import update from "lodash.set";
+import unset from "lodash.unset";
 
 const defaultField: ElementType = {
   id: 0,
@@ -58,7 +59,14 @@ const useTemplateStore = create<ElementStore>()(
       email: "test@example.com",
     },
     publishingStatus: true,
-    updateField: (path, value) => set((state) => update(state, path, value)),
+    updateField: (path, value) =>
+      set((state) => {
+        update(state, path, value);
+      }),
+    unsetField: (path) =>
+      set((state) => {
+        unset(state, path);
+      }),
     moveUp: (index) =>
       set((state) => {
         state.form.elements = moveUp(state.form.elements, index);
