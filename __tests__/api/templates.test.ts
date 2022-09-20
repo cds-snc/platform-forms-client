@@ -39,12 +39,12 @@ describe("Test JSON validation scenarios", () => {
   });
   it("Should successfully handle a POST request to create a template", async () => {
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
-      id: "8",
+      id: "test0form00000id000asdf11",
       jsonConfig: validFormTemplate,
     });
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
-      id: "8",
+      id: "test0form00000id000asdf11",
       jsonConfig: validFormTemplate,
     });
 
@@ -66,7 +66,7 @@ describe("Test JSON validation scenarios", () => {
       "1",
       "Create",
       "UploadForm",
-      "Form id: 8 has been uploaded"
+      "Form id: test0form00000id000asdf11 has been uploaded"
     );
   });
 
@@ -89,7 +89,7 @@ describe("Test JSON validation scenarios", () => {
 
   it("Should successfully handle PUT request", async () => {
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
-      id: "8",
+      id: "test0form00000id000asdf11",
       jsonConfig: validFormTemplate,
     });
 
@@ -100,7 +100,7 @@ describe("Test JSON validation scenarios", () => {
         Origin: "http://localhost:3000",
       },
       body: {
-        formID: "8",
+        formID: "test0form00000id000asdf11",
         formConfig: validFormTemplate,
       },
     });
@@ -112,13 +112,13 @@ describe("Test JSON validation scenarios", () => {
       "1",
       "Update",
       "UpdateForm",
-      "Form id: 8 has been updated"
+      "Form id: test0form00000id000asdf11 has been updated"
     );
   });
 
   it("Should successfully handle DELETE request", async () => {
     (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
-      id: "8",
+      id: "test0form00000id000asdf11",
       jsonConfig: validFormTemplate,
     });
 
@@ -129,7 +129,7 @@ describe("Test JSON validation scenarios", () => {
         Origin: "http://localhost:3000",
       },
       body: {
-        formID: "8",
+        formID: "test0form00000id000asdf11",
       },
     });
 
@@ -140,7 +140,7 @@ describe("Test JSON validation scenarios", () => {
       "1",
       "Delete",
       "DeleteForm",
-      "Form id: 8 has been deleted"
+      "Form id: test0form00000id000asdf11 has been deleted"
     );
   });
 });

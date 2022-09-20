@@ -47,9 +47,13 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("creates a temporary token and updates the database", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET as Secret, {
-      expiresIn: "1y",
-    });
+    const token = jwt.sign(
+      { formID: "1test0form00000id000asdf11" },
+      process.env.TOKEN_SECRET as Secret,
+      {
+        expiresIn: "1y",
+      }
+    );
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -98,9 +102,13 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error with invalid form access token", async () => {
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET_WRONG as Secret, {
-      expiresIn: "1y",
-    });
+    const token = jwt.sign(
+      { formID: "test0form00000id000asdf11" },
+      process.env.TOKEN_SECRET_WRONG as Secret,
+      {
+        expiresIn: "1y",
+      }
+    );
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -123,9 +131,13 @@ describe("TemporaryBearerToken tests", () => {
   it("throws error when GC Notify service is unavailable", async () => {
     IsGCNotifyServiceAvailable = false;
 
-    const token = jwt.sign({ formID: "1" }, process.env.TOKEN_SECRET as Secret, {
-      expiresIn: "1y",
-    });
+    const token = jwt.sign(
+      { formID: "test0form00000id000asdf11" },
+      process.env.TOKEN_SECRET as Secret,
+      {
+        expiresIn: "1y",
+      }
+    );
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -170,7 +182,10 @@ describe("TemporaryBearerToken tests", () => {
   });
 
   it("throws error when using expired form access token", async () => {
-    const token = jwt.sign({ formID: "1", exp: 1636501665 }, process.env.TOKEN_SECRET as Secret);
+    const token = jwt.sign(
+      { formID: "test0form00000id000asdf11", exp: 1636501665 },
+      process.env.TOKEN_SECRET as Secret
+    );
 
     const { req, res } = createMocks({
       method: "POST",

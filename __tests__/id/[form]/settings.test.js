@@ -40,7 +40,7 @@ jest.mock("next-i18next", () => ({
 describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
-    formID: 15,
+    formID: "test0form00000id000asdf11",
     formConfig: validFormTemplate,
   };
   test("renders without errors", () => {
@@ -53,7 +53,7 @@ describe("Form Settings Page", () => {
       "Public Service Award of Excellence 2020 - Nomination form"
     );
     expect(screen.queryByText("Form ID:")).toBeInTheDocument();
-    expect(screen.getByTestId("formID")).toHaveTextContent("15");
+    expect(screen.getByTestId("formID")).toHaveTextContent("test0form00000id000asdf11");
   });
 
   test("Delete button redirects on success", async () => {
