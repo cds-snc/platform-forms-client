@@ -20,7 +20,6 @@ const TextInput = styled.textarea`
   padding: 20px;
   width: 460px;
   height: 200px;
-  font-size: 16px;
   border: 1px solid rgba(0, 0, 0, 0.12);
 `;
 

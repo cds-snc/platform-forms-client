@@ -20,7 +20,6 @@ const IconWrapper = styled.div`
 `;
 
 const TextInput = styled(Input)`
-  font-size: 16px;
   margin-left: 20px;
   padding: 16px 10px;
   width: 340px;

@@ -18,7 +18,6 @@ const DropDownHeader = styled.button`
   border: 1.5px solid #000000;
   width: 100%;
   line-height: 24px;
-  font-size: 16px;
 
   &:focus,
   &[aria-expanded="true"] {
@@ -49,7 +48,6 @@ const DropDownListItem = styled.li`
   padding-right: 26px;
   padding-bottom: 8px;
   padding-top: 8px;
-  font-size: 16px;
 `;
 
 const DropDownListIcon = styled.div`

@@ -111,6 +111,7 @@ const TitleInput = styled(Input)`
   border-bottom: 1.5px solid #000000;
   border-radius: 4px 4px 0 0;
   font-weight: 700;
+  font-size: 20px;
 
   &:focus {
     border-color: #000000;
@@ -136,7 +137,6 @@ const DivDisabled = styled.div`
   margin-top: 20px;
   padding: 5px 10px;
   width: 460px;
-  font-size: 16px;
   cursor: not-allowed;
   border-radius: 4px;
   background: #f2f2f2;
@@ -163,11 +163,10 @@ const LabelHidden = styled(FormLabel)`
 `;
 
 const FormWrapper = styled.div`
-  padding: 1.25em;
+  padding: 20px 25px;
 `;
 
 const RequiredWrapper = styled.div`
-  font-size: 16px;
   margin-top: 20px;
 
   span {
@@ -187,6 +186,7 @@ const QuestionNumber = styled.span`
   margin-left: -25px;
   padding: 7px 4px;
   border-radius: 0 4px 4px 0;
+  font-size: 20px;
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
@@ -398,6 +398,7 @@ const ElementWrapperDiv = styled.div`
   max-width: 800px;
   height: auto;
   margin-top: -1px;
+  font-size: 16px;
 `;
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
