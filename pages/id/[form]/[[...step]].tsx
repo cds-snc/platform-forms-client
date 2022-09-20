@@ -8,7 +8,7 @@ import Head from "next/head";
 import { Form, TextPage } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
-import { PublicFormRecord } from "@lib/types";
+import { PublicFormRecord, FormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
@@ -55,7 +55,7 @@ function redirect(locale: string | undefined) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const unpublishedForms = await checkOne("unpublishedForms");
-  let form = null;
+  let form: FormRecord | null = null;
   const formID = context.params?.form;
   const isEmbeddable = context.query?.embed == "true" || null;
 
@@ -75,18 +75,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     form = await getTemplateByID(formID);
   }
 
+  // Ensure only public properties are passed to the client
+  const publicForm: PublicFormRecord | null = form && onlyIncludePublicProperties(form);
+
   // Redirect if form doesn't exist and
   // Only retrieve publish ready forms if isProduction
   // Short circuit only if Cypress testing
   if (
     process.env.APP_ENV !== "test" &&
-    (!form || (!form?.formConfig?.publishingStatus && !unpublishedForms))
+    (!publicForm || (!publicForm?.formConfig?.publishingStatus && !unpublishedForms))
   ) {
     return redirect(context.locale);
   }
   return {
     props: {
-      formRecord: onlyIncludePublicProperties(form),
+      formRecord: publicForm,
       isEmbeddable: isEmbeddable,
       ...(context.locale &&
         (await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"]))),
