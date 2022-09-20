@@ -40,7 +40,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -67,7 +67,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -175,7 +175,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          form: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -213,13 +213,13 @@ describe("/api/retrieval", () => {
         .resolves({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "1",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "2",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -233,13 +233,13 @@ describe("/api/retrieval", () => {
         .resolves({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "3",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "4",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -256,28 +256,28 @@ describe("/api/retrieval", () => {
           responses: [
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "1",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "2",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "3",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "4",
               formSubmission: "true",
               securityAttribute: "Protected B",
