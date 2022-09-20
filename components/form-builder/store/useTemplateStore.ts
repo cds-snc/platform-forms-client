@@ -89,7 +89,7 @@ const useTemplateStore = create<ElementStore>()(
         const element = JSON.parse(JSON.stringify(state.form.elements[index]));
         element.id = incrementElementId(state.form.elements);
         element.properties.titleEn = `${element.properties.titleEn} copy`;
-        state.form.elements.push(element);
+        state.form.elements.splice(index + 1, 0, element);
       });
     },
     bulkAddChoices: (index, bulkChoices) => {

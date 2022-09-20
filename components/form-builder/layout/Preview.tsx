@@ -21,7 +21,6 @@ export const Preview = () => {
 
   return (
     <>
-      <h2 className="gc-h2">Preview</h2>
       <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
         {currentForm}
       </Form>
