@@ -442,13 +442,13 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
           </ModalButton>
         )}
       >
-        {!isRichText && modals[item.index] ? (
+        {!isRichText && modals[item.index] && (
           <ModalForm
             item={item}
             properties={modals[item.index]}
             updateModalProperties={updateModalProperties}
           />
-        ) : null}
+        )}
       </PanelActions>
     </ElementWrapperDiv>
   );
