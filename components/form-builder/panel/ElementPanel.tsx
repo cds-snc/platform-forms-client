@@ -489,7 +489,7 @@ export const ElementPanel = () => {
   const policyTextPlaceholder = [
     {
       type: "paragraph",
-      children: [{ text: "All email addresses will be not be shared." }],
+      children: [{ text: "Email addresses will not be shared." }],
     },
   ];
 
