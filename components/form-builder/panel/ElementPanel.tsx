@@ -504,20 +504,24 @@ export const ElementPanel = () => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
-      <RichTextLocked
-        addElement={false}
-        initialValue={confirmTextPlaceholder}
-        schemaProperty="endPage"
-      >
-        <h3>Confirmation page and message</h3>
-      </RichTextLocked>
-      <RichTextLocked
-        addElement={false}
-        initialValue={policyTextPlaceholder}
-        schemaProperty="privacyPolicy"
-      >
-        <h3>Privacy statement</h3>
-      </RichTextLocked>
+      {elements?.length >= 1 && (
+        <>
+          <RichTextLocked
+            addElement={false}
+            initialValue={confirmTextPlaceholder}
+            schemaProperty="endPage"
+          >
+            <h3>Confirmation page and message</h3>
+          </RichTextLocked>
+          <RichTextLocked
+            addElement={false}
+            initialValue={policyTextPlaceholder}
+            schemaProperty="privacyPolicy"
+          >
+            <h3>Privacy statement</h3>
+          </RichTextLocked>
+        </>
+      )}
     </ElementPanelDiv>
   );
 };
