@@ -40,7 +40,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -67,7 +67,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -175,7 +175,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          form: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -213,13 +213,13 @@ describe("/api/retrieval", () => {
         .resolves({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "1",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "2",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -233,13 +233,13 @@ describe("/api/retrieval", () => {
         .resolves({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "3",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "4",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -256,28 +256,28 @@ describe("/api/retrieval", () => {
           responses: [
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "1",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "2",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "3",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "4",
               formSubmission: "true",
               securityAttribute: "Protected B",
@@ -291,7 +291,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          form: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -327,13 +327,13 @@ describe("/api/retrieval", () => {
         .resolvesOnce({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "1",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "2",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -344,25 +344,25 @@ describe("/api/retrieval", () => {
         .resolvesOnce({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "3",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "4",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "5",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "6",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -373,19 +373,19 @@ describe("/api/retrieval", () => {
         .resolvesOnce({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "7",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "8",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "9",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -396,7 +396,7 @@ describe("/api/retrieval", () => {
         .resolvesOnce({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "10",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -407,19 +407,19 @@ describe("/api/retrieval", () => {
         .resolves({
           Items: [
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "11",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "12",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
             },
             {
-              FormID: "1",
+              FormID: "test0form00000id000asdf11",
               SubmissionID: "13",
               FormSubmission: "true",
               SecurityAttribute: "Protected B",
@@ -436,70 +436,70 @@ describe("/api/retrieval", () => {
           responses: [
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "1",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "2",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "3",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "4",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "5",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "6",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "7",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "8",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "9",
               formSubmission: "true",
               securityAttribute: "Protected B",
             },
             {
               fileAttachments: [],
-              formID: "1",
+              formID: "test0form00000id000asdf11",
               submissionID: "10",
               formSubmission: "true",
               securityAttribute: "Protected B",
@@ -512,7 +512,7 @@ describe("/api/retrieval", () => {
     it("Should return 500 status code if it fails to fetch/send command to dynamoDb", async () => {
       const token = jwt.sign(
         {
-          formID: 2,
+          formID: "test0form00000id000asdf12",
           email: "test@cds-snc.ca",
         },
         process.env.TOKEN_SECRET as Secret,
@@ -529,13 +529,13 @@ describe("/api/retrieval", () => {
           authorization: `Bearer ${token}`,
         },
         query: {
-          form: "23",
+          form: "test0form00000id000asdf13",
         },
       });
       // Mock good temporary token
       prismaMock.formUser.findUnique.mockResolvedValue({
         id: "asdf",
-        templateId: "22",
+        templateId: "test0form00000id000asdf12",
         email: "b@d.a",
         active: true,
         temporaryToken: token,
@@ -552,7 +552,7 @@ describe("/api/retrieval", () => {
     it("Should return 200 status code and an empty list of form's responses", async () => {
       const token = jwt.sign(
         {
-          formID: 3,
+          formID: "test0form00000id000asdf13",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -568,13 +568,13 @@ describe("/api/retrieval", () => {
           authorization: `Bearer ${token}`,
         },
         query: {
-          form: "12",
+          form: "test0form00000id000asdf12",
         },
       });
       // Mock good temporary token
       prismaMock.formUser.findUnique.mockResolvedValue({
         id: "asdf",
-        templateId: "22",
+        templateId: "test0form00000id000asdf11",
         email: "b@d.a",
         active: true,
         temporaryToken: token,
@@ -598,7 +598,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -645,7 +645,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -688,7 +688,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -732,7 +732,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {
@@ -776,7 +776,7 @@ describe("/api/retrieval", () => {
       const token = jwt.sign(
         {
           email: "test@cds-snc.ca",
-          formID: 1,
+          formID: "test0form00000id000asdf11",
         },
         process.env.TOKEN_SECRET as Secret,
         {

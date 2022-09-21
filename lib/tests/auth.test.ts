@@ -79,7 +79,7 @@ describe("Test Auth lib", () => {
     });
     it("Invalid Token - bad secret", async () => {
       const token = jwt.sign(
-        { email: "test@test.ca", formID: "1" },
+        { email: "test@test.ca", formID: "test0form00000id000asdf11" },
         process.env.TOKEN_SECRET_WRONG as Secret,
         {
           expiresIn: "1d",
@@ -92,7 +92,7 @@ describe("Test Auth lib", () => {
     it("Invalid Token - expired", async () => {
       // Token expires in 1 millisecond
       const token = jwt.sign(
-        { email: "test@test.ca", formID: "1" },
+        { email: "test@test.ca", formID: "1test0form00000id000asdf11" },
         process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1",
@@ -106,7 +106,7 @@ describe("Test Auth lib", () => {
     });
     it("Wrong Token - user Refreshed token", async () => {
       const token = jwt.sign(
-        { email: "test@test.ca", formID: "1" },
+        { email: "test@test.ca", formID: "test0form00000id000asdf11" },
         process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1d",
@@ -126,7 +126,7 @@ describe("Test Auth lib", () => {
     });
     it("Returns a Form User", async () => {
       const token = jwt.sign(
-        { email: "test@test.ca", formID: "1" },
+        { email: "test@test.ca", formID: "test0form00000id000asdf11" },
         process.env.TOKEN_SECRET as Secret,
         {
           expiresIn: "1d",

@@ -10,7 +10,7 @@ export default {
 export const defaultJSONUpload = (): React.ReactElement => <JSONUpload></JSONUpload>;
 
 const testForm = {
-  formID: "1",
+  formID: "test0form00000id000asdf11",
   formConfig: {
     publishingStatus: true,
     securityAttribute: "Unclassified",

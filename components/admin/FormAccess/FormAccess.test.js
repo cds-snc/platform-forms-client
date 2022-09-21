@@ -8,7 +8,7 @@ import FormAccess from "./FormAccess";
 jest.mock("axios");
 
 describe("Form Access Component", () => {
-  const formConfig = { formID: 1 };
+  const formConfig = { formID: "test0form00000id000asdf11" };
 
   afterEach(cleanup);
 
@@ -64,7 +64,7 @@ describe("Form Access Component", () => {
     await user.click(screen.getByTestId("add-email"));
     expect(mockedAxios.mock.calls.length).toBe(2);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/id/1/owners", method: "POST" })
+      expect.objectContaining({ url: "/api/id/test0form00000id000asdf11/owners", method: "POST" })
     );
 
     expect(await screen.findByText(testEmailAddress)).toBeInTheDocument;
