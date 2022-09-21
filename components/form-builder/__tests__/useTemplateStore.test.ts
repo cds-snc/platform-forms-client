@@ -203,6 +203,43 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[2].id).toBe(3);
   });
 
+  it("Adds a validation type", () => {
+    const result = createStore();
+    expect(result.current.form.titleEn).toBe("My Form");
+
+    act(() => {
+      result.current.add(0);
+      result.current.updateField(`form.elements[0].type`, "textField");
+      result.current.updateField(`form.elements[0].properties.validation.type`, "email");
+    });
+
+    expect(result.current.form.elements[0].type).toBe("textField");
+    expect(result.current.form.elements[0].properties.validation.required).toBe(false);
+    expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+  });
+
+  it("Removes a validation type", () => {
+    const result = createStore();
+    expect(result.current.form.titleEn).toBe("My Form");
+
+    act(() => {
+      result.current.add(0);
+      result.current.updateField(`form.elements[0].type`, "textField");
+      result.current.updateField(`form.elements[0].properties.validation.type`, "email");
+    });
+
+    expect(result.current.form.elements[0].type).toBe("textField");
+    expect(result.current.form.elements[0].properties.validation.required).toBe(false);
+    expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+
+    act(() => {
+      result.current.unsetField(`form.elements[0].properties.validation.type`);
+    });
+
+    expect(result.current.form.elements[0].properties.validation.required).toBe(false);
+    expect(result.current.form.elements[0].properties.validation.type).toBeUndefined();
+  });
+
   it("Initializes the default form", () => {
     const result = createStore();
 
