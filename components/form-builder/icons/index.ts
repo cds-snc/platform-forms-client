@@ -1,3 +1,4 @@
+export { CalendarIcon } from "./CalendarIcon";
 export { CheckBoxEmptyIcon } from "./CheckBoxEmptyIcon";
 export { CheckIcon } from "./CheckIcon";
 export { ChevronDown } from "./ChevronDown";
@@ -7,6 +8,7 @@ export { Duplicate } from "./Duplicate";
 export { EmailIcon } from "./EmailIcon";
 export { MenuOpenIcon } from "./MenuOpenIcon";
 export { ParagraphIcon } from "./ParagraphIcon";
+export { PhoneIcon } from "./PhoneIcon";
 export { RadioEmptyIcon } from "./RadioEmptyIcon";
 export { RadioIcon } from "./RadioIcon";
 export { SelectMenuIcon } from "./SelectMenuIcon";

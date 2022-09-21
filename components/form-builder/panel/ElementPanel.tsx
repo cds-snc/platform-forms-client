@@ -8,16 +8,18 @@ import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
 import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
-import { ShortAnswer, Paragraph, Options, RichText, RichTextLocked, Email } from "../elements";
+import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
 import {
-  ShortAnswerIcon,
+  CalendarIcon,
   CheckBoxEmptyIcon,
   CheckIcon,
   EmailIcon,
   ParagraphIcon,
+  PhoneIcon,
   RadioIcon,
   RadioEmptyIcon,
   SelectMenuIcon,
+  ShortAnswerIcon,
 } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
@@ -37,6 +39,8 @@ const elementOptions = [
   { id: "checkbox", value: "Checkboxes", icon: <CheckIcon /> },
   { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon />, prepend: <Separator /> },
   { id: "email", value: "Email", icon: <EmailIcon /> },
+  { id: "phone", value: "Phone number", icon: <PhoneIcon /> },
+  { id: "date", value: "Date", icon: <CalendarIcon /> },
 ];
 
 const SelectedElement = ({
@@ -46,17 +50,19 @@ const SelectedElement = ({
   selected: ElementOption;
   item: ElementTypeWithIndex;
 }) => {
+  const { t } = useTranslation("form-builder");
+
   let element = null;
 
   switch (selected.id) {
     case "textField":
-      element = <ShortAnswer />;
+      element = <ShortAnswer>{t("Short answer text")}</ShortAnswer>;
       break;
     case "richText":
       element = <RichText parentIndex={item.index} />;
       break;
     case "textArea":
-      element = <Paragraph />;
+      element = <ShortAnswer>{t("Long answer text")}</ShortAnswer>;
       break;
     case "radio":
       element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
@@ -68,7 +74,13 @@ const SelectedElement = ({
       element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
       break;
     case "email":
-      element = <Email />;
+      element = <ShortAnswer>{t("example@canada.gc.ca")}</ShortAnswer>;
+      break;
+    case "phone":
+      element = <ShortAnswer>555-555-0000</ShortAnswer>;
+      break;
+    case "date":
+      element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
       break;
     default:
       element = null;
@@ -219,19 +231,29 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
+  const _updateState = (id: string, index: number) => {
+    switch (id) {
+      case "email":
+      case "phone":
+      case "date":
+        updateField(`form.elements[${index}].type`, "textField");
+        updateField(`form.elements[${index}].properties.validation.type`, id);
+        break;
+      case "richText":
+        resetChoices(index);
+      // no break here (we want default to happen)
+      default: // eslint-disable-line no-fallthrough
+        updateField(`form.elements[${index}].type`, id);
+        unsetField(`form.elements[${index}].properties.validation.type`);
+        break;
+    }
+  };
+
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
       if (selectedItem) {
         setSelectedItem(selectedItem);
-
-        if (selectedItem.id === "email") {
-          updateField(`form.elements[${item.index}].type`, "textField");
-          updateField(`form.elements[${item.index}].properties.validation.type`, "email");
-        } else {
-          updateField(`form.elements[${item.index}].type`, selectedItem?.id);
-          unsetField(`form.elements[${item.index}].properties.validation.type`);
-        }
-        selectedItem.id === "richText" && resetChoices(item.index);
+        _updateState(selectedItem.id, item.index);
       }
     },
     [setSelectedItem]
