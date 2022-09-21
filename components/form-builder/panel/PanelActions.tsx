@@ -91,7 +91,7 @@ export const PanelActions = ({
 }: {
   item: ElementTypeWithIndex;
   renderSaveButton: () => React.ReactElement | string | undefined;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
   const {
@@ -173,6 +173,6 @@ export const PanelActions = ({
 
 PanelActions.propTypes = {
   item: PropTypes.object,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.any]),
   renderSaveButton: PropTypes.func,
 };
