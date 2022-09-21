@@ -90,12 +90,24 @@ export const newlineToOptions = (
 
 export const getSchemaFromState = (state: TemplateSchema) => {
   const {
-    form: { endPage, elements, titleEn, titleFr, version, emailSubjectEn, emailSubjectFr },
+    form: {
+      endPage,
+      introduction,
+      privacyPolicy,
+      elements,
+      titleEn,
+      titleFr,
+      version,
+      emailSubjectEn,
+      emailSubjectFr,
+    },
   } = state;
 
   const form: FormSchema = {
     layout: [],
     endPage,
+    introduction,
+    privacyPolicy,
     titleEn,
     titleFr,
     version,
