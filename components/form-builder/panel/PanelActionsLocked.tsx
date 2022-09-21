@@ -55,7 +55,9 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
         <AddButtonWrapper>
           <FancyButton
             onClick={() => {
-              add(0);
+              // ensure element gets added to start of elements array
+              // add function is add(index + 1)
+              add(-1);
             }}
           >
             {t("Add element")}
