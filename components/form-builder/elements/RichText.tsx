@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../editor/RichTextEditor";
-import { initialValue } from "../editor/util";
+import { RichTextEditor } from "../plate-editor/RichTextEditor";
+import { initialValue } from "../plate-editor/util";
 import { serialize } from "../editor/Markdown";
 
 const OptionWrapper = styled.div`
@@ -14,6 +14,11 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
   const { updateField } = useTemplateStore();
 
+  // need to convert markdown back to json
+  // const newValue = elements[parentIndex].properties.descriptionEn
+  //   ? elements[parentIndex].properties.descriptionEn
+  //   : initialValue;
+
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -22,7 +27,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     }
   }, []);
 
-  const onChange = (value: string) => {
+  const saveValue = (value: string) => {
     const parsed = JSON.parse(value);
     const serialized = serialize({ children: parsed });
 
@@ -32,7 +37,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
 
   return (
     <OptionWrapper>
-      <RichTextEditor value={value} onChange={onChange} />
+      <RichTextEditor value={value} onChange={saveValue} />
     </OptionWrapper>
   );
 };
