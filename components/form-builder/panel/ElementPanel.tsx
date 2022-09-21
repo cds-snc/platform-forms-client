@@ -93,11 +93,12 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const {
     form: { elements },
   } = useTemplateStore();
-
-  const { type } = elements[item.index];
+  let { type } = elements[item.index];
 
   if (!type) {
     return elementOptions[2];
+  } else if (type === "textField") {
+    type = elements[item.index].properties.validation.type || type;
   }
 
   const selected = elementOptions.filter((item) => item.id === type);

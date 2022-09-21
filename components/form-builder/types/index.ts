@@ -16,6 +16,7 @@ export interface ElementProperties {
   titleFr: string;
   validation: {
     required: boolean;
+    type?: string;
   };
   descriptionEn: string;
   descriptionFr: string;
