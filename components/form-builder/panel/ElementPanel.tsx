@@ -8,15 +8,18 @@ import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
 import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
 import { UseSelectStateChange } from "downshift";
-import { ShortAnswer, Paragraph, Options, RichText, RichTextLocked } from "../elements";
+import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
 import {
-  ShortAnswerIcon,
-  ParagraphIcon,
-  RadioIcon,
-  RadioEmptyIcon,
+  CalendarIcon,
   CheckBoxEmptyIcon,
   CheckIcon,
+  EmailIcon,
+  ParagraphIcon,
+  PhoneIcon,
+  RadioIcon,
+  RadioEmptyIcon,
   SelectMenuIcon,
+  ShortAnswerIcon,
 } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
@@ -34,7 +37,10 @@ const elementOptions = [
   { id: "textArea", value: "Paragraph", icon: <ParagraphIcon />, prepend: <Separator /> },
   { id: "radio", value: "Multiple choice", icon: <RadioIcon /> },
   { id: "checkbox", value: "Checkboxes", icon: <CheckIcon /> },
-  { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon /> },
+  { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon />, prepend: <Separator /> },
+  { id: "email", value: "Email", icon: <EmailIcon /> },
+  { id: "phone", value: "Phone number", icon: <PhoneIcon /> },
+  { id: "date", value: "Date", icon: <CalendarIcon /> },
 ];
 
 const SelectedElement = ({
@@ -44,17 +50,19 @@ const SelectedElement = ({
   selected: ElementOption;
   item: ElementTypeWithIndex;
 }) => {
+  const { t } = useTranslation("form-builder");
+
   let element = null;
 
   switch (selected.id) {
     case "textField":
-      element = <ShortAnswer />;
+      element = <ShortAnswer>{t("Short answer text")}</ShortAnswer>;
       break;
     case "richText":
       element = <RichText parentIndex={item.index} />;
       break;
     case "textArea":
-      element = <Paragraph />;
+      element = <ShortAnswer>{t("Long answer text")}</ShortAnswer>;
       break;
     case "radio":
       element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
@@ -64,6 +72,15 @@ const SelectedElement = ({
       break;
     case "dropdown":
       element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
+      break;
+    case "email":
+      element = <ShortAnswer>{t("example@canada.gc.ca")}</ShortAnswer>;
+      break;
+    case "phone":
+      element = <ShortAnswer>555-555-0000</ShortAnswer>;
+      break;
+    case "date":
+      element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
       break;
     default:
       element = null;
@@ -76,11 +93,18 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const {
     form: { elements },
   } = useTemplateStore();
-
-  const { type } = elements[item.index];
+  let { type } = elements[item.index];
 
   if (!type) {
     return elementOptions[2];
+  } else if (type === "textField") {
+    /**
+     * Email, phone, and date fields are specialized text field types.
+     * That is to say, their "type" is "textField" but they have specalized validation "type"s.
+     * So if we have a "textField", we want to first check properties.validation.type to see if
+     * it is a true Short Answer, or one of the other types.
+     */
+    type = elements[item.index].properties.validation.type || type;
   }
 
   const selected = elementOptions.filter((item) => item.id === type);
@@ -111,6 +135,7 @@ const TitleInput = styled(Input)`
   border-bottom: 1.5px solid #000000;
   border-radius: 4px 4px 0 0;
   font-weight: 700;
+  font-size: 20px;
 
   &:focus {
     border-color: #000000;
@@ -136,7 +161,6 @@ const DivDisabled = styled.div`
   margin-top: 20px;
   padding: 5px 10px;
   width: 460px;
-  font-size: 16px;
   cursor: not-allowed;
   border-radius: 4px;
   background: #f2f2f2;
@@ -163,11 +187,10 @@ const LabelHidden = styled(FormLabel)`
 `;
 
 const FormWrapper = styled.div`
-  padding: 1.25em;
+  padding: 20px 25px;
 `;
 
 const RequiredWrapper = styled.div`
-  font-size: 16px;
   margin-top: 20px;
 
   span {
@@ -187,6 +210,7 @@ const QuestionNumber = styled.span`
   margin-left: -25px;
   padding: 7px 4px;
   border-radius: 0 4px 4px 0;
+  font-size: 20px;
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
@@ -195,6 +219,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const {
     form: { elements },
     updateField,
+    unsetField,
     resetChoices,
   } = useTemplateStore();
 
@@ -213,11 +238,30 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
+  const _updateState = (id: string, index: number) => {
+    switch (id) {
+      case "email":
+      case "phone":
+      case "date":
+        updateField(`form.elements[${index}].type`, "textField");
+        updateField(`form.elements[${index}].properties.validation.type`, id);
+        break;
+      case "richText":
+        resetChoices(index);
+      // no break here (we want default to happen)
+      default: // eslint-disable-line no-fallthrough
+        updateField(`form.elements[${index}].type`, id);
+        unsetField(`form.elements[${index}].properties.validation.type`);
+        break;
+    }
+  };
+
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
-      selectedItem && setSelectedItem(selectedItem);
-      selectedItem && updateField(`form.elements[${item.index}].type`, selectedItem?.id);
-      selectedItem && selectedItem.id === "richText" && resetChoices(item.index);
+      if (selectedItem) {
+        setSelectedItem(selectedItem);
+        _updateState(selectedItem.id, item.index);
+      }
     },
     [setSelectedItem]
   );
@@ -398,6 +442,7 @@ const ElementWrapperDiv = styled.div`
   max-width: 800px;
   height: auto;
   margin-top: -1px;
+  font-size: 16px;
 `;
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
