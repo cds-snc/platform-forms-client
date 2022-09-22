@@ -1,4 +1,4 @@
-import { TEditableProps } from "@udecode/plate-core";
+import { TEditableProps } from "@udecode/plate";
 import { MyValue } from "./types";
 
 export const editableProps: TEditableProps<MyValue> = {

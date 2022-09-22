@@ -1,21 +1,59 @@
 import React from "react";
-import { createPlugins, Plate } from "@udecode/plate-core";
+import { Plate, PlateProvider } from "@udecode/plate";
 import { editableProps } from "./editableProps";
-import { MyValue } from "./types";
-import PropTypes from "prop-types";
-import { createBoldPlugin, createItalicPlugin } from "@udecode/plate-basic-marks";
-import { createHeadingPlugin } from "@udecode/plate-heading";
-import { createParagraphPlugin } from "@udecode/plate-paragraph";
-import { createBlockquotePlugin } from "@udecode/plate-block-quote";
+import { createMyPlugins, MyValue } from "./types";
 import { plateUI } from "./plateUI";
+import PropTypes from "prop-types";
 
-const plugins = createPlugins<MyValue>(
+import {
+  createLinkPlugin,
+  createParagraphPlugin,
+  createListPlugin,
+  createBoldPlugin,
+  createItalicPlugin,
+  createSuperscriptPlugin,
+  createSubscriptPlugin,
+  createHeadingPlugin,
+  HeadingToolbar,
+} from "@udecode/plate";
+
+import styled from "styled-components";
+import {
+  BasicElementToolbarButtons,
+  BasicMarkToolbarButtons,
+  ListToolbarButtons,
+} from "./Toolbars";
+// import { initialText } from "./examples/initialText";
+
+const RichTextWrapper = styled.div`
+  [data-slate-editor] {
+    padding: 10px 5px;
+  }
+
+  .slate-ToolbarButton {
+    svg {
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  .slate-HeadingToolbar {
+    background: white;
+    border-bottom: 1px solid #ddd;
+    z-index: 1000;
+  }
+`;
+
+const plugins = createMyPlugins<MyValue>(
   [
+    createLinkPlugin(),
+    createParagraphPlugin(),
+    createListPlugin(),
     createBoldPlugin(),
     createItalicPlugin(),
+    createSubscriptPlugin(),
+    createSuperscriptPlugin(),
     createHeadingPlugin(),
-    createParagraphPlugin(),
-    createBlockquotePlugin(),
   ],
   {
     components: plateUI,
@@ -24,14 +62,22 @@ const plugins = createPlugins<MyValue>(
 
 export const RichTextEditor = ({ value, onChange }) => {
   return (
-    <Plate<MyValue>
-      editableProps={editableProps}
-      initialValue={value}
-      plugins={plugins}
-      onChange={(value) => {
-        onChange(JSON.stringify(value));
-      }}
-    />
+    <RichTextWrapper>
+      <PlateProvider<MyValue>
+        plugins={plugins}
+        initialValue={value}
+        onChange={(value) => {
+          onChange(value);
+        }}
+      >
+        <HeadingToolbar>
+          <BasicElementToolbarButtons />
+          <BasicMarkToolbarButtons />
+          <ListToolbarButtons />
+        </HeadingToolbar>
+        <Plate<MyValue> editableProps={editableProps} />
+      </PlateProvider>
+    </RichTextWrapper>
   );
 };
 

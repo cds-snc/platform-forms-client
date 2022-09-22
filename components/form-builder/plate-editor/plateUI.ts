@@ -1,8 +1,8 @@
-import { CodeBlockElement, createPlateUI, StyledElement } from "@udecode/plate-ui";
+import { CodeBlockElement, createPlateUI, StyledElement } from "@udecode/plate";
 
-import { withProps } from "@udecode/plate-common";
-import { ELEMENT_CODE_BLOCK } from "@udecode/plate-code-block";
-import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
+import { withProps } from "@udecode/plate";
+import { ELEMENT_CODE_BLOCK } from "@udecode/plate";
+import { ELEMENT_PARAGRAPH } from "@udecode/plate";
 
 export const plateUI = createPlateUI({
   [ELEMENT_CODE_BLOCK]: CodeBlockElement,
