@@ -20,7 +20,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const [submitting, setSubmitting] = useState(false);
   const [errorState, setErrorState] = useState({ message: "" });
   const { refreshData, isRefreshing } = useRefresh([form]);
-  const formID = form ? form.formID : null;
+  const formID = form?.formID;
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +38,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     }
 
     try {
-      const response = await uploadJson(formID, jsonConfig);
+      const response = await uploadJson(jsonConfig, formID);
       // If the server returned a record, this is a new record
       // Redirect to the appropriate page
 
@@ -71,7 +71,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     }
   };
 
-  const uploadJson = async (formID: string | null, jsonConfig: string) => {
+  const uploadJson = async (jsonConfig: string, formID?: string) => {
     return await axios({
       url: "/api/templates",
       method: formID ? "PUT" : "POST",
