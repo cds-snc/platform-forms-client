@@ -14,6 +14,7 @@ import {
   CheckBoxEmptyIcon,
   CheckIcon,
   EmailIcon,
+  NumericFieldIcon,
   ParagraphIcon,
   PhoneIcon,
   RadioIcon,
@@ -41,6 +42,7 @@ const elementOptions = [
   { id: "email", value: "Email", icon: <EmailIcon /> },
   { id: "phone", value: "Phone number", icon: <PhoneIcon /> },
   { id: "date", value: "Date", icon: <CalendarIcon /> },
+  { id: "number", value: "Numeric field", icon: <NumericFieldIcon /> },
 ];
 
 const SelectedElement = ({
@@ -81,6 +83,9 @@ const SelectedElement = ({
       break;
     case "date":
       element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
+      break;
+    case "number":
+      element = <ShortAnswer>01233456789</ShortAnswer>;
       break;
     default:
       element = null;
@@ -243,6 +248,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
       case "email":
       case "phone":
       case "date":
+      case "number":
         updateField(`form.elements[${index}].type`, "textField");
         updateField(`form.elements[${index}].properties.validation.type`, id);
         break;
@@ -419,9 +425,13 @@ const ModalForm = ({
           value={`required-${item.index}-value-modal`}
           checked={properties.validation.required}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // clone the existing properties so that we don't overwrite "validation"
+            const validation = Object.assign({}, properties.validation, {
+              required: e.target.checked,
+            });
             updateModalProperties(item.index, {
               ...properties,
-              ...{ validation: { required: e.target.checked } },
+              ...{ validation },
             });
           }}
           label={t("Required")}
