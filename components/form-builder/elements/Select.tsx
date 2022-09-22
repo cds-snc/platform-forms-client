@@ -56,14 +56,16 @@ const DropDownListIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 10px;
-  padding-top: 2px;
   text-align: left;
-  height: 24px;
   overflow: hidden;
-  width: 24px;
   display: inline-block;
   position: relative;
+  padding-top: 2px;
+
+  svg {
+    height: 20px;
+    width: 20px;
+  }
 `;
 
 const DropDownListLabel = styled.div`
