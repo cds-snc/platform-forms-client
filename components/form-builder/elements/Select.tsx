@@ -37,6 +37,8 @@ const DropDownList = styled.ul`
   margin-top: 10px;
   list-style: none;
   background-color: #fff;
+  position: absolute;
+  width: 250px;
 `;
 
 const DropDownListItem = styled.li`
@@ -86,7 +88,7 @@ export const DropDown = ({
   });
 
   return (
-    <DropDownContainer style={{ zIndex: isOpen ? 20000 : 1 }}>
+    <DropDownContainer style={{ position: "relative", zIndex: isOpen ? 20000 : 1 }}>
       <DropDownHeader {...getToggleButtonProps()}>
         {selectedItem && (
           <>
