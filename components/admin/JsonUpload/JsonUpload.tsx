@@ -71,6 +71,15 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     }
   };
 
+  /**
+   * Uploads the JSON config to the server,
+   * either as a new form or as an update to an existing form
+   * @param jsonConfig The JSON config to upload
+   * @param formID The formID to update, if any
+   * @returns The response from the server
+   * @throws Error if the server returns an error
+   * @throws Error if the JSON is invalid
+   */
   const uploadJson = async (jsonConfig: string, formID?: string) => {
     return await axios({
       url: "/api/templates",
