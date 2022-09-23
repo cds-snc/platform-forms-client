@@ -1,10 +1,13 @@
 import NextAuth, { Session, JWT, NextAuthOptions } from "next-auth";
-
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import {
+  CognitoIdentityProviderClient,
+  AdminInitiateAuthCommand,
+  AdminInitiateAuthCommandInput,
+} from "@aws-sdk/client-cognito-identity-provider";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
-import { validateTemporaryToken } from "@lib/auth";
 import { getFormUser, getOrCreateUser, userLastLogin } from "@lib/users";
 import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
@@ -17,6 +20,14 @@ if (
 )
   throw new Error("Missing Google Authentication Credentials");
 
+if (
+  (!process.env.COGNITO_APP_CLIENT_ID ||
+    !process.env.COGNITO_REGION ||
+    !process.env.COGNITO_USER_POOL_ID) &&
+  process.env.NODE_ENV !== "test"
+)
+  throw new Error("Missing Cognito Credentials");
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -24,21 +35,33 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     CredentialsProvider({
-      name: "TemporaryToken",
+      name: "CognitoLogin",
       credentials: {
-        temporaryToken: { label: "Temporary Token", type: "text" },
+        username: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // If the temporary token is missing don't process further
-        if (!credentials?.temporaryToken) return null;
-        const user = await validateTemporaryToken(credentials.temporaryToken);
+        if (!credentials?.username || !credentials?.password) return null;
+        const params: AdminInitiateAuthCommandInput = {
+          AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+          ClientId: process.env.COGNITO_APP_CLIENT_ID,
+          UserPoolId: process.env.COGNITO_USER_POOL_ID,
+          AuthParameters: {
+            USERNAME: credentials.username,
+            PASSWORD: credentials.password,
+          },
+        };
 
-        if (user) {
-          // Type limitations on the Class only allow the return of id and email.
-          return { id: user.id, email: user.email };
-        } else {
-          return null;
-        }
+        const cognitoClient = new CognitoIdentityProviderClient({
+          region: process.env.COGNITO_REGION,
+        });
+
+        const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
+
+        const response = await cognitoClient.send(adminInitiateAuthCommand);
+
+        return { id: response.AuthenticationResult?.IdToken as string };
       },
     }),
   ],
@@ -68,7 +91,7 @@ export const authOptions: NextAuthOptions = {
       // Since this is the initial creation of the JWT we add the properties
       switch (account?.provider) {
         case "google": {
-          const user = await getOrCreateUser(token as JWT);
+          const user = await getOrCreateUser(token);
           if (user === null)
             throw new Error(`Could not get or create user with email: ${token.email}`);
 
@@ -86,14 +109,20 @@ export const authOptions: NextAuthOptions = {
             if (!token.sub)
               throw new Error(`JWT token does not have an id for user with email ${token.email}`);
 
-            const user = await getFormUser(token.sub);
-            const lastLogin = await userLastLogin(token.sub);
+            const cognitoAccessTokenParts = token.sub.split(".");
+            const claimsBuff = new Buffer(cognitoAccessTokenParts[1], "base64");
+            const cognitoAccessTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
+            const user = await getOrCreateUser({
+              name: cognitoAccessTokenClaims["given_name"],
+              email: cognitoAccessTokenClaims["email"],
+            });
 
             token.userId = user?.id;
-            token.authorizedForm = user?.templateId;
-            token.lastLoginTime = lastLogin?.timestamp;
+            token.authorizedForm = null;
+            token.lastLoginTime = new Date();
             token.acceptableUse = false;
-            token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
+            token.role = UserRole.ADMINISTRATOR;
+            token.email = user?.email;
           }
           break;
       }
