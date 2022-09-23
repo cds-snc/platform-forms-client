@@ -10,8 +10,6 @@ import { LooksTwo } from "@styled-icons/material/LooksTwo";
 import { FormatBold } from "@styled-icons/material/FormatBold";
 import { FormatItalic } from "@styled-icons/material/FormatItalic";
 import { FormatStrikethrough } from "@styled-icons/material/FormatStrikethrough";
-import { Subscript } from "@styled-icons/material/Subscript";
-import { Superscript } from "@styled-icons/material/Superscript";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
 
@@ -27,14 +25,12 @@ import {
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
-  MARK_SUPERSCRIPT,
-  MARK_SUBSCRIPT,
   getPluginType,
   BlockToolbarButton,
   ListToolbarButton,
+  MarkToolbarButton,
 } from "@udecode/plate";
 import { useMyPlateEditorRef } from "./types";
-import { MarkToolbarButton } from "@udecode/plate-ui";
 
 export const BasicElementToolbarButtons = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -63,16 +59,6 @@ export const BasicMarkToolbarButtons = () => {
       <MarkToolbarButton
         type={getPluginType(editor, MARK_STRIKETHROUGH)}
         icon={<FormatStrikethrough />}
-      />
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_SUPERSCRIPT)}
-        clear={getPluginType(editor, MARK_SUBSCRIPT)}
-        icon={<Superscript />}
-      />
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_SUBSCRIPT)}
-        clear={getPluginType(editor, MARK_SUPERSCRIPT)}
-        icon={<Subscript />}
       />
     </>
   );

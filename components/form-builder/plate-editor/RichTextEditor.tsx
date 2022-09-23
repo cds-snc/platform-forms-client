@@ -1,5 +1,4 @@
 import React from "react";
-import { Plate, PlateProvider } from "@udecode/plate";
 import { editableProps } from "./editableProps";
 import { createMyPlugins, MyValue } from "./types";
 import { plateUI } from "./plateUI";
@@ -15,7 +14,14 @@ import {
   createSubscriptPlugin,
   createHeadingPlugin,
   HeadingToolbar,
+  createBlockquotePlugin,
+  createStrikethroughPlugin,
+  Plate,
+  PlateProvider,
+  createExitBreakPlugin,
 } from "@udecode/plate";
+
+import { exitBreakPlugin } from "./plugins/exitBreakPlugin";
 
 import styled from "styled-components";
 import {
@@ -23,7 +29,7 @@ import {
   BasicMarkToolbarButtons,
   ListToolbarButtons,
 } from "./Toolbars";
-// import { initialText } from "./examples/initialText";
+import { linkPlugin } from "./plugins/linkPlugin";
 
 const RichTextWrapper = styled.div`
   [data-slate-editor] {
@@ -46,7 +52,7 @@ const RichTextWrapper = styled.div`
 
 const plugins = createMyPlugins<MyValue>(
   [
-    createLinkPlugin(),
+    createLinkPlugin(linkPlugin), // no toolbar item
     createParagraphPlugin(),
     createListPlugin(),
     createBoldPlugin(),
@@ -54,6 +60,9 @@ const plugins = createMyPlugins<MyValue>(
     createSubscriptPlugin(),
     createSuperscriptPlugin(),
     createHeadingPlugin(),
+    createStrikethroughPlugin(),
+    createBlockquotePlugin(),
+    createExitBreakPlugin(exitBreakPlugin), // not working?
   ],
   {
     components: plateUI,

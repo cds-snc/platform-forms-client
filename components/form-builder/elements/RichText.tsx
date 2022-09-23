@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { serialize } from "remark-slate";
 import { initialText } from "../plate-editor/examples/initialText";
+import { deserializeMd } from "@udecode/plate";
+import { useMyPlateEditorRef } from "../plate-editor/types";
+import { serializeMd } from "../plate-editor/helpers/markdown";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -13,15 +15,12 @@ const OptionWrapper = styled.div`
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
   const { updateField, form } = useTemplateStore();
-
-  // need to convert markdown back to json
-  // const newValue = elements[parentIndex].properties.descriptionEn
-  //   ? elements[parentIndex].properties.descriptionEn
-  //   : initialValue;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const editor = useMyPlateEditorRef()!;
 
   const [value, setValue] = useState(
     form.elements[parentIndex].properties.descriptionEn
-      ? form.elements[parentIndex].properties.descriptionEn
+      ? deserializeMd(editor, form.elements[parentIndex].properties.descriptionEn)
       : initialText
   );
 
@@ -31,27 +30,17 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     }
   }, []);
 
+  /**
+   * Serialize the contents of the Editor to Markdown and save
+   * to the datastore.
+   *
+   * @param value
+   */
   const handleChange = (value) => {
-    // const parsed = JSON.parse(value);
-    const serialized = serialize({ children: value });
-
-    // logMessage.info(serialized);
-    // logMessage.info(deserialize(serialized));
+    const serialized = serializeMd(value);
 
     setValue(value);
     updateField(`form.elements[${parentIndex}].properties.descriptionEn`, serialized);
-
-    // const parsed = JSON.parse(value);
-    // const serialized = serialize(parsed);
-    // const serialized = serialize({ children: value });
-    // const serialized = parsed.map((v) => serialize(v)).join("");
-
-    // logMessage.info(serialized);
-    // setValue(value);
-    // updateField(
-    //   `form.elements[${parentIndex}].properties.descriptionEn`,
-    //   serialized ? serialized : false
-    // );
   };
 
   return (
