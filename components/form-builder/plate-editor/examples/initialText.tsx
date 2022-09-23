@@ -7,14 +7,15 @@ jsx;
 export const initialText: unknown = (
   <fragment>
     <hp>
-      The basic marks consist of text formatting such as bold, italic, underline, strikethrough,
-      subscript, superscript, and code.
+      This is a paragraph with some <htext bold>Bold text</htext> and some{" "}
+      <htext italic>Italic text</htext>.
     </hp>
-    <hp>
-      <htext bold>This text is bold.</htext>
-    </hp>
-    <hp>
-      <htext italic>This text is italic.</htext>
-    </hp>
+    <hp>Here&apos;s some more text in a paragraph</hp>
+    <hul>
+      <hli>First item in the list</hli>
+      <hli>
+        <htext italic>This text is italic.</htext>
+      </hli>
+    </hul>
   </fragment>
 );
