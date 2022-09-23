@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
+import { LocalizedFormProperties } from "../types";
 import { Import } from "./Import";
 import { Output } from "./Output";
 import { Preview } from "./Preview";
@@ -27,10 +29,8 @@ const Tab = styled.span`
 `;
 
 export const Layout = () => {
-  const {
-    updateField,
-    form: { titleEn },
-  } = useTemplateStore();
+  const { lang, updateField, toggleLang, localizeField, form } = useTemplateStore();
+  const { t } = useTranslation("form-builder");
 
   const [showTab, setShowTab] = React.useState("create");
 
@@ -41,19 +41,20 @@ export const Layout = () => {
   return (
     <>
       <Navigation>
-        <Tab onClick={() => handleClick("create")}>Create</Tab> /{" "}
-        <Tab onClick={() => handleClick("json")}>Json</Tab> /{" "}
-        <Tab onClick={() => handleClick("preview")}>Preview</Tab>
+        <Tab onClick={() => handleClick("create")}>{t("create")}</Tab> /{" "}
+        <Tab onClick={() => handleClick("json")}>{t("json")}</Tab> /{" "}
+        <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
+        <Tab onClick={() => handleClick("preview")}>{t("preview")}</Tab>
       </Navigation>
 
       {showTab === "create" && (
         <>
           <div>
             <Input
-              placeholder="Form Title"
-              value={titleEn}
+              placeholder={t("placeHolderFormTitle")}
+              value={form[localizeField(LocalizedFormProperties.TITLE)]}
               onChange={(e) => {
-                updateField("form.titleEn", e.target.value);
+                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
               }}
             />
           </div>

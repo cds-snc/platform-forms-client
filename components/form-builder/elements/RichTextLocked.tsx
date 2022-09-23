@@ -46,7 +46,7 @@ export const RichTextLocked = ({
   schemaProperty: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-  const { updateField } = useTemplateStore();
+  const { localizeField, updateField } = useTemplateStore();
   const [value, setValue] = useState<Descendant[]>(initialValue);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const RichTextLocked = ({
     const parsed = JSON.parse(value);
     const serialized = serialize({ children: parsed });
     setValue(parsed);
-    updateField(`form.${schemaProperty}.descriptionEn`, serialized);
+    updateField(`form.${schemaProperty}.${localizeField("description")}`, serialized);
   };
 
   return (

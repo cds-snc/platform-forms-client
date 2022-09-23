@@ -266,4 +266,27 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("My Form");
     expect(result.current.form.elements.length).toBe(0);
   });
+
+  it("Creates localized property", () => {
+    const result = createStore();
+    let titleProp = "";
+    let descProp = "";
+
+    act(() => {
+      titleProp = result.current.localizeField("title");
+      descProp = result.current.localizeField("description");
+    });
+
+    expect(titleProp).toBe("titleEn");
+    expect(descProp).toBe("descriptionEn");
+
+    act(() => {
+      result.current.toggleLang();
+      titleProp = result.current.localizeField("title");
+      descProp = result.current.localizeField("description");
+    });
+
+    expect(titleProp).toBe("titleFr");
+    expect(descProp).toBe("descriptionFr");
+  });
 });
