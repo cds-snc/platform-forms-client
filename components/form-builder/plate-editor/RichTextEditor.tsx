@@ -19,9 +19,10 @@ import {
   Plate,
   PlateProvider,
   createExitBreakPlugin,
+  LinkToolbarButton,
 } from "@udecode/plate";
 
-import { exitBreakPlugin } from "./plugins/exitBreakPlugin";
+import { exitBreakPluginConfig } from "./plugins/exitBreakPluginConfig";
 
 import styled from "styled-components";
 import {
@@ -29,7 +30,10 @@ import {
   BasicMarkToolbarButtons,
   ListToolbarButtons,
 } from "./Toolbars";
-import { linkPlugin } from "./plugins/linkPlugin";
+import { linkPluginConfig } from "./plugins/linkPluginConfig";
+import { softBreakPluginConfig } from "./plugins/softBreakPluginConfig";
+import { createSoftBreakPlugin } from "./plugins/soft-break";
+import { Link } from "@styled-icons/material/Link";
 
 const RichTextWrapper = styled.div`
   [data-slate-editor] {
@@ -52,7 +56,6 @@ const RichTextWrapper = styled.div`
 
 const plugins = createMyPlugins<MyValue>(
   [
-    createLinkPlugin(linkPlugin), // no toolbar item
     createParagraphPlugin(),
     createListPlugin(),
     createBoldPlugin(),
@@ -62,7 +65,9 @@ const plugins = createMyPlugins<MyValue>(
     createHeadingPlugin(),
     createStrikethroughPlugin(),
     createBlockquotePlugin(),
-    createExitBreakPlugin(exitBreakPlugin), // not working?
+    createExitBreakPlugin(exitBreakPluginConfig),
+    createSoftBreakPlugin(softBreakPluginConfig),
+    createLinkPlugin(linkPluginConfig),
   ],
   {
     components: plateUI,
@@ -83,6 +88,7 @@ export const RichTextEditor = ({ value, onChange }) => {
           <BasicElementToolbarButtons />
           <BasicMarkToolbarButtons />
           <ListToolbarButtons />
+          <LinkToolbarButton icon={<Link />} />
         </HeadingToolbar>
         <Plate<MyValue> editableProps={editableProps} />
       </PlateProvider>
