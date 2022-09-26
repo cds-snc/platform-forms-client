@@ -23,7 +23,7 @@ export const onKeyDownSoftBreak =
         event.preventDefault();
         event.stopPropagation();
 
-        editor.insertText("  \n");
+        editor.insertText("  \n"); // line breaks need two spaces before
       }
     });
   };

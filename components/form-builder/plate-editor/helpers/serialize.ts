@@ -187,13 +187,16 @@ export default function serialize(
       return `${spacer}${isOL ? "1." : "-"} ${children}${treatAsLeaf ? "\n" : ""}`;
 
     case nodeTypes.paragraph:
-      return `${children}\n\n`;
+      if (chunk.parentType === "li") {
+        return children; // don't wrap children of list items
+      }
+      return `${children}\n\n`; // double line feeds for paras
 
     case nodeTypes.thematic_break:
       return `---\n`;
 
     default:
-      return escapeHtml(children);
+      return children; // escapeHtml(children); @TODO: probably should escape here but causes problems in slate editor
   }
 }
 
