@@ -19,7 +19,7 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
 } from "@udecode/plate";
-import { serialize } from "remark-slate";
+import serialize from "./serialize";
 
 export const serializeMd = (value) => {
   return serialize(
