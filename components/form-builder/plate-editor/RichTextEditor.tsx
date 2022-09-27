@@ -1,6 +1,6 @@
 import React from "react";
 import { editableProps } from "./editableProps";
-import { createMyPlugins, MyValue } from "./types";
+import { createMyPlugins, MyRootBlock, MyValue } from "./types";
 import { plateUI } from "./plateUI";
 import PropTypes from "prop-types";
 
@@ -55,7 +55,7 @@ const RichTextWrapper = styled.div`
   }
 `;
 
-const plugins = createMyPlugins<MyValue>(
+const plugins = createMyPlugins(
   [
     createParagraphPlugin(),
     createListPlugin(),
@@ -75,7 +75,13 @@ const plugins = createMyPlugins<MyValue>(
   }
 );
 
-export const RichTextEditor = ({ value, onChange }) => {
+export const RichTextEditor = ({
+  value,
+  onChange,
+}: {
+  value: MyRootBlock[];
+  onChange: (value: MyValue) => void;
+}) => {
   return (
     <RichTextWrapper>
       <PlateProvider<MyValue>

@@ -566,30 +566,16 @@ const ElementPanelDiv = styled.div`
 `;
 
 export const ElementPanel = () => {
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const { form, localizeField } = useTemplateStore();
 
-  const introTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Add an introduction" }],
-    },
-  ];
+  const introTextPlaceholder =
+    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
-  const confirmTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Thank you for participating in the ice cream survey!" }],
-    },
-  ];
+  const confirmTextPlaceholder =
+    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
-  const policyTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Email addresses will not be shared." }],
-    },
-  ];
+  const policyTextPlaceholder =
+    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
     <ElementPanelDiv>
@@ -598,11 +584,11 @@ export const ElementPanel = () => {
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
       />
-      {elements.map((element, index) => {
+      {form.elements.map((element, index) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
-      {elements?.length >= 1 && (
+      {form.elements?.length >= 1 && (
         <>
           <RichTextLocked
             addElement={false}

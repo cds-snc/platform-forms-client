@@ -5,7 +5,7 @@ import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
 import { initialText } from "../plate-editor/examples/initialText";
 import { deserializeMd } from "@udecode/plate";
-import { useMyPlateEditorRef } from "../plate-editor/types";
+import { MyValue, useMyPlateEditorRef } from "../plate-editor/types";
 import { serializeMd } from "../plate-editor/helpers/markdown";
 import { LocalizedElementProperties } from "../types";
 
@@ -22,7 +22,12 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
 
   const [value, setValue] = useState(
     form.elements[parentIndex].properties.descriptionEn
-      ? deserializeMd(editor, form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)])
+      ? deserializeMd(
+          editor,
+          form.elements[parentIndex].properties[
+            localizeField(LocalizedElementProperties.DESCRIPTION)
+          ]
+        )
       : initialText
   );
 
@@ -38,8 +43,12 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    *
    * @param value
    */
-  const handleChange = (value) => {
-    const serialized = serializeMd(value);
+  const handleChange = (value: MyValue) => {
+    let serialized = serializeMd(value);
+
+    if (typeof serialized === "undefined") {
+      serialized = "";
+    }
 
     setValue(value);
     updateField(

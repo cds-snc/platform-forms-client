@@ -2,10 +2,11 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { Descendant } from "slate";
-import { serialize } from "../editor/Markdown";
+import { serializeMd } from "../plate-editor/helpers/markdown";
+import { deserializeMd } from "@udecode/plate";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
+import { MyValue, useMyPlateEditorRef } from "../plate-editor/types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
@@ -43,12 +44,16 @@ export const RichTextLocked = ({
 }: {
   addElement: boolean;
   children?: React.ReactElement;
-  initialValue: Descendant[];
+  initialValue: string;
   schemaProperty: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
   const { localizeField, updateField } = useTemplateStore();
-  const [value, setValue] = useState<Descendant[]>(initialValue);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const editor = useMyPlateEditorRef()!;
+
+  // const [value, setValue] = useState<Descendant[]>(initialValue);
+  const [value, setValue] = useState(deserializeMd(editor, initialValue));
 
   useEffect(() => {
     if (input.current) {
@@ -56,10 +61,15 @@ export const RichTextLocked = ({
     }
   }, []);
 
-  const onChange = (value: string) => {
-    const parsed = JSON.parse(value);
-    const serialized = serialize({ children: parsed });
-    setValue(parsed);
+  const onChange = (value: MyValue) => {
+    let serialized = serializeMd(value);
+
+    if (typeof serialized === "undefined") {
+      serialized = "";
+    }
+
+    setValue(value);
+
     updateField(
       `form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`,
       serialized
