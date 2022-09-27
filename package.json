@@ -72,7 +72,6 @@
     "react-dnd-html5-backend": "^15.1.2",
     "react-dom": "^18.2.0",
     "react-tabs": "^4.2.0",
-    "remark-parse": "^10.0.1",
     "remark-slate": "^1.8.6",
     "slate": "^0.82.1",
     "slate-history": "^0.66.0",
@@ -80,7 +79,6 @@
     "slate-react": "^0.82.1",
     "styled-components": "^5.3.5",
     "swr": "^1.2.2",
-    "unified": "^10.1.2",
     "uuid": "^8.3.2",
     "zustand": "^4.1.1"
   },
