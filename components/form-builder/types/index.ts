@@ -17,6 +17,7 @@ export interface ElementProperties {
   validation: {
     required: boolean;
     type?: string;
+    maxLength?: number;
   };
   descriptionEn: string;
   descriptionFr: string;
@@ -94,6 +95,7 @@ export interface ModalStore {
   modals: ElementProperties[];
   updateIsOpen: (isOpen: boolean) => void;
   updateModalProperties: (index: number, properties: ElementProperties) => void;
+  unsetModalField: (path: string) => void;
   initialize: () => void;
 }
 

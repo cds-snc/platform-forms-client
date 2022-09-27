@@ -42,6 +42,36 @@ describe("ModalStore", () => {
     expect(result.current.modals[0].descriptionFr).toEqual("Voici ma description");
   });
 
+  it("Unsets maxLength in existing modal", () => {
+    const result = createStore();
+    expect(result.current.modals.length).toBe(1);
+    expect(result.current.modals[0].validation).toEqual({ required: false });
+
+    act(() => {
+      const validation = {
+        required: false,
+        maxLength: 100,
+        type: "email",
+      };
+      result.current.updateModalProperties(0, {
+        ...defaultProperties,
+        ...{ validation },
+      });
+    });
+
+    expect(result.current.modals[0].validation.required).toEqual(false);
+    expect(result.current.modals[0].validation.type).toEqual("email");
+    expect(result.current.modals[0].validation.maxLength).toEqual(100);
+
+    act(() => {
+      result.current.unsetModalField("modals[0].validation.maxLength");
+    });
+
+    expect(result.current.modals[0].validation.required).toEqual(false);
+    expect(result.current.modals[0].validation.type).toEqual("email");
+    expect(result.current.modals[0].validation.maxLength).toBeUndefined();
+  });
+
   it("Adds new modal", () => {
     const result = createStore();
     expect(result.current.modals.length).toBe(1);

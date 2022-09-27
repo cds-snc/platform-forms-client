@@ -14,6 +14,7 @@ import {
   CheckBoxEmptyIcon,
   CheckIcon,
   EmailIcon,
+  NumericFieldIcon,
   ParagraphIcon,
   PhoneIcon,
   RadioIcon,
@@ -41,6 +42,7 @@ const elementOptions = [
   { id: "email", value: "Email", icon: <EmailIcon /> },
   { id: "phone", value: "Phone number", icon: <PhoneIcon /> },
   { id: "date", value: "Date", icon: <CalendarIcon /> },
+  { id: "number", value: "Numeric field", icon: <NumericFieldIcon /> },
 ];
 
 const SelectedElement = ({
@@ -81,6 +83,9 @@ const SelectedElement = ({
       break;
     case "date":
       element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
+      break;
+    case "number":
+      element = <ShortAnswer>01233456789</ShortAnswer>;
       break;
     default:
       element = null;
@@ -240,11 +245,19 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   const _updateState = (id: string, index: number) => {
     switch (id) {
+      case "textField":
       case "email":
       case "phone":
       case "date":
+      case "number":
         updateField(`form.elements[${index}].type`, "textField");
-        updateField(`form.elements[${index}].properties.validation.type`, id);
+
+        if (id === "textField") {
+          unsetField(`form.elements[${index}].properties.validation.type`);
+        } else {
+          updateField(`form.elements[${index}].properties.validation.type`, id);
+          unsetField(`form.elements[${index}].properties.validation.maxLength`);
+        }
         break;
       case "richText":
         resetChoices(index);
@@ -252,6 +265,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
       default: // eslint-disable-line no-fallthrough
         updateField(`form.elements[${index}].type`, id);
         unsetField(`form.elements[${index}].properties.validation.type`);
+        unsetField(`form.elements[${index}].properties.validation.maxLength`);
         break;
     }
   };
@@ -290,6 +304,12 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
+          {item.properties.validation.maxLength && (
+            <DivDisabled>
+              {t("Max character length: ")}
+              {item.properties.validation.maxLength}
+            </DivDisabled>
+          )}
         </div>
         {!isRichText && (
           <>
@@ -344,6 +364,10 @@ const ModalInput = styled(Input)`
   width: 90%;
 `;
 
+const ModalInputShort = styled(Input)`
+  width: 180px;
+`;
+
 const ModalSaveButton = styled(FancyButton)`
   padding: 15px 20px;
   background: #26374a;
@@ -367,10 +391,12 @@ const ModalForm = ({
   item,
   properties,
   updateModalProperties,
+  unsetModalField,
 }: {
   item: ElementTypeWithIndex;
   properties: ElementProperties;
   updateModalProperties: (index: number, properties: ElementProperties) => void;
+  unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -419,14 +445,60 @@ const ModalForm = ({
           value={`required-${item.index}-value-modal`}
           checked={properties.validation.required}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // clone the existing properties so that we don't overwrite other keys in "validation"
+            const validation = Object.assign({}, properties.validation, {
+              required: e.target.checked,
+            });
             updateModalProperties(item.index, {
               ...properties,
-              ...{ validation: { required: e.target.checked } },
+              ...{ validation },
             });
           }}
           label={t("Required")}
         ></Checkbox>
       </ModalRow>
+      {item.type === "textField" && !item.properties.validation.type && (
+        <ModalRow>
+          <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
+            {t("Maximum character length")}
+          </FormLabel>
+          <HintText>
+            {t(
+              "Only use a character limit when there is a good reason for limiting the number of characters users can enter."
+            )}
+          </HintText>
+          <ModalInputShort
+            id={`characterLength--modal--${item.index}`}
+            type="number"
+            min="1"
+            value={properties.validation.maxLength || ""}
+            onKeyDown={(e) => {
+              if (["-", "+", ".", "e"].includes(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // if value is "", unset the field
+              if (e.target.value === "") {
+                unsetModalField(`modals[${item.index}].validation.maxLength`);
+                return;
+              }
+
+              const value = parseInt(e.target.value);
+              if (!isNaN(value) && value >= 1) {
+                // clone the existing properties so that we don't overwrite other keys in "validation"
+                const validation = Object.assign({}, properties.validation, {
+                  maxLength: value,
+                });
+                updateModalProperties(item.index, {
+                  ...properties,
+                  ...{ validation },
+                });
+              }
+            }}
+          />
+        </ModalRow>
+      )}
     </form>
   );
 };
@@ -453,7 +525,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
     updateField,
   } = useTemplateStore();
 
-  const { isOpen, modals, updateModalProperties } = useModalStore();
+  const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
   React.useEffect(() => {
     if (item.type != "richText") {
@@ -492,6 +564,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
             item={item}
             properties={modals[item.index]}
             updateModalProperties={updateModalProperties}
+            unsetModalField={unsetModalField}
           />
         )}
       </PanelActions>
