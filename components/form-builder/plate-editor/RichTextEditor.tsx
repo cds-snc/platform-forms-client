@@ -51,6 +51,7 @@ const RichTextWrapper = styled.div`
     background: white;
     border-bottom: 1px solid #ddd;
     z-index: 1000;
+    padding-bottom: 0;
   }
 `;
 

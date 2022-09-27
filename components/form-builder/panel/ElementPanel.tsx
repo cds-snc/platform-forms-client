@@ -94,14 +94,6 @@ const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
-
-  & div {
-    ${({ isRichText }) =>
-      isRichText &&
-      `
-      width: 100%;
-    `}
-  }
 `;
 
 const TitleInput = styled(Input)`
