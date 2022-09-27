@@ -7,10 +7,14 @@ import {
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
 
-const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
-
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
   // craft registration params for the SignUpCommand
+  if (!req.body.username || !req.body.password) {
+    return res.status(400).json({
+      message: "username and password need to be provided in the body of the request",
+    });
+  }
   const params: SignUpCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     Password: req.body.password,
