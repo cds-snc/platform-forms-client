@@ -21,7 +21,7 @@ import {
 } from "@udecode/plate";
 import serialize from "./serialize";
 
-export const serializeMd = (value) => {
+export const serializeMd = (value: string) => {
   return serialize(
     { children: value },
     {
