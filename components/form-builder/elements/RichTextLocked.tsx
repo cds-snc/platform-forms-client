@@ -29,7 +29,7 @@ const ContentWrapper = styled.div`
 
 const OptionWrapper = styled.div`
   display: flex;
-  margin: 30px 20px 10px;
+  margin: 0 20px;
 `;
 
 export const RichTextLocked = ({
