@@ -3,5 +3,21 @@
   "addMultiple": "Add multiple options",
   "addOption": "Add an option",
   "addOptions": "Add options",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "shortAnswer": "Short Answer",
+  "richText": "Rich Text",
+  "paragraph": "Paragraph",
+  "multipleChoice": "Multiple choice",
+  "checkboxes": "Checkboxes",
+  "dropdown": "Dropdown",
+  "email": "Email",
+  "phoneNumber": "Phone number",
+  "date": "Date",
+  "numericField": "Numeric field",
+  "option": "Option",
+  "remove": "Remove",
+  "create": "Create",
+  "json": "JSON",
+  "preview": "preview",
+  "placeHolderFormTitle": "Form Title"
 }

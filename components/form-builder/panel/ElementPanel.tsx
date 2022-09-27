@@ -6,44 +6,20 @@ import useTemplateStore from "../store/useTemplateStore";
 import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
-import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
+import {
+  ElementOption,
+  ElementProperties,
+  ElementTypeWithIndex,
+  LocalizedElementProperties,
+} from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
-import {
-  CalendarIcon,
-  CheckBoxEmptyIcon,
-  CheckIcon,
-  EmailIcon,
-  NumericFieldIcon,
-  ParagraphIcon,
-  PhoneIcon,
-  RadioIcon,
-  RadioEmptyIcon,
-  SelectMenuIcon,
-  ShortAnswerIcon,
-} from "../icons";
+import { useElementOptions } from "../hooks/useElementOptions";
+import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
 import { Input } from "./Input";
-
-const Separator = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  margin: 8px 0;
-`;
-
-const elementOptions = [
-  { id: "textField", value: "Short answer", icon: <ShortAnswerIcon /> },
-  { id: "richText", value: "Rich Text", icon: <ParagraphIcon /> },
-  { id: "textArea", value: "Paragraph", icon: <ParagraphIcon />, prepend: <Separator /> },
-  { id: "radio", value: "Multiple choice", icon: <RadioIcon /> },
-  { id: "checkbox", value: "Checkboxes", icon: <CheckIcon /> },
-  { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon />, prepend: <Separator /> },
-  { id: "email", value: "Email", icon: <EmailIcon /> },
-  { id: "phone", value: "Phone number", icon: <PhoneIcon /> },
-  { id: "date", value: "Date", icon: <CalendarIcon /> },
-  { id: "number", value: "Numeric field", icon: <NumericFieldIcon /> },
-];
 
 const SelectedElement = ({
   selected,
@@ -85,7 +61,7 @@ const SelectedElement = ({
       element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
       break;
     case "number":
-      element = <ShortAnswer>01233456789</ShortAnswer>;
+      element = <ShortAnswer>0123456789</ShortAnswer>;
       break;
     default:
       element = null;
@@ -95,6 +71,7 @@ const SelectedElement = ({
 };
 
 const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
+  const elementOptions = useElementOptions();
   const {
     form: { elements },
   } = useTemplateStore();
@@ -221,7 +198,9 @@ const QuestionNumber = styled.span`
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
+  const elementOptions = useElementOptions();
   const {
+    localizeField,
     form: { elements },
     updateField,
     unsetField,
@@ -293,16 +272,24 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 type="text"
                 name={`item${item.index}`}
                 placeholder={t("Question")}
-                value={item.properties.titleEn}
+                value={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
                 onChange={(e) => {
-                  updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+                  updateField(
+                    `form.elements[${item.index}].properties.${localizeField(
+                      LocalizedElementProperties.TITLE
+                    )}`,
+                    e.target.value
+                  );
                 }}
               />
             </>
           )}
-          {item.properties.descriptionEn && item.type !== "richText" && (
-            <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
-          )}
+          {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)] &&
+            item.type !== "richText" && (
+              <DivDisabled aria-label={t("Description")}>
+                {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+              </DivDisabled>
+            )}
           <SelectedElement item={item} selected={selectedItem} />
           {item.properties.validation.maxLength && (
             <DivDisabled>
@@ -399,6 +386,7 @@ const ModalForm = ({
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { localizeField } = useTemplateStore();
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
@@ -409,11 +397,11 @@ const ModalForm = ({
           type="text"
           name={`item${item.index}`}
           placeholder={t("Question")}
-          value={properties.titleEn}
+          value={properties[localizeField(LocalizedElementProperties.TITLE)]}
           onChange={(e) =>
             updateModalProperties(item.index, {
               ...properties,
-              ...{ titleEn: e.target.value },
+              ...{ local: e.target.value },
             })
           }
         />
@@ -430,10 +418,10 @@ const ModalForm = ({
           onChange={(e) => {
             updateModalProperties(item.index, {
               ...properties,
-              ...{ descriptionEn: e.target.value },
+              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: e.target.value },
             });
           }}
-          value={properties.descriptionEn}
+          value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
         />
       </ModalRow>
       <ModalRow>

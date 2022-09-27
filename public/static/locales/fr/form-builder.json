@@ -3,5 +3,21 @@
   "addMultiple": "[FR] Add multiple options",
   "addOption": "[FR] Add an option",
   "addOptions": "[FR] Add options",
-  "cancel": "[FR] Cancel"
+  "cancel": "[FR] Cancel",
+  "shortAnswer": "[FR] Short Answer",
+  "richText": "[FR] Rich Text",
+  "paragraph": "[FR] Paragraph",
+  "multipleChoice": "[FR] Multiple choice",
+  "checkboxes": "[FR] Checkboxes",
+  "dropdown": "[FR] Dropdown",
+  "email": "[FR] Email",
+  "phoneNumber": "[FR] Phone number",
+  "date": "[FR] Date",
+  "numericField": "[FR] Numeric field",
+  "option": "[FR] Option",
+  "remove": "[FR] Remove",
+  "create": "[FR] Create",
+  "json": "[FR] JSON",
+  "preview": "[FR] preview",
+  "placeHolderFormTitle": "[FR] Form Title"
 }

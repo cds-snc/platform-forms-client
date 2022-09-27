@@ -5,6 +5,7 @@ import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../editor/RichTextEditor";
 import { initialValue } from "../editor/util";
 import { serialize } from "../editor/Markdown";
+import { LocalizedElementProperties } from "../types";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const OptionWrapper = styled.div`
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
-  const { updateField } = useTemplateStore();
+  const { localizeField, updateField } = useTemplateStore();
 
   const [value, setValue] = useState(initialValue);
 
@@ -27,7 +28,12 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     const serialized = serialize({ children: parsed });
 
     setValue(parsed);
-    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, serialized);
+    updateField(
+      `form.elements[${parentIndex}].properties.${localizeField(
+        LocalizedElementProperties.DESCRIPTION
+      )}`,
+      serialized
+    );
   };
 
   return (

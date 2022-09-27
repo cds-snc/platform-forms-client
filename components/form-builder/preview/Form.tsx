@@ -15,6 +15,8 @@ import { NextRouter } from "next/router";
 import Markdown from "markdown-to-jsx";
 import styled from "styled-components";
 import { BackArrowIcon } from "../icons";
+import useTemplateStore from "../store/useTemplateStore";
+import { LocalizedElementProperties } from "../types";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
@@ -52,6 +54,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
   const { t } = useTranslation();
+  const { localizeField } = useTemplateStore();
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -181,7 +184,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             Back to form preview
           </Link>
           <Markdown options={{ forceBlock: true }}>
-            {form.endPage ? form.endPage.descriptionEn : ""}
+            {form.endPage
+              ? form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)]
+              : ""}
           </Markdown>
         </>
       )}
@@ -194,12 +199,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         <>
           <div className="gc-richText">
             <Markdown options={{ forceBlock: true }}>
-              {form.introduction ? form.introduction.descriptionEn : ""}
-            </Markdown>
-          </div>
-          <div className="gc-richText">
-            <Markdown options={{ forceBlock: true }}>
-              {form.privacyPolicy ? form.privacyPolicy.descriptionEn : ""}
+              {form.introduction
+                ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
+                : ""}
             </Markdown>
           </div>
           <form
@@ -261,6 +263,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                     <p className="gc-description">{t("spam-error.success-prompt")}</p>
                   </div>
                 ))}
+              <div className="gc-richText">
+                <Markdown options={{ forceBlock: true }}>
+                  {form.privacyPolicy
+                    ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
+                    : ""}
+                </Markdown>
+              </div>
               <div className="buttons">
                 <Button type="submit">{t("submitButton")}</Button>
                 {props.isPreview && (

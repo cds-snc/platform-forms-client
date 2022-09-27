@@ -5,6 +5,7 @@ import { RichTextEditor } from "../editor/RichTextEditor";
 import { Descendant } from "slate";
 import { serialize } from "../editor/Markdown";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
+import { LocalizedElementProperties } from "../types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
@@ -46,7 +47,7 @@ export const RichTextLocked = ({
   schemaProperty: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-  const { updateField } = useTemplateStore();
+  const { localizeField, updateField } = useTemplateStore();
   const [value, setValue] = useState<Descendant[]>(initialValue);
 
   useEffect(() => {
@@ -59,7 +60,10 @@ export const RichTextLocked = ({
     const parsed = JSON.parse(value);
     const serialized = serialize({ children: parsed });
     setValue(parsed);
-    updateField(`form.${schemaProperty}.descriptionEn`, serialized);
+    updateField(
+      `form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`,
+      serialized
+    );
   };
 
   return (
