@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../editor/RichTextEditor";
+import { RichTextEditor } from "../plate-editor/RichTextEditor";
 import { Descendant } from "slate";
 import { serialize } from "../editor/Markdown";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
