@@ -53,7 +53,7 @@ export const defaultForm = {
 
 const useTemplateStore = create<ElementStore>()(
   immer((set, get) => ({
-    lang: "fr",
+    lang: "en",
     form: defaultForm,
     submission: {
       email: "test@example.com",
