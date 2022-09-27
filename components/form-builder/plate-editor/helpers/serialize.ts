@@ -1,5 +1,4 @@
 import { BlockType, defaultNodeTypes, LeafType, NodeTypes } from "remark-slate";
-import escapeHtml from "escape-html";
 
 interface Options {
   nodeTypes: NodeTypes;
@@ -184,7 +183,7 @@ export default function serialize(
           spacer += "  ";
         }
       }
-      return `${spacer}${isOL ? "1." : "-"} ${children}${treatAsLeaf ? "\n" : ""}`;
+      return `${spacer}${isOL ? "1." : "-"} ${children}${treatAsLeaf ? "\n" : "\n"}`;
 
     case nodeTypes.paragraph:
       if (chunk.parentType === "li") {
