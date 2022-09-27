@@ -19,9 +19,10 @@ import {
   ELEMENT_H5,
   ELEMENT_H6,
 } from "@udecode/plate";
+import { MyValue } from "../types";
 import serialize from "./serialize";
 
-export const serializeMd = (value: string) => {
+export const serializeMd = (value: MyValue) => {
   return serialize(
     { children: value },
     {
