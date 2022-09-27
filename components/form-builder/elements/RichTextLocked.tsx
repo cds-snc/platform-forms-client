@@ -19,17 +19,17 @@ const ElementWrapperDiv = styled.div`
 
 const ContentWrapper = styled.div`
   display: flex;
-  margin: 0px 20px 10px;
+  margin: 0px 20px;
 
   & h3 {
-    margin-top: 30px;
+    margin-top: 15px;
     margin-bottom: 0;
   }
 `;
 
 const OptionWrapper = styled.div`
   display: flex;
-  margin: 0 20px;
+  margin: 0 26px;
 `;
 
 export const RichTextLocked = ({

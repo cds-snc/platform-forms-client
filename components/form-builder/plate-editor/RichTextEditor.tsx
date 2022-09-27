@@ -83,7 +83,7 @@ export const RichTextEditor = ({
   onChange: (value: MyValue) => void;
 }) => {
   return (
-    <RichTextWrapper>
+    <RichTextWrapper style={{ width: "100%" }}>
       <PlateProvider<MyValue>
         plugins={plugins}
         initialValue={value}
