@@ -22,7 +22,9 @@
     "brand": {},
     "elements": [ ],
     "startPage": {},
-    "endPage": {}
+    "endPage": {},
+    "introduction": {},
+    "privacyPolicy": {}
   }}],
   "properties": {
     "internalTitleEn": {

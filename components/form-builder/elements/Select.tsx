@@ -18,7 +18,6 @@ const DropDownHeader = styled.button`
   border: 1.5px solid #000000;
   width: 100%;
   line-height: 24px;
-  font-size: 16px;
 
   &:focus,
   &[aria-expanded="true"] {
@@ -38,6 +37,8 @@ const DropDownList = styled.ul`
   margin-top: 10px;
   list-style: none;
   background-color: #fff;
+  position: absolute;
+  width: 250px;
 `;
 
 const DropDownListItem = styled.li`
@@ -49,21 +50,22 @@ const DropDownListItem = styled.li`
   padding-right: 26px;
   padding-bottom: 8px;
   padding-top: 8px;
-  font-size: 16px;
 `;
 
 const DropDownListIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 10px;
-  padding-top: 2px;
   text-align: left;
-  height: 24px;
   overflow: hidden;
-  width: 24px;
   display: inline-block;
   position: relative;
+  padding-top: 2px;
+
+  svg {
+    height: 20px;
+    width: 20px;
+  }
 `;
 
 const DropDownListLabel = styled.div`
@@ -88,7 +90,7 @@ export const DropDown = ({
   });
 
   return (
-    <DropDownContainer style={{ zIndex: isOpen ? 20000 : 1 }}>
+    <DropDownContainer style={{ position: "relative", zIndex: isOpen ? 20000 : 1 }}>
       <DropDownHeader {...getToggleButtonProps()}>
         {selectedItem && (
           <>

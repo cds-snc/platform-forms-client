@@ -15,6 +15,8 @@ import { NextRouter } from "next/router";
 import Markdown from "markdown-to-jsx";
 import styled from "styled-components";
 import { BackArrowIcon } from "../icons";
+import useTemplateStore from "../store/useTemplateStore";
+import { LocalizedElementProperties } from "../types";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
@@ -52,6 +54,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
   const { t } = useTranslation();
+  const { localizeField } = useTemplateStore();
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -181,7 +184,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             Back to form preview
           </Link>
           <Markdown options={{ forceBlock: true }}>
-            {form.endPage ? form.endPage.descriptionEn : ""}
+            {form.endPage
+              ? form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)]
+              : ""}
           </Markdown>
         </>
       )}
@@ -191,75 +196,91 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
        * to the URL
        */}
       {!formStatusSubmitted && (
-        <form
-          id="form"
-          data-testid="form"
-          method="POST"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (timerActive) {
-              if (!formTimerState.canSubmit) {
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                  event: "form_submission_spam_trigger",
-                  formID: formID,
-                  formTitle: form.titleEn,
-                  submitTime: formTimerState.remainingTime,
-                });
-                setSubmitTooEarly(true);
-                // In case the useEffect timer failed check again
-                //formTimerDispatch({ type: "check" });
-                return;
-              }
-              // Only change state if submitTooEarly is already set to true
-              submitTooEarly && setSubmitTooEarly(false);
-            }
-
-            if (isReCaptchaEnableOnSite) {
-              handleSubmitReCaptcha(e);
-            } else {
-              handleSubmit(e);
-            }
-          }}
-          noValidate
-        >
-          {children}
-          <div
-            className={classNames({
-              "border-l-2": submitTooEarly,
-              "border-red-default": submitTooEarly,
-              "border-green-default": formTimerState.remainingTime === 0 && submitTooEarly,
-              "pl-3": submitTooEarly,
-            })}
-          >
-            {submitTooEarly &&
-              (formTimerState.remainingTime > 0 ? (
-                <div role="alert">
-                  <p className="gc-label text-red-default">
-                    {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
-                    {t("spam-error.error-part-2")}
-                  </p>
-                  <p className="gc-description">
-                    {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
-                    {t("spam-error.prompt-part-2")}
-                  </p>
-                </div>
-              ) : (
-                <div role="alert">
-                  <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
-                  <p className="gc-description">{t("spam-error.success-prompt")}</p>
-                </div>
-              ))}
-            <div className="buttons">
-              <Button type="submit">{t("submitButton")}</Button>
-              {props.isPreview && (
-                <SubmitButtonLabel>
-                  To preview your confirmation message, click submit
-                </SubmitButtonLabel>
-              )}
-            </div>
+        <>
+          <div className="gc-richText">
+            <Markdown options={{ forceBlock: true }}>
+              {form.introduction
+                ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
+                : ""}
+            </Markdown>
           </div>
-        </form>
+          <form
+            id="form"
+            data-testid="form"
+            method="POST"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (timerActive) {
+                if (!formTimerState.canSubmit) {
+                  window.dataLayer = window.dataLayer || [];
+                  window.dataLayer.push({
+                    event: "form_submission_spam_trigger",
+                    formID: formID,
+                    formTitle: form.titleEn,
+                    submitTime: formTimerState.remainingTime,
+                  });
+                  setSubmitTooEarly(true);
+                  // In case the useEffect timer failed check again
+                  //formTimerDispatch({ type: "check" });
+                  return;
+                }
+                // Only change state if submitTooEarly is already set to true
+                submitTooEarly && setSubmitTooEarly(false);
+              }
+
+              if (isReCaptchaEnableOnSite) {
+                handleSubmitReCaptcha(e);
+              } else {
+                handleSubmit(e);
+              }
+            }}
+            noValidate
+          >
+            {children}
+            <div
+              className={classNames({
+                "border-l-2": submitTooEarly,
+                "border-red-default": submitTooEarly,
+                "border-green-default": formTimerState.remainingTime === 0 && submitTooEarly,
+                "pl-3": submitTooEarly,
+              })}
+            >
+              {submitTooEarly &&
+                (formTimerState.remainingTime > 0 ? (
+                  <div role="alert">
+                    <p className="gc-label text-red-default">
+                      {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
+                      {t("spam-error.error-part-2")}
+                    </p>
+                    <p className="gc-description">
+                      {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
+                      {t("spam-error.prompt-part-2")}
+                    </p>
+                  </div>
+                ) : (
+                  <div role="alert">
+                    <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
+                    <p className="gc-description">{t("spam-error.success-prompt")}</p>
+                  </div>
+                ))}
+              <div className="gc-richText">
+                <Markdown options={{ forceBlock: true }}>
+                  {form.privacyPolicy
+                    ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
+                    : ""}
+                </Markdown>
+              </div>
+              <div className="buttons">
+                <Button type="submit">{t("submitButton")}</Button>
+                {props.isPreview && (
+                  <SubmitButtonLabel>
+                    To preview your confirmation message, click submit
+                  </SubmitButtonLabel>
+                )}
+              </div>
+            </div>
+          </form>
+        </>
       )}
     </>
   );

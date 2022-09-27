@@ -7,6 +7,7 @@ import { initialText } from "../plate-editor/examples/initialText";
 import { deserializeMd } from "@udecode/plate";
 import { useMyPlateEditorRef } from "../plate-editor/types";
 import { serializeMd } from "../plate-editor/helpers/markdown";
+import { LocalizedElementProperties } from "../types";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -14,13 +15,14 @@ const OptionWrapper = styled.div`
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
-  const { updateField, form } = useTemplateStore();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const editor = useMyPlateEditorRef()!;
 
+  const { localizeField, updateField, form } = useTemplateStore();
+
   const [value, setValue] = useState(
     form.elements[parentIndex].properties.descriptionEn
-      ? deserializeMd(editor, form.elements[parentIndex].properties.descriptionEn)
+      ? deserializeMd(editor, form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)])
       : initialText
   );
 
@@ -40,7 +42,12 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     const serialized = serializeMd(value);
 
     setValue(value);
-    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, serialized);
+    updateField(
+      `form.elements[${parentIndex}].properties.${localizeField(
+        LocalizedElementProperties.DESCRIPTION
+      )}`,
+      serialized
+    );
   };
 
   return (

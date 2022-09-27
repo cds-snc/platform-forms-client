@@ -15,6 +15,18 @@ async function main() {
             referrerUrlEn: "",
             referrerUrlFr: "",
           },
+          introduction: {
+            descriptionEn:
+              "Thank you for your interest in the CDS. Send your question using the form below.",
+            descriptionFr:
+              "[fr] Thank you for your interest in the CDS. Send your question using the form below.",
+          },
+          privacyPolicy: {
+            descriptionEn:
+              "Find out how <a href='https://digital.canada.ca/legal/privacy'>CDS protects your privacy</a>.",
+            descriptionFr:
+              "[fr] Find out how <a href='https://digital.canada.ca/legal/privacy'>CDS protects your privacy</a>.",
+          },
           titleEn: "Lemonade Stand Funding",
           titleFr: "[fr] Lemonade Stand Funding",
           version: 1,

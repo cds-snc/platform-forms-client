@@ -16,7 +16,6 @@ const LinkButton = styled(Button)`
   background-color: transparent;
   border-radius: 4px;
   display: block;
-  font-size: 16px;
 
   &:first-of-type {
     margin-top: 20px;
