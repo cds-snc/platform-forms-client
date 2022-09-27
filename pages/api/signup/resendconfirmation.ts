@@ -1,26 +1,24 @@
 import {
   CognitoIdentityProviderClient,
-  ConfirmSignUpCommand,
-  ConfirmSignUpCommandInput,
+  ResendConfirmationCodeCommand,
+  ResendConfirmationCodeCommandInput,
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
 
-const confirm = async (req: NextApiRequest, res: NextApiResponse) => {
-  // build parameters for the confirm sign up command
+const resendConfirmationCode = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
-  if (!req.body.username || !req.body.confirmationCode) {
+  if (!req.body.username) {
     return res.status(400).json({
-      message: "username and confirmation code needs to be provided in the body of the request",
+      message: "username needs to be provided in the body of the request",
     });
   }
-
-  const params: ConfirmSignUpCommandInput = {
+  // build command parameters
+  const params: ResendConfirmationCodeCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     Username: req.body.username,
-    ConfirmationCode: req.body.confirmationCode,
   };
 
   // instantiate the cognito client
@@ -28,12 +26,12 @@ const confirm = async (req: NextApiRequest, res: NextApiResponse) => {
     region: COGNITO_REGION,
   });
 
-  // instantiate the confirm sign up command object
-  const confirmSignUpCommand = new ConfirmSignUpCommand(params);
+  // instantiate command object
+  const signUpCommand = new ResendConfirmationCodeCommand(params);
 
+  // attempt to execute command on cognito and handle failure
   try {
-    // send command to cognito
-    const response = await cognitoClient.send(confirmSignUpCommand);
+    const response = await cognitoClient.send(signUpCommand);
     return res.status(response["$metadata"].httpStatusCode as number).send("");
   } catch (err) {
     const cognitoError = err as CognitoIdentityProviderServiceException;
@@ -43,4 +41,7 @@ const confirm = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default middleware([cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])], confirm);
+export default middleware(
+  [cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])],
+  resendConfirmationCode
+);
