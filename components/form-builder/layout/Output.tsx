@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { CopyToClipboard } from "./CopyToClipboard";
+import { DownloadFileButton } from "./DownloadFileButton";
 
 const JSONOutput = styled.pre`
   margin-top: 20px;
@@ -16,8 +16,8 @@ export const Output = () => {
 
   return (
     <>
+      <DownloadFileButton />
       <h2 className="gc-h2">JSON Output</h2>
-      <CopyToClipboard />
       <JSONOutput>{stringified}</JSONOutput>
     </>
   );
