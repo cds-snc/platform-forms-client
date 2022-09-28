@@ -15,15 +15,9 @@ const Welcome: React.FC<WelcomeProps> = (props: WelcomeProps) => {
   const { user } = props;
   return (
     <>
-      <h1 className="gc-h1">{t("title")}</h1>
       <div className="flex flex-wrap">
         <div className="flex-auto mb-10">
-          <h3 className="gc-h3">
-            {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
-          </h3>
-          <>
-            <Layout />
-          </>
+          <Layout />
         </div>
       </div>
     </>
