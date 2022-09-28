@@ -32,8 +32,8 @@ import {
 } from "@udecode/plate";
 import { useMyPlateEditorRef } from "./types";
 
-export const BasicElementToolbarButtons = ({ id }: { id: string }) => {
-  const editor = useMyPlateEditorRef(id);
+export const BasicElementToolbarButtons = () => {
+  const editor = useMyPlateEditorRef();
 
   return (
     <>
@@ -47,8 +47,8 @@ export const BasicElementToolbarButtons = ({ id }: { id: string }) => {
   );
 };
 
-export const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
-  const editor = useMyPlateEditorRef(id);
+export const BasicMarkToolbarButtons = () => {
+  const editor = useMyPlateEditorRef();
 
   return (
     <>
@@ -62,8 +62,8 @@ export const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
   );
 };
 
-export const ListToolbarButtons = ({ id }: { id: string }) => {
-  const editor = useMyPlateEditorRef(id);
+export const ListToolbarButtons = () => {
+  const editor = useMyPlateEditorRef();
 
   return (
     <>

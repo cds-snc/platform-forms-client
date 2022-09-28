@@ -19,7 +19,6 @@ import {
   Plate,
   PlateProvider,
   createExitBreakPlugin,
-  LinkToolbarButton,
 } from "@udecode/plate";
 
 import { exitBreakPluginConfig } from "./plugins/exitBreakPluginConfig";
@@ -33,7 +32,6 @@ import {
 import { linkPluginConfig } from "./plugins/linkPluginConfig";
 import { softBreakPluginConfig } from "./plugins/softBreakPluginConfig";
 import { createSoftBreakPlugin } from "./plugins/soft-break";
-import { Link } from "@styled-icons/material/Link";
 
 const RichTextWrapper = styled.div`
   [data-slate-editor] {
@@ -94,13 +92,21 @@ export const RichTextEditor = ({
           onChange(value);
         }}
       >
-        <HeadingToolbar id={id}>
-          <BasicElementToolbarButtons id={id} />
-          <BasicMarkToolbarButtons id={id} />
-          <ListToolbarButtons id={id} />
-          <LinkToolbarButton icon={<Link />} />
+        <HeadingToolbar>
+          <BasicElementToolbarButtons />
+          <BasicMarkToolbarButtons />
+          <ListToolbarButtons />
+          {/* <LinkToolbarButton tooltip={{ content: "Huzzah" }} id={id} icon={<Link />} /> */}
         </HeadingToolbar>
-        <Plate<MyValue> id={id} editableProps={editableProps} />
+        <Plate<MyValue>
+          id={id}
+          editableProps={editableProps}
+          plugins={plugins}
+          initialValue={value}
+          onChange={(value) => {
+            onChange(value);
+          }}
+        />
       </PlateProvider>
     </RichTextWrapper>
   );
