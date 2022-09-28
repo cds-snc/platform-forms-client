@@ -28,7 +28,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
             localizeField(LocalizedElementProperties.DESCRIPTION)
           ]
         )
-      : initialText
+      : ""
   );
 
   useEffect(() => {
