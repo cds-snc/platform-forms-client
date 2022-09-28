@@ -4,8 +4,7 @@ import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import { LocalizedFormProperties } from "../types";
-import { Import } from "./Import";
-import { Output } from "./Output";
+import { Save } from "./Save";
 import { Preview } from "./Preview";
 
 const Input = styled.input`
@@ -42,9 +41,9 @@ export const Layout = () => {
     <>
       <Navigation>
         <Tab onClick={() => handleClick("create")}>{t("create")}</Tab> /{" "}
-        <Tab onClick={() => handleClick("json")}>{t("json")}</Tab> /{" "}
         <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
-        <Tab onClick={() => handleClick("preview")}>{t("preview")}</Tab>
+        <Tab onClick={() => handleClick("preview")}>{t("preview")}</Tab> /{" "}
+        <Tab onClick={() => handleClick("save")}>{t("save")}</Tab>
       </Navigation>
 
       {showTab === "create" && (
@@ -61,10 +60,9 @@ export const Layout = () => {
           <ElementPanel />
         </>
       )}
-      {showTab === "json" && (
+      {showTab === "save" && (
         <>
-          <Import />
-          <Output />
+          <Save />
         </>
       )}
       {showTab === "preview" && (

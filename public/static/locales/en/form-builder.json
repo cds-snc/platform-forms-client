@@ -18,6 +18,19 @@
   "remove": "Remove",
   "create": "Create",
   "json": "JSON",
-  "preview": "preview",
-  "placeHolderFormTitle": "Form Title"
+  "preview": "Preview",
+  "placeHolderFormTitle": "Form Title",
+  "share": "Share",
+  "save": "Save",
+  "saveH1": "Save your progress",
+  "saveP1": "We don’t save your form on our website, but don’t worry, you can save the file to your computer.",
+  "saveP2": "Save the from file to save your progress, or if you’re done, save it and open it again later to pick-up where you left off.",
+  "saveH2": "Save the form file on your computer",
+  "saveP3": "Click the save button to download your form.",
+  "saveH3": "Upload the form file again to edit",
+  "saveP4": "Open the form file from the GC Form Builder’s start page to pick-up where you left off.",
+  "viewCode": "View code",
+  "copyButton": "Copy to clipboard",
+  "copyMessage": "(template copied)",
+  "saveButton": "Save file"
 }
