@@ -76,34 +76,38 @@ const plugins = createMyPlugins(
 );
 
 export const RichTextEditor = ({
+  id,
   value,
   onChange,
 }: {
+  id: string;
   value: MyRootBlock[];
   onChange: (value: MyValue) => void;
 }) => {
   return (
     <RichTextWrapper style={{ width: "100%" }}>
       <PlateProvider<MyValue>
+        id={id}
         plugins={plugins}
         initialValue={value}
         onChange={(value) => {
           onChange(value);
         }}
       >
-        <HeadingToolbar>
-          <BasicElementToolbarButtons />
-          <BasicMarkToolbarButtons />
-          <ListToolbarButtons />
+        <HeadingToolbar id={id}>
+          <BasicElementToolbarButtons id={id} />
+          <BasicMarkToolbarButtons id={id} />
+          <ListToolbarButtons id={id} />
           <LinkToolbarButton icon={<Link />} />
         </HeadingToolbar>
-        <Plate<MyValue> editableProps={editableProps} />
+        <Plate<MyValue> id={id} editableProps={editableProps} />
       </PlateProvider>
     </RichTextWrapper>
   );
 };
 
 RichTextEditor.propTypes = {
+  id: PropTypes.string,
   value: PropTypes.array,
   onChange: PropTypes.func,
 };

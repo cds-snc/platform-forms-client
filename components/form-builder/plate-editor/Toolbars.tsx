@@ -32,9 +32,8 @@ import {
 } from "@udecode/plate";
 import { useMyPlateEditorRef } from "./types";
 
-export const BasicElementToolbarButtons = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const editor = useMyPlateEditorRef()!;
+export const BasicElementToolbarButtons = ({ id }: { id: string }) => {
+  const editor = useMyPlateEditorRef(id);
 
   return (
     <>
@@ -48,9 +47,8 @@ export const BasicElementToolbarButtons = () => {
   );
 };
 
-export const BasicMarkToolbarButtons = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const editor = useMyPlateEditorRef()!;
+export const BasicMarkToolbarButtons = ({ id }: { id: string }) => {
+  const editor = useMyPlateEditorRef(id);
 
   return (
     <>
@@ -64,9 +62,8 @@ export const BasicMarkToolbarButtons = () => {
   );
 };
 
-export const ListToolbarButtons = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const editor = useMyPlateEditorRef()!;
+export const ListToolbarButtons = ({ id }: { id: string }) => {
+  const editor = useMyPlateEditorRef(id);
 
   return (
     <>

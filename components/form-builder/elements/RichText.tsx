@@ -15,8 +15,8 @@ const OptionWrapper = styled.div`
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const editor = useMyPlateEditorRef()!;
+  const editorId = `${parentIndex}-editor`;
+  const editor = useMyPlateEditorRef(editorId);
 
   const { localizeField, updateField, form } = useTemplateStore();
 
@@ -61,7 +61,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
 
   return (
     <OptionWrapper>
-      <RichTextEditor value={value} onChange={handleChange} />
+      <RichTextEditor id={editorId} value={value} onChange={handleChange} />
     </OptionWrapper>
   );
 };

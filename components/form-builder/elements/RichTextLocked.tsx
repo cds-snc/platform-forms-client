@@ -33,11 +33,13 @@ const OptionWrapper = styled.div`
 `;
 
 export const RichTextLocked = ({
+  id,
   addElement,
   children,
   initialValue,
   schemaProperty,
 }: {
+  id: string;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
@@ -45,7 +47,7 @@ export const RichTextLocked = ({
 }) => {
   const input = useRef<HTMLInputElement>(null);
   const { localizeField, updateField } = useTemplateStore();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const editorId = `${id}-editor`;
   const editor = useMyPlateEditorRef()!;
 
   // const [value, setValue] = useState<Descendant[]>(initialValue);
@@ -76,7 +78,7 @@ export const RichTextLocked = ({
     <ElementWrapperDiv>
       <ContentWrapper>{children}</ContentWrapper>
       <OptionWrapper>
-        <RichTextEditor value={value} onChange={onChange} />
+        <RichTextEditor id={editorId} value={value} onChange={onChange} />
       </OptionWrapper>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>
