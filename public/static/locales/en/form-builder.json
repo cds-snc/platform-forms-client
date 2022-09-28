@@ -32,5 +32,6 @@
   "viewCode": "View code",
   "copyButton": "Copy to clipboard",
   "copyMessage": "(template copied)",
-  "saveButton": "Save file"
+  "saveButton": "Save file",
+  "start": "Start"
 }

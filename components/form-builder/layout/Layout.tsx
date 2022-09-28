@@ -5,6 +5,7 @@ import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import { LocalizedFormProperties } from "../types";
 import { Save } from "./Save";
+import { Start } from "./Start";
 import { Preview } from "./Preview";
 
 const Input = styled.input`
@@ -40,12 +41,14 @@ export const Layout = () => {
   return (
     <>
       <Navigation>
+        <Tab onClick={() => handleClick("start")}>{t("start")}</Tab> /{" "}
         <Tab onClick={() => handleClick("create")}>{t("create")}</Tab> /{" "}
         <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
         <Tab onClick={() => handleClick("preview")}>{t("preview")}</Tab> /{" "}
         <Tab onClick={() => handleClick("save")}>{t("save")}</Tab>
       </Navigation>
 
+      {showTab === "start" && <Start createForm={handleClick} />}
       {showTab === "create" && (
         <>
           <div>
@@ -61,16 +64,8 @@ export const Layout = () => {
           <ElementPanel />
         </>
       )}
-      {showTab === "save" && (
-        <>
-          <Save />
-        </>
-      )}
-      {showTab === "preview" && (
-        <>
-          <Preview />
-        </>
-      )}
+      {showTab === "save" && <Save />}
+      {showTab === "preview" && <Preview />}
     </>
   );
 };

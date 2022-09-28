@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../components/form-builder/layout/Layout";
@@ -10,9 +9,7 @@ type WelcomeProps = {
   user: User;
 };
 
-const Welcome: React.FC<WelcomeProps> = (props: WelcomeProps) => {
-  const { t, i18n } = useTranslation("form-builder");
-  const { user } = props;
+const Welcome: React.FC<WelcomeProps> = () => {
   return (
     <>
       <div className="flex flex-wrap">
