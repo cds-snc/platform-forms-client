@@ -3,7 +3,7 @@ import { Value } from "@udecode/plate";
 
 export const serializeMd = (value: Value) => {
   return serialize(
-    { children: value },
+    { type: "", children: value },
     {
       nodeTypes: {
         paragraph: "paragraph",
