@@ -1,7 +1,7 @@
 import serialize from "./serialize";
-import { BlockType, LeafType } from "remark-slate";
+import { Value } from "@udecode/plate";
 
-export const serializeMd = (value: (BlockType | LeafType)[]) => {
+export const serializeMd = (value: Value) => {
   if (value && value.length && value[0] && typeof value[0] !== "undefined") {
     return;
   }

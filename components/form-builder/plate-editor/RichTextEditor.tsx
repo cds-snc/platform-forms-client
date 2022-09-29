@@ -19,6 +19,7 @@ import {
   Plate,
   PlateProvider,
   createExitBreakPlugin,
+  Value,
 } from "@udecode/plate";
 
 import { exitBreakPluginConfig } from "./plugins/exitBreakPluginConfig";
@@ -80,18 +81,11 @@ export const RichTextEditor = ({
 }: {
   id: string;
   value: MyRootBlock[];
-  onChange: (value: MyValue) => void;
+  onChange: (value: Value) => void;
 }) => {
   return (
     <RichTextWrapper style={{ width: "100%" }}>
-      <PlateProvider<MyValue>
-        id={id}
-        plugins={plugins}
-        initialValue={value}
-        onChange={(value) => {
-          onChange(value);
-        }}
-      >
+      <PlateProvider<MyValue> id={id} plugins={plugins} initialValue={value} onChange={onChange}>
         <HeadingToolbar>
           <BasicElementToolbarButtons />
           <BasicMarkToolbarButtons />
@@ -103,9 +97,7 @@ export const RichTextEditor = ({
           editableProps={editableProps}
           plugins={plugins}
           initialValue={value}
-          onChange={(value) => {
-            onChange(value);
-          }}
+          onChange={onChange}
         />
       </PlateProvider>
     </RichTextWrapper>

@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { deserializeMd } from "@udecode/plate";
-import { MyValue, useMyPlateEditorRef } from "../plate-editor/types";
+import { deserializeMd, Value } from "@udecode/plate";
+import { useMyPlateEditorRef } from "../plate-editor/types";
 import { serializeMd } from "../plate-editor/helpers/markdown";
 import { LocalizedElementProperties } from "../types";
-import { BlockType, LeafType } from "remark-slate";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -43,7 +42,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    *
    * @param value
    */
-  const handleChange = (value: (BlockType | LeafType)[]) => {
+  const handleChange = (value: Value) => {
     let serialized = serializeMd(value);
 
     if (typeof serialized === "undefined") {
