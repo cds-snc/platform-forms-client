@@ -1,4 +1,5 @@
 import { BlockType, defaultNodeTypes, LeafType, NodeTypes } from "remark-slate";
+import { Value } from "@udecode/plate";
 
 interface Options {
   nodeTypes: NodeTypes;

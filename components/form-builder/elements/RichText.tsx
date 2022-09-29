@@ -64,9 +64,3 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     </OptionWrapper>
   );
 };
-
-RichText.propTypes = {
-  parentIndex: PropTypes.number,
-  index: PropTypes.number,
-  renderIcon: PropTypes.func,
-};
