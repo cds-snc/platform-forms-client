@@ -4,10 +4,9 @@ import { Form } from "../preview/Form";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
-import { LocalizedFormProperties } from "../types";
 
 export const Preview = () => {
-  const { getSchema, form, localizeField } = useTemplateStore();
+  const { getSchema } = useTemplateStore();
   const stringified = getSchema();
 
   const formRecord = {
@@ -21,11 +20,8 @@ export const Preview = () => {
   const currentForm = getRenderedForm(formRecord, language, t);
 
   return (
-    <>
-      <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-      <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
-        {currentForm}
-      </Form>
-    </>
+    <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
+      {currentForm}
+    </Form>
   );
 };

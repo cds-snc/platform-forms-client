@@ -5,11 +5,6 @@ import { DownloadFileButton } from "./DownloadFileButton";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { Output } from "./Output";
 
-const StyledHeader = styled.h1`
-  border-bottom: none;
-  margin-bottom: 2rem;
-`;
-
 const BottomMargin = styled.div`
   margin-bottom: 1.5rem;
 `;
@@ -42,7 +37,6 @@ export const Save = () => {
 
   return (
     <>
-      <StyledHeader>{t("saveH1")}</StyledHeader>
       <BottomMargin>
         <p>{t("saveP1")}</p>
       </BottomMargin>

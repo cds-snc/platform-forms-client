@@ -55,7 +55,7 @@ const StyledContainer = styled.div`
   }
 `;
 
-export const Start = ({ createForm }: { createForm: (tab: string) => void }) => {
+export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
 
   const { importTemplate } = useTemplateStore();
@@ -89,7 +89,7 @@ export const Start = ({ createForm }: { createForm: (tab: string) => void }) => 
         // ensure elements follow layout array order
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
-        createForm("create");
+        changeTab("create");
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -100,14 +100,13 @@ export const Start = ({ createForm }: { createForm: (tab: string) => void }) => 
 
   return (
     <>
-      <h1>{t("start")}</h1>
       {errors && <div className="pt-2 pb-2 mt-4 mb-4 text-lg text-red-700">{errors}</div>}
       <StyledContainer>
         <button
           className="box"
           onClick={(e) => {
             e.preventDefault();
-            createForm("create");
+            changeTab("create");
           }}
         >
           <DesignIcon />
