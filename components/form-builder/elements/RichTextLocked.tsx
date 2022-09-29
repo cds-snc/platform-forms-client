@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { serializeMd } from "../plate-editor/helpers/serialize";
+import { serializeMd } from "../plate-editor/helpers/markdown";
 import { deserializeMd, Value } from "@udecode/plate";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
