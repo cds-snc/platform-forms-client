@@ -33,5 +33,10 @@
   "copyButton": "Copy to clipboard",
   "copyMessage": "(template copied)",
   "saveButton": "Save file",
-  "start": "Start"
+  "start": "Start",
+  "startH2": "Design a form",
+  "startP1": "Create a new form from scratch",
+  "startH3": "Open a form file",
+  "startP2": "Revisit and edit an existing form file you saved from your last session",
+  "startErrorValidation": "Template validation failed"
 }

@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import useTemplateStore from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon } from "../icons";
+import { validateTemplate } from "../validate";
+import { sortByLayout } from "../util";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -23,6 +26,7 @@ const StyledContainer = styled.div`
     text-align: left;
 
     &:hover {
+      cursor: pointer;
       background-color: #d7d9db;
 
       h2 {
@@ -45,14 +49,51 @@ const StyledContainer = styled.div`
       font-size: 16px;
     }
   }
+
+  #file-upload {
+    display: none;
+  }
 `;
 
 export const Start = ({ createForm }: { createForm: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
 
+  const { importTemplate } = useTemplateStore();
+  const [errors, setErrors] = useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target || !e.target.files) {
+      return;
+    }
+    try {
+      const fileReader = new FileReader();
+
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      fileReader.onload = (e) => {
+        if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
+
+        const data = JSON.parse(e.target.result);
+
+        if (!validateTemplate(data)) {
+          setErrors(t("startErrorValidation"));
+          return;
+        }
+
+        // ensure elements follow layout array order
+        data.form.elements = sortByLayout(data.form);
+        importTemplate(data);
+        createForm("create");
+      };
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrors(e.message);
+      }
+    }
+  };
+
   return (
     <>
       <h1>{t("start")}</h1>
+      {errors && <div className="pt-2 pb-2 mt-4 mb-4 text-lg text-red-700">{errors}</div>}
       <StyledContainer>
         <button
           className="box"
@@ -62,14 +103,15 @@ export const Start = ({ createForm }: { createForm: (tab: string) => void }) => 
           }}
         >
           <DesignIcon />
-          <h2>Design a form</h2>
-          <p>Create a new form from scratch</p>
+          <h2>{t("startH2")}</h2>
+          <p>{t("startP1")}</p>
         </button>
-        <div className="box">
+        <label className="box" htmlFor="file-upload">
           <ExternalLinkIcon />
-          <h2>Open a form file</h2>
-          <p>Revisit and edit an existing form file you saved from your last session</p>
-        </div>
+          <h2>{t("startH3")}</h2>
+          <p>{t("startP2")}</p>
+        </label>
+        <input id="file-upload" type="file" onChange={handleChange} />
       </StyledContainer>
     </>
   );

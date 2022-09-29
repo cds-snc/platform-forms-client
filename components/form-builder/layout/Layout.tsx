@@ -21,6 +21,13 @@ const Navigation = styled.div`
   width: 800px;
   text-align: center;
   margin: 20px 0;
+
+  &.start .start,
+  &.create .create,
+  &.preview .preview,
+  &.save .save {
+    font-weight: 700;
+  }
 `;
 
 const Tab = styled.span`
@@ -32,7 +39,7 @@ export const Layout = () => {
   const { lang, updateField, toggleLang, localizeField, form } = useTemplateStore();
   const { t } = useTranslation("form-builder");
 
-  const [showTab, setShowTab] = React.useState("create");
+  const [showTab, setShowTab] = React.useState("start");
 
   const handleClick = (tab: string) => {
     setShowTab(tab);
@@ -40,12 +47,22 @@ export const Layout = () => {
 
   return (
     <>
-      <Navigation>
-        <Tab onClick={() => handleClick("start")}>{t("start")}</Tab> /{" "}
-        <Tab onClick={() => handleClick("create")}>{t("create")}</Tab> /{" "}
-        <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
-        <Tab onClick={() => handleClick("preview")}>{t("preview")}</Tab> /{" "}
-        <Tab onClick={() => handleClick("save")}>{t("save")}</Tab>
+      <Navigation className={showTab}>
+        <Tab className="start" onClick={() => handleClick("start")}>
+          {t("start")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="create" onClick={() => handleClick("create")}>
+          {t("create")}
+        </Tab>{" "}
+        / <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
+        <Tab className="preview" onClick={() => handleClick("preview")}>
+          {t("preview")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="save" onClick={() => handleClick("save")}>
+          {t("save")}
+        </Tab>
       </Navigation>
 
       {showTab === "start" && <Start createForm={handleClick} />}

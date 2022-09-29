@@ -7,7 +7,7 @@ describe("Form Builder", () => {
 
   it("renders without errors", async () => {
     const { getByText } = render(<Layout />);
-    const button = getByText("Add element");
+    const button = getByText("startH2"); // This is the name of the translations key
     expect(button).toBeTruthy();
   });
 });
