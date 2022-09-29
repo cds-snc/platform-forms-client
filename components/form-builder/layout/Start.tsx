@@ -70,8 +70,16 @@ export const Start = ({ createForm }: { createForm: (tab: string) => void }) => 
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
+        let data;
 
-        const data = JSON.parse(e.target.result);
+        try {
+          data = JSON.parse(e.target.result);
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            setErrors(t("startErrorParse"));
+            return;
+          }
+        }
 
         if (!validateTemplate(data)) {
           setErrors(t("startErrorValidation"));

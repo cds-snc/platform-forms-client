@@ -38,5 +38,6 @@
   "startP1": "[FR] Create a new form from scratch",
   "startH3": "[FR] Open a form file",
   "startP2": "[FR] Revisit and edit an existing form file you saved from your last session",
-  "startErrorValidation": "[FR] Template validation failed"
+  "startErrorValidation": "[FR] Template validation failed",
+  "startErrorParse": "[FR] Failed to parse file, not valid JSON"
 }
