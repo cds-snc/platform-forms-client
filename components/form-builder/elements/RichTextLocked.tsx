@@ -2,11 +2,11 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { serializeMd } from "../plate-editor/helpers/markdown";
-import { deserializeMd } from "@udecode/plate";
+import { serializeMd } from "../plate-editor/helpers/serialize";
+import { deserializeMd, Value } from "@udecode/plate";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
-import { MyValue, useMyPlateEditorRef } from "../plate-editor/types";
+import { useMyPlateEditorRef } from "../plate-editor/types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
@@ -59,7 +59,7 @@ export const RichTextLocked = ({
     }
   }, []);
 
-  const onChange = (value: MyValue) => {
+  const onChange = (value: Value) => {
     let serialized = serializeMd(value);
 
     if (typeof serialized === "undefined") {
