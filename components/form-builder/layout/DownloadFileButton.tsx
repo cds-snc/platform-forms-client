@@ -1,5 +1,28 @@
 import React, { useCallback } from "react";
+import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+
 import useTemplateStore from "../store/useTemplateStore";
+import { FancyButton } from "../panel/Button";
+
+const PrimaryButton = styled(FancyButton)`
+  padding: 15px 20px;
+  background: #26374a;
+  box-shadow: inset 0 -2px 0 #515963;
+  color: white;
+
+  &:hover:not(:disabled),
+  &:active,
+  &:focus {
+    color: #ffffff;
+    background: #1c578a;
+    box-shadow: inset 0 -2px 0 #7a8796;
+  }
+
+  &:hover:active {
+    background: #16446c;
+  }
+`;
 
 const slugify = (str: string) =>
   str
@@ -17,8 +40,9 @@ const getDate = () => {
 };
 
 export const DownloadFileButton = () => {
+  const { t } = useTranslation("form-builder");
   const { getSchema, form } = useTemplateStore();
-  const dowloadFile = useCallback(async () => {
+  const downloadfile = useCallback(async () => {
     async function retrieveFileBlob() {
       try {
         const blob = new Blob([getSchema()], { type: "application/json" });
@@ -35,9 +59,5 @@ export const DownloadFileButton = () => {
 
     retrieveFileBlob();
   }, [getSchema]);
-  return (
-    <button className="gc-button" onClick={dowloadFile}>
-      Download
-    </button>
-  );
+  return <PrimaryButton onClick={downloadfile}>{t("saveButton")}</PrimaryButton>;
 };

@@ -205,13 +205,16 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     updateField,
     unsetField,
     resetChoices,
+    focusInput,
+    setFocusInput,
   } = useTemplateStore();
 
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (input.current) {
+    if (input.current && focusInput) {
       input.current.focus();
+      setFocusInput(false);
     }
   }, []);
 
