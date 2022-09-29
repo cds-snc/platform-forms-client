@@ -1,3 +1,4 @@
+import React from "react";
 import { useRouter } from "next/router";
 import { getCsrfToken, signIn } from "next-auth/react";
 import axios from "axios";
@@ -9,7 +10,8 @@ export const useAuth = () => {
 
   const register = async (
     { username, password }: { username: string; password: string },
-    { setSubmitting }: FormikHelpers<{ username: string; password: string }>
+    { setSubmitting }: FormikHelpers<{ username: string; password: string }>,
+    setUsername: React.Dispatch<React.SetStateAction<string>>
   ) => {
     try {
       const token = await getCsrfToken();
@@ -29,7 +31,8 @@ export const useAuth = () => {
         });
 
         if (result.statusText === "OK") {
-          await router.push({ pathname: "/signup/confirm", query: { username } });
+          await setSubmitting(false);
+          await setUsername(username);
         }
       }
     } catch (err) {
@@ -68,7 +71,7 @@ export const useAuth = () => {
 
         if (result.statusText === "OK") {
           await router.push({
-            pathname: "/login",
+            pathname: "/auth/login",
           });
         }
       }
@@ -79,9 +82,32 @@ export const useAuth = () => {
     }
   };
 
+  const resendConfirmationCode = async (username: string) => {
+    try {
+      const token = await getCsrfToken();
+      if (token) {
+        await axios({
+          url: "/api/signup/resendconfirmation",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token,
+          },
+          data: {
+            username: username,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
+      }
+    } catch (err) {
+      logMessage.error(err);
+    }
+  };
+
   const login = async (
     { username, password }: { username: string; password: string },
-    { setSubmitting }: FormikHelpers<{ username: string; password: string }>
+    { setSubmitting }: FormikHelpers<{ username: string; password: string }>,
+    setUsername: React.Dispatch<React.SetStateAction<string>>
   ) => {
     try {
       const response = await signIn<"credentials">("credentials", {
@@ -90,15 +116,10 @@ export const useAuth = () => {
         password,
       });
 
-      logMessage.error(response);
       if (response?.error && response.error.includes("User is not confirmed.")) {
-        await router.push({
-          pathname: "/signup/confirm",
-          query: {
-            username,
-          },
-        });
-      } else {
+        await setSubmitting(false);
+        await setUsername(username);
+      } else if (response?.ok) {
         await router.push({
           pathname: "/admin",
         });
@@ -110,5 +131,5 @@ export const useAuth = () => {
     }
   };
 
-  return { register, confirm, login };
+  return { register, confirm, resendConfirmationCode, login };
 };
