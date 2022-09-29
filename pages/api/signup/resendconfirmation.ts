@@ -27,11 +27,11 @@ const resendConfirmationCode = async (req: NextApiRequest, res: NextApiResponse)
   });
 
   // instantiate command object
-  const signUpCommand = new ResendConfirmationCodeCommand(params);
+  const resendConfirmationCodeCommand = new ResendConfirmationCodeCommand(params);
 
   // attempt to execute command on cognito and handle failure
   try {
-    const response = await cognitoClient.send(signUpCommand);
+    const response = await cognitoClient.send(resendConfirmationCodeCommand);
     return res.status(response["$metadata"].httpStatusCode as number).send("");
   } catch (err) {
     const cognitoError = err as CognitoIdentityProviderServiceException;

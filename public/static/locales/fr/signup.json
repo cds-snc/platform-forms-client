@@ -1,0 +1,22 @@
+{
+  "signUpConfirmation": {
+    "title": "Confirm Your Email (FR)",
+    "noUsername": "No user to confirm (FR)",
+    "fields": {
+      "confirmationCode": {
+        "label": "Confirmation Code (FR)"
+      }
+    }
+  },
+  "signUpRegistration": {
+    "title": "Sign Up to GC Forms (FR)",
+    "fields": {
+      "username": {
+        "label": "Email (FR)"
+      },
+      "password": {
+        "label": "Password (FR)"
+      }
+    }
+  }
+}

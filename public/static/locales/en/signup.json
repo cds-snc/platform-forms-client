@@ -1,0 +1,23 @@
+{
+  "signUpConfirmation": {
+    "title": "Confirm Your Email",
+    "noUsername": "No user to confirm",
+    "resendConfirmationCodeButton": "Resend Confirmation Code",
+    "fields": {
+      "confirmationCode": {
+        "label": "Confirmation Code"
+      }
+    }
+  },
+  "signUpRegistration": {
+    "title": "Sign Up to GC Forms",
+    "fields": {
+      "username": {
+        "label": "Email"
+      },
+      "password": {
+        "label": "Password"
+      }
+    }
+  }
+}
