@@ -7,6 +7,7 @@ import { deserializeMd } from "@udecode/plate";
 import { MyValue, useMyPlateEditorRef } from "../plate-editor/types";
 import { serializeMd } from "../plate-editor/helpers/markdown";
 import { LocalizedElementProperties } from "../types";
+import { BlockType, LeafType } from "remark-slate";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -42,7 +43,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    *
    * @param value
    */
-  const handleChange = (value: MyValue) => {
+  const handleChange = (value: (BlockType | LeafType)[]) => {
     let serialized = serializeMd(value);
 
     if (typeof serialized === "undefined") {
