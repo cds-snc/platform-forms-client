@@ -222,7 +222,6 @@
   },
   "required": ["form", "submission", "publishingStatus"],
   "additionalProperties": true,
-
   "definitions": {
     "element": {
       "type": "object",
@@ -305,7 +304,7 @@
                 "regex": {
                   "type": "string"
                 },
-                "maxLegth": {
+                "maxLength": {
                   "description": "The maximum number of characters that can be entered in a textinput or textarea.",
                   "type": "integer",
                   "minimum": 1

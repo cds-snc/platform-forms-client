@@ -85,6 +85,7 @@ export interface TemplateSchema {
 
 export interface ElementStore extends TemplateSchema {
   lang: Language;
+  focusInput: boolean;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
   localizeField: {
@@ -93,6 +94,7 @@ export interface ElementStore extends TemplateSchema {
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
   toggleLang: () => void;
+  setFocusInput: (isSet: boolean) => void;
   add: (index?: number) => void;
   remove: (id: number) => void;
   addChoice: (index: number) => void;

@@ -4,8 +4,8 @@ import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import { LocalizedFormProperties } from "../types";
-import { Import } from "./Import";
-import { Output } from "./Output";
+import { Save } from "./Save";
+import { Start } from "./Start";
 import { Preview } from "./Preview";
 
 const Input = styled.input`
@@ -21,6 +21,13 @@ const Navigation = styled.div`
   width: 800px;
   text-align: center;
   margin: 20px 0;
+
+  &.start .start,
+  &.create .create,
+  &.preview .preview,
+  &.save .save {
+    font-weight: 700;
+  }
 `;
 
 const Tab = styled.span`
@@ -32,7 +39,7 @@ export const Layout = () => {
   const { lang, updateField, toggleLang, localizeField, form } = useTemplateStore();
   const { t } = useTranslation("form-builder");
 
-  const [showTab, setShowTab] = React.useState("create");
+  const [showTab, setShowTab] = React.useState("start");
 
   const handleClick = (tab: string) => {
     setShowTab(tab);
@@ -40,16 +47,29 @@ export const Layout = () => {
 
   return (
     <>
-      <Navigation>
-        <Tab onClick={() => handleClick("create")}>{t("create")}</Tab> /{" "}
-        <Tab onClick={() => handleClick("json")}>{t("json")}</Tab> /{" "}
-        <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
-        <Tab onClick={() => handleClick("preview")}>{t("preview")}</Tab>
+      <Navigation className={showTab}>
+        <Tab className="start" onClick={() => handleClick("start")}>
+          {t("start")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="create" onClick={() => handleClick("create")}>
+          {t("create")}
+        </Tab>{" "}
+        / <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
+        <Tab className="preview" onClick={() => handleClick("preview")}>
+          {t("preview")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="save" onClick={() => handleClick("save")}>
+          {t("save")}
+        </Tab>
       </Navigation>
 
+      {showTab === "start" && <Start createForm={handleClick} />}
       {showTab === "create" && (
         <>
           <div>
+            <h1>{t("title")}</h1>
             <Input
               placeholder={t("placeHolderFormTitle")}
               value={form[localizeField(LocalizedFormProperties.TITLE)]}
@@ -61,17 +81,8 @@ export const Layout = () => {
           <ElementPanel />
         </>
       )}
-      {showTab === "json" && (
-        <>
-          <Import />
-          <Output />
-        </>
-      )}
-      {showTab === "preview" && (
-        <>
-          <Preview />
-        </>
-      )}
+      {showTab === "save" && <Save />}
+      {showTab === "preview" && <Preview />}
     </>
   );
 };
