@@ -54,6 +54,7 @@ export const defaultForm = {
 const useTemplateStore = create<ElementStore>()(
   immer((set, get) => ({
     lang: "en",
+    focusInput: false,
     form: defaultForm,
     submission: {
       email: "test@example.com",
@@ -68,6 +69,10 @@ const useTemplateStore = create<ElementStore>()(
     toggleLang: () =>
       set((state) => {
         state.lang = state.lang === "en" ? "fr" : "en";
+      }),
+    setFocusInput: (isSet) =>
+      set((state) => {
+        state.focusInput = isSet;
       }),
     updateField: (path, value) =>
       set((state) => {

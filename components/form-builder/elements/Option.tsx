@@ -58,19 +58,23 @@ export const Option = ({
     removeChoice,
     updateField,
     lang,
+    focusInput,
+    setFocusInput,
   } = useTemplateStore();
   const val = elements[parentIndex].properties.choices[index][lang];
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
 
   useEffect(() => {
-    if (input.current) {
+    if (input.current && focusInput) {
       input.current.focus();
+      setFocusInput(false);
     }
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
+      setFocusInput(true);
       addChoice(parentIndex);
     }
   };
