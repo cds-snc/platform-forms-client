@@ -1,8 +1,8 @@
 import { BlockType, defaultNodeTypes, LeafType, NodeTypes } from "remark-slate";
-import { Value } from "@udecode/plate";
+import { plateNodeTypes } from "./remarkslate-nodetypes";
 
 interface Options {
-  nodeTypes: NodeTypes;
+  nodeTypes: typeof plateNodeTypes;
   listDepth?: number;
   ignoreParagraphNewline?: boolean;
 }
@@ -17,7 +17,7 @@ const BREAK_TAG = "<br>";
 
 export default function serialize(
   chunk: BlockType | LeafType,
-  opts: Options = { nodeTypes: defaultNodeTypes }
+  opts: Options = { nodeTypes: plateNodeTypes }
 ) {
   const {
     nodeTypes: userNodeTypes = defaultNodeTypes,
@@ -29,7 +29,7 @@ export default function serialize(
   let text = (chunk as LeafType).text || "";
   let type = (chunk as BlockType).type || "";
 
-  const nodeTypes: NodeTypes = {
+  const nodeTypes: typeof plateNodeTypes = {
     ...defaultNodeTypes,
     ...userNodeTypes,
     heading: {
