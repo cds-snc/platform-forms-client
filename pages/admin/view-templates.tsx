@@ -115,6 +115,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
 
     return { props: {} };
   }
-}, UserRole.ADMINISTRATOR);
+});
 
 export default DataView;

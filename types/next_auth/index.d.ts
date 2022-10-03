@@ -1,5 +1,7 @@
 import { DefaultSession, DefaultUser } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
+import { AppAbility, Ability } from "@lib/policyBuilder";
+import { RawRuleOf } from "@casl/ability";
 
 declare module "next-auth" {
   /**
@@ -7,27 +9,28 @@ declare module "next-auth" {
    */
   interface Session extends DefaultSession {
     user: {
-      userId?: string;
+      id: string;
       authorizedForm?: string;
       lastLoginTime?: Date;
-      role?: string;
+      privelages: RawRuleOf<AppAbility>[];
       acceptableUse?: boolean;
       name?: string | null;
-      email?: string | null;
+      email: string | null;
       image?: string | null;
     };
   }
 
   interface User extends DefaultUser {
     id: string;
-    role?: string | null;
+    privelages: RawRuleOf<AppAbility>[];
+    ability?: Ability;
   }
 
   interface JWT extends DefaultJWT {
     userId?: string;
     authorizedForm?: string;
     lastLoginTime?: Date;
-    role?: string;
+    privelages?: RawRuleOf<AppAbility>[];
     acceptableUse?: boolean;
   }
 }

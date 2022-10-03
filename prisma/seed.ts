@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const testForm = await prisma.template.create({
+  await prisma.template.create({
     data: {
       jsonConfig: {
         form: {
@@ -346,8 +346,38 @@ async function main() {
     },
   });
 
-  // eslint-disable-next-line no-console
-  console.log({ testForm });
+  await prisma.privelage.createMany({
+    data: [
+      {
+        nameEn: "base",
+        nameFr: "base",
+        descriptionEn: "User can view templates",
+        descriptionFr: "Utilisature pour voir les templates",
+        permissions: { action: "view", subject: "FormRecord" },
+      },
+      {
+        nameEn: "formBuilder",
+        nameFr: "constructeurDeFormulaires",
+        descriptionEn: "User can create and modify templates",
+        descriptionFr: "Utilisature pour creer et modifier les templates",
+        permissions: { action: ["view", "update"], subject: "FormRecord" },
+      },
+      {
+        nameEn: "userView",
+        nameFr: "userView",
+        descriptionEn: "Can view all Users",
+        descriptionFr: "Pour voir tous les utilisateurs",
+        permissions: { action: "view", subject: "User" },
+      },
+      {
+        nameEn: "userManager",
+        nameFr: "userManager",
+        descriptionEn: "Can manage User permissions",
+        descriptionFr: "Peut gere les permissions d'utilisateur",
+        permissions: { action: "manage", subject: "User" },
+      },
+    ],
+  });
 }
 
 main()

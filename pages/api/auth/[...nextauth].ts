@@ -5,11 +5,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { validateTemporaryToken } from "@lib/auth";
-import { getFormUser, getOrCreateUser, userLastLogin } from "@lib/users";
-import { UserRole } from "@prisma/client";
+import { getOrCreateUser } from "@lib/users";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
+import { getPrivelageRulesForUser } from "@lib/privelages";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -71,31 +71,14 @@ export const authOptions: NextAuthOptions = {
           const user = await getOrCreateUser(token as JWT);
           if (user === null)
             throw new Error(`Could not get or create user with email: ${token.email}`);
-
           token.userId = user.id;
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
-          token.role = user.role;
           token.acceptableUse = false;
+          token.privelages = user.privelages.map((privelage) => privelage.permissions);
 
           break;
         }
-
-        case "credentials":
-          {
-            if (!token.sub)
-              throw new Error(`JWT token does not have an id for user with email ${token.email}`);
-
-            const user = await getFormUser(token.sub);
-            const lastLogin = await userLastLogin(token.sub);
-
-            token.userId = user?.id;
-            token.authorizedForm = user?.templateId;
-            token.lastLoginTime = lastLogin?.timestamp;
-            token.acceptableUse = false;
-            token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
-          }
-          break;
       }
       // The swtich case above is only run on initial JWT creation and not on any subsequent checks
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
@@ -107,13 +90,17 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       // Add info like 'role' to session object
-      session.user.userId = token.userId as string;
+      session.user.id = token.userId as string;
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
-      session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
+
+      const privelages = await getPrivelageRulesForUser(token.userId as string);
+      if (!privelages.length) throw new Error("User has no privelages");
+
+      session.user.privelages = privelages;
       return session;
     },
   },
@@ -181,7 +168,7 @@ export const authOptions: NextAuthOptions = {
  * otherwise return false
  * @returns boolean
  */
-const getAcceptableUseValue = async (userId: string | undefined) => {
+const getAcceptableUseValue = async (userId: string) => {
   if (!userId) return false;
   const acceptableUse = await acceptableUseCheck(userId);
 

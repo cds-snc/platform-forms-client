@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isAdmin } from "@lib/auth";
+import { isAuthenticated } from "@lib/auth";
 import { MiddlewareReturn } from "@lib/types";
 
 const useMethods = (req: NextApiRequest, methods?: string[]) => {
@@ -19,7 +19,7 @@ const useMethods = (req: NextApiRequest, methods?: string[]) => {
 
 export const sessionExists = (methods?: string[]) => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    const session = await isAdmin({ req, res });
+    const session = await isAuthenticated({ req, res });
 
     if (useMethods(req, methods) && !session) {
       res.status(403).json({ error: "Access Denied" });

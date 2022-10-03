@@ -72,13 +72,23 @@ model Template {
   formUsers   FormUser[]
 }
 
+model Privelage {
+  id          String  @id @default(cuid())
+  nameEn        String @unique
+  nameFr        String @unique
+  descriptionEn String?
+  descriptionFr String?
+  permissions Json
+  users       User[]
+}
+
 model User {
-  id            String     @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?    @unique
+  email         String?     @unique
   image         String?
   emailVerified DateTime?
-  role          UserRole   @default(PROGRAM_ADMINISTRATOR)
+  privelages    Privelage[]
   accounts      Account[]
   adminLogs     AdminLog[]
   sessions      Session[]
@@ -90,9 +100,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum UserRole {
-  ADMINISTRATOR
-  PROGRAM_ADMINISTRATOR
 }

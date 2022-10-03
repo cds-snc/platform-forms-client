@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../components/form-builder/layout/Layout";
 import { User } from "next-auth";
-import { UserRole } from "@prisma/client";
+import { createAbility } from "@lib/policyBuilder";
 
 type WelcomeProps = {
   user: User;
@@ -30,13 +30,21 @@ const Welcome: React.FC<WelcomeProps> = (props: WelcomeProps) => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
+export const getServerSideProps = requireAuthentication(async ({ user, locale }) => {
+  const userAbility = user?.privelages && createAbility(user.privelages);
+  if (userAbility?.cannot("update", "FormRecord")) {
+    return {
+      redirect: {
+        destination: `/${locale}/admin/unauthorized/`,
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "form-builder"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
     },
   };
-}, UserRole.ADMINISTRATOR);
+});
 
 export default Welcome;

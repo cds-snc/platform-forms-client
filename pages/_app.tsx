@@ -4,6 +4,7 @@ import React from "react";
 
 import { appWithTranslation } from "next-i18next";
 import { SessionProvider } from "next-auth/react";
+import { AccessControlProvider } from "@lib/hooks";
 import Base from "@components/globals/Base";
 import "../styles/app.scss";
 import i18nextConfig from "../next-i18next.config";
@@ -35,11 +36,13 @@ const MyApp: React.FunctionComponent<AppProps> = ({
       // Re-fetches session when window is focused
       refetchOnWindowFocus={true}
     >
-      <SafeHydrate>
-        <Base>
-          <Component {...pageProps} />
-        </Base>
-      </SafeHydrate>
+      <AccessControlProvider>
+        <SafeHydrate>
+          <Base>
+            <Component {...pageProps} />
+          </Base>
+        </SafeHydrate>
+      </AccessControlProvider>
     </SessionProvider>
   );
 };
