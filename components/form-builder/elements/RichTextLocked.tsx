@@ -50,7 +50,6 @@ export const RichTextLocked = ({
   const editorId = `${id}-editor`;
   const editor = useMyPlateEditorRef()!;
 
-  // const [value, setValue] = useState<Descendant[]>(initialValue);
   const [value, setValue] = useState(deserializeMd(editor, initialValue));
 
   useEffect(() => {
