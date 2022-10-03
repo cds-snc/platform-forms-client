@@ -122,7 +122,7 @@ export interface ElementOption {
   id: string;
   value: string | undefined;
   icon?: ReactElement;
-  prepend?: ReactElement;
+  append?: ReactElement;
 }
 
 export interface DropdownProps {

@@ -111,7 +111,7 @@ export const DropDown = ({
                 {item.icon && <DropDownListIcon>{item.icon}</DropDownListIcon>}
                 <DropDownListLabel>{item.value}</DropDownListLabel>
               </DropDownListItem>
-              {item.prepend && item.prepend}
+              {item.append && item.append}
             </div>
           ))}
       </DropDownList>

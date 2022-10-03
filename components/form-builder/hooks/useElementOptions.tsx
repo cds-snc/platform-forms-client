@@ -21,14 +21,14 @@ const Separator = styled.div`
 export const useElementOptions = () => {
   const { t } = useTranslation("form-builder");
   const elementOptions = [
-    { id: "textField", value: t("shortAnswer"), icon: <ShortAnswerIcon /> },
-    { id: "richText", value: t("richText"), icon: <ParagraphIcon /> },
-    { id: "textArea", value: t("paragraph"), icon: <ParagraphIcon />, prepend: <Separator /> },
-    { id: "radio", value: t("multipleChoice"), icon: <RadioIcon /> },
+    { id: "richText", value: t("richText"), icon: <ParagraphIcon />, append: <Separator /> },
+    { id: "radio", value: t("singleChoice"), icon: <RadioIcon /> },
     { id: "checkbox", value: t("checkboxes"), icon: <CheckIcon /> },
-    { id: "dropdown", value: t("dropdown"), icon: <SelectMenuIcon />, prepend: <Separator /> },
-    { id: "email", value: t("email"), icon: <EmailIcon /> },
+    { id: "dropdown", value: t("dropdown"), icon: <SelectMenuIcon />, append: <Separator /> },
+    { id: "textField", value: t("shortAnswer"), icon: <ShortAnswerIcon /> },
+    { id: "textArea", value: t("paragraph"), icon: <ParagraphIcon />, append: <Separator /> },
     { id: "phone", value: t("phoneNumber"), icon: <PhoneIcon /> },
+    { id: "email", value: t("email"), icon: <EmailIcon /> },
     { id: "date", value: t("date"), icon: <CalendarIcon /> },
     { id: "number", value: t("numericField"), icon: <NumericFieldIcon /> },
   ];
