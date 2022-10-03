@@ -1,4 +1,4 @@
-import { PureAbility, RawRuleOf, InferSubjects, MatchConditions } from "@casl/ability";
+import { createMongoAbility, MongoAbility, RawRuleOf, InferSubjects } from "@casl/ability";
 import { FormRecord } from "@lib/types";
 import { User } from "@prisma/client";
 /*
@@ -19,7 +19,8 @@ export type Action = "manage" | "create" | "view" | "update" | "delete";
 export type Subject = InferSubjects<CASL_FormRecord | CASL_User>;
 
 export type Abilities = [Action, Subject];
-export type AppAbility = PureAbility<Abilities, MatchConditions>;
-export type Ability = PureAbility<Abilities, unknown>;
-export const createAbility = (rules: RawRuleOf<AppAbility>[]) => new PureAbility<Abilities>(rules);
+export type AppAbility = MongoAbility<Abilities>;
+export const createAbility = (rules: RawRuleOf<AppAbility>[]) =>
+  createMongoAbility<AppAbility>(rules);
 export class AccessControlError extends Error {}
+export type Ability = MongoAbility;
