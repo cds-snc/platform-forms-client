@@ -8,6 +8,11 @@ import { Save } from "./Save";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 
+const StyledHeader = styled.h1`
+  border-bottom: none;
+  margin-bottom: 2rem;
+`;
+
 const Input = styled.input`
   padding: 22px 10px;
   width: 800px;
@@ -36,7 +41,7 @@ const Tab = styled.span`
 `;
 
 export const Layout = () => {
-  const { lang, updateField, toggleLang, localizeField, form } = useTemplateStore();
+  const { updateField, toggleLang, localizeField, form } = useTemplateStore();
   const { t } = useTranslation("form-builder");
 
   const [showTab, setShowTab] = React.useState("start");
@@ -45,6 +50,13 @@ export const Layout = () => {
     setShowTab(tab);
   };
 
+  const handleHeaderClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.detail === 2) {
+      // double click
+      toggleLang();
+    }
+  };
+  /* eslint-disable */
   return (
     <>
       <Navigation className={showTab}>
@@ -55,7 +67,7 @@ export const Layout = () => {
         <Tab className="create" onClick={() => handleClick("create")}>
           {t("create")}
         </Tab>{" "}
-        / <Tab onClick={toggleLang}>{lang === "en" ? "Français" : "English"}</Tab> /{" "}
+        /{" "}
         <Tab className="preview" onClick={() => handleClick("preview")}>
           {t("preview")}
         </Tab>{" "}
@@ -65,11 +77,16 @@ export const Layout = () => {
         </Tab>
       </Navigation>
 
-      {showTab === "start" && <Start createForm={handleClick} />}
+      {showTab === "start" && (
+        <>
+          <h1 onClick={handleHeaderClick}>{t("start")}</h1>
+          <Start changeTab={handleClick} />
+        </>
+      )}
       {showTab === "create" && (
         <>
           <div>
-            <h1>{t("title")}</h1>
+            <h1 onClick={handleHeaderClick}>{t("title")}</h1>
             <Input
               placeholder={t("placeHolderFormTitle")}
               value={form[localizeField(LocalizedFormProperties.TITLE)]}
@@ -81,10 +98,21 @@ export const Layout = () => {
           <ElementPanel />
         </>
       )}
-      {showTab === "save" && <Save />}
-      {showTab === "preview" && <Preview />}
+      {showTab === "preview" && (
+        <>
+          <h1 onClick={handleHeaderClick}>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+          <Preview />
+        </>
+      )}
+      {showTab === "save" && (
+        <>
+          <StyledHeader onClick={handleHeaderClick}>{t("saveH1")}</StyledHeader>
+          <Save />
+        </>
+      )}
     </>
   );
+  /* eslint-enable */
 };
 
 export default Layout;
