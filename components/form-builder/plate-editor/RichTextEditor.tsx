@@ -82,7 +82,7 @@ export const RichTextEditor = ({
           <BasicElementToolbarButtons />
           <BasicMarkToolbarButtons />
           <ListToolbarButtons />
-          {/* <LinkToolbarButton tooltip={{ content: "Huzzah" }} id={id} icon={<Link />} /> */}
+          {/* <LinkToolbarButtons /> */}
         </HeadingToolbar>
         <Plate<MyValue>
           id={id}
