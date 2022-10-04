@@ -19,14 +19,14 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const { localizeField, updateField, form } = useTemplateStore();
 
   const [value, setValue] = useState(
-    form.elements[parentIndex].properties.descriptionEn
+    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)]
       ? deserializeMd(
           editor,
           form.elements[parentIndex].properties[
             localizeField(LocalizedElementProperties.DESCRIPTION)
           ]
         )
-      : ""
+      : [{ children: [{ text: "" }] }]
   );
 
   useEffect(() => {
