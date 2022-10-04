@@ -1,5 +1,5 @@
 {
-  "title": "Create form",
+  "title": "Design a form",
   "addMultiple": "Add multiple options",
   "addOption": "Add an option",
   "addOptions": "Add options",
@@ -16,7 +16,7 @@
   "numericField": "Numeric field",
   "option": "Option",
   "remove": "Remove",
-  "create": "Create",
+  "design": "Design",
   "json": "JSON",
   "preview": "Preview",
   "placeHolderFormTitle": "Form Title",
