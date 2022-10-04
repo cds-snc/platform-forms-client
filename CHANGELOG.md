@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix last login date format [#950](https://github.com/cds-snc/platform-forms-client/pull/950)
 - Cleared email input field after successfully adding an email to Form Access [#954](https://github.com/cds-snc/platform-forms-client/pull/954)
 - Returned only public properties for forms [#1038](https://github.com/cds-snc/platform-forms-client/pull/1038)
+- Can't enable/disable user permissions in admin panel
 
 ### Removed
 

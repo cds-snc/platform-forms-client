@@ -43,13 +43,12 @@ describe("Template CRUD functions", () => {
 
     const newTemplate = await createTemplate(formConfiguration as FormConfiguration);
 
-    expect(
-      prismaMock.template.create.calledWith({
-        data: {
-          jsonConfig: formConfiguration,
-        },
-      })
-    );
+    expect(prismaMock.template.create).toHaveBeenCalledWith({
+      data: {
+        jsonConfig: formConfiguration,
+      },
+    });
+
     expect(newTemplate).toEqual({
       formID: "formtestID",
       formConfig: formConfiguration,
@@ -62,17 +61,16 @@ describe("Template CRUD functions", () => {
     });
 
     const template = await getTemplateByID("formTestID");
-    expect(
-      prismaMock.template.findUnique.calledWith({
-        where: {
-          id: "formTestID",
-        },
-        select: {
-          id: true,
-          jsonConfig: true,
-        },
-      })
-    );
+
+    expect(prismaMock.template.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: "formTestID",
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    });
 
     expect(template).toEqual({
       formID: "formtestID",
@@ -125,20 +123,18 @@ describe("Template CRUD functions", () => {
 
     const updatedTemplate = await updateTemplate("test1", updatedFormConfig);
 
-    expect(
-      prismaMock.template.update.calledWith({
-        where: {
-          id: "formtestID",
-        },
-        data: {
-          jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
-        },
-        select: {
-          id: true,
-          jsonConfig: true,
-        },
-      })
-    );
+    expect(prismaMock.template.update).toHaveBeenCalledWith({
+      where: {
+        id: "test1",
+      },
+      data: {
+        jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    });
 
     expect(updatedTemplate).toEqual({
       formID: "formtestID",
@@ -152,13 +148,17 @@ describe("Template CRUD functions", () => {
     });
 
     const deletedTemplate = await deleteTemplate("formtestID");
-    expect(
-      prismaMock.template.delete.calledWith({
-        where: {
-          id: "formtestID",
-        },
-      })
-    );
+
+    expect(prismaMock.template.delete).toHaveBeenCalledWith({
+      where: {
+        id: "formtestID",
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    });
+
     expect(deletedTemplate).toEqual({
       formID: "formtestID",
       formConfig: formConfiguration,
@@ -198,16 +198,15 @@ describe("Template CRUD functions", () => {
     });
 
     const submissionType = await getSubmissionTypeByID("formtestID");
-    expect(
-      prismaMock.template.findUnique.calledWith({
-        where: {
-          id: "formtestID",
-        },
-        select: {
-          jsonConfig: true,
-        },
-      })
-    );
+
+    expect(prismaMock.template.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: "formtestID",
+      },
+      select: {
+        jsonConfig: true,
+      },
+    });
 
     expect(submissionType).toEqual(formConfiguration.submission);
   });
