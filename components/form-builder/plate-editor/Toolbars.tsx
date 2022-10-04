@@ -42,7 +42,6 @@ export const BasicElementToolbarButtons = () => {
       <BlockToolbarButton type={getPluginType(editor, ELEMENT_H4)} icon={<Looks4 />} />
       <BlockToolbarButton type={getPluginType(editor, ELEMENT_H5)} icon={<Looks5 />} />
       <BlockToolbarButton type={getPluginType(editor, ELEMENT_H6)} icon={<Looks6 />} />
-      <BlockToolbarButton type={getPluginType(editor, ELEMENT_BLOCKQUOTE)} icon={<FormatQuote />} />
     </>
   );
 };
@@ -54,10 +53,6 @@ export const BasicMarkToolbarButtons = () => {
     <>
       <MarkToolbarButton type={getPluginType(editor, MARK_BOLD)} icon={<FormatBold />} />
       <MarkToolbarButton type={getPluginType(editor, MARK_ITALIC)} icon={<FormatItalic />} />
-      <MarkToolbarButton
-        type={getPluginType(editor, MARK_STRIKETHROUGH)}
-        icon={<FormatStrikethrough />}
-      />
     </>
   );
 };
