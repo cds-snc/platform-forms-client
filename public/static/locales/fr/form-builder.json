@@ -1,5 +1,5 @@
 {
-  "title": "[FR] Create form",
+  "title": "[FR] Design a form",
   "addMultiple": "[FR] Add multiple options",
   "addOption": "[FR] Add an option",
   "addOptions": "[FR] Add options",
@@ -16,7 +16,7 @@
   "numericField": "[FR] Numeric field",
   "option": "[FR] Option",
   "remove": "[FR] Remove",
-  "create": "[FR] Create",
+  "design": "[FR] Design",
   "json": "[FR] JSON",
   "preview": "[FR] Preview",
   "placeHolderFormTitle": "[FR] Form Title",

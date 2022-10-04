@@ -65,7 +65,7 @@ export const Layout = () => {
         </Tab>{" "}
         /{" "}
         <Tab className="create" onClick={() => handleClick("create")}>
-          {t("create")}
+          {t("design")}
         </Tab>{" "}
         /{" "}
         <Tab className="preview" onClick={() => handleClick("preview")}>
