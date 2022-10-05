@@ -363,18 +363,28 @@ async function main() {
         permissions: [{ action: ["view", "update"], subject: "FormRecord" }],
       },
       {
-        nameEn: "userView",
-        nameFr: "userView",
+        nameEn: "ViewUserPrivelages",
+        nameFr: "ViewUserPrivelages",
         descriptionEn: "Can view all Users",
         descriptionFr: "Pour voir tous les utilisateurs",
-        permissions: [{ action: "view", subject: "User" }],
+        permissions: [{ action: "view", subject: ["User", "Privelage"] }],
       },
       {
         nameEn: "userManager",
         nameFr: "userManager",
         descriptionEn: "Can manage User permissions",
         descriptionFr: "Peut gere les permissions d'utilisateur",
-        permissions: [{ action: "manage", subject: "User" }],
+        permissions: [
+          { action: ["view", "manage"], subject: "User" },
+          { action: "view", subject: "Privelage" },
+        ],
+      },
+      {
+        nameEn: "privelageManage",
+        nameFr: "privelageManage",
+        descriptionEn: "Can manage Privelages",
+        descriptionFr: "Peut gerer les privelages",
+        permissions: [{ action: ["view", "manage"], subject: "Privelage" }],
       },
     ],
   });

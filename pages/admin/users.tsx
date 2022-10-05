@@ -115,9 +115,9 @@ const Users = ({
 
 export default Users;
 
-export const getServerSideProps = requireAuthentication(async ({ user, locale }) => {
-  const allUsers = await getUsers(user.ability);
-  const allPrivelages = (await getAllPrivelages()).map(
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+  const allUsers = await getUsers(ability);
+  const allPrivelages = (await getAllPrivelages(ability)).map(
     ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
       id,
       nameEn,

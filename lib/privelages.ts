@@ -90,8 +90,9 @@ export const updatePrivelagesForUser = async (
  * Get all privelages availabe in the application
  * @returns an array of privealges
  */
-export const getAllPrivelages = async () => {
+export const getAllPrivelages = async (ability: Ability) => {
   try {
+    checkPrivelages(ability, [{ action: "view", subject: "Privelage" }]);
     return await prisma.privelage.findMany({
       select: {
         id: true,
@@ -101,9 +102,37 @@ export const getAllPrivelages = async () => {
         descriptionFr: true,
         permissions: true,
       },
+      orderBy: {
+        id: "asc",
+      },
     });
   } catch (e) {
     return prismaErrors(e, []);
+  }
+};
+
+export const updatePrivelage = async (ability: Ability, privelage: Privelage) => {
+  try {
+    checkPrivelages(ability, [{ action: "manage", subject: "Privelage" }]);
+
+    const response = await prisma.privelage.update({
+      where: {
+        id: privelage.id,
+      },
+      data: privelage,
+
+      select: {
+        id: true,
+      },
+    });
+    return response;
+  } catch (error) {
+    logMessage.error(error as Error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      // Error P2025: Record to update not found.
+      return null;
+    }
+    throw error;
   }
 };
 

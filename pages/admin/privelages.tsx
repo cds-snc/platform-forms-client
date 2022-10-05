@@ -10,7 +10,7 @@ import { getAllPrivelages } from "@lib/privelages";
 import { Privelage } from "@lib/policyBuilder";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { logMessage } from "@lib/logger";
-import { selected } from "@components/forms/Radio/Radio.stories";
+import { useRefresh } from "@lib/hooks";
 
 const PrivelageRow = ({
   privelage,
@@ -19,7 +19,7 @@ const PrivelageRow = ({
   privelage: Privelage;
   edit: (privelage: Privelage) => void;
 }) => {
-  const { ability, refreshAbility } = useAccessControl();
+  const { ability } = useAccessControl();
   const { i18n } = useTranslation();
 
   return (
@@ -57,9 +57,11 @@ const PrivelageRow = ({
         </table>
       </td>
       <td>
-        <Button type="button" className="w-32" onClick={() => edit(privelage)}>
-          Edit
-        </Button>
+        {ability?.can("update", "Privelage") && (
+          <Button type="button" className="w-32" onClick={() => edit(privelage)}>
+            Edit
+          </Button>
+        )}
       </td>
     </tr>
   );
@@ -67,10 +69,10 @@ const PrivelageRow = ({
 
 const ModifyPrivelage = ({
   privelage,
-  cancel,
+  backToList,
 }: {
   privelage: Privelage | null;
-  cancel: () => void;
+  backToList: () => void;
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -78,19 +80,32 @@ const ModifyPrivelage = ({
       nameFr: privelage?.nameFr || "",
       descriptionEn: privelage?.descriptionEn || "",
       descriptionFr: privelage?.descriptionFr || "",
-      permissions: privelage?.permissions || [],
+      permissions: JSON.stringify(privelage?.permissions) || "",
     },
     validate: (values) => {
       const errors = {};
-      logMessage.debug(JSON.stringify(values));
+      // logMessage.debug(JSON.stringify(values));
 
       return errors;
     },
-    onSubmit: (values, { setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await axios({
+          url: `/api/privelages`,
+          method: "PUT",
+          data: {
+            privelage: {
+              ...(privelage?.id && { id: privelage.id }),
+              ...values,
+            },
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
         setSubmitting(false);
-      }, 400);
+        backToList();
+      } catch (e) {
+        logMessage.error(e);
+      }
     },
   });
 
@@ -145,9 +160,21 @@ const ModifyPrivelage = ({
             value={formik.values.descriptionFr}
           />
         </div>
+        <div>
+          <label htmlFor="permissions" className="gc-label">
+            Permissions
+          </label>
+          <input
+            id="permissions"
+            name="permissions"
+            className="gc-input-text"
+            onChange={formik.handleChange}
+            value={formik.values.permissions}
+          />
+        </div>
 
         <Button type="submit">Submit</Button>
-        <Button type="button" onClick={cancel}>
+        <Button type="button" onClick={backToList}>
           Cancel
         </Button>
       </form>
@@ -155,15 +182,11 @@ const ModifyPrivelage = ({
   );
 };
 
-const Privelages = ({
-  allPrivelages: _privelages,
-}: {
-  allPrivelages: Privelage[];
-}): React.ReactElement => {
+const Privelages = ({ allPrivelages }: { allPrivelages: Privelage[] }): React.ReactElement => {
   const { t } = useTranslation("admin-privelages");
-  const [privelages, setPrivelages] = useState(_privelages);
   const [modifyMode, setModifyMode] = useState(false);
   const [selectedPrivelage, setSelectedPrivealge] = useState<Privelage | null>(null);
+  const { refreshData } = useRefresh();
 
   const editPrivelage = (privelage: Privelage) => {
     setSelectedPrivealge(privelage);
@@ -173,6 +196,7 @@ const Privelages = ({
   const cancelEdit = () => {
     setModifyMode(false);
     setSelectedPrivealge(null);
+    refreshData();
   };
 
   return (
@@ -180,7 +204,7 @@ const Privelages = ({
       <h1>{t("title")}</h1>
       <div className="shadow-lg border-4">
         {modifyMode ? (
-          <ModifyPrivelage privelage={selectedPrivelage} cancel={cancelEdit} />
+          <ModifyPrivelage privelage={selectedPrivelage} backToList={cancelEdit} />
         ) : (
           <table className="table-fixed min-w-full">
             <thead>
@@ -191,7 +215,7 @@ const Privelages = ({
               </tr>
             </thead>
             <tbody>
-              {privelages.map((privelage) => {
+              {allPrivelages.map((privelage) => {
                 return (
                   <PrivelageRow key={privelage.id} privelage={privelage} edit={editPrivelage} />
                 );
@@ -206,9 +230,9 @@ const Privelages = ({
 
 export default Privelages;
 
-export const getServerSideProps = requireAuthentication(async ({ user, locale }) => {
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   // Add ability check later for newly defined permissions
-  const allPrivelages = await getAllPrivelages();
+  const allPrivelages = await getAllPrivelages(ability);
 
   return {
     props: {

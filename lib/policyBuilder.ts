@@ -14,9 +14,13 @@ interface CASL_User extends User {
   kind: "User";
 }
 
+interface CASL_Privelage extends Privelage {
+  kind: "Privelage";
+}
+
 export type Action = "manage" | "create" | "view" | "update" | "delete";
 
-export type Subject = InferSubjects<CASL_FormRecord | CASL_User>;
+export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privelage>;
 
 export type Abilities = [Action, Subject];
 export type AppAbility = MongoAbility<Abilities>;

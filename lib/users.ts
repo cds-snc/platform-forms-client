@@ -16,7 +16,18 @@ export const getUsers = async (ability: Ability) => {
         id: true,
         name: true,
         email: true,
-        privelages: true,
+        privelages: {
+          select: {
+            id: true,
+            nameEn: true,
+            nameFr: true,
+            descriptionEn: true,
+            descriptionFr: true,
+          },
+        },
+      },
+      orderBy: {
+        id: "asc",
       },
     });
 
