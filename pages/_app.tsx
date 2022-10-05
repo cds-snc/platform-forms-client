@@ -7,7 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
 import Base from "@components/globals/Base";
 import "../styles/app.scss";
-import i18nextConfig from "../next-i18next.config";
+import { Session } from "next-auth";
 
 /*
 This component disables SSR when in testing mode.
@@ -24,10 +24,10 @@ const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const MyApp: React.FunctionComponent<AppProps> = ({
+const MyApp: React.FunctionComponent<AppProps<{ session?: Session }>> = ({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) => {
+}) => {
   return (
     <SessionProvider
       session={session}
@@ -47,4 +47,5 @@ const MyApp: React.FunctionComponent<AppProps> = ({
   );
 };
 
-export default appWithTranslation(MyApp, i18nextConfig);
+// Temporary workaround until this issue is resolved with next-i18next (https://github.com/i18next/next-i18next/issues/1944)
+export default appWithTranslation(MyApp as React.FC);
