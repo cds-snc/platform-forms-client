@@ -64,7 +64,8 @@
     "templates": "Templates",
     "features": "Options",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "privelages": "Privelages"
   },
   "formElements": {
     "characterCount": {
@@ -78,13 +79,13 @@
     "add": "Add",
     "delete": "Delete"
   },
-  "acceptableUsePage":{
-    "agree":"Agree",
-    "cancel":"Cancel",
-    "welcome":"Welcome back",
-    "lastLoginTime":"Last log-in"
+  "acceptableUsePage": {
+    "agree": "Agree",
+    "cancel": "Cancel",
+    "welcome": "Welcome back",
+    "lastLoginTime": "Last log-in"
   },
-  "loginMenu":{
+  "loginMenu": {
     "login": "Sign in",
     "logout": "Sign out"
   }

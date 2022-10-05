@@ -1,6 +1,6 @@
 import { createMongoAbility, MongoAbility, RawRuleOf, InferSubjects } from "@casl/ability";
 import { FormRecord } from "@lib/types";
-import { User } from "@prisma/client";
+import { User, Privelage as PrismaPrivelage } from "@prisma/client";
 /*
 This file is referenced by the useAccessControl hook so no server-side
 only dependencies can be referenced in this file.
@@ -24,3 +24,12 @@ export const createAbility = (rules: RawRuleOf<AppAbility>[]) =>
   createMongoAbility<AppAbility>(rules);
 export class AccessControlError extends Error {}
 export type Ability = MongoAbility;
+export type Permission = {
+  action: Action | Action[];
+  subject: Extract<Subject, string> | Extract<Subject, string>[];
+  condition?: string;
+};
+export interface Privelage extends PrismaPrivelage {
+  permissions: Permission[];
+  [key: string]: string | null | Permission[];
+}

@@ -2,10 +2,10 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
-import { Button } from "@components/forms";
-import React, { useState } from "react";
+import { useRefresh } from "@lib/hooks";
+import React from "react";
 import axios from "axios";
-import { TFunction, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 import { getAllPrivelages } from "@lib/privelages";
 import { Privelage } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
@@ -16,6 +16,8 @@ interface User {
   name: string | null;
   email: string | null;
 }
+
+type PrivelageList = Omit<Privelage, "permissions">[];
 
 const updatePrivelage = async (
   userID: string,
@@ -36,19 +38,12 @@ const updatePrivelage = async (
   }
 };
 
-const UserRow = ({
-  user,
-  privelages,
-  afterUpdate: refreshAfterUpdate,
-}: {
-  user: User;
-  privelages: Privelage[];
-  afterUpdate: () => Promise<void>;
-}) => {
+const UserRow = ({ user, privelages }: { user: User; privelages: PrivelageList }) => {
   const { ability, refreshAbility } = useAccessControl();
   const { i18n } = useTranslation();
   const userPrivelageName = user.privelages.map((privelage) => privelage.id);
   const canManageUsers = ability?.can("manage", "User") ?? false;
+  const { refreshData: refreshAfterUpdate } = useRefresh();
 
   return (
     <tr className="border-b-1">
@@ -82,27 +77,13 @@ const UserRow = ({
 };
 
 const Users = ({
-  allUsers: _allUsers,
+  allUsers,
   allPrivelages,
 }: {
   allUsers: User[];
-  allPrivelages: Privelage[];
+  allPrivelages: PrivelageList;
 }): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-users");
-  const [allUsers, setAllUsers] = useState(_allUsers);
-
-  const refreshUserList = async () => {
-    try {
-      const response = await axios({
-        url: `/api/users`,
-        method: "GET",
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      });
-      setAllUsers(response.data);
-    } catch (error) {
-      logMessage.error(error);
-    }
-  };
 
   return (
     <>
@@ -123,14 +104,7 @@ const Users = ({
           </thead>
           <tbody>
             {allUsers.map((user) => {
-              return (
-                <UserRow
-                  key={user.id}
-                  user={user}
-                  privelages={allPrivelages}
-                  afterUpdate={refreshUserList}
-                />
-              );
+              return <UserRow key={user.id} user={user} privelages={allPrivelages} />;
             })}
           </tbody>
         </table>
@@ -143,7 +117,15 @@ export default Users;
 
 export const getServerSideProps = requireAuthentication(async ({ user, locale }) => {
   const allUsers = await getUsers(user.ability);
-  const allPrivelages = await getAllPrivelages();
+  const allPrivelages = (await getAllPrivelages()).map(
+    ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
+      id,
+      nameEn,
+      nameFr,
+      descriptionFr,
+      descriptionEn,
+    })
+  );
 
   return {
     props: {

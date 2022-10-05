@@ -1,7 +1,6 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { privelageCheck, privelagePut, privelageDelete } from "@lib/privelageCache";
-import { Ability, AppAbility, Action, Subject, AccessControlError } from "@lib/policyBuilder";
-import { RawRuleOf } from "@casl/ability";
+import { Ability, Action, Subject, AccessControlError, Privelage } from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
 
@@ -24,11 +23,12 @@ export const getPrivelageRulesForUser = async (userId: string) => {
       },
     });
 
-    if (user?.privelages === null) throw new Error("No privelages assigned to user");
+    if (!user || !user?.privelages) throw new Error("No privelages assigned to user");
 
-    const refreshedRules = user?.privelages.map(
-      (privelage) => privelage.permissions
-    ) as unknown as RawRuleOf<AppAbility>[];
+    const refreshedRules = user.privelages
+      .map((privelage) => (privelage as Privelage).permissions)
+      .flat();
+    //  as unknown as RawRuleOf<AppAbility>[];
     refreshedRules && privelagePut(userId, refreshedRules);
     return refreshedRules;
   } catch (e) {
@@ -99,6 +99,7 @@ export const getAllPrivelages = async () => {
         nameFr: true,
         descriptionEn: true,
         descriptionFr: true,
+        permissions: true,
       },
     });
   } catch (e) {

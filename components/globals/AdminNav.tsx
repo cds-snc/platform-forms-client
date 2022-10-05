@@ -35,6 +35,11 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/users">{t("adminNav.users")}</Link>
           </li>
         )}
+        {ability?.can("view", "User") && (
+          <li className="gc-horizontal-item">
+            <Link href="/admin/privelages">{t("adminNav.privelages")}</Link>
+          </li>
+        )}
         <li className="gc-horizontal-item">
           <Link href="/admin/upload">{t("adminNav.upload")}</Link>
         </li>

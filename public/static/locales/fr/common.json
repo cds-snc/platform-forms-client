@@ -64,7 +64,8 @@
     "templates": "Modèles",
     "features": "Options",
     "login": "Connexion",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "privelages": "Privelages"
   },
   "formElements": {
     "characterCount": {

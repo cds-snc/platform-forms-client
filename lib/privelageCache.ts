@@ -1,7 +1,6 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
-import { AppAbility } from "@lib/policyBuilder";
-import { RawRuleOf } from "@casl/ability";
+import { Permission } from "./policyBuilder";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
 const cacheAvailable: boolean =
@@ -41,7 +40,7 @@ const deleteValue = async (deleteParameter: string) => {
   }
 };
 
-const modifyValue = async (modifyParameter: string, rules: RawRuleOf<AppAbility>[]) => {
+const modifyValue = async (modifyParameter: string, rules: Permission[]) => {
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
@@ -58,7 +57,7 @@ const modifyValue = async (modifyParameter: string, rules: RawRuleOf<AppAbility>
   Privelages
 */
 
-export const privelageCheck = async (userID: string): Promise<RawRuleOf<AppAbility>[] | null> => {
+export const privelageCheck = async (userID: string): Promise<Permission[] | null> => {
   return checkValue(`auth:privelages:${userID}`);
 };
 
@@ -66,10 +65,7 @@ export const privelageDelete = async (userID: string): Promise<void> => {
   return deleteValue(`auth:privelages:${userID}`);
 };
 
-export const privelagePut = async (
-  userID: string,
-  privelages: RawRuleOf<AppAbility>[]
-): Promise<void> => {
+export const privelagePut = async (userID: string, privelages: Permission[]): Promise<void> => {
   return modifyValue(`auth:privelages:${userID}`, privelages);
 };
 
