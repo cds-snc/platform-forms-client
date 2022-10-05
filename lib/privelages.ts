@@ -136,6 +136,28 @@ export const updatePrivelage = async (ability: Ability, privelage: Privelage) =>
   }
 };
 
+export const createPrivelage = async (ability: Ability, privelage: Privelage) => {
+  try {
+    checkPrivelages(ability, [{ action: "manage", subject: "Privelage" }]);
+
+    const response = await prisma.privelage.create({
+      data: privelage,
+
+      select: {
+        id: true,
+      },
+    });
+    return response;
+  } catch (error) {
+    logMessage.error(error as Error);
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+      // Error P2025: Record to update not found.
+      return null;
+    }
+    throw error;
+  }
+};
+
 /**
  * Checks the privelages requested against an ability instance and throws and error if the action is not permitted.
  * @param ability The ability instance associated to a User

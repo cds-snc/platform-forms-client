@@ -92,7 +92,7 @@ const ModifyPrivelage = ({
       try {
         await axios({
           url: `/api/privelages`,
-          method: "PUT",
+          method: privelage?.id ? "PUT" : "POST",
           data: {
             privelage: {
               ...(privelage?.id && { id: privelage.id }),

@@ -7,7 +7,10 @@ import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { createAbility, Ability, Privelage } from "@lib/policyBuilder";
-import { updatePrivelage as prismaUpdatePrivelage } from "@lib/privelages";
+import {
+  updatePrivelage as prismaUpdatePrivelage,
+  createPrivelage as prismaCreatePrivelage,
+} from "@lib/privelages";
 const allowedMethods = ["GET", "PUT"];
 
 const getPrivelageList = async (res: NextApiResponse, ability: Ability) => {
@@ -19,6 +22,35 @@ const getPrivelageList = async (res: NextApiResponse, ability: Ability) => {
   }
 };
 
+const createPrivelage = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  ability: Ability,
+  session?: Session
+) => {
+  const { privelage } = req.body;
+  if (typeof privelage === "undefined" || privelage.id) {
+    return res.status(400).json({ error: "Malformed Request" });
+  }
+  // Need to parse serialized permissions from form response
+  privelage.permissions = JSON.parse(privelage.permissions);
+
+  const result = await prismaCreatePrivelage(ability, privelage);
+  logMessage.info(AdminLogAction.Update);
+  if (result) {
+    if (session && session.user.id) {
+      /*
+      await logAdminActivity(
+        session.user.id,
+      );
+      */
+    }
+    res.status(200).send("Success");
+  } else {
+    res.status(404).json({ error: "Privelage not found" });
+  }
+};
+
 const updatePrivelage = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -26,13 +58,14 @@ const updatePrivelage = async (
   session?: Session
 ) => {
   const { privelage } = req.body;
-  if (typeof privelage === "undefined") {
+  if (typeof privelage === "undefined" || !privelage.id) {
     return res.status(400).json({ error: "Malformed Request" });
   }
   // Need to parse serialized permissions from form response
   privelage.permissions = JSON.parse(privelage.permissions);
 
   const result = await prismaUpdatePrivelage(ability, privelage);
+
   logMessage.info(AdminLogAction.Update);
   if (result) {
     if (session && session.user.id) {
@@ -61,6 +94,9 @@ const handler = async (
     const ability = createAbility(session.user.privelages);
 
     switch (req.method) {
+      case "POST":
+        await createPrivelage(req, res, ability, session);
+        break;
       case "PUT":
         await updatePrivelage(req, res, ability, session);
         break;
