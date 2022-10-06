@@ -12,7 +12,7 @@ declare module "next-auth" {
       id: string;
       authorizedForm?: string;
       lastLoginTime?: Date;
-      privelages: RawRuleOf<AppAbility>[];
+      priveleges: RawRuleOf<AppAbility>[];
       acceptableUse?: boolean;
       name?: string | null;
       email: string | null;
@@ -22,7 +22,7 @@ declare module "next-auth" {
 
   interface User extends DefaultUser {
     id: string;
-    privelages: RawRuleOf<AppAbility>[];
+    priveleges: RawRuleOf<AppAbility>[];
     ability?: Ability;
   }
 
@@ -30,7 +30,7 @@ declare module "next-auth" {
     userId?: string;
     authorizedForm?: string;
     lastLoginTime?: Date;
-    privelages?: RawRuleOf<AppAbility>[];
+    priveleges?: RawRuleOf<AppAbility>[];
     acceptableUse?: boolean;
   }
 }

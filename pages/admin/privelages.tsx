@@ -6,26 +6,26 @@ import { Button } from "@components/forms";
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { checkPrivelages, getAllPrivelages } from "@lib/privelages";
-import { Privelage } from "@lib/policyBuilder";
+import { checkPriveleges, getAllPriveleges } from "@lib/priveleges";
+import { Privelege } from "@lib/policyBuilder";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks";
 
-const PrivelageRow = ({
-  privelage,
+const PrivelegeRow = ({
+  privelege,
   edit,
 }: {
-  privelage: Privelage;
-  edit: (privelage: Privelage) => void;
+  privelege: Privelege;
+  edit: (privelege: Privelege) => void;
 }) => {
   const { ability } = useAccessControl();
   const { i18n } = useTranslation();
 
   return (
     <tr className="border-b-1">
-      <td>{i18n.language === "en" ? privelage.nameEn : privelage.nameFr}</td>
-      <td>{i18n.language === "en" ? privelage.descriptionEn : privelage.descriptionFr}</td>
+      <td>{i18n.language === "en" ? privelege.nameEn : privelege.nameFr}</td>
+      <td>{i18n.language === "en" ? privelege.descriptionEn : privelege.descriptionFr}</td>
       <td>
         <table className="table-fixed min-w-full text-center">
           <thead>
@@ -36,7 +36,7 @@ const PrivelageRow = ({
             </tr>
           </thead>
           <tbody>
-            {privelage.permissions.map((permission, index) => {
+            {privelege.permissions.map((permission, index) => {
               return (
                 <tr key={index}>
                   <td>
@@ -57,8 +57,8 @@ const PrivelageRow = ({
         </table>
       </td>
       <td>
-        {ability?.can("update", "Privelage") && (
-          <Button type="button" className="w-32" onClick={() => edit(privelage)}>
+        {ability?.can("update", "Privelege") && (
+          <Button type="button" className="w-32" onClick={() => edit(privelege)}>
             Edit
           </Button>
         )}
@@ -67,20 +67,20 @@ const PrivelageRow = ({
   );
 };
 
-const ModifyPrivelage = ({
-  privelage,
+const ModifyPrivelege = ({
+  privelege,
   backToList,
 }: {
-  privelage: Privelage | null;
+  privelege: Privelege | null;
   backToList: () => void;
 }) => {
   const formik = useFormik({
     initialValues: {
-      nameEn: privelage?.nameEn || "",
-      nameFr: privelage?.nameFr || "",
-      descriptionEn: privelage?.descriptionEn || "",
-      descriptionFr: privelage?.descriptionFr || "",
-      permissions: JSON.stringify(privelage?.permissions) || "",
+      nameEn: privelege?.nameEn || "",
+      nameFr: privelege?.nameFr || "",
+      descriptionEn: privelege?.descriptionEn || "",
+      descriptionFr: privelege?.descriptionFr || "",
+      permissions: JSON.stringify(privelege?.permissions) || "",
     },
     validate: (values) => {
       const errors = {};
@@ -91,11 +91,11 @@ const ModifyPrivelage = ({
     onSubmit: async (values, { setSubmitting }) => {
       try {
         await axios({
-          url: `/api/privelages`,
-          method: privelage?.id ? "PUT" : "POST",
+          url: `/api/priveleges`,
+          method: privelege?.id ? "PUT" : "POST",
           data: {
-            privelage: {
-              ...(privelage?.id && { id: privelage.id }),
+            privelege: {
+              ...(privelege?.id && { id: privelege.id }),
               ...values,
             },
           },
@@ -182,14 +182,14 @@ const ModifyPrivelage = ({
   );
 };
 
-const Privelages = ({ allPrivelages }: { allPrivelages: Privelage[] }): React.ReactElement => {
-  const { t } = useTranslation("admin-privelages");
+const Priveleges = ({ allPriveleges }: { allPriveleges: Privelege[] }): React.ReactElement => {
+  const { t } = useTranslation("admin-priveleges");
   const [modifyMode, setModifyMode] = useState(false);
-  const [selectedPrivelage, setSelectedPrivealge] = useState<Privelage | null>(null);
+  const [selectedPrivelege, setSelectedPrivealge] = useState<Privelege | null>(null);
   const { refreshData } = useRefresh();
 
-  const editPrivelage = (privelage: Privelage) => {
-    setSelectedPrivealge(privelage);
+  const editPrivelege = (privelege: Privelege) => {
+    setSelectedPrivealge(privelege);
     setModifyMode(true);
   };
 
@@ -204,21 +204,21 @@ const Privelages = ({ allPrivelages }: { allPrivelages: Privelage[] }): React.Re
       <h1>{t("title")}</h1>
       <div className="shadow-lg border-4">
         {modifyMode ? (
-          <ModifyPrivelage privelage={selectedPrivelage} backToList={cancelEdit} />
+          <ModifyPrivelege privelege={selectedPrivelege} backToList={cancelEdit} />
         ) : (
           <div>
             <table className="table-fixed min-w-full">
               <thead>
                 <tr className="border-b-2">
-                  <th className="w-1/6">Privelage Name</th>
+                  <th className="w-1/6">Privelege Name</th>
                   <th className="w-1/3">Description</th>
                   <th className="w-3/4">Permissions</th>
                 </tr>
               </thead>
               <tbody>
-                {allPrivelages.map((privelage) => {
+                {allPriveleges.map((privelege) => {
                   return (
-                    <PrivelageRow key={privelage.id} privelage={privelage} edit={editPrivelage} />
+                    <PrivelegeRow key={privelege.id} privelege={privelege} edit={editPrivelege} />
                   );
                 })}
               </tbody>
@@ -239,16 +239,16 @@ const Privelages = ({ allPrivelages }: { allPrivelages: Privelage[] }): React.Re
   );
 };
 
-export default Privelages;
+export default Priveleges;
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
-  checkPrivelages(ability, [{ action: "manage", subject: "Privelage" }]);
-  const allPrivelages = await getAllPrivelages(ability);
+  checkPriveleges(ability, [{ action: "manage", subject: "Privelege" }]);
+  const allPriveleges = await getAllPriveleges(ability);
 
   return {
     props: {
-      ...(locale && (await serverSideTranslations(locale, ["common", "admin-privelages"]))),
-      allPrivelages,
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-priveleges"]))),
+      allPriveleges,
     },
   };
 });

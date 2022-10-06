@@ -35,9 +35,9 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/users">{t("adminNav.users")}</Link>
           </li>
         )}
-        {ability?.can("manage", "Privelage") && (
+        {ability?.can("manage", "Privelege") && (
           <li className="gc-horizontal-item">
-            <Link href="/admin/privelages">{t("adminNav.privelages")}</Link>
+            <Link href="/admin/priveleges">{t("adminNav.priveleges")}</Link>
           </li>
         )}
         <li className="gc-horizontal-item">

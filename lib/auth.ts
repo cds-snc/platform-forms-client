@@ -55,7 +55,7 @@ export function requireAuthentication(
         };
       }
 
-      context.user = { ...session.user, ability: createAbility(session.user.privelages) };
+      context.user = { ...session.user, ability: createAbility(session.user.priveleges) };
 
       const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic
       if (hasOwnProperty(innerFunctionProps, "props")) {

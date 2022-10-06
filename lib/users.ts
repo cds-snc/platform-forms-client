@@ -3,20 +3,20 @@ import { AccessLog, FormUser } from "@prisma/client";
 import { JWT } from "next-auth";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
-import { checkPrivelages } from "./privelages";
+import { checkPriveleges } from "./priveleges";
 /**
  * Get all Users
  * @returns An array of all Users
  */
 export const getUsers = async (ability: Ability) => {
   try {
-    checkPrivelages(ability, [{ action: "view", subject: "User" }]);
+    checkPriveleges(ability, [{ action: "view", subject: "User" }]);
     const users = await prisma.user.findMany({
       select: {
         id: true,
         name: true,
         email: true,
-        privelages: {
+        priveleges: {
           select: {
             id: true,
             nameEn: true,
@@ -69,16 +69,16 @@ export const getOrCreateUser = async (userToken: JWT) => {
         id: true,
         name: true,
         email: true,
-        privelages: true,
+        priveleges: true,
       },
     });
 
     // If a user already exists return the record
-    if (user !== null && user.privelages.length) return user;
+    if (user !== null && user.priveleges.length) return user;
 
     // User does not exist, create and return a record
     const { name, email, picture: image } = userToken;
-    const basePrivelages = await prisma.privelage.findUnique({
+    const basePriveleges = await prisma.privelege.findUnique({
       where: {
         nameEn: "base",
       },
@@ -87,7 +87,7 @@ export const getOrCreateUser = async (userToken: JWT) => {
       },
     });
 
-    if (basePrivelages === null) throw new Error("Base Privelages is not set in Database");
+    if (basePriveleges === null) throw new Error("Base Priveleges is not set in Database");
 
     if (!user) {
       return await prisma.user.create({
@@ -95,15 +95,15 @@ export const getOrCreateUser = async (userToken: JWT) => {
           name,
           email,
           image,
-          privelages: {
-            connect: basePrivelages,
+          priveleges: {
+            connect: basePriveleges,
           },
         },
         select: {
           id: true,
           name: true,
           email: true,
-          privelages: true,
+          priveleges: true,
         },
       });
     } else {
@@ -112,15 +112,15 @@ export const getOrCreateUser = async (userToken: JWT) => {
           id: user.id,
         },
         data: {
-          privelages: {
-            connect: basePrivelages,
+          priveleges: {
+            connect: basePriveleges,
           },
         },
         select: {
           id: true,
           name: true,
           email: true,
-          privelages: true,
+          priveleges: true,
         },
       });
     }

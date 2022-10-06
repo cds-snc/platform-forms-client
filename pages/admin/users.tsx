@@ -6,22 +6,22 @@ import { useRefresh } from "@lib/hooks";
 import React from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { getAllPrivelages } from "@lib/privelages";
-import { Privelage } from "@prisma/client";
+import { getAllPriveleges } from "@lib/priveleges";
+import { Privelege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 
 interface User {
-  privelages: Privelage[];
+  priveleges: Privelege[];
   id: string;
   name: string | null;
   email: string | null;
 }
 
-type PrivelageList = Omit<Privelage, "permissions">[];
+type PrivelegeList = Omit<Privelege, "permissions">[];
 
-const updatePrivelage = async (
+const updatePrivelege = async (
   userID: string,
-  privelages: [{ id: string; action: "add" | "remove" }]
+  priveleges: [{ id: string; action: "add" | "remove" }]
 ) => {
   try {
     await axios({
@@ -29,7 +29,7 @@ const updatePrivelage = async (
       method: "PUT",
       data: {
         userID,
-        privelages,
+        priveleges,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
@@ -38,32 +38,32 @@ const updatePrivelage = async (
   }
 };
 
-const UserRow = ({ user, privelages }: { user: User; privelages: PrivelageList }) => {
+const UserRow = ({ user, priveleges }: { user: User; priveleges: PrivelegeList }) => {
   const { ability, refreshAbility } = useAccessControl();
   const { i18n } = useTranslation();
-  const userPrivelageName = user.privelages.map((privelage) => privelage.id);
+  const userPrivelegeName = user.priveleges.map((privelege) => privelege.id);
   const canManageUsers = ability?.can("manage", "User") ?? false;
   const { refreshData: refreshAfterUpdate } = useRefresh();
 
   return (
     <tr className="border-b-1">
       <td>{user.email}</td>
-      {privelages?.map((privelage) => {
+      {priveleges?.map((privelege) => {
         return (
-          <td key={privelage.id}>
-            <label className="sr-only" htmlFor={`${user.id}-${privelage.id}`}>
-              {i18n.language === "en" ? privelage.nameEn : privelage.nameFr}
+          <td key={privelege.id}>
+            <label className="sr-only" htmlFor={`${user.id}-${privelege.id}`}>
+              {i18n.language === "en" ? privelege.nameEn : privelege.nameFr}
             </label>
             <input
               type="checkbox"
-              id={`${user.id}-${privelage.id}`}
-              checked={userPrivelageName.includes(privelage.id)}
+              id={`${user.id}-${privelege.id}`}
+              checked={userPrivelegeName.includes(privelege.id)}
               disabled={!canManageUsers}
               onChange={async () => {
-                if (userPrivelageName.includes(privelage.id)) {
-                  await updatePrivelage(user.id, [{ id: privelage.id, action: "remove" }]);
+                if (userPrivelegeName.includes(privelege.id)) {
+                  await updatePrivelege(user.id, [{ id: privelege.id, action: "remove" }]);
                 } else {
-                  await updatePrivelage(user.id, [{ id: privelage.id, action: "add" }]);
+                  await updatePrivelege(user.id, [{ id: privelege.id, action: "add" }]);
                 }
                 await refreshAbility();
                 await refreshAfterUpdate();
@@ -78,10 +78,10 @@ const UserRow = ({ user, privelages }: { user: User; privelages: PrivelageList }
 
 const Users = ({
   allUsers,
-  allPrivelages,
+  allPriveleges,
 }: {
   allUsers: User[];
-  allPrivelages: PrivelageList;
+  allPriveleges: PrivelegeList;
 }): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-users");
 
@@ -93,10 +93,10 @@ const Users = ({
           <thead>
             <tr className="border-b-2">
               <th>{t("email")}</th>
-              {allPrivelages?.map((privelage) => {
+              {allPriveleges?.map((privelege) => {
                 return (
-                  <th key={privelage.id}>
-                    {i18n.language === "en" ? privelage.nameEn : privelage.nameFr}
+                  <th key={privelege.id}>
+                    {i18n.language === "en" ? privelege.nameEn : privelege.nameFr}
                   </th>
                 );
               })}
@@ -104,7 +104,7 @@ const Users = ({
           </thead>
           <tbody>
             {allUsers.map((user) => {
-              return <UserRow key={user.id} user={user} privelages={allPrivelages} />;
+              return <UserRow key={user.id} user={user} priveleges={allPriveleges} />;
             })}
           </tbody>
         </table>
@@ -117,7 +117,7 @@ export default Users;
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   const allUsers = await getUsers(ability);
-  const allPrivelages = (await getAllPrivelages(ability)).map(
+  const allPriveleges = (await getAllPriveleges(ability)).map(
     ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({
       id,
       nameEn,
@@ -131,7 +131,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     props: {
       ...(locale && (await serverSideTranslations(locale, ["common", "admin-users"]))),
       allUsers,
-      allPrivelages,
+      allPriveleges,
     },
   };
 });

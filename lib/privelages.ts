@@ -1,35 +1,35 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { privelageCheck, privelagePut, privelageDelete, flushValues } from "@lib/privelageCache";
-import { Ability, Action, Subject, AccessControlError, Privelage } from "@lib/policyBuilder";
+import { privelegeCheck, privelegePut, privelegeDelete, flushValues } from "@lib/privelegeCache";
+import { Ability, Action, Subject, AccessControlError, Privelege } from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
 
 /**
- * Get the privelages rules associated to a user
+ * Get the priveleges rules associated to a user
  * @param userId id of a User
- * @returns An array of privelages associated to the user
+ * @returns An array of priveleges associated to the user
  */
-export const getPrivelageRulesForUser = async (userId: string) => {
+export const getPrivelegeRulesForUser = async (userId: string) => {
   try {
-    const cachedPrivelagesRules = await privelageCheck(userId);
-    if (cachedPrivelagesRules?.length) return cachedPrivelagesRules;
+    const cachedPrivelegesRules = await privelegeCheck(userId);
+    if (cachedPrivelegesRules?.length) return cachedPrivelegesRules;
 
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
       select: {
-        privelages: true,
+        priveleges: true,
       },
     });
 
-    if (!user || !user?.privelages) throw new Error("No privelages assigned to user");
+    if (!user || !user?.priveleges) throw new Error("No priveleges assigned to user");
 
-    const refreshedRules = user.privelages
-      .map((privelage) => (privelage as Privelage).permissions)
+    const refreshedRules = user.priveleges
+      .map((privelege) => (privelege as Privelege).permissions)
       .flat();
     //  as unknown as RawRuleOf<AppAbility>[];
-    refreshedRules && privelagePut(userId, refreshedRules);
+    refreshedRules && privelegePut(userId, refreshedRules);
     return refreshedRules;
   } catch (e) {
     return prismaErrors(e, []);
@@ -37,26 +37,26 @@ export const getPrivelageRulesForUser = async (userId: string) => {
 };
 
 /**
- * Update and overwrite existing privelages on a User
+ * Update and overwrite existing priveleges on a User
  * @param ability Ability instance for session
  * @param userID id of the user to be updated
- * @param privelages Array of privelages to be connect to user
+ * @param priveleges Array of priveleges to be connect to user
  * @returns
  */
-export const updatePrivelagesForUser = async (
+export const updatePrivelegesForUser = async (
   ability: Ability,
   userID: string,
-  privelages: { id: string; action: "add" | "remove" }[]
+  priveleges: { id: string; action: "add" | "remove" }[]
 ) => {
   try {
-    checkPrivelages(ability, [{ action: "manage", subject: "User" }]);
-    const addPrivelages: { id: string }[] = [];
-    const removePrivelages: { id: string }[] = [];
-    privelages.forEach((privelage) => {
-      if (privelage.action === "add") {
-        addPrivelages.push({ id: privelage.id });
+    checkPriveleges(ability, [{ action: "manage", subject: "User" }]);
+    const addPriveleges: { id: string }[] = [];
+    const removePriveleges: { id: string }[] = [];
+    priveleges.forEach((privelege) => {
+      if (privelege.action === "add") {
+        addPriveleges.push({ id: privelege.id });
       } else {
-        removePrivelages.push({ id: privelage.id });
+        removePriveleges.push({ id: privelege.id });
       }
     });
     const user = await prisma.user.update({
@@ -64,18 +64,18 @@ export const updatePrivelagesForUser = async (
         id: userID,
       },
       data: {
-        privelages: {
-          connect: addPrivelages,
-          disconnect: removePrivelages,
+        priveleges: {
+          connect: addPriveleges,
+          disconnect: removePriveleges,
         },
       },
       select: {
-        privelages: true,
+        priveleges: true,
       },
     });
-    await privelageDelete(userID);
+    await privelegeDelete(userID);
 
-    return user.privelages;
+    return user.priveleges;
   } catch (error) {
     logMessage.error(error as Error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -87,13 +87,13 @@ export const updatePrivelagesForUser = async (
 };
 
 /**
- * Get all privelages availabe in the application
+ * Get all priveleges availabe in the application
  * @returns an array of privealges
  */
-export const getAllPrivelages = async (ability: Ability) => {
+export const getAllPriveleges = async (ability: Ability) => {
   try {
-    checkPrivelages(ability, [{ action: "view", subject: "Privelage" }]);
-    return await prisma.privelage.findMany({
+    checkPriveleges(ability, [{ action: "view", subject: "Privelege" }]);
+    return await prisma.privelege.findMany({
       select: {
         id: true,
         nameEn: true,
@@ -111,21 +111,21 @@ export const getAllPrivelages = async (ability: Ability) => {
   }
 };
 
-export const updatePrivelage = async (ability: Ability, privelage: Privelage) => {
+export const updatePrivelege = async (ability: Ability, privelege: Privelege) => {
   try {
-    checkPrivelages(ability, [{ action: "manage", subject: "Privelage" }]);
+    checkPriveleges(ability, [{ action: "manage", subject: "Privelege" }]);
 
-    const response = await prisma.privelage.update({
+    const response = await prisma.privelege.update({
       where: {
-        id: privelage.id,
+        id: privelege.id,
       },
-      data: privelage,
+      data: privelege,
 
       select: {
         id: true,
       },
     });
-    // Flush existing privelage cache for all users asynchronously
+    // Flush existing privelege cache for all users asynchronously
     flushValues();
     return response;
   } catch (error) {
@@ -138,18 +138,18 @@ export const updatePrivelage = async (ability: Ability, privelage: Privelage) =>
   }
 };
 
-export const createPrivelage = async (ability: Ability, privelage: Privelage) => {
+export const createPrivelege = async (ability: Ability, privelege: Privelege) => {
   try {
-    checkPrivelages(ability, [{ action: "manage", subject: "Privelage" }]);
+    checkPriveleges(ability, [{ action: "manage", subject: "Privelege" }]);
 
-    const response = await prisma.privelage.create({
-      data: privelage,
+    const response = await prisma.privelege.create({
+      data: privelege,
 
       select: {
         id: true,
       },
     });
-    // Flush existing privelage cache for all users asynchronously
+    // Flush existing privelege cache for all users asynchronously
     flushValues();
     return response;
   } catch (error) {
@@ -163,12 +163,12 @@ export const createPrivelage = async (ability: Ability, privelage: Privelage) =>
 };
 
 /**
- * Checks the privelages requested against an ability instance and throws and error if the action is not permitted.
+ * Checks the priveleges requested against an ability instance and throws and error if the action is not permitted.
  * @param ability The ability instance associated to a User
  * @param rules An array of rules to verify
  * @param logic Use an AND or OR logic comparison
  */
-export const checkPrivelages = (
+export const checkPriveleges = (
   ability: Ability,
   rules: { action: Action; subject: Subject }[],
   logic: "all" | "one" = "all"
