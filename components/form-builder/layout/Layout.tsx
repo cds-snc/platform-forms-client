@@ -40,6 +40,11 @@ const Tab = styled.span`
   cursor: pointer;
 `;
 
+const StyledPreviewWrapper = styled.div`
+  border: 2px dashed blue;
+  padding: 20px;
+`;
+
 export const Layout = () => {
   const { updateField, toggleLang, localizeField, form } = useTemplateStore();
   const { t } = useTranslation("form-builder");
@@ -100,8 +105,10 @@ export const Layout = () => {
       )}
       {showTab === "preview" && (
         <>
-          <h1 onClick={handleHeaderClick}>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-          <Preview />
+          <StyledPreviewWrapper>
+            <h1 onClick={handleHeaderClick}>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+            <Preview />
+          </StyledPreviewWrapper>
         </>
       )}
       {showTab === "save" && (
