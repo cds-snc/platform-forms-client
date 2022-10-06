@@ -579,14 +579,16 @@ const ElementPanelDiv = styled.div`
 export const ElementPanel = () => {
   const { form, localizeField } = useTemplateStore();
 
-  const introTextPlaceholder =
-    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const introTextPlaceholder = form.introduction
+    ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
+    : "";
 
   const confirmTextPlaceholder =
     form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
-  const policyTextPlaceholder =
-    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const policyTextPlaceholder = form.privacyPolicy
+    ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
+    : "";
 
   return (
     <ElementPanelDiv>
