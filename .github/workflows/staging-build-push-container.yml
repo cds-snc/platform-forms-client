@@ -3,6 +3,11 @@ name: "Staging — Push container to ECR"
 on:
   push:
     branches: [develop]
+    paths-ignore:
+      # Ignore all files and folders that start with '.'
+      - ".**"
+      # Ignore all files and folder in fixtures, tests, utils, etc.
+      - "__*/**"
 
 env:
   ECR_REPOSITORY: form_viewer_staging
