@@ -22,4 +22,3 @@ jobs:
             --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
             --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
             --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID .
-
