@@ -41,7 +41,7 @@ const Tab = styled.span`
 `;
 
 const StyledPreviewWrapper = styled.div`
-  border: 2px dashed blue;
+  border: 3px dashed blue;
   padding: 20px;
 `;
 
