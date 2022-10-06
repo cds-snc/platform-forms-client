@@ -6,12 +6,12 @@ import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { createAbility, Ability, Privelage } from "@lib/policyBuilder";
+import { createAbility, Ability } from "@lib/policyBuilder";
 import {
   updatePrivelage as prismaUpdatePrivelage,
   createPrivelage as prismaCreatePrivelage,
 } from "@lib/privelages";
-const allowedMethods = ["GET", "PUT"];
+const allowedMethods = ["GET", "PUT", "POST"];
 
 const getPrivelageList = async (res: NextApiResponse, ability: Ability) => {
   const privelages = await getAllPrivelages(ability);

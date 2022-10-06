@@ -7,7 +7,8 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { UserRole } from "@prisma/client";
+import { checkPrivelages } from "@lib/privelages";
+import { useAccessControl } from "@lib/hooks";
 
 interface DataViewProps {
   templates: Array<{
@@ -35,6 +36,8 @@ const DataView = (props: DataViewProps): React.ReactElement => {
     });
   };
 
+  const { ability } = useAccessControl();
+
   return (
     <>
       <Head>
@@ -60,12 +63,14 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                   {template.publishingStatus ? t("view.published") : t("view.draft")}
                 </td>
                 <td>
-                  <button
-                    onClick={() => redirectToSettings(template.formID)}
-                    className="gc-button w-full"
-                  >
-                    {t("view.update")}
-                  </button>
+                  {ability?.can("update", "FormRecord") && (
+                    <button
+                      onClick={() => redirectToSettings(template.formID)}
+                      className="gc-button w-full"
+                    >
+                      {t("view.update")}
+                    </button>
+                  )}
                 </td>
                 <td>
                   <button
@@ -84,8 +89,16 @@ const DataView = (props: DataViewProps): React.ReactElement => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   {
+    checkPrivelages(
+      ability,
+      [
+        { action: "view", subject: "FormRecord" },
+        { action: "update", subject: "FormRecord" },
+      ],
+      "one"
+    );
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
 
@@ -108,8 +121,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     return {
       props: {
         templates,
-        ...(context.locale &&
-          (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
+        ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
       }, // will be passed to the page component as props
     };
 

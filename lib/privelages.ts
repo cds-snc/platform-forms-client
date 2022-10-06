@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { privelageCheck, privelagePut, privelageDelete } from "@lib/privelageCache";
+import { privelageCheck, privelagePut, privelageDelete, flushValues } from "@lib/privelageCache";
 import { Ability, Action, Subject, AccessControlError, Privelage } from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
@@ -125,6 +125,8 @@ export const updatePrivelage = async (ability: Ability, privelage: Privelage) =>
         id: true,
       },
     });
+    // Flush existing privelage cache for all users asynchronously
+    flushValues();
     return response;
   } catch (error) {
     logMessage.error(error as Error);
@@ -147,6 +149,8 @@ export const createPrivelage = async (ability: Ability, privelage: Privelage) =>
         id: true,
       },
     });
+    // Flush existing privelage cache for all users asynchronously
+    flushValues();
     return response;
   } catch (error) {
     logMessage.error(error as Error);

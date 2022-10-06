@@ -6,7 +6,7 @@ import { Button } from "@components/forms";
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { getAllPrivelages } from "@lib/privelages";
+import { checkPrivelages, getAllPrivelages } from "@lib/privelages";
 import { Privelage } from "@lib/policyBuilder";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { logMessage } from "@lib/logger";
@@ -206,22 +206,33 @@ const Privelages = ({ allPrivelages }: { allPrivelages: Privelage[] }): React.Re
         {modifyMode ? (
           <ModifyPrivelage privelage={selectedPrivelage} backToList={cancelEdit} />
         ) : (
-          <table className="table-fixed min-w-full">
-            <thead>
-              <tr className="border-b-2">
-                <th className="w-1/6">Privelage Name</th>
-                <th className="w-1/3">Description</th>
-                <th className="w-3/4">Permissions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allPrivelages.map((privelage) => {
-                return (
-                  <PrivelageRow key={privelage.id} privelage={privelage} edit={editPrivelage} />
-                );
-              })}
-            </tbody>
-          </table>
+          <div>
+            <table className="table-fixed min-w-full">
+              <thead>
+                <tr className="border-b-2">
+                  <th className="w-1/6">Privelage Name</th>
+                  <th className="w-1/3">Description</th>
+                  <th className="w-3/4">Permissions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allPrivelages.map((privelage) => {
+                  return (
+                    <PrivelageRow key={privelage.id} privelage={privelage} edit={editPrivelage} />
+                  );
+                })}
+              </tbody>
+            </table>
+            <Button
+              type="button"
+              onClick={() => {
+                setSelectedPrivealge(null);
+                setModifyMode(true);
+              }}
+            >
+              Create
+            </Button>
+          </div>
         )}
       </div>
     </>
@@ -231,7 +242,7 @@ const Privelages = ({ allPrivelages }: { allPrivelages: Privelage[] }): React.Re
 export default Privelages;
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
-  // Add ability check later for newly defined permissions
+  checkPrivelages(ability, [{ action: "manage", subject: "Privelage" }]);
   const allPrivelages = await getAllPrivelages(ability);
 
   return {
