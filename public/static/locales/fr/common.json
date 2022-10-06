@@ -65,7 +65,7 @@
     "features": "Options",
     "login": "Connexion",
     "logout": "Déconnexion",
-    "priveleges": "Priveleges"
+    "privileges": "Privileges"
   },
   "formElements": {
     "characterCount": {

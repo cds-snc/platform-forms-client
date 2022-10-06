@@ -72,7 +72,7 @@ model Template {
   formUsers   FormUser[]
 }
 
-model Privelege {
+model Privilege {
   id          String  @id @default(cuid())
   nameEn        String @unique
   nameFr        String @unique
@@ -88,7 +88,7 @@ model User {
   email         String?     @unique
   image         String?
   emailVerified DateTime?
-  priveleges    Privelege[]
+  privileges    Privilege[]
   accounts      Account[]
   adminLogs     AdminLog[]
   sessions      Session[]

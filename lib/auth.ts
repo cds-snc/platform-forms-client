@@ -55,7 +55,7 @@ export function requireAuthentication(
         };
       }
 
-      context.user = { ...session.user, ability: createAbility(session.user.priveleges) };
+      context.user = { ...session.user, ability: createAbility(session.user.privileges) };
 
       const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic
       if (hasOwnProperty(innerFunctionProps, "props")) {
@@ -83,7 +83,7 @@ export function requireAuthentication(
 }
 
 /**
- * Checks if session exists server side and if it belongs to a user with administrative priveleges
+ * Checks if session exists server side and if it belongs to a user with administrative privileges
  * @param reqOrContext Request and Response Object
  * @returns session if exists otherwise null
  */

@@ -346,7 +346,7 @@ async function main() {
     },
   });
 
-  await prisma.privelege.createMany({
+  await prisma.privilege.createMany({
     data: [
       {
         nameEn: "base",
@@ -363,11 +363,11 @@ async function main() {
         permissions: [{ action: ["view", "update"], subject: "FormRecord" }],
       },
       {
-        nameEn: "ViewUserPriveleges",
-        nameFr: "ViewUserPriveleges",
+        nameEn: "ViewUserPrivileges",
+        nameFr: "ViewUserPrivileges",
         descriptionEn: "Can view all Users",
         descriptionFr: "Pour voir tous les utilisateurs",
-        permissions: [{ action: "view", subject: ["User", "Privelege"] }],
+        permissions: [{ action: "view", subject: ["User", "Privilege"] }],
       },
       {
         nameEn: "userManager",
@@ -376,15 +376,15 @@ async function main() {
         descriptionFr: "Peut gere les permissions d'utilisateur",
         permissions: [
           { action: ["view", "manage"], subject: "User" },
-          { action: "view", subject: "Privelege" },
+          { action: "view", subject: "Privilege" },
         ],
       },
       {
-        nameEn: "privelegeManage",
-        nameFr: "privelegeManage",
-        descriptionEn: "Can manage Priveleges",
-        descriptionFr: "Peut gerer les priveleges",
-        permissions: [{ action: ["view", "manage"], subject: "Privelege" }],
+        nameEn: "privilegeManage",
+        nameFr: "privilegeManage",
+        descriptionEn: "Can manage Privileges",
+        descriptionFr: "Peut gerer les privileges",
+        permissions: [{ action: ["view", "manage"], subject: "Privilege" }],
       },
     ],
   });

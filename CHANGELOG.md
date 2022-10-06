@@ -124,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `organisation` to `organization` which has an impact on the API access path
 - Modified the middleware functionality and separation of scopes between middlewares
 - A user now needs to have an enabled admin flag (user table) to access the Admin Pages
-- An admin user can now add and remove administrative priveleges from other users.
+- An admin user can now add and remove administrative privileges from other users.
 
 ### Fixed
 

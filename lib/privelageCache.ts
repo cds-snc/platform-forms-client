@@ -54,19 +54,19 @@ const modifyValue = async (modifyParameter: string, rules: Permission[]) => {
 };
 
 /*
-  Priveleges
+  Privileges
 */
 
-export const privelegeCheck = async (userID: string): Promise<Permission[] | null> => {
-  return checkValue(`auth:priveleges:${userID}`);
+export const privilegeCheck = async (userID: string): Promise<Permission[] | null> => {
+  return checkValue(`auth:privileges:${userID}`);
 };
 
-export const privelegeDelete = async (userID: string): Promise<void> => {
-  return deleteValue(`auth:priveleges:${userID}`);
+export const privilegeDelete = async (userID: string): Promise<void> => {
+  return deleteValue(`auth:privileges:${userID}`);
 };
 
-export const privelegePut = async (userID: string, priveleges: Permission[]): Promise<void> => {
-  return modifyValue(`auth:priveleges:${userID}`, priveleges);
+export const privilegePut = async (userID: string, privileges: Permission[]): Promise<void> => {
+  return modifyValue(`auth:privileges:${userID}`, privileges);
 };
 
 export const flushValues = async () => {
@@ -74,7 +74,7 @@ export const flushValues = async () => {
   try {
     const redis = await getRedisInstance();
     const stream = redis.scanStream({
-      match: "auth:priveleges:*",
+      match: "auth:privileges:*",
     });
     stream.on("data", function (keys: string[]) {
       // `keys` is an array of strings representing key names
@@ -88,7 +88,7 @@ export const flushValues = async () => {
     });
     return new Promise<void>((resolve) =>
       stream.on("end", () => {
-        logMessage.debug("Cached Priveleges have been cleared");
+        logMessage.debug("Cached Privileges have been cleared");
         resolve();
       })
     );

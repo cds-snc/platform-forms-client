@@ -15,8 +15,8 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
 
   const refreshAbility = async () => {
     const session = await getSession();
-    if (session !== null && session.user.priveleges) {
-      const userAbility = createAbility(session.user.priveleges);
+    if (session !== null && session.user.privileges) {
+      const userAbility = createAbility(session.user.privileges);
       setAbility(userAbility);
     }
   };

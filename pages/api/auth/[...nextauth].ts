@@ -9,7 +9,7 @@ import { getOrCreateUser } from "@lib/users";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
-import { getPrivelegeRulesForUser } from "@lib/priveleges";
+import { getPrivilegeRulesForUser } from "@lib/privileges";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -75,7 +75,7 @@ export const authOptions: NextAuthOptions = {
           token.authorizedForm = null;
           token.lastLoginTime = new Date();
           token.acceptableUse = false;
-          token.priveleges = user.priveleges.map((privelege) => privelege.permissions);
+          token.privileges = user.privileges.map((privilege) => privilege.permissions);
 
           break;
         }
@@ -97,10 +97,10 @@ export const authOptions: NextAuthOptions = {
       session.user.name = token.name ?? null;
       session.user.image = token.picture ?? null;
 
-      const priveleges = await getPrivelegeRulesForUser(token.userId as string);
-      if (!priveleges.length) throw new Error("User has no priveleges");
+      const privileges = await getPrivilegeRulesForUser(token.userId as string);
+      if (!privileges.length) throw new Error("User has no privileges");
 
-      session.user.priveleges = priveleges;
+      session.user.privileges = privileges;
       return session;
     },
   },

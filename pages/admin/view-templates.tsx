@@ -7,7 +7,7 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { checkPriveleges } from "@lib/priveleges";
+import { checkPrivileges } from "@lib/privileges";
 import { useAccessControl } from "@lib/hooks";
 
 interface DataViewProps {
@@ -91,7 +91,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   {
-    checkPriveleges(
+    checkPrivileges(
       ability,
       [
         { action: "view", subject: "FormRecord" },

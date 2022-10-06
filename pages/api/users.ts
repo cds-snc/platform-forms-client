@@ -7,7 +7,7 @@ import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { createAbility, Ability } from "@lib/policyBuilder";
-import { updatePrivelegesForUser } from "@lib/priveleges";
+import { updatePrivilegesForUser } from "@lib/privileges";
 const allowedMethods = ["GET", "PUT"];
 
 const getUserList = async (res: NextApiResponse, ability: Ability) => {
@@ -19,21 +19,21 @@ const getUserList = async (res: NextApiResponse, ability: Ability) => {
   }
 };
 
-const updatePrivelegeOnUser = async (
+const updatePrivilegeOnUser = async (
   req: NextApiRequest,
   res: NextApiResponse,
   ability: Ability,
   session?: Session
 ) => {
-  const { userID, priveleges } = req.body;
+  const { userID, privileges } = req.body;
   if (
     typeof userID === "undefined" ||
-    typeof priveleges === "undefined" ||
-    !Array.isArray(priveleges)
+    typeof privileges === "undefined" ||
+    !Array.isArray(privileges)
   ) {
     return res.status(400).json({ error: "Malformed Request" });
   }
-  const result = await updatePrivelegesForUser(ability, userID, priveleges);
+  const result = await updatePrivilegesForUser(ability, userID, privileges);
   logMessage.info(AdminLogAction.Update);
   if (result) {
     if (session && session.user.id) {
@@ -62,11 +62,11 @@ const handler = async (
       res.status(403);
       return;
     }
-    const ability = createAbility(session.user.priveleges);
+    const ability = createAbility(session.user.privileges);
 
     switch (req.method) {
       case "PUT":
-        await updatePrivelegeOnUser(req, res, ability, session);
+        await updatePrivilegeOnUser(req, res, ability, session);
         break;
       case "GET":
         await getUserList(res, ability);

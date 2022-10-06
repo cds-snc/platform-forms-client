@@ -31,7 +31,7 @@ const Welcome: React.FC<WelcomeProps> = (props: WelcomeProps) => {
 };
 
 export const getServerSideProps = requireAuthentication(async ({ user, locale }) => {
-  const userAbility = user?.priveleges && createAbility(user.priveleges);
+  const userAbility = user?.privileges && createAbility(user.privileges);
   if (userAbility?.cannot("update", "FormRecord")) {
     return {
       redirect: {
