@@ -143,7 +143,7 @@ const useTemplateStore = create<ElementStore>()(
     },
     importTemplate: (json) =>
       set((state) => {
-        state.form = json.form;
+        state.form = { ...defaultForm, ...json.form };
       }),
   }))
 );
