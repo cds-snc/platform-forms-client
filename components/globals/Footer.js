@@ -10,13 +10,7 @@ const Footer = ({ disableGcBranding }) => {
     <footer className="gc-footer" data-testid="footer">
       <div className="gc-footer-container items-start">
         <div>
-          {!isSplashPage() && (
-            <>
-              {t("footer.terms.disclaimer")}
-              <br />
-              <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
-            </>
-          )}
+          {!isSplashPage() && <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>}
         </div>
         {!disableGcBranding && (
           <div>
