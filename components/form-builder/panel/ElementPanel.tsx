@@ -581,24 +581,10 @@ export const ElementPanel = () => {
     form: { elements },
   } = useTemplateStore();
 
-  const introTextPlaceholder = [
+  const textPlaceholder = [
     {
       type: "paragraph",
-      children: [{ text: "Add an introduction" }],
-    },
-  ];
-
-  const confirmTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Thank you for participating in the ice cream survey!" }],
-    },
-  ];
-
-  const policyTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Email addresses will not be shared." }],
+      children: [{ text: "" }],
     },
   ];
 
@@ -606,7 +592,7 @@ export const ElementPanel = () => {
     <ElementPanelDiv>
       <RichTextLocked
         addElement={true}
-        initialValue={introTextPlaceholder}
+        initialValue={textPlaceholder}
         schemaProperty="introduction"
       />
       {elements.map((element, index) => {
@@ -617,14 +603,14 @@ export const ElementPanel = () => {
         <>
           <RichTextLocked
             addElement={false}
-            initialValue={confirmTextPlaceholder}
+            initialValue={textPlaceholder}
             schemaProperty="endPage"
           >
             <h3>Confirmation page and message</h3>
           </RichTextLocked>
           <RichTextLocked
             addElement={false}
-            initialValue={policyTextPlaceholder}
+            initialValue={textPlaceholder}
             schemaProperty="privacyPolicy"
           >
             <h3>Privacy statement</h3>
