@@ -264,6 +264,8 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     [setSelectedItem]
   );
 
+  const hasDescription = item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
   return (
     <>
       <Row isRichText={isRichText}>
@@ -275,9 +277,11 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               <TitleInput
                 ref={input}
                 type="text"
+                id={`item${item.index}`}
                 name={`item${item.index}`}
                 placeholder={t("Question")}
                 value={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
+                aria-describedby={hasDescription ? `item${item.index}-describedby` : undefined}
                 onChange={(e) => {
                   updateField(
                     `form.elements[${item.index}].properties.${localizeField(
@@ -289,12 +293,11 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               />
             </>
           )}
-          {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)] &&
-            item.type !== "richText" && (
-              <DivDisabled aria-label={t("Description")}>
-                {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
-              </DivDisabled>
-            )}
+          {hasDescription && item.type !== "richText" && (
+            <DivDisabled id={`item${item.index}-describedby`}>
+              {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+            </DivDisabled>
+          )}
           <SelectedElement item={item} selected={selectedItem} />
           {item.properties.validation.maxLength && (
             <DivDisabled>
@@ -611,7 +614,7 @@ export const ElementPanel = () => {
             initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
           >
-            <h3>Confirmation page and message</h3>
+            <h2>Confirmation page and message</h2>
           </RichTextLocked>
           <RichTextLocked
             id="policyPage"
@@ -619,7 +622,7 @@ export const ElementPanel = () => {
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
           >
-            <h3>Privacy statement</h3>
+            <h2>Privacy statement</h2>
           </RichTextLocked>
         </>
       )}

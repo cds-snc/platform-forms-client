@@ -21,9 +21,12 @@ const ContentWrapper = styled.div`
   display: flex;
   margin: 0px 20px;
 
-  & h3 {
+  & h2 {
+    font-size: 26px;
+    line-height: 32px;
     margin-top: 15px;
     margin-bottom: 0;
+    padding-bottom: 0;
   }
 `;
 

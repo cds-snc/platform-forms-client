@@ -15,7 +15,7 @@
   "date": "[FR] Date",
   "numericField": "[FR] Numeric field",
   "option": "[FR] Option",
-  "remove": "[FR] Remove",
+  "removeOption": "[FR] Remove option :",
   "design": "[FR] Design",
   "json": "[FR] JSON",
   "preview": "[FR] Preview",
