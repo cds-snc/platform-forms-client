@@ -16,13 +16,11 @@ This website uses a third-party service provider, Google Inc. (Google Analytics)
 
 ### Questions or complaints
 
-Send questions about your personal information and the Canadian Digital Service to the Treasury Board of Canada Secretariat’s Access to Information and Privacy Coordinator:  
-&nbsp;&nbsp;&nbsp;&nbsp;ATIP.AIPRP@tbs-sct.gc.ca  
-&nbsp;&nbsp;&nbsp;&nbsp;1-866-312-1511  
+Send questions about your personal information to the department or agency’s [Access to Information and Privacy Coordinator](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp).
 
 Send complaints about how your personal information has been handled to the Office of the Privacy Commissioner of Canada:  
 &nbsp;&nbsp;&nbsp;&nbsp;info@priv.gc.ca  
-&nbsp;&nbsp;&nbsp;&nbsp;1-800-282-1376  
+&nbsp;&nbsp;&nbsp;&nbsp;1-800-282-1376
 
 ## Our commitment to accessibility
 
@@ -30,7 +28,7 @@ The Canadian Digital Service is committed to achieving a high standard of access
 
 ## Providing content in Canada's official languages
 
-The Canadian Digital Service enables the creation of forms in both official languages, English and French. Departments and agencies may also provide content in other languages. The [Official Languages Act](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/), the [Official Languages (Communications with and Services to the Public) Regulations](http://laws.justice.gc.ca/eng/regulations/SOR-92-48/index.html) and Treasury Board policy requirements establish the use of both English and French to provide services to or communicate with members of the public. When there is no obligation to provide information in both official languages, content may be available in one official language only. 
+The Canadian Digital Service enables the creation of forms in both official languages, English and French. Departments and agencies may also provide content in other languages. The [Official Languages Act](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/), the [Official Languages (Communications with and Services to the Public) Regulations](http://laws.justice.gc.ca/eng/regulations/SOR-92-48/index.html) and Treasury Board policy requirements establish the use of both English and French to provide services to or communicate with members of the public. When there is no obligation to provide information in both official languages, content may be available in one official language only.
 
 ## Protecting the Security of Government of Canada Websites
 
@@ -52,6 +50,7 @@ When a threat to the Canadian Digital Service site or computer systems of the Go
 This website uses a third-party service provider, Google Inc. to reduce malicious activity and detect fraud. Information about visits to this website is transferred to Google Inc. through the reCAPTCHA service. This information may include: IP addresses, mouse movements, and the length of a visit. This information is used to determine whether or not this visit is from a human being or a bot.
 
 The Canadian Digital Service is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, we would like to know so we can fix it. Please visit this [Security Notice](https://digital.canada.ca/legal/security-notice/) to learn more about that process.
+
 ## Social media
 
 This notice has been written to explain how the Government of Canada interacts with the public on social media platforms including how this form may be shared.
@@ -86,7 +85,7 @@ Many social media platforms have multiple language options and provide instructi
 
 ## Using files located on non-Government of Canada servers
 
-To improve the functionality of this website, certain files (such as open source libraries, images and scripts) may be delivered automatically to your browser via a trusted third-party server or content delivery network. The delivery of these files is intended to provide a seamless user experience by speeding response times and avoiding the need for each visitor to download these files. 
+To improve the functionality of this website, certain files (such as open source libraries, images and scripts) may be delivered automatically to your browser via a trusted third-party server or content delivery network. The delivery of these files is intended to provide a seamless user experience by speeding response times and avoiding the need for each visitor to download these files.
 
 ## Linking to non-Government of Canada websites
 
@@ -115,4 +114,3 @@ Some of the content on this site may be subject to the copyright of another part
 ### Trademark notice
 
 The official symbols of the Government of Canada, including the Canada wordmark, the Arms of Canada, and the flag symbol may not be reproduced, whether for commercial or non-commercial purposes, without prior [written authorization](https://www.canada.ca/en/treasury-board-secretariat/topics/government-communications/federal-identity-requirements/legal-protection-official-symbols-government-canada.html).
-
