@@ -22,6 +22,7 @@ export const useElementOptions = () => {
   const { t } = useTranslation("form-builder");
   const elementOptions = [
     { id: "richText", value: t("richText"), icon: <ParagraphIcon />, append: <Separator /> },
+    { id: "text", value: t("richText"), icon: <ParagraphIcon />, append: <Separator /> },
     { id: "radio", value: t("singleChoice"), icon: <RadioIcon /> },
     { id: "checkbox", value: t("checkboxes"), icon: <CheckIcon /> },
     { id: "dropdown", value: t("dropdown"), icon: <SelectMenuIcon />, append: <Separator /> },

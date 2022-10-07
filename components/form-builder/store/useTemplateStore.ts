@@ -33,8 +33,8 @@ export const defaultForm = {
   layout: [],
   version: 1,
   endPage: {
-    descriptionEn: "#Your submission has been received",
-    descriptionFr: "#[fr] Your submission has been received.",
+    descriptionEn: "",
+    descriptionFr: "",
     referrerUrlEn: "",
     referrerUrlFr: "",
   },
@@ -143,7 +143,7 @@ const useTemplateStore = create<ElementStore>()(
     },
     importTemplate: (json) =>
       set((state) => {
-        state.form = json.form;
+        state.form = { ...defaultForm, ...json.form };
       }),
   }))
 );

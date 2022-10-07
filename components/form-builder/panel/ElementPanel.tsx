@@ -33,6 +33,7 @@ const SelectedElement = ({
   let element = null;
 
   switch (selected.id) {
+    case "text":
     case "textField":
       element = <ShortAnswer>{t("Short answer text")}</ShortAnswer>;
       break;
@@ -101,12 +102,12 @@ const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
-
-  & div {
+  & > div {
     ${({ isRichText }) =>
       isRichText &&
       `
       width: 100%;
+      margin: 0;
     `}
   }
 `;
@@ -227,6 +228,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   const _updateState = (id: string, index: number) => {
     switch (id) {
+      case "text":
       case "textField":
       case "email":
       case "phone":
@@ -234,7 +236,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
       case "number":
         updateField(`form.elements[${index}].type`, "textField");
 
-        if (id === "textField") {
+        if (id === "textField" || id === "text") {
           unsetField(`form.elements[${index}].properties.validation.type`);
         } else {
           updateField(`form.elements[${index}].properties.validation.type`, id);
@@ -448,48 +450,49 @@ const ModalForm = ({
           label={t("Required")}
         ></Checkbox>
       </ModalRow>
-      {item.type === "textField" && !item.properties.validation.type && (
-        <ModalRow>
-          <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
-            {t("Maximum character length")}
-          </FormLabel>
-          <HintText>
-            {t(
-              "Only use a character limit when there is a good reason for limiting the number of characters users can enter."
-            )}
-          </HintText>
-          <ModalInputShort
-            id={`characterLength--modal--${item.index}`}
-            type="number"
-            min="1"
-            value={properties.validation.maxLength || ""}
-            onKeyDown={(e) => {
-              if (["-", "+", ".", "e"].includes(e.key)) {
-                e.preventDefault();
-              }
-            }}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              // if value is "", unset the field
-              if (e.target.value === "") {
-                unsetModalField(`modals[${item.index}].validation.maxLength`);
-                return;
-              }
+      {item.type === "textField" &&
+        (!item.properties.validation.type || item.properties.validation.type === "text") && (
+          <ModalRow>
+            <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
+              {t("Maximum character length")}
+            </FormLabel>
+            <HintText>
+              {t(
+                "Only use a character limit when there is a good reason for limiting the number of characters users can enter."
+              )}
+            </HintText>
+            <ModalInputShort
+              id={`characterLength--modal--${item.index}`}
+              type="number"
+              min="1"
+              value={properties.validation.maxLength || ""}
+              onKeyDown={(e) => {
+                if (["-", "+", ".", "e"].includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // if value is "", unset the field
+                if (e.target.value === "") {
+                  unsetModalField(`modals[${item.index}].validation.maxLength`);
+                  return;
+                }
 
-              const value = parseInt(e.target.value);
-              if (!isNaN(value) && value >= 1) {
-                // clone the existing properties so that we don't overwrite other keys in "validation"
-                const validation = Object.assign({}, properties.validation, {
-                  maxLength: value,
-                });
-                updateModalProperties(item.index, {
-                  ...properties,
-                  ...{ validation },
-                });
-              }
-            }}
-          />
-        </ModalRow>
-      )}
+                const value = parseInt(e.target.value);
+                if (!isNaN(value) && value >= 1) {
+                  // clone the existing properties so that we don't overwrite other keys in "validation"
+                  const validation = Object.assign({}, properties.validation, {
+                    maxLength: value,
+                  });
+                  updateModalProperties(item.index, {
+                    ...properties,
+                    ...{ validation },
+                  });
+                }
+              }}
+            />
+          </ModalRow>
+        )}
     </form>
   );
 };
@@ -577,45 +580,33 @@ const ElementPanelDiv = styled.div`
 `;
 
 export const ElementPanel = () => {
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const { form, localizeField } = useTemplateStore();
 
-  const introTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Add an introduction" }],
-    },
-  ];
+  const introTextPlaceholder =
+    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
-  const confirmTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Thank you for participating in the ice cream survey!" }],
-    },
-  ];
+  const confirmTextPlaceholder =
+    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
-  const policyTextPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "Email addresses will not be shared." }],
-    },
-  ];
+  const policyTextPlaceholder =
+    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
     <ElementPanelDiv>
       <RichTextLocked
+        id="introductionPage"
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
       />
-      {elements.map((element, index) => {
+      {form.elements.map((element, index) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
-      {elements?.length >= 1 && (
+      {form.elements?.length >= 1 && (
         <>
           <RichTextLocked
+            id="endPage"
             addElement={false}
             initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
@@ -623,6 +614,7 @@ export const ElementPanel = () => {
             <h3>Confirmation page and message</h3>
           </RichTextLocked>
           <RichTextLocked
+            id="policyPage"
             addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
