@@ -1,6 +1,11 @@
 name: Build and Deploy Storybooks
 on:
   pull_request:
+    paths-ignore:
+      # Ignore all files and folders that start with '.'
+      - ".**"
+      # Ignore all files and folder in fixtures, tests, utils, etc.
+      - "__*/**"
   push:
     branches: [main]
     paths-ignore:
