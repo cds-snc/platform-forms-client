@@ -14,8 +14,7 @@ const Footer = ({ disableGcBranding }) => {
             <>
               {t("footer.terms.disclaimer")}
               <br />
-              {t("footer.terms.desc-preface")}
-              <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>.
+              <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>
             </>
           )}
         </div>

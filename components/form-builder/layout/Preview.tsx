@@ -20,10 +20,8 @@ export const Preview = () => {
   const currentForm = getRenderedForm(formRecord, language, t);
 
   return (
-    <>
-      <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
-        {currentForm}
-      </Form>
-    </>
+    <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
+      {currentForm}
+    </Form>
   );
 };

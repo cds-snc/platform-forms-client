@@ -16,7 +16,6 @@ const LinkButton = styled(Button)`
   background-color: transparent;
   border-radius: 4px;
   display: block;
-  font-size: 16px;
 
   &:first-of-type {
     margin-top: 20px;
@@ -78,11 +77,17 @@ const AddOptions = ({
   index: number;
   toggleBulkAdd: (onoff: boolean) => void;
 }) => {
-  const { addChoice } = useTemplateStore();
+  const { addChoice, setFocusInput } = useTemplateStore();
 
   return (
     <>
-      <AddButton index={index} onClick={addChoice} />
+      <AddButton
+        index={index}
+        onClick={() => {
+          setFocusInput(true);
+          addChoice(index);
+        }}
+      />
       <BulkAddButton index={index} onClick={toggleBulkAdd} />
     </>
   );

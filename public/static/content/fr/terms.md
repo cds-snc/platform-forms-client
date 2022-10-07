@@ -6,7 +6,7 @@ Ce formulaire est hébergé par le [Service numérique canadien](https://numeriq
 
 Le Service numérique canadien n’utilise pas les renseignements personnels que vous fournissez sur un formulaire à des fins administratives. Nous ne prenons pas de décisions concernant votre personne ou votre demande. Nous prenons des mesures de sécurité, comme le chiffrement de vos renseignements et leur suppression après 30 jours. Le Service numérique canadien fait partie du Secrétariat du Conseil du Trésor, un ministère du gouvernement fédéral. L’article 7 de la Loi sur la gestion des finances publiques nous autorise à recueillir et à stocker des renseignements personnels.
 
-Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire précise comment ils procèdent.  
+Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire précise comment ils procèdent.
 
 ### Nous utilisons l’analytique Web pour améliorer votre expérience
 
@@ -16,13 +16,11 @@ Ce site a recours à un fournisseur de services tiers, Google Inc. (Google Analy
 
 ### Questions ou plaintes
 
-Envoyez toute question concernant l’utilisation de vos renseignements personnels et sur le Service numérique canadien au coordonnateur de l’accès à l’information et de la protection des renseignements personnels du Secrétariat du Conseil du Trésor du Canada :  
-&nbsp;&nbsp;&nbsp;&nbsp;ATIP.AIPRP@tbs-sct.gc.ca  
-&nbsp;&nbsp;&nbsp;&nbsp;1 866 312-1511  
+Veuillez adresser toute question concernant l’utilisation de vos renseignements personnels et sur le Service numérique canadien au [coordonnateur ou à la coordonnatrice de l’accès à l’information et de la protection des renseignements personnels](https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp) du ministère ou de l’organisme.
 
 En cas de problème lié à la gestion de vos renseignements personnels, déposez toute plainte auprès du Commissariat à la protection de la vie privée du Canada.  
 &nbsp;&nbsp;&nbsp;&nbsp;info@priv.gc.ca  
-&nbsp;&nbsp;&nbsp;&nbsp;1 800 282-1376  
+&nbsp;&nbsp;&nbsp;&nbsp;1 800 282-1376
 
 ## Notre engagement à l’égard de l’accessibilité
 
@@ -36,7 +34,7 @@ Le Service numérique canadien permet de créer des formulaires dans les deux la
 
 Des logiciels sont utilisés pour surveiller le trafic réseau et pour détecter les tentatives non autorisées de télécharger ou de modifier des données, ou de causer d’autres dommages. Lorsque vous visitez un site Web du Service numérique canadien, ces logiciels reçoivent automatiquement les données fournies par votre navigateur (par exemple, Google Chrome, Mozilla Firefox) et les stockent temporairement dans les journaux de notre serveur Web pendant trois mois. Parmi les données recueillies automatiquement par notre serveur lorsque vous naviguez sur notre site Web on trouve :
 
-- le nom du formulaire rempli (mais non votre réponse); 
+- le nom du formulaire rempli (mais non votre réponse);
 - l’emplacement du réseau et l’adresse du protocole Internet (IP) de l’ordinateur et d’autres appareils que vous avez utilisés pour contacter notre site Web;
 - le nom du domaine que vous avez utilisé pour accéder à Internet (.com, .org, .net, .ca, etc.);
 - le type de navigateur que vous avez utilisé;
@@ -52,6 +50,7 @@ Lorsque l’on détecte une menace pour le site du Service numérique canadien o
 Ce site a recours à un fournisseur de services tiers, Google Inc., afin de réduire les activités malveillantes et détecter la fraude. Les données recueillies relatives aux consultations de ce site Web sont communiquées à Google Inc. par le biais du service reCAPTCHA. Ces données comportent : des adresses IP, des mouvements avec la souris, et la durée de la visite. Ces renseignements sont utilisés afin de déterminer si la visite au site Web est faite par une personne ou par un robot.
 
 Le Service numérique canadien est un défenseur de la divulgation responsable des vulnérabilités. Si vous avez repéré une vulnérabilité, nous aimerions le savoir afin de la corriger. Veuillez consulter cet Avis de sécurité pour en savoir plus.
+
 ## Médias sociaux
 
 Cet avis a été préparé pour expliquer la façon dont le gouvernement du Canada interagit avec le public sur les plateformes de médias sociaux.
@@ -86,7 +85,7 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 ## Emploi de fichiers situés sur des serveurs autres que ceux du gouvernement du Canada
 
-Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur. 
+Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur.
 
 ## Hyperliens vers des sites Web autres que ceux du gouvernement du Canada
 

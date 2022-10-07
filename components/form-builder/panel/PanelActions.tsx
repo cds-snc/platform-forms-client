@@ -91,7 +91,7 @@ export const PanelActions = ({
 }: {
   item: ElementTypeWithIndex;
   renderSaveButton: () => React.ReactElement | string | undefined;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
   const {
@@ -101,9 +101,11 @@ export const PanelActions = ({
     add,
     duplicateElement,
     form: { elements },
+    setFocusInput,
   } = useTemplateStore();
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
+  const isRichText = item.type == "richText";
 
   return (
     <Actions className="panel-actions">
@@ -143,22 +145,24 @@ export const PanelActions = ({
       >
         <Label>{t("Remove")}</Label>
       </PanelButton>
-
-      <Modal
-        title="More options"
-        openButton={
-          <PanelButton icon={<ThreeDotsIcon />} onClick={() => null}>
-            <Label>{t("More")}</Label>
-          </PanelButton>
-        }
-        saveButton={renderSaveButton()}
-      >
-        {children}
-      </Modal>
+      {!isRichText && (
+        <Modal
+          title="More options"
+          openButton={
+            <PanelButton icon={<ThreeDotsIcon />} onClick={() => null}>
+              <Label>{t("More")}</Label>
+            </PanelButton>
+          }
+          saveButton={renderSaveButton()}
+        >
+          {children}
+        </Modal>
+      )}
 
       <AddButtonWrapper>
         <FancyButton
           onClick={() => {
+            setFocusInput(true);
             add(item.index);
           }}
         >
@@ -171,6 +175,6 @@ export const PanelActions = ({
 
 PanelActions.propTypes = {
   item: PropTypes.object,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.any]),
   renderSaveButton: PropTypes.func,
 };

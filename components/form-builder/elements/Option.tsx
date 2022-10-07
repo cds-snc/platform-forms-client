@@ -5,6 +5,7 @@ import { Close } from "../icons";
 import { Button } from "../panel";
 import { Input } from "../panel";
 import useTemplateStore from "../store/useTemplateStore";
+import { useTranslation } from "next-i18next";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -20,7 +21,6 @@ const IconWrapper = styled.div`
 `;
 
 const TextInput = styled(Input)`
-  font-size: 16px;
   margin-left: 20px;
   padding: 16px 10px;
   width: 340px;
@@ -58,18 +58,23 @@ export const Option = ({
     removeChoice,
     updateField,
     lang,
+    focusInput,
+    setFocusInput,
   } = useTemplateStore();
   const val = elements[parentIndex].properties.choices[index][lang];
   const icon = renderIcon && renderIcon(index);
+  const { t } = useTranslation("form-builder");
 
   useEffect(() => {
-    if (input.current) {
+    if (input.current && focusInput) {
       input.current.focus();
+      setFocusInput(false);
     }
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
+      setFocusInput(true);
       addChoice(parentIndex);
     }
   };
@@ -81,7 +86,7 @@ export const Option = ({
         ref={input}
         type="text"
         value={val}
-        placeholder={`Option ${index + 1}`}
+        placeholder={`${t("option")} ${index + 1}`}
         onChange={(e) => {
           updateField(
             `form.elements[${parentIndex}].properties.choices[${index}].${lang}`,
@@ -92,7 +97,7 @@ export const Option = ({
       />
       <RemoveButton
         icon={<Close />}
-        aria-label={`Remove ${val}`}
+        aria-label={`${t("remove")} ${val}`}
         onClick={() => {
           removeChoice(parentIndex, index);
         }}

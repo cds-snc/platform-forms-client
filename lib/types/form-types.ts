@@ -107,6 +107,8 @@ export interface FormProperties {
   brand?: BrandProperties;
   elements: Array<FormElement>;
   endPage?: Record<string, string>;
+  introduction?: Record<string, string>;
+  privacyPolicy?: Record<string, string>;
   [key: string]:
     | string
     | boolean

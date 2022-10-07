@@ -6,36 +6,20 @@ import useTemplateStore from "../store/useTemplateStore";
 import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
-import { ElementOption, ElementProperties, ElementTypeWithIndex } from "../types";
-import { UseSelectStateChange } from "downshift";
-import { ShortAnswer, Paragraph, Options, RichText } from "../elements";
 import {
-  ShortAnswerIcon,
-  ParagraphIcon,
-  RadioIcon,
-  RadioEmptyIcon,
-  CheckBoxEmptyIcon,
-  CheckIcon,
-  SelectMenuIcon,
-} from "../icons";
+  ElementOption,
+  ElementProperties,
+  ElementTypeWithIndex,
+  LocalizedElementProperties,
+} from "../types";
+import { UseSelectStateChange } from "downshift";
+import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
+import { useElementOptions } from "../hooks/useElementOptions";
+import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
 import { Input } from "./Input";
-
-const Separator = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-  margin: 8px 0;
-`;
-
-const elementOptions = [
-  { id: "textField", value: "Short answer", icon: <ShortAnswerIcon /> },
-  { id: "richText", value: "Rich Text", icon: <ParagraphIcon /> },
-  { id: "textArea", value: "Paragraph", icon: <ParagraphIcon />, prepend: <Separator /> },
-  { id: "radio", value: "Multiple choice", icon: <RadioIcon /> },
-  { id: "checkbox", value: "Checkboxes", icon: <CheckIcon /> },
-  { id: "dropdown", value: "Dropdown", icon: <SelectMenuIcon /> },
-];
 
 const SelectedElement = ({
   selected,
@@ -44,17 +28,20 @@ const SelectedElement = ({
   selected: ElementOption;
   item: ElementTypeWithIndex;
 }) => {
+  const { t } = useTranslation("form-builder");
+
   let element = null;
 
   switch (selected.id) {
+    case "text":
     case "textField":
-      element = <ShortAnswer />;
+      element = <ShortAnswer>{t("Short answer text")}</ShortAnswer>;
       break;
     case "richText":
       element = <RichText parentIndex={item.index} />;
       break;
     case "textArea":
-      element = <Paragraph />;
+      element = <ShortAnswer>{t("Long answer text")}</ShortAnswer>;
       break;
     case "radio":
       element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
@@ -65,6 +52,18 @@ const SelectedElement = ({
     case "dropdown":
       element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
       break;
+    case "email":
+      element = <ShortAnswer>{t("example@canada.gc.ca")}</ShortAnswer>;
+      break;
+    case "phone":
+      element = <ShortAnswer>555-555-0000</ShortAnswer>;
+      break;
+    case "date":
+      element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
+      break;
+    case "number":
+      element = <ShortAnswer>0123456789</ShortAnswer>;
+      break;
     default:
       element = null;
   }
@@ -73,13 +72,22 @@ const SelectedElement = ({
 };
 
 const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
+  const elementOptions = useElementOptions();
   const {
     form: { elements },
   } = useTemplateStore();
-  const { type } = elements[item.index];
+  let { type } = elements[item.index];
 
   if (!type) {
     return elementOptions[2];
+  } else if (type === "textField") {
+    /**
+     * Email, phone, and date fields are specialized text field types.
+     * That is to say, their "type" is "textField" but they have specalized validation "type"s.
+     * So if we have a "textField", we want to first check properties.validation.type to see if
+     * it is a true Short Answer, or one of the other types.
+     */
+    type = elements[item.index].properties.validation.type || type;
   }
 
   const selected = elementOptions.filter((item) => item.id === type);
@@ -94,12 +102,12 @@ const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
-
-  & div {
+  & > div {
     ${({ isRichText }) =>
       isRichText &&
       `
       width: 100%;
+      margin: 0;
     `}
   }
 `;
@@ -110,6 +118,7 @@ const TitleInput = styled(Input)`
   border-bottom: 1.5px solid #000000;
   border-radius: 4px 4px 0 0;
   font-weight: 700;
+  font-size: 20px;
 
   &:focus {
     border-color: #000000;
@@ -135,7 +144,6 @@ const DivDisabled = styled.div`
   margin-top: 20px;
   padding: 5px 10px;
   width: 460px;
-  font-size: 16px;
   cursor: not-allowed;
   border-radius: 4px;
   background: #f2f2f2;
@@ -162,11 +170,10 @@ const LabelHidden = styled(FormLabel)`
 `;
 
 const FormWrapper = styled.div`
-  padding: 1.25em;
+  padding: 20px 25px;
 `;
 
 const RequiredWrapper = styled.div`
-  font-size: 16px;
   margin-top: 20px;
 
   span {
@@ -186,22 +193,29 @@ const QuestionNumber = styled.span`
   margin-left: -25px;
   padding: 7px 4px;
   border-radius: 0 4px 4px 0;
+  font-size: 20px;
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
+  const elementOptions = useElementOptions();
   const {
+    localizeField,
     form: { elements },
     updateField,
+    unsetField,
     resetChoices,
+    focusInput,
+    setFocusInput,
   } = useTemplateStore();
 
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (input.current) {
+    if (input.current && focusInput) {
       input.current.focus();
+      setFocusInput(false);
     }
   }, []);
 
@@ -212,11 +226,40 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
 
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
+  const _updateState = (id: string, index: number) => {
+    switch (id) {
+      case "text":
+      case "textField":
+      case "email":
+      case "phone":
+      case "date":
+      case "number":
+        updateField(`form.elements[${index}].type`, "textField");
+
+        if (id === "textField" || id === "text") {
+          unsetField(`form.elements[${index}].properties.validation.type`);
+        } else {
+          updateField(`form.elements[${index}].properties.validation.type`, id);
+          unsetField(`form.elements[${index}].properties.validation.maxLength`);
+        }
+        break;
+      case "richText":
+        resetChoices(index);
+      // no break here (we want default to happen)
+      default: // eslint-disable-line no-fallthrough
+        updateField(`form.elements[${index}].type`, id);
+        unsetField(`form.elements[${index}].properties.validation.type`);
+        unsetField(`form.elements[${index}].properties.validation.maxLength`);
+        break;
+    }
+  };
+
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
-      selectedItem && setSelectedItem(selectedItem);
-      selectedItem && updateField(`form.elements[${item.index}].type`, selectedItem?.id);
-      selectedItem && selectedItem.id === "richText" && resetChoices(item.index);
+      if (selectedItem) {
+        setSelectedItem(selectedItem);
+        _updateState(selectedItem.id, item.index);
+      }
     },
     [setSelectedItem]
   );
@@ -234,17 +277,31 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 type="text"
                 name={`item${item.index}`}
                 placeholder={t("Question")}
-                value={item.properties.titleEn}
+                value={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
                 onChange={(e) => {
-                  updateField(`form.elements[${item.index}].properties.titleEn`, e.target.value);
+                  updateField(
+                    `form.elements[${item.index}].properties.${localizeField(
+                      LocalizedElementProperties.TITLE
+                    )}`,
+                    e.target.value
+                  );
                 }}
               />
             </>
           )}
-          {item.properties.descriptionEn && item.type !== "richText" && (
-            <DivDisabled aria-label={t("Description")}>{item.properties.descriptionEn}</DivDisabled>
-          )}
+          {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)] &&
+            item.type !== "richText" && (
+              <DivDisabled aria-label={t("Description")}>
+                {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+              </DivDisabled>
+            )}
           <SelectedElement item={item} selected={selectedItem} />
+          {item.properties.validation.maxLength && (
+            <DivDisabled>
+              {t("Max character length: ")}
+              {item.properties.validation.maxLength}
+            </DivDisabled>
+          )}
         </div>
         {!isRichText && (
           <>
@@ -299,6 +356,10 @@ const ModalInput = styled(Input)`
   width: 90%;
 `;
 
+const ModalInputShort = styled(Input)`
+  width: 180px;
+`;
+
 const ModalSaveButton = styled(FancyButton)`
   padding: 15px 20px;
   background: #26374a;
@@ -322,12 +383,15 @@ const ModalForm = ({
   item,
   properties,
   updateModalProperties,
+  unsetModalField,
 }: {
   item: ElementTypeWithIndex;
   properties: ElementProperties;
   updateModalProperties: (index: number, properties: ElementProperties) => void;
+  unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { localizeField } = useTemplateStore();
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
@@ -338,11 +402,11 @@ const ModalForm = ({
           type="text"
           name={`item${item.index}`}
           placeholder={t("Question")}
-          value={properties.titleEn}
+          value={properties[localizeField(LocalizedElementProperties.TITLE)]}
           onChange={(e) =>
             updateModalProperties(item.index, {
               ...properties,
-              ...{ titleEn: e.target.value },
+              ...{ local: e.target.value },
             })
           }
         />
@@ -359,10 +423,10 @@ const ModalForm = ({
           onChange={(e) => {
             updateModalProperties(item.index, {
               ...properties,
-              ...{ descriptionEn: e.target.value },
+              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: e.target.value },
             });
           }}
-          value={properties.descriptionEn}
+          value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
         />
       </ModalRow>
       <ModalRow>
@@ -374,14 +438,61 @@ const ModalForm = ({
           value={`required-${item.index}-value-modal`}
           checked={properties.validation.required}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            // clone the existing properties so that we don't overwrite other keys in "validation"
+            const validation = Object.assign({}, properties.validation, {
+              required: e.target.checked,
+            });
             updateModalProperties(item.index, {
               ...properties,
-              ...{ validation: { required: e.target.checked } },
+              ...{ validation },
             });
           }}
           label={t("Required")}
         ></Checkbox>
       </ModalRow>
+      {item.type === "textField" &&
+        (!item.properties.validation.type || item.properties.validation.type === "text") && (
+          <ModalRow>
+            <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
+              {t("Maximum character length")}
+            </FormLabel>
+            <HintText>
+              {t(
+                "Only use a character limit when there is a good reason for limiting the number of characters users can enter."
+              )}
+            </HintText>
+            <ModalInputShort
+              id={`characterLength--modal--${item.index}`}
+              type="number"
+              min="1"
+              value={properties.validation.maxLength || ""}
+              onKeyDown={(e) => {
+                if (["-", "+", ".", "e"].includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // if value is "", unset the field
+                if (e.target.value === "") {
+                  unsetModalField(`modals[${item.index}].validation.maxLength`);
+                  return;
+                }
+
+                const value = parseInt(e.target.value);
+                if (!isNaN(value) && value >= 1) {
+                  // clone the existing properties so that we don't overwrite other keys in "validation"
+                  const validation = Object.assign({}, properties.validation, {
+                    maxLength: value,
+                  });
+                  updateModalProperties(item.index, {
+                    ...properties,
+                    ...{ validation },
+                  });
+                }
+              }}
+            />
+          </ModalRow>
+        )}
     </form>
   );
 };
@@ -397,20 +508,24 @@ const ElementWrapperDiv = styled.div`
   max-width: 800px;
   height: auto;
   margin-top: -1px;
+  font-size: 16px;
 `;
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
+  const isRichText = item.type == "richText";
   const {
     form: { elements },
     updateField,
   } = useTemplateStore();
 
-  const { isOpen, modals, updateModalProperties } = useModalStore();
+  const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
   React.useEffect(() => {
-    updateModalProperties(item.index, elements[item.index].properties);
-  }, [item, isOpen]);
+    if (item.type != "richText") {
+      updateModalProperties(item.index, elements[item.index].properties);
+    }
+  }, [item, isOpen, isRichText]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
@@ -438,11 +553,12 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
           </ModalButton>
         )}
       >
-        {modals[item.index] && (
+        {!isRichText && modals[item.index] && (
           <ModalForm
             item={item}
             properties={modals[item.index]}
             updateModalProperties={updateModalProperties}
+            unsetModalField={unsetModalField}
           />
         )}
       </PanelActions>
@@ -464,31 +580,49 @@ const ElementPanelDiv = styled.div`
 `;
 
 export const ElementPanel = () => {
-  const {
-    form: { elements },
-    add,
-  } = useTemplateStore();
+  const { form, localizeField } = useTemplateStore();
 
-  if (!elements.length) {
-    return (
-      <button
-        style={{ marginBottom: 20 }}
-        className="gc-button gc-button--secondary"
-        onClick={() => {
-          add();
-        }}
-      >
-        Add form element
-      </button>
-    );
-  }
+  const introTextPlaceholder =
+    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
+  const confirmTextPlaceholder =
+    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
+  const policyTextPlaceholder =
+    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
     <ElementPanelDiv>
-      {elements.map((element, index) => {
+      <RichTextLocked
+        id="introductionPage"
+        addElement={true}
+        initialValue={introTextPlaceholder}
+        schemaProperty="introduction"
+      />
+      {form.elements.map((element, index) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
+      {form.elements?.length >= 1 && (
+        <>
+          <RichTextLocked
+            id="endPage"
+            addElement={false}
+            initialValue={confirmTextPlaceholder}
+            schemaProperty="endPage"
+          >
+            <h3>Confirmation page and message</h3>
+          </RichTextLocked>
+          <RichTextLocked
+            id="policyPage"
+            addElement={false}
+            initialValue={policyTextPlaceholder}
+            schemaProperty="privacyPolicy"
+          >
+            <h3>Privacy statement</h3>
+          </RichTextLocked>
+        </>
+      )}
     </ElementPanelDiv>
   );
 };

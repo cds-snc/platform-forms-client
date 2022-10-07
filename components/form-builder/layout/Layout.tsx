@@ -1,10 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
-import { Import } from "./Import";
-import { Output } from "./Output";
+import { LocalizedFormProperties } from "../types";
+import { Save } from "./Save";
+import { Start } from "./Start";
 import { Preview } from "./Preview";
+
+const StyledHeader = styled.h1`
+  border-bottom: none;
+  margin-bottom: 2rem;
+`;
 
 const Input = styled.input`
   padding: 22px 10px;
@@ -19,6 +26,13 @@ const Navigation = styled.div`
   width: 800px;
   text-align: center;
   margin: 20px 0;
+
+  &.start .start,
+  &.create .create,
+  &.preview .preview,
+  &.save .save {
+    font-weight: 700;
+  }
 `;
 
 const Tab = styled.span`
@@ -26,53 +40,86 @@ const Tab = styled.span`
   cursor: pointer;
 `;
 
-export const Layout = () => {
-  const {
-    updateField,
-    form: { titleEn },
-  } = useTemplateStore();
+const StyledPreviewWrapper = styled.div`
+  border: 3px dashed blue;
+  padding: 20px;
+`;
 
-  const [showTab, setShowTab] = React.useState("create");
+export const Layout = () => {
+  const { updateField, toggleLang, localizeField, form } = useTemplateStore();
+  const { t } = useTranslation("form-builder");
+
+  const [showTab, setShowTab] = React.useState("start");
 
   const handleClick = (tab: string) => {
     setShowTab(tab);
   };
 
+  const handleHeaderClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (e.detail === 2) {
+      // double click
+      toggleLang();
+    }
+  };
+  /* eslint-disable */
   return (
     <>
-      <Navigation>
-        <Tab onClick={() => handleClick("create")}>Create</Tab> /{" "}
-        <Tab onClick={() => handleClick("json")}>Json</Tab> /{" "}
-        <Tab onClick={() => handleClick("preview")}>Preview</Tab>
+      <Navigation className={showTab}>
+        <Tab className="start" onClick={() => handleClick("start")}>
+          {t("start")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="create" onClick={() => handleClick("create")}>
+          {t("design")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="preview" onClick={() => handleClick("preview")}>
+          {t("preview")}
+        </Tab>{" "}
+        /{" "}
+        <Tab className="save" onClick={() => handleClick("save")}>
+          {t("save")}
+        </Tab>
       </Navigation>
 
+      {showTab === "start" && (
+        <>
+          <h1 onClick={handleHeaderClick}>{t("start")}</h1>
+          <Start changeTab={handleClick} />
+        </>
+      )}
       {showTab === "create" && (
         <>
           <div>
+            <h1 onClick={handleHeaderClick}>{t("title")}</h1>
             <Input
-              placeholder="Form Title"
-              value={titleEn}
+              placeholder={t("placeHolderFormTitle")}
+              value={form[localizeField(LocalizedFormProperties.TITLE)]}
               onChange={(e) => {
-                updateField("form.titleEn", e.target.value);
+                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
               }}
             />
           </div>
           <ElementPanel />
         </>
       )}
-      {showTab === "json" && (
-        <>
-          <Import />
-          <Output />
-        </>
-      )}
       {showTab === "preview" && (
         <>
-          <Preview />
+          <StyledPreviewWrapper>
+            <h1 onClick={handleHeaderClick}>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+            <Preview />
+          </StyledPreviewWrapper>
+        </>
+      )}
+      {showTab === "save" && (
+        <>
+          <StyledHeader onClick={handleHeaderClick}>{t("saveH1")}</StyledHeader>
+          <Save />
         </>
       )}
     </>
   );
+  /* eslint-enable */
 };
 
 export default Layout;
