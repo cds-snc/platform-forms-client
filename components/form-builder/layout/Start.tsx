@@ -89,7 +89,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
         // ensure elements follow layout array order
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
-        changeTab("create");
+        changeTab("preview");
       };
     } catch (e) {
       if (e instanceof Error) {
