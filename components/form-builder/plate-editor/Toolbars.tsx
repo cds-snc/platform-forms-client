@@ -107,7 +107,7 @@ export const ListToolbarButtons = () => {
 };
 
 export const LinkToolbarButtons = () => {
-  const editor = useMyPlateEditorRef()!;
+  const editor = useMyPlateEditorRef();
 
   return (
     <>

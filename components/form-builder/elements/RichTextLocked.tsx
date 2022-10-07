@@ -48,7 +48,7 @@ export const RichTextLocked = ({
   const input = useRef<HTMLInputElement>(null);
   const { localizeField, updateField } = useTemplateStore();
   const editorId = `${id}-editor`;
-  const editor = useMyPlateEditorRef()!;
+  const editor = useMyPlateEditorRef();
 
   const [value, setValue] = useState(
     initialValue ? deserializeMd(editor, initialValue) : [{ children: [{ text: "" }] }]
