@@ -39,15 +39,15 @@ export interface FormSchema {
   titleEn: string;
   titleFr: string;
   layout: number[];
-  endPage?: {
+  endPage: {
     descriptionEn: string;
     descriptionFr: string;
   };
-  introduction?: {
+  introduction: {
     descriptionEn: string;
     descriptionFr: string;
   };
-  privacyPolicy?: {
+  privacyPolicy: {
     descriptionEn: string;
     descriptionFr: string;
   };

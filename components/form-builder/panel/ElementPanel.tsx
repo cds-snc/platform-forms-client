@@ -101,12 +101,12 @@ const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
-
-  & div {
+  & > div {
     ${({ isRichText }) =>
       isRichText &&
       `
       width: 100%;
+      margin: 0;
     `}
   }
 `;
@@ -577,40 +577,43 @@ const ElementPanelDiv = styled.div`
 `;
 
 export const ElementPanel = () => {
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const { form, localizeField } = useTemplateStore();
 
-  const textPlaceholder = [
-    {
-      type: "paragraph",
-      children: [{ text: "" }],
-    },
-  ];
+  const introTextPlaceholder =
+    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
+  const confirmTextPlaceholder =
+    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
+  const policyTextPlaceholder =
+    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
     <ElementPanelDiv>
       <RichTextLocked
+        id="introductionPage"
         addElement={true}
-        initialValue={textPlaceholder}
+        initialValue={introTextPlaceholder}
         schemaProperty="introduction"
       />
-      {elements.map((element, index) => {
+      {form.elements.map((element, index) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
-      {elements?.length >= 1 && (
+      {form.elements?.length >= 1 && (
         <>
           <RichTextLocked
+            id="endPage"
             addElement={false}
-            initialValue={textPlaceholder}
+            initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
           >
             <h3>Confirmation page and message</h3>
           </RichTextLocked>
           <RichTextLocked
+            id="policyPage"
             addElement={false}
-            initialValue={textPlaceholder}
+            initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
           >
             <h3>Privacy statement</h3>
