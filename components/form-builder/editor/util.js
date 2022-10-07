@@ -5,7 +5,7 @@ const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
 export const initialValue = [
   {
     type: "paragraph",
-    children: [{ text: "Your text" }, { text: " here", bold: true }],
+    children: [{ text: "" }],
   },
 ];
 
