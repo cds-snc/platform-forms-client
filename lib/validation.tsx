@@ -310,3 +310,54 @@ export const isValidGovEmail = (email: string, domains: string[]): boolean => {
   //Check the email's domain against the list of domains
   return domains.includes(emailDomain.toString());
 };
+
+/**
+ * This function checks if a given password is a valid email based on:
+ * 1. The policy found here found here: https://github.com/cds-snc/forms-terraform/blob/develop/aws/cognito/user_pool.tf#L5-L11
+ * 2. Additionally a max length of 50 characters
+ * And it returns true if the password is a valid otherwise false.
+ * @param password A valid password
+ * @returns {boolean} The validation result
+ */
+export const isValidPassword = (password: string): boolean => {
+  // Note: regex inspired by https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
+  const reg = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,50}$");
+  if (!password || !reg.test(password)) {
+    return false;
+  }
+  return true;
+};
+
+// TODO: either doc below or combine into one func
+
+export const isLowerCase = (password: string): boolean => {
+  const reg = new RegExp("^(?=.*?[a-z])");
+  if (!password || !reg.test(password)) {
+    return false;
+  }
+  return true;
+};
+
+export const isUpperCase = (password: string): boolean => {
+  const reg = new RegExp("^(?=.*?[A-Z])");
+  if (!password || !reg.test(password)) {
+    return false;
+  }
+  return true;
+};
+
+export const isNumber = (password: string): boolean => {
+  const reg = new RegExp("^(?=.*?[0-9])");
+  if (!password || !reg.test(password)) {
+    return false;
+  }
+  return true;
+};
+
+export const isSymbol = (password: string): boolean => {
+  const reg = new RegExp("^(?=.*?[#?!@$%^&*-])");
+  if (!password || !reg.test(password)) {
+    return false;
+  }
+  return true;
+};
