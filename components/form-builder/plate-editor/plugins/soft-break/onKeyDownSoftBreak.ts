@@ -19,6 +19,7 @@ export const onKeyDownSoftBreak =
     if (!entry) return;
 
     rules.forEach(({ hotkey, query }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (isHotkey(hotkey, event as any) && queryNode(entry, query)) {
         event.preventDefault();
         event.stopPropagation();
