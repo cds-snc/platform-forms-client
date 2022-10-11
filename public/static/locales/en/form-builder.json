@@ -15,7 +15,7 @@
   "date": "Date",
   "numericField": "Numeric field",
   "option": "Option",
-  "remove": "Remove",
+  "removeOption": "Remove option:",
   "design": "Design",
   "json": "JSON",
   "preview": "Preview",
@@ -39,5 +39,8 @@
   "startH3": "Open a form file",
   "startP2": "Revisit and edit an existing form file you saved from your last session",
   "startErrorValidation": "Template validation failed",
-  "startErrorParse": "Failed to parse file, not valid JSON"
+  "startErrorParse": "Failed to parse file, not valid JSON",
+  "richTextIntroTitle": "Form introduction",
+  "richTextConfirmationTitle": "Confirmation page and message",
+  "richTextPrivacyTitle": "Privacy statement"
 }

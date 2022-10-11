@@ -97,7 +97,7 @@ export const Option = ({
       />
       <RemoveButton
         icon={<Close />}
-        aria-label={`${t("remove")} ${val}`}
+        aria-label={`${t("removeOption")} ${val}`}
         onClick={() => {
           removeChoice(parentIndex, index);
         }}
