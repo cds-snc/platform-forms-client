@@ -18,6 +18,7 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
+import { Session } from "next-auth";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -25,7 +26,7 @@ const authenticatedMethods = ["POST", "PUT", "DELETE"];
 const templates = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await isAdmin({ req, res });
-    const response = await templateCRUD({ method: req.method, ...req.body });
+    const response = await templateCRUD({ user: session?.user, method: req.method, ...req.body });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
 
@@ -74,10 +75,12 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const templateCRUD = async ({
   method,
+  user,
   formID,
   formConfig,
 }: {
   method: string;
+  user: Session["user"];
   formID?: string;
   formConfig?: FormConfiguration;
 }) => {
@@ -86,7 +89,7 @@ const templateCRUD = async ({
       if (formID) return await getTemplateByID(formID);
       return getAllTemplates();
     case "POST":
-      if (formConfig) return await createTemplate(formConfig);
+      if (formConfig) return await createTemplate(user.id, formConfig);
       throw new Error("Missing Form Configuration");
     case "PUT":
       if (formID && formConfig) return await updateTemplate(formID, formConfig);

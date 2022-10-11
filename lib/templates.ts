@@ -58,12 +58,18 @@ async function _getTemplateByStatus(status: boolean): Promise<(PublicFormRecord 
  * @returns Form Record or null if creation was not sucessfull.
  */
 
-async function _createTemplate(config: FormConfiguration): Promise<FormRecord | null> {
+async function _createTemplate(
+  userID: string,
+  config: FormConfiguration
+): Promise<FormRecord | null> {
   try {
     const createdTemplate = _parseTemplate(
       await prisma.template.create({
         data: {
           jsonConfig: config as Prisma.JsonObject,
+          users: {
+            connect: { id: userID },
+          },
         },
       })
     );

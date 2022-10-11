@@ -70,6 +70,7 @@ model Template {
   jsonConfig  Json
   bearerToken String?
   formUsers   FormUser[]
+  users       User[]
 }
 
 model Privilege {
@@ -92,6 +93,7 @@ model User {
   accounts      Account[]
   adminLogs     AdminLog[]
   sessions      Session[]
+  templates     Template[]
 }
 
 model VerificationToken {
