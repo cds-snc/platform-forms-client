@@ -48,6 +48,11 @@ const RichTextWrapper = styled.div`
     z-index: 1000;
     padding-bottom: 0;
   }
+
+  span[data-slate-placeholder="true"] {
+    color: #71767e;
+    opacity: 1 !important;
+  }
 `;
 
 const plugins = createMyPlugins(
@@ -70,10 +75,12 @@ export const RichTextEditor = ({
   id,
   value,
   onChange,
+  "aria-label": ariaLabel = undefined,
 }: {
   id: string;
   value: MyRootBlock[];
   onChange: (value: Value) => void;
+  "aria-label"?: string;
 }) => {
   return (
     <RichTextWrapper style={{ width: "100%" }}>
@@ -86,7 +93,9 @@ export const RichTextEditor = ({
         </HeadingToolbar>
         <Plate<MyValue>
           id={id}
-          editableProps={editableProps}
+          editableProps={
+            ariaLabel ? { ...editableProps, ...{ "aria-label": ariaLabel } } : editableProps
+          }
           plugins={plugins}
           initialValue={value}
           onChange={onChange}

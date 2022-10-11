@@ -583,6 +583,7 @@ const ElementPanelDiv = styled.div`
 `;
 
 export const ElementPanel = () => {
+  const { t } = useTranslation("form-builder");
   const { form, localizeField } = useTemplateStore();
 
   const introTextPlaceholder =
@@ -601,6 +602,7 @@ export const ElementPanel = () => {
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
+        aria-label={t("richTextIntroTitle")}
       />
       {form.elements.map((element, index) => {
         const item = { ...element, index };
@@ -613,16 +615,18 @@ export const ElementPanel = () => {
             addElement={false}
             initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
+            aria-label={t("richTextConfirmationTitle")}
           >
-            <h2>Confirmation page and message</h2>
+            <h2>{t("richTextConfirmationTitle")}</h2>
           </RichTextLocked>
           <RichTextLocked
             id="policyPage"
             addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
+            aria-label={t("richTextPrivacyTitle")}
           >
-            <h2>Privacy statement</h2>
+            <h2>{t("richTextPrivacyTitle")}</h2>
           </RichTextLocked>
         </>
       )}
