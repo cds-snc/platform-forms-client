@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
-import * as Yup from "Yup";
+import * as Yup from "yup";
 import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
 import emailDomainList from "../../email.domains.json";
 
@@ -85,13 +85,9 @@ export default function Register() {
               >
                 <ol className="gc-ordered-list">
                   {errors &&
-                    Object.entries(errors).map(([elementId /*, errorMessage*/]) => {
+                    Object.entries(errors).map(([elementId, errorMessage]) => {
                       return (
-                        <ErrorListItem
-                          errorKey={elementId}
-                          value={t("input-validation.required", { ns: "common" })}
-                          key={elementId}
-                        />
+                        <ErrorListItem errorKey={elementId} value={errorMessage} key={elementId} />
                       );
                     })}
                 </ol>

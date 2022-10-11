@@ -312,23 +312,6 @@ export const isValidGovEmail = (email: string, domains: string[]): boolean => {
 };
 
 /**
- * This function checks if a given password is a valid email based on:
- * 1. The policy found here found here: https://github.com/cds-snc/forms-terraform/blob/develop/aws/cognito/user_pool.tf#L5-L11
- * 2. Additionally a max length of 50 characters
- * And it returns true if the password is a valid otherwise false.
- * @param password A valid password
- * @returns {boolean} The validation result
- */
-export const isValidPassword = (password: string): boolean => {
-  // Note: regex inspired by https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
-  const reg = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,50}$");
-  if (!password || !reg.test(password)) {
-    return false;
-  }
-  return true;
-};
-
-/**
  * This function tests whether a string contains a lower case character
  * @param field A string containing a lower case character
  * @returns {boolean} The validation result
