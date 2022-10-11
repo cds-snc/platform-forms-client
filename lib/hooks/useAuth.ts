@@ -9,15 +9,8 @@ export const useAuth = () => {
   const router = useRouter();
 
   const register = async (
-    {
-      username,
-      password,
-      firstName,
-      lastName,
-    }: { username: string; password: string; firstName: string; lastName: string },
-    {
-      setSubmitting,
-    }: FormikHelpers<{ username: string; password: string; firstName: string; lastName: string }>,
+    { username, password, name }: { username: string; password: string; name: string },
+    { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>,
     setUsername: React.Dispatch<React.SetStateAction<string>>
   ) => {
     try {
@@ -33,8 +26,7 @@ export const useAuth = () => {
           data: {
             username,
             password,
-            firstName,
-            lastName,
+            name,
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });

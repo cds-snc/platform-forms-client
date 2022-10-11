@@ -31,11 +31,8 @@
           "oneSymbol": "The field must contain at least 1 symbol. (FR)"
         }
       },
-      "firstName": {
-        "label": "First name (FR)"
-      },
-      "lastName": {
-        "label": "Last name (FR)"
+      "name": {
+        "label": "Full name (FR)"
       }
     }
   },

@@ -32,11 +32,8 @@
           "oneSymbol": "The field must contain at least 1 symbol."
         }
       },
-      "firstName": {
-        "label": "First name"
-      },
-      "lastName": {
-        "label": "Last name"
+      "name": {
+        "label": "Full name"
       }
     }
   },

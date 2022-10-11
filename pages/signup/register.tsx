@@ -24,8 +24,7 @@ export default function Register() {
         t("signUpRegistration.fields.username.error.validGovEmail"),
         (value = "") => isValidGovEmail(value, emailDomainList.domains)
       ),
-    firstName: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    lastName: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    name: Yup.string().required(t("input-validation.required", { ns: "common" })),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .min(8, t("signUpRegistration.fields.passwordConfirmation.error.minLength"))
@@ -63,7 +62,7 @@ export default function Register() {
   }
   return (
     <Formik
-      initialValues={{ username: "", password: "", firstName: "", lastName: "" }}
+      initialValues={{ username: "", password: "", name: "" }}
       onSubmit={async (values, formikHelpers) => {
         await register(values, formikHelpers, setUsername);
       }}
@@ -100,16 +99,10 @@ export default function Register() {
               <TextInput type={"email"} id={"username"} name={"username"} />
             </div>
             <div className="focus-group">
-              <Label id={"label-firstName"} htmlFor={"firstName"} className="required" required>
-                {t("signUpRegistration.fields.firstName.label")}
+              <Label id={"label-name"} htmlFor={"name"} className="required" required>
+                {t("signUpRegistration.fields.name.label")}
               </Label>
-              <TextInput type={"text"} id={"firstName"} name={"firstName"} />
-            </div>
-            <div className="focus-group">
-              <Label id={"label-lastName"} htmlFor={"lastName"} className="required" required>
-                {t("signUpRegistration.fields.lastName.label")}
-              </Label>
-              <TextInput type={"text"} id={"lastName"} name={"lastName"} />
+              <TextInput type={"text"} id={"name"} name={"name"} />
             </div>
             <div className="focus-group">
               <Label id={"label-password"} htmlFor={"password"} className="required" required>
