@@ -10,9 +10,9 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     await enableFlag(key);
     const flags = await checkAll();
 
-    if (session.user.userId) {
+    if (session.user.id) {
       await logAdminActivity(
-        session.user.userId,
+        session.user.id,
         AdminLogAction.Update,
         AdminLogEvent.EnableFeature,
         `Feature: ${key} has been enabled`

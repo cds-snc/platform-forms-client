@@ -10,9 +10,9 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     await disableFlag(key);
     const flags = await checkAll();
 
-    if (session.user.userId) {
+    if (session.user.id) {
       await logAdminActivity(
-        session.user.userId,
+        session.user.id,
         AdminLogAction.Update,
         AdminLogEvent.DisableFeature,
         `Feature: ${key} has been disabled`
