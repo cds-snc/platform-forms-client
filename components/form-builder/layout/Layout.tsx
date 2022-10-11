@@ -7,6 +7,7 @@ import { LocalizedFormProperties } from "../types";
 import { Save } from "./Save";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
+import { Translate } from "../translate/Translate";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -30,6 +31,7 @@ const Navigation = styled.div`
   &.start .start,
   &.create .create,
   &.preview .preview,
+  &.translate .translate,
   &.save .save {
     font-weight: 700;
   }
@@ -77,6 +79,10 @@ export const Layout = () => {
           {t("preview")}
         </Tab>{" "}
         /{" "}
+        <Tab className="translate" onClick={() => handleClick("translate")}>
+          {t("translate")}
+        </Tab>{" "}
+        /{" "}
         <Tab className="save" onClick={() => handleClick("save")}>
           {t("save")}
         </Tab>
@@ -109,6 +115,12 @@ export const Layout = () => {
             <h1 onClick={handleHeaderClick}>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
             <Preview />
           </StyledPreviewWrapper>
+        </>
+      )}
+      {showTab === "translate" && (
+        <>
+          <h1 onClick={handleHeaderClick}>{t("translateTitle")}</h1>
+          <Translate />
         </>
       )}
       {showTab === "save" && (

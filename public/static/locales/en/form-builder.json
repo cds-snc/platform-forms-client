@@ -42,5 +42,7 @@
   "startErrorParse": "Failed to parse file, not valid JSON",
   "richTextIntroTitle": "Form introduction",
   "richTextConfirmationTitle": "Confirmation page and message",
-  "richTextPrivacyTitle": "Privacy statement"
+  "richTextPrivacyTitle": "Privacy statement",
+  "translate": "Translate",
+  "translateTitle": "Translate view"
 }
