@@ -1,7 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { getTemplateByID } from "@lib/templates";
-import { UserRole } from "@prisma/client";
 import Settings from "@components/admin/TemplateDelete/Settings";
 
 const redirect = (locale: string | undefined) => {
@@ -37,6 +36,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   }
   // if no form returned, 404
   return redirect(context.locale);
-}, UserRole.ADMINISTRATOR);
+});
 
 export default Settings;

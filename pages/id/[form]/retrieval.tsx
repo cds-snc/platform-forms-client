@@ -2,7 +2,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import React from "react";
-import { UserRole } from "@prisma/client";
 
 const retrieval = (): React.ReactElement => {
   const { t } = useTranslation("forms-responses-retrieval");
@@ -33,6 +32,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
         (await serverSideTranslations(context?.locale, ["common", "forms-responses-retrieval"]))),
     },
   };
-}, UserRole.PROGRAM_ADMINISTRATOR);
+});
 
 export default retrieval;
