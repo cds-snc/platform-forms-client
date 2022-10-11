@@ -328,35 +328,53 @@ export const isValidPassword = (password: string): boolean => {
   return true;
 };
 
-// TODO: either doc below or combine into one func
-
-export const isLowerCase = (password: string): boolean => {
+/**
+ * This function tests whether a string contains a lower case character
+ * @param field A string containing a lower case character
+ * @returns {boolean} The validation result
+ */
+export const isLowerCase = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[a-z])");
-  if (!password || !reg.test(password)) {
+  if (!field || !reg.test(field)) {
     return false;
   }
   return true;
 };
 
-export const isUpperCase = (password: string): boolean => {
+/**
+ * This function tests whether a string contains an upper case character
+ * @param field A string containing an uppwer case character
+ * @returns {boolean} The validation result
+ */
+export const isUpperCase = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[A-Z])");
-  if (!password || !reg.test(password)) {
+  if (!field || !reg.test(field)) {
     return false;
   }
   return true;
 };
 
-export const isNumber = (password: string): boolean => {
+/**
+ * This function tests whether a string contains a number
+ * @param field A string containing a number
+ * @returns {boolean} The validation result
+ */
+export const isNumber = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[0-9])");
-  if (!password || !reg.test(password)) {
+  if (!field || !reg.test(field)) {
     return false;
   }
   return true;
 };
 
-export const isSymbol = (password: string): boolean => {
+/**
+ * This function tests whether a string contains a symbol character
+ * @param field A string containing a symbol character
+ * @returns {boolean} The validation result
+ */
+export const isSymbol = (field: string): boolean => {
   const reg = new RegExp("^(?=.*?[#?!@$%^&*-])");
-  if (!password || !reg.test(password)) {
+  if (!field || !reg.test(field)) {
     return false;
   }
   return true;
