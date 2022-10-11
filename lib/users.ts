@@ -3,7 +3,7 @@ import { AccessLog, FormUser } from "@prisma/client";
 import { JWT } from "next-auth";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
-import { checkPrivileges } from "./privileges";
+import { checkPrivileges } from "@lib/privileges";
 /**
  * Get all Users
  * @returns An array of all Users
