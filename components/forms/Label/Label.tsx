@@ -10,6 +10,7 @@ interface LabelProps {
   className?: string;
   error?: boolean;
   hint?: React.ReactNode;
+  idHint?: string;
   srOnly?: boolean;
   required?: boolean;
   validation?: ValidationProperties;
@@ -17,8 +18,19 @@ interface LabelProps {
 }
 
 export const Label = (props: LabelProps): React.ReactElement => {
-  const { children, htmlFor, className, error, hint, srOnly, required, validation, id, group } =
-    props;
+  const {
+    children,
+    htmlFor,
+    className,
+    error,
+    hint,
+    idHint,
+    srOnly,
+    required,
+    validation,
+    id,
+    group,
+  } = props;
 
   const classes = classnames(
     {
@@ -45,7 +57,11 @@ export const Label = (props: LabelProps): React.ReactElement => {
           {validation?.all ? t("all-required") : t("required-field")}
         </i>
       )}
-      {hint && <span className="gc-hint">{hint}</span>}
+      {hint && (
+        <span id={idHint} className="gc-hint">
+          {hint}
+        </span>
+      )}
     </>
   );
 

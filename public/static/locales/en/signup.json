@@ -14,12 +14,14 @@
     "fields": {
       "username": {
         "label": "Email",
+        "hint": "Must be a federal government email address",
         "error": {
           "validGovEmail": "This field must be a valid government email."
         }
       },
       "password": {
-        "label": "Password"
+        "label": "Password",
+        "hint": "Must be at least 8 characters with a capital, number and symbol"
       },
       "passwordConfirmation": {
         "label": "Password confirmation",

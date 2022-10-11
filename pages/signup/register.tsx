@@ -16,6 +16,7 @@ export default function Register() {
   const { t } = useTranslation(["signup", "common"]);
 
   const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t("input-validation.required", { ns: "common" })),
     username: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" }))
@@ -24,7 +25,6 @@ export default function Register() {
         t("signUpRegistration.fields.username.error.validGovEmail"),
         (value = "") => isValidGovEmail(value, emailDomainList.domains)
       ),
-    name: Yup.string().required(t("input-validation.required", { ns: "common" })),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .min(8, t("signUpRegistration.fields.passwordConfirmation.error.minLength"))
@@ -93,22 +93,46 @@ export default function Register() {
               </Alert>
             ) : null}
             <div className="focus-group">
-              <Label id={"label-username"} htmlFor={"username"} className="required" required>
-                {t("signUpRegistration.fields.username.label")}
-              </Label>
-              <TextInput type={"email"} id={"username"} name={"username"} />
-            </div>
-            <div className="focus-group">
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("signUpRegistration.fields.name.label")}
               </Label>
               <TextInput type={"text"} id={"name"} name={"name"} />
             </div>
             <div className="focus-group">
-              <Label id={"label-password"} htmlFor={"password"} className="required" required>
+              <Label
+                id={"label-username"}
+                htmlFor={"username"}
+                hint={t("signUpRegistration.fields.username.hint")}
+                idHint={"username-hint"}
+                className="required"
+                required
+              >
+                {t("signUpRegistration.fields.username.label")}
+              </Label>
+              <TextInput
+                type={"email"}
+                id={"username"}
+                name={"username"}
+                ariaDescribedBy={"username-hint"}
+              />
+            </div>
+            <div className="focus-group">
+              <Label
+                id={"label-password"}
+                htmlFor={"password"}
+                hint={t("signUpRegistration.fields.password.hint")}
+                idHint="password-hint"
+                className="required"
+                required
+              >
                 {t("signUpRegistration.fields.password.label")}
               </Label>
-              <TextInput type={"password"} id={"password"} name={"password"} />
+              <TextInput
+                type={"password"}
+                id={"password"}
+                name={"password"}
+                ariaDescribedBy={"username-hint"}
+              />
             </div>
             <div className="focus-group">
               <Label
