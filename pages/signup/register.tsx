@@ -15,7 +15,6 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const { t } = useTranslation(["signup", "common"]);
 
-  // TEMP: NOTE: state stored and shared in Formik as "errors"
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
@@ -87,7 +86,6 @@ export default function Register() {
                 <ol className="gc-ordered-list">
                   {errors &&
                     Object.entries(errors).map(([elementId /*, errorMessage*/]) => {
-                      //TODO use .keys if not need errorMessage later
                       return (
                         <ErrorListItem
                           errorKey={elementId}
@@ -99,117 +97,45 @@ export default function Register() {
                 </ol>
               </Alert>
             ) : null}
-
             <div className="focus-group">
-              <Label id={"label-username"} htmlFor={"username"} className="required">
+              <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("signUpRegistration.fields.username.label")}
-                <span data-testid="required" aria-hidden="true">
-                  {" "}
-                  ({t("required")})
-                </span>
               </Label>
-              <TextInput
-                type={"email"}
-                id={"username"}
-                name={"username"}
-                required={true}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1"),
-                  part2: t("formElements.characterCount.part2"),
-                  part1Error: t("formElements.characterCount.part1-error"),
-                  part2Error: t("formElements.characterCount.part2-error"),
-                }}
-              />
+              <TextInput type={"email"} id={"username"} name={"username"} />
             </div>
-
             <div className="focus-group">
-              <Label id={"label-firstName"} htmlFor={"firstName"} className="required">
+              <Label id={"label-firstName"} htmlFor={"firstName"} className="required" required>
                 {t("signUpRegistration.fields.firstName.label")}
-                <span data-testid="required" aria-hidden="true">
-                  {" "}
-                  ({t("required")})
-                </span>
               </Label>
-              <TextInput
-                type={"text"}
-                id={"firstName"}
-                name={"firstName"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1"),
-                  part2: t("formElements.characterCount.part2"),
-                  part1Error: t("formElements.characterCount.part1-error"),
-                  part2Error: t("formElements.characterCount.part2-error"),
-                }}
-              />
+              <TextInput type={"text"} id={"firstName"} name={"firstName"} />
             </div>
-
             <div className="focus-group">
-              <Label id={"label-lastName"} htmlFor={"lastName"} className="required">
+              <Label id={"label-lastName"} htmlFor={"lastName"} className="required" required>
                 {t("signUpRegistration.fields.lastName.label")}
-                <span data-testid="required" aria-hidden="true">
-                  {" "}
-                  ({t("required")})
-                </span>
               </Label>
-              <TextInput
-                type={"text"}
-                id={"lastName"}
-                name={"lastName"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1"),
-                  part2: t("formElements.characterCount.part2"),
-                  part1Error: t("formElements.characterCount.part1-error"),
-                  part2Error: t("formElements.characterCount.part2-error"),
-                }}
-              />
+              <TextInput type={"text"} id={"lastName"} name={"lastName"} />
             </div>
-
             <div className="focus-group">
-              <Label id={"label-password"} htmlFor={"password"} className="required">
+              <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("signUpRegistration.fields.password.label")}
-                <span data-testid="required" aria-hidden="true">
-                  {" "}
-                  ({t("required")})
-                </span>
               </Label>
-              <TextInput
-                type={"password"}
-                id={"password"}
-                name={"password"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1", { ns: "common" }),
-                  part2: t("formElements.characterCount.part2", { ns: "common" }),
-                  part1Error: t("formElements.characterCount.part1-error", { ns: "common" }),
-                  part2Error: t("formElements.characterCount.part2-error", { ns: "common" }),
-                }}
-              />
+              <TextInput type={"password"} id={"password"} name={"password"} />
             </div>
-
             <div className="focus-group">
               <Label
                 id={"label-passwordConfirmation"}
                 htmlFor={"passwordConfirmation"}
                 className="required"
+                required
               >
                 {t("signUpRegistration.fields.passwordConfirmation.label")}
-                <span data-testid="required" aria-hidden="true">
-                  {" "}
-                  ({t("required")})
-                </span>
               </Label>
               <TextInput
                 type={"password"}
                 id={"passwordConfirmation"}
                 name={"passwordConfirmation"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1", { ns: "common" }),
-                  part2: t("formElements.characterCount.part2", { ns: "common" }),
-                  part1Error: t("formElements.characterCount.part1-error", { ns: "common" }),
-                  part2Error: t("formElements.characterCount.part2-error", { ns: "common" }),
-                }}
               />
             </div>
-
             <div className="buttons">
               <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
             </div>
