@@ -4632,80 +4632,80 @@
     "@typescript-eslint/types" "5.36.1"
     eslint-visitor-keys "^3.3.0"
 
-"@udecode/plate-alignment@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-alignment/-/plate-alignment-17.0.3.tgz#4efd27d20419c5ac1c99b69198e1cd8851dae014"
-  integrity sha512-QlNKnWtzwWN6pFjQrr08xQrBZoIoWKM38gvu6FsQr7Ok29pQKwPcHbmKDzv86Ki6EkDdeKEH8KsDyabohYygCQ==
+"@udecode/plate-alignment@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-alignment/-/plate-alignment-18.1.1.tgz#328eda1a700a1bd61cd3c4cd667a91e3bfbeed34"
+  integrity sha512-Ba7NgJ9nj2xCbb3nFkVGlsLGKnLBESatoyGolpWkt9YEgGSfrUCa51PqbnbdCyrhgrsAJleChzfiJy+GK+wOBw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-autoformat@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-autoformat/-/plate-autoformat-17.0.3.tgz#8519c6e3500f97290dc33a27841741319d93a0db"
-  integrity sha512-a0OlH5cHpnmVvnizhnzz0hWcCfI+vMcTKfKkeuGBBb/QE0VkuxSuTJiHBluNH6GJqyniWo81fpIE/pvza4SPuw==
+"@udecode/plate-autoformat@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-autoformat/-/plate-autoformat-18.1.1.tgz#b91697948ebd9b510a322ec9a4799241fb0352a1"
+  integrity sha512-Tv2354/ciBbgaJKjQJhm+ZGDRc5EsX8M8CDqbO7D0q3hEhhEFCeoxkydGhKR9JLKEf33wc/5DZutxxLgxQvQjA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-basic-elements@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-elements/-/plate-basic-elements-17.0.3.tgz#418fb6088993decff3b1c561253d7aae04a3d13f"
-  integrity sha512-Vdhfu8cgIp833jVG4hphs4h0WMtGxA1R+ONf7StlByHEkM5tqnL1Kl8B57x5Xu+1lHm410eVUVpKnXneSDyQzw==
+"@udecode/plate-basic-elements@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-elements/-/plate-basic-elements-18.1.1.tgz#6cc5bffee00874171506aabb298f5e620dc8b58f"
+  integrity sha512-nk0zmaRwKcE30p0B+hRW4NA/AawB2pEZ7ptmDn+L0tcOFhIEyqTbk/CVVwOjop2BGJ8alutsbMWr6LZIiTcDfQ==
   dependencies:
-    "@udecode/plate-block-quote" "17.0.3"
-    "@udecode/plate-code-block" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-heading" "17.0.3"
-    "@udecode/plate-paragraph" "17.0.3"
+    "@udecode/plate-block-quote" "18.1.1"
+    "@udecode/plate-code-block" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-heading" "18.1.1"
+    "@udecode/plate-paragraph" "18.1.1"
 
-"@udecode/plate-basic-marks@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-marks/-/plate-basic-marks-17.0.3.tgz#03ea5cee2467abb62e78d5996e1c092e36c0ae3f"
-  integrity sha512-Jb4gw7npHqDXRgYVUiNOAlora4tTzn+GGCfhrmXTrYFEg+rOk9+ISXhcI8lX/mGiLOk1vJewTZ2A097BWndCyQ==
+"@udecode/plate-basic-marks@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-marks/-/plate-basic-marks-18.1.1.tgz#231b3513ac3cf638da93d7424ab28425e5706a11"
+  integrity sha512-CNSsnzBBf0jjWvJuNa8148D+9b91YDkDnwSrKDeiFw9qNTazLjaqbgG4hkIskVtenhdsi6SliVY0G8D/PqOiSw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-block-quote@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-17.0.3.tgz#af3876ba212a0c90ef727b1f22214277f84fc093"
-  integrity sha512-x8FG0BxJgB7n/W8YXhVTE4i7McsT5tMGCm+fih78xOKR+GlLPJ3llZAI0koiiMI8sRZcacDpzKVqEFX7VtuXcQ==
+"@udecode/plate-block-quote@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-18.1.1.tgz#014d4ac500337350e24a15cb0d0737be398007e6"
+  integrity sha512-jX/fOnrr6u8rj4M4Oa1ZbGXeE6PgD19WhneSK9Sk98iRgBg9OCLL6UgOHbySOVR4qUH8nMOifDB7hz44hoLsVw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-break@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-break/-/plate-break-17.0.3.tgz#55e804419b6ffca5bf098093f64a70eebd67b6b2"
-  integrity sha512-ow93c7rnwaNk6phDeCZOXkANRumQfXcUtI3Zw2R3IUS2LsufQRquSlUhMfSwJxjHFziIFhzn9cOs6I0Kpy50AQ==
+"@udecode/plate-break@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-break/-/plate-break-18.1.1.tgz#05a23659d5ac65d1dcc48a40b167b60682970b03"
+  integrity sha512-qIbH4hcJDRa9mG5aPeRtjNAZXph1Rog8M46RC8L1CAFbzZAV/h4cBQWbkQGDIOowBxpxooYn9VkxY87ndun+cQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-button@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-17.0.3.tgz#e3efd5a498470538238ec0203823be55c96bd231"
-  integrity sha512-XbAHpQn6hieiufjBbaMw/mgIWXKFykgrbvzucQ7uiIKEs0+sWxnAF3YqFVrLuwqPch4JIiDClv+Hf0UBSCKwfQ==
+"@udecode/plate-button@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-18.1.1.tgz#53c551318a9932a3ef55822d13f1bbc49ccf8102"
+  integrity sha512-OBt6Md8JPnxwu3SGhIOJMVNXE+JMSNgTJ8r6drf1sHTUPDuvgRhpEauqVKdELNVAObngzRQd/rt6qrG333G+Vg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-code-block@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-17.0.3.tgz#286af83ba600736aa1419b7ee360039f218b636d"
-  integrity sha512-DQ2Juc+qEDPSAuiTw7RTB6aoPTDI/JjBmzR0OK9CmPoETlgFI7paHF0hCMGzYR/m1VLw80n169CyGrUokSD3Ow==
+"@udecode/plate-code-block@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-18.1.1.tgz#7441e5e46f62e16e71b734aa94b953c9f877a422"
+  integrity sha512-xagSl2BodmqI0qGIHy3BAaas8zI2YUyl0BNngb8zEAzVXQxn6Wk99QnJLu33Ac98O5nBnSLqdnTzmjUA+hJA7Q==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
     prismjs "^1.25.0"
 
-"@udecode/plate-combobox@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-combobox/-/plate-combobox-17.0.3.tgz#e4b19242bb7ef9a81213481d64dceb24684b7ab1"
-  integrity sha512-TJQLzKFd0PhLg0lrNfuGI7cA7NfCQQhbf1QJxaZtyCccYNgFrYbF503cEm7C9wKD8CPEIi9C8zn/HQZcerwJqA==
+"@udecode/plate-combobox@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-combobox/-/plate-combobox-18.1.1.tgz#fc002dcb701db6d41e22e51e345d0a8689bde47c"
+  integrity sha512-RfEtcYK0wFgWmkrSHlX6D8TO7lj91ZqcIz0HQjrxNa40ESK7ZvPnlP13w/+ocDu5UDyrzpY65tmd5aDnTRy+Pg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-floating" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-floating" "18.1.1"
     downshift "^6.1.7"
 
-"@udecode/plate-core@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-17.0.3.tgz#13eb540dce9f2e92ec66f058d52890de5fb4544e"
-  integrity sha512-D5UTsi7PWXhVwuIjIQa5TcrsPLrR2ip6QHbBYfsMQang+L2FtZNeh8u0KDeNwGuVzj3Gu01pqcUfObzYaXkyzw==
+"@udecode/plate-core@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-18.1.1.tgz#40efe379ae0b8fc86c474ab6b9f659d442952a71"
+  integrity sha512-yzJYisFqNuyEzvIgdxQEEjy7oCBerxf6lBsBwipYBkbb91rav6j2L2zFR35ByRuJyQR7VnbRixwShMPtfY5BKw==
   dependencies:
     "@radix-ui/react-slot" "^0.1.2"
     "@udecode/zustood" "^1.1.1"
@@ -4717,482 +4717,482 @@
     use-deep-compare "^1.1.0"
     zustand "^3.7.2"
 
-"@udecode/plate-find-replace@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-17.0.3.tgz#39386dab5755747b755ea8b308c9250389910390"
-  integrity sha512-8WnWdPP+NkmQzdZnEEv8S4I/kyE6MzHtPXnM+zDJEYWU4+vM3xC2qgDCh9bvjnam1WsWyFNPTZSChC37jqGaiA==
+"@udecode/plate-find-replace@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-find-replace/-/plate-find-replace-18.1.1.tgz#aa066f5f657922ed6b5167a23eae23a4b9100ac0"
+  integrity sha512-g+xqOGgrJxA0uzCBEONPG0QSt34uSoYFnyWhq2ORdUUt6vpUH6Z7fkyEKt9hsDynPabbzpIH0YxyjUCG85dbhQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-floating@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-floating/-/plate-floating-17.0.3.tgz#982966c2d1d0b5bf122357d34ece594baf17fc29"
-  integrity sha512-jizgZWFO5UlVHE8zp3AsQtuPw0R92Biv8GJbmVaD2uT8nibppavFAoPoKP+XtogvFmj0krk01mWQzGqQ4P0LdQ==
+"@udecode/plate-floating@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-floating/-/plate-floating-18.1.1.tgz#fda556a6189d15a588a7bd6f8951fe139154edc7"
+  integrity sha512-4laYN67ol1zIajLn7Tn6CEgYlrhFjO9SWdfCn8uLJkoLnyzQF6CS6Nq9+fnnPExPXvhSOxxk9BWXDmWJap/eHw==
   dependencies:
     "@floating-ui/react-dom-interactions" "^0.6.6"
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-font@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-font/-/plate-font-17.0.3.tgz#4226a12d6c5735bab43cd8f2a5715df4687a1305"
-  integrity sha512-l0dw2whZrl85qVL4Gl/RAq0ck3zZEsfPEx+BivkLMirJG6iinDy1W7ABwmlD5YWiXhGI7/OSUa9K7ai88bvgQA==
+"@udecode/plate-font@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-font/-/plate-font-18.1.1.tgz#9bd20d8f888000d3e4461cace67bcb2bc943bcae"
+  integrity sha512-Ir5slAd5BbnkhIO04FyEGKBJrx4Wlid8W96PsIbI8C4kLq82CiTwNVZTPwW1OTOc3+DKBP1HaUmAn5M/nVYQLg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-heading@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-heading/-/plate-heading-17.0.3.tgz#72f578625b966a1065d35451a8ac83ef299c9959"
-  integrity sha512-dN+AkHHPYGQesijK2398yHI8SV9C0vNsZkrwj3F4rR2LV20ZJkY/GW+klK67rs3KJJ9QrDAapCv2riT6mbDGcA==
+"@udecode/plate-heading@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-heading/-/plate-heading-18.1.1.tgz#1b3c65c0adfe39ec4139732ae2c6667c83def1ff"
+  integrity sha512-Yw7sKQODW3hnASB+j6KbrTzPjSdvPe943j13PSk4s5fwhgP74EySYv5wokUWwVL4F5S/SDJSCfNKXnPfIbJiqw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-headless@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.1.0.tgz#ddd68b88edaddbce7d352f684770f9588e354d87"
-  integrity sha512-332GEB0YHDmYXYR6NDkCbnAsPJ6zMi71tL/HSAPquBheh8an51ImkYke1ZW6JMN0IKhmjK0vEySC9B6JcFVMKw==
+"@udecode/plate-headless@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.1.2.tgz#0a09a3ae8141aad41b9c6ab5b32f80891f5aa7ca"
+  integrity sha512-oeLvptlm7hWncEGKCMA7UoLI07Pp7CVMINoQpk4+kiMHeKV/CmqiFZJvjLDzP0SmgeFzfRM5vOnWjK4oRCjhWw==
   dependencies:
-    "@udecode/plate-alignment" "17.0.3"
-    "@udecode/plate-autoformat" "17.0.3"
-    "@udecode/plate-basic-elements" "17.0.3"
-    "@udecode/plate-basic-marks" "17.0.3"
-    "@udecode/plate-block-quote" "17.0.3"
-    "@udecode/plate-break" "17.0.3"
-    "@udecode/plate-button" "17.0.3"
-    "@udecode/plate-code-block" "17.0.3"
-    "@udecode/plate-combobox" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-find-replace" "17.0.3"
-    "@udecode/plate-floating" "17.0.3"
-    "@udecode/plate-font" "17.0.3"
-    "@udecode/plate-heading" "17.0.3"
-    "@udecode/plate-highlight" "17.0.3"
-    "@udecode/plate-horizontal-rule" "17.0.3"
-    "@udecode/plate-indent" "17.0.3"
-    "@udecode/plate-indent-list" "17.0.3"
-    "@udecode/plate-kbd" "17.0.3"
-    "@udecode/plate-line-height" "17.0.3"
-    "@udecode/plate-link" "18.1.0"
-    "@udecode/plate-list" "17.0.3"
-    "@udecode/plate-media" "17.0.3"
-    "@udecode/plate-mention" "17.0.3"
-    "@udecode/plate-node-id" "17.0.3"
-    "@udecode/plate-normalizers" "17.0.3"
-    "@udecode/plate-paragraph" "17.0.3"
-    "@udecode/plate-reset-node" "17.0.3"
-    "@udecode/plate-select" "17.0.3"
-    "@udecode/plate-selection" "17.0.3"
-    "@udecode/plate-serializer-csv" "17.0.3"
-    "@udecode/plate-serializer-docx" "17.0.3"
-    "@udecode/plate-serializer-html" "17.0.3"
-    "@udecode/plate-serializer-md" "18.1.0"
-    "@udecode/plate-table" "17.0.3"
-    "@udecode/plate-trailing-block" "17.0.3"
+    "@udecode/plate-alignment" "18.1.1"
+    "@udecode/plate-autoformat" "18.1.1"
+    "@udecode/plate-basic-elements" "18.1.1"
+    "@udecode/plate-basic-marks" "18.1.1"
+    "@udecode/plate-block-quote" "18.1.1"
+    "@udecode/plate-break" "18.1.1"
+    "@udecode/plate-button" "18.1.1"
+    "@udecode/plate-code-block" "18.1.1"
+    "@udecode/plate-combobox" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-find-replace" "18.1.1"
+    "@udecode/plate-floating" "18.1.1"
+    "@udecode/plate-font" "18.1.1"
+    "@udecode/plate-heading" "18.1.1"
+    "@udecode/plate-highlight" "18.1.1"
+    "@udecode/plate-horizontal-rule" "18.1.1"
+    "@udecode/plate-indent" "18.1.1"
+    "@udecode/plate-indent-list" "18.1.2"
+    "@udecode/plate-kbd" "18.1.1"
+    "@udecode/plate-line-height" "18.1.1"
+    "@udecode/plate-link" "18.1.1"
+    "@udecode/plate-list" "18.1.1"
+    "@udecode/plate-media" "18.1.1"
+    "@udecode/plate-mention" "18.1.1"
+    "@udecode/plate-node-id" "18.1.1"
+    "@udecode/plate-normalizers" "18.1.1"
+    "@udecode/plate-paragraph" "18.1.1"
+    "@udecode/plate-reset-node" "18.1.1"
+    "@udecode/plate-select" "18.1.1"
+    "@udecode/plate-selection" "18.1.1"
+    "@udecode/plate-serializer-csv" "18.1.2"
+    "@udecode/plate-serializer-docx" "18.1.2"
+    "@udecode/plate-serializer-html" "18.1.1"
+    "@udecode/plate-serializer-md" "18.1.1"
+    "@udecode/plate-table" "18.1.2"
+    "@udecode/plate-trailing-block" "18.1.1"
 
-"@udecode/plate-highlight@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-highlight/-/plate-highlight-17.0.3.tgz#b0191d1e49099bfea28991c7065faecd5eaff1b0"
-  integrity sha512-0gabYOjp52elSMtheJCUzKMiMi0yv/uOpaiJep9YV1OpvmjNbmhEhiRUctFPBMkiEkMBsp/y9Zk2knc5rgoUlA==
+"@udecode/plate-highlight@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-highlight/-/plate-highlight-18.1.1.tgz#88c6be64759486f63be57f54e572aa65f4cd86bf"
+  integrity sha512-VUlJZTkdS9XItJ9gOukTlMAKE4sT8PEHk0OtmrtE/rNesKLJeOaX6mfuaHcimgGwor+FVer34rqlxJYUN770IA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-horizontal-rule@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-horizontal-rule/-/plate-horizontal-rule-17.0.3.tgz#988c51e364df30c195bafe99b6af1d0d968849be"
-  integrity sha512-zxsqaL/kHs6P3yB498Y3GKE01WicJU9EjyEOhexqDLo1FKtGQztEsffSzJ7wRTxJ/80+sSIXfwB/tmcm8zH3Ww==
+"@udecode/plate-horizontal-rule@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-horizontal-rule/-/plate-horizontal-rule-18.1.1.tgz#e4eec167847fd404afcdee56f699726bd4e8ec4f"
+  integrity sha512-fST7m+9PKZUVaue51epSCiKeYGG6Nn+IvLRwe6Q4Wgxj0PePbnZQR/V8LeI04zN0gP40So0R94TGowK74F/u8g==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-indent-list@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-indent-list/-/plate-indent-list-17.0.3.tgz#5bcfb4667e21aa0e2a02c346d49942925852b8c3"
-  integrity sha512-19U/rmSFAU/Wym3mjexw+oGRptToQT2R4Cc3mnH4+h6YSw+c9jscMgLP9hPdwlHa6y7kkAGDrlVE76ZMjn1eDg==
+"@udecode/plate-indent-list@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-indent-list/-/plate-indent-list-18.1.2.tgz#f0f099e5b0c1f72a2d7cb61166628637d4255039"
+  integrity sha512-Gxy8wwoORSeMBTEaoPASM59PJ1x5meizrH7W8xnFZN2k6jSY8UJQFkR/dj0z4VqgZp/eCfMIaK5MVYHa7XnQOw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-indent" "17.0.3"
-    "@udecode/plate-list" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-indent" "18.1.1"
+    "@udecode/plate-list" "18.1.1"
 
-"@udecode/plate-indent@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-indent/-/plate-indent-17.0.3.tgz#3046faffa668c5d214f1a14df10aa8ff3ea4f9cc"
-  integrity sha512-6urrfj/dmwVgGY7LM8Kq4h5HtweESLM4MClctacq/PQmd4O1AOGbszXnk7mJlxD/j3r2NgDBMFE431s5z4EP2g==
+"@udecode/plate-indent@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-indent/-/plate-indent-18.1.1.tgz#31b831d3cad7a4bb52986953d6f30fa20cc132f2"
+  integrity sha512-rS8gGpksx5It2CgiYwzJ7UxBFH9m5YUfn+edx+2ayvsgGCuDjE4I/V46IhSn86dR6ZoVZthNedqwCG30hGnqDg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-kbd@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-kbd/-/plate-kbd-17.0.3.tgz#c5d85f0a516acb613aadf6f78463cc5f80233d9e"
-  integrity sha512-4r8oqDMcax5n7qhLZLNGaHitc42JG+m55qGRratNQhpu6fGJjoXLKXNZmWLfkvYDyPUKpl69G5v0tvelyTWOsg==
+"@udecode/plate-kbd@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-kbd/-/plate-kbd-18.1.1.tgz#bc339d5e44afa36d2b2f4d7b1c03ee9633bcd9c7"
+  integrity sha512-TdXlS9oMc5epAWgNT641jeoC65/XrlJCKDltQx6eWfAQXkw6Dsa69NpnQvLzl/QN1U6tmuoz8N2+z6wFXS+00g==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-line-height@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-line-height/-/plate-line-height-17.0.3.tgz#0d73e0a59da6d228ffac66023ca02e1f0047e5ff"
-  integrity sha512-PmeoH4O+6bfIkxa44+UIi3DnEBSMKrXLKOM44qP+8WFLFuLPB/f4Uw7PaYwXwqbZCkVad70E/L3hzBtNb5hKog==
+"@udecode/plate-line-height@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-line-height/-/plate-line-height-18.1.1.tgz#584dd7bc419fb598d62d994dd41f766c64fde457"
+  integrity sha512-z9stwA5CLEJrg0VbbjOGHXqai44U+nTblS3cVgqo53cLShHHK2B2HWbeV8KGVPEIHhWB3kjDhHCM55yEz2MCRg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-link@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-18.1.0.tgz#354a386a233c5b3d2e9e37a9f9d8a4584e0a3ebd"
-  integrity sha512-InpEH9ypGOaK7sHkZ5YHxbnBwVb+ObHWq4mQm/2d3wg0CNbRYzls0lPS2bk+jIgotuszs/s0EPK6P3/zKhyfgA==
+"@udecode/plate-link@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-18.1.1.tgz#89bf4ec184885fdf21f2a76fca6307e7e46f9752"
+  integrity sha512-P7hR+1kIkCp43G3cTHZuaJTDRGbSATNfdSoCPaZeNumRuMaPVdLjOldU6CEILNzcnwXGXOhPVQP+lYIbJuIJ+A==
   dependencies:
-    "@udecode/plate-button" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-normalizers" "17.0.3"
+    "@udecode/plate-button" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-normalizers" "18.1.1"
 
-"@udecode/plate-list@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-list/-/plate-list-17.0.3.tgz#5eed5d5d8fe34f73bd86189c67c9b2fef99647ab"
-  integrity sha512-Ta0EhBTYHZ9h0vyeuHfyH57ASUFrJz6F54r7bPkr1T5ETXOpzt4AUiOOcVSjxWOlmw2lZGNUxpRCWcSCUreKlA==
+"@udecode/plate-list@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-list/-/plate-list-18.1.1.tgz#54faedfd82ac81ee16edbf67f0e7607c31b6059a"
+  integrity sha512-W9bN6c9io2r+eiSCTFviM7XQ5ZF4kbgr/HFMMN3fJKniOjiNHuCfmOUIkGyRuOAT1cD2x0fKInC2fIzouT4elA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-reset-node" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-reset-node" "18.1.1"
 
-"@udecode/plate-media@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-media/-/plate-media-17.0.3.tgz#5737295709cf211f72b21221ffad2766e0afb1d5"
-  integrity sha512-wjX0xFTIFEuo5OtmgoHjDrKxgMLRvkvKoScEHy9uHK8/PrDrSprA6qKZn5NjQl/cHzFQKNGZlOrc+JSx+IiwrQ==
+"@udecode/plate-media@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-media/-/plate-media-18.1.1.tgz#dee9b31d8a92cca8d6e56354dd3e66707325e855"
+  integrity sha512-whzooGpzrViqT8VXGI96uzf7vyg/R3YUDjuEFgHjIYgWvHUUHrTKDfX8oHST3pN8Y/VQqRe0qDMlVNUFfyljzA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
     js-video-url-parser "^0.5.1"
     re-resizable "^6.9.9"
     react-textarea-autosize "^8.3.3"
     scriptjs "2.5.9"
 
-"@udecode/plate-mention@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-mention/-/plate-mention-17.0.3.tgz#042fcd5604f6c673d6b58645683a4e34b4912a58"
-  integrity sha512-yRxOq1y1UoCWwbKAyJwUBUDVlfaQHLuXxDeAJSvKeSda66uMNSOpu8n7CU/+NjWY3YU1Xgcrb5FbvGTFchZdWA==
+"@udecode/plate-mention@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-mention/-/plate-mention-18.1.1.tgz#0369a10e555292e784fd847f1e3d9d27acbe08c7"
+  integrity sha512-t/wg4A86JuYe5YXyYgaw2V5Vr96j0ISUob84pOxFIvW9DbYcUl9DGwb0zEAUhi59HscMta0C/ecrDpz370ByEw==
   dependencies:
-    "@udecode/plate-combobox" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-combobox" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-node-id@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-node-id/-/plate-node-id-17.0.3.tgz#9cf0f1898ef7cffeeb0eb336523c61cee91d8574"
-  integrity sha512-OpeUp33MIns32LNUFl0spVlnkJH4GMPLP1ymewijJqgcS11s+aoOzGZw5s5JiycHnIwoT74VC0KNOcGB0dLxCQ==
+"@udecode/plate-node-id@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-node-id/-/plate-node-id-18.1.1.tgz#c335235a74703b63d231d00b00fc617bb89ece8a"
+  integrity sha512-kWxirHfK+lpo5umWh9j9UfhXefcYC2wrr0Z0zQ07Hpu1HzikMWDws9viDt1ObPeC+vmM26ji4dhoIKxWBt9/zg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-normalizers@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-17.0.3.tgz#bf0d73f5921397abab7778211125cfd06d111736"
-  integrity sha512-65A/oQ7E4srNL3vhkbXHU4iIgiuzecg8Gpni49y6bEKDMowFAwAW4kvqIf4Z6BP3Nk7J+pxYk8VzUNWwMEXLQg==
+"@udecode/plate-normalizers@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-18.1.1.tgz#58e3546f7d0ed1e3cd44198dc1c78a0cf087d22f"
+  integrity sha512-e1TrzXFtMt2skzF2FEie8c/moKE+1FCg2fXwGvPdS9eCyIbk7tGaNLt2TgFYsFDxoVt2h2Mj7CKL/jcGbGJsmQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-paragraph@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-17.0.3.tgz#1671db01c48692f94531987c6b86c9f968aa8b66"
-  integrity sha512-UAqARbMiY4RuKGjO0hLU4G/tYDQ8Gap99iJmFD1FQNYAorih6p1TCoD0N5Xt/n9GiRySV7ChfAa84+UYWCLz5Q==
+"@udecode/plate-paragraph@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-18.1.1.tgz#6191faa559d1f4a7489c585abb4ffdeab9d399b8"
+  integrity sha512-gvk264qvHzLvf5mAi/TnL9mbhfK3PEt8PODay6jVsMae08HRuSKSHuqiIcIKeTa2T7JW94ipQn3tJAuWLEJQFg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-reset-node@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-reset-node/-/plate-reset-node-17.0.3.tgz#a0f2c699bfe043d213afae07b4a06ce37b954591"
-  integrity sha512-LHyUx/BPcCSBbmhaowFjoXyhzSo4NNfsmZ+BwQUIyaWt2u/JMnm0v2yjvWxz5M2Q/GSg2Jr1AqtY9bp+vva2hA==
+"@udecode/plate-reset-node@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-reset-node/-/plate-reset-node-18.1.1.tgz#04fb2fb3a83a6ca8009f8379a9a839cdb94c465e"
+  integrity sha512-oOWd0XzVKhvG3HVK/yhrhX+8bQuY+/T5xgDb+ROugJU/B622pDWlgLGxvweauifgpP/B7BPO3mQ1AyRxyxwImw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-select@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-select/-/plate-select-17.0.3.tgz#4392fde3c9b9de012f891242711572879419febc"
-  integrity sha512-NNBbnb2YUyBXBFiTB3y8+xnAezJSh/XpJ01CZr69OHGDsWGK5uOZKQ4NW2QLf7dfQ+7376X1+dw25GOUNL07GA==
+"@udecode/plate-select@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-select/-/plate-select-18.1.1.tgz#ec2e1fc5889ee265b4b90b1b8cdc5bb0c5b95cc6"
+  integrity sha512-GnQcHWYdoWce2zMeQ/d2UUsdlqi/Q+vWwRcwj3wrPFHbNhsddv7mNPxYbMBihO/YK4BPQ3te5M8JiNryJzK3Tg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-selection@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-selection/-/plate-selection-17.0.3.tgz#aecfeaeac505bb85029a2b254ce4774ffae2cf0b"
-  integrity sha512-rmsK2U4sBwQ852xop2NzN1u8A9sj2fJ6MTo1FfHkhKpsILO9FQWwOkwvea1/gZQP8rY2LMCPPsSvcCr/h2IrIA==
+"@udecode/plate-selection@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-selection/-/plate-selection-18.1.1.tgz#384cb97583205288165a2859dbc95d4091cce9f2"
+  integrity sha512-4MOPvctVSS6y9O/++zESeJRQ2cWMMb4YMNg8CmBvxvEh6bc8NSa6R2xFLzWS+YXRXYwjlOrRui2HyQX/9dY0OA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
     "@viselect/vanilla" "^3.1.0"
 
-"@udecode/plate-serializer-csv@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-17.0.3.tgz#43f81415c3cbe60905d8d8278c34c1096ce40abc"
-  integrity sha512-Vvg7r0siMEkrPCTdsQj79HT/fuz09aAUADMRIYBjeUS35UAmbzyiEsgI7xMaEQwddfY7VOH7u6xlO9UrvcplHQ==
+"@udecode/plate-serializer-csv@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-csv/-/plate-serializer-csv-18.1.2.tgz#6f386bad742bd65eb019a762a1fc1194ff84d01e"
+  integrity sha512-lFcF0VZIRIMLmcNo75ZgRF3/XzjyJcKAPyxpdgOTE5n0s3peNX94YKlKr09fzt7m5qx3BlIq23yBJhLlBT5/7g==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-table" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-table" "18.1.2"
     papaparse "^5.3.2"
 
-"@udecode/plate-serializer-docx@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-17.0.3.tgz#ab37f6cb32d561a48e37f785f791b8eef9278299"
-  integrity sha512-pbTa1owq6ml/HdrAOgYJokASTGxuskua6IKIhMUUQv0/oTkJq316jfluZzYcEiIxHTaw0j5TUR9pFEjfX3AVmA==
+"@udecode/plate-serializer-docx@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-18.1.2.tgz#01ec99575c573905e1f262f58e3b46b6a06bf4db"
+  integrity sha512-pFkUYXxcpFmNHB/Lufa9LM+WTDc08hLNGOdSxdpaqbPKicBfGHjcfZ58wCTSuJ9UsX3hgy7Gx+Lf5fRSpyWNmA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-heading" "17.0.3"
-    "@udecode/plate-indent" "17.0.3"
-    "@udecode/plate-indent-list" "17.0.3"
-    "@udecode/plate-media" "17.0.3"
-    "@udecode/plate-paragraph" "17.0.3"
-    "@udecode/plate-table" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-heading" "18.1.1"
+    "@udecode/plate-indent" "18.1.1"
+    "@udecode/plate-indent-list" "18.1.2"
+    "@udecode/plate-media" "18.1.1"
+    "@udecode/plate-paragraph" "18.1.1"
+    "@udecode/plate-table" "18.1.2"
     validator "^13.7.0"
 
-"@udecode/plate-serializer-html@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-html/-/plate-serializer-html-17.0.3.tgz#e0fdab4f3336a736e13148a2c6bc2977afff3bb1"
-  integrity sha512-uOVGYPaA93vwFG2pdjFMgKTN4BtcnbAere7o0/OdUXlNiJu1nK+lmNjenDNR4Rp+YUZqo1kD30inUmxYM4jxMA==
+"@udecode/plate-serializer-html@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-html/-/plate-serializer-html-18.1.1.tgz#9d669ce8a3dc0972d64dd11dd646d3351d2a39c4"
+  integrity sha512-3TNVKmnYBOWwW7eWi2FIH/6ag9a+ur3HdMcEd/PTZBInF52dJt4H+H4NbwUo5JbuFY2Nqe4mq727/VFxMjz74g==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
     html-entities "^2.3.3"
 
-"@udecode/plate-serializer-md@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-18.1.0.tgz#d0bb73ea473c5380055ffb13cb63b9ef3a1859c4"
-  integrity sha512-Pd1pWLc9io/GpZGXlJjH7U0OuwzKlSOMDQyb1UEMrb06LXMme+wU6U9ij/FT8Di1ft8Dbd+Ocbk2sHhjNRbnJA==
+"@udecode/plate-serializer-md@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-md/-/plate-serializer-md-18.1.1.tgz#194eb83343024a5469e999d94a7caeda56b9be47"
+  integrity sha512-Bijhk1ofRwRhSZRpVG5qBbTlviPaLUksAPgbsGh/GMD9c0tVhKF8S8F/r6RI46yLtCVihj3G0fwiNPOxpBe6aA==
   dependencies:
-    "@udecode/plate-block-quote" "17.0.3"
-    "@udecode/plate-code-block" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-heading" "17.0.3"
-    "@udecode/plate-link" "18.1.0"
-    "@udecode/plate-list" "17.0.3"
-    "@udecode/plate-paragraph" "17.0.3"
+    "@udecode/plate-block-quote" "18.1.1"
+    "@udecode/plate-code-block" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-heading" "18.1.1"
+    "@udecode/plate-link" "18.1.1"
+    "@udecode/plate-list" "18.1.1"
+    "@udecode/plate-paragraph" "18.1.1"
     remark-parse "^9.0.0"
     remark-slate "^1.8.6"
     unified "^9.2.1"
 
-"@udecode/plate-styled-components@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-styled-components/-/plate-styled-components-17.0.3.tgz#846d55814f00472fe54b8e8fc6c11a8e6123fef0"
-  integrity sha512-sUuXz/5ZMhck6XoUkZ+JZO5XrDKHi/UaZg6JM4m8Sa3sWapBh6t4BCGD6vCrITaaR4EDl7UeJP+y8shGjBMb1A==
+"@udecode/plate-styled-components@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-styled-components/-/plate-styled-components-18.1.1.tgz#cdecf93ae465acf843f05f8e32859985c7bf6c23"
+  integrity sha512-XtmCsgmOauo5AwVglC0+T6GwPZZxqr+7OnSbRC/5b3V90dPljzEBvX1pE4pSD1h0llvXxHxtNt73viYUgzdRvg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
     clsx "^1.1.1"
 
-"@udecode/plate-table@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-17.0.3.tgz#7a3e5dc128679d25d457ddf59789611b5589dc17"
-  integrity sha512-3z7MX2ex5C5TOTANYoohwz3xh7WYWwG6Dh8z3corCXTQ6kv6QfIRDOD2oCXY56rzaFXyiHMSlZqr0BROU0JCpg==
+"@udecode/plate-table@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-table/-/plate-table-18.1.2.tgz#5aa66d48497bedb8e98dd5e72da5ff4687f412bd"
+  integrity sha512-G7Tfg1Rf6p0O7tmcaxn2LtuF859LgF01WXHqZmI/GqLPEv5nTVcdCBT86w9xHhhjgJ8RAypE/Bk4SlJYRHPHlQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
 "@udecode/plate-test-utils@13.4.0":
   version "13.4.0"
   resolved "https://registry.yarnpkg.com/@udecode/plate-test-utils/-/plate-test-utils-13.4.0.tgz#378e7e9dce3059d64f17722d84c48f8936b7b9aa"
   integrity sha512-k/DTt+fv6i5ZXkOC/bZmAA7gwOW1vOuXvk6SCInweNxjS+jxUtszXj/Bw5SBD//Gm/KY00/Gd6elrfIUpT0ccQ==
 
-"@udecode/plate-trailing-block@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-trailing-block/-/plate-trailing-block-17.0.3.tgz#c28f461d02ab80cd86e898a5361e23d8ad682b36"
-  integrity sha512-Mj/7sJcvd/4W9xId8jiwbnzLZnjmZjFoh65A3OGjMZTqJoghoPwCL7F7rz+Cs3Z6bemyfYtqkq65trZAwC4DFw==
+"@udecode/plate-trailing-block@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-trailing-block/-/plate-trailing-block-18.1.1.tgz#e7419e5bbd5767cb54b1eb45ffc391b48ee65ff6"
+  integrity sha512-TFNUMLXalqeT7DOKcKhhPgHnohxCY6UC9nldlh+clOcLTfOPUem4QxOWEiFYRNgQeIDZTHoOYhn+zCRiO7mQ5A==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
 
-"@udecode/plate-ui-alignment@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-alignment/-/plate-ui-alignment-17.0.3.tgz#792d3998fd59e7c29d64a57370ae369328921c48"
-  integrity sha512-3hzgH3NyVim8KYsDB6oOSjmYsCrGoyC1rbtrEgejhA4PRbKd8OguR9zKgYmDrmJD9RLyn5ut5KVuzphGkxh8LQ==
+"@udecode/plate-ui-alignment@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-alignment/-/plate-ui-alignment-18.1.1.tgz#34772f4e5e78d5e01f2ae0641214341a841e73da"
+  integrity sha512-pEZfexhOCPzKbSxzkzqvHeSj8t36VL1adCH3oDPcH1Ah3H6+BXSCY0ERMJqYMFtX0oNNgdUryRQgSP1qw0ZvAA==
   dependencies:
-    "@udecode/plate-alignment" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-alignment" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-block-quote@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-block-quote/-/plate-ui-block-quote-17.0.3.tgz#02d81808bcfcd6549d7e39fbfccce0df6ba092e0"
-  integrity sha512-BpIdtVSVgF6Msm4CZ+HFLrWhskapVGLlEIEyqhLbNxyU9pv4I932T7p6fO/ure6wG1QS9BaqQT9sAt6wZkzYqQ==
+"@udecode/plate-ui-block-quote@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-block-quote/-/plate-ui-block-quote-18.1.1.tgz#2aa73436836a9ce33b912ff8ad45fd1332729454"
+  integrity sha512-NnUFmnTvGJzUdfyfdyOgO03LjO2NLJo89Bo3Ke4ahFEoC28kz8E9sLoDhbToxXvIOL648dkXEn3VKD1+kV/zGg==
   dependencies:
-    "@udecode/plate-block-quote" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
+    "@udecode/plate-block-quote" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
 
-"@udecode/plate-ui-button@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-button/-/plate-ui-button-17.0.3.tgz#42564f1865f553b24c02fb35b442689ac58c57f4"
-  integrity sha512-wcTN/LAQnii80Ge82yde0/DX4XvqRWpfmHTxOKHv/mXRhQczMIRBCbsZbGibfiVLxtFX++fptxYSzLZNejySFg==
+"@udecode/plate-ui-button@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-button/-/plate-ui-button-18.1.1.tgz#709773f456e0ff09ba17b142570950e6c45fdd08"
+  integrity sha512-B5dnnZR0e+hUbfHG7BxQuCpxHuY3hruBkEypCJBzKwjPj+M/MBO4sRobJxVNjMoiH4LkoOY5O1i6RT9ABcOgWA==
   dependencies:
-    "@udecode/plate-button" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
+    "@udecode/plate-button" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
 
-"@udecode/plate-ui-code-block@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-code-block/-/plate-ui-code-block-17.0.3.tgz#4c3a446f041c679270ac0c6f2303eb767f3b8a28"
-  integrity sha512-WztbvaqFq17GbT1WaXUNEjDCyB9a/2+fG319GXMCxRYvpLkcnKCv8GHtT0KLg5T8ZeJqNBU2V6/7NVDHBIeSKQ==
+"@udecode/plate-ui-code-block@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-code-block/-/plate-ui-code-block-18.1.1.tgz#efd6d55a811f0c333b2c767044ab46a2ec1b005d"
+  integrity sha512-ZWjzs6GrfIvvsz0RR7hAl2bOyEuzH7a3JA5PnyoyaHQXAWOOuN/ei7Pxl+Py+iEF855k72u4HSOP+vStRucIrg==
   dependencies:
-    "@udecode/plate-code-block" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-code-block" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-combobox@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-combobox/-/plate-ui-combobox-17.0.3.tgz#7706a066878c52f28d97aa1cdceeaa8f15ab5d11"
-  integrity sha512-TYiDYLwu+/5vwwLE8+D0wLn16wAhvf8i/6+g9frYkEl9UJkq2sPT6k3gNAH26vfdL6TTH9oW4JahutHWPLX7LA==
+"@udecode/plate-ui-combobox@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-combobox/-/plate-ui-combobox-18.1.2.tgz#2ff6437042f4a24933ed2f63486c6016c0c8b663"
+  integrity sha512-onp446RA173G2NZRmHN0I7UwxkGEee7oAL5Irv+wMZIgb8W+utmVji3IfAtfQzD2Ssd0gOPIEtKjGkzkniLNLQ==
   dependencies:
-    "@udecode/plate-combobox" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-floating" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
+    "@udecode/plate-combobox" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-floating" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
 
-"@udecode/plate-ui-cursor@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-cursor/-/plate-ui-cursor-17.0.3.tgz#f289b8405155637c90b266a1399e0679112718ce"
-  integrity sha512-n1NS1gPHMJ5YIb0/MUwz8JxQCHRtmLYqxf4eAPoK30/FWA+Du4wr0mJSYfpfiXmUDuMXd5xpJazgrYfgpfz0Hw==
+"@udecode/plate-ui-cursor@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-cursor/-/plate-ui-cursor-18.1.1.tgz#2fd6e30a9ff74f67eb9bb964b1ffc34d017af635"
+  integrity sha512-RZULtLvyP8d5PaQZcx6yEwyEgl/u012M33DQw4wSzVh8XbccAv/F6HiA8ktL4QRV9FohFIOlqZpD74vfwUD2IQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
 
-"@udecode/plate-ui-dnd@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-dnd/-/plate-ui-dnd-17.0.3.tgz#e0880ef01805a4243846a0c8f6f841d3da8caaeb"
-  integrity sha512-pj7T2rOsOJH7E8jED17bwMrtyRghAM1x9YQ1AN6nez7HXIHZmdAqXCu+r2/lhhsBeArrdDu7snK3R9Rs6rnl0A==
+"@udecode/plate-ui-dnd@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-dnd/-/plate-ui-dnd-18.1.1.tgz#a96f9cd84c4f73047f2ad63cb4b8d61b3fbab7f1"
+  integrity sha512-N9u1akDrY5/fH8ZxPTUSdZ0mWZ41asv6P4EoNz6nL/jRQcS1zvXv3LQyOUJ4kepcsX6hKLxk0PZ4Jo9gjHpX4Q==
   dependencies:
     "@react-hook/merged-ref" "^1.3.2"
     "@tippyjs/react" "^4.2.6"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
 
-"@udecode/plate-ui-find-replace@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-find-replace/-/plate-ui-find-replace-17.0.3.tgz#46951ff2124fc8909273a542b9fcfdce9f0ffd41"
-  integrity sha512-x+Dg1yOJmoYzuVK1Vn2PUkaYOS8HMEiEhwFeT5tLnhvuu9+Aq+qa0c052jETHvnXlxQsVreINzeN8stNqm0eLg==
+"@udecode/plate-ui-find-replace@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-find-replace/-/plate-ui-find-replace-18.1.1.tgz#619c39dddf3fa450212d6fb601978536ecdbdd45"
+  integrity sha512-OqbWmhow/WoZL4QpSQiMLR1T6pAEBBEvuMX8aFa2COoB1cI/Vrc0Bqklxl9sc/qGjkNoF5b+G8bJ/jIW6iaYzg==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-find-replace" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-find-replace" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-font@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-font/-/plate-ui-font-17.0.3.tgz#75a7ec406c5f235aabf38e33ab2e7622f341063d"
-  integrity sha512-HtFrLL5b+3bW/lOm28qjAfMRqFrooPZXJFEWC/5ZryWGj9uR8d08uQ9px85Jzxk/rFgjZunV99hbozzF3JlaTw==
+"@udecode/plate-ui-font@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-font/-/plate-ui-font-18.1.1.tgz#2cb4250ff429f4449133fdbbc27ef8ef048a4764"
+  integrity sha512-uSUhszPN8b9w6Mx3tXT7+PsDfim2weJu+/l90bNSMBVC1lBPDE9BUGTW8vJz0enFI5ur4f5c56QkxcEQDUJ03Q==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-font" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-button" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-font" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-button" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-line-height@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-line-height/-/plate-ui-line-height-17.0.3.tgz#26b1a60f1e5bdab0b059d2492e614309c94d6eac"
-  integrity sha512-KF5wcHG14+4hGcZrVjHUlss+beOvfkoGyrK/EQJ2+MzXeKkxFBN941M9C8o7JSrRkkMbO4b41beDFQVgMdQPdw==
+"@udecode/plate-ui-line-height@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-line-height/-/plate-ui-line-height-18.1.1.tgz#ece2da5a1b5d0701da27ada01b86caa7d1f9ceaf"
+  integrity sha512-BYTM4rNvTBcLB2otNZ+nTpqbzRi4FNCTNefIeIqAIw0MJivmJoe3tTpyN/7/4JYdt2EJlY3HfQLELTT65FwKdQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-line-height" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-line-height" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-link@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-link/-/plate-ui-link-18.1.0.tgz#3c5e8a7fdde207b696042afcd53f20361e7de366"
-  integrity sha512-NLvwFFltIIIxeHPenaKWpMIqNwpKUng7XwGLzXQF6VXGtOvqutrlpvQ4nPiJORMujFcj4nBlPAy/+q2Elcu16Q==
+"@udecode/plate-ui-link@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-link/-/plate-ui-link-18.1.1.tgz#024c4b441a74ceed9eacccdf3762e6beb83854ea"
+  integrity sha512-PdFTBxzeuU13Re/ppnNKZKRWIpxhJnSXn0DvRfUrCPIplise3eR27ddy2UJ5rkj0Iqe4D6ZYo1cLpCq6kOPNMA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-link" "18.1.0"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-button" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-link" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-button" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-list@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-list/-/plate-ui-list-17.0.3.tgz#d5e517909c3cdb871f9448a2b907f0e375545dab"
-  integrity sha512-PurrWQj7lE6cxQzF0RUJA72W3Q4qEW+PbvE1GD8Lh//lrRx1j2cG5OZp1Ndufqnq27wvcHYv0s1SYE1tYnMyiA==
+"@udecode/plate-ui-list@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-list/-/plate-ui-list-18.1.1.tgz#fa84218ea5182cebbdfa1a81e45e915f27de941a"
+  integrity sha512-cL33Ogwnzu4a+vwWjG9z42ptPmdGGWqdpL8ScmdAji0bBi7bkLxJCAPVOoUoTrzTgJWh9EclacLeDU1DL29rpw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-list" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-list" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate-ui-media@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-media/-/plate-ui-media-18.1.0.tgz#e220c0851c0a424ed7a58e1bbf216f04ba44cc7b"
-  integrity sha512-jyhbchvrO8rl71i5W6++X67M9ByzQ3w/BrGO/l8yHBxd7YeVSR457IpFaXJb3nN0b7jmEGLwqPj54rR20D/Ing==
+"@udecode/plate-ui-media@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-media/-/plate-ui-media-18.1.1.tgz#5213589cbdbe0260f966d60eb53df77e993c7b74"
+  integrity sha512-KkVrqjTyU/DtErl1XQ1TvuSzvpwCq617EiTUPnMwB26h94OenksbwEQyefrRfyAZo6t8bN8Tk0EWfM4DWt5wSQ==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-floating" "17.0.3"
-    "@udecode/plate-link" "18.1.0"
-    "@udecode/plate-media" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-link" "18.1.0"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-floating" "18.1.1"
+    "@udecode/plate-link" "18.1.1"
+    "@udecode/plate-media" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-link" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
     js-video-url-parser "0.5.1"
 
-"@udecode/plate-ui-mention@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-mention/-/plate-ui-mention-17.0.3.tgz#205a3ced43133713b1c5e83c58100c3def6f8093"
-  integrity sha512-ZJEopKWCEehiHXy0FYz2KYjhRqVtMNBK6zL79f446KHXbLX+Ar8/7gKYuteOc1e/6Dr6Y/sFgp8kTegdlAiyvg==
+"@udecode/plate-ui-mention@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-mention/-/plate-ui-mention-18.1.2.tgz#e04f38fa9efa91b42fc2e885dc1322468b2a9911"
+  integrity sha512-XrvS33QXTL2+ThzuGrDHWDnDOf4/My8HmavQckw0ywWmCAM3poyKakNxFTjFvMgtEy6Pqa3XbPRQekM5CMenwg==
   dependencies:
-    "@udecode/plate-combobox" "17.0.3"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-mention" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-combobox" "17.0.3"
+    "@udecode/plate-combobox" "18.1.1"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-mention" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-combobox" "18.1.2"
 
-"@udecode/plate-ui-placeholder@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-placeholder/-/plate-ui-placeholder-17.0.3.tgz#70326d9d9bdbfbd67a5c63320c9fb903c5ecd577"
-  integrity sha512-2ysiswdY8fSO6jaLraHMzPLGF9RkL+yNUFJXhRaTzLOTUkt8RUBCDZXMl/vX+MgHd/Z+qXTAyQp8KIh1YUzqKQ==
+"@udecode/plate-ui-placeholder@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-placeholder/-/plate-ui-placeholder-18.1.1.tgz#bac84f809cfa178689490e10b330ca394d13568f"
+  integrity sha512-T1inY4rbyhJY3GQOmrLmh4pRLa6LCUeUIuopouJksTUZgiQV9e69MP+7+eRF0joMIXQUFmmCjn8vaxlMr073Aw==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
 
-"@udecode/plate-ui-table@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-table/-/plate-ui-table-17.0.3.tgz#bf3ffe1a7382bd4506f826d83ddc2ace6431d9e3"
-  integrity sha512-jbkOiSJlwJ5FaKMopoHU83nfmZmqoDFrGvpdThfcaeyD+yIQUrWPLNZkbsIeeA9DtztRbUVleNOxeGiS0mWI8w==
+"@udecode/plate-ui-table@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-table/-/plate-ui-table-18.1.2.tgz#24577bd260fcfac6ac637d52a3c7c8516829e626"
+  integrity sha512-XV3v1EouSjHu3Nw5JsZfvwR46Z/fnqdEUCQ7iMBRVscoaWljOwEDyEsVscUI7tVOwWZuDQX4N04DbNoK7qiKvA==
   dependencies:
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-floating" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-table" "17.0.3"
-    "@udecode/plate-ui-button" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-floating" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-table" "18.1.2"
+    "@udecode/plate-ui-button" "18.1.1"
+    "@udecode/plate-ui-toolbar" "18.1.1"
     re-resizable "^6.9.9"
 
-"@udecode/plate-ui-toolbar@17.0.3":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-toolbar/-/plate-ui-toolbar-17.0.3.tgz#3e202b97d6b534504c76e2082d40e6c165529616"
-  integrity sha512-0oHuyehwT3KlGQX1slTUb6A25bqNSWhUQ6X0ZX1ebdcww68tnWOFcQUbT5IanbQgDI+UJuujOXxODfzGc6eAIw==
+"@udecode/plate-ui-toolbar@18.1.1":
+  version "18.1.1"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui-toolbar/-/plate-ui-toolbar-18.1.1.tgz#9bdec75f26a99e9f701b8c792c188b53c96308ca"
+  integrity sha512-J64yvCJSR4J6ce46H45U1TOa58okUxSqM45CDIOMv2BZ/0pisvsZM9A2E5HQX7nOKX96x0fYFXjTOQB/nmiong==
   dependencies:
     "@tippyjs/react" "^4.2.6"
-    "@udecode/plate-core" "17.0.3"
-    "@udecode/plate-floating" "17.0.3"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-button" "17.0.3"
+    "@udecode/plate-core" "18.1.1"
+    "@udecode/plate-floating" "18.1.1"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-button" "18.1.1"
     react-use "^17.3.2"
 
-"@udecode/plate-ui@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.1.0.tgz#53936d8ef461e016123fabe4063e07fb3db82d14"
-  integrity sha512-WTDQsY4mHiA4DWJjPRSU3xxbhlbQ4ENLwTy+T0CP4fvaW6JJf7bKbuuETHivjFPSwPj2e3ISF4UR3J9ETfdtZQ==
+"@udecode/plate-ui@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.1.2.tgz#4ecc45713927cb7de0b4e4b449df4635e6ad9d9f"
+  integrity sha512-ga+emnaowknCyo/fXBZpjnJO3t9jVqfl0M52UiLDNaXSzmhk/eibmYEV++Lgtyt9i02RpzmZ6tLhJQluxM80Hg==
   dependencies:
-    "@udecode/plate-headless" "18.1.0"
-    "@udecode/plate-styled-components" "17.0.3"
-    "@udecode/plate-ui-alignment" "17.0.3"
-    "@udecode/plate-ui-block-quote" "17.0.3"
-    "@udecode/plate-ui-button" "17.0.3"
-    "@udecode/plate-ui-code-block" "17.0.3"
-    "@udecode/plate-ui-combobox" "17.0.3"
-    "@udecode/plate-ui-cursor" "17.0.3"
-    "@udecode/plate-ui-dnd" "17.0.3"
-    "@udecode/plate-ui-find-replace" "17.0.3"
-    "@udecode/plate-ui-font" "17.0.3"
-    "@udecode/plate-ui-line-height" "17.0.3"
-    "@udecode/plate-ui-link" "18.1.0"
-    "@udecode/plate-ui-list" "17.0.3"
-    "@udecode/plate-ui-media" "18.1.0"
-    "@udecode/plate-ui-mention" "17.0.3"
-    "@udecode/plate-ui-placeholder" "17.0.3"
-    "@udecode/plate-ui-table" "17.0.3"
-    "@udecode/plate-ui-toolbar" "17.0.3"
+    "@udecode/plate-headless" "18.1.2"
+    "@udecode/plate-styled-components" "18.1.1"
+    "@udecode/plate-ui-alignment" "18.1.1"
+    "@udecode/plate-ui-block-quote" "18.1.1"
+    "@udecode/plate-ui-button" "18.1.1"
+    "@udecode/plate-ui-code-block" "18.1.1"
+    "@udecode/plate-ui-combobox" "18.1.2"
+    "@udecode/plate-ui-cursor" "18.1.1"
+    "@udecode/plate-ui-dnd" "18.1.1"
+    "@udecode/plate-ui-find-replace" "18.1.1"
+    "@udecode/plate-ui-font" "18.1.1"
+    "@udecode/plate-ui-line-height" "18.1.1"
+    "@udecode/plate-ui-link" "18.1.1"
+    "@udecode/plate-ui-list" "18.1.1"
+    "@udecode/plate-ui-media" "18.1.1"
+    "@udecode/plate-ui-mention" "18.1.2"
+    "@udecode/plate-ui-placeholder" "18.1.1"
+    "@udecode/plate-ui-table" "18.1.2"
+    "@udecode/plate-ui-toolbar" "18.1.1"
 
-"@udecode/plate@18.1.0":
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.1.0.tgz#60025d0b5f1e45a9e75fa95724869ea6f8dd7618"
-  integrity sha512-f7ZL4t2jBlRUGpZ3UJIwgcvjQv+BuHc0e97mpqWpWHNjmjol4a7kS2A4xl1b16a9nbVnwE6mMeyw12aH6xjk9w==
+"@udecode/plate@18.1.2":
+  version "18.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.1.2.tgz#4479b17bc3f176692d624ab7a5c3662cfcb0c56a"
+  integrity sha512-81Xn7bHZUxPQxd+YtIeWB9K9/tQQ6472HtXi0iOJEN9IefILJ9CquC7PfzAjZR/0MoGL7+m3fV2bp7OK+VyLDg==
   dependencies:
-    "@udecode/plate-headless" "18.1.0"
-    "@udecode/plate-ui" "18.1.0"
+    "@udecode/plate-headless" "18.1.2"
+    "@udecode/plate-ui" "18.1.2"
 
 "@udecode/zustood@^1.1.1":
   version "1.1.3"
