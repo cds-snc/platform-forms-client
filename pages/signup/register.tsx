@@ -109,7 +109,7 @@ export default function Register() {
                 type={"email"}
                 id={"username"}
                 name={"username"}
-                ariaDescribedBy={"username-hint"}
+                ariaDescribedBy={"desc-username-hint"}
               />
             </div>
             <div className="focus-group">
@@ -123,7 +123,7 @@ export default function Register() {
                 type={"password"}
                 id={"password"}
                 name={"password"}
-                ariaDescribedBy={"username-hint"}
+                ariaDescribedBy={"desc-username-hint"}
               />
             </div>
             <div className="focus-group">
