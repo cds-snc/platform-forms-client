@@ -80,7 +80,7 @@ export const getOrCreateUser = async (userToken: JWT) => {
     const { name, email, picture: image } = userToken;
     const basePrivileges = await prisma.privilege.findUnique({
       where: {
-        nameEn: "base",
+        nameEn: "Base",
       },
       select: {
         id: true,
