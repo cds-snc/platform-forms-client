@@ -12,11 +12,35 @@
     "title": "Sign Up to GC Forms (FR)",
     "fields": {
       "username": {
-        "label": "Email (FR)"
+        "label": "Email (FR)",
+        "hint": "Must be a federal government email address (FR)",
+        "error": {
+          "validGovEmail": "This field must be a valid government email. (FR)"
+        }
       },
       "password": {
-        "label": "Password (FR)"
+        "label": "Password (FR)",
+        "hint": "Must be at least 8 characters with a capital, number and symbol"
+      },
+      "passwordConfirmation": {
+        "label": "Password confirmation (FR)",
+        "error": {
+          "mustMatch": "The value must match the value of the password field. (FR)",
+          "minLength": "The minimum length of the value must be 8 characters. (FR)",
+          "oneLowerCase": "The field must contain at least 1 lowercase character. (FR)",
+          "oneUpperCase": "The field must contain at least 1 uppercase character. (FR)",
+          "oneNumber": "The field must contain at least 1 number. (FR)",
+          "oneSymbol": "The field must contain at least 1 symbol. (FR)"
+        }
+      },
+      "name": {
+        "label": "Full name (FR)"
       }
+    }
+  },
+  "common": {
+    "errors": {
+      "maxLength": "The field must be no longer than 50 characters. (FR)"
     }
   }
 }

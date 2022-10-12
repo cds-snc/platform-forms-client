@@ -1,60 +1,144 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
+import * as Yup from "yup";
+import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
+import emailDomainList from "../../email.domains.json";
 
 export default function Register() {
   const { register } = useAuth();
   const [username, setUsername] = useState("");
   const { t } = useTranslation(["signup", "common"]);
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    username: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .email(t("input-validation.email", { ns: "common" }))
+      .test(
+        "username-govEmail",
+        t("signUpRegistration.fields.username.error.validGovEmail"),
+        (value = "") => isValidGovEmail(value, emailDomainList.domains)
+      ),
+    password: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .min(8, t("signUpRegistration.fields.passwordConfirmation.error.minLength"))
+      .max(50, t("signUpRegistration.fields.passwordConfirmation.error.maxLength"))
+      .test(
+        "password-valid-lowerCase",
+        t("signUpRegistration.fields.passwordConfirmation.error.oneLowerCase"),
+        (password = "") => isLowerCase(password)
+      )
+      .test(
+        "password-valid-upperCase",
+        t("signUpRegistration.fields.passwordConfirmation.error.oneUpperCase"),
+        (password = "") => isUpperCase(password)
+      )
+      .test(
+        "password-valid-number",
+        t("signUpRegistration.fields.passwordConfirmation.error.oneNumber"),
+        (password = "") => isNumber(password)
+      )
+      .test(
+        "password-valid-symbol",
+        t("signUpRegistration.fields.passwordConfirmation.error.oneSymbol"),
+        (password = "") => isSymbol(password)
+      ),
+    passwordConfirmation: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .oneOf(
+        [Yup.ref("password"), null],
+        t("signUpRegistration.fields.passwordConfirmation.error.mustMatch")
+      ),
+  });
+
   if (username) {
     return <Confirmation username={username} />;
   }
   return (
     <Formik
-      initialValues={{ username: "", password: "" }}
+      initialValues={{ username: "", password: "", name: "" }}
       onSubmit={async (values, formikHelpers) => {
         await register(values, formikHelpers, setUsername);
       }}
+      validateOnChange={false}
+      validateOnBlur={false}
+      validationSchema={validationSchema}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, errors, touched }) => (
         <>
           <h1>{t("signUpRegistration.title")}</h1>
-          <form id="registration" method="POST" onSubmit={handleSubmit}>
+          <form id="registration" method="POST" onSubmit={handleSubmit} noValidate>
+            {Object.keys(errors).length > 0 && Object.keys(touched).length > 0 ? (
+              <Alert
+                type="error"
+                heading={t("input-validation.heading", { ns: "common" })}
+                validation={true}
+                id={"validationAlert"}
+                tabIndex={0}
+              >
+                <ol className="gc-ordered-list">
+                  {errors &&
+                    Object.entries(errors).map(([elementId, errorMessage]) => {
+                      return (
+                        <ErrorListItem errorKey={elementId} value={errorMessage} key={elementId} />
+                      );
+                    })}
+                </ol>
+              </Alert>
+            ) : null}
             <div className="focus-group">
-              <Label id={"label-1"} htmlFor={"1"} className="required">
+              <Label id={"label-name"} htmlFor={"name"} className="required" required>
+                {t("signUpRegistration.fields.name.label")}
+              </Label>
+              <TextInput type={"text"} id={"name"} name={"name"} />
+            </div>
+            <div className="focus-group">
+              <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("signUpRegistration.fields.username.label")}
               </Label>
+              <Description id={"username-hint"}>
+                {t("signUpRegistration.fields.username.hint")}
+              </Description>
               <TextInput
                 type={"email"}
-                id={"1"}
+                id={"username"}
                 name={"username"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1"),
-                  part2: t("formElements.characterCount.part2"),
-                  part1Error: t("formElements.characterCount.part1-error"),
-                  part2Error: t("formElements.characterCount.part2-error"),
-                }}
+                ariaDescribedBy={"desc-username-hint"}
               />
             </div>
             <div className="focus-group">
-              <Label id={"label-1"} htmlFor={"1"} className="required">
+              <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("signUpRegistration.fields.password.label")}
+              </Label>
+              <Description id={"password-hint"}>
+                {t("signUpRegistration.fields.password.hint")}
+              </Description>
+              <TextInput
+                type={"password"}
+                id={"password"}
+                name={"password"}
+                ariaDescribedBy={"desc-username-hint"}
+              />
+            </div>
+            <div className="focus-group">
+              <Label
+                id={"label-passwordConfirmation"}
+                htmlFor={"passwordConfirmation"}
+                className="required"
+                required
+              >
+                {t("signUpRegistration.fields.passwordConfirmation.label")}
               </Label>
               <TextInput
                 type={"password"}
-                id={"2"}
-                name={"password"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1", { ns: "common" }),
-                  part2: t("formElements.characterCount.part2", { ns: "common" }),
-                  part1Error: t("formElements.characterCount.part1-error", { ns: "common" }),
-                  part2Error: t("formElements.characterCount.part2-error", { ns: "common" }),
-                }}
+                id={"passwordConfirmation"}
+                name={"passwordConfirmation"}
               />
             </div>
             <div className="buttons">

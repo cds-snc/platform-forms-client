@@ -310,3 +310,55 @@ export const isValidGovEmail = (email: string, domains: string[]): boolean => {
   //Check the email's domain against the list of domains
   return domains.includes(emailDomain.toString());
 };
+
+/**
+ * This function tests whether a string contains a lower case character
+ * @param field A string containing a lower case character
+ * @returns {boolean} The validation result
+ */
+export const isLowerCase = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[a-z])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains an upper case character
+ * @param field A string containing an uppwer case character
+ * @returns {boolean} The validation result
+ */
+export const isUpperCase = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[A-Z])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a number
+ * @param field A string containing a number
+ * @returns {boolean} The validation result
+ */
+export const isNumber = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[0-9])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * This function tests whether a string contains a symbol character
+ * @param field A string containing a symbol character
+ * @returns {boolean} The validation result
+ */
+export const isSymbol = (field: string): boolean => {
+  const reg = new RegExp("^(?=.*?[#?!@$%^&*-])");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
