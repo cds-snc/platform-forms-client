@@ -41,7 +41,7 @@
     "@prisma/client": "4.3.1",
     "@styled-icons/material": "10.46.0",
     "@types/lodash.unset": "4.5.7",
-    "@udecode/plate": "18.1.0",
+    "@udecode/plate": "18.1.2",
     "@udecode/plate-test-utils": "13.4.0",
     "aws-sdk-client-mock": "0.6.2",
     "axios": "0.26.1",
