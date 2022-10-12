@@ -199,14 +199,10 @@
 
 .gc-label {
   @apply md:text-small_base block mb-2 text-base font-bold w-3/4 xl:w-full;
-  &.required > span :not(gc-hint) {
+  &.required > span {
     @apply text-red-700;
     content: " *";
   }
-}
-
-.gc-hint {
-  @apply md:text-small_base block mb-2 text-base font-light text-gray-800 w-3/4 xl:w-full;
 }
 
 .gc-plain-text {

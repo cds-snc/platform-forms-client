@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
@@ -99,16 +99,12 @@ export default function Register() {
               <TextInput type={"text"} id={"name"} name={"name"} />
             </div>
             <div className="focus-group">
-              <Label
-                id={"label-username"}
-                htmlFor={"username"}
-                hint={t("signUpRegistration.fields.username.hint")}
-                idHint={"username-hint"}
-                className="required"
-                required
-              >
+              <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("signUpRegistration.fields.username.label")}
               </Label>
+              <Description id={"username-hint"}>
+                {t("signUpRegistration.fields.username.hint")}
+              </Description>
               <TextInput
                 type={"email"}
                 id={"username"}
@@ -117,16 +113,12 @@ export default function Register() {
               />
             </div>
             <div className="focus-group">
-              <Label
-                id={"label-password"}
-                htmlFor={"password"}
-                hint={t("signUpRegistration.fields.password.hint")}
-                idHint="password-hint"
-                className="required"
-                required
-              >
+              <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("signUpRegistration.fields.password.label")}
               </Label>
+              <Description id={"password-hint"}>
+                {t("signUpRegistration.fields.password.hint")}
+              </Description>
               <TextInput
                 type={"password"}
                 id={"password"}
