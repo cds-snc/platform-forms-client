@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../plate-editor/RichTextEditor";
+// import { RichTextEditor } from "../plate-editor/RichTextEditor";
 import { deserializeMd, Value } from "@udecode/plate";
 import { useMyPlateEditorRef } from "../plate-editor/types";
 import { serializeMd } from "../plate-editor/helpers/markdown";
 import { LocalizedElementProperties } from "../types";
+import RichTextEditor from "../ck-editor/RichTextEditor";
+import { logMessage } from "@lib/logger";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -19,14 +21,8 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const { localizeField, updateField, form } = useTemplateStore();
 
   const [value, setValue] = useState(
-    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)]
-      ? deserializeMd(
-          editor,
-          form.elements[parentIndex].properties[
-            localizeField(LocalizedElementProperties.DESCRIPTION)
-          ]
-        )
-      : [{ children: [{ text: "" }] }]
+    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)] ||
+      ""
   );
 
   useEffect(() => {
@@ -41,14 +37,15 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    *
    * @param value
    */
-  const handleChange = (value: Value) => {
-    let serialized = serializeMd(value);
+  const handleChange = (event, editor) => {
+    let serialized = editor.getData();
+    logMessage.info(serialized);
 
     if (typeof serialized === "undefined") {
       serialized = "";
     }
 
-    setValue(value);
+    setValue(serialized);
     updateField(
       `form.elements[${parentIndex}].properties.${localizeField(
         LocalizedElementProperties.DESCRIPTION
@@ -59,7 +56,8 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
 
   return (
     <OptionWrapper>
-      <RichTextEditor id={editorId} value={value} onChange={handleChange} />
+      <RichTextEditor value={value} onChange={handleChange} />
+      {/* <RichTextEditor id={editorId} value={value} onChange={handleChange} /> */}
     </OptionWrapper>
   );
 };
