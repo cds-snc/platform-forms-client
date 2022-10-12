@@ -21,9 +21,12 @@ const ContentWrapper = styled.div`
   display: flex;
   margin: 0px 20px;
 
-  & h3 {
+  & h2 {
+    font-size: 26px;
+    line-height: 32px;
     margin-top: 15px;
     margin-bottom: 0;
+    padding-bottom: 0;
   }
 `;
 
@@ -38,12 +41,14 @@ export const RichTextLocked = ({
   children,
   initialValue,
   schemaProperty,
+  "aria-label": ariaLabel = undefined,
 }: {
   id: string;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
   schemaProperty: string;
+  "aria-label"?: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
   const { localizeField, updateField } = useTemplateStore();
@@ -79,7 +84,7 @@ export const RichTextLocked = ({
     <ElementWrapperDiv>
       <ContentWrapper>{children}</ContentWrapper>
       <OptionWrapper>
-        <RichTextEditor id={editorId} value={value} onChange={onChange} />
+        <RichTextEditor id={editorId} value={value} onChange={onChange} aria-label={ariaLabel} />
       </OptionWrapper>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>

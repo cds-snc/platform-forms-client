@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # tag=v1
       - name: Node.JS 16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # tag=v2
         with:
           node-version: 16
       - name: Install Node Dependencies
@@ -28,9 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # tag=v1
       - name: Node.JS 16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # tag=v2
         with:
           node-version: 16
       - name: Install Node Dependencies
@@ -48,13 +48,13 @@ jobs:
         # Continue to the next step even if this fails
         continue-on-error: true
       - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@1.1.2
+        uses: ataylorme/eslint-annotate-action@47568f60ae08ffa4d3b1bab645e21e9ae8266980 # tag=1.1.2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           report-json: "eslint_report.json"
         continue-on-error: true
       - name: Upload ESLint report
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # tag=v1
         with:
           name: eslint_report.json
           path: eslint_report.json
