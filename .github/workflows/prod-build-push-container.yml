@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for Jest tests to pass
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891 # tag=v1.0.0
         id: wait-for-jest-tests
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -28,7 +28,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Wait for Cypress tests to pass
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891 # tag=v1.0.0
         id: wait-for-cypress-tests
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Wait for ESLint tests to pass
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891 # tag=v1.0.0
         id: wait-for-eslint-tests
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@7884fcad6b5d53d10323aee724dc68d8b9096a2e # tag=v2
 
       - name: Build Form Viewer
         run: |

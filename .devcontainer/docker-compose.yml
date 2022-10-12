@@ -14,7 +14,7 @@ services:
       - 3000
 
   db:
-    image: postgres:11.2
+    image: postgres:11.2@sha256:85d0c745dc4f4627184da8945a36ac773762ec5d2ba1c1821cc7334b736e6e00
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -30,7 +30,7 @@ services:
 
   redis:
     restart: unless-stopped
-    image: redis:latest
+    image: redis:latest@sha256:c95835a74c37b3a784fb55f7b2c211bd20c650d5e55dae422c3caa9c01eb39fa
     ports:
       - "6379:6379"
     expose:
