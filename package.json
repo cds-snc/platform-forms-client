@@ -58,6 +58,7 @@
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "lint-staged": "^13.0.3",
+    "lodash": "^4.17.21",
     "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2",
     "markdown-to-jsx": "^7.1.7",

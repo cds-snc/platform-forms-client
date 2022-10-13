@@ -11,6 +11,8 @@ import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
 import { getProperty } from "@lib/formBuilder";
+import { useAccessControl } from "@lib/hooks";
+import { subject } from "@casl/ability";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -52,6 +54,8 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       ""
     );
 
+  const { ability } = useAccessControl();
+
   return (
     <>
       <h1>{t("settings.title")}</h1>
@@ -71,14 +75,18 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
           <div>{newText}</div>
           <Label htmlFor="jsonInput">{t("settings.edit")}</Label>
           <JSONUpload form={form} />
-          <br />
-          <div>
-            <DeleteButton
-              action={handleDelete}
-              data={form.formID}
-              redirect={`/admin/view-templates`}
-            />
-          </div>
+          {ability?.can("delete", subject("FormRecord", form)) && (
+            <>
+              <br />
+              <div>
+                <DeleteButton
+                  action={handleDelete}
+                  data={form.formID}
+                  redirect={`/admin/view-templates`}
+                />
+              </div>
+            </>
+          )}
         </TabPanel>
         <TabPanel>
           <BearerRefresh formID={form.formID} />
