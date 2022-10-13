@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth } from "@lib/hooks";
@@ -11,9 +11,8 @@ import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@
 import emailDomainList from "../../email.domains.json";
 
 export default function Register() {
-  const { register } = useAuth();
-  const [username, setUsername] = useState("");
-  const { t } = useTranslation(["signup", "common"]);
+  const { username, cognitoError, setCognitoError, register } = useAuth();
+  const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("input-validation.required", { ns: "common" })),
@@ -64,34 +63,49 @@ export default function Register() {
     <Formik
       initialValues={{ username: "", password: "", name: "" }}
       onSubmit={async (values, formikHelpers) => {
-        await register(values, formikHelpers, setUsername);
+        await register(values, formikHelpers);
       }}
       validateOnChange={false}
       validateOnBlur={false}
       validationSchema={validationSchema}
     >
-      {({ handleSubmit, errors, touched }) => (
+      {({ handleSubmit, errors }) => (
         <>
+          {cognitoError && (
+            <Alert
+              type="error"
+              heading={cognitoError}
+              onDismiss={() => {
+                setCognitoError("");
+              }}
+              id="cognitoErrors"
+              tabIndex={0}
+              dismissible
+            />
+          )}
+          {Object.keys(errors).length > 0 && !cognitoError && (
+            <Alert
+              type="error"
+              validation={true}
+              tabIndex={0}
+              id="registrationValidationErrors"
+              heading={t("input-validation.heading", { ns: "common" })}
+            >
+              <ol className="gc-ordered-list">
+                {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                  return (
+                    <ErrorListItem
+                      key={`error-${fieldKey}`}
+                      errorKey={fieldKey}
+                      value={fieldValue}
+                    />
+                  );
+                })}
+              </ol>
+            </Alert>
+          )}
           <h1>{t("signUpRegistration.title")}</h1>
           <form id="registration" method="POST" onSubmit={handleSubmit} noValidate>
-            {Object.keys(errors).length > 0 && Object.keys(touched).length > 0 ? (
-              <Alert
-                type="error"
-                heading={t("input-validation.heading", { ns: "common" })}
-                validation={true}
-                id={"validationAlert"}
-                tabIndex={0}
-              >
-                <ol className="gc-ordered-list">
-                  {errors &&
-                    Object.entries(errors).map(([elementId, errorMessage]) => {
-                      return (
-                        <ErrorListItem errorKey={elementId} value={errorMessage} key={elementId} />
-                      );
-                    })}
-                </ol>
-              </Alert>
-            ) : null}
             <div className="focus-group">
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("signUpRegistration.fields.name.label")}
@@ -154,7 +168,8 @@ export default function Register() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
-      ...(context.locale && (await serverSideTranslations(context.locale, ["common", "signup"]))),
+      ...(context.locale &&
+        (await serverSideTranslations(context.locale, ["common", "cognito-errors", "signup"]))),
     },
   };
 };

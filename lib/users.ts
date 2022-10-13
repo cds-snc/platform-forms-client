@@ -48,19 +48,21 @@ export const getFormUser = async (userId: string): Promise<FormUser | null> => {
  * @returns A User Object
  */
 export const getOrCreateUser = async ({
+  sub,
   name,
   email,
   picture,
 }: {
+  sub?: string | null;
   name?: string | null;
   email?: string | null;
   picture?: string | null;
 }): Promise<User | null> => {
   try {
-    if (!email) throw new Error("Email address does not exist on token");
+    if (!sub) throw new Error("Sub does not exist on token");
     const user: User | null = await prisma.user.findUnique({
       where: {
-        email: email,
+        id: sub,
       },
       select: {
         id: true,
@@ -76,6 +78,7 @@ export const getOrCreateUser = async ({
     // User does not exist, create and return a record
     return await prisma.user.create({
       data: {
+        id: sub,
         name,
         email,
         image: picture,

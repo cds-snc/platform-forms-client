@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
@@ -12,9 +12,8 @@ import { UserRole } from "@prisma/client";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 
 export default function Register() {
-  const { login } = useAuth();
+  const { username, cognitoError, setCognitoError, login } = useAuth();
   const { t } = useTranslation(["login", "common"]);
-  const [username, setUsername] = useState("");
   if (username) {
     return <Confirmation username={username} />;
   }
@@ -22,44 +21,56 @@ export default function Register() {
     <Formik
       initialValues={{ username: "", password: "" }}
       onSubmit={async (values, helpers) => {
-        await login(values, helpers, setUsername);
+        await login(values, helpers);
       }}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, errors }) => (
         <>
+          {cognitoError && (
+            <Alert
+              type="error"
+              heading={cognitoError}
+              onDismiss={() => {
+                setCognitoError("");
+              }}
+              id="cognitoErrors"
+              dismissible
+            />
+          )}
+          {Object.keys(errors).length > 0 && !cognitoError && (
+            <Alert
+              type="error"
+              validation={true}
+              tabIndex={0}
+              id="loginValidationErrors"
+              heading={t("input-validation.heading", { ns: "common" })}
+            >
+              <ol className="gc-ordered-list">
+                {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                  return (
+                    <ErrorListItem
+                      key={`error-${fieldKey}`}
+                      errorKey={fieldKey}
+                      value={fieldValue}
+                    />
+                  );
+                })}
+              </ol>
+            </Alert>
+          )}
           <h1>{t("title")}</h1>
           <form id="login" method="POST" onSubmit={handleSubmit}>
             <div className="focus-group">
               <Label id={"label-1"} htmlFor={"1"} className="required">
                 {t("fields.username.label")}
               </Label>
-              <TextInput
-                type={"email"}
-                id={"1"}
-                name={"username"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1", { ns: "common" }),
-                  part2: t("formElements.characterCount.part2", { ns: "common" }),
-                  part1Error: t("formElements.characterCount.part1-error", { ns: "common" }),
-                  part2Error: t("formElements.characterCount.part2-error", { ns: "common" }),
-                }}
-              />
+              <TextInput type={"email"} id={"1"} name={"username"} />
             </div>
             <div className="focus-group">
               <Label id={"label-1"} htmlFor={"1"} className="required">
                 {t("fields.password.label")}
               </Label>
-              <TextInput
-                type={"password"}
-                id={"2"}
-                name={"password"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1", { ns: "common" }),
-                  part2: t("formElements.characterCount.part2", { ns: "common" }),
-                  part1Error: t("formElements.characterCount.part1-error", { ns: "common" }),
-                  part2Error: t("formElements.characterCount.part2-error", { ns: "common" }),
-                }}
-              />
+              <TextInput type={"password"} id={"2"} name={"password"} />
             </div>
             <div className="buttons">
               <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
@@ -96,7 +107,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "signup", "login"]))),
+        (await serverSideTranslations(context.locale, [
+          "common",
+          "signup",
+          "login",
+          "cognito-errors",
+        ]))),
     },
   };
 };
