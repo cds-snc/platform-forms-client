@@ -10,10 +10,21 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { UserRole } from "@prisma/client";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
+import * as Yup from "yup";
 
 export default function Register() {
   const { username, cognitoError, setCognitoError, login } = useAuth();
   const { t } = useTranslation(["login", "common"]);
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .email(t("input-validation.email", { ns: "common" })),
+    password: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .max(50, t("fields.password.errors.maxLength")),
+  });
+
   if (username) {
     return <Confirmation username={username} />;
   }
@@ -23,6 +34,9 @@ export default function Register() {
       onSubmit={async (values, helpers) => {
         await login(values, helpers);
       }}
+      validateOnChange={false}
+      validateOnBlur={false}
+      validationSchema={validationSchema}
     >
       {({ handleSubmit, errors }) => (
         <>
@@ -59,18 +73,18 @@ export default function Register() {
             </Alert>
           )}
           <h1>{t("title")}</h1>
-          <form id="login" method="POST" onSubmit={handleSubmit}>
+          <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
-              <Label id={"label-1"} htmlFor={"1"} className="required">
+              <Label id={"label-username"} htmlFor={"username"} className="required">
                 {t("fields.username.label")}
               </Label>
-              <TextInput type={"email"} id={"1"} name={"username"} />
+              <TextInput type={"email"} id={"username"} name={"username"} />
             </div>
             <div className="focus-group">
-              <Label id={"label-1"} htmlFor={"1"} className="required">
+              <Label id={"label-password"} htmlFor={"password"} className="required">
                 {t("fields.password.label")}
               </Label>
-              <TextInput type={"password"} id={"2"} name={"password"} />
+              <TextInput type={"password"} id={"password"} name={"password"} />
             </div>
             <div className="buttons">
               <Button type="submit">{t("submitButton", { ns: "common" })}</Button>

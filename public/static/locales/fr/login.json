@@ -6,7 +6,10 @@
       "label": "Adresse courriel"
     },
     "password": {
-      "label": "Clé d'accès au formulaire"
+      "label": "Clé d'accès au formulaire",
+      "errors": {
+        "maxLength": "This field must be no longer than 50 characters. (FR)"
+      }
     }
   }
 }

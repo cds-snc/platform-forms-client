@@ -6,7 +6,10 @@
       "label": "Email"
     },
     "password": {
-      "label": "Password"
+      "label": "Password",
+      "errors": {
+        "maxLength": "This field must be no longer than 50 characters."
+      }
     }
   }
 }
