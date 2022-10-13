@@ -33,8 +33,8 @@ describe("User query tests should fail gracefully", () => {
     const result = await getOrCreateUser({ email: "test@fail.ca" });
     expect(result).toEqual(null);
   });
-  it("getFormUser should fail gracefully", async () => {
-    prismaMock.formUser.findUnique.mockRejectedValue(
+  it("getApiUser should fail gracefully", async () => {
+    prismaMock.apiUser.findUnique.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
     );
     const result = await getApiUser("1");
@@ -157,8 +157,8 @@ describe("getOrCreateUser", () => {
     expect(result).toMatchObject(user);
   });
 });
-describe("getFormUser", () => {
-  it("Returns a FormUsers", async () => {
+describe("getApiUser", () => {
+  it("Returns a ApiUsers", async () => {
     const returnedUser = {
       id: "3",
       name: "user_1",
@@ -171,7 +171,7 @@ describe("getFormUser", () => {
       updated_at: new Date(),
     };
 
-    prismaMock.formUser.findUnique.mockResolvedValue(returnedUser);
+    prismaMock.apiUser.findUnique.mockResolvedValue(returnedUser);
 
     const result = await getApiUser("3");
     expect(result).toMatchObject(returnedUser);

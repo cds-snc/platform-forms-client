@@ -87,7 +87,7 @@ describe("/id/[forms]/owners", () => {
     it("Should return all the emails associated with the form ID.", async () => {
       // Mocking query to return a list of emails
 
-      (prismaMock.formUser.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.apiUser.findMany as jest.MockedFunction<any>).mockResolvedValue([
         { id: 1, email: "test@cds.ca", active: true },
         { id: 2, email: "forms@cds.ca", active: false },
       ]);
@@ -123,7 +123,7 @@ describe("/id/[forms]/owners", () => {
           form: "1",
         },
       });
-      (prismaMock.formUser.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      (prismaMock.apiUser.findMany as jest.MockedFunction<any>).mockResolvedValue([
         {
           id: 1,
           email: "oneEmail@cds.ca",
@@ -139,7 +139,7 @@ describe("/id/[forms]/owners", () => {
 
     it("Should return an empty array if form has no emails associated", async () => {
       // Mocking executeQuery to return an empty list
-      prismaMock.formUser.findMany.mockResolvedValue([]);
+      prismaMock.apiUser.findMany.mockResolvedValue([]);
 
       const { req, res } = createMocks({
         method: "GET",
@@ -225,7 +225,7 @@ describe("/id/[forms]/owners", () => {
 
     it("Should return 404 Form or email Not Found in form_users", async () => {
       // Mocking prisma to throw an error
-      prismaMock.formUser.update.mockRejectedValue(
+      prismaMock.apiUser.update.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError("Unknown User", "P2025", "4.3.2")
       );
 
@@ -252,7 +252,7 @@ describe("/id/[forms]/owners", () => {
       "Should return 200 status code: owners are deactivated/activated",
       async (elem) => {
         //Mocking prisma
-        (prismaMock.formUser.update as jest.MockedFunction<any>).mockResolvedValue({
+        (prismaMock.apiUser.update as jest.MockedFunction<any>).mockResolvedValue({
           id: elem,
           active: true,
         });
@@ -287,7 +287,7 @@ describe("/id/[forms]/owners", () => {
   describe("POST: Associate an email to a template data API endpoint", () => {
     it("Should return 400 FormID doesn't exist or User already assigned in db", async () => {
       //Mocking db result by throwing constraint violation error.
-      prismaMock.formUser.create.mockRejectedValue(
+      prismaMock.apiUser.create.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
       );
       const { req, res } = createMocks({
@@ -314,7 +314,7 @@ describe("/id/[forms]/owners", () => {
     it("Should create a new record and return 200 code along with the id", async () => {
       // return the id of the newly created record.
 
-      (prismaMock.formUser.create as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
         id: 1,
       });
       const { req, res } = createMocks({
@@ -391,7 +391,7 @@ describe("/id/[forms]/owners", () => {
 
     it("Should log admin activity if POST API call completed successfully", async () => {
       // return the id of the newly created record.
-      (prismaMock.formUser.create as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
         id: 1,
       });
 

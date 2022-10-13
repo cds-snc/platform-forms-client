@@ -66,12 +66,12 @@ describe("TemporaryBearerToken tests", () => {
       },
     });
     mockedGetTokenById.mockResolvedValue({ bearerToken: token });
-    (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.apiUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       templateId: 1,
       email: "test@cds-snc.ca",
       active: true,
     });
-    prismaMock.formUser.update.mockResolvedValue({
+    prismaMock.apiUser.update.mockResolvedValue({
       id: "3",
       templateId: "1",
       email: "test@cds-snc.ca",
@@ -150,12 +150,12 @@ describe("TemporaryBearerToken tests", () => {
       },
     });
     mockedGetTokenById.mockResolvedValue({ bearerToken: token });
-    (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.apiUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       templateId: 1,
       email: "test@cds-snc.ca",
       active: true,
     });
-    prismaMock.formUser.update.mockResolvedValue({
+    prismaMock.apiUser.update.mockResolvedValue({
       id: "3",
       templateId: "1",
       email: "test@cds-snc.ca",
@@ -199,12 +199,12 @@ describe("TemporaryBearerToken tests", () => {
       },
     });
     mockedGetTokenById.mockResolvedValue({ bearerToken: token });
-    (prismaMock.formUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.apiUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       templateId: 1,
       email: "test@cds-snc.ca",
       active: true,
     });
-    prismaMock.formUser.update.mockResolvedValue({
+    prismaMock.apiUser.update.mockResolvedValue({
       id: "3",
       templateId: "1",
       email: "test@cds-snc.ca",
