@@ -101,16 +101,21 @@ export const authOptions: NextAuthOptions = {
       const privileges = await getPrivilegeRulesForUser(token.userId as string);
       if (!privileges.length) throw new Error("User has no privileges");
 
-      session.user.privileges = privileges.map((p) => {
-        return p.conditions
-          ? {
-              ...p,
-              conditions: interpolatePermissionCondition(p.conditions, {
-                userId: token.userId as string,
-              }),
-            }
-          : p;
-      });
+      try {
+        session.user.privileges = privileges.map((p) => {
+          return p.conditions
+            ? {
+                ...p,
+                conditions: interpolatePermissionCondition(p.conditions, {
+                  userId: token.userId as string,
+                }),
+              }
+            : p;
+        });
+      } catch (error) {
+        logMessage.error(error);
+        throw error;
+      }
 
       return session;
     },

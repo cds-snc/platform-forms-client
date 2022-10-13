@@ -55,12 +55,12 @@ INSERT INTO
 VALUES
   (uuid_generate_v4(),'Base','Base','Base Permissions','Autorisations de Base','[
     {"action":"create","subject":"FormRecord"},
-    {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
+    {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${userId}"}}}},
     {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true},
     {"action":"delete","subject":"FormRecord","conditions":{"publishingStatus":true},"inverted":true}
   ]'::JSONB),
     (uuid_generate_v4(),'PublishFormRecord','PublierUnFormulaire','Permission to Publish a Form','Autorisation de publier un formulaire','[
-    {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
+    {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${userId}"}}}}
   ]'::JSONB),
     (uuid_generate_v4(),'ManageFormRecords','GérerLesFormulaire','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
     {"action":["create","view","update","delete"],"subject":"FormRecord"}

@@ -49,7 +49,7 @@ export const updatePrivilegesForUser = async (
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
   try {
-    checkPrivileges(ability, [{ action: "manage", subject: "User" }]);
+    checkPrivileges(ability, [{ action: "update", subject: "User" }]);
     const addPrivileges: { id: string }[] = [];
     const removePrivileges: { id: string }[] = [];
     privileges.forEach((privilege) => {
@@ -113,7 +113,7 @@ export const getAllPrivileges = async (ability: Ability) => {
 
 export const updatePrivilege = async (ability: Ability, privilege: Privilege) => {
   try {
-    checkPrivileges(ability, [{ action: "manage", subject: "Privilege" }]);
+    checkPrivileges(ability, [{ action: "update", subject: "Privilege" }]);
 
     const response = await prisma.privilege.update({
       where: {
@@ -140,7 +140,7 @@ export const updatePrivilege = async (ability: Ability, privilege: Privilege) =>
 
 export const createPrivilege = async (ability: Ability, privilege: Privilege) => {
   try {
-    checkPrivileges(ability, [{ action: "manage", subject: "Privilege" }]);
+    checkPrivileges(ability, [{ action: "create", subject: "Privilege" }]);
 
     const response = await prisma.privilege.create({
       data: privilege,
