@@ -10,6 +10,7 @@ import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
+import { interpolatePermissionCondition } from "@lib/policyBuilder";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -100,7 +101,17 @@ export const authOptions: NextAuthOptions = {
       const privileges = await getPrivilegeRulesForUser(token.userId as string);
       if (!privileges.length) throw new Error("User has no privileges");
 
-      session.user.privileges = privileges;
+      session.user.privileges = privileges.map((p) => {
+        return p.conditions
+          ? {
+              ...p,
+              conditions: interpolatePermissionCondition(p.conditions, {
+                userId: token.userId as string,
+              }),
+            }
+          : p;
+      });
+
       return session;
     },
   },

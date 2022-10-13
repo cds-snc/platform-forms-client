@@ -32,7 +32,7 @@ const PrivilegeRow = ({
             <tr>
               <td className="font-bold w-1/3">Action</td>
               <td className="font-bold w-1/3">Subject</td>
-              <td className="font-bold w-1/3">Condition</td>
+              <td className="font-bold w-1/3">Conditions</td>
             </tr>
           </thead>
           <tbody>
@@ -49,7 +49,7 @@ const PrivilegeRow = ({
                       ? JSON.stringify(permission.subject)
                       : permission.subject}
                   </td>
-                  <td>{permission.condition}</td>
+                  <td>{JSON.stringify(permission.conditions) ?? "none"}</td>
                 </tr>
               );
             })}
