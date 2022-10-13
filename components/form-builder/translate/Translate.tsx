@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
+import { RichText } from "./RichText";
+import { MultipleOptions } from "./MultipleOptions";
+import { TextField } from "./TextField";
+import { TextArea } from "./TextArea";
 
 const SectionDiv = styled.div`
   .section-title {
@@ -37,24 +41,29 @@ const SectionDiv = styled.div`
       border-right: 1px solid black;
     }
 
-    input {
+    input,
+    textarea {
       width: 100%;
-      padding: 4px 8px;
+      padding: 8px;
       margin-top: 5;
     }
 
     span {
       display: inline-block;
-      border: 1px solid grey;
-      margin-right: 4px;
-      padding: 1px 4px;
-      background: #e9e9e9;
+      margin-right: 10px;
+      padding: 8px 6px;
+      background: #e9ecef;
+      &:first-of-type {
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #e9ecef;
+      }
     }
   }
 `;
 
 export const Translate = () => {
   const { updateField, form } = useTemplateStore();
+  const { t } = useTranslation();
+  let questionsIndex = 1;
 
   return (
     <>
@@ -72,7 +81,7 @@ export const Translate = () => {
 
           <div className="text-entry">
             <div>
-              <span>Form title</span>
+              <span>{t("Form introduction")}</span>
               <span>Title</span>
               <input
                 type="text"
@@ -95,7 +104,7 @@ export const Translate = () => {
 
           <div className="text-entry">
             <div>
-              <span>Form title</span>
+              <span>{t("Form introduction")}</span>
               <span>Description</span>
               <input
                 type="text"
@@ -116,111 +125,29 @@ export const Translate = () => {
             </div>
           </div>
 
-          {form.elements.map((element, index) => (
-            <div className="section" key={`section-${index}`} id={`section-${index}`}>
-              <div className="section-title">
-                <h2>Section: Question {index + 1}</h2>
-                <hr />
-              </div>
-
-              <div className="text-entry">
-                <div>
-                  <span>{element.type}</span>
-                  <span>Question title</span>
-                  <input
-                    type="text"
-                    value={element.properties.titleEn}
-                    onChange={(e) => {
-                      updateField(`form.elements[${index}].properties.titleEn`, e.target.value);
-                    }}
-                  />
+          {form.elements.map((element, index) => {
+            return (
+              <div className="section" key={`section-${index}`} id={`section-${index}`}>
+                <div className="section-title">
+                  <h2>
+                    {element.type !== "richText" && <>Question {questionsIndex++}</>}{" "}
+                    {element.type === "richText" && <>Form text</>}
+                  </h2>
+                  <hr />
                 </div>
-                <div>
-                  <input
-                    type="text"
-                    value={element.properties.titleFr}
-                    onChange={(e) => {
-                      updateField(`form.elements[${index}].properties.titleFr`, e.target.value);
-                    }}
-                  />
-                </div>
-              </div>
 
-              {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                <div className="text-entry">
-                  <div>
-                    <span>Short answer</span>
-                    <span>Description</span>
-                    <input
-                      type="text"
-                      value={form.elements[index].properties.descriptionEn}
-                      onChange={(e) => {
-                        updateField(
-                          `form.elements[${index}].properties.descriptionEn`,
-                          e.target.value
-                        );
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      value={form.elements[index].properties.descriptionFr}
-                      onChange={(e) => {
-                        updateField(
-                          `form.elements[${index}].properties.descriptionFr`,
-                          e.target.value
-                        );
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
+                {element.type === "richText" && <RichText element={element} index={index} />}
 
-              {element.type !== "textField" &&
-                element.properties.choices &&
-                element.properties.choices.length && (
-                  <div>
-                    {element.properties.choices.map((choice, choiceIndex) => (
-                      <div
-                        className="choice"
-                        key={`choice-${choiceIndex}`}
-                        id={`choice-${choiceIndex}`}
-                      >
-                        <div className="text-entry">
-                          <div>
-                            <span>{element.type}</span>
-                            <span>Option {choiceIndex + 1}</span>
-                            <input
-                              type="text"
-                              value={choice.en}
-                              onChange={(e) => {
-                                updateField(
-                                  `form.elements[${index}].properties.choices[${choiceIndex}].en`,
-                                  e.target.value
-                                );
-                              }}
-                            />
-                          </div>
-                          <div>
-                            <input
-                              type="text"
-                              value={choice.fr}
-                              onChange={(e) => {
-                                updateField(
-                                  `form.elements[${index}].properties.choices[${choiceIndex}].fr`,
-                                  e.target.value
-                                );
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                {["radio", "checkbox", "dropdown"].includes(element.type) && (
+                  <MultipleOptions element={element} index={index} />
                 )}
-            </div>
-          ))}
+
+                {element.type === "textField" && <TextField element={element} index={index} />}
+
+                {element.type === "textArea" && <TextArea element={element} index={index} />}
+              </div>
+            );
+          })}
         </SectionDiv>
       </div>
     </>
