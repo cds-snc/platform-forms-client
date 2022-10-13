@@ -357,49 +357,6 @@ async function main() {
       },
     },
   });
-
-  await prisma.privilege.createMany({
-    data: [
-      {
-        nameEn: "base",
-        nameFr: "base",
-        descriptionEn: "User can view templates",
-        descriptionFr: "Utilisature pour voir les templates",
-        permissions: [{ action: "view", subject: "FormRecord" }],
-      },
-      {
-        nameEn: "formBuilder",
-        nameFr: "constructeurDeFormulaires",
-        descriptionEn: "User can create and modify templates",
-        descriptionFr: "Utilisature pour creer et modifier les templates",
-        permissions: [{ action: ["view", "update"], subject: "FormRecord" }],
-      },
-      {
-        nameEn: "ViewUserPrivileges",
-        nameFr: "ViewUserPrivileges",
-        descriptionEn: "Can view all Users",
-        descriptionFr: "Pour voir tous les utilisateurs",
-        permissions: [{ action: "view", subject: ["User", "Privilege"] }],
-      },
-      {
-        nameEn: "userManager",
-        nameFr: "userManager",
-        descriptionEn: "Can manage User permissions",
-        descriptionFr: "Peut gere les permissions d'utilisateur",
-        permissions: [
-          { action: ["view", "manage"], subject: "User" },
-          { action: "view", subject: "Privilege" },
-        ],
-      },
-      {
-        nameEn: "privilegeManage",
-        nameFr: "privilegeManage",
-        descriptionEn: "Can manage Privileges",
-        descriptionFr: "Peut gerer les privileges",
-        permissions: [{ action: ["view", "manage"], subject: "Privilege" }],
-      },
-    ],
-  });
 }
 
 main()

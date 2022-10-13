@@ -73,14 +73,14 @@ export const getOrCreateUser = async (userToken: JWT) => {
       },
     });
 
-    // If a user already exists return the record
+    // If a user already exists and has privileges return the record
     if (user !== null && user.privileges.length) return user;
 
-    // User does not exist, create and return a record
+    // User does not exist, create and return a record or assign base privileges
     const { name, email, picture: image } = userToken;
     const basePrivileges = await prisma.privilege.findUnique({
       where: {
-        nameEn: "base",
+        nameEn: "Base",
       },
       select: {
         id: true,
