@@ -46,37 +46,39 @@ ALTER TABLE "_PrivilegeToUser" ADD CONSTRAINT "_PrivilegeToUser_A_fkey" FOREIGN 
 -- AddForeignKey
 ALTER TABLE "_PrivilegeToUser" ADD CONSTRAINT "_PrivilegeToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Populate with Privileges
 
 INSERT INTO
   "Privilege" ("id","nameEn", "nameFr", "descriptionEn", "descriptionFr", "permissions")
 VALUES
-  (gen_random_uuid(),'Base','Base','Base Permissions','Autorisations de Base','[
+  (uuid_generate_v4(),'Base','Base','Base Permissions','Autorisations de Base','[
     {"action":"create","subject":"FormRecord"},
     {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
     {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true},
     {"action":"delete","subject":"FormRecord","conditions":{"publishingStatus":true},"inverted":true}
   ]'::JSONB),
-    (gen_random_uuid(),'PublishFormRecord','PublierUnFormulaire','Permission to Publish a Form','Autorisation de publier un formulaire','[
+    (uuid_generate_v4(),'PublishFormRecord','PublierUnFormulaire','Permission to Publish a Form','Autorisation de publier un formulaire','[
     {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
   ]'::JSONB),
-    (gen_random_uuid(),'ManageFormRecords','GérerLesFormulaire','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
+    (uuid_generate_v4(),'ManageFormRecords','GérerLesFormulaire','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
     {"action":["create","view","update","delete"],"subject":"FormRecord"}
   ]'::JSONB),
-  (gen_random_uuid(),'ViewUserPrivileges','VisionnerPrivilègesUtilisateur','Permission to view user privileges','Autorisation d''afficher les privilèges de l''utilisateur','[
+  (uuid_generate_v4(),'ViewUserPrivileges','VisionnerPrivilègesUtilisateur','Permission to view user privileges','Autorisation d''afficher les privilèges de l''utilisateur','[
     {"action":"view","subject":["User","Privilege"]}
   ]'::JSONB),
-  (gen_random_uuid(),'ManageUsers','GérerUtilisateurs','Permission to manage users','Autorisation de gérer les utilisateurs','[
+  (uuid_generate_v4(),'ManageUsers','GérerUtilisateurs','Permission to manage users','Autorisation de gérer les utilisateurs','[
     {"action":"view","subject":["User","Privilege"]},
     {"action":"update","subject":"User"}
   ]'::JSONB),
-   (gen_random_uuid(),'ManagePrivileges','GérerPrivilèges','Permission to manage privileges','Autorisation de gérer les privilèges','[
+   (uuid_generate_v4(),'ManagePrivileges','GérerPrivilèges','Permission to manage privileges','Autorisation de gérer les privilèges','[
     {"action":["create","view","update","delete"],"subject":"Privilege"}
   ]'::JSONB),
-  (gen_random_uuid(),'ViewApplicationSettings','VisionnerParamètresApplication','Permission to view application settings','Autorisation d''afficher les paramètres de l''application','[
+  (uuid_generate_v4(),'ViewApplicationSettings','VisionnerParamètresApplication','Permission to view application settings','Autorisation d''afficher les paramètres de l''application','[
     {"action":"view","subject":"Flags"}
   ]'::JSONB),
-  (gen_random_uuid(),'ManageApplicationSettings','GérerParamètresApplication','Permission to manage application settings','Autorisation de gérer les paramètres de l''application','[
+  (uuid_generate_v4(),'ManageApplicationSettings','GérerParamètresApplication','Permission to manage application settings','Autorisation de gérer les paramètres de l''application','[
     {"action":"view","subject":"Flags"},
     {"action":"update","subject":"Flags"}
   ]'::JSONB);
