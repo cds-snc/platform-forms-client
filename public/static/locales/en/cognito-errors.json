@@ -1,0 +1,7 @@
+{
+  "CodeMismatchException": "The confirmation code provided does not match our records",
+  "InternalServiceException": "We've encountered an error with your request. Please try again later",
+  "TooManyRequestsException": "TooManyRequestsException",
+  "UsernameExistsException": "UsernameExistsException",
+  "UsernameOrPasswordIncorrect": "UsernameOrPasswordIncorrect"
+}

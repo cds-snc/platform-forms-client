@@ -1,6 +1,6 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
@@ -12,38 +12,83 @@ export interface ConfirmationProps {
 }
 
 export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
-  const { confirm, resendConfirmationCode } = useAuth();
-  const { t } = useTranslation(["signup", "common"]);
+  const { cognitoError, setCognitoError, confirm, resendConfirmationCode } = useAuth();
+  const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
+  const { t } = useTranslation(["signup", "cognito-errors", "common"]);
   if (!username) {
     return <p>{t("signUpConfirmation.noUsername")}</p>;
   }
   return (
-    <Formik initialValues={{ username: username, confirmationCode: "" }} onSubmit={confirm}>
-      {({ handleSubmit }) => (
+    <Formik
+      initialValues={{ username: username, confirmationCode: "" }}
+      onSubmit={async (values, formikHelpers) => {
+        await setShowSentReconfirmationToast(false);
+        await confirm(values, formikHelpers);
+      }}
+    >
+      {({ handleSubmit, errors }) => (
         <>
+          {showSentReconfirmationToast && !cognitoError && (
+            <Alert
+              type="success"
+              heading={t("signupConfirmation.resendConfirmationCode.success.title")}
+              onDismiss={() => {
+                setShowSentReconfirmationToast(false);
+              }}
+              id="reconfirmationSuccess"
+              dismissible
+            >
+              {t("signupConfirmation.resendConfirmationCode.success.body")}
+            </Alert>
+          )}
+          {cognitoError && (
+            <Alert
+              type="error"
+              heading={cognitoError}
+              onDismiss={() => {
+                setCognitoError("");
+              }}
+              id="cognitoErrors"
+              dismissible
+            />
+          )}
+          {Object.keys(errors).length > 0 && !cognitoError && (
+            <Alert
+              type="error"
+              validation={true}
+              tabIndex={0}
+              id="confirmationValidationErrors"
+              heading={t("input-validation.heading", { ns: "common" })}
+            >
+              <ol className="gc-ordered-list">
+                {Object.entries(errors).map(([fieldKey, fieldValue]) => {
+                  return (
+                    <ErrorListItem
+                      key={`error-${fieldKey}`}
+                      errorKey={fieldKey}
+                      value={fieldValue}
+                    />
+                  );
+                })}
+              </ol>
+            </Alert>
+          )}
           <h1>{t("signUpConfirmation.title")}</h1>
           <form id="confirmation" method="POST" onSubmit={handleSubmit}>
             <div className="focus-group">
-              <Label id={"label-1"} htmlFor={"1"} className="required">
+              <Label id={"label-confirmationCode"} htmlFor="confirmationCode" className="required">
                 {t("signUpConfirmation.fields.confirmationCode.label")}
               </Label>
-              <TextInput
-                type={"text"}
-                id={"1"}
-                name={"confirmationCode"}
-                characterCountMessages={{
-                  part1: t("formElements.characterCount.part1", { ns: "common" }),
-                  part2: t("formElements.characterCount.part2", { ns: "common" }),
-                  part1Error: t("formElements.characterCount.part1-error", { ns: "common" }),
-                  part2Error: t("formElements.characterCount.part2-error", { ns: "common" }),
-                }}
-              />
+              <TextInput type="text" id="confirmationCode" name="confirmationCode" />
             </div>
             <div className="buttons">
               <Button
                 type="button"
                 onClick={async () => {
-                  await resendConfirmationCode(username);
+                  const error = await resendConfirmationCode(username);
+                  if (!error) {
+                    await setShowSentReconfirmationToast(true);
+                  }
                 }}
                 secondary
               >

@@ -87,5 +87,8 @@
   "loginMenu": {
     "login": "Se connecter",
     "logout": "Se déconnecter"
+  },
+  "alert": {
+    "dismissAlert": "Fermer cette alerte"
   }
 }

@@ -5,11 +5,11 @@ import {
   CognitoIdentityProviderClient,
   AdminInitiateAuthCommand,
   AdminInitiateAuthCommandInput,
+  CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
-import { UserRole } from "@prisma/client";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
@@ -52,16 +52,30 @@ export const authOptions: NextAuthOptions = {
             PASSWORD: credentials.password,
           },
         };
+        try {
+          const cognitoClient = new CognitoIdentityProviderClient({
+            region: process.env.COGNITO_REGION,
+          });
 
-        const cognitoClient = new CognitoIdentityProviderClient({
-          region: process.env.COGNITO_REGION,
-        });
+          const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
 
-        const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
-
-        const response = await cognitoClient.send(adminInitiateAuthCommand);
-
-        return { id: response.AuthenticationResult?.IdToken as string };
+          const response = await cognitoClient.send(adminInitiateAuthCommand);
+          const idToken = response.AuthenticationResult?.IdToken;
+          if (idToken) {
+            const cognitoIDTokenParts = idToken.split(".");
+            const claimsBuff = new Buffer(cognitoIDTokenParts[1], "base64");
+            const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
+            return {
+              id: cognitoIDTokenClaims.sub,
+              name: cognitoIDTokenClaims.name,
+              email: cognitoIDTokenClaims.email,
+            };
+          }
+          return null;
+        } catch (e) {
+          // throw new Error with cognito error converted to string so as to include the exception name
+          throw new Error((e as CognitoIdentityProviderServiceException).toString());
+        }
       },
     }),
   ],
@@ -87,46 +101,22 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, account }) {
-      // Account is only available on the first callback after a login.
-      // Since this is the initial creation of the JWT we add the properties
-      switch (account?.provider) {
-        case "google": {
-          const user = await getOrCreateUser(token);
-          if (user === null)
-            throw new Error(`Could not get or create user with email: ${token.email}`);
-
-          token.userId = user.id;
-          token.authorizedForm = null;
-          token.lastLoginTime = new Date();
-          token.role = user.role;
-          token.acceptableUse = false;
-
-          break;
+      // account is only available on the first call to the JWT function
+      if (account?.provider) {
+        if (!token.sub) {
+          throw new Error(`JWT token does not have an id for user with email ${token.email}`);
         }
+        const user = await getOrCreateUser(token);
+        if (user === null)
+          throw new Error(`Could not get or create user with email: ${token.email}`);
 
-        case "credentials":
-          {
-            if (!token.sub)
-              throw new Error(`JWT token does not have an id for user with email ${token.email}`);
-
-            const cognitoAccessTokenParts = token.sub.split(".");
-            const claimsBuff = new Buffer(cognitoAccessTokenParts[1], "base64");
-            const cognitoAccessTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
-            const user = await getOrCreateUser({
-              name: cognitoAccessTokenClaims["given_name"],
-              email: cognitoAccessTokenClaims["email"],
-            });
-
-            token.userId = user?.id;
-            token.authorizedForm = null;
-            token.lastLoginTime = new Date();
-            token.acceptableUse = false;
-            token.role = UserRole.ADMINISTRATOR;
-            token.email = user?.email;
-          }
-          break;
+        token.userId = user.id;
+        token.authorizedForm = null;
+        token.lastLoginTime = new Date();
+        token.role = user.role;
+        token.acceptableUse = false;
       }
-      // The swtich case above is only run on initial JWT creation and not on any subsequent checks
+
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
       if (!token.acceptableUse) {
         token.acceptableUse = await getAcceptableUseValue(token.userId as string);
