@@ -69,7 +69,7 @@ export async function registerSuccessfulLoginAttempt(email: string): Promise<voi
 
 async function logLoginLockoutEvent(email: string): Promise<void> {
   try {
-    const formUser = await prisma.formUser.findFirst({
+    const apiUser = await prisma.apiUser.findFirst({
       where: {
         email: email,
       },
@@ -78,11 +78,11 @@ async function logLoginLockoutEvent(email: string): Promise<void> {
       },
     });
 
-    if (formUser) {
-      await prisma.accessLog.create({
+    if (apiUser) {
+      await prisma.apiAccessLog.create({
         data: {
           action: LoggingAction.LOCKED,
-          userId: formUser.id,
+          userId: apiUser.id,
         },
       });
     } else {

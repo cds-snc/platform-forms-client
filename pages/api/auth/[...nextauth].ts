@@ -110,7 +110,7 @@ export const authOptions: NextAuthOptions = {
       // Not throwing an Error as it could potentially redirect the user to an Error page
       // This error should be transparent to a user.
       try {
-        const formUser = await prisma.formUser.findUnique({
+        const apiUser = await prisma.apiUser.findUnique({
           where: {
             id: user.id,
           },
@@ -118,8 +118,8 @@ export const authOptions: NextAuthOptions = {
             id: true,
           },
         });
-        if (formUser) {
-          await prisma.accessLog.create({
+        if (apiUser) {
+          await prisma.apiAccessLog.create({
             data: {
               action: LoggingAction.LOGIN,
               userId: user.id,
@@ -139,7 +139,7 @@ export const authOptions: NextAuthOptions = {
           return;
         }
 
-        const formUser = await prisma.formUser.findUnique({
+        const apiUser = await prisma.apiUser.findUnique({
           where: {
             id: token.userId as string,
           },
@@ -147,8 +147,8 @@ export const authOptions: NextAuthOptions = {
             id: true,
           },
         });
-        if (formUser) {
-          await prisma.accessLog.create({
+        if (apiUser) {
+          await prisma.apiAccessLog.create({
             data: {
               action: LoggingAction.LOGOUT,
               userId: token.userId as string,

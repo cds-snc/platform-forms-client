@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { getUsers, adminRole, getOrCreateUser, getFormUser } from "@lib/users";
+import { getUsers, adminRole, getOrCreateUser, getApiUser } from "@lib/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma, UserRole } from "@prisma/client";
 
@@ -37,7 +37,7 @@ describe("User query tests should fail gracefully", () => {
     prismaMock.formUser.findUnique.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
     );
-    const result = await getFormUser("1");
+    const result = await getApiUser("1");
     expect(result).toEqual(null);
   });
 });
@@ -173,7 +173,7 @@ describe("getFormUser", () => {
 
     prismaMock.formUser.findUnique.mockResolvedValue(returnedUser);
 
-    const result = await getFormUser("3");
+    const result = await getApiUser("3");
     expect(result).toMatchObject(returnedUser);
   });
 });

@@ -38,7 +38,7 @@ export async function getEmailListByFormID(
   if (formID) {
     try {
       //Get emails by formID
-      const emailList = await prisma.formUser.findMany({
+      const emailList = await prisma.apiUser.findMany({
         where: {
           templateId: formID,
         },
@@ -89,7 +89,7 @@ export async function activateOrDeactivateFormOwners(
     const formID = req.query.form as string;
     if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
     //Update form_users's records
-    const updatedRecord = await prisma.formUser.update({
+    const updatedRecord = await prisma.apiUser.update({
       where: {
         templateId_email: {
           templateId: formID,
@@ -151,7 +151,7 @@ export async function addEmailToForm(
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   try {
     // Will throw an error if the user and templateID unique id already exist
-    const formUserID = await prisma.formUser.create({
+    const apiUserID = await prisma.apiUser.create({
       data: {
         templateId: formID,
         email: email,
@@ -161,16 +161,16 @@ export async function addEmailToForm(
       },
     });
 
-    if (session && session.user.idId) {
+    if (session && session.user.id) {
       await logAdminActivity(
-        session.user.idId,
+        session.user.id,
         AdminLogAction.Create,
         AdminLogEvent.GrantInitialFormAccess,
         `Email: ${email} has been given access to form id: ${formID}`
       );
     }
 
-    return res.status(200).json({ success: formUserID });
+    return res.status(200).json({ success: apiUserID });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
       // Unique constraint failed
