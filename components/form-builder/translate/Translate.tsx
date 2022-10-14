@@ -25,6 +25,14 @@ const SwitchLanguageButton = styled.button`
   }
 `;
 
+const CopyFormContentButton = styled.button`
+  border: 2px solid #26374a;
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px 25px;
+  margin: 10px 0 30px 0;
+`;
+
 const SectionDiv = styled.div`
   .section-title {
     display: flex;
@@ -102,7 +110,7 @@ export const Translate = () => {
         <div>
           {languagePriority === "en" ? "English" : "French"}
           <SwitchLanguageButton onClick={switchLanguage}>
-            <span>Switch</span>
+            <span>{t("Switch")}</span>
             <SwapHoriz />
           </SwitchLanguageButton>
           {languagePriority === "en" ? "French" : "English"}
@@ -110,14 +118,16 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>Section: Start</h2>
+            <h2>{t("Start")}</h2>
             <hr />
           </div>
+
+          <CopyFormContentButton>Copy form content</CopyFormContentButton>
 
           <div className="text-entry">
             <div>
               <span>{t("Form introduction")}</span>
-              <span>Title</span>
+              <span>{t("Title")}</span>
               <input
                 type="text"
                 value={languagePriority === "en" ? form.titleEn : form.titleFr}
@@ -146,7 +156,7 @@ export const Translate = () => {
           <div className="text-entry">
             <div>
               <span>{t("Form introduction")}</span>
-              <span>Description</span>
+              <span>{t("Description")}</span>
               <input
                 type="text"
                 value={
@@ -183,7 +193,9 @@ export const Translate = () => {
               />
             </div>
           </div>
+        </SectionDiv>
 
+        <SectionDiv>
           {form.elements.map((element, index) => {
             return (
               <div className="section" key={`section-${index}`} id={`section-${index}`}>
@@ -217,6 +229,100 @@ export const Translate = () => {
               </div>
             );
           })}
+        </SectionDiv>
+
+        <SectionDiv>
+          <div className="section-title">
+            <h2>{t("Privacy statement")}</h2>
+            <hr />
+          </div>
+          <div className="text-entry">
+            <div>
+              <span>{t("Page text")}</span>
+              <span>{t("Description")}</span>
+              <input
+                type="text"
+                value={
+                  languagePriority === "en"
+                    ? form.privacyPolicy.descriptionEn
+                    : form.privacyPolicy.descriptionFr
+                }
+                onChange={(e) => {
+                  updateField(
+                    languagePriority === "en"
+                      ? "form.privacyPolicy.descriptionEn"
+                      : "form.privacyPolicy.descriptionFr",
+                    e.target.value
+                  );
+                }}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                value={
+                  languagePriority === "en"
+                    ? form.privacyPolicy.descriptionFr
+                    : form.privacyPolicy.descriptionEn
+                }
+                onChange={(e) => {
+                  updateField(
+                    languagePriority === "en"
+                      ? "form.privacyPolicy.descriptionFr"
+                      : "form.privacyPolicy.descriptionEn",
+                    e.target.value
+                  );
+                }}
+              />
+            </div>
+          </div>
+        </SectionDiv>
+
+        <SectionDiv>
+          <div className="section-title">
+            <h2>{t("Confirmation message")}</h2>
+            <hr />
+          </div>
+          <div className="text-entry">
+            <div>
+              <span>{t("Page text")}</span>
+              <span>{t("Description")}</span>
+              <input
+                type="text"
+                value={
+                  languagePriority === "en"
+                    ? form.endPage.descriptionEn
+                    : form.endPage.descriptionFr
+                }
+                onChange={(e) => {
+                  updateField(
+                    languagePriority === "en"
+                      ? "form.endPage.descriptionEn"
+                      : "form.endPage.descriptionFr",
+                    e.target.value
+                  );
+                }}
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                value={
+                  languagePriority === "en"
+                    ? form.endPage.descriptionFr
+                    : form.endPage.descriptionEn
+                }
+                onChange={(e) => {
+                  updateField(
+                    languagePriority === "en"
+                      ? "form.endPage.descriptionFr"
+                      : "form.endPage.descriptionEn",
+                    e.target.value
+                  );
+                }}
+              />
+            </div>
+          </div>
         </SectionDiv>
       </div>
     </>
