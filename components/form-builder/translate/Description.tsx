@@ -12,22 +12,20 @@ export const Description = ({ element, index }: { element: ElementType; index: n
         <div>
           <span>{t(element.type)}</span>
           <span>Description</span>
-          <input
-            type="text"
+          <textarea
             value={form.elements[index].properties.descriptionEn}
             onChange={(e) => {
               updateField(`form.elements[${index}].properties.descriptionEn`, e.target.value);
             }}
-          />
+          ></textarea>
         </div>
         <div>
-          <input
-            type="text"
+          <textarea
             value={form.elements[index].properties.descriptionFr}
             onChange={(e) => {
               updateField(`form.elements[${index}].properties.descriptionFr`, e.target.value);
             }}
-          />
+          ></textarea>
         </div>
       </div>
     </>

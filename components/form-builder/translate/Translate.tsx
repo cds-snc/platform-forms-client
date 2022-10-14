@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
@@ -62,7 +62,9 @@ const SectionDiv = styled.div`
 
 export const Translate = () => {
   const { updateField, form } = useTemplateStore();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation("form-builder");
+  const [languagePriority, setLanguagePriority] = useState(i18n.language);
+
   let questionsIndex = 1;
 
   return (
@@ -131,7 +133,7 @@ export const Translate = () => {
                 <div className="section-title">
                   <h2>
                     {element.type !== "richText" && <>Question {questionsIndex++}</>}{" "}
-                    {element.type === "richText" && <>Form text</>}
+                    {element.type === "richText" && <>Page text</>}
                   </h2>
                   <hr />
                 </div>
