@@ -4,62 +4,15 @@ import { JWT } from "next-auth";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
 import { checkPrivileges } from "@lib/privileges";
-/**
- * Get all Users
- * @returns An array of all Users
- */
-export const getUsers = async (ability: Ability) => {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        privileges: {
-          select: {
-            id: true,
-            nameEn: true,
-            nameFr: true,
-            descriptionEn: true,
-            descriptionFr: true,
-          },
-        },
-      },
-      orderBy: {
-        id: "asc",
-      },
-    });
-
-    return users;
-  } catch (e) {
-    return prismaErrors(e, []);
-  }
-};
-
-/**
- * Get an APIUser
- * @param userId ApiUser Id
- * @returns ApiUser Object
- */
-export const getApiUser = async (userId: string): Promise<ApiUser | null> => {
-  try {
-    return await prisma.apiUser.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
-};
 
 /**
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async (userToken: JWT) => {
+export const getOrCreateUser = async (ability: Ability, userToken: JWT) => {
   try {
+    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+
     if (!userToken.email) throw new Error("Email address does not exist on token");
     const user = await prisma.user.findUnique({
       where: {
@@ -124,6 +77,59 @@ export const getOrCreateUser = async (userToken: JWT) => {
         },
       });
     }
+  } catch (e) {
+    return prismaErrors(e, null);
+  }
+};
+
+/**
+ * Get all Users
+ * @returns An array of all Users
+ */
+export const getUsers = async (ability: Ability) => {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        privileges: {
+          select: {
+            id: true,
+            nameEn: true,
+            nameFr: true,
+            descriptionEn: true,
+            descriptionFr: true,
+          },
+        },
+      },
+      orderBy: {
+        id: "asc",
+      },
+    });
+
+    return users;
+  } catch (e) {
+    return prismaErrors(e, []);
+  }
+};
+
+/**
+ * Get a APIUser
+ * @param userId ApiUser Id
+ * @returns ApiUser Object
+ */
+export const getApiUser = async (ability: Ability, userId: string): Promise<ApiUser | null> => {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+
+    return await prisma.apiUser.findUnique({
+      where: {
+        id: userId,
+      },
+    });
   } catch (e) {
     return prismaErrors(e, null);
   }
