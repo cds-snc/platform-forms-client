@@ -54,16 +54,16 @@ INSERT INTO
   "Privilege" ("id","nameEn", "nameFr", "descriptionEn", "descriptionFr", "permissions")
 VALUES
   (uuid_generate_v4(),'Base','Base','Base Permissions','Autorisations de Base','[
-    {"action":"create","subject":"FormConfiguration"},
-    {"action":["view","update","delete"],"subject":"FormConfiguration","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
-    {"action":"update","subject":"FormConfiguration","fields":["publishingStatus"],"inverted":true},
-    {"action":"delete","subject":"FormConfiguration","conditions":{"publishingStatus":true},"inverted":true}
+    {"action":"create","subject":"FormRecord"},
+    {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
+    {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true},
+    {"action":"delete","subject":"FormRecord","conditions":{"publishingStatus":true},"inverted":true}
   ]'::JSONB),
     (uuid_generate_v4(),'PublishForm','PublierUnFormulaire','Permission to Publish a Form','Autorisation de publier un formulaire','[
-    {"action":["update"],"subject":"FormConfiguration","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
+    {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
   ]'::JSONB),
     (uuid_generate_v4(),'ManageForm','GérerLesFormulaire','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
-    {"action":["create","view","update","delete"],"subject":"FormConfiguration"}
+    {"action":["create","view","update","delete"],"subject":"FormRecord"}
   ]'::JSONB),
   (uuid_generate_v4(),'ViewUserPrivileges','VisionnerPrivilègesUtilisateur','Permission to view user privileges','Autorisation d''afficher les privilèges de l''utilisateur','[
     {"action":"view","subject":["User","Privilege"]}
