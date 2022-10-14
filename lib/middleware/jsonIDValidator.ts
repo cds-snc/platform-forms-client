@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { FormConfiguration, FormElement, FormElementTypes } from "@lib/types/form-types";
+import { BetterOmit, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
+import { FormElement, FormElementTypes, FormRecord } from "@lib/types/form-types";
 
 export type ValidateOptions = {
   jsonKey: string;
@@ -17,7 +17,9 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
       if (req.method !== "POST" && req.method !== "PUT") {
         return { next: true };
       }
-      const jsonConfig: FormConfiguration = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+      const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
+        ? req.body[options.jsonKey]
+        : req.body;
       const elementIDs: Array<number> = jsonConfig.form.elements.map((element) => {
         return element.id;
       });
@@ -50,7 +52,9 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
       if (req.method !== "POST" && req.method !== "PUT") {
         return { next: true };
       }
-      const jsonConfig: FormConfiguration = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+      const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
+        ? req.body[options.jsonKey]
+        : req.body;
       const elementIDs: Array<number> = jsonConfig.form.elements.map((element) => {
         return element.id;
       });
@@ -83,7 +87,9 @@ export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareReq
       if (req.method !== "POST" && req.method !== "PUT") {
         return { next: true };
       }
-      const jsonConfig: FormConfiguration = options?.jsonKey ? req.body[options.jsonKey] : req.body;
+      const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
+        ? req.body[options.jsonKey]
+        : req.body;
 
       const dynamicRowElements: Array<FormElement> = jsonConfig.form.elements.filter((element) => {
         return element.type === FormElementTypes.dynamicRow;

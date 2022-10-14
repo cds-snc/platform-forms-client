@@ -11,7 +11,7 @@ import { UserRole } from "@prisma/client";
 
 interface DataViewProps {
   templates: Array<{
-    formID: string;
+    id: string;
     titleEn: string;
     titleFr: string;
     publishingStatus: boolean;
@@ -54,24 +54,21 @@ const DataView = (props: DataViewProps): React.ReactElement => {
         <tbody>
           {templates.map((template) => {
             return (
-              <tr key={template.formID} className="border-t-4 border-b-1 border-gray-400">
+              <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
                 <td className="pl-4">{template[getProperty("title", i18n.language)]} </td>
                 <td className="text-center">
                   {template.publishingStatus ? t("view.published") : t("view.draft")}
                 </td>
                 <td>
                   <button
-                    onClick={() => redirectToSettings(template.formID)}
+                    onClick={() => redirectToSettings(template.id)}
                     className="gc-button w-full"
                   >
                     {t("view.update")}
                   </button>
                 </td>
                 <td>
-                  <button
-                    onClick={() => redirectToForm(template.formID)}
-                    className="gc-button w-full"
-                  >
+                  <button onClick={() => redirectToForm(template.id)} className="gc-button w-full">
                     {t("view.view")}
                   </button>
                 </td>
@@ -91,14 +88,12 @@ export const getServerSideProps = requireAuthentication(async (context) => {
 
     const templates = (await getAllTemplates()).map((template) => {
       const {
-        formID,
-        formConfig: {
-          form: { titleEn, titleFr },
-          publishingStatus,
-        },
+        id,
+        form: { titleEn, titleFr },
+        publishingStatus,
       } = template;
       return {
-        formID,
+        id,
         titleEn,
         titleFr,
         publishingStatus,

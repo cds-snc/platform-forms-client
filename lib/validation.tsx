@@ -205,7 +205,7 @@ export const validateOnSubmit = (
   const errors: Responses = {};
 
   for (const item in values) {
-    const formElement = props.formRecord.formConfig.form.elements.find(
+    const formElement = props.formRecord.form.elements.find(
       (element) => element.id == parseInt(item)
     );
     if (!formElement) return errors;
@@ -234,12 +234,12 @@ export const validateOnSubmit = (
 export const getErrorList = (
   props: { formRecord: PublicFormRecord } & FormikProps<Responses>
 ): JSX.Element | null => {
-  if (!props.formRecord?.formConfig?.form || !props.errors) {
+  if (!props.formRecord?.form || !props.errors) {
     return null;
   }
   let errorList;
 
-  const sortedFormElementErrors = props.formRecord.formConfig.form.layout
+  const sortedFormElementErrors = props.formRecord.form.layout
     .filter((element) => {
       return element in props.errors;
     })

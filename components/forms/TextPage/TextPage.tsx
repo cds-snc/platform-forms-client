@@ -42,9 +42,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
   const {
     formRecord: {
-      formConfig: {
-        form: { endPage },
-      },
+      form: { endPage },
     },
   } = props;
   const language = i18n.language as string;

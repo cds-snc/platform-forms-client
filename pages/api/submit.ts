@@ -311,7 +311,7 @@ const processFormData = async (
     }
     try {
       await callLambda(
-        form.formID,
+        form.id,
         fields,
         // pass in the language from the header content language... assume english as the default
         req.headers?.["content-language"] ? req.headers["content-language"] : "en",
