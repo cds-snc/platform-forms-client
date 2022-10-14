@@ -59,10 +59,10 @@ VALUES
     {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true},
     {"action":"delete","subject":"FormRecord","conditions":{"publishingStatus":true},"inverted":true}
   ]'::JSONB),
-    (uuid_generate_v4(),'PublishForm','PublierUnFormulaire','Permission to Publish a Form','Autorisation de publier un formulaire','[
+    (uuid_generate_v4(),'PublishForms','PublierLesFormulaires','Permission to Publish a Form','Autorisation de publier un formulaire','[
     {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
   ]'::JSONB),
-    (uuid_generate_v4(),'ManageForm','GérerLesFormulaire','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
+    (uuid_generate_v4(),'ManageForms','GérerLesFormulaires','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
     {"action":["create","view","update","delete"],"subject":"FormRecord"}
   ]'::JSONB),
   (uuid_generate_v4(),'ViewUserPrivileges','VisionnerPrivilègesUtilisateur','Permission to view user privileges','Autorisation d''afficher les privilèges de l''utilisateur','[
