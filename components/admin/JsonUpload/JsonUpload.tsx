@@ -14,13 +14,13 @@ interface JSONUploadProps {
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
   const { form } = props;
-
-  const [jsonConfig, setJsonConfig] = useState(form ? JSON.stringify(form.formConfig) : "");
+  const { id: formID, ...formConfig } = form || { id: undefined };
+  const [jsonConfig, setJsonConfig] = useState(formID ? JSON.stringify(formConfig, null, 2) : "");
   const [submitStatus, setSubmitStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorState, setErrorState] = useState({ message: "" });
-  const { refreshData, isRefreshing } = useRefresh([form]);
-  const formID = form?.formID;
+  const { refreshData, isRefreshing } = useRefresh([formConfig]);
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +43,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       // Redirect to the appropriate page
 
       if (response?.config.method === "post" && response?.data) {
-        const formID = response.data.formID;
+        const formID = response.data.id;
         router.push({
           pathname: `/${i18n.language}/id/${formID}/settings`,
           query: {
@@ -114,7 +114,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 name="jsonInput"
                 className="gc-textarea full-height font-mono"
                 data-testid="jsonInput"
-                defaultValue={form ? JSON.stringify(form.formConfig, null, 2) : ""}
+                defaultValue={jsonConfig}
                 onChange={(e) => {
                   setJsonConfig(e.currentTarget.value);
                 }}

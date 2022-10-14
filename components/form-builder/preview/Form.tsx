@@ -45,10 +45,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     children,
     handleSubmit,
     isSubmitting,
-    formRecord: {
-      formID,
-      formConfig: { reCaptchaID, form },
-    },
+    formRecord: { id: formID, reCaptchaID, form },
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
@@ -326,8 +323,8 @@ export const Form = withFormik<FormProps, Responses>({
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "form_submission_trigger",
-        formID: formikBag.props.formRecord.formID,
-        formTitle: formikBag.props.formRecord.formConfig.form.titleEn,
+        formID: formikBag.props.formRecord.id,
+        formTitle: formikBag.props.formRecord.form.titleEn,
       });
 
       formikBag.setSubmitting(false);

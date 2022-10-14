@@ -10,7 +10,8 @@ import {
   getSubmissionTypeByID,
   onlyIncludePublicProperties,
 } from "../templates";
-import { FormConfiguration, FormRecord } from "@lib/types/form-types";
+
+import { BetterOmit, FormRecord } from "@lib/types";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 
 // structuredClone is available starting in Node 17.
@@ -41,7 +42,9 @@ describe("Template CRUD functions", () => {
       jsonConfig: formConfiguration,
     });
 
-    const newTemplate = await createTemplate(formConfiguration as FormConfiguration);
+    const newTemplate = await createTemplate(
+      formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+    );
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
       data: {
@@ -50,8 +53,8 @@ describe("Template CRUD functions", () => {
     });
 
     expect(newTemplate).toEqual({
-      formID: "formtestID",
-      formConfig: formConfiguration,
+      id: "formtestID",
+      ...formConfiguration,
     });
   });
   test("Get a single Template", async () => {
@@ -73,8 +76,8 @@ describe("Template CRUD functions", () => {
     });
 
     expect(template).toEqual({
-      formID: "formtestID",
-      formConfig: formConfiguration,
+      id: "formtestID",
+      ...formConfiguration,
     });
   });
   test("Null returned when Template does not Exist", async () => {
@@ -98,12 +101,12 @@ describe("Template CRUD functions", () => {
     const templates = await getAllTemplates();
     expect(templates).toEqual([
       {
-        formID: "formtestID",
-        formConfig: formConfiguration,
+        id: "formtestID",
+        ...formConfiguration,
       },
       {
-        formID: "formtestID2",
-        formConfig: formConfiguration,
+        id: "formtestID2",
+        ...formConfiguration,
       },
     ]);
   });
@@ -114,7 +117,9 @@ describe("Template CRUD functions", () => {
     expect(template).toEqual([]);
   });
   test("Update Template", async () => {
-    const updatedFormConfig = structuredClone(formConfiguration as FormConfiguration);
+    const updatedFormConfig = structuredClone(
+      formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+    );
     updatedFormConfig.publishingStatus = true;
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
@@ -137,8 +142,8 @@ describe("Template CRUD functions", () => {
     });
 
     expect(updatedTemplate).toEqual({
-      formID: "formtestID",
-      formConfig: updatedFormConfig,
+      id: "formtestID",
+      ...updatedFormConfig,
     });
   });
   test("Delete template", async () => {
@@ -160,12 +165,14 @@ describe("Template CRUD functions", () => {
     });
 
     expect(deletedTemplate).toEqual({
-      formID: "formtestID",
-      formConfig: formConfiguration,
+      id: "formtestID",
+      ...formConfiguration,
     });
   });
   test("Get Templates by publishing status", async () => {
-    const updatedFormConfig = structuredClone(formConfiguration as FormConfiguration);
+    const updatedFormConfig = structuredClone(
+      formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+    );
     updatedFormConfig.publishingStatus = true;
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       {
@@ -182,13 +189,11 @@ describe("Template CRUD functions", () => {
     expect(publishedTemplates).toHaveLength(1);
     expect(publishedTemplates).toMatchObject([
       {
-        formID: "formtestID2",
-        formConfig: {
-          publishingStatus: true,
-          displayAlphaBanner: true,
-          securityAttribute: "Unclassified",
-          form: updatedFormConfig.form,
-        },
+        id: "formtestID2",
+        publishingStatus: true,
+        displayAlphaBanner: true,
+        securityAttribute: "Unclassified",
+        form: updatedFormConfig.form,
       },
     ]);
   });
@@ -212,15 +217,15 @@ describe("Template CRUD functions", () => {
   });
   test("Only include public properties", async () => {
     const formRecord = {
-      formID: "testID",
-      formConfig: formConfiguration,
+      id: "testID",
+      ...formConfiguration,
     };
 
     const publicFormRecord = onlyIncludePublicProperties(formRecord as FormRecord);
-    expect(publicFormRecord.formConfig).not.toHaveProperty("submission");
-    expect(publicFormRecord.formConfig).not.toHaveProperty("internalTitleEn");
-    expect(publicFormRecord.formConfig).not.toHaveProperty("internalTitleFr");
-    expect(publicFormRecord.formConfig).toHaveProperty("displayAlphaBanner");
-    expect(publicFormRecord.formConfig).toHaveProperty("securityAttribute");
+    expect(publicFormRecord).not.toHaveProperty("submission");
+    expect(publicFormRecord).not.toHaveProperty("internalTitleEn");
+    expect(publicFormRecord).not.toHaveProperty("internalTitleFr");
+    expect(publicFormRecord).toHaveProperty("displayAlphaBanner");
+    expect(publicFormRecord).toHaveProperty("securityAttribute");
   });
 });
