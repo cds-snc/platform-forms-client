@@ -1,6 +1,13 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { privilegeCheck, privilegePut, privilegeDelete, flushValues } from "@lib/privilegeCache";
-import { Ability, Action, Subject, AccessControlError, Privilege } from "@lib/policyBuilder";
+import {
+  Ability,
+  Action,
+  Subject,
+  AccessControlError,
+  Privilege,
+  interpolatePermissionCondition,
+} from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
 
@@ -19,18 +26,33 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
         id: userId,
       },
       select: {
+        id: true,
         privileges: true,
       },
     });
 
     if (!user || !user?.privileges) throw new Error("No privileges assigned to user");
 
-    const refreshedRules = user.privileges
-      .map((privilege) => (privilege as Privilege).permissions)
-      .flat();
-    //  as unknown as RawRuleOf<AppAbility>[];
-    refreshedRules && privilegePut(userId, refreshedRules);
-    return refreshedRules;
+    try {
+      const userPrivilegeRules = user.privileges
+        .map((privilege) => (privilege as Privilege).permissions)
+        .flat()
+        .map((p) => {
+          return p.conditions
+            ? {
+                ...p,
+                conditions: interpolatePermissionCondition(p.conditions, { user }),
+              }
+            : p;
+        });
+
+      await privilegePut(userId, userPrivilegeRules);
+
+      return userPrivilegeRules;
+    } catch (error) {
+      logMessage.error(error);
+      throw error;
+    }
   } catch (e) {
     return prismaErrors(e, []);
   }
@@ -49,7 +71,7 @@ export const updatePrivilegesForUser = async (
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
   try {
-    checkPrivileges(ability, [{ action: "manage", subject: "User" }]);
+    checkPrivileges(ability, [{ action: "update", subject: "User" }]);
     const addPrivileges: { id: string }[] = [];
     const removePrivileges: { id: string }[] = [];
     privileges.forEach((privilege) => {
@@ -113,7 +135,7 @@ export const getAllPrivileges = async (ability: Ability) => {
 
 export const updatePrivilege = async (ability: Ability, privilege: Privilege) => {
   try {
-    checkPrivileges(ability, [{ action: "manage", subject: "Privilege" }]);
+    checkPrivileges(ability, [{ action: "update", subject: "Privilege" }]);
 
     const response = await prisma.privilege.update({
       where: {
@@ -140,7 +162,7 @@ export const updatePrivilege = async (ability: Ability, privilege: Privilege) =>
 
 export const createPrivilege = async (ability: Ability, privilege: Privilege) => {
   try {
-    checkPrivileges(ability, [{ action: "manage", subject: "Privilege" }]);
+    checkPrivileges(ability, [{ action: "create", subject: "Privilege" }]);
 
     const response = await prisma.privilege.create({
       data: privilege,
