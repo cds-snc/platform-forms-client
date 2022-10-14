@@ -1,6 +1,13 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { privilegeCheck, privilegePut, privilegeDelete, flushValues } from "@lib/privilegeCache";
-import { Ability, Action, Subject, AccessControlError, Privilege } from "@lib/policyBuilder";
+import {
+  Ability,
+  Action,
+  Subject,
+  AccessControlError,
+  Privilege,
+  interpolatePermissionCondition,
+} from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
 
@@ -19,18 +26,33 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
         id: userId,
       },
       select: {
+        id: true,
         privileges: true,
       },
     });
 
     if (!user || !user?.privileges) throw new Error("No privileges assigned to user");
 
-    const refreshedRules = user.privileges
-      .map((privilege) => (privilege as Privilege).permissions)
-      .flat();
-    //  as unknown as RawRuleOf<AppAbility>[];
-    refreshedRules && privilegePut(userId, refreshedRules);
-    return refreshedRules;
+    try {
+      const userPrivilegeRules = user.privileges
+        .map((privilege) => (privilege as Privilege).permissions)
+        .flat()
+        .map((p) => {
+          return p.conditions
+            ? {
+                ...p,
+                conditions: interpolatePermissionCondition(p.conditions, { user }),
+              }
+            : p;
+        });
+
+      await privilegePut(userId, userPrivilegeRules);
+
+      return userPrivilegeRules;
+    } catch (error) {
+      logMessage.error(error);
+      throw error;
+    }
   } catch (e) {
     return prismaErrors(e, []);
   }
