@@ -99,7 +99,7 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     // getStaticProps is serverside, and therefore instead of doing a request,
     // we import the invoke Lambda function directly
 
-    const templates = (await getAllTemplates()).map((template) => {
+    const templates = (await getAllTemplates(ability)).map((template) => {
       const {
         id,
         form: { titleEn, titleFr },

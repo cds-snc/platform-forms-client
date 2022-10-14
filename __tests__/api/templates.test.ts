@@ -4,19 +4,27 @@
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks } from "node-mocks-http";
+import Redis from "ioredis-mock";
 import templates from "@pages/api/templates";
 import { unstable_getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
-import { UserRole } from "@prisma/client";
+import { Session } from "next-auth";
+import { Base, getUserPrivileges } from "__utils__/permissions";
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, true);
+const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
 
 jest.mock("next-auth/next");
 jest.mock("@lib/adminLogs");
+
+const redis = new Redis();
+
+jest.mock("@lib/integration/redisConnector", () => ({
+  getRedisInstance: jest.fn(() => redis),
+}));
 
 describe("Test JSON validation scenarios", () => {
   beforeAll(() => {
@@ -26,17 +34,25 @@ describe("Test JSON validation scenarios", () => {
   afterAll(() => {
     delete process.env.TOKEN_SECRET;
   });
+
   beforeEach(() => {
-    const mockSession = {
+    const mockSession: Session = {
       expires: "1",
-      user: { email: "a@b.com", name: "Testing Forms", role: UserRole.ADMINISTRATOR, userId: "1" },
+      user: {
+        id: "1",
+        email: "a@b.com",
+        name: "Testing Forms",
+        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+      },
     };
 
     mockGetSession.mockResolvedValue(mockSession);
   });
+
   afterEach(() => {
     mockGetSession.mockReset();
   });
+
   it("Should successfully handle a POST request to create a template", async () => {
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
       id: "test0form00000id000asdf11",
@@ -83,11 +99,18 @@ describe("Test JSON validation scenarios", () => {
     });
 
     await templates(req, res);
+
     expect(res.statusCode).toBe(400);
     expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
   });
 
   it("Should successfully handle PUT request", async () => {
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: validFormTemplate,
+      users: [{ id: "1" }],
+    });
+
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
       id: "test0form00000id000asdf11",
       jsonConfig: validFormTemplate,
@@ -117,6 +140,12 @@ describe("Test JSON validation scenarios", () => {
   });
 
   it("Should successfully handle DELETE request", async () => {
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: validFormTemplate,
+      users: [{ id: "1" }],
+    });
+
     (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
       id: "test0form00000id000asdf11",
       jsonConfig: validFormTemplate,
