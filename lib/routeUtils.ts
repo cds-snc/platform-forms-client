@@ -4,9 +4,7 @@ import { PublicFormRecord } from "@lib/types";
 
 export const getPageClassNames = (formRecord: PublicFormRecord): string => {
   const pageNameUrl = getPageNameUrl();
-  const brandName = formRecord?.formConfig?.form?.brand
-    ? formRecord.formConfig.form.brand.name
-    : "";
+  const brandName = formRecord?.form?.brand ? formRecord.form.brand.name : "";
   return classnames("outer-container", `page${pageNameUrl.replace(/\//g, "-")}`, brandName);
 };
 

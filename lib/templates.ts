@@ -1,9 +1,8 @@
 import { logger } from "@lib/logger";
 import { formCache } from "./formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { PublicFormRecord, SubmissionProperties, FormRecord } from "@lib/types";
+import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
 import { Prisma } from "@prisma/client";
-import { FormConfiguration } from "./types/form-types";
 import jwt, { Secret } from "jsonwebtoken";
 
 // Get the submission format by using the form ID
@@ -19,7 +18,7 @@ async function _getSubmissionTypeByID(formID: string): Promise<SubmissionPropert
       },
     });
     if (template?.jsonConfig) {
-      return (template.jsonConfig as Prisma.JsonObject as FormConfiguration).submission;
+      return (template.jsonConfig as Prisma.JsonObject as FormRecord).submission;
     }
 
     return null;
@@ -42,8 +41,7 @@ async function _getTemplateByStatus(status: boolean): Promise<(PublicFormRecord 
     const sanitizedResponse = templates.map((template) => onlyIncludePublicProperties(template));
     if (sanitizedResponse && sanitizedResponse?.length > 0) {
       return sanitizedResponse.filter(
-        (val) =>
-          typeof val !== "undefined" && val !== null && val.formConfig.publishingStatus === status
+        (val) => typeof val !== "undefined" && val !== null && val.publishingStatus === status
       );
     }
     return [];
@@ -60,7 +58,7 @@ async function _getTemplateByStatus(status: boolean): Promise<(PublicFormRecord 
 
 async function _createTemplate(
   userID: string,
-  config: FormConfiguration
+  config: BetterOmit<FormRecord, "id">
 ): Promise<FormRecord | null> {
   try {
     const createdTemplate = _parseTemplate(
@@ -76,7 +74,7 @@ async function _createTemplate(
 
     const bearerToken = jwt.sign(
       {
-        formID: createdTemplate.formID,
+        formID: createdTemplate.id,
       },
       process.env.TOKEN_SECRET as Secret,
       {
@@ -86,7 +84,7 @@ async function _createTemplate(
     return _parseTemplate(
       await prisma.template.update({
         where: {
-          id: createdTemplate.formID,
+          id: createdTemplate.id,
         },
         data: {
           bearerToken,
@@ -109,7 +107,7 @@ async function _createTemplate(
  */
 async function _updateTemplate(
   formID: string,
-  formConfig: FormConfiguration
+  formConfig: BetterOmit<FormRecord, "id" | "bearerToken">
 ): Promise<FormRecord | null> {
   try {
     const updatedTempate = await prisma.template.update({
@@ -219,30 +217,30 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
  */
 const _onlyIncludePublicProperties = (template: FormRecord): PublicFormRecord => {
   return {
-    formID: template.formID,
-    formConfig: {
-      publishingStatus: template.formConfig.publishingStatus,
-      displayAlphaBanner: template.formConfig.displayAlphaBanner ?? true,
-      securityAttribute: template.formConfig.securityAttribute ?? "Unclassified",
-      ...(process.env.RECAPTCHA_V3_SITE_KEY && {
-        reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-      }),
-      form: template.formConfig.form,
-    },
+    id: template.id,
+
+    publishingStatus: template.publishingStatus,
+    displayAlphaBanner: template.displayAlphaBanner ?? true,
+    securityAttribute: template.securityAttribute ?? "Unclassified",
+    ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+      reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+    }),
+    form: template.form,
   };
 };
 
 const _parseTemplate = (template: { id: string; jsonConfig: Prisma.JsonValue }): FormRecord => {
   return {
-    formID: template.id,
+    id: template.id,
     // Converting to unknown first as Prisma is not aware of what is stored
     // in the JSON Object type, only that it is an object.
-    formConfig: {
-      ...(template.jsonConfig as unknown as FormConfiguration),
-      ...(process.env.RECAPTCHA_V3_SITE_KEY && {
-        reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-      }),
-    },
+    ...(template.jsonConfig as unknown as BetterOmit<
+      FormRecord,
+      "id" | "reCaptchaID" | "bearerToken"
+    >),
+    ...(process.env.RECAPTCHA_V3_SITE_KEY && {
+      reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
+    }),
   };
 };
 

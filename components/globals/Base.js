@@ -16,7 +16,7 @@ const Base = ({ children }) => {
   const isAuthenticated = children?.props?.user;
   const isEmbeddable = formRecord && children?.props?.isEmbeddable;
 
-  const shouldDisplayAlphaBanner = formRecord?.formConfig.displayAlphaBanner ?? true;
+  const shouldDisplayAlphaBanner = formRecord?.displayAlphaBanner ?? true;
   const { t } = useTranslation("common");
 
   return (
@@ -39,11 +39,7 @@ const Base = ({ children }) => {
         )}
         <main id="content">{children}</main>
         {!isEmbeddable && (
-          <Footer
-            disableGcBranding={
-              children.props.formRecord?.formConfig?.form?.brand?.disableGcBranding
-            }
-          />
+          <Footer disableGcBranding={children.props.formRecord?.form?.brand?.disableGcBranding} />
         )}
       </div>
     </>

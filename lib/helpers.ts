@@ -29,7 +29,7 @@ async function _getFormByID(formID: string): Promise<PublicFormRecord | undefine
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
     const { data }: { data: Array<PublicFormRecord> } = response.data;
-    if (data?.length === 1 && data[0].formID) {
+    if (data?.length === 1 && data[0].id) {
       return data[0];
     }
   } catch (err) {
@@ -42,10 +42,8 @@ export function extractFormData(submission: Submission): Array<string> {
   const formResponses = submission.responses;
   const formOrigin = submission.form;
   const dataCollector: Array<string> = [];
-  formOrigin.formConfig.form.layout.map((qID) => {
-    const question = formOrigin.formConfig.form.elements.find(
-      (element: FormElement) => element.id === qID
-    );
+  formOrigin.form.layout.map((qID) => {
+    const question = formOrigin.form.elements.find((element: FormElement) => element.id === qID);
     if (question) {
       handleType(question, formResponses[question.id], dataCollector);
     }
@@ -148,10 +146,10 @@ function handleTextResponse(title: string, response: string, collector: Array<st
   collector.push(`**${title}**${String.fromCharCode(13)}No Response`);
 }
 
-function _buildFormDataObject(form: PublicFormRecord, values: Responses) {
+function _buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
   const formData = {} as { [key: string]: string | FileInputResponse };
 
-  const formElementsWithoutRichTextComponents = form.formConfig.form.elements.filter(
+  const formElementsWithoutRichTextComponents = formRecord.form.elements.filter(
     (element) => ![FormElementTypes.richText].includes(element.type)
   );
 
@@ -162,8 +160,8 @@ function _buildFormDataObject(form: PublicFormRecord, values: Responses) {
     }
   }
 
-  formData["formID"] = `${form.formID}`;
-  formData["securityAttribute"] = form.formConfig.securityAttribute ?? "Unclassified";
+  formData["formID"] = `${formRecord.id}`;
+  formData["securityAttribute"] = formRecord.securityAttribute ?? "Unclassified";
 
   return formData;
 }
@@ -285,7 +283,7 @@ async function _submitToAPI(
       .then((serverResponse) => {
         if (serverResponse.data.received === true) {
           router.push({
-            pathname: `/${language}/id/${formRecord.formID}/confirmation`,
+            pathname: `/${language}/id/${formRecord.id}/confirmation`,
           });
         } else {
           throw Error("Server submit API returned an error");
@@ -301,11 +299,11 @@ async function _submitToAPI(
   }
 }
 function _rehydrateFormResponses(payload: Submission) {
-  const { form, responses } = payload;
+  const { form: formRecord, responses } = payload;
 
   const rehydratedResponses: Responses = {};
 
-  form.formConfig.form.elements
+  formRecord.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((question: FormElement) => {
       switch (question.type) {

@@ -64,16 +64,14 @@ const dynamicRowData = {
 };
 
 const formRecord = {
-  formID: "test0form00000id000asdf11",
-  formConfig: {
-    form: {
-      id: 1,
-      version: 1,
-      titleEn: "Test Form",
-      titleFr: "Formulaire de test",
-      layout: [1],
-      elements: [dynamicRowData],
-    },
+  id: "test0form00000id000asdf11",
+  form: {
+    id: 1,
+    version: 1,
+    titleEn: "Test Form",
+    titleFr: "Formulaire de test",
+    layout: [1],
+    elements: [dynamicRowData],
   },
 };
 

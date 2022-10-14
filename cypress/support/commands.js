@@ -34,11 +34,9 @@ Cypress.Commands.add("mockForm", (file) => {
           set(serverSideProps) {
             // here is our change to modify the injected parsed data
             serverSideProps.props.pageProps.formRecord = {
-              formID: "test0form00000id000asdf11",
-              formConfig: {
-                securityAttribute: mockedForm.securityAttribute,
-                form: mockedForm.form,
-              },
+              id: "test0form00000id000asdf11",
+              securityAttribute: mockedForm.securityAttribute,
+              form: mockedForm.form,
             };
             nextData = serverSideProps;
           },
@@ -56,8 +54,8 @@ Cypress.Commands.add("mockForm", (file) => {
       return req.continue((res) => {
         // let's use the same test greeting
         res.body.pageProps.formRecord = {
-          formID: "test0form00000id000asdf11",
-          formConfig: { form: mockedForm.form },
+          id: "test0form00000id000asdf11",
+          form: mockedForm.form,
         };
       });
     });
