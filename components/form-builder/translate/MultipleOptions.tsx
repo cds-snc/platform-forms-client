@@ -4,14 +4,22 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { Title } from "./Title";
 
-export const MultipleOptions = ({ element, index }: { element: ElementType; index: number }) => {
+export const MultipleOptions = ({
+  element,
+  index,
+  languagePriority,
+}: {
+  element: ElementType;
+  index: number;
+  languagePriority: string;
+}) => {
   return (
     <>
-      <Title element={element} index={index} />
+      <Title languagePriority={languagePriority} element={element} index={index} />
       {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-        <Description element={element} index={index} />
+        <Description languagePriority={languagePriority} element={element} index={index} />
       )}
-      <Options element={element} index={index} />
+      <Options languagePriority={languagePriority} element={element} index={index} />
     </>
   );
 };

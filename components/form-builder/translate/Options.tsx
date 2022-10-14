@@ -3,7 +3,15 @@ import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
 import { ElementType } from "../types";
 
-export const Options = ({ element, index }: { element: ElementType; index: number }) => {
+export const Options = ({
+  element,
+  index,
+  languagePriority,
+}: {
+  element: ElementType;
+  index: number;
+  languagePriority: string;
+}) => {
   const { updateField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
 
@@ -18,10 +26,12 @@ export const Options = ({ element, index }: { element: ElementType; index: numbe
                 <span>Option text</span>
                 <input
                   type="text"
-                  value={choice.en}
+                  value={languagePriority === "en" ? choice.en : choice.fr}
                   onChange={(e) => {
                     updateField(
-                      `form.elements[${index}].properties.choices[${choiceIndex}].en`,
+                      languagePriority === "en"
+                        ? `form.elements[${index}].properties.choices[${choiceIndex}].en`
+                        : `form.elements[${index}].properties.choices[${choiceIndex}].fr`,
                       e.target.value
                     );
                   }}
@@ -30,10 +40,12 @@ export const Options = ({ element, index }: { element: ElementType; index: numbe
               <div>
                 <input
                   type="text"
-                  value={choice.fr}
+                  value={languagePriority === "en" ? choice.fr : choice.en}
                   onChange={(e) => {
                     updateField(
-                      `form.elements[${index}].properties.choices[${choiceIndex}].fr`,
+                      languagePriority === "en"
+                        ? `form.elements[${index}].properties.choices[${choiceIndex}].fr`
+                        : `form.elements[${index}].properties.choices[${choiceIndex}].en`,
                       e.target.value
                     );
                   }}

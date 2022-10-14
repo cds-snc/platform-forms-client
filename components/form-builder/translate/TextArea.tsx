@@ -3,12 +3,20 @@ import { ElementType } from "../types";
 import { Description } from "./Description";
 import { Title } from "./Title";
 
-export const TextArea = ({ element, index }: { element: ElementType; index: number }) => {
+export const TextArea = ({
+  element,
+  index,
+  languagePriority,
+}: {
+  element: ElementType;
+  index: number;
+  languagePriority: string;
+}) => {
   return (
     <>
-      <Title element={element} index={index} />
+      <Title languagePriority={languagePriority} element={element} index={index} />
       {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-        <Description element={element} index={index} />
+        <Description languagePriority={languagePriority} element={element} index={index} />
       )}
     </>
   );
