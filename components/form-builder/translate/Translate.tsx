@@ -164,52 +164,54 @@ export const Translate = () => {
             </div>
           </div>
 
-          <div className="text-entry">
-            <div>
-              <span>{t("Form introduction")}</span>
-              <span>{t("Description")}</span>
-              <textarea
-                value={
-                  form.introduction[
-                    localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriority
-                    )
-                  ]
-                }
-                onChange={(e) => {
-                  updateField(
-                    `form.introduction.${localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriority
-                    )}`,
-                    e.target.value
-                  );
-                }}
-              ></textarea>
+          {(form.introduction.descriptionEn || form.introduction.descriptionFr) && (
+            <div className="text-entry">
+              <div>
+                <span>{t("Form introduction")}</span>
+                <span>{t("Description")}</span>
+                <textarea
+                  value={
+                    form.introduction[
+                      localizeField(
+                        LocalizedElementProperties.DESCRIPTION,
+                        translationLanguagePriority
+                      )
+                    ]
+                  }
+                  onChange={(e) => {
+                    updateField(
+                      `form.introduction.${localizeField(
+                        LocalizedElementProperties.DESCRIPTION,
+                        translationLanguagePriority
+                      )}`,
+                      e.target.value
+                    );
+                  }}
+                ></textarea>
+              </div>
+              <div>
+                <textarea
+                  value={
+                    form.introduction[
+                      localizeField(
+                        LocalizedElementProperties.DESCRIPTION,
+                        translationLanguagePriorityAlt
+                      )
+                    ]
+                  }
+                  onChange={(e) => {
+                    updateField(
+                      `form.introduction.${localizeField(
+                        LocalizedElementProperties.DESCRIPTION,
+                        translationLanguagePriorityAlt
+                      )}`,
+                      e.target.value
+                    );
+                  }}
+                ></textarea>
+              </div>
             </div>
-            <div>
-              <textarea
-                value={
-                  form.introduction[
-                    localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriorityAlt
-                    )
-                  ]
-                }
-                onChange={(e) => {
-                  updateField(
-                    `form.introduction.${localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriorityAlt
-                    )}`,
-                    e.target.value
-                  );
-                }}
-              ></textarea>
-            </div>
-          </div>
+          )}
         </SectionDiv>
 
         <SectionDiv>
