@@ -242,7 +242,7 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
 export default Privileges;
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
-  checkPrivileges(ability, [{ action: "manage", subject: "Privilege" }]);
+  checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
   const allPrivileges = await getAllPrivileges(ability);
 
   return {
