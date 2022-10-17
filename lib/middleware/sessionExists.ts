@@ -22,7 +22,7 @@ export const sessionExists = (methods?: string[]) => {
     const session = await isAuthenticated({ req, res });
 
     if (useMethods(req, methods) && !session) {
-      res.status(403).json({ error: "Access Denied" });
+      res.status(401).json({ error: "Unauthorized" });
       return { next: false };
     }
 

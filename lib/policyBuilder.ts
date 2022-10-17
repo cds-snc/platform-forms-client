@@ -19,19 +19,20 @@ This file is referenced by the useAccessControl hook so no server-side
 only dependencies can be referenced in this file.
  */
 
-interface CASL_FormRecord extends FormRecord {
-  kind: "FormRecord";
+export interface CASL_FormRecord extends FormRecord {
+  kind?: "FormRecord";
 }
 
-interface CASL_User extends User {
-  kind: "User";
+export interface CASL_User extends User {
+  kind?: "User";
 }
 
-interface CASL_Privilege extends Privilege {
-  kind: "Privilege";
+export interface CASL_Privilege extends Privilege {
+  kind?: "Privilege";
+  [key: string]: string | null | Permission[] | undefined;
 }
 
-export type Action = "manage" | "create" | "view" | "update" | "delete";
+export type Action = "create" | "view" | "update" | "delete";
 
 export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privilege>;
 

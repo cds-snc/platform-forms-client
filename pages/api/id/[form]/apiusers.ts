@@ -1,6 +1,6 @@
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
@@ -8,6 +8,9 @@ import { Session } from "next-auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps } from "@lib/types";
+import { createAbility, AccessControlError, Ability } from "@lib/policyBuilder";
+import { checkPrivileges } from "@lib/privileges";
+import { subject } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -15,9 +18,11 @@ const handler = async (
   { session }: MiddlewareProps
 ): Promise<void> => {
   try {
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
+    const ability = createAbility(session.user.privileges);
     switch (req.method) {
       case "GET":
-        return await getEmailListByFormID(req, res);
+        return await getEmailListByFormID(ability, req, res);
       case "PUT":
         return await activateOrDeactivateFormOwners(req, res, session);
       case "POST":
@@ -26,43 +31,54 @@ const handler = async (
         return res.status(400).json({ error: "Bad Request" });
     }
   } catch (err) {
+    if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     res.status(500).json({ error: "Error on Server Side" });
   }
 };
 
 export async function getEmailListByFormID(
+  ability: Ability,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const formID = req.query.form as string;
-  if (formID) {
-    try {
-      //Get emails by formID
-      const emailList = await prisma.apiUser.findMany({
+  try {
+    const formID = req.query.form;
+    if (Array.isArray(formID) || !formID)
+      return res.status(400).json({ error: "Malformed API Request FormID not define" });
+
+    if (formID) {
+      const emailList = await prisma.template.findUnique({
         where: {
-          templateId: formID,
+          id: formID,
         },
         select: {
-          id: true,
-          email: true,
-          active: true,
+          apiUsers: {
+            select: {
+              id: true,
+              email: true,
+              active: true,
+            },
+          },
+          users: {
+            select: {
+              id: true,
+            },
+          },
         },
       });
 
-      //Return all emails associated with formID
-      if (emailList) return res.status(200).json(emailList);
+      // The prisma response will be null if the form is not found
 
-      // If emailList is undefined it's because an underlying Prisma error was thrown
-      throw new Error("Prisma Engine Error");
-    } catch (e) {
-      // For production tracabiltiy
-      logMessage.info(e as Error);
-      //Otherwise a 404 form Not Found
-      return res.status(404).json({ error: "Form Not Found" });
+      if (!emailList) return res.status(404).json({ error: "Form Not Found" });
+
+      checkPrivileges(ability, [{ action: "view", subject: subject("FormRecord", emailList) }]);
+
+      //Return all emails associated with formID
+      if (emailList) return res.status(200).json(emailList.apiUsers);
     }
+  } catch (e) {
+    prismaErrors(e);
   }
-  //Could not find formID in the path
-  return res.status(400).json({ error: "Malformed API Request FormID not define" });
 }
 /**
  * It will activate and deactivate all the owners associated to a specific form.
@@ -151,7 +167,7 @@ export async function addEmailToForm(
   if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
   try {
     // Will throw an error if the user and templateID unique id already exist
-    const apiUserID = await prisma.apiUser.create({
+    const formUserID = await prisma.apiUser.create({
       data: {
         templateId: formID,
         email: email,
@@ -170,7 +186,7 @@ export async function addEmailToForm(
       );
     }
 
-    return res.status(200).json({ success: apiUserID });
+    return res.status(200).json({ success: formUserID });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
       // Unique constraint failed
