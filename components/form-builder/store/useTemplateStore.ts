@@ -61,8 +61,7 @@ const useTemplateStore = create<ElementStore>()(
       email: "test@example.com",
     },
     publishingStatus: true,
-    localizeField: (path, langPriority) => {
-      const lang = langPriority ? langPriority : get().lang;
+    localizeField: (path, lang = get().lang) => {
       const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
         lang.slice(1)) as Capitalize<Language>;
       return `${path}${langUpperCaseFirst}`;

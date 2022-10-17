@@ -92,7 +92,7 @@ export interface ElementStore extends TemplateSchema {
   localizeField: {
     <LocalizedProperty extends string>(
       arg: LocalizedProperty,
-      arg1?: string
+      arg1?: Language
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
   toggleLang: () => void;
