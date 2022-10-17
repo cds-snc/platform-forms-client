@@ -48,7 +48,7 @@ describe("getUsers", () => {
       {
         id: "3",
         name: "user_1",
-        admin: false,
+        role: UserRole.PROGRAM_ADMINISTRATOR,
         email: "fads@asdf.ca",
         emailVerified: null,
         image: null,
@@ -56,7 +56,7 @@ describe("getUsers", () => {
       {
         id: "5",
         name: "user_2",
-        admin: true,
+        role: UserRole.ADMINISTRATOR,
         email: "faaass@asdf.ca",
         emailVerified: null,
         image: null,
@@ -68,32 +68,57 @@ describe("getUsers", () => {
     expect(result).toMatchObject(returnedUsers);
   });
 });
+
 describe("adminRole", () => {
-  it("Modifies an adminitrator", async () => {
+  it("Assign ADMINISTRATOR role", async () => {
     prismaMock.user.update.mockResolvedValue({
       id: "2",
       name: "user_1",
-      admin: false,
+      role: UserRole.ADMINISTRATOR,
+      email: "faaass@asdf.ca",
+      emailVerified: null,
+      image: null,
+    });
+
+    const result = await adminRole(true, "2");
+
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: {
+        id: "2",
+      },
+      data: {
+        role: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(result).toMatchObject([true, true]);
+  });
+
+  it("Assign PROGRAM_ADMINISTRATOR role", async () => {
+    prismaMock.user.update.mockResolvedValue({
+      id: "2",
+      name: "user_1",
+      role: UserRole.PROGRAM_ADMINISTRATOR,
       email: "faaass@asdf.ca",
       emailVerified: null,
       image: null,
     });
 
     const result = await adminRole(false, "2");
-    expect(
-      prismaMock.user.update.calledWith({
-        where: {
-          id: "2",
-        },
-        data: {
-          admin: false,
-        },
-      })
-    );
+
+    expect(prismaMock.user.update).toHaveBeenCalledWith({
+      where: {
+        id: "2",
+      },
+      data: {
+        role: UserRole.PROGRAM_ADMINISTRATOR,
+      },
+    });
 
     expect(result).toMatchObject([true, true]);
   });
 });
+
 describe("getOrCreateUser", () => {
   it("Returns an existing User", async () => {
     const user = {

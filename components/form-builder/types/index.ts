@@ -1,9 +1,6 @@
 import { ReactElement } from "react";
 
-export interface Language {
-  en: string;
-  fr: string;
-}
+export type Language = "en" | "fr";
 
 export interface Choice {
   en: string;
@@ -17,6 +14,7 @@ export interface ElementProperties {
   validation: {
     required: boolean;
     type?: string;
+    maxLength?: number;
   };
   descriptionEn: string;
   descriptionFr: string;
@@ -41,26 +39,40 @@ export interface FormSchema {
   titleEn: string;
   titleFr: string;
   layout: number[];
-  endPage?: {
-    descriptionEn: string;
-    descriptionFr: string;
-    referrerUrlEn: string;
-    referrerUrlFr: string;
-  };
-  introduction?: {
+  endPage: {
     descriptionEn: string;
     descriptionFr: string;
   };
-  privacyPolicy?: {
+  introduction: {
+    descriptionEn: string;
+    descriptionFr: string;
+  };
+  privacyPolicy: {
     descriptionEn: string;
     descriptionFr: string;
   };
   elements: ElementType[];
   version: number;
-  emailSubjectEn: string;
-  emailSubjectFr: string;
   internalTitleEn?: string;
   internalTitleFr?: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
+}
+
+export enum LocalizedFormProperties {
+  TITLE = "title",
+  REFERRER = "referrerUrl",
+  INTERNAL_TITLE = "internalTitle",
+  EMAIL_SUBJECT = "emailSubject",
+}
+
+export enum LocalizedElementProperties {
+  TITLE = "title",
+  DESCRIPTION = "description",
+}
+
+export interface LocalizedProperty {
+  <T extends string>(arg: T): `${T}${Capitalize<Language>}`;
 }
 
 export interface TemplateSchema {
@@ -72,9 +84,17 @@ export interface TemplateSchema {
 }
 
 export interface ElementStore extends TemplateSchema {
-  lang: keyof Language;
+  lang: Language;
+  focusInput: boolean;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
+  localizeField: {
+    <LocalizedProperty extends string>(
+      arg: LocalizedProperty
+    ): `${LocalizedProperty}${Capitalize<Language>}`;
+  };
+  toggleLang: () => void;
+  setFocusInput: (isSet: boolean) => void;
   add: (index?: number) => void;
   remove: (id: number) => void;
   addChoice: (index: number) => void;
@@ -94,14 +114,15 @@ export interface ModalStore {
   modals: ElementProperties[];
   updateIsOpen: (isOpen: boolean) => void;
   updateModalProperties: (index: number, properties: ElementProperties) => void;
+  unsetModalField: (path: string) => void;
   initialize: () => void;
 }
 
 export interface ElementOption {
   id: string;
-  value: string;
+  value: string | undefined;
   icon?: ReactElement;
-  prepend?: ReactElement;
+  append?: ReactElement;
 }
 
 export interface DropdownProps {

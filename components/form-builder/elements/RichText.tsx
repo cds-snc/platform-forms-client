@@ -1,10 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../editor/RichTextEditor";
-import { initialValue } from "../editor/util";
-import { serialize } from "../editor/Markdown";
+import { RichTextEditor } from "../plate-editor/RichTextEditor";
+import { deserializeMd, Value } from "@udecode/plate";
+import { useMyPlateEditorRef } from "../plate-editor/types";
+import { serializeMd } from "../plate-editor/helpers/markdown";
+import { LocalizedElementProperties } from "../types";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -12,9 +13,21 @@ const OptionWrapper = styled.div`
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
-  const { updateField } = useTemplateStore();
+  const editorId = `${parentIndex}-editor`;
+  const editor = useMyPlateEditorRef(editorId);
 
-  const [value, setValue] = useState(initialValue);
+  const { localizeField, updateField, form } = useTemplateStore();
+
+  const [value, setValue] = useState(
+    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)]
+      ? deserializeMd(
+          editor,
+          form.elements[parentIndex].properties[
+            localizeField(LocalizedElementProperties.DESCRIPTION)
+          ]
+        )
+      : [{ children: [{ text: "" }] }]
+  );
 
   useEffect(() => {
     if (input.current) {
@@ -22,23 +35,31 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     }
   }, []);
 
-  const onChange = (value: string) => {
-    const parsed = JSON.parse(value);
-    const serialized = serialize({ children: parsed });
+  /**
+   * Serialize the contents of the Editor to Markdown and save
+   * to the datastore.
+   *
+   * @param value
+   */
+  const handleChange = (value: Value) => {
+    let serialized = serializeMd(value);
 
-    setValue(parsed);
-    updateField(`form.elements[${parentIndex}].properties.descriptionEn`, serialized);
+    if (typeof serialized === "undefined") {
+      serialized = "";
+    }
+
+    setValue(value);
+    updateField(
+      `form.elements[${parentIndex}].properties.${localizeField(
+        LocalizedElementProperties.DESCRIPTION
+      )}`,
+      serialized
+    );
   };
 
   return (
     <OptionWrapper>
-      <RichTextEditor value={value} onChange={onChange} />
+      <RichTextEditor id={editorId} value={value} onChange={handleChange} />
     </OptionWrapper>
   );
-};
-
-RichText.propTypes = {
-  parentIndex: PropTypes.number,
-  index: PropTypes.number,
-  renderIcon: PropTypes.func,
 };

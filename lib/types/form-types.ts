@@ -4,6 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
+import { BetterOmit } from ".";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -107,6 +108,8 @@ export interface FormProperties {
   brand?: BrandProperties;
   elements: Array<FormElement>;
   endPage?: Record<string, string>;
+  introduction?: Record<string, string>;
+  privacyPolicy?: Record<string, string>;
   [key: string]:
     | string
     | boolean
@@ -116,8 +119,10 @@ export interface FormProperties {
     | undefined;
 }
 
-// defines the fields for the top level form object
-export interface FormConfiguration {
+// defines the fields for the form record that is available in authenticated spaces and backend processes
+export type FormRecord = {
+  id: string;
+  bearerToken?: string;
   internalTitleEn?: string;
   internalTitleFr?: string;
   publishingStatus: boolean;
@@ -126,26 +131,11 @@ export interface FormConfiguration {
   form: FormProperties;
   securityAttribute: string;
   reCaptchaID?: string;
-  [key: string]: unknown;
-}
-
-export interface PublicFormConfiguration {
-  publishingStatus: boolean;
-  displayAlphaBanner?: boolean;
-  form: FormProperties;
-  securityAttribute: string;
-  reCaptchaID?: string;
-  [key: string]: unknown;
-}
+  [key: string]: string | boolean | SubmissionProperties | FormProperties | undefined;
+};
 
 // defines the fields for the form record that is available to unauthenticated users
-export interface PublicFormRecord {
-  formID: string;
-  formConfig: PublicFormConfiguration;
-}
-
-// defines the fields for the form record that is available in authenticated spaces and backend processes
-export interface FormRecord extends PublicFormRecord {
-  formConfig: FormConfiguration;
-  bearerToken?: string;
-}
+export type PublicFormRecord = BetterOmit<
+  FormRecord,
+  "bearerToken" | "internalTitleEn" | "internalTitleFr" | "submission"
+>;

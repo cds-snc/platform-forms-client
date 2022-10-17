@@ -8,7 +8,7 @@ import {
   newlineToOptions,
   getSchemaFromState,
 } from "../util";
-import { ElementStore, ElementType } from "../types";
+import { ElementStore, ElementType, Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
 
@@ -33,8 +33,8 @@ export const defaultForm = {
   layout: [],
   version: 1,
   endPage: {
-    descriptionEn: "#Your submission has been received",
-    descriptionFr: "#[fr] Your submission has been received.",
+    descriptionEn: "",
+    descriptionFr: "",
     referrerUrlEn: "",
     referrerUrlFr: "",
   },
@@ -54,11 +54,26 @@ export const defaultForm = {
 const useTemplateStore = create<ElementStore>()(
   immer((set, get) => ({
     lang: "en",
+    focusInput: false,
     form: defaultForm,
     submission: {
       email: "test@example.com",
     },
     publishingStatus: true,
+    localizeField: (path) => {
+      const lang = get().lang;
+      const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
+        lang.slice(1)) as Capitalize<Language>;
+      return `${path}${langUpperCaseFirst}`;
+    },
+    toggleLang: () =>
+      set((state) => {
+        state.lang = state.lang === "en" ? "fr" : "en";
+      }),
+    setFocusInput: (isSet) =>
+      set((state) => {
+        state.focusInput = isSet;
+      }),
     updateField: (path, value) =>
       set((state) => {
         update(state, path, value);
@@ -104,7 +119,9 @@ const useTemplateStore = create<ElementStore>()(
         // deep copy the element
         const element = JSON.parse(JSON.stringify(state.form.elements[index]));
         element.id = incrementElementId(state.form.elements);
-        element.properties.titleEn = `${element.properties.titleEn} copy`;
+        element.properties[state.localizeField("title")] = `${
+          element.properties[state.localizeField("title")]
+        } copy`;
         state.form.elements.splice(index + 1, 0, element);
       });
     },
@@ -126,7 +143,7 @@ const useTemplateStore = create<ElementStore>()(
     },
     importTemplate: (json) =>
       set((state) => {
-        state.form = json.form;
+        state.form = { ...defaultForm, ...json.form };
       }),
   }))
 );

@@ -40,8 +40,8 @@ jest.mock("next-i18next", () => ({
 describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
-    formID: "test0form00000id000asdf11",
-    formConfig: validFormTemplate,
+    id: "test0form00000id000asdf11",
+    ...validFormTemplate,
   };
   test("renders without errors", () => {
     useRouter.mockImplementation(() => ({

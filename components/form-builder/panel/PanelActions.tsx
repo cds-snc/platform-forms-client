@@ -101,6 +101,7 @@ export const PanelActions = ({
     add,
     duplicateElement,
     form: { elements },
+    setFocusInput,
   } = useTemplateStore();
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
@@ -161,6 +162,7 @@ export const PanelActions = ({
       <AddButtonWrapper>
         <FancyButton
           onClick={() => {
+            setFocusInput(true);
             add(item.index);
           }}
         >

@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
 - Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 
+### Changed
+
+- Updated Terms and conditions page + text link in the footer [#863](https://github.com/cds-snc/platform-forms-client/issues/863)
+
 ### Fixed
 
 - Fix stuck "Loading..." animation after uploading a new JSON config. [#898](https://github.com/cds-snc/platform-forms-client/pull/898)
@@ -26,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix last login date format [#950](https://github.com/cds-snc/platform-forms-client/pull/950)
 - Cleared email input field after successfully adding an email to Form Access [#954](https://github.com/cds-snc/platform-forms-client/pull/954)
 - Returned only public properties for forms [#1038](https://github.com/cds-snc/platform-forms-client/pull/1038)
+- Can't enable/disable user permissions in admin panel
 
 ### Removed
 

@@ -11,9 +11,7 @@ const Fip = (props) => {
   const { t, i18n } = useTranslation("common");
 
   // Check if custom branding was provided, otherwise show the Government of Canada branding
-  const formTheme = props.formRecord?.formConfig?.form
-    ? props.formRecord.formConfig.form.brand
-    : null;
+  const formTheme = props.formRecord?.form ? props.formRecord.form.brand : null;
 
   const logo =
     formTheme && formTheme[getProperty("logo", i18n.language)]

@@ -1,9 +1,7 @@
 {
   "footer": {
     "terms": {
-      "disclaimer": "This form is hosted by the Canadian Digital Service.",
       "link": "/en/terms-avis",
-      "desc-preface": "Learn more by visiting the ",
       "desc": "Terms and conditions"
     }
   },
@@ -78,13 +76,13 @@
     "add": "Add",
     "delete": "Delete"
   },
-  "acceptableUsePage":{
-    "agree":"Agree",
-    "cancel":"Cancel",
-    "welcome":"Welcome back",
-    "lastLoginTime":"Last log-in"
+  "acceptableUsePage": {
+    "agree": "Agree",
+    "cancel": "Cancel",
+    "welcome": "Welcome back",
+    "lastLoginTime": "Last log-in"
   },
-  "loginMenu":{
+  "loginMenu": {
     "login": "Sign in",
     "logout": "Sign out"
   },

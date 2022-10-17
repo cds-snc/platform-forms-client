@@ -60,11 +60,7 @@ export const sortByLayout = ({
   });
 };
 
-export const newlineToOptions = (
-  lang: keyof Language,
-  currentChoices: Choice[],
-  bulkChoices: string
-) => {
+export const newlineToOptions = (lang: Language, currentChoices: Choice[], bulkChoices: string) => {
   const cleanedBulkChoices = bulkChoices.endsWith("\n") ? bulkChoices.slice(0, -1) : bulkChoices;
   const choices = cleanedBulkChoices.split("\n");
 
