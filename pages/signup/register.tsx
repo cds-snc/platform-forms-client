@@ -15,7 +15,9 @@ export default function Register() {
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    name: Yup.string()
+      .required(t("input-validation.required", { ns: "common" }))
+      .max(50, t("signUpRegistration.fields.name.error.maxLength")),
     username: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" }))
@@ -26,26 +28,26 @@ export default function Register() {
       ),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
-      .min(8, t("signUpRegistration.fields.passwordConfirmation.error.minLength"))
-      .max(50, t("signUpRegistration.fields.passwordConfirmation.error.maxLength"))
+      .min(8, t("signUpRegistration.fields.password.error.minLength"))
+      .max(50, t("signUpRegistration.fields.password.error.maxLength"))
       .test(
         "password-valid-lowerCase",
-        t("signUpRegistration.fields.passwordConfirmation.error.oneLowerCase"),
+        t("signUpRegistration.fields.password.error.oneLowerCase"),
         (password = "") => isLowerCase(password)
       )
       .test(
         "password-valid-upperCase",
-        t("signUpRegistration.fields.passwordConfirmation.error.oneUpperCase"),
+        t("signUpRegistration.fields.password.error.oneUpperCase"),
         (password = "") => isUpperCase(password)
       )
       .test(
         "password-valid-number",
-        t("signUpRegistration.fields.passwordConfirmation.error.oneNumber"),
+        t("signUpRegistration.fields.password.error.oneNumber"),
         (password = "") => isNumber(password)
       )
       .test(
         "password-valid-symbol",
-        t("signUpRegistration.fields.passwordConfirmation.error.oneSymbol"),
+        t("signUpRegistration.fields.password.error.oneSymbol"),
         (password = "") => isSymbol(password)
       ),
     passwordConfirmation: Yup.string()

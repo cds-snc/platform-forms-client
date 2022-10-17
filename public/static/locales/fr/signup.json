@@ -20,27 +20,28 @@
       },
       "password": {
         "label": "Password (FR)",
-        "hint": "Must be at least 8 characters with a capital, number and symbol"
-      },
-      "passwordConfirmation": {
-        "label": "Password confirmation (FR)",
+        "hint": "Must be at least 8 characters with a capital, number and symbol (FR)",
         "error": {
-          "mustMatch": "The value must match the value of the password field. (FR)",
           "minLength": "The minimum length of the value must be 8 characters. (FR)",
+          "maxLength": "The field must be no longer than 50 characters. (FR)",
           "oneLowerCase": "The field must contain at least 1 lowercase character. (FR)",
           "oneUpperCase": "The field must contain at least 1 uppercase character. (FR)",
           "oneNumber": "The field must contain at least 1 number. (FR)",
           "oneSymbol": "The field must contain at least 1 symbol. (FR)"
         }
       },
+      "passwordConfirmation": {
+        "label": "Password confirmation (FR)",
+        "error": {
+          "mustMatch": "The value must match the value of the password field. (FR)"
+        }
+      },
       "name": {
-        "label": "Full name (FR)"
+        "label": "Full name (FR)",
+        "error": {
+          "maxLength": "The field must be no longer than 50 characters. (FR)"
+        }
       }
-    }
-  },
-  "common": {
-    "errors": {
-      "maxLength": "The field must be no longer than 50 characters. (FR)"
     }
   }
 }
