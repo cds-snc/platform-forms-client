@@ -10,7 +10,7 @@ import { middleware, cors, csrfProtected } from "@lib/middleware";
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
   // craft registration params for the SignUpCommand
-  if (!req.body.username || !req.body.password) {
+  if (!req.body.username || !req.body.password || !req.body.name) {
     return res.status(400).json({
       message: "username and password need to be provided in the body of the request",
     });
@@ -19,6 +19,12 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
     ClientId: COGNITO_APP_CLIENT_ID,
     Password: req.body.password,
     Username: req.body.username,
+    UserAttributes: [
+      {
+        Name: "name",
+        Value: req.body.name,
+      },
+    ],
   };
 
   // instantiate the cognito client object. cognito is region specific and so a region must be specified

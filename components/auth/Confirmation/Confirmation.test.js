@@ -1,7 +1,7 @@
 import React from "react";
 import { Confirmation } from "./Confirmation";
 import { useAuth } from "../../../lib/hooks";
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("../../../lib/hooks");
@@ -44,12 +44,14 @@ describe("confirmation component", () => {
   test("when form is submitted, the user is confirmed", async () => {
     const user = userEvent.setup();
     render(<Confirmation username={"test"} language={"en"} t={(key) => key} />);
-    await user.type(screen.getByRole("textbox"), "confirmationcode");
-    await user.click(screen.getByText("submitButton"));
+    await act(async () => {
+      await user.type(screen.getByRole("textbox"), "7876657");
+      await user.click(screen.getByText("submitButton"));
+    });
     expect(confirmMock.mock.calls.length).toBe(1);
     expect(confirmMock.mock.calls[0][0]).toEqual({
       username: "test",
-      confirmationCode: "confirmationcode",
+      confirmationCode: "7876657",
     });
   });
 });

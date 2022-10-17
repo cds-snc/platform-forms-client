@@ -44,7 +44,6 @@
     "@types/lodash.unset": "4.5.7",
     "@udecode/plate": "18.1.2",
     "@udecode/plate-test-utils": "13.4.0",
-    "aws-sdk-client-mock": "0.6.2",
     "axios": "0.26.1",
     "classnames": "2.3.2",
     "cors": "2.8.5",

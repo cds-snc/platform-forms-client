@@ -5,7 +5,10 @@
     "resendConfirmationCodeButton": "Resend Confirmation Code",
     "fields": {
       "confirmationCode": {
-        "label": "Confirmation Code"
+        "label": "Confirmation Code",
+        "error": {
+          "number": "This field must be a number"
+        }
       }
     }
   },

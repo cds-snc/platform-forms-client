@@ -1,4 +1,3 @@
-import React from "react";
 import { useRouter } from "next/router";
 import { getCsrfToken, signIn } from "next-auth/react";
 import axios, { AxiosError } from "axios";
@@ -87,9 +86,16 @@ export const useAuth = () => {
         });
 
         if (result.statusText === "OK") {
-          await router.push({
-            pathname: "/auth/login",
-          });
+          // we could be on the registration page or the login page
+          // if we are on the login page we want to refresh the page
+          // instead of pushing the route as it will do nothing
+          if (router.pathname.includes("/auth/login")) {
+            await router.reload();
+          } else {
+            await router.push({
+              pathname: "/auth/login",
+            });
+          }
         }
       }
     } catch (err) {

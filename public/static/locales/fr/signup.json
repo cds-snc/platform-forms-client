@@ -4,7 +4,10 @@
     "noUsername": "No user to confirm (FR)",
     "fields": {
       "confirmationCode": {
-        "label": "Confirmation Code (FR)"
+        "label": "Confirmation Code (FR)",
+        "error": {
+          "number": "This field must be a number (FR)"
+        }
       }
     }
   },

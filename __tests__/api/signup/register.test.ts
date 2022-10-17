@@ -74,7 +74,7 @@ describe("/signup/register", () => {
       mockedSignUpCommand.mockReset();
       sendFunctionMock.mockReset();
     });
-    it("handler returns 400 status code when username or password is not included", async () => {
+    it("handler returns 400 status code when username, password or name is not included", async () => {
       mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
       const { req, res } = createMocks({
         method: "POST",
@@ -111,6 +111,7 @@ describe("/signup/register", () => {
         body: {
           username: "test",
           password: "test",
+          name: "test",
         },
       });
 
@@ -121,6 +122,12 @@ describe("/signup/register", () => {
         ClientId: "somemockvalue",
         Username: "test",
         Password: "test",
+        UserAttributes: [
+          {
+            Name: "name",
+            Value: "test",
+          },
+        ],
       });
       expect(res._getData()).toEqual("");
     });
@@ -145,6 +152,7 @@ describe("/signup/register", () => {
         body: {
           username: "test",
           password: "test",
+          name: "test",
         },
       });
 

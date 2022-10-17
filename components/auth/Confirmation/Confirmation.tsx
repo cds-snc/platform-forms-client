@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
+import * as Yup from "yup";
 
 export interface ConfirmationProps {
   /**
@@ -15,12 +16,21 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
   const { cognitoError, setCognitoError, confirm, resendConfirmationCode } = useAuth();
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
+
+  const validationSchema = Yup.object().shape({
+    confirmationCode: Yup.number()
+      .typeError(t("signUpConfirmation.fields.confirmationCode.error.number"))
+      .required(t("input-validation.required", { ns: "common" })),
+  });
   if (!username) {
     return <p>{t("signUpConfirmation.noUsername")}</p>;
   }
   return (
     <Formik
+      validationSchema={validationSchema}
       initialValues={{ username: username, confirmationCode: "" }}
+      validateOnBlur={false}
+      validateOnChange={false}
       onSubmit={async (values, formikHelpers) => {
         await setShowSentReconfirmationToast(false);
         await confirm(values, formikHelpers);
@@ -74,7 +84,7 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
             </Alert>
           )}
           <h1>{t("signUpConfirmation.title")}</h1>
-          <form id="confirmation" method="POST" onSubmit={handleSubmit}>
+          <form id="confirmation" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
               <Label id={"label-confirmationCode"} htmlFor="confirmationCode" className="required">
                 {t("signUpConfirmation.fields.confirmationCode.label")}

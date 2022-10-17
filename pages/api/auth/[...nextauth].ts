@@ -16,7 +16,7 @@ import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
-  process.env.NODE_ENV !== "test"
+  process.env.APP_ENV !== "test"
 )
   throw new Error("Missing Google Authentication Credentials");
 
@@ -24,7 +24,7 @@ if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
     !process.env.COGNITO_REGION ||
     !process.env.COGNITO_USER_POOL_ID) &&
-  process.env.NODE_ENV !== "test"
+  process.env.APP_ENV !== "test"
 )
   throw new Error("Missing Cognito Credentials");
 

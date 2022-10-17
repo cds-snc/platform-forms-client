@@ -6787,7 +6787,7 @@ autoprefixer@^9.8.6:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-aws-sdk-client-mock@0.6.2:
+aws-sdk-client-mock@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/aws-sdk-client-mock/-/aws-sdk-client-mock-0.6.2.tgz#2880d7a7a7e9fcaaf7abdfc01a0f6f22551bc654"
   integrity sha512-0kH1cyfqGogp69vJitzVducx9q691vGOwg7wEG+DUegGlepjaeskp6YG4SJI0y5Vwh3vi+fP27YQTcWllv4GlQ==

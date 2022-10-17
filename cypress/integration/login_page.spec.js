@@ -8,8 +8,6 @@ describe("Login Page", () => {
       cy.get("h1").should("contain", "Sign In to GC Forms");
       cy.get("input[id='username']");
       cy.get("input[id='password']");
-      //TODO did the below previously exist or on a branch?
-      //cy.get("[data-testid='signInKey']");
     });
 
     it("Change page language", () => {
