@@ -68,6 +68,7 @@
     "prisma": "^4.2.1",
     "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
+    "react-csv": "^2.2.2",
     "react-dnd": "^15.1.2",
     "react-dnd-html5-backend": "^15.1.2",
     "react-dom": "^18.2.0",
