@@ -123,17 +123,10 @@
   dependencies:
     tslib "^2.3.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@aws-sdk/client-dynamodb@^3.163.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.186.0.tgz#f6c84e6fa8215bc361f3c233c3928f33518017b8"
-  integrity sha512-3Vq4UxqVUSRSIUbx83yfgiZezhOFYDG9ZazFjB4oDLIfqUSkH83IRCcJxJrANfw2xc3qdjzkBiQKyZu4Q9Xf4A==
-=========
 "@aws-sdk/client-dynamodb@3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.163.0.tgz#7b3a4c7e7e5ebdeb813781efe83fca45133ee226"
   integrity sha512-NALw3nejI4e8pYucHchYz3RyxREvr58w3FhcmmTp0u9FA4zfRN4D0+tHexdBlMGuKkdY1niSPXXDq+qefxudyA==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@aws-crypto/sha256-browser" "2.0.0"
     "@aws-crypto/sha256-js" "2.0.0"
@@ -173,17 +166,10 @@
     tslib "^2.3.1"
     uuid "^8.3.2"
 
-<<<<<<<<< Temporary merge branch 1
-"@aws-sdk/client-lambda@^3.163.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-lambda/-/client-lambda-3.186.0.tgz#72e176a6ba9f6596100ffcdefe118e88b07c6f39"
-  integrity sha512-Wr/s591KMRhRRMnv4eWpJ56Kvt5wMjHFW/XGb4NBEPBkLnd/92jVDXp76tGhmbILa/zNpMBaHTx2eqDvHA6AXQ==
-=========
 "@aws-sdk/client-lambda@3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-lambda/-/client-lambda-3.163.0.tgz#e0b02628818cf8f15f50895652882c647160ebd1"
   integrity sha512-YB9MefQ9WwOXLTUngJFF0LiJa9dMACPt6IAKFX3FYSu/yP1jFbS3+N/ULGdOoUuylKJWslpUXG4X3jFF1XhhBg==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@aws-crypto/sha256-browser" "2.0.0"
     "@aws-crypto/sha256-js" "2.0.0"
@@ -221,17 +207,10 @@
     "@aws-sdk/util-waiter" "3.162.0"
     tslib "^2.3.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@aws-sdk/client-s3@^3.163.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.186.0.tgz#07942a691d3a30616f040ce7b3f9668cb027d4c9"
-  integrity sha512-tUvUkqKh1MQ8g4HDJyekZnSVjJ44pjo0QZmrV9gwpnyCymYoxPShz5zT5CsYyXYTOx81yxIBw6/mkFKEJ8MZ2g==
-=========
 "@aws-sdk/client-s3@3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-s3/-/client-s3-3.163.0.tgz#744d69e74237993e84912870c1c581e7ec1214ca"
   integrity sha512-pWjsVnD9kjXeS8yan8pMj6p+3yIvzR8gEpV6MDWDbJnlhD432M8WZUsFo+lkDK+2sfvGvdIg+gKd+Cb2cO8KvQ==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@aws-crypto/sha1-browser" "2.0.0"
     "@aws-crypto/sha256-browser" "2.0.0"
@@ -288,17 +267,10 @@
     fast-xml-parser "3.19.0"
     tslib "^2.3.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@aws-sdk/client-sqs@^3.163.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-sqs/-/client-sqs-3.186.0.tgz#11f396b3b6cddf89d723778c002ca99d808dd064"
-  integrity sha512-QetQrUek5soxMSdP7HADxsO/l4OLNI20s4lPGsPk+imp0kXd+SIxOz4qHh6vmxEMkjdUq7eA5RRRndN6M2pYzg==
-=========
 "@aws-sdk/client-sqs@3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-sqs/-/client-sqs-3.163.0.tgz#9d8fbd15bfd1c22d88e0c77bcec8156bdf68460b"
   integrity sha512-drYIE/cPDUXYhvLBjxYASPf/VVcTuT/yc3Igk03aChjiXBu5Ok0QeTJhQUYBV436k0TPaW+gfd4h1Nel9FzBMg==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@aws-crypto/sha256-browser" "2.0.0"
     "@aws-crypto/sha256-js" "2.0.0"
@@ -615,17 +587,10 @@
   dependencies:
     tslib "^2.3.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@aws-sdk/lib-dynamodb@^3.163.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.186.0.tgz#057e56960fa94f1ce569ea914d84b0a916716fe1"
-  integrity sha512-914jSaxNMiPRK+vUHsx8EvVbogAovcc51Y2bvO2L91VmRiDgNMwUrtiY/2lDTYDgbnrblRntYufIrnk7XoGIIQ==
-=========
 "@aws-sdk/lib-dynamodb@3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.163.0.tgz#db462faf89dc786dd4957e2eedf8c9033703c69b"
   integrity sha512-zOrPlqkHFa0tafpyD6wqyDShu1bRA/dtCCPXhwJZOp2Qtl0gt3OJjPOVFDyfrdcpelgvLSocPvIKZMqLCGQaQg==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@aws-sdk/util-dynamodb" "3.163.0"
     tslib "^2.3.1"
@@ -879,65 +844,6 @@
   dependencies:
     tslib "^2.3.1"
 
-"@aws-sdk/signature-v4-multi-region@3.186.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/signature-v4-multi-region/-/signature-v4-multi-region-3.186.0.tgz#1fd17ee73dc0a9974d8d3ea601b01f762a08c390"
-  integrity sha512-99+WIti/zaoYgRAFTWSC2206E71gi+bPtPFbijLzQHMpmB3QlzPYobx3xyepgQ+LL0FQcfqD5zFtdmlcoWTddQ==
-  dependencies:
-    "@aws-sdk/protocol-http" "3.186.0"
-    "@aws-sdk/signature-v4" "3.186.0"
-    "@aws-sdk/types" "3.186.0"
-    "@aws-sdk/util-arn-parser" "3.186.0"
-    tslib "^2.3.1"
-
-"@aws-sdk/signature-v4@3.186.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/signature-v4/-/signature-v4-3.186.0.tgz#bbd56e71af95548abaeec6307ea1dfe7bd26b4e4"
-  integrity sha512-18i96P5c4suMqwSNhnEOqhq4doqqyjH4fn0YV3F8TkekHPIWP4mtIJ0PWAN4eievqdtcKgD/GqVO6FaJG9texw==
-  dependencies:
-    "@aws-sdk/is-array-buffer" "3.186.0"
-    "@aws-sdk/types" "3.186.0"
-    "@aws-sdk/util-hex-encoding" "3.186.0"
-    "@aws-sdk/util-middleware" "3.186.0"
-    "@aws-sdk/util-uri-escape" "3.186.0"
-    tslib "^2.3.1"
-
-"@aws-sdk/smithy-client@3.186.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/smithy-client/-/smithy-client-3.186.0.tgz#67514544fb55d7eff46300e1e73311625cf6f916"
-  integrity sha512-rdAxSFGSnrSprVJ6i1BXi65r4X14cuya6fYe8dSdgmFSa+U2ZevT97lb3tSINCUxBGeMXhENIzbVGkRZuMh+DQ==
-  dependencies:
-    "@aws-sdk/middleware-stack" "3.186.0"
-    "@aws-sdk/types" "3.186.0"
-    tslib "^2.3.1"
-
-"@aws-sdk/types@3.186.0", "@aws-sdk/types@^3.1.0", "@aws-sdk/types@^3.110.0", "@aws-sdk/types@^3.55.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/types/-/types-3.186.0.tgz#f6fb6997b6a364f399288bfd5cd494bc680ac922"
-  integrity sha512-NatmSU37U+XauMFJCdFI6nougC20JUFZar+ump5wVv0i54H+2Refg1YbFDxSs0FY28TSB9jfhWIpfFBmXgL5MQ==
-
-"@aws-sdk/url-parser@3.186.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/url-parser/-/url-parser-3.186.0.tgz#e42f845cd405c1920fdbdcc796a350d4ace16ae9"
-  integrity sha512-jfdJkKqJZp8qjjwEjIGDqbqTuajBsddw02f86WiL8bPqD8W13/hdqbG4Fpwc+Bm6GwR6/4MY6xWXFnk8jDUKeA==
-  dependencies:
-    "@aws-sdk/querystring-parser" "3.186.0"
-    "@aws-sdk/types" "3.186.0"
-    tslib "^2.3.1"
-
-"@aws-sdk/util-arn-parser@3.186.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-arn-parser/-/util-arn-parser-3.186.0.tgz#fba484cc1e42bb4e1770391e73efb49e577758b6"
-  integrity sha512-hhTziyXeiNylZfZ6yXmaAhOUSmS3xQiofXRm1CcxMttHWmTOI6OrepKa2kOkNZsZe28vfuy4I7vbWPi2LcwSqA==
-  dependencies:
-    tslib "^2.3.1"
-
-<<<<<<<<< Temporary merge branch 1
-"@aws-sdk/util-base64-browser@3.186.0":
-  version "3.186.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-base64-browser/-/util-base64-browser-3.186.0.tgz#0310482752163fa819718ce9ea9250836b20346d"
-  integrity sha512-TpQL8opoFfzTwUDxKeon/vuc83kGXpYqjl6hR8WzmHoQgmFfdFlV+0KXZOohra1001OP3FhqvMqaYbO8p9vXVQ==
-=========
 "@aws-sdk/signature-v4-multi-region@3.163.0":
   version "3.163.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/signature-v4-multi-region/-/signature-v4-multi-region-3.163.0.tgz#e1d58d6dd40c4530d6ae83f8ebc0ad33a64f5d7c"
@@ -993,7 +899,6 @@
   version "3.55.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/util-arn-parser/-/util-arn-parser-3.55.0.tgz#6672eb2975e798a460bedfaf6b5618d4e4b262e1"
   integrity sha512-76KJxp4MRWufHYWys7DFl64znr5yeJ3AIQNAPCKKw1sP0hzO7p6Kx0PaJnw9x+CPSzOrT4NbuApL6/srYhKDGg==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     tslib "^2.3.1"
 
@@ -1210,17 +1115,31 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-<<<<<<<<< Temporary merge branch 1
-"@babel/core@^7.1.0", "@babel/core@^7.11.6", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.17.8", "@babel/core@^7.7.5":
-  version "7.19.3"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.19.3.tgz#2519f62a51458f43b682d61583c3810e7dcee64c"
-  integrity sha512-WneDJxdsjEvyKtXKsaBGbDeiyOjR5vYq4HcShxnIbG0qixpoHjI3MqeZM9NDvsojNCEBItQE4juOo/bU6e72gQ==
-=========
-"@babel/core@7.18.13", "@babel/core@^7.1.0", "@babel/core@^7.11.6", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.7.5":
+"@babel/core@7.18.13":
   version "7.18.13"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.18.13.tgz#9be8c44512751b05094a4d3ab05fc53a47ce00ac"
   integrity sha512-ZisbOvRRusFktksHSG6pjj1CSvkPkcZq/KHD45LAkVP/oiHJkNBZWfpvlLmX8OtHDG8IuzsFlVRWo08w7Qxn0A==
->>>>>>>>> Temporary merge branch 2
+  dependencies:
+    "@ampproject/remapping" "^2.1.0"
+    "@babel/code-frame" "^7.18.6"
+    "@babel/generator" "^7.18.13"
+    "@babel/helper-compilation-targets" "^7.18.9"
+    "@babel/helper-module-transforms" "^7.18.9"
+    "@babel/helpers" "^7.18.9"
+    "@babel/parser" "^7.18.13"
+    "@babel/template" "^7.18.10"
+    "@babel/traverse" "^7.18.13"
+    "@babel/types" "^7.18.13"
+    convert-source-map "^1.7.0"
+    debug "^4.1.0"
+    gensync "^1.0.0-beta.2"
+    json5 "^2.2.1"
+    semver "^6.3.0"
+
+"@babel/core@^7.1.0", "@babel/core@^7.11.6", "@babel/core@^7.12.10", "@babel/core@^7.12.3", "@babel/core@^7.7.5":
+  version "7.19.3"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.19.3.tgz#2519f62a51458f43b682d61583c3810e7dcee64c"
+  integrity sha512-WneDJxdsjEvyKtXKsaBGbDeiyOjR5vYq4HcShxnIbG0qixpoHjI3MqeZM9NDvsojNCEBItQE4juOo/bU6e72gQ==
   dependencies:
     "@ampproject/remapping" "^2.1.0"
     "@babel/code-frame" "^7.18.6"
@@ -3016,17 +2935,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-<<<<<<<<< Temporary merge branch 1
-"@prisma/client@^4.2.1":
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.4.0.tgz#45f59c172dd3621ecc92d7cf9bc765d85e6c7d56"
-  integrity sha512-ciKOP246x1xwr04G9ajHlJ4pkmtu9Q6esVyqVBO0QJihaKQIUvbPjClp17IsRJyxqNpFm4ScbOc/s9DUzKHINQ==
-=========
 "@prisma/client@4.3.1":
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.3.1.tgz#b9aad9bd9bd43e7f715ec1d763c8bd9273688800"
   integrity sha512-FA0/d1VMJNWqzU7WVWTNWJ+lGOLR9JUBnF73GdIPAEVo/6dWk4gHx0EmgeU+SMv4MZoxgOeTBJF2azhg7x0hMw==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@prisma/engines-version" "4.3.0-32.c875e43600dfe042452e0b868f7a48b817b9640b"
 
@@ -4070,17 +3982,24 @@
   dependencies:
     tslib "^2.4.0"
 
-<<<<<<<<< Temporary merge branch 1
-"@testing-library/dom@^8.11.1", "@testing-library/dom@^8.17.1", "@testing-library/dom@^8.5.0":
-  version "8.18.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.18.1.tgz#80f91be02bc171fe5a3a7003f88207be31ac2cf3"
-  integrity sha512-oEvsm2B/WtcHKE+IcEeeCqNU/ltFGaVyGbpcm4g/2ytuT49jrlH9x5qRKL/H3A6yfM4YAbSbC0ceT5+9CEXnLg==
-=========
-"@testing-library/dom@8.17.1", "@testing-library/dom@^8.11.1", "@testing-library/dom@^8.5.0":
+"@testing-library/dom@8.17.1":
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.17.1.tgz#2d7af4ff6dad8d837630fecd08835aee08320ad7"
   integrity sha512-KnH2MnJUzmFNPW6RIKfd+zf2Wue8mEKX0M3cpX6aKl5ZXrJM1/c/Pc8c2xDNYQCnJO48Sm5ITbMXgqTr3h4jxQ==
->>>>>>>>> Temporary merge branch 2
+  dependencies:
+    "@babel/code-frame" "^7.10.4"
+    "@babel/runtime" "^7.12.5"
+    "@types/aria-query" "^4.2.0"
+    aria-query "^5.0.0"
+    chalk "^4.1.0"
+    dom-accessibility-api "^0.5.9"
+    lz-string "^1.4.4"
+    pretty-format "^27.0.2"
+
+"@testing-library/dom@^8.11.1", "@testing-library/dom@^8.5.0":
+  version "8.19.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.19.0.tgz#bd3f83c217ebac16694329e413d9ad5fdcfd785f"
+  integrity sha512-6YWYPPpxG3e/xOo6HIWwB/58HukkwIVTOaZ0VwdMVjhRUX/01E4FtQbck9GazOOj7MXHc5RBzMrU86iBJHbI+A==
   dependencies:
     "@babel/code-frame" "^7.10.4"
     "@babel/runtime" "^7.12.5"
@@ -4114,17 +4033,10 @@
     "@babel/runtime" "^7.12.5"
     react-error-boundary "^3.1.0"
 
-<<<<<<<<< Temporary merge branch 1
-"@testing-library/react@^13.3.0":
-  version "13.4.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-13.4.0.tgz#6a31e3bf5951615593ad984e96b9e5e2d9380966"
-  integrity sha512-sXOGON+WNTh3MLE9rve97ftaZukN3oNf2KjDy7YTx6hcTO2uuLHuCGynMDhFwGw/jYf4OJ2Qk0i4i79qMNNkyw==
-=========
 "@testing-library/react@13.3.0":
   version "13.3.0"
   resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-13.3.0.tgz#bf298bfbc5589326bbcc8052b211f3bb097a97c5"
   integrity sha512-DB79aA426+deFgGSjnf5grczDPiL4taK3hFaa+M5q7q20Kcve9eQottOG5kZ74KEr55v0tU2CQormSSDK87zYQ==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@testing-library/dom" "^8.5.0"
@@ -4460,15 +4372,9 @@
   integrity sha512-+xvMrGl3eAygKcf5jm+4zA4tbfEgmKM9o6/glTmN0RFVdu2VuFXMYYtRmuv3zTGCgAYMnEZLde3B7BTp+Yxcig==
 
 "@types/node@^14.14.31":
-<<<<<<<<< Temporary merge branch 1
-  version "14.18.31"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.31.tgz#4b873dea3122e71af4f77e65ec5841397ff254d3"
-  integrity sha512-vQAnaReSQkEDa8uwAyQby8bYGKu84R/deEc6mg5T8fX6gzCn8QW6rziSgsti1fNvsrswKUKPnVTi7uoB+u62Mw==
-=========
-  version "14.18.26"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.26.tgz#239e19f8b4ea1a9eb710528061c1d733dc561996"
-  integrity sha512-0b+utRBSYj8L7XAp0d+DX7lI4cSmowNaaTkk6/1SKzbKkG+doLuPusB9EOvzLJ8ahJSk03bTLIL6cWaEd4dBKA==
->>>>>>>>> Temporary merge branch 2
+  version "14.18.32"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.32.tgz#8074f7106731f1a12ba993fe8bad86ee73905014"
+  integrity sha512-Y6S38pFr04yb13qqHf8uk1nHE3lXgQ30WZbv1mLliV9pt0NjvqdWttLcrOYLnXbOafknVYRHZGoMSpR9UwfYow==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -4814,11 +4720,10 @@
     "@typescript-eslint/types" "5.36.1"
     eslint-visitor-keys "^3.3.0"
 
-<<<<<<<<< Temporary merge branch 1
-"@typescript-eslint/visitor-keys@5.39.0":
-  version "5.39.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.39.0.tgz#8f41f7d241b47257b081ddba5d3ce80deaae61e2"
-  integrity sha512-yyE3RPwOG+XJBLrhvsxAidUgybJVQ/hG8BhiJo0k8JSAYfk/CshVcxf0HwP4Jt7WZZ6vLmxdo1p6EyN3tzFTkg==
+"@typescript-eslint/visitor-keys@5.40.0":
+  version "5.40.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.40.0.tgz#dd2d38097f68e0d2e1e06cb9f73c0173aca54b68"
+  integrity sha512-ijJ+6yig+x9XplEpG2K6FUdJeQGGj/15U3S56W9IqXKJqleuD7zJ2AX/miLezwxpd7ZxDAqO87zWufKg+RPZyQ==
   dependencies:
     "@typescript-eslint/types" "5.40.0"
     eslint-visitor-keys "^3.3.0"
@@ -4909,66 +4814,6 @@
   resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-18.1.1.tgz#7441e5e46f62e16e71b734aa94b953c9f877a422"
   integrity sha512-xagSl2BodmqI0qGIHy3BAaas8zI2YUyl0BNngb8zEAzVXQxn6Wk99QnJLu33Ac98O5nBnSLqdnTzmjUA+hJA7Q==
   dependencies:
-=========
-"@udecode/plate-alignment@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-alignment/-/plate-alignment-18.1.1.tgz#328eda1a700a1bd61cd3c4cd667a91e3bfbeed34"
-  integrity sha512-Ba7NgJ9nj2xCbb3nFkVGlsLGKnLBESatoyGolpWkt9YEgGSfrUCa51PqbnbdCyrhgrsAJleChzfiJy+GK+wOBw==
-  dependencies:
-    "@udecode/plate-core" "18.1.1"
-
-"@udecode/plate-autoformat@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-autoformat/-/plate-autoformat-18.1.1.tgz#b91697948ebd9b510a322ec9a4799241fb0352a1"
-  integrity sha512-Tv2354/ciBbgaJKjQJhm+ZGDRc5EsX8M8CDqbO7D0q3hEhhEFCeoxkydGhKR9JLKEf33wc/5DZutxxLgxQvQjA==
-  dependencies:
-    "@udecode/plate-core" "18.1.1"
-
-"@udecode/plate-basic-elements@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-elements/-/plate-basic-elements-18.1.1.tgz#6cc5bffee00874171506aabb298f5e620dc8b58f"
-  integrity sha512-nk0zmaRwKcE30p0B+hRW4NA/AawB2pEZ7ptmDn+L0tcOFhIEyqTbk/CVVwOjop2BGJ8alutsbMWr6LZIiTcDfQ==
-  dependencies:
-    "@udecode/plate-block-quote" "18.1.1"
-    "@udecode/plate-code-block" "18.1.1"
-    "@udecode/plate-core" "18.1.1"
-    "@udecode/plate-heading" "18.1.1"
-    "@udecode/plate-paragraph" "18.1.1"
-
-"@udecode/plate-basic-marks@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-marks/-/plate-basic-marks-18.1.1.tgz#231b3513ac3cf638da93d7424ab28425e5706a11"
-  integrity sha512-CNSsnzBBf0jjWvJuNa8148D+9b91YDkDnwSrKDeiFw9qNTazLjaqbgG4hkIskVtenhdsi6SliVY0G8D/PqOiSw==
-  dependencies:
-    "@udecode/plate-core" "18.1.1"
-
-"@udecode/plate-block-quote@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-block-quote/-/plate-block-quote-18.1.1.tgz#014d4ac500337350e24a15cb0d0737be398007e6"
-  integrity sha512-jX/fOnrr6u8rj4M4Oa1ZbGXeE6PgD19WhneSK9Sk98iRgBg9OCLL6UgOHbySOVR4qUH8nMOifDB7hz44hoLsVw==
-  dependencies:
-    "@udecode/plate-core" "18.1.1"
-
-"@udecode/plate-break@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-break/-/plate-break-18.1.1.tgz#05a23659d5ac65d1dcc48a40b167b60682970b03"
-  integrity sha512-qIbH4hcJDRa9mG5aPeRtjNAZXph1Rog8M46RC8L1CAFbzZAV/h4cBQWbkQGDIOowBxpxooYn9VkxY87ndun+cQ==
-  dependencies:
-    "@udecode/plate-core" "18.1.1"
-
-"@udecode/plate-button@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-button/-/plate-button-18.1.1.tgz#53c551318a9932a3ef55822d13f1bbc49ccf8102"
-  integrity sha512-OBt6Md8JPnxwu3SGhIOJMVNXE+JMSNgTJ8r6drf1sHTUPDuvgRhpEauqVKdELNVAObngzRQd/rt6qrG333G+Vg==
-  dependencies:
-    "@udecode/plate-core" "18.1.1"
-
-"@udecode/plate-code-block@18.1.1":
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-code-block/-/plate-code-block-18.1.1.tgz#7441e5e46f62e16e71b734aa94b953c9f877a422"
-  integrity sha512-xagSl2BodmqI0qGIHy3BAaas8zI2YUyl0BNngb8zEAzVXQxn6Wk99QnJLu33Ac98O5nBnSLqdnTzmjUA+hJA7Q==
-  dependencies:
->>>>>>>>> Temporary merge branch 2
     "@udecode/plate-core" "18.1.1"
     prismjs "^1.25.0"
 
@@ -5025,17 +4870,10 @@
   dependencies:
     "@udecode/plate-core" "18.1.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@udecode/plate-headless@18.1.3":
-  version "18.1.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.1.3.tgz#3410c58a873c2cfc97b4d46ebfa3e492a8869214"
-  integrity sha512-NvieSP0a4sQmv7LpbDYoTaEhwG6TvYNv8Qzr/PLCNytFCWFCnFr9S0andPPv+AY1iDa2O+8plI3/d9YrS3AgLA==
-=========
 "@udecode/plate-headless@18.1.2":
   version "18.1.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-headless/-/plate-headless-18.1.2.tgz#0a09a3ae8141aad41b9c6ab5b32f80891f5aa7ca"
   integrity sha512-oeLvptlm7hWncEGKCMA7UoLI07Pp7CVMINoQpk4+kiMHeKV/CmqiFZJvjLDzP0SmgeFzfRM5vOnWjK4oRCjhWw==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@udecode/plate-alignment" "18.1.1"
     "@udecode/plate-autoformat" "18.1.1"
@@ -5054,11 +4892,7 @@
     "@udecode/plate-highlight" "18.1.1"
     "@udecode/plate-horizontal-rule" "18.1.1"
     "@udecode/plate-indent" "18.1.1"
-<<<<<<<<< Temporary merge branch 1
-    "@udecode/plate-indent-list" "18.1.3"
-=========
     "@udecode/plate-indent-list" "18.1.2"
->>>>>>>>> Temporary merge branch 2
     "@udecode/plate-kbd" "18.1.1"
     "@udecode/plate-line-height" "18.1.1"
     "@udecode/plate-link" "18.1.1"
@@ -5072,11 +4906,7 @@
     "@udecode/plate-select" "18.1.1"
     "@udecode/plate-selection" "18.1.1"
     "@udecode/plate-serializer-csv" "18.1.2"
-<<<<<<<<< Temporary merge branch 1
-    "@udecode/plate-serializer-docx" "18.1.3"
-=========
     "@udecode/plate-serializer-docx" "18.1.2"
->>>>>>>>> Temporary merge branch 2
     "@udecode/plate-serializer-html" "18.1.1"
     "@udecode/plate-serializer-md" "18.1.1"
     "@udecode/plate-table" "18.1.2"
@@ -5096,17 +4926,10 @@
   dependencies:
     "@udecode/plate-core" "18.1.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@udecode/plate-indent-list@18.1.3":
-  version "18.1.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-indent-list/-/plate-indent-list-18.1.3.tgz#1ac52f0fd86f289ed3bda12cb81b73451e75e5ec"
-  integrity sha512-2LX3VRwVL1DRD8G/UYtWJCb2gTrbndGvrCNkLBvwkREAJ7ndHtg3Qdko9eaXg/DM5WMBG4sxg0sLY0btyWCobw==
-=========
 "@udecode/plate-indent-list@18.1.2":
   version "18.1.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-indent-list/-/plate-indent-list-18.1.2.tgz#f0f099e5b0c1f72a2d7cb61166628637d4255039"
   integrity sha512-Gxy8wwoORSeMBTEaoPASM59PJ1x5meizrH7W8xnFZN2k6jSY8UJQFkR/dj0z4VqgZp/eCfMIaK5MVYHa7XnQOw==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@udecode/plate-core" "18.1.1"
     "@udecode/plate-indent" "18.1.1"
@@ -5221,26 +5044,15 @@
     "@udecode/plate-table" "18.1.2"
     papaparse "^5.3.2"
 
-<<<<<<<<< Temporary merge branch 1
-"@udecode/plate-serializer-docx@18.1.3":
-  version "18.1.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-18.1.3.tgz#befd65f797aaefa25e2d9efd6f5c9a9447007a89"
-  integrity sha512-17Xss3aywXCyI5URzMxTwa9G4fwbiLWQ/z+NmveomuVbaWdj2v4cvdLADi0uN3E+vj5Hv36vdInd+oatnjmz2Q==
-=========
 "@udecode/plate-serializer-docx@18.1.2":
   version "18.1.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-serializer-docx/-/plate-serializer-docx-18.1.2.tgz#01ec99575c573905e1f262f58e3b46b6a06bf4db"
   integrity sha512-pFkUYXxcpFmNHB/Lufa9LM+WTDc08hLNGOdSxdpaqbPKicBfGHjcfZ58wCTSuJ9UsX3hgy7Gx+Lf5fRSpyWNmA==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@udecode/plate-core" "18.1.1"
     "@udecode/plate-heading" "18.1.1"
     "@udecode/plate-indent" "18.1.1"
-<<<<<<<<< Temporary merge branch 1
-    "@udecode/plate-indent-list" "18.1.3"
-=========
     "@udecode/plate-indent-list" "18.1.2"
->>>>>>>>> Temporary merge branch 2
     "@udecode/plate-media" "18.1.1"
     "@udecode/plate-paragraph" "18.1.1"
     "@udecode/plate-table" "18.1.2"
@@ -5473,21 +5285,12 @@
     "@udecode/plate-ui-button" "18.1.1"
     react-use "^17.3.2"
 
-<<<<<<<<< Temporary merge branch 1
-"@udecode/plate-ui@18.1.3":
-  version "18.1.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.1.3.tgz#9c1576293738c2facf28f6d19ebfab042a8f2806"
-  integrity sha512-jI7Ujb/jYxwTRBLWXvWAI+IH2UZ9H+wDudsiWNAUlHAe2sDYpRDIvU1Ww40xwwO+3b5aj4iFLMlODzc1808ePA==
-  dependencies:
-    "@udecode/plate-headless" "18.1.3"
-=========
 "@udecode/plate-ui@18.1.2":
   version "18.1.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-ui/-/plate-ui-18.1.2.tgz#4ecc45713927cb7de0b4e4b449df4635e6ad9d9f"
   integrity sha512-ga+emnaowknCyo/fXBZpjnJO3t9jVqfl0M52UiLDNaXSzmhk/eibmYEV++Lgtyt9i02RpzmZ6tLhJQluxM80Hg==
   dependencies:
     "@udecode/plate-headless" "18.1.2"
->>>>>>>>> Temporary merge branch 2
     "@udecode/plate-styled-components" "18.1.1"
     "@udecode/plate-ui-alignment" "18.1.1"
     "@udecode/plate-ui-block-quote" "18.1.1"
@@ -5507,15 +5310,6 @@
     "@udecode/plate-ui-table" "18.1.2"
     "@udecode/plate-ui-toolbar" "18.1.1"
 
-<<<<<<<<< Temporary merge branch 1
-"@udecode/plate@^18.1.0":
-  version "18.1.3"
-  resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.1.3.tgz#88b49f2d75f1b32de168aaa861ceb54651511edd"
-  integrity sha512-i/Ac9pl/JD2+nBVPS/e6btr86fMu+R5vo20CGgKVs6LgIbXMStfvzi9CbrDnnC0m4ANNMpKOWTBI5qJO0zpZLA==
-  dependencies:
-    "@udecode/plate-headless" "18.1.3"
-    "@udecode/plate-ui" "18.1.3"
-=========
 "@udecode/plate@18.1.2":
   version "18.1.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate/-/plate-18.1.2.tgz#4479b17bc3f176692d624ab7a5c3662cfcb0c56a"
@@ -5523,7 +5317,6 @@
   dependencies:
     "@udecode/plate-headless" "18.1.2"
     "@udecode/plate-ui" "18.1.2"
->>>>>>>>> Temporary merge branch 2
 
 "@udecode/zustood@^1.1.1":
   version "1.1.3"
@@ -11115,17 +10908,10 @@ jest-each@^28.1.3:
     jest-util "^28.1.3"
     pretty-format "^28.1.3"
 
-<<<<<<<<< Temporary merge branch 1
-jest-environment-jsdom@^29.0.1:
-  version "29.1.2"
-  resolved "https://registry.yarnpkg.com/jest-environment-jsdom/-/jest-environment-jsdom-29.1.2.tgz#59c5d7c53c999e1518cc2f1cd4ee19ab4b68eb68"
-  integrity sha512-D+XNIKia5+uDjSMwL/G1l6N9MCb7LymKI8FpcLo7kkISjc/Sa9w+dXXEa7u1Wijo3f8sVLqfxdGqYtRhmca+Xw==
-=========
 jest-environment-jsdom@29.0.1:
   version "29.0.1"
   resolved "https://registry.yarnpkg.com/jest-environment-jsdom/-/jest-environment-jsdom-29.0.1.tgz#45bb0ef6506cafcff0809c961e841d2d4c9820cf"
   integrity sha512-rMF501kfui+bw4AmwowLA2bNaYb633A3ejFMN5pVU0AeOqLv2NbMAY5XzzlMr/+lM1itEf+3ZdCr9dGGrUfoxg==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@jest/environment" "^29.0.1"
     "@jest/fake-timers" "^29.0.1"
@@ -12614,17 +12400,10 @@ nested-error-stacks@^2.0.0, nested-error-stacks@^2.1.0:
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.1.1.tgz#26c8a3cee6cc05fbcf1e333cd2fc3e003326c0b5"
   integrity sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==
 
-<<<<<<<<< Temporary merge branch 1
-next-auth@^4.10.3:
-  version "4.12.3"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.12.3.tgz#a4392c27d57c246128526a17b38971638f63b5a2"
-  integrity sha512-kfJjYOH2or/y+pEBkeA6O2MxIXOKXNiOKLKhrQHsaRqMDttEQX0yEK3xXVTB1yB7xbMLGcMvsIS3d23BC/K8/A==
-=========
 next-auth@4.10.3:
   version "4.10.3"
   resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.10.3.tgz#0a952dd5004fd2ac2ba414c990922cf9b33951a3"
   integrity sha512-7zc4aXYc/EEln7Pkcsn21V1IevaTZsMLJwapfbnKA4+JY0+jFzWbt5p/ljugesGIrN4VOZhpZIw50EaFZyghJQ==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@panva/hkdf" "^1.0.1"
@@ -12636,17 +12415,10 @@ next-auth@4.10.3:
     preact-render-to-string "^5.1.19"
     uuid "^8.3.2"
 
-<<<<<<<<< Temporary merge branch 1
-next-i18next@^12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-12.1.0.tgz#70926fbe966bc4750d2f68573307bfe36eadba46"
-  integrity sha512-rhos/PVULmZPdC0jpec2MDBQMXdGZ3+Mbh/tZfrDtjgnVN3ucdq7k8BlwsJNww6FnqC8AC31n6dSYuqVzYsGsw==
-=========
 next-i18next@11.3.0:
   version "11.3.0"
   resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-11.3.0.tgz#bfce51d8df07fb5cd61097423eeb7d744e09ae25"
   integrity sha512-xl0oIRtiVrk9ZaWBRUbNk/prva4Htdu59o9rFWzd9ax/KemaDVuTTuBZTQMkmXohUQk/MJ7w1rV/mICL6TzyGw==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@types/hoist-non-react-statics" "^3.3.1"
@@ -12656,17 +12428,10 @@ next-i18next@11.3.0:
     i18next-fs-backend "^1.1.4"
     react-i18next "^11.18.0"
 
-<<<<<<<<< Temporary merge branch 1
-next@^12.3.1:
-  version "12.3.1"
-  resolved "https://registry.yarnpkg.com/next/-/next-12.3.1.tgz#127b825ad2207faf869b33393ec8c75fe61e50f1"
-  integrity sha512-l7bvmSeIwX5lp07WtIiP9u2ytZMv7jIeB8iacR28PuUEFG5j0HGAPnMqyG5kbZNBG2H7tRsrQ4HCjuMOPnANZw==
-=========
 next@12.2.5:
   version "12.2.5"
   resolved "https://registry.yarnpkg.com/next/-/next-12.2.5.tgz#14fb5975e8841fad09553b8ef41fe1393602b717"
   integrity sha512-tBdjqX5XC/oFs/6gxrZhjmiq90YWizUYU6qOWAfat7zJwrwapJ+BYgX2PmiacunXMaRpeVT4vz5MSPSLgNkrpA==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@next/env" "12.2.5"
     "@swc/helpers" "0.4.3"
@@ -14090,17 +13855,10 @@ pretty-hrtime@^1.0.3:
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
   integrity sha512-66hKPCr+72mlfiSjlEB1+45IjXSqvVAIy6mocupoww4tBFE9R9IhwwUGoI4G++Tc9Aq+2rxOt0RFU6gPcrte0A==
 
-<<<<<<<<< Temporary merge branch 1
-prisma@^4.3.1:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.4.0.tgz#0c53324bf6a29474636b3e1964e0d72e0277bf8f"
-  integrity sha512-l/QKLmLcKJQFuc+X02LyICo0NWTUVaNNZ00jKJBqwDyhwMAhboD1FWwYV50rkH4Wls0RviAJSFzkC2ZrfawpfA==
-=========
 prisma@4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.3.1.tgz#9e4c24e49710392be40ee75fb3d9341d7487881e"
   integrity sha512-90xo06wtqil76Xsi3mNpc4Js3SdDRR5g4qb9h+4VWY4Y8iImJY6xc3PX+C9xxTSt1lr0Q89A0MLkJjd8ax6KiQ==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@prisma/engines" "4.3.1"
 
@@ -15135,17 +14893,10 @@ sass-loader@12.6.0:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-<<<<<<<<< Temporary merge branch 1
-sass@^1.49.11:
-  version "1.55.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.55.0.tgz#0c4d3c293cfe8f8a2e8d3b666e1cf1bff8065d1c"
-  integrity sha512-Pk+PMy7OGLs9WaxZGJMn7S96dvlyVBwwtToX895WmCpAOr5YiJYEUJfiJidMuKb613z2xNWcXCHEuOvjZbqC6A==
-=========
 sass@1.54.8:
   version "1.54.8"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.8.tgz#4adef0dd86ea2b1e4074f551eeda4fc5f812a996"
   integrity sha512-ib4JhLRRgbg6QVy6bsv5uJxnJMTS2soVcCp9Y88Extyy13A8vV0G1fAwujOzmNkFQbR3LvedudAMbtuNRPbQww==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -15439,7 +15190,6 @@ slate-hyperscript@0.77.0:
   dependencies:
     is-plain-object "^5.0.0"
 
-<<<<<<<<< Temporary merge branch 1
 slate-react@*:
   version "0.83.2"
   resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.83.2.tgz#7099db1607b79c95cc2a41e2df1e04982b7e26a5"
@@ -15454,16 +15204,10 @@ slate-react@*:
     scroll-into-view-if-needed "^2.2.20"
     tiny-invariant "1.0.6"
 
-slate-react@^0.82.1:
-  version "0.82.2"
-  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.82.2.tgz#4344ef392e3e51e5cd7c3272d3e5d61483c41823"
-  integrity sha512-lNmSqqNOKQJG1i3Wx4MkggWr6dLhQ43n4exPf5NLmKVBHPBuQSRNaWhAAKm6HOEC36Q6xBfkVONIQWi3GSyIEQ==
-=========
-slate-react@*, slate-react@0.82.1:
+slate-react@0.82.1:
   version "0.82.1"
   resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.82.1.tgz#f70bfa370e8182af7055a45afc40b6a17cd24856"
   integrity sha512-FHYai6LWAN2CbxNH7zNxbBOL8O3+EdPiviVdckTZBOh92+mR69jgvH3v26pdYczflIOXl1jisHFMhyb7vCC0qA==
->>>>>>>>> Temporary merge branch 2
   dependencies:
     "@types/is-hotkey" "^0.1.1"
     "@types/lodash" "^4.14.149"
