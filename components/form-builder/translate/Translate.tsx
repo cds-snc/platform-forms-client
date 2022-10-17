@@ -3,10 +3,10 @@ import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
-import { MultipleOptions } from "./MultipleOptions";
-import { TextField } from "./TextField";
-import { TextArea } from "./TextArea";
 import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
+import { Title } from "./Title";
+import { Description } from "./Description";
+import { Options } from "./Options";
 
 const SwitchLanguageButton = styled.button`
   color: #fff;
@@ -212,19 +212,30 @@ export const Translate = () => {
                 )}
 
                 {["radio", "checkbox", "dropdown"].includes(element.type) && (
-                  <MultipleOptions
-                    languagePriority={languagePriority}
-                    element={element}
-                    index={index}
-                  />
+                  <>
+                    <Title languagePriority={languagePriority} element={element} index={index} />
+                    {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+                      <Description
+                        languagePriority={languagePriority}
+                        element={element}
+                        index={index}
+                      />
+                    )}
+                    <Options languagePriority={languagePriority} element={element} index={index} />
+                  </>
                 )}
 
-                {element.type === "textField" && (
-                  <TextField languagePriority={languagePriority} element={element} index={index} />
-                )}
-
-                {element.type === "textArea" && (
-                  <TextArea languagePriority={languagePriority} element={element} index={index} />
+                {["textField", "textArea"].includes(element.type) && (
+                  <>
+                    <Title languagePriority={languagePriority} element={element} index={index} />
+                    {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+                      <Description
+                        languagePriority={languagePriority}
+                        element={element}
+                        index={index}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             );

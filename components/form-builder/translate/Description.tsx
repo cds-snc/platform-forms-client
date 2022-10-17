@@ -20,7 +20,7 @@ export const Description = ({
       <div className="text-entry">
         <div>
           <span>{t(element.type)}</span>
-          <span>Description</span>
+          <span>{t("Description")}</span>
           <textarea
             value={
               languagePriority === "en"
