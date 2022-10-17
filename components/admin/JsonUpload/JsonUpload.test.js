@@ -19,15 +19,14 @@ describe("JSON Upload Component", () => {
   });
   it("renders existing form JSON if passed in", async () => {
     const form = {
-      formConfig: formConfig,
+      id: "test",
+      ...formConfig,
     };
     render(<JSONUpload form={form}></JSONUpload>);
     expect(screen.queryByTestId("jsonInput").value).toBe(JSON.stringify(formConfig, null, 2));
   });
   it("Shows an error message if unparseable JSON is entered", async () => {
-    const form = {
-      formConfig: undefined,
-    };
+    const form = {};
     render(<JSONUpload form={form}></JSONUpload>);
     fireEvent.click(screen.queryByTestId("upload"));
     expect(mockedAxios.mock.calls.length).toBe(0);
@@ -35,7 +34,8 @@ describe("JSON Upload Component", () => {
   });
   it("Shows a submit status message if successfully submitted to API", async () => {
     const form = {
-      formConfig: formConfig,
+      id: "test",
+      ...formConfig,
     };
     mockedAxios.mockResolvedValue();
 
@@ -43,7 +43,7 @@ describe("JSON Upload Component", () => {
     fireEvent.click(screen.queryByTestId("upload"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "POST" })
+      expect.objectContaining({ url: "/api/templates", method: "PUT" })
     );
     expect(await screen.findByTestId("submitStatus")).toBeInTheDocument();
   });

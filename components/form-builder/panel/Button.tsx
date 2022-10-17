@@ -44,15 +44,22 @@ export const Button = ({
   onClick,
   className,
   disabled = false,
+  "aria-label": ariaLabel = undefined,
 }: {
   children?: JSX.Element | string;
   icon?: ReactElement;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
   className?: string;
   disabled?: boolean;
+  "aria-label"?: string;
 }) => {
   return (
-    <StyledButton onClick={onClick} className={className} disabled={disabled}>
+    <StyledButton
+      onClick={onClick}
+      className={className}
+      disabled={disabled}
+      aria-label={ariaLabel}
+    >
       {icon}
       {children}
     </StyledButton>

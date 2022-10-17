@@ -10,8 +10,8 @@ export const Preview = () => {
   const stringified = getSchema();
 
   const formRecord = {
-    formID: "test0form00000id000asdf11",
-    formConfig: JSON.parse(stringified),
+    id: "test0form00000id000asdf11",
+    ...JSON.parse(stringified),
   };
   const router = useRouter();
   const { t, i18n } = useTranslation();

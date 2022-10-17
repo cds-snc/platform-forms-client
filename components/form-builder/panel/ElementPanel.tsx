@@ -81,13 +81,15 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   if (!type) {
     return elementOptions[2];
   } else if (type === "textField") {
+    const validationType = elements[item.index].properties.validation.type;
     /**
      * Email, phone, and date fields are specialized text field types.
      * That is to say, their "type" is "textField" but they have specalized validation "type"s.
      * So if we have a "textField", we want to first check properties.validation.type to see if
      * it is a true Short Answer, or one of the other types.
+     * The one exception to this is validationType === "text" types, for which we want to return "textField"
      */
-    type = elements[item.index].properties.validation.type || type;
+    type = validationType && validationType !== "text" ? validationType : type;
   }
 
   const selected = elementOptions.filter((item) => item.id === type);
@@ -264,6 +266,8 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     [setSelectedItem]
   );
 
+  const hasDescription = item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
   return (
     <>
       <Row isRichText={isRichText}>
@@ -275,9 +279,11 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               <TitleInput
                 ref={input}
                 type="text"
+                id={`item${item.index}`}
                 name={`item${item.index}`}
                 placeholder={t("Question")}
                 value={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
+                aria-describedby={hasDescription ? `item${item.index}-describedby` : undefined}
                 onChange={(e) => {
                   updateField(
                     `form.elements[${item.index}].properties.${localizeField(
@@ -289,12 +295,11 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
               />
             </>
           )}
-          {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)] &&
-            item.type !== "richText" && (
-              <DivDisabled aria-label={t("Description")}>
-                {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
-              </DivDisabled>
-            )}
+          {hasDescription && item.type !== "richText" && (
+            <DivDisabled id={`item${item.index}-describedby`}>
+              {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+            </DivDisabled>
+          )}
           <SelectedElement item={item} selected={selectedItem} />
           {item.properties.validation.maxLength && (
             <DivDisabled>
@@ -580,6 +585,7 @@ const ElementPanelDiv = styled.div`
 `;
 
 export const ElementPanel = () => {
+  const { t } = useTranslation("form-builder");
   const { form, localizeField } = useTemplateStore();
 
   const introTextPlaceholder =
@@ -598,6 +604,7 @@ export const ElementPanel = () => {
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
+        aria-label={t("richTextIntroTitle")}
       />
       {form.elements.map((element, index) => {
         const item = { ...element, index };
@@ -610,16 +617,18 @@ export const ElementPanel = () => {
             addElement={false}
             initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
+            aria-label={t("richTextConfirmationTitle")}
           >
-            <h3>Confirmation page and message</h3>
+            <h2>{t("richTextConfirmationTitle")}</h2>
           </RichTextLocked>
           <RichTextLocked
             id="policyPage"
             addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
+            aria-label={t("richTextPrivacyTitle")}
           >
-            <h3>Privacy statement</h3>
+            <h2>{t("richTextPrivacyTitle")}</h2>
           </RichTextLocked>
         </>
       )}

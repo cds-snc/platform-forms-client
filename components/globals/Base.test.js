@@ -9,17 +9,15 @@ describe("Generate the Base structure of a page", () => {
 
   test("Alpha banner should be displayed if form property is set to true", () => {
     const formRecordTest = {
-      formConfig: {
-        form: {
-          id: 1,
-          version: 1,
-          titleEn: "Test Form",
-          titleFr: "Formulaire de test",
-          layout: [1, 2],
-          elements: [],
-        },
-        displayAlphaBanner: true,
+      form: {
+        id: 1,
+        version: 1,
+        titleEn: "Test Form",
+        titleFr: "Formulaire de test",
+        layout: [1, 2],
+        elements: [],
       },
+      displayAlphaBanner: true,
     };
 
     render(
@@ -35,17 +33,15 @@ describe("Generate the Base structure of a page", () => {
 
   test("Alpha banner should be hidden if form property is set to false", () => {
     const formRecordTest = {
-      formConfig: {
-        form: {
-          id: 1,
-          version: 1,
-          titleEn: "Test Form",
-          titleFr: "Formulaire de test",
-          layout: [1, 2],
-          elements: [],
-        },
-        displayAlphaBanner: false,
+      form: {
+        id: 1,
+        version: 1,
+        titleEn: "Test Form",
+        titleFr: "Formulaire de test",
+        layout: [1, 2],
+        elements: [],
       },
+      displayAlphaBanner: false,
     };
     render(
       <SessionProvider session={null}>

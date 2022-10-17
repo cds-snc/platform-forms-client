@@ -6,7 +6,7 @@ import {
   createTemplate,
   updateTemplate,
 } from "@lib/templates";
-import { FormConfiguration, FormRecord } from "@lib/types/form-types";
+import { FormRecord } from "@lib/types/form-types";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
@@ -19,6 +19,7 @@ import {
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
 import { Session } from "next-auth";
+import { BetterOmit } from "@lib/types";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -36,7 +37,7 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
           session.user.id,
           AdminLogAction.Create,
           AdminLogEvent.UploadForm,
-          `Form id: ${(response as FormRecord).formID} has been uploaded`
+          `Form id: ${(response as FormRecord).id} has been uploaded`
         );
       }
       if (req.method === "PUT") {
@@ -82,7 +83,7 @@ const templateCRUD = async ({
   method: string;
   user: Session["user"];
   formID?: string;
-  formConfig?: FormConfiguration;
+  formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
 }) => {
   switch (method) {
     case "GET":

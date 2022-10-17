@@ -31,3 +31,5 @@ export type {
 export type { BearerTokenPayload, TemporaryTokenPayload, BearerResponse } from "./retrieval-types";
 
 export type { FormOwner } from "./user-types";
+
+export type BetterOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };
