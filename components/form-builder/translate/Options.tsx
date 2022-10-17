@@ -5,15 +5,15 @@ import { ElementType } from "../types";
 
 export const Options = ({
   element,
-  index,
-  languagePriority,
+  translationLanguagePriority,
 }: {
   element: ElementType;
   index: number;
-  languagePriority: string;
+  translationLanguagePriority: string;
 }) => {
   const { updateField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
+  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 
   return (
     <>
@@ -26,12 +26,10 @@ export const Options = ({
                 <span>Option text</span>
                 <input
                   type="text"
-                  value={languagePriority === "en" ? choice.en : choice.fr}
+                  value={choice[translationLanguagePriority]}
                   onChange={(e) => {
                     updateField(
-                      languagePriority === "en"
-                        ? `form.elements[${index}].properties.choices[${choiceIndex}].en`
-                        : `form.elements[${index}].properties.choices[${choiceIndex}].fr`,
+                      `element.properties.choices[${choiceIndex}].${translationLanguagePriority}`,
                       e.target.value
                     );
                   }}
@@ -40,12 +38,10 @@ export const Options = ({
               <div>
                 <input
                   type="text"
-                  value={languagePriority === "en" ? choice.fr : choice.en}
+                  value={choice[translationLanguagePriorityAlt]}
                   onChange={(e) => {
                     updateField(
-                      languagePriority === "en"
-                        ? `form.elements[${index}].properties.choices[${choiceIndex}].fr`
-                        : `form.elements[${index}].properties.choices[${choiceIndex}].en`,
+                      `element.properties.choices[${choiceIndex}].${translationLanguagePriorityAlt}`,
                       e.target.value
                     );
                   }}

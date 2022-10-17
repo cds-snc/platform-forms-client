@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
@@ -7,7 +7,7 @@ import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
-import { LocalizedFormProperties } from "../types";
+import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
 
 const SwitchLanguageButton = styled.button`
@@ -81,14 +81,19 @@ const SectionDiv = styled.div`
 `;
 
 export const Translate = () => {
-  const { updateField, form, toggleLang, lang, localizeField } = useTemplateStore();
-  const { t, i18n } = useTranslation("form-builder");
-  const [languagePriority, setLanguagePriority] = useState(i18n.language);
+  const {
+    updateField,
+    form,
+    toggleTranslationLanguagePriority,
+    translationLanguagePriority,
+    localizeField,
+  } = useTemplateStore();
+  const { t } = useTranslation("form-builder");
+
+  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 
   const switchLanguage = () => {
-    toggleLang();
-    const newLanguage = languagePriority === "en" ? "fr" : "en";
-    setLanguagePriority(newLanguage);
+    toggleTranslationLanguagePriority();
   };
 
   let questionsIndex = 1;
@@ -102,15 +107,12 @@ export const Translate = () => {
         </p>
         <br />
         <div>
-          {languagePriority === "en" ? "English" : "French"}
-          <p>Via Store</p>
-          {lang === "en" ? "English" : "French"}
-          <hr />
+          {translationLanguagePriority === "en" ? "English" : "French"}
           <SwitchLanguageButton onClick={switchLanguage}>
             <span>{t("Switch")}</span>
             <SwapHoriz />
           </SwitchLanguageButton>
-          {languagePriority === "en" ? "French" : "English"}
+          {translationLanguagePriority === "en" ? "French" : "English"}
         </div>
 
         <SectionDiv>
@@ -127,10 +129,15 @@ export const Translate = () => {
               <span>{t("Title")}</span>
               <input
                 type="text"
-                value={form[localizeField(LocalizedFormProperties.TITLE)]}
+                value={
+                  form[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]
+                }
                 onChange={(e) => {
                   updateField(
-                    `form.${localizeField(LocalizedFormProperties.TITLE)}`,
+                    `form.${localizeField(
+                      LocalizedElementProperties.TITLE,
+                      translationLanguagePriority
+                    )}`,
                     e.target.value
                   );
                 }}
@@ -139,10 +146,17 @@ export const Translate = () => {
             <div>
               <input
                 type="text"
-                value={languagePriority === "en" ? form.titleFr : form.titleEn}
+                value={
+                  form[
+                    localizeField(LocalizedElementProperties.TITLE, translationLanguagePriorityAlt)
+                  ]
+                }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en" ? "form.titleFr" : "form.titleEn",
+                    `form.${localizeField(
+                      LocalizedElementProperties.TITLE,
+                      translationLanguagePriorityAlt
+                    )}`,
                     e.target.value
                   );
                 }}
@@ -154,40 +168,46 @@ export const Translate = () => {
             <div>
               <span>{t("Form introduction")}</span>
               <span>{t("Description")}</span>
-              <input
-                type="text"
+              <textarea
                 value={
-                  languagePriority === "en"
-                    ? form.introduction.descriptionEn
-                    : form.introduction.descriptionFr
+                  form.introduction[
+                    localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )
+                  ]
                 }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en"
-                      ? "form.introduction.descriptionEn"
-                      : "form.introduction.descriptionFr",
+                    `form.introduction.${localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )}`,
                     e.target.value
                   );
                 }}
-              />
+              ></textarea>
             </div>
             <div>
-              <input
-                type="text"
+              <textarea
                 value={
-                  languagePriority === "en"
-                    ? form.introduction.descriptionFr
-                    : form.introduction.descriptionEn
+                  form.introduction[
+                    localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriorityAlt
+                    )
+                  ]
                 }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en"
-                      ? "form.introduction.descriptionFr"
-                      : "form.introduction.descriptionEn",
+                    `form.introduction.${localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriorityAlt
+                    )}`,
                     e.target.value
                   );
                 }}
-              />
+              ></textarea>
             </div>
           </div>
         </SectionDiv>
@@ -205,29 +225,45 @@ export const Translate = () => {
                 </div>
 
                 {element.type === "richText" && (
-                  <RichText languagePriority={languagePriority} element={element} index={index} />
+                  <RichText
+                    translationLanguagePriority={translationLanguagePriority}
+                    element={element}
+                    index={index}
+                  />
                 )}
 
                 {["radio", "checkbox", "dropdown"].includes(element.type) && (
                   <>
-                    <Title languagePriority={languagePriority} element={element} index={index} />
+                    <Title
+                      translationLanguagePriority={translationLanguagePriority}
+                      element={element}
+                      index={index}
+                    />
                     {(element.properties.descriptionEn || element.properties.descriptionFr) && (
                       <Description
-                        languagePriority={languagePriority}
+                        translationLanguagePriority={translationLanguagePriority}
                         element={element}
                         index={index}
                       />
                     )}
-                    <Options languagePriority={languagePriority} element={element} index={index} />
+                    <Options
+                      translationLanguagePriority={translationLanguagePriority}
+                      element={element}
+                      index={index}
+                    />
                   </>
                 )}
 
                 {["textField", "textArea"].includes(element.type) && (
                   <>
-                    <Title languagePriority={languagePriority} element={element} index={index} />
+                    <Title
+                      translationLanguagePriority={translationLanguagePriority}
+                      element={element}
+                      index={index}
+                    />
                     {(element.properties.descriptionEn || element.properties.descriptionFr) && (
                       <Description
-                        languagePriority={languagePriority}
+                        translationLanguagePriority={translationLanguagePriority}
                         element={element}
                         index={index}
                       />
@@ -248,40 +284,46 @@ export const Translate = () => {
             <div>
               <span>{t("Page text")}</span>
               <span>{t("Description")}</span>
-              <input
-                type="text"
+              <textarea
                 value={
-                  languagePriority === "en"
-                    ? form.privacyPolicy.descriptionEn
-                    : form.privacyPolicy.descriptionFr
+                  form.privacyPolicy[
+                    localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )
+                  ]
                 }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en"
-                      ? "form.privacyPolicy.descriptionEn"
-                      : "form.privacyPolicy.descriptionFr",
+                    `form.privacyPolicy.${localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )}`,
                     e.target.value
                   );
                 }}
-              />
+              ></textarea>
             </div>
             <div>
-              <input
-                type="text"
+              <textarea
                 value={
-                  languagePriority === "en"
-                    ? form.privacyPolicy.descriptionFr
-                    : form.privacyPolicy.descriptionEn
+                  form.privacyPolicy[
+                    localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriorityAlt
+                    )
+                  ]
                 }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en"
-                      ? "form.privacyPolicy.descriptionFr"
-                      : "form.privacyPolicy.descriptionEn",
+                    `form.privacyPolicy.${localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriorityAlt
+                    )}`,
                     e.target.value
                   );
                 }}
-              />
+              ></textarea>
             </div>
           </div>
         </SectionDiv>
@@ -295,40 +337,47 @@ export const Translate = () => {
             <div>
               <span>{t("Page text")}</span>
               <span>{t("Description")}</span>
-              <input
-                type="text"
+
+              <textarea
                 value={
-                  languagePriority === "en"
-                    ? form.endPage.descriptionEn
-                    : form.endPage.descriptionFr
+                  form.endPage[
+                    localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )
+                  ]
                 }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en"
-                      ? "form.endPage.descriptionEn"
-                      : "form.endPage.descriptionFr",
+                    `form.endPage.${localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )}`,
                     e.target.value
                   );
                 }}
-              />
+              ></textarea>
             </div>
             <div>
-              <input
-                type="text"
+              <textarea
                 value={
-                  languagePriority === "en"
-                    ? form.endPage.descriptionFr
-                    : form.endPage.descriptionEn
+                  form.endPage[
+                    localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriorityAlt
+                    )
+                  ]
                 }
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en"
-                      ? "form.endPage.descriptionFr"
-                      : "form.endPage.descriptionEn",
+                    `form.endPage.${localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriorityAlt
+                    )}`,
                     e.target.value
                   );
                 }}
-              />
+              ></textarea>
             </div>
           </div>
         </SectionDiv>

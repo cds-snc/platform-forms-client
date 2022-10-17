@@ -1,19 +1,19 @@
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
-import { ElementType } from "../types";
+import { ElementType, LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
 
 export const Description = ({
   element,
-  index,
-  languagePriority,
+  translationLanguagePriority,
 }: {
   element: ElementType;
   index: number;
-  languagePriority: string;
+  translationLanguagePriority: string;
 }) => {
-  const { updateField, form } = useTemplateStore();
+  const { updateField, localizeField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
+  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 
   return (
     <>
@@ -23,15 +23,16 @@ export const Description = ({
           <span>{t("Description")}</span>
           <textarea
             value={
-              languagePriority === "en"
-                ? form.elements[index].properties.descriptionEn
-                : form.elements[index].properties.descriptionFr
+              element.properties[
+                localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+              ]
             }
             onChange={(e) => {
               updateField(
-                languagePriority === "en"
-                  ? `form.elements[${index}].properties.descriptionEn`
-                  : `form.elements[${index}].properties.descriptionFr`,
+                `element.properties.${localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriority
+                )}`,
                 e.target.value
               );
             }}
@@ -40,15 +41,19 @@ export const Description = ({
         <div>
           <textarea
             value={
-              languagePriority === "en"
-                ? form.elements[index].properties.descriptionFr
-                : form.elements[index].properties.descriptionEn
+              element.properties[
+                localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriorityAlt
+                )
+              ]
             }
             onChange={(e) => {
               updateField(
-                languagePriority === "en"
-                  ? `form.elements[${index}].properties.descriptionFr`
-                  : `form.elements[${index}].properties.descriptionEn`,
+                `element.properties.${localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriorityAlt
+                )}`,
                 e.target.value
               );
             }}

@@ -85,15 +85,18 @@ export interface TemplateSchema {
 
 export interface ElementStore extends TemplateSchema {
   lang: Language;
+  translationLanguagePriority: Language;
   focusInput: boolean;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
   localizeField: {
     <LocalizedProperty extends string>(
-      arg: LocalizedProperty
+      arg: LocalizedProperty,
+      arg1?: string
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
   toggleLang: () => void;
+  toggleTranslationLanguagePriority: () => void;
   setFocusInput: (isSet: boolean) => void;
   add: (index?: number) => void;
   remove: (id: number) => void;

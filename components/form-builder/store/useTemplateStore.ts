@@ -54,14 +54,15 @@ export const defaultForm = {
 const useTemplateStore = create<ElementStore>()(
   immer((set, get) => ({
     lang: "en",
+    translationLanguagePriority: "en",
     focusInput: false,
     form: defaultForm,
     submission: {
       email: "test@example.com",
     },
     publishingStatus: true,
-    localizeField: (path) => {
-      const lang = get().lang;
+    localizeField: (path, langPriority) => {
+      const lang = langPriority ? langPriority : get().lang;
       const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
         lang.slice(1)) as Capitalize<Language>;
       return `${path}${langUpperCaseFirst}`;
@@ -69,6 +70,11 @@ const useTemplateStore = create<ElementStore>()(
     toggleLang: () =>
       set((state) => {
         state.lang = state.lang === "en" ? "fr" : "en";
+      }),
+    toggleTranslationLanguagePriority: () =>
+      set((state) => {
+        state.translationLanguagePriority =
+          state.translationLanguagePriority === "en" ? "fr" : "en";
       }),
     setFocusInput: (isSet) =>
       set((state) => {

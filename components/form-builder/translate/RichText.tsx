@@ -5,11 +5,17 @@ import { Description } from "./Description";
 export const RichText = ({
   element,
   index,
-  languagePriority,
+  translationLanguagePriority,
 }: {
   element: ElementType;
   index: number;
-  languagePriority: string;
+  translationLanguagePriority: string;
 }) => {
-  return <Description languagePriority={languagePriority} element={element} index={index} />;
+  return (
+    <Description // @TODO: replace with RichText
+      translationLanguagePriority={translationLanguagePriority}
+      element={element}
+      index={index}
+    />
+  );
 };
