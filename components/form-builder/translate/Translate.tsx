@@ -8,6 +8,7 @@ import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedFormProperties } from "../types";
+import { DownloadCSV } from "./DownloadCSV";
 
 const SwitchLanguageButton = styled.button`
   color: #fff;
@@ -24,14 +25,6 @@ const SwitchLanguageButton = styled.button`
     width: 40px;
     margin-left: 4px;
   }
-`;
-
-const CopyFormContentButton = styled.button`
-  border: 2px solid #26374a;
-  border-radius: 10px;
-  background: #fff;
-  padding: 10px 25px;
-  margin: 10px 0 30px 0;
 `;
 
 const SectionDiv = styled.div`
@@ -126,7 +119,7 @@ export const Translate = () => {
             <hr />
           </div>
 
-          <CopyFormContentButton>Copy form content</CopyFormContentButton>
+          <DownloadCSV />
 
           <div className="text-entry">
             <div>
