@@ -32,7 +32,6 @@ export const DownloadCSV = () => {
   const generateCSV = async () => {
     const data = [["description", "english", "french"]];
 
-    // build array
     data.push(["Form introduction - Title", form.titleEn, form.titleFr]);
     data.push([
       "Form introduction - Description",
@@ -65,6 +64,18 @@ export const DownloadCSV = () => {
         });
       }
     });
+
+    if (form.privacyPolicy.descriptionEn || form.privacyPolicy.descriptionFr) {
+      data.push([
+        "Privacy statement",
+        form.privacyPolicy.descriptionEn,
+        form.privacyPolicy.descriptionFr,
+      ]);
+    }
+
+    if (form.endPage.descriptionEn || form.endPage.descriptionFr) {
+      data.push(["Confirmation message", form.endPage.descriptionEn, form.endPage.descriptionFr]);
+    }
 
     const csv = data.map((row) => row.join(",")).join("\n");
 
