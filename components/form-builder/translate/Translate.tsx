@@ -7,6 +7,7 @@ import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
+import { LocalizedFormProperties } from "../types";
 
 const SwitchLanguageButton = styled.button`
   color: #fff;
@@ -87,11 +88,12 @@ const SectionDiv = styled.div`
 `;
 
 export const Translate = () => {
-  const { updateField, form } = useTemplateStore();
+  const { updateField, form, toggleLang, lang, localizeField } = useTemplateStore();
   const { t, i18n } = useTranslation("form-builder");
   const [languagePriority, setLanguagePriority] = useState(i18n.language);
 
   const switchLanguage = () => {
+    toggleLang();
     const newLanguage = languagePriority === "en" ? "fr" : "en";
     setLanguagePriority(newLanguage);
   };
@@ -106,9 +108,11 @@ export const Translate = () => {
           filling out your form.
         </p>
         <br />
-
         <div>
           {languagePriority === "en" ? "English" : "French"}
+          <p>Via Store</p>
+          {lang === "en" ? "English" : "French"}
+          <hr />
           <SwitchLanguageButton onClick={switchLanguage}>
             <span>{t("Switch")}</span>
             <SwapHoriz />
@@ -130,10 +134,10 @@ export const Translate = () => {
               <span>{t("Title")}</span>
               <input
                 type="text"
-                value={languagePriority === "en" ? form.titleEn : form.titleFr}
+                value={form[localizeField(LocalizedFormProperties.TITLE)]}
                 onChange={(e) => {
                   updateField(
-                    languagePriority === "en" ? "form.titleEn" : "form.titleFr",
+                    `form.${localizeField(LocalizedFormProperties.TITLE)}`,
                     e.target.value
                   );
                 }}
