@@ -1,7 +1,6 @@
 import { User } from "next-auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { AccessLog, FormUser, Prisma, UserRole } from "@prisma/client";
-import { JWT } from "next-auth";
 import { logMessage } from "@lib/logger";
 import { LoggingAction } from "./auth";
 

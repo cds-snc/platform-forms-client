@@ -24,7 +24,7 @@ const Logout = () => {
           {t("logoutDate")} : {logoutDate}
         </div>
         <div className="gc-go-to-login-btn">
-          <Link href={`/${i18n.language}/login`}>{t("goToLoginLabel")}</Link>
+          <Link href={`/${i18n.language}/auth/login`}>{t("goToLoginLabel")}</Link>
         </div>
       </div>
     </>
