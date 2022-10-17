@@ -10,6 +10,12 @@ import {
 } from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
+import { subject as setSubjectType } from "@casl/ability";
+
+interface ForcedSubjectType {
+  type: Extract<Subject, string>;
+  object: Record<string, unknown>;
+}
 
 /**
  * Get the privileges rules associated to a user
@@ -192,11 +198,26 @@ export const createPrivilege = async (ability: Ability, privilege: Privilege) =>
  */
 export const checkPrivileges = (
   ability: Ability,
-  rules: { action: Action; subject: Subject }[],
+  rules: {
+    action: Action;
+    subject: Subject | ForcedSubjectType;
+  }[],
   logic: "all" | "one" = "all"
 ): void => {
-  // Deny by default
-  const result = rules.map(({ action, subject }) => ability.can(action, subject));
+  // helper to define if we are force typing a passed object
+  function isForceTyping(subject: Subject | ForcedSubjectType): subject is ForcedSubjectType {
+    return (
+      (subject as ForcedSubjectType).type !== undefined &&
+      (subject as ForcedSubjectType).object !== undefined
+    );
+  }
+  const result = rules.map(({ action, subject }) => {
+    if (isForceTyping(subject)) {
+      return ability.can(action, setSubjectType(subject.type, subject.object));
+    } else {
+      return ability.can(action, subject);
+    }
+  });
   let accessAllowed = false;
   switch (logic) {
     case "all":
