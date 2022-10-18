@@ -3,7 +3,7 @@ import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
 
-const CopyFormContentButton = styled.button`
+const DownloadCSVButton = styled.button`
   border: 2px solid #26374a;
   border-radius: 10px;
   background: #fff;
@@ -89,5 +89,5 @@ export const DownloadCSV = () => {
     URL.revokeObjectURL(url);
   };
 
-  return <CopyFormContentButton onClick={generateCSV}>Download .csv</CopyFormContentButton>;
+  return <DownloadCSVButton onClick={generateCSV}>Download .csv</DownloadCSVButton>;
 };
