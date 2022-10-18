@@ -26,6 +26,26 @@ jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
 }));
 
+describe("Requires a valid session to access API", () => {
+  it("Should successfully handle a POST request to create a template", async () => {
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: {
+        formConfig: brokenFormTemplate,
+      },
+    });
+
+    await templates(req, res);
+
+    expect(res.statusCode).toBe(401);
+    expect(JSON.parse(res._getData())).toMatchObject({ error: "Unauthorized" });
+  });
+});
+
 describe("Test JSON validation scenarios", () => {
   beforeAll(() => {
     process.env.TOKEN_SECRET = "testsecret";

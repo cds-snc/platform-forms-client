@@ -9,10 +9,8 @@ import { checkPrivileges } from "@lib/privileges";
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async (ability: Ability, userToken: JWT) => {
+export const getOrCreateUser = async (userToken: JWT) => {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
-
     if (!userToken.email) throw new Error("Email address does not exist on token");
     const user = await prisma.user.findUnique({
       where: {
@@ -113,25 +111,6 @@ export const getUsers = async (ability: Ability) => {
     return users;
   } catch (e) {
     return prismaErrors(e, []);
-  }
-};
-
-/**
- * Get a APIUser
- * @param userId ApiUser Id
- * @returns ApiUser Object
- */
-export const getApiUser = async (ability: Ability, userId: string): Promise<ApiUser | null> => {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
-
-    return await prisma.apiUser.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-  } catch (e) {
-    return prismaErrors(e, null);
   }
 };
 

@@ -32,7 +32,7 @@ const templates = async (
 ) => {
   try {
     if (!session) {
-      res.status(403);
+      res.status(401);
       return;
     }
 
