@@ -11,7 +11,6 @@ import { FormRecord } from "@lib/types/form-types";
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
-import { isAdmin } from "@lib/auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import {
   layoutIDValidator,
@@ -20,14 +19,31 @@ import {
 } from "@lib/middleware/jsonIDValidator";
 import { Session } from "next-auth";
 import { BetterOmit } from "@lib/types";
+import { MiddlewareProps } from "@lib/types";
+import { Ability, createAbility } from "@lib/policyBuilder";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
 
-const templates = async (req: NextApiRequest, res: NextApiResponse) => {
+const templates = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  { session }: MiddlewareProps
+) => {
   try {
-    const session = await isAdmin({ req, res });
-    const response = await templateCRUD({ user: session?.user, method: req.method, ...req.body });
+    if (!session) {
+      res.status(401);
+      return;
+    }
+
+    const ability = createAbility(session.user.privileges);
+
+    const response = await templateCRUD({
+      ability: ability,
+      user: session?.user,
+      method: req.method,
+      ...req.body,
+    });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
 
@@ -75,11 +91,13 @@ const templates = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const templateCRUD = async ({
+  ability,
   method,
   user,
   formID,
   formConfig,
 }: {
+  ability: Ability;
   method: string;
   user: Session["user"];
   formID?: string;
@@ -88,15 +106,15 @@ const templateCRUD = async ({
   switch (method) {
     case "GET":
       if (formID) return await getTemplateByID(formID);
-      return getAllTemplates();
+      return getAllTemplates(ability);
     case "POST":
-      if (formConfig) return await createTemplate(user.id, formConfig);
+      if (formConfig) return await createTemplate(ability, user.id, formConfig);
       throw new Error("Missing Form Configuration");
     case "PUT":
-      if (formID && formConfig) return await updateTemplate(formID, formConfig);
+      if (formID && formConfig) return await updateTemplate(ability, formID, formConfig);
       throw new Error("Missing formID and/or formConfig");
     case "DELETE":
-      if (formID) return await deleteTemplate(formID);
+      if (formID) return await deleteTemplate(ability, formID);
       throw new Error("Missing formID");
     default:
       throw new Error("Unsupported Method");
