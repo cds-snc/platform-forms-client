@@ -95,6 +95,7 @@ export interface ElementStore extends TemplateSchema {
       arg1?: Language
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
+  setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
   setFocusInput: (isSet: boolean) => void;
@@ -119,6 +120,11 @@ export interface ModalStore {
   updateModalProperties: (index: number, properties: ElementProperties) => void;
   unsetModalField: (path: string) => void;
   initialize: () => void;
+}
+
+export interface NavigationStore {
+  currentTab: string;
+  setTab: (tab: string) => void;
 }
 
 export interface ElementOption {

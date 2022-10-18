@@ -66,6 +66,10 @@ const useTemplateStore = create<ElementStore>()(
         lang.slice(1)) as Capitalize<Language>;
       return `${path}${langUpperCaseFirst}`;
     },
+    setLang: (lang) =>
+      set((state) => {
+        state.lang = lang;
+      }),
     toggleLang: () =>
       set((state) => {
         state.lang = state.lang === "en" ? "fr" : "en";
