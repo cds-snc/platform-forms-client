@@ -1,6 +1,5 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
-import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { ElementType, Language, LocalizedElementProperties } from "../types";
 import { Editor } from "./Editor";
