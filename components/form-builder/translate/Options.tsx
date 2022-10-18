@@ -5,6 +5,7 @@ import { ElementType, Language } from "../types";
 
 export const Options = ({
   element,
+  index,
   translationLanguagePriority,
 }: {
   element: ElementType;
@@ -29,7 +30,7 @@ export const Options = ({
                   value={choice[translationLanguagePriority]}
                   onChange={(e) => {
                     updateField(
-                      `element.properties.choices[${choiceIndex}].${translationLanguagePriority}`,
+                      `form.elements[${index}].properties.choices[${choiceIndex}].${translationLanguagePriority}`,
                       e.target.value
                     );
                   }}
@@ -41,7 +42,7 @@ export const Options = ({
                   value={choice[translationLanguagePriorityAlt]}
                   onChange={(e) => {
                     updateField(
-                      `element.properties.choices[${choiceIndex}].${translationLanguagePriorityAlt}`,
+                      `form.elements[${index}].properties.choices[${choiceIndex}].${translationLanguagePriorityAlt}`,
                       e.target.value
                     );
                   }}

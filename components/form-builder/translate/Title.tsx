@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 
 export const Title = ({
   element,
+  index,
   translationLanguagePriority,
 }: {
   element: ElementType;
@@ -29,7 +30,7 @@ export const Title = ({
             }
             onChange={(e) => {
               updateField(
-                `element.properties.${localizeField(
+                `form.elements[${index}].properties.${localizeField(
                   LocalizedElementProperties.TITLE,
                   translationLanguagePriority
                 )}`,
@@ -47,7 +48,7 @@ export const Title = ({
             }
             onChange={(e) => {
               updateField(
-                `element.properties.${localizeField(
+                `form.elements[${index}].properties.${localizeField(
                   LocalizedElementProperties.TITLE,
                   translationLanguagePriorityAlt
                 )}`,
