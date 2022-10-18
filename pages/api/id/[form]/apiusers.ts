@@ -10,7 +10,6 @@ import { logMessage } from "@lib/logger";
 import { MiddlewareProps } from "@lib/types";
 import { createAbility, AccessControlError, Ability } from "@lib/policyBuilder";
 import { checkPrivileges } from "@lib/privileges";
-import { subject } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -24,9 +23,9 @@ const handler = async (
       case "GET":
         return await getEmailListByFormID(ability, req, res);
       case "PUT":
-        return await activateOrDeactivateFormOwners(req, res, session);
+        return await activateOrDeactivateFormOwners(ability, req, res, session);
       case "POST":
-        return await addEmailToForm(req, res, session);
+        return await addEmailToForm(ability, req, res, session);
       default:
         return res.status(400).json({ error: "Bad Request" });
     }
@@ -71,7 +70,9 @@ export async function getEmailListByFormID(
 
       if (!emailList) return res.status(404).json({ error: "Form Not Found" });
 
-      checkPrivileges(ability, [{ action: "view", subject: subject("FormRecord", emailList) }]);
+      checkPrivileges(ability, [
+        { action: "view", subject: { type: "FormRecord", object: emailList } },
+      ]);
 
       //Return all emails associated with formID
       if (emailList) return res.status(200).json(emailList.apiUsers);
@@ -90,9 +91,10 @@ export async function getEmailListByFormID(
  * @param res
  */
 export async function activateOrDeactivateFormOwners(
+  ability: Ability,
   req: NextApiRequest,
   res: NextApiResponse,
-  session?: Session
+  session: Session
 ): Promise<void> {
   try {
     //Extracting req body
@@ -102,8 +104,30 @@ export async function activateOrDeactivateFormOwners(
       //Invalid payload
       return res.status(400).json({ error: "Invalid payload fields are not define" });
     }
-    const formID = req.query.form as string;
-    if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
+
+    const formID = req.query.form;
+    if (Array.isArray(formID) || !formID)
+      return res.status(400).json({ error: "Malformed API Request FormID not define" });
+
+    // check if user is an owner on the form
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!template) return res.status(404).json({ error: "Form Not Found" });
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: template } },
+    ]);
+
     //Update form_users's records
     const updatedRecord = await prisma.apiUser.update({
       where: {
@@ -138,8 +162,9 @@ export async function activateOrDeactivateFormOwners(
     //A 404 status code for a form Not Found in form_users
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
       // Error P2025: Record to update not found.
-      return res.status(404).json({ error: "Form or email Not Found" });
+      return res.status(404).json({ error: "Email Not Found" });
     }
+    if (e instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     return res.status(500).json({ error: "Could not process request" });
   }
 }
@@ -154,6 +179,7 @@ export async function activateOrDeactivateFormOwners(
  * @param res The response object
  */
 export async function addEmailToForm(
+  ability: Ability,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session
@@ -163,9 +189,30 @@ export async function addEmailToForm(
   if (!isValidGovEmail(email, emailDomainList.domains)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
-  const formID = req.query.form as string;
-  if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
+  const formID = req.query.form;
+  if (Array.isArray(formID) || !formID)
+    return res.status(400).json({ error: "Malformed API Request FormID not define" });
+
   try {
+    // check if user is an owner on the form
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!template) return res.status(404).json({ error: "Form Not Found" });
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: template } },
+    ]);
+
     // Will throw an error if the user and templateID unique id already exist
     const formUserID = await prisma.apiUser.create({
       data: {

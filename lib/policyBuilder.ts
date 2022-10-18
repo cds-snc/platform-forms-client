@@ -20,21 +20,27 @@ only dependencies can be referenced in this file.
  */
 
 export interface CASL_FormRecord extends FormRecord {
-  kind?: "FormRecord";
+  kind: "FormRecord";
 }
 
 export interface CASL_User extends User {
-  kind?: "User";
+  kind: "User";
+  [key: string]: string | null | Date;
 }
 
 export interface CASL_Privilege extends Privilege {
-  kind?: "Privilege";
-  [key: string]: string | null | Permission[] | undefined;
+  kind: "Privilege";
+  [key: string]: string | null | Permission[];
+}
+
+export interface CASL_Flag {
+  kind: "Flag";
+  [key: string]: boolean | string;
 }
 
 export type Action = "create" | "view" | "update" | "delete";
 
-export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privilege>;
+export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privilege | CASL_Flag>;
 
 export type Abilities = [Action, Subject];
 export type AppAbility = MongoAbility<Abilities>;
@@ -49,7 +55,7 @@ export type Permission = {
 };
 export interface Privilege extends PrismaPrivilege {
   permissions: Permission[];
-  [key: string]: string | null | Permission[];
+  [key: string]: string | null | Permission[] | undefined;
 }
 
 export function interpolatePermissionCondition(

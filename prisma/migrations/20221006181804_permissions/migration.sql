@@ -76,11 +76,11 @@ VALUES
     {"action":["create","view","update","delete"],"subject":"Privilege"}
   ]'::JSONB),
   (uuid_generate_v4(),'ViewApplicationSettings','VisionnerParamètresApplication','Permission to view application settings','Autorisation d''afficher les paramètres de l''application','[
-    {"action":"view","subject":"Flags"}
+    {"action":"view","subject":"Flag"}
   ]'::JSONB),
   (uuid_generate_v4(),'ManageApplicationSettings','GérerParamètresApplication','Permission to manage application settings','Autorisation de gérer les paramètres de l''application','[
-    {"action":"view","subject":"Flags"},
-    {"action":"update","subject":"Flags"}
+    {"action":"view","subject":"Flag"},
+    {"action":"update","subject":"Flag"}
   ]'::JSONB);
   
     
