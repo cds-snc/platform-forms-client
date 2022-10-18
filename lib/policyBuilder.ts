@@ -19,21 +19,21 @@ This file is referenced by the useAccessControl hook so no server-side
 only dependencies can be referenced in this file.
  */
 
-export interface CASL_FormRecord extends FormRecord {
+interface CASL_FormRecord extends FormRecord {
   kind: "FormRecord";
 }
 
-export interface CASL_User extends User {
+interface CASL_User extends User {
   kind: "User";
   [key: string]: string | null | Date;
 }
 
-export interface CASL_Privilege extends Privilege {
+interface CASL_Privilege extends Privilege {
   kind: "Privilege";
   [key: string]: string | null | Permission[];
 }
 
-export interface CASL_Flag {
+interface CASL_Flag {
   kind: "Flag";
   [key: string]: boolean | string;
 }
