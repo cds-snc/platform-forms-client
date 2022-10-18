@@ -25,15 +25,22 @@ interface CASL_FormRecord extends FormRecord {
 
 interface CASL_User extends User {
   kind: "User";
+  [key: string]: string | null | Date;
 }
 
 interface CASL_Privilege extends Privilege {
   kind: "Privilege";
+  [key: string]: string | null | Permission[];
 }
 
-export type Action = "manage" | "create" | "view" | "update" | "delete";
+interface CASL_Flag {
+  kind: "Flag";
+  [key: string]: boolean | string;
+}
 
-export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privilege>;
+export type Action = "create" | "view" | "update" | "delete";
+
+export type Subject = InferSubjects<CASL_FormRecord | CASL_User | CASL_Privilege | CASL_Flag>;
 
 export type Abilities = [Action, Subject];
 export type AppAbility = MongoAbility<Abilities>;
@@ -48,7 +55,7 @@ export type Permission = {
 };
 export interface Privilege extends PrismaPrivilege {
   permissions: Permission[];
-  [key: string]: string | null | Permission[];
+  [key: string]: string | null | Permission[] | undefined;
 }
 
 export function interpolatePermissionCondition(

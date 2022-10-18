@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { AccessLog, FormUser } from "@prisma/client";
+import { ApiAccessLog, ApiUser } from "@prisma/client";
 import { JWT } from "next-auth";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
@@ -38,13 +38,13 @@ export const getUsers = async (ability: Ability) => {
 };
 
 /**
- * Get a FormUser
- * @param userId FormUser Id
- * @returns FormUser Object
+ * Get an APIUser
+ * @param userId ApiUser Id
+ * @returns ApiUser Object
  */
-export const getFormUser = async (userId: string): Promise<FormUser | null> => {
+export const getApiUser = async (userId: string): Promise<ApiUser | null> => {
   try {
-    return await prisma.formUser.findUnique({
+    return await prisma.apiUser.findUnique({
       where: {
         id: userId,
       },
@@ -134,9 +134,9 @@ export const getOrCreateUser = async (userToken: JWT) => {
  * @param userId
  * @returns AccessLog object
  */
-export const userLastLogin = async (userId: string): Promise<AccessLog | null> => {
+export const userLastLogin = async (userId: string): Promise<ApiAccessLog | null> => {
   try {
-    return await prisma.accessLog.findFirst({
+    return await prisma.apiAccessLog.findFirst({
       where: {
         userId: userId,
         action: LoggingAction.LOGIN,

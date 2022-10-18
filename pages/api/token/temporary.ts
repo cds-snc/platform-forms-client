@@ -136,7 +136,7 @@ function createTemporaryToken(email: string, formID: string, tokenSecret: string
 async function updateTemporaryToken(temporaryToken: string, email: string, templateId: string) {
   try {
     // Throws an error is user is not found
-    const user = await prisma.formUser.findUnique({
+    const user = await prisma.apiUser.findUnique({
       where: {
         templateId_email: {
           email: email,
@@ -150,7 +150,7 @@ async function updateTemporaryToken(temporaryToken: string, email: string, templ
       },
     });
     if (user?.active) {
-      await prisma.formUser.update({
+      await prisma.apiUser.update({
         where: {
           templateId_email: {
             email: user.email,

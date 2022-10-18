@@ -126,7 +126,7 @@ export const validateTemporaryToken = async (token: string) => {
       process.env.TOKEN_SECRET || ""
     ) as TemporaryTokenPayload;
 
-    const user = await prisma.formUser.findUnique({
+    const user = await prisma.apiUser.findUnique({
       where: {
         templateId_email: {
           email,

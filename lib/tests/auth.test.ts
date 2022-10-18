@@ -112,7 +112,7 @@ describe("Test Auth lib", () => {
           expiresIn: "1d",
         }
       );
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "1",
         templateId: "1",
         email: "test@test.ca",
@@ -132,7 +132,7 @@ describe("Test Auth lib", () => {
           expiresIn: "1d",
         }
       );
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "1",
         templateId: "1",
         email: "test@test.ca",
