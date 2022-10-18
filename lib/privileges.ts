@@ -10,7 +10,7 @@ import {
 } from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
-import { subject as setSubjectType } from "@casl/ability";
+import { subject as setSubjectType, subject } from "@casl/ability";
 
 interface ForcedSubjectType {
   type: Extract<Subject, string>;
@@ -219,6 +219,23 @@ export const checkPrivileges = (
     }
   });
   let accessAllowed = false;
+  if (process.env.NODE_ENV !== "production") {
+    rules.map((rule, index) => {
+      if (isForceTyping(rule.subject)) {
+        logMessage.debug(
+          `Privilege Check ${result[index] ? "PASS" : "FAIL"}: Can ${rule.action} on ${
+            rule.subject.type
+          } `
+        );
+      } else {
+        logMessage.debug(
+          `Privilege Check ${result[index] ? "PASS" : "FAIL"}: Can ${rule.action} on ${
+            rule.subject
+          } `
+        );
+      }
+    });
+  }
   switch (logic) {
     case "all":
       // The initial value needs to be true because of the AND logic

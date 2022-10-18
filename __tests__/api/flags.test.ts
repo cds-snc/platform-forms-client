@@ -173,21 +173,21 @@ describe("Flags API endpoint", () => {
         expect(res.statusCode).toBe(200);
         expect(res._getJSONData()).toMatchObject({ flag1: false });
       });
-    });
-    it("Gets a list of all feature flags", async () => {
-      const { req, res } = createMocks({
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://localhost:3000",
-        },
-        url: "/api/flags/",
+      it("Gets a list of all feature flags", async () => {
+        const { req, res } = createMocks({
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+          url: "/api/flags/",
+        });
+
+        await checkAllFlags(req, res);
+
+        expect(res.statusCode).toBe(200);
+        expect(res._getJSONData()).toMatchObject({ flag1: true, flag2: false });
       });
-
-      await checkAllFlags(req, res);
-
-      expect(res.statusCode).toBe(200);
-      expect(res._getJSONData()).toMatchObject({ flag1: true, flag2: false });
     });
   });
 
