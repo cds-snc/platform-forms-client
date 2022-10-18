@@ -795,147 +795,424 @@ describe("/id/[forms]/owners", () => {
   });
 
   describe("POST: Associate an email to a template data API endpoint", () => {
-    it("Should return 400 FormID doesn't exist or User already assigned in db", async () => {
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        users: [
-          {
-            id: "2",
+    describe("Base Permissions", () => {
+      beforeEach(() => {
+        const mockSession: Session = {
+          expires: "1",
+          user: {
+            id: "1",
+            email: "forms@cds.ca",
+            name: "forms user",
+            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
           },
-        ],
+        };
+
+        mockGetSession.mockResolvedValue(mockSession);
       });
+      afterEach(() => mockGetSession.mockReset());
+      it("Should return 400 FormID doesn't exist or User already assigned in db", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "1",
+            },
+          ],
+        });
 
-      //Mocking db result by throwing constraint violation error.
-      prismaMock.apiUser.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
-      );
+        //Mocking db result by throwing constraint violation error.
+        prismaMock.apiUser.create.mockRejectedValue(
+          new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
+        );
 
-      const { req, res } = createMocks({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          email: "test@gc.ca",
-        },
-        query: {
-          form: "888",
-        },
-      });
-      await apiUsers(req, res);
-      expect(res.statusCode).toBe(401);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({
-          error: "Forbidden",
-        })
-      );
-    });
-
-    it("Should create a new record and return 200 code along with the id", async () => {
-      // return the id of the newly created record.
-
-      (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
-        id: 1,
-      });
-      const { req, res } = createMocks({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          email: "test9@gc.ca",
-        },
-        query: {
-          form: "9",
-        },
-      });
-      await apiUsers(req, res);
-      expect(res.statusCode).toBe(200);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({
-          success: {
-            id: 1,
-          },
-        })
-      );
-    });
-
-    it("Should return 400 undefined formID was supplied", async () => {
-      const { req, res } = createMocks({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          email: "forms@cds-snc.ca",
-        },
-        query: {
-          form: undefined,
-        },
-      });
-      await apiUsers(req, res);
-      expect(res.statusCode).toBe(400);
-      expect(JSON.parse(res._getData())).toEqual(
-        expect.objectContaining({ error: "Malformed API Request Invalid formID" })
-      );
-    });
-
-    test.each([
-      "",
-      "wrongEmail.gc.ca",
-      undefined,
-      "testNotValidGovDomainName@google.com",
-      "@gc.ca",
-    ])(
-      "Should return 400 status code wiht invalid email in payload for all those cases",
-      async (elem) => {
         const { req, res } = createMocks({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: {
-            email: elem,
+            email: "test@gc.ca",
           },
           query: {
-            form: "23",
+            form: "888",
           },
         });
         await apiUsers(req, res);
         expect(res.statusCode).toBe(400);
         expect(JSON.parse(res._getData())).toEqual(
-          expect.objectContaining({ error: "The email is not a valid GC email" })
+          expect.objectContaining({
+            error: "The formID does not exist or User is already assigned",
+          })
         );
-      }
-    );
-
-    it("Should log admin activity if POST API call completed successfully", async () => {
-      // return the id of the newly created record.
-      (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
-        id: 1,
       });
 
-      const { req, res } = createMocks({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          email: "test9@gc.ca",
-        },
-        query: {
-          form: "9",
-        },
+      it("Should create a new record and return 200 code along with the id", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "1",
+            },
+          ],
+        });
+
+        // return the id of the newly created record.
+
+        (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
+          id: 1,
+        });
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test9@gc.ca",
+          },
+          query: {
+            form: "9",
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(200);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({
+            success: {
+              id: 1,
+            },
+          })
+        );
+      });
+      it("Should not allow a new record if the user does not own the form", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "2",
+            },
+          ],
+        });
+
+        // return the id of the newly created record.
+
+        (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
+          id: 1,
+        });
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test9@gc.ca",
+          },
+          query: {
+            form: "9",
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({
+            error: "Forbidden",
+          })
+        );
       });
 
-      await apiUsers(req, res);
+      it("Should return 400 undefined formID was supplied", async () => {
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "forms@cds-snc.ca",
+          },
+          query: {
+            form: undefined,
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(400);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({ error: "Malformed API Request FormID not define" })
+        );
+      });
 
-      expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
-        "1",
-        "Create",
-        "GrantInitialFormAccess",
-        "Email: test9@gc.ca has been given access to form id: 9"
+      test.each([
+        "",
+        "wrongEmail.gc.ca",
+        undefined,
+        "testNotValidGovDomainName@google.com",
+        "@gc.ca",
+      ])(
+        "Should return 400 status code wiht invalid email in payload for all those cases",
+        async (elem) => {
+          const { req, res } = createMocks({
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: {
+              email: elem,
+            },
+            query: {
+              form: "23",
+            },
+          });
+          await apiUsers(req, res);
+          expect(res.statusCode).toBe(400);
+          expect(JSON.parse(res._getData())).toEqual(
+            expect.objectContaining({ error: "The email is not a valid GC email" })
+          );
+        }
       );
+
+      it("Should log admin activity if POST API call completed successfully", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "1",
+            },
+          ],
+        });
+
+        // return the id of the newly created record.
+        (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
+          id: 1,
+        });
+
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test9@gc.ca",
+          },
+          query: {
+            form: "9",
+          },
+        });
+
+        await apiUsers(req, res);
+
+        expect(res.statusCode).toBe(200);
+        expect(logAdminActivity).toHaveBeenCalledWith(
+          "1",
+          "Create",
+          "GrantInitialFormAccess",
+          "Email: test9@gc.ca has been given access to form id: 9"
+        );
+      });
+    });
+
+    describe("ManageForm Permissions", () => {
+      beforeEach(() => {
+        const mockSession: Session = {
+          expires: "1",
+          user: {
+            id: "1",
+            email: "forms@cds.ca",
+            name: "forms user",
+            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
+          },
+        };
+
+        mockGetSession.mockResolvedValue(mockSession);
+      });
+      afterEach(() => mockGetSession.mockReset());
+      it("Should return 400 FormID doesn't exist or User already assigned in db", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "1",
+            },
+          ],
+        });
+
+        //Mocking db result by throwing constraint violation error.
+        prismaMock.apiUser.create.mockRejectedValue(
+          new Prisma.PrismaClientKnownRequestError("Unknown User", "P2003", "4.3.2")
+        );
+
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test@gc.ca",
+          },
+          query: {
+            form: "888",
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(400);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({
+            error: "The formID does not exist or User is already assigned",
+          })
+        );
+      });
+
+      it("Should create a new record and return 200 code along with the id", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "1",
+            },
+          ],
+        });
+
+        // return the id of the newly created record.
+
+        (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
+          id: 1,
+        });
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test9@gc.ca",
+          },
+          query: {
+            form: "9",
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(200);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({
+            success: {
+              id: 1,
+            },
+          })
+        );
+      });
+      it("Should allow a new record if the user does not own the form", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "2",
+            },
+          ],
+        });
+
+        // return the id of the newly created record.
+
+        (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
+          id: 1,
+        });
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test9@gc.ca",
+          },
+          query: {
+            form: "9",
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(200);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({
+            success: {
+              id: 1,
+            },
+          })
+        );
+      });
+
+      it("Should return 400 undefined formID was supplied", async () => {
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "forms@cds-snc.ca",
+          },
+          query: {
+            form: undefined,
+          },
+        });
+        await apiUsers(req, res);
+        expect(res.statusCode).toBe(400);
+        expect(JSON.parse(res._getData())).toEqual(
+          expect.objectContaining({ error: "Malformed API Request FormID not define" })
+        );
+      });
+
+      test.each([
+        "",
+        "wrongEmail.gc.ca",
+        undefined,
+        "testNotValidGovDomainName@google.com",
+        "@gc.ca",
+      ])(
+        "Should return 400 status code wiht invalid email in payload for all those cases",
+        async (elem) => {
+          const { req, res } = createMocks({
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: {
+              email: elem,
+            },
+            query: {
+              form: "23",
+            },
+          });
+          await apiUsers(req, res);
+          expect(res.statusCode).toBe(400);
+          expect(JSON.parse(res._getData())).toEqual(
+            expect.objectContaining({ error: "The email is not a valid GC email" })
+          );
+        }
+      );
+
+      it("Should log admin activity if POST API call completed successfully", async () => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          users: [
+            {
+              id: "1",
+            },
+          ],
+        });
+
+        // return the id of the newly created record.
+        (prismaMock.apiUser.create as jest.MockedFunction<any>).mockResolvedValue({
+          id: 1,
+        });
+
+        const { req, res } = createMocks({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            email: "test9@gc.ca",
+          },
+          query: {
+            form: "9",
+          },
+        });
+
+        await apiUsers(req, res);
+
+        expect(res.statusCode).toBe(200);
+        expect(logAdminActivity).toHaveBeenCalledWith(
+          "1",
+          "Create",
+          "GrantInitialFormAccess",
+          "Email: test9@gc.ca has been given access to form id: 9"
+        );
+      });
     });
   });
 });
