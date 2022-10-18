@@ -40,7 +40,7 @@ export function requireAuthentication(
   ) => Promise<GetServerSidePropsResult<Record<string, unknown>>>
 ) {
   return async (
-    context: ServerSidePropsAuthContext
+    context: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
     try {
       const session = await unstable_getServerSession(context.req, context.res, authOptions);
@@ -55,9 +55,10 @@ export function requireAuthentication(
         };
       }
 
-      context.user = { ...session.user, ability: createAbility(session.user.privileges) };
-
-      const innerFunctionProps = await innerFunction(context); // Continue on to call `getServerSideProps` logic
+      const innerFunctionProps = await innerFunction({
+        user: { ...session.user, ability: createAbility(session.user.privileges) },
+        ...context,
+      }); // Continue on to call `getServerSideProps` logic
       if (hasOwnProperty(innerFunctionProps, "props")) {
         return {
           props: {
@@ -81,22 +82,6 @@ export function requireAuthentication(
     }
   };
 }
-
-/**
- * Checks if session exists server side and if it belongs to a user with administrative privileges
- * @param reqOrContext Request and Response Object
- * @returns session if exists otherwise null
- */
-export const isAdmin = async ({
-  req,
-  res,
-}: {
-  req: NextApiRequest;
-  res: NextApiResponse;
-}): Promise<Session | null> => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  return session;
-};
 
 /**
  * Checks if session exists server side and if it belongs to a user
@@ -126,21 +111,23 @@ export const validateTemporaryToken = async (token: string) => {
       process.env.TOKEN_SECRET || ""
     ) as TemporaryTokenPayload;
 
-    const user = await prisma.apiUser.findUnique({
-      where: {
-        templateId_email: {
-          email,
-          templateId: formID,
+    const user = await prisma.apiUser
+      .findUnique({
+        where: {
+          templateId_email: {
+            email,
+            templateId: formID,
+          },
         },
-      },
-      select: {
-        id: true,
-        templateId: true,
-        email: true,
-        active: true,
-        temporaryToken: true,
-      },
-    });
+        select: {
+          id: true,
+          templateId: true,
+          email: true,
+          active: true,
+          temporaryToken: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
 
     // The token could be valid but user has been made inactive since
     if (!user?.active) return null;
@@ -149,6 +136,6 @@ export const validateTemporaryToken = async (token: string) => {
     // The user and token are valid
     return user;
   } catch (error) {
-    return prismaErrors(error, null);
+    return null;
   }
 };
