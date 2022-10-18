@@ -1,6 +1,6 @@
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
-import { ElementType, LocalizedElementProperties } from "../types";
+import { ElementType, Language, LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
 
 export const Description = ({
@@ -9,7 +9,7 @@ export const Description = ({
 }: {
   element: ElementType;
   index: number;
-  translationLanguagePriority: string;
+  translationLanguagePriority: Language;
 }) => {
   const { updateField, localizeField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
@@ -19,8 +19,8 @@ export const Description = ({
     <>
       <div className="text-entry">
         <div>
-          <span>{t(element.type)}</span>
-          <span>{t("Description")}</span>
+          <span className="section">{t(element.type)}</span>
+          <span className="description">{t("Description")}</span>
           <textarea
             value={
               element.properties[

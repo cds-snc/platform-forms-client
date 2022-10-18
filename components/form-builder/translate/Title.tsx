@@ -19,8 +19,8 @@ export const Title = ({
     <>
       <div className="text-entry">
         <div>
-          <span>{t(element.type)}</span>
-          <span>Question title</span>
+          <span className="section">{t(element.type)}</span>
+          <span className="description">Question title</span>
           <input
             type="text"
             value={

@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
-import { ElementType } from "../types";
+import { ElementType, Language } from "../types";
 
 export const Options = ({
   element,
@@ -9,7 +9,7 @@ export const Options = ({
 }: {
   element: ElementType;
   index: number;
-  translationLanguagePriority: string;
+  translationLanguagePriority: Language;
 }) => {
   const { updateField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
@@ -22,8 +22,8 @@ export const Options = ({
           <div className="choice" key={`choice-${choiceIndex}`} id={`choice-${choiceIndex}`}>
             <div className="text-entry">
               <div>
-                <span>{t(element.type)}</span>
-                <span>Option text</span>
+                <span className="section">{t(element.type)}</span>
+                <span className="description">Option text</span>
                 <input
                   type="text"
                   value={choice[translationLanguagePriority]}
