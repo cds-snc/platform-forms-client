@@ -1,7 +1,15 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
+import styled from "styled-components";
 import { ElementType, Language } from "../types";
 import { Editor } from "./Editor";
+
+const EditorWrapper = styled.div`
+  display: flex;
+  .slate-HeadingToolbar {
+    margin: 0;
+  }
+`;
 
 export const RichText = ({
   element,
@@ -21,10 +29,14 @@ export const RichText = ({
         <div>
           <span className="section">{t(element.type)}</span>
           <span className="description">{t("Description")}</span>
-          <Editor element={element} index={index} language={translationLanguagePriority} />
+          <EditorWrapper>
+            <Editor element={element} index={index} language={translationLanguagePriority} />
+          </EditorWrapper>
         </div>
         <div>
-          <Editor element={element} index={index} language={translationLanguagePriorityAlt} />
+          <EditorWrapper>
+            <Editor element={element} index={index} language={translationLanguagePriorityAlt} />
+          </EditorWrapper>
         </div>
       </div>
     </>
