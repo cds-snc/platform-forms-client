@@ -1,32 +1,37 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMyPlateEditorRef } from "../plate-editor/types";
-import { ElementType, Language, LocalizedElementProperties } from "../types";
+import { Language } from "../types";
 import { serializeMd } from "../plate-editor/helpers/markdown";
 import { deserializeMd, Value } from "@udecode/plate";
 import { RichTextEditor } from "../plate-editor/RichTextEditor";
 import useTemplateStore from "../store/useTemplateStore";
+import styled from "styled-components";
+
+const EditorWrapper = styled.div`
+  display: flex;
+  .slate-HeadingToolbar {
+    margin: 0;
+  }
+`;
 
 export const Editor = ({
-  element,
+  path,
+  content,
   index,
   language,
 }: {
-  element: ElementType;
-  index: number;
+  path: string;
+  content: string;
+  index: string;
   language: Language;
 }) => {
-  const { localizeField, updateField } = useTemplateStore();
+  const { updateField } = useTemplateStore();
 
   const editorId = `${index}-editor-${language}`;
   const editor = useMyPlateEditorRef(editorId);
 
   const [value, setValue] = useState(
-    element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, language)]
-      ? deserializeMd(
-          editor,
-          element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, language)]
-        )
-      : [{ children: [{ text: "" }] }]
+    content ? deserializeMd(editor, content) : [{ children: [{ text: "" }] }]
   );
 
   const handleChange = (value: Value) => {
@@ -37,14 +42,12 @@ export const Editor = ({
     }
 
     setValue(value);
-    updateField(
-      `form.elements[${index}].properties.${localizeField(
-        LocalizedElementProperties.DESCRIPTION,
-        language
-      )}`,
-      serialized
-    );
+    updateField(path, serialized);
   };
 
-  return <RichTextEditor id={editorId} value={value} onChange={handleChange} />;
+  return (
+    <EditorWrapper>
+      <RichTextEditor id={editorId} value={value} onChange={handleChange} />
+    </EditorWrapper>
+  );
 };

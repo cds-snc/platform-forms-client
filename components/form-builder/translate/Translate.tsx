@@ -9,6 +9,7 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
+import { Editor } from "./Editor";
 
 const SwitchLanguageButton = styled.button`
   color: #fff;
@@ -173,8 +174,14 @@ export const Translate = () => {
               <div>
                 <span className="section">{t("Form introduction")}</span>
                 <span className="description">{t("Description")}</span>
-                <textarea
-                  value={
+
+                <Editor
+                  path={`form.introduction.${localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    translationLanguagePriority
+                  )}`}
+                  index="introduction"
+                  content={
                     form.introduction[
                       localizeField(
                         LocalizedElementProperties.DESCRIPTION,
@@ -182,20 +189,17 @@ export const Translate = () => {
                       )
                     ]
                   }
-                  onChange={(e) => {
-                    updateField(
-                      `form.introduction.${localizeField(
-                        LocalizedElementProperties.DESCRIPTION,
-                        translationLanguagePriority
-                      )}`,
-                      e.target.value
-                    );
-                  }}
-                ></textarea>
+                  language={translationLanguagePriority}
+                />
               </div>
               <div>
-                <textarea
-                  value={
+                <Editor
+                  path={`form.introduction.${localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    translationLanguagePriorityAlt
+                  )}`}
+                  index="introduction"
+                  content={
                     form.introduction[
                       localizeField(
                         LocalizedElementProperties.DESCRIPTION,
@@ -203,16 +207,8 @@ export const Translate = () => {
                       )
                     ]
                   }
-                  onChange={(e) => {
-                    updateField(
-                      `form.introduction.${localizeField(
-                        LocalizedElementProperties.DESCRIPTION,
-                        translationLanguagePriorityAlt
-                      )}`,
-                      e.target.value
-                    );
-                  }}
-                ></textarea>
+                  language={translationLanguagePriorityAlt}
+                />
               </div>
             </div>
           )}
@@ -290,8 +286,13 @@ export const Translate = () => {
             <div>
               <span className="section">{t("Page text")}</span>
               <span className="description">{t("Description")}</span>
-              <textarea
-                value={
+              <Editor
+                path={`form.privacyPolicy.${localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriority
+                )}`}
+                index="introduction"
+                content={
                   form.privacyPolicy[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -299,20 +300,17 @@ export const Translate = () => {
                     )
                   ]
                 }
-                onChange={(e) => {
-                  updateField(
-                    `form.privacyPolicy.${localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriority
-                    )}`,
-                    e.target.value
-                  );
-                }}
-              ></textarea>
+                language={translationLanguagePriority}
+              />
             </div>
             <div>
-              <textarea
-                value={
+              <Editor
+                path={`form.privacyPolicy.${localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriorityAlt
+                )}`}
+                index="introduction"
+                content={
                   form.privacyPolicy[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -320,16 +318,8 @@ export const Translate = () => {
                     )
                   ]
                 }
-                onChange={(e) => {
-                  updateField(
-                    `form.privacyPolicy.${localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriorityAlt
-                    )}`,
-                    e.target.value
-                  );
-                }}
-              ></textarea>
+                language={translationLanguagePriority}
+              />
             </div>
           </div>
         </SectionDiv>
@@ -343,30 +333,31 @@ export const Translate = () => {
             <div>
               <span className="section">{t("Page text")}</span>
               <span className="description">{t("Description")}</span>
-
-              <textarea
-                value={
+              <Editor
+                path={`form.endPage.${localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriority
+                )}`}
+                index="introduction"
+                content={
                   form.endPage[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriority
+                      translationLanguagePriorityAlt
                     )
                   ]
                 }
-                onChange={(e) => {
-                  updateField(
-                    `form.endPage.${localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriority
-                    )}`,
-                    e.target.value
-                  );
-                }}
-              ></textarea>
+                language={translationLanguagePriority}
+              />
             </div>
             <div>
-              <textarea
-                value={
+              <Editor
+                path={`form.endPage.${localizeField(
+                  LocalizedElementProperties.DESCRIPTION,
+                  translationLanguagePriority
+                )}`}
+                index="introduction"
+                content={
                   form.endPage[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -374,16 +365,8 @@ export const Translate = () => {
                     )
                   ]
                 }
-                onChange={(e) => {
-                  updateField(
-                    `form.endPage.${localizeField(
-                      LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriorityAlt
-                    )}`,
-                    e.target.value
-                  );
-                }}
-              ></textarea>
+                language={translationLanguagePriority}
+              />
             </div>
           </div>
         </SectionDiv>

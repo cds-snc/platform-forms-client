@@ -1,15 +1,9 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
 import styled from "styled-components";
-import { ElementType, Language } from "../types";
+import useTemplateStore from "../store/useTemplateStore";
+import { ElementType, Language, LocalizedElementProperties } from "../types";
 import { Editor } from "./Editor";
-
-const EditorWrapper = styled.div`
-  display: flex;
-  .slate-HeadingToolbar {
-    margin: 0;
-  }
-`;
 
 export const RichText = ({
   element,
@@ -21,6 +15,7 @@ export const RichText = ({
   translationLanguagePriority: Language;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { localizeField } = useTemplateStore();
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 
   return (
@@ -29,14 +24,31 @@ export const RichText = ({
         <div>
           <span className="section">{t(element.type)}</span>
           <span className="description">{t("Description")}</span>
-          <EditorWrapper>
-            <Editor element={element} index={index} language={translationLanguagePriority} />
-          </EditorWrapper>
+
+          <Editor
+            path={`form.elements[${index}].properties.${localizeField(
+              LocalizedElementProperties.DESCRIPTION,
+              "en"
+            )}`}
+            content={
+              element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")]
+            }
+            index="${index}"
+            language={translationLanguagePriority}
+          />
         </div>
         <div>
-          <EditorWrapper>
-            <Editor element={element} index={index} language={translationLanguagePriorityAlt} />
-          </EditorWrapper>
+          <Editor
+            path={`form.elements[${index}].properties.${localizeField(
+              LocalizedElementProperties.DESCRIPTION,
+              "fr"
+            )}`}
+            content={
+              element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")]
+            }
+            index="${index}"
+            language={translationLanguagePriorityAlt}
+          />
         </div>
       </div>
     </>
