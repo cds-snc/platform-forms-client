@@ -1,4 +1,10 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+/**
+ * @jest-environment node
+ */
+
+import Redis from "ioredis-mock";
 import { prismaMock } from "@jestUtils";
 import {
   createTemplate,
@@ -6,8 +12,7 @@ import {
   getTemplateByID,
   updateTemplate,
   deleteTemplate,
-  getTemplateByStatus,
-  getSubmissionTypeByID,
+  getTemplateSubmissionTypeByID,
   onlyIncludePublicProperties,
 } from "../templates";
 
@@ -18,6 +23,14 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 // Until we catch up... polyfill
 import v8 from "v8";
 import { Prisma } from "@prisma/client";
+import { AccessControlError, createAbility } from "@lib/policyBuilder";
+import { Base, getUserPrivileges } from "__utils__/permissions";
+
+const redis = new Redis();
+
+jest.mock("@lib/integration/redisConnector", () => ({
+  getRedisInstance: jest.fn(() => redis),
+}));
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
@@ -31,7 +44,10 @@ describe("Template CRUD functions", () => {
   afterAll(() => {
     delete process.env.TOKEN_SECRET;
   });
-  test("Create a Template", async () => {
+
+  it("Create a Template", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
       jsonConfig: formConfiguration,
@@ -43,12 +59,17 @@ describe("Template CRUD functions", () => {
     });
 
     const newTemplate = await createTemplate(
+      ability,
+      "1",
       formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
     );
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
       data: {
         jsonConfig: formConfiguration,
+        users: {
+          connect: { id: "1" },
+        },
       },
     });
 
@@ -57,7 +78,45 @@ describe("Template CRUD functions", () => {
       ...formConfiguration,
     });
   });
-  test("Get a single Template", async () => {
+
+  it("Get multiple Templates", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      {
+        id: "formtestID",
+        jsonConfig: formConfiguration,
+      },
+      {
+        id: "formtestID2",
+        jsonConfig: formConfiguration,
+      },
+    ]);
+
+    const templates = await getAllTemplates(ability);
+
+    expect(templates).toEqual([
+      {
+        id: "formtestID",
+        ...formConfiguration,
+      },
+      {
+        id: "formtestID2",
+        ...formConfiguration,
+      },
+    ]);
+  });
+
+  it("No templates returned", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
+
+    const template = await getAllTemplates(ability);
+    expect(template).toEqual([]);
+  });
+
+  it("Get a single Template", async () => {
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
       jsonConfig: formConfiguration,
@@ -80,53 +139,44 @@ describe("Template CRUD functions", () => {
       ...formConfiguration,
     });
   });
-  test("Null returned when Template does not Exist", async () => {
+
+  it("Null returned when Template does not Exist", async () => {
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
     const template = await getTemplateByID("asdf");
     expect(template).toBe(null);
   });
-  test("Get multiple Templates", async () => {
-    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
-      {
-        id: "formtestID",
-        jsonConfig: formConfiguration,
-      },
-      {
-        id: "formtestID2",
-        jsonConfig: formConfiguration,
-      },
-    ]);
 
-    const templates = await getAllTemplates();
-    expect(templates).toEqual([
-      {
-        id: "formtestID",
-        ...formConfiguration,
-      },
-      {
-        id: "formtestID2",
-        ...formConfiguration,
-      },
-    ]);
-  });
-  test("No templates returned", async () => {
-    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
+  it("Get Submission Type", async () => {
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      jsonConfig: formConfiguration,
+    });
 
-    const template = await getAllTemplates();
-    expect(template).toEqual([]);
+    const submissionType = await getTemplateSubmissionTypeByID("formtestID");
+
+    expect(submissionType).toEqual(formConfiguration.submission);
   });
-  test("Update Template", async () => {
+
+  it("Update Template", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      users: [{ id: "1" }],
+    });
+
     const updatedFormConfig = structuredClone(
       formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
     );
     updatedFormConfig.publishingStatus = true;
+
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
       jsonConfig: updatedFormConfig,
     });
 
-    const updatedTemplate = await updateTemplate("test1", updatedFormConfig);
+    const updatedTemplate = await updateTemplate(ability, "test1", updatedFormConfig);
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -146,13 +196,22 @@ describe("Template CRUD functions", () => {
       ...updatedFormConfig,
     });
   });
-  test("Delete template", async () => {
+
+  it("Delete template", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      users: [{ id: "1" }],
+    });
+
     (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
       jsonConfig: formConfiguration,
     });
 
-    const deletedTemplate = await deleteTemplate("formtestID");
+    const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
     expect(prismaMock.template.delete).toHaveBeenCalledWith({
       where: {
@@ -169,53 +228,8 @@ describe("Template CRUD functions", () => {
       ...formConfiguration,
     });
   });
-  test("Get Templates by publishing status", async () => {
-    const updatedFormConfig = structuredClone(
-      formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
-    );
-    updatedFormConfig.publishingStatus = true;
-    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
-      {
-        id: "formtestID",
-        jsonConfig: formConfiguration,
-      },
-      {
-        id: "formtestID2",
-        jsonConfig: updatedFormConfig,
-      },
-    ]);
 
-    const publishedTemplates = await getTemplateByStatus(true);
-    expect(publishedTemplates).toHaveLength(1);
-    expect(publishedTemplates).toMatchObject([
-      {
-        id: "formtestID2",
-        publishingStatus: true,
-        displayAlphaBanner: true,
-        securityAttribute: "Unclassified",
-        form: updatedFormConfig.form,
-      },
-    ]);
-  });
-  test("Get Submission Type", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      jsonConfig: formConfiguration,
-    });
-
-    const submissionType = await getSubmissionTypeByID("formtestID");
-
-    expect(prismaMock.template.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: "formtestID",
-      },
-      select: {
-        jsonConfig: true,
-      },
-    });
-
-    expect(submissionType).toEqual(formConfiguration.submission);
-  });
-  test("Only include public properties", async () => {
+  it("Only include public properties", async () => {
     const formRecord = {
       id: "testID",
       ...formConfiguration,
@@ -227,5 +241,57 @@ describe("Template CRUD functions", () => {
     expect(publicFormRecord).not.toHaveProperty("internalTitleFr");
     expect(publicFormRecord).toHaveProperty("displayAlphaBanner");
     expect(publicFormRecord).toHaveProperty("securityAttribute");
+  });
+
+  it("User with no permission should not be able to use CRUD functions", async () => {
+    const ability = createAbility([]);
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      users: [{ id: "1" }],
+    });
+
+    expect(async () => {
+      await createTemplate(
+        ability,
+        "1",
+        formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+      );
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    expect(async () => {
+      await updateTemplate(
+        ability,
+        "test1",
+        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">)
+      );
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    expect(async () => {
+      await deleteTemplate(ability, "formtestID");
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+  });
+
+  it("User with no relation to the template being interacted with should not be able to use update and delete functions", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      users: [{ id: "2" }],
+    });
+
+    expect(async () => {
+      await updateTemplate(
+        ability,
+        "test1",
+        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">)
+      );
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    expect(async () => {
+      await deleteTemplate(ability, "formtestID");
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
 });

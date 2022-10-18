@@ -33,6 +33,7 @@ const updatePrivilegeOnUser = async (
   ) {
     return res.status(400).json({ error: "Malformed Request" });
   }
+
   const result = await updatePrivilegesForUser(ability, userID, privileges);
   logMessage.info(AdminLogAction.Update);
   if (result) {
