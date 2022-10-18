@@ -35,8 +35,8 @@ export const DownloadCSV = () => {
     data.push(["Form introduction - Title", form.titleEn, form.titleFr]);
     data.push([
       "Form introduction - Description",
-      form.introduction.descriptionEn,
-      form.introduction.descriptionFr,
+      markdownToTxt(form.introduction.descriptionEn).replaceAll("\n", " "),
+      markdownToTxt(form.introduction.descriptionFr).replaceAll("\n", " "),
     ]);
 
     let questionIndex = 1;
@@ -51,8 +51,8 @@ export const DownloadCSV = () => {
       if (element.properties.descriptionEn || element.properties.descriptionFr) {
         data.push([
           description,
-          markdownToTxt(element.properties.descriptionEn),
-          markdownToTxt(element.properties.descriptionFr),
+          markdownToTxt(element.properties.descriptionEn).replaceAll("\n", ""),
+          markdownToTxt(element.properties.descriptionFr).replaceAll("\n", ""),
         ]);
       }
 
@@ -68,13 +68,17 @@ export const DownloadCSV = () => {
     if (form.privacyPolicy.descriptionEn || form.privacyPolicy.descriptionFr) {
       data.push([
         "Privacy statement",
-        form.privacyPolicy.descriptionEn,
-        form.privacyPolicy.descriptionFr,
+        markdownToTxt(form.privacyPolicy.descriptionEn).replaceAll("\n", ""),
+        markdownToTxt(form.privacyPolicy.descriptionFr).replaceAll("\n", ""),
       ]);
     }
 
     if (form.endPage.descriptionEn || form.endPage.descriptionFr) {
-      data.push(["Confirmation message", form.endPage.descriptionEn, form.endPage.descriptionFr]);
+      data.push([
+        "Confirmation message",
+        markdownToTxt(form.endPage.descriptionEn).replaceAll("\n", ""),
+        markdownToTxt(form.endPage.descriptionFr).replaceAll("\n", ""),
+      ]);
     }
 
     const csv = data.map((row) => row.join(",")).join("\n");
