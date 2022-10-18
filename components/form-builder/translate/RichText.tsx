@@ -1,6 +1,7 @@
+import { useTranslation } from "next-i18next";
 import React from "react";
-import { ElementType } from "../types";
-import { Description } from "./Description";
+import { ElementType, Language } from "../types";
+import { Editor } from "./Editor";
 
 export const RichText = ({
   element,
@@ -9,13 +10,23 @@ export const RichText = ({
 }: {
   element: ElementType;
   index: number;
-  translationLanguagePriority: string;
+  translationLanguagePriority: Language;
 }) => {
+  const { t } = useTranslation("form-builder");
+  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
+
   return (
-    <Description // @TODO: replace with RichText
-      translationLanguagePriority={translationLanguagePriority}
-      element={element}
-      index={index}
-    />
+    <>
+      <div className="text-entry">
+        <div>
+          <span className="section">{t(element.type)}</span>
+          <span className="description">{t("Description")}</span>
+          <Editor element={element} index={index} language={translationLanguagePriority} />
+        </div>
+        <div>
+          <Editor element={element} index={index} language={translationLanguagePriorityAlt} />
+        </div>
+      </div>
+    </>
   );
 };
