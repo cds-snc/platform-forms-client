@@ -41,7 +41,7 @@ const handleDelete = async (formID: string) => {
 };
 
 const FormSettings = (props: FormSettingsProps): React.ReactElement => {
-  const { form } = props;
+  const { form: formRecord } = props;
   const router = useRouter();
   const { t, i18n } = useTranslation("admin-templates");
   const language = i18n.language as string;
@@ -56,9 +56,9 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
     <>
       <h1>{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
-        <b>Form Title:</b> {form.formConfig.form[getProperty("title", language)] as string}
+        <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
         <br />
-        <b>Form ID:</b> {form.formID}
+        <b>Form ID:</b> {formRecord.id}
       </div>
       <Tabs>
         <TabList>
@@ -70,21 +70,21 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         <TabPanel>
           <div>{newText}</div>
           <Label htmlFor="jsonInput">{t("settings.edit")}</Label>
-          <JSONUpload form={form} />
+          <JSONUpload form={formRecord} />
           <br />
           <div>
             <DeleteButton
               action={handleDelete}
-              data={form.formID}
+              data={formRecord.id}
               redirect={`/admin/view-templates`}
             />
           </div>
         </TabPanel>
         <TabPanel>
-          <BearerRefresh formID={form.formID} />
+          <BearerRefresh formID={formRecord.id} />
         </TabPanel>
         <TabPanel>
-          <FormAccess formID={form.formID} />
+          <FormAccess formID={formRecord.id} />
         </TabPanel>
       </Tabs>
     </>

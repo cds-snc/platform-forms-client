@@ -4,7 +4,7 @@ import { extractFormData } from "./helpers";
 import { Submission } from "@lib/types";
 
 export default logger((formResponse: Submission): string => {
-  const formResponseFormObject = formResponse.form.formConfig.form;
+  const formResponseFormObject = formResponse.form.form;
   const subjectEn = formResponseFormObject.emailSubjectEn
     ? formResponseFormObject.emailSubjectEn
     : formResponseFormObject.titleEn;

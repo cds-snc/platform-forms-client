@@ -20,7 +20,7 @@ const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.Rea
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language, t);
-  const formTitle = formRecord.formConfig.form[getProperty("title", language)] as string;
+  const formTitle = formRecord.form[getProperty("title", language)] as string;
   const router = useRouter();
   const { step } = router.query;
 
@@ -83,7 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // Short circuit only if Cypress testing
   if (
     process.env.APP_ENV !== "test" &&
-    (!publicForm || (!publicForm?.formConfig?.publishingStatus && !unpublishedForms))
+    (!publicForm || (!publicForm?.publishingStatus && !unpublishedForms))
   ) {
     return redirect(context.locale);
   }
