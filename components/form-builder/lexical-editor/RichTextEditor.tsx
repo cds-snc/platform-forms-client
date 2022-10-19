@@ -17,7 +17,7 @@ const Placeholder = styled.div`
     overflow: hidden;
     position: absolute;
     text-overflow: ellipsis;
-    top: 15px;
+    top: 90px;
     left: 30px;
     font-size: 15px;
     user-select: none;
