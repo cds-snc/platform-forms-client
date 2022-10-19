@@ -19,9 +19,10 @@ export const Description = ({
   return (
     <>
       <div className="text-entry">
-        <div>
-          <span className="section">{t(element.type)}</span>
-          <span className="description">{t("Description")}</span>
+        <div className="section-heading">
+          {t(element.type)}: {t("Description")}
+        </div>
+        <div className="section-text">
           <textarea
             value={
               element.properties[
@@ -38,8 +39,6 @@ export const Description = ({
               );
             }}
           ></textarea>
-        </div>
-        <div>
           <textarea
             value={
               element.properties[
