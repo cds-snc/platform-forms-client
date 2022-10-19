@@ -1,11 +1,18 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { deserializeMd, Value } from "@udecode/plate";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { useMyPlateEditorRef } from "../plate-editor/types";
-import { serializeMd } from "../plate-editor/helpers/markdown";
-import { LocalizedElementProperties } from "../types";
+
+/*
+import {
+  $convertFromMarkdownString,
+  $convertToMarkdownString,
+  TRANSFORMERS,
+} from '@lexical/markdown';
+*/
+
+// https://socket.dev/npm/package/@lexical/markdown
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -18,16 +25,22 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
 
   const { localizeField, updateField, form } = useTemplateStore();
 
+  const [value, setValue] = useState("");
+
+  // LexicalAutoLinkPlugin
+
+  /*
   const [value, setValue] = useState(
     form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)]
       ? deserializeMd(
-          editor,
-          form.elements[parentIndex].properties[
-            localizeField(LocalizedElementProperties.DESCRIPTION)
-          ]
-        )
+        editor,
+        form.elements[parentIndex].properties[
+        localizeField(LocalizedElementProperties.DESCRIPTION)
+        ]
+      )
       : [{ children: [{ text: "" }] }]
   );
+  */
 
   useEffect(() => {
     if (input.current) {
@@ -41,7 +54,8 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    *
    * @param value
    */
-  const handleChange = (value: Value) => {
+  const handleChange = (value: string = "") => {
+    /*
     let serialized = serializeMd(value);
 
     if (typeof serialized === "undefined") {
@@ -55,6 +69,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
       )}`,
       serialized
     );
+    */
   };
 
   return (

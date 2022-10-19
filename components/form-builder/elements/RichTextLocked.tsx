@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../plate-editor/RichTextEditor";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { serializeMd } from "../plate-editor/helpers/markdown";
 import { deserializeMd, Value } from "@udecode/plate";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
@@ -65,7 +65,8 @@ export const RichTextLocked = ({
     }
   }, []);
 
-  const onChange = (value: Value) => {
+  const onChange = (value: string) => {
+    /*
     let serialized = serializeMd(value);
 
     if (typeof serialized === "undefined") {
@@ -78,6 +79,7 @@ export const RichTextLocked = ({
       `form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`,
       serialized
     );
+    */
   };
 
   return (
