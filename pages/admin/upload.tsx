@@ -3,7 +3,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { UserRole } from "@prisma/client";
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   return {
