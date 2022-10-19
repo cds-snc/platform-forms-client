@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SELECTION_CHANGE_COMMAND, $getSelection, $isRangeSelection } from "lexical";
+import { $getSelection, $isRangeSelection, SELECTION_CHANGE_COMMAND } from "lexical";
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
@@ -100,12 +100,12 @@ function FloatingLinkEditor({ editor }) {
           updateLinkEditor();
         });
       }),
-
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
+          console.log("change");
           updateLinkEditor();
-          return true;
+          return false;
         },
         LowPriority
       )
@@ -195,7 +195,6 @@ function getSelectedNode(selection) {
 
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const toolbarRef = useRef(null);
   const [, setBlockType] = useState("paragraph");
   const [, setSelectedElementKey] = useState(null);
   const [isLink, setIsLink] = useState(false);
@@ -237,15 +236,7 @@ export default function ToolbarPlugin() {
         editorState.read(() => {
           updateToolbar();
         });
-      }),
-      editor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        () => {
-          updateToolbar();
-          return false;
-        },
-        LowPriority
-      )
+      })
     );
   }, [editor, updateToolbar]);
 
@@ -258,20 +249,16 @@ export default function ToolbarPlugin() {
   }, [editor, isLink]);
 
   return (
-    <div className="toolbar" ref={toolbarRef}>
-      <Divider />
-      <>
-        <button
-          onClick={insertLink}
-          className={"toolbar-item spaced " + (isLink ? "active" : "")}
-          aria-label="Insert Link"
-        >
-          Link
-        </button>
-        {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
-        <Divider />
-      </>
-    </div>
+    <>
+      <button
+        onClick={insertLink}
+        className={"toolbar-item spaced " + (isLink ? "active" : "")}
+        aria-label="Insert Link"
+      >
+        Link
+      </button>
+      {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
+    </>
   );
 }
 
