@@ -27,7 +27,7 @@ export const Description = ({
             className="sr-only"
             htmlFor={`element-${element.id}-description-${translationLanguagePriority}`}
           >
-            English text
+            {t(`${translationLanguagePriority}-text`)}
           </label>
           <textarea
             id={`element-${element.id}-description-${translationLanguagePriority}`}
@@ -50,7 +50,7 @@ export const Description = ({
             className="sr-only"
             htmlFor={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
           >
-            French text
+            {t(`${translationLanguagePriorityAlt}-text`)}
           </label>
           <textarea
             id={`element-${element.id}-description-${translationLanguagePriorityAlt}`}

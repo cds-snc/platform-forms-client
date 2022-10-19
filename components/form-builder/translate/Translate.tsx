@@ -151,7 +151,7 @@ export const Translate = () => {
             </legend>
             <div className="section-text">
               <label htmlFor="form-title-en" className="sr-only">
-                {t("English text")}
+                {t(`${translationLanguagePriority}-text`)}
               </label>
               <input
                 id="form-title-en"
@@ -170,7 +170,7 @@ export const Translate = () => {
                 }}
               />
               <label htmlFor="form-title-fr" className="sr-only">
-                {t("French text")}
+                {t(`${translationLanguagePriorityAlt}-text`)}
               </label>
               <input
                 id="form-title-fr"

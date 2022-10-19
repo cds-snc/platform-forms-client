@@ -32,7 +32,7 @@ export const Options = ({
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
                 >
-                  English text
+                  {t(`${translationLanguagePriority}-text`)}
                 </label>
                 <input
                   id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
@@ -49,7 +49,7 @@ export const Options = ({
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
                 >
-                  French text
+                  {t(`${translationLanguagePriorityAlt}-text`)}
                 </label>
                 <input
                   id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
