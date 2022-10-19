@@ -19,9 +19,10 @@ export const Title = ({
   return (
     <>
       <div className="text-entry">
-        <div>
-          <span className="section">{t(element.type)}</span>
-          <span className="description">Question title</span>
+        <div className="section-heading">
+          {t(element.type)}: {t("Question title")}
+        </div>
+        <div className="section-text">
           <textarea
             value={
               element.properties[
@@ -38,8 +39,6 @@ export const Title = ({
               );
             }}
           />
-        </div>
-        <div>
           <textarea
             value={
               element.properties[

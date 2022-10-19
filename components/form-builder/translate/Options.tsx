@@ -22,9 +22,10 @@ export const Options = ({
         {element.properties.choices.map((choice, choiceIndex) => (
           <div className="choice" key={`choice-${choiceIndex}`} id={`choice-${choiceIndex}`}>
             <div className="text-entry">
-              <div>
-                <span className="section">{t(element.type)}</span>
-                <span className="description">Option text</span>
+              <div className="section-heading">
+                {t(element.type)}: {t("Option text")}
+              </div>
+              <div className="section-text">
                 <input
                   type="text"
                   value={choice[translationLanguagePriority]}
@@ -35,8 +36,6 @@ export const Options = ({
                     );
                   }}
                 />
-              </div>
-              <div>
                 <input
                   type="text"
                   value={choice[translationLanguagePriorityAlt]}

@@ -26,6 +26,11 @@ const getDate = () => {
   return date.toISOString().split("T")[0];
 };
 
+// Add a space behind all sets of octothorphes
+const fixMarkdownHeadings = (str: string) => str.replace(/#{1,6}/g, "$& ").replace(/  +/g, " ");
+
+const formatMarkdown = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}"`;
+
 export const DownloadCSV = () => {
   const { form } = useTemplateStore();
 
@@ -35,8 +40,8 @@ export const DownloadCSV = () => {
     data.push(["Form introduction - Title", form.titleEn, form.titleFr]);
     data.push([
       "Form introduction - Description",
-      markdownToTxt(form.introduction.descriptionEn).replaceAll("\n", " "),
-      markdownToTxt(form.introduction.descriptionFr).replaceAll("\n", " "),
+      formatMarkdown(form.introduction.descriptionEn),
+      formatMarkdown(form.introduction.descriptionFr),
     ]);
 
     let questionIndex = 1;
@@ -51,8 +56,8 @@ export const DownloadCSV = () => {
       if (element.properties.descriptionEn || element.properties.descriptionFr) {
         data.push([
           description,
-          markdownToTxt(element.properties.descriptionEn).replaceAll("\n", ""),
-          markdownToTxt(element.properties.descriptionFr).replaceAll("\n", ""),
+          formatMarkdown(element.properties.descriptionEn),
+          formatMarkdown(element.properties.descriptionFr),
         ]);
       }
 
@@ -68,16 +73,16 @@ export const DownloadCSV = () => {
     if (form.privacyPolicy.descriptionEn || form.privacyPolicy.descriptionFr) {
       data.push([
         "Privacy statement",
-        markdownToTxt(form.privacyPolicy.descriptionEn).replaceAll("\n", ""),
-        markdownToTxt(form.privacyPolicy.descriptionFr).replaceAll("\n", ""),
+        formatMarkdown(form.privacyPolicy.descriptionEn),
+        formatMarkdown(form.privacyPolicy.descriptionFr),
       ]);
     }
 
     if (form.endPage.descriptionEn || form.endPage.descriptionFr) {
       data.push([
         "Confirmation message",
-        markdownToTxt(form.endPage.descriptionEn).replaceAll("\n", ""),
-        markdownToTxt(form.endPage.descriptionFr).replaceAll("\n", ""),
+        formatMarkdown(form.endPage.descriptionEn),
+        formatMarkdown(form.endPage.descriptionFr),
       ]);
     }
 

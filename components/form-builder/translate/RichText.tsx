@@ -20,10 +20,10 @@ export const RichText = ({
   return (
     <>
       <div className="text-entry">
-        <div>
-          <span className="section">{t(element.type)}</span>
-          <span className="description">{t("Description")}</span>
-
+        <div className="section-heading">
+          {t(element.type)}: {t("Description")}
+        </div>
+        <div className="section-text">
           <Editor
             path={`form.elements[${index}].properties.${localizeField(
               LocalizedElementProperties.DESCRIPTION,
@@ -35,8 +35,6 @@ export const RichText = ({
             index="${index}"
             language={translationLanguagePriority}
           />
-        </div>
-        <div>
           <Editor
             path={`form.elements[${index}].properties.${localizeField(
               LocalizedElementProperties.DESCRIPTION,
