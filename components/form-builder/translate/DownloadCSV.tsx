@@ -26,10 +26,15 @@ const getDate = () => {
   return date.toISOString().split("T")[0];
 };
 
-// Add a space behind all sets of octothorphes
+/**
+ * Add a space behind all sets of octothorphes
+ *
+ * NOTE: This is necessary because our RichTextEditor is not serializing headings
+ * correctly. We should aim to fix with the next iteration.
+ */
 const fixMarkdownHeadings = (str: string) => str.replace(/#{1,6}/g, "$& ").replace(/  +/g, " ");
 
-const formatMarkdown = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}"`;
+const formatText = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}"`;
 
 export const DownloadCSV = () => {
   const { form } = useTemplateStore();
@@ -37,11 +42,11 @@ export const DownloadCSV = () => {
   const generateCSV = async () => {
     const data = [["description", "english", "french"]];
 
-    data.push(["Form introduction - Title", form.titleEn, form.titleFr]);
+    data.push(["Form introduction - Title", formatText(form.titleEn), formatText(form.titleFr)]);
     data.push([
       "Form introduction - Description",
-      formatMarkdown(form.introduction.descriptionEn),
-      formatMarkdown(form.introduction.descriptionFr),
+      formatText(form.introduction.descriptionEn),
+      formatText(form.introduction.descriptionFr),
     ]);
 
     let questionIndex = 1;
@@ -50,14 +55,18 @@ export const DownloadCSV = () => {
       const description = element.type === "richText" ? "Page text" : `Question ${questionIndex++}`;
 
       if (element.properties.titleEn || element.properties.titleFr) {
-        data.push([description, element.properties.titleEn, element.properties.titleFr]);
+        data.push([
+          description,
+          formatText(element.properties.titleEn),
+          formatText(element.properties.titleFr),
+        ]);
       }
 
       if (element.properties.descriptionEn || element.properties.descriptionFr) {
         data.push([
           description,
-          formatMarkdown(element.properties.descriptionEn),
-          formatMarkdown(element.properties.descriptionFr),
+          formatText(element.properties.descriptionEn),
+          formatText(element.properties.descriptionFr),
         ]);
       }
 
@@ -73,16 +82,16 @@ export const DownloadCSV = () => {
     if (form.privacyPolicy.descriptionEn || form.privacyPolicy.descriptionFr) {
       data.push([
         "Privacy statement",
-        formatMarkdown(form.privacyPolicy.descriptionEn),
-        formatMarkdown(form.privacyPolicy.descriptionFr),
+        formatText(form.privacyPolicy.descriptionEn),
+        formatText(form.privacyPolicy.descriptionFr),
       ]);
     }
 
     if (form.endPage.descriptionEn || form.endPage.descriptionFr) {
       data.push([
         "Confirmation message",
-        formatMarkdown(form.endPage.descriptionEn),
-        formatMarkdown(form.endPage.descriptionFr),
+        formatText(form.endPage.descriptionEn),
+        formatText(form.endPage.descriptionFr),
       ]);
     }
 
