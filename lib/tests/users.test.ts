@@ -3,7 +3,7 @@
  */
 
 import { prismaMock } from "@jestUtils";
-import { getUsers, getOrCreateUser, getApiUser } from "@lib/users";
+import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/policyBuilder";
 import { getUserPrivileges, ManageUsers } from "__utils__/permissions";
@@ -114,7 +114,7 @@ describe("Users CRUD functions should throw an error if user does not have suffi
   it("User with no permission should not be able to use CRUD functions", async () => {
     const ability = createAbility([]);
 
-    expect(async () => {
+    await expect(async () => {
       await getUsers(ability);
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
