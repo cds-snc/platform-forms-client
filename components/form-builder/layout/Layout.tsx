@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
-import { LocalizedFormProperties } from "../types";
+import useNavigationStore from "../store/useNavigationStore";
+
+import { Language, LocalizedFormProperties } from "../types";
 import { Save } from "./Save";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
+import { Translate } from "../translate/Translate";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -30,6 +33,7 @@ const Navigation = styled.div`
   &.start .start,
   &.create .create,
   &.preview .preview,
+  &.translate .translate,
   &.save .save {
     font-weight: 700;
   }
@@ -46,25 +50,23 @@ const StyledPreviewWrapper = styled.div`
 `;
 
 export const Layout = () => {
-  const { updateField, toggleLang, localizeField, form } = useTemplateStore();
-  const { t } = useTranslation("form-builder");
-
-  const [showTab, setShowTab] = React.useState("start");
+  const { updateField, localizeField, form, setLang } = useTemplateStore();
+  const { currentTab, setTab } = useNavigationStore();
+  const { t, i18n } = useTranslation("form-builder");
+  const locale = i18n.language as Language;
 
   const handleClick = (tab: string) => {
-    setShowTab(tab);
+    setTab(tab);
   };
 
-  const handleHeaderClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (e.detail === 2) {
-      // double click
-      toggleLang();
-    }
-  };
+  useEffect(() => {
+    setLang(locale);
+  }, [locale]);
+
   /* eslint-disable */
   return (
     <>
-      <Navigation className={showTab}>
+      <Navigation className={currentTab}>
         <Tab className="start" onClick={() => handleClick("start")}>
           {t("start")}
         </Tab>{" "}
@@ -77,21 +79,25 @@ export const Layout = () => {
           {t("preview")}
         </Tab>{" "}
         /{" "}
+        <Tab className="translate" onClick={() => handleClick("translate")}>
+          {t("translate")}
+        </Tab>{" "}
+        /{" "}
         <Tab className="save" onClick={() => handleClick("save")}>
           {t("save")}
         </Tab>
       </Navigation>
 
-      {showTab === "start" && (
+      {currentTab === "start" && (
         <>
-          <h1 onClick={handleHeaderClick}>{t("start")}</h1>
+          <h1>{t("start")}</h1>
           <Start changeTab={handleClick} />
         </>
       )}
-      {showTab === "create" && (
+      {currentTab === "create" && (
         <>
           <div>
-            <h1 onClick={handleHeaderClick}>{t("title")}</h1>
+            <h1>{t("title")}</h1>
             <Input
               placeholder={t("placeHolderFormTitle")}
               value={form[localizeField(LocalizedFormProperties.TITLE)]}
@@ -103,17 +109,23 @@ export const Layout = () => {
           <ElementPanel />
         </>
       )}
-      {showTab === "preview" && (
+      {currentTab === "preview" && (
         <>
           <StyledPreviewWrapper>
-            <h1 onClick={handleHeaderClick}>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+            <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
             <Preview />
           </StyledPreviewWrapper>
         </>
       )}
-      {showTab === "save" && (
+      {currentTab === "translate" && (
         <>
-          <StyledHeader onClick={handleHeaderClick}>{t("saveH1")}</StyledHeader>
+          <h1>{t("translateTitle")}</h1>
+          <Translate />
+        </>
+      )}
+      {currentTab === "save" && (
+        <>
+          <StyledHeader>{t("saveH1")}</StyledHeader>
           <Save />
         </>
       )}
