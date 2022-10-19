@@ -54,7 +54,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    *
    * @param value
    */
-  const handleChange = (value: string = "") => {
+  const handleChange = (value = "") => {
     /*
     let serialized = serializeMd(value);
 
