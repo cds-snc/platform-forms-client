@@ -65,20 +65,18 @@ async function _createTemplate(
  * @returns An array of Form Records
  */
 async function _getAllTemplates(ability: Ability): Promise<Array<FormRecord>> {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+  checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-    const templates = await prisma.template.findMany({
+  const templates = await prisma.template
+    .findMany({
       select: {
         id: true,
         jsonConfig: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, []));
 
-    return templates.map((template) => _parseTemplate(template));
-  } catch (e) {
-    return prismaErrors(e, []);
-  }
+  return templates.map((template) => _parseTemplate(template));
 }
 
 /**
@@ -87,17 +85,17 @@ async function _getAllTemplates(ability: Ability): Promise<Array<FormRecord>> {
  * @returns Form Record
  */
 async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
-  try {
-    if (formCache.cacheAvailable) {
-      // This value will always be the latest if it exists because
-      // the cache is invalidated on change of a template
-      const cachedValue = await formCache.formID.check(formID);
-      if (cachedValue) {
-        return cachedValue;
-      }
+  if (formCache.cacheAvailable) {
+    // This value will always be the latest if it exists because
+    // the cache is invalidated on change of a template
+    const cachedValue = await formCache.formID.check(formID);
+    if (cachedValue) {
+      return cachedValue;
     }
+  }
 
-    const template = await prisma.template.findUnique({
+  const template = await prisma.template
+    .findUnique({
       where: {
         id: formID,
       },
@@ -105,18 +103,16 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
         id: true,
         jsonConfig: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    // Short circuit the public record filtering if no form record is found
-    if (!template) return null;
+  // Short circuit the public record filtering if no form record is found
+  if (!template) return null;
 
-    const parsedTemplate = _parseTemplate(template);
-    if (formCache.cacheAvailable) formCache.formID.set(formID, parsedTemplate);
+  const parsedTemplate = _parseTemplate(template);
+  if (formCache.cacheAvailable) formCache.formID.set(formID, parsedTemplate);
 
-    return parsedTemplate;
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
+  return parsedTemplate;
 }
 
 // Get the submission format by using the form ID
@@ -137,24 +133,24 @@ async function _updateTemplate(
   formID: string,
   formConfig: BetterOmit<FormRecord, "id" | "bearerToken">
 ): Promise<FormRecord | null> {
-  try {
-    const formRecordWithAssociatedUsers = await getFormRecordWithAssociatedUsers(formID);
-    if (!formRecordWithAssociatedUsers) return null;
+  const formRecordWithAssociatedUsers = await getFormRecordWithAssociatedUsers(formID);
+  if (!formRecordWithAssociatedUsers) return null;
 
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...formRecordWithAssociatedUsers.formRecord,
-            users: formRecordWithAssociatedUsers.users,
-          },
+  checkPrivileges(ability, [
+    {
+      action: "update",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...formRecordWithAssociatedUsers.formRecord,
+          users: formRecordWithAssociatedUsers.users,
         },
       },
-    ]);
+    },
+  ]);
 
-    const updatedTempate = await prisma.template.update({
+  const updatedTemplate = await prisma.template
+    .update({
       where: {
         id: formID,
       },
@@ -165,13 +161,13 @@ async function _updateTemplate(
         id: true,
         jsonConfig: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-    return _parseTemplate(updatedTempate);
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  return _parseTemplate(updatedTemplate);
 }
 
 /**
@@ -180,24 +176,24 @@ async function _updateTemplate(
  * @returns A boolean status if operation is sucessful
  */
 async function _deleteTemplate(ability: Ability, formID: string): Promise<FormRecord | null> {
-  try {
-    const formRecordWithAssociatedUsers = await getFormRecordWithAssociatedUsers(formID);
-    if (!formRecordWithAssociatedUsers) return null;
+  const formRecordWithAssociatedUsers = await getFormRecordWithAssociatedUsers(formID);
+  if (!formRecordWithAssociatedUsers) return null;
 
-    checkPrivileges(ability, [
-      {
-        action: "delete",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...formRecordWithAssociatedUsers.formRecord,
-            users: formRecordWithAssociatedUsers.users,
-          },
+  checkPrivileges(ability, [
+    {
+      action: "delete",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...formRecordWithAssociatedUsers.formRecord,
+          users: formRecordWithAssociatedUsers.users,
         },
       },
-    ]);
+    },
+  ]);
 
-    const deletedTemplate = await prisma.template.delete({
+  const deletedTemplate = await prisma.template
+    .delete({
       where: {
         id: formID,
       },
@@ -205,13 +201,15 @@ async function _deleteTemplate(ability: Ability, formID: string): Promise<FormRe
         id: true,
         jsonConfig: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-    return _parseTemplate(deletedTemplate);
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
+  // There was an error with Prisma, do not delete from Cache.
+  if (deletedTemplate === null) return deletedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+  return _parseTemplate(deletedTemplate);
 }
 
 async function getFormRecordWithAssociatedUsers(
