@@ -59,6 +59,7 @@
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.1.7",
+    "markdown-to-txt": "^2.0.1",
     "mmmagic": "0.5.3",
     "next": "12.2.5",
     "next-auth": "4.10.3",

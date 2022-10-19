@@ -84,7 +84,7 @@ export const RichTextEditor = ({
 }) => {
   return (
     <RichTextWrapper style={{ width: "100%" }}>
-      <PlateProvider<MyValue> id={id} plugins={plugins} initialValue={value} onChange={onChange}>
+      <PlateProvider<MyValue> id={id} plugins={plugins} value={value} onChange={onChange}>
         <HeadingToolbar>
           <BasicElementToolbarButtons />
           <BasicMarkToolbarButtons />
