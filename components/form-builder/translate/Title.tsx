@@ -18,12 +18,19 @@ export const Title = ({
 
   return (
     <>
-      <div className="text-entry">
-        <div className="section-heading">
+      <fieldset className="text-entry">
+        <legend className="section-heading">
           {t(element.type)}: {t("Question title")}
-        </div>
+        </legend>
         <div className="section-text">
+          <label
+            className="sr-only"
+            htmlFor={`element-${element.id}-title-${translationLanguagePriority}`}
+          >
+            English text
+          </label>
           <textarea
+            id={`element-${element.id}-title-${translationLanguagePriority}`}
             value={
               element.properties[
                 localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
@@ -39,7 +46,14 @@ export const Title = ({
               );
             }}
           />
+          <label
+            className="sr-only"
+            htmlFor={`element-${element.id}-title-${translationLanguagePriorityAlt}`}
+          >
+            French text
+          </label>
           <textarea
+            id={`element-${element.id}-title-${translationLanguagePriorityAlt}`}
             value={
               element.properties[
                 localizeField(LocalizedElementProperties.TITLE, translationLanguagePriorityAlt)
@@ -56,7 +70,7 @@ export const Title = ({
             }}
           />
         </div>
-      </div>
+      </fieldset>
     </>
   );
 };

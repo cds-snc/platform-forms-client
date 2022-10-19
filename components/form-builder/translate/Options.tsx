@@ -1,3 +1,4 @@
+import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
@@ -12,6 +13,7 @@ export const Options = ({
   index: number;
   translationLanguagePriority: Language;
 }) => {
+  logMessage.info(element);
   const { updateField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
@@ -20,13 +22,20 @@ export const Options = ({
     <>
       <div>
         {element.properties.choices.map((choice, choiceIndex) => (
-          <div className="choice" key={`choice-${choiceIndex}`} id={`choice-${choiceIndex}`}>
-            <div className="text-entry">
-              <div className="section-heading">
+          <div className="choice" key={`choice-${choiceIndex}`}>
+            <fieldset className="text-entry">
+              <legend className="section-heading">
                 {t(element.type)}: {t("Option text")}
-              </div>
+              </legend>
               <div className="section-text">
+                <label
+                  className="sr-only"
+                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
+                >
+                  English text
+                </label>
                 <input
+                  id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
                   type="text"
                   value={choice[translationLanguagePriority]}
                   onChange={(e) => {
@@ -36,7 +45,14 @@ export const Options = ({
                     );
                   }}
                 />
+                <label
+                  className="sr-only"
+                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
+                >
+                  French text
+                </label>
                 <input
+                  id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
                   type="text"
                   value={choice[translationLanguagePriorityAlt]}
                   onChange={(e) => {
@@ -47,7 +63,7 @@ export const Options = ({
                   }}
                 />
               </div>
-            </div>
+            </fieldset>
           </div>
         ))}
       </div>

@@ -61,6 +61,7 @@ const SectionDiv = styled.div`
       border: #dfdfdf 1px solid;
       border-bottom: none;
       background: #f5f5f5;
+      width: 100%;
     }
 
     .section-text {
@@ -144,12 +145,16 @@ export const Translate = () => {
             <hr />
           </div>
 
-          <div className="text-entry">
-            <div className="section-heading">
+          <fieldset className="text-entry">
+            <legend className="section-heading">
               {t("Form introduction")}: {t("Title")}
-            </div>
+            </legend>
             <div className="section-text">
+              <label htmlFor="form-title-en" className="sr-only">
+                {t("English text")}
+              </label>
               <input
+                id="form-title-en"
                 type="text"
                 value={
                   form[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]
@@ -164,7 +169,11 @@ export const Translate = () => {
                   );
                 }}
               />
+              <label htmlFor="form-title-fr" className="sr-only">
+                {t("French text")}
+              </label>
               <input
+                id="form-title-fr"
                 type="text"
                 value={
                   form[
@@ -182,7 +191,7 @@ export const Translate = () => {
                 }}
               />
             </div>
-          </div>
+          </fieldset>
 
           {(form.introduction.descriptionEn || form.introduction.descriptionFr) && (
             <div className="text-entry">
