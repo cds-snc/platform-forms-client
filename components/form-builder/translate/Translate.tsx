@@ -331,7 +331,7 @@ export const Translate = () => {
                     )
                   ]
                 }
-                language={translationLanguagePriority}
+                language={translationLanguagePriorityAlt}
               />
             </div>
           </div>
@@ -357,7 +357,7 @@ export const Translate = () => {
                   form.endPage[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriorityAlt
+                      translationLanguagePriority
                     )
                   ]
                 }
@@ -366,7 +366,7 @@ export const Translate = () => {
               <Editor
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
-                  translationLanguagePriority
+                  translationLanguagePriorityAlt
                 )}`}
                 index="introduction"
                 content={
@@ -377,7 +377,7 @@ export const Translate = () => {
                     )
                   ]
                 }
-                language={translationLanguagePriority}
+                language={translationLanguagePriorityAlt}
               />
             </div>
           </div>
