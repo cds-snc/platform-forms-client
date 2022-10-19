@@ -180,7 +180,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             <BackArrowIcon />
             Back to form preview
           </Link>
-          <Markdown options={{ forceBlock: true }}>
+          <Markdown options={{ forceBlock: true, disableParsingRawHTML: true }}>
             {form.endPage
               ? form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)]
               : ""}
@@ -195,7 +195,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {!formStatusSubmitted && (
         <>
           <div className="gc-richText">
-            <Markdown options={{ forceBlock: true }}>
+            <Markdown options={{ forceBlock: true, disableParsingRawHTML: true }}>
               {form.introduction
                 ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
                 : ""}
@@ -261,7 +261,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   </div>
                 ))}
               <div className="gc-richText">
-                <Markdown options={{ forceBlock: true }}>
+                <Markdown options={{ forceBlock: true, disableParsingRawHTML: true }}>
                   {form.privacyPolicy
                     ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
                     : ""}
