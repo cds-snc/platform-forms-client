@@ -10,7 +10,7 @@ import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
-import { getUserPrivileges, ManageUsers } from "__utils__/permissions";
+import { getUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/adminLogs");
@@ -64,7 +64,7 @@ describe("Users API endpoint", () => {
     });
   });
 
-  describe("GET", () => {
+  describe.each([[ViewUserPrivileges], [ManageUsers]])("GET", (privileges) => {
     beforeAll(() => {
       const mockSession: Session = {
         expires: "1",
@@ -72,7 +72,7 @@ describe("Users API endpoint", () => {
           id: "1",
           email: "forms@cds.ca",
           name: "forms",
-          privileges: getUserPrivileges(ManageUsers, {}),
+          privileges: privileges,
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
@@ -260,6 +260,97 @@ describe("Users API endpoint", () => {
       await users(req, res);
 
       expect(res.statusCode).toBe(200);
+    });
+  });
+
+  describe("Users API functions should throw an error if user does not have permissions", () => {
+    describe("Users API functions should throw an error if user does not have any permissions", () => {
+      beforeAll(() => {
+        const mockSession: Session = {
+          expires: "1",
+          user: {
+            id: "1",
+            email: "forms@cds.ca",
+            name: "forms",
+            privileges: [],
+          },
+        };
+        mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+      });
+
+      afterAll(() => {
+        mockGetSession.mockReset();
+      });
+
+      it("User with no permission should not be able to use GET API functions", async () => {
+        const { req, res } = createMocks({
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+        });
+
+        await users(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      });
+
+      it("User with no permission should not be able to use PUT API functions", async () => {
+        const { req, res } = createMocks({
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            userID: "2",
+            privileges: [],
+          },
+        });
+
+        await users(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      });
+    });
+
+    describe("Users API functions should throw an error if user does not have sufficient permissions", () => {
+      beforeAll(() => {
+        const mockSession: Session = {
+          expires: "1",
+          user: {
+            id: "1",
+            email: "forms@cds.ca",
+            name: "forms",
+            privileges: ViewUserPrivileges,
+          },
+        };
+        mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+      });
+
+      afterAll(() => {
+        mockGetSession.mockReset();
+      });
+
+      it("User with no permission should not be able to use PUT API functions", async () => {
+        const { req, res } = createMocks({
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: {
+            userID: "2",
+            privileges: [],
+          },
+        });
+
+        await users(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      });
     });
   });
 });

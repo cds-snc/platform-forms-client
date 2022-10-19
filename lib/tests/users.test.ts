@@ -6,7 +6,7 @@ import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/policyBuilder";
-import { getUserPrivileges, ManageUsers } from "__utils__/permissions";
+import { getUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
 
 describe("User query tests should fail gracefully", () => {
   it("getOrCreateUser should fail gracefully - create", async () => {
@@ -30,7 +30,7 @@ describe("User query tests should fail gracefully", () => {
   });
 
   it("getUsers should fail silenty", async () => {
-    const ability = createAbility(getUserPrivileges(ManageUsers, {}));
+    const ability = createAbility(ManageUsers);
 
     prismaMock.user.findMany.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
@@ -46,11 +46,10 @@ describe("getOrCreateUser", () => {
     const user = {
       id: "3",
       name: "user_1",
-      admin: false,
       email: "fads@asdf.ca",
       emailVerified: null,
       image: null,
-      privileges: ["Base privilege"],
+      privileges: ManageUsers,
     };
 
     prismaMock.user.findUnique.mockResolvedValue(user);
@@ -63,7 +62,6 @@ describe("getOrCreateUser", () => {
     const user = {
       id: "3",
       name: "user_1",
-      admin: false,
       email: "fads@asdf.ca",
       emailVerified: null,
       image: null,
@@ -83,8 +81,8 @@ describe("getOrCreateUser", () => {
 });
 
 describe("getUsers", () => {
-  it("Returns a list of users", async () => {
-    const ability = createAbility(getUserPrivileges(ManageUsers, {}));
+  it.each([[ViewUserPrivileges], [ManageUsers]])("Returns a list of users", async (privileges) => {
+    const ability = createAbility(privileges);
 
     const returnedUsers = [
       {
@@ -110,7 +108,7 @@ describe("getUsers", () => {
   });
 });
 
-describe("Users CRUD functions should throw an error if user does not have sufficient permissions", () => {
+describe("Users CRUD functions should throw an error if user does not have any permissions", () => {
   it("User with no permission should not be able to use CRUD functions", async () => {
     const ability = createAbility([]);
 
