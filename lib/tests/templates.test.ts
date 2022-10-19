@@ -24,7 +24,7 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import v8 from "v8";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/policyBuilder";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, getUserPrivileges, ManageForms } from "__utils__/permissions";
 
 const redis = new Redis();
 
@@ -45,8 +45,8 @@ describe("Template CRUD functions", () => {
     delete process.env.TOKEN_SECRET;
   });
 
-  it("Create a Template", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+  it.each([[Base], [ManageForms]])("Create a Template", async (privileges) => {
+    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
@@ -79,8 +79,8 @@ describe("Template CRUD functions", () => {
     });
   });
 
-  it("Get multiple Templates", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+  it.each([[Base], [ManageForms]])("Get multiple Templates", async (privileges) => {
+    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       {
@@ -107,8 +107,8 @@ describe("Template CRUD functions", () => {
     ]);
   });
 
-  it("No templates returned", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+  it.each([[Base], [ManageForms]])("No templates returned", async (privileges) => {
+    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
@@ -157,8 +157,8 @@ describe("Template CRUD functions", () => {
     expect(submissionType).toEqual(formConfiguration.submission);
   });
 
-  it("Update Template", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+  it.each([[Base], [ManageForms]])("Update Template", async (privileges) => {
+    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
@@ -197,8 +197,8 @@ describe("Template CRUD functions", () => {
     });
   });
 
-  it("Delete template", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+  it.each([[Base], [ManageForms]])("Delete template", async (privileges) => {
+    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
@@ -252,7 +252,7 @@ describe("Template CRUD functions", () => {
       users: [{ id: "1" }],
     });
 
-    expect(async () => {
+    await expect(async () => {
       await createTemplate(
         ability,
         "1",
@@ -260,7 +260,11 @@ describe("Template CRUD functions", () => {
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
-    expect(async () => {
+    await expect(async () => {
+      await getAllTemplates(ability);
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    await expect(async () => {
       await updateTemplate(
         ability,
         "test1",
@@ -268,7 +272,7 @@ describe("Template CRUD functions", () => {
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
-    expect(async () => {
+    await expect(async () => {
       await deleteTemplate(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
@@ -282,7 +286,7 @@ describe("Template CRUD functions", () => {
       users: [{ id: "2" }],
     });
 
-    expect(async () => {
+    await expect(async () => {
       await updateTemplate(
         ability,
         "test1",
@@ -290,7 +294,21 @@ describe("Template CRUD functions", () => {
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
-    expect(async () => {
+    await expect(async () => {
+      await deleteTemplate(ability, "formtestID");
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+  });
+
+  it("User with Base permissions should not be able to delete a template that is published", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: { ...formConfiguration, publishingStatus: true },
+      users: [{ id: "1" }],
+    });
+
+    await expect(async () => {
       await deleteTemplate(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });

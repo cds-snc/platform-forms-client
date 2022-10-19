@@ -20,7 +20,7 @@ import {
 import { Session } from "next-auth";
 import { BetterOmit } from "@lib/types";
 import { MiddlewareProps } from "@lib/types";
-import { Ability, createAbility } from "@lib/policyBuilder";
+import { Ability, AccessControlError, createAbility } from "@lib/policyBuilder";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -31,10 +31,7 @@ const templates = async (
   { session }: MiddlewareProps
 ) => {
   try {
-    if (!session) {
-      res.status(401);
-      return;
-    }
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
 
     const ability = createAbility(session.user.privileges);
 
@@ -86,6 +83,7 @@ const templates = async (
     // If not GET then we're authenticated and can safely return the complete Form Record.
     return res.status(200).json(response);
   } catch (err) {
+    if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     res.status(500).json({ error: "Malformed API Request" });
   }
 };
