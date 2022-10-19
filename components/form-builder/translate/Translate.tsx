@@ -11,6 +11,12 @@ import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { Editor } from "./Editor";
 
+const FlexDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const SwitchLanguageButton = styled.button`
   color: #fff;
 
@@ -49,38 +55,46 @@ const SectionDiv = styled.div`
   }
 
   .text-entry {
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 20px;
-    border: 1px solid #cacaca;
-
-    > * {
-      flex: 1;
-    }
-
-    > div:first-of-type {
-      border-right: 1px solid black;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5;
-    }
-
-    span.section {
-      display: inline-block;
-      margin-right: 10px;
+    .section-heading {
+      font-size: 16px;
       padding: 8px 6px;
-      background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #e9ecef;
+      border: #dfdfdf 1px solid;
+      border-bottom: none;
+      background: #f5f5f5;
     }
 
-    span.description {
-      display: inline-block;
-      margin-right: 10px;
-      padding: 8px 6px;
-      background: #e9ecef;
+    .section-text {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 20px;
+      border: 1px solid #cacaca;
+
+      > * {
+        flex: 1;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5;
+        z-index: 1;
+
+        &:first-of-type {
+          border-right: 1px solid black;
+        }
+
+        &:focus {
+          border-color: #303fc3;
+          box-shadow: 0 0 0 2.5px #303fc3;
+          outline: 0;
+          z-index: 10;
+        }
+      }
+
+      div[class^="Editor"]:first-of-type {
+        border-right: 1px solid black;
+      }
     }
   }
 `;
@@ -111,14 +125,18 @@ export const Translate = () => {
           filling out your form.
         </p>
         <br />
-        <div>
-          {translationLanguagePriority === "en" ? "English" : "French"}
-          <SwitchLanguageButton onClick={switchLanguage}>
-            <span>{t("Switch")}</span>
-            <SwapHoriz />
-          </SwitchLanguageButton>
-          {translationLanguagePriority === "en" ? "French" : "English"}
-        </div>
+
+        <FlexDiv>
+          <div>
+            {translationLanguagePriority === "en" ? "English" : "French"}
+            <SwitchLanguageButton onClick={switchLanguage}>
+              <span>{t("Switch")}</span>
+              <SwapHoriz />
+            </SwitchLanguageButton>
+            {translationLanguagePriority === "en" ? "French" : "English"}
+          </div>
+          <DownloadCSV />
+        </FlexDiv>
 
         <SectionDiv>
           <div className="section-title">
@@ -126,12 +144,11 @@ export const Translate = () => {
             <hr />
           </div>
 
-          <DownloadCSV />
-
           <div className="text-entry">
-            <div>
-              <span className="section">{t("Form introduction")}</span>
-              <span className="description">{t("Title")}</span>
+            <div className="section-heading">
+              {t("Form introduction")}: {t("Title")}
+            </div>
+            <div className="section-text">
               <input
                 type="text"
                 value={
@@ -147,8 +164,6 @@ export const Translate = () => {
                   );
                 }}
               />
-            </div>
-            <div>
               <input
                 type="text"
                 value={
@@ -171,10 +186,10 @@ export const Translate = () => {
 
           {(form.introduction.descriptionEn || form.introduction.descriptionFr) && (
             <div className="text-entry">
-              <div>
-                <span className="section">{t("Form introduction")}</span>
-                <span className="description">{t("Description")}</span>
-
+              <div className="section-heading">
+                {t("Form introduction")}: {t("Description")}
+              </div>
+              <div className="section-text">
                 <Editor
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
@@ -191,8 +206,6 @@ export const Translate = () => {
                   }
                   language={translationLanguagePriority}
                 />
-              </div>
-              <div>
                 <Editor
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
@@ -283,9 +296,11 @@ export const Translate = () => {
             <hr />
           </div>
           <div className="text-entry">
-            <div>
-              <span className="section">{t("Page text")}</span>
-              <span className="description">{t("Description")}</span>
+            <div className="section-heading">
+              {t("Page text")}: {t("Description")}
+            </div>
+
+            <div className="section-text">
               <Editor
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
@@ -302,8 +317,6 @@ export const Translate = () => {
                 }
                 language={translationLanguagePriority}
               />
-            </div>
-            <div>
               <Editor
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
@@ -330,9 +343,10 @@ export const Translate = () => {
             <hr />
           </div>
           <div className="text-entry">
-            <div>
-              <span className="section">{t("Page text")}</span>
-              <span className="description">{t("Description")}</span>
+            <div className="section-heading">
+              {t("Page text")}: {t("Description")}
+            </div>
+            <div className="section-text">
               <Editor
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
@@ -349,8 +363,6 @@ export const Translate = () => {
                 }
                 language={translationLanguagePriority}
               />
-            </div>
-            <div>
               <Editor
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
