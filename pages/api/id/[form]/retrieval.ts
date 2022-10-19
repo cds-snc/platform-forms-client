@@ -201,11 +201,8 @@ async function deleteFormResponses(
   }
 }
 
+// Removing access for all Methods until this API is ready for use.
 export default middleware(
-  [
-    cors({ allowedMethods: ["GET", "DELETE"] }),
-    validTemporaryToken(),
-    jsonValidator(retrievalSchema),
-  ],
+  [cors({ allowedMethods: [] }), validTemporaryToken(), jsonValidator(retrievalSchema)],
   handler
 );

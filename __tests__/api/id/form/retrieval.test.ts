@@ -12,11 +12,12 @@ import jwt, { Secret } from "jsonwebtoken";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/logger");
-const mockLogMessage = jest.mocked(logMessage, true);
+const mockLogMessage = jest.mocked(logMessage, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
-describe("/api/retrieval", () => {
+// Skipping until API is reactivated.  Currently all methods are blocked from accessing.
+describe.skip("/api/retrieval", () => {
   let dateNowSpy: jest.SpyInstance;
   beforeEach(() => {
     dateNowSpy = jest.spyOn(Date, "now");
