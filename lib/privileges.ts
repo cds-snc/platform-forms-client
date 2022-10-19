@@ -10,7 +10,7 @@ import {
 } from "@lib/policyBuilder";
 import { Prisma } from "@prisma/client";
 import { logMessage } from "./logger";
-import { subject as setSubjectType, subject } from "@casl/ability";
+import { subject as setSubjectType } from "@casl/ability";
 
 interface ForcedSubjectType {
   type: Extract<Subject, string>;

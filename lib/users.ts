@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { ApiAccessLog, ApiUser } from "@prisma/client";
+import { ApiAccessLog } from "@prisma/client";
 import { JWT } from "next-auth";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
@@ -115,7 +115,7 @@ export const getUsers = async (ability: Ability) => {
 };
 
 /**
- * Retrieves the accessLog entry for the last login for a user
+ * Retrieves the accessLog entry for the last login for an API user
  * @param userId
  * @returns AccessLog object
  */
