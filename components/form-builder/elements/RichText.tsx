@@ -1,18 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-import { useMyPlateEditorRef } from "../plate-editor/types";
-
-/*
-import {
-  $convertFromMarkdownString,
-  $convertToMarkdownString,
-  TRANSFORMERS,
-} from '@lexical/markdown';
-*/
-
-// https://socket.dev/npm/package/@lexical/markdown
+import { LocalizedElementProperties } from "../types";
 
 const OptionWrapper = styled.div`
   display: flex;
@@ -21,26 +11,11 @@ const OptionWrapper = styled.div`
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   const input = useRef<HTMLInputElement>(null);
   const editorId = `${parentIndex}-editor`;
-  const editor = useMyPlateEditorRef(editorId);
 
   const { localizeField, updateField, form } = useTemplateStore();
 
-  const [value, setValue] = useState("");
-
-  // LexicalAutoLinkPlugin
-
-  /*
-  const [value, setValue] = useState(
-    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)]
-      ? deserializeMd(
-        editor,
-        form.elements[parentIndex].properties[
-        localizeField(LocalizedElementProperties.DESCRIPTION)
-        ]
-      )
-      : [{ children: [{ text: "" }] }]
-  );
-  */
+  const value =
+    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   useEffect(() => {
     if (input.current) {
@@ -55,21 +30,12 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
    * @param value
    */
   const handleChange = (value = "") => {
-    /*
-    let serialized = serializeMd(value);
-
-    if (typeof serialized === "undefined") {
-      serialized = "";
-    }
-
-    setValue(value);
     updateField(
       `form.elements[${parentIndex}].properties.${localizeField(
         LocalizedElementProperties.DESCRIPTION
       )}`,
-      serialized
+      value
     );
-    */
   };
 
   return (
