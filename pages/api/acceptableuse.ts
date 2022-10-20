@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { cors, middleware, csrfProtected } from "@lib/middleware";
+import { cors, middleware, csrfProtected, sessionExists } from "@lib/middleware";
 import { setAcceptableUse } from "@lib/acceptableUseCache";
 
 const acceptableUse = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -14,6 +14,6 @@ const acceptableUse = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default middleware(
-  [cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])],
+  [cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"]), sessionExists()],
   acceptableUse
 );

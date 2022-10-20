@@ -6,7 +6,7 @@
 
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
-import apiUsers from "@pages/api/id/[form]/apiUsers";
+import apiUsers from "@pages/api/id/[form]/apiusers";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";

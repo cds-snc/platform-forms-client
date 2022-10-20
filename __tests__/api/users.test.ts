@@ -51,7 +51,6 @@ describe("Users API endpoint", () => {
         },
         body: {
           userId: "1",
-          isAdmin: "false",
         },
       });
 
@@ -172,7 +171,7 @@ describe("Users API endpoint", () => {
       mockGetSession.mockReset();
     });
 
-    it("Should return 400 invalid payload error when isAdmin is missing", async () => {
+    it("Should return 400 invalid payload error when privileges is missing", async () => {
       const { req, res } = createMocks({
         method: "PUT",
         headers: {
@@ -200,7 +199,7 @@ describe("Users API endpoint", () => {
           Origin: "http://localhost:3000/api/id/11/owners",
         },
         body: {
-          isAdmin: true,
+          privileges: [{ id: "2", action: "add" }],
         },
       });
 

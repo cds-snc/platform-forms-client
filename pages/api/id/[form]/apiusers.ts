@@ -6,7 +6,6 @@ import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
 import { Session } from "next-auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { logMessage } from "@lib/logger";
 import { MiddlewareProps } from "@lib/types";
 import { createAbility, AccessControlError, Ability } from "@lib/policyBuilder";
 import { checkPrivileges } from "@lib/privileges";

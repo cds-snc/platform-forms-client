@@ -1,5 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { ApiAccessLog, ApiUser } from "@prisma/client";
+import { ApiAccessLog } from "@prisma/client";
 import { JWT } from "next-auth";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
@@ -85,10 +85,10 @@ export const getOrCreateUser = async (userToken: JWT) => {
  * @returns An array of all Users
  */
 export const getUsers = async (ability: Ability) => {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+  checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
-    const users = await prisma.user.findMany({
+  const users = await prisma.user
+    .findMany({
       select: {
         id: true,
         name: true,
@@ -106,16 +106,14 @@ export const getUsers = async (ability: Ability) => {
       orderBy: {
         id: "asc",
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, []));
 
-    return users;
-  } catch (e) {
-    return prismaErrors(e, []);
-  }
+  return users;
 };
 
 /**
- * Retrieves the accessLog entry for the last login for a user
+ * Retrieves the accessLog entry for the last login for an API user
  * @param userId
  * @returns AccessLog object
  */

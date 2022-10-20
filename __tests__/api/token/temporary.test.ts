@@ -7,7 +7,6 @@ import { createMocks } from "node-mocks-http";
 import temporary from "@pages/api/token/temporary";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
-import { getTokenById } from "@pages/api/id/[form]/bearer";
 
 const redis = new Redis();
 
@@ -17,7 +16,6 @@ jest.mock("@lib/integration/redisConnector", () => ({
 
 jest.mock("next-auth/react");
 jest.mock("@pages/api/id/[form]/bearer");
-const mockedGetTokenById = jest.mocked(getTokenById, true);
 
 let IsGCNotifyServiceAvailable = true;
 
@@ -65,7 +63,10 @@ describe("TemporaryBearerToken tests", () => {
         email: "test@cds-snc.ca",
       },
     });
-    mockedGetTokenById.mockResolvedValue({ bearerToken: token });
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      bearerToken: token,
+    });
+
     (prismaMock.apiUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       templateId: 1,
       email: "test@cds-snc.ca",
@@ -149,7 +150,9 @@ describe("TemporaryBearerToken tests", () => {
         email: "test@cds-snc.ca",
       },
     });
-    mockedGetTokenById.mockResolvedValue({ bearerToken: token });
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      bearerToken: token,
+    });
     (prismaMock.apiUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       templateId: 1,
       email: "test@cds-snc.ca",
@@ -198,7 +201,9 @@ describe("TemporaryBearerToken tests", () => {
         email: "test@cds-snc.ca",
       },
     });
-    mockedGetTokenById.mockResolvedValue({ bearerToken: token });
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      bearerToken: token,
+    });
     (prismaMock.apiUser.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       templateId: 1,
       email: "test@cds-snc.ca",

@@ -14,7 +14,6 @@ import {
   registerSuccessfulLoginAttempt,
 } from "@lib/lockout";
 import { extractBearerTokenFromReq } from "@lib/middleware/validTemporaryToken";
-import { getTokenById } from "../id/[form]/bearer";
 
 /**
  * Verifies that the payload for the request is valid.
@@ -30,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse): Promise<void>
     return res.status(500).json({ error: "Server cannot respond at this time" });
   }
 
-  const email = req.body["email"];
+  const email: string | undefined = req.body["email"];
 
   if (!email) {
     return res.status(400).json({ error: "Invalid payload" });
@@ -89,7 +88,14 @@ async function hasValidFormAccessToken(req: NextApiRequest, tokenSecret: string)
   try {
     const token = extractBearerTokenFromReq(req);
     const { formID } = jwt.verify(token, tokenSecret) as BearerTokenPayload;
-    const tokenID = await getTokenById(formID);
+    const tokenID = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        bearerToken: true,
+      },
+    });
 
     if (tokenID?.bearerToken === token) return formID;
     else throw new Error("Form access token is invalid.");

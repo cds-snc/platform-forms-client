@@ -1,29 +1,28 @@
-import { getRedisInstance } from "./integration/redisConnector";
+import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../flag_initialization/default_flag_settings.json";
+import { checkPrivileges } from "@lib/privileges";
+import { Ability } from "./policyBuilder";
 
-export const createFlag = async (key: string, value: boolean): Promise<void> => {
-  const redis = await getRedisInstance();
-  await redis
-    .multi()
-    .sadd("flags", key)
-    .set(`flag:${key}`, value ? "1" : "0")
-    .exec();
-};
-
-export const enableFlag = async (key: string): Promise<void> => {
+/**
+ * Enables an Application Setting Flag
+ * @param ability User's Ability Instance
+ * @param key Applicaiton setting flag key
+ */
+export const enableFlag = async (ability: Ability, key: string): Promise<void> => {
+  checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
   const redis = await getRedisInstance();
   await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
 };
 
-export const disableFlag = async (key: string): Promise<void> => {
+/**
+ * Disables an Application Setting Flag
+ * @param ability User's Ability Instance
+ * @param key Application setting flag key
+ */
+export const disableFlag = async (ability: Ability, key: string): Promise<void> => {
+  checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
   const redis = await getRedisInstance();
   await redis.set(`flag:${key}`, "0");
-};
-
-export const removeFlag = async (key: string): Promise<void> => {
-  const redis = await getRedisInstance();
-  await redis.srem("flags", key);
-  await redis.del(`flag:${key}`);
 };
 
 const getKeys = async () => {
@@ -31,8 +30,14 @@ const getKeys = async () => {
   return redis.smembers("flags");
 };
 
+/**
+ * Checks a single Application Setting Flag
+ * @param key Application setting flag key
+ * @returns Boolean value of Flag key
+ */
 export const checkOne = async (key: string): Promise<boolean> => {
-  if (process.env.APP_ENV === "test") {
+  // If REDIS is not configured return the default values for the flags
+  if (!process.env.REDIS_URL) {
     return (flagInitialSettings as Record<string, boolean>)[key];
   }
   const redis = await getRedisInstance();
@@ -40,12 +45,18 @@ export const checkOne = async (key: string): Promise<boolean> => {
   return value === "1";
 };
 
-export const checkAll = async (): Promise<{ [k: string]: boolean }> => {
+/**
+ * Get a list of all available Application Setting Flags and their values
+ * @param ability User's Ability Instance
+ * @returns An object of {flag: value ...}
+ */
+export const checkAll = async (ability: Ability): Promise<{ [k: string]: boolean }> => {
+  checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
   const keys = await getKeys();
   return checkMulti(keys);
 };
 
-export const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => {
+const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => {
   const redis = await getRedisInstance();
   if (keys.length === 0) return {};
 

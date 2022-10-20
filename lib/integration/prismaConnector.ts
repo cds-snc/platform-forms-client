@@ -31,9 +31,6 @@ export const prismaErrors = <Error, T>(e: Error, returnValue?: T): T => {
     logMessage.warn(e as Error);
     if (returnValue !== undefined) return returnValue;
   }
-  if (process.env.APP_ENV === "test") {
-    if (returnValue !== undefined) return returnValue;
-  }
   logMessage.error(e as Error);
   throw e;
 };

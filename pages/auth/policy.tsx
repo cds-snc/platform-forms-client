@@ -12,7 +12,7 @@ const TermsOfUse = ({ content, user }: TermsOfUse) => {
   const acceptableProps: AcceptableUseProps = {
     content,
     lastLoginTime: user.lastLoginTime,
-    userId: user.userId,
+    userId: user.id,
     formID: user.authorizedForm,
   };
   return (
