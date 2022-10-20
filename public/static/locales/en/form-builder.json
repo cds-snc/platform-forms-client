@@ -48,5 +48,7 @@
   "translateTitle": "Translate view",
   "textField": "Text field",
   "textArea": "Text area",
-  "checkbox": "Multiple choice"
+  "checkbox": "Multiple choice",
+  "en-text": "English text",
+  "fr-text": "French text"
 }

@@ -18,12 +18,19 @@ export const Description = ({
 
   return (
     <>
-      <div className="text-entry">
-        <div className="section-heading">
+      <fieldset className="text-entry">
+        <legend className="section-heading">
           {t(element.type)}: {t("Description")}
-        </div>
+        </legend>
         <div className="section-text">
+          <label
+            className="sr-only"
+            htmlFor={`element-${element.id}-description-${translationLanguagePriority}`}
+          >
+            {t(`${translationLanguagePriority}-text`)}
+          </label>
           <textarea
+            id={`element-${element.id}-description-${translationLanguagePriority}`}
             value={
               element.properties[
                 localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
@@ -39,7 +46,14 @@ export const Description = ({
               );
             }}
           ></textarea>
+          <label
+            className="sr-only"
+            htmlFor={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
+          >
+            {t(`${translationLanguagePriorityAlt}-text`)}
+          </label>
           <textarea
+            id={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
             value={
               element.properties[
                 localizeField(
@@ -59,7 +73,7 @@ export const Description = ({
             }}
           ></textarea>
         </div>
-      </div>
+      </fieldset>
     </>
   );
 };
