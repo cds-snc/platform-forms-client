@@ -20,13 +20,20 @@ export const Options = ({
     <>
       <div>
         {element.properties.choices.map((choice, choiceIndex) => (
-          <div className="choice" key={`choice-${choiceIndex}`} id={`choice-${choiceIndex}`}>
-            <div className="text-entry">
-              <div className="section-heading">
+          <div className="choice" key={`choice-${choiceIndex}`}>
+            <fieldset className="text-entry">
+              <legend className="section-heading">
                 {t(element.type)}: {t("Option text")}
-              </div>
+              </legend>
               <div className="section-text">
+                <label
+                  className="sr-only"
+                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
+                >
+                  {t(`${translationLanguagePriority}-text`)}
+                </label>
                 <input
+                  id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
                   type="text"
                   value={choice[translationLanguagePriority]}
                   onChange={(e) => {
@@ -36,7 +43,14 @@ export const Options = ({
                     );
                   }}
                 />
+                <label
+                  className="sr-only"
+                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
+                >
+                  {t(`${translationLanguagePriorityAlt}-text`)}
+                </label>
                 <input
+                  id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
                   type="text"
                   value={choice[translationLanguagePriorityAlt]}
                   onChange={(e) => {
@@ -47,7 +61,7 @@ export const Options = ({
                   }}
                 />
               </div>
-            </div>
+            </fieldset>
           </div>
         ))}
       </div>

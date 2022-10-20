@@ -39,7 +39,7 @@ const Navigation = styled.div`
   }
 `;
 
-const Tab = styled.span`
+const Tab = styled.a`
   text-decoration: underline;
   cursor: pointer;
 `;
@@ -56,7 +56,10 @@ export const Layout = () => {
   const locale = i18n.language as Language;
 
   const handleClick = (tab: string) => {
-    setTab(tab);
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      setTab(tab);
+    };
   };
 
   useEffect(() => {
@@ -67,23 +70,23 @@ export const Layout = () => {
   return (
     <>
       <Navigation className={currentTab}>
-        <Tab className="start" onClick={() => handleClick("start")}>
+        <Tab className="start" href="#" onClick={handleClick("start")}>
           {t("start")}
         </Tab>{" "}
         /{" "}
-        <Tab className="create" onClick={() => handleClick("create")}>
+        <Tab className="create" href="#" onClick={handleClick("create")}>
           {t("design")}
         </Tab>{" "}
         /{" "}
-        <Tab className="preview" onClick={() => handleClick("preview")}>
+        <Tab className="preview" href="#" onClick={handleClick("preview")}>
           {t("preview")}
         </Tab>{" "}
         /{" "}
-        <Tab className="translate" onClick={() => handleClick("translate")}>
+        <Tab className="translate" href="#" onClick={handleClick("translate")}>
           {t("translate")}
         </Tab>{" "}
         /{" "}
-        <Tab className="save" onClick={() => handleClick("save")}>
+        <Tab className="save" href="#" onClick={handleClick("save")}>
           {t("save")}
         </Tab>
       </Navigation>
@@ -91,7 +94,7 @@ export const Layout = () => {
       {currentTab === "start" && (
         <>
           <h1>{t("start")}</h1>
-          <Start changeTab={handleClick} />
+          <Start changeTab={setTab} />
         </>
       )}
       {currentTab === "create" && (

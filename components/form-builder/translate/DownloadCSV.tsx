@@ -1,15 +1,7 @@
 import React from "react";
-import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
-
-const DownloadCSVButton = styled.button`
-  border: 2px solid #26374a;
-  border-radius: 10px;
-  background: #fff;
-  padding: 10px 25px;
-  margin: 10px 0 30px 0;
-`;
+import { FancyButton } from "../panel/Button";
 
 const slugify = (str: string) =>
   str
@@ -107,5 +99,5 @@ export const DownloadCSV = () => {
     URL.revokeObjectURL(url);
   };
 
-  return <DownloadCSVButton onClick={generateCSV}>Download .csv</DownloadCSVButton>;
+  return <FancyButton onClick={generateCSV}>Download .csv</FancyButton>;
 };
