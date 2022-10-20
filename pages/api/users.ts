@@ -6,8 +6,9 @@ import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { createAbility, Ability } from "@lib/policyBuilder";
+import { createAbility, Ability, AccessControlError } from "@lib/policyBuilder";
 import { updatePrivilegesForUser } from "@lib/privileges";
+
 const allowedMethods = ["GET", "PUT"];
 
 const getUserList = async (res: NextApiResponse, ability: Ability) => {
@@ -59,21 +60,20 @@ const handler = async (
   { session }: MiddlewareProps
 ): Promise<void> => {
   try {
-    if (!session) {
-      res.status(403);
-      return;
-    }
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
+
     const ability = createAbility(session.user.privileges);
 
     switch (req.method) {
-      case "PUT":
-        await updatePrivilegeOnUser(req, res, ability, session);
-        break;
       case "GET":
         await getUserList(res, ability);
         break;
+      case "PUT":
+        await updatePrivilegeOnUser(req, res, ability, session);
+        break;
     }
   } catch (error) {
+    if (error instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     res.status(500).json({ error: "Could not process request" });
   }
 };

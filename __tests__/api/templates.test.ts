@@ -3,7 +3,7 @@
  */
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { createMocks } from "node-mocks-http";
+import { createMocks, RequestMethod } from "node-mocks-http";
 import Redis from "ioredis-mock";
 import templates from "@pages/api/templates";
 import { unstable_getServerSession } from "next-auth/next";
@@ -12,7 +12,7 @@ import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, getUserPrivileges, ManageForms } from "__utils__/permissions";
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
@@ -46,7 +46,7 @@ describe("Requires a valid session to access API", () => {
   });
 });
 
-describe("Test JSON validation scenarios", () => {
+describe("Test templates API functions", () => {
   beforeAll(() => {
     process.env.TOKEN_SECRET = "testsecret";
   });
@@ -55,141 +55,344 @@ describe("Test JSON validation scenarios", () => {
     delete process.env.TOKEN_SECRET;
   });
 
-  beforeEach(() => {
-    const mockSession: Session = {
-      expires: "1",
-      user: {
-        id: "1",
-        email: "a@b.com",
-        name: "Testing Forms",
-        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
-      },
-    };
+  describe.each([[Base], [ManageForms]])("POST", (privileges) => {
+    beforeEach(() => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "a@b.com",
+          name: "Testing Forms",
+          privileges: privileges,
+        },
+      };
 
-    mockGetSession.mockResolvedValue(mockSession);
+      mockGetSession.mockResolvedValue(mockSession);
+    });
+
+    afterEach(() => {
+      mockGetSession.mockReset();
+    });
+
+    it("Should successfully handle a POST request to create a template", async () => {
+      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formConfig: validFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        "1",
+        "Create",
+        "UploadForm",
+        "Form id: test0form00000id000asdf11 has been uploaded"
+      );
+    });
+
+    it("Should fail with invalid JSON", async () => {
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formConfig: brokenFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
+    });
   });
 
-  afterEach(() => {
-    mockGetSession.mockReset();
+  describe.each([[Base], [ManageForms]])("PUT", (privileges) => {
+    beforeEach(() => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "a@b.com",
+          name: "Testing Forms",
+          privileges: getUserPrivileges(privileges, { user: { id: "1" } }),
+        },
+      };
+
+      mockGetSession.mockResolvedValue(mockSession);
+    });
+
+    afterEach(() => {
+      mockGetSession.mockReset();
+    });
+
+    it("Should successfully handle PUT request", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+          formConfig: validFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        "1",
+        "Update",
+        "UpdateForm",
+        "Form id: test0form00000id000asdf11 has been updated"
+      );
+    });
   });
 
-  it("Should successfully handle a POST request to create a template", async () => {
-    (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue({
-      id: "test0form00000id000asdf11",
-      jsonConfig: validFormTemplate,
+  describe.each([[Base], [ManageForms]])("DELETE", (privileges) => {
+    beforeEach(() => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "a@b.com",
+          name: "Testing Forms",
+          privileges: getUserPrivileges(privileges, { user: { id: "1" } }),
+        },
+      };
+
+      mockGetSession.mockResolvedValue(mockSession);
     });
 
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
-      id: "test0form00000id000asdf11",
-      jsonConfig: validFormTemplate,
+    afterEach(() => {
+      mockGetSession.mockReset();
     });
 
-    const { req, res } = createMocks({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      body: {
-        formConfig: validFormTemplate,
-      },
+    it("Should successfully handle DELETE request", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        "1",
+        "Delete",
+        "DeleteForm",
+        "Form id: test0form00000id000asdf11 has been deleted"
+      );
+    });
+  });
+});
+
+describe("Templates API functions should throw an error if user does not have permissions", () => {
+  describe("Templates API functions should throw an error if user does not have any permissions", () => {
+    beforeAll(() => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "a@b.com",
+          name: "Testing Forms",
+          privileges: [],
+        },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
     });
 
-    await templates(req, res);
+    afterAll(() => {
+      mockGetSession.mockReset();
+    });
 
-    expect(res.statusCode).toBe(200);
-    expect(logAdminActivity).toHaveBeenCalledWith(
-      "1",
-      "Create",
-      "UploadForm",
-      "Form id: test0form00000id000asdf11 has been uploaded"
+    it.each(["GET", "POST", "PUT", "DELETE"])(
+      "User with no permission should not be able to use %s API functions",
+      async (httpMethod) => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          id: "formtestID",
+          jsonConfig: validFormTemplate,
+          users: [{ id: "1" }],
+        });
+
+        const { req, res } = createMocks({
+          method: httpMethod as RequestMethod,
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+          body: {
+            ...(httpMethod !== "GET" && { formID: "test0form00000id000asdf11" }), // To target the getAllTemplates API when testing GET request
+            formConfig: validFormTemplate,
+          },
+        });
+
+        await templates(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      }
     );
   });
 
-  it("Should fail with invalid JSON", async () => {
-    const { req, res } = createMocks({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      body: {
-        formConfig: brokenFormTemplate,
-      },
+  describe("Templates API functions should throw an error if user does not have sufficient permissions", () => {
+    afterAll(() => {
+      mockGetSession.mockReset();
     });
 
-    await templates(req, res);
+    it("User with no relation to the template being interacted with should not be able to use the PUT API function", async () => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "forms@cds.ca",
+          name: "forms",
+          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
 
-    expect(res.statusCode).toBe(400);
-    expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
-  });
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: { ...validFormTemplate, publishingStatus: true },
+        users: [{ id: "2" }],
+      });
 
-  it("Should successfully handle PUT request", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      id: "formtestID",
-      jsonConfig: validFormTemplate,
-      users: [{ id: "1" }],
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+          formConfig: validFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
     });
 
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
-      id: "test0form00000id000asdf11",
-      jsonConfig: validFormTemplate,
+    it("User with no relation to the template being interacted with should not be able to use the DELETE API function", async () => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "forms@cds.ca",
+          name: "forms",
+          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "2" }],
+      });
+
+      const { req, res } = createMocks({
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
     });
 
-    const { req, res } = createMocks({
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      body: {
-        formID: "test0form00000id000asdf11",
-        formConfig: validFormTemplate,
-      },
+    it("User with Base permissions should not be able to use the DELETE API function on a published template", async () => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "forms@cds.ca",
+          name: "forms",
+          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: { ...validFormTemplate, publishingStatus: true },
+        users: [{ id: "1" }],
+      });
+
+      const { req, res } = createMocks({
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
     });
-
-    await templates(req, res);
-
-    expect(res.statusCode).toBe(200);
-    expect(logAdminActivity).toHaveBeenCalledWith(
-      "1",
-      "Update",
-      "UpdateForm",
-      "Form id: test0form00000id000asdf11 has been updated"
-    );
-  });
-
-  it("Should successfully handle DELETE request", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      id: "formtestID",
-      jsonConfig: validFormTemplate,
-      users: [{ id: "1" }],
-    });
-
-    (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
-      id: "test0form00000id000asdf11",
-      jsonConfig: validFormTemplate,
-    });
-
-    const { req, res } = createMocks({
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      body: {
-        formID: "test0form00000id000asdf11",
-      },
-    });
-
-    await templates(req, res);
-
-    expect(res.statusCode).toBe(200);
-    expect(logAdminActivity).toHaveBeenCalledWith(
-      "1",
-      "Delete",
-      "DeleteForm",
-      "Form id: test0form00000id000asdf11 has been deleted"
-    );
   });
 });
