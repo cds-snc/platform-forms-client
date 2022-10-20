@@ -31,6 +31,10 @@ export const prismaErrors = <Error, T>(e: Error, returnValue?: T): T => {
     logMessage.warn(e as Error);
     if (returnValue !== undefined) return returnValue;
   }
+  // If we're in test mode ignore that we cannot connect to the Prisma Backend
+  if (process.env.NODE_ENV === "test" && e instanceof Prisma.PrismaClientInitializationError) {
+    if (returnValue !== undefined) return returnValue;
+  }
   logMessage.error(e as Error);
   throw e;
 };
