@@ -1,12 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-import { serializeMd } from "../plate-editor/helpers/markdown";
-import { deserializeMd, Value } from "@udecode/plate";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
-import { LocalizedElementProperties } from "../types";
-import { useMyPlateEditorRef } from "../plate-editor/types";
+import { Language, LocalizedElementProperties } from "../types";
+import { useTranslation } from "next-i18next";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
@@ -36,28 +34,18 @@ const OptionWrapper = styled.div`
 `;
 
 export const RichTextLocked = ({
-  id,
   addElement,
   children,
   initialValue,
   schemaProperty,
-  "aria-label": ariaLabel = undefined,
 }: {
-  id: string;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
   schemaProperty: string;
-  "aria-label"?: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-  const { localizeField, updateField } = useTemplateStore();
-  const editorId = `${id}-editor`;
-  const editor = useMyPlateEditorRef();
-
-  const [value, setValue] = useState(
-    initialValue ? deserializeMd(editor, initialValue) : [{ children: [{ text: "" }] }]
-  );
+  const { localizeField } = useTemplateStore();
 
   useEffect(() => {
     if (input.current) {
@@ -65,28 +53,14 @@ export const RichTextLocked = ({
     }
   }, []);
 
-  const onChange = (value: string) => {
-    /*
-    let serialized = serializeMd(value);
-
-    if (typeof serialized === "undefined") {
-      serialized = "";
-    }
-
-    setValue(value);
-
-    updateField(
-      `form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`,
-      serialized
-    );
-    */
-  };
-
   return (
     <ElementWrapperDiv>
       <ContentWrapper>{children}</ContentWrapper>
       <OptionWrapper>
-        <RichTextEditor id={editorId} value={value} onChange={onChange} aria-label={ariaLabel} />
+        <RichTextEditor
+          path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
+          content={initialValue}
+        />
       </OptionWrapper>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>

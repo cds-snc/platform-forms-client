@@ -601,7 +601,6 @@ export const ElementPanel = () => {
   return (
     <ElementPanelDiv>
       <RichTextLocked
-        id="introductionPage"
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
@@ -614,7 +613,6 @@ export const ElementPanel = () => {
       {form.elements?.length >= 1 && (
         <>
           <RichTextLocked
-            id="endPage"
             addElement={false}
             initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
@@ -623,7 +621,6 @@ export const ElementPanel = () => {
             <h2>{t("richTextConfirmationTitle")}</h2>
           </RichTextLocked>
           <RichTextLocked
-            id="policyPage"
             addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
