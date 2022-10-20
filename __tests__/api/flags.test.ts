@@ -21,6 +21,13 @@ jest.mock("next-auth/next");
 const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
 
 describe("Flags API endpoint", () => {
+  beforeAll(() => {
+    // Adding URL to process.env because we are mocking out Redis for these tests
+    process.env.REDIS_URL = "test_url";
+  });
+  afterAll(() => {
+    delete process.env.REDIS_URL;
+  });
   describe("Authenticated", () => {
     describe("ViewApplicationSettings", () => {
       beforeEach(async () => {
