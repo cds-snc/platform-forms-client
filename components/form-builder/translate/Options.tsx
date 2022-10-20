@@ -1,4 +1,3 @@
-import { logMessage } from "@lib/logger";
 import { useTranslation } from "next-i18next";
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
@@ -13,7 +12,6 @@ export const Options = ({
   index: number;
   translationLanguagePriority: Language;
 }) => {
-  logMessage.info(element);
   const { updateField } = useTemplateStore();
   const { t } = useTranslation("form-builder");
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";

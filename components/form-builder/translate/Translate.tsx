@@ -10,28 +10,39 @@ import { Options } from "./Options";
 import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { Editor } from "./Editor";
+import { FancyButton } from "../panel/Button";
+
+const SwitchLangButton = styled(FancyButton)`
+  padding: 10px 20px;
+  background: #26374a;
+  color: white;
+  margin: 0 10px;
+
+  &:hover:not(:disabled),
+  &:active,
+  &:focus {
+    color: #ffffff;
+    background: #1c578a;
+  }
+
+  &:hover:active {
+    background: #16446c;
+  }
+
+  svg {
+    width: 30px;
+  }
+`;
 
 const FlexDiv = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 `;
 
-const SwitchLanguageButton = styled.button`
-  color: #fff;
-
-  align-items: center;
-  padding: 10px 25px;
-  margin: 0 10px;
-
-  background: #26374a;
-  border: 2px solid #284162;
-  border-radius: 10px;
-
-  svg {
-    width: 40px;
-    margin-left: 4px;
-  }
+const LangSpan = styled.span`
+  width: 70px;
 `;
 
 const SectionDiv = styled.div`
@@ -128,14 +139,13 @@ export const Translate = () => {
         <br />
 
         <FlexDiv>
-          <div>
-            {translationLanguagePriority === "en" ? "English" : "French"}
-            <SwitchLanguageButton onClick={switchLanguage}>
-              <span>{t("Switch")}</span>
-              <SwapHoriz />
-            </SwitchLanguageButton>
-            {translationLanguagePriority === "en" ? "French" : "English"}
-          </div>
+          <FlexDiv>
+            <LangSpan>{translationLanguagePriority === "en" ? "English" : "French"}</LangSpan>
+            <SwitchLangButton onClick={switchLanguage} icon={<SwapHoriz />}>
+              {t("Switch")}
+            </SwitchLangButton>
+            <LangSpan>{translationLanguagePriority === "en" ? "French" : "English"}</LangSpan>
+          </FlexDiv>
           <DownloadCSV />
         </FlexDiv>
 

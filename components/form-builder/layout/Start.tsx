@@ -25,13 +25,19 @@ const StyledContainer = styled.div`
     padding: 110px 20px 0 25px;
     text-align: left;
 
-    &:hover {
+    &:hover,
+    &:focus {
       cursor: pointer;
       background-color: #d7d9db;
 
       h2 {
         text-decoration: underline;
       }
+    }
+
+    &:focus {
+      outline: 3px solid #303fc3;
+      outline-offset: 2px;
     }
 
     h2,
@@ -98,6 +104,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
     }
   };
 
+  /* eslint-disable */
   return (
     <>
       {errors && <div className="pt-2 pb-2 mt-4 mb-4 text-lg text-red-700">{errors}</div>}
@@ -113,7 +120,17 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           <h2>{t("startH2")}</h2>
           <p>{t("startP1")}</p>
         </button>
-        <label className="box" htmlFor="file-upload">
+        <label
+          className="box"
+          htmlFor="file-upload"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const uploadButton = document.getElementById("file-upload");
+              if (uploadButton) uploadButton.click();
+            }
+          }}
+          tabIndex={0}
+        >
           <ExternalLinkIcon />
           <h2>{t("startH3")}</h2>
           <p>{t("startP2")}</p>
