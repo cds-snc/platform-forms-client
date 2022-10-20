@@ -32,7 +32,7 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
       validateOnBlur={false}
       validateOnChange={false}
       onSubmit={async (values, formikHelpers) => {
-        await setShowSentReconfirmationToast(false);
+        setShowSentReconfirmationToast(false);
         await confirm(values, formikHelpers);
       }}
     >
@@ -97,7 +97,7 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
                 onClick={async () => {
                   const error = await resendConfirmationCode(username);
                   if (!error) {
-                    await setShowSentReconfirmationToast(true);
+                    setShowSentReconfirmationToast(true);
                   }
                 }}
                 secondary

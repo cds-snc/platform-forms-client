@@ -14,6 +14,9 @@ module.exports = {
         project: "./tsconfig.json",
       },
       plugins: ["@typescript-eslint", "jsx-a11y", "prettier"],
+      rules: {
+        "@typescript-eslint/await-thenable": "error",
+      },
     },
   ],
   env: {

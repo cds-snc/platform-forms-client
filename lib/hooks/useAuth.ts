@@ -16,7 +16,7 @@ export const useAuth = () => {
     { username, password, name }: { username: string; password: string; name: string },
     { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
   ) => {
-    await setCognitoError("");
+    setCognitoError("");
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -36,8 +36,8 @@ export const useAuth = () => {
         });
 
         if (result.statusText === "OK") {
-          await setSubmitting(false);
-          await setUsername(username);
+          setSubmitting(false);
+          setUsername(username);
         }
       }
     } catch (err) {
@@ -67,7 +67,7 @@ export const useAuth = () => {
     },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; confirmationCode: string }>
   ) => {
-    await setCognitoError("");
+    setCognitoError("");
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -90,7 +90,7 @@ export const useAuth = () => {
           // if we are on the login page we want to refresh the page
           // instead of pushing the route as it will do nothing
           if (router.pathname.includes("/auth/login")) {
-            await router.reload();
+            router.reload();
           } else {
             await router.push({
               pathname: "/auth/login",
@@ -105,18 +105,18 @@ export const useAuth = () => {
         const errorResponseMessage = axiosError.response.data.message;
 
         if (errorResponseMessage.includes("CodeMismatchException")) {
-          await setErrors({
+          setErrors({
             confirmationCode: t("CodeMismatchException"),
           });
         } else if (errorResponseMessage.includes("ExpiredCodeException")) {
-          await setErrors({
+          setErrors({
             confirmationCode: t("ExpiredCodeException"),
           });
         } else {
-          await setCognitoError(t("InternalServiceException"));
+          setCognitoError(t("InternalServiceException"));
         }
       } else {
-        await setCognitoError(t("InternalServiceException"));
+        setCognitoError(t("InternalServiceException"));
       }
     } finally {
       setSubmitting(false);
@@ -124,7 +124,7 @@ export const useAuth = () => {
   };
 
   const resendConfirmationCode = async (username: string) => {
-    await setCognitoError("");
+    setCognitoError("");
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -149,10 +149,10 @@ export const useAuth = () => {
         if (errorResponseMessage.includes("TooManyRequestsException")) {
           setCognitoError(t("TooManyRequestsException"));
         } else {
-          await setCognitoError(t("InternalServiceException"));
+          setCognitoError(t("InternalServiceException"));
         }
       } else {
-        await setCognitoError(t("InternalServiceException"));
+        setCognitoError(t("InternalServiceException"));
       }
       return err;
     }
@@ -162,7 +162,7 @@ export const useAuth = () => {
     { username, password }: { username: string; password: string },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; password: string }>
   ) => {
-    await setCognitoError("");
+    setCognitoError("");
     try {
       const response = await signIn<"credentials">("credentials", {
         redirect: false,
@@ -172,20 +172,20 @@ export const useAuth = () => {
       logMessage.error(response);
       if (response?.error) {
         const responseErrorMessage = response.error;
-        await setSubmitting(false);
+        setSubmitting(false);
 
         if (responseErrorMessage.includes("UserNotConfirmedException")) {
-          await setUsername(username);
+          setUsername(username);
         } else if (
           responseErrorMessage.includes("UserNotFoundException") ||
           responseErrorMessage.includes("NotAuthorizedException")
         ) {
-          await setErrors({
+          setErrors({
             username: t("UsernameOrPasswordIncorrect"),
             password: t("UsernameOrPasswordIncorrect"),
           });
         } else {
-          await setCognitoError(t("InternalServiceException"));
+          setCognitoError(t("InternalServiceException"));
         }
       } else if (response?.ok) {
         await router.push({
@@ -194,7 +194,7 @@ export const useAuth = () => {
       }
     } catch (err) {
       logMessage.error(err);
-      await setCognitoError(t("InternalServiceException"));
+      setCognitoError(t("InternalServiceException"));
     } finally {
       setSubmitting(false);
     }
