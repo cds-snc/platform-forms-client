@@ -1,5 +1,5 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
-
+import flagInitialSettings from "../flag_initialization/default_flag_settings.json";
 import { checkPrivileges } from "@lib/privileges";
 import { Ability } from "./policyBuilder";
 
@@ -36,6 +36,10 @@ const getKeys = async () => {
  * @returns Boolean value of Flag key
  */
 export const checkOne = async (key: string): Promise<boolean> => {
+  // If REDIS is not configured return the default values for the flags
+  if (!process.env.REDIS_URL) {
+    return (flagInitialSettings as Record<string, boolean>)[key];
+  }
   const redis = await getRedisInstance();
   const value = await redis.get(`flag:${key}`);
   return value === "1";
