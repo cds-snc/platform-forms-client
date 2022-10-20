@@ -13,7 +13,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
 
   const { localizeField, form } = useTemplateStore();
 
-  const value =
+  const content =
     form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
         path={`form.elements[${parentIndex}].properties.${localizeField(
           LocalizedElementProperties.DESCRIPTION
         )}`}
-        content={value}
+        content={content}
       />
     </OptionWrapper>
   );
