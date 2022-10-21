@@ -6,7 +6,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { editorConfig } from "./config";
-import { Toolbar } from "./Toolbar";
+import { Toolbar } from "./toolbar/Toolbar";
 
 // import TreeViewPlugin from "./plugins/TreeViewPlugin";
 // import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";

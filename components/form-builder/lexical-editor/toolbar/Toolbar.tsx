@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister } from "@lexical/utils";
-import { LinkEditor } from "./plugins/LinkEditor";
+import { LinkEditor } from "../plugins/LinkEditor";
 import { Looks3 } from "@styled-icons/material/Looks3";
 import { LooksTwo } from "@styled-icons/material/LooksTwo";
 import { FormatBold } from "@styled-icons/material/FormatBold";
@@ -97,11 +97,12 @@ export const Toolbar = () => {
     );
   }, [editor, updateToolbar]);
 
+  // @TODO: aria-controls below needs an id for the editor
   return (
     <>
-      <ToolbarContainer role="toolbar">
+      <ToolbarContainer role="toolbar" aria-label="Text formatting" aria-controls="">
         <button
-          tabIndex={-1}
+          tabIndex={0}
           style={{ marginRight: 10 }}
           onClick={() => {
             formatHeading("h2");
