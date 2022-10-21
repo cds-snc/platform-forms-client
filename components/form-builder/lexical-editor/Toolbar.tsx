@@ -3,6 +3,13 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister } from "@lexical/utils";
 import { LinkEditor } from "./plugins/LinkEditor";
+import { Looks3 } from "@styled-icons/material/Looks3";
+import { LooksTwo } from "@styled-icons/material/LooksTwo";
+import { FormatBold } from "@styled-icons/material/FormatBold";
+import { FormatItalic } from "@styled-icons/material/FormatItalic";
+import { Link } from "@styled-icons/material/Link";
+import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
+import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
 import {
   FORMAT_TEXT_COMMAND,
   $getSelection,
@@ -12,6 +19,12 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
+import styled from "styled-components";
+
+const ToolbarContainer = styled.div`
+  border-bottom: 1px solid #ddd;
+  padding: 0 20px 10px 20px;
+`;
 
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
@@ -86,43 +99,84 @@ export const Toolbar = () => {
 
   return (
     <>
-      <button
-        style={{ marginRight: 10 }}
-        onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-        }}
-        className={"toolbar-item " + (isBold ? "active" : "")}
-        aria-label="Format Bold"
-      >
-        Bold
-      </button>
-
-      <button
-        style={{ marginRight: 10 }}
-        onClick={() => {
-          formatParagraph();
-        }}
-        className={"toolbar-item spaced " + (isBold ? "active" : "")}
-        aria-label="Normal"
-      >
-        Paragraph
-      </button>
-
-      <button
-        style={{ marginRight: 10 }}
-        onClick={() => {
-          formatHeading("h2");
-        }}
-        className={"toolbar-item spaced " + (isBold ? "active" : "")}
-        aria-label="Format H2"
-      >
-        H2
-      </button>
-      <LinkEditor>
-        <button aria-label="aha" className="something">
-          This is a test
+      <ToolbarContainer role="toolbar">
+        <button
+          tabIndex={-1}
+          style={{ marginRight: 10 }}
+          onClick={() => {
+            formatHeading("h2");
+          }}
+          className={"toolbar-item spaced " + (isBold ? "active" : "")}
+          aria-label="Format H2"
+        >
+          <LooksTwo size={20} />
         </button>
-      </LinkEditor>
+
+        <button
+          tabIndex={-1}
+          style={{ marginRight: 10 }}
+          onClick={() => {
+            formatHeading("h3");
+          }}
+          className={"toolbar-item spaced " + (isBold ? "active" : "")}
+          aria-label="Format H3"
+        >
+          <Looks3 size={20} />
+        </button>
+
+        <button
+          tabIndex={-1}
+          style={{ marginRight: 10 }}
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+          }}
+          className={"toolbar-item " + (isBold ? "active" : "")}
+          aria-label="Format Bold"
+        >
+          <FormatBold size={20} />
+        </button>
+
+        <button
+          tabIndex={-1}
+          style={{ marginRight: 10 }}
+          onClick={() => {
+            editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+          }}
+          className={"toolbar-item " + (isBold ? "active" : "")}
+          aria-label="Format Italic"
+        >
+          <FormatItalic size={20} />
+        </button>
+
+        <button
+          tabIndex={-1}
+          style={{ marginRight: 10 }}
+          className={"toolbar-item " + (isBold ? "active" : "")}
+          aria-label="Format list bulleted"
+        >
+          <FormatListBulleted size={20} />
+        </button>
+
+        <button
+          tabIndex={-1}
+          style={{ marginRight: 10 }}
+          className={"toolbar-item " + (isBold ? "active" : "")}
+          aria-label="Format list numbered"
+        >
+          <FormatListNumbered size={20} />
+        </button>
+
+        <LinkEditor>
+          <button
+            tabIndex={-1}
+            style={{ marginRight: 10 }}
+            className={"toolbar-item " + (isBold ? "active" : "")}
+            aria-label="Format Link"
+          >
+            <Link size={20} />
+          </button>
+        </LinkEditor>
+      </ToolbarContainer>
     </>
   );
 };

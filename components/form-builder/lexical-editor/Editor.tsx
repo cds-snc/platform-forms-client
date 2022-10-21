@@ -7,15 +7,21 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
-import TreeViewPlugin from "./plugins/TreeViewPlugin";
-import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+
+// import TreeViewPlugin from "./plugins/TreeViewPlugin";
+// import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+// import ToolbarPlugin from "./plugins/FloatingLinkEditor";
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
 
-const RichTextWrapper = styled.div``;
+const RichTextWrapper = styled.div`
+  .editor-input {
+    padding: 20px;
+  }
+`;
 
 const Placeholder = styled.div`
   color: #999;
@@ -42,7 +48,7 @@ export const Editor = ({
   }
 
   return (
-    <RichTextWrapper style={{ width: "100%" }}>
+    <RichTextWrapper>
       <LexicalComposer
         initialConfig={{
           ...editorConfig,
@@ -54,8 +60,6 @@ export const Editor = ({
           contentEditable={<ContentEditable className="editor-input" />}
           placeholder={<Placeholder> Enter some rich text...</Placeholder>}
         />
-        <TreeViewPlugin />
-        <LinkPlugin />
 
         <OnChangePlugin
           onChange={(editorState) => {
@@ -66,6 +70,10 @@ export const Editor = ({
             });
           }}
         />
+
+        {/* <ToolbarPlugin />
+        <TreeViewPlugin />
+        <LinkPlugin /> */}
       </LexicalComposer>
     </RichTextWrapper>
   );

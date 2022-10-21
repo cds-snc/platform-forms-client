@@ -4,10 +4,7 @@ import useTemplateStore from "../store/useTemplateStore";
 import styled from "styled-components";
 
 const EditorWrapper = styled.div`
-  display: flex;
-  .slate-HeadingToolbar {
-    margin: 0;
-  }
+  width: 100%;
 `;
 
 export const RichTextEditor = ({ path, content }: { path: string; content: string }) => {
