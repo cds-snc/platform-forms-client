@@ -8,6 +8,7 @@
   "richText": "Page text",
   "paragraph": "Long answer",
   "singleChoice": "Single choice",
+  "radio": "Single choice",
   "checkboxes": "Multiple choice",
   "dropdown": "Dropdown list",
   "email": "Email",
@@ -42,5 +43,12 @@
   "startErrorParse": "Failed to parse file, not valid JSON",
   "richTextIntroTitle": "Form introduction",
   "richTextConfirmationTitle": "Confirmation page and message",
-  "richTextPrivacyTitle": "Privacy statement"
+  "richTextPrivacyTitle": "Privacy statement",
+  "translate": "Translate",
+  "translateTitle": "Translate view",
+  "textField": "Text field",
+  "textArea": "Text area",
+  "checkbox": "Multiple choice",
+  "en-text": "English text",
+  "fr-text": "French text"
 }

@@ -426,9 +426,10 @@ const ModalForm = ({
         <TextArea
           placeholder={t("Description")}
           onChange={(e) => {
+            const description = e.target.value.replace(/[\r\n]/gm, "");
             updateModalProperties(item.index, {
               ...properties,
-              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: e.target.value },
+              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: description },
             });
           }}
           value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
