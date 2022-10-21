@@ -3,12 +3,10 @@ import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
-import { Language, LocalizedElementProperties } from "../types";
-import { useTranslation } from "next-i18next";
+import { LocalizedElementProperties } from "../types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;

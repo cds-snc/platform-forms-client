@@ -23,7 +23,21 @@ import styled from "styled-components";
 
 const ToolbarContainer = styled.div`
   border-bottom: 1px solid #ddd;
-  padding: 0 20px 10px 20px;
+  padding: 10px;
+
+  &:focus-within {
+    border: 2px solid blue;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  button {
+    padding: 4px;
+    margin-right: 5px;
+    svg {
+      display: block;
+    }
+  }
 `;
 
 const LowPriority = 1;
@@ -147,7 +161,6 @@ export const Toolbar = () => {
         <button
           tabIndex={0}
           ref={(el) => (itemsRef.current["row-0"] = el)}
-          style={{ marginRight: 10 }}
           onClick={() => {
             formatHeading("h2");
           }}
@@ -160,7 +173,6 @@ export const Toolbar = () => {
         <button
           tabIndex={-1}
           ref={(el) => (itemsRef.current["row-1"] = el)}
-          style={{ marginRight: 10 }}
           onClick={() => {
             formatHeading("h3");
           }}
@@ -173,7 +185,6 @@ export const Toolbar = () => {
         <button
           tabIndex={-1}
           ref={(el) => (itemsRef.current["row-2"] = el)}
-          style={{ marginRight: 10 }}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
           }}
@@ -186,7 +197,6 @@ export const Toolbar = () => {
         <button
           tabIndex={-1}
           ref={(el) => (itemsRef.current["row-3"] = el)}
-          style={{ marginRight: 10 }}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
@@ -199,7 +209,6 @@ export const Toolbar = () => {
         <button
           tabIndex={-1}
           ref={(el) => (itemsRef.current["row-4"] = el)}
-          style={{ marginRight: 10 }}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list bulleted"
         >
@@ -209,7 +218,6 @@ export const Toolbar = () => {
         <button
           tabIndex={-1}
           ref={(el) => (itemsRef.current["row-5"] = el)}
-          style={{ marginRight: 10 }}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list numbered"
         >
@@ -220,7 +228,6 @@ export const Toolbar = () => {
           <button
             tabIndex={-1}
             ref={(el) => (itemsRef.current["row-6"] = el)}
-            style={{ marginRight: 10 }}
             className={"toolbar-item " + (isBold ? "active" : "")}
             aria-label="Format Link"
           >
