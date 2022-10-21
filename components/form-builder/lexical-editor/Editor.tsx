@@ -23,19 +23,6 @@ const RichTextWrapper = styled.div`
   }
 `;
 
-const Placeholder = styled.div`
-  color: #999;
-  overflow: hidden;
-  position: absolute;
-  text-overflow: ellipsis;
-  top: 90px;
-  left: 30px;
-  font-size: 15px;
-  user-select: none;
-  display: inline-block;
-  pointer-events: none;
-`;
-
 export const Editor = ({
   content,
   onChange,
@@ -58,7 +45,7 @@ export const Editor = ({
         <Toolbar />
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
-          placeholder={<Placeholder> Enter some rich text...</Placeholder>}
+          placeholder={""}
         />
 
         <OnChangePlugin
