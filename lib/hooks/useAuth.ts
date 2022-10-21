@@ -20,7 +20,7 @@ export const useAuth = () => {
     try {
       const token = await getCsrfToken();
       if (token) {
-        const result = await axios({
+        await axios({
           url: "/api/signup/register",
           method: "POST",
           headers: {
@@ -35,10 +35,8 @@ export const useAuth = () => {
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
 
-        if (result.statusText === "OK") {
-          setSubmitting(false);
-          setUsername(username);
-        }
+        setSubmitting(false);
+        setUsername(username);
       }
     } catch (err) {
       const axiosError = err as AxiosError;
