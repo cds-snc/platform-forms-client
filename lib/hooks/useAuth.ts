@@ -69,7 +69,7 @@ export const useAuth = () => {
     try {
       const token = await getCsrfToken();
       if (token) {
-        const result = await axios({
+        await axios({
           url: "/api/signup/confirm",
           method: "POST",
           headers: {
@@ -83,17 +83,15 @@ export const useAuth = () => {
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
 
-        if (result.statusText === "OK") {
-          // we could be on the registration page or the login page
-          // if we are on the login page we want to refresh the page
-          // instead of pushing the route as it will do nothing
-          if (router.pathname.includes("/auth/login")) {
-            router.reload();
-          } else {
-            await router.push({
-              pathname: "/auth/login",
-            });
-          }
+        // we could be on the registration page or the login page
+        // if we are on the login page we want to refresh the page
+        // instead of pushing the route as it will do nothing
+        if (router.pathname.includes("/auth/login")) {
+          router.reload();
+        } else {
+          await router.push({
+            pathname: "/auth/login",
+          });
         }
       }
     } catch (err) {
