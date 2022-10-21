@@ -13,7 +13,7 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
-  process.env.NODE_ENV !== "test"
+  process.env.APP_ENV !== "test"
 )
   throw new Error("Missing Google Authentication Credentials");
 
