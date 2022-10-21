@@ -10,6 +10,13 @@ import { FormatItalic } from "@styled-icons/material/FormatItalic";
 import { Link } from "@styled-icons/material/Link";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
+
+import {
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  REMOVE_LIST_COMMAND,
+} from "@lexical/list";
+
 import {
   FORMAT_TEXT_COMMAND,
   $getSelection,
@@ -107,6 +114,24 @@ export const Toolbar = () => {
           $wrapNodes(selection, () => $createParagraphNode());
         }
       });
+    }
+  };
+
+  const formatBulletList = (evt) => {
+    evt.preventDefault();
+    if (blockType !== "ul") {
+      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+    } else {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+    }
+  };
+
+  const formatNumberedList = (evt) => {
+    evt.preventDefault();
+    if (blockType !== "ol") {
+      editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+    } else {
+      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
     }
   };
 
@@ -208,6 +233,9 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          onClick={(evt) => {
+            formatBulletList(evt);
+          }}
           ref={(el) => (itemsRef.current["row-4"] = el)}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list bulleted"
@@ -217,6 +245,9 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          onClick={(evt) => {
+            formatNumberedList(evt);
+          }}
           ref={(el) => (itemsRef.current["row-5"] = el)}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list numbered"
