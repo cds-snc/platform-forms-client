@@ -104,7 +104,7 @@ const templateCRUD = async ({
   switch (method) {
     case "GET":
       if (formID) return await getTemplateByID(formID);
-      return getAllTemplates(ability);
+      return getAllTemplates(ability, user.id);
     case "POST":
       if (formConfig) return await createTemplate(ability, user.id, formConfig);
       throw new Error("Missing Form Configuration");

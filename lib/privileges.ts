@@ -249,3 +249,19 @@ export const checkPrivileges = (
     throw new AccessControlError(`Access Control Forbidden Action`);
   }
 };
+
+export const checkPrivilegesAsBoolean = (
+  ability: Ability,
+  rules: {
+    action: Action;
+    subject: Subject | ForcedSubjectType;
+  }[],
+  logic: "all" | "one" = "all"
+): boolean => {
+  try {
+    checkPrivileges(ability, rules, logic);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

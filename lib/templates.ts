@@ -4,7 +4,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
 import { Prisma, User } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
-import { checkPrivileges } from "./privileges";
+import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { Ability } from "@lib/policyBuilder";
 
 /**
@@ -61,14 +61,34 @@ async function _createTemplate(
 }
 
 /**
- * Get all form templates
+ * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
  * @returns An array of Form Records
  */
-async function _getAllTemplates(ability: Ability): Promise<Array<FormRecord>> {
+async function _getAllTemplates(ability: Ability, userID: string): Promise<Array<FormRecord>> {
   checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+
+  const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+        object: {},
+      },
+    },
+  ]);
 
   const templates = await prisma.template
     .findMany({
+      where: {
+        ...(!canUserAccessAllTemplates && {
+          users: {
+            some: {
+              id: userID,
+            },
+          },
+        }),
+      },
       select: {
         id: true,
         jsonConfig: true,

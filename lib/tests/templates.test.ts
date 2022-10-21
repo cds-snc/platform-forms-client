@@ -93,7 +93,7 @@ describe("Template CRUD functions", () => {
       },
     ]);
 
-    const templates = await getAllTemplates(ability);
+    const templates = await getAllTemplates(ability, "1");
 
     expect(templates).toEqual([
       {
@@ -112,8 +112,56 @@ describe("Template CRUD functions", () => {
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
-    const template = await getAllTemplates(ability);
+    const template = await getAllTemplates(ability, "1");
     expect(template).toEqual([]);
+  });
+
+  it("Get all templates if user has the ManageForms privileges", async () => {
+    const ability = createAbility(ManageForms);
+
+    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      {
+        id: "formtestID",
+        jsonConfig: formConfiguration,
+      },
+    ]);
+
+    await getAllTemplates(ability, "1");
+
+    expect(prismaMock.template.findMany).toHaveBeenCalledWith({
+      where: {},
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    });
+  });
+
+  it("Get templates linked to the provided user if he has the Base privileges", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+      {
+        id: "formtestID",
+        jsonConfig: formConfiguration,
+      },
+    ]);
+
+    await getAllTemplates(ability, "1");
+
+    expect(prismaMock.template.findMany).toHaveBeenCalledWith({
+      where: {
+        users: {
+          some: {
+            id: "1",
+          },
+        },
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    });
   });
 
   it("Get a single Template", async () => {
@@ -261,7 +309,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await getAllTemplates(ability);
+      await getAllTemplates(ability, "1");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
