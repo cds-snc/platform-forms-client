@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister } from "@lexical/utils";
-import { LinkEditor } from "../plugins/LinkEditor";
+import { LinkEditor } from "./plugins/LinkEditor";
 import { Looks3 } from "@styled-icons/material/Looks3";
 import { LooksTwo } from "@styled-icons/material/LooksTwo";
 import { FormatBold } from "@styled-icons/material/FormatBold";

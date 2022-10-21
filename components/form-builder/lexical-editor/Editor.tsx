@@ -6,10 +6,10 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { editorConfig } from "./config";
-import { Toolbar } from "./toolbar/Toolbar";
+import { Toolbar } from "./Toolbar";
 
 // import TreeViewPlugin from "./plugins/TreeViewPlugin";
-// import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 // import ToolbarPlugin from "./plugins/FloatingLinkEditor";
 import {
   $convertFromMarkdownString,
@@ -74,6 +74,7 @@ export const Editor = ({
         {/* <ToolbarPlugin />
         <TreeViewPlugin />
         <LinkPlugin /> */}
+        <LinkPlugin />
       </LexicalComposer>
     </RichTextWrapper>
   );
