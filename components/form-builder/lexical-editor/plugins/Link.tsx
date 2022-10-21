@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   $getSelection,
   $isRangeSelection,
@@ -15,7 +16,6 @@ import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { $isListNode, ListNode } from "@lexical/list";
-import { createPortal } from "react-dom";
 import { $isHeadingNode } from "@lexical/rich-text";
 
 const LowPriority = 1;
@@ -36,7 +36,7 @@ function positionEditorElement(editor: HTMLElement, rect: DOMRectReadOnly | null
 
 type Selection = RangeSelection | NodeSelection | GridSelection;
 
-function FloatingLinkEditor({ editor }: { editor: LexicalEditor }) {
+export const FloatingLinkEditor = ({ editor }: { editor: LexicalEditor }) => {
   const editorRef = useRef(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const mouseDownRef = useRef(false);
@@ -57,6 +57,7 @@ function FloatingLinkEditor({ editor }: { editor: LexicalEditor }) {
         setLinkUrl("");
       }
     }
+
     const editorElem = editorRef.current;
     const nativeSelection = window.getSelection();
     const activeElement = document.activeElement;
@@ -155,7 +156,11 @@ function FloatingLinkEditor({ editor }: { editor: LexicalEditor }) {
       />
     </div>
   );
-}
+};
+
+FloatingLinkEditor.propTypes = {
+  editor: PropTypes.object,
+};
 
 function getSelectedNode(selection: RangeSelection) {
   const anchor = selection.anchor;
@@ -173,13 +178,13 @@ function getSelectedNode(selection: RangeSelection) {
   }
 }
 
-export default function ToolbarPlugin() {
+export const Link = ({ children, styles }: { styles: "string"; children: string }) => {
   const [editor] = useLexicalComposerContext();
   const [, setBlockType] = useState("paragraph");
   const [, setSelectedElementKey] = useState<string | null>(null);
   const [isLink, setIsLink] = useState(false);
 
-  const updateToolbar = useCallback(() => {
+  const updateLink = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode();
@@ -214,11 +219,11 @@ export default function ToolbarPlugin() {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
-          updateToolbar();
+          updateLink();
         });
       })
     );
-  }, [editor, updateToolbar]);
+  }, [editor, updateLink]);
 
   const insertLink = useCallback(() => {
     if (!isLink) {
@@ -228,20 +233,14 @@ export default function ToolbarPlugin() {
     }
   }, [editor, isLink]);
 
+  const className = `${styles} ${isLink ? "active" : ""}`;
+
   return (
     <>
-      <button
-        onClick={insertLink}
-        className={"toolbar-item spaced " + (isLink ? "active" : "")}
-        aria-label="Insert Link"
-      >
-        Link
+      <button onClick={insertLink} className={className}>
+        {children}
       </button>
       {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
     </>
   );
-}
-
-FloatingLinkEditor.propTypes = {
-  editor: PropTypes.object,
 };
