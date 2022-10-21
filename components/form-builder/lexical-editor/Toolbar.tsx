@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister } from "@lexical/utils";
@@ -59,22 +59,28 @@ export const Toolbar = () => {
     { id: 7, txt: "link" },
   ]);
 
-  const itemsContainerRef = useRef(null);
-  const itemsRef = useRef([]);
+  const itemsRef = useRef<[HTMLButtonElement] | []>([]);
   const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
-  const [currentActiveId, setCurrentActiveId] = useState(-1);
+
+  const [toolbarInit, setToolbarInit] = useState(false);
 
   useEffect(() => {
-    const el = itemsRef.current[`row-${currentFocusIndex}`];
+    const index = `button-${currentFocusIndex}` as unknown as number;
+    const el = itemsRef.current[index];
     if (el) {
       el.focus();
-      setCurrentActiveId(el.id);
     }
   }, [currentFocusIndex]);
 
   const handleNav = useCallback(
-    (evt) => {
+    (evt: KeyboardEvent<HTMLInputElement>) => {
       const { key } = evt;
+
+      if (!toolbarInit) {
+        setCurrentFocusIndex(0);
+        setToolbarInit(true);
+      }
+
       if (key === "ArrowLeft") {
         evt.preventDefault();
         setCurrentFocusIndex((index) => Math.max(0, index - 1));
@@ -83,7 +89,7 @@ export const Toolbar = () => {
         setCurrentFocusIndex((index) => Math.min(items.length - 1, index + 1));
       }
     },
-    [items]
+    [items, setCurrentFocusIndex, setToolbarInit, toolbarInit]
   );
 
   const formatHeading = (level: HeadingTagType) => {
@@ -160,7 +166,12 @@ export const Toolbar = () => {
       >
         <button
           tabIndex={0}
-          ref={(el) => (itemsRef.current["row-0"] = el)}
+          ref={(el) => {
+            const index = "button-0" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
           onClick={() => {
             formatHeading("h2");
           }}
@@ -171,8 +182,13 @@ export const Toolbar = () => {
         </button>
 
         <button
-          tabIndex={-1}
-          ref={(el) => (itemsRef.current["row-1"] = el)}
+          tabIndex={currentFocusIndex == 1 ? 0 : -1}
+          ref={(el) => {
+            const index = "button-1" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
           onClick={() => {
             formatHeading("h3");
           }}
@@ -183,8 +199,13 @@ export const Toolbar = () => {
         </button>
 
         <button
-          tabIndex={-1}
-          ref={(el) => (itemsRef.current["row-2"] = el)}
+          tabIndex={currentFocusIndex == 2 ? 0 : -1}
+          ref={(el) => {
+            const index = "button-2" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
           }}
@@ -195,8 +216,13 @@ export const Toolbar = () => {
         </button>
 
         <button
-          tabIndex={-1}
-          ref={(el) => (itemsRef.current["row-3"] = el)}
+          tabIndex={currentFocusIndex == 3 ? 0 : -1}
+          ref={(el) => {
+            const index = "button-3" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
@@ -207,8 +233,13 @@ export const Toolbar = () => {
         </button>
 
         <button
-          tabIndex={-1}
-          ref={(el) => (itemsRef.current["row-4"] = el)}
+          tabIndex={currentFocusIndex == 4 ? 0 : -1}
+          ref={(el) => {
+            const index = "button-4" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list bulleted"
         >
@@ -216,8 +247,13 @@ export const Toolbar = () => {
         </button>
 
         <button
-          tabIndex={-1}
-          ref={(el) => (itemsRef.current["row-5"] = el)}
+          tabIndex={currentFocusIndex == 5 ? 0 : -1}
+          ref={(el) => {
+            const index = "button-5" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list numbered"
         >
@@ -226,8 +262,13 @@ export const Toolbar = () => {
 
         <LinkEditor>
           <button
-            tabIndex={-1}
-            ref={(el) => (itemsRef.current["row-6"] = el)}
+            tabIndex={currentFocusIndex == 6 ? 0 : -1}
+            ref={(el) => {
+              const index = "button-6" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
             className={"toolbar-item " + (isBold ? "active" : "")}
             aria-label="Format Link"
           >
