@@ -11,8 +11,7 @@ const EditorWrapper = styled.div`
 `;
 
 export const RichTextEditor = ({ path, content }: { path: string; content: string }) => {
-  const { updateField } = useTemplateStore();
-
+  const { updateField, lang } = useTemplateStore();
   const handleChange = (value: string) => {
     if (typeof value === "undefined") {
       value = "";
@@ -22,7 +21,7 @@ export const RichTextEditor = ({ path, content }: { path: string; content: strin
   };
 
   return (
-    <EditorWrapper>
+    <EditorWrapper key={lang}>
       <Editor content={content} onChange={handleChange} />
     </EditorWrapper>
   );
