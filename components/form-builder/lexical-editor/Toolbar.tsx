@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister } from "@lexical/utils";
@@ -34,6 +34,44 @@ export const Toolbar = () => {
   const [isBold, setIsBold] = useState(false);
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
+
+  const [items] = useState([
+    { id: 1, txt: "heading2" },
+    { id: 2, txt: "heading3" },
+    { id: 3, txt: "bold" },
+    { id: 4, txt: "italic" },
+    { id: 5, txt: "bulletedList" },
+    { id: 6, txt: "numberedList" },
+    { id: 7, txt: "link" },
+  ]);
+
+  const itemsContainerRef = useRef(null);
+  const itemsRef = useRef([]);
+  const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
+  const [currentActiveId, setCurrentActiveId] = useState(-1);
+
+  useEffect(() => {
+    const el = itemsRef.current[`row-${currentFocusIndex}`];
+    if (el) {
+      el.focus();
+      setCurrentActiveId(el.id);
+    }
+  }, [currentFocusIndex]);
+
+  const handleNav = useCallback(
+    (evt) => {
+      const { key } = evt;
+      if (key === "ArrowLeft") {
+        evt.preventDefault();
+        setCurrentFocusIndex((index) => Math.max(0, index - 1));
+      } else if (key === "ArrowRight") {
+        evt.preventDefault();
+        setCurrentFocusIndex((index) => Math.min(items.length - 1, index + 1));
+      }
+    },
+    [items]
+  );
+
   const formatHeading = (level: HeadingTagType) => {
     if (blockType !== level) {
       editor.update(() => {
@@ -100,9 +138,15 @@ export const Toolbar = () => {
   // @TODO: aria-controls below needs an id for the editor
   return (
     <>
-      <ToolbarContainer role="toolbar" aria-label="Text formatting" aria-controls="">
+      <ToolbarContainer
+        role="toolbar"
+        aria-label="Text formatting"
+        aria-controls=""
+        onKeyDown={handleNav}
+      >
         <button
           tabIndex={0}
+          ref={(el) => (itemsRef.current["row-0"] = el)}
           style={{ marginRight: 10 }}
           onClick={() => {
             formatHeading("h2");
@@ -115,6 +159,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          ref={(el) => (itemsRef.current["row-1"] = el)}
           style={{ marginRight: 10 }}
           onClick={() => {
             formatHeading("h3");
@@ -127,6 +172,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          ref={(el) => (itemsRef.current["row-2"] = el)}
           style={{ marginRight: 10 }}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
@@ -139,6 +185,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          ref={(el) => (itemsRef.current["row-3"] = el)}
           style={{ marginRight: 10 }}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
@@ -151,6 +198,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          ref={(el) => (itemsRef.current["row-4"] = el)}
           style={{ marginRight: 10 }}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list bulleted"
@@ -160,6 +208,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
+          ref={(el) => (itemsRef.current["row-5"] = el)}
           style={{ marginRight: 10 }}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list numbered"
@@ -170,6 +219,7 @@ export const Toolbar = () => {
         <LinkEditor>
           <button
             tabIndex={-1}
+            ref={(el) => (itemsRef.current["row-6"] = el)}
             style={{ marginRight: 10 }}
             className={"toolbar-item " + (isBold ? "active" : "")}
             aria-label="Format Link"
