@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
           const idToken = response.AuthenticationResult?.IdToken;
           if (idToken) {
             const cognitoIDTokenParts = idToken.split(".");
-            const claimsBuff = new Buffer(cognitoIDTokenParts[1], "base64");
+            const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
             const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
             return {
               id: cognitoIDTokenClaims.sub,
