@@ -12,10 +12,6 @@ import { $isHeadingNode } from "@lexical/rich-text";
 
 const LowPriority = 1;
 
-function Divider() {
-  return <div className="divider" />;
-}
-
 function positionEditorElement(editor, rect) {
   if (rect === null) {
     editor.style.opacity = "0";
@@ -23,10 +19,10 @@ function positionEditorElement(editor, rect) {
     editor.style.left = "-1000px";
   } else {
     editor.style.opacity = "1";
-    editor.style.top = `${rect.top + rect.height + window.pageYOffset + 10}px`;
-    editor.style.left = `${
-      rect.left + window.pageXOffset - editor.offsetWidth / 2 + rect.width / 2
-    }px`;
+    const top = `${rect.top + rect.height + window.pageYOffset + 10}px`;
+    const left = `${rect.left}px`;
+    editor.style.top = top;
+    editor.style.left = left;
   }
 }
 
@@ -103,7 +99,6 @@ function FloatingLinkEditor({ editor }) {
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
-          console.log("change");
           updateLinkEditor();
           return false;
         },
@@ -125,54 +120,29 @@ function FloatingLinkEditor({ editor }) {
   }, [isEditMode]);
 
   return (
-    <div
-      ref={editorRef}
-      style={{ border: "1px solid red", position: "absolute", top: "10px", left: "10px" }}
-      className="link-editor"
-    >
-      {isEditMode ? (
-        <input
-          ref={inputRef}
-          className="link-input"
-          value={linkUrl}
-          onChange={(event) => {
-            setLinkUrl(event.target.value);
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              if (lastSelection !== null) {
-                if (linkUrl !== "") {
-                  editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
-                }
-                setEditMode(false);
+    <div ref={editorRef} style={{ position: "absolute", width: "500px" }} className="link-editor">
+      <input
+        ref={inputRef}
+        className="link-input"
+        value={linkUrl}
+        onChange={(event) => {
+          setLinkUrl(event.target.value);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            if (lastSelection !== null) {
+              if (linkUrl !== "") {
+                editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
               }
-            } else if (event.key === "Escape") {
-              event.preventDefault();
               setEditMode(false);
             }
-          }}
-        />
-      ) : (
-        <>
-          <div className="link-input">
-            <a href={linkUrl} target="_blank" rel="noopener noreferrer">
-              {linkUrl}
-            </a>
-            <div
-              className="link-edit"
-              role="button"
-              tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
-              onClick={() => {
-                setEditMode(true);
-              }}
-            >
-              Edit
-            </div>
-          </div>
-        </>
-      )}
+          } else if (event.key === "Escape") {
+            event.preventDefault();
+            setEditMode(false);
+          }
+        }}
+      />
     </div>
   );
 }
