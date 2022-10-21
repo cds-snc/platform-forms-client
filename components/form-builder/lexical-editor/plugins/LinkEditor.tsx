@@ -178,7 +178,7 @@ function getSelectedNode(selection: RangeSelection) {
   }
 }
 
-export const Link = ({ children, styles }: { styles: "string"; children: string }) => {
+export const LinkEditor = ({ children }: { children: JSX.Element }) => {
   const [editor] = useLexicalComposerContext();
   const [, setBlockType] = useState("paragraph");
   const [, setSelectedElementKey] = useState<string | null>(null);
@@ -233,13 +233,15 @@ export const Link = ({ children, styles }: { styles: "string"; children: string 
     }
   }, [editor, isLink]);
 
-  const className = `${styles} ${isLink ? "active" : ""}`;
-
+  const activeClass = `${isLink ? "active" : ""}`;
   return (
     <>
-      <button onClick={insertLink} className={className}>
-        {children}
-      </button>
+      {React.Children.map(children, (child) =>
+        React.cloneElement(child, {
+          className: `${child.props.className} ${activeClass}`,
+          onClick: insertLink,
+        })
+      )}
       {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
     </>
   );

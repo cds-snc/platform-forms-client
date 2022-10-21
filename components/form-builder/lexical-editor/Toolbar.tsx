@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister } from "@lexical/utils";
+import { LinkEditor } from "./plugins/LinkEditor";
 import {
   FORMAT_TEXT_COMMAND,
   $getSelection,
@@ -117,6 +118,11 @@ export const Toolbar = () => {
       >
         H2
       </button>
+      <LinkEditor>
+        <button aria-label="aha" className="something">
+          This is a test
+        </button>
+      </LinkEditor>
     </>
   );
 };

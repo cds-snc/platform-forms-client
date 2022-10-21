@@ -9,7 +9,6 @@ import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
-import ToolbarPlugin from "./plugins/FloatingLinkEditor";
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
@@ -51,7 +50,6 @@ export const Editor = ({
         }}
       >
         <Toolbar />
-        <ToolbarPlugin />
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
           placeholder={<Placeholder> Enter some rich text...</Placeholder>}
