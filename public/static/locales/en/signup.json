@@ -1,0 +1,51 @@
+{
+  "signUpConfirmation": {
+    "title": "Confirm Your Email",
+    "noUsername": "No user to confirm",
+    "resendConfirmationCodeButton": "Resend Confirmation Code",
+    "fields": {
+      "confirmationCode": {
+        "label": "Confirmation Code",
+        "error": {
+          "number": "This field must be a number"
+        }
+      }
+    }
+  },
+  "signUpRegistration": {
+    "title": "Sign Up to GC Forms",
+    "fields": {
+      "username": {
+        "label": "Email",
+        "hint": "Must be a federal government email address",
+        "error": {
+          "validGovEmail": "This field must be a valid government email."
+        }
+      },
+      "password": {
+        "label": "Password",
+        "hint": "Must be at least 8 characters with a capital, number and symbol",
+        "error": {
+          "minLength": "The minimum length of the value must be 8 characters.",
+          "maxLength": "The field must be no longer than 50 characters.",
+          "oneLowerCase": "The field must contain at least 1 lowercase character.",
+          "oneUpperCase": "The field must contain at least 1 uppercase character.",
+          "oneNumber": "The field must contain at least 1 number.",
+          "oneSymbol": "The field must contain at least 1 symbol."
+        } 
+      },
+      "passwordConfirmation": {
+        "label": "Password confirmation",
+        "error": {
+          "mustMatch": "The value must match the value of the password field."
+        }
+      },
+      "name": {
+        "label": "Full name",
+        "error": {
+          "maxLength": "The field must be no longer than 50 characters."
+        }
+      }
+    }
+  }
+}

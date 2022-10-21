@@ -1,21 +1,32 @@
 import NextAuth, { Session, JWT, NextAuthOptions } from "next-auth";
-
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import {
+  CognitoIdentityProviderClient,
+  AdminInitiateAuthCommand,
+  AdminInitiateAuthCommandInput,
+  CognitoIdentityProviderServiceException,
+} from "@aws-sdk/client-cognito-identity-provider";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
-import { validateTemporaryToken } from "@lib/auth";
-import { getFormUser, getOrCreateUser, userLastLogin } from "@lib/users";
-import { UserRole } from "@prisma/client";
+import { getOrCreateUser } from "@lib/users";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
-  process.env.NODE_ENV !== "test"
+  process.env.APP_ENV !== "test"
 )
   throw new Error("Missing Google Authentication Credentials");
+
+if (
+  (!process.env.COGNITO_APP_CLIENT_ID ||
+    !process.env.COGNITO_REGION ||
+    !process.env.COGNITO_USER_POOL_ID) &&
+  process.env.APP_ENV !== "test"
+)
+  throw new Error("Missing Cognito Credentials");
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -24,20 +35,46 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     CredentialsProvider({
-      name: "TemporaryToken",
+      name: "CognitoLogin",
       credentials: {
-        temporaryToken: { label: "Temporary Token", type: "text" },
+        username: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // If the temporary token is missing don't process further
-        if (!credentials?.temporaryToken) return null;
-        const user = await validateTemporaryToken(credentials.temporaryToken);
+        if (!credentials?.username || !credentials?.password) return null;
+        const params: AdminInitiateAuthCommandInput = {
+          AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+          ClientId: process.env.COGNITO_APP_CLIENT_ID,
+          UserPoolId: process.env.COGNITO_USER_POOL_ID,
+          AuthParameters: {
+            USERNAME: credentials.username,
+            PASSWORD: credentials.password,
+          },
+        };
+        try {
+          const cognitoClient = new CognitoIdentityProviderClient({
+            region: process.env.COGNITO_REGION,
+          });
 
-        if (user) {
-          // Type limitations on the Class only allow the return of id and email.
-          return { id: user.id, email: user.email };
-        } else {
+          const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
+
+          const response = await cognitoClient.send(adminInitiateAuthCommand);
+          const idToken = response.AuthenticationResult?.IdToken;
+          if (idToken) {
+            const cognitoIDTokenParts = idToken.split(".");
+            const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
+            const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
+            return {
+              id: cognitoIDTokenClaims.sub,
+              name: cognitoIDTokenClaims.name,
+              email: cognitoIDTokenClaims.email,
+            };
+          }
           return null;
+        } catch (e) {
+          // throw new Error with cognito error converted to string so as to include the exception name
+          throw new Error((e as CognitoIdentityProviderServiceException).toString());
         }
       },
     }),
@@ -64,40 +101,22 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, account }) {
-      // Account is only available on the first callback after a login.
-      // Since this is the initial creation of the JWT we add the properties
-      switch (account?.provider) {
-        case "google": {
-          const user = await getOrCreateUser(token as JWT);
-          if (user === null)
-            throw new Error(`Could not get or create user with email: ${token.email}`);
-
-          token.userId = user.id;
-          token.authorizedForm = null;
-          token.lastLoginTime = new Date();
-          token.role = user.role;
-          token.acceptableUse = false;
-
-          break;
+      // account is only available on the first call to the JWT function
+      if (account?.provider) {
+        if (!token.sub) {
+          throw new Error(`JWT token does not have an id for user with email ${token.email}`);
         }
+        const user = await getOrCreateUser(token);
+        if (user === null)
+          throw new Error(`Could not get or create user with email: ${token.email}`);
 
-        case "credentials":
-          {
-            if (!token.sub)
-              throw new Error(`JWT token does not have an id for user with email ${token.email}`);
-
-            const user = await getFormUser(token.sub);
-            const lastLogin = await userLastLogin(token.sub);
-
-            token.userId = user?.id;
-            token.authorizedForm = user?.templateId;
-            token.lastLoginTime = lastLogin?.timestamp;
-            token.acceptableUse = false;
-            token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
-          }
-          break;
+        token.userId = user.id;
+        token.authorizedForm = null;
+        token.lastLoginTime = new Date();
+        token.role = user.role;
+        token.acceptableUse = false;
       }
-      // The swtich case above is only run on initial JWT creation and not on any subsequent checks
+
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
       if (!token.acceptableUse) {
         token.acceptableUse = await getAcceptableUseValue(token.userId as string);
