@@ -2,7 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { $getSelection, $isRangeSelection, SELECTION_CHANGE_COMMAND } from "lexical";
+import {
+  $getSelection,
+  $isRangeSelection,
+  GridSelection,
+  LexicalEditor,
+  NodeSelection,
+  RangeSelection,
+  SELECTION_CHANGE_COMMAND,
+} from "lexical";
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { $isAtNodeEnd } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
@@ -12,27 +20,29 @@ import { $isHeadingNode } from "@lexical/rich-text";
 
 const LowPriority = 1;
 
-function positionEditorElement(editor, rect) {
+function positionEditorElement(editor: HTMLElement, rect: DOMRectReadOnly | null) {
   if (rect === null) {
     editor.style.opacity = "0";
     editor.style.top = "-1000px";
     editor.style.left = "-1000px";
   } else {
-    editor.style.opacity = "1";
     const top = `${rect.top + rect.height + window.pageYOffset + 10}px`;
     const left = `${rect.left}px`;
+    editor.style.opacity = "1";
     editor.style.top = top;
     editor.style.left = left;
   }
 }
 
-function FloatingLinkEditor({ editor }) {
+type Selection = RangeSelection | NodeSelection | GridSelection;
+
+function FloatingLinkEditor({ editor }: { editor: LexicalEditor }) {
   const editorRef = useRef(null);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const mouseDownRef = useRef(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
-  const [lastSelection, setLastSelection] = useState(null);
+  const [lastSelection, setLastSelection] = useState<Selection | null>(null);
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -66,7 +76,7 @@ function FloatingLinkEditor({ editor }) {
       const domRange = nativeSelection.getRangeAt(0);
       let rect;
       if (nativeSelection.anchorNode === rootElement) {
-        let inner = rootElement;
+        let inner: Element = rootElement;
         while (inner.firstElementChild != null) {
           inner = inner.firstElementChild;
         }
@@ -147,7 +157,7 @@ function FloatingLinkEditor({ editor }) {
   );
 }
 
-function getSelectedNode(selection) {
+function getSelectedNode(selection: RangeSelection) {
   const anchor = selection.anchor;
   const focus = selection.focus;
   const anchorNode = selection.anchor.getNode();
@@ -166,7 +176,7 @@ function getSelectedNode(selection) {
 export default function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const [, setBlockType] = useState("paragraph");
-  const [, setSelectedElementKey] = useState(null);
+  const [, setSelectedElementKey] = useState<string | null>(null);
   const [isLink, setIsLink] = useState(false);
 
   const updateToolbar = useCallback(() => {
