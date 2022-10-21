@@ -239,7 +239,7 @@ export const LinkEditor = ({ children }: { children: JSX.Element }) => {
       {React.Children.map(children, (child) =>
         React.cloneElement(child, {
           className: `${child.props.className} ${activeClass}`,
-          onClick: insertLink,
+          onClick: child.props.onClick || insertLink,
         })
       )}
       {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
