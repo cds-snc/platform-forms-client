@@ -1,8 +1,8 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import useTemplateStore from "../store/useTemplateStore";
 import { ElementType, Language, LocalizedElementProperties } from "../types";
-import { Editor } from "./Editor";
 
 export const RichText = ({
   element,
@@ -24,27 +24,23 @@ export const RichText = ({
           {t(element.type)}: {t("Description")}
         </div>
         <div className="section-text">
-          <Editor
+          <RichTextEditor
             path={`form.elements[${index}].properties.${localizeField(
               LocalizedElementProperties.DESCRIPTION,
-              "en"
+              translationLanguagePriority
             )}`}
             content={
               element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")]
             }
-            index="${index}"
-            language={translationLanguagePriority}
           />
-          <Editor
+          <RichTextEditor
             path={`form.elements[${index}].properties.${localizeField(
               LocalizedElementProperties.DESCRIPTION,
-              "fr"
+              translationLanguagePriorityAlt
             )}`}
             content={
               element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")]
             }
-            index="${index}"
-            language={translationLanguagePriorityAlt}
           />
         </div>
       </div>

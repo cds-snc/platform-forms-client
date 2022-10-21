@@ -9,8 +9,8 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
-import { Editor } from "./Editor";
 import { FancyButton } from "../panel/Button";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 
 const SwitchLangButton = styled(FancyButton)`
   padding: 10px 20px;
@@ -209,12 +209,11 @@ export const Translate = () => {
                 {t("Form introduction")}: {t("Description")}
               </div>
               <div className="section-text">
-                <Editor
+                <RichTextEditor
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     translationLanguagePriority
                   )}`}
-                  index="introduction"
                   content={
                     form.introduction[
                       localizeField(
@@ -223,14 +222,12 @@ export const Translate = () => {
                       )
                     ]
                   }
-                  language={translationLanguagePriority}
                 />
-                <Editor
+                <RichTextEditor
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     translationLanguagePriorityAlt
                   )}`}
-                  index="introduction"
                   content={
                     form.introduction[
                       localizeField(
@@ -239,7 +236,6 @@ export const Translate = () => {
                       )
                     ]
                   }
-                  language={translationLanguagePriorityAlt}
                 />
               </div>
             </div>
@@ -320,12 +316,11 @@ export const Translate = () => {
             </div>
 
             <div className="section-text">
-              <Editor
+              <RichTextEditor
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriority
                 )}`}
-                index="introduction"
                 content={
                   form.privacyPolicy[
                     localizeField(
@@ -334,14 +329,12 @@ export const Translate = () => {
                     )
                   ]
                 }
-                language={translationLanguagePriority}
               />
-              <Editor
+              <RichTextEditor
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriorityAlt
                 )}`}
-                index="introduction"
                 content={
                   form.privacyPolicy[
                     localizeField(
@@ -350,7 +343,6 @@ export const Translate = () => {
                     )
                   ]
                 }
-                language={translationLanguagePriorityAlt}
               />
             </div>
           </div>
@@ -366,12 +358,11 @@ export const Translate = () => {
               {t("Page text")}: {t("Description")}
             </div>
             <div className="section-text">
-              <Editor
+              <RichTextEditor
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriority
                 )}`}
-                index="introduction"
                 content={
                   form.endPage[
                     localizeField(
@@ -380,14 +371,12 @@ export const Translate = () => {
                     )
                   ]
                 }
-                language={translationLanguagePriority}
               />
-              <Editor
+              <RichTextEditor
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriorityAlt
                 )}`}
-                index="introduction"
                 content={
                   form.endPage[
                     localizeField(
@@ -396,7 +385,6 @@ export const Translate = () => {
                     )
                   ]
                 }
-                language={translationLanguagePriorityAlt}
               />
             </div>
           </div>
