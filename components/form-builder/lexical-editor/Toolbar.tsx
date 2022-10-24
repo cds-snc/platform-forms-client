@@ -117,22 +117,22 @@ export const Toolbar = () => {
     }
   };
 
-  const formatBulletList = (evt) => {
+  const formatBulletList = (evt: React.ChangeEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    if (blockType !== "ul") {
+    if (blockType !== "list") {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-    } else {
-      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      return;
     }
+    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
   };
 
-  const formatNumberedList = (evt) => {
+  const formatNumberedList = (evt: React.ChangeEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    if (blockType !== "ol") {
+    if (blockType !== "list") {
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-    } else {
-      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
+      return;
     }
+    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
   };
 
   const updateToolbar = useCallback(() => {
@@ -233,9 +233,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
-          onClick={(evt) => {
-            formatBulletList(evt);
-          }}
+          onClick={formatBulletList}
           ref={(el) => (itemsRef.current["row-4"] = el)}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list bulleted"
@@ -245,9 +243,7 @@ export const Toolbar = () => {
 
         <button
           tabIndex={-1}
-          onClick={(evt) => {
-            formatNumberedList(evt);
-          }}
+          onClick={formatNumberedList}
           ref={(el) => (itemsRef.current["row-5"] = el)}
           className={"toolbar-item " + (isBold ? "active" : "")}
           aria-label="Format list numbered"
