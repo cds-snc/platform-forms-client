@@ -7,7 +7,6 @@ import { LockIcon } from "../icons";
 
 const Actions = styled.div`
   position: relative;
-  margin-top: 5px;
   display: flex;
   background-color: #ebebeb;
   padding-left: 20px;

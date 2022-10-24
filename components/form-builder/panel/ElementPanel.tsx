@@ -104,12 +104,14 @@ const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
+  font-size: 16px;
   & > div {
     ${({ isRichText }) =>
       isRichText &&
       `
       width: 100%;
       margin: 0;
+      font-size: 1.25em;
     `}
   }
 `;
@@ -171,8 +173,13 @@ const LabelHidden = styled(FormLabel)`
   border-width: 0;
 `;
 
-const FormWrapper = styled.div`
-  padding: 20px 25px;
+const FormWrapper = styled.div<RowProps>`
+  padding: 30px 25px;
+  ${({ isRichText }) =>
+    isRichText &&
+    `
+      padding: 0;
+    `}
 `;
 
 const RequiredWrapper = styled.div`
@@ -509,12 +516,10 @@ ModalForm.propTypes = {
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;
   margin-top: -1px;
-  font-size: 16px;
 `;
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
@@ -544,7 +549,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
 
   return (
     <ElementWrapperDiv className={`element-${item.index}`}>
-      <FormWrapper>
+      <FormWrapper isRichText={isRichText}>
         <Form item={item} />
       </FormWrapper>
       <PanelActions
@@ -601,7 +606,6 @@ export const ElementPanel = () => {
   return (
     <ElementPanelDiv>
       <RichTextLocked
-        id="introductionPage"
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
@@ -614,22 +618,20 @@ export const ElementPanel = () => {
       {form.elements?.length >= 1 && (
         <>
           <RichTextLocked
-            id="endPage"
-            addElement={false}
-            initialValue={confirmTextPlaceholder}
-            schemaProperty="endPage"
-            aria-label={t("richTextConfirmationTitle")}
-          >
-            <h2>{t("richTextConfirmationTitle")}</h2>
-          </RichTextLocked>
-          <RichTextLocked
-            id="policyPage"
             addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
             aria-label={t("richTextPrivacyTitle")}
           >
             <h2>{t("richTextPrivacyTitle")}</h2>
+          </RichTextLocked>
+          <RichTextLocked
+            addElement={false}
+            initialValue={confirmTextPlaceholder}
+            schemaProperty="endPage"
+            aria-label={t("richTextConfirmationTitle")}
+          >
+            <h2>{t("richTextConfirmationTitle")}</h2>
           </RichTextLocked>
         </>
       )}
