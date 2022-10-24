@@ -20,6 +20,7 @@ import {
 } from "@lexical/list";
 
 import {
+  $isRootNode,
   FORMAT_TEXT_COMMAND,
   $getSelection,
   $isRangeSelection,
@@ -133,9 +134,13 @@ export const Toolbar = () => {
     if (blockType !== level) {
       editor.update(() => {
         const selection = $getSelection();
-
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode(level));
+          try {
+            $wrapNodes(selection, () => $createHeadingNode(level));
+          } catch (err) {
+            // catch root node error
+            // no-op
+          }
         }
       });
     }
