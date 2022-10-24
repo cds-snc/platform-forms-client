@@ -9,7 +9,7 @@ const OptionWrapper = styled.div`
 `;
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
-  const { localizeField, form } = useTemplateStore();
+  const { localizeField, form, lang } = useTemplateStore();
 
   const content =
     form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
@@ -22,6 +22,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
           LocalizedElementProperties.DESCRIPTION
         )}`}
         content={content}
+        lang={lang}
       />
     </OptionWrapper>
   );
