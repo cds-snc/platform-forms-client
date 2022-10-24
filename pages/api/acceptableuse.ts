@@ -4,7 +4,7 @@ import { setAcceptableUse } from "@lib/acceptableUseCache";
 import { MiddlewareProps } from "@lib/types";
 
 const acceptableUse = async (
-  req: NextApiRequest,
+  _req: NextApiRequest,
   res: NextApiResponse,
   { session }: MiddlewareProps
 ) => {
