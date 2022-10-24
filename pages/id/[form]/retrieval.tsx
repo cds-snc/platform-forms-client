@@ -1,8 +1,7 @@
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+// import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import React from "react";
-import { checkPrivileges } from "@lib/privileges";
 
 const retrieval = (): React.ReactElement => {
   const { t } = useTranslation("forms-responses-retrieval");

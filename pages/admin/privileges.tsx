@@ -185,18 +185,19 @@ const ModifyPrivilege = ({
 const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.ReactElement => {
   const { t } = useTranslation("admin-privileges");
   const [modifyMode, setModifyMode] = useState(false);
-  const [selectedPrivilege, setSelectedPrivealge] = useState<Privilege | null>(null);
+  const [selectedPrivilege, setSelectedPrivilege] = useState<Privilege | null>(null);
   const { refreshData } = useRefresh();
   const { ability } = useAccessControl();
 
   const editPrivilege = (privilege: Privilege) => {
-    setSelectedPrivealge(privilege);
+    setSelectedPrivilege(privilege);
     setModifyMode(true);
   };
 
   const cancelEdit = () => {
     setModifyMode(false);
-    setSelectedPrivealge(null);
+    setSelectedPrivilege(null);
+
     refreshData();
   };
 
@@ -228,7 +229,7 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
               <Button
                 type="button"
                 onClick={() => {
-                  setSelectedPrivealge(null);
+                  setSelectedPrivilege(null);
                   setModifyMode(true);
                 }}
               >

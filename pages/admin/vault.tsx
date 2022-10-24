@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+// import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { getFormByID } from "@lib/helpers";
 import convertMessage from "@lib/markdown";
@@ -111,7 +111,7 @@ const FormResponse = ({
       <div className="p-5">
         <RichText className="email-preview">{response}</RichText>
       </div>
-      <div className="inline-block justify-center flex space-x-20">
+      <div className="justify-center flex space-x-20">
         {index > 0 && (
           <Button
             className="gc-button rounded-lg float-left"
@@ -271,7 +271,7 @@ const AdminVault: React.FC = () => {
         </div>
       </div>
       {responses.Items.length ? (
-        <div className="mt-4 inline-block justify-left flex space-x-20">
+        <div className="mt-4 justify-left flex space-x-20">
           <Button
             className="gc-button rounded-lg"
             type="button"

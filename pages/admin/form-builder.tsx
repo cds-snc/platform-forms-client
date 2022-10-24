@@ -3,6 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../components/form-builder/layout/Layout";
 import { User } from "next-auth";
+import { checkPrivileges } from "@lib/privileges";
 
 type WelcomeProps = {
   user: User;
@@ -21,6 +22,7 @@ const Welcome: React.FC<WelcomeProps> = () => {
 };
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+  checkPrivileges(ability, [{ action: "update", subject: "FormRecord" }]);
   return {
     props: {
       ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
