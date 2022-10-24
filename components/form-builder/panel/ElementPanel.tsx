@@ -104,12 +104,14 @@ const Row = styled.div<RowProps>`
   display: flex;
   justify-content: space-between;
   position: relative;
+  font-size: 16px;
   & > div {
     ${({ isRichText }) =>
       isRichText &&
       `
       width: 100%;
       margin: 0;
+      font-size: 1.25em;
     `}
   }
 `;
@@ -518,7 +520,6 @@ const ElementWrapperDiv = styled.div`
   max-width: 800px;
   height: auto;
   margin-top: -1px;
-  font-size: 16px;
 `;
 
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
