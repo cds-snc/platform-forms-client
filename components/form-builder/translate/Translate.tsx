@@ -222,6 +222,7 @@ export const Translate = () => {
                       )
                     ]
                   }
+                  lang={translationLanguagePriority}
                 />
                 <RichTextEditor
                   path={`form.introduction.${localizeField(
@@ -236,6 +237,7 @@ export const Translate = () => {
                       )
                     ]
                   }
+                  lang={translationLanguagePriorityAlt}
                 />
               </div>
             </div>
@@ -329,6 +331,7 @@ export const Translate = () => {
                     )
                   ]
                 }
+                lang={translationLanguagePriority}
               />
               <RichTextEditor
                 path={`form.privacyPolicy.${localizeField(
@@ -343,6 +346,7 @@ export const Translate = () => {
                     )
                   ]
                 }
+                lang={translationLanguagePriorityAlt}
               />
             </div>
           </div>
@@ -371,6 +375,7 @@ export const Translate = () => {
                     )
                   ]
                 }
+                lang={translationLanguagePriority}
               />
               <RichTextEditor
                 path={`form.endPage.${localizeField(
@@ -385,6 +390,7 @@ export const Translate = () => {
                     )
                   ]
                 }
+                lang={translationLanguagePriorityAlt}
               />
             </div>
           </div>

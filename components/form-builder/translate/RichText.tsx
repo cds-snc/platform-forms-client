@@ -32,6 +32,7 @@ export const RichText = ({
             content={
               element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")]
             }
+            lang={translationLanguagePriority}
           />
           <RichTextEditor
             path={`form.elements[${index}].properties.${localizeField(
@@ -41,6 +42,7 @@ export const RichText = ({
             content={
               element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")]
             }
+            lang={translationLanguagePriorityAlt}
           />
         </div>
       </div>

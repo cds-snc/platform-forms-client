@@ -41,7 +41,7 @@ export const RichTextLocked = ({
   initialValue: string;
   schemaProperty: string;
 }) => {
-  const { localizeField } = useTemplateStore();
+  const { localizeField, lang } = useTemplateStore();
 
   return (
     <ElementWrapperDiv>
@@ -50,6 +50,7 @@ export const RichTextLocked = ({
         <RichTextEditor
           path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
           content={initialValue}
+          lang={lang}
         />
       </OptionWrapper>
       <PanelActionsLocked addElement={addElement} />
