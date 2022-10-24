@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -62,6 +63,7 @@ export const Editor = ({
         <TreeViewPlugin />
         <LinkPlugin /> */}
         <LinkPlugin />
+        <ListPlugin />
       </LexicalComposer>
     </RichTextWrapper>
   );
