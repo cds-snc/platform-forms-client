@@ -176,7 +176,7 @@ const FormWrapper = styled.div<RowProps>`
   ${({ isRichText }) =>
     isRichText &&
     `
-      padding: 0 0 30px 0;
+      padding: 0;
     `}
 `;
 
