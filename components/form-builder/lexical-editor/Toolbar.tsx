@@ -79,7 +79,6 @@ export const Toolbar = () => {
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isLink] = useState(false);
-
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
 
@@ -95,7 +94,6 @@ export const Toolbar = () => {
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
   const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
-
   const [toolbarInit, setToolbarInit] = useState(false);
 
   useEffect(() => {
@@ -135,12 +133,7 @@ export const Toolbar = () => {
       editor.update(() => {
         const selection = $getSelection();
         if ($isRangeSelection(selection)) {
-          try {
-            $wrapNodes(selection, () => $createHeadingNode(level));
-          } catch (err) {
-            // catch root node error
-            // no-op
-          }
+          $wrapNodes(selection, () => $createHeadingNode(level));
         }
       });
     }

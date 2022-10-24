@@ -35,7 +35,6 @@ export const Editor = ({
   if (typeof content !== "string") {
     content = "";
   }
-
   return (
     <RichTextWrapper>
       <LexicalComposer

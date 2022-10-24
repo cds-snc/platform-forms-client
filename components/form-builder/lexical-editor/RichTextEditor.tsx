@@ -21,7 +21,6 @@ export const RichTextEditor = ({
     if (typeof value === "undefined") {
       value = "";
     }
-
     updateField(path, value);
   };
 
