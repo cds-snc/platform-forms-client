@@ -49,7 +49,8 @@ describe("Test acceptable use endpoint", () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it("Should return 404 for undefined userID", async () => {
+  it("Should return 401 for unauthenticated user", async () => {
+    mockGetSession.mockReset();
     const { req, res } = createMocks({
       method: "POST",
       headers: {
@@ -62,8 +63,8 @@ describe("Test acceptable use endpoint", () => {
       },
     });
     await acceptableUse(req, res);
-    expect(res.statusCode).toBe(404);
-    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Bad request" }));
+    expect(res.statusCode).toBe(401);
+    expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Unauthorized" }));
   });
 
   it("Should throw an error and return 500 status code", async () => {

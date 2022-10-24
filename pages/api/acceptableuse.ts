@@ -1,12 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, csrfProtected, sessionExists } from "@lib/middleware";
 import { setAcceptableUse } from "@lib/acceptableUseCache";
+import { MiddlewareProps } from "@lib/types";
 
-const acceptableUse = async (req: NextApiRequest, res: NextApiResponse) => {
+const acceptableUse = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  { session }: MiddlewareProps
+) => {
   try {
-    const { userID } = req.body;
-    if (!userID) return res.status(404).json({ error: "Bad request" });
-    await setAcceptableUse(userID);
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
+    await setAcceptableUse(session.user.id);
     res.status(200).json({});
   } catch (err) {
     res.status(500).json({ error: "Malformed API Request" });
