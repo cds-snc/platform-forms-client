@@ -1,129 +1,74 @@
 // IE polyfills
 @supports not (display: grid) {
-    input {
-      border: 1px solid #000;
-    }
+  input {
+    border: 1px solid #000;
   }
-  
-  .gc-fieldset ul {
-    @apply mb-14;
-  }
-  
-  .gc-alert,
-  .gc-error-message {
-    @apply md:text-small_base text-base py-0 w-full text-red-700 mb-2;
-  }
-  
-  .gc-error-message + .gc-input-text,
-  .gc-error-message + .gc-textarea,
-  .gc-error-message + .gc-dropdown {
-    @apply border-red-700;
-  }
-  
-  .gc-alert {
-    @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
-    &.gc-alert--validation,
-    &.gc-alert--error {
-      @apply border-2 border-red-default;
-  
-      &:focus {
-        box-shadow: inset 0 0 0 2px #b10e1e;
-        @apply outline-none;
-      }
-  
-      &:focus-within {
-        box-shadow: inset 0 0 0 2px #b10e1e;
-        @apply outline-none;
-      }
-    }
-  
-    &.gc-alert--success {
-      @apply bg-green-100;
-    }
-  
-    .gc-alert__body {
-      @apply text-black-default;
-      h3 {
-        @apply mb-5 text-red-default;
-      }
-  
-      ol {
-        @apply list-inside;
-  
-        li {
-          @apply mb-2;
-        }
-      }
-    }
-  }
-  
-  .gc-ordered-list {
-    @apply ml-0 font-normal;
-  
-    .gc-error-link {
-      @apply ml-2 text-blue-900;
-  
-      &:focus {
-        box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-        @apply bg-blue-focus text-white-default;
-      }
-  
-      &:active {
-        box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-        @apply underline bg-blue-active text-white-default;
-      }
-    }
-  }
-  
-  .gc-dropdown {
-    background-image: url("../public/img/arrow-down.svg");
-    @apply md:w-full w-1/2 md:text-small_base text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
-  
+}
+
+.gc-fieldset ul {
+  @apply mb-14;
+}
+
+.gc-alert,
+.gc-error-message {
+  @apply md:text-small_base text-base py-0 w-full text-red-700 mb-2;
+}
+
+.gc-error-message + .gc-input-text,
+.gc-error-message + .gc-textarea,
+.gc-error-message + .gc-dropdown {
+  @apply border-red-700;
+}
+
+.gc-alert {
+  @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
+  &.gc-alert--validation,
+  &.gc-alert--error {
+    @apply border-2 border-red-default;
+
     &:focus {
-      @apply outline-none border-blue-focus shadow-input;
+      box-shadow: inset 0 0 0 2px #b10e1e;
+      @apply outline-none;
+    }
+
+    &:focus-within {
+      box-shadow: inset 0 0 0 2px #b10e1e;
+      @apply outline-none;
     }
   }
-  
-  .gc-p {
-    @apply md:text-small_p text-p mb-10 w-full;
+
+  &.gc-alert--success {
+    @apply bg-green-100;
   }
-  
-  .gc-description {
-    @apply md:text-small_sm text-gray-text mb-3 text-sm w-3/4 xl:w-full;
-  }
-  
-  .gc-richText {
-    p {
-      @extend .gc-p;
+
+  .gc-alert__body {
+    @apply text-black-default;
+    h3 {
+      @apply mb-5 text-red-default;
     }
-    h4 {
-      @extend .gc-section-header;
-    }
-  
-    ul,
-    ol {
-      @apply mb-10;
-    }
-  
+
     ol {
       @apply list-inside;
+
+      li {
+        @apply mb-2;
+      }
     }
-  
-    a:visited {
-      @apply text-purple-default;
-    }
-  
-    a {
-      @apply underline text-blue-dark hover:text-blue-hover;
-    }
-  
-    a:focus {
-      outline: none;
+  }
+}
+
+.gc-ordered-list {
+  @apply ml-0 font-normal;
+
+  .gc-error-link {
+    @apply ml-2 text-blue-900;
+
+    &:focus {
       box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
       @apply bg-blue-focus text-white-default;
     }
-  
-    a:active {
+
+    &:active {
       box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
       @apply underline bg-blue-active text-white-default;
     }
@@ -311,61 +256,127 @@
     & + .gc-checkbox-label {
       @apply relative cursor-pointer p-0;
     }
-  
+
     &:focus {
       @apply outline-none;
     }
-  
-    &:focus + .gc-radio-label {
+
+    &:focus + .gc-checkbox-label {
       span {
         @apply text-blue-focus;
       }
     }
-  
-    &:focus + .gc-radio-label:before {
+
+    &:focus + .gc-checkbox-label:before {
       @apply outline-none border-4 border-blue-focus;
     }
-  
-    // Circle.
-    & + .gc-radio-label:before {
+
+    // Box.
+    & + .gc-checkbox-label:before {
       content: "";
-      @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
+      @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
     }
-  
-    // Radio. Could be replaced with an image
-    &:checked + .gc-radio-label:after {
+
+    // Checkmark. Could be replaced with an image
+    &:checked + .gc-checkbox-label:after {
+      background-repeat: no-repeat;
       content: "";
-      background-image: url("../public/img/black-circle.svg");
-      @apply absolute w-5 h-5 left-10px;
+      background-image: url("../public/img/checkmark.svg");
+      @apply absolute w-6 h-6 left-2;
     }
-  
-    &:focus + .gc-radio-label:after {
-      background-image: url("../public/img/blue-circle.svg");
-    }
-  }
-  
-  .gc-file-input {
-    @apply w-full md:text-small_base text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
-  
-    &:focus {
-      @apply outline-none border-blue-focus shadow-input;
-    }
-  
-    &.is-disabled {
-      opacity: 0.5;
-      pointer-events: none;
+
+    &:focus + .gc-checkbox-label:after {
+      background-image: url("../public/img/blue-checkmark.svg");
     }
   }
-  
-  .gc-file-input-upload-button {
-    @apply text-center inline-block mb-0;
+}
+
+.gc-input-radio,
+.gc-input-checkbox {
+  @apply flex pt-3 pb-1 px-0 items-center;
+}
+
+.gc-radio-label,
+.gc-checkbox-label {
+  @apply md:text-small_base block font-normal text-base flex items-center;
+
+  .checkbox-label-text,
+  .radio-label-text {
+    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
   }
-  
-  .gc-file-input-file-selected {
-    @apply inline-block;
+}
+
+.gc-radio__input {
+  @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
+  & + .gc-radio-label {
+    @apply relative cursor-pointer p-0;
   }
-  
-  .gc-file-input [type="file"] {
+
+  &:focus {
+    @apply outline-none;
+  }
+
+  &:focus + .gc-radio-label {
+    span {
+      @apply text-blue-focus;
+    }
+  }
+
+  &:focus + .gc-radio-label:before {
+    @apply outline-none border-4 border-blue-focus;
+  }
+
+  // Circle.
+  & + .gc-radio-label:before {
+    content: "";
+    @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
+  }
+
+  // Radio. Could be replaced with an image
+  &:checked + .gc-radio-label:after {
+    content: "";
+    background-image: url("../public/img/black-circle.svg");
+    @apply absolute w-5 h-5 left-10px;
+  }
+
+  &:focus + .gc-radio-label:after {
+    background-image: url("../public/img/blue-circle.svg");
+  }
+}
+
+.gc-file-input {
+  @apply w-full md:text-small_base text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
+
+  &:focus {
+    @apply outline-none border-blue-focus shadow-input;
+  }
+
+  &.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.gc-file-input-upload-button {
+  @apply text-center inline-block mb-0;
+}
+
+.gc-file-input-file-selected {
+  @apply inline-block;
+}
+
+.gc-file-input [type="file"] {
+  display: none;
+}
+
+.page-preview-form,
+.page-en-preview-form,
+.page-fr-preview-form {
+  h1::before {
+    content: "[Preview/Prévisualisation]";
+    @apply mb-10 block font-bold text-green-700;
+  }
+  .gc-button[type="submit"] {
     display: none;
   }
 }
