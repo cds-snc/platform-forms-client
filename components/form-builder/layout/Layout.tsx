@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import useNavigationStore from "../store/useNavigationStore";
+import { LeftNavigation } from "./LeftNavigation";
 
 import { Language, LocalizedFormProperties } from "../types";
 import { Save } from "./Save";
@@ -23,25 +24,6 @@ const Input = styled.input`
   max-height: 36px;
   margin-bottom: 35px;
   border-radius: 4px;
-`;
-
-const Navigation = styled.div`
-  width: 800px;
-  text-align: center;
-  margin: 20px 0;
-
-  &.start .start,
-  &.create .create,
-  &.preview .preview,
-  &.translate .translate,
-  &.save .save {
-    font-weight: 700;
-  }
-`;
-
-const Tab = styled.a`
-  text-decoration: underline;
-  cursor: pointer;
 `;
 
 const StyledPreviewWrapper = styled.div`
@@ -68,37 +50,18 @@ export const Layout = () => {
 
   /* eslint-disable */
   return (
-    <>
-      <Navigation className={currentTab}>
-        <Tab className="start" href="#" onClick={handleClick("start")}>
-          {t("start")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="create" href="#" onClick={handleClick("create")}>
-          {t("design")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="preview" href="#" onClick={handleClick("preview")}>
-          {t("preview")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="translate" href="#" onClick={handleClick("translate")}>
-          {t("translate")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="save" href="#" onClick={handleClick("save")}>
-          {t("save")}
-        </Tab>
-      </Navigation>
+    <div className="grid grid-cols-12 gap-4">
+
+      {currentTab !== "start" && <LeftNavigation currentTab={currentTab} handleClick={handleClick} />}
 
       {currentTab === "start" && (
-        <>
-          <h1>{t("start")}</h1>
+        <div className="col-start-1 col-span-12">
           <Start changeTab={setTab} />
-        </>
+        </div>
       )}
+
       {currentTab === "create" && (
-        <>
+        <div className="col-start-4 col-span-10">
           <div>
             <h1>{t("title")}</h1>
             <Input
@@ -110,29 +73,33 @@ export const Layout = () => {
             />
           </div>
           <ElementPanel />
-        </>
+        </div>
       )}
+
       {currentTab === "preview" && (
-        <>
+        <div className="col-start-4 col-span-10">
           <StyledPreviewWrapper>
             <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
             <Preview />
           </StyledPreviewWrapper>
-        </>
+        </div>
       )}
+
       {currentTab === "translate" && (
-        <>
+        <div className="col-start-4 col-span-10">
           <h1>{t("translateTitle")}</h1>
           <Translate />
-        </>
+        </div>
       )}
+
       {currentTab === "save" && (
-        <>
+        <div className="col-start-4 col-span-10">
           <StyledHeader>{t("saveH1")}</StyledHeader>
           <Save />
-        </>
+        </div>
       )}
-    </>
+
+    </div >
   );
   /* eslint-enable */
 };

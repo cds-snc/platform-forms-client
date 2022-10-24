@@ -1,23 +1,21 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../components/form-builder/layout/Layout";
-import { User } from "next-auth";
+import { Header } from "../../components/form-builder/layout/Header";
 import { UserRole } from "@prisma/client";
+import { NextPageWithLayout } from "../../pages/_app";
 
-type WelcomeProps = {
-  user: User;
+const Page: NextPageWithLayout = () => {
+  return <Layout />;
 };
 
-const Welcome: React.FC<WelcomeProps> = () => {
+Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <>
-      <div className="flex flex-wrap">
-        <div className="flex-auto mb-10">
-          <Layout />
-        </div>
-      </div>
-    </>
+    <div>
+      <Header />
+      {page}
+    </div>
   );
 };
 
@@ -30,4 +28,4 @@ export const getServerSideProps = requireAuthentication(async (context) => {
   };
 }, UserRole.ADMINISTRATOR);
 
-export default Welcome;
+export default Page;
