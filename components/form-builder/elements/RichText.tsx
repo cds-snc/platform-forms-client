@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
@@ -9,18 +9,10 @@ const OptionWrapper = styled.div`
 `;
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
-  const input = useRef<HTMLInputElement>(null);
-
   const { localizeField, form } = useTemplateStore();
 
   const content =
     form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
-
-  useEffect(() => {
-    if (input.current) {
-      input.current.focus();
-    }
-  }, []);
 
   return (
     <OptionWrapper>

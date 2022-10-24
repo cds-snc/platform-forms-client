@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import useTemplateStore from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
@@ -41,14 +41,7 @@ export const RichTextLocked = ({
   initialValue: string;
   schemaProperty: string;
 }) => {
-  const input = useRef<HTMLInputElement>(null);
   const { localizeField } = useTemplateStore();
-
-  useEffect(() => {
-    if (input.current) {
-      input.current.focus();
-    }
-  }, []);
 
   return (
     <ElementWrapperDiv>
