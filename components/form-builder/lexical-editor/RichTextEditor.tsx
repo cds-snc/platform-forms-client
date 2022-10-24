@@ -7,7 +7,15 @@ const EditorWrapper = styled.div`
   width: 100%;
 `;
 
-export const RichTextEditor = ({ path, content }: { path: string; content: string }) => {
+export const RichTextEditor = ({
+  path,
+  content,
+  autoFocusEditor,
+}: {
+  path: string;
+  content: string;
+  autoFocusEditor: boolean;
+}) => {
   const { updateField, lang } = useTemplateStore();
   const handleChange = (value: string) => {
     if (typeof value === "undefined") {
@@ -19,7 +27,7 @@ export const RichTextEditor = ({ path, content }: { path: string; content: strin
 
   return (
     <EditorWrapper key={lang}>
-      <Editor content={content} onChange={handleChange} />
+      <Editor autoFocusEditor={autoFocusEditor} content={content} onChange={handleChange} />
     </EditorWrapper>
   );
 };

@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
-export const FocusPlugin = () => {
+export const FocusPlugin = ({ autoFocusEditor = false }: { autoFocusEditor: boolean }) => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-    editor.focus();
-  }, []);
+    if (autoFocusEditor) {
+      editor.focus();
+    }
+  }, [autoFocusEditor]);
 
   return null;
 };

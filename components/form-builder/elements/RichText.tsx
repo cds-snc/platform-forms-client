@@ -17,6 +17,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   return (
     <OptionWrapper>
       <RichTextEditor
+        autoFocusEditor={true}
         path={`form.elements[${parentIndex}].properties.${localizeField(
           LocalizedElementProperties.DESCRIPTION
         )}`}

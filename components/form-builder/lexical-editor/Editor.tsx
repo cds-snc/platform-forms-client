@@ -29,9 +29,11 @@ const RichTextWrapper = styled.div`
 export const Editor = ({
   content,
   onChange,
+  autoFocusEditor,
 }: {
   content: string;
   onChange: (value: string) => void;
+  autoFocusEditor: boolean;
 }) => {
   if (typeof content !== "string") {
     content = "";
@@ -58,9 +60,7 @@ export const Editor = ({
           contentEditable={<ContentEditable className="editor-input" />}
           placeholder={""}
         />
-
-        <FocusPlugin />
-
+        <FocusPlugin autoFocusEditor={autoFocusEditor} />
         <OnChangePlugin
           onChange={(editorState) => {
             editorState.read(() => {
