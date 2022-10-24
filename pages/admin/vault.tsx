@@ -244,7 +244,7 @@ const AdminVault: React.FC = () => {
       </div>
       <div>
         <form id="form" onSubmit={handleSubmit}>
-          <label className={"gc-label"} htmlFor={"formTextInput"} id={"1"}>
+          <label className={"gc-label"} htmlFor={"formTextInput"}>
             {t("formInput")}
           </label>
           <div className="inline-block space-x-3">
@@ -292,12 +292,21 @@ const AdminVault: React.FC = () => {
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
+  // Disabling this page until the Vault feature is ready.
+  return {
+    redirect: {
+      destination: `/${context.locale}/admin/`,
+      permanent: false,
+    },
+  };
+  /*
   return {
     props: {
       ...(context.locale &&
         (await serverSideTranslations(context.locale, ["common", "admin-vault"]))),
     },
   };
+  */
 });
 
 export default AdminVault;
