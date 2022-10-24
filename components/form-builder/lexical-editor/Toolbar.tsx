@@ -20,7 +20,6 @@ import {
 } from "@lexical/list";
 
 import {
-  $isRootNode,
   FORMAT_TEXT_COMMAND,
   $getSelection,
   $isRangeSelection,
