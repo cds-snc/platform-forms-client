@@ -75,7 +75,7 @@ export const editorConfig = {
   // The editor theme
   theme: theme,
   // Handling of errors during update
-  onError(error: any) {
+  onError(error: Error) {
     throw error;
   },
   // Any custom nodes go here
