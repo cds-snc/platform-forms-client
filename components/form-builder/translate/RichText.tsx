@@ -25,6 +25,7 @@ export const RichText = ({
         </div>
         <div className="section-text">
           <RichTextEditor
+            autoFocusEditor={false}
             path={`form.elements[${index}].properties.${localizeField(
               LocalizedElementProperties.DESCRIPTION,
               translationLanguagePriority
@@ -35,6 +36,7 @@ export const RichText = ({
             lang={translationLanguagePriority}
           />
           <RichTextEditor
+            autoFocusEditor={false}
             path={`form.elements[${index}].properties.${localizeField(
               LocalizedElementProperties.DESCRIPTION,
               translationLanguagePriorityAlt
