@@ -50,6 +50,7 @@ const ToolbarContainer = styled.div`
   padding: 10px;
 
   &:focus-within {
+    margin: -2px;
     border: 2px solid #015ecc;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -57,14 +58,14 @@ const ToolbarContainer = styled.div`
 
   button {
     padding: 4px;
-    border: 2px solid transparent;
+    border: 1.5px solid transparent;
+    border-radius: 4px;
     margin-right: 5px;
     svg {
       display: block;
     }
     &.active {
-      border: 2px solid #015ecc;
-      border-radius: 4px;
+      border: 1.5px solid #015ecc;
     }
   }
 `;
@@ -125,6 +126,10 @@ export const Toolbar = () => {
   );
 
   const formatHeading = (level: HeadingTagType) => {
+    if (blockType === level) {
+      formatParagraph();
+    }
+
     if (blockType !== level) {
       editor.update(() => {
         const selection = $getSelection();
