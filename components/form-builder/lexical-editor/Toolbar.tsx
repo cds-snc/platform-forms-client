@@ -125,6 +125,10 @@ export const Toolbar = () => {
   );
 
   const formatHeading = (level: HeadingTagType) => {
+    if (blockType === level) {
+      formatParagraph();
+    }
+
     if (blockType !== level) {
       editor.update(() => {
         const selection = $getSelection();
