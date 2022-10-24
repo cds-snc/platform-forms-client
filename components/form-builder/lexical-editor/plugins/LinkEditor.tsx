@@ -20,28 +20,33 @@ import { $isHeadingNode } from "@lexical/rich-text";
 
 const LowPriority = 1;
 
-function positionEditorElement(editor: HTMLElement, rect: DOMRectReadOnly | null) {
+function positionEditorElement(linkEditor: HTMLElement, rect: DOMRectReadOnly | null) {
   if (rect === null) {
-    editor.style.opacity = "0";
-    editor.style.top = "-1000px";
-    editor.style.left = "-1000px";
+    linkEditor.style.opacity = "0";
+    linkEditor.style.top = "-1000px";
+    linkEditor.style.left = "-1000px";
   } else {
     const top = `${rect.top + rect.height + window.pageYOffset + 10}px`;
     const left = `${rect.left}px`;
-    editor.style.opacity = "1";
-    editor.style.top = top;
-    editor.style.left = left;
+    linkEditor.style.opacity = "1";
+    linkEditor.style.top = top;
+    linkEditor.style.left = left;
   }
 }
 
 type Selection = RangeSelection | NodeSelection | GridSelection;
 
-export const FloatingLinkEditor = ({ editor }: { editor: LexicalEditor }) => {
-  const editorRef = useRef(null);
+export const FloatingLinkEditor = ({
+  editor,
+  toggleEditor,
+}: {
+  editor: LexicalEditor;
+  toggleEditor: (state: boolean) => void;
+}) => {
+  const linkEditorRef = useRef(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const mouseDownRef = useRef(false);
   const [linkUrl, setLinkUrl] = useState("");
-  const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<Selection | null>(null);
 
   const updateLinkEditor = useCallback(() => {
@@ -58,11 +63,11 @@ export const FloatingLinkEditor = ({ editor }: { editor: LexicalEditor }) => {
       }
     }
 
-    const editorElem = editorRef.current;
+    const linkEditorElem = linkEditorRef.current;
     const nativeSelection = window.getSelection();
     const activeElement = document.activeElement;
 
-    if (editorElem === null) {
+    if (linkEditorElem === null) {
       return;
     }
 
@@ -87,13 +92,15 @@ export const FloatingLinkEditor = ({ editor }: { editor: LexicalEditor }) => {
       }
 
       if (!mouseDownRef.current) {
-        positionEditorElement(editorElem, rect);
+        positionEditorElement(linkEditorElem, rect);
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       }
       setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
-      positionEditorElement(editorElem, null);
+      positionEditorElement(linkEditorElem, null);
       setLastSelection(null);
-      setEditMode(false);
       setLinkUrl("");
     }
 
@@ -118,42 +125,37 @@ export const FloatingLinkEditor = ({ editor }: { editor: LexicalEditor }) => {
     );
   }, [editor, updateLinkEditor]);
 
-  useEffect(() => {
-    editor.getEditorState().read(() => {
-      updateLinkEditor();
-    });
-  }, [editor, updateLinkEditor]);
-
-  useEffect(() => {
-    if (isEditMode && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isEditMode]);
+  const input = (
+    <input
+      ref={inputRef}
+      className="link-input"
+      value={linkUrl}
+      onChange={(event) => {
+        setLinkUrl(event.target.value);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          if (lastSelection !== null) {
+            if (linkUrl !== "") {
+              editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
+              toggleEditor(false);
+            }
+          }
+        } else if (event.key === "Escape") {
+          event.preventDefault();
+        }
+      }}
+    />
+  );
 
   return (
-    <div ref={editorRef} style={{ position: "absolute", width: "500px" }} className="link-editor">
-      <input
-        ref={inputRef}
-        className="link-input"
-        value={linkUrl}
-        onChange={(event) => {
-          setLinkUrl(event.target.value);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            if (lastSelection !== null) {
-              if (linkUrl !== "") {
-                editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
-              }
-              setEditMode(false);
-            }
-          } else if (event.key === "Escape") {
-            event.preventDefault();
-            setEditMode(false);
-          }
-        }}
-      />
+    <div
+      ref={linkEditorRef}
+      style={{ position: "absolute", width: "500px" }}
+      className="link-editor"
+    >
+      {input}
     </div>
   );
 };
@@ -183,6 +185,13 @@ export const LinkEditor = ({ children }: { children: JSX.Element }) => {
   const [, setBlockType] = useState("paragraph");
   const [, setSelectedElementKey] = useState<string | null>(null);
   const [isLink, setIsLink] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const toggleEditor = useCallback(
+    (state: boolean) => {
+      setShowEditor(state);
+    },
+    [setShowEditor]
+  );
 
   const updateLink = useCallback(() => {
     const selection = $getSelection();
@@ -227,8 +236,10 @@ export const LinkEditor = ({ children }: { children: JSX.Element }) => {
 
   const insertLink = useCallback(() => {
     if (!isLink) {
+      toggleEditor(true);
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
     } else {
+      toggleEditor(false);
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
   }, [editor, isLink]);
@@ -242,7 +253,12 @@ export const LinkEditor = ({ children }: { children: JSX.Element }) => {
           onClick: child.props.onClick || insertLink,
         })
       )}
-      {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
+      {isLink &&
+        showEditor &&
+        createPortal(
+          <FloatingLinkEditor toggleEditor={toggleEditor} editor={editor} />,
+          document.body
+        )}
     </>
   );
 };
