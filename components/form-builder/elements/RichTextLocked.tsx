@@ -51,6 +51,7 @@ export const RichTextLocked = ({
           path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
           content={initialValue}
           lang={lang}
+          autoFocusEditor={false}
         />
       </OptionWrapper>
       <PanelActionsLocked addElement={addElement} />
