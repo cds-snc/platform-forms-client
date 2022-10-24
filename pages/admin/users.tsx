@@ -67,11 +67,11 @@ const ManageUser = ({
   return (
     <div>
       <div className="mb-8">{`${t("managePermissionsFor")} ${user.name}`}</div>
-      <div className="flex flex-row flex-wrap gap-8 pb-8">
+      <ul className="flex flex-row flex-wrap gap-8 pb-8 pl-0 list-none">
         {privileges?.map((privilege) => {
           const active = userPrivileges.includes(privilege.id);
           return (
-            <div
+            <li
               key={privilege.id}
               className={`w-72 flex flex-col gap-2 border-2 rounded-lg p-4 hover:border-blue-hover ${
                 active ? "bg-green-100" : "bg-red-100"
@@ -110,10 +110,10 @@ const ManageUser = ({
               ) : (
                 <div className="m-auto">{active ? t("enabled") : t("disabled")}</div>
               )}
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
       <Button className="" type="submit" onClick={() => save()}>
         {t("save")}
       </Button>
