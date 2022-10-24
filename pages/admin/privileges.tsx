@@ -187,6 +187,7 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
   const [modifyMode, setModifyMode] = useState(false);
   const [selectedPrivilege, setSelectedPrivealge] = useState<Privilege | null>(null);
   const { refreshData } = useRefresh();
+  const { ability } = useAccessControl();
 
   const editPrivilege = (privilege: Privilege) => {
     setSelectedPrivealge(privilege);
@@ -223,15 +224,17 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
                 })}
               </tbody>
             </table>
-            <Button
-              type="button"
-              onClick={() => {
-                setSelectedPrivealge(null);
-                setModifyMode(true);
-              }}
-            >
-              Create
-            </Button>
+            {ability?.can("create", "Privilege") && (
+              <Button
+                type="button"
+                onClick={() => {
+                  setSelectedPrivealge(null);
+                  setModifyMode(true);
+                }}
+              >
+                Create
+              </Button>
+            )}
           </div>
         )}
       </div>
