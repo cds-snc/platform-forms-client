@@ -171,8 +171,15 @@ const LabelHidden = styled(FormLabel)`
   border-width: 0;
 `;
 
-const FormWrapper = styled.div`
-  padding: 0 0 20px 0;
+const FormWrapper = styled.div<RowProps>`
+  padding: 30px 25px;
+  ${({ isRichText }) =>
+    isRichText &&
+    `
+      padding-top: 0;
+      padding-left: 0;
+      padding-right: 0;
+    `}
 `;
 
 const RequiredWrapper = styled.div`
@@ -543,7 +550,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
 
   return (
     <ElementWrapperDiv className={`element-${item.index}`}>
-      <FormWrapper>
+      <FormWrapper isRichText={isRichText}>
         <Form item={item} />
       </FormWrapper>
       <PanelActions
