@@ -8,6 +8,7 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
+import { FocusPlugin } from "./plugins/FocusEditor";
 
 // import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
@@ -48,6 +49,8 @@ export const Editor = ({
           contentEditable={<ContentEditable className="editor-input" />}
           placeholder={""}
         />
+
+        <FocusPlugin />
 
         <OnChangePlugin
           onChange={(editorState) => {
