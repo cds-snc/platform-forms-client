@@ -6,6 +6,7 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { $createParagraphNode, $getRoot } from "lexical";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
 
@@ -40,7 +41,15 @@ export const Editor = ({
       <LexicalComposer
         initialConfig={{
           ...editorConfig,
-          editorState: () => $convertFromMarkdownString(content, TRANSFORMERS),
+          editorState: () => {
+            if (!content) {
+              const root = $getRoot();
+              const paragraphNode = $createParagraphNode();
+              root.append(paragraphNode);
+              return;
+            }
+            $convertFromMarkdownString(content, TRANSFORMERS);
+          },
         }}
       >
         <Toolbar />
