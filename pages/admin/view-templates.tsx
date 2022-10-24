@@ -86,42 +86,44 @@ const DataView = (props: DataViewProps): React.ReactElement => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
-  {
-    checkPrivileges(
-      ability,
-      [
-        { action: "view", subject: "FormRecord" },
-        { action: "update", subject: "FormRecord" },
-      ],
-      "one"
-    );
-    // getStaticProps is serverside, and therefore instead of doing a request,
-    // we import the invoke Lambda function directly
+export const getServerSideProps = requireAuthentication(
+  async ({ user: { ability, id }, locale }) => {
+    {
+      checkPrivileges(
+        ability,
+        [
+          { action: "view", subject: "FormRecord" },
+          { action: "update", subject: "FormRecord" },
+        ],
+        "one"
+      );
+      // getStaticProps is serverside, and therefore instead of doing a request,
+      // we import the invoke Lambda function directly
 
-    const templates = (await getAllTemplates(ability)).map((template) => {
-      const {
-        id,
-        form: { titleEn, titleFr },
-        publishingStatus,
-      } = template;
+      const templates = (await getAllTemplates(ability, id)).map((template) => {
+        const {
+          id,
+          form: { titleEn, titleFr },
+          publishingStatus,
+        } = template;
+        return {
+          id,
+          titleEn,
+          titleFr,
+          publishingStatus,
+        };
+      });
+
       return {
-        id,
-        titleEn,
-        titleFr,
-        publishingStatus,
+        props: {
+          templates,
+          ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
+        }, // will be passed to the page component as props
       };
-    });
 
-    return {
-      props: {
-        templates,
-        ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
-      }, // will be passed to the page component as props
-    };
-
-    return { props: {} };
+      return { props: {} };
+    }
   }
-});
+);
 
 export default DataView;
