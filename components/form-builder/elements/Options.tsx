@@ -135,7 +135,7 @@ export const Options = ({
   }
 
   if (!choices) {
-    return <AddOptions index={index} toggleBulkAdd={toggleBulkAdd} />;
+    return <AddOptions index={index} />;
   }
 
   const options = choices.map((child, index) => {
@@ -153,7 +153,7 @@ export const Options = ({
   return (
     <div>
       {options}
-      <AddOptions index={index} toggleBulkAdd={toggleBulkAdd} />
+      <AddOptions index={index} />
     </div>
   );
 };
