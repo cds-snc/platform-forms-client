@@ -210,6 +210,7 @@ export const Translate = () => {
               </div>
               <div className="section-text">
                 <RichTextEditor
+                  autoFocusEditor={false}
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     translationLanguagePriority
@@ -225,6 +226,7 @@ export const Translate = () => {
                   lang={translationLanguagePriority}
                 />
                 <RichTextEditor
+                  autoFocusEditor={false}
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     translationLanguagePriorityAlt
@@ -319,6 +321,7 @@ export const Translate = () => {
 
             <div className="section-text">
               <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriority
@@ -334,6 +337,7 @@ export const Translate = () => {
                 lang={translationLanguagePriority}
               />
               <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriorityAlt
@@ -363,6 +367,7 @@ export const Translate = () => {
             </div>
             <div className="section-text">
               <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriority
@@ -378,6 +383,7 @@ export const Translate = () => {
                 lang={translationLanguagePriority}
               />
               <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriorityAlt
