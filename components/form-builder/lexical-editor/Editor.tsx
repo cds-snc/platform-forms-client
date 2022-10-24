@@ -10,10 +10,7 @@ import { $createParagraphNode, $getRoot } from "lexical";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
 import { FocusPlugin } from "./plugins/FocusEditor";
-
-// import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
-// import ToolbarPlugin from "./plugins/FloatingLinkEditor";
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
@@ -70,10 +67,6 @@ export const Editor = ({
             });
           }}
         />
-
-        {/* <ToolbarPlugin />
-        <TreeViewPlugin />
-        <LinkPlugin /> */}
         <LinkPlugin />
         <ListPlugin />
       </LexicalComposer>
