@@ -5,6 +5,10 @@ import styled from "styled-components";
 
 const EditorWrapper = styled.div`
   width: 100%;
+
+  .editor-list-ol {
+    padding-left: 20px;
+  }
 `;
 
 export const RichTextEditor = ({ path, content }: { path: string; content: string }) => {
