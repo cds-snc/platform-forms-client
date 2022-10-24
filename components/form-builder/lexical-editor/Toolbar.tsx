@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
-import { mergeRegister } from "@lexical/utils";
+import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 import { LinkEditor } from "./plugins/LinkEditor";
 import { Looks3 } from "@styled-icons/material/Looks3";
 import { LooksTwo } from "@styled-icons/material/LooksTwo";
@@ -12,9 +12,11 @@ import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
 
 import {
+  $isListNode,
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
+  ListNode,
 } from "@lexical/list";
 
 import {
@@ -28,21 +30,41 @@ import {
 import { $wrapNodes } from "@lexical/selection";
 import styled from "styled-components";
 
+const blockTypeToBlockName = {
+  bullet: "Bulleted List",
+  check: "Check List",
+  code: "Code Block",
+  h1: "Heading 1",
+  h2: "Heading 2",
+  h3: "Heading 3",
+  h4: "Heading 4",
+  h5: "Heading 5",
+  h6: "Heading 6",
+  number: "Numbered List",
+  paragraph: "Normal",
+  quote: "Quote",
+};
+
 const ToolbarContainer = styled.div`
   border-bottom: 1px solid #ddd;
   padding: 10px;
 
   &:focus-within {
-    border: 2px solid blue;
+    border: 2px solid #015ecc;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
   }
 
   button {
     padding: 4px;
+    border: 2px solid transparent;
     margin-right: 5px;
     svg {
       display: block;
+    }
+    &.active {
+      border: 2px solid #015ecc;
+      border-radius: 4px;
     }
   }
 `;
@@ -53,6 +75,9 @@ type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 export const Toolbar = () => {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
+  const [isLink] = useState(false);
+
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
 
@@ -159,6 +184,21 @@ export const Toolbar = () => {
 
       // Update text format
       setIsBold(selection.hasFormat("bold"));
+      setIsItalic(selection.hasFormat("italic"));
+
+      if (elementDOM !== null) {
+        setSelectedElementKey(elementKey);
+        if ($isListNode(element)) {
+          const parentList = $getNearestNodeOfType<ListNode>(anchorNode, ListNode);
+          const type = parentList ? parentList.getListType() : element.getListType();
+          setBlockType(type);
+        } else {
+          const type = $isHeadingNode(element) ? element.getTag() : element.getType();
+          if (type in blockTypeToBlockName) {
+            setBlockType(type as keyof typeof blockTypeToBlockName);
+          }
+        }
+      }
     }
   }, [editor]);
 
@@ -200,7 +240,7 @@ export const Toolbar = () => {
           onClick={() => {
             formatHeading("h2");
           }}
-          className={"toolbar-item spaced " + (isBold ? "active" : "")}
+          className={"toolbar-item spaced " + (blockType === "h2" ? "active" : "")}
           aria-label="Format H2"
         >
           <LooksTwo size={20} />
@@ -217,7 +257,7 @@ export const Toolbar = () => {
           onClick={() => {
             formatHeading("h3");
           }}
-          className={"toolbar-item spaced " + (isBold ? "active" : "")}
+          className={"toolbar-item spaced " + (blockType === "h3" ? "active" : "")}
           aria-label="Format H3"
         >
           <Looks3 size={20} />
@@ -251,7 +291,7 @@ export const Toolbar = () => {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
-          className={"toolbar-item " + (isBold ? "active" : "")}
+          className={"toolbar-item " + (isItalic ? "active" : "")}
           aria-label="Format Italic"
         >
           <FormatItalic size={20} />
@@ -266,7 +306,7 @@ export const Toolbar = () => {
             }
           }}
           onClick={formatBulletList}
-          className={"toolbar-item " + (isBold ? "active" : "")}
+          className={"toolbar-item " + (blockType === "bullet" ? "active" : "")}
           aria-label="Format list bulleted"
         >
           <FormatListBulleted size={20} />
@@ -281,7 +321,7 @@ export const Toolbar = () => {
             }
           }}
           onClick={formatNumberedList}
-          className={"toolbar-item " + (isBold ? "active" : "")}
+          className={"toolbar-item " + (blockType === "number" ? "active" : "")}
           aria-label="Format list numbered"
         >
           <FormatListNumbered size={20} />
@@ -296,7 +336,7 @@ export const Toolbar = () => {
                 itemsRef.current[index] = el;
               }
             }}
-            className={"toolbar-item " + (isBold ? "active" : "")}
+            className={"toolbar-item " + (isLink ? "active" : "")}
             aria-label="Format Link"
           >
             <Link size={20} />
