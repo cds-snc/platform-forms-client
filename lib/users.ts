@@ -1,7 +1,6 @@
 import { User } from "next-auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { AccessLog, FormUser, Prisma, UserRole } from "@prisma/client";
-import { JWT } from "next-auth";
 import { logMessage } from "@lib/logger";
 import { LoggingAction } from "./auth";
 
@@ -47,12 +46,22 @@ export const getFormUser = async (userId: string): Promise<FormUser | null> => {
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async (userToken: JWT): Promise<User | null> => {
+export const getOrCreateUser = async ({
+  sub,
+  name,
+  email,
+  picture,
+}: {
+  sub?: string | null;
+  name?: string | null;
+  email?: string | null;
+  picture?: string | null;
+}): Promise<User | null> => {
   try {
-    if (!userToken.email) throw new Error("Email address does not exist on token");
+    if (!sub) throw new Error("Sub does not exist on token");
     const user: User | null = await prisma.user.findUnique({
       where: {
-        email: userToken.email,
+        id: sub,
       },
       select: {
         id: true,
@@ -66,12 +75,12 @@ export const getOrCreateUser = async (userToken: JWT): Promise<User | null> => {
     if (user !== null) return user;
 
     // User does not exist, create and return a record
-    const { name, email, picture: image } = userToken;
     return await prisma.user.create({
       data: {
+        id: sub,
         name,
         email,
-        image,
+        image: picture,
       },
     });
   } catch (e) {

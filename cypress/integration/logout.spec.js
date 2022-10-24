@@ -20,6 +20,6 @@ describe("Logout Page test", () => {
   it("Go to login page", () => {
     cy.get(".gc-go-to-login-btn").find("a").click();
     cy.url().should("contain", "/en/auth/login");
-    cy.get("h1").should("contain", "Sign in");
+    cy.get("h1").should("contain", "Sign In");
   });
 });

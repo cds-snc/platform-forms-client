@@ -1,30 +1,15 @@
 {
-  "title": "Sign in",
-  "emailLabel": "Email",
-  "signInKeyLabel": "Form sign-in key",
-  "signInKeyDescription": "Enter the form sign-in key emailed to you when you were provided access to the form.",
-  "signInKeyForgot": "Forgot your form sign-in key?",
-  "signInKeyReset": "Request a reset (opens in new tab)",
-  "loginInvalidCredentialsErrorTitle": "Account details are incorrect.",
-  "loginInvalidCredentialsErrorMessage": "Double-check your email and form sign-in key are correct",
-  "loginEmailErrorMessage": "Double-check your email before trying again.",
-  "loginSignInKeyErrorMessage": "Double-check the form sign-in key before trying again.",
-  "loginInternalErrorTitle": "There was a problem with the web page",
-  "loginInternalErrorMessage": "Please try again.",
-  "remainingNumberOfLoginAttemptsErrorMessagePart1": "You have tried to sign in",
-  "remainingNumberOfLoginAttemptsErrorMessagePart2": "times. This account will be locked after 10 tries.",
-  "lockoutErrorTitle": "Account locked.",
-  "lockoutDurationErrorMessagePart1": "Sign-in will be blocked for",
-  "lockoutDurationErrorMessagePart2": "seconds.",
-  "temporaryToken": {
-    "title": "Check your email",
-    "instructions": "We've sent you a one-time-use, 6-digit verification code by email. It may take a few minutes to arrive.",
-    "temporaryTokenLabel": "Enter verification code",
-    "submitButton": "Submit",
-    "helpText": "Didn't get the verification code?",
-    "retryPrompt": "Double-check your login key and email then",
-    "retry": "try again.",
-    "errorTitle": "Problems on this page:",
-    "errorMessage": "Incorrect verification code."
+  "title": "Sign In to GC Forms",
+  "signUpLink": "Sign Up to GC Forms",
+  "fields": {
+    "username": {
+      "label": "Email"
+    },
+    "password": {
+      "label": "Password",
+      "errors": {
+        "maxLength": "This field must be no longer than 50 characters."
+      }
+    }
   }
 }

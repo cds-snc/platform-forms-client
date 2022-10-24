@@ -14,6 +14,8 @@ env:
   GITHUB_SHA: ${{ github.sha }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_SECRET }}
   GOOGLE_CLIENT_ID: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_ID }}
+  COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
+  COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
 
 jobs:
   push-production:
@@ -52,7 +54,9 @@ jobs:
           --build-arg PRODUCTION_ENV=true \
           --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
           --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
-          --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID .
+          --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
+          --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
+          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer

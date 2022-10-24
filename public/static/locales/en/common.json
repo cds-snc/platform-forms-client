@@ -85,5 +85,8 @@
   "loginMenu": {
     "login": "Sign in",
     "logout": "Sign out"
+  },
+  "alert": {
+    "dismissAlert": "Close this alert"
   }
 }

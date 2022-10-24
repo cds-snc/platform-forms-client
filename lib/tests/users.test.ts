@@ -128,11 +128,12 @@ describe("getOrCreateUser", () => {
       email: "fads@asdf.ca",
       emailVerified: null,
       image: null,
+      role: UserRole.PROGRAM_ADMINISTRATOR,
     };
 
     prismaMock.user.findUnique.mockResolvedValue(user);
 
-    const result = await getOrCreateUser({ email: "fads@asdf.ca" });
+    const result = await getOrCreateUser({ sub: "3", email: "fads@asdf.ca" });
     expect(result).toMatchObject(user);
   });
   it("Creates a new User", async () => {
@@ -143,15 +144,16 @@ describe("getOrCreateUser", () => {
       email: "fads@asdf.ca",
       emailVerified: null,
       image: null,
+      role: UserRole.PROGRAM_ADMINISTRATOR,
     };
 
     prismaMock.user.findUnique.mockResolvedValue(null);
     prismaMock.user.create.mockResolvedValue(user);
 
     const result = await getOrCreateUser({
+      sub: "3",
       name: "test",
       email: "fads@asdf.ca",
-      image: "/somewhere/pic",
     });
 
     expect(result).toMatchObject(user);
