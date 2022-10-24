@@ -30,7 +30,7 @@ export const Editor = ({
 }: {
   content: string;
   onChange: (value: string) => void;
-  autoFocusEditor: boolean;
+  autoFocusEditor?: boolean;
 }) => {
   if (typeof content !== "string") {
     content = "";

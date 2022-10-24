@@ -14,7 +14,7 @@ export const RichTextEditor = ({
 }: {
   path: string;
   content: string;
-  autoFocusEditor: boolean;
+  autoFocusEditor?: boolean;
 }) => {
   const { updateField, lang } = useTemplateStore();
   const handleChange = (value: string) => {

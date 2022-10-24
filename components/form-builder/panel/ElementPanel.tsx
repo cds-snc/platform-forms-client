@@ -619,19 +619,19 @@ export const ElementPanel = () => {
         <>
           <RichTextLocked
             addElement={false}
-            initialValue={confirmTextPlaceholder}
-            schemaProperty="endPage"
-            aria-label={t("richTextConfirmationTitle")}
-          >
-            <h2>{t("richTextConfirmationTitle")}</h2>
-          </RichTextLocked>
-          <RichTextLocked
-            addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
             aria-label={t("richTextPrivacyTitle")}
           >
             <h2>{t("richTextPrivacyTitle")}</h2>
+          </RichTextLocked>
+          <RichTextLocked
+            addElement={false}
+            initialValue={confirmTextPlaceholder}
+            schemaProperty="endPage"
+            aria-label={t("richTextConfirmationTitle")}
+          >
+            <h2>{t("richTextConfirmationTitle")}</h2>
           </RichTextLocked>
         </>
       )}

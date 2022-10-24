@@ -72,10 +72,10 @@ BulkAddButton.propTypes = {
 
 const AddOptions = ({
   index,
-  toggleBulkAdd,
-}: {
+}: // toggleBulkAdd,
+{
   index: number;
-  toggleBulkAdd: (onoff: boolean) => void;
+  // toggleBulkAdd: (onoff: boolean) => void;
 }) => {
   const { addChoice, setFocusInput } = useTemplateStore();
 
@@ -88,7 +88,11 @@ const AddOptions = ({
           addChoice(index);
         }}
       />
-      <BulkAddButton index={index} onClick={toggleBulkAdd} />
+
+      {/*  
+      // feature removed for now
+      <BulkAddButton index={index} onClick={toggleBulkAdd} /> 
+      */}
     </>
   );
 };
