@@ -48,9 +48,9 @@ const updatePrivilegeOnUser = async (
       );
       */
     }
-    res.status(200).send("Success");
+    return res.status(200).send("Success");
   } else {
-    res.status(404).json({ error: "User not found" });
+    return res.status(404).json({ error: "User not found" });
   }
 };
 
