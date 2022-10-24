@@ -150,7 +150,7 @@ export const Toolbar = () => {
 
   const formatBulletList = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    if (blockType !== "list") {
+    if (blockType !== "bullet") {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
       return;
     }
@@ -159,7 +159,7 @@ export const Toolbar = () => {
 
   const formatNumberedList = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    if (blockType !== "list") {
+    if (blockType !== "number") {
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
       return;
     }
