@@ -172,7 +172,7 @@ const LabelHidden = styled(FormLabel)`
 `;
 
 const FormWrapper = styled.div`
-  padding: 20px 25px;
+  padding: 0 0 20px 0;
 `;
 
 const RequiredWrapper = styled.div`
@@ -509,7 +509,6 @@ ModalForm.propTypes = {
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  padding-top: 10px;
   position: relative;
   max-width: 800px;
   height: auto;

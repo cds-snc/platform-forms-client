@@ -21,7 +21,7 @@ const ContentWrapper = styled.div`
     font-size: 26px;
     line-height: 32px;
     margin-top: 15px;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     padding-bottom: 0;
   }
 `;

@@ -48,13 +48,14 @@ const blockTypeToBlockName = {
 
 const ToolbarContainer = styled.div`
   border-bottom: 1px solid #ddd;
+  background-color: #f7f7f7;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   padding: 10px;
 
   &:focus-within {
     margin: -2px;
     border: 2px solid #015ecc;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
   }
 
   button {
