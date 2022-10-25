@@ -50,56 +50,59 @@ export const Layout = () => {
 
   /* eslint-disable */
   return (
-    <div className="grid grid-cols-12 gap-4">
+    <div className="md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64">
+      <div className="grid grid-cols-12 gap-4">
 
-      {currentTab !== "start" && <LeftNavigation currentTab={currentTab} handleClick={handleClick} />}
+        {currentTab !== "start" && <LeftNavigation currentTab={currentTab} handleClick={handleClick} />}
 
-      {currentTab === "start" && (
-        <div className="col-start-1 col-span-12">
-          <Start changeTab={setTab} />
-        </div>
-      )}
-
-      {currentTab === "create" && (
-        <div className="col-start-4 col-span-10">
-          <div>
-            <h1>{t("title")}</h1>
-            <Input
-              placeholder={t("placeHolderFormTitle")}
-              value={form[localizeField(LocalizedFormProperties.TITLE)]}
-              onChange={(e) => {
-                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
-              }}
-            />
+        {currentTab === "start" && (
+          <div className="col-span-12">
+            <Start changeTab={setTab} />
           </div>
-          <ElementPanel />
-        </div>
-      )}
+        )}
 
-      {currentTab === "preview" && (
-        <div className="col-start-4 col-span-10">
-          <StyledPreviewWrapper>
-            <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-            <Preview />
-          </StyledPreviewWrapper>
-        </div>
-      )}
+        {currentTab === "create" && (
+          <div className="col-start-3 col-span-10">
+            <div>
+              <h1>{t("title")}</h1>
+              <Input
+                placeholder={t("placeHolderFormTitle")}
+                value={form[localizeField(LocalizedFormProperties.TITLE)]}
+                onChange={(e) => {
+                  updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
+                }}
+              />
+            </div>
+            <ElementPanel />
+          </div>
+        )}
 
-      {currentTab === "translate" && (
-        <div className="col-start-4 col-span-10">
-          <h1>{t("translateTitle")}</h1>
-          <Translate />
-        </div>
-      )}
+        {currentTab === "preview" && (
+          <div className="col-start-3 col-span-10">
+            <StyledPreviewWrapper>
+              <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+              <Preview />
+            </StyledPreviewWrapper>
+          </div>
+        )}
 
-      {currentTab === "save" && (
-        <div className="col-start-4 col-span-10">
-          <StyledHeader>{t("saveH1")}</StyledHeader>
-          <Save />
-        </div>
-      )}
+        {currentTab === "translate" && (
+          <div className="col-start-3 col-span-10">
+            <h1>{t("translateTitle")}</h1>
+            <Translate />
+          </div>
+        )}
 
-    </div >
+        {currentTab === "save" && (
+          <div className="col-start-3 col-span-10">
+            <StyledHeader>{t("saveH1")}</StyledHeader>
+            <Save />
+          </div>
+        )}
+
+      </div>
+    </div>
+
   );
   /* eslint-enable */
 };

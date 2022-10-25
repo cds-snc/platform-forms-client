@@ -27,7 +27,7 @@ export const LeftNavigation = ({
 }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <div className="col-start-2 col-span-2">
+    <div className="col-span-2">
       <Navigation className={currentTab}>
         <Tab className="start" href="#" onClick={handleClick("start")}>
           {t("start")}
