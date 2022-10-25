@@ -55,15 +55,15 @@ export const Layout = () => {
         )}
 
         {currentTab === "create" && (
-          <div className="col-start-3 col-span-10">
-             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+          <div className="col-start-4 col-span-9">
+          <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <ElementPanel />
           </div>
         )}
 
         {currentTab === "preview" && (
-          <div className="col-start-3 col-span-10">
-            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+          <div className="col-start-4 col-span-9">
+          <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <StyledPreviewWrapper>
               <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
               <Preview />
@@ -79,8 +79,8 @@ export const Layout = () => {
         )}
 
         {currentTab === "save" && (
-          <div className="col-start-3 col-span-10">
-            <StyledHeader>{t("saveH1")}</StyledHeader>
+          <div className="col-start-4 col-span-9">
+          <StyledHeader>{t("saveH1")}</StyledHeader>
             <Save />
           </div>
         )}
