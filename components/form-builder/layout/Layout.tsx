@@ -64,7 +64,6 @@ export const Layout = () => {
         {currentTab === "create" && (
           <div className="col-start-3 col-span-10">
             <div>
-              <h1>{t("title")}</h1>
               <Input
                 placeholder={t("placeHolderFormTitle")}
                 value={form[localizeField(LocalizedFormProperties.TITLE)]}
