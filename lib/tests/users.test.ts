@@ -2,21 +2,23 @@
  * @jest-environment node
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/policyBuilder";
-import { getUserPrivileges, ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
+import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 
 describe("User query tests should fail gracefully", () => {
   it("getOrCreateUser should fail gracefully - create", async () => {
     prismaMock.user.findUnique.mockResolvedValue(null);
-
+    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
     prismaMock.user.create.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
     );
 
-    const result = await getOrCreateUser({ email: "test@fail.ca" });
+    const result = await getOrCreateUser({ sub: "3218462" });
     expect(result).toEqual(null);
   });
 
@@ -24,8 +26,11 @@ describe("User query tests should fail gracefully", () => {
     prismaMock.user.findUnique.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
     );
-
-    const result = await getOrCreateUser({ email: "test@fail.ca" });
+    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
+    prismaMock.user.create.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
+    );
+    const result = await getOrCreateUser({ sub: "8465132" });
     expect(result).toEqual(null);
   });
 
@@ -47,12 +52,10 @@ describe("getOrCreateUser", () => {
       id: "3",
       name: "user_1",
       email: "fads@asdf.ca",
-      emailVerified: null,
-      image: null,
       privileges: ManageUsers,
     };
 
-    prismaMock.user.findUnique.mockResolvedValue(user);
+    (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({ sub: "3", email: "fads@asdf.ca" });
     expect(result).toMatchObject(user);
@@ -61,23 +64,43 @@ describe("getOrCreateUser", () => {
   it("Creates a new User", async () => {
     const user = {
       id: "3",
-      name: "user_1",
+      name: "test",
       email: "fads@asdf.ca",
-      emailVerified: null,
-      image: null,
       privileges: Base,
     };
 
     prismaMock.user.findUnique.mockResolvedValue(null);
-    prismaMock.user.create.mockResolvedValue(user);
+    (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "2",
+    });
+    (prismaMock.user.create as jest.MockedFunction<any>).mockResolvedValue(user);
 
     const result = await getOrCreateUser({
       sub: "3",
       name: "test",
       email: "fads@asdf.ca",
+      privileges: Base,
     });
 
     expect(result).toMatchObject(user);
+    expect(prismaMock.user.create).toBeCalledWith({
+      data: {
+        email: "fads@asdf.ca",
+        id: "3",
+        name: "test",
+        privileges: {
+          connect: {
+            id: "2",
+          },
+        },
+      },
+      select: {
+        email: true,
+        id: true,
+        name: true,
+        privileges: true,
+      },
+    });
   });
 });
 
@@ -90,19 +113,17 @@ describe("getUsers", () => {
         id: "3",
         name: "user_1",
         email: "fads@asdf.ca",
-        emailVerified: null,
-        image: null,
+        privileges: Base,
       },
       {
         id: "5",
         name: "user_2",
         email: "faaass@asdf.ca",
-        emailVerified: null,
-        image: null,
+        privileges: Base,
       },
     ];
 
-    prismaMock.user.findMany.mockResolvedValue(returnedUsers);
+    (prismaMock.user.findMany as jest.MockedFunction<any>).mockResolvedValue(returnedUsers);
 
     const result = await getUsers(ability);
     expect(result).toMatchObject(returnedUsers);

@@ -56,8 +56,7 @@ VALUES
   (uuid_generate_v4(),'Base','Base','Base Permissions','Autorisations de Base','[
     {"action":"create","subject":"FormRecord"},
     {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
-    {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true},
-    {"action":"delete","subject":"FormRecord","conditions":{"publishingStatus":true},"inverted":true}
+    {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true}
   ]'::JSONB),
     (uuid_generate_v4(),'PublishForms','PublierLesFormulaires','Permission to Publish a Form','Autorisation de publier un formulaire','[
     {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}

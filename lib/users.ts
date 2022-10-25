@@ -1,7 +1,6 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { DefaultJWT } from "next-auth/jwt";
-import { ApiAccessLog, Prisma, User } from "@prisma/client";
-import { logMessage } from "@lib/logger";
+import { ApiAccessLog } from "@prisma/client";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
 import { checkPrivileges } from "@lib/privileges";
@@ -11,9 +10,9 @@ import { checkPrivileges } from "@lib/privileges";
  * @returns A User Object
  */
 export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT) => {
-  try {
-    if (!sub) throw new Error("Sub does not exist on token");
-    const user = await prisma.user.findUnique({
+  if (!sub) throw new Error("Sub does not exist on token");
+  const user = await prisma.user
+    .findUnique({
       where: {
         id: sub,
       },
@@ -23,25 +22,29 @@ export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT)
         email: true,
         privileges: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    // If a user already exists and has privileges return the record
-    if (user !== null && user.privileges.length) return user;
+  // If a user already exists and has privileges return the record
+  if (user !== null && user.privileges.length) return user;
 
-    // User does not exist, create and return a record or assign base privileges
-    const basePrivileges = await prisma.privilege.findUnique({
+  // User does not exist, create and return a record or assign base privileges
+  const basePrivileges = await prisma.privilege
+    .findUnique({
       where: {
         nameEn: "Base",
       },
       select: {
         id: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    if (basePrivileges === null) throw new Error("Base Privileges is not set in Database");
+  if (basePrivileges === null) throw new Error("Base Privileges is not set in Database");
 
-    if (!user) {
-      return await prisma.user.create({
+  if (!user) {
+    return await prisma.user
+      .create({
         data: {
           id: sub,
           name,
@@ -57,9 +60,11 @@ export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT)
           email: true,
           privileges: true,
         },
-      });
-    } else {
-      return await prisma.user.update({
+      })
+      .catch((e) => prismaErrors(e, null));
+  } else {
+    return await prisma.user
+      .update({
         where: {
           id: user.id,
         },
@@ -74,10 +79,8 @@ export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT)
           email: true,
           privileges: true,
         },
-      });
-    }
-  } catch (e) {
-    return prismaErrors(e, null);
+      })
+      .catch((e) => prismaErrors(e, null));
   }
 };
 

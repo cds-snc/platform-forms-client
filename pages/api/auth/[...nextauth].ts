@@ -132,7 +132,6 @@ export const authOptions: NextAuthOptions = {
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
-      session.user.image = token.picture ?? null;
       session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
       return session;
     },
