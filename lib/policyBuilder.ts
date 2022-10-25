@@ -55,7 +55,7 @@ export type Permission = {
 };
 export interface Privilege extends PrismaPrivilege {
   permissions: Permission[];
-  [key: string]: string | null | Permission[] | undefined;
+  [key: string]: string | null | Permission[] | number | undefined;
 }
 
 export function interpolatePermissionCondition(

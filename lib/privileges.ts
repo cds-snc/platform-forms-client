@@ -136,7 +136,7 @@ export const getAllPrivileges = async (ability: Ability) => {
         priority: true,
       },
       orderBy: {
-        id: "asc",
+        priority: "asc",
       },
     });
   } catch (e) {
