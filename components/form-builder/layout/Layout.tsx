@@ -50,7 +50,7 @@ export const Layout = () => {
 
   /* eslint-disable */
   return (
-    <div className="md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64">
+    <main className="md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64">
       <div className="grid grid-cols-12 gap-4">
 
         {currentTab !== "start" && <LeftNavigation currentTab={currentTab} handleClick={handleClick} />}
@@ -101,8 +101,7 @@ export const Layout = () => {
         )}
 
       </div>
-    </div>
-
+    </main>
   );
   /* eslint-enable */
 };

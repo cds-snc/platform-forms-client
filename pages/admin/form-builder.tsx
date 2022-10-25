@@ -5,6 +5,7 @@ import { Layout } from "../../components/form-builder/layout/Layout";
 import { Header } from "../../components/form-builder/layout/Header";
 import { UserRole } from "@prisma/client";
 import { NextPageWithLayout } from "../../pages/_app";
+import Footer from "../../components/globals/Footer";
 
 const Page: NextPageWithLayout = () => {
   return <Layout />;
@@ -12,9 +13,10 @@ const Page: NextPageWithLayout = () => {
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <div>
+    <div id="form-builder">
       <Header />
       {page}
+      <Footer />
     </div>
   );
 };
