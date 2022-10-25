@@ -1,0 +1,50 @@
+{
+  "signUpConfirmation": {
+    "title": "Confirm Your Email (FR)",
+    "noUsername": "No user to confirm (FR)",
+    "fields": {
+      "confirmationCode": {
+        "label": "Confirmation Code (FR)",
+        "error": {
+          "number": "This field must be a number (FR)"
+        }
+      }
+    }
+  },
+  "signUpRegistration": {
+    "title": "Sign Up to GC Forms (FR)",
+    "fields": {
+      "username": {
+        "label": "Email (FR)",
+        "hint": "Must be a federal government email address (FR)",
+        "error": {
+          "validGovEmail": "This field must be a valid government email. (FR)"
+        }
+      },
+      "password": {
+        "label": "Password (FR)",
+        "hint": "Must be at least 8 characters with a capital, number and symbol (FR)",
+        "error": {
+          "minLength": "The minimum length of the value must be 8 characters. (FR)",
+          "maxLength": "The field must be no longer than 50 characters. (FR)",
+          "oneLowerCase": "The field must contain at least 1 lowercase character. (FR)",
+          "oneUpperCase": "The field must contain at least 1 uppercase character. (FR)",
+          "oneNumber": "The field must contain at least 1 number. (FR)",
+          "oneSymbol": "The field must contain at least 1 symbol. (FR)"
+        }
+      },
+      "passwordConfirmation": {
+        "label": "Password confirmation (FR)",
+        "error": {
+          "mustMatch": "The value must match the value of the password field. (FR)"
+        }
+      },
+      "name": {
+        "label": "Full name (FR)",
+        "error": {
+          "maxLength": "The field must be no longer than 50 characters. (FR)"
+        }
+      }
+    }
+  }
+}

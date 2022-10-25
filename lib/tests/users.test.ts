@@ -6,7 +6,7 @@ import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/policyBuilder";
-import { getUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
+import { getUserPrivileges, ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 
 describe("User query tests should fail gracefully", () => {
   it("getOrCreateUser should fail gracefully - create", async () => {
@@ -54,7 +54,7 @@ describe("getOrCreateUser", () => {
 
     prismaMock.user.findUnique.mockResolvedValue(user);
 
-    const result = await getOrCreateUser({ email: "fads@asdf.ca" });
+    const result = await getOrCreateUser({ sub: "3", email: "fads@asdf.ca" });
     expect(result).toMatchObject(user);
   });
 
@@ -65,15 +65,16 @@ describe("getOrCreateUser", () => {
       email: "fads@asdf.ca",
       emailVerified: null,
       image: null,
+      privileges: Base,
     };
 
     prismaMock.user.findUnique.mockResolvedValue(null);
     prismaMock.user.create.mockResolvedValue(user);
 
     const result = await getOrCreateUser({
+      sub: "3",
       name: "test",
       email: "fads@asdf.ca",
-      image: "/somewhere/pic",
     });
 
     expect(result).toMatchObject(user);

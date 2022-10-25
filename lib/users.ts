@@ -1,6 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { ApiAccessLog } from "@prisma/client";
-import { JWT } from "next-auth";
+import { DefaultJWT } from "next-auth/jwt";
+import { ApiAccessLog, Prisma, User } from "@prisma/client";
+import { logMessage } from "@lib/logger";
 import { LoggingAction } from "./auth";
 import { Ability } from "./policyBuilder";
 import { checkPrivileges } from "@lib/privileges";
@@ -9,12 +10,12 @@ import { checkPrivileges } from "@lib/privileges";
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async (userToken: JWT) => {
+export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT) => {
   try {
-    if (!userToken.email) throw new Error("Email address does not exist on token");
+    if (!sub) throw new Error("Sub does not exist on token");
     const user = await prisma.user.findUnique({
       where: {
-        email: userToken.email,
+        id: sub,
       },
       select: {
         id: true,
@@ -28,7 +29,6 @@ export const getOrCreateUser = async (userToken: JWT) => {
     if (user !== null && user.privileges.length) return user;
 
     // User does not exist, create and return a record or assign base privileges
-    const { name, email, picture: image } = userToken;
     const basePrivileges = await prisma.privilege.findUnique({
       where: {
         nameEn: "Base",
@@ -43,9 +43,10 @@ export const getOrCreateUser = async (userToken: JWT) => {
     if (!user) {
       return await prisma.user.create({
         data: {
+          id: sub,
           name,
           email,
-          image,
+          image: picture,
           privileges: {
             connect: basePrivileges,
           },

@@ -42,5 +42,7 @@
   "startErrorParse": "[FR] Failed to parse file, not valid JSON",
   "richTextIntroTitle": "[FR] Form introduction",
   "richTextConfirmationTitle": "[FR] Confirmation page and message",
-  "richTextPrivacyTitle": "[FR] Privacy statement"
+  "richTextPrivacyTitle": "[FR] Privacy statement",
+  "translate": "[FR] Translate",
+  "translateTitle": "[FR] Translate view"
 }

@@ -93,8 +93,8 @@ async function getFormResponses(
         //You need to specify those attributes in the key condition expression, not the filter expression.
         ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
       };
-
-      const response = await documentClient.send(new QueryCommand(getItemsDbParams));
+      const queryCommand = new QueryCommand(getItemsDbParams);
+      const response = await documentClient.send(queryCommand);
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(

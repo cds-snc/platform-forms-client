@@ -20,7 +20,7 @@ import { LocalizedElementProperties } from "../types";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
-const Link = styled.div`
+const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
   margin: 15px 0;
@@ -173,9 +173,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {formStatusSubmitted && props.isPreview && (
         <>
           <Link
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               props.setStatus("None");
             }}
+            href="#"
           >
             <BackArrowIcon />
             Back to form preview
