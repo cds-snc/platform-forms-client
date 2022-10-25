@@ -11,6 +11,7 @@ import {
   ElementProperties,
   ElementTypeWithIndex,
   LocalizedElementProperties,
+  LocalizedFormProperties,
 } from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
@@ -577,6 +578,18 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   );
 };
 
+const FormTitleWrapper = styled.div`
+  width: 100px;
+  margin: 10px;
+  input {
+    padding: 22px 10px;
+    width: 770px;
+    border: 1.5px solid #000000;
+    max-height: 36px;
+    border-radius: 4px;
+  }
+`;
+
 const ElementPanelDiv = styled.div`
   > div:first-of-type {
     border-top-left-radius: 8px;
@@ -592,7 +605,7 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField } = useTemplateStore();
+  const { form, localizeField, updateField } = useTemplateStore();
 
   const introTextPlaceholder =
     form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
@@ -606,12 +619,23 @@ export const ElementPanel = () => {
   return (
     <ElementPanelDiv>
       <RichTextLocked
+        beforeContent={
+          <FormTitleWrapper>
+            <Input
+              placeholder={t("placeHolderFormTitle")}
+              value={form[localizeField(LocalizedFormProperties.TITLE)]}
+              onChange={(e) => {
+                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
+              }}
+            />
+          </FormTitleWrapper>
+        }
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
         aria-label={t("richTextIntroTitle")}
       />
-      {form.elements.map((element, index) => {
+      {form.elements.map((element, index: number) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}

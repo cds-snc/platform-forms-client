@@ -31,11 +31,13 @@ const OptionWrapper = styled.div`
 `;
 
 export const RichTextLocked = ({
+  beforeContent,
   addElement,
   children,
   initialValue,
   schemaProperty,
 }: {
+  beforeContent?: React.ReactElement;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
@@ -45,6 +47,7 @@ export const RichTextLocked = ({
 
   return (
     <ElementWrapperDiv>
+      {beforeContent && beforeContent}
       <ContentWrapper>{children}</ContentWrapper>
       <OptionWrapper>
         <RichTextEditor

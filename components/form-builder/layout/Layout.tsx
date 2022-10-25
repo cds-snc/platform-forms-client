@@ -17,22 +17,13 @@ const StyledHeader = styled.h1`
   margin-bottom: 2rem;
 `;
 
-const Input = styled.input`
-  padding: 22px 10px;
-  width: 800px;
-  border: 1.5px solid #000000;
-  max-height: 36px;
-  margin-bottom: 35px;
-  border-radius: 4px;
-`;
-
 const StyledPreviewWrapper = styled.div`
   border: 3px dashed blue;
   padding: 20px;
 `;
 
 export const Layout = () => {
-  const { updateField, localizeField, form, setLang } = useTemplateStore();
+  const { localizeField, form, setLang } = useTemplateStore();
   const { currentTab, setTab } = useNavigationStore();
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
@@ -63,15 +54,6 @@ export const Layout = () => {
 
         {currentTab === "create" && (
           <div className="col-start-3 col-span-10">
-            <div>
-              <Input
-                placeholder={t("placeHolderFormTitle")}
-                value={form[localizeField(LocalizedFormProperties.TITLE)]}
-                onChange={(e) => {
-                  updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
-                }}
-              />
-            </div>
             <ElementPanel />
           </div>
         )}
