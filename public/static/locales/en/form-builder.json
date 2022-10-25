@@ -50,5 +50,8 @@
   "textArea": "Text area",
   "checkbox": "Multiple choice",
   "en-text": "English text",
-  "fr-text": "French text"
+  "fr-text": "French text",
+  "questions": "Questions",
+  "settings": "Settings",
+  "testDataDelivery": "Test data delivery"
 }
