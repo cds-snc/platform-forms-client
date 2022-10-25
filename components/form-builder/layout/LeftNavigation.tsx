@@ -48,14 +48,14 @@ export const LeftNavigation = ({
         {t("start")}
       </Link>
       <Link
-        isCurrentTab={currentTab === "create"}
+        isCurrentTab={["create", "translate", "settings"].includes(currentTab)}
         icon={<PreviewIcon className={iconClassname} />}
         handleClick={handleClick("create")}
       >
         {t("design")}
       </Link>
       <Link
-        isCurrentTab={currentTab === "preview"}
+        isCurrentTab={["preview", "test-data-delivery"].includes(currentTab)}
         icon={<ShareIcon className={iconClassname} />}
         handleClick={handleClick("preview")}
       >
