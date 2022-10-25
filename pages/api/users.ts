@@ -11,7 +11,7 @@ import { updatePrivilegesForUser } from "@lib/privileges";
 
 const allowedMethods = ["GET", "PUT"];
 
-const getUserList = async (res: NextApiResponse, ability: Ability) => {
+const getUserList = async (ability: Ability, res: NextApiResponse) => {
   const users = await getUsers(ability);
   if (users.length === 0) {
     res.status(500).json({ error: "Could not process request" });
@@ -21,9 +21,9 @@ const getUserList = async (res: NextApiResponse, ability: Ability) => {
 };
 
 const updatePrivilegeOnUser = async (
+  ability: Ability,
   req: NextApiRequest,
   res: NextApiResponse,
-  ability: Ability,
   session?: Session
 ) => {
   const { userID, privileges } = req.body;
@@ -66,10 +66,10 @@ const handler = async (
 
     switch (req.method) {
       case "GET":
-        await getUserList(res, ability);
+        await getUserList(ability, res);
         break;
       case "PUT":
-        await updatePrivilegeOnUser(req, res, ability, session);
+        await updatePrivilegeOnUser(ability, req, res, session);
         break;
     }
   } catch (error) {

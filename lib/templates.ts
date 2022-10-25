@@ -153,7 +153,7 @@ async function _updateTemplate(
   formID: string,
   formConfig: BetterOmit<FormRecord, "id" | "bearerToken">
 ): Promise<FormRecord | null> {
-  const formRecordWithAssociatedUsers = await getFormRecordWithAssociatedUsers(formID);
+  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
   if (!formRecordWithAssociatedUsers) return null;
 
   checkPrivileges(ability, [
@@ -196,7 +196,7 @@ async function _updateTemplate(
  * @returns A boolean status if operation is sucessful
  */
 async function _deleteTemplate(ability: Ability, formID: string): Promise<FormRecord | null> {
-  const formRecordWithAssociatedUsers = await getFormRecordWithAssociatedUsers(formID);
+  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
   if (!formRecordWithAssociatedUsers) return null;
 
   checkPrivileges(ability, [
@@ -232,7 +232,7 @@ async function _deleteTemplate(ability: Ability, formID: string): Promise<FormRe
   return _parseTemplate(deletedTemplate);
 }
 
-async function getFormRecordWithAssociatedUsers(
+async function _getFormRecordWithAssociatedUsers(
   formID: string
 ): Promise<{ formRecord: FormRecord; users: User[] } | null> {
   try {

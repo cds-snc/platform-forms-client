@@ -20,7 +20,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (!session)
     return {
-      props: {},
       redirect: {
         destination: `/${context.locale}/admin/login/`,
         permanent: false,

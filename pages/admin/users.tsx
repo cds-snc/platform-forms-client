@@ -6,7 +6,7 @@ import { useRefresh } from "@lib/hooks";
 import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
-import { getAllPrivileges } from "@lib/privileges";
+import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { Button } from "@components/forms";
@@ -56,11 +56,12 @@ const ManageUser = ({
     { id: string; action: "add" | "remove" }[]
   >([]);
 
-  const { ability } = useAccessControl();
+  const { ability, refreshAbility } = useAccessControl();
   const canManageUsers = ability?.can("update", "User") ?? false;
 
   const save = async () => {
     await updatePrivilege(user.id, changedPrivileges);
+    await refreshAbility();
     unselectUser();
   };
 
@@ -178,6 +179,14 @@ const Users = ({
 export default Users;
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+  checkPrivileges(
+    ability,
+    [
+      { action: "view", subject: "User" },
+      { action: "view", subject: "Privilege" },
+    ],
+    "all"
+  );
   const allUsers = await getUsers(ability);
   const allPrivileges = (await getAllPrivileges(ability)).map(
     ({ id, nameEn, nameFr, descriptionFr, descriptionEn }) => ({

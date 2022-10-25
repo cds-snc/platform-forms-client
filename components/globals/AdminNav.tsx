@@ -27,9 +27,6 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
           </li>
         )}
 
-        <li className="gc-horizontal-item">
-          <Link href="/admin/vault">{t("adminNav.vault")}</Link>
-        </li>
         {ability?.can("view", "User") && (
           <li className="gc-horizontal-item">
             <Link href="/admin/users">{t("adminNav.users")}</Link>
@@ -40,17 +37,21 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/privileges">{t("adminNav.privileges")}</Link>
           </li>
         )}
-        <li className="gc-horizontal-item">
-          <Link href="/admin/upload">{t("adminNav.upload")}</Link>
-        </li>
+        {ability?.can("create", "FormRecord") && (
+          <li className="gc-horizontal-item">
+            <Link href="/admin/upload">{t("adminNav.upload")}</Link>
+          </li>
+        )}
         {ability?.can("view", "FormRecord") && (
           <li className="gc-horizontal-item">
             <Link href="/admin/view-templates">{t("adminNav.templates")}</Link>
           </li>
         )}
-        <li className="gc-horizontal-item">
-          <Link href="/admin/flags">{t("adminNav.features")}</Link>
-        </li>
+        {ability?.can("view", "Flag") && (
+          <li className="gc-horizontal-item">
+            <Link href="/admin/flags">{t("adminNav.features")}</Link>
+          </li>
+        )}
         <li className="gc-horizontal-item">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>

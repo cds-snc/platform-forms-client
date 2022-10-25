@@ -1,4 +1,4 @@
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+// import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import React from "react";
@@ -15,12 +15,21 @@ const retrieval = (): React.ReactElement => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
-  if (!context.user?.acceptableUse) {
+export const getServerSideProps = requireAuthentication(async ({ locale, params }) => {
+  // Disabling this page until the Vault feature is ready.
+  return {
+    redirect: {
+      destination: `/${locale}/id/${params?.form}`,
+      permanent: false,
+    },
+  };
+
+  /*
+  if (!user?.acceptableUse) {
     return {
       redirect: {
         //redirect to acceptable use page
-        destination: `/${context.locale}/auth/policy`,
+        destination: `/${locale}/auth/policy`,
         permanent: false,
       },
     };
@@ -28,10 +37,11 @@ export const getServerSideProps = requireAuthentication(async (context) => {
 
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context?.locale, ["common", "forms-responses-retrieval"]))),
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "forms-responses-retrieval"]))),
     },
   };
+  */
 });
 
 export default retrieval;

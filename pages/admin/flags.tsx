@@ -5,6 +5,7 @@ import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Loader from "@components/globals/Loader";
 import { Button } from "@components/forms";
+import { checkPrivileges } from "@lib/privileges";
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json());
 
@@ -64,11 +65,11 @@ const Flags: React.FC = () => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
+export const getServerSideProps = requireAuthentication(async ({ locale, user: { ability } }) => {
+  checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "admin-flags"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-flags"]))),
     },
   };
 });
