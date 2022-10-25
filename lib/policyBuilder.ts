@@ -30,7 +30,6 @@ interface CASL_User extends User {
 
 interface CASL_Privilege extends Privilege {
   kind: "Privilege";
-  [key: string]: string | null | Permission[];
 }
 
 interface CASL_Flag {

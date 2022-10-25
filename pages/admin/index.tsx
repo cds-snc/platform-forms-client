@@ -4,7 +4,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import Link from "next/link";
 import { User } from "next-auth";
-import { createAbility } from "@lib/policyBuilder";
 
 type AdminWelcomeProps = {
   user: User;
