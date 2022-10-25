@@ -58,7 +58,6 @@ module.exports = {
     },
     maxWidth: {
       prose: "75ch",
-      container: "1170px",
     },
     screens: {
       xxl: { max: "1240px" },

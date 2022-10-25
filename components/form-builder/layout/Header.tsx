@@ -16,7 +16,7 @@ export const Header = () => {
   const { currentTab } = useNavigationStore();
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
-      <div className="max-w-container px-4 mx-auto">
+      <div className="container--wet">
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div className="">
             <StyledH2>GC Forms</StyledH2>

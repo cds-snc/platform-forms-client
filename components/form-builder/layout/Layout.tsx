@@ -43,7 +43,7 @@ export const Layout = () => {
 
   /* eslint-disable */
   return (
-    <main className="max-w-container px-4 mx-auto">
+    <main className="container--wet">
       <div className="grid grid-cols-12 gap-4">
 
         {currentTab !== "start" && <LeftNavigation currentTab={currentTab} handleClick={handleClick} />}
