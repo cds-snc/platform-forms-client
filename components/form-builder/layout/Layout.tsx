@@ -72,8 +72,8 @@ export const Layout = () => {
         )}
 
         {currentTab === "translate" && (
-          <div className="col-start-3 col-span-10">
-            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+          <div className="col-start-4 col-span-9">
+          <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <Translate />
           </div>
         )}

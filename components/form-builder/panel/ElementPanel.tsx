@@ -581,11 +581,10 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
 };
 
 const FormTitleWrapper = styled.div`
-  width: 100px;
   margin: 10px;
   input {
+    width: 100%;
     padding: 22px 10px;
-    width: 770px;
     border: 1.5px solid #000000;
     max-height: 36px;
     border-radius: 4px;
