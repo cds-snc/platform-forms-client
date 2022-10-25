@@ -11,6 +11,8 @@ import { Save } from "./Save";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
+import { EditNavigation } from "./EditNavigation";
+import { PreviewNavigation } from "./PreviewNavigation";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -63,6 +65,7 @@ export const Layout = () => {
 
         {currentTab === "create" && (
           <div className="col-start-3 col-span-10">
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <div>
               <h1>{t("title")}</h1>
               <Input
@@ -79,6 +82,7 @@ export const Layout = () => {
 
         {currentTab === "preview" && (
           <div className="col-start-3 col-span-10">
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <StyledPreviewWrapper>
               <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
               <Preview />
@@ -88,6 +92,7 @@ export const Layout = () => {
 
         {currentTab === "translate" && (
           <div className="col-start-3 col-span-10">
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <h1>{t("translateTitle")}</h1>
             <Translate />
           </div>
