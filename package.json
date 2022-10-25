@@ -90,7 +90,7 @@
     "zustand": "4.1.1"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.188.0",
+    "@aws-sdk/types": "3.188.0",
     "@babel/core": "^7.17.8",
     "@babel/preset-typescript": "^7.16.7",
     "@next/eslint-plugin-next": "^12.1.4",
