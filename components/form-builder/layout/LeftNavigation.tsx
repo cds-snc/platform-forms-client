@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon } from "../icons";
+import { useAllowPlublish } from "../hooks/useAllowPublish";
 
 function Link({
   children,
@@ -34,6 +35,7 @@ export const LeftNavigation = ({
   handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { title, questions } = useAllowPlublish();
 
   const iconClassname =
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -61,13 +63,16 @@ export const LeftNavigation = ({
       >
         {t("preview")}
       </Link>
-      <Link
-        isCurrentTab={currentTab === "save"}
-        icon={<PublishIcon className={iconClassname} />}
-        handleClick={handleClick("save")}
-      >
-        {t("save")}
-      </Link>
+
+      {title && questions && (
+        <Link
+          isCurrentTab={currentTab === "save"}
+          icon={<PublishIcon className={iconClassname} />}
+          handleClick={handleClick("save")}
+        >
+          {t("save")}
+        </Link>
+      )}
     </div>
   );
 };
