@@ -38,9 +38,6 @@ export const LeftNavigation = ({
         <Tab className="preview" href="#" onClick={handleClick("preview")}>
           {t("preview")}
         </Tab>
-        <Tab className="translate" href="#" onClick={handleClick("translate")}>
-          {t("translate")}
-        </Tab>
         <Tab className="save" href="#" onClick={handleClick("save")}>
           {t("save")}
         </Tab>
