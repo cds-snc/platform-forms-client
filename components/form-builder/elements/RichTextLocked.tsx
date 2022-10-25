@@ -31,7 +31,7 @@ const OptionWrapper = styled.div`
 `;
 
 export const RichTextLocked = ({
-  beforeContent,
+  beforeContent = null,
   addElement,
   children,
   initialValue,

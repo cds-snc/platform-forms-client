@@ -21,6 +21,8 @@ import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
 import { Input } from "./Input";
+import { ConfirmationDescription } from "./ConfirmationDescription";
+import { PrivacyDescription } from "./PrivacyDescription";
 
 const SelectedElement = ({
   selected,
@@ -647,7 +649,10 @@ export const ElementPanel = () => {
             schemaProperty="privacyPolicy"
             aria-label={t("richTextPrivacyTitle")}
           >
-            <h2>{t("richTextPrivacyTitle")}</h2>
+            <div>
+              <h2>{t("richTextPrivacyTitle")}</h2>
+              <PrivacyDescription />
+            </div>
           </RichTextLocked>
           <RichTextLocked
             addElement={false}
@@ -655,7 +660,10 @@ export const ElementPanel = () => {
             schemaProperty="endPage"
             aria-label={t("richTextConfirmationTitle")}
           >
-            <h2>{t("richTextConfirmationTitle")}</h2>
+            <div>
+              <h2>{t("richTextConfirmationTitle")}</h2>
+              <ConfirmationDescription />
+            </div>
           </RichTextLocked>
         </>
       )}
