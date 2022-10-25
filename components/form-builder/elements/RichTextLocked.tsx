@@ -37,7 +37,7 @@ export const RichTextLocked = ({
   initialValue,
   schemaProperty,
 }: {
-  beforeContent?: React.ReactElement;
+  beforeContent?: React.ReactElement | null;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
