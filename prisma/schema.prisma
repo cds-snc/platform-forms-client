@@ -80,6 +80,7 @@ model Privilege {
   descriptionEn String?
   descriptionFr String?
   permissions Json
+  priority    Int
   users       User[]
 }
 

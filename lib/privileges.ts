@@ -26,14 +26,18 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
   try {
     const cachedPrivilegesRules = await privilegeCheck(userId);
     if (cachedPrivilegesRules?.length) return cachedPrivilegesRules;
-
+    // Order privileges ascending so that Base Privileges are always applied first
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
       select: {
         id: true,
-        privileges: true,
+        privileges: {
+          orderBy: {
+            priority: "asc",
+          },
+        },
       },
     });
 

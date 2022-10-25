@@ -18,6 +18,7 @@ CREATE TABLE "Privilege" (
     "descriptionEn" TEXT,
     "descriptionFr" TEXT,
     "permissions" JSONB NOT NULL,
+    "priority" INTEGER NOT NULL,
 
     CONSTRAINT "Privilege_pkey" PRIMARY KEY ("id")
 );
@@ -51,35 +52,35 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Populate with Privileges
 
 INSERT INTO
-  "Privilege" ("id","nameEn", "nameFr", "descriptionEn", "descriptionFr", "permissions")
+  "Privilege" ("id","nameEn", "nameFr", "descriptionEn", "descriptionFr", "permissions", "priority")
 VALUES
   (uuid_generate_v4(),'Base','Base','Base Permissions','Autorisations de Base','[
     {"action":"create","subject":"FormRecord"},
     {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
     {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true}
-  ]'::JSONB),
+  ]'::JSONB, 0),
     (uuid_generate_v4(),'PublishForms','PublierLesFormulaires','Permission to Publish a Form','Autorisation de publier un formulaire','[
     {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
-  ]'::JSONB),
+  ]'::JSONB, 1),
     (uuid_generate_v4(),'ManageForms','GérerLesFormulaires','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
     {"action":["create","view","update","delete"],"subject":"FormRecord"}
-  ]'::JSONB),
+  ]'::JSONB, 2),
   (uuid_generate_v4(),'ViewUserPrivileges','VisionnerPrivilègesUtilisateur','Permission to view user privileges','Autorisation d''afficher les privilèges de l''utilisateur','[
     {"action":"view","subject":["User","Privilege"]}
-  ]'::JSONB),
+  ]'::JSONB, 3),
   (uuid_generate_v4(),'ManageUsers','GérerUtilisateurs','Permission to manage users','Autorisation de gérer les utilisateurs','[
     {"action":"view","subject":["User","Privilege"]},
     {"action":"update","subject":"User"}
-  ]'::JSONB),
+  ]'::JSONB, 4),
    (uuid_generate_v4(),'ManagePrivileges','GérerPrivilèges','Permission to manage privileges','Autorisation de gérer les privilèges','[
     {"action":["create","view","update","delete"],"subject":"Privilege"}
-  ]'::JSONB),
+  ]'::JSONB, 5),
   (uuid_generate_v4(),'ViewApplicationSettings','VisionnerParamètresApplication','Permission to view application settings','Autorisation d''afficher les paramètres de l''application','[
     {"action":"view","subject":"Flag"}
-  ]'::JSONB),
+  ]'::JSONB, 6),
   (uuid_generate_v4(),'ManageApplicationSettings','GérerParamètresApplication','Permission to manage application settings','Autorisation de gérer les paramètres de l''application','[
     {"action":"view","subject":"Flag"},
     {"action":"update","subject":"Flag"}
-  ]'::JSONB);
+  ]'::JSONB, 7);
   
     
