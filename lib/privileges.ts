@@ -133,6 +133,7 @@ export const getAllPrivileges = async (ability: Ability) => {
         descriptionEn: true,
         descriptionFr: true,
         permissions: true,
+        priority: true,
       },
       orderBy: {
         id: "asc",
