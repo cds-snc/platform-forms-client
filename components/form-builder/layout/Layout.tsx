@@ -74,7 +74,6 @@ export const Layout = () => {
         {currentTab === "translate" && (
           <div className="col-start-3 col-span-10">
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1>{t("translateTitle")}</h1>
             <Translate />
           </div>
         )}
