@@ -17,7 +17,7 @@ describe("useAllowPublish", () => {
     const result = createStore();
     const {
       result: {
-        current: { hasData },
+        current: { data, hasData },
       },
     } = renderHook(() => useAllowPlublish());
 
@@ -35,9 +35,9 @@ describe("useAllowPublish", () => {
     expect(result.current.form.elements[1].properties.titleEn).toBe("element title");
     expect(result.current.form.endPage.descriptionEn).toBe("end page has value");
 
-    act(() => {
-      expect(hasData(["title"])).toBe(true);
-      expect(hasData(["title", "privacyPolicy"])).toBe(false);
-    });
+    expect(hasData(["title"])).toBe(true);
+    expect(data.title).toBe(true);
+    // expect(hasData(["title", "questions"])).toBe(true);
+    // expect(hasData(["title", "privacyPolicy"])).toBe(false);
   });
 });

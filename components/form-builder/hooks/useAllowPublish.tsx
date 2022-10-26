@@ -1,22 +1,32 @@
 import { useCallback } from "react";
 import useTemplateStore from "../store/useTemplateStore";
+import { publishRequiredFields } from "../types";
 
 export const useAllowPlublish = () => {
   const { form } = useTemplateStore();
   const data = {
     title: !!form.titleEn,
-    questions: !!form.elements.length,
-    privacyPolicy: !!form.privacyPolicy.descriptionEn,
-    confirmationMessage: !!form.endPage.descriptionEn,
+    questions: form.elements.length ? true : false,
+    privacyPolicy: form.privacyPolicy.descriptionEn ? true : false,
+    confirmationMessage: form.endPage.descriptionEn ? true : false,
   };
 
   const hasData = useCallback(
-    (fields: [string] | []) => {
+    (fields: publishRequiredFields[]) => {
       return fields.every(
         (field) => Object.prototype.hasOwnProperty.call(data, field) && data[field] === true
       );
     },
     [data]
   );
-  return { data, hasData };
+
+  const isPublishable = useCallback(() => {
+    return true;
+  }, []);
+
+  const isSaveable = useCallback(() => {
+    return true;
+  }, []);
+
+  return { data, hasData, isPublishable, isSaveable };
 };
