@@ -1,34 +1,61 @@
+import useTemplateStore from "../store/useTemplateStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { renderHook } from "@testing-library/react";
 
+import { act } from "react-dom/test-utils";
+
+const createStore = () => {
+  const { result } = renderHook(() => useTemplateStore());
+  act(() => {
+    result.current.initialize();
+  });
+
+  return result;
+};
+
 describe("useAllowPublish", () => {
   it("checks required fields needed to publish or save", () => {
+    const result = createStore();
     const store = {
-      titleEn: "form title",
-      titleFr: "",
-      elements: [
-        {
-          id: 1,
-          type: "",
-          properties: {
-            titleEn: "question 1",
-            titleFr: "question 2",
-            choices: [],
-            validation: { required: false },
-            descriptionEn: "",
-            descriptionFr: "",
-          },
+      form: {
+        version: 1,
+        layout: [],
+        introduction: {
+          descriptionEn: "",
+          descriptionFr: "",
         },
-      ],
-      privacyPolicy: { descriptionEn: "", descriptionFr: "" },
-      endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        titleEn: "form title",
+        titleFr: "",
+        elements: [
+          {
+            id: 1,
+            type: "",
+            properties: {
+              titleEn: "question 1",
+              titleFr: "question 2",
+              choices: [],
+              validation: { required: false },
+              descriptionEn: "",
+              descriptionFr: "",
+            },
+          },
+        ],
+        privacyPolicy: { descriptionEn: "", descriptionFr: "" },
+        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+      },
+      submission: { email: "test@example.com" },
+      publishingStatus: true,
     };
+
+    act(() => {
+      result.current.importTemplate(store);
+    });
 
     const {
       result: {
         current: { data, hasData, isSaveable, isPublishable },
       },
-    } = renderHook(() => useAllowPublish(store));
+    } = renderHook(() => useAllowPublish());
 
     expect(data.title).toBe(true);
     expect(data.questions).toBe(true);
@@ -42,32 +69,47 @@ describe("useAllowPublish", () => {
   });
 
   it("isPublishable", () => {
+    const result = createStore();
     const store = {
-      titleEn: "form title",
-      titleFr: "",
-      elements: [
-        {
-          id: 1,
-          type: "",
-          properties: {
-            titleEn: "question 1",
-            titleFr: "question 2",
-            choices: [],
-            validation: { required: false },
-            descriptionEn: "",
-            descriptionFr: "",
-          },
+      form: {
+        version: 1,
+        layout: [],
+        introduction: {
+          descriptionEn: "",
+          descriptionFr: "",
         },
-      ],
-      privacyPolicy: { descriptionEn: "privacy en", descriptionFr: "privacy fr" },
-      endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        titleEn: "form title",
+        titleFr: "",
+        elements: [
+          {
+            id: 1,
+            type: "",
+            properties: {
+              titleEn: "question 1",
+              titleFr: "question 2",
+              choices: [],
+              validation: { required: false },
+              descriptionEn: "",
+              descriptionFr: "",
+            },
+          },
+        ],
+        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
+        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+      },
+      submission: { email: "test@example.com" },
+      publishingStatus: true,
     };
+
+    act(() => {
+      result.current.importTemplate(store);
+    });
 
     const {
       result: {
         current: { isPublishable },
       },
-    } = renderHook(() => useAllowPublish(store, "test@example.com"));
+    } = renderHook(() => useAllowPublish());
 
     expect(isPublishable()).toBe(true);
   });
