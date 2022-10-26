@@ -1,11 +1,12 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
 import { CheckCircleOutline } from "@styled-icons/material/CheckCircleOutline";
-import { useAllowPlublish } from "../hooks/useAllowPublish";
+import { useAllowPublish } from "../hooks/useAllowPublish";
 import { CancelIcon } from "../icons";
 import styled from "styled-components";
 import { FancyButton } from "../panel/Button";
 import Link from "next/link";
+import useTemplateStore from "../store/useTemplateStore";
 
 const PrimaryButton = styled(FancyButton)`
   margin-top: 25px;
@@ -29,7 +30,10 @@ const PrimaryButton = styled(FancyButton)`
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
-  const { data } = useAllowPlublish();
+  const { form } = useTemplateStore();
+  const {
+    data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
+  } = useAllowPublish(form);
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -46,25 +50,25 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-8">
-          <Icon checked={data.title} /> Publisher
+          <Icon checked={title} /> Publisher
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={data.questions} /> Questions
+          <Icon checked={questions} /> Questions
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={data.privacyPolicy} /> Privacy statement
+          <Icon checked={privacyPolicy} /> Privacy statement
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={data.translate} /> Translate
+          <Icon checked={translate} /> Translate
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={data.responseDelivery} /> Response delivery
+          <Icon checked={responseDelivery} /> Response delivery
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={data.title} /> Form title
+          <Icon checked={title} /> Form title
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={data.confirmationMessage} /> Form confirmation message
+          <Icon checked={confirmationMessage} /> Form confirmation message
         </li>
       </ul>
 

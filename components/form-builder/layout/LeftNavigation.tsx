@@ -1,7 +1,8 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
-import { useAllowPlublish } from "../hooks/useAllowPublish";
+import { useAllowPublish } from "../hooks/useAllowPublish";
+import useTemplateStore from "../store/useTemplateStore";
 
 function Link({
   children,
@@ -35,7 +36,8 @@ export const LeftNavigation = ({
   handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { isSaveable } = useAllowPlublish();
+  const { form } = useTemplateStore();
+  const { isSaveable } = useAllowPublish(form);
 
   const iconClassname =
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
