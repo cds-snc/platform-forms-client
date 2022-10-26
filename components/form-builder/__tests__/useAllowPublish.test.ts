@@ -27,7 +27,7 @@ describe("useAllowPublish", () => {
 
     const {
       result: {
-        current: { data, hasData },
+        current: { data, hasData, isSaveable },
       },
     } = renderHook(() => useAllowPublish(store));
 
@@ -38,5 +38,6 @@ describe("useAllowPublish", () => {
     expect(hasData(["title", "questions"])).toBe(true);
     expect(hasData(["title", "privacyPolicy"])).toBe(false);
     expect(hasData(["title", "confirmationMessage"])).toBe(true);
+    expect(isSaveable()).toBe(true);
   });
 });
