@@ -40,4 +40,35 @@ describe("useAllowPublish", () => {
     expect(isSaveable()).toBe(true);
     expect(isPublishable()).toBe(false);
   });
+
+  it("isPublishable", () => {
+    const store = {
+      titleEn: "form title",
+      titleFr: "",
+      elements: [
+        {
+          id: 1,
+          type: "",
+          properties: {
+            titleEn: "question 1",
+            titleFr: "question 2",
+            choices: [],
+            validation: { required: false },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+      ],
+      privacyPolicy: { descriptionEn: "privacy en", descriptionFr: "privacy fr" },
+      endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+    };
+
+    const {
+      result: {
+        current: { isPublishable },
+      },
+    } = renderHook(() => useAllowPublish(store, "test@example.com"));
+
+    expect(isPublishable()).toBe(true);
+  });
 });

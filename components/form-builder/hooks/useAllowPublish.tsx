@@ -1,14 +1,17 @@
 import { useCallback } from "react";
 import { publishRequiredFields, FormSchema } from "../types";
 
-export const useAllowPublish = (form: Omit<FormSchema, "layout" | "introduction" | "version">) => {
+export const useAllowPublish = (
+  form: Omit<FormSchema, "layout" | "introduction" | "version">,
+  email = ""
+) => {
   const data = {
     title: !!form.titleEn,
     questions: !!form.elements.length,
     privacyPolicy: !!form.privacyPolicy.descriptionEn,
     confirmationMessage: !!form.endPage.descriptionEn,
     translate: !!form.elements[0]?.properties.titleEn && !!form.elements[0]?.properties.titleFr,
-    responseDelivery: false,
+    responseDelivery: !!email,
   };
 
   const hasData = useCallback(
