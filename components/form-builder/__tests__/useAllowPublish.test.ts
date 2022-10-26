@@ -2,7 +2,7 @@ import { useAllowPublish } from "../hooks/useAllowPublish";
 import { renderHook } from "@testing-library/react";
 
 describe("useAllowPublish", () => {
-  it("checks", () => {
+  it("checks required fields needed to publish or save", () => {
     const store = {
       titleEn: "form title",
       titleFr: "",
