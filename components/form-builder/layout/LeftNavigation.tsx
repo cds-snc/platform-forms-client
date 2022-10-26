@@ -35,7 +35,7 @@ export const LeftNavigation = ({
   handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { data } = useAllowPlublish();
+  const { isPublishable, isSaveable } = useAllowPlublish();
 
   const iconClassname =
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -64,7 +64,7 @@ export const LeftNavigation = ({
         {t("preview")}
       </Link>
 
-      {data.title && data.questions && (
+      {isSaveable() && (
         <Link
           isCurrentTab={currentTab === "save"}
           icon={<SaveIcon className={iconClassname} />}
@@ -74,7 +74,7 @@ export const LeftNavigation = ({
         </Link>
       )}
 
-      {data.title && data.questions && (
+      {isPublishable() && (
         <Link
           isCurrentTab={currentTab === "publish"}
           icon={<PublishIcon className={iconClassname} />}
