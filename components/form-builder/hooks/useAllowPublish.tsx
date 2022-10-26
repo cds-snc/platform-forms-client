@@ -9,7 +9,7 @@ export const useAllowPlublish = () => {
     questions: !!form.elements.length,
     privacyPolicy: !!form.privacyPolicy.descriptionEn,
     confirmationMessage: !!form.endPage.descriptionEn,
-    translate: false,
+    translate: !!form.elements[0]?.properties.titleEn && !!form.elements[0]?.properties.titleFr,
     responseDelivery: false,
   };
 
@@ -23,8 +23,9 @@ export const useAllowPlublish = () => {
   );
 
   const isPublishable = useCallback(() => {
-    return true;
-  }, []);
+    const fields = Object.keys(data) as unknown as publishRequiredFields[];
+    return hasData(fields);
+  }, [data, hasData]);
 
   const isSaveable = useCallback(() => {
     return hasData(["title", "questions"]);
