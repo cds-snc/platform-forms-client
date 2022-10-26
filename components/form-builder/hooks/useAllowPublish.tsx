@@ -4,10 +4,12 @@ import useTemplateStore from "../store/useTemplateStore";
 export const useAllowPlublish = () => {
   const { form } = useTemplateStore();
   const data = {
-    title: form.titleEn ? true : false,
-    questions: form.elements.length ? true : false,
-    privacyPolicy: form.privacyPolicy.descriptionEn ? true : false,
-    confirmationMessage: form.endPage.descriptionEn ? true : false,
+    title: !!form.titleEn,
+    questions: !!form.elements.length,
+    privacyPolicy: !!form.privacyPolicy.descriptionEn,
+    confirmationMessage: !!form.endPage.descriptionEn,
+    translate: false,
+    responseDelivery: false,
   };
 
   const hasData = useCallback(
