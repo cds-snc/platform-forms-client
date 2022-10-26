@@ -6,7 +6,6 @@ import { CancelIcon } from "../icons";
 import styled from "styled-components";
 import { FancyButton } from "../panel/Button";
 import Link from "next/link";
-import useTemplateStore from "../store/useTemplateStore";
 
 const PrimaryButton = styled(FancyButton)`
   margin-top: 25px;
@@ -30,11 +29,10 @@ const PrimaryButton = styled(FancyButton)`
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
-  const { form } = useTemplateStore();
   const {
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
     isPublishable,
-  } = useAllowPublish(form);
+  } = useAllowPublish();
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (

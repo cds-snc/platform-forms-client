@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 import styled from "styled-components";
 import useNavigationStore from "../store/useNavigationStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
-import useTemplateStore from "../store/useTemplateStore";
 
 const StyledH2 = styled.h2`
   display: inline-block;
@@ -15,8 +14,7 @@ const StyledH2 = styled.h2`
 
 export const Header = () => {
   const { status } = useSession();
-  const { form } = useTemplateStore();
-  const { isSaveable } = useAllowPublish(form);
+  const { isSaveable } = useAllowPublish();
   const { currentTab } = useNavigationStore();
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">

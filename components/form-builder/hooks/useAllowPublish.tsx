@@ -1,10 +1,21 @@
 import { useCallback } from "react";
 import { publishRequiredFields, FormSchema } from "../types";
+import useTemplateStore from "../store/useTemplateStore";
 
 export const useAllowPublish = (
-  form: Omit<FormSchema, "layout" | "introduction" | "version">,
-  email = ""
+  form?: Omit<FormSchema, "layout" | "introduction" | "version"> | null,
+  email?: string
 ) => {
+  const { form: defaultForm, submission } = useTemplateStore();
+
+  if (!form) {
+    form = defaultForm;
+  }
+
+  if (!email && submission?.email) {
+    email = submission?.email;
+  }
+
   const data = {
     title: !!form.titleEn,
     questions: !!form.elements.length,
