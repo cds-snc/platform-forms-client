@@ -14,7 +14,7 @@ const StyledH2 = styled.h2`
 
 export const Header = () => {
   const { status } = useSession();
-  const { title, questions } = useAllowPlublish();
+  const { isSaveable } = useAllowPlublish();
   const { currentTab } = useNavigationStore();
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
@@ -22,7 +22,7 @@ export const Header = () => {
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div className="">
             <StyledH2>GC Forms</StyledH2>
-            {currentTab !== "start" && title && questions && <DownloadFileButton />}
+            {currentTab !== "start" && isSaveable() && <DownloadFileButton />}
           </div>
           <div className="inline-flex">
             {<LoginMenu isAuthenticated={status === "authenticated"} />}

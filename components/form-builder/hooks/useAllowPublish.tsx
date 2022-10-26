@@ -6,9 +6,9 @@ export const useAllowPlublish = () => {
   const { form } = useTemplateStore();
   const data = {
     title: !!form.titleEn,
-    confirmationMessage: form.endPage.descriptionEn ? true : false,
     questions: !!form.elements.length,
     privacyPolicy: !!form.privacyPolicy.descriptionEn,
+    confirmationMessage: !!form.endPage.descriptionEn,
     translate: false,
     responseDelivery: false,
   };
@@ -27,8 +27,8 @@ export const useAllowPlublish = () => {
   }, []);
 
   const isSaveable = useCallback(() => {
-    return true;
-  }, []);
+    return hasData(["title", "questions"]);
+  }, [hasData]);
 
   return { data, hasData, isPublishable, isSaveable };
 };

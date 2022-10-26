@@ -75,7 +75,13 @@ export interface LocalizedProperty {
   <T extends string>(arg: T): `${T}${Capitalize<Language>}`;
 }
 
-export type publishRequiredFields = "title" | "questions" | "privacyPolicy" | "confirmationMessage";
+export type publishRequiredFields =
+  | "title"
+  | "questions"
+  | "privacyPolicy"
+  | "confirmationMessage"
+  | "translate"
+  | "responseDelivery";
 
 export interface TemplateSchema {
   form: FormSchema;
