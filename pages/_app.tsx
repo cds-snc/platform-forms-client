@@ -1,13 +1,13 @@
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import { appWithTranslation } from "next-i18next";
+import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
 import Base from "@components/globals/Base";
 import "../styles/app.scss";
-import { Session } from "next-auth";
 
 /*
 This component disables SSR when in testing mode.
@@ -24,10 +24,18 @@ const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const MyApp: React.FunctionComponent<AppProps<{ session?: Session }>> = ({
+export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp: React.FC<AppPropsWithLayout> = ({
   Component,
   pageProps: { session, ...pageProps },
-}) => {
+}: AppPropsWithLayout) => {
   return (
     <SessionProvider
       session={session}
@@ -38,9 +46,13 @@ const MyApp: React.FunctionComponent<AppProps<{ session?: Session }>> = ({
     >
       <AccessControlProvider>
         <SafeHydrate>
-          <Base>
-            <Component {...pageProps} />
-          </Base>
+          {Component.getLayout ? (
+            Component.getLayout(<Component {...pageProps} />)
+          ) : (
+            <Base>
+              <Component {...pageProps} />
+            </Base>
+          )}
         </SafeHydrate>
       </AccessControlProvider>
     </SessionProvider>

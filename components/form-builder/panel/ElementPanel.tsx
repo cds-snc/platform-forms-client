@@ -11,6 +11,7 @@ import {
   ElementProperties,
   ElementTypeWithIndex,
   LocalizedElementProperties,
+  LocalizedFormProperties,
 } from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
@@ -20,6 +21,8 @@ import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
 import { FancyButton } from "./Button";
 import { Input } from "./Input";
+import { ConfirmationDescription } from "./ConfirmationDescription";
+import { PrivacyDescription } from "./PrivacyDescription";
 
 const SelectedElement = ({
   selected,
@@ -577,6 +580,17 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   );
 };
 
+const FormTitleWrapper = styled.div`
+  margin: 10px;
+  input {
+    width: 100%;
+    padding: 22px 10px;
+    border: 1.5px solid #000000;
+    max-height: 36px;
+    border-radius: 4px;
+  }
+`;
+
 const ElementPanelDiv = styled.div`
   > div:first-of-type {
     border-top-left-radius: 8px;
@@ -592,7 +606,7 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField } = useTemplateStore();
+  const { form, localizeField, updateField } = useTemplateStore();
 
   const introTextPlaceholder =
     form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
@@ -606,12 +620,23 @@ export const ElementPanel = () => {
   return (
     <ElementPanelDiv>
       <RichTextLocked
+        beforeContent={
+          <FormTitleWrapper>
+            <Input
+              placeholder={t("placeHolderFormTitle")}
+              value={form[localizeField(LocalizedFormProperties.TITLE)]}
+              onChange={(e) => {
+                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
+              }}
+            />
+          </FormTitleWrapper>
+        }
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
         aria-label={t("richTextIntroTitle")}
       />
-      {form.elements.map((element, index) => {
+      {form.elements.map((element, index: number) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
@@ -623,7 +648,10 @@ export const ElementPanel = () => {
             schemaProperty="privacyPolicy"
             aria-label={t("richTextPrivacyTitle")}
           >
-            <h2>{t("richTextPrivacyTitle")}</h2>
+            <div>
+              <h2>{t("richTextPrivacyTitle")}</h2>
+              <PrivacyDescription />
+            </div>
           </RichTextLocked>
           <RichTextLocked
             addElement={false}
@@ -631,7 +659,10 @@ export const ElementPanel = () => {
             schemaProperty="endPage"
             aria-label={t("richTextConfirmationTitle")}
           >
-            <h2>{t("richTextConfirmationTitle")}</h2>
+            <div>
+              <h2>{t("richTextConfirmationTitle")}</h2>
+              <ConfirmationDescription />
+            </div>
           </RichTextLocked>
         </>
       )}

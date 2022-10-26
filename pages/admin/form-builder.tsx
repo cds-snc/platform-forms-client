@@ -1,23 +1,23 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../components/form-builder/layout/Layout";
-import { User } from "next-auth";
 import { checkPrivileges } from "@lib/privileges";
+import { Header } from "../../components/form-builder/layout/Header";
+import { NextPageWithLayout } from "../../pages/_app";
+import Footer from "../../components/globals/Footer";
 
-type WelcomeProps = {
-  user: User;
+const Page: NextPageWithLayout = () => {
+  return <Layout />;
 };
 
-const Welcome: React.FC<WelcomeProps> = () => {
+Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <>
-      <div className="flex flex-wrap">
-        <div className="flex-auto mb-10">
-          <Layout />
-        </div>
-      </div>
-    </>
+    <div id="form-builder">
+      <Header />
+      {page}
+      <Footer />
+    </div>
   );
 };
 
@@ -30,4 +30,4 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
   };
 });
 
-export default Welcome;
+export default Page;
