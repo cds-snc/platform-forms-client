@@ -20,6 +20,7 @@
   "design": "Design",
   "json": "JSON",
   "preview": "Preview",
+  "publish": "Publish",
   "placeHolderFormTitle": "Form Title",
   "share": "Share",
   "save": "Save",
@@ -53,5 +54,7 @@
   "fr-text": "French text",
   "questions": "Questions",
   "settings": "Settings",
-  "testDataDelivery": "Test data delivery"
+  "testDataDelivery": "Test data delivery",
+  "publishYourForm": "Publish your form",
+  "publishYourFormInstructions": "You need the following items completed before you publish your form."
 }

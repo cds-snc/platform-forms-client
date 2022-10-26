@@ -6,9 +6,11 @@ export const useAllowPlublish = () => {
   const { form } = useTemplateStore();
   const data = {
     title: !!form.titleEn,
-    questions: form.elements.length ? true : false,
-    privacyPolicy: form.privacyPolicy.descriptionEn ? true : false,
     confirmationMessage: form.endPage.descriptionEn ? true : false,
+    questions: !!form.elements.length,
+    privacyPolicy: !!form.privacyPolicy.descriptionEn,
+    translate: false,
+    responseDelivery: false,
   };
 
   const hasData = useCallback(
