@@ -1,10 +1,22 @@
+import { useCallback } from "react";
 import useTemplateStore from "../store/useTemplateStore";
 
 export const useAllowPlublish = () => {
   const { form } = useTemplateStore();
-  const title = form.titleEn;
-  const questions = form.elements.length || false;
-  const privacyPolicy = form.privacyPolicy.descriptionEn || false;
-  const confirmationMessage = form.endPage.descriptionEn || false;
-  return { title, privacyPolicy, confirmationMessage, questions };
+  const data = {
+    title: form.titleEn ? true : false,
+    questions: form.elements.length ? true : false,
+    privacyPolicy: form.privacyPolicy.descriptionEn ? true : false,
+    confirmationMessage: form.endPage.descriptionEn ? true : false,
+  };
+
+  const hasData = useCallback(
+    (fields: [string] | []) => {
+      return fields.every(
+        (field) => Object.prototype.hasOwnProperty.call(data, field) && data[field] === true
+      );
+    },
+    [data]
+  );
+  return { data, hasData };
 };
