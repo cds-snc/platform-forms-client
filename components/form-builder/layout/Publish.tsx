@@ -1,5 +1,5 @@
 import { useTranslation } from "next-i18next";
-import React from "react";
+import React, { useCallback } from "react";
 import { CheckCircleOutline } from "@styled-icons/material/CheckCircleOutline";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { CancelIcon } from "../icons";
@@ -33,6 +33,7 @@ export const Publish = () => {
   const { form } = useTemplateStore();
   const {
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
+    isPublishable,
   } = useAllowPublish(form);
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -42,6 +43,10 @@ export const Publish = () => {
       <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" />
     );
   };
+
+  const handlePublish = useCallback(() => {
+    // call API here
+  }, []);
 
   return (
     <>
@@ -79,8 +84,7 @@ export const Publish = () => {
         <br />
         <Link href={""}>Support</Link>
       </p>
-
-      <PrimaryButton>Publish</PrimaryButton>
+      {isPublishable() && <PrimaryButton onClick={handlePublish}>Publish</PrimaryButton>}
     </>
   );
 };
