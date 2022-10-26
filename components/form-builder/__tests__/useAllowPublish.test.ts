@@ -10,7 +10,6 @@ describe("useAllowPublish", () => {
         {
           id: 1,
           type: "",
-
           properties: {
             titleEn: "question 1",
             titleFr: "question 2",
