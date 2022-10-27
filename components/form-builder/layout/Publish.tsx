@@ -35,15 +35,15 @@ export const Publish = () => {
     isPublishable,
   } = useAllowPublish();
 
-  const [formId, setFormId] = useState();
-  const [errorMessage, setErrorMessage] = useState();
+  const [formId, setFormId] = useState(undefined);
+  const [error, setError] = useState(false);
 
   const { getSchema } = useTemplateStore();
 
   const uploadJson = async (jsonConfig: string, formID?: string) => {
     try {
       const result = await axios({
-        url: "/api/templates1",
+        url: "/api/templates",
         method: formID ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const Publish = () => {
 
       return { id: result?.data?.id };
     } catch (err) {
-      return { error: err.message };
+      return { error: err as Error };
     }
   };
 
@@ -70,13 +70,14 @@ export const Publish = () => {
   };
 
   const handlePublish = useCallback(async () => {
-    const result = await uploadJson(getSchema());
+    setError(false);
+    const result = await uploadJson(getSchema(), formId);
     if (!result?.id) {
-      setErrorMessage(result.error.message);
+      setError(true);
       return;
     }
     setFormId(result?.id);
-  }, [setErrorMessage]);
+  }, [setError, setFormId]);
 
   return (
     <>
@@ -117,12 +118,24 @@ export const Publish = () => {
       {isPublishable() && (
         <>
           <PrimaryButton onClick={handlePublish}>{t("publish")}</PrimaryButton>
-          <div role="alert" className="inline-block ml-5 py-1 px-3 text-green-darker bg-green-100">
-            The form has been published successfully
-          </div>
-          <div role="alert" className="inline-block ml-5 py-1 px-3 text-red-destructive bg-red-100">
-            There was an error publishing the form
-          </div>
+
+          {formId && (
+            <div
+              role="alert"
+              className="inline-block ml-5 py-1 px-3 text-green-darker bg-green-100"
+            >
+              The form has been published successfully
+            </div>
+          )}
+
+          {error && (
+            <div
+              role="alert"
+              className="inline-block ml-5 py-1 px-3 text-red-destructive bg-red-100"
+            >
+              There was an error publishing the form
+            </div>
+          )}
         </>
       )}
     </>
