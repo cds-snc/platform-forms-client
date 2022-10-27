@@ -31,7 +31,7 @@ const areChoicesTranslated = (choices: Choice[]) => {
   });
 };
 
-const isElementTranslated = (element: ElementType) => {
+const isFormElementTranslated = (element: ElementType) => {
   isTitleTranslated(element.properties);
 
   // Description is optional
@@ -56,7 +56,7 @@ export const checkTranslated = (form: FormSchema) => {
       if (element.type === "richText") {
         isDescriptionTranslated(element.properties);
       } else {
-        isElementTranslated(element);
+        isFormElementTranslated(element);
       }
     });
   } catch (e) {
