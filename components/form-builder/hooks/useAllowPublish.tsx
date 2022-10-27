@@ -48,7 +48,9 @@ const isElementTranslated = (element: ElementType) => {
 export const checkTranslated = (form: FormSchema) => {
   try {
     isTitleTranslated(form);
-    [form.introduction, form.privacyPolicy, form.endPage].every(isDescriptionTranslated);
+    isDescriptionTranslated(form.introduction);
+    isDescriptionTranslated(form.privacyPolicy);
+    isDescriptionTranslated(form.endPage);
 
     form.elements.forEach((element) => {
       if (element.type === "richText") {
