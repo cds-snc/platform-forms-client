@@ -18,8 +18,14 @@ import {
 } from "@lexical/markdown";
 
 const RichTextWrapper = styled.div`
+  height: 100%;
+
   .editor-input {
     padding: 20px;
+
+    &:focus {
+      outline: 2px #303fc3 solid;
+    }
   }
 `;
 

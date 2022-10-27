@@ -45,5 +45,8 @@
   "richTextConfirmationTitle": "[FR] Confirmation page and message",
   "richTextPrivacyTitle": "[FR] Privacy statement",
   "translate": "[FR] Translate",
-  "translateTitle": "[FR] Translate view"
+  "translateTitle": "[FR] Translate view",
+  "navLabelFormBuilder": "[FR] Form builder navigation",
+  "navLabelEditor": "[FR] Edit navigation",
+  "navLabelPreview": "[FR] Preview navigation"
 }

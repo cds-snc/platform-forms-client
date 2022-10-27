@@ -64,5 +64,8 @@
   "formTitle": "Form title",
   "formConfirmationMessage": "Form confirmation message",
   "complete": "Complete",
-  "incomplete": "Incomplete"
+  "incomplete": "Incomplete",
+  "navLabelFormBuilder": "Form builder navigation",
+  "navLabelEditor": "Edit navigation",
+  "navLabelPreview": "Preview navigation"
 }
