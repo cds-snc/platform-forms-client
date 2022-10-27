@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
-function Link({
+function Button({
   children,
   handleClick,
   icon,
@@ -41,45 +41,45 @@ export const LeftNavigation = ({
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <div className="col-span-3">
-      <Link
+    <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
+      <Button
         isCurrentTab={currentTab === "start"}
         icon={<DesignIcon className={iconClassname} />}
         handleClick={handleClick("start")}
       >
         {t("start")}
-      </Link>
-      <Link
+      </Button>
+      <Button
         isCurrentTab={["create", "translate", "settings"].includes(currentTab)}
         icon={<PreviewIcon className={iconClassname} />}
         handleClick={handleClick("create")}
       >
         {t("design")}
-      </Link>
-      <Link
+      </Button>
+      <Button
         isCurrentTab={["preview", "test-data-delivery"].includes(currentTab)}
         icon={<ShareIcon className={iconClassname} />}
         handleClick={handleClick("preview")}
       >
         {t("preview")}
-      </Link>
+      </Button>
 
       {isSaveable() && (
-        <Link
+        <Button
           isCurrentTab={currentTab === "save"}
           icon={<SaveIcon className={iconClassname} />}
           handleClick={handleClick("save")}
         >
           {t("save")}
-        </Link>
+        </Button>
       )}
-      <Link
+      <Button
         isCurrentTab={currentTab === "publish"}
         icon={<PublishIcon className={iconClassname} />}
         handleClick={handleClick("publish")}
       >
         {t("publish")}
-      </Link>
-    </div>
+      </Button>
+    </nav>
   );
 };
