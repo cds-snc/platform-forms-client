@@ -56,5 +56,10 @@
   "settings": "Settings",
   "testDataDelivery": "Test data delivery",
   "publishYourForm": "Publish your form",
-  "publishYourFormInstructions": "You need the following items completed before you publish your form."
+  "publishYourFormInstructions": "You need the following items completed before you publish your form.",
+  "publisher": "Publisher",
+  "privacyStatement": "Privacy statement",
+  "responseDelivery": "Response delivery",
+  "formTitle": "Form title",
+  "formConfirmationMessage": "Form confirmation message"
 }
