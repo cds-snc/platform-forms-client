@@ -13,23 +13,6 @@ const ElementWrapperDiv = styled.div`
   margin-top: -1px;
 `;
 
-const ContentWrapper = styled.div`
-  display: flex;
-  margin: 0px 20px;
-
-  & h2 {
-    font-size: 26px;
-    line-height: 32px;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    padding-bottom: 0;
-  }
-`;
-
-const OptionWrapper = styled.div`
-  display: flex;
-`;
-
 export const RichTextLocked = ({
   beforeContent = null,
   addElement,
@@ -48,15 +31,15 @@ export const RichTextLocked = ({
   return (
     <ElementWrapperDiv>
       {beforeContent && beforeContent}
-      <ContentWrapper>{children}</ContentWrapper>
-      <OptionWrapper>
+      <div className="flex mt-6 mx-7">{children}</div>
+      <div className="flex">
         <RichTextEditor
           path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
           content={initialValue}
           lang={lang}
           autoFocusEditor={false}
         />
-      </OptionWrapper>
+      </div>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>
   );
