@@ -2,9 +2,8 @@ import { useTranslation } from "next-i18next";
 import axios from "axios";
 import useTemplateStore from "../store/useTemplateStore";
 import React, { useCallback } from "react";
-import { CheckCircleOutline } from "@styled-icons/material/CheckCircleOutline";
 import { useAllowPublish } from "../hooks/useAllowPublish";
-import { CancelIcon } from "../icons";
+import { CancelIcon, CircleCheckIcon } from "../icons";
 import styled from "styled-components";
 import { FancyButton } from "../panel/Button";
 import Link from "next/link";
@@ -59,9 +58,9 @@ export const Publish = () => {
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
-      <CheckCircleOutline className="w-9 fill-green-700 inline-block" />
+      <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("complete")} />
     ) : (
-      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" />
+      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("Incomplete")} />
     );
   };
 
@@ -76,25 +75,25 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-8">
-          <Icon checked={title} /> Publisher
+          <Icon checked={title} /> {t("publisher")}
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={questions} /> Questions
+          <Icon checked={questions} /> {t("questions")}
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={privacyPolicy} /> Privacy statement
+          <Icon checked={privacyPolicy} /> {t("privacyStatement")}
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={translate} /> Translate
+          <Icon checked={translate} /> {t("translate")}
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={responseDelivery} /> Response delivery
+          <Icon checked={responseDelivery} /> {t("responseDelivery")}
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={title} /> Form title
+          <Icon checked={title} /> {t("formTitle")}
         </li>
         <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} /> Form confirmation message
+          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
         </li>
       </ul>
 
@@ -105,7 +104,7 @@ export const Publish = () => {
         <br />
         <Link href={""}>Support</Link>
       </p>
-      {isPublishable() && <PrimaryButton onClick={handlePublish}>Publish</PrimaryButton>}
+      {isPublishable() && <PrimaryButton onClick={handlePublish}>{t("publish")}</PrimaryButton>}
     </>
   );
 };

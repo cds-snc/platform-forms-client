@@ -6,6 +6,7 @@ export { CheckBoxEmptyIcon } from "./CheckBoxEmptyIcon";
 export { CheckIcon } from "./CheckIcon";
 export { ChevronDown } from "./ChevronDown";
 export { ChevronUp } from "./ChevronUp";
+export { CircleCheckIcon } from "./CircleCheckIcon";
 export { Close } from "./Close";
 export { DesignIcon } from "./DesignIcon";
 export { Duplicate } from "./Duplicate";
