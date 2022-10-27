@@ -604,6 +604,11 @@ const ElementPanelDiv = styled.div`
   }
 `;
 
+const StyledIntroduction = styled.div`
+  font-size: 1rem;
+  margin: 20px;
+`;
+
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
   const { form, localizeField, updateField } = useTemplateStore();
@@ -621,15 +626,21 @@ export const ElementPanel = () => {
     <ElementPanelDiv>
       <RichTextLocked
         beforeContent={
-          <FormTitleWrapper>
-            <Input
-              placeholder={t("placeHolderFormTitle")}
-              value={form[localizeField(LocalizedFormProperties.TITLE)]}
-              onChange={(e) => {
-                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
-              }}
-            />
-          </FormTitleWrapper>
+          <>
+            <FormTitleWrapper>
+              <Input
+                placeholder={t("placeHolderFormTitle")}
+                value={form[localizeField(LocalizedFormProperties.TITLE)]}
+                onChange={(e) => {
+                  updateField(
+                    `form.${localizeField(LocalizedFormProperties.TITLE)}`,
+                    e.target.value
+                  );
+                }}
+              />
+            </FormTitleWrapper>
+            <StyledIntroduction>{t("startFormIntro")}</StyledIntroduction>
+          </>
         }
         addElement={true}
         initialValue={introTextPlaceholder}
