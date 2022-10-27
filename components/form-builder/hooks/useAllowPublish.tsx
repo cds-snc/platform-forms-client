@@ -1,5 +1,12 @@
 import { useCallback } from "react";
-import { Description, ElementType, FormSchema, publishRequiredFields, Title } from "../types";
+import {
+  Choice,
+  Description,
+  ElementType,
+  FormSchema,
+  publishRequiredFields,
+  Title,
+} from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
 const MissingTranslation = {};
@@ -16,29 +23,29 @@ const isDescriptionTranslated = (element: Description) => {
   }
 };
 
+const areChoicesTranslated = (choices: Choice[]) => {
+  choices.forEach((choice) => {
+    if (!choice.en || !choice.fr) {
+      throw MissingTranslation;
+    }
+  });
+};
+
 const isElementTranslated = (element: ElementType) => {
-  if (element.type === "richText") {
+  isTitleTranslated(element.properties);
+
+  // Description is optional
+  if (element.properties.descriptionEn || element.properties.descriptionFr) {
     isDescriptionTranslated(element.properties);
-  } else {
-    isTitleTranslated(element.properties);
+  }
 
-    // Description is optional
-    if (element.properties.descriptionEn || element.properties.descriptionFr) {
-      isDescriptionTranslated(element.properties);
-    }
-
-    // Check choices if there are any
-    if (element.properties.choices) {
-      element.properties.choices.forEach((choice) => {
-        if (!choice.en || !choice.fr) {
-          throw MissingTranslation;
-        }
-      });
-    }
+  // Check choices if there are any
+  if (element.properties.choices) {
+    areChoicesTranslated(element.properties.choices);
   }
 };
 
-const checkTranslated = (form: FormSchema) => {
+export const checkTranslated = (form: FormSchema) => {
   try {
     isTitleTranslated(form);
     isDescriptionTranslated(form.introduction);
@@ -46,7 +53,12 @@ const checkTranslated = (form: FormSchema) => {
     isDescriptionTranslated(form.endPage);
 
     form.elements.forEach((element) => {
-      isElementTranslated(element);
+      if (element.type === "richText") {
+        isDescriptionTranslated(element.properties);
+      }
+      if (element.type !== "richText") {
+        isElementTranslated(element);
+      }
     });
   } catch (e) {
     return false;
