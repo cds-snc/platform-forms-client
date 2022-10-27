@@ -1,5 +1,5 @@
 import { useTranslation } from "next-i18next";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import useTemplateStore from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
@@ -67,7 +67,7 @@ export const Publish = () => {
       });
       return { id: result?.data?.id };
     } catch (err) {
-      return { error: err as Error };
+      return { error: err as AxiosError };
     }
   };
 
@@ -81,7 +81,7 @@ export const Publish = () => {
 
   const handlePublish = useCallback(async () => {
     setError(false);
-    const result = await uploadJson(getSchema());
+    const result = await uploadJson(getSchema(), formId);
     if (result && result?.error) {
       setError(true);
       return;
