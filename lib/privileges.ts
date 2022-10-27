@@ -196,6 +196,18 @@ export const createPrivilege = async (ability: Ability, privilege: Privilege) =>
 };
 
 /**
+ * Helper function to determine which Subject Type is being passed
+ * @param subject
+ * @returns
+ */
+function _isForceTyping(subject: Subject | ForcedSubjectType): subject is ForcedSubjectType {
+  return (
+    (subject as ForcedSubjectType).type !== undefined &&
+    (subject as ForcedSubjectType).object !== undefined
+  );
+}
+
+/**
  * Checks the privileges requested against an ability instance and throws and error if the action is not permitted.
  * @param ability The ability instance associated to a User
  * @param rules An array of rules to verify
@@ -210,37 +222,24 @@ export const checkPrivileges = (
   logic: "all" | "one" = "all"
 ): void => {
   // helper to define if we are force typing a passed object
-  function isForceTyping(subject: Subject | ForcedSubjectType): subject is ForcedSubjectType {
-    return (
-      (subject as ForcedSubjectType).type !== undefined &&
-      (subject as ForcedSubjectType).object !== undefined
-    );
-  }
+
   const result = rules.map(({ action, subject }) => {
-    if (isForceTyping(subject)) {
-      return ability.can(action, setSubjectType(subject.type, subject.object));
+    let ruleResult = false;
+    if (_isForceTyping(subject)) {
+      ruleResult = ability.can(action, setSubjectType(subject.type, subject.object));
+      logMessage.debug(
+        `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} `
+      );
     } else {
-      return ability.can(action, subject);
+      ruleResult = ability.can(action, subject);
+      logMessage.debug(
+        `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject} `
+      );
     }
+    return ruleResult;
   });
+
   let accessAllowed = false;
-  if (process.env.NODE_ENV !== "production") {
-    rules.map((rule, index) => {
-      if (isForceTyping(rule.subject)) {
-        logMessage.debug(
-          `Privilege Check ${result[index] ? "PASS" : "FAIL"}: Can ${rule.action} on ${
-            rule.subject.type
-          } `
-        );
-      } else {
-        logMessage.debug(
-          `Privilege Check ${result[index] ? "PASS" : "FAIL"}: Can ${rule.action} on ${
-            rule.subject
-          } `
-        );
-      }
-    });
-  }
   switch (logic) {
     case "all":
       // The initial value needs to be true because of the AND logic
