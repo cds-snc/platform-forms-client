@@ -119,23 +119,16 @@ export const Publish = () => {
         <>
           <PrimaryButton onClick={handlePublish}>{t("publish")}</PrimaryButton>
 
-          {formId && (
-            <div
-              role="alert"
-              className="inline-block ml-5 py-1 px-3 text-green-darker bg-green-100"
-            >
-              The form has been published successfully
-            </div>
-          )}
-
-          {error && (
-            <div
-              role="alert"
-              className="inline-block ml-5 py-1 px-3 text-red-destructive bg-red-100"
-            >
-              There was an error publishing the form
-            </div>
-          )}
+          <div
+            role="alert"
+            className={`inline-block ml-5 py-1 px-3 
+            ${error ? "text-red-destructive bg-red-100" : ""}
+            ${formId ? "text-green-darker bg-green-100" : ""} 
+            ${!formId && !error ? "hidden" : ""}`}
+          >
+            {formId && <p>The form has been published successfully</p>}
+            {error && <p>There was an error publishing the form</p>}
+          </div>
         </>
       )}
     </>
