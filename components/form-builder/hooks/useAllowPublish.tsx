@@ -1,6 +1,12 @@
 import { useCallback } from "react";
-import { publishRequiredFields } from "../types";
+import { FormSchema, publishRequiredFields } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
+
+const checkTranslated = (form: FormSchema) => {
+  return (
+    !!form.elements[0]?.properties.descriptionEn && !!form.elements[0]?.properties.descriptionFr
+  );
+};
 
 export const useAllowPublish = () => {
   const { form, submission } = useTemplateStore();
@@ -14,7 +20,7 @@ export const useAllowPublish = () => {
     questions: !!form.elements.length,
     privacyPolicy: !!form.privacyPolicy.descriptionEn,
     confirmationMessage: !!form.endPage.descriptionEn,
-    translate: !!form.elements[0]?.properties.titleEn && !!form.elements[0]?.properties.titleFr,
+    translate: checkTranslated(form),
     responseDelivery: !!email,
   };
 

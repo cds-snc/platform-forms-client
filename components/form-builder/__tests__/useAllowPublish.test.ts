@@ -35,8 +35,8 @@ describe("useAllowPublish", () => {
               titleFr: "question 2",
               choices: [],
               validation: { required: false },
-              descriptionEn: "",
-              descriptionFr: "",
+              descriptionEn: "description en",
+              descriptionFr: "descrption fr",
             },
           },
         ],
@@ -60,6 +60,7 @@ describe("useAllowPublish", () => {
     expect(data.title).toBe(true);
     expect(data.questions).toBe(true);
     expect(data.privacyPolicy).toBe(false);
+    expect(result.current.form.elements[0].properties.descriptionEn).toBe("description en");
     expect(hasData(["title"])).toBe(true);
     expect(hasData(["title", "questions"])).toBe(true);
     expect(hasData(["title", "privacyPolicy"])).toBe(false);
@@ -89,8 +90,8 @@ describe("useAllowPublish", () => {
               titleFr: "question 2",
               choices: [],
               validation: { required: false },
-              descriptionEn: "",
-              descriptionFr: "",
+              descriptionEn: "description en",
+              descriptionFr: "description fr",
             },
           },
         ],
