@@ -2,10 +2,37 @@ import { useCallback } from "react";
 import { FormSchema, publishRequiredFields } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
+const MissingTranslation = {};
+
+const isTranslated = (elementEn: string, elementFr: string) => {
+  if (elementEn || elementFr) {
+    if (!elementEn || !elementFr) {
+      throw MissingTranslation;
+    }
+  }
+  return true;
+};
+
 const checkTranslated = (form: FormSchema) => {
-  return (
-    !!form.elements[0]?.properties.descriptionEn && !!form.elements[0]?.properties.descriptionFr
-  );
+  try {
+    isTranslated(form.titleEn, form.titleFr);
+    isTranslated(form.introduction.descriptionEn, form.introduction.descriptionFr);
+    isTranslated(form.privacyPolicy.descriptionEn, form.privacyPolicy.descriptionFr);
+    isTranslated(form.endPage.descriptionEn, form.endPage.descriptionFr);
+    form.elements.forEach((element) => {
+      isTranslated(element.properties.titleEn, element.properties.titleFr);
+      isTranslated(element.properties.descriptionEn, element.properties.descriptionFr);
+      if (element.properties.choices) {
+        element.properties.choices.forEach((choice) => {
+          isTranslated(choice.en, choice.fr);
+        });
+      }
+    });
+  } catch (e) {
+    return false;
+  }
+
+  return true;
 };
 
 export const useAllowPublish = () => {

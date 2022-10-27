@@ -80,7 +80,7 @@ describe("useAllowPublish", () => {
           descriptionFr: "",
         },
         titleEn: "form title",
-        titleFr: "",
+        titleFr: "form title fr",
         elements: [
           {
             id: 1,
