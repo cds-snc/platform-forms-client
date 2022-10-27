@@ -15,15 +15,17 @@ const PrimaryButton = styled(FancyButton)`
   box-shadow: inset 0 -2px 0 #515963;
   color: white;
 
-  &:hover:not(:disabled),
+  &:hover,
   &:active,
   &:focus {
-    color: #ffffff;
-    background: #1c578a;
-    box-shadow: inset 0 -2px 0 #7a8796;
+    &:not(:disabled) {
+      color: #ffffff;
+      background: #1c578a;
+      box-shadow: inset 0 -2px 0 #7a8796;
+    }
   }
 
-  &:hover:active {
+  &:hover:active:not(:disabled) {
     background: #16446c;
   }
 `;
@@ -117,7 +119,9 @@ export const Publish = () => {
       </p>
       {isPublishable() && (
         <>
-          <PrimaryButton onClick={handlePublish}>{t("publish")}</PrimaryButton>
+          <PrimaryButton onClick={handlePublish} disabled={formId}>
+            {t("publish")}
+          </PrimaryButton>
 
           <div
             role="alert"
