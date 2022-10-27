@@ -197,8 +197,8 @@ export const createPrivilege = async (ability: Ability, privilege: Privilege) =>
 
 /**
  * Helper function to determine which Subject Type is being passed
- * @param subject
- * @returns
+ * @param subject  Rule subject
+ * @returns True is subject is of type ForcedSubjectType
  */
 function _isForceTyping(subject: Subject | ForcedSubjectType): subject is ForcedSubjectType {
   return (
