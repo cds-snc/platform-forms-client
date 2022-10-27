@@ -37,7 +37,7 @@ export const Publish = () => {
     return checked ? (
       <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("complete")} />
     ) : (
-      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("Incomplete")} />
+      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
     );
   };
 
