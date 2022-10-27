@@ -1,4 +1,6 @@
 import { useTranslation } from "next-i18next";
+import axios from "axios";
+import useTemplateStore from "../store/useTemplateStore";
 import React, { useCallback } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { CancelIcon, CircleCheckIcon } from "../icons";
@@ -33,6 +35,27 @@ export const Publish = () => {
     isPublishable,
   } = useAllowPublish();
 
+  const { getSchema } = useTemplateStore();
+
+  const uploadJson = async (jsonConfig: string, formID?: string) => {
+    try {
+      const result = await axios({
+        url: "/api/templates",
+        method: formID ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          formConfig: JSON.parse(jsonConfig),
+          formID: formID,
+        },
+        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      });
+    } catch (e) {
+      // console.log(e);
+    }
+  };
+
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
       <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("complete")} />
@@ -41,8 +64,8 @@ export const Publish = () => {
     );
   };
 
-  const handlePublish = useCallback(() => {
-    // call API here
+  const handlePublish = useCallback(async () => {
+    await uploadJson(getSchema());
   }, []);
 
   return (

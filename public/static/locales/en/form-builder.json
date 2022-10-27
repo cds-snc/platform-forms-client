@@ -36,6 +36,7 @@
   "copyMessage": "(template copied)",
   "saveButton": "Save",
   "start": "Start",
+  "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
   "startH2": "Design a form",
   "startP1": "Create a new form from scratch",
   "startH3": "Open a form file",
