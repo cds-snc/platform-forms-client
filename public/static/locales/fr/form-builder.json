@@ -48,5 +48,19 @@
   "translateTitle": "[FR] Translate view",
   "navLabelFormBuilder": "[FR] Form builder navigation",
   "navLabelEditor": "[FR] Edit navigation",
-  "navLabelPreview": "[FR] Preview navigation"
+  "navLabelPreview": "[FR] Preview navigation",
+  "testDataDelivery": "[FR] Test data delivery",
+  "settings": "[FR] Settings",
+  "settingsReponseTitle": "[FR] Response delivery destination",
+  "settingsReponseHint1": "[FR] Provide a Government of Canada email address to send form responses to.",
+  "settingsReponseHint2": "[FR] In order to publish, you need to provide a response delivery destination.",
+  "settingsFormatTitle": "[FR] Original format",
+  "settingsFormatHint": "[FR] What is the original form format you are designing from?",
+  "settingsFormatOption1": "[FR] PDF",
+  "settingsFormatOption2": "[FR] Paper document",
+  "settingsFormatOption3": "[FR] Work document",
+  "settingsFormatOption4": "[FR] Other",
+  "settingsDeleteTitle": "[FR] Delete form",
+  "settingsDeleteHint": "[FR] Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
+  "settingsDeleteButton": "[FR] Delete"
 }
