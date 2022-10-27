@@ -76,8 +76,8 @@ describe("useAllowPublish", () => {
         version: 1,
         layout: [],
         introduction: {
-          descriptionEn: "",
-          descriptionFr: "",
+          descriptionEn: "e",
+          descriptionFr: "e",
         },
         titleEn: "form title",
         titleFr: "form title fr",

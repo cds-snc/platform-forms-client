@@ -1,32 +1,52 @@
 import { useCallback } from "react";
-import { FormSchema, publishRequiredFields } from "../types";
+import { Description, ElementType, FormSchema, publishRequiredFields, Title } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
 const MissingTranslation = {};
 
-const isTranslated = (elementEn: string, elementFr: string) => {
-  if (elementEn || elementFr) {
-    if (!elementEn || !elementFr) {
-      throw MissingTranslation;
+const isTitleTranslated = (element: Title) => {
+  if (!element.titleEn || !element.titleFr) {
+    throw MissingTranslation;
+  }
+};
+
+const isDescriptionTranslated = (element: Description) => {
+  if (!element.descriptionEn || !element.descriptionFr) {
+    throw MissingTranslation;
+  }
+};
+
+const isElementTranslated = (element: ElementType) => {
+  if (element.type === "richText") {
+    isDescriptionTranslated(element.properties);
+  } else {
+    isTitleTranslated(element.properties);
+
+    // Description is optional
+    if (element.properties.descriptionEn || element.properties.descriptionFr) {
+      isDescriptionTranslated(element.properties);
+    }
+
+    // Check choices if there are any
+    if (element.properties.choices) {
+      element.properties.choices.forEach((choice) => {
+        if (!choice.en || !choice.fr) {
+          throw MissingTranslation;
+        }
+      });
     }
   }
-  return true;
 };
 
 const checkTranslated = (form: FormSchema) => {
   try {
-    isTranslated(form.titleEn, form.titleFr);
-    isTranslated(form.introduction.descriptionEn, form.introduction.descriptionFr);
-    isTranslated(form.privacyPolicy.descriptionEn, form.privacyPolicy.descriptionFr);
-    isTranslated(form.endPage.descriptionEn, form.endPage.descriptionFr);
+    isTitleTranslated(form);
+    isDescriptionTranslated(form.introduction);
+    isDescriptionTranslated(form.privacyPolicy);
+    isDescriptionTranslated(form.endPage);
+
     form.elements.forEach((element) => {
-      isTranslated(element.properties.titleEn, element.properties.titleFr);
-      isTranslated(element.properties.descriptionEn, element.properties.descriptionFr);
-      if (element.properties.choices) {
-        element.properties.choices.forEach((choice) => {
-          isTranslated(choice.en, choice.fr);
-        });
-      }
+      isElementTranslated(element);
     });
   } catch (e) {
     return false;
@@ -43,10 +63,10 @@ export const useAllowPublish = () => {
   }
 
   const data = {
-    title: !!form.titleEn,
+    title: !!form.titleEn || !!form.titleFr,
     questions: !!form.elements.length,
-    privacyPolicy: !!form.privacyPolicy.descriptionEn,
-    confirmationMessage: !!form.endPage.descriptionEn,
+    privacyPolicy: !!form.privacyPolicy.descriptionEn || !!form.privacyPolicy.descriptionFr,
+    confirmationMessage: !!form.endPage.descriptionEn || !!form.endPage.descriptionFr,
     translate: checkTranslated(form),
     responseDelivery: !!email,
   };
