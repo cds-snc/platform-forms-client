@@ -10,7 +10,6 @@ interface AccessControlInterface {
 const AbilityContext = createContext<AccessControlInterface>({} as AccessControlInterface);
 
 export const AccessControlProvider = ({ children }: { children: React.ReactNode }) => {
-  // use a memo function here to set the default for abilitiy
   const [ability, setAbility] = useState<PureAbility<Abilities, unknown> | null>(null);
 
   const refreshAbility = async () => {
