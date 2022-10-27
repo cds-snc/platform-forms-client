@@ -115,7 +115,6 @@ export const authOptions: NextAuthOptions = {
         token.authorizedForm = null;
         token.lastLoginTime = new Date();
         token.acceptableUse = false;
-        token.privileges = user.privileges.map((privilege) => privilege.permissions);
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.

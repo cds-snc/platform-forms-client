@@ -13,7 +13,7 @@ const Base = ({ children }) => {
   const formRecord = children?.props?.formRecord;
   const classes = getPageClassNames(formRecord);
 
-  const isAuthenticated = children?.props?.user;
+  const isAuthenticated = Boolean(children?.props?.user);
   const isEmbeddable = formRecord && children?.props?.isEmbeddable;
 
   const shouldDisplayAlphaBanner = formRecord?.displayAlphaBanner ?? true;
