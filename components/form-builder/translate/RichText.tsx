@@ -23,7 +23,7 @@ export const RichText = ({
         <div className="section-heading">
           {t(element.type)}: {t("Description")}
         </div>
-        <div className="section-text">
+        <div className="section-text section-text--rich-text">
           <RichTextEditor
             autoFocusEditor={false}
             path={`form.elements[${index}].properties.${localizeField(

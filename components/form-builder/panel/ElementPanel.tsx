@@ -568,6 +568,7 @@ const FormTitleInput = styled(TitleInput)`
   font-weight: 700;
   font-family: "Lato", sans-serif;
   width: 75%;
+  margin-bottom: 16px;
 `;
 
 const ElementPanelDiv = styled.div`
@@ -581,11 +582,6 @@ const ElementPanelDiv = styled.div`
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
   }
-`;
-
-const StyledIntroduction = styled.div`
-  font-size: 1rem;
-  margin: 20px;
 `;
 
 export const ElementPanel = () => {
@@ -605,7 +601,7 @@ export const ElementPanel = () => {
     <ElementPanelDiv>
       <RichTextLocked
         beforeContent={
-          <div className="mx-7 my-4">
+          <>
             <FormTitleInput
               placeholder={t("placeHolderFormTitle")}
               value={form[localizeField(LocalizedFormProperties.TITLE)]}
@@ -613,8 +609,8 @@ export const ElementPanel = () => {
                 updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
               }}
             />
-            <StyledIntroduction>{t("startFormIntro")}</StyledIntroduction>
-          </div>
+            <p className="text-sm mb-4">{t("startFormIntro")}</p>
+          </>
         }
         addElement={true}
         initialValue={introTextPlaceholder}
@@ -634,7 +630,7 @@ export const ElementPanel = () => {
             aria-label={t("richTextPrivacyTitle")}
           >
             <div>
-              <h2>{t("richTextPrivacyTitle")}</h2>
+              <h2 className="text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
               <PrivacyDescription />
             </div>
           </RichTextLocked>
@@ -645,7 +641,7 @@ export const ElementPanel = () => {
             aria-label={t("richTextConfirmationTitle")}
           >
             <div>
-              <h2>{t("richTextConfirmationTitle")}</h2>
+              <h2 className="text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
             </div>
           </RichTextLocked>

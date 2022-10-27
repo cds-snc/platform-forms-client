@@ -23,7 +23,7 @@ export const RichTextEditor = ({
   };
 
   return (
-    <div key={lang} className="mx-7 mb-6 mt-2 w-full border-2 rounded">
+    <div key={lang} className="w-full">
       <Editor autoFocusEditor={autoFocusEditor} content={content} onChange={handleChange} />
     </div>
   );

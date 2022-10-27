@@ -7,10 +7,7 @@ import { LocalizedElementProperties } from "../types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  position: relative;
   max-width: 800px;
-  height: auto;
-  margin-top: -1px;
 `;
 
 export const RichTextLocked = ({
@@ -29,16 +26,18 @@ export const RichTextLocked = ({
   const { localizeField, lang } = useTemplateStore();
 
   return (
-    <ElementWrapperDiv>
-      {beforeContent && beforeContent}
-      <div className="flex mt-6 mx-7">{children}</div>
-      <div className="flex">
-        <RichTextEditor
-          path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
-          content={initialValue}
-          lang={lang}
-          autoFocusEditor={false}
-        />
+    <ElementWrapperDiv className="h-auto relative -mt-px">
+      <div className="mx-7 mt-5 mb-7">
+        {beforeContent && beforeContent}
+        <div className="flex">{children}</div>
+        <div className="flex border-2 rounded">
+          <RichTextEditor
+            path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
+            content={initialValue}
+            lang={lang}
+            autoFocusEditor={false}
+          />
+        </div>
       </div>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>
