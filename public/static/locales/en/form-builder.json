@@ -62,5 +62,7 @@
   "privacyStatement": "Privacy statement",
   "responseDelivery": "Response delivery",
   "formTitle": "Form title",
-  "formConfirmationMessage": "Form confirmation message"
+  "formConfirmationMessage": "Form confirmation message",
+  "complete": "Complete",
+  "incomplete": "Incomplete"
 }

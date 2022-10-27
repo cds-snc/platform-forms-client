@@ -63,9 +63,9 @@ export const Publish = () => {
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
-      <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("complete")} />
+      <CircleCheckIcon className="w-9 fill-green-700 inline-block" title={t("completed")} />
     ) : (
-      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("Incomplete")} />
+      <CancelIcon className="w-9 fill-red-700 w-9 h-9 inline-block" title={t("incomplete")} />
     );
   };
 
@@ -114,7 +114,17 @@ export const Publish = () => {
         <br />
         <Link href={""}>Support</Link>
       </p>
-      {isPublishable() && <PrimaryButton onClick={handlePublish}>{t("publish")}</PrimaryButton>}
+      {isPublishable() && (
+        <>
+          <PrimaryButton onClick={handlePublish}>{t("publish")}</PrimaryButton>
+          <div role="alert" className="inline-block ml-5 py-1 px-3 text-green-darker bg-green-100">
+            The form has been published successfully
+          </div>
+          <div role="alert" className="inline-block ml-5 py-1 px-3 text-red-destructive bg-red-100">
+            There was an error publishing the form
+          </div>
+        </>
+      )}
     </>
   );
 };
