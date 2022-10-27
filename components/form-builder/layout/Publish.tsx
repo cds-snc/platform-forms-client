@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import axios from "axios";
 import useTemplateStore from "../store/useTemplateStore";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { CancelIcon, CircleCheckIcon } from "../icons";
 import styled from "styled-components";
@@ -35,12 +35,15 @@ export const Publish = () => {
     isPublishable,
   } = useAllowPublish();
 
+  const [formId, setFormId] = useState();
+  const [errorMessage, setErrorMessage] = useState();
+
   const { getSchema } = useTemplateStore();
 
   const uploadJson = async (jsonConfig: string, formID?: string) => {
     try {
       const result = await axios({
-        url: "/api/templates",
+        url: "/api/templates1",
         method: formID ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,8 +54,10 @@ export const Publish = () => {
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
-    } catch (e) {
-      // console.log(e);
+
+      return { id: result?.data?.id };
+    } catch (err) {
+      return { error: err.message };
     }
   };
 
@@ -65,8 +70,13 @@ export const Publish = () => {
   };
 
   const handlePublish = useCallback(async () => {
-    await uploadJson(getSchema());
-  }, []);
+    const result = await uploadJson(getSchema());
+    if (!result?.id) {
+      setErrorMessage(result.error.message);
+      return;
+    }
+    setFormId(result?.id);
+  }, [setErrorMessage]);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { publishRequiredFields, FormSchema } from "../types";
+import { publishRequiredFields } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
 export const useAllowPublish = () => {
