@@ -49,7 +49,7 @@ describe("Test Auth lib", () => {
       }))(context);
       expect(result).toEqual({
         redirect: {
-          destination: `/undefined/admin/login`,
+          destination: `/undefined/auth/login`,
           permanent: false,
         },
       });

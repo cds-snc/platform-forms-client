@@ -49,7 +49,7 @@ export function requireAuthentication(
         // If no user, redirect to login
         return {
           redirect: {
-            destination: `/${context.locale}/admin/login`,
+            destination: `/${context.locale}/auth/login`,
             permanent: false,
           },
         };
