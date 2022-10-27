@@ -45,7 +45,7 @@ const isFormElementTranslated = (element: ElementType) => {
   }
 };
 
-export const checkTranslated = (form: FormSchema) => {
+export const isFormTranslated = (form: FormSchema) => {
   try {
     isTitleTranslated(form);
     isDescriptionTranslated(form.introduction);
@@ -78,7 +78,7 @@ export const useAllowPublish = () => {
     questions: !!form.elements.length,
     privacyPolicy: !!form.privacyPolicy.descriptionEn || !!form.privacyPolicy.descriptionFr,
     confirmationMessage: !!form.endPage.descriptionEn || !!form.endPage.descriptionFr,
-    translate: checkTranslated(form),
+    translate: isFormTranslated(form),
     responseDelivery: !!email,
   };
 
