@@ -4,6 +4,24 @@
   - You are about to drop the column `role` on the `User` table. All the data in the column will be lost.
 
 */
+-- DropForeignKey
+ALTER TABLE "AccessLog" DROP CONSTRAINT "AccessLog_userId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "FormUser" DROP CONSTRAINT "FormUser_templateId_fkey";
+
+-- RenameTable
+ALTER TABLE "AccessLog" RENAME TO "ApiAccessLog";
+
+-- RenameTable
+ALTER TABLE "FormUser" RENAME TO "ApiUser";
+
+-- AlterTable
+ALTER TABLE "ApiAccessLog" RENAME CONSTRAINT "AccessLog_pkey" TO "ApiAccessLog_pkey";
+
+-- AlterTable
+ALTER TABLE "ApiUser" RENAME CONSTRAINT "FormUser_pkey" TO "ApiUser_pkey";
+
 -- AlterTable
 ALTER TABLE "User" DROP COLUMN "role";
 
@@ -29,6 +47,12 @@ CREATE TABLE "_PrivilegeToUser" (
     "B" TEXT NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "_TemplateToUser" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Privilege_nameEn_key" ON "Privilege"("nameEn");
 
@@ -41,46 +65,31 @@ CREATE UNIQUE INDEX "_PrivilegeToUser_AB_unique" ON "_PrivilegeToUser"("A", "B")
 -- CreateIndex
 CREATE INDEX "_PrivilegeToUser_B_index" ON "_PrivilegeToUser"("B");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "_TemplateToUser_AB_unique" ON "_TemplateToUser"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_TemplateToUser_B_index" ON "_TemplateToUser"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ApiUser_templateId_email_key" ON "ApiUser"("templateId", "email");
+
 -- AddForeignKey
 ALTER TABLE "_PrivilegeToUser" ADD CONSTRAINT "_PrivilegeToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Privilege"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_PrivilegeToUser" ADD CONSTRAINT "_PrivilegeToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- AddForeignKey
+ALTER TABLE "_TemplateToUser" ADD CONSTRAINT "_TemplateToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Template"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- Populate with Privileges
+-- AddForeignKey
+ALTER TABLE "_TemplateToUser" ADD CONSTRAINT "_TemplateToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-INSERT INTO
-  "Privilege" ("id","nameEn", "nameFr", "descriptionEn", "descriptionFr", "permissions", "priority")
-VALUES
-  (uuid_generate_v4(),'Base','Base','Base Permissions','Autorisations de Base','[
-    {"action":"create","subject":"FormRecord"},
-    {"action":["view","update","delete"],"subject":"FormRecord","conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}},
-    {"action":"update","subject":"FormRecord","fields":["publishingStatus"],"inverted":true}
-  ]'::JSONB, 0),
-    (uuid_generate_v4(),'PublishForms','PublierLesFormulaires','Permission to Publish a Form','Autorisation de publier un formulaire','[
-    {"action":["update"],"subject":"FormRecord","fields":["publishingStatus"],"conditions":{"users":{"$elemMatch":{"id":"${user.id}"}}}}
-  ]'::JSONB, 1),
-    (uuid_generate_v4(),'ManageForms','GérerLesFormulaires','Permission to manage all Forms','Autorisation de gérer tous les formulaires','[
-    {"action":["create","view","update","delete"],"subject":"FormRecord"}
-  ]'::JSONB, 2),
-  (uuid_generate_v4(),'ViewUserPrivileges','VisionnerPrivilègesUtilisateur','Permission to view user privileges','Autorisation d''afficher les privilèges de l''utilisateur','[
-    {"action":"view","subject":["User","Privilege"]}
-  ]'::JSONB, 3),
-  (uuid_generate_v4(),'ManageUsers','GérerUtilisateurs','Permission to manage users','Autorisation de gérer les utilisateurs','[
-    {"action":"view","subject":["User","Privilege"]},
-    {"action":"update","subject":"User"}
-  ]'::JSONB, 4),
-   (uuid_generate_v4(),'ManagePrivileges','GérerPrivilèges','Permission to manage privileges','Autorisation de gérer les privilèges','[
-    {"action":["create","view","update","delete"],"subject":"Privilege"}
-  ]'::JSONB, 5),
-  (uuid_generate_v4(),'ViewApplicationSettings','VisionnerParamètresApplication','Permission to view application settings','Autorisation d''afficher les paramètres de l''application','[
-    {"action":"view","subject":"Flag"}
-  ]'::JSONB, 6),
-  (uuid_generate_v4(),'ManageApplicationSettings','GérerParamètresApplication','Permission to manage application settings','Autorisation de gérer les paramètres de l''application','[
-    {"action":"view","subject":"Flag"},
-    {"action":"update","subject":"Flag"}
-  ]'::JSONB, 7);
-  
+-- AddForeignKey
+ALTER TABLE "ApiAccessLog" ADD CONSTRAINT "ApiAccessLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "ApiUser"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE "ApiUser" ADD CONSTRAINT "ApiUser_templateId_fkey" FOREIGN KEY ("templateId") REFERENCES "Template"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
     

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seeds/seed.ts --environment=development"
   },
   "scripts": {
     "dev": "yarn migrate:dev && yarn initialize && NODE_OPTIONS='--inspect' next dev",
@@ -13,7 +13,7 @@
     "migrate:prod": "yarn migrate:oldMigrations && yarn prisma:deploy",
     "migrate:oldMigrations": "cd ./migrations && yarn migrate && cd ..",
     "migrate:toPrisma": "prisma migrate resolve --applied 20220506182127_initial",
-    "prisma:deploy": "prisma migrate deploy",
+    "prisma:deploy": "prisma migrate deploy && ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seeds/seed.ts --environment=production",
     "prisma:dev": "prisma migrate dev",
     "prisma:reset": "prisma migrate reset",
     "prisma:studio": "prisma studio",
@@ -85,6 +85,7 @@
     "slate-react": "0.82.1",
     "styled-components": "5.3.6",
     "swr": "1.3.0",
+    "ts-command-line-args": "^2.3.1",
     "uuid": "8.3.2",
     "yup": "0.32.11",
     "zustand": "4.1.1"
