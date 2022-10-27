@@ -13,6 +13,7 @@ import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
 import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
+import { Publish } from "./Publish";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -82,6 +83,12 @@ export const Layout = () => {
           <div className="col-start-4 col-span-9">
           <StyledHeader>{t("saveH1")}</StyledHeader>
             <Save />
+          </div>
+        )}
+
+        {currentTab === "publish" && (
+          <div className="col-start-4 col-span-9">
+            <Publish />
           </div>
         )}
 

@@ -5,6 +5,7 @@ import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
 import useNavigationStore from "../store/useNavigationStore";
+import { useAllowPublish } from "../hooks/useAllowPublish";
 
 const StyledH2 = styled.h2`
   display: inline-block;
@@ -13,6 +14,7 @@ const StyledH2 = styled.h2`
 
 export const Header = () => {
   const { status } = useSession();
+  const { isSaveable } = useAllowPublish();
   const { currentTab } = useNavigationStore();
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
@@ -20,7 +22,7 @@ export const Header = () => {
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div className="">
             <StyledH2>GC Forms</StyledH2>
-            {currentTab !== "start" && <DownloadFileButton />}
+            {currentTab !== "start" && isSaveable() && <DownloadFileButton />}
           </div>
           <div className="inline-flex">
             {<LoginMenu isAuthenticated={status === "authenticated"} />}

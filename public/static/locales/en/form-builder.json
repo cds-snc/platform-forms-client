@@ -20,6 +20,7 @@
   "design": "Design",
   "json": "JSON",
   "preview": "Preview",
+  "publish": "Publish",
   "placeHolderFormTitle": "Form Title",
   "share": "Share",
   "save": "Save",
@@ -35,6 +36,7 @@
   "copyMessage": "(template copied)",
   "saveButton": "Save",
   "start": "Start",
+  "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
   "startH2": "Design a form",
   "startP1": "Create a new form from scratch",
   "startH3": "Open a form file",
@@ -53,5 +55,14 @@
   "fr-text": "French text",
   "questions": "Questions",
   "settings": "Settings",
-  "testDataDelivery": "Test data delivery"
+  "testDataDelivery": "Test data delivery",
+  "publishYourForm": "Publish your form",
+  "publishYourFormInstructions": "You need the following items completed before you publish your form.",
+  "publisher": "Publisher",
+  "privacyStatement": "Privacy statement",
+  "responseDelivery": "Response delivery",
+  "formTitle": "Form title",
+  "formConfirmationMessage": "Form confirmation message",
+  "complete": "Complete",
+  "incomplete": "Incomplete"
 }
