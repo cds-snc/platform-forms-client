@@ -176,15 +176,6 @@ const LabelHidden = styled(FormLabel)`
   border-width: 0;
 `;
 
-const FormWrapper = styled.div<RowProps>`
-  padding: 30px 25px;
-  ${({ isRichText }) =>
-    isRichText &&
-    `
-      padding: 0;
-    `}
-`;
-
 const RequiredWrapper = styled.div`
   margin-top: 20px;
 
@@ -196,16 +187,6 @@ const RequiredWrapper = styled.div`
   label {
     padding-top: 4px;
   }
-`;
-
-const QuestionNumber = styled.span`
-  position: absolute;
-  background: #ebebeb;
-  left: 0;
-  margin-left: -25px;
-  padding: 7px 4px;
-  border-radius: 0 4px 4px 0;
-  font-size: 20px;
 `;
 
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
@@ -284,7 +265,9 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
         <div>
           {!isRichText && (
             <>
-              <QuestionNumber>{questionNumber}</QuestionNumber>
+              <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
+                {questionNumber}
+              </span>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
               <TitleInput
                 ref={input}
@@ -552,9 +535,9 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
 
   return (
     <ElementWrapperDiv className={`element-${item.index}`}>
-      <FormWrapper isRichText={isRichText}>
+      <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
         <Form item={item} />
-      </FormWrapper>
+      </div>
       <PanelActions
         item={item}
         renderSaveButton={() => (
@@ -580,15 +563,12 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   );
 };
 
-const FormTitleWrapper = styled.div`
-  margin: 10px;
-  input {
-    width: 100%;
-    padding: 22px 10px;
-    border: 1.5px solid #000000;
-    max-height: 36px;
-    border-radius: 4px;
-  }
+const FormTitleInput = styled(TitleInput)`
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Lato", sans-serif;
+  width: 75%;
+  margin-bottom: 16px;
 `;
 
 const ElementPanelDiv = styled.div`
@@ -602,11 +582,6 @@ const ElementPanelDiv = styled.div`
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
   }
-`;
-
-const StyledIntroduction = styled.div`
-  font-size: 1rem;
-  margin: 20px;
 `;
 
 export const ElementPanel = () => {
@@ -627,19 +602,14 @@ export const ElementPanel = () => {
       <RichTextLocked
         beforeContent={
           <>
-            <FormTitleWrapper>
-              <Input
-                placeholder={t("placeHolderFormTitle")}
-                value={form[localizeField(LocalizedFormProperties.TITLE)]}
-                onChange={(e) => {
-                  updateField(
-                    `form.${localizeField(LocalizedFormProperties.TITLE)}`,
-                    e.target.value
-                  );
-                }}
-              />
-            </FormTitleWrapper>
-            <StyledIntroduction>{t("startFormIntro")}</StyledIntroduction>
+            <FormTitleInput
+              placeholder={t("placeHolderFormTitle")}
+              value={form[localizeField(LocalizedFormProperties.TITLE)]}
+              onChange={(e) => {
+                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
+              }}
+            />
+            <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>
         }
         addElement={true}
@@ -660,7 +630,7 @@ export const ElementPanel = () => {
             aria-label={t("richTextPrivacyTitle")}
           >
             <div>
-              <h2>{t("richTextPrivacyTitle")}</h2>
+              <h2 className="text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
               <PrivacyDescription />
             </div>
           </RichTextLocked>
@@ -671,7 +641,7 @@ export const ElementPanel = () => {
             aria-label={t("richTextConfirmationTitle")}
           >
             <div>
-              <h2>{t("richTextConfirmationTitle")}</h2>
+              <h2 className="text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
             </div>
           </RichTextLocked>
