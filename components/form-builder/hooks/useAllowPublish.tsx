@@ -32,16 +32,20 @@ const areChoicesTranslated = (choices: Choice[]) => {
 };
 
 const isFormElementTranslated = (element: ElementType) => {
-  isTitleTranslated(element.properties);
-
-  // Description is optional
-  if (element.properties.descriptionEn || element.properties.descriptionFr) {
+  if (element.type === "richText") {
     isDescriptionTranslated(element.properties);
-  }
+  } else {
+    isTitleTranslated(element.properties);
 
-  // Check choices if there are any
-  if (element.properties.choices) {
-    areChoicesTranslated(element.properties.choices);
+    // Description is optional
+    if (element.properties.descriptionEn || element.properties.descriptionFr) {
+      isDescriptionTranslated(element.properties);
+    }
+
+    // Check choices if there are any
+    if (element.properties.choices) {
+      areChoicesTranslated(element.properties.choices);
+    }
   }
 };
 
@@ -53,11 +57,7 @@ export const isFormTranslated = (form: FormSchema) => {
     isDescriptionTranslated(form.endPage);
 
     form.elements.forEach((element) => {
-      if (element.type === "richText") {
-        isDescriptionTranslated(element.properties);
-      } else {
-        isFormElementTranslated(element);
-      }
+      isFormElementTranslated(element);
     });
   } catch (e) {
     return false;
