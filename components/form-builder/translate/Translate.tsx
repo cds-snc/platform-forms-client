@@ -76,12 +76,22 @@ const SectionDiv = styled.div`
     }
 
     .section-text {
-      display: flex;
-      align-items: flex-start;
+      display: grid;
+      grid-auto-flow: column;
       margin-bottom: 20px;
       border: 1px solid #cacaca;
 
       &.section-text--rich-text > div {
+        .editor-input {
+          height: calc(100% - 90px);
+        }
+
+        @media (min-width: 992px) {
+          .editor-input {
+            height: calc(100% - 56px);
+          }
+        }
+
         &:first-of-type {
           border-right: 1px solid black;
         }

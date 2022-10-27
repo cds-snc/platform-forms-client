@@ -18,6 +18,8 @@ import {
 } from "@lexical/markdown";
 
 const RichTextWrapper = styled.div`
+  height: 100%;
+
   .editor-input {
     padding: 20px;
   }
