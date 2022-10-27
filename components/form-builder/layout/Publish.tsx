@@ -43,6 +43,15 @@ export const Publish = () => {
   const { getSchema } = useTemplateStore();
 
   const uploadJson = async (jsonConfig: string, formID?: string) => {
+    let formData;
+    try {
+      formData = JSON.parse(jsonConfig);
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        return { error: new Error("failed to parse form data") };
+      }
+    }
+
     try {
       const result = await axios({
         url: "/api/templates",
@@ -51,12 +60,11 @@ export const Publish = () => {
           "Content-Type": "application/json",
         },
         data: {
-          formConfig: JSON.parse(jsonConfig),
+          formConfig: formData,
           formID: formID,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
-
       return { id: result?.data?.id };
     } catch (err) {
       return { error: err as Error };
@@ -73,8 +81,8 @@ export const Publish = () => {
 
   const handlePublish = useCallback(async () => {
     setError(false);
-    const result = await uploadJson(getSchema(), formId);
-    if (!result?.id) {
+    const result = await uploadJson(getSchema());
+    if (result && result?.error) {
       setError(true);
       return;
     }
