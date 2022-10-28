@@ -1,11 +1,74 @@
 import { useCallback } from "react";
-import { FormSchema, publishRequiredFields } from "../types";
+import {
+  Choice,
+  Description,
+  ElementType,
+  FormSchema,
+  publishRequiredFields,
+  Title,
+} from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
-const checkTranslated = (form: FormSchema) => {
-  return (
-    !!form.elements[0]?.properties.descriptionEn && !!form.elements[0]?.properties.descriptionFr
-  );
+export const MissingTranslation = {};
+
+export const isTitleTranslated = (element: Title) => {
+  if (!element.titleEn || !element.titleFr) {
+    throw MissingTranslation;
+  }
+};
+
+export const isDescriptionTranslated = (element: Description) => {
+  if (!element.descriptionEn || !element.descriptionFr) {
+    throw MissingTranslation;
+  }
+};
+
+export const areChoicesTranslated = (choices: Choice[]) => {
+  choices.forEach((choice) => {
+    if (!choice.en || !choice.fr) {
+      throw MissingTranslation;
+    }
+  });
+};
+
+export const isFormElementTranslated = (element: ElementType) => {
+  if (element.type === "richText") {
+    isDescriptionTranslated(element.properties);
+  } else {
+    isTitleTranslated(element.properties);
+
+    // Description is optional
+    if (element.properties.descriptionEn || element.properties.descriptionFr) {
+      isDescriptionTranslated(element.properties);
+    }
+
+    // Check choices if there are any
+    if (element.properties.choices) {
+      areChoicesTranslated(element.properties.choices);
+    }
+  }
+};
+
+export const isFormTranslated = (form: FormSchema) => {
+  try {
+    isTitleTranslated(form);
+
+    // Introduction is optional, but must be translated if present
+    if (form.introduction.descriptionEn || form.introduction.descriptionFr) {
+      isDescriptionTranslated(form.introduction);
+    }
+
+    isDescriptionTranslated(form.privacyPolicy);
+    isDescriptionTranslated(form.endPage);
+
+    form.elements.forEach((element) => {
+      isFormElementTranslated(element);
+    });
+  } catch (e) {
+    return false;
+  }
+
+  return true;
 };
 
 export const useAllowPublish = () => {
@@ -16,11 +79,11 @@ export const useAllowPublish = () => {
   }
 
   const data = {
-    title: !!form.titleEn,
+    title: !!form.titleEn || !!form.titleFr,
     questions: !!form.elements.length,
-    privacyPolicy: !!form.privacyPolicy.descriptionEn,
-    confirmationMessage: !!form.endPage.descriptionEn,
-    translate: checkTranslated(form),
+    privacyPolicy: !!form.privacyPolicy.descriptionEn || !!form.privacyPolicy.descriptionFr,
+    confirmationMessage: !!form.endPage.descriptionEn || !!form.endPage.descriptionFr,
+    translate: isFormTranslated(form),
     responseDelivery: !!email,
   };
 

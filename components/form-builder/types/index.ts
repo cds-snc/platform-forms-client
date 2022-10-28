@@ -35,22 +35,23 @@ export interface UpdatePayload {
   value: string;
 }
 
+export interface Description {
+  descriptionEn: string;
+  descriptionFr: string;
+}
+
+export interface Title {
+  titleEn: string;
+  titleFr: string;
+}
+
 export interface FormSchema {
   titleEn: string;
   titleFr: string;
   layout: number[];
-  endPage: {
-    descriptionEn: string;
-    descriptionFr: string;
-  };
-  introduction: {
-    descriptionEn: string;
-    descriptionFr: string;
-  };
-  privacyPolicy: {
-    descriptionEn: string;
-    descriptionFr: string;
-  };
+  endPage: Description;
+  introduction: Description;
+  privacyPolicy: Description;
   elements: ElementType[];
   version: number;
   internalTitleEn?: string;
