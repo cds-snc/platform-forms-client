@@ -1,69 +1,106 @@
+#form-builder > main {
+    min-height: calc(100vh - 300px);
+}
+
 .editor-list-ol {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 .link-editor {
-   background-color: #fff;
-   border: 2px solid black;
-   border-radius: 8px;
+  background-color: #fff;
+  border: 2px solid black;
+  border-radius: 8px;
 }
 
-.link-editor .button.active,.toolbar .button.active {
-    background-color: #fff;
+.link-editor .button.active,
+.toolbar .button.active {
+  background-color: #fff;
 }
 
 .link-editor .link-input {
-    display: block;
-    width: calc(100% - 24px);
-    box-sizing: border-box;
-    margin: 8px 12px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background-color: #eee;
-    font-size: 15px;
-    color: #050505;
-    border: 0;
-    outline: 0;
-    position: relative;
-    font-family: inherit
+  display: block;
+  width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 8px 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #eee;
+  font-size: 15px;
+  color: #050505;
+  border: 0;
+  outline: 0;
+  position: relative;
+  font-family: inherit;
 }
 
 .link-editor div.link-edit {
-    // background-image: url(/assets/pencil-fill.633b2c8d.svg);
-    background-size: 16px;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 35px;
-    vertical-align: -.25em;
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    cursor: pointer
+  // background-image: url(/assets/pencil-fill.633b2c8d.svg);
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 35px;
+  vertical-align: -0.25em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  cursor: pointer;
 }
 
 .link-editor .link-input a {
-    color: #216fdb;
-    text-decoration: none;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    margin-right: 30px;
-    text-overflow: ellipsis
+  color: #216fdb;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 30px;
+  text-overflow: ellipsis;
 }
 
 .link-editor .link-input a:hover {
-    text-decoration: underline
+  text-decoration: underline;
 }
 
-.link-editor .font-size-wrapper,.link-editor .font-family-wrapper {
-    display: flex;
-    margin: 0 4px
+.link-editor .font-size-wrapper,
+.link-editor .font-family-wrapper {
+  display: flex;
+  margin: 0 4px;
 }
 
 .link-editor select {
-    padding: 6px;
-    border: none;
-    background-color: #00000013;
-    border-radius: 4px
+  padding: 6px;
+  border: none;
+  background-color: #00000013;
+  border-radius: 4px;
+}
+
+@layer components {
+  #form-builder {
+
+    .container--wet,
+    .gc-footer-container {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto
+    }
+
+    @media (min-width: 768px) {
+      .container--wet, .gc-footer-container {
+        max-width:750px
+      }
+    }
+
+    @media (min-width: 992px) {
+      .container--wet, .gc-footer-container {
+        max-width:970px
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .container--wet, .gc-footer-container {
+        max-width:1170px
+      }
+    }
+  }
 }
