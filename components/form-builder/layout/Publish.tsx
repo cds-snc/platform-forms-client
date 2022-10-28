@@ -119,10 +119,6 @@ export const Publish = () => {
       </ul>
 
       <p className="leading-10 mt-8">
-        <Link href={""}>Why do I need to have these before publishing?</Link>
-        <br />
-        <Link href={""}>How do I get the authority to publish?</Link>
-        <br />
         <Link href={""}>Support</Link>
       </p>
       {isPublishable() && (
