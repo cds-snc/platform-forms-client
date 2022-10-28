@@ -9,21 +9,21 @@ import {
 } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
 
-const MissingTranslation = {};
+export const MissingTranslation = {};
 
-const isTitleTranslated = (element: Title) => {
+export const isTitleTranslated = (element: Title) => {
   if (!element.titleEn || !element.titleFr) {
     throw MissingTranslation;
   }
 };
 
-const isDescriptionTranslated = (element: Description) => {
+export const isDescriptionTranslated = (element: Description) => {
   if (!element.descriptionEn || !element.descriptionFr) {
     throw MissingTranslation;
   }
 };
 
-const areChoicesTranslated = (choices: Choice[]) => {
+export const areChoicesTranslated = (choices: Choice[]) => {
   choices.forEach((choice) => {
     if (!choice.en || !choice.fr) {
       throw MissingTranslation;
@@ -31,7 +31,7 @@ const areChoicesTranslated = (choices: Choice[]) => {
   });
 };
 
-const isFormElementTranslated = (element: ElementType) => {
+export const isFormElementTranslated = (element: ElementType) => {
   if (element.type === "richText") {
     isDescriptionTranslated(element.properties);
   } else {

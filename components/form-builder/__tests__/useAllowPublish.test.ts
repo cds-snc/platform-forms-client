@@ -1,6 +1,13 @@
 import useTemplateStore from "../store/useTemplateStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { renderHook } from "@testing-library/react";
+import {
+  isTitleTranslated,
+  isDescriptionTranslated,
+  isFormElementTranslated,
+  areChoicesTranslated,
+  MissingTranslationError,
+} from "../hooks/useAllowPublish";
 
 import { act } from "react-dom/test-utils";
 
@@ -115,7 +122,260 @@ describe("useAllowPublish", () => {
     expect(isPublishable()).toBe(true);
   });
 
-  describe("translation tests", () => {
+  describe("Translation methods", () => {
+    it("isTitleTranslated", () => {
+      const translated = () => {
+        isTitleTranslated({
+          titleEn: "title",
+          titleFr: "titlefr",
+        });
+      };
+
+      expect(translated).not.toThrow();
+
+      const notTranslated = () => {
+        isTitleTranslated({
+          titleEn: "title",
+          titleFr: "",
+        });
+      };
+
+      expect(notTranslated).toThrow(MissingTranslationError);
+
+      const notProvided = () => {
+        isTitleTranslated({
+          titleEn: "",
+          titleFr: "",
+        });
+      };
+
+      expect(notProvided).toThrow(MissingTranslationError);
+    });
+
+    it("isDescriptionTranslated", () => {
+      const translated = () => {
+        isDescriptionTranslated({
+          descriptionEn: "description",
+          descriptionFr: "descriptionfr",
+        });
+      };
+
+      expect(translated).not.toThrow();
+
+      const notTranslated = () => {
+        isDescriptionTranslated({
+          descriptionEn: "description",
+          descriptionFr: "",
+        });
+      };
+
+      expect(notTranslated).toThrow(MissingTranslationError);
+
+      const notProvided = () => {
+        isDescriptionTranslated({
+          descriptionEn: "description",
+          descriptionFr: "descriptionfr",
+        });
+      };
+
+      // Descriptions are optional
+      expect(notProvided).not.toThrow();
+    });
+
+    it("areChoicesTranslated", () => {
+      const translated = () => {
+        areChoicesTranslated([
+          {
+            en: "label",
+            fr: "labelfr",
+          },
+          {
+            en: "label",
+            fr: "labelfr",
+          },
+        ]);
+      };
+
+      expect(translated).not.toThrow();
+
+      const notTranslated = () => {
+        areChoicesTranslated([
+          {
+            en: "label",
+            fr: "labelfr",
+          },
+          {
+            en: "label",
+            fr: "",
+          },
+        ]);
+      };
+
+      expect(notTranslated).toThrow(MissingTranslationError);
+
+      const notProvided = () => {
+        areChoicesTranslated([
+          {
+            en: "",
+            fr: "",
+          },
+          {
+            en: "",
+            fr: "",
+          },
+        ]);
+      };
+
+      expect(notProvided).toThrow(MissingTranslationError);
+    });
+
+    it("isFormElementTranslated richText", () => {
+      const translated = () => {
+        isFormElementTranslated({
+          id: 1,
+          type: "richText",
+          properties: {
+            titleEn: "",
+            titleFr: "",
+            descriptionEn: "description",
+            descriptionFr: "descriptionfr",
+            choices: [],
+            validation: { required: false },
+          },
+        });
+      };
+
+      expect(translated).not.toThrow();
+
+      const notTranslated = () => {
+        isFormElementTranslated({
+          id: 1,
+          type: "richText",
+          properties: {
+            titleEn: "",
+            titleFr: "",
+            descriptionEn: "description",
+            descriptionFr: "",
+            choices: [],
+            validation: { required: false },
+          },
+        });
+      };
+
+      expect(notTranslated).toThrow(MissingTranslationError);
+
+      const notProvided = () => {
+        isFormElementTranslated({
+          id: 1,
+          type: "richText",
+          properties: {
+            titleEn: "",
+            titleFr: "",
+            descriptionEn: "",
+            descriptionFr: "",
+            choices: [],
+            validation: { required: false },
+          },
+        });
+      };
+
+      expect(notProvided).toThrow(MissingTranslationError);
+    });
+
+    it("isFormElementTranslated other types", () => {
+      const translated = () => {
+        isFormElementTranslated({
+          id: 1,
+          type: "radio",
+          properties: {
+            titleEn: "title",
+            titleFr: "titlefr",
+            descriptionEn: "description",
+            descriptionFr: "descriptionfr",
+            choices: [
+              {
+                en: "option",
+                fr: "optionfr",
+              },
+            ],
+            validation: { required: false },
+          },
+        });
+      };
+
+      expect(translated).not.toThrow();
+
+      const titleNotTranslated = () => {
+        isFormElementTranslated({
+          id: 1,
+          type: "radio",
+          properties: {
+            titleEn: "title",
+            titleFr: "",
+            descriptionEn: "description",
+            descriptionFr: "descriptionfr",
+            choices: [
+              {
+                en: "option",
+                fr: "optionfr",
+              },
+            ],
+            validation: { required: false },
+          },
+        });
+      };
+
+      expect(titleNotTranslated).toThrow(MissingTranslationError);
+    });
+
+    const descriptionNotProvided = () => {
+      isFormElementTranslated({
+        id: 1,
+        type: "radio",
+        properties: {
+          titleEn: "title",
+          titleFr: "titlefr",
+          descriptionEn: "",
+          descriptionFr: "",
+          choices: [
+            {
+              en: "option",
+              fr: "optionfr",
+            },
+          ],
+          validation: { required: false },
+        },
+      });
+    };
+
+    // Descriptions are optional
+    expect(descriptionNotProvided).not.toThrow();
+
+    const descriptionNotTranslated = () => {
+      isFormElementTranslated({
+        id: 1,
+        type: "radio",
+        properties: {
+          titleEn: "title",
+          titleFr: "titlefr",
+          descriptionEn: "description",
+          descriptionFr: "",
+          choices: [
+            {
+              en: "option",
+              fr: "optionfr",
+            },
+          ],
+          validation: { required: false },
+        },
+      });
+    };
+
+    // If provided, Descriptions must be translated
+    expect(descriptionNotTranslated).toThrow(MissingTranslationError);
+  });
+
+  describe("Validate form translated tests", () => {
     const defaultStore = {
       form: {
         version: 1,
