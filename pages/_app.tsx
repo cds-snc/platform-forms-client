@@ -59,5 +59,4 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
   );
 };
 
-// Temporary workaround until this issue is resolved with next-i18next (https://github.com/i18next/next-i18next/issues/1944)
-export default appWithTranslation(MyApp as React.FC);
+export default appWithTranslation(MyApp);

@@ -1,7 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { DefaultJWT } from "next-auth/jwt";
 import { ApiAccessLog } from "@prisma/client";
-import { LoggingAction } from "./auth";
+import { LoggingAction } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { MongoAbility } from "@casl/ability";
 
