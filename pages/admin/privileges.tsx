@@ -1,6 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-
 import { useFormik } from "formik";
 import { Button } from "@components/forms";
 import React, { useState } from "react";
@@ -82,7 +81,7 @@ const ModifyPrivilege = ({
       descriptionFr: privilege?.descriptionFr || "",
       permissions: JSON.stringify(privilege?.permissions) || "",
     },
-    validate: (values) => {
+    validate: () => {
       const errors = {};
       // logMessage.debug(JSON.stringify(values));
 
