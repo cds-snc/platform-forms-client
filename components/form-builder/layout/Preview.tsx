@@ -5,14 +5,16 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 
-export const Preview = () => {
+export const Preview = ({ isPreview }: { isPreview: boolean }) => {
   const { getSchema } = useTemplateStore();
   const stringified = getSchema();
 
+  // @todo use real formId for test test delivery
   const formRecord = {
     id: "test0form00000id000asdf11",
     ...JSON.parse(stringified),
   };
+
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
@@ -20,7 +22,7 @@ export const Preview = () => {
   const currentForm = getRenderedForm(formRecord, language, t);
 
   return (
-    <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={true}>
+    <Form formRecord={formRecord} language={language} router={router} t={t} isPreview={isPreview}>
       {currentForm}
     </Form>
   );

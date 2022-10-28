@@ -1,8 +1,8 @@
 import { useTranslation } from "next-i18next";
-import axios, { AxiosError } from "axios";
 import useTemplateStore from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
+import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon } from "../icons";
 import styled from "styled-components";
 import { FancyButton } from "../panel/Button";
@@ -37,39 +37,10 @@ export const Publish = () => {
     isPublishable,
   } = useAllowPublish();
 
-  const [formId, setFormId] = useState(undefined);
+  const { uploadJson } = usePublish(false);
+  const [formId, setFormId] = useState();
   const [error, setError] = useState(false);
-
   const { getSchema } = useTemplateStore();
-
-  const uploadJson = async (jsonConfig: string, formID?: string) => {
-    let formData;
-    try {
-      formData = JSON.parse(jsonConfig);
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        return { error: new Error("failed to parse form data") };
-      }
-    }
-
-    try {
-      const result = await axios({
-        url: "/api/templates",
-        method: formID ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: {
-          formConfig: formData,
-          formID: formID,
-        },
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      });
-      return { id: result?.data?.id };
-    } catch (err) {
-      return { error: err as AxiosError };
-    }
-  };
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (

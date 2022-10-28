@@ -57,31 +57,42 @@ export const Layout = () => {
 
         {currentTab === "create" && (
           <div className="col-start-4 col-span-9">
-          <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <ElementPanel />
           </div>
         )}
 
         {currentTab === "preview" && (
           <div className="col-start-4 col-span-9">
-          <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <StyledPreviewWrapper>
               <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-              <Preview />
+              <Preview isPreview={true} />
+            </StyledPreviewWrapper>
+          </div>
+        )}
+
+        {currentTab === "test-data-delivery" && (
+          <div className="col-start-4 col-span-9">
+            Data delivery
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+            <StyledPreviewWrapper>
+              <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+              <Preview isPreview={false} />
             </StyledPreviewWrapper>
           </div>
         )}
 
         {currentTab === "translate" && (
           <div className="col-start-4 col-span-9">
-          <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <Translate />
           </div>
         )}
 
         {currentTab === "save" && (
           <div className="col-start-4 col-span-9">
-          <StyledHeader>{t("saveH1")}</StyledHeader>
+            <StyledHeader>{t("saveH1")}</StyledHeader>
             <Save />
           </div>
         )}
