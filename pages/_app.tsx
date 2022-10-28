@@ -39,8 +39,8 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
   return (
     <SessionProvider
       session={session}
-      // Re-fetch session every 5 minutes
-      refetchInterval={5 * 60}
+      // Re-fetch session every 30 minutes if no user activity
+      refetchInterval={30 * 60}
       // Re-fetches session when window is focused
       refetchOnWindowFocus={true}
     >
