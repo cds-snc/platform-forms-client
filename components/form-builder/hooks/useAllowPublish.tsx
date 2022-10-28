@@ -52,7 +52,12 @@ const isFormElementTranslated = (element: ElementType) => {
 export const isFormTranslated = (form: FormSchema) => {
   try {
     isTitleTranslated(form);
-    isDescriptionTranslated(form.introduction);
+
+    // Introduction is optional, but must be translated if present
+    if (form.introduction.descriptionEn || form.introduction.descriptionFr) {
+      isDescriptionTranslated(form.introduction);
+    }
+
     isDescriptionTranslated(form.privacyPolicy);
     isDescriptionTranslated(form.endPage);
 
