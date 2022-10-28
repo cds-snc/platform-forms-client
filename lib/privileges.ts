@@ -261,34 +261,38 @@ export const checkPrivileges = (
   logic: "all" | "one" = "all"
 ): void => {
   // helper to define if we are force typing a passed object
+  try {
+    const result = rules.map(({ action, subject }) => {
+      let ruleResult = false;
+      if (_isForceTyping(subject)) {
+        ruleResult = ability.can(action, setSubjectType(subject.type, subject.object));
+        logMessage.debug(
+          `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} `
+        );
+      } else {
+        ruleResult = ability.can(action, subject);
+        logMessage.debug(
+          `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject} `
+        );
+      }
+      return ruleResult;
+    });
 
-  const result = rules.map(({ action, subject }) => {
-    let ruleResult = false;
-    if (_isForceTyping(subject)) {
-      ruleResult = ability.can(action, setSubjectType(subject.type, subject.object));
-      logMessage.debug(
-        `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} `
-      );
-    } else {
-      ruleResult = ability.can(action, subject);
-      logMessage.debug(
-        `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject} `
-      );
+    let accessAllowed = false;
+    switch (logic) {
+      case "all":
+        // The initial value needs to be true because of the AND logic
+        accessAllowed = result.reduce((prev, curr) => prev && curr, true);
+        break;
+      case "one":
+        accessAllowed = result.reduce((prev, curr) => prev || curr, false);
+        break;
     }
-    return ruleResult;
-  });
-
-  let accessAllowed = false;
-  switch (logic) {
-    case "all":
-      // The initial value needs to be true because of the AND logic
-      accessAllowed = result.reduce((prev, curr) => prev && curr, true);
-      break;
-    case "one":
-      accessAllowed = result.reduce((prev, curr) => prev || curr, false);
-      break;
-  }
-  if (!accessAllowed) {
+    if (!accessAllowed) {
+      throw new AccessControlError(`Access Control Forbidden Action`);
+    }
+  } catch {
+    // If there is any error in privilege checking default to forbidden
     throw new AccessControlError(`Access Control Forbidden Action`);
   }
 };

@@ -40,13 +40,13 @@ export async function getEmailListByFormID(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  try {
-    const formID = req.query.form;
-    if (Array.isArray(formID) || !formID)
-      return res.status(400).json({ error: "Malformed API Request FormID not define" });
+  const formID = req.query.form;
+  if (Array.isArray(formID) || !formID)
+    return res.status(400).json({ error: "Malformed API Request FormID not define" });
 
-    if (formID) {
-      const emailList = await prisma.template.findUnique({
+  if (formID) {
+    const emailList = await prisma.template
+      .findUnique({
         where: {
           id: formID,
         },
@@ -64,21 +64,19 @@ export async function getEmailListByFormID(
             },
           },
         },
-      });
+      })
+      .catch((e) => prismaErrors(e, null));
 
-      // The prisma response will be null if the form is not found
+    // The prisma response will be null if the form is not found
 
-      if (!emailList) return res.status(404).json({ error: "Form Not Found" });
+    if (!emailList) return res.status(404).json({ error: "Form Not Found" });
 
-      checkPrivileges(ability, [
-        { action: "view", subject: { type: "FormRecord", object: emailList } },
-      ]);
+    checkPrivileges(ability, [
+      { action: "view", subject: { type: "FormRecord", object: emailList } },
+    ]);
 
-      //Return all emails associated with formID
-      if (emailList) return res.status(200).json(emailList.apiUsers);
-    }
-  } catch (e) {
-    prismaErrors(e);
+    //Return all emails associated with formID
+    if (emailList) return res.status(200).json(emailList.apiUsers);
   }
 }
 /**

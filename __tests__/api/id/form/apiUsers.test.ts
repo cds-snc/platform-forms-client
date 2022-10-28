@@ -209,7 +209,7 @@ describe("/id/[forms]/owners", () => {
 
       it("Should return 404 as statusCode if there's db's error", async () => {
         // Mocking prisma to throw an error
-        prismaMock.user.findMany.mockRejectedValue(
+        prismaMock.template.findUnique.mockRejectedValue(
           new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
         );
 
@@ -385,7 +385,7 @@ describe("/id/[forms]/owners", () => {
 
       it("Should return 404 as statusCode if there's db's error", async () => {
         // Mocking prisma to throw an error
-        prismaMock.user.findMany.mockRejectedValue(
+        prismaMock.template.findUnique.mockRejectedValue(
           new Prisma.PrismaClientKnownRequestError("Can't reach database server", "P1001", "4.3.2")
         );
 
