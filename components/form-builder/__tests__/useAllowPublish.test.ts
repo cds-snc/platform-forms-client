@@ -122,7 +122,7 @@ describe("useAllowPublish", () => {
     expect(isPublishable()).toBe(true);
   });
 
-  describe("Translation methods", () => {
+  describe("Translation helper methods", () => {
     it("isTitleTranslated", () => {
       const translated = () => {
         isTitleTranslated({
@@ -373,6 +373,50 @@ describe("useAllowPublish", () => {
 
     // If provided, Descriptions must be translated
     expect(descriptionNotTranslated).toThrow(MissingTranslationError);
+
+    const optionNotTranslated = () => {
+      isFormElementTranslated({
+        id: 1,
+        type: "radio",
+        properties: {
+          titleEn: "title",
+          titleFr: "titlefr",
+          descriptionEn: "description",
+          descriptionFr: "descriptionfr",
+          choices: [
+            {
+              en: "option",
+              fr: "",
+            },
+          ],
+          validation: { required: false },
+        },
+      });
+    };
+
+    expect(optionNotTranslated).toThrow(MissingTranslationError);
+
+    const optionNotProvided = () => {
+      isFormElementTranslated({
+        id: 1,
+        type: "radio",
+        properties: {
+          titleEn: "title",
+          titleFr: "titlefr",
+          descriptionEn: "description",
+          descriptionFr: "descriptionfr",
+          choices: [
+            {
+              en: "",
+              fr: "",
+            },
+          ],
+          validation: { required: false },
+        },
+      });
+    };
+
+    expect(optionNotProvided).toThrow(MissingTranslationError);
   });
 
   describe("Validate form translated tests", () => {
