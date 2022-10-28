@@ -1,5 +1,6 @@
 import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
+import useNavigationStore from "../store/useNavigationStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
@@ -32,13 +33,13 @@ const PrimaryButton = styled(FancyButton)`
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
+  const { formId, setFormId } = useNavigationStore();
   const {
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
     isPublishable,
   } = useAllowPublish();
 
   const { uploadJson } = usePublish(false);
-  const [formId, setFormId] = useState();
   const [error, setError] = useState(false);
   const { getSchema } = useTemplateStore();
 
