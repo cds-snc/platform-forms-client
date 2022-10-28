@@ -147,7 +147,7 @@ const useTemplateStore = create<ElementStore>()(
         state.lang = "en";
         state.form = defaultForm;
         state.submission = { email: "test@example.com" };
-        state.publishingStatus = true;
+        state.publishingStatus = false;
       });
     },
     importTemplate: (json) =>
