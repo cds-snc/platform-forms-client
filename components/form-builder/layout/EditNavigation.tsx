@@ -10,29 +10,33 @@ export const EditNavigation = ({
 }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <>
-      <div className="mb-8">
-        <button
-          className={`mr-5 ${currentTab === "create" ? "font-bold" : ""}`}
-          onClick={handleClick("create")}
-        >
-          {t("questions")}
-        </button>
-        |
-        <button
-          className={`ml-5 mr-5 ${currentTab === "translate" ? "font-bold" : ""}`}
-          onClick={handleClick("translate")}
-        >
-          {t("translate")}
-        </button>
-        |
-        <button
-          className={`ml-5 ${currentTab === "settings" ? "font-bold" : ""}`}
-          onClick={handleClick("settings")}
-        >
-          {t("settings")}
-        </button>
-      </div>
-    </>
+    <nav className="mb-8" aria-label={t("navLabelEditor")}>
+      <button
+        className={`mr-5 ${
+          currentTab === "create" ? "font-bold" : ""
+        } outline-blue-focus outline-offset-2`}
+        onClick={handleClick("create")}
+      >
+        {t("questions")}
+      </button>
+      |
+      <button
+        className={`ml-5 mr-5 ${
+          currentTab === "translate" ? "font-bold" : ""
+        } outline-blue-focus outline-offset-2`}
+        onClick={handleClick("translate")}
+      >
+        {t("translate")}
+      </button>
+      |
+      <button
+        className={`ml-5 ${
+          currentTab === "settings" ? "font-bold" : ""
+        } outline-blue-focus outline-offset-2`}
+        onClick={handleClick("settings")}
+      >
+        {t("settings")}
+      </button>
+    </nav>
   );
 };
