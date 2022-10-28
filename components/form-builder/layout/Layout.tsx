@@ -14,7 +14,7 @@ import { Translate } from "../translate/Translate";
 import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { FormRecord } from "@lib/types";
-import { sortByLayout } from "../util";
+
 const StyledHeader = styled.h1`
   border-bottom: none;
   margin-bottom: 2rem;

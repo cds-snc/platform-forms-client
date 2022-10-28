@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../../components/form-builder/layout/Layout";
@@ -8,6 +8,7 @@ import { NextPageWithLayout } from "../../_app";
 import Footer from "../../../components/globals/Footer";
 import { getTemplateByID } from "@lib/templates";
 import { FormRecord } from "@lib/types";
+import { useRouter } from "next/router";
 
 type PageProps = {
   tab: string;
@@ -15,6 +16,11 @@ type PageProps = {
 };
 
 const Page: NextPageWithLayout<PageProps> = ({ tab, initialForm }: PageProps) => {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace(router.pathname, router.pathname, { shallow: true });
+  }, []);
+
   return <Layout tab={tab} initialForm={initialForm} />;
 };
 
