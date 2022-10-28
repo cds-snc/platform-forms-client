@@ -6,7 +6,7 @@ import useTemplateStore from "../store/useTemplateStore";
 import { FancyButton } from "../panel/Button";
 
 const PrimaryButton = styled(FancyButton)`
-  padding: 10px 15px;
+  padding: 15px 20px;
   background: #26374a;
   box-shadow: inset 0 -2px 0 #515963;
   color: white;

@@ -1,9 +1,8 @@
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
-import React, { ReactElement, ReactNode } from "react";
+import React from "react";
 
 import { appWithTranslation } from "next-i18next";
-import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import Base from "@components/globals/Base";
 import "../styles/app.scss";
@@ -24,18 +23,10 @@ const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
-};
-
-const MyApp: React.FC<AppPropsWithLayout> = ({
+const MyApp: React.FunctionComponent<AppProps> = ({
   Component,
   pageProps: { session, ...pageProps },
-}: AppPropsWithLayout) => {
+}: AppProps) => {
   return (
     <SessionProvider
       session={session}
@@ -45,13 +36,9 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
       refetchOnWindowFocus={true}
     >
       <SafeHydrate>
-        {Component.getLayout ? (
-          Component.getLayout(<Component {...pageProps} />)
-        ) : (
-          <Base>
-            <Component {...pageProps} />
-          </Base>
-        )}
+        <Base>
+          <Component {...pageProps} />
+        </Base>
       </SafeHydrate>
     </SessionProvider>
   );

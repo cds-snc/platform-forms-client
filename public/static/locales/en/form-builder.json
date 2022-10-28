@@ -33,7 +33,7 @@
   "viewCode": "View code",
   "copyButton": "Copy to clipboard",
   "copyMessage": "(template copied)",
-  "saveButton": "Save",
+  "saveButton": "Save file",
   "start": "Start",
   "startH2": "Design a form",
   "startP1": "Create a new form from scratch",
@@ -45,13 +45,10 @@
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextPrivacyTitle": "Privacy statement",
   "translate": "Translate",
-  "translateTitle": "Enter your translation",
+  "translateTitle": "Translate view",
   "textField": "Text field",
   "textArea": "Text area",
   "checkbox": "Multiple choice",
   "en-text": "English text",
-  "fr-text": "French text",
-  "questions": "Questions",
-  "settings": "Settings",
-  "testDataDelivery": "Test data delivery"
+  "fr-text": "French text"
 }
