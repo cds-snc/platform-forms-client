@@ -1,6 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { privilegeCheck, privilegePut, privilegeDelete, flushValues } from "@lib/privilegeCache";
+import {
+  privilegeCheck,
+  privilegePut,
+  privilegeDelete,
+  flushValues,
+} from "@lib/cache/privilegeCache";
 import {
   createMongoAbility,
   MongoAbility,

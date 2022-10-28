@@ -1,6 +1,6 @@
 import { FormRecord, PublicFormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { getRedisInstance } from "./integration/redisConnector";
+import { getRedisInstance } from "../integration/redisConnector";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
 const cacheAvailable: boolean =

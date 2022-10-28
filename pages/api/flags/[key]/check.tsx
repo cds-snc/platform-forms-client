@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { checkOne } from "@lib/flags";
+import { checkOne } from "@lib/cache/flags";
 import { middleware, cors } from "@lib/middleware";
 
 const allowedMethods = ["GET"];

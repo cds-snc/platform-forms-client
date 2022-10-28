@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { checkAll } from "@lib/flags";
+import { checkAll } from "@lib/cache/flags";
 import { MiddlewareProps } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists } from "@lib/middleware";

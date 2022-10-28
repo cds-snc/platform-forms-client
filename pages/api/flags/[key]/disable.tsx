@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { disableFlag, checkAll } from "@lib/flags";
+import { disableFlag, checkAll } from "@lib/cache/flags";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { MiddlewareProps } from "@lib/types";

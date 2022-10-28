@@ -3,7 +3,7 @@ import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { rehydrateFormResponses } from "@lib/helpers";
 import { getTemplateByID, getTemplateSubmissionTypeByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
-import { checkOne } from "@lib/flags";
+import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";

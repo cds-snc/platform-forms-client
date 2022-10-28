@@ -1,5 +1,5 @@
 import { logMessage } from "@lib/logger";
-import { getRedisInstance } from "./integration/redisConnector";
+import { getRedisInstance } from "../integration/redisConnector";
 import { Permission } from "@lib/types";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
@@ -9,7 +9,9 @@ const cacheAvailable: boolean =
 // Return a random number between 300 and 600  (5 - 10 minutes)
 const randomCacheExpiry = () => Math.floor(Math.random() * 300 + 300);
 
-const checkValue = async (checkParameter: string) => {
+export const privilegeCheck = async (userID: string): Promise<Permission[] | null> => {
+  const checkParameter = `auth:privileges:${userID}`;
+
   if (cacheAvailable) {
     try {
       const redis = await getRedisInstance();
@@ -27,7 +29,9 @@ const checkValue = async (checkParameter: string) => {
   return null;
 };
 
-const deleteValue = async (deleteParameter: string) => {
+export const privilegeDelete = async (userID: string): Promise<void> => {
+  const deleteParameter = `auth:privileges:${userID}`;
+
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
@@ -40,33 +44,19 @@ const deleteValue = async (deleteParameter: string) => {
   }
 };
 
-const modifyValue = async (modifyParameter: string, rules: Permission[]) => {
+export const privilegePut = async (userID: string, privileges: Permission[]): Promise<void> => {
+  const modifyParameter = `auth:privileges:${userID}`;
+
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
 
-    redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(rules));
+    redis.setex(modifyParameter, randomCacheExpiry(), JSON.stringify(privileges));
     logMessage.debug(`Updating Cached Privileges for ${modifyParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
   }
-};
-
-/*
-  Privileges
-*/
-
-export const privilegeCheck = async (userID: string): Promise<Permission[] | null> => {
-  return checkValue(`auth:privileges:${userID}`);
-};
-
-export const privilegeDelete = async (userID: string): Promise<void> => {
-  return deleteValue(`auth:privileges:${userID}`);
-};
-
-export const privilegePut = async (userID: string, privileges: Permission[]): Promise<void> => {
-  return modifyValue(`auth:privileges:${userID}`, privileges);
 };
 
 export const flushValues = async () => {

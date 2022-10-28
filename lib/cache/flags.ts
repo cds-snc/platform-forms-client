@@ -1,5 +1,5 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
-import flagInitialSettings from "../flag_initialization/default_flag_settings.json";
+import flagInitialSettings from "../../flag_initialization/default_flag_settings.json";
 import { checkPrivileges } from "@lib/privileges";
 import { MongoAbility } from "@casl/ability";
 
