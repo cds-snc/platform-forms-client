@@ -87,26 +87,21 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
 
     if (!user || !user?.privileges) throw new Error("No privileges assigned to user");
 
-    try {
-      const userPrivilegeRules = user.privileges
-        .map((privilege) => (privilege as Privilege).permissions)
-        .flat()
-        .map((p) => {
-          return p.conditions
-            ? {
-                ...p,
-                conditions: interpolatePermissionCondition(p.conditions, { user }),
-              }
-            : p;
-        });
+    const userPrivilegeRules = user.privileges
+      .map((privilege) => (privilege as Privilege).permissions)
+      .flat()
+      .map((p) => {
+        return p.conditions
+          ? {
+              ...p,
+              conditions: interpolatePermissionCondition(p.conditions, { user }),
+            }
+          : p;
+      });
 
-      await privilegePut(userId, userPrivilegeRules);
+    await privilegePut(userId, userPrivilegeRules);
 
-      return userPrivilegeRules;
-    } catch (error) {
-      logMessage.error(error);
-      throw error;
-    }
+    return userPrivilegeRules;
   } catch (e) {
     return prismaErrors(e, []);
   }
