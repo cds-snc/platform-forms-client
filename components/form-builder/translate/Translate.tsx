@@ -131,7 +131,6 @@ export const Translate = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
       <div>
         <p>
           Translate your form content side by side to provide a bilingual experience to those
