@@ -28,8 +28,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const { name, disabled, allowMulti, required, ariaDescribedBy } = props;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { value } = field;
-  const [fileName, setFileName] = useState(value?.name);
+  const [fileName, setFileName] = useState(field.name);
 
   const classes = classNames(
     "gc-file-input",
