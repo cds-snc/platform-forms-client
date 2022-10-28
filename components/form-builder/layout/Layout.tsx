@@ -50,7 +50,7 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
   // Refactor later to pass tab prop as intial state to useNavigationStore();
   useEffect(() => {
     setTab(tab);
-  }, [tab]);
+  }, []);
 
   useEffect(() => {
     if (initialForm) {
@@ -62,7 +62,7 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
       // typeRefactoredForm.form.elements = sortByLayout(typeRefactoredForm.form);
       importTemplate(typeRefactoredForm);
     }
-  }, [initialForm]);
+  }, []);
 
   /* eslint-disable */
   return (
