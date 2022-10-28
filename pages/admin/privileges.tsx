@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
-import { Privilege } from "@lib/policyBuilder";
+import { Privilege } from "@lib/types";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks";

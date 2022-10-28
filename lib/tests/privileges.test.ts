@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import { interpolatePermissionCondition } from "@lib/policyBuilder";
+import { interpolatePermissionCondition } from "@lib/privileges";
 
 describe("Provided values can be interpolated in permission condition", () => {
   it("Should succeed if condition does not require any interpolation", async () => {

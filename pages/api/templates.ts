@@ -6,7 +6,6 @@ import {
   createTemplate,
   updateTemplate,
 } from "@lib/templates";
-import { FormRecord } from "@lib/types/form-types";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
@@ -18,9 +17,9 @@ import {
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
 import { Session } from "next-auth";
-import { BetterOmit } from "@lib/types";
-import { MiddlewareProps } from "@lib/types";
-import { Ability, AccessControlError, createAbility } from "@lib/policyBuilder";
+import { BetterOmit, MiddlewareProps, FormRecord } from "@lib/types";
+import { AccessControlError, createAbility } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -95,7 +94,7 @@ const templateCRUD = async ({
   formID,
   formConfig,
 }: {
-  ability: Ability;
+  ability: MongoAbility;
   method: string;
   user: Session["user"];
   formID?: string;

@@ -1,20 +1,59 @@
+import { Prisma } from "@prisma/client";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { privilegeCheck, privilegePut, privilegeDelete, flushValues } from "@lib/privilegeCache";
 import {
-  Ability,
-  Action,
-  Subject,
-  AccessControlError,
-  Privilege,
-  interpolatePermissionCondition,
-} from "@lib/policyBuilder";
-import { Prisma } from "@prisma/client";
-import { logMessage } from "./logger";
-import { subject as setSubjectType } from "@casl/ability";
+  createMongoAbility,
+  MongoAbility,
+  RawRuleOf,
+  MongoQuery,
+  subject as setSubjectType,
+} from "@casl/ability";
+import { Abilities, Privilege, Action, Subject, ForcedSubjectType, AnyObject } from "@lib/types";
 
-interface ForcedSubjectType {
-  type: Extract<Subject, string>;
-  object: Record<string, unknown>;
+import get from "lodash/get";
+
+import { logMessage } from "./logger";
+
+/*
+This file contains references to server side only modules.
+Any attempt to import these functions into a browser will cause compilation failures
+ */
+
+export const createAbility = (rules: RawRuleOf<MongoAbility<Abilities>>[]) =>
+  createMongoAbility<MongoAbility<Abilities>>(rules);
+
+// Creates a new custom Error Class
+export class AccessControlError extends Error {}
+
+export function interpolatePermissionCondition(
+  condition: MongoQuery<AnyObject>,
+  values: AnyObject
+): MongoQuery<AnyObject> {
+  const placeHolderRegex = /\$\{[^}]*\}/g;
+  const objectPathRegex = /([a-zA-Z]+(\.*[a-zA-Z]+)+)/;
+
+  const conditionAsString = JSON.stringify(condition);
+  const placeHolder = conditionAsString.matchAll(placeHolderRegex);
+
+  const interpolatedString = Array.from(placeHolder).reduce((acc, current) => {
+    const objectPath = current[0].match(objectPathRegex);
+
+    if (objectPath) {
+      const value = get(values, objectPath[0]);
+
+      if (value !== undefined) {
+        return acc.replace(current[0], String(value));
+      } else {
+        throw new Error(
+          `Could not interpolate permission condition because of missing value (${objectPath[0]})`
+        );
+      }
+    } else {
+      throw new Error("Could not find object path in permission condition placeholder");
+    }
+  }, conditionAsString);
+
+  return JSON.parse(interpolatedString);
 }
 
 /**
@@ -76,7 +115,7 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
  * @returns
  */
 export const updatePrivilegesForUser = async (
-  ability: Ability,
+  ability: MongoAbility,
   userID: string,
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
@@ -122,7 +161,7 @@ export const updatePrivilegesForUser = async (
  * Get all privileges availabe in the application
  * @returns an array of privealges
  */
-export const getAllPrivileges = async (ability: Ability) => {
+export const getAllPrivileges = async (ability: MongoAbility) => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
     return await prisma.privilege.findMany({
@@ -144,7 +183,7 @@ export const getAllPrivileges = async (ability: Ability) => {
   }
 };
 
-export const updatePrivilege = async (ability: Ability, privilege: Privilege) => {
+export const updatePrivilege = async (ability: MongoAbility, privilege: Privilege) => {
   try {
     checkPrivileges(ability, [{ action: "update", subject: "Privilege" }]);
 
@@ -171,7 +210,7 @@ export const updatePrivilege = async (ability: Ability, privilege: Privilege) =>
   }
 };
 
-export const createPrivilege = async (ability: Ability, privilege: Privilege) => {
+export const createPrivilege = async (ability: MongoAbility, privilege: Privilege) => {
   try {
     checkPrivileges(ability, [{ action: "create", subject: "Privilege" }]);
 
@@ -214,7 +253,7 @@ function _isForceTyping(subject: Subject | ForcedSubjectType): subject is Forced
  * @param logic Use an AND or OR logic comparison
  */
 export const checkPrivileges = (
-  ability: Ability,
+  ability: MongoAbility,
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;
@@ -255,7 +294,7 @@ export const checkPrivileges = (
 };
 
 export const checkPrivilegesAsBoolean = (
-  ability: Ability,
+  ability: MongoAbility,
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;

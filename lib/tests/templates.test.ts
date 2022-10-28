@@ -23,7 +23,7 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 // Until we catch up... polyfill
 import v8 from "v8";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, createAbility } from "@lib/policyBuilder";
+import { AccessControlError, createAbility } from "@lib/privileges";
 import { Base, getUserPrivileges, ManageForms } from "__utils__/permissions";
 
 const redis = new Redis();

@@ -1,7 +1,7 @@
 import { DefaultSession, DefaultUser } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
-import { AppAbility, Ability } from "@lib/policyBuilder";
-import { RawRuleOf } from "@casl/ability";
+import { Abilities } from "@lib/types";
+import { RawRuleOf, MongoAbility } from "@casl/ability";
 
 declare module "next-auth" {
   /**
@@ -12,7 +12,7 @@ declare module "next-auth" {
       id: string;
       authorizedForm?: string;
       lastLoginTime?: Date;
-      privileges: RawRuleOf<AppAbility>[];
+      privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse?: boolean;
       name?: string | null;
       email: string | null;
@@ -22,7 +22,7 @@ declare module "next-auth" {
 
   interface User extends DefaultUser {
     id: string;
-    privileges: RawRuleOf<AppAbility>[];
+    privileges: RawRuleOf<MongoAbility<Abilities>>[];
     ability?: Ability;
   }
 
@@ -30,7 +30,7 @@ declare module "next-auth" {
     userId?: string;
     authorizedForm?: string;
     lastLoginTime?: Date;
-    privileges?: RawRuleOf<AppAbility>[];
+    privileges?: RawRuleOf<MongoAbility<Abilities>>[];
     acceptableUse?: boolean;
   }
 }

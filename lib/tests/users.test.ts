@@ -7,7 +7,7 @@
 import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, createAbility } from "@lib/policyBuilder";
+import { AccessControlError, createAbility } from "@lib/privileges";
 import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 
 describe("User query tests should fail gracefully", () => {

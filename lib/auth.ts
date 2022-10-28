@@ -11,13 +11,14 @@ import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
 import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { Ability, AccessControlError, createAbility } from "./policyBuilder";
+import { AccessControlError, createAbility } from "./privileges";
+import { MongoAbility } from "@casl/ability";
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
   user: AuthContextUser;
 }
 interface AuthContextUser extends User {
-  ability: Ability;
+  ability: MongoAbility;
 }
 
 /**

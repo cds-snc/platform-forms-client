@@ -7,8 +7,9 @@ import emailDomainList from "../../../../email.domains.json";
 import { Session } from "next-auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { MiddlewareProps } from "@lib/types";
-import { createAbility, AccessControlError, Ability } from "@lib/policyBuilder";
+import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -35,7 +36,7 @@ const handler = async (
 };
 
 export async function getEmailListByFormID(
-  ability: Ability,
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
@@ -90,7 +91,7 @@ export async function getEmailListByFormID(
  * @param res
  */
 export async function activateOrDeactivateFormOwners(
-  ability: Ability,
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session: Session
@@ -178,7 +179,7 @@ export async function activateOrDeactivateFormOwners(
  * @param res The response object
  */
 export async function addEmailToForm(
-  ability: Ability,
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session

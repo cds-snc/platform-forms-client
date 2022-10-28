@@ -1,6 +1,6 @@
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "./integration/redisConnector";
-import { Permission } from "./policyBuilder";
+import { Permission } from "@lib/types";
 
 // If NODE_ENV is in test mode (Jest Tests) do not use the cache
 const cacheAvailable: boolean =

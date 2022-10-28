@@ -6,14 +6,15 @@ import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { createAbility, Ability } from "@lib/policyBuilder";
 import {
+  createAbility,
   updatePrivilege as prismaUpdatePrivilege,
   createPrivilege as prismaCreatePrivilege,
 } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 const allowedMethods = ["GET", "PUT", "POST"];
 
-const getPrivilegeList = async (ability: Ability, res: NextApiResponse) => {
+const getPrivilegeList = async (ability: MongoAbility, res: NextApiResponse) => {
   const privileges = await getAllPrivileges(ability);
   if (privileges.length === 0) {
     res.status(500).json({ error: "Could not process request" });
@@ -23,7 +24,7 @@ const getPrivilegeList = async (ability: Ability, res: NextApiResponse) => {
 };
 
 const createPrivilege = async (
-  ability: Ability,
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session
@@ -52,7 +53,7 @@ const createPrivilege = async (
 };
 
 const updatePrivilege = async (
-  ability: Ability,
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session

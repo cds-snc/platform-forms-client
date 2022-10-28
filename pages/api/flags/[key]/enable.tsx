@@ -3,7 +3,7 @@ import { enableFlag, checkAll } from "@lib/flags";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { MiddlewareProps } from "@lib/types";
-import { AccessControlError, createAbility } from "@lib/policyBuilder";
+import { AccessControlError, createAbility } from "@lib/privileges";
 
 const allowedMethods = ["GET"];
 

@@ -1,7 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { createAbility } from "@lib/policyBuilder";
+
 import { getSession } from "next-auth/react";
-import { PureAbility, Abilities } from "@casl/ability";
+import { PureAbility, createMongoAbility, MongoAbility } from "@casl/ability";
+import { Abilities } from "@lib/types";
 
 interface AccessControlInterface {
   ability: PureAbility<Abilities, unknown> | null;
@@ -15,7 +16,7 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
   const refreshAbility = async () => {
     const session = await getSession();
     if (session !== null && session.user.privileges) {
-      const userAbility = createAbility(session.user.privileges);
+      const userAbility = createMongoAbility<MongoAbility<Abilities>>(session.user.privileges);
       setAbility(userAbility);
     }
   };

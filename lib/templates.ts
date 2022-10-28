@@ -5,7 +5,7 @@ import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "
 import { Prisma, User } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
-import { Ability } from "@lib/policyBuilder";
+import { MongoAbility } from "@casl/ability";
 
 /**
  * Creates a Form Template record
@@ -13,7 +13,7 @@ import { Ability } from "@lib/policyBuilder";
  * @returns Form Record or null if creation was not sucessfull.
  */
 async function _createTemplate(
-  ability: Ability,
+  ability: MongoAbility,
   userID: string,
   config: BetterOmit<FormRecord, "id">
 ): Promise<FormRecord | null> {
@@ -64,7 +64,7 @@ async function _createTemplate(
  * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
  * @returns An array of Form Records
  */
-async function _getAllTemplates(ability: Ability, userID: string): Promise<Array<FormRecord>> {
+async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<Array<FormRecord>> {
   checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
   const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
@@ -149,7 +149,7 @@ async function _getTemplateSubmissionTypeByID(
  * @returns The updated form template or null if the record does not exist
  */
 async function _updateTemplate(
-  ability: Ability,
+  ability: MongoAbility,
   formID: string,
   formConfig: BetterOmit<FormRecord, "id" | "bearerToken">
 ): Promise<FormRecord | null> {
@@ -195,7 +195,7 @@ async function _updateTemplate(
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful
  */
-async function _deleteTemplate(ability: Ability, formID: string): Promise<FormRecord | null> {
+async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<FormRecord | null> {
   const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
   if (!formRecordWithAssociatedUsers) return null;
 

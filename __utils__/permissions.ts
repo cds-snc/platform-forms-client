@@ -1,13 +1,13 @@
-import { AppAbility } from "@lib/policyBuilder";
-import { RawRuleOf } from "@casl/ability";
-import { interpolatePermissionCondition } from "@lib/policyBuilder";
+import { interpolatePermissionCondition } from "@lib/privileges";
+import { Abilities } from "@lib/types/privileges-types";
+import { RawRuleOf, MongoAbility } from "@casl/ability";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 };
 
-export const Base: RawRuleOf<AppAbility>[] = [
+export const Base: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "create", subject: "FormRecord" },
   {
     action: ["view", "update", "delete"],
@@ -23,7 +23,7 @@ export const Base: RawRuleOf<AppAbility>[] = [
   },
 ];
 
-export const PublishForms: RawRuleOf<AppAbility>[] = [
+export const PublishForms: RawRuleOf<MongoAbility<Abilities>>[] = [
   {
     action: ["update"],
     subject: "FormRecord",
@@ -32,36 +32,39 @@ export const PublishForms: RawRuleOf<AppAbility>[] = [
   },
 ];
 
-export const ManageForms: RawRuleOf<AppAbility>[] = [
+export const ManageForms: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: ["create", "view", "update", "delete"], subject: "FormRecord" },
 ];
 
-export const ViewUserPrivileges: RawRuleOf<AppAbility>[] = [
+export const ViewUserPrivileges: RawRuleOf<MongoAbility<Abilities>>[] = [
   {
     action: "view",
     subject: ["User", "Privilege"],
   },
 ];
 
-export const ManageUsers: RawRuleOf<AppAbility>[] = [
+export const ManageUsers: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: ["User", "Privilege"] },
   { action: "update", subject: "User" },
 ];
 
-export const ManagePrivileges: RawRuleOf<AppAbility>[] = [
+export const ManagePrivileges: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: ["create", "view", "update", "delete"], subject: "Privilege" },
 ];
 
-export const ViewApplicationSettings: RawRuleOf<AppAbility>[] = [
+export const ViewApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: "Flag" },
 ];
 
-export const ManageApplicationSettings: RawRuleOf<AppAbility>[] = [
+export const ManageApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "view", subject: "Flag" },
   { action: "update", subject: "Flag" },
 ];
 
-export const getUserPrivileges = (permissionSet: RawRuleOf<AppAbility>[], values: AnyObject) => {
+export const getUserPrivileges = (
+  permissionSet: RawRuleOf<MongoAbility<Abilities>>[],
+  values: AnyObject
+) => {
   return permissionSet.map((p) => {
     return p.conditions
       ? {

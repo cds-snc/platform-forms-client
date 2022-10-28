@@ -5,9 +5,9 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { MiddlewareProps } from "@lib/types";
-import { createAbility, Ability, AccessControlError } from "@lib/policyBuilder";
-import { checkPrivileges } from "@lib/privileges";
+import { createAbility, checkPrivileges, AccessControlError } from "@lib/privileges";
 import { Session } from "next-auth";
+import { MongoAbility } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -48,7 +48,7 @@ const handler = async (
  * @param res The response object containing all that is needed to return a response
  */
 export async function createToken(
-  ability: Ability,
+  ability: MongoAbility,
   formID: string,
   res: NextApiResponse,
   session: Session
@@ -123,7 +123,7 @@ export async function createToken(
  * @returns Bearer Token if it exists
  */
 export async function getToken(
-  ability: Ability,
+  ability: MongoAbility,
   formID: string,
   res: NextApiResponse
 ): Promise<void> {

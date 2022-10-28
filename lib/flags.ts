@@ -1,14 +1,14 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../flag_initialization/default_flag_settings.json";
 import { checkPrivileges } from "@lib/privileges";
-import { Ability } from "./policyBuilder";
+import { MongoAbility } from "@casl/ability";
 
 /**
  * Enables an Application Setting Flag
  * @param ability User's Ability Instance
  * @param key Applicaiton setting flag key
  */
-export const enableFlag = async (ability: Ability, key: string): Promise<void> => {
+export const enableFlag = async (ability: MongoAbility, key: string): Promise<void> => {
   checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
   const redis = await getRedisInstance();
   await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
@@ -19,7 +19,7 @@ export const enableFlag = async (ability: Ability, key: string): Promise<void> =
  * @param ability User's Ability Instance
  * @param key Application setting flag key
  */
-export const disableFlag = async (ability: Ability, key: string): Promise<void> => {
+export const disableFlag = async (ability: MongoAbility, key: string): Promise<void> => {
   checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
   const redis = await getRedisInstance();
   await redis.set(`flag:${key}`, "0");
@@ -50,7 +50,7 @@ export const checkOne = async (key: string): Promise<boolean> => {
  * @param ability User's Ability Instance
  * @returns An object of {flag: value ...}
  */
-export const checkAll = async (ability: Ability): Promise<{ [k: string]: boolean }> => {
+export const checkAll = async (ability: MongoAbility): Promise<{ [k: string]: boolean }> => {
   checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
   const keys = await getKeys();
   return checkMulti(keys);

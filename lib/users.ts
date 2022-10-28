@@ -2,8 +2,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { DefaultJWT } from "next-auth/jwt";
 import { ApiAccessLog } from "@prisma/client";
 import { LoggingAction } from "./auth";
-import { Ability } from "./policyBuilder";
 import { checkPrivileges } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 
 /**
  * Get or Create a user if a record does not exist
@@ -88,7 +88,7 @@ export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT)
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (ability: Ability) => {
+export const getUsers = async (ability: MongoAbility) => {
   checkPrivileges(ability, [{ action: "view", subject: "User" }]);
 
   const users = await prisma.user
