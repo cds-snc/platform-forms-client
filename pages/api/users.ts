@@ -24,7 +24,7 @@ const updatePrivilegeOnUser = async (
   ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
-  session?: Session
+  session: Session
 ) => {
   const { userID, privileges } = req.body;
   if (
@@ -37,9 +37,8 @@ const updatePrivilegeOnUser = async (
 
   const result = await updatePrivilegesForUser(ability, userID, privileges);
   logMessage.info(AdminLogAction.Update);
-  if (result) {
-    if (session && session.user.id) {
-      /*
+  if (result && session && session.user.id) {
+    /*
       await logAdminActivity(
         session.user.id,
         AdminLogAction.Update,
@@ -47,7 +46,7 @@ const updatePrivilegeOnUser = async (
         `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userId}`
       );
       */
-    }
+
     return res.status(200).send("Success");
   } else {
     return res.status(404).json({ error: "User not found" });
