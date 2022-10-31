@@ -15,6 +15,7 @@ import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
+import { DataDeliveryInstructions } from "./DataDeliveryInstructions";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -75,10 +76,10 @@ export const Layout = () => {
 
         {currentTab === "test-data-delivery" && (
           <div className="col-start-4 col-span-9">
-            Data delivery
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+            <h1 className="border-0 mb-0">Test your response delivery</h1>
+            <DataDeliveryInstructions />
             <StyledPreviewWrapper>
-              <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
               <Preview isPreview={false} />
             </StyledPreviewWrapper>
           </div>
