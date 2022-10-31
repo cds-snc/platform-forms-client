@@ -1,5 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import useTemplateStore from "../store/useTemplateStore";
+import useNavigationStore from "../store/useNavigationStore";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -70,6 +72,8 @@ export const Button = ({
 
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
+  const { initialize } = useTemplateStore();
+  const { setTab } = useNavigationStore();
 
   return (
     <>
@@ -102,7 +106,14 @@ export const Settings = () => {
           <Label htmlFor="delete">{t("settingsDeleteTitle")}</Label>
           <HintText id="delete-hint">{t("settingsDeleteHint")}</HintText>
           <div className="mt-4">
-            <Button id="delete-form" theme="destructive">
+            <Button
+              id="delete-form"
+              theme="destructive"
+              onClick={() => {
+                initialize(); // Reset the form
+                setTab("start"); // Back to start page
+              }}
+            >
               {t("settingsDeleteButton")}
             </Button>
           </div>
