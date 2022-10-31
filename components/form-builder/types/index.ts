@@ -133,7 +133,9 @@ export interface ModalStore {
 
 export interface NavigationStore {
   currentTab: string;
+  formId: string;
   setTab: (tab: string) => void;
+  setFormId: (id: string) => void;
 }
 
 export interface ElementOption {
