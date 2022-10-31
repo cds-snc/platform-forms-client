@@ -1,6 +1,6 @@
 import { getTemplateByID, onlyIncludePublicProperties } from "@lib/templates";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { checkOne } from "@lib/flags";
+import { checkOne } from "@lib/cache/flags";
 import React from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";

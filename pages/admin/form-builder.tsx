@@ -2,8 +2,8 @@ import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { Layout } from "../../components/form-builder/layout/Layout";
+import { checkPrivileges } from "@lib/privileges";
 import { Header } from "../../components/form-builder/layout/Header";
-import { UserRole } from "@prisma/client";
 import { NextPageWithLayout } from "../../pages/_app";
 import Footer from "../../components/globals/Footer";
 
@@ -21,13 +21,13 @@ Page.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
+export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+  checkPrivileges(ability, [{ action: "update", subject: "FormRecord" }]);
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "form-builder"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
     },
   };
-}, UserRole.ADMINISTRATOR);
+});
 
 export default Page;

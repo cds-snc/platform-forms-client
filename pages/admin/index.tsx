@@ -4,7 +4,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import Link from "next/link";
 import { User } from "next-auth";
-import { UserRole } from "@prisma/client";
 
 type AdminWelcomeProps = {
   user: User;
@@ -53,13 +52,12 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
+export const getServerSideProps = requireAuthentication(async ({ locale }) => {
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "admin-login"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-login"]))),
     },
   };
-}, UserRole.ADMINISTRATOR);
+});
 
 export default AdminWelcome;

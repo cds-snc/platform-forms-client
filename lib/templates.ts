@@ -1,67 +1,32 @@
 import { logger } from "@lib/logger";
-import { formCache } from "./formCache";
+import { formCache } from "./cache/formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
-
-// Get the submission format by using the form ID
-// Returns => json object of the submission details.
-async function _getSubmissionTypeByID(formID: string): Promise<SubmissionProperties | null> {
-  try {
-    const template = await prisma.template.findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        jsonConfig: true,
-      },
-    });
-    if (template?.jsonConfig) {
-      return (template.jsonConfig as Prisma.JsonObject as FormRecord).submission;
-    }
-
-    return null;
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
-}
-
-/**
- * Get a form template based on publishing status
- * @param status A boolean indicating the publishing status requested
- * @returns A Public Form Record
- */
-
-async function _getTemplateByStatus(status: boolean): Promise<(PublicFormRecord | undefined)[]> {
-  try {
-    const templates = (await prisma.template.findMany()).map((template) =>
-      _parseTemplate(template)
-    );
-    const sanitizedResponse = templates.map((template) => onlyIncludePublicProperties(template));
-    if (sanitizedResponse && sanitizedResponse?.length > 0) {
-      return sanitizedResponse.filter(
-        (val) => typeof val !== "undefined" && val !== null && val.publishingStatus === status
-      );
-    }
-    return [];
-  } catch (e) {
-    return prismaErrors(e, []);
-  }
-}
+import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
+import { MongoAbility } from "@casl/ability";
 
 /**
  * Creates a Form Template record
  * @param config Form Template configuration
  * @returns Form Record or null if creation was not sucessfull.
  */
-
-async function _createTemplate(config: BetterOmit<FormRecord, "id">): Promise<FormRecord | null> {
+async function _createTemplate(
+  ability: MongoAbility,
+  userID: string,
+  config: BetterOmit<FormRecord, "id">
+): Promise<FormRecord | null> {
   try {
+    checkPrivileges(ability, [{ action: "create", subject: "FormRecord" }]);
+
     const createdTemplate = _parseTemplate(
       await prisma.template.create({
         data: {
           jsonConfig: config as Prisma.JsonObject,
+          users: {
+            connect: { id: userID },
+          },
         },
       })
     );
@@ -75,6 +40,7 @@ async function _createTemplate(config: BetterOmit<FormRecord, "id">): Promise<Fo
         expiresIn: "1y",
       }
     );
+
     return _parseTemplate(
       await prisma.template.update({
         where: {
@@ -95,16 +61,116 @@ async function _createTemplate(config: BetterOmit<FormRecord, "id">): Promise<Fo
 }
 
 /**
+ * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
+ * @returns An array of Form Records
+ */
+async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<Array<FormRecord>> {
+  checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+
+  const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+        object: {},
+      },
+    },
+  ]);
+
+  const templates = await prisma.template
+    .findMany({
+      where: {
+        ...(!canUserAccessAllTemplates && {
+          users: {
+            some: {
+              id: userID,
+            },
+          },
+        }),
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, []));
+
+  return templates.map((template) => _parseTemplate(template));
+}
+
+/**
+ * Get a form template by ID
+ * @param formID ID of form template
+ * @returns Form Record
+ */
+async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
+  if (formCache.cacheAvailable) {
+    // This value will always be the latest if it exists because
+    // the cache is invalidated on change of a template
+    const cachedValue = await formCache.formID.check(formID);
+    if (cachedValue) {
+      return cachedValue;
+    }
+  }
+
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  // Short circuit the public record filtering if no form record is found
+  if (!template) return null;
+
+  const parsedTemplate = _parseTemplate(template);
+  if (formCache.cacheAvailable) formCache.formID.set(formID, parsedTemplate);
+
+  return parsedTemplate;
+}
+
+// Get the submission format by using the form ID
+// Returns => json object of the submission details.
+async function _getTemplateSubmissionTypeByID(
+  formID: string
+): Promise<SubmissionProperties | null> {
+  return _getTemplateByID(formID).then((formRecord) => formRecord?.submission ?? null);
+}
+
+/**
  * Update a form template
  * @param template A Form Record containing updated information
  * @returns The updated form template or null if the record does not exist
  */
 async function _updateTemplate(
+  ability: MongoAbility,
   formID: string,
   formConfig: BetterOmit<FormRecord, "id" | "bearerToken">
 ): Promise<FormRecord | null> {
-  try {
-    const updatedTempate = await prisma.template.update({
+  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
+  if (!formRecordWithAssociatedUsers) return null;
+
+  checkPrivileges(ability, [
+    {
+      action: "update",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...formRecordWithAssociatedUsers.formRecord,
+          users: formRecordWithAssociatedUsers.users,
+        },
+      },
+    },
+  ]);
+
+  const updatedTemplate = await prisma.template
+    .update({
       where: {
         id: formID,
       },
@@ -115,12 +181,13 @@ async function _updateTemplate(
         id: true,
         jsonConfig: true,
       },
-    });
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-    return _parseTemplate(updatedTempate);
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  return _parseTemplate(updatedTemplate);
 }
 
 /**
@@ -128,9 +195,25 @@ async function _updateTemplate(
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful
  */
-async function _deleteTemplate(formID: string): Promise<FormRecord | null> {
-  try {
-    const deletedTemplate = await prisma.template.delete({
+async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<FormRecord | null> {
+  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
+  if (!formRecordWithAssociatedUsers) return null;
+
+  checkPrivileges(ability, [
+    {
+      action: "delete",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...formRecordWithAssociatedUsers.formRecord,
+          users: formRecordWithAssociatedUsers.users,
+        },
+      },
+    },
+  ]);
+
+  const deletedTemplate = await prisma.template
+    .delete({
       where: {
         id: formID,
       },
@@ -138,69 +221,41 @@ async function _deleteTemplate(formID: string): Promise<FormRecord | null> {
         id: true,
         jsonConfig: true,
       },
-    });
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-    return _parseTemplate(deletedTemplate);
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  // There was an error with Prisma, do not delete from Cache.
+  if (deletedTemplate === null) return deletedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+  return _parseTemplate(deletedTemplate);
 }
 
-/**
- * Get all form templates
- * @returns An array of Form Records
- */
-async function _getAllTemplates(): Promise<Array<FormRecord>> {
+async function _getFormRecordWithAssociatedUsers(
+  formID: string
+): Promise<{ formRecord: FormRecord; users: User[] } | null> {
   try {
-    const templates = await prisma.template.findMany({
-      select: {
-        id: true,
-        jsonConfig: true,
-      },
-    });
-    return templates.map((template) => _parseTemplate(template));
-  } catch (e) {
-    return prismaErrors(e, []);
-  }
-}
-
-/**
- * Get a form template by ID
- * @param formID ID of form template
- * @returns Form Record
- */
-
-async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
-  try {
-    if (formCache.cacheAvailable) {
-      // This value will always be the latest if it exists because
-      // the cache is invalidated on change of a template
-      const cachedValue = await formCache.formID.check(formID);
-      if (cachedValue) {
-        return cachedValue;
-      }
-    }
-    const template = await prisma.template.findUnique({
+    const templateWithUsers = await prisma.template.findUnique({
       where: {
         id: formID,
       },
       select: {
         id: true,
         jsonConfig: true,
+        users: true,
       },
     });
+    if (!templateWithUsers) return null;
 
-    // Short circuit the public record filtering if no form record is found
-    if (!template) return null;
+    const parsedTemplate = _parseTemplate(templateWithUsers);
 
-    const parsedTemplate = _parseTemplate(template);
-    if (formCache.cacheAvailable) formCache.formID.set(formID, parsedTemplate);
-
-    return parsedTemplate;
+    return { formRecord: parsedTemplate, users: templateWithUsers.users };
   } catch (e) {
     return prismaErrors(e, null);
   }
 }
+
 /*
  * Extract only the public properties from a form record.
  * The public properties are the ones that are needed to display the form
@@ -241,8 +296,7 @@ const _parseTemplate = (template: { id: string; jsonConfig: Prisma.JsonValue }):
 export const createTemplate = logger(_createTemplate);
 export const getAllTemplates = logger(_getAllTemplates);
 export const getTemplateByID = logger(_getTemplateByID);
+export const getTemplateSubmissionTypeByID = logger(_getTemplateSubmissionTypeByID);
 export const updateTemplate = logger(_updateTemplate);
 export const deleteTemplate = logger(_deleteTemplate);
-export const getTemplateByStatus = logger(_getTemplateByStatus);
-export const getSubmissionTypeByID = logger(_getSubmissionTypeByID);
 export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);
