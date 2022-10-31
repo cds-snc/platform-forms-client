@@ -24,6 +24,7 @@
   "placeHolderFormTitle": "Form Title",
   "share": "Share",
   "save": "Save",
+  "edit": "Edit",
   "saveH1": "Save your progress",
   "saveP1": "We don’t save your form on our website, but don’t worry, you can save the file to your computer.",
   "saveP2": "Save the form file to work on later, and open it again to pick-up where you left off.",
@@ -67,5 +68,17 @@
   "incomplete": "Incomplete",
   "navLabelFormBuilder": "Form builder navigation",
   "navLabelEditor": "Edit navigation",
-  "navLabelPreview": "Preview navigation"
+  "navLabelPreview": "Preview navigation",
+  "settingsReponseTitle": "Response delivery destination",
+  "settingsReponseHint1": "Provide a Government of Canada email address to send form responses to.",
+  "settingsReponseHint2": "In order to publish, you need to provide a response delivery destination.",
+  "settingsFormatTitle": "Original format",
+  "settingsFormatHint": "What is the original form format you are designing from?",
+  "settingsFormatOption1": "PDF",
+  "settingsFormatOption2": "Paper document",
+  "settingsFormatOption3": "Work document",
+  "settingsFormatOption4": "Other",
+  "settingsDeleteTitle": "Delete form",
+  "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
+  "settingsDeleteButton": "Delete"
 }

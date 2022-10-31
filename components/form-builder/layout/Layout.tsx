@@ -14,6 +14,7 @@ import { Translate } from "../translate/Translate";
 import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
+import { Settings } from "./Settings";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -89,6 +90,14 @@ export const Layout = () => {
         {currentTab === "publish" && (
           <div className="col-start-4 col-span-9">
             <Publish />
+          </div>
+        )}
+
+        {currentTab === "settings" && (
+          <div className="col-start-4 col-span-9">
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+            <h1 className="visually-hidden">Form settings</h1>
+            <Settings />
           </div>
         )}
 

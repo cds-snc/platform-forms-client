@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
+import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon } from "../icons";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
 function Button({
@@ -43,22 +43,15 @@ export const LeftNavigation = ({
   return (
     <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
       <Button
-        isCurrentTab={currentTab === "start"}
-        icon={<DesignIcon className={iconClassname} />}
-        handleClick={handleClick("start")}
-      >
-        {t("start")}
-      </Button>
-      <Button
         isCurrentTab={["create", "translate", "settings"].includes(currentTab)}
-        icon={<PreviewIcon className={iconClassname} />}
+        icon={<DesignIcon className={iconClassname} />}
         handleClick={handleClick("create")}
       >
-        {t("design")}
+        {t("edit")}
       </Button>
       <Button
         isCurrentTab={["preview", "test-data-delivery"].includes(currentTab)}
-        icon={<ShareIcon className={iconClassname} />}
+        icon={<PreviewIcon className={iconClassname} />}
         handleClick={handleClick("preview")}
       >
         {t("preview")}
@@ -67,7 +60,7 @@ export const LeftNavigation = ({
       {isSaveable() && (
         <Button
           isCurrentTab={currentTab === "save"}
-          icon={<SaveIcon className={iconClassname} />}
+          icon={<ShareIcon className={iconClassname} />}
           handleClick={handleClick("save")}
         >
           {t("save")}
