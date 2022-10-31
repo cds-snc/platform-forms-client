@@ -207,7 +207,7 @@ describe("Test templates API functions", () => {
         users: [{ id: "1" }],
       });
 
-      (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
         id: "test0form00000id000asdf11",
         jsonConfig: validFormTemplate,
       });

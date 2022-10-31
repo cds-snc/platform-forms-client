@@ -1,6 +1,6 @@
 import { Template } from "@prisma/client";
 
-type TemplateSeed = Omit<Template, "id" | "bearerToken" | "apiUsers" | "users">;
+type TemplateSeed = Omit<Template, "id" | "bearerToken" | "ttl" | "apiUsers" | "users">;
 type TemplateCollection = {
   development: TemplateSeed[];
   production: TemplateSeed[];

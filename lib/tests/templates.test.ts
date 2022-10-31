@@ -129,7 +129,9 @@ describe("Template CRUD functions", () => {
     await getAllTemplates(ability, "1");
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
-      where: {},
+      where: {
+        ttl: null,
+      },
       select: {
         id: true,
         jsonConfig: true,
@@ -151,6 +153,7 @@ describe("Template CRUD functions", () => {
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
       where: {
+        ttl: null,
         users: {
           some: {
             id: "1",
@@ -179,6 +182,7 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         jsonConfig: true,
+        ttl: true,
       },
     });
 
@@ -192,6 +196,18 @@ describe("Template CRUD functions", () => {
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
     const template = await getTemplateByID("asdf");
+    expect(template).toBe(null);
+  });
+
+  test("Get template by id returns null if item is marked as archived", async () => {
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      ttl: new Date(),
+    });
+
+    const template = await getTemplateByID("formtestID");
+
     expect(template).toBe(null);
   });
 
@@ -254,22 +270,27 @@ describe("Template CRUD functions", () => {
       users: [{ id: "1" }],
     });
 
-    (prismaMock.template.delete as jest.MockedFunction<any>).mockResolvedValue({
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
       jsonConfig: formConfiguration,
     });
 
     const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
-    expect(prismaMock.template.delete).toHaveBeenCalledWith({
-      where: {
-        id: "formtestID",
-      },
-      select: {
-        id: true,
-        jsonConfig: true,
-      },
-    });
+    expect(prismaMock.template.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          id: "formtestID",
+        },
+        data: {
+          ttl: expect.any(Date),
+        },
+        select: {
+          id: true,
+          jsonConfig: true,
+        },
+      })
+    );
 
     expect(deletedTemplate).toEqual({
       id: "formtestID",
