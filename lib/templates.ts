@@ -81,6 +81,7 @@ async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<
   const templates = await prisma.template
     .findMany({
       where: {
+        ttl: null,
         ...(!canUserAccessAllTemplates && {
           users: {
             some: {
@@ -122,14 +123,16 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
       select: {
         id: true,
         jsonConfig: true,
+        ttl: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
 
-  // Short circuit the public record filtering if no form record is found
-  if (!template) return null;
+  // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
+  if (!template || template.ttl) return null;
 
   const parsedTemplate = _parseTemplate(template);
+
   if (formCache.cacheAvailable) formCache.formID.set(formID, parsedTemplate);
 
   return parsedTemplate;
@@ -191,7 +194,7 @@ async function _updateTemplate(
 }
 
 /**
- * Deletes a form template
+ * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful
  */
@@ -212,10 +215,15 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
     },
   ]);
 
-  const deletedTemplate = await prisma.template
-    .delete({
+  const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
+
+  const templateMarkedAsDeleted = await prisma.template
+    .update({
       where: {
         id: formID,
+      },
+      data: {
+        ttl: dateIn30Days,
       },
       select: {
         id: true,
@@ -225,11 +233,11 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
     .catch((e) => prismaErrors(e, null));
 
   // There was an error with Prisma, do not delete from Cache.
-  if (deletedTemplate === null) return deletedTemplate;
+  if (templateMarkedAsDeleted === null) return templateMarkedAsDeleted;
 
   if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
 
-  return _parseTemplate(deletedTemplate);
+  return _parseTemplate(templateMarkedAsDeleted);
 }
 
 async function _getFormRecordWithAssociatedUsers(
