@@ -86,8 +86,8 @@ export type publishRequiredFields =
 
 export interface TemplateSchema {
   form: FormSchema;
-  submission?: {
-    email?: string;
+  submission: {
+    email: string;
   };
   publishingStatus: boolean;
 }
