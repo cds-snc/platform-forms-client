@@ -8,7 +8,6 @@ import { signIn } from "next-auth/react";
 
 import { Button } from "@components/forms";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { UserRole } from "@prisma/client";
 
 const Login = (): JSX.Element => {
   const { t } = useTranslation("admin-login");
@@ -29,9 +28,8 @@ const Login = (): JSX.Element => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
 
-  if (session?.user.role === UserRole.ADMINISTRATOR)
+  if (session)
     return {
-      props: {},
       redirect: {
         destination: `/${context.locale}/admin/`,
         permanent: false,
@@ -40,7 +38,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   if (session)
     return {
-      props: {},
       redirect: {
         destination: `/${context.locale}/admin/unauthorized/`,
         permanent: false,

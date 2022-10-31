@@ -1,5 +1,7 @@
 import { DefaultSession, DefaultUser } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
+import { Abilities } from "@lib/types";
+import { RawRuleOf, MongoAbility } from "@casl/ability";
 
 declare module "next-auth" {
   /**
@@ -7,27 +9,28 @@ declare module "next-auth" {
    */
   interface Session extends DefaultSession {
     user: {
-      userId?: string;
+      id: string;
       authorizedForm?: string;
       lastLoginTime?: Date;
-      role?: string;
+      privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse?: boolean;
       name?: string | null;
-      email?: string | null;
+      email: string | null;
       image?: string | null;
     };
   }
 
   interface User extends DefaultUser {
     id: string;
-    role?: string | null;
+    privileges: RawRuleOf<MongoAbility<Abilities>>[];
+    ability?: Ability;
   }
 
   interface JWT extends DefaultJWT {
     userId?: string;
     authorizedForm?: string;
     lastLoginTime?: Date;
-    role?: string;
+    privileges?: RawRuleOf<MongoAbility<Abilities>>[];
     acceptableUse?: boolean;
   }
 }

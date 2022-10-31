@@ -1,13 +1,15 @@
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@lib/integration/prismaConnector";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
 import { Session } from "next-auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { logMessage } from "@lib/logger";
 import { MiddlewareProps } from "@lib/types";
+import { createAbility, AccessControlError } from "@lib/privileges";
+import { checkPrivileges } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -15,54 +17,67 @@ const handler = async (
   { session }: MiddlewareProps
 ): Promise<void> => {
   try {
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
+    const ability = createAbility(session.user.privileges);
     switch (req.method) {
       case "GET":
-        return await getEmailListByFormID(req, res);
+        return await getEmailListByFormID(ability, req, res);
       case "PUT":
-        return await activateOrDeactivateFormOwners(req, res, session);
+        return await activateOrDeactivateFormOwners(ability, req, res, session);
       case "POST":
-        return await addEmailToForm(req, res, session);
+        return await addEmailToForm(ability, req, res, session);
       default:
         return res.status(400).json({ error: "Bad Request" });
     }
   } catch (err) {
+    if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     res.status(500).json({ error: "Error on Server Side" });
   }
 };
 
 export async function getEmailListByFormID(
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  const formID = req.query.form as string;
+  const formID = req.query.form;
+  if (Array.isArray(formID) || !formID)
+    return res.status(400).json({ error: "Malformed API Request FormID not define" });
+
   if (formID) {
-    try {
-      //Get emails by formID
-      const emailList = await prisma.formUser.findMany({
+    const emailList = await prisma.template
+      .findUnique({
         where: {
-          templateId: formID,
+          id: formID,
         },
         select: {
-          id: true,
-          email: true,
-          active: true,
+          apiUsers: {
+            select: {
+              id: true,
+              email: true,
+              active: true,
+            },
+          },
+          users: {
+            select: {
+              id: true,
+            },
+          },
         },
-      });
+      })
+      .catch((e) => prismaErrors(e, null));
 
-      //Return all emails associated with formID
-      if (emailList) return res.status(200).json(emailList);
+    // The prisma response will be null if the form is not found
 
-      // If emailList is undefined it's because an underlying Prisma error was thrown
-      throw new Error("Prisma Engine Error");
-    } catch (e) {
-      // For production tracabiltiy
-      logMessage.info(e as Error);
-      //Otherwise a 404 form Not Found
-      return res.status(404).json({ error: "Form Not Found" });
-    }
+    if (!emailList) return res.status(404).json({ error: "Form Not Found" });
+
+    checkPrivileges(ability, [
+      { action: "view", subject: { type: "FormRecord", object: emailList } },
+    ]);
+
+    //Return all emails associated with formID
+    if (emailList) return res.status(200).json(emailList.apiUsers);
   }
-  //Could not find formID in the path
-  return res.status(400).json({ error: "Malformed API Request FormID not define" });
 }
 /**
  * It will activate and deactivate all the owners associated to a specific form.
@@ -74,9 +89,10 @@ export async function getEmailListByFormID(
  * @param res
  */
 export async function activateOrDeactivateFormOwners(
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
-  session?: Session
+  session: Session
 ): Promise<void> {
   try {
     //Extracting req body
@@ -86,10 +102,32 @@ export async function activateOrDeactivateFormOwners(
       //Invalid payload
       return res.status(400).json({ error: "Invalid payload fields are not define" });
     }
-    const formID = req.query.form as string;
-    if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
+
+    const formID = req.query.form;
+    if (Array.isArray(formID) || !formID)
+      return res.status(400).json({ error: "Malformed API Request FormID not define" });
+
+    // check if user is an owner on the form
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!template) return res.status(404).json({ error: "Form Not Found" });
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: template } },
+    ]);
+
     //Update form_users's records
-    const updatedRecord = await prisma.formUser.update({
+    const updatedRecord = await prisma.apiUser.update({
       where: {
         templateId_email: {
           templateId: formID,
@@ -105,9 +143,9 @@ export async function activateOrDeactivateFormOwners(
       },
     });
 
-    if (session && session.user.userId) {
+    if (session && session.user.id) {
       await logAdminActivity(
-        session.user.userId,
+        session.user.id,
         AdminLogAction.Update,
         active ? AdminLogEvent.GrantFormAccess : AdminLogEvent.RevokeFormAccess,
         `Access to form id: ${formID} has been ${
@@ -122,8 +160,9 @@ export async function activateOrDeactivateFormOwners(
     //A 404 status code for a form Not Found in form_users
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
       // Error P2025: Record to update not found.
-      return res.status(404).json({ error: "Form or email Not Found" });
+      return res.status(404).json({ error: "Email Not Found" });
     }
+    if (e instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     return res.status(500).json({ error: "Could not process request" });
   }
 }
@@ -138,6 +177,7 @@ export async function activateOrDeactivateFormOwners(
  * @param res The response object
  */
 export async function addEmailToForm(
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session
@@ -147,11 +187,32 @@ export async function addEmailToForm(
   if (!isValidGovEmail(email, emailDomainList.domains)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
-  const formID = req.query.form as string;
-  if (!formID) return res.status(400).json({ error: "Malformed API Request Invalid formID" });
+  const formID = req.query.form;
+  if (Array.isArray(formID) || !formID)
+    return res.status(400).json({ error: "Malformed API Request FormID not define" });
+
   try {
+    // check if user is an owner on the form
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    if (!template) return res.status(404).json({ error: "Form Not Found" });
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: template } },
+    ]);
+
     // Will throw an error if the user and templateID unique id already exist
-    const formUserID = await prisma.formUser.create({
+    const formUserID = await prisma.apiUser.create({
       data: {
         templateId: formID,
         email: email,
@@ -161,9 +222,9 @@ export async function addEmailToForm(
       },
     });
 
-    if (session && session.user.userId) {
+    if (session && session.user.id) {
       await logAdminActivity(
-        session.user.userId,
+        session.user.id,
         AdminLogAction.Create,
         AdminLogEvent.GrantInitialFormAccess,
         `Email: ${email} has been given access to form id: ${formID}`

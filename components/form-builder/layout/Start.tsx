@@ -25,6 +25,10 @@ const StyledContainer = styled.div`
     padding: 110px 20px 0 25px;
     text-align: left;
 
+    &:first-child svg {
+      transform: scale(1.33);
+    }
+
     &:hover,
     &:focus {
       cursor: pointer;
