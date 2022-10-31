@@ -15,13 +15,23 @@ const StyledH2 = styled.h2`
 export const Header = () => {
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
-  const { currentTab } = useNavigationStore();
+  const { currentTab, setTab } = useNavigationStore();
+
+  const handleClick = (tab: string) => {
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      setTab(tab);
+    };
+  };
+
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
       <div className="container--wet">
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div className="">
-            <StyledH2>GC Forms</StyledH2>
+            <StyledH2>
+              <button onClick={handleClick("start")}>GC Forms</button>
+            </StyledH2>
             {currentTab !== "start" && isSaveable() && <DownloadFileButton />}
           </div>
           <div className="inline-flex">
