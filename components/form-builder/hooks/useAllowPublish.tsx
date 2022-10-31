@@ -8,6 +8,7 @@ import {
   Title,
 } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
+import { useAccessControl } from "@lib/hooks";
 
 export const MissingTranslation = {};
 
@@ -72,11 +73,14 @@ export const isFormTranslated = (form: FormSchema) => {
 };
 
 export const useAllowPublish = () => {
+  const { ability } = useAccessControl();
   const { form, submission } = useTemplateStore();
   let email = "";
   if (submission?.email) {
     email = submission?.email;
   }
+
+  const userCanPublish = ability?.can("update", "FormRecord", "[publishingStatus]");
 
   const data = {
     title: !!form.titleEn || !!form.titleFr,
@@ -105,5 +109,5 @@ export const useAllowPublish = () => {
     return hasData(["title", "questions"]);
   }, [hasData]);
 
-  return { data, hasData, isPublishable, isSaveable };
+  return { data, hasData, isPublishable, isSaveable, userCanPublish };
 };
