@@ -47,8 +47,8 @@ export const defaultForm = {
     descriptionFr: "",
   },
   elements: [],
-  emailSubjectEn: "",
-  emailSubjectFr: "",
+  emailSubjectEn: "Form builder test [en]",
+  emailSubjectFr: "Form builder test [fr]",
 };
 
 const useTemplateStore = create<ElementStore>()(
@@ -60,7 +60,7 @@ const useTemplateStore = create<ElementStore>()(
     submission: {
       email: "test@example.com",
     },
-    publishingStatus: true,
+    publishingStatus: false,
     localizeField: (path, lang = get().lang) => {
       const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
         lang.slice(1)) as Capitalize<Language>;
@@ -147,7 +147,7 @@ const useTemplateStore = create<ElementStore>()(
         state.lang = "en";
         state.form = defaultForm;
         state.submission = { email: "test@example.com" };
-        state.publishingStatus = true;
+        state.publishingStatus = false;
       });
     },
     importTemplate: (json) =>
