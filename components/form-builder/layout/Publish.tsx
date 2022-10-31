@@ -95,7 +95,7 @@ export const Publish = () => {
       </p>
       {isPublishable() && (
         <>
-          <PrimaryButton onClick={handlePublish} disabled={formId}>
+          <PrimaryButton onClick={handlePublish} disabled={!!formId}>
             {t("publish")}
           </PrimaryButton>
 
