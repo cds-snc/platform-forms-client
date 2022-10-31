@@ -1,7 +1,7 @@
 import React from "react";
 import useTemplateStore from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
-import { FancyButton } from "../panel/Button";
+import { Button } from "../shared/Button";
 
 const slugify = (str: string) =>
   str
@@ -99,5 +99,9 @@ export const DownloadCSV = () => {
     URL.revokeObjectURL(url);
   };
 
-  return <FancyButton onClick={generateCSV}>Download .csv</FancyButton>;
+  return (
+    <Button onClick={generateCSV} theme="secondary">
+      Download .csv
+    </Button>
+  );
 };

@@ -3,7 +3,7 @@ import useNavigationStore from "../store/useNavigationStore";
 import useTemplateStore from "../store/useTemplateStore";
 import { useCallback } from "react";
 import { usePublish } from "../hooks/usePublish";
-import { Button } from "../layout/Settings";
+import { Button } from "../shared/Button";
 
 export const DataDeliveryInstructions = () => {
   const { getSchema } = useTemplateStore();
