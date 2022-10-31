@@ -8,7 +8,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { UserRole } from "@prisma/client";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 
@@ -100,20 +99,11 @@ export default function Register() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
 
-  if (session?.user.role === UserRole.ADMINISTRATOR)
-    return {
-      props: {},
-      redirect: {
-        destination: `/${context.locale}/admin/`,
-        permanent: false,
-      },
-    };
-
   if (session)
     return {
       props: {},
       redirect: {
-        destination: `/${context.locale}/admin/unauthorized/`,
+        destination: `/${context.locale}/admin/`,
         permanent: false,
       },
     };

@@ -16,7 +16,7 @@ export const middleware = (
     try {
       let props = {};
       for (const middlewareLayer of middlewareArray) {
-        const { next: pass, props: middlewareProps } = await middlewareLayer(req, res, props);
+        const { next: pass, props: middlewareProps } = await middlewareLayer(req, res);
         if (!pass) return;
 
         props = { ...props, ...middlewareProps };

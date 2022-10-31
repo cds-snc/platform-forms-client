@@ -13,6 +13,7 @@ import { getOrCreateUser } from "@lib/users";
 import { LoggingAction } from "@lib/auth";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
+import { getPrivilegeRulesForUser } from "@lib/privileges";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -113,7 +114,6 @@ export const authOptions: NextAuthOptions = {
         token.userId = user.id;
         token.authorizedForm = null;
         token.lastLoginTime = new Date();
-        token.role = user.role;
         token.acceptableUse = false;
       }
 
@@ -126,13 +126,12 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       // Add info like 'role' to session object
-      session.user.userId = token.userId as string;
+      session.user.id = token.userId as string;
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
-      session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
-      session.user.image = token.picture ?? null;
+      session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
       return session;
     },
   },
@@ -142,7 +141,7 @@ export const authOptions: NextAuthOptions = {
       // Not throwing an Error as it could potentially redirect the user to an Error page
       // This error should be transparent to a user.
       try {
-        const formUser = await prisma.formUser.findUnique({
+        const apiUser = await prisma.apiUser.findUnique({
           where: {
             id: user.id,
           },
@@ -150,8 +149,8 @@ export const authOptions: NextAuthOptions = {
             id: true,
           },
         });
-        if (formUser) {
-          await prisma.accessLog.create({
+        if (apiUser) {
+          await prisma.apiAccessLog.create({
             data: {
               action: LoggingAction.LOGIN,
               userId: user.id,
@@ -171,7 +170,7 @@ export const authOptions: NextAuthOptions = {
           return;
         }
 
-        const formUser = await prisma.formUser.findUnique({
+        const apiUser = await prisma.apiUser.findUnique({
           where: {
             id: token.userId as string,
           },
@@ -179,8 +178,8 @@ export const authOptions: NextAuthOptions = {
             id: true,
           },
         });
-        if (formUser) {
-          await prisma.accessLog.create({
+        if (apiUser) {
+          await prisma.apiAccessLog.create({
             data: {
               action: LoggingAction.LOGOUT,
               userId: token.userId as string,
@@ -200,7 +199,7 @@ export const authOptions: NextAuthOptions = {
  * otherwise return false
  * @returns boolean
  */
-const getAcceptableUseValue = async (userId: string | undefined) => {
+const getAcceptableUseValue = async (userId: string) => {
   if (!userId) return false;
   const acceptableUse = await acceptableUseCheck(userId);
 

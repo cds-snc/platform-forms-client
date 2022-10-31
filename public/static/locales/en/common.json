@@ -62,7 +62,8 @@
     "templates": "Templates",
     "features": "Options",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "privileges": "Privileges"
   },
   "formElements": {
     "characterCount": {

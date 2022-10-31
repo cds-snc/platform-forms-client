@@ -3,16 +3,16 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { UserRole } from "@prisma/client";
+import { checkPrivileges } from "@lib/privileges";
 
-export const getServerSideProps = requireAuthentication(async (context) => {
+export const getServerSideProps = requireAuthentication(async ({ locale, user: { ability } }) => {
+  checkPrivileges(ability, [{ action: "create", subject: "FormRecord" }]);
   return {
     props: {
-      ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
+      ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
     },
   };
-}, UserRole.ADMINISTRATOR);
+});
 
 const Upload = (): React.ReactElement => {
   const { t } = useTranslation("admin-templates");

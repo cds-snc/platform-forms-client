@@ -3,7 +3,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/AcceptableUse";
 import { requireAuthentication } from "@lib/auth";
 
-import { UserRole } from "@prisma/client";
 import { Session } from "next-auth";
 interface TermsOfUse {
   content: string;
@@ -13,7 +12,7 @@ const TermsOfUse = ({ content, user }: TermsOfUse) => {
   const acceptableProps: AcceptableUseProps = {
     content,
     lastLoginTime: user.lastLoginTime,
-    userId: user.userId,
+    userId: user.id,
     formID: user.authorizedForm,
   };
   return (
@@ -42,6 +41,6 @@ export const getServerSideProps = requireAuthentication(async (context) => {
       content: termsOfUseContent ?? null,
     },
   };
-}, UserRole.PROGRAM_ADMINISTRATOR);
+});
 
 export default TermsOfUse;

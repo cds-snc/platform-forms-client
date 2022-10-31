@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { rehydrateFormResponses } from "@lib/helpers";
-import { getTemplateByID, getSubmissionTypeByID } from "@lib/templates";
+import { getTemplateByID, getTemplateSubmissionTypeByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
-import { checkOne } from "@lib/flags";
+import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { fileTypeFromBuffer } from "file-type";
 import { Magic, MAGIC_MIME_TYPE } from "mmmagic";
@@ -60,7 +60,7 @@ const callLambda = async (
   language: string,
   securityAttribute: string
 ) => {
-  const submission = await getSubmissionTypeByID(formID);
+  const submission = await getTemplateSubmissionTypeByID(formID);
 
   const encoder = new TextEncoder();
 

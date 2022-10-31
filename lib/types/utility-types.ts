@@ -19,8 +19,7 @@ export interface MiddlewareReturn {
 
 export type MiddlewareRequest = (
   req: NextApiRequest,
-  res: NextApiResponse,
-  props?: Record<string, unknown>
+  res: NextApiResponse
 ) => Promise<MiddlewareReturn>;
 
 export interface MiddlewareProps {
