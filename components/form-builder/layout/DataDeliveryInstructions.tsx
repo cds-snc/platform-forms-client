@@ -3,6 +3,7 @@ import useNavigationStore from "../store/useNavigationStore";
 import useTemplateStore from "../store/useTemplateStore";
 import { useCallback } from "react";
 import { usePublish } from "../hooks/usePublish";
+import { Button } from "../layout/Settings";
 
 export const DataDeliveryInstructions = () => {
   const { getSchema } = useTemplateStore();
@@ -23,12 +24,9 @@ export const DataDeliveryInstructions = () => {
         {!formId && (
           <li>
             Save your form{" "}
-            <button
-              className="button py-1 px-2 rounded-lg border-2 border-blue-dark"
-              onClick={handlePublish}
-            >
+            <Button theme="secondary" onClick={handlePublish}>
               Save
-            </button>
+            </Button>
           </li>
         )}
         <li>Fill out the form, and click submit.</li>
