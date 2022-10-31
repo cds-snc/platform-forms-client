@@ -97,6 +97,7 @@ export const getSchemaFromState = (state: TemplateSchema) => {
       emailSubjectEn,
       emailSubjectFr,
     },
+    submission,
   } = state;
 
   const form: FormSchema = {
@@ -118,7 +119,7 @@ export const getSchemaFromState = (state: TemplateSchema) => {
 
   const schema: TemplateSchema = {
     form,
-    submission: { email: "test@test.com" },
+    submission,
     publishingStatus: true,
   };
 
