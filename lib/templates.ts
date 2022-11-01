@@ -124,7 +124,6 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
         id: true,
         jsonConfig: true,
         ttl: true,
-        users: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
