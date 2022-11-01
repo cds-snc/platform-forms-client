@@ -1,6 +1,6 @@
 import React from "react";
 import { Editor } from "./Editor";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { Language } from "../types";
 
 export const RichTextEditor = ({
@@ -14,7 +14,7 @@ export const RichTextEditor = ({
   autoFocusEditor?: boolean;
   lang: Language;
 }) => {
-  const { updateField } = useTemplateStore();
+  const updateField = useTemplateStore((s) => s.updateField);
   const handleChange = (value: string) => {
     if (typeof value === "undefined") {
       value = "";

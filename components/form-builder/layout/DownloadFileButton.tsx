@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { FancyButton } from "../panel/Button";
 
 const PrimaryButton = styled(FancyButton)`
@@ -41,7 +41,10 @@ const getDate = () => {
 
 export const DownloadFileButton = () => {
   const { t } = useTranslation("form-builder");
-  const { getSchema, form } = useTemplateStore();
+  const { getSchema, form } = useTemplateStore((s) => ({
+    getSchema: s.getSchema,
+    form: s.form,
+  }));
   const downloadfile = useCallback(async () => {
     async function retrieveFileBlob() {
       try {

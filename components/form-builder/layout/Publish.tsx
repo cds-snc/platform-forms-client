@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
-import useNavigationStore from "../store/useNavigationStore";
+import { useNavigationStore } from "../store/useNavigationStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
@@ -41,7 +41,8 @@ export const Publish = () => {
 
   const { uploadJson } = usePublish(false);
   const [error, setError] = useState(false);
-  const { getSchema } = useTemplateStore();
+
+  const getSchema = useTemplateStore((s) => s.getSchema);
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (

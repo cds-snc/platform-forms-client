@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
@@ -76,9 +76,7 @@ const SelectedElement = ({
 
 const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const elements = useTemplateStore((s) => s.form.elements);
   let { type } = elements[item.index];
 
   if (!type) {
@@ -195,13 +193,21 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const elementOptions = useElementOptions();
   const {
     localizeField,
-    form: { elements },
+    elements,
     updateField,
     unsetField,
     resetChoices,
     focusInput,
     setFocusInput,
-  } = useTemplateStore();
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    elements: s.form.elements,
+    updateField: s.updateField,
+    unsetField: s.unsetField,
+    resetChoices: s.resetChoices,
+    focusInput: s.focusInput,
+    setFocusInput: s.setFocusInput,
+  }));
 
   const input = useRef<HTMLInputElement>(null);
 
@@ -586,7 +592,11 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField, updateField } = useTemplateStore();
+  const { form, localizeField, updateField } = useTemplateStore((s) => ({
+    form: s.form,
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+  }));
 
   const introTextPlaceholder =
     form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];

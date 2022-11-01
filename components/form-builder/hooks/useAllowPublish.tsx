@@ -7,8 +7,8 @@ import {
   publishRequiredFields,
   Title,
 } from "../types";
-import useTemplateStore from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
+import { useTemplateStore } from "../store/useTemplateStore";
 
 export const MissingTranslation = {};
 
@@ -74,7 +74,10 @@ export const isFormTranslated = (form: FormSchema) => {
 
 export const useAllowPublish = () => {
   const { ability } = useAccessControl();
-  const { form, submission } = useTemplateStore();
+  const { form, submission } = useTemplateStore((s) => ({
+    form: s.form,
+    submission: s.submission,
+  }));
   let email = "";
   if (submission?.email) {
     email = submission?.email;

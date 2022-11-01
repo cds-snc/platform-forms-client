@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { ElementType, Language } from "../types";
 
 export const Options = ({
@@ -12,7 +12,7 @@ export const Options = ({
   index: number;
   translationLanguagePriority: Language;
 }) => {
-  const { updateField } = useTemplateStore();
+  const updateField = useTemplateStore((s) => s.updateField);
   const { t } = useTranslation("form-builder");
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 

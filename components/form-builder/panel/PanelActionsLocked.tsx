@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { FancyButton } from "./Button";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { LockIcon } from "../icons";
 
 const Actions = styled.div`
@@ -43,7 +43,7 @@ const AddButtonWrapper = styled.div`
 `;
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
-  const { add } = useTemplateStore();
+  const add = useTemplateStore((s) => s.add);
   const { t } = useTranslation("form-builder");
   return (
     <Actions className="panel-actions">

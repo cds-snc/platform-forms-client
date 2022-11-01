@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { FancyButton } from "../panel/Button";
 
 interface IShowSpan {
@@ -26,7 +26,7 @@ export const CopyToClipboard = () => {
 
   const [isCopied, setIsCopied] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-  const { getSchema } = useTemplateStore();
+  const getSchema = useTemplateStore((s) => s.getSchema);
 
   const handleCopyToClipboard = async () => {
     if ("clipboard" in navigator) {

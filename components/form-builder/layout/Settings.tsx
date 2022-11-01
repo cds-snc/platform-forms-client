@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
-import useNavigationStore from "../store/useNavigationStore";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { useNavigationStore } from "../store/useNavigationStore";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -84,12 +84,12 @@ export const Button = ({
 
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
-  const {
-    initialize,
-    submission: { email },
-    updateField,
-  } = useTemplateStore();
-  const { setTab } = useNavigationStore();
+  const { initialize, email, updateField } = useTemplateStore((s) => ({
+    initialize: s.initialize,
+    email: s.submission.email,
+    updateField: s.updateField,
+  }));
+  const setTab = useNavigationStore((s) => s.setTab);
 
   return (
     <>

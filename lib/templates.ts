@@ -124,6 +124,7 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
         id: true,
         jsonConfig: true,
         ttl: true,
+        users: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -263,6 +264,21 @@ async function _getFormRecordWithAssociatedUsers(
     return prismaErrors(e, null);
   }
 }
+
+export const getTemplateOwners = logger(async (formID: string) => {
+  return await prisma.template.findUnique({
+    where: {
+      id: formID,
+    },
+    select: {
+      users: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+});
 
 /*
  * Extract only the public properties from a form record.

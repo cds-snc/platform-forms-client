@@ -2,19 +2,18 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
-import useTemplateStore from "../store/useTemplateStore";
-import useNavigationStore from "../store/useNavigationStore";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { useNavigationStore } from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
-import { Language, LocalizedFormProperties, TemplateSchema } from "../types";
+import { Language, LocalizedFormProperties } from "../types";
 import { Save } from "./Save";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
 import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
-import { FormRecord } from "@lib/types";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
 import { DataDeliveryInstructions } from "./DataDeliveryInstructions";
@@ -29,15 +28,20 @@ const StyledPreviewWrapper = styled.div`
   padding: 20px;
 `;
 
-type LayoutProps = {
-  tab: string;
-  initialForm: FormRecord | null;
-};
+export const Layout = () => {
+  const { localizeField, form, setLang } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    form: s.form,
+    setLang: s.setLang,
+  }));
 
-export const Layout = ({ tab, initialForm }: LayoutProps) => {
-  const { localizeField, form, setLang, importTemplate } = useTemplateStore();
+  const { currentTab, setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
+  }));
+
   const { userCanPublish } = useAllowPublish();
-  const { currentTab, setTab } = useNavigationStore();
+
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
 
@@ -52,45 +56,23 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
     setLang(locale);
   }, [locale]);
 
-  // Refactor later to pass tab prop as intial state to useNavigationStore();
-  useEffect(() => {
-    setTab(tab);
-  }, []);
-
-  useEffect(() => {
-    if (initialForm) {
-      const typeRefactoredForm = { ...initialForm } as unknown as TemplateSchema;
-      typeRefactoredForm.form.endPage = {
-        descriptionEn: "",
-        descriptionFr: "",
-      };
-      // typeRefactoredForm.form.elements = sortByLayout(typeRefactoredForm.form);
-      importTemplate(typeRefactoredForm);
-    }
-  }, []);
-
-  /* eslint-disable */
-  return (
-    <main className="container--wet">
-      <div className="grid grid-cols-12 gap-4">
-        {currentTab !== "start" && (
-          <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
-        )}
-
-        {currentTab === "start" && (
+  const renderTab = (tab: string) => {
+    switch (tab) {
+      case "start":
+        return (
           <div className="col-span-12">
             <Start changeTab={setTab} />
           </div>
-        )}
-
-        {currentTab === "create" && (
+        );
+      case "create":
+        return (
           <div className="col-start-4 col-span-9">
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <ElementPanel />
           </div>
-        )}
-
-        {currentTab === "preview" && (
+        );
+      case "preview":
+        return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <StyledPreviewWrapper>
@@ -98,9 +80,9 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
               <Preview isPreview={true} />
             </StyledPreviewWrapper>
           </div>
-        )}
-
-        {currentTab === "test-data-delivery" && (
+        );
+      case "test-data-delivery":
+        return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <h1 className="border-0 mb-0">Test your response delivery</h1>
@@ -109,35 +91,49 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
               <Preview isPreview={false} />
             </StyledPreviewWrapper>
           </div>
-        )}
-
-        {currentTab === "translate" && (
+        );
+      case "translate":
+        return (
           <div className="col-start-4 col-span-9">
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <Translate />
           </div>
-        )}
-
-        {currentTab === "save" && (
+        );
+      case "save":
+        return (
           <div className="col-start-4 col-span-9">
             <StyledHeader>{t("saveH1")}</StyledHeader>
             <Save />
           </div>
-        )}
-
-        {currentTab === "publish" && userCanPublish && (
+        );
+      case "publish":
+        return userCanPublish ? (
           <div className="col-start-4 col-span-9">
             <Publish />
           </div>
-        )}
-
-        {currentTab === "settings" && (
+        ) : (
+          setTab("create")
+        );
+      case "settings":
+        return (
           <div className="col-start-4 col-span-9">
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <h1 className="visually-hidden">Form settings</h1>
             <Settings />
           </div>
+        );
+      default:
+        break;
+    }
+  };
+  /* eslint-disable */
+  return (
+    <main className="container--wet">
+      <div className="grid grid-cols-12 gap-4">
+        {currentTab !== "start" && (
+          <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
+        {renderTab(currentTab)}
       </div>
     </main>
   );

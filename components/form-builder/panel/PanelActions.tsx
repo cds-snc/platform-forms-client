@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import { Button, FancyButton } from "./Button";
 import { ChevronUp, ChevronDown, Close, Duplicate, ThreeDotsIcon } from "../icons";
 import { ElementTypeWithIndex } from "../types";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 
 import { Modal } from "./Modal";
 
@@ -93,15 +93,16 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const {
-    remove,
-    moveUp,
-    moveDown,
-    add,
-    duplicateElement,
-    form: { elements },
-    setFocusInput,
-  } = useTemplateStore();
+  const { remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+    useTemplateStore((s) => ({
+      remove: s.remove,
+      moveUp: s.moveUp,
+      moveDown: s.moveDown,
+      add: s.add,
+      duplicateElement: s.duplicateElement,
+      elements: s.form.elements,
+      setFocusInput: s.setFocusInput,
+    }));
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";

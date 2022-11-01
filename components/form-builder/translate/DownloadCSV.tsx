@@ -1,5 +1,5 @@
 import React from "react";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
 import { FancyButton } from "../panel/Button";
 
@@ -29,7 +29,7 @@ const fixMarkdownHeadings = (str: string) => str.replace(/#{1,6}/g, "$& ").repla
 const formatText = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}"`;
 
 export const DownloadCSV = () => {
-  const { form } = useTemplateStore();
+  const form = useTemplateStore((s) => s.form);
 
   const generateCSV = async () => {
     const data = [["description", "english", "french"]];
