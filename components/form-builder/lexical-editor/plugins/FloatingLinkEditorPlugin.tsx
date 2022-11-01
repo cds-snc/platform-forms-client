@@ -28,6 +28,7 @@ import { getSelectedNode } from "../utils/getSelectedNode";
 import { sanitizeUrl } from "../utils/sanitizeUrl";
 import { setFloatingElemPosition } from "../utils/setFloatingElemPosition";
 import { EditIcon } from "@components/form-builder/icons/EditIcon";
+import Link from "next/link";
 
 function FloatingLinkEditor({
   editor,
@@ -182,9 +183,9 @@ function FloatingLinkEditor({
       ) : (
         <>
           <div className="link-input">
-            <a href={linkUrl} target="_blank" rel="noopener noreferrer">
+            <Link href={linkUrl} target="_blank" rel="noopener noreferrer">
               {linkUrl}
-            </a>
+            </Link>
             <button
               className="link-edit"
               onMouseDown={(event) => event.preventDefault()}
