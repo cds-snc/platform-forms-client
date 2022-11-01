@@ -10,24 +10,24 @@ import {
 import { useAccessControl } from "@lib/hooks";
 import { useTemplateStore } from "../store/useTemplateStore";
 
-export const MissingTranslation = {};
+export class MissingTranslation extends Error {}
 
 export const isTitleTranslated = (element: Title) => {
   if (!element.titleEn || !element.titleFr) {
-    throw MissingTranslation;
+    throw new MissingTranslation();
   }
 };
 
 export const isDescriptionTranslated = (element: Description) => {
   if (!element.descriptionEn || !element.descriptionFr) {
-    throw MissingTranslation;
+    throw new MissingTranslation();
   }
 };
 
 export const areChoicesTranslated = (choices: Choice[]) => {
   choices.forEach((choice) => {
     if (!choice.en || !choice.fr) {
-      throw MissingTranslation;
+      throw new MissingTranslation();
     }
   });
 };

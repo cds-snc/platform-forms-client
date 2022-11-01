@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigationStore } from "../store/useNavigationStore";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { Form } from "../preview/Form";
 import { useTranslation } from "next-i18next";
@@ -7,9 +6,11 @@ import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 
 export const Preview = ({ isPreview }: { isPreview: boolean }) => {
-  const getSchema = useTemplateStore((s) => s.getSchema);
+  const { getSchema, formId } = useTemplateStore((s) => ({
+    formId: s.formId,
+    getSchema: s.getSchema,
+  }));
   const stringified = getSchema();
-  const { formId } = useNavigationStore();
 
   const formRecord = {
     id: formId || "test0form00000id000asdf11",

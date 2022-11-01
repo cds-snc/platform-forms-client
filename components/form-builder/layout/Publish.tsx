@@ -1,5 +1,4 @@
 import { useTranslation } from "next-i18next";
-import { useNavigationStore } from "../store/useNavigationStore";
 import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
@@ -33,7 +32,6 @@ const PrimaryButton = styled(FancyButton)`
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
-  const { formId, setFormId } = useNavigationStore();
   const {
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
     isPublishable,
@@ -42,7 +40,11 @@ export const Publish = () => {
   const { uploadJson } = usePublish(false);
   const [error, setError] = useState(false);
 
-  const getSchema = useTemplateStore((s) => s.getSchema);
+  const { getSchema, formId, setFormId } = useTemplateStore((s) => ({
+    getSchema: s.getSchema,
+    formId: s.formId,
+    setFormId: s.setFormId,
+  }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -58,6 +60,7 @@ export const Publish = () => {
     if (result && result?.error) {
       setError(true);
       return;
+      s;
     }
     setFormId(result?.id);
   }, [setError, setFormId]);
