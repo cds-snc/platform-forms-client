@@ -23,6 +23,7 @@ import { FancyButton } from "./Button";
 import { Input } from "./Input";
 import { ConfirmationDescription } from "./ConfirmationDescription";
 import { PrivacyDescription } from "./PrivacyDescription";
+import { QuestionInput } from "./QuestionInput";
 
 const SelectedElement = ({
   selected,
@@ -269,22 +270,10 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 {questionNumber}
               </span>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
-              <TitleInput
-                ref={input}
-                type="text"
-                id={`item${item.index}`}
-                name={`item${item.index}`}
-                placeholder={t("Question")}
-                value={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
-                aria-describedby={hasDescription ? `item${item.index}-describedby` : undefined}
-                onChange={(e) => {
-                  updateField(
-                    `form.elements[${item.index}].properties.${localizeField(
-                      LocalizedElementProperties.TITLE
-                    )}`,
-                    e.target.value
-                  );
-                }}
+              <QuestionInput
+                initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
+                index={item.index}
+                hasDescription={hasDescription}
               />
             </>
           )}
