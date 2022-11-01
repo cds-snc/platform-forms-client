@@ -6,6 +6,7 @@ export const Button = ({
   className,
   id,
   icon,
+  iconWrapperClassName,
   disabled = false,
   "aria-label": ariaLabel = undefined,
   theme = "primary",
@@ -15,6 +16,7 @@ export const Button = ({
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   icon?: ReactElement;
   className?: string;
+  iconWrapperClassName?: string;
   disabled?: boolean;
   "aria-label"?: string;
   theme?: "primary" | "secondary" | "destructive" | "link";
@@ -34,13 +36,13 @@ export const Button = ({
       onClick={onClick}
       className={`${className || ""} ${
         themes[theme]
-      } relative py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default`}
+      } relative py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500`}
       id={id}
       disabled={disabled}
       aria-label={ariaLabel}
       type="button"
     >
-      {icon && <div className="w-8 -ml-2 mr-2">{icon}</div>}
+      {icon && <div className={`${iconWrapperClassName || ""} w-8 -ml-2 mr-2`}>{icon}</div>}
       {children}
     </button>
   );
