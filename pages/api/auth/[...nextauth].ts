@@ -53,6 +53,30 @@ export const authOptions: NextAuthOptions = {
             PASSWORD: credentials.password,
           },
         };
+
+        // signIn callback cannot be used. It has to be included in here as the url field
+        // of the response of the sign in callback is not populated
+        const prismaUser = await prisma.user
+          .findUnique({
+            where: {
+              email: credentials.username,
+            },
+            select: {
+              accounts: true,
+            },
+          })
+          .catch((e) => {
+            prismaErrors(e, undefined);
+          });
+
+        if (
+          prismaUser &&
+          prismaUser.accounts.length > 0 &&
+          prismaUser.accounts[0].provider === "google"
+        ) {
+          throw new Error("GoogleCredentialsExist");
+        }
+
         try {
           const cognitoClient = new CognitoIdentityProviderClient({
             region: process.env.COGNITO_REGION,
@@ -101,6 +125,29 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
 
   callbacks: {
+    async signIn({ account, profile }) {
+      // redirect google login if there is an existing cognito account
+      if (account.provider === "google") {
+        const prismaUser = await prisma.user
+          .findUnique({
+            where: {
+              email: profile.email,
+            },
+            select: {
+              accounts: true,
+            },
+          })
+          .catch((e) => {
+            prismaErrors(e, undefined);
+          });
+
+        // in this case we know there is an existing cognito account
+        if (prismaUser?.accounts.length === 0) {
+          return "/auth/login";
+        }
+      }
+      return true;
+    },
     async jwt({ token, account }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
@@ -131,64 +178,9 @@ export const authOptions: NextAuthOptions = {
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
+      session.user.image = session.user?.image ?? null;
       session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
       return session;
-    },
-  },
-
-  events: {
-    async signIn({ user }) {
-      // Not throwing an Error as it could potentially redirect the user to an Error page
-      // This error should be transparent to a user.
-      try {
-        const apiUser = await prisma.apiUser.findUnique({
-          where: {
-            id: user.id,
-          },
-          select: {
-            id: true,
-          },
-        });
-        if (apiUser) {
-          await prisma.apiAccessLog.create({
-            data: {
-              action: LoggingAction.LOGIN,
-              userId: user.id,
-            },
-          });
-        }
-      } catch (e) {
-        prismaErrors(e, null);
-      }
-    },
-    async signOut({ token }) {
-      try {
-        if (!token.userId) {
-          // Not throwing an Error as it could potentially redirect the user to an Error page
-          // This error should be transparent to a user.
-          logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
-          return;
-        }
-
-        const apiUser = await prisma.apiUser.findUnique({
-          where: {
-            id: token.userId as string,
-          },
-          select: {
-            id: true,
-          },
-        });
-        if (apiUser) {
-          await prisma.apiAccessLog.create({
-            data: {
-              action: LoggingAction.LOGOUT,
-              userId: token.userId as string,
-            },
-          });
-        }
-      } catch (e) {
-        prismaErrors(e, null);
-      }
     },
   },
 };
