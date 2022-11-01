@@ -79,15 +79,24 @@ const SelectedElement = ({
 
 const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
-  const {
-    form: { elements },
-  } = useTemplateStore();
-  let { type } = elements[item.index];
+
+  const { validationType, type } = useTemplateStore(
+    useCallback(
+      (state: ElementStore) => {
+        return {
+          type: state.form.elements[item.index].type,
+          validationType: state.form.elements[item.index].properties.validation.type,
+        };
+      },
+      [item.index]
+    )
+  );
+
+  let selectedType = type;
 
   if (!type) {
     return elementOptions[2];
   } else if (type === "textField") {
-    const validationType = elements[item.index].properties.validation.type;
     /**
      * Email, phone, and date fields are specialized text field types.
      * That is to say, their "type" is "textField" but they have specalized validation "type"s.
@@ -95,10 +104,10 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
      * it is a true Short Answer, or one of the other types.
      * The one exception to this is validationType === "text" types, for which we want to return "textField"
      */
-    type = validationType && validationType !== "text" ? validationType : type;
+    selectedType = validationType && validationType !== "text" ? validationType : type;
   }
 
-  const selected = elementOptions.filter((item) => item.id === type);
+  const selected = elementOptions.filter((item) => item.id === selectedType);
   return selected && selected.length ? selected[0] : elementOptions[2];
 };
 
