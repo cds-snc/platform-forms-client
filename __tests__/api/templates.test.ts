@@ -359,40 +359,5 @@ describe("Templates API functions should throw an error if user does not have pe
       expect(res.statusCode).toBe(403);
       expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
     });
-
-    it("User with Base permissions should not be able to use the DELETE API function on a published template", async () => {
-      const mockSession: Session = {
-        expires: "1",
-        user: {
-          id: "1",
-          email: "forms@cds.ca",
-          name: "forms",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
-        },
-      };
-      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
-
-      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-        id: "formtestID",
-        jsonConfig: { ...validFormTemplate, publishingStatus: true },
-        users: [{ id: "1" }],
-      });
-
-      const { req, res } = createMocks({
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Origin: "http://localhost:3000",
-        },
-        body: {
-          formID: "test0form00000id000asdf11",
-        },
-      });
-
-      await templates(req, res);
-
-      expect(res.statusCode).toBe(403);
-      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
-    });
   });
 });

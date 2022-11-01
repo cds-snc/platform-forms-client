@@ -367,18 +367,4 @@ describe("Template CRUD functions", () => {
       await deleteTemplate(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
-
-  it("User with Base permissions should not be able to delete a template that is published", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
-
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      id: "formtestID",
-      jsonConfig: { ...formConfiguration, publishingStatus: true },
-      users: [{ id: "1" }],
-    });
-
-    await expect(async () => {
-      await deleteTemplate(ability, "formtestID");
-    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
-  });
 });

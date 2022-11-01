@@ -20,12 +20,6 @@ const Base: PrivilegeSeed = {
       conditions: { users: { $elemMatch: { id: "${user.id}" } } },
     },
     { action: "update", subject: "FormRecord", fields: ["publishingStatus"], inverted: true },
-    {
-      action: "delete",
-      subject: "FormRecord",
-      conditions: { publishingStatus: true },
-      inverted: true,
-    },
   ],
   priority: 0,
 };
