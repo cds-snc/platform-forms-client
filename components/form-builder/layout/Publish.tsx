@@ -5,31 +5,8 @@ import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon } from "../icons";
-import styled from "styled-components";
-import { FancyButton } from "../panel/Button";
+import { Button } from "../shared/Button";
 import Link from "next/link";
-
-const PrimaryButton = styled(FancyButton)`
-  margin-top: 25px;
-  padding: 10px 15px;
-  background: #26374a;
-  box-shadow: inset 0 -2px 0 #515963;
-  color: white;
-
-  &:hover,
-  &:active,
-  &:focus {
-    &:not(:disabled) {
-      color: #ffffff;
-      background: #1c578a;
-      box-shadow: inset 0 -2px 0 #7a8796;
-    }
-  }
-
-  &:hover:active:not(:disabled) {
-    background: #16446c;
-  }
-`;
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -90,14 +67,14 @@ export const Publish = () => {
         </li>
       </ul>
 
-      <p className="leading-10 mt-8">
+      <p className="leading-10 mt-6 mb-4">
         <Link href={""}>Support</Link>
       </p>
       {isPublishable() && (
         <>
-          <PrimaryButton onClick={handlePublish} disabled={!!formId}>
+          <Button onClick={handlePublish} disabled={!!formId}>
             {t("publish")}
-          </PrimaryButton>
+          </Button>
 
           <div
             role="alert"
