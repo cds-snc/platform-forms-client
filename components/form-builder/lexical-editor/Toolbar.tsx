@@ -10,6 +10,7 @@ import { FormatItalic } from "@styled-icons/material/FormatItalic";
 import { Link } from "@styled-icons/material/Link";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 
 import {
   $isListNode,
@@ -29,6 +30,7 @@ import {
 
 import { $wrapNodes } from "@lexical/selection";
 import styled from "styled-components";
+import { sanitizeUrl } from "./utils/sanitizeUrl";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -81,6 +83,16 @@ export const Toolbar = () => {
   const [isLink] = useState(false);
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
+
+  const [isEditable, setIsEditable] = useState(() => editor.isEditable());
+
+  const insertLink = useCallback(() => {
+    if (!isLink) {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"));
+    } else {
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+    }
+  }, [editor, isLink]);
 
   const [items] = useState([
     { id: 1, txt: "heading2" },
@@ -330,7 +342,24 @@ export const Toolbar = () => {
           <FormatListNumbered size={20} />
         </button>
 
-        <LinkEditor>
+        <button
+          tabIndex={currentFocusIndex == 6 ? 0 : -1}
+          ref={(el) => {
+            const index = "button-6" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
+          disabled={!isEditable}
+          onClick={insertLink}
+          className={"toolbar-item " + (isLink ? "active" : "")}
+          aria-label="Insert link"
+          title="Insert link"
+        >
+          <Link size={20} />
+        </button>
+
+        {/* <LinkEditor>
           <button
             tabIndex={currentFocusIndex == 6 ? 0 : -1}
             ref={(el) => {
@@ -344,7 +373,7 @@ export const Toolbar = () => {
           >
             <Link size={20} />
           </button>
-        </LinkEditor>
+        </LinkEditor> */}
       </ToolbarContainer>
     </>
   );

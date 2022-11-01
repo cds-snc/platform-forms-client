@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -17,6 +17,7 @@ import {
   TRANSFORMERS,
 } from "@lexical/markdown";
 import { TabEscape } from "./plugins/TabEscape";
+import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditor";
 
 const RichTextWrapper = styled.div`
   height: 100%;
@@ -39,6 +40,16 @@ export const Editor = ({
   onChange: (value: string) => void;
   autoFocusEditor?: boolean;
 }) => {
+  const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
+    undefined
+  );
+
+  const onRef = (_floatingAnchorElem: HTMLDivElement) => {
+    if (_floatingAnchorElem !== null) {
+      setFloatingAnchorElem(_floatingAnchorElem);
+    }
+  };
+
   if (typeof content !== "string") {
     content = "";
   }
@@ -60,7 +71,11 @@ export const Editor = ({
       >
         <Toolbar />
         <RichTextPlugin
-          contentEditable={<ContentEditable className="editor-input" />}
+          contentEditable={
+            <div className="editor" ref={onRef}>
+              <ContentEditable className="editor-input" />
+            </div>
+          }
           placeholder={""}
         />
         <FocusPlugin autoFocusEditor={autoFocusEditor} />
@@ -74,6 +89,7 @@ export const Editor = ({
           }}
         />
         <LinkPlugin />
+        <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
         <TabEscape />
       </LexicalComposer>
