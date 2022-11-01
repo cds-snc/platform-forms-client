@@ -86,10 +86,10 @@ export const useAllowPublish = () => {
   const userCanPublish = ability?.can("update", "FormRecord", "[publishingStatus]");
 
   const data = {
-    title: !!form.titleEn || !!form.titleFr,
-    questions: !!form.elements.length,
-    privacyPolicy: !!form.privacyPolicy.descriptionEn || !!form.privacyPolicy.descriptionFr,
-    confirmationMessage: !!form.endPage.descriptionEn || !!form.endPage.descriptionFr,
+    title: !!form?.titleEn || !!form?.titleFr,
+    questions: !!form?.elements?.length,
+    privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
+    confirmationMessage: !!form?.endPage?.descriptionEn || !!form?.endPage?.descriptionFr,
     translate: isFormTranslated(form),
     responseDelivery: !!email,
   };

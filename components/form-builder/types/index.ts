@@ -85,41 +85,12 @@ export type publishRequiredFields =
   | "responseDelivery";
 
 export interface TemplateSchema {
+  formId: string;
   form: FormSchema;
   submission: {
     email: string;
   };
   publishingStatus: boolean;
-}
-
-export interface ElementStore extends TemplateSchema {
-  lang: Language;
-  translationLanguagePriority: Language;
-  focusInput: boolean;
-  moveUp: (index: number) => void;
-  moveDown: (index: number) => void;
-  localizeField: {
-    <LocalizedProperty extends string>(
-      arg: LocalizedProperty,
-      arg1?: Language
-    ): `${LocalizedProperty}${Capitalize<Language>}`;
-  };
-  setLang: (lang: Language) => void;
-  toggleLang: () => void;
-  toggleTranslationLanguagePriority: () => void;
-  setFocusInput: (isSet: boolean) => void;
-  add: (index?: number) => void;
-  remove: (id: number) => void;
-  addChoice: (index: number) => void;
-  resetChoices: (index: number) => void;
-  removeChoice: (index: number, childIndex: number) => void;
-  updateField: (path: string, value: string | boolean) => void;
-  unsetField: (path: string) => void;
-  duplicateElement: (index: number) => void;
-  bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: TemplateSchema) => void;
-  getSchema: () => string;
-  initialize: () => void;
 }
 
 export interface ModalStore {

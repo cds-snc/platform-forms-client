@@ -123,7 +123,11 @@ export const Layout = () => {
           </div>
         );
       default:
-        break;
+        return (
+          <div className="col-span-12">
+            <Start changeTab={setTab} />
+          </div>
+        );
     }
   };
   /* eslint-disable */
@@ -133,7 +137,7 @@ export const Layout = () => {
         {currentTab !== "start" && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
-        {renderTab(currentTab)}
+        {form && renderTab(currentTab)}
       </div>
     </main>
   );

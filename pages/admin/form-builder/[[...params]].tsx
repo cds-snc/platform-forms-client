@@ -7,6 +7,7 @@ import { checkPrivileges } from "@lib/privileges";
 import { NextPageWithLayout } from "../../_app";
 import Footer from "../../../components/globals/Footer";
 import { getTemplateByID } from "@lib/templates";
+import { TemplateSchema } from "@components/form-builder/types";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";
 import { NavigationStoreProvider } from "@components/form-builder/store/useNavigationStore";
@@ -29,20 +30,9 @@ const Page: NextPageWithLayout<PageProps> = () => {
 };
 
 Page.getLayout = function getLayout(page: ReactElement) {
-  /*
-  if (page.props.initialForm) {
-    const typeRefactoredForm = { ...initialForm } as unknown as TemplateSchema;
-    typeRefactoredForm.form.endPage = {
-      descriptionEn: "",
-      descriptionFr: "",
-    };
-    // typeRefactoredForm.form.elements = sortByLayout(typeRefactoredForm.form);
-    importTemplate(typeRefactoredForm);
-  }
-  */
   return (
     <NavigationStoreProvider currentTab={page.props.tab}>
-      <TemplateStoreProvider form={page.props.initialForm}>
+      <TemplateStoreProvider {...(page.props.initialForm && { form: page.props.initialForm })}>
         <div id="form-builder">
           <Header />
           {page}
@@ -57,13 +47,21 @@ export const getServerSideProps = requireAuthentication(
   async ({ query: { params }, user: { ability }, locale }) => {
     checkPrivileges(ability, [{ action: "update", subject: "FormRecord" }]);
     const [tab = "start", formID = null] = params || [];
-    const FormbuilderParams: { tab: string; initialForm: null | FormRecord } = {
+    const FormbuilderParams: { tab: string; initialForm: null | TemplateSchema } = {
       tab,
       initialForm: null,
     };
 
     if (formID) {
-      FormbuilderParams.initialForm = await getTemplateByID(formID);
+      const rawForm = await getTemplateByID(formID);
+      if (rawForm !== null) {
+        const typeRefactoredForm = { ...rawForm } as unknown as TemplateSchema;
+        typeRefactoredForm.form.endPage = {
+          descriptionEn: "",
+          descriptionFr: "",
+        };
+        FormbuilderParams.initialForm = typeRefactoredForm;
+      }
     }
 
     return {
