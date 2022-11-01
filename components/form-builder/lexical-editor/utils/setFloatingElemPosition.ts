@@ -27,7 +27,7 @@ export function setFloatingElemPosition(
   const anchorElementRect = anchorElem.getBoundingClientRect();
   const editorScrollerRect = scrollerElem.getBoundingClientRect();
 
-  let top = targetRect.top - floatingElemRect.height - verticalGap;
+  let top = targetRect.top;
   let left = targetRect.left - horizontalOffset;
 
   if (top < editorScrollerRect.top) {

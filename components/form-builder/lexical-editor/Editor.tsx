@@ -72,7 +72,7 @@ export const Editor = ({
         <Toolbar />
         <RichTextPlugin
           contentEditable={
-            <div className="editor" ref={onRef}>
+            <div className="editor relative" ref={onRef}>
               <ContentEditable className="editor-input" />
             </div>
           }
