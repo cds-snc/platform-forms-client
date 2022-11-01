@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -202,18 +202,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
     updateField,
     unsetField,
     resetChoices,
-    focusInput,
-    setFocusInput,
   } = useTemplateStore();
-
-  const input = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (input.current && focusInput) {
-      input.current.focus();
-      setFocusInput(false);
-    }
-  }, []);
 
   const questionNumber =
     elements

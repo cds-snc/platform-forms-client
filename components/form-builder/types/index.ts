@@ -108,6 +108,7 @@ export interface ElementStore extends TemplateSchema {
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
   setFocusInput: (isSet: boolean) => void;
+  getFocusInput: () => boolean;
   add: (index?: number) => void;
   remove: (id: number) => void;
   addChoice: (index: number) => void;
