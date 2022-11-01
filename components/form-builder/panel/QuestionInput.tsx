@@ -33,15 +33,15 @@ export const QuestionInput = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
-  const { localizeField, updateField, focusInput, setFocusInput } = useTemplateStore();
+  const { localizeField, updateField, getFocusInput, setFocusInput } = useTemplateStore();
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (input.current && focusInput) {
+    if (input.current && getFocusInput()) {
       input.current.focus();
       setFocusInput(false);
     }
-  }, []);
+  }, [getFocusInput]);
 
   const _debounced = useCallback(
     debounce((val) => {

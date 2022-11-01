@@ -83,6 +83,7 @@ const useTemplateStore = create<ElementStore>()(
       set((state) => {
         state.focusInput = isSet;
       }),
+    getFocusInput: () => get().focusInput,
     updateField: (path, value) =>
       set((state) => {
         update(state, path, value);
