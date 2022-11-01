@@ -58,7 +58,7 @@ const useTemplateStore = create<ElementStore>()(
     focusInput: false,
     form: defaultForm,
     submission: {
-      email: "test@example.com",
+      email: "",
     },
     publishingStatus: false,
     localizeField: (path, lang = get().lang) => {

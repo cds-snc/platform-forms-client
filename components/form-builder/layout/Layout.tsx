@@ -5,6 +5,7 @@ import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import useNavigationStore from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
+import { useAllowPublish } from "../hooks/useAllowPublish";
 
 import { Language, LocalizedFormProperties } from "../types";
 import { Save } from "./Save";
@@ -29,6 +30,7 @@ const StyledPreviewWrapper = styled.div`
 
 export const Layout = () => {
   const { localizeField, form, setLang } = useTemplateStore();
+  const { userCanPublish } = useAllowPublish();
   const { currentTab, setTab } = useNavigationStore();
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
@@ -99,7 +101,7 @@ export const Layout = () => {
           </div>
         )}
 
-        {currentTab === "publish" && (
+        {(currentTab === "publish" && userCanPublish) && (
           <div className="col-start-4 col-span-9">
             <Publish />
           </div>
