@@ -17,7 +17,7 @@ import {
   TRANSFORMERS,
 } from "@lexical/markdown";
 import { TabEscape } from "./plugins/TabEscape";
-import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditor";
+import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 
 const RichTextWrapper = styled.div`
   height: 100%;
