@@ -129,7 +129,7 @@ export const Options = ({
   });
 
   return (
-    <div>
+    <div className="mt-5">
       {options}
       <AddOptions index={index} />
     </div>

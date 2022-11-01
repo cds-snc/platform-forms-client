@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "next-i18next";
 import useTemplateStore from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
 import { Button } from "../shared/Button";
@@ -30,6 +31,7 @@ const formatText = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}
 
 export const DownloadCSV = () => {
   const { form } = useTemplateStore();
+  const { t } = useTranslation("form-builder");
 
   const generateCSV = async () => {
     const data = [["description", "english", "french"]];
@@ -101,7 +103,7 @@ export const DownloadCSV = () => {
 
   return (
     <Button onClick={generateCSV} theme="secondary">
-      Download .csv
+      {t("downloadCSV")}
     </Button>
   );
 };

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-import { Button as OldButton } from "./Button";
 import { Button } from "../shared/Button";
 import { Close } from "../icons/Close";
 import { CDSHTMLDialogElement } from "../types";
@@ -60,16 +59,6 @@ const StyledDialog = styled.dialog`
     justify-content: flex-start;
     padding: 15px;
     border-top: 1px solid #cacaca;
-  }
-`;
-
-const CloseButton = styled(OldButton)`
-  padding: 3px 5px;
-  border: 1px solid #cacaca;
-  border-radius: 2px;
-
-  svg {
-    margin-right: 3px;
   }
 `;
 
@@ -229,7 +218,13 @@ export const ModalContainer = ({
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
             <ModalButton isOpenButton={false}>
-              <CloseButton icon={<Close />} onClick={close}>{t("Close")}</CloseButton>
+              <Button
+                theme="icon"
+                className="group"
+                icon={<Close className="group-focus:fill-white-default" />}
+                aria-label={t("Close")}
+                onClick={close}
+              ></Button>
             </ModalButton>
           </div>
           <div className="modal-body">

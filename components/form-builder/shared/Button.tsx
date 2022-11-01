@@ -19,7 +19,7 @@ export const Button = ({
   iconWrapperClassName?: string;
   disabled?: boolean;
   "aria-label"?: string;
-  theme?: "primary" | "secondary" | "destructive" | "link";
+  theme?: "primary" | "secondary" | "destructive" | "link" | "icon";
 }) => {
   const themes = {
     primary:
@@ -29,6 +29,7 @@ export const Button = ({
     destructive:
       "bg-red-default text-white-default border-red-default hover:bg-red-destructive hover:border-red-destructive active:bg-red-hover focus:border-blue-hover",
     link: "bg-white-default !p-0 !border-none text-black-default underline hover:no-underline focus:!bg-white-default focus:!text-black-default",
+    icon: "!border-none bg-gray-selected hover:bg-gray-600 !rounded-full max-h-9 !p-1.5 ml-1.5",
   };
 
   return (
@@ -42,7 +43,13 @@ export const Button = ({
       aria-label={ariaLabel}
       type="button"
     >
-      {icon && <div className={`${iconWrapperClassName || ""} w-8 -ml-2 mr-2`}>{icon}</div>}
+      {icon && (
+        <div
+          className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}
+        >
+          {icon}
+        </div>
+      )}
       {children}
     </button>
   );

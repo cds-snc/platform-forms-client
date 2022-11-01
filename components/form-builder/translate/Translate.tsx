@@ -142,7 +142,7 @@ export const Translate = () => {
               onClick={switchLanguage}
               icon={<SwapHoriz className="fill-white-default" />}
             >
-              {t("Switch")}
+              {t("switch")}
             </Button>
             <LangSpan>{translationLanguagePriority === "en" ? "French" : "English"}</LangSpan>
           </FlexDiv>
