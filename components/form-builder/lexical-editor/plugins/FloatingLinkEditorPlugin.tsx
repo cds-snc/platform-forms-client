@@ -28,7 +28,7 @@ import { getSelectedNode } from "../utils/getSelectedNode";
 import { sanitizeUrl } from "../utils/sanitizeUrl";
 import { setFloatingElemPosition } from "../utils/setFloatingElemPosition";
 import { EditIcon } from "@components/form-builder/icons/EditIcon";
-import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 function FloatingLinkEditor({
   editor,
@@ -44,6 +44,8 @@ function FloatingLinkEditor({
   const [lastSelection, setLastSelection] = useState<
     RangeSelection | GridSelection | NodeSelection | null
   >(null);
+
+  const { t } = useTranslation();
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -183,17 +185,16 @@ function FloatingLinkEditor({
       ) : (
         <>
           <div className="link-input">
-            <a href={linkUrl} target="_blank" rel="noopener noreferrer">
-              {linkUrl}
-            </a>
             <button
-              className="link-edit"
+              title={t("Click to edit link")}
+              className="relative w-full"
               onMouseDown={(event) => event.preventDefault()}
               onClick={() => {
                 setEditMode(true);
               }}
             >
-              <EditIcon title="Edit link" className="w-5 h-5 inline-block right-0" />
+              {linkUrl}
+              <EditIcon title="Edit link" className="w-5 h-5 inline-block absolute right-0" />
             </button>
           </div>
         </>

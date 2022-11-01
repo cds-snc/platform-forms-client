@@ -52,7 +52,7 @@
   cursor: pointer;
 }
 
-.link-editor .link-input a {
+.link-editor .link-input span {
   color: #216fdb;
   text-decoration: none;
   display: block;
@@ -60,10 +60,6 @@
   overflow: hidden;
   margin-right: 30px;
   text-overflow: ellipsis;
-}
-
-.link-editor .link-input a:hover {
-  text-decoration: underline;
 }
 
 .link-editor .font-size-wrapper,
