@@ -12,6 +12,7 @@ import {
   ElementTypeWithIndex,
   LocalizedElementProperties,
   LocalizedFormProperties,
+  ElementStore,
 } from "../types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
@@ -24,6 +25,7 @@ import { Input } from "./Input";
 import { ConfirmationDescription } from "./ConfirmationDescription";
 import { PrivacyDescription } from "./PrivacyDescription";
 import { QuestionInput } from "./QuestionInput";
+import shallow from "zustand/shallow";
 
 const SelectedElement = ({
   selected,
@@ -575,7 +577,14 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField, updateField } = useTemplateStore();
+  const { form, localizeField, updateField } = useTemplateStore(
+    (state: ElementStore) => ({
+      form: state.form,
+      localizeField: state.localizeField,
+      updateField: state.updateField,
+    }),
+    shallow
+  );
 
   const introTextPlaceholder =
     form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
