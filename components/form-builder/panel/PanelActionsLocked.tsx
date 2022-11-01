@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { FancyButton } from "./Button";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { LockIcon } from "../icons";
+import { Button } from "../shared/Button";
 
 const Actions = styled.div`
   position: relative;
@@ -43,7 +43,10 @@ const AddButtonWrapper = styled.div`
 `;
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
-  const add = useTemplateStore((s) => s.add);
+  const { add, setFocusInput } = useTemplateStore((s) => ({
+    add: s.add,
+    setFocusInput: s.setFocusInput,
+  }));
   const { t } = useTranslation("form-builder");
   return (
     <Actions className="panel-actions">
@@ -52,15 +55,18 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
       </Label>
       {addElement && (
         <AddButtonWrapper>
-          <FancyButton
+          <Button
             onClick={() => {
               // ensure element gets added to start of elements array
               // add function is add(index + 1)
+              setFocusInput(true);
               add(-1);
             }}
+            theme="secondary"
+            className="!border-1.5 !py-2 !px-4 leading-6"
           >
             {t("Add element")}
-          </FancyButton>
+          </Button>
         </AddButtonWrapper>
       )}
     </Actions>

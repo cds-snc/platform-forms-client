@@ -19,7 +19,7 @@ import { useElementOptions } from "../hooks/useElementOptions";
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
-import { FancyButton } from "./Button";
+import { Button } from "../shared/Button";
 import { Input } from "./Input";
 import { ConfirmationDescription } from "./ConfirmationDescription";
 import { PrivacyDescription } from "./PrivacyDescription";
@@ -364,25 +364,6 @@ const ModalInputShort = styled(Input)`
   width: 180px;
 `;
 
-const ModalSaveButton = styled(FancyButton)`
-  padding: 15px 20px;
-  background: #26374a;
-  box-shadow: inset 0 -2px 0 #515963;
-  color: white;
-
-  &:hover:not(:disabled),
-  &:active,
-  &:focus {
-    color: #ffffff;
-    background: #1c578a;
-    box-shadow: inset 0 -2px 0 #7a8796;
-  }
-
-  &:hover:active {
-    background: #16446c;
-  }
-`;
-
 const ModalForm = ({
   item,
   properties,
@@ -549,9 +530,12 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
         renderSaveButton={() => (
           <ModalButton isOpenButton={false}>
             {modals[item.index] && (
-              <ModalSaveButton onClick={handleSubmit({ item, properties: modals[item.index] })}>
+              <Button
+                className="mr-4"
+                onClick={handleSubmit({ item, properties: modals[item.index] })}
+              >
                 {t("Save")}
-              </ModalSaveButton>
+              </Button>
             )}
           </ModalButton>
         )}

@@ -3,15 +3,11 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../store/useTemplateStore";
-import { FancyButton } from "../panel/Button";
+import { Button } from "../shared/Button";
 
 interface IShowSpan {
   show: boolean;
 }
-
-const SecondaryButton = styled(FancyButton)`
-  padding: 15px 20px;
-`;
 
 const StyledSpan = styled.span<IShowSpan>`
   color: #777777;
@@ -43,7 +39,9 @@ export const CopyToClipboard = () => {
 
   return (
     <>
-      <SecondaryButton onClick={handleCopyToClipboard}>{t("copyButton")}</SecondaryButton>
+      <Button onClick={handleCopyToClipboard} theme="secondary">
+        {t("copyButton")}
+      </Button>
       {isCopied && <StyledSpan show={showMessage}>{isCopied}</StyledSpan>}
     </>
   );

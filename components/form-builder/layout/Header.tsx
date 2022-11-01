@@ -3,14 +3,8 @@ import LanguageToggle from "../../globals/LanguageToggle";
 import { DownloadFileButton } from "./DownloadFileButton";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
-import styled from "styled-components";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
-
-const StyledH2 = styled.h2`
-  display: inline-block;
-  margin-right: 40px;
-`;
 
 export const Header = () => {
   const { status } = useSession();
@@ -29,11 +23,16 @@ export const Header = () => {
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
       <div className="container--wet">
         <div className="flex" style={{ justifyContent: "space-between" }}>
-          <div className="">
-            <StyledH2>
-              <button onClick={handleClick("start")}>GC Forms</button>
-            </StyledH2>
-            {currentTab !== "start" && isSaveable() && <DownloadFileButton />}
+          <div>
+            <button
+              onClick={handleClick("start")}
+              className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
+            >
+              GC Forms
+            </button>
+            {currentTab !== "start" && isSaveable() && (
+              <DownloadFileButton className="!py-1 !px-4" />
+            )}
           </div>
           <div className="inline-flex">
             {<LoginMenu isAuthenticated={status === "authenticated"} />}

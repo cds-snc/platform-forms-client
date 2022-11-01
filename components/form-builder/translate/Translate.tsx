@@ -9,30 +9,8 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
-import { FancyButton } from "../panel/Button";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-
-const SwitchLangButton = styled(FancyButton)`
-  padding: 10px 20px;
-  background: #26374a;
-  color: white;
-  margin: 0 10px;
-
-  &:hover:not(:disabled),
-  &:active,
-  &:focus {
-    color: #ffffff;
-    background: #1c578a;
-  }
-
-  &:hover:active {
-    background: #16446c;
-  }
-
-  svg {
-    width: 30px;
-  }
-`;
+import { Button } from "../shared/Button";
 
 const FlexDiv = styled.div`
   display: flex;
@@ -165,9 +143,13 @@ export const Translate = () => {
         <FlexDiv>
           <FlexDiv>
             <LangSpan>{translationLanguagePriority === "en" ? "English" : "French"}</LangSpan>
-            <SwitchLangButton onClick={switchLanguage} icon={<SwapHoriz />}>
-              {t("Switch")}
-            </SwitchLangButton>
+            <Button
+              className="mx-4"
+              onClick={switchLanguage}
+              icon={<SwapHoriz className="fill-white-default" />}
+            >
+              {t("switch")}
+            </Button>
             <LangSpan>{translationLanguagePriority === "en" ? "French" : "English"}</LangSpan>
           </FlexDiv>
           <DownloadCSV />
