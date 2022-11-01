@@ -5,6 +5,7 @@ import { ElementPanel } from "../panel/ElementPanel";
 import useTemplateStore from "../store/useTemplateStore";
 import useNavigationStore from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
+import { useAllowPublish } from "../hooks/useAllowPublish";
 
 import { Language, LocalizedFormProperties, TemplateSchema } from "../types";
 import { Save } from "./Save";
@@ -16,6 +17,7 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { FormRecord } from "@lib/types";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
+import { DataDeliveryInstructions } from "./DataDeliveryInstructions";
 
 const StyledHeader = styled.h1`
   border-bottom: none;
@@ -34,6 +36,7 @@ type LayoutProps = {
 
 export const Layout = ({ tab, initialForm }: LayoutProps) => {
   const { localizeField, form, setLang, importTemplate } = useTemplateStore();
+  const { userCanPublish } = useAllowPublish();
   const { currentTab, setTab } = useNavigationStore();
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
@@ -92,7 +95,18 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <StyledPreviewWrapper>
               <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-              <Preview />
+              <Preview isPreview={true} />
+            </StyledPreviewWrapper>
+          </div>
+        )}
+
+        {currentTab === "test-data-delivery" && (
+          <div className="col-start-4 col-span-9">
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+            <h1 className="border-0 mb-0">Test your response delivery</h1>
+            <DataDeliveryInstructions />
+            <StyledPreviewWrapper>
+              <Preview isPreview={false} />
             </StyledPreviewWrapper>
           </div>
         )}
@@ -111,7 +125,7 @@ export const Layout = ({ tab, initialForm }: LayoutProps) => {
           </div>
         )}
 
-        {currentTab === "publish" && (
+        {currentTab === "publish" && userCanPublish && (
           <div className="col-start-4 col-span-9">
             <Publish />
           </div>

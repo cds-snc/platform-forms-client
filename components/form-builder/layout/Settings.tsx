@@ -19,13 +19,25 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
   );
 };
 
-const TextInput = ({ id, describedBy }: { id: string; describedBy?: string }) => {
+const TextInput = ({
+  id,
+  describedBy,
+  value,
+  onChange,
+}: {
+  id: string;
+  describedBy?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   return (
     <input
       id={id}
       aria-describedby={describedBy}
       type="text"
       className="w-3/5 py-2 px-3 my-2 rounded border-2 border-black-default border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus"
+      value={value}
+      onChange={onChange}
     />
   );
 };
@@ -72,7 +84,11 @@ export const Button = ({
 
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
-  const { initialize } = useTemplateStore();
+  const {
+    initialize,
+    submission: { email },
+    updateField,
+  } = useTemplateStore();
   const { setTab } = useNavigationStore();
 
   return (
@@ -85,6 +101,10 @@ export const Settings = () => {
           <TextInput
             id="response-delivery"
             describedBy="response-delivery-hint-1 response-delivery-hint-2"
+            value={email}
+            onChange={(e) => {
+              updateField(`submission.email`, e.target.value);
+            }}
           />
         </div>
 

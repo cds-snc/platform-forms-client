@@ -16,6 +16,7 @@ import {
   $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
+import { TabEscape } from "./plugins/TabEscape";
 
 const RichTextWrapper = styled.div`
   height: 100%;
@@ -74,6 +75,7 @@ export const Editor = ({
         />
         <LinkPlugin />
         <ListPlugin />
+        <TabEscape />
       </LexicalComposer>
     </RichTextWrapper>
   );
