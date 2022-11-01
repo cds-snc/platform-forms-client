@@ -183,9 +183,9 @@ function FloatingLinkEditor({
       ) : (
         <>
           <div className="link-input">
-            <Link href={linkUrl} target="_blank" rel="noopener noreferrer">
+            <a href={linkUrl} target="_blank" rel="noopener noreferrer">
               {linkUrl}
-            </Link>
+            </a>
             <button
               className="link-edit"
               onMouseDown={(event) => event.preventDefault()}
