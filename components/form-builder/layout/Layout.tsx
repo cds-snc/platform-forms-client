@@ -137,7 +137,7 @@ export const Layout = () => {
         {currentTab !== "start" && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
-        {form && renderTab(currentTab)}
+        <>{form && renderTab(currentTab)}</>
       </div>
     </main>
   );

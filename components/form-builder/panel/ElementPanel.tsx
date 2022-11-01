@@ -376,7 +376,7 @@ const ModalForm = ({
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField } = useTemplateStore();
+  const localizeField = useTemplateStore((s) => s.localizeField);
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
@@ -498,10 +498,10 @@ const ElementWrapperDiv = styled.div`
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-  const {
-    form: { elements },
-    updateField,
-  } = useTemplateStore();
+  const { elements, updateField } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    elements: s.form.elements,
+  }));
 
   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 

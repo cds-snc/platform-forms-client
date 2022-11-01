@@ -37,7 +37,6 @@ export const Publish = () => {
     if (result && result?.error) {
       setError(true);
       return;
-      s;
     }
     setFormId(result?.id);
   }, [setError, setFormId]);
