@@ -31,7 +31,9 @@ export const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`${className} ${themes[theme]} relative py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-2 focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default`}
+      className={`${className || ""} ${
+        themes[theme]
+      } relative py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default`}
       id={id}
       disabled={disabled}
       aria-label={ariaLabel}

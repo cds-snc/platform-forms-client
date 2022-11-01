@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-import { Button, FancyButton } from "./Button";
+import { Button as OldButton } from "./Button";
+import { Button } from "../shared/Button";
 import { Close } from "../icons/Close";
 import { CDSHTMLDialogElement } from "../types";
 import useModalStore from "../store/useModalStore";
@@ -59,14 +60,10 @@ const StyledDialog = styled.dialog`
     justify-content: flex-start;
     padding: 15px;
     border-top: 1px solid #cacaca;
-
-    > *:first-child {
-      margin-right: 20px;
-    }
   }
 `;
 
-const CloseButton = styled(Button)`
+const CloseButton = styled(OldButton)`
   padding: 3px 5px;
   border: 1px solid #cacaca;
   border-radius: 2px;
@@ -74,10 +71,6 @@ const CloseButton = styled(Button)`
   svg {
     margin-right: 3px;
   }
-`;
-
-const ModalCancelButton = styled(FancyButton)`
-  padding: 15px 20px;
 `;
 
 interface IModalContext {
@@ -244,7 +237,7 @@ export const ModalContainer = ({
           </div>
           <div className="modal-footer">
             {saveButton}
-            <ModalCancelButton onClick={close}>{t("Cancel")}</ModalCancelButton>
+            <Button theme="secondary" onClick={close}>{t("Cancel")}</Button>
           </div>
         </div>
     </StyledDialog>

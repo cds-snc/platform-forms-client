@@ -3,12 +3,12 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
-import { Button, FancyButton } from "./Button";
+import { Button } from "../shared/Button";
+import { Button as OldButton } from "./Button";
 import { ChevronUp, ChevronDown, Close, Duplicate, ThreeDotsIcon } from "../icons";
+import { Modal } from "./Modal";
 import { ElementTypeWithIndex } from "../types";
 import useTemplateStore from "../store/useTemplateStore";
-
-import { Modal } from "./Modal";
 
 const Actions = styled.div`
   position: relative;
@@ -19,7 +19,7 @@ const Actions = styled.div`
   align-items: center;
 `;
 
-const PanelButton = styled(Button)`
+const PanelButton = styled(OldButton)`
   border: 1px solid transparent;
   padding: 20px 5px;
   transition: background 0.1s ease, border 0.1s linear;
@@ -159,14 +159,16 @@ export const PanelActions = ({
       )}
 
       <AddButtonWrapper>
-        <FancyButton
+        <Button
           onClick={() => {
             setFocusInput(true);
             add(item.index);
           }}
+          theme="secondary"
+          className="!border-1.5 !py-2 !px-4 leading-6"
         >
           {t("Add element")}
-        </FancyButton>
+        </Button>
       </AddButtonWrapper>
     </Actions>
   );
