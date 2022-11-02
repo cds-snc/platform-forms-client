@@ -19,7 +19,7 @@ const StyledInput = styled(Input)`
   }
 `;
 
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 
 export const QuestionInput = ({
@@ -33,15 +33,23 @@ export const QuestionInput = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
-  const { localizeField, updateField, focusInput, setFocusInput } = useTemplateStore();
+  const { localizeField, updateField, getFocusInput, setFocusInput } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+    focusInput: s.focusInput,
+    setFocusInput: s.setFocusInput,
+    getFocusInput: s.getFocusInput,
+  }));
+
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (input.current && focusInput) {
+    // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
+    if (input.current && getFocusInput()) {
       input.current.focus();
       setFocusInput(false);
     }
-  }, []);
+  }, [getFocusInput]);
 
   const _debounced = useCallback(
     debounce((val) => {

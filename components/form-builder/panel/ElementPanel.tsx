@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -192,32 +192,15 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
-  const {
-    localizeField,
-    elements,
-    updateField,
-    unsetField,
-    resetChoices,
-    focusInput,
-    setFocusInput,
-  } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    elements: s.form.elements,
-    updateField: s.updateField,
-    unsetField: s.unsetField,
-    resetChoices: s.resetChoices,
-    focusInput: s.focusInput,
-    setFocusInput: s.setFocusInput,
-  }));
-
-  const input = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (input.current && focusInput) {
-      input.current.focus();
-      setFocusInput(false);
-    }
-  }, []);
+  const { localizeField, elements, updateField, unsetField, resetChoices } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      elements: s.form.elements,
+      updateField: s.updateField,
+      unsetField: s.unsetField,
+      resetChoices: s.resetChoices,
+    })
+  );
 
   const questionNumber =
     elements

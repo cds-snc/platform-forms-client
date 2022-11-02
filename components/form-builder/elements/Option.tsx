@@ -26,7 +26,7 @@ export const Option = ({
 }) => {
   const input = useRef<HTMLInputElement>(null);
 
-  const { elements, addChoice, removeChoice, updateField, lang, focusInput, setFocusInput } =
+  const { elements, addChoice, removeChoice, updateField, lang, getFocusInput, setFocusInput } =
     useTemplateStore((s) => ({
       elements: s.form.elements,
       addChoice: s.addChoice,
@@ -35,6 +35,7 @@ export const Option = ({
       lang: s.lang,
       focusInput: s.focusInput,
       setFocusInput: s.setFocusInput,
+      getFocusInput: s.getFocusInput,
     }));
 
   const val = elements[parentIndex].properties.choices[index][lang];
@@ -42,11 +43,12 @@ export const Option = ({
   const { t } = useTranslation("form-builder");
 
   useEffect(() => {
-    if (input.current && focusInput) {
+    // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
+    if (input.current && getFocusInput()) {
       input.current.focus();
       setFocusInput(false);
     }
-  }, []);
+  }, [getFocusInput]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
