@@ -2,7 +2,7 @@ import React, { useState, ReactElement, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { Option } from "./Option";
 import { BulkAdd } from "./BulkAdd";
 import { Button } from "../shared/Button";
@@ -55,7 +55,10 @@ const AddOptions = ({
   index: number;
   // toggleBulkAdd: (onoff: boolean) => void;
 }) => {
-  const { addChoice, setFocusInput } = useTemplateStore();
+  const { addChoice, setFocusInput } = useTemplateStore((s) => ({
+    addChoice: s.addChoice,
+    setFocusInput: s.setFocusInput,
+  }));
 
   return (
     <>
@@ -88,9 +91,7 @@ export const Options = ({
   item: ElementTypeWithIndex;
   renderIcon?: RenderIcon;
 }) => {
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const elements = useTemplateStore((s) => s.form.elements);
 
   const [bulkAddAction, setBulkAddAction] = useState(false);
 

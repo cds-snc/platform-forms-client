@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { LockIcon } from "../icons";
 import { Button } from "../shared/Button";
 
@@ -43,7 +43,10 @@ const AddButtonWrapper = styled.div`
 `;
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
-  const { add, setFocusInput } = useTemplateStore();
+  const { add, setFocusInput } = useTemplateStore((s) => ({
+    add: s.add,
+    setFocusInput: s.setFocusInput,
+  }));
   const { t } = useTranslation("form-builder");
   return (
     <Actions className="panel-actions">

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
 import { Button } from "../shared/Button";
 
@@ -30,7 +30,7 @@ const fixMarkdownHeadings = (str: string) => str.replace(/#{1,6}/g, "$& ").repla
 const formatText = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}"`;
 
 export const DownloadCSV = () => {
-  const { form } = useTemplateStore();
+  const form = useTemplateStore((s) => s.form);
   const { t } = useTranslation("form-builder");
 
   const generateCSV = async () => {

@@ -1,6 +1,5 @@
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
-import useNavigationStore from "../store/useNavigationStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
@@ -10,7 +9,6 @@ import Link from "next/link";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
-  const { formId, setFormId } = useNavigationStore();
   const {
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
     isPublishable,
@@ -18,7 +16,12 @@ export const Publish = () => {
 
   const { uploadJson } = usePublish(false);
   const [error, setError] = useState(false);
-  const { getSchema } = useTemplateStore();
+
+  const { getSchema, formId, setFormId } = useTemplateStore((s) => ({
+    getSchema: s.getSchema,
+    formId: s.formId,
+    setFormId: s.setFormId,
+  }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (

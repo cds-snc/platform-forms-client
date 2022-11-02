@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Close } from "../icons";
 import { Button } from "../shared/Button";
 import { Input } from "../panel";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 
 const TextInput = styled(Input)`
@@ -25,15 +25,18 @@ export const Option = ({
   renderIcon?: RenderIcon;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-  const {
-    form: { elements },
-    addChoice,
-    removeChoice,
-    updateField,
-    lang,
-    focusInput,
-    setFocusInput,
-  } = useTemplateStore();
+
+  const { elements, addChoice, removeChoice, updateField, lang, focusInput, setFocusInput } =
+    useTemplateStore((s) => ({
+      elements: s.form.elements,
+      addChoice: s.addChoice,
+      removeChoice: s.removeChoice,
+      updateField: s.updateField,
+      lang: s.lang,
+      focusInput: s.focusInput,
+      setFocusInput: s.setFocusInput,
+    }));
+
   const val = elements[parentIndex].properties.choices[index][lang];
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
@@ -23,7 +23,10 @@ export const RichTextLocked = ({
   initialValue: string;
   schemaProperty: string;
 }) => {
-  const { localizeField, lang } = useTemplateStore();
+  const { localizeField, lang } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    lang: s.lang,
+  }));
 
   return (
     <ElementWrapperDiv className="h-auto relative -mt-px">

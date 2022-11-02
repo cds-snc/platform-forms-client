@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
 import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
@@ -113,7 +113,13 @@ export const Translate = () => {
     toggleTranslationLanguagePriority,
     translationLanguagePriority,
     localizeField,
-  } = useTemplateStore();
+  } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    form: s.form,
+    toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
+    translationLanguagePriority: s.translationLanguagePriority,
+    localizeField: s.localizeField,
+  }));
   const { t } = useTranslation("form-builder");
 
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";

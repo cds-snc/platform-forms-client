@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "next-i18next";
 
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { Button } from "../shared/Button";
 
 const slugify = (str: string) =>
@@ -21,7 +21,10 @@ const getDate = () => {
 
 export const DownloadFileButton = ({ className }: { className?: string }) => {
   const { t } = useTranslation("form-builder");
-  const { getSchema, form } = useTemplateStore();
+  const { getSchema, form } = useTemplateStore((s) => ({
+    getSchema: s.getSchema,
+    form: s.form,
+  }));
   const downloadfile = useCallback(async () => {
     async function retrieveFileBlob() {
       try {

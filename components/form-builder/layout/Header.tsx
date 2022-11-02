@@ -3,13 +3,14 @@ import LanguageToggle from "../../globals/LanguageToggle";
 import { DownloadFileButton } from "./DownloadFileButton";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
-import useNavigationStore from "../store/useNavigationStore";
+import { useNavigationStore } from "../store/useNavigationStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
 export const Header = () => {
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
-  const { currentTab, setTab } = useNavigationStore();
+  const currentTab = useNavigationStore((s) => s.currentTab);
+  const setTab = useNavigationStore((s) => s.setTab);
 
   const handleClick = (tab: string) => {
     return (e: React.MouseEvent<HTMLElement>) => {

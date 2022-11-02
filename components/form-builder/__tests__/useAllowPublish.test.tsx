@@ -1,4 +1,5 @@
-import useTemplateStore from "../store/useTemplateStore";
+import React from "react";
+import { TemplateStoreProvider, TemplateStoreProps } from "../store/useTemplateStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { renderHook } from "@testing-library/react";
 import {
@@ -6,23 +7,26 @@ import {
   isDescriptionTranslated,
   isFormElementTranslated,
   areChoicesTranslated,
-  MissingTranslationError,
+  MissingTranslation,
 } from "../hooks/useAllowPublish";
 
-import { act } from "react-dom/test-utils";
-
-const createStore = () => {
-  const { result } = renderHook(() => useTemplateStore());
-  act(() => {
-    result.current.initialize();
-  });
+const createTemplateStore = ({
+  form,
+  submission,
+  publishingStatus,
+}: Partial<TemplateStoreProps>) => {
+  const wrapper = ({ children }: React.PropsWithChildren) => (
+    <TemplateStoreProvider form={form} submission={submission} publishingStatus={publishingStatus}>
+      {children}
+    </TemplateStoreProvider>
+  );
+  const { result } = renderHook(() => useAllowPublish(), { wrapper });
 
   return result;
 };
 
 describe("useAllowPublish", () => {
   it("checks required fields needed to publish or save", () => {
-    const result = createStore();
     const store = {
       form: {
         version: 1,
@@ -53,21 +57,17 @@ describe("useAllowPublish", () => {
       submission: { email: "test@example.com" },
       publishingStatus: true,
     };
-
-    act(() => {
-      result.current.importTemplate(store);
-    });
-
     const {
-      result: {
-        current: { data, hasData, isSaveable, isPublishable },
-      },
-    } = renderHook(() => useAllowPublish());
+      current: { data, hasData, isSaveable, isPublishable },
+    } = createTemplateStore({
+      form: store.form,
+      submission: store.submission,
+      publishingStatus: store.publishingStatus,
+    });
 
     expect(data.title).toBe(true);
     expect(data.questions).toBe(true);
     expect(data.privacyPolicy).toBe(false);
-    expect(result.current.form.elements[0].properties.descriptionEn).toBe("description en");
     expect(hasData(["title"])).toBe(true);
     expect(hasData(["title", "questions"])).toBe(true);
     expect(hasData(["title", "privacyPolicy"])).toBe(false);
@@ -77,7 +77,6 @@ describe("useAllowPublish", () => {
   });
 
   it("isPublishable", () => {
-    const result = createStore();
     const store = {
       form: {
         version: 1,
@@ -108,16 +107,13 @@ describe("useAllowPublish", () => {
       submission: { email: "test@example.com" },
       publishingStatus: true,
     };
-
-    act(() => {
-      result.current.importTemplate(store);
-    });
-
     const {
-      result: {
-        current: { isPublishable },
-      },
-    } = renderHook(() => useAllowPublish());
+      current: { isPublishable },
+    } = createTemplateStore({
+      form: store.form,
+      submission: store.submission,
+      publishingStatus: store.publishingStatus,
+    });
 
     expect(isPublishable()).toBe(true);
   });
@@ -140,7 +136,7 @@ describe("useAllowPublish", () => {
         });
       };
 
-      expect(notTranslated).toThrow(MissingTranslationError);
+      expect(notTranslated).toThrow(MissingTranslation);
 
       const notProvided = () => {
         isTitleTranslated({
@@ -149,7 +145,7 @@ describe("useAllowPublish", () => {
         });
       };
 
-      expect(notProvided).toThrow(MissingTranslationError);
+      expect(notProvided).toThrow(MissingTranslation);
     });
 
     it("isDescriptionTranslated", () => {
@@ -169,7 +165,7 @@ describe("useAllowPublish", () => {
         });
       };
 
-      expect(notTranslated).toThrow(MissingTranslationError);
+      expect(notTranslated).toThrow(MissingTranslation);
 
       const notProvided = () => {
         isDescriptionTranslated({
@@ -211,7 +207,7 @@ describe("useAllowPublish", () => {
         ]);
       };
 
-      expect(notTranslated).toThrow(MissingTranslationError);
+      expect(notTranslated).toThrow(MissingTranslation);
 
       const notProvided = () => {
         areChoicesTranslated([
@@ -226,7 +222,7 @@ describe("useAllowPublish", () => {
         ]);
       };
 
-      expect(notProvided).toThrow(MissingTranslationError);
+      expect(notProvided).toThrow(MissingTranslation);
     });
 
     it("isFormElementTranslated richText", () => {
@@ -262,7 +258,7 @@ describe("useAllowPublish", () => {
         });
       };
 
-      expect(notTranslated).toThrow(MissingTranslationError);
+      expect(notTranslated).toThrow(MissingTranslation);
 
       const notProvided = () => {
         isFormElementTranslated({
@@ -279,7 +275,7 @@ describe("useAllowPublish", () => {
         });
       };
 
-      expect(notProvided).toThrow(MissingTranslationError);
+      expect(notProvided).toThrow(MissingTranslation);
     });
 
     it("isFormElementTranslated other types", () => {
@@ -325,7 +321,7 @@ describe("useAllowPublish", () => {
         });
       };
 
-      expect(titleNotTranslated).toThrow(MissingTranslationError);
+      expect(titleNotTranslated).toThrow(MissingTranslation);
     });
 
     const descriptionNotProvided = () => {
@@ -372,7 +368,7 @@ describe("useAllowPublish", () => {
     };
 
     // If provided, Descriptions must be translated
-    expect(descriptionNotTranslated).toThrow(MissingTranslationError);
+    expect(descriptionNotTranslated).toThrow(MissingTranslation);
 
     const optionNotTranslated = () => {
       isFormElementTranslated({
@@ -394,7 +390,7 @@ describe("useAllowPublish", () => {
       });
     };
 
-    expect(optionNotTranslated).toThrow(MissingTranslationError);
+    expect(optionNotTranslated).toThrow(MissingTranslation);
 
     const optionNotProvided = () => {
       isFormElementTranslated({
@@ -416,7 +412,7 @@ describe("useAllowPublish", () => {
       });
     };
 
-    expect(optionNotProvided).toThrow(MissingTranslationError);
+    expect(optionNotProvided).toThrow(MissingTranslation);
   });
 
   describe("Validate form translated tests", () => {
@@ -470,147 +466,125 @@ describe("useAllowPublish", () => {
     };
 
     it("fails when form title translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.titleFr = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
 
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
-
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
       expect(data.translate).toBe(false);
     });
 
     it("fails when form introduction translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.introduction.descriptionFr = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
 
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(false);
     });
 
     it("fails when form privacyPolicy translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.privacyPolicy.descriptionEn = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
 
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(false);
     });
 
     it("fails when form endPage translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.endPage.descriptionFr = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
-
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(false);
     });
 
     it("fails when an element title translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.titleFr = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
-
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(false);
     });
 
     it("passes when an optional element description is not set", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.descriptionEn = "";
       store.form.elements[0].properties.descriptionFr = "";
 
-      act(() => {
-        result.current.importTemplate(store);
-      });
-
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(true);
     });
 
     it("fails when an optional element description is provided but translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.descriptionFr = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
-
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(false);
     });
 
     it("fails when a choice element translation is missing", () => {
-      const result = createStore();
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.choices[0].fr = "";
-      act(() => {
-        result.current.importTemplate(store);
-      });
-
       const {
-        result: {
-          current: { data },
-        },
-      } = renderHook(() => useAllowPublish());
+        current: { data },
+      } = createTemplateStore({
+        form: store.form,
+        submission: store.submission,
+        publishingStatus: store.publishingStatus,
+      });
 
       expect(data.translate).toBe(false);
     });
