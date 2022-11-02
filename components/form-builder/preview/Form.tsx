@@ -15,7 +15,7 @@ import { NextRouter } from "next/router";
 import Markdown from "markdown-to-jsx";
 import styled from "styled-components";
 import { BackArrowIcon } from "../icons";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { LocalizedElementProperties } from "../types";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
@@ -51,7 +51,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
   const { t } = useTranslation();
-  const { localizeField } = useTemplateStore();
+  const localizeField = useTemplateStore((s) => s.localizeField);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";

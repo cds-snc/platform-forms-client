@@ -1,9 +1,13 @@
-import useTemplateStore from "../store/useTemplateStore";
+import React from "react";
+import { useTemplateStore, TemplateStoreProvider } from "../store/useTemplateStore";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
 
 const createStore = () => {
-  const { result } = renderHook(() => useTemplateStore());
+  const wrapper = ({ children }: React.PropsWithChildren) => (
+    <TemplateStoreProvider>{children}</TemplateStoreProvider>
+  );
+  const { result } = renderHook(() => useTemplateStore((s) => s), { wrapper });
   act(() => {
     result.current.initialize();
   });

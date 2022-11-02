@@ -1,11 +1,12 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
+import debounce from "lodash.debounce";
 import {
   ElementOption,
   ElementProperties,
@@ -19,10 +20,11 @@ import { useElementOptions } from "../hooks/useElementOptions";
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
-import { FancyButton } from "./Button";
+import { Button } from "../shared/Button";
 import { Input } from "./Input";
 import { ConfirmationDescription } from "./ConfirmationDescription";
 import { PrivacyDescription } from "./PrivacyDescription";
+import { QuestionInput } from "./QuestionInput";
 
 const SelectedElement = ({
   selected,
@@ -76,15 +78,23 @@ const SelectedElement = ({
 
 const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
-  const {
-    form: { elements },
-  } = useTemplateStore();
-  let { type } = elements[item.index];
+  const { validationType, type } = useTemplateStore(
+    useCallback(
+      (s) => {
+        return {
+          type: s.form?.elements[item.index]?.type,
+          validationType: s.form?.elements[item.index].properties?.validation?.type,
+        };
+      },
+      [item.index]
+    )
+  );
+
+  let selectedType = type;
 
   if (!type) {
     return elementOptions[2];
   } else if (type === "textField") {
-    const validationType = elements[item.index].properties.validation.type;
     /**
      * Email, phone, and date fields are specialized text field types.
      * That is to say, their "type" is "textField" but they have specalized validation "type"s.
@@ -92,10 +102,10 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
      * it is a true Short Answer, or one of the other types.
      * The one exception to this is validationType === "text" types, for which we want to return "textField"
      */
-    type = validationType && validationType !== "text" ? validationType : type;
+    selectedType = validationType && validationType !== "text" ? validationType : type;
   }
 
-  const selected = elementOptions.filter((item) => item.id === type);
+  const selected = elementOptions.filter((item) => item.id === selectedType);
   return selected && selected.length ? selected[0] : elementOptions[2];
 };
 
@@ -193,24 +203,15 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
-  const {
-    localizeField,
-    form: { elements },
-    updateField,
-    unsetField,
-    resetChoices,
-    focusInput,
-    setFocusInput,
-  } = useTemplateStore();
-
-  const input = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (input.current && focusInput) {
-      input.current.focus();
-      setFocusInput(false);
-    }
-  }, []);
+  const { localizeField, elements, updateField, unsetField, resetChoices } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      elements: s.form.elements,
+      updateField: s.updateField,
+      unsetField: s.unsetField,
+      resetChoices: s.resetChoices,
+    })
+  );
 
   const questionNumber =
     elements
@@ -269,22 +270,10 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 {questionNumber}
               </span>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
-              <TitleInput
-                ref={input}
-                type="text"
-                id={`item${item.index}`}
-                name={`item${item.index}`}
-                placeholder={t("Question")}
-                value={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
-                aria-describedby={hasDescription ? `item${item.index}-describedby` : undefined}
-                onChange={(e) => {
-                  updateField(
-                    `form.elements[${item.index}].properties.${localizeField(
-                      LocalizedElementProperties.TITLE
-                    )}`,
-                    e.target.value
-                  );
-                }}
+              <QuestionInput
+                initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
+                index={item.index}
+                hasDescription={hasDescription}
               />
             </>
           )}
@@ -358,25 +347,6 @@ const ModalInputShort = styled(Input)`
   width: 180px;
 `;
 
-const ModalSaveButton = styled(FancyButton)`
-  padding: 15px 20px;
-  background: #26374a;
-  box-shadow: inset 0 -2px 0 #515963;
-  color: white;
-
-  &:hover:not(:disabled),
-  &:active,
-  &:focus {
-    color: #ffffff;
-    background: #1c578a;
-    box-shadow: inset 0 -2px 0 #7a8796;
-  }
-
-  &:hover:active {
-    background: #16446c;
-  }
-`;
-
 const ModalForm = ({
   item,
   properties,
@@ -389,7 +359,7 @@ const ModalForm = ({
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField } = useTemplateStore();
+  const localizeField = useTemplateStore((s) => s.localizeField);
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
@@ -511,10 +481,10 @@ const ElementWrapperDiv = styled.div`
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-  const {
-    form: { elements },
-    updateField,
-  } = useTemplateStore();
+  const { elements, updateField } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    elements: s.form.elements,
+  }));
 
   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
@@ -543,9 +513,12 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
         renderSaveButton={() => (
           <ModalButton isOpenButton={false}>
             {modals[item.index] && (
-              <ModalSaveButton onClick={handleSubmit({ item, properties: modals[item.index] })}>
+              <Button
+                className="mr-4"
+                onClick={handleSubmit({ item, properties: modals[item.index] })}
+              >
                 {t("Save")}
-              </ModalSaveButton>
+              </Button>
             )}
           </ModalButton>
         )}
@@ -586,16 +559,41 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField, updateField } = useTemplateStore();
+  const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
+    useTemplateStore((s) => ({
+      title: s.localizeField(LocalizedFormProperties.TITLE),
+      elements: s.form.elements,
+      introduction: s.form.introduction,
+      endPage: s.form.endPage,
+      privacyPolicy: s.form.privacyPolicy,
+      form: s.form,
+      localizeField: s.localizeField,
+      updateField: s.updateField,
+    }));
 
-  const introTextPlaceholder =
-    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const [value, setValue] = useState<string>(title);
 
-  const confirmTextPlaceholder =
-    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const _debounced = useCallback(
+    debounce((val) => {
+      updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, val);
+    }, 100),
+    []
+  );
+
+  const updateValue = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+      _debounced(e.target.value);
+    },
+    [setValue]
+  );
+
+  const introTextPlaceholder = introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
+  const confirmTextPlaceholder = endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   const policyTextPlaceholder =
-    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
     <ElementPanelDiv>
@@ -604,10 +602,8 @@ export const ElementPanel = () => {
           <>
             <FormTitleInput
               placeholder={t("placeHolderFormTitle")}
-              value={form[localizeField(LocalizedFormProperties.TITLE)]}
-              onChange={(e) => {
-                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
-              }}
+              value={value}
+              onChange={updateValue}
             />
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>
@@ -617,11 +613,11 @@ export const ElementPanel = () => {
         schemaProperty="introduction"
         aria-label={t("richTextIntroTitle")}
       />
-      {form.elements.map((element, index: number) => {
+      {elements.map((element, index: number) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
-      {form.elements?.length >= 1 && (
+      {elements?.length >= 1 && (
         <>
           <RichTextLocked
             addElement={false}

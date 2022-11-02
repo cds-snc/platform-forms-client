@@ -165,6 +165,7 @@ export const useAuth = () => {
         username,
         password,
       });
+
       logMessage.error(response);
       if (response?.error) {
         const responseErrorMessage = response.error;
@@ -180,6 +181,8 @@ export const useAuth = () => {
             username: t("UsernameOrPasswordIncorrect"),
             password: t("UsernameOrPasswordIncorrect"),
           });
+        } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
+          await router.push("/admin/login");
         } else {
           setCognitoError(t("InternalServiceException"));
         }
