@@ -6,6 +6,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
+import debounce from "lodash.debounce";
 import {
   ElementOption,
   ElementProperties,
@@ -548,20 +549,41 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField, updateField } = useTemplateStore((s) => ({
-    form: s.form,
-    localizeField: s.localizeField,
-    updateField: s.updateField,
-  }));
+  const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
+    useTemplateStore((s) => ({
+      title: s.localizeField(LocalizedFormProperties.TITLE),
+      elements: s.form.elements,
+      introduction: s.form.introduction,
+      endPage: s.form.endPage,
+      privacyPolicy: s.form.privacyPolicy,
+      form: s.form,
+      localizeField: s.localizeField,
+      updateField: s.updateField,
+    }));
 
-  const introTextPlaceholder =
-    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const [value, setValue] = useState<string>(title);
 
-  const confirmTextPlaceholder =
-    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const _debounced = useCallback(
+    debounce((val) => {
+      updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, val);
+    }, 1500),
+    []
+  );
+
+  const updateValue = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+      _debounced(e.target.value);
+    },
+    [setValue]
+  );
+
+  const introTextPlaceholder = introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+
+  const confirmTextPlaceholder = endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   const policyTextPlaceholder =
-    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
     <ElementPanelDiv>
@@ -570,10 +592,8 @@ export const ElementPanel = () => {
           <>
             <FormTitleInput
               placeholder={t("placeHolderFormTitle")}
-              value={form[localizeField(LocalizedFormProperties.TITLE)]}
-              onChange={(e) => {
-                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
-              }}
+              value={value}
+              onChange={updateValue}
             />
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>
@@ -583,11 +603,11 @@ export const ElementPanel = () => {
         schemaProperty="introduction"
         aria-label={t("richTextIntroTitle")}
       />
-      {form.elements.map((element, index: number) => {
+      {elements.map((element, index: number) => {
         const item = { ...element, index };
         return <ElementWrapper item={item} key={item.id} />;
       })}
-      {form.elements?.length >= 1 && (
+      {elements?.length >= 1 && (
         <>
           <RichTextLocked
             addElement={false}
