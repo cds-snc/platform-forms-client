@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Editor } from "./Editor";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { Language } from "../types";
@@ -27,6 +27,10 @@ export const RichTextEditor = ({
     }, 100),
     []
   );
+
+  useEffect(() => {
+    setValue(content);
+  }, [content]);
 
   const updateValue = useCallback(
     (value: string) => {
