@@ -24,7 +24,7 @@ export const RichTextEditor = ({
         value = "";
       }
       updateField(path, value);
-    }, 1500),
+    }, 100),
     []
   );
 

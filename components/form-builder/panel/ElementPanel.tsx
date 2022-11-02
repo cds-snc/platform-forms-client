@@ -576,7 +576,7 @@ export const ElementPanel = () => {
   const _debounced = useCallback(
     debounce((val) => {
       updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, val);
-    }, 1500),
+    }, 100),
     []
   );
 

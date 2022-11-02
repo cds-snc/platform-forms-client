@@ -56,7 +56,7 @@ export const QuestionInput = ({
         `form.elements[${index}].properties.${localizeField(LocalizedElementProperties.TITLE)}`,
         val
       );
-    }, 1500),
+    }, 100),
     []
   );
 

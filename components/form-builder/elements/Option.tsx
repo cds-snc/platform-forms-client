@@ -61,7 +61,7 @@ export const Option = ({
   const _debounced = useCallback(
     debounce((val) => {
       updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
-    }, 1500),
+    }, 100),
     []
   );
 
