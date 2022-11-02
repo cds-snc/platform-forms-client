@@ -82,8 +82,8 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
     useCallback(
       (s) => {
         return {
-          type: s.form.elements[item.index].type,
-          validationType: s.form.elements[item.index].properties.validation.type,
+          type: s.form?.elements[item.index]?.type,
+          validationType: s.form?.elements[item.index].properties?.validation?.type,
         };
       },
       [item.index]
