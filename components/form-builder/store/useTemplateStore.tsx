@@ -71,6 +71,7 @@ export interface TemplateStoreProps {
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
+  getFocusInput: () => boolean;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
   localizeField: {
@@ -149,6 +150,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
         set((state) => {
           state.focusInput = isSet;
         }),
+      getFocusInput: () => get().focusInput,
       updateField: (path, value) =>
         set((state) => {
           update(state, path, value);
