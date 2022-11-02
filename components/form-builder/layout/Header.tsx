@@ -3,24 +3,36 @@ import LanguageToggle from "../../globals/LanguageToggle";
 import { DownloadFileButton } from "./DownloadFileButton";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
-import styled from "styled-components";
-import useNavigationStore from "../store/useNavigationStore";
-
-const StyledH2 = styled.h2`
-  display: inline-block;
-  margin-right: 40px;
-`;
+import { useNavigationStore } from "../store/useNavigationStore";
+import { useAllowPublish } from "../hooks/useAllowPublish";
 
 export const Header = () => {
   const { status } = useSession();
-  const { currentTab } = useNavigationStore();
+  const { isSaveable } = useAllowPublish();
+  const currentTab = useNavigationStore((s) => s.currentTab);
+  const setTab = useNavigationStore((s) => s.setTab);
+
+  const handleClick = (tab: string) => {
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      setTab(tab);
+    };
+  };
+
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
       <div className="container--wet">
         <div className="flex" style={{ justifyContent: "space-between" }}>
-          <div className="">
-            <StyledH2>GC Forms</StyledH2>
-            {currentTab !== "start" && <DownloadFileButton />}
+          <div>
+            <button
+              onClick={handleClick("start")}
+              className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
+            >
+              GC Forms
+            </button>
+            {currentTab !== "start" && isSaveable() && (
+              <DownloadFileButton className="!py-1 !px-4" />
+            )}
           </div>
           <div className="inline-flex">
             {<LoginMenu isAuthenticated={status === "authenticated"} />}

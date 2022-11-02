@@ -35,22 +35,23 @@ export interface UpdatePayload {
   value: string;
 }
 
+export interface Description {
+  descriptionEn: string;
+  descriptionFr: string;
+}
+
+export interface Title {
+  titleEn: string;
+  titleFr: string;
+}
+
 export interface FormSchema {
   titleEn: string;
   titleFr: string;
   layout: number[];
-  endPage: {
-    descriptionEn: string;
-    descriptionFr: string;
-  };
-  introduction: {
-    descriptionEn: string;
-    descriptionFr: string;
-  };
-  privacyPolicy: {
-    descriptionEn: string;
-    descriptionFr: string;
-  };
+  endPage: Description;
+  introduction: Description;
+  privacyPolicy: Description;
   elements: ElementType[];
   version: number;
   internalTitleEn?: string;
@@ -75,42 +76,21 @@ export interface LocalizedProperty {
   <T extends string>(arg: T): `${T}${Capitalize<Language>}`;
 }
 
+export type publishRequiredFields =
+  | "title"
+  | "questions"
+  | "privacyPolicy"
+  | "confirmationMessage"
+  | "translate"
+  | "responseDelivery";
+
 export interface TemplateSchema {
+  formId: string;
   form: FormSchema;
-  submission?: {
-    email?: string;
+  submission: {
+    email: string;
   };
   publishingStatus: boolean;
-}
-
-export interface ElementStore extends TemplateSchema {
-  lang: Language;
-  translationLanguagePriority: Language;
-  focusInput: boolean;
-  moveUp: (index: number) => void;
-  moveDown: (index: number) => void;
-  localizeField: {
-    <LocalizedProperty extends string>(
-      arg: LocalizedProperty,
-      arg1?: Language
-    ): `${LocalizedProperty}${Capitalize<Language>}`;
-  };
-  setLang: (lang: Language) => void;
-  toggleLang: () => void;
-  toggleTranslationLanguagePriority: () => void;
-  setFocusInput: (isSet: boolean) => void;
-  add: (index?: number) => void;
-  remove: (id: number) => void;
-  addChoice: (index: number) => void;
-  resetChoices: (index: number) => void;
-  removeChoice: (index: number, childIndex: number) => void;
-  updateField: (path: string, value: string | boolean) => void;
-  unsetField: (path: string) => void;
-  duplicateElement: (index: number) => void;
-  bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: TemplateSchema) => void;
-  getSchema: () => string;
-  initialize: () => void;
 }
 
 export interface ModalStore {
@@ -120,11 +100,6 @@ export interface ModalStore {
   updateModalProperties: (index: number, properties: ElementProperties) => void;
   unsetModalField: (path: string) => void;
   initialize: () => void;
-}
-
-export interface NavigationStore {
-  currentTab: string;
-  setTab: (tab: string) => void;
 }
 
 export interface ElementOption {

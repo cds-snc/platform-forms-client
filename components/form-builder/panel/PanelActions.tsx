@@ -3,12 +3,11 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
-import { Button, FancyButton } from "./Button";
+import { Button } from "../shared/Button";
 import { ChevronUp, ChevronDown, Close, Duplicate, ThreeDotsIcon } from "../icons";
-import { ElementTypeWithIndex } from "../types";
-import useTemplateStore from "../store/useTemplateStore";
-
 import { Modal } from "./Modal";
+import { ElementTypeWithIndex } from "../types";
+import { useTemplateStore } from "../store/useTemplateStore";
 
 const Actions = styled.div`
   position: relative;
@@ -17,32 +16,6 @@ const Actions = styled.div`
   padding-left: 20px;
   height: 62px;
   align-items: center;
-`;
-
-const PanelButton = styled(Button)`
-  border: 1px solid transparent;
-  padding: 20px 5px;
-  transition: background 0.1s ease, border 0.1s linear;
-
-  &.disabled {
-    color: #ccc;
-    cursor: not-allowed;
-
-    svg {
-      fill: #ccc;
-    }
-
-    &:hover,
-    &:focus,
-    &:active {
-      color: #ccc;
-      background-color: transparent;
-
-      svg {
-        fill: #ccc;
-      }
-    }
-  }
 `;
 
 const Label = styled.span`
@@ -93,15 +66,16 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const {
-    remove,
-    moveUp,
-    moveDown,
-    add,
-    duplicateElement,
-    form: { elements },
-    setFocusInput,
-  } = useTemplateStore();
+  const { remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+    useTemplateStore((s) => ({
+      remove: s.remove,
+      moveUp: s.moveUp,
+      moveDown: s.moveDown,
+      add: s.add,
+      duplicateElement: s.duplicateElement,
+      elements: s.form.elements,
+      setFocusInput: s.setFocusInput,
+    }));
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
@@ -109,48 +83,78 @@ export const PanelActions = ({
   return (
     <Actions className="panel-actions">
       <UpDown>
-        <PanelButton
-          className={isFirstItem ? "disabled" : ""}
-          icon={<ChevronUp />}
+        <Button
+          theme="secondary"
+          className={`${
+            isFirstItem ? "disabled" : ""
+          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+          }
           disabled={isFirstItem}
           onClick={() => moveUp(item.index)}
         >
           <Label>{t("Move up")}</Label>
-        </PanelButton>
-        <PanelButton
-          className={isLastItem ? "disabled" : ""}
-          icon={<ChevronDown />}
+        </Button>
+        <Button
+          theme="secondary"
+          className={`${
+            isFirstItem ? "disabled" : ""
+          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+          }
           disabled={isLastItem}
           onClick={() => moveDown(item.index)}
         >
           <Label>{t("Move down")}</Label>
-        </PanelButton>
+        </Button>
       </UpDown>
 
-      <PanelButton
-        icon={<Duplicate />}
+      <Button
+        theme="secondary"
+        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+        }
         onClick={() => {
           duplicateElement(item.index);
         }}
       >
         <Label>{t("Duplicate")}</Label>
-      </PanelButton>
+      </Button>
 
-      <PanelButton
-        icon={<Close />}
+      <Button
+        theme="secondary"
+        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+        }
         onClick={() => {
           remove(item.id);
         }}
       >
         <Label>{t("Remove")}</Label>
-      </PanelButton>
+      </Button>
       {!isRichText && (
         <Modal
           title="More options"
           openButton={
-            <PanelButton icon={<ThreeDotsIcon />} onClick={() => null}>
+            <Button
+              theme="secondary"
+              className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+              iconWrapperClassName="!w-7 !mr-0"
+              icon={
+                <ThreeDotsIcon className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+              }
+              onClick={() => null}
+            >
               <Label>{t("More")}</Label>
-            </PanelButton>
+            </Button>
           }
           saveButton={renderSaveButton()}
         >
@@ -159,14 +163,16 @@ export const PanelActions = ({
       )}
 
       <AddButtonWrapper>
-        <FancyButton
+        <Button
           onClick={() => {
             setFocusInput(true);
             add(item.index);
           }}
+          theme="secondary"
+          className="!border-1.5 !py-2 !px-4 leading-6"
         >
           {t("Add element")}
-        </FancyButton>
+        </Button>
       </AddButtonWrapper>
     </Actions>
   );

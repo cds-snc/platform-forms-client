@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon } from "../icons";
 import { validateTemplate } from "../validate";
@@ -24,6 +24,10 @@ const StyledContainer = styled.div`
     flex-direction: column;
     padding: 110px 20px 0 25px;
     text-align: left;
+
+    &:first-child svg {
+      transform: scale(1.33);
+    }
 
     &:hover,
     &:focus {
@@ -64,7 +68,7 @@ const StyledContainer = styled.div`
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
 
-  const { importTemplate } = useTemplateStore();
+  const importTemplate = useTemplateStore((s) => s.importTemplate);
   const [errors, setErrors] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target || !e.target.files) {

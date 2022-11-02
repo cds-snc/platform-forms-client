@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import React from "react";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { ElementType, Language, LocalizedElementProperties } from "../types";
 
 export const RichText = ({
@@ -14,7 +14,7 @@ export const RichText = ({
   translationLanguagePriority: Language;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField } = useTemplateStore();
+  const localizeField = useTemplateStore((s) => s.localizeField);
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 
   return (
@@ -23,7 +23,7 @@ export const RichText = ({
         <div className="section-heading">
           {t(element.type)}: {t("Description")}
         </div>
-        <div className="section-text">
+        <div className="section-text section-text--rich-text">
           <RichTextEditor
             autoFocusEditor={false}
             path={`form.elements[${index}].properties.${localizeField(

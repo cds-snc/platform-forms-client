@@ -1,12 +1,7 @@
 import React from "react";
 import { Editor } from "./Editor";
-import useTemplateStore from "../store/useTemplateStore";
-import styled from "styled-components";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { Language } from "../types";
-
-const EditorWrapper = styled.div`
-  width: 100%;
-`;
 
 export const RichTextEditor = ({
   path,
@@ -19,7 +14,7 @@ export const RichTextEditor = ({
   autoFocusEditor?: boolean;
   lang: Language;
 }) => {
-  const { updateField } = useTemplateStore();
+  const updateField = useTemplateStore((s) => s.updateField);
   const handleChange = (value: string) => {
     if (typeof value === "undefined") {
       value = "";
@@ -28,8 +23,8 @@ export const RichTextEditor = ({
   };
 
   return (
-    <EditorWrapper key={lang}>
+    <div key={lang} className="w-full">
       <Editor autoFocusEditor={autoFocusEditor} content={content} onChange={handleChange} />
-    </EditorWrapper>
+    </div>
   );
 };

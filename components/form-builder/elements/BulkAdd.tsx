@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import { Choice } from "../types";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 
 const LinkButton = styled.button`
   margin-top: 20px;
@@ -33,7 +33,8 @@ export const BulkAdd = ({
   toggleBulkAdd: (onoff: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, bulkAddChoices } = useTemplateStore();
+  const lang = useTemplateStore((s) => s.lang);
+  const bulkAddChoices = useTemplateStore((s) => s.bulkAddChoices);
   const initialChoices = choices.map((choice) => choice[lang]).join("\n");
   const [textContent, setTextContent] = useState(initialChoices);
 

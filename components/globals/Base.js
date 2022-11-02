@@ -8,13 +8,12 @@ import Fip from "./Fip";
 import AdminNav from "./AdminNav";
 import { useTranslation } from "next-i18next";
 import { getPageClassNames } from "@lib/routeUtils";
-import { UserRole } from "@prisma/client";
 
 const Base = ({ children }) => {
   const formRecord = children?.props?.formRecord;
   const classes = getPageClassNames(formRecord);
 
-  const isAdmin = children?.props?.user?.role === UserRole.ADMINISTRATOR;
+  const isAuthenticated = Boolean(children?.props?.user);
   const isEmbeddable = formRecord && children?.props?.isEmbeddable;
 
   const shouldDisplayAlphaBanner = formRecord?.displayAlphaBanner ?? true;
@@ -35,7 +34,7 @@ const Base = ({ children }) => {
           <header>
             {shouldDisplayAlphaBanner && <PhaseBanner />}
             <Fip formRecord={formRecord} />
-            {isAdmin && <AdminNav user={children.props.user} />}
+            {isAuthenticated && <AdminNav user={children.props.user} />}
           </header>
         )}
         <main id="content">{children}</main>

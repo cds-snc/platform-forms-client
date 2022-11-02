@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
 import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
@@ -9,30 +9,8 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
-import { FancyButton } from "../panel/Button";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-
-const SwitchLangButton = styled(FancyButton)`
-  padding: 10px 20px;
-  background: #26374a;
-  color: white;
-  margin: 0 10px;
-
-  &:hover:not(:disabled),
-  &:active,
-  &:focus {
-    color: #ffffff;
-    background: #1c578a;
-  }
-
-  &:hover:active {
-    background: #16446c;
-  }
-
-  svg {
-    width: 30px;
-  }
-`;
+import { Button } from "../shared/Button";
 
 const FlexDiv = styled.div`
   display: flex;
@@ -76,10 +54,31 @@ const SectionDiv = styled.div`
     }
 
     .section-text {
-      display: flex;
-      align-items: flex-end;
+      display: grid;
+      grid-auto-flow: column;
       margin-bottom: 20px;
       border: 1px solid #cacaca;
+
+      &.section-text--rich-text > div {
+        .editor-input {
+          height: calc(100% - 90px);
+        }
+
+        @media (min-width: 992px) {
+          .editor-input {
+            height: calc(100% - 56px);
+          }
+        }
+
+        &:first-of-type {
+          border-right: 1px solid black;
+        }
+
+        &:last-of-type {
+          border-left: 1px solid black;
+          margin-left: -1px;
+        }
+      }
 
       > * {
         flex: 1;
@@ -103,10 +102,6 @@ const SectionDiv = styled.div`
           z-index: 10;
         }
       }
-
-      div[class^="Editor"]:first-of-type {
-        border-right: 1px solid black;
-      }
     }
   }
 `;
@@ -118,7 +113,13 @@ export const Translate = () => {
     toggleTranslationLanguagePriority,
     translationLanguagePriority,
     localizeField,
-  } = useTemplateStore();
+  } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    form: s.form,
+    toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
+    translationLanguagePriority: s.translationLanguagePriority,
+    localizeField: s.localizeField,
+  }));
   const { t } = useTranslation("form-builder");
 
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
@@ -142,9 +143,13 @@ export const Translate = () => {
         <FlexDiv>
           <FlexDiv>
             <LangSpan>{translationLanguagePriority === "en" ? "English" : "French"}</LangSpan>
-            <SwitchLangButton onClick={switchLanguage} icon={<SwapHoriz />}>
-              {t("Switch")}
-            </SwitchLangButton>
+            <Button
+              className="mx-4"
+              onClick={switchLanguage}
+              icon={<SwapHoriz className="fill-white-default" />}
+            >
+              {t("switch")}
+            </Button>
             <LangSpan>{translationLanguagePriority === "en" ? "French" : "English"}</LangSpan>
           </FlexDiv>
           <DownloadCSV />
@@ -209,7 +214,7 @@ export const Translate = () => {
               <div className="section-heading">
                 {t("Form introduction")}: {t("Description")}
               </div>
-              <div className="section-text">
+              <div className="section-text section-text--rich-text">
                 <RichTextEditor
                   autoFocusEditor={false}
                   path={`form.introduction.${localizeField(
@@ -320,7 +325,7 @@ export const Translate = () => {
               {t("Page text")}: {t("Description")}
             </div>
 
-            <div className="section-text">
+            <div className="section-text section-text--rich-text">
               <RichTextEditor
                 autoFocusEditor={false}
                 path={`form.privacyPolicy.${localizeField(
@@ -366,7 +371,7 @@ export const Translate = () => {
             <div className="section-heading">
               {t("Page text")}: {t("Description")}
             </div>
-            <div className="section-text">
+            <div className="section-text section-text--rich-text">
               <RichTextEditor
                 autoFocusEditor={false}
                 path={`form.endPage.${localizeField(

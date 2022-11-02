@@ -10,22 +10,24 @@ export const PreviewNavigation = ({
 }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <>
-      <div className="mb-8">
-        <button
-          className={`mr-5 ${currentTab === "preview" ? "font-bold" : ""}`}
-          onClick={handleClick("preview")}
-        >
-          {t("preview")}
-        </button>
-        |
-        <button
-          className={`ml-5 ${currentTab === "test-data-delivery" ? "font-bold" : ""}`}
-          onClick={handleClick("test-data-delivery")}
-        >
-          {t("testDataDelivery")}
-        </button>
-      </div>
-    </>
+    <nav className="mb-8" aria-label={t("navLabelPreview")}>
+      <button
+        className={`mr-5 ${
+          currentTab === "preview" ? "font-bold" : ""
+        } outline-blue-focus outline-offset-2`}
+        onClick={handleClick("preview")}
+      >
+        {t("preview")}
+      </button>
+      |
+      <button
+        className={`ml-5 ${
+          currentTab === "test-data-delivery" ? "font-bold" : ""
+        } outline-blue-focus outline-offset-2`}
+        onClick={handleClick("test-data-delivery")}
+      >
+        {t("testDataDelivery")}
+      </button>
+    </nav>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import useModalStore from "../store/useModalStore";
 import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
@@ -19,7 +19,7 @@ import { useElementOptions } from "../hooks/useElementOptions";
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
 import { Checkbox } from "./MultipleChoice";
-import { FancyButton } from "./Button";
+import { Button } from "../shared/Button";
 import { Input } from "./Input";
 import { ConfirmationDescription } from "./ConfirmationDescription";
 import { PrivacyDescription } from "./PrivacyDescription";
@@ -76,9 +76,7 @@ const SelectedElement = ({
 
 const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const elements = useTemplateStore((s) => s.form.elements);
   let { type } = elements[item.index];
 
   if (!type) {
@@ -176,15 +174,6 @@ const LabelHidden = styled(FormLabel)`
   border-width: 0;
 `;
 
-const FormWrapper = styled.div<RowProps>`
-  padding: 30px 25px;
-  ${({ isRichText }) =>
-    isRichText &&
-    `
-      padding: 0;
-    `}
-`;
-
 const RequiredWrapper = styled.div`
   margin-top: 20px;
 
@@ -198,29 +187,27 @@ const RequiredWrapper = styled.div`
   }
 `;
 
-const QuestionNumber = styled.span`
-  position: absolute;
-  background: #ebebeb;
-  left: 0;
-  margin-left: -25px;
-  padding: 7px 4px;
-  border-radius: 0 4px 4px 0;
-  font-size: 20px;
-`;
-
 const Form = ({ item }: { item: ElementTypeWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
   const {
     localizeField,
-    form: { elements },
+    elements,
     updateField,
     unsetField,
     resetChoices,
     focusInput,
     setFocusInput,
-  } = useTemplateStore();
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    elements: s.form.elements,
+    updateField: s.updateField,
+    unsetField: s.unsetField,
+    resetChoices: s.resetChoices,
+    focusInput: s.focusInput,
+    setFocusInput: s.setFocusInput,
+  }));
 
   const input = useRef<HTMLInputElement>(null);
 
@@ -284,7 +271,9 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
         <div>
           {!isRichText && (
             <>
-              <QuestionNumber>{questionNumber}</QuestionNumber>
+              <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
+                {questionNumber}
+              </span>
               <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
               <TitleInput
                 ref={input}
@@ -375,25 +364,6 @@ const ModalInputShort = styled(Input)`
   width: 180px;
 `;
 
-const ModalSaveButton = styled(FancyButton)`
-  padding: 15px 20px;
-  background: #26374a;
-  box-shadow: inset 0 -2px 0 #515963;
-  color: white;
-
-  &:hover:not(:disabled),
-  &:active,
-  &:focus {
-    color: #ffffff;
-    background: #1c578a;
-    box-shadow: inset 0 -2px 0 #7a8796;
-  }
-
-  &:hover:active {
-    background: #16446c;
-  }
-`;
-
 const ModalForm = ({
   item,
   properties,
@@ -406,7 +376,7 @@ const ModalForm = ({
   unsetModalField: (path: string) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField } = useTemplateStore();
+  const localizeField = useTemplateStore((s) => s.localizeField);
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
@@ -528,10 +498,10 @@ const ElementWrapperDiv = styled.div`
 export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-  const {
-    form: { elements },
-    updateField,
-  } = useTemplateStore();
+  const { elements, updateField } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    elements: s.form.elements,
+  }));
 
   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
@@ -552,17 +522,20 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
 
   return (
     <ElementWrapperDiv className={`element-${item.index}`}>
-      <FormWrapper isRichText={isRichText}>
+      <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
         <Form item={item} />
-      </FormWrapper>
+      </div>
       <PanelActions
         item={item}
         renderSaveButton={() => (
           <ModalButton isOpenButton={false}>
             {modals[item.index] && (
-              <ModalSaveButton onClick={handleSubmit({ item, properties: modals[item.index] })}>
+              <Button
+                className="mr-4"
+                onClick={handleSubmit({ item, properties: modals[item.index] })}
+              >
                 {t("Save")}
-              </ModalSaveButton>
+              </Button>
             )}
           </ModalButton>
         )}
@@ -580,15 +553,12 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   );
 };
 
-const FormTitleWrapper = styled.div`
-  margin: 10px;
-  input {
-    width: 100%;
-    padding: 22px 10px;
-    border: 1.5px solid #000000;
-    max-height: 36px;
-    border-radius: 4px;
-  }
+const FormTitleInput = styled(TitleInput)`
+  font-size: 30px;
+  font-weight: 700;
+  font-family: "Lato", sans-serif;
+  width: 75%;
+  margin-bottom: 16px;
 `;
 
 const ElementPanelDiv = styled.div`
@@ -606,7 +576,11 @@ const ElementPanelDiv = styled.div`
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { form, localizeField, updateField } = useTemplateStore();
+  const { form, localizeField, updateField } = useTemplateStore((s) => ({
+    form: s.form,
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+  }));
 
   const introTextPlaceholder =
     form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
@@ -621,15 +595,16 @@ export const ElementPanel = () => {
     <ElementPanelDiv>
       <RichTextLocked
         beforeContent={
-          <FormTitleWrapper>
-            <Input
+          <>
+            <FormTitleInput
               placeholder={t("placeHolderFormTitle")}
               value={form[localizeField(LocalizedFormProperties.TITLE)]}
               onChange={(e) => {
                 updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
               }}
             />
-          </FormTitleWrapper>
+            <p className="text-sm mb-4">{t("startFormIntro")}</p>
+          </>
         }
         addElement={true}
         initialValue={introTextPlaceholder}
@@ -649,7 +624,7 @@ export const ElementPanel = () => {
             aria-label={t("richTextPrivacyTitle")}
           >
             <div>
-              <h2>{t("richTextPrivacyTitle")}</h2>
+              <h2 className="text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
               <PrivacyDescription />
             </div>
           </RichTextLocked>
@@ -660,7 +635,7 @@ export const ElementPanel = () => {
             aria-label={t("richTextConfirmationTitle")}
           >
             <div>
-              <h2>{t("richTextConfirmationTitle")}</h2>
+              <h2 className="text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
             </div>
           </RichTextLocked>

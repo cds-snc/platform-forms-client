@@ -1,33 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  position: relative;
   max-width: 800px;
-  height: auto;
-  margin-top: -1px;
-`;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  margin: 0px 20px;
-
-  & h2 {
-    font-size: 26px;
-    line-height: 32px;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    padding-bottom: 0;
-  }
-`;
-
-const OptionWrapper = styled.div`
-  display: flex;
 `;
 
 export const RichTextLocked = ({
@@ -43,20 +23,25 @@ export const RichTextLocked = ({
   initialValue: string;
   schemaProperty: string;
 }) => {
-  const { localizeField, lang } = useTemplateStore();
+  const { localizeField, lang } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    lang: s.lang,
+  }));
 
   return (
-    <ElementWrapperDiv>
-      {beforeContent && beforeContent}
-      <ContentWrapper>{children}</ContentWrapper>
-      <OptionWrapper>
-        <RichTextEditor
-          path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
-          content={initialValue}
-          lang={lang}
-          autoFocusEditor={false}
-        />
-      </OptionWrapper>
+    <ElementWrapperDiv className="h-auto relative -mt-px">
+      <div className="mx-7 mt-5 mb-7">
+        {beforeContent && beforeContent}
+        <div className="flex">{children}</div>
+        <div className="flex border-2 rounded">
+          <RichTextEditor
+            path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
+            content={initialValue}
+            lang={lang}
+            autoFocusEditor={false}
+          />
+        </div>
+      </div>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>
   );

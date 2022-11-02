@@ -9,7 +9,7 @@ import { logMessage } from "@lib/logger";
 import { Level } from "pino";
 
 jest.mock("next-auth/react");
-const mockedGetCsrfToken = jest.mocked(getCsrfToken, true);
+const mockedGetCsrfToken = jest.mocked(getCsrfToken, { shallow: true });
 
 describe("Log API Endpoint", () => {
   it.each(["info", "warn", "error"])("Receives and Saves a log for %s level", async (level) => {

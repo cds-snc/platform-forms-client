@@ -1,48 +1,55 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { getUsers, adminRole } from "@lib/users";
-import { logAdminActivity } from "@lib/adminLogs";
-import { AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { getUsers } from "@lib/users";
+
+import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
 import { MiddlewareProps } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "PUT"];
 
-const getUserAdminStatus = async (res: NextApiResponse) => {
-  const users = await getUsers();
+const getUserList = async (ability: MongoAbility, res: NextApiResponse) => {
+  const users = await getUsers(ability);
   if (users.length === 0) {
     res.status(500).json({ error: "Could not process request" });
   } else {
-    res.status(200).json({ users });
+    res.status(200).json([...users]);
   }
 };
 
-const updateUserAdminStatus = async (
+const updatePrivilegeOnUser = async (
+  ability: MongoAbility,
   req: NextApiRequest,
   res: NextApiResponse,
-  session?: Session
+  session: Session
 ) => {
-  const { userId, isAdmin } = req.body;
-  if (typeof userId === "undefined" || typeof isAdmin === "undefined") {
+  const { userID, privileges } = req.body;
+  if (
+    typeof userID === "undefined" ||
+    typeof privileges === "undefined" ||
+    !Array.isArray(privileges)
+  ) {
     return res.status(400).json({ error: "Malformed Request" });
   }
-  const [success, userFound] = await adminRole(isAdmin, userId);
+
+  const result = await updatePrivilegesForUser(ability, userID, privileges);
   logMessage.info(AdminLogAction.Update);
-  if (success && userFound) {
-    if (session && session.user.userId) {
+  if (result && session && session.user.id) {
+    /*
       await logAdminActivity(
-        session.user.userId,
+        session.user.id,
         AdminLogAction.Update,
         isAdmin ? AdminLogEvent.GrantAdminRole : AdminLogEvent.RevokeAdminRole,
         `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userId}`
       );
-    }
-    res.status(200).send("Success");
-  } else if (success) {
-    res.status(404).json({ error: "User not found" });
+      */
+
+    return res.status(200).send("Success");
   } else {
-    res.status(500).json({ error: "Could not process request" });
+    return res.status(404).json({ error: "User not found" });
   }
 };
 
@@ -51,13 +58,22 @@ const handler = async (
   res: NextApiResponse,
   { session }: MiddlewareProps
 ): Promise<void> => {
-  switch (req.method) {
-    case "PUT":
-      await updateUserAdminStatus(req, res, session);
-      break;
-    case "GET":
-      await getUserAdminStatus(res);
-      break;
+  try {
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
+
+    const ability = createAbility(session.user.privileges);
+
+    switch (req.method) {
+      case "GET":
+        await getUserList(ability, res);
+        break;
+      case "PUT":
+        await updatePrivilegeOnUser(ability, req, res, session);
+        break;
+    }
+  } catch (error) {
+    if (error instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
+    res.status(500).json({ error: "Could not process request" });
   }
 };
 

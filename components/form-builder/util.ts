@@ -86,6 +86,7 @@ export const newlineToOptions = (lang: Language, currentChoices: Choice[], bulkC
 
 export const getSchemaFromState = (state: TemplateSchema) => {
   const {
+    formId,
     form: {
       endPage,
       introduction,
@@ -97,6 +98,7 @@ export const getSchemaFromState = (state: TemplateSchema) => {
       emailSubjectEn,
       emailSubjectFr,
     },
+    submission,
   } = state;
 
   const form: FormSchema = {
@@ -117,8 +119,9 @@ export const getSchemaFromState = (state: TemplateSchema) => {
   });
 
   const schema: TemplateSchema = {
+    formId,
     form,
-    submission: { email: "test@test.com" },
+    submission,
     publishingStatus: true,
   };
 

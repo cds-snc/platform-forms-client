@@ -16,10 +16,17 @@ import {
   $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
+import { TabEscape } from "./plugins/TabEscape";
 
 const RichTextWrapper = styled.div`
+  height: 100%;
+
   .editor-input {
     padding: 20px;
+
+    &:focus {
+      outline: 2px #303fc3 solid;
+    }
   }
 `;
 
@@ -68,6 +75,7 @@ export const Editor = ({
         />
         <LinkPlugin />
         <ListPlugin />
+        <TabEscape />
       </LexicalComposer>
     </RichTextWrapper>
   );

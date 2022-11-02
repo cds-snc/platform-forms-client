@@ -12,11 +12,12 @@ import jwt, { Secret } from "jsonwebtoken";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/logger");
-const mockLogMessage = jest.mocked(logMessage, true);
+const mockLogMessage = jest.mocked(logMessage, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
-describe("/api/retrieval", () => {
+// Skipping until API is reactivated.  Currently all methods are blocked from accessing.
+describe.skip("/api/retrieval", () => {
   let dateNowSpy: jest.SpyInstance;
   beforeEach(() => {
     dateNowSpy = jest.spyOn(Date, "now");
@@ -119,7 +120,7 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",
@@ -196,7 +197,7 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",
@@ -312,7 +313,7 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",
@@ -533,7 +534,7 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "test0form00000id000asdf12",
         email: "b@d.a",
@@ -572,7 +573,7 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "test0form00000id000asdf11",
         email: "b@d.a",
@@ -619,7 +620,7 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "test@cds-snc.ca",
@@ -666,7 +667,7 @@ describe("/api/retrieval", () => {
         },
       });
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",
@@ -710,7 +711,7 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",
@@ -754,7 +755,7 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",
@@ -798,7 +799,7 @@ describe("/api/retrieval", () => {
       });
 
       // Mock good temporary token
-      prismaMock.formUser.findUnique.mockResolvedValue({
+      prismaMock.apiUser.findUnique.mockResolvedValue({
         id: "asdf",
         templateId: "22",
         email: "b@d.a",

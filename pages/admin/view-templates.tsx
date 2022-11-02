@@ -7,7 +7,8 @@ import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { UserRole } from "@prisma/client";
+import { checkPrivileges } from "@lib/privileges";
+import { useAccessControl } from "@lib/hooks";
 
 interface DataViewProps {
   templates: Array<{
@@ -35,6 +36,8 @@ const DataView = (props: DataViewProps): React.ReactElement => {
     });
   };
 
+  const { ability } = useAccessControl();
+
   return (
     <>
       <Head>
@@ -60,12 +63,14 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                   {template.publishingStatus ? t("view.published") : t("view.draft")}
                 </td>
                 <td>
-                  <button
-                    onClick={() => redirectToSettings(template.id)}
-                    className="gc-button w-full"
-                  >
-                    {t("view.update")}
-                  </button>
+                  {ability?.can("update", "FormRecord") && (
+                    <button
+                      onClick={() => redirectToSettings(template.id)}
+                      className="gc-button w-full"
+                    >
+                      {t("view.update")}
+                    </button>
+                  )}
                 </td>
                 <td>
                   <button onClick={() => redirectToForm(template.id)} className="gc-button w-full">
@@ -81,35 +86,44 @@ const DataView = (props: DataViewProps): React.ReactElement => {
   );
 };
 
-export const getServerSideProps = requireAuthentication(async (context) => {
-  {
-    // getStaticProps is serverside, and therefore instead of doing a request,
-    // we import the invoke Lambda function directly
+export const getServerSideProps = requireAuthentication(
+  async ({ user: { ability, id }, locale }) => {
+    {
+      checkPrivileges(
+        ability,
+        [
+          { action: "view", subject: "FormRecord" },
+          { action: "update", subject: "FormRecord" },
+        ],
+        "one"
+      );
+      // getStaticProps is serverside, and therefore instead of doing a request,
+      // we import the invoke Lambda function directly
 
-    const templates = (await getAllTemplates()).map((template) => {
-      const {
-        id,
-        form: { titleEn, titleFr },
-        publishingStatus,
-      } = template;
+      const templates = (await getAllTemplates(ability, id)).map((template) => {
+        const {
+          id,
+          form: { titleEn, titleFr },
+          publishingStatus,
+        } = template;
+        return {
+          id,
+          titleEn,
+          titleFr,
+          publishingStatus,
+        };
+      });
+
       return {
-        id,
-        titleEn,
-        titleFr,
-        publishingStatus,
+        props: {
+          templates,
+          ...(locale && (await serverSideTranslations(locale, ["common", "admin-templates"]))),
+        }, // will be passed to the page component as props
       };
-    });
 
-    return {
-      props: {
-        templates,
-        ...(context.locale &&
-          (await serverSideTranslations(context.locale, ["common", "admin-templates"]))),
-      }, // will be passed to the page component as props
-    };
-
-    return { props: {} };
+      return { props: {} };
+    }
   }
-}, UserRole.ADMINISTRATOR);
+);
 
 export default DataView;
