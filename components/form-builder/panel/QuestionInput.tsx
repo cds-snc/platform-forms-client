@@ -50,6 +50,10 @@ export const QuestionInput = ({
     }
   }, [getFocusInput]);
 
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const _debounced = useCallback(
     debounce((val) => {
       updateField(
