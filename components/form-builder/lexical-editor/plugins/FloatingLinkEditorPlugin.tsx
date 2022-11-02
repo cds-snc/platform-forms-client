@@ -158,7 +158,15 @@ function FloatingLinkEditor({
   }, [isEditMode]);
 
   return (
-    <div ref={editorRef} className="link-editor" role="dialog">
+    <div
+      ref={editorRef}
+      className="link-editor"
+      role="dialog"
+      aria-labelledby={"link-editor-label-" + editor._key}
+    >
+      <div id={"link-editor-label-" + editor._key} className="sr-only">
+        {t("editLink")}
+      </div>
       {isEditMode ? (
         <>
           <input
