@@ -30,8 +30,10 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <NavigationStoreProvider currentTab={page.props.tab}>
-      <TemplateStoreProvider {...(page.props.initialForm && { form: page.props.initialForm })}>
+    <NavigationStoreProvider currentTab={page.props.tab as string}>
+      <TemplateStoreProvider
+        {...(page.props.initialForm && (page.props.initialForm as FormRecord))}
+      >
         <div id="form-builder">
           <Header />
           {page}
