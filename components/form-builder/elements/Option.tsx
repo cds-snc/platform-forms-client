@@ -37,7 +37,8 @@ export const Option = ({
       setFocusInput: s.setFocusInput,
     }));
 
-  const val = elements[parentIndex].properties.choices[index][lang];
+  const val = elements[parentIndex].properties.choices?.[index][lang];
+
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
 

@@ -1,14 +1,15 @@
+import { FormElement } from "@lib/types";
 import { useTranslation } from "next-i18next";
 import React from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { ElementType, Language } from "../types";
+import { Language } from "../types";
 
 export const Options = ({
   element,
   index,
   translationLanguagePriority,
 }: {
-  element: ElementType;
+  element: FormElement;
   index: number;
   translationLanguagePriority: Language;
 }) => {
@@ -19,7 +20,7 @@ export const Options = ({
   return (
     <>
       <div>
-        {element.properties.choices.map((choice, choiceIndex) => (
+        {element.properties.choices?.map((choice, choiceIndex) => (
           <div className="choice" key={`choice-${choiceIndex}`}>
             <fieldset className="text-entry">
               <legend className="section-heading">

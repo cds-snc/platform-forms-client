@@ -6,14 +6,14 @@ import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 
 export const Preview = ({ isPreview }: { isPreview: boolean }) => {
-  const { getSchema, formId } = useTemplateStore((s) => ({
-    formId: s.formId,
+  const { getSchema, id } = useTemplateStore((s) => ({
+    id: s.id,
     getSchema: s.getSchema,
   }));
   const stringified = getSchema();
 
   const formRecord = {
-    id: formId || "test0form00000id000asdf11",
+    id: id || "test0form00000id000asdf11",
     ...JSON.parse(stringified),
   };
 

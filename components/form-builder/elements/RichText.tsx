@@ -11,7 +11,8 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
   }));
 
   const content =
-    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)] ??
+    "";
 
   return (
     <div className="flex mx-7 mt-5 mb-7 border-2 rounded">

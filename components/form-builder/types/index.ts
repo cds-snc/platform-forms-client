@@ -1,32 +1,8 @@
 import { ReactElement } from "react";
-
+import { FormElement, ElementProperties } from "@lib/types";
 export type Language = "en" | "fr";
 
-export interface Choice {
-  en: string;
-  fr: string;
-}
-
-export interface ElementProperties {
-  choices: Choice[];
-  titleEn: string;
-  titleFr: string;
-  validation: {
-    required: boolean;
-    type?: string;
-    maxLength?: number;
-  };
-  descriptionEn: string;
-  descriptionFr: string;
-}
-
-export interface ElementType {
-  id: number;
-  type: string;
-  properties: ElementProperties;
-}
-
-export interface ElementTypeWithIndex extends ElementType {
+export interface FormElementWithIndex extends FormElement {
   index: number;
 }
 
@@ -36,28 +12,13 @@ export interface UpdatePayload {
 }
 
 export interface Description {
-  descriptionEn: string;
-  descriptionFr: string;
+  descriptionEn?: string;
+  descriptionFr?: string;
 }
 
 export interface Title {
   titleEn: string;
   titleFr: string;
-}
-
-export interface FormSchema {
-  titleEn: string;
-  titleFr: string;
-  layout: number[];
-  endPage: Description;
-  introduction: Description;
-  privacyPolicy: Description;
-  elements: ElementType[];
-  version: number;
-  internalTitleEn?: string;
-  internalTitleFr?: string;
-  emailSubjectEn?: string;
-  emailSubjectFr?: string;
 }
 
 export enum LocalizedFormProperties {
@@ -83,24 +44,6 @@ export type publishRequiredFields =
   | "confirmationMessage"
   | "translate"
   | "responseDelivery";
-
-export interface TemplateSchema {
-  formId: string;
-  form: FormSchema;
-  submission: {
-    email: string;
-  };
-  publishingStatus: boolean;
-}
-
-export interface ModalStore {
-  isOpen: boolean;
-  modals: ElementProperties[];
-  updateIsOpen: (isOpen: boolean) => void;
-  updateModalProperties: (index: number, properties: ElementProperties) => void;
-  unsetModalField: (path: string) => void;
-  initialize: () => void;
-}
 
 export interface ElementOption {
   id: string;

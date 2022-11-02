@@ -8,11 +8,11 @@ import { Select } from "../elements";
 import { PanelActions } from "./PanelActions";
 import {
   ElementOption,
-  ElementProperties,
-  ElementTypeWithIndex,
+  FormElementWithIndex,
   LocalizedElementProperties,
   LocalizedFormProperties,
 } from "../types";
+import { ElementProperties, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
 import { useElementOptions } from "../hooks/useElementOptions";
@@ -29,7 +29,7 @@ const SelectedElement = ({
   item,
 }: {
   selected: ElementOption;
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -74,15 +74,15 @@ const SelectedElement = ({
   return element;
 };
 
-const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
+const getSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
   const elements = useTemplateStore((s) => s.form.elements);
-  let { type } = elements[item.index];
+  let { type }: { type: FormElementTypes | HTMLTextInputTypeAttribute } = elements[item.index];
 
   if (!type) {
     return elementOptions[2];
-  } else if (type === "textField") {
-    const validationType = elements[item.index].properties.validation.type;
+  } else if (type === FormElementTypes.textField) {
+    const validationType = elements[item.index].properties.validation?.type;
     /**
      * Email, phone, and date fields are specialized text field types.
      * That is to say, their "type" is "textField" but they have specalized validation "type"s.
@@ -187,7 +187,7 @@ const RequiredWrapper = styled.div`
   }
 `;
 
-const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+const Form = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
@@ -300,10 +300,10 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             </DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
-          {item.properties.validation.maxLength && (
+          {item.properties.validation?.maxLength && (
             <DivDisabled>
               {t("Max character length: ")}
-              {item.properties.validation.maxLength}
+              {item.properties.validation?.maxLength}
             </DivDisabled>
           )}
         </div>
@@ -319,7 +319,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 <Checkbox
                   id={`required-${item.index}-id`}
                   value={`required-${item.index}-value`}
-                  checked={item.properties.validation.required}
+                  checked={item.properties.validation?.required}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (!e.target) {
                       return;
@@ -370,7 +370,7 @@ const ModalForm = ({
   updateModalProperties,
   unsetModalField,
 }: {
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
   properties: ElementProperties;
   updateModalProperties: (index: number, properties: ElementProperties) => void;
   unsetModalField: (path: string) => void;
@@ -422,7 +422,7 @@ const ModalForm = ({
         <Checkbox
           id={`required-${item.index}-id-modal`}
           value={`required-${item.index}-value-modal`}
-          checked={properties.validation.required}
+          checked={properties.validation?.required}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             // clone the existing properties so that we don't overwrite other keys in "validation"
             const validation = Object.assign({}, properties.validation, {
@@ -436,8 +436,8 @@ const ModalForm = ({
           label={t("Required")}
         ></Checkbox>
       </ModalRow>
-      {item.type === "textField" &&
-        (!item.properties.validation.type || item.properties.validation.type === "text") && (
+      {item.type === FormElementTypes.textField &&
+        (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
           <ModalRow>
             <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
               {t("Maximum character length")}
@@ -451,7 +451,7 @@ const ModalForm = ({
               id={`characterLength--modal--${item.index}`}
               type="number"
               min="1"
-              value={properties.validation.maxLength || ""}
+              value={properties.validation?.maxLength || ""}
               onKeyDown={(e) => {
                 if (["-", "+", ".", "e"].includes(e.key)) {
                   e.preventDefault();
@@ -495,7 +495,7 @@ const ElementWrapperDiv = styled.div`
   margin-top: -1px;
 `;
 
-export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
+export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
   const { elements, updateField } = useTemplateStore((s) => ({
@@ -512,7 +512,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   }, [item, isOpen, isRichText]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
+  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
       // replace all of "properties" with the new properties set in the ModalForm
@@ -583,13 +583,13 @@ export const ElementPanel = () => {
   }));
 
   const introTextPlaceholder =
-    form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    form.introduction?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
   const confirmTextPlaceholder =
-    form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    form.endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
   const policyTextPlaceholder =
-    form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    form.privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
   return (
     <ElementPanelDiv>

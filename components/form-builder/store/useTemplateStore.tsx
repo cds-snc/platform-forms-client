@@ -10,13 +10,14 @@ import {
   newlineToOptions,
   getSchemaFromState,
 } from "../util";
-import { ElementType, Language, FormSchema, TemplateSchema } from "../types";
+import { Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
+import { FormElement, FormProperties, FormElementTypes, FormRecord } from "@lib/types";
 
-const defaultField: ElementType = {
+const defaultField: FormElement = {
   id: 0,
-  type: "",
+  type: FormElementTypes.textField,
   properties: {
     choices: [{ en: "", fr: "" }],
     titleEn: "",
@@ -30,6 +31,7 @@ const defaultField: ElementType = {
 };
 
 export const defaultForm = {
+  id: "",
   titleEn: "My Form",
   titleFr: "[fr] My Form",
   layout: [],
@@ -51,21 +53,23 @@ export const defaultForm = {
   elements: [],
   emailSubjectEn: "Form builder test [en]",
   emailSubjectFr: "Form builder test [fr]",
+  securityAttribute: "Unclassified",
 };
 
 export interface TemplateStoreProps {
-  formId: string;
+  id: string;
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
-  form: FormSchema;
+  form: FormProperties;
   submission: {
     email: string;
   };
   publishingStatus: boolean;
+  securityAttribute: string;
 }
 
-interface TemplateStoreState extends TemplateStoreProps {
+export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
@@ -75,7 +79,7 @@ interface TemplateStoreState extends TemplateStoreProps {
       arg1?: Language
     ): `${LocalizedProperty}${Capitalize<Language>}`;
   };
-  setFormId: (id: string) => void;
+  setId: (id: string) => void;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
@@ -89,14 +93,14 @@ interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (index: number) => void;
   bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: TemplateSchema) => void;
+  importTemplate: (json: FormRecord) => void;
   getSchema: () => string;
   initialize: () => void;
 }
 
 const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
-    formId: "",
+    id: "",
     lang: "en",
     translationLanguagePriority: "en",
     focusInput: false,
@@ -105,7 +109,16 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
       email: "",
     },
     publishingStatus: false,
+    securityAttribute: "Unclassified",
   };
+
+  // Ensure any required properties by Form Builder are defaulted by defaultForm
+  if (initProps?.form)
+    initProps.form = {
+      ...defaultForm,
+      ...initProps?.form,
+    };
+
   return createStore<TemplateStoreState>()(
     immer((set, get) => ({
       ...DEFAULT_PROPS,
@@ -115,9 +128,9 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
           lang.slice(1)) as Capitalize<Language>;
         return `${path}${langUpperCaseFirst}`;
       },
-      setFormId: (id) =>
+      setId: (id) =>
         set((state) => {
-          state.formId = id;
+          state.id = id;
         }),
       setLang: (lang) =>
         set((state) => {
@@ -157,7 +170,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
           state.form.elements.splice(index + 1, 0, {
             ...defaultField,
             id: incrementElementId(state.form.elements),
-            type: "radio",
+            type: FormElementTypes.radio,
           });
         }),
       remove: (elementId) =>
@@ -166,11 +179,11 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
         }),
       addChoice: (index) =>
         set((state) => {
-          state.form.elements[index].properties.choices.push({ en: "", fr: "" });
+          state.form.elements[index].properties.choices?.push({ en: "", fr: "" });
         }),
       removeChoice: (index, childIndex) =>
         set((state) => {
-          state.form.elements[index].properties.choices.splice(childIndex, 1);
+          state.form.elements[index].properties.choices?.splice(childIndex, 1);
         }),
       resetChoices: (index) =>
         set((state) => {
@@ -197,11 +210,12 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
       getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
       initialize: () => {
         set((state) => {
-          state.formId = "";
+          state.id = "";
           state.lang = "en";
           state.form = defaultForm;
           state.submission = { email: "test@example.com" };
           state.publishingStatus = false;
+          state.securityAttribute = "Unclassified";
         });
       },
       importTemplate: (json) =>
