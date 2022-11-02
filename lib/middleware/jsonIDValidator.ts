@@ -4,6 +4,7 @@ import { FormElement, FormElementTypes, FormRecord } from "@lib/types/form-types
 
 export type ValidateOptions = {
   jsonKey: string;
+  skipValidationIf?: (req: NextApiRequest) => boolean;
 };
 
 /**
@@ -14,7 +15,10 @@ export type ValidateOptions = {
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (req.method !== "POST" && req.method !== "PUT") {
+      if (
+        (req.method !== "POST" && req.method !== "PUT") ||
+        (options?.skipValidationIf && options?.skipValidationIf(req))
+      ) {
         return { next: true };
       }
       const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
@@ -49,7 +53,10 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
 export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (req.method !== "POST" && req.method !== "PUT") {
+      if (
+        (req.method !== "POST" && req.method !== "PUT") ||
+        (options?.skipValidationIf && options?.skipValidationIf(req))
+      ) {
         return { next: true };
       }
       const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
@@ -84,7 +91,10 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
 export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (req.method !== "POST" && req.method !== "PUT") {
+      if (
+        (req.method !== "POST" && req.method !== "PUT") ||
+        (options?.skipValidationIf && options?.skipValidationIf(req))
+      ) {
         return { next: true };
       }
       const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey

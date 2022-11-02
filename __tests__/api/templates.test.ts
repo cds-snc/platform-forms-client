@@ -12,7 +12,7 @@ import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
-import { Base, getUserPrivileges, ManageForms } from "__utils__/permissions";
+import { Base, getUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
@@ -181,6 +181,62 @@ describe("Test templates API functions", () => {
     });
   });
 
+  describe("PUT API that modifies `isPublished`", () => {
+    beforeEach(() => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "a@b.com",
+          name: "Testing Forms",
+          privileges: getUserPrivileges(PublishForms, { user: { id: "1" } }),
+        },
+      };
+
+      mockGetSession.mockResolvedValue(mockSession);
+    });
+
+    afterEach(() => {
+      mockGetSession.mockReset();
+    });
+
+    it("Should successfully handle PUT request", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+        isPublished: true,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+          isPublished: true,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(logAdminActivity).toHaveBeenCalledWith(
+        "1",
+        "Update",
+        "UpdateForm",
+        "Form id: test0form00000id000asdf11 'isPublished' value has been updated"
+      );
+    });
+  });
+
   describe.each([[Base], [ManageForms]])("DELETE", (privileges) => {
     beforeEach(() => {
       const mockSession: Session = {
@@ -303,7 +359,7 @@ describe("Templates API functions should throw an error if user does not have pe
 
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         id: "formtestID",
-        jsonConfig: { ...validFormTemplate, publishingStatus: true },
+        jsonConfig: validFormTemplate,
         users: [{ id: "2" }],
       });
 
@@ -316,6 +372,42 @@ describe("Templates API functions should throw an error if user does not have pe
         body: {
           formID: "test0form00000id000asdf11",
           formConfig: validFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+    });
+
+    it("User with no relation to the template being interacted with should not be able to use the PUT API function that modifies `isPublished`", async () => {
+      const mockSession: Session = {
+        expires: "1",
+        user: {
+          id: "1",
+          email: "forms@cds.ca",
+          name: "forms",
+          privileges: getUserPrivileges(PublishForms, { user: { id: "1" } }),
+        },
+      };
+      mockGetSession.mockReturnValue(Promise.resolve(mockSession));
+
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "2" }],
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+          isPublished: true,
         },
       });
 
