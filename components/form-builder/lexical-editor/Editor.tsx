@@ -18,6 +18,7 @@ import {
 } from "@lexical/markdown";
 import { TabEscape } from "./plugins/TabEscape";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
+import { t } from "i18next";
 
 const RichTextWrapper = styled.div`
   height: 100%;
@@ -73,7 +74,7 @@ export const Editor = ({
         <RichTextPlugin
           contentEditable={
             <div className="editor relative" ref={onRef}>
-              <ContentEditable className="editor-input" />
+              <ContentEditable className="editor-input" aria-label={t("RichTextEditor")} />
             </div>
           }
           placeholder={""}
