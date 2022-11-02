@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -579,6 +579,10 @@ export const ElementPanel = () => {
     }, 100),
     []
   );
+
+  useEffect(() => {
+    setValue(title);
+  }, [title]);
 
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
