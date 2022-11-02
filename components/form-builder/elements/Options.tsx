@@ -120,7 +120,7 @@ export const Options = ({
   const options = choices.map((child, index) => {
     if (!child || !item) return null;
 
-    const initialValue = elements[item.index].properties.choices[index][lang] as string;
+    const initialValue = elements[item.index].properties.choices?.[index][lang] ?? "";
 
     return (
       <Option
