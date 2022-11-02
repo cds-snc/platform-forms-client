@@ -35,7 +35,6 @@ export const Option = ({
       removeChoice: s.removeChoice,
       updateField: s.updateField,
       lang: s.lang,
-      focusInput: s.focusInput,
       setFocusInput: s.setFocusInput,
       getFocusInput: s.getFocusInput,
     }));

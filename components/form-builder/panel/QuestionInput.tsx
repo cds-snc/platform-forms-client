@@ -36,7 +36,6 @@ export const QuestionInput = ({
   const { localizeField, updateField, getFocusInput, setFocusInput } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     updateField: s.updateField,
-    focusInput: s.focusInput,
     setFocusInput: s.setFocusInput,
     getFocusInput: s.getFocusInput,
   }));
