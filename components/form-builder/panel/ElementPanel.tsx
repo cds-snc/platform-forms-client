@@ -199,24 +199,16 @@ const RequiredWrapper = styled.div`
   }
 `;
 
-const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+const Form = ({ item, questionNumber }: { item: ElementTypeWithIndex; questionNumber: number }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
-  const { localizeField, elements, updateField, unsetField, resetChoices } = useTemplateStore(
-    (s) => ({
-      localizeField: s.localizeField,
-      elements: s.form.elements,
-      updateField: s.updateField,
-      unsetField: s.unsetField,
-      resetChoices: s.resetChoices,
-    })
-  );
-
-  const questionNumber =
-    elements
-      .filter((item) => item.type != "richText")
-      .findIndex((object) => object.id === item.id) + 1;
+  const { localizeField, updateField, unsetField, resetChoices } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+    unsetField: s.unsetField,
+    resetChoices: s.resetChoices,
+  }));
 
   const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
 
@@ -478,7 +470,13 @@ const ElementWrapperDiv = styled.div`
   margin-top: -1px;
 `;
 
-export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
+export const ElementWrapper = ({
+  item,
+  questionNumber,
+}: {
+  item: ElementTypeWithIndex;
+  questionNumber: number;
+}) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
   const { elements, updateField } = useTemplateStore((s) => ({
@@ -506,7 +504,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   return (
     <ElementWrapperDiv className={`element-${item.index}`}>
       <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
-        <Form item={item} />
+        <Form item={item} questionNumber={questionNumber} />
       </div>
       <PanelActions
         item={item}
@@ -595,6 +593,8 @@ export const ElementPanel = () => {
   const policyTextPlaceholder =
     privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
+  let questionNumber = 0;
+
   return (
     <ElementPanelDiv>
       <RichTextLocked
@@ -615,7 +615,12 @@ export const ElementPanel = () => {
       />
       {elements.map((element, index: number) => {
         const item = { ...element, index };
-        return <ElementWrapper item={item} key={item.id} />;
+
+        if (item.type !== "richText") {
+          questionNumber = index + 1;
+        }
+
+        return <ElementWrapper item={item} key={item.id} questionNumber={questionNumber} />;
       })}
       {elements?.length >= 1 && (
         <>
