@@ -1,13 +1,16 @@
 import React from "react";
-import useNavigationStore from "../store/useNavigationStore";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useCallback } from "react";
 import { usePublish } from "../hooks/usePublish";
-import { Button } from "../layout/Settings";
+import { Button } from "../shared/Button";
 
 export const DataDeliveryInstructions = () => {
-  const { getSchema } = useTemplateStore();
-  const { formId, setFormId } = useNavigationStore();
+  const { getSchema, formId, setFormId } = useTemplateStore((s) => ({
+    getSchema: s.getSchema,
+    formId: s.formId,
+    setFormId: s.setFormId,
+  }));
+
   const { uploadJson } = usePublish(false);
   const handlePublish = useCallback(async () => {
     const result = await uploadJson(getSchema(), formId);

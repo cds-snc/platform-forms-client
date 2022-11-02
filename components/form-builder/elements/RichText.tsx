@@ -1,10 +1,14 @@
 import React from "react";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { LocalizedElementProperties } from "../types";
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
-  const { localizeField, form, lang } = useTemplateStore();
+  const { localizeField, form, lang } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    form: s.form,
+    lang: s.lang,
+  }));
 
   const content =
     form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)];

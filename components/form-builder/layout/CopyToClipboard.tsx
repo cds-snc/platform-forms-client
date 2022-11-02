@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
-import useTemplateStore from "../store/useTemplateStore";
-import { FancyButton } from "../panel/Button";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { Button } from "../shared/Button";
 
 interface IShowSpan {
   show: boolean;
 }
-
-const SecondaryButton = styled(FancyButton)`
-  padding: 15px 20px;
-`;
 
 const StyledSpan = styled.span<IShowSpan>`
   color: #777777;
@@ -26,7 +22,7 @@ export const CopyToClipboard = () => {
 
   const [isCopied, setIsCopied] = useState("");
   const [showMessage, setShowMessage] = useState(false);
-  const { getSchema } = useTemplateStore();
+  const getSchema = useTemplateStore((s) => s.getSchema);
 
   const handleCopyToClipboard = async () => {
     if ("clipboard" in navigator) {
@@ -43,7 +39,9 @@ export const CopyToClipboard = () => {
 
   return (
     <>
-      <SecondaryButton onClick={handleCopyToClipboard}>{t("copyButton")}</SecondaryButton>
+      <Button onClick={handleCopyToClipboard} theme="secondary">
+        {t("copyButton")}
+      </Button>
       {isCopied && <StyledSpan show={showMessage}>{isCopied}</StyledSpan>}
     </>
   );

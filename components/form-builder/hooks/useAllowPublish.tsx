@@ -7,27 +7,27 @@ import {
   publishRequiredFields,
   Title,
 } from "../types";
-import useTemplateStore from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
+import { useTemplateStore } from "../store/useTemplateStore";
 
-export const MissingTranslation = {};
+export class MissingTranslation extends Error {}
 
 export const isTitleTranslated = (element: Title) => {
   if (!element.titleEn || !element.titleFr) {
-    throw MissingTranslation;
+    throw new MissingTranslation();
   }
 };
 
 export const isDescriptionTranslated = (element: Description) => {
   if (!element.descriptionEn || !element.descriptionFr) {
-    throw MissingTranslation;
+    throw new MissingTranslation();
   }
 };
 
 export const areChoicesTranslated = (choices: Choice[]) => {
   choices.forEach((choice) => {
     if (!choice.en || !choice.fr) {
-      throw MissingTranslation;
+      throw new MissingTranslation();
     }
   });
 };
@@ -74,7 +74,10 @@ export const isFormTranslated = (form: FormSchema) => {
 
 export const useAllowPublish = () => {
   const { ability } = useAccessControl();
-  const { form, submission } = useTemplateStore();
+  const { form, submission } = useTemplateStore((s) => ({
+    form: s.form,
+    submission: s.submission,
+  }));
   let email = "";
   if (submission?.email) {
     email = submission?.email;
@@ -83,10 +86,10 @@ export const useAllowPublish = () => {
   const userCanPublish = ability?.can("update", "FormRecord", "[publishingStatus]");
 
   const data = {
-    title: !!form.titleEn || !!form.titleFr,
-    questions: !!form.elements.length,
-    privacyPolicy: !!form.privacyPolicy.descriptionEn || !!form.privacyPolicy.descriptionFr,
-    confirmationMessage: !!form.endPage.descriptionEn || !!form.endPage.descriptionFr,
+    title: !!form?.titleEn || !!form?.titleFr,
+    questions: !!form?.elements?.length,
+    privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
+    confirmationMessage: !!form?.endPage?.descriptionEn || !!form?.endPage?.descriptionFr,
     translate: isFormTranslated(form),
     responseDelivery: !!email,
   };

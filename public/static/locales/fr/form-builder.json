@@ -23,6 +23,7 @@
   "share": "[FR] Share",
   "save": "[FR] Save",
   "edit": "[FR] Edit",
+  "switch": "[FR] Switch",
   "saveH1": "[FR] Save your progress",
   "saveP1": "[FR] We don’t save your form on our website, but don’t worry, you can save the file to your computer.",
   "saveP2": "[FR] Save the form file to work on later, and open it again to pick-up where you left off.",
@@ -63,5 +64,6 @@
   "settingsFormatOption4": "[FR] Other",
   "settingsDeleteTitle": "[FR] Delete form",
   "settingsDeleteHint": "[FR] Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
-  "settingsDeleteButton": "[FR] Delete"
+  "settingsDeleteButton": "[FR] Delete",
+  "downloadCSV": "[FR] Download .csv"
 }

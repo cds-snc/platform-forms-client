@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Editor } from "./Editor";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { Language } from "../types";
+import debounce from "lodash.debounce";
 
 export const RichTextEditor = ({
   path,
@@ -14,17 +15,30 @@ export const RichTextEditor = ({
   autoFocusEditor?: boolean;
   lang: Language;
 }) => {
-  const { updateField } = useTemplateStore();
-  const handleChange = (value: string) => {
-    if (typeof value === "undefined") {
-      value = "";
-    }
-    updateField(path, value);
-  };
+  const updateField = useTemplateStore((s) => s.updateField);
+  const [value, setValue] = useState(content);
+
+  const _debounced = useCallback(
+    debounce((value: string) => {
+      if (typeof value === "undefined") {
+        value = "";
+      }
+      updateField(path, value);
+    }, 100),
+    []
+  );
+
+  const updateValue = useCallback(
+    (value: string) => {
+      setValue(value);
+      _debounced(value);
+    },
+    [setValue]
+  );
 
   return (
     <div key={lang} className="w-full">
-      <Editor autoFocusEditor={autoFocusEditor} content={content} onChange={handleChange} />
+      <Editor autoFocusEditor={autoFocusEditor} content={value} onChange={updateValue} />
     </div>
   );
 };

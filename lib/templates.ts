@@ -264,6 +264,21 @@ async function _getFormRecordWithAssociatedUsers(
   }
 }
 
+export const getTemplateOwners = logger(async (formID: string) => {
+  return await prisma.template.findUnique({
+    where: {
+      id: formID,
+    },
+    select: {
+      users: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+});
+
 /*
  * Extract only the public properties from a form record.
  * The public properties are the ones that are needed to display the form
