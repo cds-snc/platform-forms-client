@@ -41,6 +41,7 @@ function FloatingLinkEditor({
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
+  const [isInit, setIsInit] = useState(false);
   const [lastSelection, setLastSelection] = useState<
     RangeSelection | GridSelection | NodeSelection | null
   >(null);
@@ -144,6 +145,14 @@ function FloatingLinkEditor({
       )
     );
   }, [editor, updateLinkEditor]);
+
+  useEffect(() => {
+    if (!isInit) {
+      setIsInit(true);
+      setEditMode(true);
+      return;
+    }
+  }, [isInit, setIsInit, setEditMode]);
 
   useEffect(() => {
     editor.getEditorState().read(() => {
