@@ -41,7 +41,6 @@ function FloatingLinkEditor({
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
-  const [isInit, setIsInit] = useState(false);
   const [lastSelection, setLastSelection] = useState<
     RangeSelection | GridSelection | NodeSelection | null
   >(null);
@@ -147,14 +146,6 @@ function FloatingLinkEditor({
   }, [editor, updateLinkEditor]);
 
   useEffect(() => {
-    if (!isInit) {
-      setIsInit(true);
-      setEditMode(true);
-      return;
-    }
-  }, [isInit, setIsInit, setEditMode]);
-
-  useEffect(() => {
     editor.getEditorState().read(() => {
       updateLinkEditor();
     });
@@ -188,6 +179,7 @@ function FloatingLinkEditor({
             } else if (event.key === "Escape") {
               event.preventDefault();
               setEditMode(false);
+              editor.focus();
             }
           }}
         />
@@ -198,6 +190,12 @@ function FloatingLinkEditor({
               title={t("Click to edit link")}
               className="relative w-full"
               onMouseDown={(event) => event.preventDefault()}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  event.preventDefault();
+                  editor.focus();
+                }
+              }}
               onClick={() => {
                 setEditMode(true);
               }}
