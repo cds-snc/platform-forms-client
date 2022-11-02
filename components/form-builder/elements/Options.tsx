@@ -91,7 +91,7 @@ export const Options = ({
   item: ElementTypeWithIndex;
   renderIcon?: RenderIcon;
 }) => {
-  const elements = useTemplateStore((s) => s.form.elements);
+  const { elements, lang } = useTemplateStore((s) => ({ elements: s.form.elements, lang: s.lang }));
 
   const [bulkAddAction, setBulkAddAction] = useState(false);
 
@@ -119,12 +119,16 @@ export const Options = ({
 
   const options = choices.map((child, index) => {
     if (!child || !item) return null;
+
+    const initialValue = elements[item.index].properties.choices[index][lang] as string;
+
     return (
       <Option
         renderIcon={renderIcon}
         parentIndex={item.index}
         key={`child-${item.id}-${index}`}
         index={index}
+        initialValue={initialValue}
       />
     );
   });
