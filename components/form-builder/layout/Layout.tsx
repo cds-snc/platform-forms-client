@@ -8,7 +8,7 @@ import { LeftNavigation } from "./LeftNavigation";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
 import { Language, LocalizedFormProperties } from "../types";
-import { Save } from "./Save";
+import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
@@ -99,11 +99,11 @@ export const Layout = () => {
             <Translate />
           </div>
         );
-      case "save":
+      case "share":
         return (
           <div className="col-start-4 col-span-9">
-            <StyledHeader>{t("saveH1")}</StyledHeader>
-            <Save />
+            <StyledHeader>{t("shareH1")}</StyledHeader>
+            <Share />
           </div>
         );
       case "publish":
