@@ -158,36 +158,43 @@ function FloatingLinkEditor({
   }, [isEditMode]);
 
   return (
-    <div ref={editorRef} className="link-editor">
+    <div ref={editorRef} className="link-editor" role="dialog">
       {isEditMode ? (
-        <input
-          ref={inputRef}
-          className="link-input"
-          value={linkUrl}
-          onChange={(event) => {
-            setLinkUrl(event.target.value);
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              if (lastSelection !== null) {
-                if (linkUrl !== "") {
-                  editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
+        <>
+          <input
+            ref={inputRef}
+            id={"link-editor-description-" + editor._key}
+            className="link-input"
+            value={linkUrl}
+            onChange={(event) => {
+              setLinkUrl(event.target.value);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                if (lastSelection !== null) {
+                  if (linkUrl !== "") {
+                    editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
+                  }
+                  setEditMode(false);
                 }
+              } else if (event.key === "Escape") {
+                event.preventDefault();
                 setEditMode(false);
+                editor.focus();
               }
-            } else if (event.key === "Escape") {
-              event.preventDefault();
-              setEditMode(false);
-              editor.focus();
-            }
-          }}
-        />
+            }}
+          />
+          <label className="visually-hidden" htmlFor={"link-editor-description-" + editor._key}>
+            {t("linkUrl")}
+          </label>
+        </>
       ) : (
         <>
           <div className="link-input">
             <button
-              title={t("Click to edit link")}
+              title={t("editLink")}
+              aria-label={t("editLink")}
               className="relative w-full"
               onMouseDown={(event) => event.preventDefault()}
               onKeyDown={(event) => {
@@ -201,7 +208,7 @@ function FloatingLinkEditor({
               }}
             >
               {linkUrl}
-              <EditIcon title="Edit link" className="w-5 h-5 inline-block absolute right-0" />
+              <EditIcon title={t("editLink")} className="w-5 h-5 inline-block absolute right-0" />
             </button>
           </div>
         </>

@@ -80,5 +80,7 @@
   "settingsFormatOption4": "Other",
   "settingsDeleteTitle": "Delete form",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
-  "settingsDeleteButton": "Delete"
+  "settingsDeleteButton": "Delete",
+  "linkUrl": "Link URL",
+  "editLink" : "Edit link"
 }
