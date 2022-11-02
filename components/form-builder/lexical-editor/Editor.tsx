@@ -45,6 +45,8 @@ export const Editor = ({
     undefined
   );
 
+  const editorId = "editor-" + Math.random().toString(36).substr(2, 9);
+
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
       setFloatingAnchorElem(_floatingAnchorElem);
@@ -70,11 +72,15 @@ export const Editor = ({
           },
         }}
       >
-        <Toolbar />
+        <Toolbar editorId={editorId} />
         <RichTextPlugin
           contentEditable={
             <div className="editor relative" ref={onRef}>
-              <ContentEditable className="editor-input" aria-label={t("RichTextEditor")} />
+              <ContentEditable
+                className="editor-input"
+                id={editorId}
+                ariaLabel={t("RichTextEditor")}
+              />
             </div>
           }
           placeholder={""}

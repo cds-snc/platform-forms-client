@@ -75,7 +75,7 @@ const ToolbarContainer = styled.div`
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
-export const Toolbar = () => {
+export const Toolbar = ({ editorId }: { editorId: string }) => {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -240,7 +240,7 @@ export const Toolbar = () => {
       <ToolbarContainer
         role="toolbar"
         aria-label="Text formatting"
-        aria-controls=""
+        aria-controls={editorId}
         onKeyDown={handleNav}
       >
         <button
