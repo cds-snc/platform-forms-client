@@ -561,12 +561,11 @@ export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
   const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
     useTemplateStore((s) => ({
-      title: s.localizeField(LocalizedFormProperties.TITLE),
+      title: s.form[s.localizeField(LocalizedFormProperties.TITLE)] ?? "",
       elements: s.form.elements,
       introduction: s.form.introduction,
       endPage: s.form.endPage,
       privacyPolicy: s.form.privacyPolicy,
-      form: s.form,
       localizeField: s.localizeField,
       updateField: s.updateField,
     }));
