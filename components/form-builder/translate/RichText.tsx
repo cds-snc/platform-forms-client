@@ -1,15 +1,16 @@
+import { FormElement } from "@lib/types";
 import { useTranslation } from "next-i18next";
 import React from "react";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { ElementType, Language, LocalizedElementProperties } from "../types";
+import { Language, LocalizedElementProperties } from "../types";
 
 export const RichText = ({
   element,
   index,
   translationLanguagePriority,
 }: {
-  element: ElementType;
+  element: FormElement;
   index: number;
   translationLanguagePriority: Language;
 }) => {
@@ -31,7 +32,7 @@ export const RichText = ({
               translationLanguagePriority
             )}`}
             content={
-              element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")]
+              element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")] ?? ""
             }
             lang={translationLanguagePriority}
           />
@@ -42,7 +43,7 @@ export const RichText = ({
               translationLanguagePriorityAlt
             )}`}
             content={
-              element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")]
+              element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")] ?? ""
             }
             lang={translationLanguagePriorityAlt}
           />

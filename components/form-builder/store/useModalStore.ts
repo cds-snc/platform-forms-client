@@ -1,7 +1,16 @@
 import create from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { ModalStore, ElementProperties } from "../types";
+import { ElementProperties } from "@lib/types";
 import unset from "lodash.unset";
+
+type ModalStore = {
+  isOpen: boolean;
+  modals: ElementProperties[];
+  updateIsOpen: (isOpen: boolean) => void;
+  updateModalProperties: (index: number, properties: ElementProperties) => void;
+  unsetModalField: (path: string) => void;
+  initialize: () => void;
+};
 
 export const defaultProperties: ElementProperties = {
   choices: [],

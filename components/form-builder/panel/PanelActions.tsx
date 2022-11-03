@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import { Button } from "../shared/Button";
 import { ChevronUp, ChevronDown, Close, Duplicate, ThreeDotsIcon } from "../icons";
 import { Modal } from "./Modal";
-import { ElementTypeWithIndex } from "../types";
+import { FormElementWithIndex } from "../types";
 import { useTemplateStore } from "../store/useTemplateStore";
 
 const Actions = styled.div`
@@ -61,7 +61,7 @@ export const PanelActions = ({
   renderSaveButton,
   children,
 }: {
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
   renderSaveButton: () => React.ReactElement | string | undefined;
   children?: React.ReactNode;
 }) => {
