@@ -305,42 +305,6 @@ describe("Template CRUD functions", () => {
     });
   });
 
-  /**
-   * Can be deleted once we think that the progressive migration is not needed anymore and the code in lib/templates.ts has been removed
-   */
-  it("Update `isPublished` on a specific form should handle soft migration with existing `publishingStatus`", async () => {
-    const ability = createAbility(getUserPrivileges(PublishForms, { user: { id: "1" } }));
-
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      id: "formtestID",
-      jsonConfig: { ...formConfiguration, publishingStatus: true },
-      users: [{ id: "1" }],
-    });
-
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
-      id: "formtestID",
-      jsonConfig: formConfiguration,
-      isPublished: true,
-    });
-
-    await updateIsPublishedForTemplate(ability, "formtestID", false);
-
-    expect(prismaMock.template.update).toHaveBeenCalledWith({
-      where: {
-        id: "formtestID",
-      },
-      data: {
-        isPublished: false,
-        jsonConfig: formConfiguration as unknown as Prisma.JsonObject,
-      },
-      select: {
-        id: true,
-        jsonConfig: true,
-        isPublished: true,
-      },
-    });
-  });
-
   it.each([[Base], [ManageForms]])("Delete template", async (privileges) => {
     const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 

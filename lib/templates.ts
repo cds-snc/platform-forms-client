@@ -222,33 +222,12 @@ async function _updateIsPublishedForTemplate(
     },
   ]);
 
-  /**
-   * Can be removed and replaced by `{ data: { isPublished }}` directly in the prisma update block once we think that the progressive
-   * migration is not needed anymore (see `_determineProperIsPublishedValue` description).
-   * The `formConfig` return value from the `_determineProperIsPublishedValue` function could also be removed
-   * since it was added for this specific migration feature
-   */
-  const buildData = () => {
-    const requiresIsPublishedMigration = _determineProperIsPublishedValue(
-      formRecordWithAssociatedUsers.formRecord,
-      formRecordWithAssociatedUsers.formRecord.isPublished
-    ).hasOldPublishingStatus;
-
-    if (requiresIsPublishedMigration) {
-      const { publishingStatus: _, ...formConfigWithoutPublishingStatus } =
-        formRecordWithAssociatedUsers.formConfig as Record<string, unknown>;
-      return { isPublished, jsonConfig: formConfigWithoutPublishingStatus as Prisma.JsonObject };
-    } else {
-      return { isPublished };
-    }
-  };
-
   const updatedTemplate = await prisma.template
     .update({
       where: {
         id: formID,
       },
-      data: buildData(),
+      data: { isPublished },
       select: {
         id: true,
         jsonConfig: true,
@@ -384,14 +363,7 @@ const _parseTemplate = (template: {
 }): FormRecord => {
   return {
     id: template.id,
-    /**
-     * Will be replaced by `isPublished: template.isPublished` once we think that the progressive
-     * migration is not needed anymore (see `_determineProperIsPublishedValue` description)
-     */
-    isPublished: _determineProperIsPublishedValue(
-      template.jsonConfig as Record<string, unknown>,
-      template.isPublished
-    ).isPublished,
+    isPublished: template.isPublished,
     // Converting to unknown first as Prisma is not aware of what is stored
     // in the JSON Object type, only that it is an object.
     ...(template.jsonConfig as unknown as BetterOmit<
@@ -402,21 +374,6 @@ const _parseTemplate = (template: {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
     }),
   };
-};
-
-/**
- * This is a temporary function that we are using to handle a soft migration process to transfer the `publishingStatus`
- * information from the form JSON configuration to the `isPublished` database schema data field
- */
-const _determineProperIsPublishedValue = (
-  jsonConfig: Record<string, unknown>,
-  isPublished: boolean
-): { isPublished: boolean; hasOldPublishingStatus: boolean } => {
-  if (jsonConfig.publishingStatus) {
-    return { isPublished: jsonConfig.publishingStatus as boolean, hasOldPublishingStatus: true };
-  } else {
-    return { isPublished: isPublished as boolean, hasOldPublishingStatus: false };
-  }
 };
 
 export const createTemplate = logger(_createTemplate);
