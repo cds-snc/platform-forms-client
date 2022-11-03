@@ -43,7 +43,7 @@ const MultipleChoiceWrapper = styled.div`
 const MultipleChoiceLabel = styled.label`
   input[type="radio"] + &::before {
     content: "";
-    border: 1.5px solid;
+    border: 2px solid;
     background: transparent;
     width: 34px;
     height: 34px;
@@ -71,7 +71,7 @@ const MultipleChoiceLabel = styled.label`
   }
   input[type="checkbox"] + &::before {
     content: "";
-    border: 1.5px solid;
+    border: 2px solid;
     background: transparent;
     width: 34px;
     height: 34px;

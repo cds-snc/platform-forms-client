@@ -19,7 +19,7 @@ import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
 import { useElementOptions } from "../hooks/useElementOptions";
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
-import { Checkbox } from "./MultipleChoice";
+import { Checkbox } from "../shared/MultipleChoice";
 import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
 import { TextArea } from "../shared/TextArea";
