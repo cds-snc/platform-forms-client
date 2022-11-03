@@ -9,11 +9,11 @@ import { PanelActions } from "./PanelActions";
 import debounce from "lodash.debounce";
 import {
   ElementOption,
-  ElementProperties,
-  ElementTypeWithIndex,
+  FormElementWithIndex,
   LocalizedElementProperties,
   LocalizedFormProperties,
 } from "../types";
+import { ElementProperties, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { UseSelectStateChange } from "downshift";
 import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
 import { useElementOptions } from "../hooks/useElementOptions";
@@ -31,7 +31,7 @@ const SelectedElement = ({
   item,
 }: {
   selected: ElementOption;
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -76,7 +76,7 @@ const SelectedElement = ({
   return element;
 };
 
-const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
+const getSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
   const { validationType, type } = useTemplateStore(
     useCallback(
@@ -90,7 +90,7 @@ const getSelectedOption = (item: ElementTypeWithIndex): ElementOption => {
     )
   );
 
-  let selectedType = type;
+  let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
 
   if (!type) {
     return elementOptions[2];
@@ -199,7 +199,7 @@ const RequiredWrapper = styled.div`
   }
 `;
 
-const Form = ({ item }: { item: ElementTypeWithIndex }) => {
+const Form = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
@@ -283,10 +283,10 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
             </DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
-          {item.properties.validation.maxLength && (
+          {item.properties.validation?.maxLength && (
             <DivDisabled>
               {t("Max character length: ")}
-              {item.properties.validation.maxLength}
+              {item.properties.validation?.maxLength}
             </DivDisabled>
           )}
         </div>
@@ -302,7 +302,7 @@ const Form = ({ item }: { item: ElementTypeWithIndex }) => {
                 <Checkbox
                   id={`required-${item.index}-id`}
                   value={`required-${item.index}-value`}
-                  checked={item.properties.validation.required}
+                  checked={item.properties.validation?.required}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (!e.target) {
                       return;
@@ -353,7 +353,7 @@ const ModalForm = ({
   updateModalProperties,
   unsetModalField,
 }: {
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
   properties: ElementProperties;
   updateModalProperties: (index: number, properties: ElementProperties) => void;
   unsetModalField: (path: string) => void;
@@ -405,7 +405,7 @@ const ModalForm = ({
         <Checkbox
           id={`required-${item.index}-id-modal`}
           value={`required-${item.index}-value-modal`}
-          checked={properties.validation.required}
+          checked={properties.validation?.required}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             // clone the existing properties so that we don't overwrite other keys in "validation"
             const validation = Object.assign({}, properties.validation, {
@@ -419,8 +419,8 @@ const ModalForm = ({
           label={t("Required")}
         ></Checkbox>
       </ModalRow>
-      {item.type === "textField" &&
-        (!item.properties.validation.type || item.properties.validation.type === "text") && (
+      {item.type === FormElementTypes.textField &&
+        (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
           <ModalRow>
             <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
               {t("Maximum character length")}
@@ -434,7 +434,7 @@ const ModalForm = ({
               id={`characterLength--modal--${item.index}`}
               type="number"
               min="1"
-              value={properties.validation.maxLength || ""}
+              value={properties.validation?.maxLength || ""}
               onKeyDown={(e) => {
                 if (["-", "+", ".", "e"].includes(e.key)) {
                   e.preventDefault();
@@ -478,7 +478,7 @@ const ElementWrapperDiv = styled.div`
   margin-top: -1px;
 `;
 
-export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
+export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
   const { elements, updateField } = useTemplateStore((s) => ({
@@ -495,7 +495,7 @@ export const ElementWrapper = ({ item }: { item: ElementTypeWithIndex }) => {
   }, [item, isOpen, isRichText]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSubmit = ({ item, properties }: { item: ElementTypeWithIndex; properties: any }) => {
+  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
       // replace all of "properties" with the new properties set in the ModalForm
@@ -561,12 +561,11 @@ export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
   const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
     useTemplateStore((s) => ({
-      title: s.localizeField(LocalizedFormProperties.TITLE),
+      title: s.form[s.localizeField(LocalizedFormProperties.TITLE)] ?? "",
       elements: s.form.elements,
       introduction: s.form.introduction,
       endPage: s.form.endPage,
       privacyPolicy: s.form.privacyPolicy,
-      form: s.form,
       localizeField: s.localizeField,
       updateField: s.updateField,
     }));
@@ -574,7 +573,7 @@ export const ElementPanel = () => {
   const [value, setValue] = useState<string>(title);
 
   const _debounced = useCallback(
-    debounce((val) => {
+    debounce((val: string | boolean) => {
       updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, val);
     }, 100),
     []
@@ -592,12 +591,14 @@ export const ElementPanel = () => {
     [setValue]
   );
 
-  const introTextPlaceholder = introduction[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const introTextPlaceholder =
+    introduction?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
-  const confirmTextPlaceholder = endPage[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const confirmTextPlaceholder =
+    endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
   const policyTextPlaceholder =
-    privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)];
+    privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
   return (
     <ElementPanelDiv>

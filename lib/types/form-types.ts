@@ -38,8 +38,8 @@ export interface ElementProperties {
   descriptionEn?: string;
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
-  choices?: Array<PropertyChoices>;
-  subElements?: Array<FormElement>;
+  choices?: PropertyChoices[];
+  subElements?: FormElement[];
   fileType?: string | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
@@ -103,15 +103,16 @@ export interface FormProperties {
   titleFr: string;
   emailSubjectEn?: string;
   emailSubjectFr?: string;
-  version: string;
-  layout: Array<number>;
+  version: number;
+  layout: number[];
   brand?: BrandProperties;
-  elements: Array<FormElement>;
+  elements: FormElement[];
   endPage?: Record<string, string>;
   introduction?: Record<string, string>;
   privacyPolicy?: Record<string, string>;
   [key: string]:
     | string
+    | number
     | boolean
     | Array<string | number | FormElement>
     | Record<string, string>

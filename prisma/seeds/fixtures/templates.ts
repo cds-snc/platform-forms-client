@@ -359,8 +359,240 @@ const LemonadeStand = {
     publishingStatus: true,
   },
 };
-
+const SimpleForm = {
+  jsonConfig: {
+    form: {
+      layout: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      endPage: {
+        descriptionEn: "Thanks for submitting.  This is a fake form so no one will be responding.",
+        descriptionFr:
+          "[fr] Thanks for submitting.  This is a fake form so no one will be responding.",
+        referrerUrlEn: "",
+        referrerUrlFr: "",
+      },
+      introduction: {
+        descriptionEn: "This is a simple form that does not use any complex components",
+        descriptionFr: "[fr] This is a simple form that does not use any complex components",
+      },
+      privacyPolicy: {
+        descriptionEn: "I'm a privacy statement / notice",
+        descriptionFr: "[fr] I'm a privacy statement / notice",
+      },
+      titleEn: "Simple Form",
+      titleFr: "Formulaire Simple",
+      version: 1,
+      elements: [
+        {
+          id: 1,
+          type: "textField",
+          properties: {
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            titleEn: "I'm a text field",
+            titleFr: "[fr] I'm a text field",
+            validation: {
+              required: true,
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 2,
+          type: "radio",
+          properties: {
+            choices: [
+              {
+                en: "Numero Uno",
+                fr: "Numero Uno",
+              },
+              {
+                en: "Numero Dos",
+                fr: "Numero Dos",
+              },
+            ],
+            titleEn: "Please choose one of my options",
+            titleFr: "[fr] Please choose one of my options",
+            validation: {
+              required: false,
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 3,
+          type: "checkbox",
+          properties: {
+            choices: [
+              {
+                en: "Uno",
+                fr: "Uno",
+              },
+              {
+                en: "Dos",
+                fr: "Dos",
+              },
+              {
+                en: "Tres",
+                fr: "Tres",
+              },
+              {
+                en: "Cuatro ",
+                fr: "Cuatro",
+              },
+            ],
+            titleEn: "Please choose multiple options",
+            titleFr: "[fr] Please choose multiple options",
+            validation: {
+              required: false,
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 4,
+          type: "dropdown",
+          properties: {
+            choices: [
+              {
+                en: "List item 1",
+                fr: "Item de liste 1",
+              },
+              {
+                en: "List item 2",
+                fr: "Item de liste 2",
+              },
+              {
+                en: "List item 3",
+                fr: "Item de liste 3",
+              },
+            ],
+            titleEn: "I'm a drop down list",
+            titleFr: "[fr] I'm a drop down list",
+            validation: {
+              required: false,
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 5,
+          type: "textArea",
+          properties: {
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            titleEn: "I'm a text area, please don't write a novel..",
+            titleFr: "[fr] I'm a text area, please don't write a novel..",
+            validation: {
+              required: true,
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 6,
+          type: "textField",
+          properties: {
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            titleEn: "Who you gonna call?",
+            titleFr: "[fr] Who you gonna call?",
+            validation: {
+              required: false,
+              type: "phone",
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 7,
+          type: "textField",
+          properties: {
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            titleEn: "Add me to your mailing list!",
+            titleFr: "[fr] Add me to your mailing list!",
+            validation: {
+              required: false,
+              type: "email",
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 8,
+          type: "textField",
+          properties: {
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            titleEn: "What's your special day?",
+            titleFr: "[fr] What's your special day?",
+            validation: {
+              required: false,
+              type: "date",
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+        {
+          id: 9,
+          type: "textField",
+          properties: {
+            choices: [
+              {
+                en: "",
+                fr: "",
+              },
+            ],
+            titleEn: "How many times have you filled out this form?",
+            titleFr: "[fr] How many times have you filled out this form?",
+            validation: {
+              required: false,
+              type: "number",
+            },
+            descriptionEn: "",
+            descriptionFr: "",
+          },
+        },
+      ],
+      emailSubjectEn: "Form builder test [en]",
+      emailSubjectFr: "Form builder test [fr]",
+    },
+    submission: {
+      email: "",
+    },
+    publishingStatus: true,
+    securityAttribute: "Unclassified",
+  },
+};
 export default {
-  development: [LemonadeStand],
+  development: [LemonadeStand, SimpleForm],
   production: [],
 } as TemplateCollection;

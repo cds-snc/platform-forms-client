@@ -209,7 +209,7 @@ export const Translate = () => {
             </div>
           </fieldset>
 
-          {(form.introduction.descriptionEn || form.introduction.descriptionFr) && (
+          {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <div className="text-entry">
               <div className="section-heading">
                 {t("Form introduction")}: {t("Description")}
@@ -333,12 +333,12 @@ export const Translate = () => {
                   translationLanguagePriority
                 )}`}
                 content={
-                  form.privacyPolicy[
+                  form.privacyPolicy?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriority
                     )
-                  ]
+                  ] ?? ""
                 }
                 lang={translationLanguagePriority}
               />
@@ -349,12 +349,12 @@ export const Translate = () => {
                   translationLanguagePriorityAlt
                 )}`}
                 content={
-                  form.privacyPolicy[
+                  form.privacyPolicy?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriorityAlt
                     )
-                  ]
+                  ] ?? ""
                 }
                 lang={translationLanguagePriorityAlt}
               />
@@ -379,12 +379,12 @@ export const Translate = () => {
                   translationLanguagePriority
                 )}`}
                 content={
-                  form.endPage[
+                  form.endPage?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriority
                     )
-                  ]
+                  ] ?? ""
                 }
                 lang={translationLanguagePriority}
               />
@@ -395,12 +395,12 @@ export const Translate = () => {
                   translationLanguagePriorityAlt
                 )}`}
                 content={
-                  form.endPage[
+                  form.endPage?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriorityAlt
                     )
-                  ]
+                  ] ?? ""
                 }
                 lang={translationLanguagePriorityAlt}
               />

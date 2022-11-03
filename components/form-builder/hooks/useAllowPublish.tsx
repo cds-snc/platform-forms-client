@@ -1,12 +1,6 @@
 import { useCallback } from "react";
-import {
-  Choice,
-  Description,
-  ElementType,
-  FormSchema,
-  publishRequiredFields,
-  Title,
-} from "../types";
+import { Description, publishRequiredFields, Title } from "../types";
+import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
 import { useAccessControl } from "@lib/hooks";
 import { useTemplateStore } from "../store/useTemplateStore";
 
@@ -24,7 +18,7 @@ export const isDescriptionTranslated = (element: Description) => {
   }
 };
 
-export const areChoicesTranslated = (choices: Choice[]) => {
+export const areChoicesTranslated = (choices: PropertyChoices[]) => {
   choices.forEach((choice) => {
     if (!choice.en || !choice.fr) {
       throw new MissingTranslation();
@@ -32,8 +26,8 @@ export const areChoicesTranslated = (choices: Choice[]) => {
   });
 };
 
-export const isFormElementTranslated = (element: ElementType) => {
-  if (element.type === "richText") {
+export const isFormElementTranslated = (element: FormElement) => {
+  if (element.type === FormElementTypes.richText) {
     isDescriptionTranslated(element.properties);
   } else {
     isTitleTranslated(element.properties);
@@ -50,17 +44,17 @@ export const isFormElementTranslated = (element: ElementType) => {
   }
 };
 
-export const isFormTranslated = (form: FormSchema) => {
+export const isFormTranslated = (form: FormProperties) => {
   try {
     isTitleTranslated(form);
 
     // Introduction is optional, but must be translated if present
-    if (form.introduction.descriptionEn || form.introduction.descriptionFr) {
+    if (form.introduction?.descriptionEn || form.introduction?.descriptionFr) {
       isDescriptionTranslated(form.introduction);
     }
 
-    isDescriptionTranslated(form.privacyPolicy);
-    isDescriptionTranslated(form.endPage);
+    isDescriptionTranslated(form.privacyPolicy ?? {});
+    isDescriptionTranslated(form.endPage ?? {});
 
     form.elements.forEach((element) => {
       isFormElementTranslated(element);

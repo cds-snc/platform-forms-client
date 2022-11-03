@@ -1,14 +1,15 @@
 import React from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { ElementType, Language, LocalizedElementProperties } from "../types";
+import { Language, LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
+import { FormElement } from "@lib/types";
 
 export const Title = ({
   element,
   index,
   translationLanguagePriority,
 }: {
-  element: ElementType;
+  element: FormElement;
   index: number;
   translationLanguagePriority: Language;
 }) => {
