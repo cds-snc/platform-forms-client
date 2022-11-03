@@ -24,6 +24,7 @@ export const Preview = () => {
   }));
 
   const router = useRouter();
+  const { t: t1 } = useTranslation("");
   const { t, i18n } = useTranslation("form-builder");
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
@@ -38,7 +39,7 @@ export const Preview = () => {
           formRecord={formRecord}
           language={language}
           router={router}
-          t={t}
+          t={t1}
           isPreview={true}
           submitAlert="Form submission is disabled in preview"
         >

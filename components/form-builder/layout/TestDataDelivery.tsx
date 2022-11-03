@@ -10,10 +10,11 @@ import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 
 export const TestDataDelivery = () => {
-  const { getSchema, id, setId } = useTemplateStore((s) => ({
+  const { getSchema, id, setId, email } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
+    email: s.submission.email || "test@example.com", // @TODO: default should come from logged in user
   }));
   const stringified = getSchema();
 
@@ -27,6 +28,7 @@ export const TestDataDelivery = () => {
   }));
 
   const router = useRouter();
+  const { t: t1 } = useTranslation("");
   const { t, i18n } = useTranslation("form-builder");
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
@@ -42,9 +44,7 @@ export const TestDataDelivery = () => {
 
   return (
     <div>
-      <div className="mb-8 bg-blue-200 p-5">
-        {t("submittedResponsesText", { email: "email@example.com" })}
-      </div>
+      <div className="mb-8 bg-blue-200 p-5">{t("submittedResponsesText", { email })}</div>
 
       <p>{t("ToTestInstructions")}</p>
       <ol className="ml-5 mb-5 mt-5">
@@ -66,8 +66,7 @@ export const TestDataDelivery = () => {
           formRecord={formRecord}
           language={language}
           router={router}
-          t={t}
-          isPreview={true}
+          t={t1}
           submitAlert={t("submitToTestDataDelivery")}
         >
           {currentForm}
