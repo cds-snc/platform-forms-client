@@ -83,7 +83,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // Short circuit only if Cypress testing
   if (
     process.env.APP_ENV !== "test" &&
-    (!publicForm || (!publicForm?.publishingStatus && !unpublishedForms))
+    (!publicForm || (!publicForm?.isPublished && !unpublishedForms))
   ) {
     return redirect(context.locale);
   }

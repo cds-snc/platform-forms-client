@@ -1,6 +1,9 @@
 import { Template } from "@prisma/client";
 
-type TemplateSeed = Omit<Template, "id" | "bearerToken" | "ttl" | "apiUsers" | "users">;
+type TemplateSeed = Omit<
+  Template,
+  "id" | "bearerToken" | "isPublished" | "ttl" | "apiUsers" | "users"
+>;
 type TemplateCollection = {
   development: TemplateSeed[];
   production: TemplateSeed[];
@@ -356,7 +359,6 @@ const LemonadeStand = {
     },
     internalTitleEn: "CDS - Lemonade Stand Funding",
     internalTitleFr: "CDS - Lemonade Stand Funding",
-    publishingStatus: true,
   },
 };
 const SimpleForm = {
@@ -588,7 +590,6 @@ const SimpleForm = {
     submission: {
       email: "",
     },
-    publishingStatus: true,
     securityAttribute: "Unclassified",
   },
 };

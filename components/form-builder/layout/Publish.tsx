@@ -14,7 +14,7 @@ export const Publish = () => {
     isPublishable,
   } = useAllowPublish();
 
-  const { uploadJson } = usePublish(false);
+  const { uploadJson } = usePublish();
   const [error, setError] = useState(false);
 
   const { getSchema, id, setId } = useTemplateStore((s) => ({

@@ -8,15 +8,7 @@
       "logoTitleEn": "Copyright Board of Canada",
       "logoTitleFr": "Commission du droit d'auteur du Canada"
     },
-    "layout": [
-      1,
-      2,
-      3,
-      6,
-      7,
-      11,
-      12
-    ],
+    "layout": [1, 2, 3, 6, 7, 11, 12],
     "endPage": {
       "descriptionEn": "# Thank you for your tariff. \n\r The Proposed Tariff(s) has/have been successfully filed. The Board will inform you when this proposed tariff has/have been published on the Board’s website or if we require additional information. \n\r <a href='https://cb-cda.gc.ca/en'>Go back</a>",
       "descriptionFr": "# Merci pour votre entrée. \n\r The Proposed Tariff(s) has/have been successfully filed. The Board will inform you when this proposed tariff has/have been published on the Board’s website or if we require additional information. \n\r <a href='https://cb-cda.gc.ca/fr'>Retour</a>",
@@ -412,6 +404,5 @@
   },
   "internalTitleEn": "Copyright Board of Canada - Proposed Tariff Filing Form",
   "internalTitleFr": "FR - Copyright Board of Canada - Proposed Tariff Filing Form",
-  "publishingStatus": false,
   "securityAttribute": "Unclassified"
 }

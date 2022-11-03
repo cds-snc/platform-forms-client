@@ -129,7 +129,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     id,
     form,
     submission,
-    publishingStatus: true,
+    isPublished: true,
     securityAttribute,
   };
 

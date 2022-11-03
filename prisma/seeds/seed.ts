@@ -29,12 +29,50 @@ async function createPrivileges(env: string) {
   });
 }
 
+//Can be removed once we know that the migration is completed
+async function publishingStatusMigration() {
+  const templates = await prisma.template.findMany({
+    select: {
+      id: true,
+      jsonConfig: true,
+    },
+  });
+
+  let numOfTemplates = 0;
+
+  templates
+    .filter((template) => {
+      return (template.jsonConfig as Record<string, unknown>).publishingStatus !== undefined;
+    })
+    .forEach(async (template) => {
+      const { publishingStatus, ...jsonConfigWithoutPublishingStatus } =
+        template.jsonConfig as Record<string, unknown>;
+
+      await prisma.template.update({
+        where: {
+          id: template.id,
+        },
+        data: {
+          jsonConfig: jsonConfigWithoutPublishingStatus as Prisma.JsonObject,
+          isPublished: publishingStatus as boolean,
+        },
+      });
+      numOfTemplates++;
+    });
+
+  console.log(`${numOfTemplates} were migrated for Publishing Status`);
+}
+
 async function main() {
   const { environment = "production" } = parse<{ environment?: string }>({
     environment: { type: String, optional: true },
   });
+
   console.log(`Seeding Database for ${environment} enviroment`);
   await Promise.all([createTemplates(environment), createPrivileges(environment)]);
+
+  console.log("Running 'publishingStatus' migration");
+  await publishingStatusMigration();
 }
 
 main()

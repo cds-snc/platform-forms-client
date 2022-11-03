@@ -77,7 +77,7 @@ export const useAllowPublish = () => {
     email = submission?.email;
   }
 
-  const userCanPublish = ability?.can("update", "FormRecord", "[publishingStatus]");
+  const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
 
   const data = {
     title: !!form?.titleEn || !!form?.titleFr,
