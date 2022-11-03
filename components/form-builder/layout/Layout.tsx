@@ -41,8 +41,6 @@ export const Layout = () => {
     };
   };
 
-  const previewWrapperClass = "p-5 border-3 border-blue-focus border-dashed";
-
   useEffect(() => {
     setLang(locale);
   }, [locale]);
