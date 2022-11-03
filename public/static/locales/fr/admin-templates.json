@@ -14,7 +14,9 @@
     "formTitle": "Titre du formulaire",
     "status": "Statut",
     "published": "Publié",
-    "draft": "Brouillon"
+    "draft": "Brouillon",
+    "publishForm": "Publier",
+    "unpublishForm": "Brouillon"
   },
   "settings": {
     "title": "Paramètres du formulaire",

@@ -59,11 +59,11 @@ export const LeftNavigation = ({
 
       {isSaveable() && (
         <Button
-          isCurrentTab={currentTab === "save"}
+          isCurrentTab={currentTab === "share"}
           icon={<ShareIcon className={iconClassname} />}
-          handleClick={handleClick("save")}
+          handleClick={handleClick("share")}
         >
-          {t("save")}
+          {t("share")}
         </Button>
       )}
       {userCanPublish && (
