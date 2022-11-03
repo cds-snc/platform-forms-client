@@ -82,5 +82,10 @@
   "settingsDeleteTitle": "Delete form",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteButton": "Delete",
-  "downloadCSV": "Download .csv"
+  "downloadCSV": "Download .csv",
+  "ToTestInstructions": "To test to see how you will gather form responses, please complete the following steps:",
+  "submittedResponsesText": "Submitted responses will be sent to {{email}}. Update response destination.",
+  "page1": "Page 1",
+  "page2": "Page 2",
+  "submitToTestDataDelivery": "Click submit to test response delivery"
 }

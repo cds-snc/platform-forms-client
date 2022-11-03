@@ -4,7 +4,7 @@ import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
 import { submitToAPI } from "@lib/helpers";
 import { useExternalScript, useFlag, useFormTimer } from "@lib/hooks";
-import { Alert, Button } from "@components/forms";
+import { Alert, Button, RichText } from "@components/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation, TFunction } from "next-i18next";
 import axios from "axios";
@@ -12,29 +12,10 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
-import Markdown from "markdown-to-jsx";
-import styled from "styled-components";
-import { BackArrowIcon } from "../icons";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { LocalizedElementProperties } from "../types";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
-
-const Link = styled.a`
-  text-decoration: underline;
-  cursor: pointer;
-  margin: 15px 0;
-
-  & svg {
-    display: inline-block;
-  }
-`;
-
-const SubmitButtonLabel = styled.div`
-  background-color: #cbc4f5;
-  display: inline-block;
-  padding: 2px 6px;
-`;
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -57,7 +38,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-  const formStatusSubmitted = props.status === "Submitted" ? true : false;
   const timerActive = useFlag("formTimer");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
 
@@ -151,8 +131,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [timerActive]);
 
-  return !props.isPreview &&
-    (isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError)) ? (
+  return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
     <Loader message={t("loading")} />
   ) : (
     <>
@@ -170,39 +149,19 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           {errorList}
         </Alert>
       )}
-      {formStatusSubmitted && props.isPreview && (
-        <>
-          <Link
-            onClick={(e) => {
-              e.preventDefault();
-              props.setStatus("None");
-            }}
-            href="#"
-          >
-            <BackArrowIcon />
-            Back to form preview
-          </Link>
-          <Markdown options={{ forceBlock: true }}>
-            {form.endPage
-              ? form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)]
-              : ""}
-          </Markdown>
-        </>
-      )}
       {/**
        * method attribute needs to stay here in case javascript does not load
        * otherwise GET request will be sent which will result in leaking all the user data
        * to the URL
        */}
-      {!formStatusSubmitted && (
+      {
         <>
-          <div className="gc-richText">
-            <Markdown options={{ forceBlock: true }}>
-              {form.introduction
-                ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
-                : ""}
-            </Markdown>
-          </div>
+          <RichText>
+            {form.introduction
+              ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
+              : ""}
+          </RichText>
+
           <form
             id="form"
             data-testid="form"
@@ -262,25 +221,25 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                     <p className="gc-description">{t("spam-error.success-prompt")}</p>
                   </div>
                 ))}
-              <div className="gc-richText">
-                <Markdown options={{ forceBlock: true }}>
-                  {form.privacyPolicy
-                    ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
-                    : ""}
-                </Markdown>
-              </div>
+
+              <RichText>
+                {form.privacyPolicy
+                  ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
+                  : ""}
+              </RichText>
+
               <div className="buttons">
-                <Button type="submit">{t("submitButton")}</Button>
-                {props.isPreview && (
-                  <SubmitButtonLabel>
-                    To preview your confirmation message, click submit
-                  </SubmitButtonLabel>
+                <Button type="submit" disabled={props.isPreview}>
+                  {t("submitButton")}
+                </Button>
+                {props.submitAlert && (
+                  <div className="inline-block py-1 px-4 bg-purple-200">{props.submitAlert}</div>
                 )}
               </div>
             </div>
           </form>
         </>
-      )}
+      }
     </>
   );
 };
@@ -291,6 +250,7 @@ interface FormProps {
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
+  submitAlert?: string;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
 }
@@ -312,11 +272,6 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
-    if (formikBag.props.isPreview) {
-      formikBag.setStatus("Submitted");
-      return;
-    }
-
     try {
       await submitToAPI(values, formikBag);
     } catch (err) {
