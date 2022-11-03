@@ -84,7 +84,7 @@ export const Layout = () => {
         return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1 className="border-0 mb-0">Test your response delivery</h1>
+            <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
             <TestDataDelivery />
           </div>
         );

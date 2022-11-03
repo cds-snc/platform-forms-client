@@ -98,5 +98,7 @@
   "submitToTestDataDelivery": "Click submit to test response delivery",
   "fillFormClickSubmit": "Fill out the form, and click submit.",
   "saveYourForm": "Save your form",
-  "confirmationPage": "Confirmation page"
+  "confirmationPage": "Confirmation page",
+  "testYourResponseDelivery": "Test your response delivery",
+  "formSubmissionDisabledInPreview": "Form submission is disabled in preview"
 }
