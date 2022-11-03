@@ -47,12 +47,11 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/view-templates">{t("adminNav.templates")}</Link>
           </li>
         )}
-        {ability?.can("view", "Flag") &&
-          ability?.can("update", "FormRecord", "[publishingStatus]") && (
-            <li className="gc-horizontal-item">
-              <Link href="/admin/flags">{t("adminNav.features")}</Link>
-            </li>
-          )}
+        {ability?.can("view", "Flag") && ability?.can("update", "FormRecord", "isPublished") && (
+          <li className="gc-horizontal-item">
+            <Link href="/admin/flags">{t("adminNav.features")}</Link>
+          </li>
+        )}
         <li className="gc-horizontal-item">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>

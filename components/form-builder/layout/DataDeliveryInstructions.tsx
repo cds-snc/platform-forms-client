@@ -11,7 +11,7 @@ export const DataDeliveryInstructions = () => {
     setId: s.setId,
   }));
 
-  const { uploadJson } = usePublish(false);
+  const { uploadJson } = usePublish();
   const handlePublish = useCallback(async () => {
     const result = await uploadJson(getSchema(), id);
     if (result && result?.error) {
