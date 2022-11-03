@@ -127,8 +127,8 @@ const templateCRUD = async ({
   }
 };
 
-const skipValidationCondition = (req: NextApiRequest) => {
-  return req.body.isPublished !== undefined;
+const runValidationCondition = (req: NextApiRequest) => {
+  return req.body.formConfig !== undefined;
 };
 
 export default middleware(
@@ -137,16 +137,16 @@ export default middleware(
     sessionExists(authenticatedMethods),
     jsonValidator(templatesSchema, { jsonKey: "formConfig" }),
     uniqueIDValidator({
+      runValidationIf: runValidationCondition,
       jsonKey: "formConfig",
-      skipValidationIf: skipValidationCondition,
     }),
     layoutIDValidator({
+      runValidationIf: runValidationCondition,
       jsonKey: "formConfig",
-      skipValidationIf: skipValidationCondition,
     }),
     subElementsIDValidator({
+      runValidationIf: runValidationCondition,
       jsonKey: "formConfig",
-      skipValidationIf: skipValidationCondition,
     }),
   ],
   templates

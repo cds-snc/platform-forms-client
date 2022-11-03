@@ -47,7 +47,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             <Link href="/admin/view-templates">{t("adminNav.templates")}</Link>
           </li>
         )}
-        {ability?.can("view", "Flag") && ability?.can("update", "FormRecord", "isPublished") && (
+        {ability?.can("view", "Flag") && (
           <li className="gc-horizontal-item">
             <Link href="/admin/flags">{t("adminNav.features")}</Link>
           </li>
