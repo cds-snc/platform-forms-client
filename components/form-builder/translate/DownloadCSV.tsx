@@ -39,8 +39,8 @@ export const DownloadCSV = () => {
     data.push(["Form introduction - Title", formatText(form.titleEn), formatText(form.titleFr)]);
     data.push([
       "Form introduction - Description",
-      formatText(form.introduction.descriptionEn),
-      formatText(form.introduction.descriptionFr),
+      formatText(form.introduction?.descriptionEn ?? ""),
+      formatText(form.introduction?.descriptionFr ?? ""),
     ]);
 
     let questionIndex = 1;
@@ -59,8 +59,8 @@ export const DownloadCSV = () => {
       if (element.properties.descriptionEn || element.properties.descriptionFr) {
         data.push([
           description,
-          formatText(element.properties.descriptionEn),
-          formatText(element.properties.descriptionFr),
+          formatText(element.properties.descriptionEn ?? ""),
+          formatText(element.properties.descriptionFr ?? ""),
         ]);
       }
 
@@ -73,7 +73,7 @@ export const DownloadCSV = () => {
       }
     });
 
-    if (form.privacyPolicy.descriptionEn || form.privacyPolicy.descriptionFr) {
+    if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
       data.push([
         "Privacy statement",
         formatText(form.privacyPolicy.descriptionEn),
@@ -81,7 +81,7 @@ export const DownloadCSV = () => {
       ]);
     }
 
-    if (form.endPage.descriptionEn || form.endPage.descriptionFr) {
+    if (form.endPage?.descriptionEn || form.endPage?.descriptionFr) {
       data.push([
         "Confirmation message",
         formatText(form.endPage.descriptionEn),

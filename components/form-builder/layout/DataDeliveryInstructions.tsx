@@ -5,26 +5,26 @@ import { usePublish } from "../hooks/usePublish";
 import { Button } from "../shared/Button";
 
 export const DataDeliveryInstructions = () => {
-  const { getSchema, formId, setFormId } = useTemplateStore((s) => ({
+  const { getSchema, id, setId } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
-    formId: s.formId,
-    setFormId: s.setFormId,
+    id: s.id,
+    setId: s.setId,
   }));
 
   const { uploadJson } = usePublish(false);
   const handlePublish = useCallback(async () => {
-    const result = await uploadJson(getSchema(), formId);
+    const result = await uploadJson(getSchema(), id);
     if (result && result?.error) {
       return;
     }
-    setFormId(result?.id);
-  }, [setFormId]);
+    setId(result?.id);
+  }, [setId]);
 
   return (
     <div>
       <p>To test to see how you will gather form responses, please complete the following steps:</p>
       <ol className="ml-5 mb-5 mt-5">
-        {!formId && (
+        {!id && (
           <li>
             Save your form{" "}
             <Button theme="secondary" onClick={handlePublish}>

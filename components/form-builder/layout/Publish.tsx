@@ -17,10 +17,10 @@ export const Publish = () => {
   const { uploadJson } = usePublish(false);
   const [error, setError] = useState(false);
 
-  const { getSchema, formId, setFormId } = useTemplateStore((s) => ({
+  const { getSchema, id, setId } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
-    formId: s.formId,
-    setFormId: s.setFormId,
+    id: s.id,
+    setId: s.setId,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -33,13 +33,13 @@ export const Publish = () => {
 
   const handlePublish = useCallback(async () => {
     setError(false);
-    const result = await uploadJson(getSchema(), formId);
+    const result = await uploadJson(getSchema(), id);
     if (result && result?.error) {
       setError(true);
       return;
     }
-    setFormId(result?.id);
-  }, [setError, setFormId]);
+    setId(result?.id);
+  }, [setError, setId]);
 
   return (
     <>
@@ -75,7 +75,7 @@ export const Publish = () => {
       </p>
       {isPublishable() && (
         <>
-          <Button onClick={handlePublish} disabled={!!formId}>
+          <Button onClick={handlePublish} disabled={!!id}>
             {t("publish")}
           </Button>
 
@@ -83,10 +83,10 @@ export const Publish = () => {
             role="alert"
             className={`inline-block ml-5 py-1 px-3 
             ${error ? "text-red-destructive bg-red-100" : ""}
-            ${formId ? "text-green-darker bg-green-100" : ""} 
-            ${!formId && !error ? "hidden" : ""}`}
+            ${id ? "text-green-darker bg-green-100" : ""} 
+            ${!id && !error ? "hidden" : ""}`}
           >
-            {formId && <p>The form has been published successfully</p>}
+            {id && <p>The form has been published successfully</p>}
             {error && <p>There was an error publishing the form</p>}
           </div>
         </>

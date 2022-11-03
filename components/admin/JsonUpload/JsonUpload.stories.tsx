@@ -17,7 +17,7 @@ const testForm = {
     email: "test@test.com",
   },
   form: {
-    version: "1",
+    version: 1,
     titleEn: "Test JSON!",
     titleFr: "Test JSON!",
     layout: [1],

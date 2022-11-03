@@ -1,30 +1,32 @@
-import { Language, Choice, ElementType, FormSchema, TemplateSchema } from "./types";
+import { Language } from "./types";
+import { FormElement, FormProperties, FormRecord, PropertyChoices } from "@lib/types";
+import { TemplateStoreState } from "./store/useTemplateStore";
 
-export const getPreviousIndex = (items: ElementType[], index: number) => {
+export const getPreviousIndex = (items: FormElement[], index: number) => {
   return index === 0 ? items.length - 1 : index - 1;
 };
 
-export const getNextIndex = (items: ElementType[], index: number) => {
+export const getNextIndex = (items: FormElement[], index: number) => {
   return index === items.length - 1 ? 0 : index + 1;
 };
 
-export const removeElementById = (items: ElementType[], id: number) => {
+export const removeElementById = (items: FormElement[], id: number) => {
   return items.filter((item) => {
     return item.id !== id;
   });
 };
 
-export const moveUp = (items: ElementType[], index: number) => {
+export const moveUp = (items: FormElement[], index: number) => {
   const previous = getPreviousIndex(items, index);
   return [...swap(items, index, previous)];
 };
 
-export const moveDown = (items: ElementType[], index: number) => {
+export const moveDown = (items: FormElement[], index: number) => {
   const next = getNextIndex(items, index);
   return [...swap(items, index, next)];
 };
 
-export const swap = (arr: ElementType[], index1: number, index2: number) => {
+export const swap = (arr: FormElement[], index1: number, index2: number) => {
   const a = { ...arr[index1] };
   const b = { ...arr[index2] };
 
@@ -40,7 +42,7 @@ export const swap = (arr: ElementType[], index1: number, index2: number) => {
   });
 };
 
-export const incrementElementId = (elements: ElementType[]) => {
+export const incrementElementId = (elements: FormElement[]) => {
   if (!elements || !elements.length) {
     return 1;
   }
@@ -53,14 +55,18 @@ export const sortByLayout = ({
   elements,
 }: {
   layout: number[];
-  elements: ElementType[];
+  elements: FormElement[];
 }) => {
   return elements.sort((a, b) => {
     return layout.indexOf(a.id) - layout.indexOf(b.id);
   });
 };
 
-export const newlineToOptions = (lang: Language, currentChoices: Choice[], bulkChoices: string) => {
+export const newlineToOptions = (
+  lang: Language,
+  currentChoices: PropertyChoices[] = [],
+  bulkChoices: string
+) => {
   const cleanedBulkChoices = bulkChoices.endsWith("\n") ? bulkChoices.slice(0, -1) : bulkChoices;
   const choices = cleanedBulkChoices.split("\n");
 
@@ -84,9 +90,9 @@ export const newlineToOptions = (lang: Language, currentChoices: Choice[], bulkC
   return newChoices;
 };
 
-export const getSchemaFromState = (state: TemplateSchema) => {
+export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
-    formId,
+    id,
     form: {
       endPage,
       introduction,
@@ -99,9 +105,10 @@ export const getSchemaFromState = (state: TemplateSchema) => {
       emailSubjectFr,
     },
     submission,
+    securityAttribute,
   } = state;
 
-  const form: FormSchema = {
+  const form: FormProperties = {
     layout: [],
     endPage,
     introduction,
@@ -118,11 +125,12 @@ export const getSchemaFromState = (state: TemplateSchema) => {
     return element.id;
   });
 
-  const schema: TemplateSchema = {
-    formId,
+  const schema: FormRecord = {
+    id,
     form,
     submission,
     publishingStatus: true,
+    securityAttribute,
   };
 
   return schema;

@@ -6,7 +6,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { Option } from "./Option";
 import { BulkAdd } from "./BulkAdd";
 import { Button } from "../shared/Button";
-import { ElementTypeWithIndex } from "../types";
+import { FormElementWithIndex } from "../types";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");
@@ -88,10 +88,10 @@ export const Options = ({
   item,
   renderIcon,
 }: {
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
   renderIcon?: RenderIcon;
 }) => {
-  const elements = useTemplateStore((s) => s.form.elements);
+  const { elements, lang } = useTemplateStore((s) => ({ elements: s.form.elements, lang: s.lang }));
 
   const [bulkAddAction, setBulkAddAction] = useState(false);
 
@@ -109,22 +109,26 @@ export const Options = ({
   }
   const { choices } = elements[index].properties;
 
-  if (bulkAddAction) {
-    return <BulkAdd index={index} toggleBulkAdd={toggleBulkAdd} choices={choices} />;
-  }
-
   if (!choices) {
     return <AddOptions index={index} />;
   }
 
+  if (bulkAddAction) {
+    return <BulkAdd index={index} toggleBulkAdd={toggleBulkAdd} choices={choices} />;
+  }
+
   const options = choices.map((child, index) => {
     if (!child || !item) return null;
+
+    const initialValue = elements[item.index].properties.choices?.[index][lang] ?? "";
+
     return (
       <Option
         renderIcon={renderIcon}
         parentIndex={item.index}
         key={`child-${item.id}-${index}`}
         index={index}
+        initialValue={initialValue}
       />
     );
   });
