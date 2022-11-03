@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { ElementPanel } from "../panel/ElementPanel";
 import { useTemplateStore } from "../store/useTemplateStore";
@@ -8,7 +7,7 @@ import { LeftNavigation } from "./LeftNavigation";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
 import { Language, LocalizedFormProperties } from "../types";
-import { Save } from "./Save";
+import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
@@ -17,16 +16,6 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
 import { DataDeliveryInstructions } from "./DataDeliveryInstructions";
-
-const StyledHeader = styled.h1`
-  border-bottom: none;
-  margin-bottom: 2rem;
-`;
-
-const StyledPreviewWrapper = styled.div`
-  border: 3px dashed blue;
-  padding: 20px;
-`;
 
 export const Layout = () => {
   const { localizeField, form, setLang } = useTemplateStore((s) => ({
@@ -52,6 +41,8 @@ export const Layout = () => {
     };
   };
 
+  const previewWrapperClass = "p-5 border-3 border-blue-focus border-dashed";
+
   useEffect(() => {
     setLang(locale);
   }, [locale]);
@@ -75,10 +66,10 @@ export const Layout = () => {
         return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <StyledPreviewWrapper>
+            <div className={previewWrapperClass}>
               <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
               <Preview isPreview={true} />
-            </StyledPreviewWrapper>
+            </div>
           </div>
         );
       case "test-data-delivery":
@@ -87,9 +78,9 @@ export const Layout = () => {
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <h1 className="border-0 mb-0">Test your response delivery</h1>
             <DataDeliveryInstructions />
-            <StyledPreviewWrapper>
+            <div className={previewWrapperClass}>
               <Preview isPreview={false} />
-            </StyledPreviewWrapper>
+            </div>
           </div>
         );
       case "translate":
@@ -99,11 +90,11 @@ export const Layout = () => {
             <Translate />
           </div>
         );
-      case "save":
+      case "share":
         return (
           <div className="col-start-4 col-span-9">
-            <StyledHeader>{t("saveH1")}</StyledHeader>
-            <Save />
+            <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
+            <Share />
           </div>
         );
       case "publish":
