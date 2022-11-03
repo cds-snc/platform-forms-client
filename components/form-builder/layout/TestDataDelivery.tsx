@@ -47,11 +47,11 @@ export const TestDataDelivery = () => {
       <div className="mb-8 bg-blue-200 p-5">{t("submittedResponsesText", { email })}</div>
 
       <p>{t("ToTestInstructions")}</p>
-      <ol className="ml-5 mb-5 mt-5">
+      <ol className="ml-5 mb-8 mt-6">
         {!id && (
-          <li>
+          <li className="mb-4">
             {t("saveYourForm")}
-            <Button theme="secondary" onClick={handlePublish}>
+            <Button theme="secondary" className="ml-4" onClick={handlePublish}>
               {t("save")}
             </Button>
           </li>
