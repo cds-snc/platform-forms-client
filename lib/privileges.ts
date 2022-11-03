@@ -257,20 +257,21 @@ export const checkPrivileges = (
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;
+    field?: string;
   }[],
   logic: "all" | "one" = "all"
 ): void => {
   // helper to define if we are force typing a passed object
   try {
-    const result = rules.map(({ action, subject }) => {
+    const result = rules.map(({ action, subject, field }) => {
       let ruleResult = false;
       if (_isForceTyping(subject)) {
-        ruleResult = ability.can(action, setSubjectType(subject.type, subject.object));
+        ruleResult = ability.can(action, setSubjectType(subject.type, subject.object), field);
         logMessage.debug(
           `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} `
         );
       } else {
-        ruleResult = ability.can(action, subject);
+        ruleResult = ability.can(action, subject, field);
         logMessage.debug(
           `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject} `
         );

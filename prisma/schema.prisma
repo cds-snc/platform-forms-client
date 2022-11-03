@@ -66,9 +66,10 @@ model Session {
 }
 
 model Template {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   jsonConfig  Json
   bearerToken String?
+  isPublished Boolean   @default(false)
   ttl         DateTime?
   apiUsers    ApiUser[]
   users       User[]

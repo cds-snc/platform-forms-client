@@ -57,6 +57,7 @@ const SectionDiv = styled.div`
       display: grid;
       grid-auto-flow: column;
       margin-bottom: 20px;
+      grid-auto-columns: minmax(0, 1fr);
       border: 1px solid #cacaca;
 
       &.section-text--rich-text > div {

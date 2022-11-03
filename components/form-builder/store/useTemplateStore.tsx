@@ -65,7 +65,7 @@ export interface TemplateStoreProps {
   submission: {
     email: string;
   };
-  publishingStatus: boolean;
+  isPublished: boolean;
   securityAttribute: string;
 }
 
@@ -109,7 +109,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
     submission: {
       email: "",
     },
-    publishingStatus: false,
+    isPublished: false,
     securityAttribute: "Unclassified",
   };
 
@@ -216,7 +216,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
           state.lang = "en";
           state.form = defaultForm;
           state.submission = { email: "test@example.com" };
-          state.publishingStatus = false;
+          state.isPublished = false;
           state.securityAttribute = "Unclassified";
         });
       },

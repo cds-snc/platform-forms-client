@@ -126,7 +126,7 @@ export type FormRecord = {
   bearerToken?: string;
   internalTitleEn?: string;
   internalTitleFr?: string;
-  publishingStatus: boolean;
+  isPublished: boolean;
   submission: SubmissionProperties;
   displayAlphaBanner?: boolean;
   form: FormProperties;
