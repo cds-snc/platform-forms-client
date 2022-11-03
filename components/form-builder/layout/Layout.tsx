@@ -7,7 +7,7 @@ import { LeftNavigation } from "./LeftNavigation";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
 import { Language } from "../types";
-import { Save } from "./Save";
+import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
@@ -40,6 +40,8 @@ export const Layout = () => {
       setTab(tab);
     };
   };
+
+  const previewWrapperClass = "p-5 border-3 border-blue-focus border-dashed";
 
   useEffect(() => {
     setLang(locale);
@@ -82,11 +84,11 @@ export const Layout = () => {
             <Translate />
           </div>
         );
-      case "save":
+      case "share":
         return (
           <div className="col-start-4 col-span-9">
-            <h1 className="border-none mb-6">{t("saveH1")}</h1>
-            <Save />
+            <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
+            <Share />
           </div>
         );
       case "publish":

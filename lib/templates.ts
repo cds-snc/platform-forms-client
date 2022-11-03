@@ -15,7 +15,7 @@ import { MongoAbility } from "@casl/ability";
 async function _createTemplate(
   ability: MongoAbility,
   userID: string,
-  config: BetterOmit<FormRecord, "id">
+  config: BetterOmit<FormRecord, "id" | "isPublished">
 ): Promise<FormRecord | null> {
   try {
     checkPrivileges(ability, [{ action: "create", subject: "FormRecord" }]);
@@ -52,6 +52,7 @@ async function _createTemplate(
         select: {
           id: true,
           jsonConfig: true,
+          isPublished: true,
         },
       })
     );
@@ -93,6 +94,7 @@ async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
       },
     })
     .catch((e) => prismaErrors(e, []));
@@ -123,6 +125,7 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
         ttl: true,
       },
     })
@@ -154,7 +157,7 @@ async function _getTemplateSubmissionTypeByID(
 async function _updateTemplate(
   ability: MongoAbility,
   formID: string,
-  formConfig: BetterOmit<FormRecord, "id" | "bearerToken">
+  formConfig: BetterOmit<FormRecord, "id" | "bearerToken" | "isPublished">
 ): Promise<FormRecord | null> {
   const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
   if (!formRecordWithAssociatedUsers) return null;
@@ -183,6 +186,7 @@ async function _updateTemplate(
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -190,6 +194,52 @@ async function _updateTemplate(
   if (updatedTemplate === null) return updatedTemplate;
 
   if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  return _parseTemplate(updatedTemplate);
+}
+
+/**
+ * Update `isPublished` value for a specific form.
+ */
+async function _updateIsPublishedForTemplate(
+  ability: MongoAbility,
+  formID: string,
+  isPublished: boolean
+): Promise<FormRecord | null> {
+  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
+  if (!formRecordWithAssociatedUsers) return null;
+
+  checkPrivileges(ability, [
+    {
+      action: "update",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...formRecordWithAssociatedUsers.formRecord,
+          users: formRecordWithAssociatedUsers.users,
+        },
+      },
+      field: "isPublished",
+    },
+  ]);
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formID,
+      },
+      data: { isPublished },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
   return _parseTemplate(updatedTemplate);
 }
 
@@ -228,6 +278,7 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -251,6 +302,7 @@ async function _getFormRecordWithAssociatedUsers(
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
         users: true,
       },
     });
@@ -258,7 +310,10 @@ async function _getFormRecordWithAssociatedUsers(
 
     const parsedTemplate = _parseTemplate(templateWithUsers);
 
-    return { formRecord: parsedTemplate, users: templateWithUsers.users };
+    return {
+      formRecord: parsedTemplate,
+      users: templateWithUsers.users,
+    };
   } catch (e) {
     return prismaErrors(e, null);
   }
@@ -290,8 +345,7 @@ export const getTemplateOwners = logger(async (formID: string) => {
 const _onlyIncludePublicProperties = (template: FormRecord): PublicFormRecord => {
   return {
     id: template.id,
-
-    publishingStatus: template.publishingStatus,
+    isPublished: template.isPublished,
     displayAlphaBanner: template.displayAlphaBanner ?? true,
     securityAttribute: template.securityAttribute ?? "Unclassified",
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
@@ -301,14 +355,19 @@ const _onlyIncludePublicProperties = (template: FormRecord): PublicFormRecord =>
   };
 };
 
-const _parseTemplate = (template: { id: string; jsonConfig: Prisma.JsonValue }): FormRecord => {
+const _parseTemplate = (template: {
+  id: string;
+  jsonConfig: Prisma.JsonValue;
+  isPublished: boolean;
+}): FormRecord => {
   return {
     id: template.id,
+    isPublished: template.isPublished,
     // Converting to unknown first as Prisma is not aware of what is stored
     // in the JSON Object type, only that it is an object.
     ...(template.jsonConfig as unknown as BetterOmit<
       FormRecord,
-      "id" | "reCaptchaID" | "bearerToken"
+      "id" | "reCaptchaID" | "bearerToken" | "isPublished"
     >),
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
@@ -321,5 +380,6 @@ export const getAllTemplates = logger(_getAllTemplates);
 export const getTemplateByID = logger(_getTemplateByID);
 export const getTemplateSubmissionTypeByID = logger(_getTemplateSubmissionTypeByID);
 export const updateTemplate = logger(_updateTemplate);
+export const updateIsPublishedForTemplate = logger(_updateIsPublishedForTemplate);
 export const deleteTemplate = logger(_deleteTemplate);
 export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);

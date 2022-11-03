@@ -6,13 +6,13 @@ import { interpolatePermissionCondition } from "@lib/privileges";
 
 describe("Provided values can be interpolated in permission condition", () => {
   it("Should succeed if condition does not require any interpolation", async () => {
-    const condition = { "formConfig.publishingStatus": false };
+    const condition = { "formConfig.something": false };
 
     const result = interpolatePermissionCondition(condition, {
       userId: "1B712DD4-9263-41C2-AAA0-B0D4F430FEC9",
     });
 
-    const expectedResult = { "formConfig.publishingStatus": false };
+    const expectedResult = { "formConfig.something": false };
 
     expect(result).toMatchObject(expectedResult);
   });

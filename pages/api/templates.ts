@@ -5,6 +5,7 @@ import {
   deleteTemplate,
   createTemplate,
   updateTemplate,
+  updateIsPublishedForTemplate,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -57,7 +58,9 @@ const templates = async (
           session.user.id,
           AdminLogAction.Update,
           AdminLogEvent.UpdateForm,
-          `Form id: ${req.body.formID} has been updated`
+          req.body.isPublished !== undefined
+            ? `Form id: ${req.body.formID} 'isPublished' value has been updated`
+            : `Form id: ${req.body.formID} has been updated`
         );
       }
       if (req.method === "DELETE") {
@@ -93,12 +96,14 @@ const templateCRUD = async ({
   user,
   formID,
   formConfig,
+  isPublished,
 }: {
   ability: MongoAbility;
   method: string;
   user: Session["user"];
   formID?: string;
   formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
+  isPublished: boolean;
 }) => {
   switch (method) {
     case "GET":
@@ -108,7 +113,11 @@ const templateCRUD = async ({
       if (formConfig) return await createTemplate(ability, user.id, formConfig);
       throw new Error("Missing Form Configuration");
     case "PUT":
-      if (formID && formConfig) return await updateTemplate(ability, formID, formConfig);
+      if (formID && formConfig) {
+        return await updateTemplate(ability, formID, formConfig);
+      } else if (formID && isPublished !== undefined) {
+        return await updateIsPublishedForTemplate(ability, formID, isPublished);
+      }
       throw new Error("Missing formID and/or formConfig");
     case "DELETE":
       if (formID) return await deleteTemplate(ability, formID);
@@ -118,14 +127,27 @@ const templateCRUD = async ({
   }
 };
 
+const runValidationCondition = (req: NextApiRequest) => {
+  return req.body.formConfig !== undefined;
+};
+
 export default middleware(
   [
     cors({ allowedMethods }),
     sessionExists(authenticatedMethods),
     jsonValidator(templatesSchema, { jsonKey: "formConfig" }),
-    uniqueIDValidator({ jsonKey: "formConfig" }),
-    layoutIDValidator({ jsonKey: "formConfig" }),
-    subElementsIDValidator({ jsonKey: "formConfig" }),
+    uniqueIDValidator({
+      runValidationIf: runValidationCondition,
+      jsonKey: "formConfig",
+    }),
+    layoutIDValidator({
+      runValidationIf: runValidationCondition,
+      jsonKey: "formConfig",
+    }),
+    subElementsIDValidator({
+      runValidationIf: runValidationCondition,
+      jsonKey: "formConfig",
+    }),
   ],
   templates
 );
