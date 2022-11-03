@@ -38,17 +38,15 @@ async function publishingStatusMigration() {
     },
   });
 
-  let numOfTemplates = 0;
-
-  templates
+  const templatesToMigrate = templates
     .filter((template) => {
       return (template.jsonConfig as Record<string, unknown>).publishingStatus !== undefined;
     })
-    .forEach(async (template) => {
+    .map((template) => {
       const { publishingStatus, ...jsonConfigWithoutPublishingStatus } =
         template.jsonConfig as Record<string, unknown>;
 
-      await prisma.template.update({
+      return prisma.template.update({
         where: {
           id: template.id,
         },
@@ -57,10 +55,11 @@ async function publishingStatusMigration() {
           isPublished: publishingStatus as boolean,
         },
       });
-      numOfTemplates++;
     });
 
-  console.log(`${numOfTemplates} were migrated for Publishing Status`);
+  await Promise.all(templatesToMigrate);
+
+  console.log(`${templatesToMigrate.length} were migrated for Publishing Status`);
 }
 
 async function main() {
