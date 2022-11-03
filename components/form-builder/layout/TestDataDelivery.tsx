@@ -50,13 +50,13 @@ export const TestDataDelivery = () => {
       <ol className="ml-5 mb-5 mt-5">
         {!id && (
           <li>
-            Save your form{" "}
+            {t("saveYourForm")}
             <Button theme="secondary" onClick={handlePublish}>
-              Save
+              {t("save")}
             </Button>
           </li>
         )}
-        <li>Fill out the form, and click submit.</li>
+        <li>{t("fillFormClickSubmit")}</li>
       </ol>
 
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">

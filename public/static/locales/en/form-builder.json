@@ -87,5 +87,7 @@
   "submittedResponsesText": "Submitted responses will be sent to {{email}}. Update response destination.",
   "page1": "Page 1",
   "page2": "Page 2",
-  "submitToTestDataDelivery": "Click submit to test response delivery"
+  "submitToTestDataDelivery": "Click submit to test response delivery",
+  "fillFormClickSubmit": "Fill out the form, and click submit.",
+  "saveYourForm": "Save your form"
 }
