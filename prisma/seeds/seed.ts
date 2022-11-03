@@ -38,6 +38,8 @@ async function publishingStatusMigration() {
     },
   });
 
+  let numOfTemplates = 0;
+
   templates
     .filter((template) => {
       return (template.jsonConfig as Record<string, unknown>).publishingStatus !== undefined;
@@ -55,7 +57,10 @@ async function publishingStatusMigration() {
           isPublished: publishingStatus as boolean,
         },
       });
+      numOfTemplates++;
     });
+
+  console.log(`${numOfTemplates} were migrated for Publishing Status`);
 }
 
 async function main() {
