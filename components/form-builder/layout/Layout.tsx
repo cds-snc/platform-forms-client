@@ -16,12 +16,15 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
+import { getSession } from "next-auth/react";
 
 export const Layout = () => {
-  const { form, setLang } = useTemplateStore((s) => ({
+  const { form, setLang, email, updateField } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
     setLang: s.setLang,
+    email: s.submission.email,
+    updateField: s.updateField,
   }));
 
   const { currentTab, setTab } = useNavigationStore((s) => ({
@@ -44,6 +47,16 @@ export const Layout = () => {
   useEffect(() => {
     setLang(locale);
   }, [locale]);
+
+  useEffect(() => {
+    const getEmail = async () => {
+      const session = await getSession();
+      if (session !== null && session.user.email) {
+        updateField("submission.email", session.user.email);
+      }
+    };
+    !email && getEmail();
+  }, [email, updateField]);
 
   const renderTab = (tab: string) => {
     switch (tab) {
