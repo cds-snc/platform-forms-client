@@ -15,7 +15,7 @@ export type ValidateOptions = {
 export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (options?.runValidationIf && options.runValidationIf(req) === false) {
+      if (options?.runValidationIf?.(req) === false) {
         return { next: true };
       }
       const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
@@ -50,7 +50,7 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
 export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (options?.runValidationIf && options.runValidationIf(req) === false) {
+      if (options?.runValidationIf?.(req) === false) {
         return { next: true };
       }
       const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
@@ -85,7 +85,7 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
 export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
     try {
-      if (options?.runValidationIf && options.runValidationIf(req) === false) {
+      if (options?.runValidationIf?.(req) === false) {
         return { next: true };
       }
       const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
