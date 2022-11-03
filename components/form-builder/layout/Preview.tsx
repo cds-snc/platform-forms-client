@@ -47,7 +47,7 @@ export const Preview = () => {
         </Form>
       </div>
 
-      <span className="bg-purple-200 p-2 inline-block mb-1">{t("page2")}</span>
+      <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
         <RichText>
           {formRecord.form.endPage

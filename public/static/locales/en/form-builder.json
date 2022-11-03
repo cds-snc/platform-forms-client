@@ -89,5 +89,6 @@
   "page2": "Page 2",
   "submitToTestDataDelivery": "Click submit to test response delivery",
   "fillFormClickSubmit": "Fill out the form, and click submit.",
-  "saveYourForm": "Save your form"
+  "saveYourForm": "Save your form",
+  "confirmationPage": "Confirmation page"
 }
