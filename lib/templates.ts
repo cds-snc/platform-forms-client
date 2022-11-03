@@ -293,7 +293,7 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
 
 async function _getFormRecordWithAssociatedUsers(
   formID: string
-): Promise<{ formRecord: FormRecord; users: User[]; formConfig: Prisma.JsonValue } | null> {
+): Promise<{ formRecord: FormRecord; users: User[] } | null> {
   try {
     const templateWithUsers = await prisma.template.findUnique({
       where: {
@@ -313,7 +313,6 @@ async function _getFormRecordWithAssociatedUsers(
     return {
       formRecord: parsedTemplate,
       users: templateWithUsers.users,
-      formConfig: templateWithUsers.jsonConfig,
     };
   } catch (e) {
     return prismaErrors(e, null);
