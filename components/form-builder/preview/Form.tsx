@@ -222,9 +222,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 ))}
 
               <RichText>
-                {form.privacyPolicy
-                  ? form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]
-                  : ""}
+                {form.privacyPolicy &&
+                  form.privacyPolicy[localizeField(LocalizedElementProperties.DESCRIPTION)]}
               </RichText>
 
               <div className="buttons">
