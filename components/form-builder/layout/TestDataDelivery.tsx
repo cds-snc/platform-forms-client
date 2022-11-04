@@ -1,6 +1,5 @@
 import React from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { useCallback } from "react";
 import { usePublish } from "../hooks/usePublish";
 import { useTranslation } from "next-i18next";
 import { Button } from "../shared/Button";
@@ -8,11 +7,10 @@ import { Form } from "../preview/Form";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
-import axios from "axios";
-import { logMessage } from "@lib/logger";
 
 export const TestDataDelivery = () => {
-  const { getSchema, id, setId, email } = useTemplateStore((s) => ({
+  const { localizeField, getSchema, id, setId, email } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
@@ -25,10 +23,6 @@ export const TestDataDelivery = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-  }));
-
   const router = useRouter();
   const { t: t1 } = useTranslation("");
   const { t, i18n } = useTranslation("form-builder");
@@ -38,22 +32,16 @@ export const TestDataDelivery = () => {
   const { uploadJson } = usePublish();
 
   const handlePublish = async () => {
-    const result = await uploadJson(getSchema(), id);
+    const schema = JSON.parse(getSchema());
+    delete schema.id;
+    delete schema.isPublished;
+
+    const result = await uploadJson(JSON.stringify(schema), id);
     if (result && result?.error) {
       return;
     }
 
-    const response = await axios({
-      url: "/api/templates",
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: { formID: result.id, isPublished: false },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    }).catch((err) => logMessage.error(err));
-
-    logMessage.info(response);
+    setId(result?.id);
   };
 
   return (
@@ -72,7 +60,6 @@ export const TestDataDelivery = () => {
         )}
         <li>{t("fillFormClickSubmit")}</li>
       </ol>
-
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
         <h1>{formRecord.form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
 

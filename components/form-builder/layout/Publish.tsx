@@ -31,6 +31,17 @@ export const Publish = () => {
     );
   };
 
+  // @TODO this should replace part of the below
+  // const response = await axios({
+  //   url: "/api/templates",
+  //   method: "PUT",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   data: { formID: result.id, isPublished: false },
+  //   timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+  // }).catch((err) => logMessage.error(err));
+
   const handlePublish = useCallback(async () => {
     setError(false);
     const result = await uploadJson(getSchema(), id);
