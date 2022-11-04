@@ -6,7 +6,7 @@ import { useNavigationStore } from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 
-import { Language, LocalizedFormProperties } from "../types";
+import { Language } from "../types";
 import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
@@ -15,13 +15,16 @@ import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
-import { DataDeliveryInstructions } from "./DataDeliveryInstructions";
+import { TestDataDelivery } from "./TestDataDelivery";
+import { useSession } from "next-auth/react";
 
 export const Layout = () => {
-  const { localizeField, form, setLang } = useTemplateStore((s) => ({
+  const { form, setLang, email, updateField } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
     setLang: s.setLang,
+    email: s.submission.email,
+    updateField: s.updateField,
   }));
 
   const { currentTab, setTab } = useNavigationStore((s) => ({
@@ -41,11 +44,20 @@ export const Layout = () => {
     };
   };
 
-  const previewWrapperClass = "p-5 border-3 border-blue-focus border-dashed";
-
   useEffect(() => {
     setLang(locale);
   }, [locale]);
+
+  const { data } = useSession();
+
+  useEffect(() => {
+    const setEmail = () => {
+      if (data && data.user.email) {
+        updateField("submission.email", data.user.email);
+      }
+    };
+    !email && setEmail();
+  }, [email, data]);
 
   const renderTab = (tab: string) => {
     switch (tab) {
@@ -66,21 +78,15 @@ export const Layout = () => {
         return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <div className={previewWrapperClass}>
-              <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-              <Preview isPreview={true} />
-            </div>
+            <Preview />
           </div>
         );
       case "test-data-delivery":
         return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1 className="border-0 mb-0">Test your response delivery</h1>
-            <DataDeliveryInstructions />
-            <div className={previewWrapperClass}>
-              <Preview isPreview={false} />
-            </div>
+            <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
+            <TestDataDelivery />
           </div>
         );
       case "translate":
