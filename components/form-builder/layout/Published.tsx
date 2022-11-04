@@ -3,8 +3,8 @@ import { RocketIcon } from "../icons/RocketIcon";
 import { Button } from "../shared/Button";
 
 export const Published = ({ id }: { id: string }) => {
-  const linkEn = `//en/id/${id}`;
-  const linkFr = `//fr/id/${id}`;
+  const linkEn = `http://localhost:3000/en/id/${id}`;
+  const linkFr = `http://localhost:3000/fr/id/${id}`;
   return (
     <div>
       <div className="p-7 mb-10 flex bg-green-50">

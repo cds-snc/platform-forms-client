@@ -20,9 +20,10 @@ import { TestDataDelivery } from "./TestDataDelivery";
 import { useSession } from "next-auth/react";
 
 export const Layout = () => {
-  const { form, setLang, email, updateField } = useTemplateStore((s) => ({
+  const { form, setLang, email, updateField, id } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
+    id: s.id,
     setLang: s.setLang,
     email: s.submission.email,
     updateField: s.updateField,
@@ -115,7 +116,7 @@ export const Layout = () => {
       case "published":
         return userCanPublish ? (
           <div className="col-start-4 col-span-9">
-            <Published />
+            <Published id={id} />
           </div>
         ) : (
           setTab("create")
