@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { usePublish } from "../hooks/usePublish";
 import { useTranslation } from "next-i18next";
@@ -34,6 +34,7 @@ export const TestDataDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
+  const [error, setError] = useState(false);
 
   const { uploadJson } = usePublish();
 
@@ -44,7 +45,7 @@ export const TestDataDelivery = () => {
 
     const result = await uploadJson(JSON.stringify(schema), id);
     if (result && result?.error) {
-      return;
+      setError(true);
     }
 
     setId(result?.id);
@@ -75,6 +76,14 @@ export const TestDataDelivery = () => {
             <Button theme="secondary" className="ml-4" onClick={handlePublish}>
               {t("save")}
             </Button>
+            <div
+              role="alert"
+              className={`inline-block ml-5 py-1 px-3 text-red-destructive bg-red-100 ${
+                error ? "" : "hidden"
+              }`}
+            >
+              <p>There was an error publishing the form</p>
+            </div>
           </li>
         )}
         <li>{t("fillFormClickSubmit")}</li>
