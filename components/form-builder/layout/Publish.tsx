@@ -6,6 +6,7 @@ import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon } from "../icons";
 import { Button } from "../shared/Button";
 import Link from "next/link";
+import { useNavigationStore } from "../store/useNavigationStore";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -20,6 +21,11 @@ export const Publish = () => {
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
+  }));
+
+  const { setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -89,7 +95,7 @@ export const Publish = () => {
             ${id ? "text-green-darker bg-green-100" : ""} 
             ${!id && !error ? "hidden" : ""}`}
           >
-            {id && <p>The form has been published successfully</p>}
+            {id && setTab("published")}
             {error && <p>There was an error publishing the form</p>}
           </div>
         </>
