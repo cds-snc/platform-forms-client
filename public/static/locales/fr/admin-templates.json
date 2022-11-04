@@ -16,7 +16,9 @@
     "published": "Publié",
     "draft": "Brouillon",
     "publishForm": "Publier",
-    "unpublishForm": "Brouillon"
+    "unpublishForm": "Brouillon",
+    "users": "Utilisateurs",
+    "assign": "Assigner"
   },
   "settings": {
     "title": "Paramètres du formulaire",

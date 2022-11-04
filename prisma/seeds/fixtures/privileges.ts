@@ -48,6 +48,7 @@ const ManageForms: PrivilegeSeed = {
   permissions: [{ action: ["create", "view", "update", "delete"], subject: "FormRecord" }],
   priority: 2,
 };
+
 const ViewUserPrivileges: PrivilegeSeed = {
   nameEn: "ViewUserPrivileges",
   nameFr: "VisionnerPrivilègesUtilisateur",
