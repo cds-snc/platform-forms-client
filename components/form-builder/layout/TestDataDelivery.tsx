@@ -7,6 +7,8 @@ import { Form } from "../preview/Form";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
+import { useNavigationStore } from "../store/useNavigationStore";
+import Link from "next/link";
 
 export const TestDataDelivery = () => {
   const { localizeField, getSchema, id, setId, email } = useTemplateStore((s) => ({
@@ -22,6 +24,10 @@ export const TestDataDelivery = () => {
     id: id || "test0form00000id000asdf11",
     ...JSON.parse(stringified),
   };
+
+  const { setTab } = useNavigationStore((s) => ({
+    setTab: s.setTab,
+  }));
 
   const router = useRouter();
   const { t: t1 } = useTranslation("");
@@ -46,7 +52,20 @@ export const TestDataDelivery = () => {
 
   return (
     <div>
-      <div className="mb-8 bg-blue-200 p-5">{t("submittedResponsesText", { email })}</div>
+      <div className="mb-8 bg-blue-200 p-5">
+        {t("submittedResponsesText", { email })}{" "}
+        <Link
+          href="#"
+          legacyBehavior={false}
+          className="text-underline inline"
+          onClick={(e) => {
+            e.preventDefault();
+            setTab("settings");
+          }}
+        >
+          {t("updateResponseDestination")}
+        </Link>
+      </div>
 
       <p>{t("ToTestInstructions")}</p>
       <ol className="ml-5 mb-8 mt-6">

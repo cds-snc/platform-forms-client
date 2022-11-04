@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon } from "../icons";
@@ -14,7 +14,6 @@ export const Publish = () => {
     isPublishable,
   } = useAllowPublish();
 
-  const { uploadJson } = usePublish();
   const [error, setError] = useState(false);
 
   const { getSchema, id, setId } = useTemplateStore((s) => ({
@@ -31,26 +30,21 @@ export const Publish = () => {
     );
   };
 
-  // @TODO this should replace part of the below
-  // const response = await axios({
-  //   url: "/api/templates",
-  //   method: "PUT",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   data: { formID: result.id, isPublished: false },
-  //   timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-  // }).catch((err) => logMessage.error(err));
+  const { uploadJson } = usePublish();
 
-  const handlePublish = useCallback(async () => {
-    setError(false);
-    const result = await uploadJson(getSchema(), id);
+  const handlePublish = async () => {
+    const schema = JSON.parse(getSchema());
+    delete schema.id;
+    delete schema.isPublished;
+
+    const result = await uploadJson(JSON.stringify(schema), id, true);
     if (result && result?.error) {
       setError(true);
       return;
     }
+
     setId(result?.id);
-  }, [setError, setId]);
+  };
 
   return (
     <>
@@ -86,9 +80,7 @@ export const Publish = () => {
       </p>
       {isPublishable() && (
         <>
-          <Button onClick={handlePublish} disabled={!!id}>
-            {t("publish")}
-          </Button>
+          <Button onClick={handlePublish}>{t("publish")}</Button>
 
           <div
             role="alert"

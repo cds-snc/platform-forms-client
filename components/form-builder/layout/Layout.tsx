@@ -16,7 +16,7 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export const Layout = () => {
   const { form, setLang, email, updateField } = useTemplateStore((s) => ({
