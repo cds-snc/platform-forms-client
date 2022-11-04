@@ -157,9 +157,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {
         <>
           <RichText>
-            {form.introduction
-              ? form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]
-              : ""}
+            {form.introduction &&
+              form.introduction[localizeField(LocalizedElementProperties.DESCRIPTION)]}
           </RichText>
 
           <form
