@@ -1,0 +1,46 @@
+// .menu {
+// }
+
+// .menu > button:active {
+//   border: 2px solid black;
+// }
+
+.menu [role="menu"] {
+  display: none;
+  position: absolute;
+  border: 2px solid black;
+  background: white;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu [role="menuitem"] {
+  padding: .5rem 1rem;
+  // cursor: pointer;
+}
+
+// .menu [role="menuitem"]:hover {
+.menu [role="menuitem"].focus {
+  border: 2px solid black;
+}
+
+.menu [role="menuitem"]:first-child {
+  padding-top: 1rem;
+}
+.menu [role="menuitem"]:last-child {
+  padding-bottom: 1rem;
+}
+
+.menu [role="menuitem"] > a {
+  text-decoration: none;
+}
+.menu [role="menuitem"] > a:hover,
+.menu [role="menuitem"] > a:active {
+  text-decoration: underline;
+}
+
+.menu button[aria-expanded="true"] {
+  border: 3px solid black;
+  background: #FFF;
+}
