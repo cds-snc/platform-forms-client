@@ -5,8 +5,8 @@ import { logMessage } from "./logger";
 
 export interface LockoutResponse {
   isLockedOut: boolean;
-  remainingNumberOfAttemptsBeforeLockout?: number;
-  numberOfSecondsBeforeLockoutExpires?: number;
+  remainingNumberOfAttemptsBeforeLockout: number;
+  numberOfSecondsBeforeLockoutExpires: number;
 }
 
 const LOCKOUT_KEY = "auth:failed";
@@ -17,49 +17,43 @@ export async function isUserLockedOut(email: string): Promise<LockoutResponse> {
   const redis = await getRedisInstance();
   const value = await redis.get(`${LOCKOUT_KEY}:${email}`);
 
-  if (value && parseInt(value) >= MAX_FAILED_ATTEMPTS_ALLOWED) {
+  const attempts = value ? parseInt(value) : 1;
+
+  if (attempts >= MAX_FAILED_ATTEMPTS_ALLOWED) {
     const lockoutTTL = await redis.ttl(`${LOCKOUT_KEY}:${email}`);
     return {
       isLockedOut: true,
+      remainingNumberOfAttemptsBeforeLockout: 0,
       numberOfSecondsBeforeLockoutExpires: lockoutTTL,
     };
   } else
     return {
       isLockedOut: false,
-      remainingNumberOfAttemptsBeforeLockout: value
-        ? MAX_FAILED_ATTEMPTS_ALLOWED - parseInt(value)
-        : MAX_FAILED_ATTEMPTS_ALLOWED,
+      remainingNumberOfAttemptsBeforeLockout: Math.max(
+        0,
+        Math.min(MAX_FAILED_ATTEMPTS_ALLOWED - attempts, 10)
+      ),
+      numberOfSecondsBeforeLockoutExpires: 0,
     };
 }
 
 export async function registerFailedLoginAttempt(email: string): Promise<LockoutResponse> {
   const redis = await getRedisInstance();
-  const value = await redis.get(`${LOCKOUT_KEY}:${email}`);
+  const incrementedNumberOfFailedLoginAttempts = await redis.incr(`${LOCKOUT_KEY}:${email}`);
+  await redis.expire(`${LOCKOUT_KEY}:${email}`, LOCKOUT_DURATION_IN_SECONDS);
 
-  if (value) {
-    const incrementedNumberOfFailedLoginAttempts = await redis.incr(`${LOCKOUT_KEY}:${email}`);
+  const isLockedOut = incrementedNumberOfFailedLoginAttempts >= MAX_FAILED_ATTEMPTS_ALLOWED;
 
-    if (incrementedNumberOfFailedLoginAttempts >= MAX_FAILED_ATTEMPTS_ALLOWED) {
-      await redis.expire(`${LOCKOUT_KEY}:${email}`, LOCKOUT_DURATION_IN_SECONDS);
-      await logLoginLockoutEvent(email);
-      return {
-        isLockedOut: false,
-        numberOfSecondsBeforeLockoutExpires: LOCKOUT_DURATION_IN_SECONDS,
-      };
-    } else {
-      return {
-        isLockedOut: true,
-        remainingNumberOfAttemptsBeforeLockout:
-          MAX_FAILED_ATTEMPTS_ALLOWED - incrementedNumberOfFailedLoginAttempts,
-      };
-    }
-  } else {
-    await redis.incr(`${LOCKOUT_KEY}:${email}`);
-    return {
-      isLockedOut: true,
-      remainingNumberOfAttemptsBeforeLockout: MAX_FAILED_ATTEMPTS_ALLOWED - 1,
-    };
-  }
+  isLockedOut && logLoginLockoutEvent(email);
+
+  return {
+    isLockedOut,
+    remainingNumberOfAttemptsBeforeLockout: Math.max(
+      0,
+      Math.min(MAX_FAILED_ATTEMPTS_ALLOWED - incrementedNumberOfFailedLoginAttempts, 10)
+    ),
+    numberOfSecondsBeforeLockoutExpires: isLockedOut ? LOCKOUT_DURATION_IN_SECONDS : 0,
+  };
 }
 
 export async function registerSuccessfulLoginAttempt(email: string): Promise<void> {

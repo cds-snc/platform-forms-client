@@ -47,9 +47,9 @@ module.exports = {
     },
   },
   plugins: ["react", "jsx-a11y", "prettier", "cypress"],
-  ignorePatterns: ["**/storybook-static/*.*"],
   rules: {
     "prettier/prettier": "error",
     "no-console": "error",
+    "no-await-in-loop": "error",
   },
 };
