@@ -33,7 +33,7 @@ export const TestDataDelivery = () => {
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
 
-  const { uploadJson } = usePublish(false);
+  const { uploadJson } = usePublish();
   const handlePublish = useCallback(async () => {
     const result = await uploadJson(getSchema(), id);
     if (result && result?.error) {
