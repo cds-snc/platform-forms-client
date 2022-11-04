@@ -211,6 +211,8 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       let fields = screen.getAllByTestId("textInput");
       let index = 0;
       for (const field of fields) {
+        // userEvent.type needs to be run sequentially
+        // eslint-disable-next-line no-await-in-loop
         await user.type(field, index.toString());
         index++;
       }

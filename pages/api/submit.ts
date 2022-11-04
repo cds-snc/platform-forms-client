@@ -277,6 +277,7 @@ const processFormData = async (
       const fileOrArray = value;
       if (!Array.isArray(fileOrArray)) {
         if (fileOrArray.name) {
+          // eslint-disable-next-line no-await-in-loop
           const { isValid, key } = await pushFileToS3(fileOrArray);
           if (isValid) {
             uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
@@ -294,6 +295,7 @@ const processFormData = async (
         for (const fileItem of fileOrArray) {
           const index = fileOrArray.indexOf(fileItem);
           if (fileItem.name) {
+            // eslint-disable-next-line no-await-in-loop
             const { isValid, key } = await pushFileToS3(fileItem);
             if (isValid) {
               uploadedFilesKeyUrlMapping.set(fileItem.name, key);
