@@ -14,6 +14,7 @@ import { Translate } from "../translate/Translate";
 import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
+import { Published } from "./Published";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
 import { useSession } from "next-auth/react";
@@ -111,6 +112,14 @@ export const Layout = () => {
         ) : (
           setTab("create")
         );
+      case "published":
+        return userCanPublish ? (
+          <div className="col-start-4 col-span-9">
+            <Published />
+          </div>
+        ) : (
+          setTab("create")
+        );
       case "settings":
         return (
           <div className="col-start-4 col-span-9">
@@ -128,10 +137,11 @@ export const Layout = () => {
     }
   };
   /* eslint-disable */
+
   return (
     <main className="container--wet">
       <div className="grid grid-cols-12 gap-4">
-        {currentTab !== "start" && (
+        {(currentTab !== "start" && currentTab !== "published") && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
         <>{form && renderTab(currentTab)}</>
