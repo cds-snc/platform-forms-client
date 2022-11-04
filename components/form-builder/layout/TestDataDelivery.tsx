@@ -8,6 +8,8 @@ import { Form } from "../preview/Form";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
+import axios from "axios";
+import { logMessage } from "@lib/logger";
 
 export const TestDataDelivery = () => {
   const { getSchema, id, setId, email } = useTemplateStore((s) => ({
@@ -34,13 +36,25 @@ export const TestDataDelivery = () => {
   const currentForm = getRenderedForm(formRecord, language, t);
 
   const { uploadJson } = usePublish();
-  const handlePublish = useCallback(async () => {
+
+  const handlePublish = async () => {
     const result = await uploadJson(getSchema(), id);
     if (result && result?.error) {
       return;
     }
-    setId(result?.id);
-  }, [setId]);
+
+    const response = await axios({
+      url: "/api/templates",
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: { formID: result.id, isPublished: false },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    }).catch((err) => logMessage.error(err));
+
+    logMessage.info(response);
+  };
 
   return (
     <div>
