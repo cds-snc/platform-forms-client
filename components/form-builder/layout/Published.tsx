@@ -3,8 +3,8 @@ import { RocketIcon } from "../icons/RocketIcon";
 import { Button } from "../shared/Button";
 
 export const Published = ({ id }: { id: string }) => {
-  const linkEn = `https://www.google.com${id}`;
-  const linkFr = `https://www.google.com${id}`;
+  const linkEn = `//en/id/${id}`;
+  const linkFr = `//fr/id/${id}`;
   return (
     <div>
       <div className="p-7 mb-10 flex bg-green-50">
@@ -17,10 +17,10 @@ export const Published = ({ id }: { id: string }) => {
           <h2 className="mb-1 pb-0">Your form is published!</h2>
           <p className="mb-5 mt-0">View and share your published form with these links: </p>
           <p>
-            <strong>English:</strong> <a href={linkEn}>https://canada.ca</a>
+            <strong>English:</strong> <a href={linkEn}>{linkEn}</a>
           </p>
           <p>
-            <strong>French:</strong> <a href={linkFr}>https://canada.ca</a>
+            <strong>French:</strong> <a href={linkFr}>{linkFr}</a>
           </p>
         </div>
       </div>
