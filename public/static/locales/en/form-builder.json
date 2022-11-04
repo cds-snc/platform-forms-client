@@ -100,5 +100,8 @@
   "saveYourForm": "Save your form",
   "confirmationPage": "Confirmation page",
   "testYourResponseDelivery": "Test your response delivery",
-  "formSubmissionDisabledInPreview": "Form submission is disabled in preview"
+  "formSubmissionDisabledInPreview": "Form submission is disabled in preview",
+  "linkUrl": "Link URL",
+  "editLink" : "Edit link",
+  "RichTextEditor": "Rich text editor"
 }
