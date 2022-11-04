@@ -51,7 +51,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@74bfbc88d5d3a3c237d9b643ed1b18546483b89e
+        uses: aws-actions/amazon-ecs-render-task-definition@f15ed65f9cc12455139db0f8e8ff6f6aaad6dfda
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
