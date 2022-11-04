@@ -14,7 +14,7 @@ export const TestDataDelivery = () => {
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
-    email: s.submission.email, // @TODO: default should come from logged in user
+    email: s.submission.email,
   }));
   const stringified = getSchema();
 

@@ -16,7 +16,7 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 export const Layout = () => {
   const { form, setLang, email, updateField } = useTemplateStore((s) => ({
@@ -48,15 +48,16 @@ export const Layout = () => {
     setLang(locale);
   }, [locale]);
 
+  const { data } = useSession();
+
   useEffect(() => {
-    const getEmail = async () => {
-      const session = await getSession();
-      if (session !== null && session.user.email) {
-        updateField("submission.email", session.user.email);
+    const setEmail = () => {
+      if (data && data.user.email) {
+        updateField("submission.email", data.user.email);
       }
     };
-    !email && getEmail();
-  }, [email, updateField]);
+    !email && setEmail();
+  }, [email, data]);
 
   const renderTab = (tab: string) => {
     switch (tab) {
