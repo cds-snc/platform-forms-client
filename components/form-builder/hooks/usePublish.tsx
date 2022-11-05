@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 export const usePublish = () => {
-  const uploadJson = async (jsonConfig: string, formID?: string) => {
+  const uploadJson = async (jsonConfig: string, formID?: string, publish = false) => {
     let formData;
     try {
       formData = JSON.parse(jsonConfig);
@@ -19,6 +19,7 @@ export const usePublish = () => {
           "Content-Type": "application/json",
         },
         data: {
+          isPublished: publish ? true : false,
           formID: formID,
           formConfig: formData,
         },
