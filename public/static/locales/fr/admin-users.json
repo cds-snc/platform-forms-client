@@ -14,5 +14,6 @@
   "viewPermissions": "Vissioner les permissions",
   "save": "Sauvegarder",
   "cancel": "Annuler",
-  "managePermissionsFor": "Gere les permissions de"
+  "managePermissionsFor": "Gere les permissions de",
+  "assignUsersToTemplate": "Assigner des utilisateurs au formulaire"
 }

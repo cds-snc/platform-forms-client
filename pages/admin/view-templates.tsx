@@ -22,6 +22,12 @@ interface DataViewProps {
   }>;
 }
 
+enum WhereToRedirect {
+  Form,
+  Settings,
+  Users,
+}
+
 const handlePublish = async (formID: string, isPublished: boolean) => {
   return await axios({
     url: "/api/templates",
@@ -40,14 +46,21 @@ const DataView = (props: DataViewProps): React.ReactElement => {
   const router = useRouter();
   const { refreshData } = useRefresh();
 
-  const redirectToSettings = (formID: string) => {
-    router.push({
-      pathname: `/${i18n.language}/id/${formID}/settings`,
-    });
-  };
-  const redirectToForm = (formID: string) => {
-    router.push({
-      pathname: `/${i18n.language}/id/${formID}`,
+  const redirectTo = async (where: WhereToRedirect, formID: string) => {
+    let pathname = "";
+    switch (where) {
+      case WhereToRedirect.Form:
+        pathname = `/${i18n.language}/id/${formID}`;
+        break;
+      case WhereToRedirect.Settings:
+        pathname = `/${i18n.language}/id/${formID}/settings`;
+        break;
+      case WhereToRedirect.Users:
+        pathname = `/${i18n.language}/id/${formID}/users`;
+        break;
+    }
+    await router.push({
+      pathname: pathname,
     });
   };
 
@@ -67,6 +80,7 @@ const DataView = (props: DataViewProps): React.ReactElement => {
             <th>{t("view.status")}</th>
             <th className="w-1/12">{t("view.update")}</th>
             <th className="w-1/12">{t("view.view")}</th>
+            <th className="w-1/12">{t("view.users")}</th>
             <th className="w-1/12">{t("view.publishForm")}</th>
           </tr>
         </thead>
@@ -87,7 +101,9 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                   <td>
                     {ability?.can("update", "FormRecord") && (
                       <button
-                        onClick={() => redirectToSettings(template.id)}
+                        onClick={async () =>
+                          await redirectTo(WhereToRedirect.Settings, template.id)
+                        }
                         className="gc-button w-full"
                       >
                         {t("view.update")}
@@ -96,23 +112,35 @@ const DataView = (props: DataViewProps): React.ReactElement => {
                   </td>
                   <td>
                     <button
-                      onClick={() => redirectToForm(template.id)}
+                      onClick={async () => await redirectTo(WhereToRedirect.Form, template.id)}
                       className="gc-button w-full"
                     >
                       {t("view.view")}
                     </button>
                   </td>
-                  <td>
-                    <button
-                      onClick={async () => {
-                        await handlePublish(template.id, !template.isPublished);
-                        refreshData();
-                      }}
-                      className="gc-button w-full"
-                    >
-                      {template.isPublished ? t("view.unpublishForm") : t("view.publishForm")}
-                    </button>
-                  </td>
+                  {ability?.can("update", "FormRecord") && (
+                    <td>
+                      <button
+                        onClick={async () => await redirectTo(WhereToRedirect.Users, template.id)}
+                        className="gc-button w-full"
+                      >
+                        {t("view.assign")}
+                      </button>
+                    </td>
+                  )}
+                  {ability?.can("update", "FormRecord", "isPublished") && (
+                    <td>
+                      <button
+                        onClick={async () => {
+                          await handlePublish(template.id, !template.isPublished);
+                          refreshData();
+                        }}
+                        className="gc-button w-full"
+                      >
+                        {template.isPublished ? t("view.unpublishForm") : t("view.publishForm")}
+                      </button>
+                    </td>
+                  )}
                 </tr>
               );
             })}

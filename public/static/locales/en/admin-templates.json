@@ -16,7 +16,9 @@
     "published": "Published",
     "draft": "Draft",
     "publishForm": "Publish",
-    "unpublishForm": "Draft"
+    "unpublishForm": "Draft",
+    "users": "Users",
+    "assign": "Assign"
   },
   "settings": {
     "title": "Form Settings",
