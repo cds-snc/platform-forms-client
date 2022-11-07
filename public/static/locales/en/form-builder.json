@@ -104,5 +104,9 @@
   "formSubmissionDisabledInPreview": "Form submission is disabled in preview",
   "linkUrl": "Link URL",
   "editLink" : "Edit link",
-  "RichTextEditor": "Rich text editor"
+  "RichTextEditor": "Rich text editor",
+  "publishedTitle": "Your form is published!",
+  "publishedViewLinks": "View and share your published form with these links:",
+  "publishedErrors": "Published form errors",
+  "publishedBack": "Back to My forms"
 }
