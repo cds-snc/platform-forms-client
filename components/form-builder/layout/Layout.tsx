@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
+import { useSession } from "next-auth/react";
 import { ElementPanel } from "../panel/ElementPanel";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
-import { useAllowPublish } from "../hooks/useAllowPublish";
-
 import { Language } from "../types";
 import { Share } from "./Share";
 import { Start } from "./Start";
@@ -17,9 +16,9 @@ import { Publish } from "./Publish";
 import { Published } from "./Published";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
-import { useSession } from "next-auth/react";
 
 export const Layout = () => {
+  const { status } = useSession();
   const { form, setLang, email, updateField, id } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
@@ -33,8 +32,6 @@ export const Layout = () => {
     currentTab: s.currentTab,
     setTab: s.setTab,
   }));
-
-  const { userCanPublish } = useAllowPublish();
 
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
@@ -84,12 +81,14 @@ export const Layout = () => {
           </div>
         );
       case "test-data-delivery":
-        return (
+        return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
             <TestDataDelivery />
           </div>
+        ) : (
+          setTab("create")
         );
       case "translate":
         return (
@@ -106,7 +105,7 @@ export const Layout = () => {
           </div>
         );
       case "publish":
-        return userCanPublish ? (
+        return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">
             <Publish />
           </div>
@@ -114,7 +113,7 @@ export const Layout = () => {
           setTab("create")
         );
       case "published":
-        return userCanPublish ? (
+        return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">
             <Published id={id} />
           </div>
@@ -124,7 +123,7 @@ export const Layout = () => {
       case "settings":
         return (
           <div className="col-start-4 col-span-9">
-            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <h1 className="visually-hidden">Form settings</h1>
             <Settings />
           </div>
