@@ -63,7 +63,8 @@
     "features": "Options",
     "login": "Login",
     "logout": "Logout",
-    "privileges": "Privileges"
+    "privileges": "Privileges",
+    "myforms": "MyForms"
   },
   "formElements": {
     "characterCount": {

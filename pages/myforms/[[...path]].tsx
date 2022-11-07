@@ -51,7 +51,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
 
   return (
     <div>
-      <h2 id="title-myforms">{t("title")}</h2>
+      <h1 id="title-myforms">{t("title")}</h1>
       <Tabs labeledby="title-myforms">
         <Tab
           url={`/${i18n.language}/myforms/drafts`}
