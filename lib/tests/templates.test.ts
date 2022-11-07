@@ -14,6 +14,7 @@ import {
   deleteTemplate,
   getTemplateSubmissionTypeByID,
   onlyIncludePublicProperties,
+  updateIsPublishedForTemplate,
 } from "../templates";
 
 import { BetterOmit, FormRecord } from "@lib/types";
@@ -24,7 +25,7 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import v8 from "v8";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { Base, getUserPrivileges, ManageForms } from "__utils__/permissions";
+import { Base, getUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
 
 const redis = new Redis();
 
@@ -61,7 +62,7 @@ describe("Template CRUD functions", () => {
     const newTemplate = await createTemplate(
       ability,
       "1",
-      formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+      formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
     );
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
@@ -135,6 +136,7 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
       },
     });
   });
@@ -163,6 +165,7 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
       },
     });
   });
@@ -182,6 +185,7 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
         ttl: true,
       },
     });
@@ -231,12 +235,12 @@ describe("Template CRUD functions", () => {
     });
 
     const updatedFormConfig = structuredClone(
-      formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+      formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
     );
-    updatedFormConfig.publishingStatus = true;
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
+      isPublished: true,
       jsonConfig: updatedFormConfig,
     });
 
@@ -252,12 +256,52 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         jsonConfig: true,
+        isPublished: true,
       },
     });
 
     expect(updatedTemplate).toEqual({
       id: "formtestID",
+      isPublished: true,
       ...updatedFormConfig,
+    });
+  });
+
+  it("Update `isPublished` on a specific form", async () => {
+    const ability = createAbility(getUserPrivileges(PublishForms, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      users: [{ id: "1" }],
+    });
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      isPublished: true,
+    });
+
+    const updatedTemplate = await updateIsPublishedForTemplate(ability, "formtestID", true);
+
+    expect(prismaMock.template.update).toHaveBeenCalledWith({
+      where: {
+        id: "formtestID",
+      },
+      data: {
+        isPublished: true,
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+      },
+    });
+
+    expect(updatedTemplate).toEqual({
+      id: "formtestID",
+      isPublished: true,
+      ...formConfiguration,
     });
   });
 
@@ -288,6 +332,7 @@ describe("Template CRUD functions", () => {
         select: {
           id: true,
           jsonConfig: true,
+          isPublished: true,
         },
       })
     );
@@ -302,6 +347,7 @@ describe("Template CRUD functions", () => {
     const formRecord = {
       id: "testID",
       ...formConfiguration,
+      isPublished: false,
     };
 
     const publicFormRecord = onlyIncludePublicProperties(formRecord as FormRecord);
@@ -325,7 +371,7 @@ describe("Template CRUD functions", () => {
       await createTemplate(
         ability,
         "1",
-        formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">
+        formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
@@ -337,8 +383,12 @@ describe("Template CRUD functions", () => {
       await updateTemplate(
         ability,
         "test1",
-        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">)
+        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">)
       );
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    await expect(async () => {
+      await updateIsPublishedForTemplate(ability, "formtestID", true);
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -359,23 +409,13 @@ describe("Template CRUD functions", () => {
       await updateTemplate(
         ability,
         "test1",
-        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "bearerToken">)
+        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">)
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await deleteTemplate(ability, "formtestID");
+      await updateIsPublishedForTemplate(ability, "formtestID", true);
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
-  });
-
-  it("User with Base permissions should not be able to delete a template that is published", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
-
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      id: "formtestID",
-      jsonConfig: { ...formConfiguration, publishingStatus: true },
-      users: [{ id: "1" }],
-    });
 
     await expect(async () => {
       await deleteTemplate(ability, "formtestID");

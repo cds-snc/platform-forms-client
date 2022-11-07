@@ -94,6 +94,7 @@ async function getFormResponses(
         ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
+      // eslint-disable-next-line no-await-in-loop
       const response = await documentClient.send(queryCommand);
 
       if (response.Items?.length) {
@@ -177,6 +178,7 @@ async function deleteFormResponses(
         ReturnValues: "NONE",
       };
       //Update one item at the time
+      // eslint-disable-next-line no-await-in-loop
       await documentClient.send(new UpdateCommand(updateItem));
       submissionIDlist.push(submissionID);
     }

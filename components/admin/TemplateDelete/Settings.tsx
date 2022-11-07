@@ -59,6 +59,8 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
         <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}
         <br />
         <b>Form ID:</b> {formRecord.id}
+        <br />
+        <b>Is form published:</b> {formRecord.isPublished.toString()}
       </div>
       <Tabs>
         <TabList>

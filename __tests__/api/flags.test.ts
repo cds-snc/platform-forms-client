@@ -46,13 +46,17 @@ describe("Flags API endpoint", () => {
           flag1: true,
           flag2: false,
         };
+        const promises = [];
         for (const [key, value] of Object.entries(testFlags)) {
-          await redis
-            .multi()
-            .sadd("flags", key)
-            .set(`flag:${key}`, value ? "1" : "0")
-            .exec();
+          promises.push(
+            redis
+              .multi()
+              .sadd("flags", key)
+              .set(`flag:${key}`, value ? "1" : "0")
+              .exec()
+          );
         }
+        await Promise.all(promises);
       });
       afterEach(() => {
         redis.flushall();
@@ -130,13 +134,17 @@ describe("Flags API endpoint", () => {
           flag1: true,
           flag2: false,
         };
+        const promises = [];
         for (const [key, value] of Object.entries(testFlags)) {
-          await redis
-            .multi()
-            .sadd("flags", key)
-            .set(`flag:${key}`, value ? "1" : "0")
-            .exec();
+          promises.push(
+            redis
+              .multi()
+              .sadd("flags", key)
+              .set(`flag:${key}`, value ? "1" : "0")
+              .exec()
+          );
         }
+        await Promise.all(promises);
       });
       afterEach(() => {
         redis.flushall();
@@ -205,13 +213,17 @@ describe("Flags API endpoint", () => {
         flag1: true,
         flag2: false,
       };
+      const promises = [];
       for (const [key, value] of Object.entries(testFlags)) {
-        await redis
-          .multi()
-          .sadd("flags", key)
-          .set(`flag:${key}`, value ? "1" : "0")
-          .exec();
+        promises.push(
+          redis
+            .multi()
+            .sadd("flags", key)
+            .set(`flag:${key}`, value ? "1" : "0")
+            .exec()
+        );
       }
+      await Promise.all(promises);
     });
     afterAll(() => {
       redis.flushall();

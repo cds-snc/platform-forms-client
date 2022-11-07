@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
-export const usePublish = (publishingStatus: boolean) => {
-  const uploadJson = async (jsonConfig: string, formID?: string) => {
+
+export const usePublish = () => {
+  const uploadJson = async (jsonConfig: string, formID?: string, publish = false) => {
     let formData;
     try {
       formData = JSON.parse(jsonConfig);
@@ -10,8 +11,6 @@ export const usePublish = (publishingStatus: boolean) => {
       }
     }
 
-    formData.publishingStatus = publishingStatus;
-
     try {
       const result = await axios({
         url: "/api/templates",
@@ -20,8 +19,9 @@ export const usePublish = (publishingStatus: boolean) => {
           "Content-Type": "application/json",
         },
         data: {
-          formConfig: formData,
+          isPublished: publish ? true : false,
           formID: formID,
+          formConfig: formData,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });

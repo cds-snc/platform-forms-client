@@ -10,13 +10,9 @@ import {
   MissingTranslation,
 } from "../hooks/useAllowPublish";
 
-const createTemplateStore = ({
-  form,
-  submission,
-  publishingStatus,
-}: Partial<TemplateStoreProps>) => {
+const createTemplateStore = ({ form, submission, isPublished }: Partial<TemplateStoreProps>) => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
-    <TemplateStoreProvider form={form} submission={submission} publishingStatus={publishingStatus}>
+    <TemplateStoreProvider form={form} submission={submission} isPublished={isPublished}>
       {children}
     </TemplateStoreProvider>
   );
@@ -55,14 +51,14 @@ describe("useAllowPublish", () => {
         endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
       submission: { email: "test@example.com" },
-      publishingStatus: true,
+      isPublished: true,
     };
     const {
       current: { data, hasData, isSaveable, isPublishable },
     } = createTemplateStore({
       form: store.form,
       submission: store.submission,
-      publishingStatus: store.publishingStatus,
+      isPublished: store.isPublished,
     });
 
     expect(data.title).toBe(true);
@@ -105,14 +101,14 @@ describe("useAllowPublish", () => {
         endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
       submission: { email: "test@example.com" },
-      publishingStatus: true,
+      isPublished: true,
     };
     const {
       current: { isPublishable },
     } = createTemplateStore({
       form: store.form,
       submission: store.submission,
-      publishingStatus: store.publishingStatus,
+      isPublished: store.isPublished,
     });
 
     expect(isPublishable()).toBe(true);
@@ -462,7 +458,6 @@ describe("useAllowPublish", () => {
         endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
       submission: { email: "test@example.com" },
-      publishingStatus: true,
     };
 
     it("fails when form title translation is missing", () => {
@@ -475,7 +470,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
       expect(data.translate).toBe(false);
     });
@@ -490,7 +485,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(false);
@@ -506,7 +501,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(false);
@@ -521,7 +516,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(false);
@@ -536,7 +531,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(false);
@@ -553,7 +548,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(true);
@@ -568,7 +563,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(false);
@@ -583,7 +578,7 @@ describe("useAllowPublish", () => {
       } = createTemplateStore({
         form: store.form,
         submission: store.submission,
-        publishingStatus: store.publishingStatus,
+        isPublished: store.isPublished,
       });
 
       expect(data.translate).toBe(false);
