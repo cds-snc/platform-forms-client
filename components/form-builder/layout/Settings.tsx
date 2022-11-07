@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { Button } from "../shared/Button";
+import { Input } from "../shared/Input";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -17,29 +18,6 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
     <span className="block text-sm mb-1" id={id}>
       {children}
     </span>
-  );
-};
-
-const TextInput = ({
-  id,
-  describedBy,
-  value,
-  onChange,
-}: {
-  id: string;
-  describedBy?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => {
-  return (
-    <input
-      id={id}
-      aria-describedby={describedBy}
-      type="text"
-      className="w-3/5 py-2 px-3 my-2 rounded border-2 border-black-default border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus"
-      value={value}
-      onChange={onChange}
-    />
   );
 };
 
@@ -59,10 +37,11 @@ export const Settings = () => {
           <Label htmlFor="response-delivery">{t("settingsReponseTitle")}</Label>
           <HintText id="response-delivery-hint-1">{t("settingsReponseHint1")}</HintText>
           <HintText id="response-delivery-hint-2">{t("settingsReponseHint2")}</HintText>
-          <TextInput
+          <Input
             id="response-delivery"
             describedBy="response-delivery-hint-1 response-delivery-hint-2"
             value={email}
+            className="w-3/5"
             onChange={(e) => {
               updateField(`submission.email`, e.target.value);
             }}

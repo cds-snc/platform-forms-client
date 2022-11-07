@@ -1,18 +1,11 @@
 import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { Close } from "../icons";
 import { Button } from "../shared/Button";
-import { Input } from "../panel";
+import { Input } from "../shared/Input";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
-
-const TextInput = styled(Input)`
-  margin-left: 20px;
-  padding: 16px 10px;
-  width: 340px;
-`;
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -80,13 +73,15 @@ export const Option = ({
   return (
     <div className="flex mt-3">
       <div className="mt-2">{icon}</div>
-      <TextInput
+      <Input
+        id={`option--${parentIndex}--${index + 1}`}
         ref={input}
         type="text"
         value={value}
         placeholder={`${t("option")} ${index + 1}`}
         onChange={updateValue}
         onKeyDown={handleKeyDown}
+        className="ml-5 w-80 max-h-9 !my-0"
       />
       <Button
         theme="icon"
