@@ -95,6 +95,8 @@ async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<
         id: true,
         jsonConfig: true,
         isPublished: true,
+        updated_at: true,
+        created_at: true,
       },
     })
     .catch((e) => prismaErrors(e, []));
@@ -419,13 +421,15 @@ const _parseTemplate = (template: {
   id: string;
   jsonConfig: Prisma.JsonValue;
   isPublished: boolean;
+  updated_at?: Date;
+  created_at?: Date;
 }): FormRecord => {
   return {
     // Converting to unknown first as Prisma is not aware of what is stored
     // in the JSON Object type, only that it is an object.
     ...(template.jsonConfig as unknown as BetterOmit<
       FormRecord,
-      "id" | "reCaptchaID" | "bearerToken" | "isPublished"
+      "id" | "reCaptchaID" | "bearerToken" | "isPublished" | "updated_at" | "created_at"
     >),
 
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
@@ -434,6 +438,8 @@ const _parseTemplate = (template: {
     // Direct field properties override jsonConfig
     id: template.id,
     isPublished: template.isPublished,
+    updated_at: template.updated_at?.toString(),
+    created_at: template.updated_at?.toString(),
   };
 };
 
