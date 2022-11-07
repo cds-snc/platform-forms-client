@@ -128,7 +128,9 @@ export const getServerSideProps = requireAuthentication(
     const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, formID);
     if (!templateWithAssociatedUsers) return redirect(locale);
 
-    const allUsers = await getUsers(ability);
+    const allUsers = (await getUsers(ability)).map((user) => {
+      return { id: user.id, name: user.name };
+    });
 
     return {
       props: {

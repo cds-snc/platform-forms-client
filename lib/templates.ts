@@ -2,7 +2,7 @@ import { logger } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { MongoAbility } from "@casl/ability";
