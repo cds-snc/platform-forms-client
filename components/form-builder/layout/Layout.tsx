@@ -13,14 +13,16 @@ import { Translate } from "../translate/Translate";
 import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
+import { Published } from "./Published";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
 
 export const Layout = () => {
   const { status } = useSession();
-  const { form, setLang, email, updateField } = useTemplateStore((s) => ({
+  const { form, setLang, email, updateField, id } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
+    id: s.id,
     setLang: s.setLang,
     email: s.submission.email,
     updateField: s.updateField,
@@ -110,6 +112,14 @@ export const Layout = () => {
         ) : (
           setTab("create")
         );
+      case "published":
+        return status === "authenticated" ? (
+          <div className="col-start-4 col-span-9">
+            <Published id={id} />
+          </div>
+        ) : (
+          setTab("create")
+        );
       case "settings":
         return (
           <div className="col-start-4 col-span-9">
@@ -127,10 +137,11 @@ export const Layout = () => {
     }
   };
   /* eslint-disable */
+
   return (
     <main className="container--wet">
       <div className="grid grid-cols-12 gap-4">
-        {currentTab !== "start" && (
+        {(currentTab !== "start" && currentTab !== "published") && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
         <>{form && renderTab(currentTab)}</>

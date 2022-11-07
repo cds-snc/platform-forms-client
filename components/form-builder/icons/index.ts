@@ -27,3 +27,5 @@ export { SelectMenuIcon } from "./SelectMenuIcon";
 export { ShareIcon } from "./ShareIcon";
 export { ShortAnswerIcon } from "./ShortAnswerIcon";
 export { ThreeDotsIcon } from "./ThreeDotsIcon";
+export { RocketIcon } from "./RocketIcon";
+export { WarningIcon } from "./WarningIcon";
