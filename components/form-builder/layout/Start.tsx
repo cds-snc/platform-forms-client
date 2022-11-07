@@ -10,6 +10,11 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
 
   const importTemplate = useTemplateStore((s) => s.importTemplate);
   const [errors, setErrors] = useState("");
+
+  // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
+  const cleaner = (key: string, value: string) =>
+    ["__proto__", "constructor"].includes(key) ? undefined : value;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target || !e.target.files) {
       return;
@@ -23,7 +28,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
         let data;
 
         try {
-          data = JSON.parse(e.target.result);
+          data = JSON.parse(e.target.result, cleaner);
         } catch (e) {
           if (e instanceof SyntaxError) {
             setErrors(t("startErrorParse"));
