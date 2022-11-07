@@ -1,0 +1,29 @@
+{
+  "title": "My Forms",
+  "nav": {
+    "drafts": "Drafts",
+    "published": "Published",
+    "all": "All"
+  },
+  "actions": {
+    "createNewForm": "Create new form"
+  },
+  "cards": {
+    "label": "List of your forms",
+    "noForms": "No forms to list."
+  },
+  "card": {
+    "states": {
+      "draft": "Draft",
+      "published": "Published"
+    },
+    "lastEdited": "Last edited",
+    "menu": {
+      "more": "More",
+      "save": "Save",
+      "copyLink": "copyLink",
+      "preview": "Priview",
+      "edit": "Edit"
+    }
+  }
+}
