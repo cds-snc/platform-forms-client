@@ -8,6 +8,9 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { CardProps } from "@components/myforms/Card/Card";
+import { Tabs } from "@components/myforms/Tabs/Tabs";
+import { Tab } from "@components/myforms/Tabs/Tab";
+import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 
 interface FormsDataItem {
   id: string;
@@ -21,7 +24,6 @@ interface MyFormsProps {
   templates: Array<FormsDataItem>;
 }
 
-// TODO: Tabs - add keynav left and right keys and focus to first card on activate
 export default function RenderMyForms({ templates }: MyFormsProps) {
   const router = useRouter();
   const path = String(router.query?.path);
@@ -50,96 +52,48 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
   return (
     <div>
       <h2 id="title-myforms">{t("title")}</h2>
-      <nav className="mb-14">
-        <ul className="gc-horizontal-list" role="tablist" aria-labelledby="title-myforms">
-          <li
-            className={`gc-horizontal-item${
-              path === "drafts" ? " [&>A]:no-underline [&>A]:hover:underline" : ""
-            }`}
-          >
-            <a
-              id="tab-drafts"
-              href="/myforms/drafts"
-              role="tab"
-              aria-selected={path === "drafts" ? "true" : "false"}
-              aria-controls="tabpanel-drafts"
-              onClick={(e) => {
-                e.preventDefault();
-                router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
-              }}
-            >
-              {t("nav.drafts")}
-            </a>
-          </li>
-          <li
-            className={`gc-horizontal-item${
-              path === "published" ? " [&>A]:no-underline hover:underline" : ""
-            }`}
-          >
-            <a
-              id="tab-published"
-              href="/myforms/published"
-              role="tab"
-              aria-selected={path === "published" ? "true" : "false"}
-              aria-controls="tabpanel-published"
-              onClick={(e) => {
-                e.preventDefault();
-                router.push(`/${i18n.language}/myforms/published`, undefined, { shallow: true });
-              }}
-            >
-              {t("nav.published")}
-            </a>
-          </li>
-          <li
-            className={`gc-horizontal-item${
-              path === "all" ? " [&>A]:no-underline hover:underline" : ""
-            }`}
-          >
-            <a
-              id="tab-all"
-              href="/myforms/all"
-              role="tab"
-              aria-selected={path === "all" ? "true" : "false"}
-              aria-controls="tabpanel-all"
-              onClick={(e) => {
-                e.preventDefault();
-                router.push(`/${i18n.language}/myforms/all`, undefined, { shallow: true });
-              }}
-            >
-              {t("nav.all")}
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <Tabs labeledby="title-myforms">
+        <Tab
+          url={`/${i18n.language}/myforms/drafts`}
+          isActive={path === "drafts"}
+          id="tab-drafts"
+          tabpanelId="tabpanel-drafts"
+        >
+          {t("nav.drafts")}
+        </Tab>
+        <Tab
+          url={`/${i18n.language}/myforms/published`}
+          isActive={path === "published"}
+          id="tab-published"
+          tabpanelId="tabpanel-published"
+        >
+          {t("nav.published")}
+        </Tab>
+        <Tab
+          url={`/${i18n.language}/myforms/all`}
+          isActive={path === "all"}
+          id="tab-all"
+          tabpanelId="tabpanel-all"
+        >
+          {t("nav.all")}
+        </Tab>
+      </Tabs>
+
       <div className="mb-6">
         <a href="/admin/form-builder">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
         </a>
       </div>
-      <section
-        id="tabpanel-drafts"
-        role="tabpanel"
-        aria-labelledby="tab-drafts"
-        className={path === "drafts" ? "" : "hidden"}
-      >
+
+      <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
         <CardGrid cards={templatesDrafts}></CardGrid>
-      </section>
-      <section
-        id="tabpanel-published"
-        role="tabpanel"
-        aria-labelledby="tab-published"
-        className={path === "published" ? "" : "hidden"}
-      >
+      </TabPanel>
+      <TabPanel id="tabpanel-published" labeledbyId="tab-published" isActive={path === "published"}>
         <CardGrid cards={templatesPublished}></CardGrid>
-      </section>
-      <section
-        id="tabpanel-all"
-        role="tabpanel"
-        aria-labelledby="tab-all"
-        className={path === "all" ? "" : "hidden"}
-      >
+      </TabPanel>
+      <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
         <CardGrid cards={templatesAll}></CardGrid>
-      </section>
+      </TabPanel>
     </div>
   );
 }
