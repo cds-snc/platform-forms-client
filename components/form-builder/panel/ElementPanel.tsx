@@ -19,9 +19,10 @@ import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
 import { useElementOptions } from "../hooks/useElementOptions";
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ModalButton } from "./Modal";
-import { Checkbox } from "./MultipleChoice";
+import { Checkbox } from "../shared/MultipleChoice";
 import { Button } from "../shared/Button";
-import { Input } from "./Input";
+import { Input } from "../shared/Input";
+import { TextArea } from "../shared/TextArea";
 import { ConfirmationDescription } from "./ConfirmationDescription";
 import { PrivacyDescription } from "./PrivacyDescription";
 import { QuestionInput } from "./QuestionInput";
@@ -126,34 +127,6 @@ const Row = styled.div<RowProps>`
       margin: 0;
       font-size: 1.25em;
     `}
-  }
-`;
-
-const TitleInput = styled(Input)`
-  padding: 24px 10px 20px 10px;
-  border: none;
-  border-bottom: 1.5px solid #000000;
-  border-radius: 4px 4px 0 0;
-  font-weight: 700;
-  font-size: 20px;
-
-  &:focus {
-    border-color: #000000;
-    box-shadow: none;
-    background: #ebebeb;
-  }
-`;
-
-const TextArea = styled.textarea`
-  padding: 10px;
-  width: 90%;
-  border: 1.5px solid #000000;
-  border-radius: 4px;
-
-  &:focus {
-    border-color: #303fc3;
-    box-shadow: 0 0 0 2.5px #303fc3;
-    outline: 0;
   }
 `;
 
@@ -339,14 +312,6 @@ const HintText = styled.p`
   margin-top: -2px;
 `;
 
-const ModalInput = styled(Input)`
-  width: 90%;
-`;
-
-const ModalInputShort = styled(Input)`
-  width: 180px;
-`;
-
 const ModalForm = ({
   item,
   properties,
@@ -365,16 +330,16 @@ const ModalForm = ({
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
       <ModalRow>
         <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("Question")}</FormLabel>
-        <ModalInput
-          id={`titleEn--modal--${item.index}`}
-          type="text"
+        <Input
+          id={`title--modal--${item.index}`}
           name={`item${item.index}`}
           placeholder={t("Question")}
           value={properties[localizeField(LocalizedElementProperties.TITLE)]}
+          className="w-11/12"
           onChange={(e) =>
             updateModalProperties(item.index, {
               ...properties,
-              ...{ local: e.target.value },
+              ...{ [localizeField(LocalizedElementProperties.TITLE)]: e.target.value },
             })
           }
         />
@@ -387,7 +352,9 @@ const ModalForm = ({
           )}
         </HintText>
         <TextArea
+          id={`description--modal--${item.index}`}
           placeholder={t("Description")}
+          className="w-11/12"
           onChange={(e) => {
             const description = e.target.value.replace(/[\r\n]/gm, "");
             updateModalProperties(item.index, {
@@ -430,10 +397,11 @@ const ModalForm = ({
                 "Only use a character limit when there is a good reason for limiting the number of characters users can enter."
               )}
             </HintText>
-            <ModalInputShort
+            <Input
               id={`characterLength--modal--${item.index}`}
               type="number"
               min="1"
+              className="w-1/4"
               value={properties.validation?.maxLength || ""}
               onKeyDown={(e) => {
                 if (["-", "+", ".", "e"].includes(e.key)) {
@@ -536,14 +504,6 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   );
 };
 
-const FormTitleInput = styled(TitleInput)`
-  font-size: 30px;
-  font-weight: 700;
-  font-family: "Lato", sans-serif;
-  width: 75%;
-  margin-bottom: 16px;
-`;
-
 const ElementPanelDiv = styled.div`
   > div:first-of-type {
     border-top-left-radius: 8px;
@@ -605,10 +565,13 @@ export const ElementPanel = () => {
       <RichTextLocked
         beforeContent={
           <>
-            <FormTitleInput
+            <Input
+              id="formTitle"
               placeholder={t("placeHolderFormTitle")}
               value={value}
               onChange={updateValue}
+              className="w-3/4 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
+              theme="title"
             />
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>
