@@ -14,5 +14,6 @@
   "save": "Save",
   "managePermissions": "Manage Permissions",
   "viewPermissions": "View Permissions",
-  "managePermissionsFor": "Managing permissions of"
+  "managePermissionsFor": "Managing permissions of",
+  "assignUsersToTemplate": "Assign users to template"
 }

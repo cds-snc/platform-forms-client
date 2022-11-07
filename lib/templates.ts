@@ -2,7 +2,7 @@ import { logger } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { MongoAbility } from "@casl/ability";
@@ -150,6 +150,61 @@ async function _getTemplateSubmissionTypeByID(
 }
 
 /**
+ * This function is for internal use only since it does not require any permission.
+ * There is an exported version `_getTemplateWithAssociatedUsers` that checks for permissions.
+ */
+async function _unprotectedGetTemplateWithAssociatedUsers(
+  formID: string
+): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
+  const templateWithUsers = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!templateWithUsers) return null;
+
+  const parsedTemplate = _parseTemplate(templateWithUsers);
+
+  return {
+    formRecord: parsedTemplate,
+    users: templateWithUsers.users,
+  };
+}
+
+async function _getTemplateWithAssociatedUsers(
+  ability: MongoAbility,
+  formID: string
+): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
+  checkPrivileges(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // We want to make sure the user has the permission to view all templates
+        object: {},
+      },
+    },
+    { action: "view", subject: "User" },
+  ]);
+
+  return _unprotectedGetTemplateWithAssociatedUsers(formID);
+}
+
+/**
  * Update a form template
  * @param template A Form Record containing updated information
  * @returns The updated form template or null if the record does not exist
@@ -159,8 +214,8 @@ async function _updateTemplate(
   formID: string,
   formConfig: BetterOmit<FormRecord, "id" | "bearerToken" | "isPublished">
 ): Promise<FormRecord | null> {
-  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
-  if (!formRecordWithAssociatedUsers) return null;
+  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+  if (!templateWithAssociatedUsers) return null;
 
   checkPrivileges(ability, [
     {
@@ -168,8 +223,8 @@ async function _updateTemplate(
       subject: {
         type: "FormRecord",
         object: {
-          ...formRecordWithAssociatedUsers.formRecord,
-          users: formRecordWithAssociatedUsers.users,
+          ...templateWithAssociatedUsers.formRecord,
+          users: templateWithAssociatedUsers.users,
         },
       },
     },
@@ -205,8 +260,8 @@ async function _updateIsPublishedForTemplate(
   formID: string,
   isPublished: boolean
 ): Promise<FormRecord | null> {
-  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
-  if (!formRecordWithAssociatedUsers) return null;
+  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+  if (!templateWithAssociatedUsers) return null;
 
   checkPrivileges(ability, [
     {
@@ -214,8 +269,8 @@ async function _updateIsPublishedForTemplate(
       subject: {
         type: "FormRecord",
         object: {
-          ...formRecordWithAssociatedUsers.formRecord,
-          users: formRecordWithAssociatedUsers.users,
+          ...templateWithAssociatedUsers.formRecord,
+          users: templateWithAssociatedUsers.users,
         },
       },
       field: "isPublished",
@@ -243,14 +298,62 @@ async function _updateIsPublishedForTemplate(
   return _parseTemplate(updatedTemplate);
 }
 
+async function _updateAssignedUsersForTemplate(
+  ability: MongoAbility,
+  formID: string,
+  users: { id: string; action: "add" | "remove" }[]
+): Promise<FormRecord | null> {
+  checkPrivileges(ability, [
+    { action: "update", subject: "FormRecord" },
+    { action: "update", subject: "User" },
+  ]);
+
+  const { addUsers, removeUsers } = users.reduce(
+    (acc, current) => {
+      if (current.action === "add")
+        return { ...acc, addUsers: acc.addUsers.concat({ id: current.id }) };
+      else return { ...acc, removeUsers: acc.removeUsers.concat({ id: current.id }) };
+    },
+    {
+      addUsers: Array<{ id: string }>(),
+      removeUsers: Array<{ id: string }>(),
+    }
+  );
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formID,
+      },
+      data: {
+        users: {
+          connect: addUsers,
+          disconnect: removeUsers,
+        },
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+  return _parseTemplate(updatedTemplate);
+}
+
 /**
  * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful
  */
 async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<FormRecord | null> {
-  const formRecordWithAssociatedUsers = await _getFormRecordWithAssociatedUsers(formID);
-  if (!formRecordWithAssociatedUsers) return null;
+  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+  if (!templateWithAssociatedUsers) return null;
 
   checkPrivileges(ability, [
     {
@@ -258,8 +361,8 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
       subject: {
         type: "FormRecord",
         object: {
-          ...formRecordWithAssociatedUsers.formRecord,
-          users: formRecordWithAssociatedUsers.users,
+          ...templateWithAssociatedUsers.formRecord,
+          users: templateWithAssociatedUsers.users,
         },
       },
     },
@@ -290,49 +393,6 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
 
   return _parseTemplate(templateMarkedAsDeleted);
 }
-
-async function _getFormRecordWithAssociatedUsers(
-  formID: string
-): Promise<{ formRecord: FormRecord; users: User[] } | null> {
-  try {
-    const templateWithUsers = await prisma.template.findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        id: true,
-        jsonConfig: true,
-        isPublished: true,
-        users: true,
-      },
-    });
-    if (!templateWithUsers) return null;
-
-    const parsedTemplate = _parseTemplate(templateWithUsers);
-
-    return {
-      formRecord: parsedTemplate,
-      users: templateWithUsers.users,
-    };
-  } catch (e) {
-    return prismaErrors(e, null);
-  }
-}
-
-export const getTemplateOwners = logger(async (formID: string) => {
-  return await prisma.template.findUnique({
-    where: {
-      id: formID,
-    },
-    select: {
-      users: {
-        select: {
-          id: true,
-        },
-      },
-    },
-  });
-});
 
 /*
  * Extract only the public properties from a form record.
@@ -379,7 +439,9 @@ export const createTemplate = logger(_createTemplate);
 export const getAllTemplates = logger(_getAllTemplates);
 export const getTemplateByID = logger(_getTemplateByID);
 export const getTemplateSubmissionTypeByID = logger(_getTemplateSubmissionTypeByID);
+export const getTemplateWithAssociatedUsers = logger(_getTemplateWithAssociatedUsers);
 export const updateTemplate = logger(_updateTemplate);
 export const updateIsPublishedForTemplate = logger(_updateIsPublishedForTemplate);
+export const updateAssignedUsersForTemplate = logger(_updateAssignedUsersForTemplate);
 export const deleteTemplate = logger(_deleteTemplate);
 export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);

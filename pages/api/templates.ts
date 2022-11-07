@@ -6,6 +6,7 @@ import {
   createTemplate,
   updateTemplate,
   updateIsPublishedForTemplate,
+  updateAssignedUsersForTemplate,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -97,6 +98,7 @@ const templateCRUD = async ({
   formID,
   formConfig,
   isPublished,
+  users,
 }: {
   ability: MongoAbility;
   method: string;
@@ -104,6 +106,7 @@ const templateCRUD = async ({
   formID?: string;
   formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
   isPublished: boolean;
+  users: { id: string; action: "add" | "remove" }[];
 }) => {
   switch (method) {
     case "GET":
@@ -117,6 +120,8 @@ const templateCRUD = async ({
         return await updateTemplate(ability, formID, formConfig);
       } else if (formID && isPublished !== undefined) {
         return await updateIsPublishedForTemplate(ability, formID, isPublished);
+      } else if (formID && users) {
+        return await updateAssignedUsersForTemplate(ability, formID, users);
       }
       throw new Error("Missing formID and/or formConfig");
     case "DELETE":
