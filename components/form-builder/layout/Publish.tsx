@@ -95,8 +95,10 @@ export const Publish = () => {
             ${id ? "text-green-darker bg-green-100" : ""} 
             ${!id && !error ? "hidden" : ""}`}
           >
-            {id && setTab("published")}
-            {error && <p>There was an error publishing the form</p>}
+            <>
+              {id && setTab("published")}
+              {error && <p>There was an error publishing the form</p>}
+            </>
           </div>
         </>
       )}
