@@ -253,7 +253,12 @@ describe("Template CRUD functions", () => {
         id: true,
         jsonConfig: true,
         isPublished: true,
-        users: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   });

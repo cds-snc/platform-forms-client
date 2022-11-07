@@ -155,7 +155,7 @@ async function _getTemplateSubmissionTypeByID(
  */
 async function _unprotectedGetTemplateWithAssociatedUsers(
   formID: string
-): Promise<{ formRecord: FormRecord; users: User[] } | null> {
+): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
   const templateWithUsers = await prisma.template
     .findUnique({
       where: {
@@ -165,7 +165,12 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
         id: true,
         jsonConfig: true,
         isPublished: true,
-        users: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -183,7 +188,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
 async function _getTemplateWithAssociatedUsers(
   ability: MongoAbility,
   formID: string
-): Promise<{ formRecord: FormRecord; users: User[] } | null> {
+): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
   checkPrivileges(ability, [
     {
       action: "view",
