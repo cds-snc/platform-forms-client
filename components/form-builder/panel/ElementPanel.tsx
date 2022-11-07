@@ -339,7 +339,7 @@ const ModalForm = ({
           onChange={(e) =>
             updateModalProperties(item.index, {
               ...properties,
-              ...{ local: e.target.value },
+              ...{ [localizeField(LocalizedElementProperties.TITLE)]: e.target.value },
             })
           }
         />
