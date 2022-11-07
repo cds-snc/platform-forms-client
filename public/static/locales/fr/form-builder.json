@@ -73,5 +73,9 @@
   "settingsDeleteTitle": "[FR] Delete form",
   "settingsDeleteHint": "[FR] Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteButton": "[FR] Delete",
-  "downloadCSV": "[FR] Download .csv"
+  "downloadCSV": "[FR] Download .csv",
+  "publishedTitle": "[FR] Your form is published!",
+  "publishedViewLinks": "[FR] View and share your published form with these links:",
+  "publishedErrors": "[FR] Published form errors",
+  "publishedBack": "[FR] Back to My forms"
 }

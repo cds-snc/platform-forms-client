@@ -3,9 +3,10 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import React, { useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
-import { CancelIcon, CircleCheckIcon } from "../icons";
+import { CancelIcon, CircleCheckIcon, WarningIcon } from "../icons";
 import { Button } from "../shared/Button";
 import Link from "next/link";
+import { useNavigationStore } from "../store/useNavigationStore";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -20,6 +21,11 @@ export const Publish = () => {
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
+  }));
+
+  const { setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -75,6 +81,24 @@ export const Publish = () => {
         </li>
       </ul>
 
+      <div className="mt-10 p-5 bg-yellow-100 flex">
+        <div className="flex">
+          <div className="pr-7">
+            <WarningIcon />
+          </div>
+        </div>
+        <div>
+          <h3 className="mb-1">Publishing disables editing.</h3>
+          <p>
+            Once you publish, you cannot make changes to this form. If changes are needed after
+            publishing, use the form file to create and publish a new form.
+          </p>
+          <p>
+            <a href="https://canada.ca">Contact support</a> if you have any questions.
+          </p>
+        </div>
+      </div>
+
       <p className="leading-10 mt-6 mb-4">
         <Link href={""}>Support</Link>
       </p>
@@ -89,8 +113,10 @@ export const Publish = () => {
             ${id ? "text-green-darker bg-green-100" : ""} 
             ${!id && !error ? "hidden" : ""}`}
           >
-            {id && <p>The form has been published successfully</p>}
-            {error && <p>There was an error publishing the form</p>}
+            <>
+              {id && setTab("published")}
+              {error && <p>There was an error publishing the form</p>}
+            </>
           </div>
         </>
       )}

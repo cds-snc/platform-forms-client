@@ -208,6 +208,7 @@ describe("useAllowPublish", () => {
       const notProvided = () => {
         areChoicesTranslated([
           {
+            // no values provided to translate
             en: "",
             fr: "",
           },
@@ -218,7 +219,7 @@ describe("useAllowPublish", () => {
         ]);
       };
 
-      expect(notProvided).toThrow(MissingTranslation);
+      expect(notProvided).not.toThrow();
     });
 
     it("isFormElementTranslated richText", () => {
@@ -397,6 +398,7 @@ describe("useAllowPublish", () => {
           titleFr: "titlefr",
           descriptionEn: "description",
           descriptionFr: "descriptionfr",
+          // no values provided to translate
           choices: [
             {
               en: "",
@@ -408,7 +410,7 @@ describe("useAllowPublish", () => {
       });
     };
 
-    expect(optionNotProvided).toThrow(MissingTranslation);
+    expect(optionNotProvided).not.toThrow();
   });
 
   describe("Validate form translated tests", () => {

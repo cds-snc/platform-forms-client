@@ -20,7 +20,13 @@ export const isDescriptionTranslated = (element: Description) => {
 
 export const areChoicesTranslated = (choices: PropertyChoices[]) => {
   choices.forEach((choice) => {
-    if (!choice.en || !choice.fr) {
+    // ensure choices have a value to be translated
+    let empty = false;
+    if (choice.en === "" && choice.fr === "") {
+      empty = true;
+    }
+
+    if (!empty && (!choice.en || !choice.fr)) {
       throw new MissingTranslation();
     }
   });

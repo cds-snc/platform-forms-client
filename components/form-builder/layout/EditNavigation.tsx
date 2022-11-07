@@ -28,15 +28,6 @@ export const EditNavigation = ({
       >
         {t("translate")}
       </button>
-      |
-      <button
-        className={`ml-5 ${
-          currentTab === "settings" ? "font-bold" : ""
-        } outline-blue-focus outline-offset-2`}
-        onClick={handleClick("settings")}
-      >
-        {t("settings")}
-      </button>
     </nav>
   );
 };
