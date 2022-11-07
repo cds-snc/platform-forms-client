@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../icons/RocketIcon";
 import { Button } from "../shared/Button";
 import { useTranslation } from "next-i18next";
+import { useTemplateStore } from "../store/useTemplateStore";
+
+const getHost = () => {
+  if (typeof window === "undefined") return "";
+  return `${window.location.protocol}//${window.location.host}`;
+};
 
 export const Published = ({ id }: { id: string }) => {
-  const linkEn = `http://localhost:3000/en/id/${id}`;
-  const linkFr = `http://localhost:3000/fr/id/${id}`;
+  const [formId] = useState(id);
+  const resetForm = useTemplateStore((s) => s.initialize);
+  const linkEn = `${getHost()}/en/id/${formId}`;
+  const linkFr = `${getHost()}/fr/id/${formId}`;
+
+  // reset the form once we reach the published page
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
+
   const { t } = useTranslation("form-builder");
   return (
     <div>

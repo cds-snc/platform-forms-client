@@ -50,6 +50,7 @@ export const Publish = () => {
     }
 
     setId(result?.id);
+    setTab("published");
   };
 
   return (
@@ -98,14 +99,12 @@ export const Publish = () => {
           </p>
         </div>
       </div>
-
       <p className="leading-10 mt-6 mb-4">
         <Link href={""}>Support</Link>
       </p>
       {isPublishable() && (
         <>
           <Button onClick={handlePublish}>{t("publish")}</Button>
-
           <div
             role="alert"
             className={`inline-block ml-5 py-1 px-3 
@@ -113,10 +112,7 @@ export const Publish = () => {
             ${id ? "text-green-darker bg-green-100" : ""} 
             ${!id && !error ? "hidden" : ""}`}
           >
-            <>
-              {id && setTab("published")}
-              {error && <p>There was an error publishing the form</p>}
-            </>
+            <>{error && <p>There was an error publishing the form</p>}</>
           </div>
         </>
       )}
