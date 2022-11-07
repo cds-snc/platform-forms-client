@@ -361,17 +361,19 @@ const _parseTemplate = (template: {
   isPublished: boolean;
 }): FormRecord => {
   return {
-    id: template.id,
-    isPublished: template.isPublished,
     // Converting to unknown first as Prisma is not aware of what is stored
     // in the JSON Object type, only that it is an object.
     ...(template.jsonConfig as unknown as BetterOmit<
       FormRecord,
       "id" | "reCaptchaID" | "bearerToken" | "isPublished"
     >),
+
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
     }),
+    // Direct field properties override jsonConfig
+    id: template.id,
+    isPublished: template.isPublished,
   };
 };
 
