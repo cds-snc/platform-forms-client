@@ -119,6 +119,7 @@ module.exports = {
       },
       green: {
         ...colors.emerald,
+        light: "#ECF3EC",
         default: "#00703C",
         darker: "#005930",
       },
