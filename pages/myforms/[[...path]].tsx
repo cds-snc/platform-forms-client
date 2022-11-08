@@ -50,7 +50,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
   }, []);
 
   return (
-    <div>
+    <div className="relative">
       <h1 id="title-myforms">{t("title")}</h1>
       <TabsList labeledby="title-myforms">
         <Tab
@@ -88,7 +88,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
         <CardGrid cards={templatesAll}></CardGrid>
       </TabPanel>
 
-      <div className="mt-6">
+      <div className="absolute top-48">
         <a href="/admin/form-builder">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
         </a>

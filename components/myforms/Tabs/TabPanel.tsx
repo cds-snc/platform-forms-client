@@ -11,7 +11,12 @@ export const TabPanel = (props: TabPanelProps): React.ReactElement => {
   const { children, id, labeledbyId, isActive = false } = props;
 
   return (
-    <div id={id} role="tabpanel" aria-labelledby={labeledbyId} className={isActive ? "" : "hidden"}>
+    <div
+      id={id}
+      role="tabpanel"
+      aria-labelledby={labeledbyId}
+      className={`pt-14 ${isActive ? "" : "hidden"}`}
+    >
       {children}
     </div>
   );
