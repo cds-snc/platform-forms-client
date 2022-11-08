@@ -5,7 +5,6 @@ import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon, WarningIcon } from "../icons";
 import { Button } from "../shared/Button";
-import Link from "next/link";
 import { useNavigationStore } from "../store/useNavigationStore";
 
 export const Publish = () => {
