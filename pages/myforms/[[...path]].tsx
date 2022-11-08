@@ -45,7 +45,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
     // Default route is "published". Done here vs getServerSideProps to avoid extra data fetch
     const formStateRegex = /^(drafts|published|all)$/gi;
     if (!formStateRegex.test(String(path))) {
-      router.push(`/${i18n.language}/myforms/published`, undefined, { shallow: true });
+      router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
     }
   }, []);
 
@@ -101,7 +101,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
 export const getServerSideProps = requireAuthentication(
   async ({ user: { ability, id }, locale }) => {
     {
-      checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }], "one");
+      checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
       const templates = (await getAllTemplates(ability, id)).map((template) => {
         const {
