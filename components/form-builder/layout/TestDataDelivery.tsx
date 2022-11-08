@@ -35,6 +35,7 @@ export const TestDataDelivery = () => {
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
   const [error, setError] = useState(false);
+  const [sent, setSent] = useState<string | null>(null);
 
   const { uploadJson } = usePublish();
 
@@ -90,16 +91,20 @@ export const TestDataDelivery = () => {
       </ol>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
         <h1>{formRecord.form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-
-        <Form
-          formRecord={formRecord}
-          language={language}
-          router={router}
-          t={t1}
-          submitAlert={t("submitToTestDataDelivery")}
-        >
-          {currentForm}
-        </Form>
+        {sent ? (
+          <div>Form ID: {sent} sent --- check your email</div>
+        ) : (
+          <Form
+            formRecord={formRecord}
+            language={language}
+            router={router}
+            t={t1}
+            submitAlert={t("submitToTestDataDelivery")}
+            onSuccess={setSent}
+          >
+            {currentForm}
+          </Form>
+        )}
       </div>
     </div>
   );
