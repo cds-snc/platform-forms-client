@@ -16,7 +16,6 @@ import {
   $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
-import { TabEscape } from "./plugins/TabEscape";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { t } from "i18next";
 
@@ -106,7 +105,6 @@ export const Editor = ({
         <LinkPlugin />
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
-        <TabEscape />
       </LexicalComposer>
     </RichTextWrapper>
   );
