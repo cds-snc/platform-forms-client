@@ -58,6 +58,10 @@ export interface DropdownProps {
   ishighlighted: boolean;
 }
 
+export interface DropdownLabelProps {
+  ishighlighted?: boolean;
+}
+
 /* https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts#L6282 */
 export interface CDSHTMLDialogElement extends HTMLElement {
   open: boolean;
