@@ -101,14 +101,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
 export const getServerSideProps = requireAuthentication(
   async ({ user: { ability, id }, locale }) => {
     {
-      checkPrivileges(
-        ability,
-        [
-          { action: "view", subject: "FormRecord" },
-          { action: "update", subject: "FormRecord" },
-        ],
-        "one"
-      );
+      checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }], "one");
 
       const templates = (await getAllTemplates(ability, id)).map((template) => {
         const {

@@ -438,8 +438,12 @@ const _parseTemplate = (template: {
     // Direct field properties override jsonConfig
     id: template.id,
     isPublished: template.isPublished,
-    updated_at: template.updated_at?.toString(),
-    created_at: template.updated_at?.toString(),
+    ...(template.updated_at && {
+      updated_at: template.updated_at.toString(),
+    }),
+    ...(template.created_at && {
+      created_at: template.created_at?.toString(),
+    }),
   };
 };
 
