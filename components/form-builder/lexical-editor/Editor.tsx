@@ -29,6 +29,14 @@ const RichTextWrapper = styled.div`
     &:focus {
       outline: 2px #303fc3 solid;
     }
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p {
+      margin: 20px 0;
+    }
   }
 `;
 

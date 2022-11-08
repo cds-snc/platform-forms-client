@@ -21,6 +21,11 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
         <li className="gc-horizontal-item">
           <Link href="/admin/">{t("adminNav.dashboard")}</Link>
         </li>
+        {ability?.can("view", "FormRecord") && (
+          <li className="gc-horizontal-item">
+            <Link href="/myforms">{t("adminNav.myforms")}</Link>
+          </li>
+        )}
         {ability?.can("update", "FormRecord") && (
           <li className="gc-horizontal-item">
             <Link href="/admin/form-builder">{t("adminNav.formbuilder")}</Link>
