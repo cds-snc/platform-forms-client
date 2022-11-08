@@ -99,18 +99,16 @@ export const Publish = () => {
           </p>
         </div>
       </div>
-      <p className="leading-10 mt-6 mb-4">
-        <Link href={""}>Support</Link>
-      </p>
       {isPublishable() && (
         <>
-          <Button onClick={handlePublish}>{t("publish")}</Button>
+          <Button className="mt-6" onClick={handlePublish}>
+            {t("publish")}
+          </Button>
           <div
             role="alert"
             className={`inline-block ml-5 py-1 px-3 
             ${error ? "text-red-destructive bg-red-100" : ""}
-            ${id ? "text-green-darker bg-green-100" : ""} 
-            ${!id && !error ? "hidden" : ""}`}
+            ${!error ? "hidden" : ""}`}
           >
             <>{error && <p>There was an error publishing the form</p>}</>
           </div>
