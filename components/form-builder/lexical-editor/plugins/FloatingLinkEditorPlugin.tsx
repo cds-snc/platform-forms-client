@@ -174,6 +174,9 @@ function FloatingLinkEditor({
             id={"link-editor-description-" + editor._key}
             className="link-input"
             value={linkUrl}
+            onFocus={(e) => {
+              e.target.select();
+            }}
             onChange={(event) => {
               setLinkUrl(event.target.value);
             }}
