@@ -32,6 +32,7 @@ export const Tab = (props: TabProps): React.ReactElement => {
       aria-selected={isActive ? "true" : "false"}
       aria-controls={tabpanelId}
       onClick={callback}
+      {...(!isActive && { tabIndex: "-1" })}
     >
       {children}
     </button>
