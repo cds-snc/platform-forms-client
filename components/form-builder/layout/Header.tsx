@@ -5,10 +5,15 @@ import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
+import Link from "next/link";
+import { useAccessControl } from "@lib/hooks";
+import { useTranslation } from "next-i18next";
 
 export const Header = () => {
+  const { t } = useTranslation("common");
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
+  const { ability } = useAccessControl();
   const currentTab = useNavigationStore((s) => s.currentTab);
   const setTab = useNavigationStore((s) => s.setTab);
 
@@ -35,6 +40,11 @@ export const Header = () => {
             )}
           </div>
           <div className="inline-flex">
+            <div className="gc-login-menu mr-3">
+              {ability?.can("view", "FormRecord") && (
+                <Link href="/myforms">{t("adminNav.myforms")}</Link>
+              )}
+            </div>
             {<LoginMenu isAuthenticated={status === "authenticated"} />}
             {<LanguageToggle />}
           </div>

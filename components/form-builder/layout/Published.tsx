@@ -3,6 +3,8 @@ import { RocketIcon } from "../icons/RocketIcon";
 import { Button } from "../shared/Button";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
+import { useAccessControl } from "@lib/hooks";
+import { useRouter } from "next/router";
 
 const getHost = () => {
   if (typeof window === "undefined") return "";
@@ -11,6 +13,7 @@ const getHost = () => {
 
 export const Published = ({ id }: { id: string }) => {
   const [formId] = useState(id);
+  const { ability } = useAccessControl();
   const resetForm = useTemplateStore((s) => s.initialize);
   const linkEn = `${getHost()}/en/id/${formId}`;
   const linkFr = `${getHost()}/fr/id/${formId}`;
@@ -21,6 +24,7 @@ export const Published = ({ id }: { id: string }) => {
   }, [resetForm]);
 
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   return (
     <div>
       <div className="p-7 mb-10 flex bg-green-50">
@@ -54,7 +58,15 @@ export const Published = ({ id }: { id: string }) => {
         </p>
       </div>
       <div>
-        <Button>{t("publishedBack")}</Button>
+        {ability?.can("view", "FormRecord") && (
+          <Button
+            onClick={() => {
+              router.push({ pathname: `/myforms` });
+            }}
+          >
+            {t("publishedBack")}
+          </Button>
+        )}
       </div>
     </div>
   );
