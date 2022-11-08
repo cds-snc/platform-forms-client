@@ -146,6 +146,8 @@ describe("Template CRUD functions", () => {
         id: true,
         jsonConfig: true,
         isPublished: true,
+        created_at: true,
+        updated_at: true,
       },
     });
   });
@@ -175,6 +177,8 @@ describe("Template CRUD functions", () => {
         id: true,
         jsonConfig: true,
         isPublished: true,
+        created_at: true,
+        updated_at: true,
       },
     });
   });
