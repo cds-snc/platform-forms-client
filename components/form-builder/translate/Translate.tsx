@@ -61,12 +61,12 @@ const SectionDiv = styled.div`
       border: 1px solid #cacaca;
 
       &.section-text--rich-text > div {
-        .editor-input {
+        .editor {
           height: calc(100% - 90px);
         }
 
         @media (min-width: 992px) {
-          .editor-input {
+          .editor {
             height: calc(100% - 56px);
           }
         }
@@ -78,6 +78,10 @@ const SectionDiv = styled.div`
         &:last-of-type {
           border-left: 1px solid black;
           margin-left: -1px;
+        }
+
+        .editor-input {
+          height: 100%;
         }
       }
 
