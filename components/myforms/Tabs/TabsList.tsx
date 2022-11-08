@@ -1,45 +1,47 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tabs } from "@components/myforms/Tabs/Tabs";
+import { TabsKeynav } from "@components/myforms/Tabs/TabsKeynav";
 
 export interface TabsProps {
   children: Array<React.ReactNode>;
   labeledby: string;
 }
 
-// TODO: add keynav left and right keys and focus to first card on activate
 export const TabsList = (props: TabsProps): React.ReactElement => {
   const { children, labeledby } = props;
-  const tabsListRef = useRef<HTMLUListElement>(null);
-  const [tabs, setTabs] = useState({} as Tabs);
+  const tabsListRef = useRef<HTMLDivElement>(null);
+  const [tabsKeynav, setTabsKeynav] = useState({} as TabsKeynav);
 
   useEffect(() => {
     if (tabsListRef.current) {
-      setTabs(
-        new Tabs({
+      setTabsKeynav(
+        new TabsKeynav({
           tabsListEl: tabsListRef.current,
         })
       );
     }
   }, [tabsListRef.current]);
 
+  // Note: the only purpose of the tabIndex is to have the eslint tests pass
   return (
-    <nav className="mb-14">
-      <ul
-        className="gc-horizontal-list"
-        role="tablist"
-        aria-labelledby={labeledby}
-        ref={tabsListRef}
-      >
-        {children &&
-          children?.length > 0 &&
-          children.map((child, index) => {
-            return (
-              <li className="gc-horizontal-item" key={`key-${index}-${labeledby}`}>
-                {child}
-              </li>
-            );
-          })}
-      </ul>
-    </nav>
+    <div
+      className="gc-horizontal-list mb-14"
+      ref={tabsListRef}
+      role="tablist"
+      aria-labelledby={labeledby}
+      onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+        tabsKeynav.onKey(e as unknown as KeyboardEvent);
+      }}
+      tabIndex={-1}
+    >
+      {children &&
+        children?.length > 0 &&
+        children.map((child, index) => {
+          return (
+            <div className="gc-horizontal-item" key={`key-${index}-${labeledby}`}>
+              {child}
+            </div>
+          );
+        })}
+    </div>
   );
 };

@@ -51,5 +51,13 @@ module.exports = {
     "prettier/prettier": "error",
     "no-console": "error",
     "no-await-in-loop": "error",
+    "jsx-a11y/no-noninteractive-tabindex": [
+      "error",
+      {
+        tags: [],
+        roles: ["tablist", "tabpanel"],
+        allowExpressionValues: true,
+      },
+    ],
   },
 };

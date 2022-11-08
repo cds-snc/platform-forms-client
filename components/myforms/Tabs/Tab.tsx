@@ -24,6 +24,8 @@ export const Tab = (props: TabProps): React.ReactElement => {
   } = props;
   const router = useRouter();
 
+  // Note: using tabindex on a focussable element, like an anchor or button, is kind of a hack
+  // but is an acceptable aria pattern for tabs.
   return (
     <button
       id={id}
