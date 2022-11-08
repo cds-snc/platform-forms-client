@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useSelect, UseSelectStateChange } from "downshift";
 import styled from "styled-components";
-import { ElementOption, DropdownProps } from "../types";
+import { ElementOption, DropdownProps, DropdownLabelProps } from "../types";
 
 const DropDownContainer = styled.div`
   width: 250px;
@@ -44,7 +44,7 @@ const DropDownList = styled.ul`
 const DropDownListItem = styled.li`
   display: flex;
   align-content: flex-start;
-  background: ${(props: DropdownProps) => (props.ishighlighted ? "#f7f9ff" : "")};
+  background: ${(props: DropdownProps) => (props.ishighlighted ? "#303FC3" : "")};
   cursor: pointer;
   padding-left: 20px;
   padding-right: 26px;
@@ -65,12 +65,15 @@ const DropDownListIcon = styled.div`
   svg {
     height: 20px;
     width: 20px;
+    path {
+      fill: ${(props: DropdownLabelProps) => (props.ishighlighted ? "#ffffff" : "")};
+    }
   }
 `;
 
 const DropDownListLabel = styled.div`
   margin-left: 10px;
-  color: #202124;
+  color: ${(props: DropdownLabelProps) => (props.ishighlighted ? "#ffffff" : "#202124")};
   line-height: 24px;
 `;
 
@@ -108,8 +111,14 @@ export const DropDown = ({
                 key={`${item.id}${index}`}
                 {...getItemProps({ item, index })}
               >
-                {item.icon && <DropDownListIcon>{item.icon}</DropDownListIcon>}
-                <DropDownListLabel>{item.value}</DropDownListLabel>
+                {item.icon && (
+                  <DropDownListIcon ishighlighted={highlightedIndex === index}>
+                    {item.icon}
+                  </DropDownListIcon>
+                )}
+                <DropDownListLabel ishighlighted={highlightedIndex === index}>
+                  {item.value}
+                </DropDownListLabel>
               </DropDownListItem>
               {item.append && item.append}
             </div>
