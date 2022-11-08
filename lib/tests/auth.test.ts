@@ -54,6 +54,46 @@ describe("Test Auth lib", () => {
         },
       });
     });
+    it("Redirects users to acceptable use page when not yet accepted", async () => {
+      const { req, res } = createMocks({
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const mockSession = {
+        expires: "1",
+        user: {
+          email: "test@cds.ca",
+          name: "test",
+          image: "null",
+          id: "1",
+          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: false,
+        },
+      };
+      mockGetSession.mockResolvedValue(mockSession);
+
+      const context = {
+        req,
+        res,
+        query: {},
+        resolvedUrl: "",
+      };
+
+      const result = await requireAuthentication(async () => ({
+        props: {
+          test: "1",
+        },
+      }))(context);
+      expect(result).toEqual({
+        redirect: {
+          destination: `/undefined/auth/policy`,
+          permanent: false,
+        },
+      });
+    });
     it("Adds user to props when a session is present", async () => {
       const { req, res } = createMocks({
         method: "GET",
@@ -70,6 +110,7 @@ describe("Test Auth lib", () => {
           image: "null",
           id: "1",
           privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -90,6 +131,7 @@ describe("Test Auth lib", () => {
             image: "null",
             id: "1",
             privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         },
       });
@@ -110,6 +152,7 @@ describe("Test Auth lib", () => {
           image: "null",
           id: "1",
           privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
       mockGetSession.mockResolvedValue(mockSession);
@@ -131,6 +174,7 @@ describe("Test Auth lib", () => {
             image: "null",
             id: "1",
             privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            acceptableUse: true,
           },
         },
       });
@@ -152,6 +196,7 @@ describe("Test Auth lib", () => {
         image: "null",
         id: "1",
         privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        acceptableUse: true,
       },
     };
     mockGetSession.mockResolvedValue(mockSession);

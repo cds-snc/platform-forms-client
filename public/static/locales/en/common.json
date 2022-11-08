@@ -79,9 +79,7 @@
   },
   "acceptableUsePage": {
     "agree": "Agree",
-    "cancel": "Cancel",
-    "welcome": "Welcome back",
-    "lastLoginTime": "Last log-in"
+    "welcome": "Know your responsibilities"
   },
   "loginMenu": {
     "login": "Sign in",

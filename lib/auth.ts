@@ -56,6 +56,16 @@ export function requireAuthentication(
         };
       }
 
+      if (!session.user.acceptableUse && context.resolvedUrl !== "/auth/policy") {
+        return {
+          redirect: {
+            //redirect to acceptable use page
+            destination: `/${context.locale}/auth/policy`,
+            permanent: false,
+          },
+        };
+      }
+
       const innerFunctionProps = await innerFunction({
         user: { ...session.user, ability: createAbility(session.user.privileges) },
         ...context,

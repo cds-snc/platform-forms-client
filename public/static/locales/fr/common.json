@@ -79,9 +79,8 @@
   },
   "acceptableUsePage": {
     "agree": "Accepter",
-    "cancel": "Annuler",
-    "welcome": "Bon retour",
-    "lastLoginTime": "Dernière session"
+
+    "welcome": "Connaître vos responsabilités"
   },
   "loginMenu": {
     "login": "Se connecter",
