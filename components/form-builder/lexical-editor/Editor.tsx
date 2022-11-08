@@ -36,6 +36,10 @@ const RichTextWrapper = styled.div`
     p {
       margin: 20px 0;
     }
+
+    .editor-nested-listitem {
+      list-style-type: none;
+    }
   }
 `;
 
