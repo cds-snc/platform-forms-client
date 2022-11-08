@@ -57,9 +57,10 @@ export function requireAuthentication(
       }
 
       if (!session.user.acceptableUse && context.resolvedUrl !== "/auth/policy") {
+        // If they haven't agreed to Acceptable Use redict to policy page for acceptance
+        // If already on the policy page don't redirect, aka endless redirect loop.
         return {
           redirect: {
-            //redirect to acceptable use page
             destination: `/${context.locale}/auth/policy`,
             permanent: false,
           },
