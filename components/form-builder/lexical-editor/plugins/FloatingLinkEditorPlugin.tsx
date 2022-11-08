@@ -203,7 +203,7 @@ function FloatingLinkEditor({
             <button
               title={t("editLink")}
               aria-label={t("editLink")}
-              className="relative w-full"
+              className="relative w-full pr-5 truncate"
               onMouseDown={(event) => event.preventDefault()}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
