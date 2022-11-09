@@ -227,8 +227,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 <Button type="submit" disabled={props.isPreview}>
                   {t("submitButton")}
                 </Button>
-                {props.submitAlert && (
-                  <div className="inline-block py-1 px-4 bg-purple-200">{props.submitAlert}</div>
+                {props.submitAlertText && (
+                  <div className="inline-block py-1 px-4 bg-purple-200">
+                    {props.submitAlertText}
+                  </div>
                 )}
               </div>
             </div>
@@ -245,7 +247,7 @@ interface FormProps {
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
-  submitAlert?: string;
+  submitAlertText?: string;
   onSuccess?: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;

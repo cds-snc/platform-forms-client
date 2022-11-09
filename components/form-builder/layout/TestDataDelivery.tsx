@@ -110,7 +110,7 @@ export const TestDataDelivery = () => {
             language={language}
             router={router}
             t={t1}
-            submitAlert={t("submitToTestDataDelivery")}
+            submitAlertText={t("submitToTestDataDelivery")}
             onSuccess={setSent}
           >
             {currentForm}

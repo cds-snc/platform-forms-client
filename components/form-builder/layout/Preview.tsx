@@ -41,7 +41,7 @@ export const Preview = () => {
           router={router}
           t={t1}
           isPreview={true}
-          submitAlert={t("formSubmissionDisabledInPreview")}
+          submitAlertText={t("formSubmissionDisabledInPreview")}
         >
           {currentForm}
         </Form>
