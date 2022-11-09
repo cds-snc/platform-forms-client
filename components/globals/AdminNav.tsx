@@ -28,7 +28,7 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
         )}
         {ability?.can("update", "FormRecord") && (
           <li className="gc-horizontal-item">
-            <Link href="/admin/form-builder">{t("adminNav.formbuilder")}</Link>
+            <Link href="/form-builder">{t("adminNav.formbuilder")}</Link>
           </li>
         )}
 
