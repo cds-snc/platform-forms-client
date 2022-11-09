@@ -128,6 +128,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [timerActive]);
 
+  const SubmitButton = () => {
+    return (
+      <Button type="submit" disabled={props.isPreview}>
+        {t("submitButton")}
+      </Button>
+    );
+  };
+
   return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
     <Loader message={t("loading")} />
   ) : (
@@ -224,14 +232,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
 
               <div className="buttons">
-                <Button type="submit" disabled={props.isPreview}>
-                  {t("submitButton")}
-                </Button>
-                {props.submitAlertText && (
-                  <div className="inline-block py-1 px-4 bg-purple-200">
-                    {props.submitAlertText}
-                  </div>
-                )}
+                {props.renderSubmit ? props.renderSubmit(<SubmitButton />) : <SubmitButton />}
               </div>
             </div>
           </form>
@@ -247,7 +248,7 @@ interface FormProps {
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
-  submitAlertText?: string;
+  renderSubmit?: (submit: JSX.Element) => JSX.Element;
   onSuccess?: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;

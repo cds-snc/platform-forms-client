@@ -110,7 +110,16 @@ export const TestDataDelivery = () => {
             language={language}
             router={router}
             t={t1}
-            submitAlertText={t("submitToTestDataDelivery")}
+            renderSubmit={(button) => {
+              return (
+                <>
+                  {button}
+                  <div className="inline-block py-1 px-4 bg-purple-200">
+                    {t("submitToTestDataDelivery")}
+                  </div>
+                </>
+              );
+            }}
             onSuccess={setSent}
           >
             {currentForm}
