@@ -66,8 +66,7 @@ export const Publish = () => {
       return;
     }
 
-    // @todo need real page
-    router.push({ pathname: `/support` });
+    router.push({ pathname: `/pages/signup/unlock-publishing` });
   }, []);
 
   return (
@@ -137,7 +136,9 @@ export const Publish = () => {
       )}
       {isPublishable() && (
         <>
-          <Button onClick={handlePublish}>{t("publish")}</Button>
+          <Button className="mt-5" onClick={handlePublish}>
+            {t("publish")}
+          </Button>
           <div
             role="alert"
             className={`inline-block ml-5 py-1 px-3 
