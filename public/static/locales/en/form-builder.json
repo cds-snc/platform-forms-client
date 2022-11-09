@@ -32,7 +32,7 @@
   "saveH2": "Save the form file on your computer",
   "saveP3": "Click the save button to download your form.",
   "saveH3": "Upload the form file again to edit",
-  "saveP4": "Open the form file from the GC Form Builder’s start page to pick-up where you left off.",  
+  "saveP4": "Open the form file from the GC Form Builder’s start page to pick-up where you left off.",
   "viewCode": "View code",
   "copyButton": "Copy to clipboard",
   "copyMessage": "(template copied)",
@@ -103,10 +103,12 @@
   "testYourResponseDelivery": "Test your response delivery",
   "formSubmissionDisabledInPreview": "Form submission is disabled in preview",
   "linkUrl": "Link URL",
-  "editLink" : "Edit link",
+  "editLink": "Edit link",
   "RichTextEditor": "Rich text editor",
   "publishedTitle": "Your form is published!",
   "publishedViewLinks": "View and share your published form with these links:",
   "publishedErrors": "Published form errors",
-  "publishedBack": "Back to My forms"
+  "publishedBack": "Back to My forms",
+  "dataDeliveredTitle": "Success",
+  "dataDeliveredMessage": "Check your email for the data delivered."
 }

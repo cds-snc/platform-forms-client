@@ -1,16 +1,20 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { requireAuthentication } from "@lib/auth";
-import { Layout } from "../../../components/form-builder/layout/Layout";
-import { Header } from "../../../components/form-builder/layout/Header";
+
+import { Layout } from "../../components/form-builder/layout/Layout";
+import { Header } from "../../components/form-builder/layout/Header";
 import { checkPrivileges } from "@lib/privileges";
-import { NextPageWithLayout } from "../../_app";
-import Footer from "../../../components/globals/Footer";
+import { NextPageWithLayout } from "../_app";
+import Footer from "../../components/globals/Footer";
 import { getTemplateByID } from "@lib/templates";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";
 import { NavigationStoreProvider } from "@components/form-builder/store/useNavigationStore";
 import { TemplateStoreProvider } from "@components/form-builder/store/useTemplateStore";
+import { GetServerSideProps } from "next";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { createAbility } from "@lib/privileges";
 
 type PageProps = {
   tab: string;
@@ -44,26 +48,31 @@ Page.getLayout = function getLayout(page: ReactElement) {
   );
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ query: { params }, user: { ability }, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { params },
+  locale,
+  req,
+  res,
+}) => {
+  const [tab = "start", formID = null] = params || [];
+  const FormbuilderParams: { tab: string; initialForm: null | FormRecord } = {
+    tab,
+    initialForm: null,
+  };
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  if (formID && session) {
+    const ability = createAbility(session.user.privileges);
     checkPrivileges(ability, [{ action: "update", subject: "FormRecord" }]);
-    const [tab = "start", formID = null] = params || [];
-    const FormbuilderParams: { tab: string; initialForm: null | FormRecord } = {
-      tab,
-      initialForm: null,
-    };
-
-    if (formID) {
-      FormbuilderParams.initialForm = await getTemplateByID(formID);
-    }
-
-    return {
-      props: {
-        ...FormbuilderParams,
-        ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
-      },
-    };
+    FormbuilderParams.initialForm = await getTemplateByID(formID);
   }
-);
+
+  return {
+    props: {
+      ...FormbuilderParams,
+      ...(locale && (await serverSideTranslations(locale, ["common", "form-builder"]))),
+    },
+  };
+};
 
 export default Page;

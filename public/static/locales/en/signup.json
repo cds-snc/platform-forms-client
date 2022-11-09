@@ -32,7 +32,7 @@
           "oneUpperCase": "The field must contain at least 1 uppercase character.",
           "oneNumber": "The field must contain at least 1 number.",
           "oneSymbol": "The field must contain at least 1 symbol."
-        } 
+        }
       },
       "passwordConfirmation": {
         "label": "Password confirmation",
@@ -47,5 +47,6 @@
         }
       }
     }
-  }
+  },
+  "registrationClosed": "Registration is closed at this time"
 }
