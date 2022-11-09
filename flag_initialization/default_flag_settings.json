@@ -3,5 +3,6 @@
   "unpublishedForms": true,
   "submitToReliabilityQueue": false,
   "reCaptcha": false,
-  "formTimer": false
+  "formTimer": false,
+  "accountRegistration": true
 }

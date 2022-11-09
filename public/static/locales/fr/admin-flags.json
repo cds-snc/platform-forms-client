@@ -33,6 +33,10 @@
     "formTimer": {
       "title": "Minuteur de formulaire",
       "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
+    },
+    "accountRegistration": {
+      "title": "Enregistrement du compte",
+      "description": "Permettre aux utilisateurs de s'inscrire pour obtenir un compte"
     }
   }
 }
