@@ -272,7 +272,7 @@ export const Form = withFormik<FormProps, Responses>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      const result = await submitToAPI(values, formikBag, false);
+      const result = await submitToAPI(values, formikBag, formikBag.props.onSuccess ? false : true);
       result && formikBag.props.onSuccess && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
