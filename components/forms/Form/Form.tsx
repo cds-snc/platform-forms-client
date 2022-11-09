@@ -128,13 +128,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [timerActive]);
 
-  const SubmitButton = () => {
-    return (
-      <Button type="submit" disabled={props.isPreview}>
-        {t("submitButton")}
-      </Button>
-    );
-  };
+  const submitButton = (
+    <Button type="submit" disabled={props.isPreview}>
+      {t("submitButton")}
+    </Button>
+  );
 
   return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
     <Loader message={t("loading")} />
@@ -232,7 +230,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
 
               <div className="buttons">
-                {props.renderSubmit ? props.renderSubmit(<SubmitButton />) : <SubmitButton />}
+                {props.renderSubmit ? props.renderSubmit(submitButton) : submitButton}
               </div>
             </div>
           </form>

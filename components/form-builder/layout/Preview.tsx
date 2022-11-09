@@ -41,16 +41,14 @@ export const Preview = () => {
           router={router}
           t={t1}
           isPreview={true}
-          renderSubmit={(button) => {
-            return (
-              <>
-                {button}
-                <div className="inline-block py-1 px-4 bg-purple-200">
-                  {t("formSubmissionDisabledInPreview")}
-                </div>
-              </>
-            );
-          }}
+          renderSubmit={(submitButton) => (
+            <>
+              {submitButton}
+              <div className="inline-block py-1 px-4 bg-purple-200">
+                {t("formSubmissionDisabledInPreview")}
+              </div>
+            </>
+          )}
         >
           {currentForm}
         </Form>
