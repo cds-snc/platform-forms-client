@@ -66,7 +66,7 @@ export const Publish = () => {
       return;
     }
 
-    router.push({ pathname: `/pages/signup/unlock-publishing` });
+    router.push({ pathname: `/signup/unlock-publishing` });
   }, []);
 
   return (
