@@ -58,6 +58,8 @@
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
   "saveButton": "Save",
+  "saveDownloadMessage": "Form file downloaded successfully",
+  "saveDraftMessage": "Form saved as a draft",
   "saveFileButton": "Save file",
   "saveH1": "Save your progress",
   "saveH2": "Save the form file on your computer",
