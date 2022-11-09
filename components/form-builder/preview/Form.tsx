@@ -249,6 +249,7 @@ interface FormProps {
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
   submitAlert?: string;
+  onSuccess?: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
 }
@@ -271,7 +272,8 @@ export const Form = withFormik<FormProps, Responses>({
 
   handleSubmit: async (values, formikBag) => {
     try {
-      await submitToAPI(values, formikBag);
+      const result = await submitToAPI(values, formikBag, false);
+      result && formikBag.props.onSuccess && formikBag.props.onSuccess(result);
     } catch (err) {
       logMessage.error(err as Error);
     } finally {

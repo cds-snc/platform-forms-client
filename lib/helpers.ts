@@ -259,7 +259,8 @@ async function _submitToAPI(
       router: NextRouter;
     },
     Responses
-  >
+  >,
+  redirect = true
 ) {
   const { language, router, formRecord } = formikBag.props;
   const { setStatus } = formikBag;
@@ -282,6 +283,9 @@ async function _submitToAPI(
     })
       .then((serverResponse) => {
         if (serverResponse.data.received === true) {
+          if (!redirect) {
+            return formRecord.id;
+          }
           router.push({
             pathname: `/${language}/id/${formRecord.id}/confirmation`,
           });
