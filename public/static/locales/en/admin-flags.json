@@ -33,6 +33,11 @@
     "formTimer": {
       "title": "Form Timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
+    },
+
+    "accountRegistration": {
+      "title": "Account Registration",
+      "description": "Allow users to register for an account"
     }
   }
 }
