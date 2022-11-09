@@ -11,6 +11,7 @@ import { useNavigationStore } from "../store/useNavigationStore";
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
   const {
+    userCanPublish,
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
     isPublishable,
   } = useAllowPublish();
@@ -81,6 +82,26 @@ export const Publish = () => {
           <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
         </li>
       </ul>
+
+      {!userCanPublish && (
+        <div className="mt-10 p-5 bg-red-100 flex">
+          <div className="flex">
+            <div className="pr-7">
+              <WarningIcon />
+            </div>
+          </div>
+          <div>
+            <h3 className="mb-1">Unlock publishing</h3>
+            <p className="mb-5">
+              To unlock publishing, provide the contact information of the person you report to.
+            </p>
+            <p>
+              <a href="https://example.com">Fill out a request</a> and we’ll process your request
+              within 2 business days.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="mt-10 p-5 bg-yellow-100 flex">
         <div className="flex">
