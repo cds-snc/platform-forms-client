@@ -26,7 +26,7 @@ export const Header = () => {
   const { ability } = useAccessControl();
   const currentTab = useNavigationStore((s) => s.currentTab);
   const setTab = useNavigationStore((s) => s.setTab);
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["form-builder", "common"]);
 
   const handleClick = (tab: string) => {
     return (e: React.MouseEvent<HTMLElement>) => {
@@ -76,7 +76,7 @@ export const Header = () => {
           <div className="inline-flex">
             <div className="gc-login-menu mr-3">
               {ability?.can("view", "FormRecord") && (
-                <Link href="/myforms">{t("adminNav.myforms")}</Link>
+                <Link href="/myforms">{t("adminNav.myforms", { ns: "common" })}</Link>
               )}
             </div>
             {<LoginMenu isAuthenticated={status === "authenticated"} />}
