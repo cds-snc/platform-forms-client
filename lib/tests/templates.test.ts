@@ -15,6 +15,8 @@ import {
   getTemplateSubmissionTypeByID,
   onlyIncludePublicProperties,
   updateIsPublishedForTemplate,
+  getTemplateWithAssociatedUsers,
+  updateAssignedUsersForTemplate,
 } from "../templates";
 
 import { BetterOmit, FormRecord } from "@lib/types";
@@ -25,7 +27,14 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import v8 from "v8";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { Base, getUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
+import {
+  Base,
+  getUserPrivileges,
+  ManageForms,
+  ManageUsers,
+  PublishForms,
+  ViewUserPrivileges,
+} from "__utils__/permissions";
 
 const redis = new Redis();
 
@@ -137,6 +146,8 @@ describe("Template CRUD functions", () => {
         id: true,
         jsonConfig: true,
         isPublished: true,
+        created_at: true,
+        updated_at: true,
       },
     });
   });
@@ -166,6 +177,8 @@ describe("Template CRUD functions", () => {
         id: true,
         jsonConfig: true,
         isPublished: true,
+        created_at: true,
+        updated_at: true,
       },
     });
   });
@@ -223,6 +236,35 @@ describe("Template CRUD functions", () => {
     const submissionType = await getTemplateSubmissionTypeByID("formtestID");
 
     expect(submissionType).toEqual(formConfiguration.submission);
+  });
+
+  it("Get templates with associated users", async () => {
+    const ability = createAbility(
+      getUserPrivileges(ManageForms.concat(ViewUserPrivileges), { user: { id: "1" } })
+    );
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      jsonConfig: formConfiguration,
+    });
+
+    await getTemplateWithAssociatedUsers(ability, "formTestID");
+
+    expect(prismaMock.template.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: "formTestID",
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
   });
 
   it.each([[Base], [ManageForms]])("Update Template", async (privileges) => {
@@ -302,6 +344,42 @@ describe("Template CRUD functions", () => {
       id: "formtestID",
       isPublished: true,
       ...formConfiguration,
+    });
+  });
+
+  it("Update assigned users for template", async () => {
+    const ability = createAbility(
+      getUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
+    );
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      isPublished: true,
+    });
+
+    const users: { id: string; action: "add" | "remove" }[] = [
+      { id: "1", action: "add" },
+      { id: "2", action: "remove" },
+    ];
+
+    await updateAssignedUsersForTemplate(ability, "formTestID", users);
+
+    expect(prismaMock.template.update).toHaveBeenCalledWith({
+      where: {
+        id: "formTestID",
+      },
+      data: {
+        users: {
+          connect: [{ id: "1" }],
+          disconnect: [{ id: "2" }],
+        },
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+      },
     });
   });
 

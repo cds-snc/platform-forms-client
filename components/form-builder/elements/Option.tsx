@@ -72,7 +72,7 @@ export const Option = ({
 
   return (
     <div className="flex mt-3">
-      <div className="mt-2">{icon}</div>
+      <div className="flex mt-2 w-5 justify-end">{icon}</div>
       <Input
         id={`option--${parentIndex}--${index + 1}`}
         ref={input}
