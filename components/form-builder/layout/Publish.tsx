@@ -1,15 +1,16 @@
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
-import { CancelIcon, CircleCheckIcon, WarningIcon } from "../icons";
+import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
 import { Button } from "../shared/Button";
-import Link from "next/link";
 import { useNavigationStore } from "../store/useNavigationStore";
+import { useRouter } from "next/router";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   const {
     userCanPublish,
     data: { title, questions, privacyPolicy, translate, responseDelivery, confirmationMessage },
@@ -54,15 +55,47 @@ export const Publish = () => {
     setTab("published");
   };
 
+  const handleSaveAndRequest = useCallback(async () => {
+    const schema = JSON.parse(getSchema());
+    delete schema.id;
+    delete schema.isPublished;
+
+    const result = await uploadJson(JSON.stringify(schema), id, false);
+    if (result && result?.error) {
+      setError(true);
+      return;
+    }
+
+    // @todo need real page
+    router.push({ pathname: `/support` });
+  }, []);
+
   return (
     <>
       <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
-      <p>{t("publishYourFormInstructions")}</p>
+      <p className="mb-0">{t("publishYourFormInstructions")}</p>
+      {!userCanPublish && (
+        <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
+          <div className="flex">
+            <div className="pr-7">
+              <LockIcon className="mb-2 scale-125" />
+            </div>
+          </div>
+          <div>
+            <h3 className="mb-1">Unlock publishing</h3>
+            <p className="mb-5">
+              To unlock publishing, provide the contact information of the person you report to.
+            </p>
+            <p>
+              <Button theme="secondary" onClick={handleSaveAndRequest}>
+                Save form and request publishing ability
+              </Button>
+            </p>
+          </div>
+        </div>
+      )}
 
       <ul className="list-none p-0">
-        <li className="mb-4 mt-8">
-          <Icon checked={title} /> {t("publisher")}
-        </li>
         <li className="mb-4 mt-4">
           <Icon checked={questions} /> {t("questions")}
         </li>
@@ -83,46 +116,25 @@ export const Publish = () => {
         </li>
       </ul>
 
-      {!userCanPublish && (
-        <div className="mt-10 p-5 bg-red-100 flex">
+      {userCanPublish && (
+        <div className="mt-10 p-5 bg-yellow-100 flex">
           <div className="flex">
             <div className="pr-7">
               <WarningIcon />
             </div>
           </div>
           <div>
-            <h3 className="mb-1">Unlock publishing</h3>
-            <p className="mb-5">
-              To unlock publishing, provide the contact information of the person you report to.
+            <h3 className="mb-1">Publishing disables editing.</h3>
+            <p>
+              Once you publish, you cannot make changes to this form. If changes are needed after
+              publishing, use the form file to create and publish a new form.
             </p>
             <p>
-              <a href="https://example.com">Fill out a request</a> and we’ll process your request
-              within 2 business days.
+              <a href="https://canada.ca">Contact support</a> if you have any questions.
             </p>
           </div>
         </div>
       )}
-
-      <div className="mt-10 p-5 bg-yellow-100 flex">
-        <div className="flex">
-          <div className="pr-7">
-            <WarningIcon />
-          </div>
-        </div>
-        <div>
-          <h3 className="mb-1">Publishing disables editing.</h3>
-          <p>
-            Once you publish, you cannot make changes to this form. If changes are needed after
-            publishing, use the form file to create and publish a new form.
-          </p>
-          <p>
-            <a href="https://canada.ca">Contact support</a> if you have any questions.
-          </p>
-        </div>
-      </div>
-      <p className="leading-10 mt-6 mb-4">
-        <Link href={""}>Support</Link>
-      </p>
       {isPublishable() && (
         <>
           <Button onClick={handlePublish}>{t("publish")}</Button>
