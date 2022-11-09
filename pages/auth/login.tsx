@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
-import { useAuth } from "@lib/hooks";
+import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -14,6 +14,7 @@ import * as Yup from "yup";
 export default function Register() {
   const { username, cognitoError, setCognitoError, login } = useAuth();
   const { t } = useTranslation(["login", "common"]);
+  const registrationOpen = useFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -88,7 +89,7 @@ export default function Register() {
             <div className="buttons">
               <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
             </div>
-            <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+            {registrationOpen && <Link href={"/signup/register"}>{t("signUpLink")}</Link>}
           </form>
         </>
       )}
