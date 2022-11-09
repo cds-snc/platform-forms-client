@@ -62,14 +62,15 @@ const callAll =
   ) =>
     fns.forEach((fn) => typeof fn === "function" && fn(...args));
 
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  theme?: string;
+}
+
 export const withMessage = (
   Button: any, // eslint-disable-line  @typescript-eslint/no-explicit-any
   message?: string
 ) => {
-  const ButtonWithMessage: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
-    onClick,
-    ...restProps
-  }) => {
+  const ButtonWithMessage: React.FC<ButtonProps> = ({ onClick, ...restProps }) => {
     const [isCopied, setIsCopied] = useState("");
     const [showMessage, setShowMessage] = useState(false);
 
