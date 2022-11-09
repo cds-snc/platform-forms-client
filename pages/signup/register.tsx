@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { useAuth } from "@lib/hooks";
+import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -13,6 +13,7 @@ import emailDomainList from "../../email.domains.json";
 export default function Register() {
   const { username, cognitoError, setCognitoError, register } = useAuth();
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
+  const registrationOpen = useFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -60,6 +61,10 @@ export default function Register() {
 
   if (username) {
     return <Confirmation username={username} />;
+  }
+
+  if (!registrationOpen) {
+    return <div>{t("registrationClosed")}</div>;
   }
   return (
     <Formik
