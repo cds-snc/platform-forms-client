@@ -6,7 +6,7 @@ import { appWithTranslation } from "next-i18next";
 import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
-import Base from "@components/globals/Base";
+import BaseLayout from "@components/globals/BaseLayout";
 import "../styles/app.scss";
 
 /*
@@ -49,9 +49,9 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
           {Component.getLayout ? (
             Component.getLayout(<Component {...pageProps} />)
           ) : (
-            <Base>
+            <BaseLayout>
               <Component {...pageProps} />
-            </Base>
+            </BaseLayout>
           )}
         </SafeHydrate>
       </AccessControlProvider>

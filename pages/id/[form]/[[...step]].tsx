@@ -1,7 +1,7 @@
 import { getTemplateByID, onlyIncludePublicProperties } from "@lib/templates";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "@lib/cache/flags";
-import React from "react";
+import React, { ReactElement } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
@@ -10,12 +10,21 @@ import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { PublicFormRecord, FormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
+import { NextPageWithLayout } from "@pages/_app";
+
+import FormDisplayLayout from "@components/globals/FormDisplayLayout";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
 */
 
-const RenderForm = ({ formRecord }: { formRecord: PublicFormRecord }): React.ReactElement => {
+interface RenderFormProps {
+  formRecord: PublicFormRecord;
+}
+
+const RenderForm: NextPageWithLayout<RenderFormProps> = ({
+  formRecord,
+}: RenderFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
@@ -52,6 +61,20 @@ function redirect(locale: string | undefined) {
     },
   };
 }
+
+RenderForm.getLayout = function getLayout(page: ReactElement) {
+  const isEmbeddable = page.props.formRecord && page.props.isEmbeddable;
+  const shouldDisplayAlphaBanner = page.props.formRecord?.displayAlphaBanner ?? true;
+  return (
+    <FormDisplayLayout
+      formRecord={page.props.formRecord}
+      embedded={isEmbeddable}
+      displayAlphaBanner={shouldDisplayAlphaBanner}
+    >
+      {page}
+    </FormDisplayLayout>
+  );
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const unpublishedForms = await checkOne("unpublishedForms");
