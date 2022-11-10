@@ -98,6 +98,8 @@
   "save": "[FR] Save",
   "saveAndRequest": "[FR] Save form and request publishing ability",
   "saveButton": "[FR] Save",
+  "saveDownloadMessage": "[FR] Form file downloaded successfully",
+  "saveDraftMessage": "[FR] Form saved as a draft",
   "saveH2": "[FR] Save the form file on your computer",
   "saveH3": "[FR] Upload the form file again to edit",
   "saveP1": "[FR] We don’t save your form on our website, but don’t worry, you can save the file to your computer.",
