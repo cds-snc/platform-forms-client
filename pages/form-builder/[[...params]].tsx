@@ -15,6 +15,8 @@ import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { createAbility } from "@lib/privileges";
+import Head from "next/head";
+import SkipLink from "@components/globals/SkipLink";
 
 type PageProps = {
   tab: string;
@@ -29,7 +31,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
     setReady(true);
   }, []);
 
-  return ready ? <Layout /> : <main className="container--wet" />;
+  return ready ? <Layout /> : null;
 };
 
 Page.getLayout = (page: ReactElement) => {
@@ -38,9 +40,16 @@ Page.getLayout = (page: ReactElement) => {
       <TemplateStoreProvider
         {...(page.props.initialForm && (page.props.initialForm as FormRecord))}
       >
-        <div id="form-builder">
+        {" "}
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+          <meta charSet="utf-8" />
+          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+        </Head>
+        <div className="flex flex-col h-full">
+          <SkipLink />
           <Header />
-          {page}
+          <main id="content">{page}</main>
           <Footer />
         </div>
       </TemplateStoreProvider>

@@ -139,14 +139,14 @@ export const Layout = () => {
   /* eslint-disable */
 
   return (
-    <main className="container--wet">
+    <>
       <div className="grid grid-cols-12 gap-4">
-        {(currentTab !== "start" && currentTab !== "published") && (
+        {currentTab !== "start" && currentTab !== "published" && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
         <>{form && renderTab(currentTab)}</>
       </div>
-    </main>
+    </>
   );
   /* eslint-enable */
 };

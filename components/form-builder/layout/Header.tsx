@@ -25,32 +25,28 @@ export const Header = () => {
   };
 
   return (
-    <div className="border-b-3 border-blue-dark mt-10 mb-10">
-      <div className="container--wet">
-        <div className="flex justify-between">
-          <div>
-            <button
-              type="button"
-              onClick={handleClick("start")}
-              className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
-            >
-              GC Forms
-            </button>
-            {currentTab !== "start" && isSaveable() && (
-              <DownloadFileButton className="!py-1 !px-4" />
+    <header className="border-b-3 border-blue-dark my-10">
+      <div className="flex justify-between">
+        <div>
+          <button
+            type="button"
+            onClick={handleClick("start")}
+            className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
+          >
+            {t("title")}
+          </button>
+          {currentTab !== "start" && isSaveable() && <DownloadFileButton className="!py-1 !px-4" />}
+        </div>
+        <div className="inline-flex gap-4">
+          <div className="md:text-small_base text-base font-normal not-italic">
+            {ability?.can("view", "FormRecord") && (
+              <Link href="/myforms">{t("adminNav.myforms")}</Link>
             )}
           </div>
-          <div className="inline-flex">
-            <div className="gc-login-menu mr-3">
-              {ability?.can("view", "FormRecord") && (
-                <Link href="/myforms">{t("adminNav.myforms")}</Link>
-              )}
-            </div>
-            {<LoginMenu isAuthenticated={status === "authenticated"} />}
-            {<LanguageToggle />}
-          </div>
+          {<LoginMenu isAuthenticated={status === "authenticated"} />}
+          {<LanguageToggle />}
         </div>
       </div>
-    </div>
+    </header>
   );
 };

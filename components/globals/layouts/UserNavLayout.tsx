@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import SkipLink from "../SkipLink";
 
-const Base = ({ children }: React.PropsWithChildren) => {
+const UserNavLayout = ({ children }: React.PropsWithChildren) => {
   const { ability } = useAccessControl();
   const { status } = useSession();
   const { t } = useTranslation("common");
@@ -53,4 +53,4 @@ const Base = ({ children }: React.PropsWithChildren) => {
   );
 };
 
-export default Base;
+export default UserNavLayout;

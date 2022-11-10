@@ -7,7 +7,7 @@ const Footer = ({ disableGcBranding }: { disableGcBranding?: boolean }) => {
 
   return (
     <footer className="lg:mt-10 border-0 bg-gray-100 mt-16 flex-none" data-testid="footer">
-      <div className="lg:flex-col lg:items-start lg:gap-4 flex py-10 flex-row items-center justify-between">
+      <div className="lg:flex-col lg:items-start lg:gap-4 flex pt-10 pb-5 flex-row items-center justify-between">
         <div>
           {!isSplashPage() && <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>}
         </div>
