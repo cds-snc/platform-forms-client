@@ -6,7 +6,12 @@ import PhaseBanner from "../PhaseBanner";
 import SkipLink from "../SkipLink";
 import Fip from "../Fip";
 
-const Base = ({ children }: React.PropsWithChildren) => {
+interface BaseProps extends React.PropsWithChildren {
+  showLanguageToggle?: boolean;
+  showLogin?: boolean;
+}
+
+const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
   return (
     <div className="flex flex-col h-full">
       <Head>
@@ -19,7 +24,7 @@ const Base = ({ children }: React.PropsWithChildren) => {
 
       <header>
         <PhaseBanner />
-        <Fip />
+        <Fip {...{ showLanguageToggle, showLogin }} />
       </header>
 
       <main id="content" className="grow shrink-0 basis-auto">

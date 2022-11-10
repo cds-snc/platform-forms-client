@@ -38,7 +38,7 @@ const FormDisplayLayout = ({
         {!embedded && (
           <header>
             {displayAlphaBanner && <PhaseBanner />}
-            <Fip formRecord={formRecord} />
+            <Fip formRecord={formRecord} showLogin={false} showLanguageToggle={true} />
           </header>
         )}
         <main id="content">{children}</main>

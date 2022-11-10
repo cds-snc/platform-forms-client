@@ -1,14 +1,20 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import LanguageToggle from "./LanguageToggle";
 import { getProperty } from "@lib/formBuilder";
-import { isSplashPage, isPublicPage } from "@lib/routeUtils";
 import Menu from "@components/auth/LoginMenu";
 import { PublicFormRecord } from "@lib/types";
 
-const Fip = ({ formRecord }: { formRecord?: PublicFormRecord }) => {
+const Fip = ({
+  formRecord,
+  showLogin = false,
+  showLanguageToggle = true,
+}: {
+  formRecord?: PublicFormRecord;
+  showLogin?: boolean;
+  showLanguageToggle?: boolean;
+}) => {
   const { t, i18n } = useTranslation("common");
 
   // Check if custom branding was provided, otherwise show the Government of Canada branding
@@ -35,9 +41,9 @@ const Fip = ({ formRecord }: { formRecord?: PublicFormRecord }) => {
           </picture>
         </a>
       </div>
-      <div className="inline-flex">
-        {!isPublicPage() && <Menu isAuthenticated={status === "authenticated"} />}
-        {!isSplashPage() && <LanguageToggle />}
+      <div className="inline-flex gap-4">
+        {showLogin && <Menu isAuthenticated={status === "authenticated"} />}
+        {showLanguageToggle && <LanguageToggle />}
       </div>
     </div>
   );
