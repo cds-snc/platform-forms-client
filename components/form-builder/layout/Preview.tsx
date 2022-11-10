@@ -1,11 +1,11 @@
 import React from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { Form } from "../preview/Form";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 import { RichText } from "@components/forms/RichText/RichText";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
+import { Form } from "@components/forms";
 
 export const Preview = () => {
   const { getSchema, id } = useTemplateStore((s) => ({
@@ -41,7 +41,14 @@ export const Preview = () => {
           router={router}
           t={t1}
           isPreview={true}
-          submitAlert={t("formSubmissionDisabledInPreview")}
+          renderSubmit={(submitButton) => (
+            <>
+              {submitButton}
+              <div className="inline-block py-1 px-4 bg-purple-200">
+                {t("formSubmissionDisabledInPreview")}
+              </div>
+            </>
+          )}
         >
           {currentForm}
         </Form>
