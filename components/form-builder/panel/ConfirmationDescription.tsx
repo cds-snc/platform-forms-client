@@ -14,9 +14,8 @@ export const ConfirmationDescription = () => {
   return (
     <StyledDiv>
       <p>
-        The confirmation message will appear on a new page once the form has been submitted.{" "}
-        <a href="http://canada.ca">Find out more about what should be included</a>. Some useful
-        things you can add to your confirmation page are:
+        The confirmation message will appear on a new page once the form has been submitted. Some
+        useful things you can add to your confirmation page are:
       </p>
       <StyledUl>
         <li>details of what happens next and when</li>
