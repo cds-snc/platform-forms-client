@@ -7,9 +7,12 @@ import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
 import { Button } from "../shared/Button";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { useRouter } from "next/router";
+import { PublishNoAuth } from "./PublishNoAuth";
+import { useSession } from "next-auth/react";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
+  const { status } = useSession();
   const router = useRouter();
   const {
     userCanPublish,
@@ -68,6 +71,10 @@ export const Publish = () => {
 
     router.push({ pathname: `/signup/unlock-publishing` });
   }, []);
+
+  if (status !== "authenticated") {
+    return <PublishNoAuth />;
+  }
 
   return (
     <>

@@ -105,12 +105,10 @@ export const Layout = () => {
           </div>
         );
       case "publish":
-        return status === "authenticated" ? (
+        return (
           <div className="col-start-4 col-span-9">
             <Publish />
           </div>
-        ) : (
-          setTab("create")
         );
       case "published":
         return status === "authenticated" ? (
