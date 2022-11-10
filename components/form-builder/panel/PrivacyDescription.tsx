@@ -7,9 +7,8 @@ const StyledDiv = styled.div`
   margin-bottom: 20px;
 `;
 
-const { t } = useTranslation("form-builder");
-
 export const PrivacyDescription = () => {
+  const { t } = useTranslation("form-builder");
   return (
     <StyledDiv>
       <p>{t("privacyNoticeDescription")}</p>
