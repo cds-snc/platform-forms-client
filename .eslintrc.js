@@ -16,6 +16,14 @@ module.exports = {
       plugins: ["@typescript-eslint", "jsx-a11y", "prettier"],
       rules: {
         "@typescript-eslint/await-thenable": "error",
+        "jsx-a11y/anchor-is-valid": [
+          "error",
+          {
+            components: ["Link"],
+            specialLink: ["hrefLeft", "hrefRight"],
+            aspects: ["invalidHref", "preferButton"],
+          },
+        ],
       },
     },
   ],

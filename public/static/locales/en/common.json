@@ -33,7 +33,8 @@
     "file-size-too-large": "Please select a smaller file.",
     "file-type-invalid": "Please select a different file type.",
     "too-many-characters": "Please shorten your response.",
-    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section."
+    "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
+    "validGovEmail": "This field must be a valid government email."
   },
   "required": "required",
   "all-required": "all checkboxes required",
@@ -90,5 +91,6 @@
   },
   "alert": {
     "dismissAlert": "Close this alert"
-  }
+  },
+  "continue": "Continue"
 }

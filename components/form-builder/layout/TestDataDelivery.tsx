@@ -57,6 +57,8 @@ export const TestDataDelivery = () => {
     <div>
       <div className="mb-8 bg-blue-200 p-5">
         {t("submittedResponsesText", { email })}{" "}
+        {/* TODO this should probably be a button - for a future refactor */}
+        {/* eslint-disable-next-line */}
         <Link
           href="#"
           legacyBehavior={false}

@@ -16,10 +16,7 @@
     "fields": {
       "username": {
         "label": "Email (FR)",
-        "hint": "Must be a federal government email address (FR)",
-        "error": {
-          "validGovEmail": "This field must be a valid government email. (FR)"
-        }
+        "hint": "Must be a federal government email address (FR)"
       },
       "password": {
         "label": "Password (FR)",

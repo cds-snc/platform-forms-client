@@ -1,0 +1,29 @@
+{
+  "unlockPublishing": {
+    "title": "Unlock publishing [FR]",
+    "paragraph1": "Before you publish your first form, provide the contact information of your manager or the person you report to. GC Forms will not display their contact information publicly. [FR]",
+    "form": {
+      "field1": {
+        "title": "Provide the email of your manager, or the person you report to (required) [FR]",
+        "description": "We'll notify them about your publishing ability in GC Forms and our service level agreement. [FR]"
+      },
+      "field2": {
+        "title": "What department or organization do you work for? (required) [FR]"
+      },
+      "field3": {
+        "title": "What are your program or service goals? (required) [FR]"
+      }
+    },
+    "skipStepButton": "Skip this step for now [FR]"
+  },
+  "unlockPublishingSubmitted": {
+    "title": "Unlock publishing request submitted [FR]",
+    "whatNext": {
+      "title": "What happens next? [FR]",
+      "paragraph1": "We'll process your request and notify your manager about your publishing ability in GC Forms and our service level agreement. [FR]",
+      "paragraph2": "It may take up to 2 business days before you can publish. [FR]",
+      "paragraph3": "You'll receive an email notification when publishing has been unlocked. [FR]",
+      "paragraph4": "While you wait, you can continue to explore and draft forms. [FR]"
+    }
+  }
+}
