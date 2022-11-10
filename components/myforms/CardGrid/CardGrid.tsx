@@ -14,7 +14,6 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
     <ol
       className="grid gap-4"
       style={{ gridTemplateColumns: "repeat(auto-fill, minmax(20rem, 1fr))" }}
-      aria-label={t("cards.label")}
     >
       {cards &&
         cards?.length > 0 &&
