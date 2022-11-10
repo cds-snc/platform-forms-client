@@ -15,13 +15,6 @@ export const Card = (props: CardProps): React.ReactElement => {
   const { id, titleEn, titleFr, url, date, isPublished } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
 
-  // Attempt to make card content more scannable for assisstive technology users
-  // Note: multi-line assign to avoid Lint auto fix error that parses the below all wrong.
-  let cardTitleA11y = i18n.language === "en" ? titleEn : titleFr;
-  cardTitleA11y +=
-    " " + (isPublished === true ? t("card.states.published") : t("card.states.draft"));
-  cardTitleA11y += " " + formatDate(date);
-
   function formatDate(date: string) {
     try {
       const dateParts = new Date(date).toLocaleDateString("en-GB").split("/");
@@ -33,7 +26,7 @@ export const Card = (props: CardProps): React.ReactElement => {
   }
 
   return (
-    <section className="h-full border-1 border-black-default rounded" data-testid={`card-${id}`}>
+    <div className="h-full border-1 border-black-default rounded" data-testid={`card-${id}`}>
       <div
         className={
           "p-1 px-3 border-b-1 border-black border-solid rounded-t" +
@@ -45,12 +38,16 @@ export const Card = (props: CardProps): React.ReactElement => {
         {isPublished === true ? t("card.states.published") : t("card.states.draft")}
       </div>
       <p className="h-36 px-3 pt-3 pb-8">
-        <a href={url} className="line-clamp-3" aria-label={cardTitleA11y}>
+        <a
+          href={url}
+          className="line-clamp-3"
+          aria-describedby={`card-title-${id} card-date-${id}`}
+        >
           {i18n.language === "en" ? titleEn : titleFr}
         </a>
       </p>
       <div className="flex justify-between items-center p-3">
-        <div className="text-sm" aria-hidden="true">
+        <div id={`card-date-${id}`} className="text-sm">
           {t("card.lastEdited")}: {formatDate(date)}
         </div>
         <div className="flex items-center text-sm">
@@ -82,6 +79,6 @@ export const Card = (props: CardProps): React.ReactElement => {
           ></MenuDropdown>
         </div>
       </div>
-    </section>
+    </div>
   );
 };

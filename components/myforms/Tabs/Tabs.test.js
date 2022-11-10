@@ -1,6 +1,6 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
-import { Tabs } from "@components/myforms/Tabs/Tabs";
+import { TabsList } from "@components/myforms/Tabs/TabsList";
 import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 
@@ -44,7 +44,7 @@ describe("Tabs component", () => {
     render(
       <>
         <h2 id={tabsData.id}>{tabsData.title}</h2>
-        <Tabs labeledby={tabsData.id}>
+        <TabsList labeledby={tabsData.id}>
           <Tab
             url={tabData_1.url}
             isActive={tabData_1.isActive}
@@ -61,7 +61,7 @@ describe("Tabs component", () => {
           >
             Tab 2
           </Tab>
-        </Tabs>
+        </TabsList>
         <TabPanel
           id={tabpanelData_1.id}
           labeledbyId={tabpanelData_1.labeledbyId}

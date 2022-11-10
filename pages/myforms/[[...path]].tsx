@@ -8,7 +8,7 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { CardProps } from "@components/myforms/Card/Card";
-import { Tabs } from "@components/myforms/Tabs/Tabs";
+import { TabsList } from "@components/myforms/Tabs/TabsList";
 import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
@@ -52,9 +52,9 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
   }, []);
 
   return (
-    <div>
+    <div className="relative">
       <h1 id="title-myforms">{t("title")}</h1>
-      <Tabs labeledby="title-myforms">
+      <TabsList labeledby="title-myforms">
         <Tab
           url={`/${i18n.language}/myforms/drafts`}
           isActive={path === "drafts"}
@@ -79,14 +79,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
         >
           {t("nav.all")}
         </Tab>
-      </Tabs>
-
-      <div className="mb-6">
-        <a href="/form-builder">
-          {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-        </a>
-      </div>
-
+      </TabsList>
       <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
         <CardGrid cards={templatesDrafts}></CardGrid>
       </TabPanel>
@@ -96,6 +89,12 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
         <CardGrid cards={templatesAll}></CardGrid>
       </TabPanel>
+
+      <div className="absolute top-48">
+        <a href="/admin/form-builder">
+          {t("actions.createNewForm")} <span aria-hidden="true">+</span>
+        </a>
+      </div>
     </div>
   );
 };

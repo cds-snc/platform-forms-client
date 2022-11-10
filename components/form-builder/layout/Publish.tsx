@@ -7,9 +7,12 @@ import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
 import { Button } from "../shared/Button";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { useRouter } from "next/router";
+import { PublishNoAuth } from "./PublishNoAuth";
+import { useSession } from "next-auth/react";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
+  const { status } = useSession();
   const router = useRouter();
   const {
     userCanPublish,
@@ -69,6 +72,10 @@ export const Publish = () => {
     router.push({ pathname: `/signup/unlock-publishing` });
   }, []);
 
+  if (status !== "authenticated") {
+    return <PublishNoAuth />;
+  }
+
   return (
     <>
       <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
@@ -96,22 +103,22 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-4">
+          <Icon checked={title} /> {t("formTitle")}
+        </li>
+        <li className="mb-4 mt-4">
           <Icon checked={questions} /> {t("questions")}
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={privacyPolicy} /> {t("privacyStatement")}
         </li>
         <li className="mb-4 mt-4">
+          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
+        </li>
+        <li className="mb-4 mt-4">
           <Icon checked={translate} /> {t("translate")}
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={responseDelivery} /> {t("responseDelivery")}
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={title} /> {t("formTitle")}
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
         </li>
       </ul>
 
@@ -143,8 +150,7 @@ export const Publish = () => {
             role="alert"
             className={`inline-block ml-5 py-1 px-3 
             ${error ? "text-red-destructive bg-red-100" : ""}
-            ${id ? "text-green-darker bg-green-100" : ""} 
-            ${!id && !error ? "hidden" : ""}`}
+            ${!error ? "hidden" : ""}`}
           >
             <>{error && <p>There was an error publishing the form</p>}</>
           </div>

@@ -61,12 +61,12 @@ const SectionDiv = styled.div`
       border: 1px solid #cacaca;
 
       &.section-text--rich-text > div {
-        .editor-input {
+        .editor {
           height: calc(100% - 90px);
         }
 
         @media (min-width: 992px) {
-          .editor-input {
+          .editor {
             height: calc(100% - 56px);
           }
         }
@@ -78,6 +78,10 @@ const SectionDiv = styled.div`
         &:last-of-type {
           border-left: 1px solid black;
           margin-left: -1px;
+        }
+
+        .editor-input {
+          height: 100%;
         }
       }
 
@@ -158,13 +162,13 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Start")}</h2>
+            <h2>{t("start")}</h2>
             <hr />
           </div>
 
           <fieldset className="text-entry">
             <legend className="section-heading">
-              {t("Form introduction")}: {t("Title")}
+              {t("Form introduction")}: {t("title")}
             </legend>
             <div className="section-text">
               <label htmlFor="form-title-en" className="sr-only">

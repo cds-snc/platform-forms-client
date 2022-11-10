@@ -19,7 +19,13 @@ const getDate = () => {
   return date.toISOString().split("T")[0];
 };
 
-export const DownloadFileButton = ({ className }: { className?: string }) => {
+export const DownloadFileButton = ({
+  className,
+  onClick,
+}: {
+  className?: string;
+  onClick?: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+}) => {
   const { t } = useTranslation("form-builder");
   const { getSchema, form } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
@@ -44,7 +50,13 @@ export const DownloadFileButton = ({ className }: { className?: string }) => {
   }, [getSchema]);
 
   return (
-    <Button className={className} onClick={downloadfile}>
+    <Button
+      className={className}
+      onClick={() => {
+        downloadfile();
+        onClick && onClick();
+      }}
+    >
       {t("saveButton")}
     </Button>
   );
