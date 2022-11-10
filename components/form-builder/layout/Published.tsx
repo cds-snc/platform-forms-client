@@ -36,25 +36,20 @@ export const Published = ({ id }: { id: string }) => {
           <h2 className="mb-1 pb-0"> {t("publishedTitle")}</h2>
           <p className="mb-5 mt-0">{t("publishedViewLinks")}</p>
           <p>
-            <strong>English:</strong> <a href={linkEn}>{linkEn}</a>
+            <strong>{t("english")}</strong> <a href={linkEn}>{linkEn}</a>
           </p>
           <p>
-            <strong>French:</strong> <a href={linkFr}>{linkFr}</a>
+            <strong>{t("french")}</strong> <a href={linkFr}>{linkFr}</a>
           </p>
         </div>
       </div>
       <div className="mb-5">
         <h3 className="mb-1">{t("publishedErrors")}</h3>
-        <p>
-          If you are experiencing any problems with your published form, please{" "}
-          <a href="http://example.com">contact support.</a>
-        </p>
+        <p>{t("ifYouAreExperiencingProblems")}</p>
       </div>
       <div className="mb-10">
-        <h3 className="mb-1">Provide feedback</h3>
-        <p>
-          Did you find this tool helpful? <a href="http://example.com">Provide feedback</a>
-        </p>
+        <h3 className="mb-1">{t("provideFeedback")}</h3>
+        <p>{t("didYouFindThisToolHelpful")}</p>
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (

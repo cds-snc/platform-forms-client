@@ -88,13 +88,11 @@ export const Publish = () => {
             </div>
           </div>
           <div>
-            <h3 className="mb-1">Unlock publishing</h3>
-            <p className="mb-5">
-              To unlock publishing, provide the contact information of the person you report to.
-            </p>
+            <h3 className="mb-1">{t("unlockPublishing")}</h3>
+            <p className="mb-5">{t("unlockPublishingDescription")}</p>
             <p>
               <Button theme="secondary" onClick={handleSaveAndRequest}>
-                Save form and request publishing ability
+                {t("saveAndRequest")}
               </Button>
             </p>
           </div>
@@ -130,14 +128,9 @@ export const Publish = () => {
             </div>
           </div>
           <div>
-            <h3 className="mb-1">Publishing disables editing.</h3>
-            <p>
-              Once you publish, you cannot make changes to this form. If changes are needed after
-              publishing, use the form file to create and publish a new form.
-            </p>
-            <p>
-              <a href="https://canada.ca">Contact support</a> if you have any questions.
-            </p>
+            <h3 className="mb-1">{t("publishingDisablesEditing")}</h3>
+            <p>{t("publishingDisablesEditingDescription")}</p>
+            <p>{t("contactSupportIfYouHaveQuestions")}</p>
           </div>
         </div>
       )}
@@ -152,7 +145,7 @@ export const Publish = () => {
             ${error ? "text-red-destructive bg-red-100" : ""}
             ${!error ? "hidden" : ""}`}
           >
-            <>{error && <p>There was an error publishing the form</p>}</>
+            <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
           </div>
         </>
       )}
