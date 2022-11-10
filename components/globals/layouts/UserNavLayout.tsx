@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Footer from "../Footer";
 import Head from "next/head";
 import LoginMenu from "@components/auth/LoginMenu";
@@ -52,10 +51,6 @@ const Base = ({ children }: React.PropsWithChildren) => {
       <Footer />
     </div>
   );
-};
-
-Base.propTypes = {
-  children: PropTypes.object.isRequired,
 };
 
 export default Base;

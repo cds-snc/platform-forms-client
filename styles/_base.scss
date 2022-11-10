@@ -9,7 +9,11 @@ body,
 }
 
 main {
-  @apply xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64 grow shrink-0 basis-auto;
+  @apply xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 mx-48 grow shrink-0 basis-auto;
+}
+
+footer {
+  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 px-48;
 }
 
 .gc-richText {
