@@ -80,7 +80,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
       </Tabs>
 
       <div className="mb-6">
-        <a href="/admin/form-builder">
+        <a href="/form-builder">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
         </a>
       </div>

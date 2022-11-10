@@ -1,9 +1,12 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { DownloadFileButton } from "./DownloadFileButton";
+import { withMessage } from "../shared/Button";
 
 export const Share = () => {
   const { t } = useTranslation("form-builder");
+
+  const DownloadFileButtonWithMessage = withMessage(DownloadFileButton, t("saveDownloadMessage"));
 
   return (
     <>
@@ -27,7 +30,7 @@ export const Share = () => {
       <p className="mb-6">{t("shareP4")}</p>
 
       <div className="mb-6">
-        <DownloadFileButton />
+        <DownloadFileButtonWithMessage />
       </div>
     </>
   );

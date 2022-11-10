@@ -3,12 +3,13 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { usePublish } from "../hooks/usePublish";
 import { useTranslation } from "next-i18next";
 import { Button } from "../shared/Button";
-import { Form } from "../preview/Form";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 import { useNavigationStore } from "../store/useNavigationStore";
 import Link from "next/link";
+import { RocketIcon } from "../icons/RocketIcon";
+import { Form } from "@components/forms";
 
 export const TestDataDelivery = () => {
   const { localizeField, getSchema, id, setId, email } = useTemplateStore((s) => ({
@@ -35,6 +36,7 @@ export const TestDataDelivery = () => {
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
   const [error, setError] = useState(false);
+  const [sent, setSent] = useState<string | null>();
 
   const { uploadJson } = usePublish();
 
@@ -90,16 +92,37 @@ export const TestDataDelivery = () => {
       </ol>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
         <h1>{formRecord.form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
-
-        <Form
-          formRecord={formRecord}
-          language={language}
-          router={router}
-          t={t1}
-          submitAlert={t("submitToTestDataDelivery")}
-        >
-          {currentForm}
-        </Form>
+        {sent ? (
+          <div className="p-7 mb-10 flex bg-green-50">
+            <div className="flex">
+              <div className="flex p-7">
+                <RocketIcon className="block self-center" />
+              </div>
+            </div>
+            <div>
+              <h2 className="mb-1 pb-0"> {t("dataDeliveredTitle")}</h2>
+              <p className="mb-5 mt-0">{t("dataDeliveredMessage")}</p>
+            </div>
+          </div>
+        ) : (
+          <Form
+            formRecord={formRecord}
+            language={language}
+            router={router}
+            t={t1}
+            renderSubmit={(submitButton) => (
+              <>
+                {submitButton}
+                <div className="inline-block py-1 px-4 bg-purple-200">
+                  {t("submitToTestDataDelivery")}
+                </div>
+              </>
+            )}
+            onSuccess={setSent}
+          >
+            {currentForm}
+          </Form>
+        )}
       </div>
     </div>
   );
