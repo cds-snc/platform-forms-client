@@ -6,6 +6,11 @@
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
   "checkboxes": "Multiple choice",
+  "confirmationDescriptionItem1": "details of what happens next and when",
+  "confirmationDescriptionItem2": "contact details for the service",
+  "confirmationDescriptionItem3": "links to information or services that users are likely to need next",
+  "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form)",
+  "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to your confirmation page are:",
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
   "contactSupportIfYouHaveQuestions": "<a href=\"https://canada.ca\">Contact support</a> if you have any questions.",
@@ -135,10 +140,5 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code",
-  "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to your confirmation page are:",
-  "confirmationDescriptionItem1": "details of what happens next and when",
-  "confirmationDescriptionItem2": "contact details for the service",
-  "confirmationDescriptionItem3": "links to information or services that users are likely to need next",
-  "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form)"
+  "viewCode": "View code"
 }
