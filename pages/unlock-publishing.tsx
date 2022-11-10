@@ -136,9 +136,28 @@ export default function UnlockPublishing() {
                   </div>
 
                   <div className="flex mt-14">
-                    <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
+                    <Button
+                      type="submit"
+                      className={` 
+                        mr-8
+                        bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+                        hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
+                        focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+                      `}
+                    >
+                      {t("submitButton", { ns: "common" })}
+                    </Button>
                     <Link href={`/${i18n.language}/myforms/`}>
-                      <a className="gc-button">{t("continue", { ns: "common" })}</a>
+                      <a
+                        className={` 
+                          no-underline visited:text-black-default 
+                          bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+                          hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
+                          focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+                        `}
+                      >
+                        {t("unlockPublishing.skipStepButton")}
+                      </a>
                     </Link>
                   </div>
                 </form>
@@ -157,7 +176,16 @@ export default function UnlockPublishing() {
           <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
           <div className="flex mt-14">
             <Link href={`/${i18n.language}/myforms/`}>
-              <a className="gc-button">{t("continue", { ns: "common" })}</a>
+              <a
+                className={` 
+                  no-underline visited:text-white-default mr-8
+                  bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+                  hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
+                  focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+                `}
+              >
+                {t("continue", { ns: "common" })}
+              </a>
             </Link>
           </div>
         </>
