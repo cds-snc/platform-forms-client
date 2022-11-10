@@ -79,6 +79,11 @@ export const withMessage = (
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
+
+        // 300ms after isMessage is false, remove the message string (the message span has "transition-300" class)
+        setTimeout(() => {
+          setIsCopied("");
+        }, 300);
       }, 1500);
     };
 
