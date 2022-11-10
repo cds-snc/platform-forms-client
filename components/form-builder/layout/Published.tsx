@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
+import Markdown from "markdown-to-jsx";
 
 const getHost = () => {
   if (typeof window === "undefined") return "";
@@ -45,11 +46,11 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div className="mb-5">
         <h3 className="mb-1">{t("publishedErrors")}</h3>
-        <p>{t("ifYouAreExperiencingProblems")}</p>
+        <Markdown options={{ forceBlock: true }}>{t("ifYouAreExperiencingProblems")}</Markdown>
       </div>
       <div className="mb-10">
         <h3 className="mb-1">{t("provideFeedback")}</h3>
-        <p>{t("didYouFindThisToolHelpful")}</p>
+        <Markdown options={{ forceBlock: true }}>{t("didYouFindThisToolHelpful")}</Markdown>
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (

@@ -68,6 +68,7 @@
   "publishingDisablesEditing": "[FR] Publishing disables editing.",
   "publishingDisablesEditingDescription": "[FR] Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
   "publishNoAuthSubTitle": "[FR] You can publish and host your form with GC forms.",
+  "publishNoAuthText": "To publish your form, {{signIn}} to your GC Forms account. If you do not have a GC Forms account, {{createOne}}.",
   "publishNoAuthTitle": "[FR] Sign in to publish your form",
   "publishYourForm": "[FR] Publish your form",
   "publishYourFormInstructions": "[FR] You need the following items completed before you publish your form.",

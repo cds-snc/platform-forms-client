@@ -9,6 +9,7 @@ import { useNavigationStore } from "../store/useNavigationStore";
 import { useRouter } from "next/router";
 import { PublishNoAuth } from "./PublishNoAuth";
 import { useSession } from "next-auth/react";
+import Markdown from "markdown-to-jsx";
 
 export const Publish = () => {
   const { t } = useTranslation("form-builder");
@@ -130,7 +131,9 @@ export const Publish = () => {
           <div>
             <h3 className="mb-1">{t("publishingDisablesEditing")}</h3>
             <p>{t("publishingDisablesEditingDescription")}</p>
-            <p>{t("contactSupportIfYouHaveQuestions")}</p>
+            <Markdown options={{ forceBlock: true }}>
+              {t("contactSupportIfYouHaveQuestions")}
+            </Markdown>
           </div>
         </div>
       )}
