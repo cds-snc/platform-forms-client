@@ -32,7 +32,7 @@ export const Preview = () => {
   return (
     <>
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("page1")}</span>
-      <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
+      <div className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none">
         <h1>{formRecord.form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
 
         <Form
