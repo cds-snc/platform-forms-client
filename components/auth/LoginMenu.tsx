@@ -16,9 +16,10 @@ const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
 
   return (
     <>
-      <div className="md:text-small_base text-base font-normal not-italic">
+      <div id="login-menu" className="md:text-small_base text-base font-normal not-italic">
         {isAuthenticated ? (
           <button
+            id="logout-button"
             type="button"
             className="shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0"
             onClick={handleClick}
@@ -27,7 +28,9 @@ const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
             {t("loginMenu.logout")}
           </button>
         ) : (
-          <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+          <Link id="login-button" href={`/${i18n.language}/auth/login`}>
+            {t("loginMenu.login")}
+          </Link>
         )}
       </div>
     </>
