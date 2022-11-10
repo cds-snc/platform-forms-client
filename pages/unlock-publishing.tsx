@@ -95,6 +95,7 @@ export default function UnlockPublishing() {
                       type={"text"}
                       id={"username"}
                       name={"username"}
+                      className="required w-[34rem]"
                       ariaDescribedBy={"unlock-publishing-description"}
                     />
                   </div>
@@ -112,7 +113,7 @@ export default function UnlockPublishing() {
                       type={"text"}
                       id={"department"}
                       name={"department"}
-                      className="required"
+                      className="required w-[34rem]"
                       required
                     />
                   </div>
@@ -124,7 +125,7 @@ export default function UnlockPublishing() {
                     <TextArea
                       id={"goals"}
                       name={"goals"}
-                      className="required"
+                      className="required w-[34rem] mt-4"
                       required
                       characterCountMessages={{
                         part1: t("formElements.characterCount.part1"),
