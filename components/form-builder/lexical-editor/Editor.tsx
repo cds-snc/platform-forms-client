@@ -90,7 +90,7 @@ export const Editor = ({
               <ContentEditable
                 className="editor-input"
                 id={editorId}
-                ariaLabel={t("RichTextEditor")}
+                ariaLabel={t("richTextEditor")}
               />
             </div>
           }
