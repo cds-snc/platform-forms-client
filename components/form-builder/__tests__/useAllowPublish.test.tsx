@@ -9,6 +9,7 @@ import {
   areChoicesTranslated,
   MissingTranslation,
 } from "../hooks/useAllowPublish";
+import { FormElementTypes } from "@lib/types";
 
 const createTemplateStore = ({ form, submission, isPublished }: Partial<TemplateStoreProps>) => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
@@ -36,7 +37,7 @@ describe("useAllowPublish", () => {
         elements: [
           {
             id: 1,
-            type: "",
+            type: FormElementTypes.radio,
             properties: {
               titleEn: "question 1",
               titleFr: "question 2",
@@ -86,7 +87,7 @@ describe("useAllowPublish", () => {
         elements: [
           {
             id: 1,
-            type: "",
+            type: FormElementTypes.radio,
             properties: {
               titleEn: "question 1",
               titleFr: "question 2",
@@ -226,7 +227,7 @@ describe("useAllowPublish", () => {
       const translated = () => {
         isFormElementTranslated({
           id: 1,
-          type: "richText",
+          type: FormElementTypes.richText,
           properties: {
             titleEn: "",
             titleFr: "",
@@ -243,7 +244,7 @@ describe("useAllowPublish", () => {
       const notTranslated = () => {
         isFormElementTranslated({
           id: 1,
-          type: "richText",
+          type: FormElementTypes.richText,
           properties: {
             titleEn: "",
             titleFr: "",
@@ -260,7 +261,7 @@ describe("useAllowPublish", () => {
       const notProvided = () => {
         isFormElementTranslated({
           id: 1,
-          type: "richText",
+          type: FormElementTypes.richText,
           properties: {
             titleEn: "",
             titleFr: "",
@@ -279,7 +280,7 @@ describe("useAllowPublish", () => {
       const translated = () => {
         isFormElementTranslated({
           id: 1,
-          type: "radio",
+          type: FormElementTypes.radio,
           properties: {
             titleEn: "title",
             titleFr: "titlefr",
@@ -301,7 +302,7 @@ describe("useAllowPublish", () => {
       const titleNotTranslated = () => {
         isFormElementTranslated({
           id: 1,
-          type: "radio",
+          type: FormElementTypes.radio,
           properties: {
             titleEn: "title",
             titleFr: "",
@@ -324,7 +325,7 @@ describe("useAllowPublish", () => {
     const descriptionNotProvided = () => {
       isFormElementTranslated({
         id: 1,
-        type: "radio",
+        type: FormElementTypes.radio,
         properties: {
           titleEn: "title",
           titleFr: "titlefr",
@@ -347,7 +348,7 @@ describe("useAllowPublish", () => {
     const descriptionNotTranslated = () => {
       isFormElementTranslated({
         id: 1,
-        type: "radio",
+        type: FormElementTypes.radio,
         properties: {
           titleEn: "title",
           titleFr: "titlefr",
@@ -370,7 +371,7 @@ describe("useAllowPublish", () => {
     const optionNotTranslated = () => {
       isFormElementTranslated({
         id: 1,
-        type: "radio",
+        type: FormElementTypes.radio,
         properties: {
           titleEn: "title",
           titleFr: "titlefr",
@@ -392,7 +393,7 @@ describe("useAllowPublish", () => {
     const optionNotProvided = () => {
       isFormElementTranslated({
         id: 1,
-        type: "radio",
+        type: FormElementTypes.radio,
         properties: {
           titleEn: "title",
           titleFr: "titlefr",

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../icons/RocketIcon";
-import { Button } from "../shared/Button";
+import { themes } from "../shared/Button";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 const getHost = () => {
   if (typeof window === "undefined") return "";
@@ -24,7 +24,6 @@ export const Published = ({ id }: { id: string }) => {
   }, [resetForm]);
 
   const { t } = useTranslation("form-builder");
-  const router = useRouter();
   return (
     <div>
       <div className="p-7 mb-10 flex bg-green-50">
@@ -59,13 +58,11 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
-          <Button
-            onClick={() => {
-              router.push({ pathname: `/myforms` });
-            }}
-          >
-            {t("publishedBack")}
-          </Button>
+          <Link href="/myforms">
+            <a href="/myforms" className={`${themes.primary} ${themes.base} ${themes.htmlLink}`}>
+              {t("publishedBack")}
+            </a>
+          </Link>
         )}
       </div>
     </div>

@@ -43,14 +43,14 @@ export const LeftNavigation = ({
   return (
     <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
       <Button
-        isCurrentTab={["create", "translate", "settings"].includes(currentTab)}
+        isCurrentTab={["create", "translate"].includes(currentTab)}
         icon={<DesignIcon className={iconClassname} />}
         handleClick={handleClick("create")}
       >
         {t("edit")}
       </Button>
       <Button
-        isCurrentTab={["preview", "test-data-delivery"].includes(currentTab)}
+        isCurrentTab={["preview", "test-data-delivery", "settings"].includes(currentTab)}
         icon={<PreviewIcon className={iconClassname} />}
         handleClick={handleClick("preview")}
       >

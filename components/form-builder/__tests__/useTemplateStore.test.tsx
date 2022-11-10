@@ -86,7 +86,12 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[0].properties.titleEn).toBe("");
     // By default, there is one choice available
     expect(result.current.form.elements[0].properties.choices).toHaveLength(1);
-    expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
+
+    if (result.current.form.elements[0].properties.choices) {
+      expect(result.current.form.elements[0].properties.choices[0]).toEqual({ en: "", fr: "" });
+    } else {
+      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
+    }
 
     // Add a choice to the element
     act(() => {
@@ -95,7 +100,12 @@ describe("TemplateStore", () => {
 
     // Default choice expectations
     expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
-    expect(result.current.form.elements[0].properties.choices[1]).toEqual({ en: "", fr: "" });
+
+    if (result.current.form.elements[0].properties.choices) {
+      expect(result.current.form.elements[0].properties.choices[1]).toEqual({ en: "", fr: "" });
+    } else {
+      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
+    }
   });
 
   it("Updates existing choices", () => {
@@ -108,10 +118,14 @@ describe("TemplateStore", () => {
       result.current.updateField(`form.elements[0].properties.choices[0].fr`, "l’option 1!!");
     });
 
-    expect(result.current.form.elements[0].properties.choices[0]).toEqual({
-      en: "option 1!!",
-      fr: "l’option 1!!",
-    });
+    if (result.current.form.elements[0].properties.choices) {
+      expect(result.current.form.elements[0].properties.choices[0]).toEqual({
+        en: "option 1!!",
+        fr: "l’option 1!!",
+      });
+    } else {
+      expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
+    }
   });
 
   it("Removes choices", () => {
@@ -218,8 +232,12 @@ describe("TemplateStore", () => {
     });
 
     expect(result.current.form.elements[0].type).toBe("textField");
-    expect(result.current.form.elements[0].properties.validation.required).toBe(false);
-    expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+    if (result.current.form.elements[0].properties.validation) {
+      expect(result.current.form.elements[0].properties.validation.required).toBe(false);
+      expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+    } else {
+      expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
+    }
   });
 
   it("Removes a validation type", () => {
@@ -233,15 +251,23 @@ describe("TemplateStore", () => {
     });
 
     expect(result.current.form.elements[0].type).toBe("textField");
-    expect(result.current.form.elements[0].properties.validation.required).toBe(false);
-    expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+    if (result.current.form.elements[0].properties.validation) {
+      expect(result.current.form.elements[0].properties.validation.required).toBe(false);
+      expect(result.current.form.elements[0].properties.validation.type).toBe("email");
+    } else {
+      expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
+    }
 
     act(() => {
       result.current.unsetField(`form.elements[0].properties.validation.type`);
     });
 
-    expect(result.current.form.elements[0].properties.validation.required).toBe(false);
-    expect(result.current.form.elements[0].properties.validation.type).toBeUndefined();
+    if (result.current.form.elements[0].properties.validation) {
+      expect(result.current.form.elements[0].properties.validation.required).toBe(false);
+      expect(result.current.form.elements[0].properties.validation.type).toBeUndefined();
+    } else {
+      expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
+    }
   });
 
   it("Initializes the default form", () => {
