@@ -63,15 +63,13 @@ export const LeftNavigation = ({
       >
         {t("share")}
       </Button>
-      {status === "authenticated" && (
-        <Button
-          isCurrentTab={currentTab === "publish"}
-          icon={<PublishIcon className={iconClassname} />}
-          handleClick={handleClick("publish")}
-        >
-          {t("publish")}
-        </Button>
-      )}
+      <Button
+        isCurrentTab={currentTab === "publish"}
+        icon={<PublishIcon className={iconClassname} />}
+        handleClick={handleClick("publish")}
+      >
+        {t("publish")}
+      </Button>
     </nav>
   );
 };
