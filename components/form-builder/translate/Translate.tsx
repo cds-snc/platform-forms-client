@@ -144,7 +144,7 @@ export const Translate = () => {
 
         <FlexDiv>
           <FlexDiv>
-            <LangSpan>{translationLanguagePriority === "en" ? "English" : "French"}</LangSpan>
+            <LangSpan>{translationLanguagePriority === "en" ? t("english") : t("french")}</LangSpan>
             <Button
               className="mx-4"
               onClick={switchLanguage}
@@ -152,7 +152,7 @@ export const Translate = () => {
             >
               {t("switch")}
             </Button>
-            <LangSpan>{translationLanguagePriority === "en" ? "French" : "English"}</LangSpan>
+            <LangSpan>{translationLanguagePriority === "en" ? t("french") : t("english")}</LangSpan>
           </FlexDiv>
           <DownloadCSV />
         </FlexDiv>
