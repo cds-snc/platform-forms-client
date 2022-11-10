@@ -298,7 +298,7 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-small_base block font-normal text-base flex items-center;
+  @apply md:text-small_base font-normal text-base flex items-center;
 
   .checkbox-label-text,
   .radio-label-text {
