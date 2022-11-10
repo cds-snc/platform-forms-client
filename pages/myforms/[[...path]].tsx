@@ -13,6 +13,7 @@ import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { NextPageWithLayout } from "@pages/_app";
+import Link from "next/link";
 
 interface FormsDataItem {
   id: string;
@@ -91,9 +92,9 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </TabPanel>
 
       <div className="absolute top-48">
-        <a href="/admin/form-builder">
+        <Link href="/form-builder/create">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-        </a>
+        </Link>
       </div>
     </div>
   );
