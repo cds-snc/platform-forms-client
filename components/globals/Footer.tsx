@@ -1,31 +1,26 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import PropTypes from "prop-types";
 import { isSplashPage } from "@lib/routeUtils";
 
-const Footer = ({ disableGcBranding }) => {
+const Footer = ({ disableGcBranding }: { disableGcBranding?: boolean }) => {
   const { t } = useTranslation("common");
 
   return (
-    <footer className="gc-footer" data-testid="footer">
-      <div className="gc-footer-container items-start">
+    <footer className="lg:mt-10 border-0 bg-gray-100 mt-16 flex-none" data-testid="footer">
+      <div className="xs:px-4 md:px-8 lg:flex-col lg:items-start lg:gap-4 lg:px-16 xl:px-32 xxl:px-48 flex py-10 px-64 flex-row items-center justify-between">
         <div>
           {!isSplashPage() && <a href={t("footer.terms.link")}>{t("footer.terms.desc")}</a>}
         </div>
         {!disableGcBranding && (
           <div>
             <picture>
-              <img alt={t("fip.text")} src="/img/wmms-blk.svg" />
+              <img className="lg:h-8 h-10" alt={t("fip.text")} src="/img/wmms-blk.svg" />
             </picture>
           </div>
         )}
       </div>
     </footer>
   );
-};
-
-Footer.propTypes = {
-  disableGcBranding: PropTypes.bool,
 };
 
 export default Footer;

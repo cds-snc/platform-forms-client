@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Footer from "./Footer";
+import Footer from "../Footer";
 import Head from "next/head";
-import PhaseBanner from "./PhaseBanner";
-import SkipLink from "./SkipLink";
-import Fip from "./Fip";
+import PhaseBanner from "../PhaseBanner";
+import SkipLink from "../SkipLink";
+import Fip from "../Fip";
 
 const Base = ({ children }: React.PropsWithChildren) => {
   return (
-    <>
+    <div className="flex flex-col h-full">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
@@ -22,10 +22,12 @@ const Base = ({ children }: React.PropsWithChildren) => {
         <Fip />
       </header>
 
-      <main id="content">{children}</main>
+      <main id="content" className="grow shrink-0 basis-auto">
+        {children}
+      </main>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

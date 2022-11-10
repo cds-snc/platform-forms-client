@@ -3,7 +3,7 @@ import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
@@ -11,6 +11,8 @@ import { CardProps } from "@components/myforms/Card/Card";
 import { Tabs } from "@components/myforms/Tabs/Tabs";
 import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import { NextPageWithLayout } from "@pages/_app";
 
 interface FormsDataItem {
   id: string;
@@ -24,7 +26,7 @@ interface MyFormsProps {
   templates: Array<FormsDataItem>;
 }
 
-export default function RenderMyForms({ templates }: MyFormsProps) {
+const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsProps) => {
   const router = useRouter();
   const path = String(router.query?.path);
   const { t, i18n } = useTranslation(["my-forms"]);
@@ -80,7 +82,7 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
       </Tabs>
 
       <div className="mb-6">
-        <a href="/admin/form-builder">
+        <a href="/form-builder">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
         </a>
       </div>
@@ -96,7 +98,11 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
       </TabPanel>
     </div>
   );
-}
+};
+
+RenderMyForms.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(
   async ({ user: { ability, id }, locale }) => {
@@ -129,3 +135,5 @@ export const getServerSideProps = requireAuthentication(
     }
   }
 );
+
+export default RenderMyForms;

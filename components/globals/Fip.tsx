@@ -6,27 +6,23 @@ import LanguageToggle from "./LanguageToggle";
 import { getProperty } from "@lib/formBuilder";
 import { isSplashPage, isPublicPage } from "@lib/routeUtils";
 import Menu from "@components/auth/LoginMenu";
+import { PublicFormRecord } from "@lib/types";
 
-const Fip = (props) => {
+const Fip = ({ formRecord }: { formRecord?: PublicFormRecord }) => {
   const { t, i18n } = useTranslation("common");
 
   // Check if custom branding was provided, otherwise show the Government of Canada branding
-  const formTheme = props.formRecord?.form ? props.formRecord.form.brand : null;
+  const formTheme = formRecord?.form ? formRecord.form.brand : null;
 
   const logo =
-    formTheme && formTheme[getProperty("logo", i18n.language)]
-      ? formTheme[getProperty("logo", i18n.language)]
-      : "/img/sig-blk-" + i18n.language + ".svg";
+    (formTheme?.[getProperty("logo", i18n.language)] as string | undefined) ??
+    "/img/sig-blk-" + i18n.language + ".svg";
 
   const linkUrl =
-    formTheme && formTheme[getProperty("url", i18n.language)]
-      ? formTheme[getProperty("url", i18n.language)]
-      : t("fip.link");
+    (formTheme?.[getProperty("url", i18n.language)] as string | undefined) ?? t("fip.link");
 
   const logoTitle =
-    formTheme && formTheme[getProperty("logoTitle", i18n.language)]
-      ? formTheme[getProperty("logoTitle", i18n.language)]
-      : t("fip.text");
+    (formTheme?.[getProperty("logoTitle", i18n.language)] as string | undefined) ?? t("fip.text");
 
   const { status } = useSession();
 
@@ -45,10 +41,6 @@ const Fip = (props) => {
       </div>
     </div>
   );
-};
-
-Fip.propTypes = {
-  formRecord: PropTypes.object,
 };
 
 export default Fip;

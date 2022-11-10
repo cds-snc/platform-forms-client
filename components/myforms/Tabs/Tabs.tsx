@@ -11,7 +11,11 @@ export const Tabs = (props: TabsProps): React.ReactElement => {
 
   return (
     <nav className="mb-14">
-      <ul className="gc-horizontal-list" role="tablist" aria-labelledby={labeledby}>
+      <ul
+        className="flex flex-row gap-4 text-base list-none p-0"
+        role="tablist"
+        aria-labelledby={labeledby}
+      >
         {children &&
           children?.length > 0 &&
           children.map((child, index) => {

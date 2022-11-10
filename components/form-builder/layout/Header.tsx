@@ -27,9 +27,10 @@ export const Header = () => {
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
       <div className="container--wet">
-        <div className="flex" style={{ justifyContent: "space-between" }}>
+        <div className="flex justify-between">
           <div>
             <button
+              type="button"
               onClick={handleClick("start")}
               className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
             >

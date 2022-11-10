@@ -32,7 +32,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
   return ready ? <Layout /> : <main className="container--wet" />;
 };
 
-Page.getLayout = function getLayout(page: ReactElement) {
+Page.getLayout = (page: ReactElement) => {
   return (
     <NavigationStoreProvider currentTab={page.props.tab as string}>
       <TemplateStoreProvider

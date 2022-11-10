@@ -12,7 +12,7 @@ import { PublicFormRecord, FormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "@pages/_app";
 
-import FormDisplayLayout from "@components/globals/FormDisplayLayout";
+import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
 /* The Dynamic form component is the outer stateful component which renders either a form step or a
     form text page based on the step
