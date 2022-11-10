@@ -62,7 +62,7 @@ export const Layout = () => {
     switch (tab) {
       case "start":
         return (
-          <div className="col-span-12">
+          <div id="content" className="col-span-12">
             <Start changeTab={setTab} />
           </div>
         );
@@ -70,22 +70,28 @@ export const Layout = () => {
         return (
           <div className="col-start-4 col-span-9">
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <ElementPanel />
+            <div id="content">
+              <ElementPanel />
+            </div>
           </div>
         );
       case "preview":
         return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <Preview />
+            <div id="content">
+              <Preview />
+            </div>
           </div>
         );
       case "test-data-delivery":
         return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
-            <TestDataDelivery />
+            <div id="content">
+              <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
+              <TestDataDelivery />
+            </div>
           </div>
         ) : (
           setTab("create")
@@ -94,25 +100,27 @@ export const Layout = () => {
         return (
           <div className="col-start-4 col-span-9">
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <Translate />
+            <div id="content">
+              <Translate />
+            </div>
           </div>
         );
       case "share":
         return (
-          <div className="col-start-4 col-span-9">
+          <div id="content" className="col-start-4 col-span-9">
             <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
             <Share />
           </div>
         );
       case "publish":
         return (
-          <div className="col-start-4 col-span-9">
+          <div id="content" className="col-start-4 col-span-9">
             <Publish />
           </div>
         );
       case "published":
         return status === "authenticated" ? (
-          <div className="col-start-4 col-span-9">
+          <div id="content" className="col-start-4 col-span-9">
             <Published id={id} />
           </div>
         ) : (
@@ -122,13 +130,15 @@ export const Layout = () => {
         return (
           <div className="col-start-4 col-span-9">
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1 className="visually-hidden">Form settings</h1>
-            <Settings />
+            <div id="content">
+              <h1 className="visually-hidden">Form settings</h1>
+              <Settings />
+            </div>
           </div>
         );
       default:
         return (
-          <div className="col-span-12">
+          <div id="content" className="col-span-12">
             <Start changeTab={setTab} />
           </div>
         );

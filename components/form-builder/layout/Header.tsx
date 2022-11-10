@@ -11,6 +11,7 @@ import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { usePublish } from "../hooks/usePublish";
 import { Button, withMessage } from "../shared/Button";
+import { SkipLink } from "../shared/SkipLink";
 
 export const Header = () => {
   const { getSchema, id, setId } = useTemplateStore((s) => ({
@@ -54,6 +55,7 @@ export const Header = () => {
 
   return (
     <div className="border-b-3 border-blue-dark mt-10 mb-10">
+      <SkipLink />
       <div className="container--wet">
         <div className="flex" style={{ justifyContent: "space-between" }}>
           <div>
