@@ -51,7 +51,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   return (
     <Actions className="panel-actions">
       <Label>
-        <LockIcon /> {t("Locked element")}
+        <LockIcon /> {t("lockedElement")}
       </Label>
       {addElement && (
         <AddButtonWrapper>
@@ -65,7 +65,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
             theme="secondary"
             className="!border-1.5 !py-2 !px-4 leading-6"
           >
-            {t("Add element")}
+            {t("addElement")}
           </Button>
         </AddButtonWrapper>
       )}

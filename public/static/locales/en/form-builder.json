@@ -116,5 +116,18 @@
   "formatItalic": "Format italic",
   "formatBulletList": "Format bullet list",
   "formatNumberedList": "Format numbered list",
-  "insertLink": "Insert link"
+  "insertLink": "Insert link",
+  "addElement": "Add element",
+  "more": "More",
+  "moreOptions": "More options",
+  "remove": "Remove",
+  "duplicate": "Duplicate",
+  "moveDown": "Move down",
+  "moveUp": "Move up",
+  "lockedElement": "Locked element",
+  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\">Directive on Privacy Practices</a>",
+  "formIntroduction": "Form introduction",
+  "description": "Description",
+  "pageText": "Page text",
+  "confirmationMessage": "Confirmation message"
 }

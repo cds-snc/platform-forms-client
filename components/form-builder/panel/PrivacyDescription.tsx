@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import React from "react";
 import styled from "styled-components";
 
@@ -6,15 +7,12 @@ const StyledDiv = styled.div`
   margin-bottom: 20px;
 `;
 
+const { t } = useTranslation("form-builder");
+
 export const PrivacyDescription = () => {
   return (
     <StyledDiv>
-      <p>
-        You are responsible for drafting privacy notices that follow the requirements of the{" "}
-        <a href="https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309">
-          Directive on Privacy Practices
-        </a>
-      </p>
+      <p>{t("privacyNoticeDescription")}</p>
     </StyledDiv>
   );
 };
