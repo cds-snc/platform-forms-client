@@ -150,8 +150,7 @@ export const Publish = () => {
             role="alert"
             className={`inline-block ml-5 py-1 px-3 
             ${error ? "text-red-destructive bg-red-100" : ""}
-            ${id ? "text-green-darker bg-green-100" : ""} 
-            ${!id && !error ? "hidden" : ""}`}
+            ${!error ? "hidden" : ""}`}
           >
             <>{error && <p>There was an error publishing the form</p>}</>
           </div>

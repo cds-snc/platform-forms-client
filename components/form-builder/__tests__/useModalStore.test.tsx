@@ -1,6 +1,7 @@
 import useModalStore, { defaultProperties } from "../store/useModalStore";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
+import { HTMLTextInputTypeAttribute } from "@lib/types";
 
 const createStore = () => {
   const { result } = renderHook(() => useModalStore());
@@ -51,7 +52,7 @@ describe("ModalStore", () => {
       const validation = {
         required: false,
         maxLength: 100,
-        type: "email",
+        type: "email" as HTMLTextInputTypeAttribute,
       };
       result.current.updateModalProperties(0, {
         ...defaultProperties,
@@ -59,17 +60,17 @@ describe("ModalStore", () => {
       });
     });
 
-    expect(result.current.modals[0].validation.required).toEqual(false);
-    expect(result.current.modals[0].validation.type).toEqual("email");
-    expect(result.current.modals[0].validation.maxLength).toEqual(100);
+    expect(result.current.modals[0].validation?.required).toEqual(false);
+    expect(result.current.modals[0].validation?.type).toEqual("email");
+    expect(result.current.modals[0].validation?.maxLength).toEqual(100);
 
     act(() => {
       result.current.unsetModalField("modals[0].validation.maxLength");
     });
 
-    expect(result.current.modals[0].validation.required).toEqual(false);
-    expect(result.current.modals[0].validation.type).toEqual("email");
-    expect(result.current.modals[0].validation.maxLength).toBeUndefined();
+    expect(result.current.modals[0].validation?.required).toEqual(false);
+    expect(result.current.modals[0].validation?.type).toEqual("email");
+    expect(result.current.modals[0].validation?.maxLength).toBeUndefined();
   });
 
   it("Adds new modal", () => {

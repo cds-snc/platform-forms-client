@@ -48,21 +48,7 @@ export const Settings = () => {
           }}
         />
       </div>
-      {status === "authenticated" && (
-        <div className="mb-10">
-          <Label htmlFor="format">{t("settingsFormatTitle")}</Label>
-          <HintText id="format-hint">{t("settingsFormatHint")}</HintText>
-          <select
-            id="format"
-            className="w-1/2 py-2 px-3 my-2 rounded border-2 border-black-default border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus"
-          >
-            <option value="pdf">{t("settingsFormatOption1")}</option>
-            <option value="paper">{t("settingsFormatOption2")}</option>
-            <option value="work">{t("settingsFormatOption3")}</option>
-            <option value="other">{t("settingsFormatOption4")}</option>
-          </select>
-        </div>
-      )}
+
       {status === "authenticated" && (
         <div className="mb-10">
           <Label htmlFor="delete">{t("settingsDeleteTitle")}</Label>
