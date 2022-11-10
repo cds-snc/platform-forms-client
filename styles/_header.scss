@@ -61,8 +61,6 @@
 }
 
 header {
-  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 px-48;
-
   .canada-flag {
     @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
 
