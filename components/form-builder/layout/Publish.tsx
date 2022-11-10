@@ -103,22 +103,22 @@ export const Publish = () => {
 
       <ul className="list-none p-0">
         <li className="mb-4 mt-4">
+          <Icon checked={title} /> {t("formTitle")}
+        </li>
+        <li className="mb-4 mt-4">
           <Icon checked={questions} /> {t("questions")}
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={privacyPolicy} /> {t("privacyStatement")}
         </li>
         <li className="mb-4 mt-4">
+          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
+        </li>
+        <li className="mb-4 mt-4">
           <Icon checked={translate} /> {t("translate")}
         </li>
         <li className="mb-4 mt-4">
           <Icon checked={responseDelivery} /> {t("responseDelivery")}
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={title} /> {t("formTitle")}
-        </li>
-        <li className="mb-4 mt-4">
-          <Icon checked={confirmationMessage} /> {t("formConfirmationMessage")}
         </li>
       </ul>
 
