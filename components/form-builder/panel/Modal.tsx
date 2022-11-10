@@ -232,7 +232,7 @@ export const ModalContainer = ({
           </div>
           <div className="modal-footer">
             {saveButton}
-            <Button theme="secondary" onClick={close}>{t("Cancel")}</Button>
+            <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
           </div>
         </div>
     </StyledDialog>

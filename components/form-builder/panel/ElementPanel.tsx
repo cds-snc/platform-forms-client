@@ -41,13 +41,13 @@ const SelectedElement = ({
   switch (selected.id) {
     case "text":
     case "textField":
-      element = <ShortAnswer>{t("Short answer text")}</ShortAnswer>;
+      element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
       break;
     case "richText":
       element = <RichText parentIndex={item.index} />;
       break;
     case "textArea":
-      element = <ShortAnswer>{t("Long answer text")}</ShortAnswer>;
+      element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
       break;
     case "radio":
       element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
@@ -362,7 +362,7 @@ const ModalForm = ({
         />
       </ModalRow>
       <ModalRow>
-        <h3>Add rules</h3>
+        <h3>{t("addRules")}</h3>
       </ModalRow>
       <ModalRow>
         <Checkbox
