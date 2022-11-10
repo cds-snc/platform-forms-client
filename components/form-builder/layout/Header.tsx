@@ -26,7 +26,7 @@ export const Header = () => {
   const { ability } = useAccessControl();
   const currentTab = useNavigationStore((s) => s.currentTab);
   const setTab = useNavigationStore((s) => s.setTab);
-  const { t } = useTranslation(["form-builder", "common"]);
+  const { t } = useTranslation(["common", "form-builder"]);
 
   const handleClick = (tab: string) => {
     return (e: React.MouseEvent<HTMLElement>) => {
@@ -76,7 +76,7 @@ export const Header = () => {
         <div className="inline-flex gap-4">
           <div className="md:text-small_base text-base font-normal not-italic">
             {ability?.can("view", "FormRecord") && (
-              <Link href="/myforms">{t("adminNav.myforms")}</Link>
+              <Link href="/myforms">{t("adminNav.myForms")}</Link>
             )}
           </div>
           {<LoginMenu isAuthenticated={status === "authenticated"} />}

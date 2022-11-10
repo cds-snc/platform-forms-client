@@ -39,7 +39,7 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
           <div className="inline-flex gap-4">
             <div className="md:text-small_base text-base font-normal not-italic">
               {ability?.can("view", "FormRecord") && (
-                <Link href="/myforms">{t("adminNav.myforms")}</Link>
+                <Link href="/myforms">{t("adminNav.myForms")}</Link>
               )}
             </div>
             {<LoginMenu isAuthenticated={status === "authenticated"} />}

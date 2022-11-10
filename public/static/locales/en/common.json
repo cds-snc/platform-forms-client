@@ -65,7 +65,7 @@
     "login": "Login",
     "logout": "Logout",
     "privileges": "Privileges",
-    "myforms": "My Forms"
+    "myForms": "My Forms"
   },
   "formElements": {
     "characterCount": {
