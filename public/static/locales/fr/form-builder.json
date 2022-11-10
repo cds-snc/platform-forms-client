@@ -136,6 +136,7 @@
   "title": "[FR] Title",
   "toTestInstructions": "[FR] To test to see how you will gather form responses, please complete the following steps:",
   "translate": "[FR] Translate",
+  "translateDescription": "[FR] Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "[FR] Enter your translation",
   "unlockPublishing": "[FR] Unlock publishing",
   "unlockPublishingDescription": "[FR] To unlock publishing, provide the contact information of the person you report to.",
