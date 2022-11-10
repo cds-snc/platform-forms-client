@@ -55,8 +55,8 @@ export const Layout = () => {
         updateField("submission.email", data.user.email);
       }
     };
-    !email && setEmail();
-  }, [email, data]);
+    !email && currentTab !== "settings" && setEmail();
+  }, [email, data, currentTab]);
 
   const renderTab = (tab: string) => {
     switch (tab) {

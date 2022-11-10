@@ -54,6 +54,8 @@
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
   "saveButton": "Save",
+  "saveDownloadMessage": "Form file downloaded successfully",
+  "saveDraftMessage": "Form saved as a draft",
   "saveH2": "Save the form file on your computer",
   "saveH3": "Upload the form file again to edit",
   "saveP1": "We don’t save your form on our website, but don’t worry, you can save the file to your computer.",
