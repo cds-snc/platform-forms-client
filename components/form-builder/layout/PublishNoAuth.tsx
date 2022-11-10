@@ -14,12 +14,12 @@ export const PublishNoAuth = () => {
       {i18n.language === "en" ? (
         <p className="mb-0">
           To publish your form, {signIn} to your GC Forms account. If you do not have a GC Forms
-          account, {createOne}
+          account, {createOne}.
         </p>
       ) : (
         <p className="mb-0">
           FR To publish your form, {signIn} to your GC Forms account. If you do not have a GC Forms
-          account, {createOne}
+          account, {createOne}.
         </p>
       )}
     </>
