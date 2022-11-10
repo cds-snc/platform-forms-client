@@ -16,22 +16,11 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
   const { ability } = useAccessControl();
 
   return (
-    <nav className="gc-admin">
-      <ul className="gc-horizontal-list">
+    <nav className="border-t-1 border-b-1 mb-20 py-5">
+      <ul className="flex items-center list-none gap-8">
         <li className="gc-horizontal-item">
           <Link href="/admin/">{t("adminNav.dashboard")}</Link>
         </li>
-        {ability?.can("view", "FormRecord") && (
-          <li className="gc-horizontal-item">
-            <Link href="/myforms">{t("adminNav.myforms")}</Link>
-          </li>
-        )}
-        {ability?.can("update", "FormRecord") && (
-          <li className="gc-horizontal-item">
-            <Link href="/form-builder">{t("adminNav.formbuilder")}</Link>
-          </li>
-        )}
-
         {ability?.can("view", "User") && (
           <li className="gc-horizontal-item">
             <Link href="/admin/users">{t("adminNav.users")}</Link>
@@ -45,11 +34,6 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
         {ability?.can("create", "FormRecord") && (
           <li className="gc-horizontal-item">
             <Link href="/admin/upload">{t("adminNav.upload")}</Link>
-          </li>
-        )}
-        {ability?.can("view", "FormRecord") && (
-          <li className="gc-horizontal-item">
-            <Link href="/admin/view-templates">{t("adminNav.templates")}</Link>
           </li>
         )}
         {ability?.can("view", "Flag") && (

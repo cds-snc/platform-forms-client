@@ -1,7 +1,8 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/AcceptableUse";
+import { AcceptableUseTerms } from "@components/auth/AcceptableUse";
 import { requireAuthentication } from "@lib/auth";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
 import { Session } from "next-auth";
 interface TermsOfUse {
@@ -14,6 +15,10 @@ const TermsOfUse = ({ content }: TermsOfUse) => {
       <AcceptableUseTerms content={content} />
     </>
   );
+};
+
+TermsOfUse.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {

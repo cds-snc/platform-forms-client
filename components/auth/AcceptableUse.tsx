@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getCsrfToken } from "next-auth/react";
 
-export interface AcceptableUseProps {
+interface AcceptableUseProps {
   content: string;
 }
 export const AcceptableUseTerms = ({ content }: AcceptableUseProps): React.ReactElement => {

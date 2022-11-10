@@ -61,6 +61,16 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
   const session = await unstable_getServerSession(req, res, authOptions);
 
+  if (session && !session.user.acceptableUse) {
+    // If they haven't agreed to Acceptable Use redict to policy page for acceptance
+    return {
+      redirect: {
+        destination: `/${locale}/auth/policy`,
+        permanent: false,
+      },
+    };
+  }
+
   if (formID && session) {
     const ability = createAbility(session.user.privileges);
     checkPrivileges(ability, [{ action: "update", subject: "FormRecord" }]);

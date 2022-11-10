@@ -19,11 +19,7 @@ export const Tabs = (props: TabsProps): React.ReactElement => {
         {children &&
           children?.length > 0 &&
           children.map((child, index) => {
-            return (
-              <li className="gc-horizontal-item" key={`key-${index}-${labeledby}`}>
-                {child}
-              </li>
-            );
+            return <li key={`key-${index}-${labeledby}`}>{child}</li>;
           })}
       </ul>
     </nav>
