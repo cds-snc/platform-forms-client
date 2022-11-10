@@ -242,7 +242,7 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
               <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
                 {questionNumber}
               </span>
-              <LabelHidden htmlFor={`item${item.index}`}>{t("Question")}</LabelHidden>
+              <LabelHidden htmlFor={`item${item.index}`}>{t("question")}</LabelHidden>
               <QuestionInput
                 initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
                 index={item.index}
@@ -258,7 +258,7 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
           <SelectedElement item={item} selected={selectedItem} />
           {item.properties.validation?.maxLength && (
             <DivDisabled>
-              {t("Max character length: ")}
+              {t("maxCharacterLength")}
               {item.properties.validation?.maxLength}
             </DivDisabled>
           )}
@@ -286,7 +286,7 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
                       e.target.checked
                     );
                   }}
-                  label={t("Required")}
+                  label={t("required")}
                 ></Checkbox>
               </RequiredWrapper>
             </div>
@@ -329,11 +329,11 @@ const ModalForm = ({
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
       <ModalRow>
-        <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("Question")}</FormLabel>
+        <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</FormLabel>
         <Input
           id={`title--modal--${item.index}`}
           name={`item${item.index}`}
-          placeholder={t("Question")}
+          placeholder={t("question")}
           value={properties[localizeField(LocalizedElementProperties.TITLE)]}
           className="w-11/12"
           onChange={(e) =>
@@ -345,12 +345,8 @@ const ModalForm = ({
         />
       </ModalRow>
       <ModalRow>
-        <FormLabel>{t("Description")}</FormLabel>
-        <HintText>
-          {t(
-            "The description appears below the label, and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements."
-          )}
-        </HintText>
+        <FormLabel>{t("description")}</FormLabel>
+        <HintText>{t("descriptionDescription")}</HintText>
         <TextArea
           id={`description--modal--${item.index}`}
           placeholder={t("Description")}
@@ -383,20 +379,16 @@ const ModalForm = ({
               ...{ validation },
             });
           }}
-          label={t("Required")}
+          label={t("required")}
         ></Checkbox>
       </ModalRow>
       {item.type === FormElementTypes.textField &&
         (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
           <ModalRow>
             <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
-              {t("Maximum character length")}
+              {t("maximumCharacterLength")}
             </FormLabel>
-            <HintText>
-              {t(
-                "Only use a character limit when there is a good reason for limiting the number of characters users can enter."
-              )}
-            </HintText>
+            <HintText>{t("characterLimitDescription")}</HintText>
             <Input
               id={`characterLength--modal--${item.index}`}
               type="number"
@@ -485,7 +477,7 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
                 className="mr-4"
                 onClick={handleSubmit({ item, properties: modals[item.index] })}
               >
-                {t("Save")}
+                {t("save")}
               </Button>
             )}
           </ModalButton>
