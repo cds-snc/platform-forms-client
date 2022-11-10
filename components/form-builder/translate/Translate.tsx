@@ -162,13 +162,13 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Start")}</h2>
+            <h2>{t("start")}</h2>
             <hr />
           </div>
 
           <fieldset className="text-entry">
             <legend className="section-heading">
-              {t("Form introduction")}: {t("Title")}
+              {t("Form introduction")}: {t("title")}
             </legend>
             <div className="section-text">
               <label htmlFor="form-title-en" className="sr-only">
