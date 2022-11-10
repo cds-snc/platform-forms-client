@@ -17,31 +17,31 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
 
   return (
     <nav className="border-t-1 border-b-1 mb-20 py-5">
-      <ul className="flex items-center list-none gap-8">
-        <li className="gc-horizontal-item">
+      <ul className="lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none">
+        <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
           <Link href="/admin/">{t("adminNav.dashboard")}</Link>
         </li>
         {ability?.can("view", "User") && (
-          <li className="gc-horizontal-item">
+          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
             <Link href="/admin/users">{t("adminNav.users")}</Link>
           </li>
         )}
         {ability?.can("view", "Privilege") && (
-          <li className="gc-horizontal-item">
+          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
             <Link href="/admin/privileges">{t("adminNav.privileges")}</Link>
           </li>
         )}
         {ability?.can("create", "FormRecord") && (
-          <li className="gc-horizontal-item">
+          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
             <Link href="/admin/upload">{t("adminNav.upload")}</Link>
           </li>
         )}
         {ability?.can("view", "Flag") && (
-          <li className="gc-horizontal-item">
+          <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
             <Link href="/admin/flags">{t("adminNav.features")}</Link>
           </li>
         )}
-        <li className="gc-horizontal-item">
+        <li className="lg:pr-0 lg:pb-4 pr-8 pb-0">
           {(!user || !user.name) && (
             <Link href="/admin/login" locale={i18n.language}>
               {t("adminNav.login")}
