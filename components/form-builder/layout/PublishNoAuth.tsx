@@ -10,6 +10,7 @@ export const PublishNoAuth = () => {
     <>
       <h1 className="border-0 mb-2">{t("publishNoAuthTitle")}</h1>
       <h3 className="border-0 mb-5">{t("publishNoAuthSubTitle")}</h3>
+      {/* @todo look futher at "interpolation" or <Trans> component */}
       {i18n.language === "en" ? (
         <p className="mb-0">
           To publish your form, {signIn} to your GC Forms account. If you do not have a GC Forms
