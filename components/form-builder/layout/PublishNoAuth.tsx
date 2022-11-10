@@ -5,7 +5,7 @@ import Link from "next/link";
 export const PublishNoAuth = () => {
   const { t, i18n } = useTranslation("form-builder");
   const signIn = <Link href={`/${i18n.language}/auth/login`}>{t("signIn")}</Link>;
-  const createOne = <Link href={`/${i18n.language}/auth/login`}>{t("createOne")}</Link>;
+  const createOne = <Link href={`/${i18n.language}/auth/register`}>{t("createOne")}</Link>;
   return (
     <>
       <h1 className="border-0 mb-2">{t("publishNoAuthTitle")}</h1>
