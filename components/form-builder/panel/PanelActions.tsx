@@ -95,7 +95,7 @@ export const PanelActions = ({
           disabled={isFirstItem}
           onClick={() => moveUp(item.index)}
         >
-          <Label>{t("Move up")}</Label>
+          <Label>{t("moveUp")}</Label>
         </Button>
         <Button
           theme="secondary"
@@ -109,7 +109,7 @@ export const PanelActions = ({
           disabled={isLastItem}
           onClick={() => moveDown(item.index)}
         >
-          <Label>{t("Move down")}</Label>
+          <Label>{t("moveDown")}</Label>
         </Button>
       </UpDown>
 
@@ -124,7 +124,7 @@ export const PanelActions = ({
           duplicateElement(item.index);
         }}
       >
-        <Label>{t("Duplicate")}</Label>
+        <Label>{t("duplicate")}</Label>
       </Button>
 
       <Button
@@ -138,11 +138,11 @@ export const PanelActions = ({
           remove(item.id);
         }}
       >
-        <Label>{t("Remove")}</Label>
+        <Label>{t("remove")}</Label>
       </Button>
       {!isRichText && (
         <Modal
-          title="More options"
+          title={t("moreOptions")}
           openButton={
             <Button
               theme="secondary"
@@ -153,7 +153,7 @@ export const PanelActions = ({
               }
               onClick={() => null}
             >
-              <Label>{t("More")}</Label>
+              <Label>{t("more")}</Label>
             </Button>
           }
           saveButton={renderSaveButton()}
@@ -171,7 +171,7 @@ export const PanelActions = ({
           theme="secondary"
           className="!border-1.5 !py-2 !px-4 leading-6"
         >
-          {t("Add element")}
+          {t("addElement")}
         </Button>
       </AddButtonWrapper>
     </Actions>

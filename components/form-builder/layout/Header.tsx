@@ -61,7 +61,7 @@ export const Header = () => {
               onClick={handleClick("start")}
               className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
             >
-              GC Forms
+              {t("gcForms")}
             </button>
             {currentTab !== "start" &&
               isSaveable() &&

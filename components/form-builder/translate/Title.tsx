@@ -24,7 +24,7 @@ export const Title = ({
     <>
       <fieldset className="text-entry">
         <legend className="section-heading">
-          {t(element.type)}: {t("Question title")}
+          {t(element.type)}: {t("questionTitle")}
         </legend>
         <div className="section-text">
           <label
