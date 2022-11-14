@@ -11,7 +11,7 @@ import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { usePublish } from "../hooks/usePublish";
 import { Button, withMessage } from "../shared/Button";
-import { SkipLink } from "../shared/SkipLink";
+import SkipLink from "../../globals/SkipLink";
 
 export const Header = () => {
   const { getSchema, id, setId } = useTemplateStore((s) => ({
