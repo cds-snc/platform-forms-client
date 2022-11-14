@@ -42,9 +42,7 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
           overrides: { h1: { component: H1 }, a: { component: A } },
         }}
       >
-        {children
-          .replace(/<br>/g, `${String.fromCharCode(10)}`)
-          .replace(/href/g, "rel='noreferrer' target='_blank' href")}
+        {children}
       </Markdown>
     </div>
   );
