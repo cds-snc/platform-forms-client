@@ -18,6 +18,14 @@ const H1 = ({ children, ...props }: { children: React.ReactElement }) => {
   );
 };
 
+const A = ({ children, ...props }: { children: React.ReactElement }) => {
+  return (
+    <a {...props} target="_blank">
+      {children}
+    </a>
+  );
+};
+
 export const RichText = (props: RichTextProps): React.ReactElement | null => {
   const { children, className, id } = props;
   if (!children) {
@@ -27,10 +35,14 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
   const classes = classnames("gc-richText", className);
   return (
     <div data-testid="richText" className={classes} id={id}>
-      <Markdown options={{ forceBlock: true, overrides: { h1: { component: H1 } } }}>
-        {children
-          .replace(/<br>/g, `${String.fromCharCode(10)}`)
-          .replace(/href/g, "rel='noreferrer' target='_blank' href")}
+      <Markdown
+        options={{
+          forceBlock: true,
+          disableParsingRawHTML: true,
+          overrides: { h1: { component: H1 }, a: { component: A } },
+        }}
+      >
+        {children}
       </Markdown>
     </div>
   );
