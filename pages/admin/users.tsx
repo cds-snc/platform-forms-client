@@ -148,27 +148,29 @@ const Users = ({
       <h1>{t("title")}</h1>
       {!selectedUser ? (
         <ul className="list-none p-0">
-          {allUsers.map((user) => {
-            return (
-              <li
-                className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
-                key={user.id}
-              >
-                <div className="grow basis-2/3 m-auto">
-                  <p>{user.name}</p>
-                  <p>{user.email}</p>
-                </div>
-
-                <Button
-                  type="button"
-                  className="w-auto rounded-md shrink-0 basis-1/3"
-                  onClick={() => setSelectedUser(user)}
+          {allUsers
+            .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
+            .map((user) => {
+              return (
+                <li
+                  className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
+                  key={user.id}
                 >
-                  {canManageUsers ? t("managePermissions") : t("viewPermissions")}{" "}
-                </Button>
-              </li>
-            );
-          })}
+                  <div className="grow basis-2/3 m-auto">
+                    <p>{user.name}</p>
+                    <p>{user.email}</p>
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="w-auto rounded-md shrink-0 basis-1/3"
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    {canManageUsers ? t("managePermissions") : t("viewPermissions")}{" "}
+                  </Button>
+                </li>
+              );
+            })}
         </ul>
       ) : (
         <ManageUser unselectUser={unselectUser} user={selectedUser} privileges={allPrivileges} />
