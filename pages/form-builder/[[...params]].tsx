@@ -49,7 +49,7 @@ Page.getLayout = (page: ReactElement) => {
         <div className="flex flex-col h-full">
           <SkipLink />
           <Header />
-          <main id="content">{page}</main>
+          {page}
           <Footer />
         </div>
       </TemplateStoreProvider>
