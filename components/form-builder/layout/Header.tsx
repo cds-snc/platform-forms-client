@@ -26,7 +26,7 @@ export const Header = () => {
   const { ability } = useAccessControl();
   const currentTab = useNavigationStore((s) => s.currentTab);
   const setTab = useNavigationStore((s) => s.setTab);
-  const { t } = useTranslation(["form-builder", "common"]);
+  const { t } = useTranslation(["common", "form-builder"]);
 
   const handleClick = (tab: string) => {
     return (e: React.MouseEvent<HTMLElement>) => {
@@ -53,37 +53,36 @@ export const Header = () => {
   const DownloadFileButtonWithMessage = withMessage(DownloadFileButton, t("saveDownloadMessage"));
 
   return (
-    <div className="border-b-3 border-blue-dark mt-10 mb-10">
-      <div className="container--wet">
-        <div className="flex" style={{ justifyContent: "space-between" }}>
-          <div>
-            <button
-              onClick={handleClick("start")}
-              className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
-            >
-              GC Forms
-            </button>
-            {currentTab !== "start" &&
-              isSaveable() &&
-              (status === "authenticated" ? (
-                <ButtonWithMessage className="ml-4" onClick={handlePublish}>
-                  {t("save")}
-                </ButtonWithMessage>
-              ) : (
-                <DownloadFileButtonWithMessage className="!py-1 !px-4" />
-              ))}
+    <header className="border-b-3 border-blue-dark my-10">
+      <div className="flex justify-between">
+        <div>
+          <button
+            type="button"
+            onClick={handleClick("start")}
+            className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
+          >
+            {t("title")}
+          </button>
+          {currentTab !== "start" &&
+            isSaveable() &&
+            (status === "authenticated" ? (
+              <ButtonWithMessage className="ml-4" onClick={handlePublish}>
+                {t("save")}
+              </ButtonWithMessage>
+            ) : (
+              <DownloadFileButtonWithMessage className="!py-1 !px-4" />
+            ))}
+        </div>
+        <div className="inline-flex gap-4">
+          <div className="md:text-small_base text-base font-normal not-italic">
+            {ability?.can("view", "FormRecord") && (
+              <Link href="/myforms">{t("adminNav.myForms", { ns: "common" })}</Link>
+            )}
           </div>
-          <div className="inline-flex">
-            <div className="gc-login-menu mr-3">
-              {ability?.can("view", "FormRecord") && (
-                <Link href="/myforms">{t("adminNav.myforms", { ns: "common" })}</Link>
-              )}
-            </div>
-            {<LoginMenu isAuthenticated={status === "authenticated"} />}
-            {<LanguageToggle />}
-          </div>
+          {<LoginMenu isAuthenticated={status === "authenticated"} />}
+          {<LanguageToggle />}
         </div>
       </div>
-    </div>
+    </header>
   );
 };

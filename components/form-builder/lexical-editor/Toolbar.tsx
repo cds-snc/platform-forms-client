@@ -10,6 +10,7 @@ import { Link } from "@styled-icons/material/Link";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
 import { TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { useTranslation } from "next-i18next";
 
 import {
   $isListNode,
@@ -234,12 +235,13 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
     );
   }, [editor, updateToolbar]);
 
-  // @TODO: aria-controls below needs an id for the editor
+  const { t } = useTranslation("form-builder");
+
   return (
     <>
       <ToolbarContainer
         role="toolbar"
-        aria-label="Text formatting"
+        aria-label={t("textFormatting")}
         aria-controls={editorId}
         onKeyDown={handleNav}
       >
@@ -255,7 +257,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             formatHeading("h2");
           }}
           className={"toolbar-item spaced " + (blockType === "h2" ? "active" : "")}
-          aria-label="Format H2"
+          aria-label={t("formatH2")}
         >
           <LooksTwo size={20} />
         </button>
@@ -272,7 +274,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             formatHeading("h3");
           }}
           className={"toolbar-item spaced " + (blockType === "h3" ? "active" : "")}
-          aria-label="Format H3"
+          aria-label={t("formatH3")}
         >
           <Looks3 size={20} />
         </button>
@@ -289,7 +291,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
           }}
           className={"toolbar-item " + (isBold ? "active" : "")}
-          aria-label="Format Bold"
+          aria-label={t("formatBold")}
         >
           <FormatBold size={20} />
         </button>
@@ -306,7 +308,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
           className={"toolbar-item " + (isItalic ? "active" : "")}
-          aria-label="Format Italic"
+          aria-label={t("formatItalic")}
         >
           <FormatItalic size={20} />
         </button>
@@ -321,7 +323,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           onClick={formatBulletList}
           className={"toolbar-item " + (blockType === "bullet" ? "active" : "")}
-          aria-label="Format list bulleted"
+          aria-label={t("formatBulletList")}
         >
           <FormatListBulleted size={20} />
         </button>
@@ -336,7 +338,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           onClick={formatNumberedList}
           className={"toolbar-item " + (blockType === "number" ? "active" : "")}
-          aria-label="Format list numbered"
+          aria-label={t("formatNumberedList")}
         >
           <FormatListNumbered size={20} />
         </button>
@@ -352,8 +354,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           disabled={!isEditable}
           onClick={insertLink}
           className={"toolbar-item " + (isLink ? "active" : "")}
-          aria-label="Insert link"
-          title="Insert link"
+          aria-label={t("insertLink")}
         >
           <Link size={20} />
         </button>

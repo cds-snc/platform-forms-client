@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React from "react";
 import styled from "styled-components";
 
@@ -13,19 +14,12 @@ const StyledUl = styled.ul`
 export const ConfirmationDescription = () => {
   return (
     <StyledDiv>
-      <p>
-        The confirmation message will appear on a new page once the form has been submitted.{" "}
-        <a href="http://canada.ca">Find out more about what should be included</a>. Some useful
-        things you can add to your confirmation page are:
-      </p>
+      <p>{t("confirmationDescriptionParagraph")}</p>
       <StyledUl>
-        <li>details of what happens next and when</li>
-        <li>contact details for the service</li>
-        <li>links to information or services that users are likely to need next</li>
-        <li>
-          a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to
-          be launched along with your main form)
-        </li>
+        <li>{t("confirmationDescriptionItem1")}</li>
+        <li>{t("confirmationDescriptionItem2")}</li>
+        <li>{t("confirmationDescriptionItem3")}</li>
+        <li>{t("confirmationDescriptionItem4")}</li>
       </StyledUl>
     </StyledDiv>
   );

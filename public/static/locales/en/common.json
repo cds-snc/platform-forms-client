@@ -44,7 +44,8 @@
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
   "server-error": "Oops, looks like there was a problem submitting your form.  Please try again later.",
-  "title": "GC Forms - Formulaires GC",
+  "title-full": "GC Forms - Formulaires GC",
+  "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
   "spam-error": {
     "error-part-1": "Button can not be used in less than",
@@ -65,7 +66,7 @@
     "login": "Login",
     "logout": "Logout",
     "privileges": "Privileges",
-    "myforms": "My Forms"
+    "myForms": "My Forms"
   },
   "formElements": {
     "characterCount": {
@@ -81,9 +82,7 @@
   },
   "acceptableUsePage": {
     "agree": "Agree",
-    "cancel": "Cancel",
-    "welcome": "Welcome back",
-    "lastLoginTime": "Last log-in"
+    "welcome": "Know your responsibilities"
   },
   "loginMenu": {
     "login": "Sign in",

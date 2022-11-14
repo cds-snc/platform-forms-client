@@ -3,13 +3,14 @@ import { requireAuthentication } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
 import { useRefresh } from "@lib/hooks";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { Button } from "@components/forms";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface User {
   privileges: Privilege[];
@@ -147,27 +148,29 @@ const Users = ({
       <h1>{t("title")}</h1>
       {!selectedUser ? (
         <ul className="list-none p-0">
-          {allUsers.map((user) => {
-            return (
-              <li
-                className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
-                key={user.id}
-              >
-                <div className="grow basis-2/3 m-auto">
-                  <p>{user.name}</p>
-                  <p>{user.email}</p>
-                </div>
-
-                <Button
-                  type="button"
-                  className="w-auto rounded-md shrink-0 basis-1/3"
-                  onClick={() => setSelectedUser(user)}
+          {allUsers
+            .sort((a, b) => (a.name && b.name ? a.name.localeCompare(b.name) : 0))
+            .map((user) => {
+              return (
+                <li
+                  className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
+                  key={user.id}
                 >
-                  {canManageUsers ? t("managePermissions") : t("viewPermissions")}{" "}
-                </Button>
-              </li>
-            );
-          })}
+                  <div className="grow basis-2/3 m-auto">
+                    <p>{user.name}</p>
+                    <p>{user.email}</p>
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="w-auto rounded-md shrink-0 basis-1/3"
+                    onClick={() => setSelectedUser(user)}
+                  >
+                    {canManageUsers ? t("managePermissions") : t("viewPermissions")}{" "}
+                  </Button>
+                </li>
+              );
+            })}
         </ul>
       ) : (
         <ManageUser unselectUser={unselectUser} user={selectedUser} privileges={allPrivileges} />
@@ -176,7 +179,9 @@ const Users = ({
   );
 };
 
-export default Users;
+Users.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   checkPrivileges(
@@ -206,3 +211,5 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     },
   };
 });
+
+export default Users;

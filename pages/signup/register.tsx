@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
@@ -9,8 +9,9 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
 import emailDomainList from "../../email.domains.json";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
-export default function Register() {
+const Register = () => {
   const { username, cognitoError, setCognitoError, register } = useAuth();
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
@@ -170,7 +171,11 @@ export default function Register() {
       )}
     </Formik>
   );
-}
+};
+
+Register.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -180,3 +185,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
+export default Register;
