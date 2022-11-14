@@ -2,7 +2,6 @@ import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
-import { storage } from "./storage";
 
 import {
   moveDown,
@@ -231,7 +230,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
         }),
         {
           name: "form-storage",
-          getStorage: () => storage,
+          getStorage: () => sessionStorage,
         }
       )
     )
