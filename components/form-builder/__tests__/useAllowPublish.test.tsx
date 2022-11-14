@@ -11,6 +11,26 @@ import {
 } from "../hooks/useAllowPublish";
 import { FormElementTypes } from "@lib/types";
 
+const localStorageMock = (() => {
+  let store: Record<string, unknown> = {};
+  return {
+    getItem(key: string) {
+      return store[key] || null;
+    },
+    setItem(key: string, value: string) {
+      store[key] = value.toString();
+    },
+    removeItem(key: string) {
+      delete store[key];
+    },
+    clear() {
+      store = {};
+    },
+  };
+})();
+
+Object.defineProperty(window, "sessionStorage", { value: localStorageMock });
+
 const createTemplateStore = ({ form, submission, isPublished }: Partial<TemplateStoreProps>) => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
     <TemplateStoreProvider form={form} submission={submission} isPublished={isPublished}>
