@@ -10,6 +10,7 @@ import { Link } from "@styled-icons/material/Link";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
 import { TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { useRichTextToolbarTranslations } from "../hooks/useRichTextToolbarTranslations";
 
 import {
   $isListNode,
@@ -235,12 +236,13 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
     );
   }, [editor, updateToolbar]);
 
-  // @TODO: aria-controls below needs an id for the editor
+  const translations = useRichTextToolbarTranslations();
+
   return (
     <>
       <ToolbarContainer
         role="toolbar"
-        aria-label="Text formatting"
+        aria-label={translations.textFormatting}
         aria-controls={editorId}
         onKeyDown={handleNav}
       >
@@ -256,7 +258,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             formatHeading("h2");
           }}
           className={"toolbar-item spaced " + (blockType === "h2" ? "active" : "")}
-          aria-label={t("formatH2")}
+          aria-label={translations.heading2}
         >
           <LooksTwo size={20} />
         </button>
@@ -273,7 +275,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             formatHeading("h3");
           }}
           className={"toolbar-item spaced " + (blockType === "h3" ? "active" : "")}
-          aria-label={t("formatH3")}
+          aria-label={translations.heading3}
         >
           <Looks3 size={20} />
         </button>
@@ -290,7 +292,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
           }}
           className={"toolbar-item " + (isBold ? "active" : "")}
-          aria-label={t("formatBold")}
+          aria-label={translations.bold}
         >
           <FormatBold size={20} />
         </button>
@@ -307,7 +309,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
           className={"toolbar-item " + (isItalic ? "active" : "")}
-          aria-label={t("formatItalic")}
+          aria-label={translations.italic}
         >
           <FormatItalic size={20} />
         </button>
@@ -322,7 +324,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           onClick={formatBulletList}
           className={"toolbar-item " + (blockType === "bullet" ? "active" : "")}
-          aria-label={t("formatBulletList")}
+          aria-label={translations.bulletList}
         >
           <FormatListBulleted size={20} />
         </button>
@@ -337,7 +339,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           onClick={formatNumberedList}
           className={"toolbar-item " + (blockType === "number" ? "active" : "")}
-          aria-label={t("formatNumberedList")}
+          aria-label={translations.numberList}
         >
           <FormatListNumbered size={20} />
         </button>
@@ -353,8 +355,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           disabled={!isEditable}
           onClick={insertLink}
           className={"toolbar-item " + (isLink ? "active" : "")}
-          aria-label={t("insertLink")}
-          title={t("insertLink")}
+          aria-label={translations.link}
         >
           <Link size={20} />
         </button>
