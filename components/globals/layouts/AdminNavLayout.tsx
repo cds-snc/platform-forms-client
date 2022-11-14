@@ -24,10 +24,11 @@ const AdminNavLayout = ({ children, user }: AdminNavLayoutProps) => {
       <header>
         <AdminNav user={user} />
       </header>
-
-      <main id="content" className="grow shrink-0 basis-auto">
-        {children}
-      </main>
+      <div id="page-container">
+        <main id="content" className="grow shrink-0 basis-auto">
+          {children}
+        </main>
+      </div>
 
       <Footer />
     </div>

@@ -41,7 +41,9 @@ const FormDisplayLayout = ({
             <Fip formRecord={formRecord} showLogin={false} showLanguageToggle={true} />
           </header>
         )}
-        <main id="content">{children}</main>
+        <div id="page-container">
+          <main id="content">{children}</main>
+        </div>
         {!embedded && <Footer disableGcBranding={formRecord.form.brand?.disableGcBranding} />}
       </div>
     </>

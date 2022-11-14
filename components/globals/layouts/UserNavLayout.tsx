@@ -47,7 +47,9 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
           </div>
         </div>
       </header>
-      <main id="content">{children}</main>
+      <div id="page-container">
+        <main id="content">{children}</main>
+      </div>
       <Footer />
     </div>
   );

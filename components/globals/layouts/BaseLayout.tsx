@@ -26,10 +26,9 @@ const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
         <PhaseBanner />
         <Fip {...{ showLanguageToggle, showLogin }} />
       </header>
-
-      <main id="content" className="grow shrink-0 basis-auto">
-        {children}
-      </main>
+      <div id="page-container">
+        <main id="content">{children}</main>
+      </div>
 
       <Footer />
     </div>
