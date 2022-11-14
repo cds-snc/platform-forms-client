@@ -10,6 +10,7 @@ import { Link } from "@styled-icons/material/Link";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
 import { TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { useTranslation } from "next-i18next";
 
 import {
   $isListNode,
@@ -30,7 +31,6 @@ import {
 import { $wrapNodes } from "@lexical/selection";
 import styled from "styled-components";
 import { sanitizeUrl } from "./utils/sanitizeUrl";
-import { t } from "i18next";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -235,12 +235,13 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
     );
   }, [editor, updateToolbar]);
 
-  // @TODO: aria-controls below needs an id for the editor
+  const { t } = useTranslation("form-builder");
+
   return (
     <>
       <ToolbarContainer
         role="toolbar"
-        aria-label="Text formatting"
+        aria-label={t("textFormatting")}
         aria-controls={editorId}
         onKeyDown={handleNav}
       >
@@ -354,7 +355,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={insertLink}
           className={"toolbar-item " + (isLink ? "active" : "")}
           aria-label={t("insertLink")}
-          title={t("insertLink")}
         >
           <Link size={20} />
         </button>
