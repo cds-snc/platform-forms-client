@@ -25,5 +25,6 @@
       "paragraph3": "You'll receive an email notification when publishing has been unlocked. [FR]",
       "paragraph4": "While you wait, you can continue to explore and draft forms. [FR]"
     }
-  }
+  },
+  "submissionError": "There was an error. Please try again later. [FR]"
 }
