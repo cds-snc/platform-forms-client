@@ -71,7 +71,7 @@ describe("Template CRUD functions", () => {
     const newTemplate = await createTemplate(
       ability,
       "1",
-      formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
+      formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
     );
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
@@ -277,7 +277,7 @@ describe("Template CRUD functions", () => {
     });
 
     const updatedFormConfig = structuredClone(
-      formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
+      formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
     );
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
@@ -428,7 +428,7 @@ describe("Template CRUD functions", () => {
       isPublished: false,
     };
 
-    const publicFormRecord = onlyIncludePublicProperties(formRecord as FormRecord);
+    const publicFormRecord = onlyIncludePublicProperties(formRecord as unknown as FormRecord);
     expect(publicFormRecord).not.toHaveProperty("submission");
     expect(publicFormRecord).not.toHaveProperty("internalTitleEn");
     expect(publicFormRecord).not.toHaveProperty("internalTitleFr");
@@ -449,7 +449,7 @@ describe("Template CRUD functions", () => {
       await createTemplate(
         ability,
         "1",
-        formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
+        formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
@@ -461,7 +461,9 @@ describe("Template CRUD functions", () => {
       await updateTemplate(
         ability,
         "test1",
-        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">)
+        structuredClone(
+          formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
+        )
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
@@ -487,7 +489,9 @@ describe("Template CRUD functions", () => {
       await updateTemplate(
         ability,
         "test1",
-        structuredClone(formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">)
+        structuredClone(
+          formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
+        )
       );
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
