@@ -4,9 +4,11 @@ import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon } from "../icons";
 import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
+import { useRouter } from "next/router";
 
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
 
   const importTemplate = useTemplateStore((s) => s.importTemplate);
   const [errors, setErrors] = useState("");
@@ -63,8 +65,9 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
       <div className="flex justify-center">
         <button
           className={boxClass}
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
+            await router.push({ pathname: "/form-builder/create" });
             changeTab("create");
           }}
         >
