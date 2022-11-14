@@ -6,6 +6,14 @@
   "true": "Oui",
   "false": "Non",
   "enable": "Activer",
+  "enabled": "Activer",
   "disable": "Désactiver",
-  "a11y-diable-desc": "les droits d'administrateur pour"
+  "disabled": "Désactiver",
+  "a11y-diable-desc": "les droits d'administrateur pour",
+  "managePermissions": "Gerer les permissions",
+  "viewPermissions": "Vissioner les permissions",
+  "save": "Sauvegarder",
+  "cancel": "Annuler",
+  "managePermissionsFor": "Gere les permissions de",
+  "assignUsersToTemplate": "Assigner des utilisateurs au formulaire"
 }

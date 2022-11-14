@@ -34,36 +34,45 @@ const createFlag = async (key, value, redis) => {
     .set(`flag:${key}`, value ? "1" : "0")
     .exec();
 };
-const initiateFlags = (redis) => {
+const initiateFlags = async (redis) => {
   console.log("Running flag initiation");
 
-  return checkAll(redis)
-    .then(async (currentFlags) => {
-      console.log("Checking for Depreceated Flags");
-      for (const key in currentFlags) {
-        if (typeof initialFlags[key] === "undefined" || initialFlags[key] === null) {
-          console.log(`Removing flag: ${key} from flag registry`);
-          await removeFlag(key, redis);
-        }
+  try {
+    let currentFlags = await checkAll(redis);
+
+    console.log("Checking for Depreceated Flags");
+    const removeFlags = [];
+    for (const key in currentFlags) {
+      if (typeof initialFlags[key] === "undefined" || initialFlags[key] === null) {
+        removeFlags.push(
+          (() => {
+            console.log(`Removing flag: ${key} from flag registry`);
+            return removeFlag(key, redis);
+          })()
+        );
       }
-      return checkAll(redis);
-    })
-    .then(async (currentFlags) => {
-      console.log("Checking for New Flags");
-      for (const key in initialFlags) {
-        if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
-          console.log(`Creating flag: ${key} with value ${initialFlags[key]}`);
-          await createFlag(key, initialFlags[key], redis);
-        }
+    }
+    await Promise.all(removeFlags);
+
+    currentFlags = await checkAll(redis);
+    console.log("Checking for New Flags");
+    const addFlags = [];
+    for (const key in initialFlags) {
+      if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
+        addFlags.push(
+          (async () => {
+            console.log(`Creating flag: ${key} with value ${initialFlags[key]}`);
+            return createFlag(key, initialFlags[key], redis);
+          })()
+        );
       }
-      return;
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-    .finally(() => {
-      redis.disconnect();
-    });
+    }
+    return await Promise.all(addFlags);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    redis.disconnect();
+  }
 };
 
 if (process.env.REDIS_URL) {

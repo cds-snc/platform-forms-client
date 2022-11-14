@@ -1,21 +1,32 @@
 import NextAuth, { Session, JWT, NextAuthOptions } from "next-auth";
-
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import {
+  CognitoIdentityProviderClient,
+  AdminInitiateAuthCommand,
+  AdminInitiateAuthCommandInput,
+  CognitoIdentityProviderServiceException,
+} from "@aws-sdk/client-cognito-identity-provider";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
-import { validateTemporaryToken } from "@lib/auth";
-import { getFormUser, getOrCreateUser, userLastLogin } from "@lib/users";
-import { UserRole } from "@prisma/client";
-import { LoggingAction } from "@lib/auth";
+import { getOrCreateUser } from "@lib/users";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
+import { getPrivilegeRulesForUser } from "@lib/privileges";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
-  process.env.NODE_ENV !== "test"
+  process.env.APP_ENV !== "test"
 )
   throw new Error("Missing Google Authentication Credentials");
+
+if (
+  (!process.env.COGNITO_APP_CLIENT_ID ||
+    !process.env.COGNITO_REGION ||
+    !process.env.COGNITO_USER_POOL_ID) &&
+  process.env.APP_ENV !== "test"
+)
+  throw new Error("Missing Cognito Credentials");
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -24,20 +35,70 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     CredentialsProvider({
-      name: "TemporaryToken",
+      name: "CognitoLogin",
       credentials: {
-        temporaryToken: { label: "Temporary Token", type: "text" },
+        username: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         // If the temporary token is missing don't process further
-        if (!credentials?.temporaryToken) return null;
-        const user = await validateTemporaryToken(credentials.temporaryToken);
+        if (!credentials?.username || !credentials?.password) return null;
+        const params: AdminInitiateAuthCommandInput = {
+          AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
+          ClientId: process.env.COGNITO_APP_CLIENT_ID,
+          UserPoolId: process.env.COGNITO_USER_POOL_ID,
+          AuthParameters: {
+            USERNAME: credentials.username,
+            PASSWORD: credentials.password,
+          },
+        };
 
-        if (user) {
-          // Type limitations on the Class only allow the return of id and email.
-          return { id: user.id, email: user.email };
-        } else {
+        // signIn callback cannot be used. It has to be included in here as the url field
+        // of the response of the sign in callback is not populated
+        const prismaUser = await prisma.user
+          .findUnique({
+            where: {
+              email: credentials.username,
+            },
+            select: {
+              accounts: true,
+            },
+          })
+          .catch((e) => {
+            prismaErrors(e, undefined);
+          });
+
+        if (
+          prismaUser &&
+          prismaUser.accounts.length > 0 &&
+          prismaUser.accounts[0].provider === "google"
+        ) {
+          throw new Error("GoogleCredentialsExist");
+        }
+
+        try {
+          const cognitoClient = new CognitoIdentityProviderClient({
+            region: process.env.COGNITO_REGION,
+          });
+
+          const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
+
+          const response = await cognitoClient.send(adminInitiateAuthCommand);
+          const idToken = response.AuthenticationResult?.IdToken;
+          if (idToken) {
+            const cognitoIDTokenParts = idToken.split(".");
+            const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
+            const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
+            return {
+              id: cognitoIDTokenClaims.sub,
+              name: cognitoIDTokenClaims.name,
+              email: cognitoIDTokenClaims.email,
+            };
+          }
           return null;
+        } catch (e) {
+          // throw new Error with cognito error converted to string so as to include the exception name
+          throw new Error((e as CognitoIdentityProviderServiceException).toString());
         }
       },
     }),
@@ -63,41 +124,45 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
 
   callbacks: {
-    async jwt({ token, account }) {
-      // Account is only available on the first callback after a login.
-      // Since this is the initial creation of the JWT we add the properties
-      switch (account?.provider) {
-        case "google": {
-          const user = await getOrCreateUser(token as JWT);
-          if (user === null)
-            throw new Error(`Could not get or create user with email: ${token.email}`);
+    async signIn({ account, profile }) {
+      // redirect google login if there is an existing cognito account
+      if (account.provider === "google") {
+        const prismaUser = await prisma.user
+          .findUnique({
+            where: {
+              email: profile.email,
+            },
+            select: {
+              accounts: true,
+            },
+          })
+          .catch((e) => {
+            prismaErrors(e, undefined);
+          });
 
-          token.userId = user.id;
-          token.authorizedForm = null;
-          token.lastLoginTime = new Date();
-          token.role = user.role;
-          token.acceptableUse = false;
-
-          break;
+        // in this case we know there is an existing cognito account
+        if (prismaUser?.accounts.length === 0) {
+          return "/auth/login";
         }
-
-        case "credentials":
-          {
-            if (!token.sub)
-              throw new Error(`JWT token does not have an id for user with email ${token.email}`);
-
-            const user = await getFormUser(token.sub);
-            const lastLogin = await userLastLogin(token.sub);
-
-            token.userId = user?.id;
-            token.authorizedForm = user?.templateId;
-            token.lastLoginTime = lastLogin?.timestamp;
-            token.acceptableUse = false;
-            token.role = user?.active ? UserRole.PROGRAM_ADMINISTRATOR : null; // TODO: change it so there is a "role" field for FormUser
-          }
-          break;
       }
-      // The swtich case above is only run on initial JWT creation and not on any subsequent checks
+      return true;
+    },
+    async jwt({ token, account }) {
+      // account is only available on the first call to the JWT function
+      if (account?.provider) {
+        if (!token.sub) {
+          throw new Error(`JWT token does not have an id for user with email ${token.email}`);
+        }
+        const user = await getOrCreateUser(token);
+        if (user === null)
+          throw new Error(`Could not get or create user with email: ${token.email}`);
+
+        token.userId = user.id;
+        token.authorizedForm = null;
+        token.lastLoginTime = new Date();
+        token.acceptableUse = false;
+      }
+
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
       if (!token.acceptableUse) {
         token.acceptableUse = await getAcceptableUseValue(token.userId as string);
@@ -107,70 +172,14 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       // Add info like 'role' to session object
-      session.user.userId = token.userId as string;
+      session.user.id = token.userId as string;
       session.user.authorizedForm = token.authorizedForm;
       session.user.lastLoginTime = token.lastLoginTime;
-      session.user.role = token.role;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
-      session.user.image = token.picture ?? null;
+      session.user.image = session.user?.image ?? null;
+      session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
       return session;
-    },
-  },
-
-  events: {
-    async signIn({ user }) {
-      // Not throwing an Error as it could potentially redirect the user to an Error page
-      // This error should be transparent to a user.
-      try {
-        const formUser = await prisma.formUser.findUnique({
-          where: {
-            id: user.id,
-          },
-          select: {
-            id: true,
-          },
-        });
-        if (formUser) {
-          await prisma.accessLog.create({
-            data: {
-              action: LoggingAction.LOGIN,
-              userId: user.id,
-            },
-          });
-        }
-      } catch (e) {
-        prismaErrors(e, null);
-      }
-    },
-    async signOut({ token }) {
-      try {
-        if (!token.userId) {
-          // Not throwing an Error as it could potentially redirect the user to an Error page
-          // This error should be transparent to a user.
-          logMessage.warn(`Could not record Signout, token corrupt : ${JSON.stringify(token)}`);
-          return;
-        }
-
-        const formUser = await prisma.formUser.findUnique({
-          where: {
-            id: token.userId as string,
-          },
-          select: {
-            id: true,
-          },
-        });
-        if (formUser) {
-          await prisma.accessLog.create({
-            data: {
-              action: LoggingAction.LOGOUT,
-              userId: token.userId as string,
-            },
-          });
-        }
-      } catch (e) {
-        prismaErrors(e, null);
-      }
     },
   },
 };
@@ -181,7 +190,7 @@ export const authOptions: NextAuthOptions = {
  * otherwise return false
  * @returns boolean
  */
-const getAcceptableUseValue = async (userId: string | undefined) => {
+const getAcceptableUseValue = async (userId: string) => {
   if (!userId) return false;
   const acceptableUse = await acceptableUseCheck(userId);
 

@@ -1,75 +1,46 @@
 import React from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import { DownloadFileButton } from "./DownloadFileButton";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { Output } from "./Output";
-
-const BottomMargin = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const NumberedHeading = styled.h2`
-  font-size: 24px;
-
-  span:first-of-type {
-    background: black;
-    color: white;
-    display: inline-block;
-    text-align: center;
-    line-height: 1;
-    padding: 5px 10px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-`;
-
-const StyledDetails = styled.details`
-  summary {
-    cursor: pointer;
-    text-decoration: underline;
-    margin-bottom: 1.5rem;
-  }
-`;
+import { withMessage } from "../shared/Button";
 
 export const Save = () => {
   const { t } = useTranslation("form-builder");
 
+  const DownloadFileButtonWithMessage = withMessage(DownloadFileButton, t("saveDownloadMessage"));
+
   return (
     <>
-      <BottomMargin>
-        <p>{t("saveP1")}</p>
-      </BottomMargin>
-      <BottomMargin>
-        <p>{t("saveP2")}</p>
-      </BottomMargin>
+      <p className="mb-6">{t("saveP1")}</p>
+      <p className="mb-6">{t("saveP2")}</p>
       <br />
 
-      <NumberedHeading>
-        <span>1</span>
+      <h2 className="text-[24px]">
+        <span className="inline-block py-1.5 p-3 mr-3 bg-black-default text-white-default leading-none rounded-full">
+          1
+        </span>
         <span>{t("saveH2")}</span>
-      </NumberedHeading>
-      <BottomMargin>
-        <p>{t("saveP3")}</p>
-      </BottomMargin>
-      <NumberedHeading>
-        <span>2</span>
+      </h2>
+      <p className="mb-6">{t("saveP3")}</p>
+      <h2 className="text-[24px]">
+        <span className="inline-block py-1.5 p-3 mr-3 bg-black-default text-white-default leading-none rounded-full">
+          2
+        </span>
         <span>{t("saveH3")}</span>
-      </NumberedHeading>
-      <BottomMargin>
-        <p>{t("saveP4")}</p>
-      </BottomMargin>
+      </h2>
+      <p className="mb-6">{t("saveP4")}</p>
 
-      <BottomMargin>
-        <DownloadFileButton />
-      </BottomMargin>
+      <div className="mb-6">
+        <DownloadFileButtonWithMessage />
+      </div>
 
-      <StyledDetails>
-        <summary>{t("viewCode")}</summary>
+      <details>
+        <summary className="cursor-pointer underline mb-6">{t("viewCode")}</summary>
 
         <CopyToClipboard />
         <Output />
-      </StyledDetails>
+      </details>
     </>
   );
 };

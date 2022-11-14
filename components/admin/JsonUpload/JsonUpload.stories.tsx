@@ -11,13 +11,13 @@ export const defaultJSONUpload = (): React.ReactElement => <JSONUpload></JSONUpl
 
 const testForm = {
   id: "test0form00000id000asdf11",
-  publishingStatus: true,
   securityAttribute: "Unclassified",
   submission: {
     email: "test@test.com",
   },
+  isPublished: true,
   form: {
-    version: "1",
+    version: 1,
     titleEn: "Test JSON!",
     titleFr: "Test JSON!",
     layout: [1],

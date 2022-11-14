@@ -41,6 +41,7 @@ describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
     id: "test0form00000id000asdf11",
+    isPublished: true,
     ...validFormTemplate,
   };
   test("renders without errors", () => {

@@ -1,18 +1,22 @@
 import React from "react";
-import useTemplateStore from "../store/useTemplateStore";
-import { ElementType, Language, LocalizedElementProperties } from "../types";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { Language, LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
+import { FormElement } from "@lib/types";
 
 export const Description = ({
   element,
   index,
   translationLanguagePriority,
 }: {
-  element: ElementType;
+  element: FormElement;
   index: number;
   translationLanguagePriority: Language;
 }) => {
-  const { updateField, localizeField } = useTemplateStore();
+  const { updateField, localizeField } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    localizeField: s.localizeField,
+  }));
   const { t } = useTranslation("form-builder");
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 

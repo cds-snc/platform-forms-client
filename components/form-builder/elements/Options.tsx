@@ -1,49 +1,25 @@
 import React, { useState, ReactElement, useCallback } from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { Option } from "./Option";
 import { BulkAdd } from "./BulkAdd";
-import { Button } from "../panel/Button";
-import { ElementTypeWithIndex } from "../types";
-
-const LinkButton = styled(Button)`
-  margin: 0;
-  margin-top: 10px;
-  text-decoration: underline;
-  background-color: transparent;
-  border-radius: 4px;
-  display: block;
-
-  &:first-of-type {
-    margin-top: 20px;
-  }
-
-  &:hover,
-  &:active,
-  &:focus {
-    outline-offset: 4px;
-    background-color: transparent;
-    color: #000000;
-  }
-
-  &:hover {
-    text-decoration: none;
-  }
-`;
+import { Button } from "../shared/Button";
+import { FormElementWithIndex } from "../types";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <LinkButton
+    <Button
+      className="!m-0 !mt-4"
+      theme="link"
       onClick={() => {
         onClick(index);
       }}
     >
       {t("addOption")}
-    </LinkButton>
+    </Button>
   );
 };
 
@@ -55,13 +31,15 @@ AddButton.propTypes = {
 const BulkAddButton = ({ onClick }: { onClick: (onoff: boolean) => void }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <LinkButton
+    <Button
+      className="!m-0 !mt-4"
+      theme="link"
       onClick={() => {
         onClick(true);
       }}
     >
       {t("addMultiple")}
-    </LinkButton>
+    </Button>
   );
 };
 
@@ -72,12 +50,15 @@ BulkAddButton.propTypes = {
 
 const AddOptions = ({
   index,
-  toggleBulkAdd,
-}: {
+}: // toggleBulkAdd,
+{
   index: number;
-  toggleBulkAdd: (onoff: boolean) => void;
+  // toggleBulkAdd: (onoff: boolean) => void;
 }) => {
-  const { addChoice, setFocusInput } = useTemplateStore();
+  const { addChoice, setFocusInput } = useTemplateStore((s) => ({
+    addChoice: s.addChoice,
+    setFocusInput: s.setFocusInput,
+  }));
 
   return (
     <>
@@ -88,7 +69,11 @@ const AddOptions = ({
           addChoice(index);
         }}
       />
-      <BulkAddButton index={index} onClick={toggleBulkAdd} />
+
+      {/*  
+      // feature removed for now
+      <BulkAddButton index={index} onClick={toggleBulkAdd} /> 
+      */}
     </>
   );
 };
@@ -103,12 +88,10 @@ export const Options = ({
   item,
   renderIcon,
 }: {
-  item: ElementTypeWithIndex;
+  item: FormElementWithIndex;
   renderIcon?: RenderIcon;
 }) => {
-  const {
-    form: { elements },
-  } = useTemplateStore();
+  const { elements, lang } = useTemplateStore((s) => ({ elements: s.form.elements, lang: s.lang }));
 
   const [bulkAddAction, setBulkAddAction] = useState(false);
 
@@ -126,30 +109,34 @@ export const Options = ({
   }
   const { choices } = elements[index].properties;
 
+  if (!choices) {
+    return <AddOptions index={index} />;
+  }
+
   if (bulkAddAction) {
     return <BulkAdd index={index} toggleBulkAdd={toggleBulkAdd} choices={choices} />;
   }
 
-  if (!choices) {
-    return <AddOptions index={index} toggleBulkAdd={toggleBulkAdd} />;
-  }
-
   const options = choices.map((child, index) => {
     if (!child || !item) return null;
+
+    const initialValue = elements[item.index].properties.choices?.[index][lang] ?? "";
+
     return (
       <Option
         renderIcon={renderIcon}
         parentIndex={item.index}
         key={`child-${item.id}-${index}`}
         index={index}
+        initialValue={initialValue}
       />
     );
   });
 
   return (
-    <div>
+    <div className="mt-5">
       {options}
-      <AddOptions index={index} toggleBulkAdd={toggleBulkAdd} />
+      <AddOptions index={index} />
     </div>
   );
 };

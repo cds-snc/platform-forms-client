@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
 import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
@@ -9,29 +9,18 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../types";
 import { DownloadCSV } from "./DownloadCSV";
-import { Editor } from "./Editor";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
+import { Button } from "../shared/Button";
 
 const FlexDiv = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 `;
 
-const SwitchLanguageButton = styled.button`
-  color: #fff;
-
-  align-items: center;
-  padding: 10px 25px;
-  margin: 0 10px;
-
-  background: #26374a;
-  border: 2px solid #284162;
-  border-radius: 10px;
-
-  svg {
-    width: 40px;
-    margin-left: 4px;
-  }
+const LangSpan = styled.span`
+  width: 70px;
 `;
 
 const SectionDiv = styled.div`
@@ -65,10 +54,36 @@ const SectionDiv = styled.div`
     }
 
     .section-text {
-      display: flex;
-      align-items: flex-end;
+      display: grid;
+      grid-auto-flow: column;
       margin-bottom: 20px;
+      grid-auto-columns: minmax(0, 1fr);
       border: 1px solid #cacaca;
+
+      &.section-text--rich-text > div {
+        .editor {
+          height: calc(100% - 90px);
+        }
+
+        @media (min-width: 992px) {
+          .editor {
+            height: calc(100% - 56px);
+          }
+        }
+
+        &:first-of-type {
+          border-right: 1px solid black;
+        }
+
+        &:last-of-type {
+          border-left: 1px solid black;
+          margin-left: -1px;
+        }
+
+        .editor-input {
+          height: 100%;
+        }
+      }
 
       > * {
         flex: 1;
@@ -92,10 +107,6 @@ const SectionDiv = styled.div`
           z-index: 10;
         }
       }
-
-      div[class^="Editor"]:first-of-type {
-        border-right: 1px solid black;
-      }
     }
   }
 `;
@@ -107,7 +118,13 @@ export const Translate = () => {
     toggleTranslationLanguagePriority,
     translationLanguagePriority,
     localizeField,
-  } = useTemplateStore();
+  } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    form: s.form,
+    toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
+    translationLanguagePriority: s.translationLanguagePriority,
+    localizeField: s.localizeField,
+  }));
   const { t } = useTranslation("form-builder");
 
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
@@ -120,34 +137,35 @@ export const Translate = () => {
 
   return (
     <>
+      <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
       <div>
-        <p>
-          Translate your form content side by side to provide a bilingual experience to those
-          filling out your form.
-        </p>
+        <p>{t("translateDescription")}</p>
         <br />
 
         <FlexDiv>
-          <div>
-            {translationLanguagePriority === "en" ? "English" : "French"}
-            <SwitchLanguageButton onClick={switchLanguage}>
-              <span>{t("Switch")}</span>
-              <SwapHoriz />
-            </SwitchLanguageButton>
-            {translationLanguagePriority === "en" ? "French" : "English"}
-          </div>
+          <FlexDiv>
+            <LangSpan>{translationLanguagePriority === "en" ? t("english") : t("french")}</LangSpan>
+            <Button
+              className="mx-4"
+              onClick={switchLanguage}
+              icon={<SwapHoriz className="fill-white-default" />}
+            >
+              {t("switch")}
+            </Button>
+            <LangSpan>{translationLanguagePriority === "en" ? t("french") : t("english")}</LangSpan>
+          </FlexDiv>
           <DownloadCSV />
         </FlexDiv>
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Start")}</h2>
+            <h2>{t("start")}</h2>
             <hr />
           </div>
 
           <fieldset className="text-entry">
             <legend className="section-heading">
-              {t("Form introduction")}: {t("Title")}
+              {t("formIntroduction")}: {t("title")}
             </legend>
             <div className="section-text">
               <label htmlFor="form-title-en" className="sr-only">
@@ -193,18 +211,18 @@ export const Translate = () => {
             </div>
           </fieldset>
 
-          {(form.introduction.descriptionEn || form.introduction.descriptionFr) && (
+          {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <div className="text-entry">
               <div className="section-heading">
-                {t("Form introduction")}: {t("Description")}
+                {t("formIntroduction")}: {t("description")}
               </div>
-              <div className="section-text">
-                <Editor
+              <div className="section-text section-text--rich-text">
+                <RichTextEditor
+                  autoFocusEditor={false}
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     translationLanguagePriority
                   )}`}
-                  index="introduction"
                   content={
                     form.introduction[
                       localizeField(
@@ -213,14 +231,14 @@ export const Translate = () => {
                       )
                     ]
                   }
-                  language={translationLanguagePriority}
+                  lang={translationLanguagePriority}
                 />
-                <Editor
+                <RichTextEditor
+                  autoFocusEditor={false}
                   path={`form.introduction.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     translationLanguagePriorityAlt
                   )}`}
-                  index="introduction"
                   content={
                     form.introduction[
                       localizeField(
@@ -229,7 +247,7 @@ export const Translate = () => {
                       )
                     ]
                   }
-                  language={translationLanguagePriorityAlt}
+                  lang={translationLanguagePriorityAlt}
                 />
               </div>
             </div>
@@ -243,7 +261,7 @@ export const Translate = () => {
                 <div className="section-title">
                   <h2>
                     {element.type !== "richText" && <>Question {questionsIndex++}</>}{" "}
-                    {element.type === "richText" && <>Page text</>}
+                    {element.type === "richText" && <>{t("pageText")}</>}
                   </h2>
                   <hr />
                 </div>
@@ -301,46 +319,46 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Privacy statement")}</h2>
+            <h2>{t("privacyStatement")}</h2>
             <hr />
           </div>
           <div className="text-entry">
             <div className="section-heading">
-              {t("Page text")}: {t("Description")}
+              {t("pageText")}: {t("description")}
             </div>
 
-            <div className="section-text">
-              <Editor
+            <div className="section-text section-text--rich-text">
+              <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriority
                 )}`}
-                index="introduction"
                 content={
-                  form.privacyPolicy[
+                  form.privacyPolicy?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriority
                     )
-                  ]
+                  ] ?? ""
                 }
-                language={translationLanguagePriority}
+                lang={translationLanguagePriority}
               />
-              <Editor
+              <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.privacyPolicy.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriorityAlt
                 )}`}
-                index="introduction"
                 content={
-                  form.privacyPolicy[
+                  form.privacyPolicy?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriorityAlt
                     )
-                  ]
+                  ] ?? ""
                 }
-                language={translationLanguagePriorityAlt}
+                lang={translationLanguagePriorityAlt}
               />
             </div>
           </div>
@@ -348,45 +366,45 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Confirmation message")}</h2>
+            <h2>{t("confirmationMessage")}</h2>
             <hr />
           </div>
           <div className="text-entry">
             <div className="section-heading">
-              {t("Page text")}: {t("Description")}
+              {t("pageText")}: {t("description")}
             </div>
-            <div className="section-text">
-              <Editor
+            <div className="section-text section-text--rich-text">
+              <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriority
                 )}`}
-                index="introduction"
                 content={
-                  form.endPage[
+                  form.endPage?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriority
                     )
-                  ]
+                  ] ?? ""
                 }
-                language={translationLanguagePriority}
+                lang={translationLanguagePriority}
               />
-              <Editor
+              <RichTextEditor
+                autoFocusEditor={false}
                 path={`form.endPage.${localizeField(
                   LocalizedElementProperties.DESCRIPTION,
                   translationLanguagePriorityAlt
                 )}`}
-                index="introduction"
                 content={
-                  form.endPage[
+                  form.endPage?.[
                     localizeField(
                       LocalizedElementProperties.DESCRIPTION,
                       translationLanguagePriorityAlt
                     )
-                  ]
+                  ] ?? ""
                 }
-                language={translationLanguagePriorityAlt}
+                lang={translationLanguagePriorityAlt}
               />
             </div>
           </div>

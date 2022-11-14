@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 
 const JSONOutput = styled.pre`
   margin-top: 20px;
@@ -10,7 +10,7 @@ const JSONOutput = styled.pre`
 `;
 
 export const Output = () => {
-  const { getSchema } = useTemplateStore();
+  const getSchema = useTemplateStore((s) => s.getSchema);
   const stringified = getSchema();
 
   return <JSONOutput>{stringified}</JSONOutput>;

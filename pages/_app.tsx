@@ -1,12 +1,13 @@
 import "react-app-polyfill/stable";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import { appWithTranslation } from "next-i18next";
+import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
+import { AccessControlProvider } from "@lib/hooks";
 import Base from "@components/globals/Base";
 import "../styles/app.scss";
-import i18nextConfig from "../next-i18next.config";
 
 /*
 This component disables SSR when in testing mode.
@@ -23,25 +24,39 @@ const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const MyApp: React.FunctionComponent<AppProps> = ({
+export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp: React.FC<AppPropsWithLayout> = ({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) => {
+}: AppPropsWithLayout) => {
   return (
     <SessionProvider
       session={session}
-      // Re-fetch session every 30 minutes
+      // Re-fetch session every 30 minutes if no user activity
       refetchInterval={30 * 60}
       // Re-fetches session when window is focused
       refetchOnWindowFocus={true}
     >
-      <SafeHydrate>
-        <Base>
-          <Component {...pageProps} />
-        </Base>
-      </SafeHydrate>
+      <AccessControlProvider>
+        <SafeHydrate>
+          {Component.getLayout ? (
+            Component.getLayout(<Component {...pageProps} />)
+          ) : (
+            <Base>
+              <Component {...pageProps} />
+            </Base>
+          )}
+        </SafeHydrate>
+      </AccessControlProvider>
     </SessionProvider>
   );
 };
 
-export default appWithTranslation(MyApp, i18nextConfig);
+export default appWithTranslation(MyApp);

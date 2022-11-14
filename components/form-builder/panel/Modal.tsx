@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-import { Button, FancyButton } from "./Button";
+import { Button } from "../shared/Button";
 import { Close } from "../icons/Close";
 import { CDSHTMLDialogElement } from "../types";
 import useModalStore from "../store/useModalStore";
@@ -59,25 +59,7 @@ const StyledDialog = styled.dialog`
     justify-content: flex-start;
     padding: 15px;
     border-top: 1px solid #cacaca;
-
-    > *:first-child {
-      margin-right: 20px;
-    }
   }
-`;
-
-const CloseButton = styled(Button)`
-  padding: 3px 5px;
-  border: 1px solid #cacaca;
-  border-radius: 2px;
-
-  svg {
-    margin-right: 3px;
-  }
-`;
-
-const ModalCancelButton = styled(FancyButton)`
-  padding: 15px 20px;
 `;
 
 interface IModalContext {
@@ -236,7 +218,13 @@ export const ModalContainer = ({
           <div className="modal-header">
             <h2 className="modal-title">{title}</h2>
             <ModalButton isOpenButton={false}>
-              <CloseButton icon={<Close />} onClick={close}>{t("Close")}</CloseButton>
+              <Button
+                theme="icon"
+                className="group"
+                icon={<Close className="group-focus:fill-white-default" />}
+                aria-label={t("Close")}
+                onClick={close}
+              ></Button>
             </ModalButton>
           </div>
           <div className="modal-body">
@@ -244,7 +232,7 @@ export const ModalContainer = ({
           </div>
           <div className="modal-footer">
             {saveButton}
-            <ModalCancelButton onClick={close}>{t("Cancel")}</ModalCancelButton>
+            <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
           </div>
         </div>
     </StyledDialog>

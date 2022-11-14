@@ -1,65 +1,29 @@
-import React, { useRef, useEffect, useState } from "react";
-import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { deserializeMd, Value } from "@udecode/plate";
-import { useMyPlateEditorRef } from "../plate-editor/types";
-import { serializeMd } from "../plate-editor/helpers/markdown";
+import React from "react";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { LocalizedElementProperties } from "../types";
 
-const OptionWrapper = styled.div`
-  display: flex;
-`;
-
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {
-  const input = useRef<HTMLInputElement>(null);
-  const editorId = `${parentIndex}-editor`;
-  const editor = useMyPlateEditorRef(editorId);
+  const { localizeField, form, lang } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    form: s.form,
+    lang: s.lang,
+  }));
 
-  const { localizeField, updateField, form } = useTemplateStore();
-
-  const [value, setValue] = useState(
-    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)]
-      ? deserializeMd(
-          editor,
-          form.elements[parentIndex].properties[
-            localizeField(LocalizedElementProperties.DESCRIPTION)
-          ]
-        )
-      : [{ children: [{ text: "" }] }]
-  );
-
-  useEffect(() => {
-    if (input.current) {
-      input.current.focus();
-    }
-  }, []);
-
-  /**
-   * Serialize the contents of the Editor to Markdown and save
-   * to the datastore.
-   *
-   * @param value
-   */
-  const handleChange = (value: Value) => {
-    let serialized = serializeMd(value);
-
-    if (typeof serialized === "undefined") {
-      serialized = "";
-    }
-
-    setValue(value);
-    updateField(
-      `form.elements[${parentIndex}].properties.${localizeField(
-        LocalizedElementProperties.DESCRIPTION
-      )}`,
-      serialized
-    );
-  };
+  const content =
+    form.elements[parentIndex].properties[localizeField(LocalizedElementProperties.DESCRIPTION)] ??
+    "";
 
   return (
-    <OptionWrapper>
-      <RichTextEditor id={editorId} value={value} onChange={handleChange} />
-    </OptionWrapper>
+    <div className="flex mx-7 mt-5 mb-7 border-2 rounded">
+      <RichTextEditor
+        autoFocusEditor={true}
+        path={`form.elements[${parentIndex}].properties.${localizeField(
+          LocalizedElementProperties.DESCRIPTION
+        )}`}
+        content={content}
+        lang={lang}
+      />
+    </div>
   );
 };

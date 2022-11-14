@@ -1,135 +1,150 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import { useSession } from "next-auth/react";
 import { ElementPanel } from "../panel/ElementPanel";
-import useTemplateStore from "../store/useTemplateStore";
-import useNavigationStore from "../store/useNavigationStore";
-
-import { Language, LocalizedFormProperties } from "../types";
-import { Save } from "./Save";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { useNavigationStore } from "../store/useNavigationStore";
+import { LeftNavigation } from "./LeftNavigation";
+import { Language } from "../types";
+import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { Translate } from "../translate/Translate";
-
-const StyledHeader = styled.h1`
-  border-bottom: none;
-  margin-bottom: 2rem;
-`;
-
-const Input = styled.input`
-  padding: 22px 10px;
-  width: 800px;
-  border: 1.5px solid #000000;
-  max-height: 36px;
-  margin-bottom: 35px;
-  border-radius: 4px;
-`;
-
-const Navigation = styled.div`
-  width: 800px;
-  text-align: center;
-  margin: 20px 0;
-
-  &.start .start,
-  &.create .create,
-  &.preview .preview,
-  &.translate .translate,
-  &.save .save {
-    font-weight: 700;
-  }
-`;
-
-const Tab = styled.span`
-  text-decoration: underline;
-  cursor: pointer;
-`;
-
-const StyledPreviewWrapper = styled.div`
-  border: 3px dashed blue;
-  padding: 20px;
-`;
+import { EditNavigation } from "./EditNavigation";
+import { PreviewNavigation } from "./PreviewNavigation";
+import { Publish } from "./Publish";
+import { Published } from "./Published";
+import { Settings } from "./Settings";
+import { TestDataDelivery } from "./TestDataDelivery";
 
 export const Layout = () => {
-  const { updateField, localizeField, form, setLang } = useTemplateStore();
-  const { currentTab, setTab } = useNavigationStore();
+  const { status } = useSession();
+  const { form, setLang, email, updateField, id } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    form: s.form,
+    id: s.id,
+    setLang: s.setLang,
+    email: s.submission.email,
+    updateField: s.updateField,
+  }));
+
+  const { currentTab, setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
+  }));
+
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
 
   const handleClick = (tab: string) => {
-    setTab(tab);
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      setTab(tab);
+    };
   };
 
   useEffect(() => {
     setLang(locale);
   }, [locale]);
 
-  /* eslint-disable */
-  return (
-    <>
-      <Navigation className={currentTab}>
-        <Tab className="start" onClick={() => handleClick("start")}>
-          {t("start")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="create" onClick={() => handleClick("create")}>
-          {t("design")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="preview" onClick={() => handleClick("preview")}>
-          {t("preview")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="translate" onClick={() => handleClick("translate")}>
-          {t("translate")}
-        </Tab>{" "}
-        /{" "}
-        <Tab className="save" onClick={() => handleClick("save")}>
-          {t("save")}
-        </Tab>
-      </Navigation>
+  const { data } = useSession();
 
-      {currentTab === "start" && (
-        <>
-          <h1>{t("start")}</h1>
-          <Start changeTab={handleClick} />
-        </>
-      )}
-      {currentTab === "create" && (
-        <>
-          <div>
-            <h1>{t("title")}</h1>
-            <Input
-              placeholder={t("placeHolderFormTitle")}
-              value={form[localizeField(LocalizedFormProperties.TITLE)]}
-              onChange={(e) => {
-                updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, e.target.value);
-              }}
-            />
+  useEffect(() => {
+    const setEmail = () => {
+      if (data && data.user.email) {
+        updateField("submission.email", data.user.email);
+      }
+    };
+    !email && currentTab !== "settings" && setEmail();
+  }, [email, data, currentTab]);
+
+  const renderTab = (tab: string) => {
+    switch (tab) {
+      case "start":
+        return (
+          <div className="col-span-12">
+            <Start changeTab={setTab} />
           </div>
-          <ElementPanel />
-        </>
-      )}
-      {currentTab === "preview" && (
-        <>
-          <StyledPreviewWrapper>
-            <h1>{form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
+        );
+      case "create":
+        return (
+          <div className="col-start-4 col-span-9">
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+            <ElementPanel />
+          </div>
+        );
+      case "preview":
+        return (
+          <div className="col-start-4 col-span-9">
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <Preview />
-          </StyledPreviewWrapper>
-        </>
-      )}
-      {currentTab === "translate" && (
-        <>
-          <h1>{t("translateTitle")}</h1>
-          <Translate />
-        </>
-      )}
-      {currentTab === "save" && (
-        <>
-          <StyledHeader>{t("saveH1")}</StyledHeader>
-          <Save />
-        </>
-      )}
-    </>
+          </div>
+        );
+      case "test-data-delivery":
+        return status === "authenticated" ? (
+          <div className="col-start-4 col-span-9">
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+            <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
+            <TestDataDelivery />
+          </div>
+        ) : (
+          setTab("create")
+        );
+      case "translate":
+        return (
+          <div className="col-start-4 col-span-9">
+            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
+            <Translate />
+          </div>
+        );
+      case "share":
+        return (
+          <div className="col-start-4 col-span-9">
+            <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
+            <Share />
+          </div>
+        );
+      case "publish":
+        return (
+          <div className="col-start-4 col-span-9">
+            <Publish />
+          </div>
+        );
+      case "published":
+        return status === "authenticated" ? (
+          <div className="col-start-4 col-span-9">
+            <Published id={id} />
+          </div>
+        ) : (
+          setTab("create")
+        );
+      case "settings":
+        return (
+          <div className="col-start-4 col-span-9">
+            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+            <h1 className="visually-hidden">Form settings</h1>
+            <Settings />
+          </div>
+        );
+      default:
+        return (
+          <div className="col-span-12">
+            <Start changeTab={setTab} />
+          </div>
+        );
+    }
+  };
+  /* eslint-disable */
+
+  return (
+    <main className="container--wet">
+      <div className="grid grid-cols-12 gap-4">
+        {(currentTab !== "start" && currentTab !== "published") && (
+          <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
+        )}
+        <>{form && renderTab(currentTab)}</>
+      </div>
+    </main>
   );
   /* eslint-enable */
 };

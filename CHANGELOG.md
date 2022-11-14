@@ -16,10 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
 - New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
 - Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
+- Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
 
 ### Changed
 
 - Updated Terms and conditions page + text link in the footer [#863](https://github.com/cds-snc/platform-forms-client/issues/863)
+- Modified Role Based to Asset Based Access Control [#1176](https://github.com/cds-snc/platform-forms-client/pull/1176)
+- Form templates are now marked as archived and will stay in the database for 30 more days before being deleted by a Lambda function. [#1166](https://github.com/cds-snc/platform-forms-client/issues/1166)
+- The existing `publishingStatus` field from the form JSON configuration has been replaced by a `isPublished` data field in the database. It can be switch to `true` or `false` using the Template API. A migration process will automatically happen through the Prisma seeding process. [#1181](https://github.com/cds-snc/platform-forms-client/issues/1181)
 
 ### Fixed
 
@@ -129,7 +133,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `organisation` to `organization` which has an impact on the API access path
 - Modified the middleware functionality and separation of scopes between middlewares
 - A user now needs to have an enabled admin flag (user table) to access the Admin Pages
-- An admin user can now add and remove administrative priveleges from other users.
+- An admin user can now add and remove administrative privileges from other users.
 
 ### Fixed
 

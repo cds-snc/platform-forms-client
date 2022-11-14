@@ -62,7 +62,9 @@
     "templates": "Modèles",
     "features": "Options",
     "login": "Connexion",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "privileges": "Privileges",
+    "myforms": "My Forms [FR]"
   },
   "formElements": {
     "characterCount": {
@@ -85,5 +87,8 @@
   "loginMenu": {
     "login": "Se connecter",
     "logout": "Se déconnecter"
+  },
+  "alert": {
+    "dismissAlert": "Fermer cette alerte"
   }
 }

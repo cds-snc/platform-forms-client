@@ -1,44 +1,11 @@
-import React, { useRef, useEffect, ReactElement } from "react";
+import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { Close } from "../icons";
-import { Button } from "../panel";
-import { Input } from "../panel";
-import useTemplateStore from "../store/useTemplateStore";
+import { Button } from "../shared/Button";
+import { Input } from "../shared/Input";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
-
-const OptionWrapper = styled.div`
-  display: flex;
-  margin-top: 12px;
-
-  &:first-of-type {
-    margin-top: 20px;
-  }
-`;
-
-const IconWrapper = styled.div`
-  margin-top: 10px;
-`;
-
-const TextInput = styled(Input)`
-  margin-left: 20px;
-  padding: 16px 10px;
-  width: 340px;
-`;
-
-const RemoveButton = styled(Button)`
-  max-height: 35px;
-  margin: 0;
-  padding: 5.5px;
-  border-radius: 50%;
-  margin-left: 5px;
-  background-color: #ebebeb;
-
-  svg {
-    fill: #000000;
-    margin: 0;
-  }
-`;
+import debounce from "lodash.debounce";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -46,31 +13,40 @@ export const Option = ({
   parentIndex,
   index,
   renderIcon,
+  initialValue,
 }: {
   parentIndex: number;
   index: number;
   renderIcon?: RenderIcon;
+  initialValue: string;
 }) => {
   const input = useRef<HTMLInputElement>(null);
-  const {
-    form: { elements },
-    addChoice,
-    removeChoice,
-    updateField,
-    lang,
-    focusInput,
-    setFocusInput,
-  } = useTemplateStore();
-  const val = elements[parentIndex].properties.choices[index][lang];
+
+  const { addChoice, removeChoice, updateField, lang, getFocusInput, setFocusInput } =
+    useTemplateStore((s) => ({
+      addChoice: s.addChoice,
+      removeChoice: s.removeChoice,
+      updateField: s.updateField,
+      lang: s.lang,
+      setFocusInput: s.setFocusInput,
+      getFocusInput: s.getFocusInput,
+    }));
+
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
+  const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    if (input.current && focusInput) {
+    // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
+    if (input.current && getFocusInput()) {
       input.current.focus();
       setFocusInput(false);
     }
-  }, []);
+  }, [getFocusInput]);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
@@ -79,30 +55,44 @@ export const Option = ({
     }
   };
 
+  const _debounced = useCallback(
+    debounce((val) => {
+      updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
+    }, 100),
+    []
+  );
+
+  const updateValue = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+      _debounced(e.target.value);
+    },
+    [setValue]
+  );
+
   return (
-    <OptionWrapper>
-      <IconWrapper>{icon}</IconWrapper>
-      <TextInput
+    <div className="flex mt-3">
+      <div className="flex mt-2 w-5 justify-end">{icon}</div>
+      <Input
+        id={`option--${parentIndex}--${index + 1}`}
         ref={input}
         type="text"
-        value={val}
+        value={value}
         placeholder={`${t("option")} ${index + 1}`}
-        onChange={(e) => {
-          updateField(
-            `form.elements[${parentIndex}].properties.choices[${index}].${lang}`,
-            e.target.value
-          );
-        }}
+        onChange={updateValue}
         onKeyDown={handleKeyDown}
+        className="ml-5 w-80 max-h-9 !my-0"
       />
-      <RemoveButton
-        icon={<Close />}
-        aria-label={`${t("removeOption")} ${val}`}
+      <Button
+        theme="icon"
+        className="group"
+        icon={<Close className="group-focus:fill-white-default" />}
+        aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
           removeChoice(parentIndex, index);
         }}
-      ></RemoveButton>
-    </OptionWrapper>
+      ></Button>
+    </div>
   );
 };
 

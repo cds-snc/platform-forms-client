@@ -14,7 +14,11 @@
     "formTitle": "Form Title",
     "status": "Status",
     "published": "Published",
-    "draft": "Draft"
+    "draft": "Draft",
+    "publishForm": "Publish",
+    "unpublishForm": "Draft",
+    "users": "Users",
+    "assign": "Assign"
   },
   "settings": {
     "title": "Form Settings",

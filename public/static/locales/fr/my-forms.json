@@ -1,0 +1,29 @@
+{
+  "title": "My Forms [FR]",
+  "nav": {
+    "drafts": "Drafts [fr]",
+    "published": "Published [fr]",
+    "all": "All [fr]"
+  },
+  "actions": {
+    "createNewForm": "Create new form [FR]"
+  },
+  "cards": {
+    "label": "List of your forms [FR]",
+    "noForms": "No forms to list. [FR]"
+  },
+  "card": {
+    "states": {
+      "draft": "Draft [FR]",
+      "published": "Published [FR]"
+    },
+    "lastEdited": "Last edited [FR]",
+    "menu": {
+      "more": "More [FR]",
+      "save": "Save [FR]",
+      "copyLink": "copyLink [FR]",
+      "preview": "Priview [FR]",
+      "edit": "Edit [FR]"
+    }
+  }
+}

@@ -1,15 +1,8 @@
 import React from "react";
-import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTranslation } from "next-i18next";
+import { useTemplateStore } from "../store/useTemplateStore";
 import markdownToTxt from "markdown-to-txt";
-
-const DownloadCSVButton = styled.button`
-  border: 2px solid #26374a;
-  border-radius: 10px;
-  background: #fff;
-  padding: 10px 25px;
-  margin: 10px 0 30px 0;
-`;
+import { Button } from "../shared/Button";
 
 const slugify = (str: string) =>
   str
@@ -37,7 +30,8 @@ const fixMarkdownHeadings = (str: string) => str.replace(/#{1,6}/g, "$& ").repla
 const formatText = (str: string) => `"${markdownToTxt(fixMarkdownHeadings(str))}"`;
 
 export const DownloadCSV = () => {
-  const { form } = useTemplateStore();
+  const form = useTemplateStore((s) => s.form);
+  const { t } = useTranslation("form-builder");
 
   const generateCSV = async () => {
     const data = [["description", "english", "french"]];
@@ -45,8 +39,8 @@ export const DownloadCSV = () => {
     data.push(["Form introduction - Title", formatText(form.titleEn), formatText(form.titleFr)]);
     data.push([
       "Form introduction - Description",
-      formatText(form.introduction.descriptionEn),
-      formatText(form.introduction.descriptionFr),
+      formatText(form.introduction?.descriptionEn ?? ""),
+      formatText(form.introduction?.descriptionFr ?? ""),
     ]);
 
     let questionIndex = 1;
@@ -65,8 +59,8 @@ export const DownloadCSV = () => {
       if (element.properties.descriptionEn || element.properties.descriptionFr) {
         data.push([
           description,
-          formatText(element.properties.descriptionEn),
-          formatText(element.properties.descriptionFr),
+          formatText(element.properties.descriptionEn ?? ""),
+          formatText(element.properties.descriptionFr ?? ""),
         ]);
       }
 
@@ -79,7 +73,7 @@ export const DownloadCSV = () => {
       }
     });
 
-    if (form.privacyPolicy.descriptionEn || form.privacyPolicy.descriptionFr) {
+    if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
       data.push([
         "Privacy statement",
         formatText(form.privacyPolicy.descriptionEn),
@@ -87,7 +81,7 @@ export const DownloadCSV = () => {
       ]);
     }
 
-    if (form.endPage.descriptionEn || form.endPage.descriptionFr) {
+    if (form.endPage?.descriptionEn || form.endPage?.descriptionFr) {
       data.push([
         "Confirmation message",
         formatText(form.endPage.descriptionEn),
@@ -107,5 +101,9 @@ export const DownloadCSV = () => {
     URL.revokeObjectURL(url);
   };
 
-  return <DownloadCSVButton onClick={generateCSV}>Download .csv</DownloadCSVButton>;
+  return (
+    <Button onClick={generateCSV} theme="secondary">
+      {t("downloadCSV")}
+    </Button>
+  );
 };

@@ -1,91 +1,47 @@
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
-import { RichTextEditor } from "../plate-editor/RichTextEditor";
-import { serializeMd } from "../plate-editor/helpers/markdown";
-import { deserializeMd, Value } from "@udecode/plate";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { PanelActionsLocked } from "../panel/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
-import { useMyPlateEditorRef } from "../plate-editor/types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  padding-top: 10px;
-  position: relative;
   max-width: 800px;
-  height: auto;
-  margin-top: -1px;
-`;
-
-const ContentWrapper = styled.div`
-  display: flex;
-  margin: 0px 20px;
-
-  & h2 {
-    font-size: 26px;
-    line-height: 32px;
-    margin-top: 15px;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-`;
-
-const OptionWrapper = styled.div`
-  display: flex;
-  margin: 0 26px;
 `;
 
 export const RichTextLocked = ({
-  id,
+  beforeContent = null,
   addElement,
   children,
   initialValue,
   schemaProperty,
-  "aria-label": ariaLabel = undefined,
 }: {
-  id: string;
+  beforeContent?: React.ReactElement | null;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
   schemaProperty: string;
-  "aria-label"?: string;
 }) => {
-  const input = useRef<HTMLInputElement>(null);
-  const { localizeField, updateField } = useTemplateStore();
-  const editorId = `${id}-editor`;
-  const editor = useMyPlateEditorRef();
-
-  const [value, setValue] = useState(
-    initialValue ? deserializeMd(editor, initialValue) : [{ children: [{ text: "" }] }]
-  );
-
-  useEffect(() => {
-    if (input.current) {
-      input.current.focus();
-    }
-  }, []);
-
-  const onChange = (value: Value) => {
-    let serialized = serializeMd(value);
-
-    if (typeof serialized === "undefined") {
-      serialized = "";
-    }
-
-    setValue(value);
-
-    updateField(
-      `form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`,
-      serialized
-    );
-  };
+  const { localizeField, lang } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    lang: s.lang,
+  }));
 
   return (
-    <ElementWrapperDiv>
-      <ContentWrapper>{children}</ContentWrapper>
-      <OptionWrapper>
-        <RichTextEditor id={editorId} value={value} onChange={onChange} aria-label={ariaLabel} />
-      </OptionWrapper>
+    <ElementWrapperDiv className="h-auto relative -mt-px">
+      <div className="mx-7 mt-5 mb-7">
+        {beforeContent && beforeContent}
+        <div className="flex">{children}</div>
+        <div className="flex border-2 rounded">
+          <RichTextEditor
+            path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
+            content={initialValue}
+            lang={lang}
+            autoFocusEditor={false}
+          />
+        </div>
+      </div>
       <PanelActionsLocked addElement={addElement} />
     </ElementWrapperDiv>
   );

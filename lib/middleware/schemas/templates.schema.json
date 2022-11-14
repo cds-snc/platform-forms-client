@@ -5,27 +5,30 @@
   "title": "GC Forms Schema - Alpha",
   "description": "A schema to define a Forms configuration.",
   "default": {},
-  "examples": [{"internalTitleEn": "",
-  "internalTitleFr": "",
-  "publishingStatus": false,
-  "securityAttribute": "",
-  "submission": {
-    "email": ""
-  },
-  "form": {
-    "version": 1,
-    "titleEn": "",
-    "titleFr": "",
-    "emailSubjectEn": "",
-    "emailSubjectFr": "",
-    "layout": [ ],
-    "brand": {},
-    "elements": [ ],
-    "startPage": {},
-    "endPage": {},
-    "introduction": {},
-    "privacyPolicy": {}
-  }}],
+  "examples": [
+    {
+      "internalTitleEn": "",
+      "internalTitleFr": "",
+      "securityAttribute": "",
+      "submission": {
+        "email": ""
+      },
+      "form": {
+        "version": 1,
+        "titleEn": "",
+        "titleFr": "",
+        "emailSubjectEn": "",
+        "emailSubjectFr": "",
+        "layout": [],
+        "brand": {},
+        "elements": [],
+        "startPage": {},
+        "endPage": {},
+        "introduction": {},
+        "privacyPolicy": {}
+      }
+    }
+  ],
   "properties": {
     "internalTitleEn": {
       "description": "The internal title of the form in English",
@@ -52,7 +55,7 @@
         "description": "The displayed title of the form to the user in French",
         "id": "#/properties/titleFr",
         "type": "string"
-      },      
+      },
       "type": "object",
       "properties": {
         "layout": {
@@ -63,7 +66,7 @@
           },
           "uniqueItems": true,
           "examples": [[2, 3, 4, 6, 9, 5]]
-        },        
+        },
         "elements": {
           "description": "A list of elements contained within the form.",
           "type": "array",
@@ -104,7 +107,7 @@
                 "descriptionEn": "",
                 "descriptionFr": ""
               }
-            }            
+            }
           ]
         },
         "brand": {
@@ -170,8 +173,8 @@
             "referrerUrlFr": {
               "type": "string"
             }
-          }       
-        }       
+          }
+        }
       },
       "required": ["elements", "layout", "titleEn", "titleFr"]
     },
@@ -199,15 +202,10 @@
         }
       ]
     },
-    "publishingStatus": {
-      "description": "If set to false, the link to the form will not appear on the main page, rather under 'sandbox'",
-      "id": "#/properties/publishingStatus",
-      "type": "boolean"
-    },
     "displayAlphaBanner": {
       "description": "If set to false, the ALPHA tag will not appear in the header of the page. If not set if will be defaulted to true.",
       "id": "#/properties/displayAlphaBanner",
-      "type": "boolean"      
+      "type": "boolean"
     },
     "securityAttribute": {
       "description": "It shows an administrator what procedure should be taken when accessing a form's responses",
@@ -220,7 +218,7 @@
       "description": ""
     }
   },
-  "required": ["form", "submission", "publishingStatus"],
+  "required": ["form", "submission"],
   "additionalProperties": true,
   "definitions": {
     "element": {
@@ -320,19 +318,23 @@
                   "type": "boolean"
                 }
               },
-              "examples":[
-                {"validation": {
-                  "required": true,
-                  "type": "email",
-                  "descriptionEN": "Please enter a valid email address.",
-                  "descriptionFR": "Veuillez entrer une adresse courriel valide."
-                }},
-                {"validation": {
-                  "required": false,
-                  "type": "alphanumeric",
-                  "descriptionEN": "Please enter your home street address.",
-                  "descriptionFR": "Veuillez entrer votre adresse postale."
-                }}      
+              "examples": [
+                {
+                  "validation": {
+                    "required": true,
+                    "type": "email",
+                    "descriptionEN": "Please enter a valid email address.",
+                    "descriptionFR": "Veuillez entrer une adresse courriel valide."
+                  }
+                },
+                {
+                  "validation": {
+                    "required": false,
+                    "type": "alphanumeric",
+                    "descriptionEN": "Please enter your home street address.",
+                    "descriptionFR": "Veuillez entrer votre adresse postale."
+                  }
+                }
               ]
             }
           }

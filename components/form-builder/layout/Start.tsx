@@ -1,65 +1,20 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import useTemplateStore from "../store/useTemplateStore";
+import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon } from "../icons";
 import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  .box {
-    background-color: #ebebeb;
-    border: 3px solid #000000;
-    border-radius: 10px;
-    height: 320px;
-    width: 320px;
-    margin: 0 1rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 110px 20px 0 25px;
-    text-align: left;
-
-    &:hover {
-      cursor: pointer;
-      background-color: #d7d9db;
-
-      h2 {
-        text-decoration: underline;
-      }
-    }
-
-    h2,
-    p {
-      margin: 0;
-      margin-bottom: 5px;
-      padding: 0;
-    }
-
-    svg {
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 16px;
-    }
-  }
-
-  #file-upload {
-    display: none;
-  }
-`;
-
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
 
-  const { importTemplate } = useTemplateStore();
+  const importTemplate = useTemplateStore((s) => s.importTemplate);
   const [errors, setErrors] = useState("");
+
+  // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
+  const cleaner = (key: string, value: string) =>
+    ["__proto__", "constructor"].includes(key) ? undefined : value;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target || !e.target.files) {
       return;
@@ -73,7 +28,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
         let data;
 
         try {
-          data = JSON.parse(e.target.result);
+          data = JSON.parse(e.target.result, cleaner);
         } catch (e) {
           if (e instanceof SyntaxError) {
             setErrors(t("startErrorParse"));
@@ -98,28 +53,42 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
     }
   };
 
+  const boxClass =
+    "group w-80 h-80 mx-4 pt-28 pl-6 pr-5 bg-gray-background border-3 border-black-default rounded-xl flex flex-col focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 hover:cursor-pointer focus:cursor-pointer hover:bg-gray-selected";
+
+  /* eslint-disable */
   return (
     <>
       {errors && <div className="pt-2 pb-2 mt-4 mb-4 text-lg text-red-700">{errors}</div>}
-      <StyledContainer>
+      <div className="flex justify-center">
         <button
-          className="box"
+          className={boxClass}
           onClick={(e) => {
             e.preventDefault();
             changeTab("create");
           }}
         >
-          <DesignIcon />
-          <h2>{t("startH2")}</h2>
-          <p>{t("startP1")}</p>
+          <DesignIcon className="mb-2 scale-125" />
+          <h2 className="p-0 mb-1 group-hover:underline group-focus:underline">{t("startH2")}</h2>
+          <p className="text-sm">{t("startP1")}</p>
         </button>
-        <label className="box" htmlFor="file-upload">
-          <ExternalLinkIcon />
-          <h2>{t("startH3")}</h2>
-          <p>{t("startP2")}</p>
+        <label
+          className={boxClass}
+          htmlFor="file-upload"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              const uploadButton = document.getElementById("file-upload");
+              if (uploadButton) uploadButton.click();
+            }
+          }}
+          tabIndex={0}
+        >
+          <ExternalLinkIcon className="mb-2" />
+          <h2 className="p-0 mb-1 group-hover:underline group-focus:underline">{t("startH3")}</h2>
+          <p className="text-sm">{t("startP2")}</p>
         </label>
-        <input id="file-upload" type="file" onChange={handleChange} />
-      </StyledContainer>
+        <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
+      </div>
     </>
   );
 };

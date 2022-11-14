@@ -62,7 +62,9 @@
     "templates": "Templates",
     "features": "Options",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "privileges": "Privileges",
+    "myforms": "My Forms"
   },
   "formElements": {
     "characterCount": {
@@ -85,5 +87,8 @@
   "loginMenu": {
     "login": "Sign in",
     "logout": "Sign out"
+  },
+  "alert": {
+    "dismissAlert": "Close this alert"
   }
 }

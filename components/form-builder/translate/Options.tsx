@@ -1,31 +1,30 @@
-import { logMessage } from "@lib/logger";
+import { FormElement } from "@lib/types";
 import { useTranslation } from "next-i18next";
 import React from "react";
-import useTemplateStore from "../store/useTemplateStore";
-import { ElementType, Language } from "../types";
+import { useTemplateStore } from "../store/useTemplateStore";
+import { Language } from "../types";
 
 export const Options = ({
   element,
   index,
   translationLanguagePriority,
 }: {
-  element: ElementType;
+  element: FormElement;
   index: number;
   translationLanguagePriority: Language;
 }) => {
-  logMessage.info(element);
-  const { updateField } = useTemplateStore();
+  const updateField = useTemplateStore((s) => s.updateField);
   const { t } = useTranslation("form-builder");
   const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
 
   return (
     <>
       <div>
-        {element.properties.choices.map((choice, choiceIndex) => (
+        {element.properties.choices?.map((choice, choiceIndex) => (
           <div className="choice" key={`choice-${choiceIndex}`}>
             <fieldset className="text-entry">
               <legend className="section-heading">
-                {t(element.type)}: {t("Option text")}
+                {t(element.type)}: {t("optionText")}
               </legend>
               <div className="section-text">
                 <label

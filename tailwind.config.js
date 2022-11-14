@@ -119,6 +119,7 @@ module.exports = {
       },
       green: {
         ...colors.emerald,
+        light: "#ECF3EC",
         default: "#00703C",
         darker: "#005930",
       },
@@ -153,5 +154,5 @@ module.exports = {
     },
   },
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };
