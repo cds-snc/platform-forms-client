@@ -3,13 +3,14 @@ import { requireAuthentication } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { getUsers } from "@lib/users";
 import { useRefresh } from "@lib/hooks";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { Button } from "@components/forms";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface User {
   privileges: Privilege[];
@@ -176,7 +177,9 @@ const Users = ({
   );
 };
 
-export default Users;
+Users.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   checkPrivileges(
@@ -206,3 +209,5 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     },
   };
 });
+
+export default Users;

@@ -1,15 +1,17 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import Link from "next/link";
 import { User } from "next-auth";
+import { NextPageWithLayout } from "@pages/_app";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 type AdminWelcomeProps = {
   user: User;
 };
 
-const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => {
+const AdminWelcome: NextPageWithLayout<AdminWelcomeProps> = (props: AdminWelcomeProps) => {
   const { t, i18n } = useTranslation("admin-login");
   const { user } = props;
 
@@ -51,7 +53,9 @@ const AdminWelcome: React.FC<AdminWelcomeProps> = (props: AdminWelcomeProps) => 
     </>
   );
 };
-
+AdminWelcome.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+};
 export const getServerSideProps = requireAuthentication(async ({ locale }) => {
   return {
     props: {
