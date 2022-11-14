@@ -18,7 +18,7 @@ import * as Yup from "yup";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../email.domains.json";
 import { logMessage } from "@lib/logger";
-import Link from "next/link";
+import { StyledLink } from "@components/globals/StyledLink";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
@@ -148,18 +148,17 @@ export default function UnlockPublishing() {
                     >
                       {t("submitButton", { ns: "common" })}
                     </Button>
-                    <Link href={`/${i18n.language}/myforms/`}>
-                      <a
-                        className={` 
+                    <StyledLink
+                      href={`/${i18n.language}/myforms/`}
+                      className={` 
                           no-underline visited:text-black-default 
                           bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
                           hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
                           focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
                         `}
-                      >
-                        {t("unlockPublishing.skipStepButton")}
-                      </a>
-                    </Link>
+                    >
+                      {t("unlockPublishing.skipStepButton")}
+                    </StyledLink>
                   </div>
                 </form>
               </>
@@ -176,18 +175,17 @@ export default function UnlockPublishing() {
           <p>{t("unlockPublishingSubmitted.whatNext.paragraph3")}</p>
           <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
           <div className="flex mt-14">
-            <Link href={`/${i18n.language}/myforms/`}>
-              <a
-                className={` 
-                  no-underline visited:text-white-default mr-8
-                  bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
-                  hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
-                  focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
-                `}
-              >
-                {t("continue", { ns: "common" })}
-              </a>
-            </Link>
+            <StyledLink
+              href={`/${i18n.language}/myforms/`}
+              className={` 
+                no-underline visited:text-white-default mr-8
+                bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+                hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
+                focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+              `}
+            >
+              {t("continue", { ns: "common" })}
+            </StyledLink>
           </div>
         </>
       )}

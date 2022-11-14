@@ -4,7 +4,7 @@ import { checkPrivileges } from "@lib/privileges";
 
 import React from "react";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
+import { StyledLink } from "@components/globals/StyledLink";
 
 export default function AccountCreated() {
   const { t, i18n } = useTranslation(["signup"]);
@@ -25,30 +25,28 @@ export default function AccountCreated() {
       <p>{t("accountCreated.unlockPublishing.paragraph1")}</p>
       <p className="mt-6">{t("accountCreated.unlockPublishing.paragraph2")}</p>
       <div className="mt-20">
-        <Link href={`/${i18n.language}/unlock-publishing/`}>
-          <a
-            className={` 
-              no-underline visited:text-white-default mr-8
-              bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
-              hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
-              focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
-            `}
-          >
-            {t("accountCreated.unlockPublishingButton")}
-          </a>
-        </Link>
-        <Link href={`/${i18n.language}/myforms/`}>
-          <a
-            className={` 
-              no-underline visited:text-black-default 
-              bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
-              hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
-              focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
-            `}
-          >
-            {t("accountCreated.skipStepButton")}
-          </a>
-        </Link>
+        <StyledLink
+          href={`/${i18n.language}/unlock-publishing/`}
+          className={` 
+            no-underline visited:text-white-default mr-8
+            bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+            hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
+            focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+          `}
+        >
+          {t("accountCreated.unlockPublishingButton")}
+        </StyledLink>
+        <StyledLink
+          href={`/${i18n.language}/myforms/`}
+          className={` 
+            no-underline visited:text-black-default 
+            bg-white-default text-black-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+            hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
+            focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+          `}
+        >
+          {t("accountCreated.skipStepButton")}
+        </StyledLink>
       </div>
     </>
   );
