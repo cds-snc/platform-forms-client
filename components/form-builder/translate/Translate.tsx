@@ -139,15 +139,12 @@ export const Translate = () => {
     <>
       <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
       <div>
-        <p>
-          Translate your form content side by side to provide a bilingual experience to those
-          filling out your form.
-        </p>
+        <p>{t("translateDescription")}</p>
         <br />
 
         <FlexDiv>
           <FlexDiv>
-            <LangSpan>{translationLanguagePriority === "en" ? "English" : "French"}</LangSpan>
+            <LangSpan>{translationLanguagePriority === "en" ? t("english") : t("french")}</LangSpan>
             <Button
               className="mx-4"
               onClick={switchLanguage}
@@ -155,7 +152,7 @@ export const Translate = () => {
             >
               {t("switch")}
             </Button>
-            <LangSpan>{translationLanguagePriority === "en" ? "French" : "English"}</LangSpan>
+            <LangSpan>{translationLanguagePriority === "en" ? t("french") : t("english")}</LangSpan>
           </FlexDiv>
           <DownloadCSV />
         </FlexDiv>
@@ -168,7 +165,7 @@ export const Translate = () => {
 
           <fieldset className="text-entry">
             <legend className="section-heading">
-              {t("Form introduction")}: {t("title")}
+              {t("formIntroduction")}: {t("title")}
             </legend>
             <div className="section-text">
               <label htmlFor="form-title-en" className="sr-only">
@@ -217,7 +214,7 @@ export const Translate = () => {
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <div className="text-entry">
               <div className="section-heading">
-                {t("Form introduction")}: {t("Description")}
+                {t("formIntroduction")}: {t("description")}
               </div>
               <div className="section-text section-text--rich-text">
                 <RichTextEditor
@@ -264,7 +261,7 @@ export const Translate = () => {
                 <div className="section-title">
                   <h2>
                     {element.type !== "richText" && <>Question {questionsIndex++}</>}{" "}
-                    {element.type === "richText" && <>Page text</>}
+                    {element.type === "richText" && <>{t("pageText")}</>}
                   </h2>
                   <hr />
                 </div>
@@ -322,12 +319,12 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Privacy statement")}</h2>
+            <h2>{t("privacyStatement")}</h2>
             <hr />
           </div>
           <div className="text-entry">
             <div className="section-heading">
-              {t("Page text")}: {t("Description")}
+              {t("pageText")}: {t("description")}
             </div>
 
             <div className="section-text section-text--rich-text">
@@ -369,12 +366,12 @@ export const Translate = () => {
 
         <SectionDiv>
           <div className="section-title">
-            <h2>{t("Confirmation message")}</h2>
+            <h2>{t("confirmationMessage")}</h2>
             <hr />
           </div>
           <div className="text-entry">
             <div className="section-heading">
-              {t("Page text")}: {t("Description")}
+              {t("pageText")}: {t("description")}
             </div>
             <div className="section-text section-text--rich-text">
               <RichTextEditor
