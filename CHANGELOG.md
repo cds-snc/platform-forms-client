@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
 - Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 - Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
+- New API path to request publishing permission [#1226](https://github.com/cds-snc/platform-forms-client/issues/1226)
 
 ### Changed
 
