@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 import { ElementPanel } from "../panel/ElementPanel";
@@ -63,12 +64,22 @@ export const Layout = () => {
       case "start":
         return (
           <main id="content" className="col-span-12">
+            <Head>
+              <title>
+                {t("gcFormsStart")} — {t("gcForms")}
+              </title>
+            </Head>
             <Start changeTab={setTab} />
           </main>
         );
       case "create":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsEdit")} — {t("gcForms")}
+              </title>
+            </Head>
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <ElementPanel />
@@ -78,6 +89,11 @@ export const Layout = () => {
       case "preview":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsPreview")} — {t("gcForms")}
+              </title>
+            </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <Preview />
@@ -87,6 +103,11 @@ export const Layout = () => {
       case "test-data-delivery":
         return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsResponseDelivery")} — {t("gcForms")}
+              </title>
+            </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
@@ -99,6 +120,11 @@ export const Layout = () => {
       case "translate":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsTranslate")} — {t("gcForms")}
+              </title>
+            </Head>
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <Translate />
@@ -108,6 +134,11 @@ export const Layout = () => {
       case "share":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsShare")} — {t("gcForms")}
+              </title>
+            </Head>
             <main id="content">
               <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
               <Share />
@@ -117,12 +148,22 @@ export const Layout = () => {
       case "publish":
         return (
           <main id="content" className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsPublish")} — {t("gcForms")}
+              </title>
+            </Head>
             <Publish />
           </main>
         );
       case "published":
         return status === "authenticated" ? (
           <main id="content" className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsPublished")} — {t("gcForms")}
+              </title>
+            </Head>
             <Published id={id} />
           </main>
         ) : (
@@ -131,6 +172,11 @@ export const Layout = () => {
       case "settings":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsSettings")} — {t("gcForms")}
+              </title>
+            </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <h1 className="visually-hidden">Form settings</h1>
