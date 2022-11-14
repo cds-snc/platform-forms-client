@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
 const Logout = () => {
   const { i18n, t } = useTranslation("logout");
@@ -29,6 +30,10 @@ const Logout = () => {
       </div>
     </>
   );
+};
+
+Logout.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

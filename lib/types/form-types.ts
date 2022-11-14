@@ -95,6 +95,7 @@ export interface BrandProperties {
   urlFr?: string;
   // if set to true the GC branding will be removed from the footer
   disableGcBranding?: boolean;
+  [key: string]: string | boolean | undefined;
 }
 
 // defines the fields for the main form configuration object

@@ -2,7 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useFormik } from "formik";
 import { Button } from "@components/forms";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
@@ -10,6 +10,7 @@ import { Privilege } from "@lib/types";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 const PrivilegeRow = ({
   privilege,
@@ -242,7 +243,9 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
   );
 };
 
-export default Privileges;
+Privileges.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
@@ -255,3 +258,5 @@ export const getServerSideProps = requireAuthentication(async ({ user: { ability
     },
   };
 });
+
+export default Privileges;

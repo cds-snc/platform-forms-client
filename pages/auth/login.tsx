@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
@@ -9,9 +9,10 @@ import Link from "next/link";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 
-export default function Register() {
+const Register = () => {
   const { username, cognitoError, setCognitoError, login } = useAuth();
   const { t } = useTranslation(["login", "common"]);
   const registrationOpen = useFlag("accountRegistration");
@@ -95,7 +96,11 @@ export default function Register() {
       )}
     </Formik>
   );
-}
+};
+
+Register.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
+};
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await unstable_getServerSession(context.req, context.res, authOptions);
@@ -121,3 +126,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
+export default Register;
