@@ -33,7 +33,7 @@ export default function UnlockPublishing() {
     goals: string
   ) => {
     return await axios({
-      url: "/api/request/publish",
+      url: "/api/request/publishXX",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export default function UnlockPublishing() {
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
-      setErrorState({ message: "There was an error. Please try again later." });
+      setErrorState({ message: t("submissionError") });
     });
   };
 
@@ -73,7 +73,7 @@ export default function UnlockPublishing() {
                 const response = await handleRequestPublishing(managerEmail, department, goals);
                 setSubmitting(false);
                 if (response.status !== 200) {
-                  throw new Error("Request failed with status " + response.status);
+                  throw new Error(t("submissionError"));
                 }
                 setErrorState({ message: "" });
                 // Shows success screen
@@ -81,7 +81,7 @@ export default function UnlockPublishing() {
               } catch (err) {
                 logMessage.error(err);
                 setSubmitting(false);
-                setErrorState({ message: "There was an error. Please try again later." });
+                setErrorState({ message: t("submissionError") });
               }
             }}
             validateOnChange={false}
