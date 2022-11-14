@@ -9,7 +9,8 @@ import { prismaMock } from "@jestUtils";
 import {
   createTemplate,
   getAllTemplates,
-  getTemplateByID,
+  getPublicTemplateByID,
+  getFullTemplateByID,
   updateTemplate,
   deleteTemplate,
   getTemplateSubmissionTypeByID,
@@ -183,13 +184,13 @@ describe("Template CRUD functions", () => {
     });
   });
 
-  it("Get a single Template", async () => {
+  it("Get a public template", async () => {
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
       jsonConfig: formConfiguration,
     });
 
-    const template = await getTemplateByID("formTestID");
+    const template = await getPublicTemplateByID("formTestID");
 
     expect(prismaMock.template.findUnique).toHaveBeenCalledWith({
       where: {
@@ -203,16 +204,50 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(template).toEqual({
+    expect(template).toEqual(
+      onlyIncludePublicProperties({
+        id: "formtestID",
+        ...formConfiguration,
+      } as unknown as FormRecord)
+    );
+  });
+
+  it("Get a full template", async () => {
+    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       id: "formtestID",
-      ...formConfiguration,
+      jsonConfig: formConfiguration,
+      users: [{ id: "1" }],
     });
+
+    const template = await getFullTemplateByID(ability, "formTestID");
+
+    expect(prismaMock.template.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: "formTestID",
+      },
+      select: {
+        id: true,
+        jsonConfig: true,
+        isPublished: true,
+        ttl: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    expect(template).toEqual({ id: "formtestID", ...formConfiguration });
   });
 
   it("Null returned when Template does not Exist", async () => {
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
 
-    const template = await getTemplateByID("asdf");
+    const template = await getPublicTemplateByID("asdf");
     expect(template).toBe(null);
   });
 
@@ -223,7 +258,7 @@ describe("Template CRUD functions", () => {
       ttl: new Date(),
     });
 
-    const template = await getTemplateByID("formtestID");
+    const template = await getPublicTemplateByID("formtestID");
 
     expect(template).toBe(null);
   });
@@ -257,6 +292,7 @@ describe("Template CRUD functions", () => {
         id: true,
         jsonConfig: true,
         isPublished: true,
+        ttl: true,
         users: {
           select: {
             id: true,
@@ -458,6 +494,10 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
+      await getFullTemplateByID(ability, "1");
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    await expect(async () => {
       await updateTemplate(
         ability,
         "test1",
@@ -476,7 +516,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
 
-  it("User with no relation to the template being interacted with should not be able to use update and delete functions", async () => {
+  it("User with no relation to the template being interacted with should not be able to use get, update and delete functions", async () => {
     const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -484,6 +524,10 @@ describe("Template CRUD functions", () => {
       jsonConfig: formConfiguration,
       users: [{ id: "2" }],
     });
+
+    await expect(async () => {
+      await getFullTemplateByID(ability, "1");
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
       await updateTemplate(

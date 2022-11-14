@@ -1,4 +1,4 @@
-import { getTemplateByID, onlyIncludePublicProperties } from "@lib/templates";
+import { getPublicTemplateByID } from "@lib/templates";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { checkOne } from "@lib/cache/flags";
 import React, { ReactElement } from "react";
@@ -8,7 +8,7 @@ import Head from "next/head";
 import { Form, TextPage } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
-import { PublicFormRecord, FormRecord } from "@lib/types";
+import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "@pages/_app";
 
@@ -78,7 +78,7 @@ RenderForm.getLayout = function getLayout(page: ReactElement) {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const unpublishedForms = await checkOne("unpublishedForms");
-  let form: FormRecord | null = null;
+  let publicForm: PublicFormRecord | null = null;
   const formID = context.params?.form;
   const isEmbeddable = context.query?.embed == "true" || null;
 
@@ -89,17 +89,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (Array.isArray(context.query?.formObject)) return redirect(context.locale);
     const queryObj = context.query.formObject;
     const parsedForm = JSON.parse(queryObj);
-    form = parsedForm.form ?? null;
+    publicForm = parsedForm.form ?? null;
   } else {
     //Otherwise, get the form object via the dataLayer library
     // Needed for typechecking of a ParsedURLQuery type which can be a string or string[]
     if (!formID || Array.isArray(formID)) return redirect(context.locale);
 
-    form = await getTemplateByID(formID);
+    publicForm = await getPublicTemplateByID(formID);
   }
-
-  // Ensure only public properties are passed to the client
-  const publicForm: PublicFormRecord | null = form && onlyIncludePublicProperties(form);
 
   // Redirect if form doesn't exist and
   // Only retrieve publish ready forms if isProduction
