@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, ExternalLinkIcon } from "../icons";
+import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
+
+import { errorMessage } from "../validate";
 
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
 
   const importTemplate = useTemplateStore((s) => s.importTemplate);
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState<errorMessage[]>();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
   const cleaner = (key: string, value: string) =>
@@ -34,14 +36,16 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           data = JSON.parse(e.target.result, cleaner);
         } catch (e) {
           if (e instanceof SyntaxError) {
-            setErrors(t("startErrorParse"));
+            setErrors([{ message: t("startErrorParse") }]);
             target.value = "";
             return;
           }
         }
 
-        if (!validateTemplate(data)) {
-          setErrors(t("startErrorValidation"));
+        const validationResult = validateTemplate(data);
+
+        if (!validationResult.valid) {
+          setErrors(validationResult.errors);
           target.value = "";
           return;
         }
@@ -53,7 +57,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
       };
     } catch (e) {
       if (e instanceof Error) {
-        setErrors(e.message);
+        setErrors([{ message: e.message }]);
       }
     }
   };
@@ -61,10 +65,24 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const boxClass =
     "group w-80 h-80 mx-4 pt-28 pl-6 pr-5 bg-gray-background border-3 border-black-default rounded-xl flex flex-col focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 hover:cursor-pointer focus:cursor-pointer hover:bg-gray-selected";
 
-  /* eslint-disable */
   return (
     <>
-      {errors && <div className="pt-2 pb-2 mt-4 mb-4 text-lg text-red-700">{errors}</div>}
+      {errors && (
+        <div className="bg-red-100 w-5/12 m-auto mb-8 p-6 flex" role="alert">
+          <WarningIcon />
+          <div>
+            <h3 className="ml-6 mb-2 mt-1">{t("failedToReadFormFile")}</h3>
+            <ul className="list-none pl-6 mb-4">
+              {errors.map((error, index) => {
+                return <li key={`section-${index}`}>{error.message}</li>;
+              })}
+            </ul>
+            <a href="https://example.com" className="ml-6">
+              {t("contactSupport")}
+            </a>
+          </div>
+        </div>
+      )}
       <div className="flex justify-center">
         <button
           className={boxClass}
