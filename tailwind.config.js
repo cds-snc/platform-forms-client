@@ -60,9 +60,9 @@ module.exports = {
       prose: "75ch",
     },
     screens: {
-      xxl: { max: "1240px" },
-      xl: { max: "1025px" },
-      lg: { max: "769px" },
+      xxl: { max: "1200px" },
+      xl: { max: "992px" },
+      lg: { max: "768px" },
       md: { max: "550px" },
       sm: { max: "450px" },
       xs: { max: "320px" },

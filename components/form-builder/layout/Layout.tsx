@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 import { ElementPanel } from "../panel/ElementPanel";
@@ -62,30 +63,56 @@ export const Layout = () => {
     switch (tab) {
       case "start":
         return (
-          <div className="col-span-12">
+          <main id="content" className="col-span-12">
+            <Head>
+              <title>
+                {t("gcFormsStart")} — {t("gcForms")}
+              </title>
+            </Head>
             <Start changeTab={setTab} />
-          </div>
+          </main>
         );
       case "create":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsEdit")} — {t("gcForms")}
+              </title>
+            </Head>
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <ElementPanel />
+            <main id="content">
+              <ElementPanel />
+            </main>
           </div>
         );
       case "preview":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsPreview")} — {t("gcForms")}
+              </title>
+            </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <Preview />
+            <main id="content">
+              <Preview />
+            </main>
           </div>
         );
       case "test-data-delivery":
         return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsResponseDelivery")} — {t("gcForms")}
+              </title>
+            </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
-            <TestDataDelivery />
+            <main id="content">
+              <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
+              <TestDataDelivery />
+            </main>
           </div>
         ) : (
           setTab("create")
@@ -93,58 +120,89 @@ export const Layout = () => {
       case "translate":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsTranslate")} — {t("gcForms")}
+              </title>
+            </Head>
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <Translate />
+            <main id="content">
+              <Translate />
+            </main>
           </div>
         );
       case "share":
         return (
           <div className="col-start-4 col-span-9">
-            <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
-            <Share />
+            <Head>
+              <title>
+                {t("gcFormsShare")} — {t("gcForms")}
+              </title>
+            </Head>
+            <main id="content">
+              <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
+              <Share />
+            </main>
           </div>
         );
       case "publish":
         return (
-          <div className="col-start-4 col-span-9">
+          <main id="content" className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsPublish")} — {t("gcForms")}
+              </title>
+            </Head>
             <Publish />
-          </div>
+          </main>
         );
       case "published":
         return status === "authenticated" ? (
-          <div className="col-start-4 col-span-9">
+          <main id="content" className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsPublished")} — {t("gcForms")}
+              </title>
+            </Head>
             <Published id={id} />
-          </div>
+          </main>
         ) : (
           setTab("create")
         );
       case "settings":
         return (
           <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsSettings")} — {t("gcForms")}
+              </title>
+            </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <h1 className="visually-hidden">Form settings</h1>
-            <Settings />
+            <main id="content">
+              <h1 className="visually-hidden">Form settings</h1>
+              <Settings />
+            </main>
           </div>
         );
       default:
         return (
-          <div className="col-span-12">
+          <main id="content" className="col-span-12">
             <Start changeTab={setTab} />
-          </div>
+          </main>
         );
     }
   };
   /* eslint-disable */
 
   return (
-    <main className="container--wet">
+    <div id="page-container">
       <div className="grid grid-cols-12 gap-4">
-        {(currentTab !== "start" && currentTab !== "published") && (
+        {currentTab !== "start" && currentTab !== "published" && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
         <>{form && renderTab(currentTab)}</>
       </div>
-    </main>
+    </div>
   );
   /* eslint-enable */
 };

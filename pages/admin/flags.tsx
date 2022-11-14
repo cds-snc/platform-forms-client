@@ -1,15 +1,16 @@
 import useSWR from "swr";
-import React from "react";
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import Loader from "@components/globals/Loader";
 import { Button } from "@components/forms";
 import { checkPrivileges } from "@lib/privileges";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json());
 
-const Flags: React.FC = () => {
+const Flags = () => {
   const { t } = useTranslation("admin-flags");
 
   const { data: flags, error, mutate: reload } = useSWR("/api/flags", fetcher);
@@ -63,6 +64,10 @@ const Flags: React.FC = () => {
       )}
     </>
   );
+};
+
+Flags.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(async ({ locale, user: { ability } }) => {

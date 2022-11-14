@@ -2,7 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import { useTranslation } from "next-i18next";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { getUsers } from "@lib/users";
@@ -13,6 +13,7 @@ import { getProperty } from "@lib/formBuilder";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { useRouter } from "next/router";
+import BaseLayout from "@components/globals/layouts/BaseLayout";
 
 interface User {
   id: string;
@@ -113,6 +114,10 @@ const redirect = (locale: string | undefined) => {
       permanent: false,
     },
   };
+};
+
+Users.getLayout = (page: ReactElement) => {
+  return <BaseLayout>{page}</BaseLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(
