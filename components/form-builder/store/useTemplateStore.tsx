@@ -218,19 +218,20 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
               state.id = "";
               state.lang = "en";
               state.form = defaultForm;
-              state.submission = { email: "test@example.com" };
+              state.submission = { email: "" };
               state.isPublished = false;
               state.securityAttribute = "Unclassified";
             });
           },
           importTemplate: (json) =>
             set((state) => {
+              state.submission = { email: json.submission?.email || "" };
               state.form = { ...defaultForm, ...json.form };
             }),
         }),
         {
           name: "form-storage",
-          getStorage: () => sessionStorage,
+          getStorage: typeof window !== undefined ? () => sessionStorage : undefined,
         }
       )
     )
