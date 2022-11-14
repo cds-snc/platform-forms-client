@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   res,
 }) => {
-  const [tab = "start", formID = null] = params || [];
+  const [tab = "create", formID = null] = params || [];
   const FormbuilderParams: { tab: string; initialForm: null | FormRecord } = {
     tab,
     initialForm: null,

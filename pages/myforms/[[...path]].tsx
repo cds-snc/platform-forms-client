@@ -92,7 +92,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </TabPanel>
 
       <div className="absolute top-48">
-        <Link href="/form-builder/create" passHref>
+        <Link href="/form-builder/start" passHref>
           {/* The following is needed as jsx-ally cannot see the rendered a tag with the passed href*/}
           {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a>
