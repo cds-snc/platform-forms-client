@@ -33,7 +33,7 @@ export default function UnlockPublishing() {
     goals: string
   ) => {
     return await axios({
-      url: "/api/request/publishXX",
+      url: "/api/request/publish",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
