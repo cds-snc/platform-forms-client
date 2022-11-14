@@ -18,7 +18,7 @@ import * as Yup from "yup";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../email.domains.json";
 import { logMessage } from "@lib/logger";
-import { StyledLink } from "@components/globals/StyledLink";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import axios from "axios";
 
 export default function UnlockPublishing() {
