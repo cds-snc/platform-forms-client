@@ -67,7 +67,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.2
-        uses: aws-actions/amazon-ecs-deploy-task-definition@e695972c2c4796ef2e79cfd6a446471174ecba4b
+        uses: aws-actions/amazon-ecs-deploy-task-definition@6de0d525c1bc3065f131da7bb3394fb7373b8ebf
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
