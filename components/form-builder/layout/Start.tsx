@@ -19,6 +19,9 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
     if (!e.target || !e.target.files) {
       return;
     }
+
+    const target = e.target;
+
     try {
       const fileReader = new FileReader();
 
@@ -32,12 +35,14 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
         } catch (e) {
           if (e instanceof SyntaxError) {
             setErrors(t("startErrorParse"));
+            target.value = "";
             return;
           }
         }
 
         if (!validateTemplate(data)) {
           setErrors(t("startErrorValidation"));
+          target.value = "";
           return;
         }
 
