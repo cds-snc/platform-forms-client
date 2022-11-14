@@ -70,7 +70,7 @@ export const TestDataDelivery = () => {
         </Link>
       </div>
 
-      <p>{t("ToTestInstructions")}</p>
+      <p>{t("toTestInstructions")}</p>
       <ol className="ml-5 mb-8 mt-6">
         {!id && (
           <li className="mb-4">
@@ -84,7 +84,7 @@ export const TestDataDelivery = () => {
                 error ? "" : "hidden"
               }`}
             >
-              <p>There was an error publishing the form</p>
+              <p>{t("thereWasAnErrorPublishing")}</p>
             </div>
           </li>
         )}

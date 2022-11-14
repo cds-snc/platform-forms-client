@@ -24,7 +24,7 @@ export const Options = ({
           <div className="choice" key={`choice-${choiceIndex}`}>
             <fieldset className="text-entry">
               <legend className="section-heading">
-                {t(element.type)}: {t("Option text")}
+                {t(element.type)}: {t("optionText")}
               </legend>
               <div className="section-text">
                 <label
