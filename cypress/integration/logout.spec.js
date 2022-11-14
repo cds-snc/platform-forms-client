@@ -6,16 +6,16 @@ describe("Logout Page test", () => {
   it("Display french page version", () => {
     cy.get("button[lang='fr']").click();
     cy.get("h2").should("contain", "Vous avez fermé votre session");
-    cy.get("[id=login-button]").should("contain", "Se connecter");
+    cy.get("div[id=login-menu]").should("contain", "Se connecter");
   });
 
   it("Toggle page language to en", () => {
     cy.get("h2").should("contain", "You are signed out");
-    cy.get("[id=login-button").should("contain", "Go to Login");
+    cy.get("div[id=login-menu]").should("contain", "Sign in");
   });
 
   it("Go to login page", () => {
-    cy.get("[id=login-button").click();
+    cy.get("div[id=login-menu]>a").click();
     cy.url().should("contain", "/en/auth/login");
     cy.get("h1").should("contain", "Sign In");
   });
