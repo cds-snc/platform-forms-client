@@ -94,8 +94,13 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       <div className="absolute top-48">
         <Link href="/form-builder/start" passHref>
           {/* The following is needed as jsx-ally cannot see the rendered a tag with the passed href*/}
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+          <a
+            onClick={() => {
+              // clear the form builder session state so we land on start page
+              sessionStorage.clear();
+            }}
+          >
             {t("actions.createNewForm")} <span aria-hidden="true">+</span>
           </a>
         </Link>
