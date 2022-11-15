@@ -108,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (session)
     return {
       redirect: {
-        destination: `/${context.locale}/admin/`,
+        destination: `/${context.locale}/myforms/`,
         permanent: false,
       },
     };
