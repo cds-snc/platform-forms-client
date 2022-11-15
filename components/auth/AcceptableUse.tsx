@@ -9,8 +9,12 @@ import { getCsrfToken } from "next-auth/react";
 
 interface AcceptableUseProps {
   content: string;
+  referer?: string;
 }
-export const AcceptableUseTerms = ({ content }: AcceptableUseProps): React.ReactElement => {
+export const AcceptableUseTerms = ({
+  content,
+  referer = "/myforms",
+}: AcceptableUseProps): React.ReactElement => {
   const router = useRouter();
   const { t, i18n } = useTranslation("common");
   const session = useSession();
@@ -32,7 +36,8 @@ export const AcceptableUseTerms = ({ content }: AcceptableUseProps): React.React
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         })
           .then(() => {
-            router.push({ pathname: `/${i18n.language}/myforms` });
+            // Go back to the page the user was redirected from.
+            router.replace(referer);
           })
           .catch((err) => {
             logMessage.error(err);
