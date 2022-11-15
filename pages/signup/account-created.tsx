@@ -54,7 +54,7 @@ export default function AccountCreated() {
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   {
-    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+    checkPrivileges(ability, [{ action: "update", subject: "FormRecord", field: "isPublished" }]);
 
     return {
       props: {
