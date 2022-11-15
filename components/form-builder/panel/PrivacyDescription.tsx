@@ -12,7 +12,7 @@ export const PrivacyDescription = () => {
   const { t } = useTranslation("form-builder");
   return (
     <StyledDiv>
-      <Markdown>{t("privacyNoticeDescription")}</Markdown>
+      <Markdown options={{ forceBlock: true }}>{t("privacyNoticeDescription")}</Markdown>
     </StyledDiv>
   );
 };

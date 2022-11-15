@@ -47,11 +47,11 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div className="mb-5">
         <h3 className="mb-1">{t("publishedErrors")}</h3>
-        <Markdown>{t("ifYouAreExperiencingProblems")}</Markdown>
+        <Markdown options={{ forceBlock: true }}>{t("ifYouAreExperiencingProblems")}</Markdown>
       </div>
       <div className="mb-10">
         <h3 className="mb-1">{t("provideFeedback")}</h3>
-        <Markdown>{t("didYouFindThisToolHelpful")}</Markdown>
+        <Markdown options={{ forceBlock: true }}>{t("didYouFindThisToolHelpful")}</Markdown>
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
