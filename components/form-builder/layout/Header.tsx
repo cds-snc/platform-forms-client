@@ -31,6 +31,8 @@ export const Header = () => {
   const handleClick = (tab: string) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
+      // clear session storage here to allow moving back to start page
+      sessionStorage.clear();
       setTab(tab);
     };
   };
@@ -76,7 +78,7 @@ export const Header = () => {
         <div className="inline-flex gap-4">
           <div className="md:text-small_base text-base font-normal not-italic">
             {ability?.can("view", "FormRecord") && (
-              <Link href="/myforms">{t("adminNav.myForms", { ns: "common" })}</Link>
+              <Link href="/myforms/start">{t("adminNav.myForms", { ns: "common" })}</Link>
             )}
           </div>
           {<LoginMenu isAuthenticated={status === "authenticated"} />}

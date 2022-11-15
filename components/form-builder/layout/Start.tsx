@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon } from "../icons";
 import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
-import { useRouter } from "next/router";
 
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
-  const router = useRouter();
 
-  const importTemplate = useTemplateStore((s) => s.importTemplate);
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem("form-storage")) {
+        const {
+          state: {
+            form: { elements },
+          },
+        } = JSON.parse(sessionStorage.getItem("form-storage") as string);
+        elements.length && changeTab("create");
+      }
+    } catch (e) {
+      // no-op
+    }
+  }, []);
+
+  const { importTemplate, initialize } = useTemplateStore((s) => ({
+    importTemplate: s.importTemplate,
+    initialize: s.initialize,
+  }));
   const [errors, setErrors] = useState("");
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
@@ -21,6 +37,10 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
     if (!e.target || !e.target.files) {
       return;
     }
+
+    // clear any existing form data
+    sessionStorage.clear();
+
     try {
       const fileReader = new FileReader();
 
@@ -67,7 +87,9 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           className={boxClass}
           onClick={async (e) => {
             e.preventDefault();
-            await router.push({ pathname: "/form-builder/create" });
+            // clear any existing form data
+            sessionStorage.clear();
+            initialize();
             changeTab("create");
           }}
         >
