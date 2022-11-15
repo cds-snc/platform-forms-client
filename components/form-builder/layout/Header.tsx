@@ -18,7 +18,7 @@ export const Header = () => {
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
-    email: s.submission.email,
+    email: s.submission?.email,
   }));
 
   const { status } = useSession();
