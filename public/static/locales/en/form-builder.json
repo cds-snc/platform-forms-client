@@ -76,7 +76,7 @@
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form Title",
   "preview": "Preview",
-  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the [Directive on Privacy Practices](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309)",
+  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.",
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Provide feedback",
   "publish": "Publish",
