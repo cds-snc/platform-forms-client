@@ -39,7 +39,7 @@ export const QuestionInput = ({
   }, [initialValue]);
 
   const _debounced = useCallback(
-    debounce((val) => {
+    debounce((index, val) => {
       updateField(
         `form.elements[${index}].properties.${localizeField(LocalizedElementProperties.TITLE)}`,
         val
@@ -49,9 +49,9 @@ export const QuestionInput = ({
   );
 
   const updateValue = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value);
-      _debounced(e.target.value);
+    (index: number, value: string) => {
+      setValue(value);
+      _debounced(index, value);
     },
     [setValue]
   );
@@ -66,7 +66,7 @@ export const QuestionInput = ({
       className="w-full"
       value={value}
       aria-describedby={hasDescription ? `item${index}-describedby` : undefined}
-      onChange={updateValue}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateValue(index, e.target.value)}
       theme="title"
     />
   );
