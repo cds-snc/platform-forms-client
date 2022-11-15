@@ -24,7 +24,7 @@ export const TabsList = (props: TabsProps): React.ReactElement => {
   // Note: the only purpose of the tabIndex is to have the eslint tests pass
   return (
     <div
-      className="gc-horizontal-list mb-14"
+      className="lg:flex-col lg:text-small_base p-0 flex text-base list-none mb-14"
       ref={tabsListRef}
       role="tablist"
       aria-labelledby={labeledby}
@@ -37,7 +37,7 @@ export const TabsList = (props: TabsProps): React.ReactElement => {
         children?.length > 0 &&
         children.map((child, index) => {
           return (
-            <div className="gc-horizontal-item" key={`key-${index}-${labeledby}`}>
+            <div className="lg:pr-0 lg:pb-4 pr-8 pb-0" key={`key-${index}-${labeledby}`}>
               {child}
             </div>
           );

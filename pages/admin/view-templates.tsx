@@ -3,7 +3,7 @@ import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { getProperty } from "@lib/formBuilder";
 
-import React, { Fragment } from "react";
+import React, { Fragment, ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -11,6 +11,7 @@ import { checkPrivileges } from "@lib/privileges";
 import { useAccessControl, useRefresh } from "@lib/hooks";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface DataViewProps {
   templates: Array<{
@@ -148,6 +149,10 @@ const DataView = (props: DataViewProps): React.ReactElement => {
       </table>
     </>
   );
+};
+
+DataView.getLayout = (page: ReactElement) => {
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(

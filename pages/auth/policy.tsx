@@ -1,33 +1,32 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { AcceptableUseTerms, AcceptableUseProps } from "@components/auth/AcceptableUse";
+import { AcceptableUseTerms } from "@components/auth/AcceptableUse";
 import { requireAuthentication } from "@lib/auth";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 
 import { Session } from "next-auth";
 interface TermsOfUse {
   content: string;
   user: Session["user"];
 }
-const TermsOfUse = ({ content, user }: TermsOfUse) => {
-  const acceptableProps: AcceptableUseProps = {
-    content,
-    lastLoginTime: user.lastLoginTime,
-    userId: user.id,
-    formID: user.authorizedForm,
-  };
+const TermsOfUse = ({ content }: TermsOfUse) => {
   return (
     <>
-      <AcceptableUseTerms {...acceptableProps} />
+      <AcceptableUseTerms content={content} />
     </>
   );
+};
+
+TermsOfUse.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(async (context) => {
   if (context.user?.acceptableUse) {
     return {
       redirect: {
-        //redirect to retrieval page
-        destination: `/${context.locale}/id/${context?.user?.authorizedForm}/retrieval`,
+        //redirect to user landing page
+        destination: `/${context.locale}/myforms`,
         permanent: false,
       },
     };

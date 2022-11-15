@@ -3,7 +3,7 @@ import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
@@ -11,6 +11,9 @@ import { CardProps } from "@components/myforms/Card/Card";
 import { TabsList } from "@components/myforms/Tabs/TabsList";
 import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
+import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import { NextPageWithLayout } from "@pages/_app";
+import Link from "next/link";
 
 interface FormsDataItem {
   id: string;
@@ -24,7 +27,7 @@ interface MyFormsProps {
   templates: Array<FormsDataItem>;
 }
 
-export default function RenderMyForms({ templates }: MyFormsProps) {
+const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsProps) => {
   const router = useRouter();
   const path = String(router.query?.path);
   const { t, i18n } = useTranslation(["my-forms"]);
@@ -42,12 +45,12 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
   ) as Array<CardProps>;
 
   useEffect(() => {
-    // Default route is "published". Done here vs getServerSideProps to avoid extra data fetch
+    // Default route is "drafts". Done here vs getServerSideProps to avoid extra data fetch
     const formStateRegex = /^(drafts|published|all)$/gi;
     if (!formStateRegex.test(String(path))) {
       router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
     }
-  }, []);
+  }, [router.query?.path]);
 
   return (
     <div className="relative">
@@ -89,13 +92,21 @@ export default function RenderMyForms({ templates }: MyFormsProps) {
       </TabPanel>
 
       <div className="absolute top-48">
-        <a href="/admin/form-builder">
-          {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-        </a>
+        <Link href="/form-builder/create" passHref>
+          {/* The following is needed as jsx-ally cannot see the rendered a tag with the passed href*/}
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a>
+            {t("actions.createNewForm")} <span aria-hidden="true">+</span>
+          </a>
+        </Link>
       </div>
     </div>
   );
-}
+};
+
+RenderMyForms.getLayout = (page: ReactElement) => {
+  return <UserNavLayout>{page}</UserNavLayout>;
+};
 
 export const getServerSideProps = requireAuthentication(
   async ({ user: { ability, id }, locale }) => {
@@ -128,3 +139,5 @@ export const getServerSideProps = requireAuthentication(
     }
   }
 );
+
+export default RenderMyForms;
