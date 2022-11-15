@@ -183,7 +183,7 @@ export const useAuth = () => {
         }
       } else if (response?.ok) {
         await router.push({
-          pathname: "/admin",
+          pathname: "/myforms",
         });
       }
     } catch (err) {
