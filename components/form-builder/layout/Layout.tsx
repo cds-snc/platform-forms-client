@@ -25,7 +25,7 @@ export const Layout = () => {
     form: s.form,
     id: s.id,
     setLang: s.setLang,
-    email: s.submission.email,
+    email: s.submission?.email,
     updateField: s.updateField,
   }));
 
