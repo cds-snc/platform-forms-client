@@ -4,7 +4,7 @@ import { checkPrivileges } from "@lib/privileges";
 
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { StyledLink } from "@components/globals/StyledLink";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
 export default function AccountCreated() {
   const { t, i18n } = useTranslation(["signup"]);

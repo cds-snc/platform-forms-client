@@ -26,6 +26,8 @@ export const StyledLink = (props: StyledLinkProps) => {
   );
 };
 
+// Note: using prop name "to" just encase passHref's implicit passing of href would conflict with
+// the prop name "href". It's possible to use the implicit href but then the typescript problem..
 interface WrappedLinkProps {
   children: React.ReactNode;
   to: string;

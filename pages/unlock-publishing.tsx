@@ -18,21 +18,43 @@ import * as Yup from "yup";
 import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../email.domains.json";
 import { logMessage } from "@lib/logger";
-import { StyledLink } from "@components/globals/StyledLink";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import axios from "axios";
 
 export default function UnlockPublishing() {
   const { t, i18n } = useTranslation(["unlock-publishing", "common"]);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorState, setErrorState] = useState({ message: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [hasRequestedPublishing, setHasRequestedPublishing] = useState(false);
+
+  const handleRequestPublishing = async (
+    managerEmail: string,
+    department: string,
+    goals: string
+  ) => {
+    return await axios({
+      url: "/api/request/publish",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: { managerEmail, department, goals },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    }).catch((err) => {
+      logMessage.error(err);
+      setErrorState({ message: t("submissionError") });
+    });
+  };
 
   const validationSchema = Yup.object().shape({
     department: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .max(50, t("signUpRegistration.fields.name.error.maxLength")),
-    username: Yup.string()
+    managerEmail: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" }))
       .test(
-        "username-govEmail",
+        "managerEmail-govEmail",
         t("input-validation.validGovEmail", { ns: "common" }),
         (value = "") => isValidGovEmail(value, emailDomainList.domains)
       ),
@@ -41,16 +63,26 @@ export default function UnlockPublishing() {
 
   return (
     <>
-      {!isSubmitted && (
+      {!hasRequestedPublishing && (
         <>
           <Formik
-            initialValues={{ username: "", department: "", goal: "" }}
-            onSubmit={(values) => {
-              // Shows success screen
-              setIsSubmitted(true);
-
-              // TODO: API Call
-              logMessage.info(values);
+            initialValues={{ managerEmail: "", department: "", goals: "" }}
+            onSubmit={async ({ managerEmail, department, goals }) => {
+              setSubmitting(true);
+              try {
+                const response = await handleRequestPublishing(managerEmail, department, goals);
+                setSubmitting(false);
+                if (response.status !== 200) {
+                  throw new Error(t("submissionError"));
+                }
+                setErrorState({ message: "" });
+                // Shows success screen
+                setHasRequestedPublishing(true);
+              } catch (err) {
+                logMessage.error(err);
+                setSubmitting(false);
+                setErrorState({ message: t("submissionError") });
+              }
             }}
             validateOnChange={false}
             validateOnBlur={false}
@@ -58,6 +90,18 @@ export default function UnlockPublishing() {
           >
             {({ handleSubmit, errors }) => (
               <>
+                {errorState.message && (
+                  <Alert
+                    type="error"
+                    validation={true}
+                    tabIndex={0}
+                    id="unlockPublishingSubmissionError"
+                    heading={t("input-validation.heading", { ns: "common" })}
+                  >
+                    {errorState.message}
+                  </Alert>
+                )}
+
                 {Object.keys(errors).length > 0 && (
                   <Alert
                     type="error"
@@ -85,7 +129,12 @@ export default function UnlockPublishing() {
 
                 <form id="unlock-publishing" method="POST" onSubmit={handleSubmit} noValidate>
                   <div className="focus-group">
-                    <Label id={"label-username"} htmlFor={"username"} className="required" required>
+                    <Label
+                      id={"label-managerEmail"}
+                      htmlFor={"managerEmail"}
+                      className="required"
+                      required
+                    >
                       {t("unlockPublishing.form.field1.title")}
                     </Label>
                     <Description id={"unlock-publishing-description"}>
@@ -93,8 +142,8 @@ export default function UnlockPublishing() {
                     </Description>
                     <TextInput
                       type={"text"}
-                      id={"username"}
-                      name={"username"}
+                      id={"managerEmail"}
+                      name={"managerEmail"}
                       className="required w-[34rem]"
                       ariaDescribedBy={"unlock-publishing-description"}
                     />
@@ -145,6 +194,7 @@ export default function UnlockPublishing() {
                         hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5
                         focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
                       `}
+                      disabled={submitting}
                     >
                       {t("submitButton", { ns: "common" })}
                     </Button>
@@ -166,7 +216,7 @@ export default function UnlockPublishing() {
           </Formik>
         </>
       )}
-      {isSubmitted && (
+      {hasRequestedPublishing && (
         <>
           <h1>{t("unlockPublishingSubmitted.title")}</h1>
           <h2>{t("unlockPublishingSubmitted.whatNext.title")}</h2>
