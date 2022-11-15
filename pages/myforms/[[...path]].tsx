@@ -45,12 +45,12 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
   ) as Array<CardProps>;
 
   useEffect(() => {
-    // Default route is "published". Done here vs getServerSideProps to avoid extra data fetch
+    // Default route is "drafts". Done here vs getServerSideProps to avoid extra data fetch
     const formStateRegex = /^(drafts|published|all)$/gi;
     if (!formStateRegex.test(String(path))) {
       router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
     }
-  }, []);
+  }, [router.query?.path]);
 
   return (
     <div className="relative">
