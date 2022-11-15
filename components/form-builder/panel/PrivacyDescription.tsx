@@ -1,4 +1,3 @@
-import { RichText } from "@components/forms";
 import Markdown from "markdown-to-jsx";
 import { useTranslation } from "next-i18next";
 import React from "react";

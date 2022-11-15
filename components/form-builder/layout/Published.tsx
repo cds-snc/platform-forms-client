@@ -6,6 +6,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
 import { RichText } from "@components/forms";
+import Markdown from "markdown-to-jsx";
 
 const getHost = () => {
   if (typeof window === "undefined") return "";
@@ -46,11 +47,11 @@ export const Published = ({ id }: { id: string }) => {
       </div>
       <div className="mb-5">
         <h3 className="mb-1">{t("publishedErrors")}</h3>
-        <RichText>{t("ifYouAreExperiencingProblems")}</RichText>
+        <Markdown>{t("ifYouAreExperiencingProblems")}</Markdown>
       </div>
       <div className="mb-10">
         <h3 className="mb-1">{t("provideFeedback")}</h3>
-        <RichText>{t("didYouFindThisToolHelpful")}</RichText>
+        <Markdown>{t("didYouFindThisToolHelpful")}</Markdown>
       </div>
       <div>
         {ability?.can("view", "FormRecord") && (
