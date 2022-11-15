@@ -1,4 +1,3 @@
-import { t } from "i18next";
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
