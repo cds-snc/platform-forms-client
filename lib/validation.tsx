@@ -364,5 +364,5 @@ export const isSymbol = (field: string): boolean => {
 };
 
 // Helpful to check whether a referer is local vs. an external URL
-// Note: taken from https://stackoverflow.com/questions/31430167/regex-check-if-given-string-is-relative-url
-export const localPathRegEx = new RegExp("^(?!www.|(?:http|ftp)s?://|[A-Za-z]:\\|//).*");
+// Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
+export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
