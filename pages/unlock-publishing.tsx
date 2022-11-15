@@ -72,7 +72,7 @@ export default function UnlockPublishing() {
               try {
                 const response = await handleRequestPublishing(managerEmail, department, goals);
                 setSubmitting(false);
-                if (response.status !== 200) {
+                if (response?.status !== 200) {
                   throw new Error(t("submissionError"));
                 }
                 setErrorState({ message: "" });
