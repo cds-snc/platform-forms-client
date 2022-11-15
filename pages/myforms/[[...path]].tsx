@@ -13,7 +13,7 @@ import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { NextPageWithLayout } from "@pages/_app";
-import Link from "next/link";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
 interface FormsDataItem {
   id: string;
@@ -92,13 +92,9 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </TabPanel>
 
       <div className="absolute top-48">
-        <Link href="/form-builder/create" passHref>
-          {/* The following is needed as jsx-ally cannot see the rendered a tag with the passed href*/}
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a>
-            {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-          </a>
-        </Link>
+        <StyledLink href="/form-builder/create">
+          {t("actions.createNewForm")} <span aria-hidden="true">+</span>
+        </StyledLink>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { getCsrfToken } from "next-auth/react";
+import { localPathRegEx } from "@lib/validation";
 
 interface AcceptableUseProps {
   content: string;
@@ -16,8 +17,13 @@ export const AcceptableUseTerms = ({
   referer = "/myforms",
 }: AcceptableUseProps): React.ReactElement => {
   const router = useRouter();
-  const { t, i18n } = useTranslation("common");
+  const { t } = useTranslation("common");
   const session = useSession();
+
+  // An extra check just encase a malicous user sets the referer to an external URL
+  if (!localPathRegEx.test(referer)) {
+    referer = "/myforms";
+  }
 
   const agree = async () => {
     const token = await getCsrfToken();
