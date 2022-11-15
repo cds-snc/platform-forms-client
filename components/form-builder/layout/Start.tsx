@@ -69,24 +69,28 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
   return (
     <>
-      {errors && (
-        <div className="bg-red-100 w-5/12 m-auto mb-8 p-6 flex" role="alert">
-          <WarningIcon />
-          <div>
-            <h3 className="ml-6 mb-2 mt-1">{t("failedToReadFormFile")}</h3>
-            <ul className="list-none pl-6 mb-4">
-              {errors.map((error, index) => {
-                return (
-                  <li key={`section-${index}`}>{t(error.message, { property: error.property })}</li>
-                );
-              })}
-            </ul>
-            <a href="https://example.com" className="ml-6">
-              {t("contactSupport")}
-            </a>
+      <div role="alert">
+        {errors && (
+          <div className="bg-red-100 w-5/12 m-auto mb-8 p-6 flex">
+            <WarningIcon />
+            <div>
+              <h3 className="ml-6 mb-2 mt-1">{t("failedToReadFormFile")}</h3>
+              <ul className="list-none pl-6 mb-4">
+                {errors.map((error, index) => {
+                  return (
+                    <li key={`section-${index}`}>
+                      {t(error.message, { property: error.property })}
+                    </li>
+                  );
+                })}
+              </ul>
+              <a href="https://example.com" className="ml-6">
+                {t("contactSupport")}
+              </a>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <div className="flex justify-center">
         <button
           className={boxClass}
