@@ -5,7 +5,6 @@ import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
-import { RichText } from "@components/forms";
 import Markdown from "markdown-to-jsx";
 
 const getHost = () => {
