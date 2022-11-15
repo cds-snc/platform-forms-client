@@ -1,6 +1,6 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist } from "zustand/middleware";
+import { persist, StateStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 
 import {
@@ -99,6 +99,21 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSchema: () => string;
   initialize: () => void;
 }
+
+/* Note: "async" getItem is intentional here to work-around a hydration issue   */
+/* https://github.com/pmndrs/zustand/issues/324#issuecomment-1031392610 */
+
+const storage: StateStorage = {
+  getItem: async (name: string) => {
+    return sessionStorage.getItem(name) || null;
+  },
+  setItem: (name: string, value: string) => {
+    sessionStorage.setItem(name, value);
+  },
+  removeItem: (name: string) => {
+    sessionStorage.removeItem(name);
+  },
+};
 
 const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
@@ -231,7 +246,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
         }),
         {
           name: "form-storage",
-          getStorage: typeof window !== undefined ? () => sessionStorage : undefined,
+          getStorage: () => storage,
         }
       )
     )

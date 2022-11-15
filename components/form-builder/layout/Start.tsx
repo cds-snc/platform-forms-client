@@ -67,7 +67,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           className={boxClass}
           onClick={async (e) => {
             e.preventDefault();
-            // await router.push({ pathname: "/form-builder/create" });
+            await router.push({ pathname: "/form-builder/create" });
             changeTab("create");
           }}
         >
