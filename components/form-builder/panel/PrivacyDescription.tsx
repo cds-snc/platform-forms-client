@@ -1,4 +1,4 @@
-import Markdown from "markdown-to-jsx";
+import { RichText } from "@components/forms";
 import { useTranslation } from "next-i18next";
 import React from "react";
 import styled from "styled-components";
@@ -12,7 +12,7 @@ export const PrivacyDescription = () => {
   const { t } = useTranslation("form-builder");
   return (
     <StyledDiv>
-      <Markdown options={{ forceBlock: true }}>{t("privacyNoticeDescription")}</Markdown>
+      <RichText>{t("privacyNoticeDescription")}</RichText>
     </StyledDiv>
   );
 };
