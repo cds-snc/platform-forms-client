@@ -56,16 +56,16 @@ export const Option = ({
   };
 
   const _debounced = useCallback(
-    debounce((val) => {
+    debounce((parentIndex, val) => {
       updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
     }, 100),
     []
   );
 
   const updateValue = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value);
-      _debounced(e.target.value);
+    (parentIndex: number, value: string) => {
+      setValue(value);
+      _debounced(parentIndex, value);
     },
     [setValue]
   );
@@ -79,7 +79,9 @@ export const Option = ({
         type="text"
         value={value}
         placeholder={`${t("option")} ${index + 1}`}
-        onChange={updateValue}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          updateValue(parentIndex, e.target.value)
+        }
         onKeyDown={handleKeyDown}
         className="ml-5 w-80 max-h-9 !my-0"
       />
