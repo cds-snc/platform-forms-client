@@ -17,7 +17,7 @@ export const TestDataDelivery = () => {
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
-    email: s.submission.email,
+    email: s.submission?.email,
   }));
   const stringified = getSchema();
 

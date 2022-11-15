@@ -31,6 +31,7 @@ import {
 import { $wrapNodes } from "@lexical/selection";
 import styled from "styled-components";
 import { sanitizeUrl } from "./utils/sanitizeUrl";
+import { useEditorFocus } from "./useEditorFocus";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -236,6 +237,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
   }, [editor, updateToolbar]);
 
   const { t } = useTranslation("form-builder");
+  const editorHasFocus = useEditorFocus();
 
   return (
     <>
@@ -256,7 +258,9 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={() => {
             formatHeading("h2");
           }}
-          className={"toolbar-item spaced " + (blockType === "h2" ? "active" : "")}
+          className={
+            "toolbar-item spaced " + (blockType === "h2" && editorHasFocus ? "active" : "")
+          }
           aria-label={t("formatH2")}
         >
           <LooksTwo size={20} />
@@ -273,7 +277,9 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={() => {
             formatHeading("h3");
           }}
-          className={"toolbar-item spaced " + (blockType === "h3" ? "active" : "")}
+          className={
+            "toolbar-item spaced " + (blockType === "h3" && editorHasFocus ? "active" : "")
+          }
           aria-label={t("formatH3")}
         >
           <Looks3 size={20} />
@@ -290,7 +296,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
           }}
-          className={"toolbar-item " + (isBold ? "active" : "")}
+          className={"toolbar-item " + (isBold && editorHasFocus ? "active" : "")}
           aria-label={t("formatBold")}
         >
           <FormatBold size={20} />
@@ -307,7 +313,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
           }}
-          className={"toolbar-item " + (isItalic ? "active" : "")}
+          className={"toolbar-item " + (isItalic && editorHasFocus ? "active" : "")}
           aria-label={t("formatItalic")}
         >
           <FormatItalic size={20} />
@@ -322,7 +328,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
           }}
           onClick={formatBulletList}
-          className={"toolbar-item " + (blockType === "bullet" ? "active" : "")}
+          className={"toolbar-item " + (blockType === "bullet" && editorHasFocus ? "active" : "")}
           aria-label={t("formatBulletList")}
         >
           <FormatListBulleted size={20} />
@@ -337,7 +343,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
           }}
           onClick={formatNumberedList}
-          className={"toolbar-item " + (blockType === "number" ? "active" : "")}
+          className={"toolbar-item " + (blockType === "number" && editorHasFocus ? "active" : "")}
           aria-label={t("formatNumberedList")}
         >
           <FormatListNumbered size={20} />
@@ -353,7 +359,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           disabled={!isEditable}
           onClick={insertLink}
-          className={"toolbar-item " + (isLink ? "active" : "")}
+          className={"toolbar-item " + (isLink && editorHasFocus ? "active" : "")}
           aria-label={t("insertLink")}
         >
           <Link size={20} />
