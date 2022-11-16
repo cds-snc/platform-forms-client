@@ -8,11 +8,12 @@ import { Session } from "next-auth";
 interface TermsOfUse {
   content: string;
   user: Session["user"];
+  referer?: string;
 }
-const TermsOfUse = ({ content }: TermsOfUse) => {
+const TermsOfUse = ({ content, referer }: TermsOfUse) => {
   return (
     <>
-      <AcceptableUseTerms content={content} />
+      <AcceptableUseTerms content={content} referer={referer} />
     </>
   );
 };
@@ -38,6 +39,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     props: {
       ...(context.locale && (await serverSideTranslations(context?.locale, ["common"]))),
       content: termsOfUseContent ?? null,
+      referer: context.query.referer,
     },
   };
 });

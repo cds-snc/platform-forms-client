@@ -83,16 +83,11 @@ export const useAuth = () => {
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
 
-        // we could be on the registration page or the login page
-        // if we are on the login page we want to refresh the page
-        // instead of pushing the route as it will do nothing
-        if (router.pathname.includes("/auth/login")) {
-          router.reload();
-        } else {
-          await router.push({
-            pathname: "/auth/login",
-          });
-        }
+        // Redirect to the Welcome / Account Created page
+
+        await router.push({
+          pathname: "/signup/account-created",
+        });
       }
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -188,7 +183,7 @@ export const useAuth = () => {
         }
       } else if (response?.ok) {
         await router.push({
-          pathname: "/admin",
+          pathname: "/myforms",
         });
       }
     } catch (err) {
