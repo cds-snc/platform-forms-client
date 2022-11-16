@@ -102,6 +102,7 @@ export const PanelActions = ({
           <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
         }
         onClick={() => {
+          setFocusInput(true);
           duplicateElement(item.index);
         }}
       >

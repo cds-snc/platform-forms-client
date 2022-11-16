@@ -447,12 +447,35 @@ const ElementWrapperDiv = styled.div`
 export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-  const { elements, updateField } = useTemplateStore((s) => ({
+  const { elements, getFocusInput, updateField } = useTemplateStore((s) => ({
     updateField: s.updateField,
     elements: s.form.elements,
+    getFocusInput: s.getFocusInput,
   }));
 
   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
+
+  const [className, setClassName] = useState<string>("");
+  const [ifFocus, setIfFocus] = useState<boolean>(false);
+
+  if (ifFocus === false) {
+    // Only run this 1 time
+    setIfFocus(true);
+
+    // getFocusInput is only ever true if we press "duplicate" or "add question"
+    if (getFocusInput()) {
+      setClassName(
+        "bg-yellow-100 transition-colors ease-out duration-[1500ms] delay-500 outline-[2px] outline-blue-focus outline"
+      );
+    }
+  }
+
+  useEffect(() => {
+    // remove the yellow background immediately, CSS transition will fade the colour
+    setClassName(className.replace("bg-yellow-100 ", ""));
+    // remove the blue outline after 2.1 seconds
+    setTimeout(() => setClassName(""), 2100);
+  }, [getFocusInput]);
 
   React.useEffect(() => {
     if (item.type != "richText") {
@@ -470,7 +493,7 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   };
 
   return (
-    <ElementWrapperDiv className={`element-${item.index}`}>
+    <ElementWrapperDiv className={`element-${item.index} ${className}`}>
       <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
         <Form item={item} />
       </div>
