@@ -22,7 +22,35 @@ const createTemplateStore = ({ form, submission, isPublished }: Partial<Template
   return result;
 };
 
+const localStorageMock = (() => {
+  let store: Record<string, unknown> = {};
+
+  return {
+    getItem(key: string) {
+      return store[key] || null;
+    },
+    setItem(key: string, value: string) {
+      store[key] = value.toString();
+    },
+    removeItem(key: string) {
+      delete store[key];
+    },
+    clear() {
+      store = {};
+    },
+  };
+})();
+
+Object.defineProperty(window, "sessionStorage", {
+  value: localStorageMock,
+});
+
 describe("useAllowPublish", () => {
+  beforeEach(() => {
+    window.sessionStorage.clear();
+    jest.restoreAllMocks();
+  });
+
   it("checks required fields needed to publish or save", () => {
     const store = {
       form: {

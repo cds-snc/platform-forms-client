@@ -1,6 +1,6 @@
-import { t } from "i18next";
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const StyledDiv = styled.div`
   font-size: 1rem;
@@ -12,6 +12,7 @@ const StyledUl = styled.ul`
 `;
 
 export const ConfirmationDescription = () => {
+  const { t } = useTranslation("form-builder");
   return (
     <StyledDiv>
       <p>{t("confirmationDescriptionParagraph")}</p>
