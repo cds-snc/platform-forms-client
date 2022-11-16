@@ -41,23 +41,23 @@
       "type": "string"
     },
     "form": {
-      "version": {
-        "description": "The version number of the form.",
-        "type": "number",
-        "mimimum": 0
-      },
-      "titleEn": {
-        "description": "The displayed title of the form to the user in English",
-        "id": "#/properties/titleEn",
-        "type": "string"
-      },
-      "titleFr": {
-        "description": "The displayed title of the form to the user in French",
-        "id": "#/properties/titleFr",
-        "type": "string"
-      },
       "type": "object",
       "properties": {
+        "version": {
+          "description": "The version number of the form.",
+          "type": "number",
+          "mimimum": 0
+        },
+        "titleEn": {
+          "description": "The displayed title of the form to the user in English",
+          "id": "#/properties/titleEn",
+          "type": "string"
+        },
+        "titleFr": {
+          "description": "The displayed title of the form to the user in French",
+          "id": "#/properties/titleFr",
+          "type": "string"
+        },
         "layout": {
           "description": "A list of element IDs that determines the order or elements in the form.",
           "type": "array",
@@ -336,6 +336,13 @@
                   }
                 }
               ]
+            },
+            "subElements": {
+              "description": "A list of subElements contained within a dynamicRow",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/element"
+              }
             }
           }
         }

@@ -137,7 +137,7 @@ export default middleware(
   [
     cors({ allowedMethods }),
     sessionExists(authenticatedMethods),
-    jsonValidator(templatesSchema, { jsonKey: "formConfig" }),
+    jsonValidator(templatesSchema, { jsonKey: "formConfig", noHTML: true }),
     uniqueIDValidator({
       runValidationIf: runValidationCondition,
       jsonKey: "formConfig",

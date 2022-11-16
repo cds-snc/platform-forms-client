@@ -8,6 +8,7 @@ import Redis from "ioredis-mock";
 import templates from "@pages/api/templates";
 import { unstable_getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
+import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormTemplateWithHTMLInDynamicRow.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
@@ -123,6 +124,24 @@ describe("Test templates API functions", () => {
 
       expect(res.statusCode).toBe(400);
       expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
+    });
+
+    it("Should reject JSON with html", async () => {
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formConfig: validFormTemplateWithHTMLInDynamicRow,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData()).error).toContain("HTML detected in JSON");
     });
   });
 
