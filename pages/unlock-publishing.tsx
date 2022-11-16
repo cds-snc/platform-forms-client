@@ -243,6 +243,7 @@ export default function UnlockPublishing() {
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   {
+    // If the user already has the Publishing Privilege redirect back to MyForms
     if (
       checkPrivilegesAsBoolean(ability, [
         { action: "update", subject: "FormRecord", field: "isPublished" },
