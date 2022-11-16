@@ -72,7 +72,7 @@ describe("Template CRUD functions", () => {
     const newTemplate = await createTemplate(
       ability,
       "1",
-      formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
+      formConfiguration as BetterOmit<FormRecord, "id" | "isPublished">
     );
 
     expect(prismaMock.template.create).toHaveBeenCalledWith({
