@@ -20,11 +20,3 @@ export const getPageNameUrl = (): string => {
 export const isSplashPage = (): boolean => {
   return getPageNameUrl() === "splash";
 };
-
-export const isPublicPage = (): boolean => {
-  const pageNameUrl = getPageNameUrl();
-  return (
-    ["splash", "/welcome-bienvenue", "/terms-avis", "/404"].includes(pageNameUrl) ||
-    pageNameUrl.startsWith("/id/")
-  );
-};
