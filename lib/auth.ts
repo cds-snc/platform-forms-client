@@ -13,6 +13,7 @@ import { TemporaryTokenPayload } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "./privileges";
 import { MongoAbility } from "@casl/ability";
+import { localPathRegEx } from "@lib/validation";
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
   user: AuthContextUser;
@@ -56,12 +57,15 @@ export function requireAuthentication(
         };
       }
 
-      if (!session.user.acceptableUse && context.resolvedUrl !== "/auth/policy") {
+      if (!session.user.acceptableUse && !context.req.url?.startsWith("/auth/policy")) {
         // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
         // If already on the policy page don't redirect, aka endless redirect loop.
+        // Also check that the path is local and not an external URL
         return {
           redirect: {
-            destination: `/${context.locale}/auth/policy`,
+            destination: `/${context.locale}/auth/policy?referer=${
+              localPathRegEx.test(context.req.url || "") ? context.req.url : "/myforms"
+            }`,
             permanent: false,
           },
         };
