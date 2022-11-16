@@ -1,6 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
 
 import React from "react";
 import { useTranslation } from "next-i18next";
@@ -52,10 +51,8 @@ export default function AccountCreated() {
   );
 }
 
-export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
+export const getServerSideProps = requireAuthentication(async ({ locale }) => {
   {
-    checkPrivileges(ability, [{ action: "update", subject: "FormRecord", field: "isPublished" }]);
-
     return {
       props: {
         ...(locale && (await serverSideTranslations(locale, ["signup", "common"]))),
