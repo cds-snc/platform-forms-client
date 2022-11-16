@@ -18,9 +18,6 @@ export type ValidateOptions = {
  */
 const htmlChecker: PreValidatePropertyFunction = (object, key) => {
   const value = object[key];
-  if (key === "subElements") {
-    logMessage.error(object);
-  }
   if (typeof value === "string") {
     // we assume all strings can be valid html
     // use htmlparse2 to construct document
