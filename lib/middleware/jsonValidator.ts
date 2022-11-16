@@ -29,10 +29,7 @@ const htmlChecker: PreValidatePropertyFunction = (object, key) => {
     else if (parsedString.children.length !== 1) throw new Error(`HTML detected in JSON`);
 
     const element = parsedString.children[0];
-    // if the parsed element is not of type text its html
-    if (key === "subElements") {
-      logMessage.error("test");
-    }
+    // if the element detected does not have a text type then it is html
     if (element?.type !== "text") throw new Error(`HTML detected in JSON`);
   }
 };
