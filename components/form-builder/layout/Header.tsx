@@ -1,7 +1,6 @@
 import React from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import LanguageToggle from "../../globals/LanguageToggle";
-import { DownloadFileButton } from "./DownloadFileButton";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
 import { useNavigationStore } from "../store/useNavigationStore";
@@ -51,8 +50,7 @@ export const Header = () => {
     }
   };
 
-  const ButtonWithMessage = withMessage(Button, t("saveDraftMessage"));
-  const DownloadFileButtonWithMessage = withMessage(DownloadFileButton, t("saveDownloadMessage"));
+  const ButtonWithMessage = withMessage(Button, t("saveDraftMessage", { ns: "form-builder" }));
 
   return (
     <header className="border-b-3 border-blue-dark my-10">
@@ -63,17 +61,13 @@ export const Header = () => {
             onClick={handleClick("start")}
             className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
           >
-            {t("title")}
+            {t("title", { ns: "common" })}
           </button>
-          {currentTab !== "start" &&
-            isSaveable() &&
-            (status === "authenticated" ? (
-              <ButtonWithMessage className="ml-4" onClick={handlePublish}>
-                {t("save")}
-              </ButtonWithMessage>
-            ) : (
-              <DownloadFileButtonWithMessage className="!py-1 !px-4" />
-            ))}
+          {currentTab !== "start" && isSaveable() && status === "authenticated" && (
+            <ButtonWithMessage className="ml-4" onClick={handlePublish}>
+              {t("save", { ns: "form-builder" })}
+            </ButtonWithMessage>
+          )}
         </div>
         <div className="inline-flex gap-4">
           <div className="md:text-small_base text-base font-normal not-italic">
