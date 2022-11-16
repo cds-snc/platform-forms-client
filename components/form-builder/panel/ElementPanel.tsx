@@ -239,10 +239,16 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
         <div className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}>
           {!isRichText && (
             <>
-              <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
+              <span
+                className={`absolute left-0 bg-gray-default py-2.5 rounded-r -ml-7 ${
+                  item.index < 9 ? "px-1.5" : "pl-0.5 pr-1 tracking-tighter"
+                }`}
+              >
                 {questionNumber}
               </span>
-              <LabelHidden htmlFor={`item${item.index}`}>{t("question")}</LabelHidden>
+              <LabelHidden htmlFor={`item${item.index}`}>
+                {t("question")} {item.index + 1}
+              </LabelHidden>
               <QuestionInput
                 initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
                 index={item.index}
