@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
+import { useSession } from "next-auth/react";
 
 function Button({
   children,
@@ -34,6 +35,7 @@ export const LeftNavigation = ({
   handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { status } = useSession();
 
   const iconClassname =
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -61,13 +63,15 @@ export const LeftNavigation = ({
       >
         {t("share")}
       </Button>
-      <Button
-        isCurrentTab={currentTab === "save"}
-        icon={<SaveIcon className={iconClassname} />}
-        handleClick={handleClick("save")}
-      >
-        {t("save")}
-      </Button>
+      {status !== "authenticated" && (
+        <Button
+          isCurrentTab={currentTab === "save"}
+          icon={<SaveIcon className={iconClassname} />}
+          handleClick={handleClick("save")}
+        >
+          {t("save")}
+        </Button>
+      )}
       <Button
         isCurrentTab={currentTab === "publish"}
         icon={<PublishIcon className={iconClassname} />}
