@@ -303,6 +303,7 @@ export const checkPrivilegesAsBoolean = (
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;
+    field?: string;
   }[],
   logic: "all" | "one" = "all"
 ): boolean => {

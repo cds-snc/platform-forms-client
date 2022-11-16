@@ -1,12 +1,12 @@
 import {
-  onlyIncludePublicProperties,
   getAllTemplates,
-  getTemplateByID,
+  getPublicTemplateByID,
   deleteTemplate,
   createTemplate,
   updateTemplate,
   updateIsPublishedForTemplate,
   updateAssignedUsersForTemplate,
+  onlyIncludePublicProperties,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -78,9 +78,6 @@ const templates = async (
       if (Array.isArray(response)) {
         const publicTemplates = response.map((template) => onlyIncludePublicProperties(template));
         return res.status(200).json(publicTemplates);
-      } else {
-        const publicTemplate = onlyIncludePublicProperties(response);
-        return res.status(200).json(publicTemplate);
       }
     }
     // If not GET then we're authenticated and can safely return the complete Form Record.
@@ -110,7 +107,7 @@ const templateCRUD = async ({
 }) => {
   switch (method) {
     case "GET":
-      if (formID) return await getTemplateByID(formID);
+      if (formID) return await getPublicTemplateByID(formID);
       return getAllTemplates(ability, user.id);
     case "POST":
       if (formConfig) return await createTemplate(ability, user.id, formConfig);
