@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
 import React, { useState } from "react";
 import { Formik } from "formik";
@@ -243,7 +243,18 @@ export default function UnlockPublishing() {
 
 export const getServerSideProps = requireAuthentication(async ({ user: { ability }, locale }) => {
   {
-    checkPrivileges(ability, [{ action: "update", subject: "FormRecord", field: "isPublished" }]);
+    if (
+      checkPrivilegesAsBoolean(ability, [
+        { action: "update", subject: "FormRecord", field: "isPublished" },
+      ])
+    ) {
+      return {
+        redirect: {
+          destination: `${locale}/myforms`,
+          permanent: false,
+        },
+      };
+    }
 
     return {
       props: {
