@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { rehydrateFormResponses } from "@lib/helpers";
-import { getTemplateByID, getTemplateSubmissionTypeByID } from "@lib/templates";
+import { getPublicTemplateByID, getTemplateSubmissionTypeByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
@@ -255,7 +255,7 @@ const processFormData = async (
       }`
     );
 
-    const form = await getTemplateByID(reqFields.formID as string);
+    const form = await getPublicTemplateByID(reqFields.formID as string);
 
     if (!form) {
       return res.status(400).json({ error: "No form could be found with that ID" });

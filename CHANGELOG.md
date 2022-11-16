@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modified Role Based to Asset Based Access Control [#1176](https://github.com/cds-snc/platform-forms-client/pull/1176)
 - Form templates are now marked as archived and will stay in the database for 30 more days before being deleted by a Lambda function. [#1166](https://github.com/cds-snc/platform-forms-client/issues/1166)
 - The existing `publishingStatus` field from the form JSON configuration has been replaced by a `isPublished` data field in the database. It can be switch to `true` or `false` using the Template API. A migration process will automatically happen through the Prisma seeding process. [#1181](https://github.com/cds-snc/platform-forms-client/issues/1181)
+- Form builder can only load form if the user has the permission to access it [#1228](https://github.com/cds-snc/platform-forms-client/issues/1228)
 
 ### Fixed
 
