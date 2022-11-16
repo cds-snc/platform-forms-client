@@ -1,5 +1,6 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { persist, StateStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 
 import {
@@ -99,6 +100,21 @@ export interface TemplateStoreState extends TemplateStoreProps {
   initialize: () => void;
 }
 
+/* Note: "async" getItem is intentional here to work-around a hydration issue   */
+/* https://github.com/pmndrs/zustand/issues/324#issuecomment-1031392610 */
+
+const storage: StateStorage = {
+  getItem: async (name: string) => {
+    return sessionStorage.getItem(name) || null;
+  },
+  setItem: (name: string, value: string) => {
+    sessionStorage.setItem(name, value);
+  },
+  removeItem: (name: string) => {
+    sessionStorage.removeItem(name);
+  },
+};
+
 const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
@@ -121,110 +137,119 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
     };
 
   return createStore<TemplateStoreState>()(
-    immer((set, get) => ({
-      ...DEFAULT_PROPS,
-      ...initProps,
-      localizeField: (path, lang = get().lang) => {
-        const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
-          lang.slice(1)) as Capitalize<Language>;
-        return `${path}${langUpperCaseFirst}`;
-      },
-      setId: (id) =>
-        set((state) => {
-          state.id = id;
+    immer(
+      persist(
+        (set, get) => ({
+          ...DEFAULT_PROPS,
+          ...initProps,
+          localizeField: (path, lang = get().lang) => {
+            const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
+              lang.slice(1)) as Capitalize<Language>;
+            return `${path}${langUpperCaseFirst}`;
+          },
+          setId: (id) =>
+            set((state) => {
+              state.id = id;
+            }),
+          setLang: (lang) =>
+            set((state) => {
+              state.lang = lang;
+            }),
+          toggleLang: () =>
+            set((state) => {
+              state.lang = state.lang === "en" ? "fr" : "en";
+            }),
+          toggleTranslationLanguagePriority: () =>
+            set((state) => {
+              state.translationLanguagePriority =
+                state.translationLanguagePriority === "en" ? "fr" : "en";
+            }),
+          setFocusInput: (isSet) =>
+            set((state) => {
+              state.focusInput = isSet;
+            }),
+          getFocusInput: () => get().focusInput,
+          updateField: (path, value) =>
+            set((state) => {
+              update(state, path, value);
+            }),
+          unsetField: (path) =>
+            set((state) => {
+              unset(state, path);
+            }),
+          moveUp: (index) =>
+            set((state) => {
+              state.form.elements = moveUp(state.form.elements, index);
+            }),
+          moveDown: (index) =>
+            set((state) => {
+              state.form.elements = moveDown(state.form.elements, index);
+            }),
+          add: (index = 0) =>
+            set((state) => {
+              state.form.elements.splice(index + 1, 0, {
+                ...defaultField,
+                id: incrementElementId(state.form.elements),
+                type: FormElementTypes.radio,
+              });
+            }),
+          remove: (elementId) =>
+            set((state) => {
+              state.form.elements = removeElementById(state.form.elements, elementId);
+            }),
+          addChoice: (index) =>
+            set((state) => {
+              state.form.elements[index].properties.choices?.push({ en: "", fr: "" });
+            }),
+          removeChoice: (index, childIndex) =>
+            set((state) => {
+              state.form.elements[index].properties.choices?.splice(childIndex, 1);
+            }),
+          resetChoices: (index) =>
+            set((state) => {
+              state.form.elements[index].properties.choices = [];
+            }),
+          duplicateElement: (index) => {
+            set((state) => {
+              // deep copy the element
+              const element = JSON.parse(JSON.stringify(state.form.elements[index]));
+              element.id = incrementElementId(state.form.elements);
+              element.properties[state.localizeField("title")] = `${
+                element.properties[state.localizeField("title")]
+              } copy`;
+              state.form.elements.splice(index + 1, 0, element);
+            });
+          },
+          bulkAddChoices: (index, bulkChoices) => {
+            set((state) => {
+              const currentChoices = state.form.elements[index].properties.choices;
+              const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
+              state.form.elements[index].properties.choices = choices;
+            });
+          },
+          getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+          initialize: () => {
+            set((state) => {
+              state.id = "";
+              state.lang = "en";
+              state.form = defaultForm;
+              state.submission = { email: "" };
+              state.isPublished = false;
+              state.securityAttribute = "Unclassified";
+            });
+          },
+          importTemplate: (json) =>
+            set((state) => {
+              state.submission = { email: json.submission?.email || "" };
+              state.form = { ...defaultForm, ...json.form };
+            }),
         }),
-      setLang: (lang) =>
-        set((state) => {
-          state.lang = lang;
-        }),
-      toggleLang: () =>
-        set((state) => {
-          state.lang = state.lang === "en" ? "fr" : "en";
-        }),
-      toggleTranslationLanguagePriority: () =>
-        set((state) => {
-          state.translationLanguagePriority =
-            state.translationLanguagePriority === "en" ? "fr" : "en";
-        }),
-      setFocusInput: (isSet) =>
-        set((state) => {
-          state.focusInput = isSet;
-        }),
-      getFocusInput: () => get().focusInput,
-      updateField: (path, value) =>
-        set((state) => {
-          update(state, path, value);
-        }),
-      unsetField: (path) =>
-        set((state) => {
-          unset(state, path);
-        }),
-      moveUp: (index) =>
-        set((state) => {
-          state.form.elements = moveUp(state.form.elements, index);
-        }),
-      moveDown: (index) =>
-        set((state) => {
-          state.form.elements = moveDown(state.form.elements, index);
-        }),
-      add: (index = 0) =>
-        set((state) => {
-          state.form.elements.splice(index + 1, 0, {
-            ...defaultField,
-            id: incrementElementId(state.form.elements),
-            type: FormElementTypes.radio,
-          });
-        }),
-      remove: (elementId) =>
-        set((state) => {
-          state.form.elements = removeElementById(state.form.elements, elementId);
-        }),
-      addChoice: (index) =>
-        set((state) => {
-          state.form.elements[index].properties.choices?.push({ en: "", fr: "" });
-        }),
-      removeChoice: (index, childIndex) =>
-        set((state) => {
-          state.form.elements[index].properties.choices?.splice(childIndex, 1);
-        }),
-      resetChoices: (index) =>
-        set((state) => {
-          state.form.elements[index].properties.choices = [];
-        }),
-      duplicateElement: (index) => {
-        set((state) => {
-          // deep copy the element
-          const element = JSON.parse(JSON.stringify(state.form.elements[index]));
-          element.id = incrementElementId(state.form.elements);
-          element.properties[state.localizeField("title")] = `${
-            element.properties[state.localizeField("title")]
-          } copy`;
-          state.form.elements.splice(index + 1, 0, element);
-        });
-      },
-      bulkAddChoices: (index, bulkChoices) => {
-        set((state) => {
-          const currentChoices = state.form.elements[index].properties.choices;
-          const choices = newlineToOptions(state.lang, currentChoices, bulkChoices);
-          state.form.elements[index].properties.choices = choices;
-        });
-      },
-      getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
-      initialize: () => {
-        set((state) => {
-          state.id = "";
-          state.lang = "en";
-          state.form = defaultForm;
-          state.submission = { email: "test@example.com" };
-          state.isPublished = false;
-          state.securityAttribute = "Unclassified";
-        });
-      },
-      importTemplate: (json) =>
-        set((state) => {
-          state.form = { ...defaultForm, ...json.form };
-        }),
-    }))
+        {
+          name: "form-storage",
+          getStorage: () => storage,
+        }
+      )
+    )
   );
 };
 

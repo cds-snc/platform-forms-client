@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
@@ -10,7 +10,25 @@ import { errorMessage } from "../validate";
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
 
-  const importTemplate = useTemplateStore((s) => s.importTemplate);
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem("form-storage")) {
+        const {
+          state: {
+            form: { elements },
+          },
+        } = JSON.parse(sessionStorage.getItem("form-storage") as string);
+        elements.length && changeTab("create");
+      }
+    } catch (e) {
+      // no-op
+    }
+  }, []);
+
+  const { importTemplate, initialize } = useTemplateStore((s) => ({
+    importTemplate: s.importTemplate,
+    initialize: s.initialize,
+  }));
   const [errors, setErrors] = useState<errorMessage[]>();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
@@ -23,6 +41,8 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
     }
 
     const target = e.target;
+    // clear any existing form data
+    sessionStorage.clear();
 
     try {
       const fileReader = new FileReader();
@@ -94,8 +114,11 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
       <div className="flex justify-center">
         <button
           className={boxClass}
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
+            // clear any existing form data
+            sessionStorage.clear();
+            initialize();
             changeTab("create");
           }}
         >
