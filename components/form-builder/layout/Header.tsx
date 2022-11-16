@@ -1,7 +1,6 @@
 import React from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import LanguageToggle from "../../globals/LanguageToggle";
-import { DownloadFileButton } from "./DownloadFileButton";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
 import { useNavigationStore } from "../store/useNavigationStore";
