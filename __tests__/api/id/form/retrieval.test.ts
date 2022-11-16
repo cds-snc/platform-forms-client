@@ -226,10 +226,10 @@ describe.skip("/api/retrieval", () => {
               SecurityAttribute: "Protected B",
             },
           ],
-          LastEvaluatedKey: 1,
+          LastEvaluatedKey: { submissionId: 1 },
         })
         .on(QueryCommand, {
-          ExclusiveStartKey: 1,
+          ExclusiveStartKey: { submissionId: 1 },
         })
         .resolves({
           Items: [
@@ -340,7 +340,7 @@ describe.skip("/api/retrieval", () => {
               SecurityAttribute: "Protected B",
             },
           ],
-          LastEvaluatedKey: 1,
+          LastEvaluatedKey: { submissionId: 1 },
         })
         .resolvesOnce({
           Items: [
@@ -369,7 +369,7 @@ describe.skip("/api/retrieval", () => {
               SecurityAttribute: "Protected B",
             },
           ],
-          LastEvaluatedKey: 2,
+          LastEvaluatedKey: { submissionId: 2 },
         })
         .resolvesOnce({
           Items: [
@@ -392,7 +392,7 @@ describe.skip("/api/retrieval", () => {
               SecurityAttribute: "Protected B",
             },
           ],
-          LastEvaluatedKey: 3,
+          LastEvaluatedKey: { submissionId: 3 },
         })
         .resolvesOnce({
           Items: [
@@ -403,7 +403,7 @@ describe.skip("/api/retrieval", () => {
               SecurityAttribute: "Protected B",
             },
           ],
-          LastEvaluatedKey: 4,
+          LastEvaluatedKey: { submissionId: 4 },
         })
         .resolves({
           Items: [
