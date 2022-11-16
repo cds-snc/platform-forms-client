@@ -17,6 +17,7 @@ import { Publish } from "./Publish";
 import { Published } from "./Published";
 import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
+import { Save } from "./Save";
 
 export const Layout = () => {
   const { status } = useSession();
@@ -142,6 +143,20 @@ export const Layout = () => {
             <main id="content">
               <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
               <Share />
+            </main>
+          </div>
+        );
+      case "save":
+        return (
+          <div className="col-start-4 col-span-9">
+            <Head>
+              <title>
+                {t("gcFormsSave")} — {t("gcForms")}
+              </title>
+            </Head>
+            <main id="content">
+              <h1 className="border-b-0 mb-8">{t("saveYourProgress")}</h1>
+              <Save />
             </main>
           </div>
         );

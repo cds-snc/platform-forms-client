@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon } from "../icons";
+import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
 
 function Button({
   children,
@@ -60,6 +60,13 @@ export const LeftNavigation = ({
         handleClick={handleClick("share")}
       >
         {t("share")}
+      </Button>
+      <Button
+        isCurrentTab={currentTab === "save"}
+        icon={<SaveIcon className={iconClassname} />}
+        handleClick={handleClick("save")}
+      >
+        {t("save")}
       </Button>
       <Button
         isCurrentTab={currentTab === "publish"}
