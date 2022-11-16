@@ -52,7 +52,6 @@ export const Header = () => {
   };
 
   const ButtonWithMessage = withMessage(Button, t("saveDraftMessage"));
-  const DownloadFileButtonWithMessage = withMessage(DownloadFileButton, t("saveDownloadMessage"));
 
   return (
     <header className="border-b-3 border-blue-dark my-10">
@@ -65,15 +64,11 @@ export const Header = () => {
           >
             {t("title")}
           </button>
-          {currentTab !== "start" &&
-            isSaveable() &&
-            (status === "authenticated" ? (
-              <ButtonWithMessage className="ml-4" onClick={handlePublish}>
-                {t("save")}
-              </ButtonWithMessage>
-            ) : (
-              <DownloadFileButtonWithMessage className="!py-1 !px-4" />
-            ))}
+          {currentTab !== "start" && isSaveable() && status === "authenticated" && (
+            <ButtonWithMessage className="ml-4" onClick={handlePublish}>
+              {t("save")}
+            </ButtonWithMessage>
+          )}
         </div>
         <div className="inline-flex gap-4">
           <div className="md:text-small_base text-base font-normal not-italic">
