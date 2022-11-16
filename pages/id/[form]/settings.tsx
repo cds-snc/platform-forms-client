@@ -1,6 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
-import { getTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates";
 import { checkPrivileges } from "@lib/privileges";
 import { ReactElement } from "react";
 import React from "react";
@@ -124,8 +124,7 @@ export const getServerSideProps = requireAuthentication(
 
     if (formID) {
       // get form info from db
-
-      const template = await getTemplateByID(formID);
+      const template = await getFullTemplateByID(ability, formID);
 
       if (template) {
         return {

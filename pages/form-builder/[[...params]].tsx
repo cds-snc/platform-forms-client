@@ -3,10 +3,9 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { Layout } from "../../components/form-builder/layout/Layout";
 import { Header } from "../../components/form-builder/layout/Header";
-import { checkPrivileges } from "@lib/privileges";
 import { NextPageWithLayout } from "../_app";
 import Footer from "../../components/globals/Footer";
-import { getTemplateByID } from "@lib/templates";
+import { getFullTemplateByID } from "@lib/templates";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";
 import { NavigationStoreProvider } from "@components/form-builder/store/useNavigationStore";
@@ -14,7 +13,7 @@ import { TemplateStoreProvider } from "@components/form-builder/store/useTemplat
 import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
-import { createAbility } from "@lib/privileges";
+import { AccessControlError, createAbility } from "@lib/privileges";
 import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
 
@@ -64,10 +63,12 @@ export const getServerSideProps: GetServerSideProps = async ({
   res,
 }) => {
   const [tab = "start", formID = null] = params || [];
+
   const FormbuilderParams: { tab: string; initialForm: null | FormRecord } = {
     tab,
     initialForm: null,
   };
+
   const session = await unstable_getServerSession(req, res, authOptions);
 
   if (session && !session.user.acceptableUse) {
@@ -81,9 +82,19 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 
   if (formID && session) {
-    const ability = createAbility(session.user.privileges);
-    checkPrivileges(ability, [{ action: "update", subject: "FormRecord" }]);
-    FormbuilderParams.initialForm = await getTemplateByID(formID);
+    try {
+      const ability = createAbility(session.user.privileges);
+      FormbuilderParams.initialForm = await getFullTemplateByID(ability, formID);
+    } catch (e) {
+      if (e instanceof AccessControlError) {
+        return {
+          redirect: {
+            destination: `/${locale}/admin/unauthorized`,
+            permanent: false,
+          },
+        };
+      }
+    }
   }
 
   return {

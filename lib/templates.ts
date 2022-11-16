@@ -105,11 +105,11 @@ async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<
 }
 
 /**
- * Get a form template by ID
+ * Get a form template by ID (no permission required) for internal use only.
  * @param formID ID of form template
- * @returns Form Record
+ * @returns FormRecord
  */
-async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
+async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord | null> {
   if (formCache.cacheAvailable) {
     // This value will always be the latest if it exists because
     // the cache is invalidated on change of a template
@@ -143,12 +143,50 @@ async function _getTemplateByID(formID: string): Promise<FormRecord | null> {
   return parsedTemplate;
 }
 
+/**
+ * Get a form template by ID (only includes public information but does not require any permission)
+ * @param formID ID of form template
+ * @returns PublicFormRecord
+ */
+async function _getPublicTemplateByID(formID: string): Promise<PublicFormRecord | null> {
+  const formRecord = await _unprotectedGetTemplateByID(formID);
+  return formRecord ? _onlyIncludePublicProperties(formRecord) : null;
+}
+
+/**
+ * Get a form template by ID (includes full template information but requires view permission)
+ * @param formID ID of form template
+ * @returns FormRecord
+ */
+async function _getFullTemplateByID(
+  ability: MongoAbility,
+  formID: string
+): Promise<FormRecord | null> {
+  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+  if (!templateWithAssociatedUsers) return null;
+
+  checkPrivileges(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...templateWithAssociatedUsers.formRecord,
+          users: templateWithAssociatedUsers.users,
+        },
+      },
+    },
+  ]);
+
+  return templateWithAssociatedUsers.formRecord;
+}
+
 // Get the submission format by using the form ID
 // Returns => json object of the submission details.
 async function _getTemplateSubmissionTypeByID(
   formID: string
 ): Promise<SubmissionProperties | null> {
-  return _getTemplateByID(formID).then((formRecord) => formRecord?.submission ?? null);
+  return _unprotectedGetTemplateByID(formID).then((formRecord) => formRecord?.submission ?? null);
 }
 
 /**
@@ -167,6 +205,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
         id: true,
         jsonConfig: true,
         isPublished: true,
+        ttl: true,
         users: {
           select: {
             id: true,
@@ -177,7 +216,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
     })
     .catch((e) => prismaErrors(e, null));
 
-  if (!templateWithUsers) return null;
+  if (!templateWithUsers || templateWithUsers.ttl) return null;
 
   const parsedTemplate = _parseTemplate(templateWithUsers);
 
@@ -449,7 +488,8 @@ const _parseTemplate = (template: {
 
 export const createTemplate = logger(_createTemplate);
 export const getAllTemplates = logger(_getAllTemplates);
-export const getTemplateByID = logger(_getTemplateByID);
+export const getPublicTemplateByID = logger(_getPublicTemplateByID);
+export const getFullTemplateByID = logger(_getFullTemplateByID);
 export const getTemplateSubmissionTypeByID = logger(_getTemplateSubmissionTypeByID);
 export const getTemplateWithAssociatedUsers = logger(_getTemplateWithAssociatedUsers);
 export const updateTemplate = logger(_updateTemplate);
