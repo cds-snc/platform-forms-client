@@ -89,7 +89,7 @@ describe("Test Auth lib", () => {
       }))(context);
       expect(result).toEqual({
         redirect: {
-          destination: `/undefined/auth/policy`,
+          destination: `/undefined/auth/policy?referer=`,
           permanent: false,
         },
       });

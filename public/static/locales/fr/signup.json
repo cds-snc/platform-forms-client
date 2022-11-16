@@ -16,10 +16,7 @@
     "fields": {
       "username": {
         "label": "Email (FR)",
-        "hint": "Must be a federal government email address (FR)",
-        "error": {
-          "validGovEmail": "This field must be a valid government email. (FR)"
-        }
+        "hint": "Must be a federal government email address (FR)"
       },
       "password": {
         "label": "Password (FR)",
@@ -47,5 +44,26 @@
       }
     }
   },
-  "registrationClosed": "L'inscription est fermée pour le moment."
+  "registrationClosed": "L'inscription est fermée pour le moment.",
+  "accountCreated": {
+    "title": "GC Forms account created (FR)",
+    "yourAccountTitle": "What you can do with your account (FR)",
+    "yourAccountListDescription": "With this account you can (FR)",
+    "yourAccountList": {
+      "item1": "draft a form (FR)",
+      "item2": "save drafts within GC Forms (FR)",
+      "item3": "test the delivery of responses (FR)"
+    },
+    "notIncluded": {
+      "title": "What's not included (FR)",
+      "paragraph1": "You cannot publish forms to the internet yet. (FR)"
+    },
+    "unlockPublishing": {
+      "title": "Unlock form publishing (FR)",
+      "paragraph1": "To unlock publishing, provide the contact information of the person you report to. (FR)",
+      "paragraph2": "We'll process your request within 2 business days. (FR)"
+    },
+    "unlockPublishingButton": "Unlock publishing (FR)",
+    "skipStepButton": "Skip this step for now (FR)"
+  }
 }
