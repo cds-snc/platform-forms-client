@@ -161,7 +161,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         <>
           <RichText>
             {form.introduction &&
-              form.introduction[props.language == "en" ? "descrptionEn" : "descriptionFr"]}
+              form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
           </RichText>
 
           <form
