@@ -235,10 +235,10 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <>
-      <Row isRichText={isRichText}>
-        <div style={isRichText ? {} : { flexBasis: "470px" }}>
+      <Row isRichText={isRichText} className="element-panel flex xxl:flex-col-reverse flex-row">
+        <div className={isRichText ? undefined : "basis-[450px] xxl:basis-[10px]"}>
           {!isRichText && (
-            <div>
+            <>
               <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
                 {questionNumber}
               </span>
@@ -248,7 +248,7 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
                 index={item.index}
                 hasDescription={hasDescription}
               />
-            </div>
+            </>
           )}
           {hasDescription && item.type !== "richText" && (
             <DivDisabled id={`item${item.index}-describedby`}>
