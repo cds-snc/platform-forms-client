@@ -99,11 +99,7 @@
   "question": "[FR] Question",
   "questions": "[FR] Questions",
   "questionTitle": "[FR] Question title",
-<<<<<<< HEAD
   "remove": "Supprimer",
-=======
-  "remove": "[FR] Supprimer",
->>>>>>> develop
   "removeOption": "[FR] Remove option:",
   "required": "Obligatoire",
   "responseDelivery": "Tester la réception des réponses",
