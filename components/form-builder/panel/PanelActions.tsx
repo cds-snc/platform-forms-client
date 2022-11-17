@@ -14,18 +14,10 @@ const Actions = styled.div`
   display: flex;
   background-color: #ebebeb;
   padding-left: 20px;
-  height: 62px;
   align-items: center;
-
-  @media (max-width: 1300px) {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    height: 150px;
-  }
 `;
 
 const Label = styled.span`
-  line-height: 38px;
   font-size: 16px;
   margin-right: 3px;
   margin-left: 3px;
@@ -53,21 +45,10 @@ const UpDown = styled.div`
 `;
 
 const AddButtonWrapper = styled.div`
-  position: absolute;
-  top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
-  right: 20px;
-
-  @media (max-width: 1300px) {
-    top: 15px;
-  }
-
-  @media (max-width: 850px) {
-    top: -25px;
-  }
+  margin: 10px;
 
   button {
     font-size: 16px;
@@ -84,8 +65,9 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
     useTemplateStore((s) => ({
+      lang: s.lang,
       remove: s.remove,
       moveUp: s.moveUp,
       moveDown: s.moveDown,
@@ -99,8 +81,8 @@ export const PanelActions = ({
   const isRichText = item.type == "richText";
 
   return (
-    <Actions className="panel-actions">
-      <UpDown>
+    <Actions className={`panel-actions ${lang}`}>
+      <UpDown className="up-down">
         <Button
           theme="secondary"
           className={`${
@@ -181,7 +163,7 @@ export const PanelActions = ({
         </Modal>
       )}
 
-      <AddButtonWrapper>
+      <AddButtonWrapper className="add-element">
         <Button
           onClick={() => {
             setFocusInput(true);
