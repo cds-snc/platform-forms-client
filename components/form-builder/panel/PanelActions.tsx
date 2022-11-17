@@ -16,6 +16,12 @@ const Actions = styled.div`
   padding-left: 20px;
   height: 62px;
   align-items: center;
+
+  @media (max-width: 1300px) {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    height: 150px;
+  }
 `;
 
 const Label = styled.span`
@@ -23,6 +29,10 @@ const Label = styled.span`
   font-size: 16px;
   margin-right: 3px;
   margin-left: 3px;
+
+  @media (max-width: 1130px) {
+    line-height: 18px;
+  }
 `;
 
 const UpDown = styled.div`
@@ -50,6 +60,14 @@ const AddButtonWrapper = styled.div`
   align-items: center;
   z-index: 999;
   right: 20px;
+
+  @media (max-width: 1300px) {
+    top: 15px;
+  }
+
+  @media (max-width: 850px) {
+    top: -25px;
+  }
 
   button {
     font-size: 16px;
@@ -112,34 +130,35 @@ export const PanelActions = ({
           <Label>{t("moveDown")}</Label>
         </Button>
       </UpDown>
+      <div>
+        <Button
+          theme="secondary"
+          className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+          }
+          onClick={() => {
+            duplicateElement(item.index);
+          }}
+        >
+          <Label>{t("duplicate")}</Label>
+        </Button>
 
-      <Button
-        theme="secondary"
-        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={
-          <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-        }
-        onClick={() => {
-          duplicateElement(item.index);
-        }}
-      >
-        <Label>{t("duplicate")}</Label>
-      </Button>
-
-      <Button
-        theme="secondary"
-        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={
-          <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-        }
-        onClick={() => {
-          remove(item.id);
-        }}
-      >
-        <Label>{t("remove")}</Label>
-      </Button>
+        <Button
+          theme="secondary"
+          className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+          }
+          onClick={() => {
+            remove(item.id);
+          }}
+        >
+          <Label>{t("remove")}</Label>
+        </Button>
+      </div>
       {!isRichText && (
         <Modal
           title={t("moreOptions")}
