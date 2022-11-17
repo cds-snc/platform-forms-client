@@ -133,7 +133,7 @@ const Row = styled.div<RowProps>`
 const DivDisabled = styled.div`
   margin-top: 20px;
   padding: 5px 10px;
-  width: 460px;
+  width: 100%;
   cursor: not-allowed;
   border-radius: 4px;
   background: #f2f2f2;
@@ -236,7 +236,7 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
   return (
     <>
       <Row isRichText={isRichText} className="element-panel flex xxl:flex-col-reverse flex-row">
-        <div className={isRichText ? undefined : "basis-[450px] xxl:basis-[10px]"}>
+        <div className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}>
           {!isRichText && (
             <>
               <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
