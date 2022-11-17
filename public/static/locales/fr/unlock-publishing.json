@@ -19,11 +19,11 @@
   "unlockPublishingSubmitted": {
     "title": "Unlock publishing request submitted [FR]",
     "whatNext": {
-      "title": "What happens next? [FR]",
-      "paragraph1": "We'll process your request and notify your manager about your publishing ability in GC Forms and our service level agreement. [FR]",
-      "paragraph2": "It may take up to 2 business days before you can publish. [FR]",
-      "paragraph3": "You'll receive an email notification when publishing has been unlocked. [FR]",
-      "paragraph4": "While you wait, you can continue to explore and draft forms. [FR]"
+      "title": "Quelle est la suite?",
+      "paragraph1": "Quelqu’un traitera votre demande et informera votre gestionnaire de l’état de votre publication.",
+      "paragraph2": "Rappelons qu’il peut s’écouler jusqu’à 24 heures avant de pouvoir publier. ",
+      "paragraph3": "Vous recevrez une notification par courriel lorsqu’on aura autorisé votre publication.",
+      "paragraph4": "Entre-temps, vous pouvez tout de même consulter et rédiger des formulaires."
     }
   },
   "submissionError": "There was an error. Please try again later. [FR]"
