@@ -48,7 +48,7 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput, getPreviousElement } =
     useTemplateStore((s) => ({
       lang: s.lang,
       remove: s.remove,
@@ -58,6 +58,7 @@ export const PanelActions = ({
       duplicateElement: s.duplicateElement,
       elements: s.form.elements,
       setFocusInput: s.setFocusInput,
+      getPreviousElement: s.getPreviousElement
     }));
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
@@ -117,7 +118,11 @@ export const PanelActions = ({
           <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
         }
         onClick={() => {
+          // if index is 0, then highlight the form title
+          const labelId = item.index === 0 ? "formTitle" : `item${getPreviousElement(item.index)}`;
+
           remove(item.id);
+          document.getElementById(labelId)?.focus();
         }}
       >
         <Label>{t("remove")}</Label>
