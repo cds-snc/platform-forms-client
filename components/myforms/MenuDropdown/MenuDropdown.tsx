@@ -52,7 +52,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
       <ul
         id={`menu-${id}`}
         className={
-          "hidden absolute z-10 w-28 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
+          "hidden absolute z-10 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
           (direction === "up" ? " -top-[10.65rem]" : "")
         }
         role="menu"
@@ -75,9 +75,12 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                 id={`mi-${id}-${index}`}
                 role="menuitem"
                 key={index}
-                className="pl-4 py-2 first:pt-4 last:pb-4"
+                className="px-4 py-2 first:pt-4 last:pb-4"
               >
-                <a href={item.url} className="action no-underline hover:underline active:underline">
+                <a
+                  href={item.url}
+                  className="action no-underline whitespace-nowrap hover:underline active:underline"
+                >
                   {item.title}
                 </a>
               </li>
