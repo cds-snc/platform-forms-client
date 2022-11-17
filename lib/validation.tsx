@@ -302,13 +302,16 @@ export const isValidGovEmail = (email: string, domains: string[]): boolean => {
   const reg = new RegExp(
     "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.([a-zA-Z0-9-]{2,}))+$"
   );
-  if (!email || !domains || !reg.test(email)) {
+  if (!email || !Array.isArray(domains) || domains.length <= 0 || !reg.test(email)) {
     return false;
   }
   //Get the domain from email
   const emailDomain = email.substring(email.lastIndexOf("@") + 1);
   //Check the email's domain against the list of domains
-  return domains.includes(emailDomain.toString());
+  //Search from the end of the string since we care about top-ish level domains most.
+  const domainList = domains.join("|");
+  const regGovDomain = new RegExp(`.?(?:${domainList})$`);
+  return regGovDomain.test(emailDomain);
 };
 
 /**
