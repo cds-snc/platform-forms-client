@@ -13,42 +13,25 @@ const Actions = styled.div`
   position: relative;
   display: flex;
   background-color: #ebebeb;
-  padding-left: 20px;
   align-items: center;
+  padding: 10px;
+
+  @media (max-width: 1130px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 `;
 
 const Label = styled.span`
   font-size: 16px;
   margin-right: 3px;
   margin-left: 3px;
-
-  @media (max-width: 1130px) {
-    line-height: 18px;
-  }
-`;
-
-const UpDown = styled.div`
-  display: flex;
-  margin-right: 10px;
-
-  svg {
-    margin-right: 0;
-  }
-
-  button:first-of-type {
-    padding-left: 0;
-  }
-
-  button:last-of-type {
-    padding-left: 0;
-  }
 `;
 
 const AddButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
 
   button {
     font-size: 16px;
@@ -82,65 +65,63 @@ export const PanelActions = ({
 
   return (
     <Actions className={`panel-actions ${lang}`}>
-      <UpDown className="up-down">
-        <Button
-          theme="secondary"
-          className={`${
-            isFirstItem ? "disabled" : ""
-          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={
-            <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
-          }
-          disabled={isFirstItem}
-          onClick={() => moveUp(item.index)}
-        >
-          <Label>{t("moveUp")}</Label>
-        </Button>
-        <Button
-          theme="secondary"
-          className={`${
-            isFirstItem ? "disabled" : ""
-          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={
-            <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
-          }
-          disabled={isLastItem}
-          onClick={() => moveDown(item.index)}
-        >
-          <Label>{t("moveDown")}</Label>
-        </Button>
-      </UpDown>
-      <div>
-        <Button
-          theme="secondary"
-          className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={
-            <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-          }
-          onClick={() => {
-            duplicateElement(item.index);
-          }}
-        >
-          <Label>{t("duplicate")}</Label>
-        </Button>
+      <Button
+        theme="secondary"
+        className={`${
+          isFirstItem ? "disabled" : ""
+        } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+        }
+        disabled={isFirstItem}
+        onClick={() => moveUp(item.index)}
+      >
+        <Label>{t("moveUp")}</Label>
+      </Button>
+      <Button
+        theme="secondary"
+        className={`${
+          isFirstItem ? "disabled" : ""
+        } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+        }
+        disabled={isLastItem}
+        onClick={() => moveDown(item.index)}
+      >
+        <Label>{t("moveDown")}</Label>
+      </Button>
 
-        <Button
-          theme="secondary"
-          className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={
-            <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-          }
-          onClick={() => {
-            remove(item.id);
-          }}
-        >
-          <Label>{t("remove")}</Label>
-        </Button>
-      </div>
+      <Button
+        theme="secondary"
+        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+        }
+        onClick={() => {
+          duplicateElement(item.index);
+        }}
+      >
+        <Label>{t("duplicate")}</Label>
+      </Button>
+
+      <Button
+        theme="secondary"
+        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+        }
+        onClick={() => {
+          remove(item.id);
+        }}
+      >
+        <Label>{t("remove")}</Label>
+      </Button>
+
       {!isRichText && (
         <Modal
           title={t("moreOptions")}
