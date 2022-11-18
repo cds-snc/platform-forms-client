@@ -13,15 +13,9 @@
   "confirmationDescriptionItem4": "un lien vers le formulaire de rétroaction (Si vous n’en avez pas, vous pouvez en créer un à l’aide de Formulaires GC qui sera lancé même temps que votre formulaire principal.)",
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans votre page de confirmation :",
   "confirmationMessage": "Message de confirmation du formulaire",
-<<<<<<< HEAD
   "confirmationPage": "Page du confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
   "contactSupportIfYouHaveQuestions": "<a href=\"http://example.com\" target=\"_blank\">Veuillez contacter</a>  l’équipe de soutien si vous avez des questions. ",
-=======
-  "confirmationPage": "Page du",
-  "contactSupport": "Contacter l’équipe de soutien",
-  "contactSupportIfYouHaveQuestions": "[FR] <a href=\"http://example.com\" target=\"_blank\">Contact support</a> if you have any questions.",
->>>>>>> develop
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
   "dataDeliveredMessage": "[FR] Check your email for the submitted form response.",
@@ -49,13 +43,8 @@
   "formIntroduction": "[FR] Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
-<<<<<<< HEAD
   "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
   "formTitle": "Titre du formulaire  ",
-=======
-  "formSubmissionDisabledInPreview": "[FR] Form submission is disabled in preview - Test out your form and response collection under Response Delivery",
-  "formTitle": "[FR] Form title",
->>>>>>> develop
   "french": "Français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Editer",
@@ -76,11 +65,7 @@
   "longAnswerText": "Réponse longue",
   "maxCharacterLength": "[FR] Max character length: ",
   "more": "Plus",
-<<<<<<< HEAD
   "moreOptions": "Plus d'options  ",
-=======
-  "moreOptions": "[FR] More options",
->>>>>>> develop
   "moveDown": "Déplacer vers le bas ",
   "moveUp": "Déplacer vers le haut ",
   "navLabelEditor": "[FR] Edit navigation",
@@ -89,11 +74,7 @@
   "numericField": "[FR] Numeric field",
   "option": "Option",
   "optionText": "[FR] Option text",
-<<<<<<< HEAD
   "page1": "Page 1",
-=======
-  "page1": "[FR] Page 1",
->>>>>>> develop
   "pageText": "Section texte",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
@@ -101,7 +82,6 @@
   "preview": "Prévisualiser",
   "privacyNoticeDescription": "Les personnes chargées de l’élaboration des formulaires doivent rédiger des avis de confidentialité conformes aux exigences de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">directive sur les pratiques relatives à la protection de la vie privée.</a>",
   "privacyStatement": "Déclaration de confidentialité ",
-<<<<<<< HEAD
   "provideFeedback": "Donner votre avis",
   "publish": "Publier",
   "publishedBack": "Revenir à mes formulaires",
@@ -119,25 +99,6 @@
   "question": "Question",
   "questions": "Des questions",
   "questionTitle": "Titre de question",
-=======
-  "provideFeedback": "[FR] Provide feedback",
-  "publish": "Publier",
-  "publishedBack": "[FR] Back to My forms",
-  "publishedErrors": "[FR] Published form errors",
-  "publishedTitle": "[FR] Your form is published!",
-  "publishedViewLinks": "[FR] View and share your published form with these links:",
-  "publisher": "Éditeur",
-  "publishingDisablesEditing": "[FR] Publishing disables editing.",
-  "publishingDisablesEditingDescription": "[FR] Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
-  "publishNoAuthSubTitle": "[FR] You can publish and host your form with GC forms.",
-  "publishNoAuthText": "[FR] To publish your form, <a href=\"{{signIn}}\">sign in</a> to your GC Forms account. If you do not have a GC Forms account, <a href=\"{{createOne}}\">create one</a>.",
-  "publishNoAuthTitle": "[FR] Sign in to publish your form",
-  "publishYourForm": "[FR] Publish your form",
-  "publishYourFormInstructions": "[FR] You need the following items completed before you publish your form.",
-  "question": "[FR] Question",
-  "questions": "[FR] Questions",
-  "questionTitle": "[FR] Question title",
->>>>>>> develop
   "remove": "Supprimer",
   "removeOption": "[FR] Remove option:",
   "required": "Obligatoire",
@@ -151,11 +112,7 @@
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
   "saveButton": "Enregistrer",
   "saveDownloadMessage": "Le formulaire a été téléchargé avec succès.",
-<<<<<<< HEAD
   "saveDraftMessage": "Formulaire enregistré en tant que brouillon  ",
-=======
-  "saveDraftMessage": "[FR] Form saved as a draft",
->>>>>>> develop
   "saveH2": "Enregistrez le formulaire sur votre ordinateur.",
   "saveH3": "Rouvrir le formulaire pour le modifier",
   "saveP1": "Nous n’enregistrons pas votre formulaire sur notre site Web, mais ne vous inquiétez pas : vous pouvez le sauvegarder sur votre ordinateur. ",
@@ -190,11 +147,7 @@
   "startH3": "Ouvrir un formulaire",
   "startP1": "Créez un formulaire à partir d’un exemplaire vierge.",
   "startP2": "Consultez et modifiez un formulaire en l’ouvrant depuis votre ordinateur.",
-<<<<<<< HEAD
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-=======
-  "submittedResponsesText": "[FR] Submitted responses will be sent to {{email}}.",
->>>>>>> develop
   "submitToTestDataDelivery": "Cliquez sur Soumettre pour tester la réception des réponses.",
   "switch": "Changer",
   "testDataDelivery": "Livraison des réponses",
@@ -205,14 +158,8 @@
   "translate": "Traduire",
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
   "translateTitle": "Saisir la traduction",
-<<<<<<< HEAD
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-=======
-  "unlockPublishing": "Unlock publishing",
-  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "updateResponseDestination": "[FR] Update response destination.",
->>>>>>> develop
   "viewCode": "Afficher le code"
 }
