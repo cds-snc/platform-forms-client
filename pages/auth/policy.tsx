@@ -39,7 +39,7 @@ export const getServerSideProps = requireAuthentication(async (context) => {
     props: {
       ...(context.locale && (await serverSideTranslations(context?.locale, ["common"]))),
       content: termsOfUseContent ?? null,
-      referer: context.query.referer,
+      ...(context.query.referer && { referer: context.query.referer }),
     },
   };
 });
