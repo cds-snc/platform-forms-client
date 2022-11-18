@@ -3,6 +3,14 @@
     "terms": {
       "link": "/fr/terms-avis",
       "desc": "Avis"
+    },
+    "sla": {
+      "link": "/fr/sla",
+      "desc": "Accord sur les niveaux de service"
+    },
+    "support": {
+      "link": "/tbd",
+      "desc": "Soutien"
     }
   },
   "phase": {

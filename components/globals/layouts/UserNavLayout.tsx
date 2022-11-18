@@ -50,7 +50,7 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
       <div id="page-container">
         <main id="content">{children}</main>
       </div>
-      <Footer />
+      <Footer displaySLAAndSupportLinks />
     </div>
   );
 };
