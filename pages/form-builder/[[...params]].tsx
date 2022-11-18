@@ -9,7 +9,10 @@ import { getFullTemplateByID } from "@lib/templates";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";
 import { NavigationStoreProvider } from "@components/form-builder/store/useNavigationStore";
-import { TemplateStoreProvider } from "@components/form-builder/store/useTemplateStore";
+import {
+  TemplateStoreProvider,
+  useTemplateStore,
+} from "@components/form-builder/store/useTemplateStore";
 import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
@@ -22,16 +25,20 @@ type PageProps = {
   initialForm: FormRecord | null;
 };
 
-const Page: NextPageWithLayout<PageProps> = ({ tab }: { tab: string }) => {
+const Page: NextPageWithLayout<PageProps> = () => {
   const router = useRouter();
   const [ready, setReady] = useState(false);
+
+  const { hasHydrated } = useTemplateStore((s) => ({
+    hasHydrated: s._hasHydrated,
+  }));
 
   useEffect(() => {
     router.replace(router.pathname, router.pathname, { shallow: true });
     setReady(true);
   }, []);
 
-  return ready ? <Layout /> : null;
+  return ready && hasHydrated ? <Layout /> : null;
 };
 
 Page.getLayout = (page: ReactElement) => {
