@@ -1,12 +1,12 @@
 {
-  "title": "My Forms [FR]",
+  "title": "Mes formulaires ",
   "nav": {
-    "drafts": "Drafts [fr]",
-    "published": "Published [fr]",
-    "all": "All [fr]"
+    "drafts": "Ébauches de formulaires",
+    "published": "Publié",
+    "all": "Tous"
   },
   "actions": {
-    "createNewForm": "Create new form [FR]"
+    "createNewForm": "Créer un nouveau formulaire +"
   },
   "cards": {
     "label": "List of your forms [FR]",
@@ -14,16 +14,16 @@
   },
   "card": {
     "states": {
-      "draft": "Draft [FR]",
-      "published": "Published [FR]"
+      "draft": "Ébauche",
+      "published": "Publier"
     },
-    "lastEdited": "Last edited [FR]",
+    "lastEdited": "Dernière modification",
     "menu": {
-      "more": "More [FR]",
-      "save": "Save [FR]",
+      "more": "Plus",
+      "save": "Enregistrer",
       "copyLink": "copyLink [FR]",
-      "preview": "Priview [FR]",
-      "edit": "Edit [FR]"
+      "preview": "Prévisualiser",
+      "edit": "Modifier"
     }
   }
 }

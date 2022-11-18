@@ -5,7 +5,7 @@ import React from "react";
 export const PublishNoAuth = () => {
   const { t, i18n } = useTranslation("form-builder");
   const signIn = `/${i18n.language}/auth/login`;
-  const createOne = `/${i18n.language}/auth/register`;
+  const createOne = `/${i18n.language}/signup/register`;
   return (
     <>
       <h1 className="border-0 mb-2">{t("publishNoAuthTitle")}</h1>
