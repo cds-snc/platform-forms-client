@@ -22,9 +22,10 @@ type PageProps = {
   initialForm: FormRecord | null;
 };
 
-const Page: NextPageWithLayout<PageProps> = () => {
+const Page: NextPageWithLayout<PageProps> = ({ tab }: { tab: string }) => {
   const router = useRouter();
   const [ready, setReady] = useState(false);
+
   useEffect(() => {
     router.replace(router.pathname, router.pathname, { shallow: true });
     setReady(true);
@@ -38,6 +39,7 @@ Page.getLayout = (page: ReactElement) => {
     <NavigationStoreProvider currentTab={page.props.tab as string}>
       <TemplateStoreProvider
         {...(page.props.initialForm && (page.props.initialForm as FormRecord))}
+        tab={page.props.tab}
       >
         {" "}
         <Head>
