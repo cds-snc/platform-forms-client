@@ -14,7 +14,7 @@ import * as Yup from "yup";
 
 const Login = () => {
   const { cognitoError, setCognitoError, login } = useAuth();
-  const { t } = useTranslation(["login", "common"]);
+  const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const didConfirm = useRef(false);
