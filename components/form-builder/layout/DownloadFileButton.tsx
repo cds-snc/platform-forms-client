@@ -12,11 +12,11 @@ const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const getDate = () => {
+const getDate = (withTime = false) => {
   let date = new Date();
   const offset = date.getTimezoneOffset();
   date = new Date(date.getTime() - offset * 60 * 1000);
-  return date.toISOString().split("T")[0];
+  return withTime ? date.toISOString() : date.toISOString().split("T")[0];
 };
 
 export const DownloadFileButton = ({
@@ -31,6 +31,7 @@ export const DownloadFileButton = ({
     getSchema: s.getSchema,
     form: s.form,
   }));
+
   const downloadfile = useCallback(async () => {
     async function retrieveFileBlob() {
       try {
@@ -49,11 +50,23 @@ export const DownloadFileButton = ({
     retrieveFileBlob();
   }, [getSchema]);
 
+  const downloadFileEvent = () => {
+    const formTitle = slugify(form.titleEn);
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "form_download",
+      formTitle,
+      submitTime: getDate(true),
+    });
+  };
+
   return (
     <Button
       className={className}
       onClick={() => {
         downloadfile();
+        downloadFileEvent();
         onClick && onClick();
       }}
     >
