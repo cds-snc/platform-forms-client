@@ -10,10 +10,19 @@ export const useAuth = () => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
   const [cognitoError, setCognitoError] = useState("");
-  const [username, setUsername] = useState("");
 
   const register = async (
-    { username, password, name }: { username: string; password: string; name: string },
+    {
+      username,
+      password,
+      name,
+      confirmationCallback,
+    }: {
+      username: string;
+      password: string;
+      name: string;
+      confirmationCallback: () => void;
+    },
     { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
   ) => {
     setCognitoError("");
@@ -34,9 +43,7 @@ export const useAuth = () => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
-
-        setSubmitting(false);
-        setUsername(username);
+        confirmationCallback();
       }
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -58,14 +65,22 @@ export const useAuth = () => {
   const confirm = async (
     {
       username,
+      password,
       confirmationCode,
+      setIsAuthorizationError,
+      confirmationCallback,
     }: {
       username: string;
+      password: string;
       confirmationCode: string;
+      setIsAuthorizationError: (s: boolean) => void;
+      confirmationCallback: () => void;
     },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; confirmationCode: string }>
   ) => {
     setCognitoError("");
+    // Initial confirmation code check
+    let confirmationSuccess = true;
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -82,15 +97,10 @@ export const useAuth = () => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
-
-        // Redirect to the Welcome / Account Created page
-
-        await router.push({
-          pathname: "/signup/account-created",
-        });
       }
     } catch (err) {
       const axiosError = err as AxiosError;
+      confirmationSuccess = false;
       logMessage.error(axiosError);
       if (axiosError.response?.data?.message) {
         const errorResponseMessage = axiosError.response.data.message;
@@ -111,6 +121,40 @@ export const useAuth = () => {
       }
     } finally {
       setSubmitting(false);
+    }
+
+    // Automated sign in with provided crednetials
+    if (!confirmationSuccess) return;
+    try {
+      const response = await signIn<"credentials">("credentials", {
+        redirect: false,
+        username,
+        password,
+      });
+
+      if (response?.error) {
+        const responseErrorMessage = response.error;
+        logMessage.error(responseErrorMessage);
+        if (
+          responseErrorMessage.includes("UserNotFoundException") ||
+          responseErrorMessage.includes("NotAuthorizedException")
+        ) {
+          setIsAuthorizationError(true);
+        } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
+          await router.push("/admin/login");
+        } else {
+          setCognitoError(t("InternalServiceException"));
+        }
+      } else if (response?.ok) {
+        await router.push("/auth/policy?referer=/signup/account-created");
+      }
+    } catch (err) {
+      logMessage.error(err);
+      setCognitoError(t("InternalServiceException"));
+      // Internal error on sign in, not confirmation, so redirect to login page
+      await router.push("/auth/login");
+    } finally {
+      confirmationCallback();
     }
   };
 
@@ -150,7 +194,17 @@ export const useAuth = () => {
   };
 
   const login = async (
-    { username, password }: { username: string; password: string },
+    {
+      username,
+      password,
+      needsConfirmation,
+      didConfirm,
+    }: {
+      username: string;
+      password: string;
+      needsConfirmation: (s: boolean) => void;
+      didConfirm: boolean;
+    },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; password: string }>
   ) => {
     setCognitoError("");
@@ -161,13 +215,12 @@ export const useAuth = () => {
         password,
       });
 
-      logMessage.error(response);
       if (response?.error) {
         const responseErrorMessage = response.error;
         setSubmitting(false);
 
         if (responseErrorMessage.includes("UserNotConfirmedException")) {
-          setUsername(username);
+          needsConfirmation(true);
         } else if (
           responseErrorMessage.includes("UserNotFoundException") ||
           responseErrorMessage.includes("NotAuthorizedException")
@@ -182,9 +235,11 @@ export const useAuth = () => {
           setCognitoError(t("InternalServiceException"));
         }
       } else if (response?.ok) {
-        await router.push({
-          pathname: "/myforms",
-        });
+        if (didConfirm) {
+          await router.push("/auth/policy?referer=/signup/account-created");
+        } else {
+          await router.push("/auth/policy");
+        }
       }
     } catch (err) {
       logMessage.error(err);
@@ -201,6 +256,5 @@ export const useAuth = () => {
     login,
     cognitoError,
     setCognitoError,
-    username,
   };
 };

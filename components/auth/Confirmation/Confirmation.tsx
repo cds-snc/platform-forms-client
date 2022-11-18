@@ -5,14 +5,19 @@ import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 
-export interface ConfirmationProps {
-  /**
-   * The email of the user being confirmed.
-   */
+interface ConfirmationProps {
   username: string;
+  password: string;
+  setIsAuthorizationError: (s: boolean) => void;
+  confirmationCallback: () => void;
 }
 
-export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
+export const Confirmation = ({
+  username,
+  password,
+  setIsAuthorizationError,
+  confirmationCallback,
+}: ConfirmationProps): ReactElement => {
   const { cognitoError, setCognitoError, confirm, resendConfirmationCode } = useAuth();
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
@@ -22,9 +27,7 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
       .typeError(t("signUpConfirmation.fields.confirmationCode.error.number"))
       .required(t("input-validation.required", { ns: "common" })),
   });
-  if (!username) {
-    return <p>{t("signUpConfirmation.noUsername")}</p>;
-  }
+
   return (
     <Formik
       validationSchema={validationSchema}
@@ -33,7 +36,10 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
       validateOnChange={false}
       onSubmit={async (values, formikHelpers) => {
         setShowSentReconfirmationToast(false);
-        await confirm(values, formikHelpers);
+        await confirm(
+          { ...values, password, setIsAuthorizationError, confirmationCallback },
+          formikHelpers
+        );
       }}
     >
       {({ handleSubmit, errors }) => (
