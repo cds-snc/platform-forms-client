@@ -1,12 +1,12 @@
 {
-  "title": "My Forms [FR]",
+  "title": "Mes formulaires ",
   "nav": {
-    "drafts": "Drafts [fr]",
-    "published": "Published [fr]",
-    "all": "All [fr]"
+    "drafts": "Ébauches de formulaires",
+    "published": "Publié",
+    "all": "Tous"
   },
   "actions": {
-    "createNewForm": "Create new form [FR]"
+    "createNewForm": "Créer un nouveau formulaire +"
   },
   "cards": {
     "noForms": "You have no forms. [FR]",
@@ -15,16 +15,16 @@
   },
   "card": {
     "states": {
-      "draft": "Draft [FR]",
-      "published": "Published [FR]"
+      "draft": "Ébauche",
+      "published": "Publier"
     },
-    "lastEdited": "Last edited [FR]",
+    "lastEdited": "Dernière modification",
     "menu": {
-      "more": "More [FR]",
-      "save": "Save to computer [FR]",
+      "more": "Plus",
+      "save": "Enregistrer",
       "copyLink": "Copy Link [FR]",
-      "preview": "Preview [FR]",
-      "edit": "Edit [FR]",
+      "preview": "Prévisualiser",
+      "edit": "Modifier",
       "settings": "Settings [FR]"
     }
   }
