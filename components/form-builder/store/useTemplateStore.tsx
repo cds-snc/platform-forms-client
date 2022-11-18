@@ -74,7 +74,6 @@ export interface TemplateStoreProps {
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
   getFocusInput: () => boolean;
-  getPreviousElement: (index: number) => number;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
   localizeField: {
@@ -179,7 +178,6 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
             set((state) => {
               unset(state, path);
             }),
-          getPreviousElement: (index) => getPreviousIndex(get().form.elements, index),
           moveUp: (index) =>
             set((state) => {
               state.form.elements = moveUp(state.form.elements, index);

@@ -48,7 +48,7 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput, getPreviousElement } =
+  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
     useTemplateStore((s) => ({
       lang: s.lang,
       remove: s.remove,
@@ -58,7 +58,6 @@ export const PanelActions = ({
       duplicateElement: s.duplicateElement,
       elements: s.form.elements,
       setFocusInput: s.setFocusInput,
-      getPreviousElement: s.getPreviousElement
     }));
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
@@ -119,7 +118,7 @@ export const PanelActions = ({
         }
         onClick={() => {
           // if index is 0, then highlight the form title
-          const labelId = item.index === 0 ? "formTitle" : `item${getPreviousElement(item.index)}`;
+          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
 
           remove(item.id);
           document.getElementById(labelId)?.focus();
