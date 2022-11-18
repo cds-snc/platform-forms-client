@@ -58,23 +58,22 @@ export const Card = (props: CardProps): React.ReactElement => {
             id={id}
             title={t("card.menu.more")}
             items={[
-              // TODO: localize strings
               {
-                title: isPublished ? "Copy Link" : "Edit",
+                title: isPublished ? t("card.menu.copyLink") : t("card.menu.edit"),
                 url: isPublished
                   ? `/${i18n.language}/id/${id}/settings`
                   : `/form-builder/create/${id}`,
               },
               {
-                title: "Preview",
+                title: t("card.menu.preview"),
                 url: url,
               },
               {
-                title: "Save to Computer",
-                url: "#TODO",
+                title: t("card.menu.save"),
+                url: `/${i18n.language}/form-builder/share/${id}`,
               },
               {
-                title: "Settings",
+                title: t("card.menu.settings"),
                 url: `/${i18n.language}/id/${id}/settings`,
               },
             ]}

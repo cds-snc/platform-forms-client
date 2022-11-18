@@ -8,7 +8,6 @@ interface CardGridProps {
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {
   const { cards } = props;
-  const { t } = useTranslation(["my-forms"]);
 
   return (
     <ol
@@ -31,7 +30,6 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
             </li>
           );
         })}
-      {cards && cards?.length === 0 && <p>{t("cards.noForms")}</p>}
     </ol>
   );
 };

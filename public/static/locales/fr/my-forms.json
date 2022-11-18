@@ -9,8 +9,9 @@
     "createNewForm": "Create new form [FR]"
   },
   "cards": {
-    "label": "List of your forms [FR]",
-    "noForms": "No forms to list. [FR]"
+    "noForms": "You have no forms. [FR]",
+    "noDraftForms": "You have no draft forms. [FR]",
+    "noPublishedForms": "You have no published forms. [FR]"
   },
   "card": {
     "states": {
@@ -20,10 +21,11 @@
     "lastEdited": "Last edited [FR]",
     "menu": {
       "more": "More [FR]",
-      "save": "Save [FR]",
-      "copyLink": "copyLink [FR]",
-      "preview": "Priview [FR]",
-      "edit": "Edit [FR]"
+      "save": "Save to computer [FR]",
+      "copyLink": "Copy Link [FR]",
+      "preview": "Preview [FR]",
+      "edit": "Edit [FR]",
+      "settings": "Settings [FR]"
     }
   }
 }
