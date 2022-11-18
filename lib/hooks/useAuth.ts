@@ -202,7 +202,7 @@ export const useAuth = () => {
     }: {
       username: string;
       password: string;
-      needsConfirmation: (s: boolean) => void;
+      needsConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
       didConfirm: boolean;
     },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; password: string }>

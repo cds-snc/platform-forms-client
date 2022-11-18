@@ -43,7 +43,7 @@ const Login = () => {
         username={username.current}
         password={password.current}
         setIsAuthorizationError={setIsAuthorizationError}
-        confirmationCallback={() => confirmationCallback()}
+        confirmationCallback={confirmationCallback}
       />
     );
   }
@@ -57,7 +57,7 @@ const Login = () => {
         await login(
           {
             ...values,
-            needsConfirmation: (s) => setNeedsConfirmation(s),
+            needsConfirmation: setNeedsConfirmation,
             didConfirm: didConfirm.current,
           },
           helpers
