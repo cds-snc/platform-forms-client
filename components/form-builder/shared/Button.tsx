@@ -10,7 +10,7 @@ export const themes = {
     "bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500",
   destructive:
     "bg-red-default text-white-default border-red-default hover:bg-red-destructive hover:border-red-destructive active:bg-red-hover focus:border-blue-hover",
-  link: "bg-white-default !p-0 !border-none text-black-default underline hover:no-underline focus:!bg-white-default focus:!text-black-default",
+  link: "!p-0 !border-none text-black-default underline bg-transparent hover:no-underline focus:!text-white-default",
   icon: "!border-none bg-gray-selected hover:bg-gray-600 !rounded-full max-h-9 !p-1.5 ml-1.5",
 };
 
