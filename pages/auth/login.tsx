@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
@@ -13,7 +13,16 @@ import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 
 const Register = () => {
-  const { username, cognitoError, setCognitoError, login } = useAuth();
+  const {
+    username,
+    cognitoError,
+    cognitoErrorDescription,
+    cognitoErrorCallToActionLink,
+    cognitoErrorCallToActionText,
+    cognitoErrorIsDismissible,
+    resetCognitoErrorState,
+    login,
+  } = useAuth();
   const { t } = useTranslation(["login", "common"]);
   const registrationOpen = useFlag("accountRegistration");
 
@@ -45,12 +54,15 @@ const Register = () => {
             <Alert
               type="error"
               heading={cognitoError}
-              onDismiss={() => {
-                setCognitoError("");
-              }}
+              onDismiss={resetCognitoErrorState}
               id="cognitoErrors"
-              dismissible
-            />
+              dismissible={cognitoErrorIsDismissible}
+            >
+              {cognitoErrorDescription}&nbsp;
+              {cognitoErrorCallToActionLink ? (
+                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              ) : undefined}
+            </Alert>
           )}
           {Object.keys(errors).length > 0 && !cognitoError && (
             <Alert
@@ -74,23 +86,51 @@ const Register = () => {
             </Alert>
           )}
           <h1>{t("title")}</h1>
+          {registrationOpen && (
+            <p className="mb-10 -mt-6">
+              {t("signUpText")}&nbsp;
+              <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+            </p>
+          )}
           <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
-              <Label id={"label-username"} htmlFor={"username"} className="required">
+              <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("fields.username.label")}
               </Label>
-              <TextInput type={"email"} id={"username"} name={"username"} />
+              <Description className="text-p text-black-default" id="login">
+                {t("fields.username.description")}
+              </Description>
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"email"}
+                id={"username"}
+                name={"username"}
+                required
+              />
             </div>
             <div className="focus-group">
-              <Label id={"label-password"} htmlFor={"password"} className="required">
+              <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("fields.password.label")}
               </Label>
-              <TextInput type={"password"} id={"password"} name={"password"} />
+              <Description id="password" className="text-p text-black-default">
+                {t("fields.password.description")}
+              </Description>
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"password"}
+                id={"password"}
+                name={"password"}
+                required
+              />
             </div>
             <div className="buttons">
-              <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
+              <Button
+                className="h-16 min-w-32 rounded-lg py-3 px-6 text-[color:white] mx-auto bg-blue-800 shadow-default"
+                type="submit"
+              >
+                {t("signInButton")}
+              </Button>
             </div>
-            {registrationOpen && <Link href={"/signup/register"}>{t("signUpLink")}</Link>}
           </form>
         </>
       )}

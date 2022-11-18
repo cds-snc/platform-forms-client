@@ -10,13 +10,24 @@ export const useAuth = () => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
   const [cognitoError, setCognitoError] = useState("");
+  const [cognitoErrorDescription, setCognitoErrorDescription] = useState("");
+  const [cognitoErrorIsDismissible, setCognitoErrorIsDismissible] = useState(true);
+  const [cognitoErrorCallToActionLink, setCognitoErrorCallToActionLink] = useState("");
+  const [cognitoErrorCallToActionText, setCognitoErrorCallToActionText] = useState("");
   const [username, setUsername] = useState("");
 
+  const resetCognitoErrorState = () => {
+    setCognitoError("");
+    setCognitoErrorDescription("");
+    setCognitoErrorIsDismissible(true);
+    setCognitoErrorCallToActionLink("");
+    setCognitoErrorCallToActionText("");
+  };
   const register = async (
     { username, password, name }: { username: string; password: string; name: string },
     { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
   ) => {
-    setCognitoError("");
+    resetCognitoErrorState();
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -65,7 +76,7 @@ export const useAuth = () => {
     },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; confirmationCode: string }>
   ) => {
-    setCognitoError("");
+    resetCognitoErrorState();
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -115,7 +126,7 @@ export const useAuth = () => {
   };
 
   const resendConfirmationCode = async (username: string) => {
-    setCognitoError("");
+    resetCognitoErrorState();
     try {
       const token = await getCsrfToken();
       if (token) {
@@ -153,7 +164,7 @@ export const useAuth = () => {
     { username, password }: { username: string; password: string },
     { setSubmitting, setErrors }: FormikHelpers<{ username: string; password: string }>
   ) => {
-    setCognitoError("");
+    resetCognitoErrorState();
     try {
       const response = await signIn<"credentials">("credentials", {
         redirect: false,
@@ -172,10 +183,11 @@ export const useAuth = () => {
           responseErrorMessage.includes("UserNotFoundException") ||
           responseErrorMessage.includes("NotAuthorizedException")
         ) {
-          setErrors({
-            username: t("UsernameOrPasswordIncorrect"),
-            password: t("UsernameOrPasswordIncorrect"),
-          });
+          setCognitoError(t("UsernameOrPasswordIncorrect.title"));
+          setCognitoErrorDescription(t("UsernameOrPasswordIncorrect.description"));
+          setCognitoErrorCallToActionText(t("UsernameOrPasswordIncorrect.linkText"));
+          setCognitoErrorCallToActionLink(t("UsernameOrPasswordIncorrect.link"));
+          setCognitoErrorIsDismissible(false);
         } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
         } else {
@@ -199,7 +211,12 @@ export const useAuth = () => {
     confirm,
     resendConfirmationCode,
     login,
+    resetCognitoErrorState,
     cognitoError,
+    cognitoErrorDescription,
+    cognitoErrorCallToActionLink,
+    cognitoErrorCallToActionText,
+    cognitoErrorIsDismissible,
     setCognitoError,
     username,
   };
