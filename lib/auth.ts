@@ -57,18 +57,14 @@ export function requireAuthentication(
         };
       }
 
-      if (
-        !session.user.acceptableUse &&
-        !context.req.url?.startsWith("/auth/policy") &&
-        !context.req.url?.startsWith("/_next/data")
-      ) {
+      if (!session.user.acceptableUse && !context.resolvedUrl?.startsWith("/auth/policy")) {
         // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
         // If already on the policy page don't redirect, aka endless redirect loop.
         // Also check that the path is local and not an external URL
         return {
           redirect: {
             destination: `/${context.locale}/auth/policy?referer=${
-              localPathRegEx.test(context.req.url || "") ? context.req.url : "/myforms"
+              localPathRegEx.test(context.resolvedUrl || "") ? context.resolvedUrl : "/myforms"
             }`,
             permanent: false,
           },
