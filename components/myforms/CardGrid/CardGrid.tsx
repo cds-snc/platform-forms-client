@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "next-i18next";
 import { Card, CardProps } from "@components/myforms/Card/Card";
 
 interface CardGridProps {
