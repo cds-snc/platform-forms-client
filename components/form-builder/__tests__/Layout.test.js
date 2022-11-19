@@ -1,10 +1,23 @@
 import React from "react";
-import { cleanup, render } from "@testing-library/react";
+import { cleanup, render, waitFor } from "@testing-library/react";
 import { Layout } from "../layout/Layout";
 import { SessionProvider } from "next-auth/react";
 import { TemplateStoreProvider } from "../store/useTemplateStore";
 import { NavigationStoreProvider } from "../store/useNavigationStore";
 import { FormElementTypes } from "@lib/types";
+
+// Mock your i18n
+jest.mock("next-i18next", () => ({
+  useTranslation: () => {
+    return {
+      t: (str) => str,
+      i18n: {
+        language: "en",
+        changeLanguage: () => Promise.resolve(),
+      },
+    };
+  },
+}));
 
 const store = {
   form: {
@@ -39,8 +52,8 @@ const store = {
 
 describe("Form Builder", () => {
   afterEach(cleanup);
-  it("renders without errors", async () => {
-    const { getByText } = render(
+  it("renders without errors", () => {
+    const rendered = render(
       <SessionProvider session={null}>
         <TemplateStoreProvider form={store.form} submission={null} isPublished={null}>
           <NavigationStoreProvider>
@@ -49,7 +62,10 @@ describe("Form Builder", () => {
         </TemplateStoreProvider>
       </SessionProvider>
     );
-    const button = getByText("startH2");
-    expect(button).toBeTruthy();
+
+    waitFor(() => {
+      const button = rendered.getByText("startH2", { selector: "button" });
+      expect(button).toBeTruthy();
+    });
   });
 });

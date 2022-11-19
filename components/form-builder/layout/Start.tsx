@@ -117,7 +117,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           onClick={async (e) => {
             e.preventDefault();
             // clear any existing form data
-            sessionStorage.clear();
+            clearTemplateStore();
             initialize();
             changeTab("create");
           }}

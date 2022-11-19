@@ -66,7 +66,7 @@ export interface TemplateStoreProps {
   _hasHydrated: boolean;
   form: FormProperties;
   submission: {
-    email: string;
+    email?: string;
   };
   isPublished: boolean;
   securityAttribute: string;
@@ -278,14 +278,17 @@ const TemplateStoreContext = createContext<TemplateStore | null>(null);
 
 export const TemplateStoreProvider = ({
   children,
-  tab,
   ...props
-}: React.PropsWithChildren<Partial<TemplateStoreProps>> & { tab: string }) => {
+}: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>();
   if (!storeRef.current) {
+    // When there is an incoming form to initialize the store, clear it first
+    if (props.id) {
+      clearTemplateStore();
+    }
     storeRef.current = createTemplateStore(props);
   }
-  if (tab === "start") storeRef.current.persist.clearStorage();
+
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
       {children}
@@ -303,7 +306,7 @@ export const useTemplateStore = <T,>(
 };
 
 export const clearTemplateStore = () => {
-  const store = useContext(TemplateStoreContext);
-  if (!store) throw new Error("Missing Template Store Provider in tree");
-  return store.persist.clearStorage;
+  if (typeof window !== "undefined") {
+    sessionStorage.removeItem("form-storage");
+  }
 };

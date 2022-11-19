@@ -3,7 +3,7 @@ import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
@@ -14,6 +14,7 @@ import { TabPanel } from "@components/myforms/Tabs/TabPanel";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { NextPageWithLayout } from "@pages/_app";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 
 interface FormsDataItem {
   id: string;
@@ -44,6 +45,8 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
     (item) => item?.isPublished === false
   ) as Array<CardProps>;
 
+  const createNewFormRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     // Default route is "drafts". Done here vs getServerSideProps to avoid extra data fetch
     const formStateRegex = /^(drafts|published|all)$/gi;
@@ -51,6 +54,20 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
     }
   }, [router.query?.path]);
+
+  useEffect(() => {
+    const handleClick = () => {
+      clearTemplateStore();
+    };
+
+    const element = createNewFormRef.current;
+
+    if (element !== null) element.addEventListener("click", handleClick);
+
+    return () => {
+      if (element !== null) element.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   return (
     <div className="relative">
@@ -91,7 +108,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
         <CardGrid cards={templatesAll}></CardGrid>
       </TabPanel>
 
-      <div className="absolute top-48">
+      <div className="absolute top-48" ref={createNewFormRef}>
         <StyledLink href="/form-builder/start">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
         </StyledLink>
