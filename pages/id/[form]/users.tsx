@@ -13,7 +13,7 @@ import { getProperty } from "@lib/formBuilder";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { useRouter } from "next/router";
-import BaseLayout from "@components/globals/layouts/BaseLayout";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface User {
   id: string;
@@ -117,7 +117,7 @@ const redirect = (locale: string | undefined) => {
 };
 
 Users.getLayout = (page: ReactElement) => {
-  return <BaseLayout>{page}</BaseLayout>;
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(

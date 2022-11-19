@@ -46,7 +46,7 @@ Page.getLayout = (page: ReactElement) => {
           <SkipLink />
           <Header />
           {page}
-          <Footer />
+          <Footer displaySLAAndSupportLinks />
         </div>
       </TemplateStoreProvider>
     </NavigationStoreProvider>

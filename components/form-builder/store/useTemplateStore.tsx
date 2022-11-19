@@ -10,6 +10,7 @@ import {
   incrementElementId,
   newlineToOptions,
   getSchemaFromState,
+  getPreviousIndex,
 } from "../util";
 import { Language } from "../types";
 import update from "lodash.set";

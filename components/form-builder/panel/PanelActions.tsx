@@ -102,6 +102,7 @@ export const PanelActions = ({
           <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
         }
         onClick={() => {
+          setFocusInput(true);
           duplicateElement(item.index);
         }}
       >
@@ -116,7 +117,11 @@ export const PanelActions = ({
           <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
         }
         onClick={() => {
+          // if index is 0, then highlight the form title
+          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+
           remove(item.id);
+          document.getElementById(labelId)?.focus();
         }}
       >
         <Label>{t("remove")}</Label>

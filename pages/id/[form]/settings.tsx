@@ -16,7 +16,7 @@ import "react-tabs/style/react-tabs.css";
 import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@components/admin/FormAccess/FormAccess";
 import { getProperty } from "@lib/formBuilder";
-import BaseLayout from "@components/globals/layouts/BaseLayout";
+import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -110,7 +110,7 @@ const redirect = (locale: string | undefined) => {
 };
 
 FormSettings.getLayout = (page: ReactElement) => {
-  return <BaseLayout>{page}</BaseLayout>;
+  return <AdminNavLayout user={page.props.user}>{page}</AdminNavLayout>;
 };
 
 export const getServerSideProps = requireAuthentication(
