@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { validateTemplate } from "../validate";
@@ -42,7 +42,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
 
     const target = e.target;
     // clear any existing form data
-    sessionStorage.clear();
+    clearTemplateStore();
 
     try {
       const fileReader = new FileReader();
@@ -117,7 +117,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           onClick={async (e) => {
             e.preventDefault();
             // clear any existing form data
-            sessionStorage.clear();
+            clearTemplateStore();
             initialize();
             changeTab("create");
           }}

@@ -41,7 +41,7 @@ export const Settings = () => {
         <Input
           id="response-delivery"
           describedBy="response-delivery-hint-1 response-delivery-hint-2"
-          value={email}
+          value={email ?? ""}
           className="w-3/5"
           onChange={(e) => {
             updateField(`submission.email`, e.target.value);
