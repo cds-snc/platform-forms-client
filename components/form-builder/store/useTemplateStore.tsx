@@ -35,8 +35,8 @@ const defaultField: FormElement = {
 
 export const defaultForm = {
   id: "",
-  titleEn: "My Form",
-  titleFr: "[fr] My Form",
+  titleEn: "",
+  titleFr: "",
   layout: [],
   version: 1,
   endPage: {
