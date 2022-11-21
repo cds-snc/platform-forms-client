@@ -16,12 +16,14 @@ export const RichTextLocked = ({
   children,
   initialValue,
   schemaProperty,
+  ariaLabel,
 }: {
   beforeContent?: React.ReactElement | null;
   addElement: boolean;
   children?: React.ReactElement;
   initialValue: string;
   schemaProperty: string;
+  ariaLabel?: string;
 }) => {
   const { localizeField, lang } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -39,6 +41,7 @@ export const RichTextLocked = ({
             content={initialValue}
             lang={lang}
             autoFocusEditor={false}
+            ariaLabel={ariaLabel}
           />
         </div>
       </div>
