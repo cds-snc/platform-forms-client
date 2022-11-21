@@ -72,7 +72,6 @@ export const PanelActions = ({
     { id: 3, txt: "duplicate" },
     { id: 4, txt: "remove" },
     { id: 5, txt: "more" },
-    { id: 6, txt: "addElement" },
   ]);
 
   useEffect(() => {
@@ -125,151 +124,146 @@ export const PanelActions = ({
   };
 
   return (
-    <Actions
-      className={`panel-actions ${lang}`}
-      role="toolbar"
-      aria-label={t("elementActions")}
-      onKeyDown={handleNav}
-    >
-      <Button
-        theme="secondary"
-        className={`${
-          isFirstItem ? "disabled" : ""
-        } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={
-          <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
-        }
-        disabled={isFirstItem}
-        onClick={() => moveUp(item.index)}
-        tabIndex={getTabIndex("moveUp")}
-        buttonRef={(el: HTMLButtonElement) => {
-          const index = "button-0" as unknown as number;
-          if (el && itemsRef.current) {
-            itemsRef.current[index] = el;
-          }
-        }}
+    <div className="relative">
+      <Actions
+        className={`panel-actions ${lang}`}
+        role="toolbar"
+        aria-label={t("elementActions")}
+        onKeyDown={handleNav}
       >
-        <Label>{t("moveUp")}</Label>
-      </Button>
-      <Button
-        theme="secondary"
-        className={`${
-          isFirstItem ? "disabled" : ""
-        } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={
-          <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
-        }
-        disabled={isLastItem}
-        onClick={() => moveDown(item.index)}
-        tabIndex={getTabIndex("moveDown")}
-        buttonRef={(el) => {
-          const index = "button-1" as unknown as number;
-          if (el && itemsRef.current) {
-            itemsRef.current[index] = el;
+        <Button
+          theme="secondary"
+          className={`${
+            isFirstItem ? "disabled" : ""
+          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
           }
-        }}
-      >
-        <Label>{t("moveDown")}</Label>
-      </Button>
-
-      <Button
-        theme="secondary"
-        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={
-          <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-        }
-        onClick={() => {
-          setFocusInput(true);
-          duplicateElement(item.index);
-        }}
-        tabIndex={getTabIndex("duplicate")}
-        buttonRef={(el) => {
-          const index = "button-2" as unknown as number;
-          if (el && itemsRef.current) {
-            itemsRef.current[index] = el;
-          }
-        }}
-      >
-        <Label>{t("duplicate")}</Label>
-      </Button>
-
-      <Button
-        theme="secondary"
-        className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-        iconWrapperClassName="!w-7 !mr-0"
-        icon={
-          <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-        }
-        onClick={() => {
-          // if index is 0, then highlight the form title
-          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
-
-          remove(item.id);
-          document.getElementById(labelId)?.focus();
-        }}
-        tabIndex={getTabIndex("remove")}
-        buttonRef={(el) => {
-          const index = "button-3" as unknown as number;
-          if (el && itemsRef.current) {
-            itemsRef.current[index] = el;
-          }
-        }}
-      >
-        <Label>{t("remove")}</Label>
-      </Button>
-
-      {!isRichText && (
-        <Modal
-          title={t("moreOptions")}
-          openButton={
-            <Button
-              theme="secondary"
-              className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
-              iconWrapperClassName="!w-7 !mr-0"
-              icon={
-                <ThreeDotsIcon className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
-              }
-              onClick={() => null}
-              tabIndex={getTabIndex("more")}
-              buttonRef={(el) => {
-                const index = "button-4" as unknown as number;
-                if (el && itemsRef.current) {
-                  itemsRef.current[index] = el;
-                }
-              }}
-            >
-              <Label>{t("more")}</Label>
-            </Button>
-          }
-          saveButton={renderSaveButton()}
+          disabled={isFirstItem}
+          onClick={() => moveUp(item.index)}
+          tabIndex={getTabIndex("moveUp")}
+          buttonRef={(el: HTMLButtonElement) => {
+            const index = "button-0" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
         >
-          {children}
-        </Modal>
-      )}
+          <Label>{t("moveUp")}</Label>
+        </Button>
+        <Button
+          theme="secondary"
+          className={`${
+            isFirstItem ? "disabled" : ""
+          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+          }
+          disabled={isLastItem}
+          onClick={() => moveDown(item.index)}
+          tabIndex={getTabIndex("moveDown")}
+          buttonRef={(el) => {
+            const index = "button-1" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
+        >
+          <Label>{t("moveDown")}</Label>
+        </Button>
 
-      <AddButtonWrapper className="add-element">
+        <Button
+          theme="secondary"
+          className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+          }
+          onClick={() => {
+            setFocusInput(true);
+            duplicateElement(item.index);
+          }}
+          tabIndex={getTabIndex("duplicate")}
+          buttonRef={(el) => {
+            const index = "button-2" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
+        >
+          <Label>{t("duplicate")}</Label>
+        </Button>
+
+        <Button
+          theme="secondary"
+          className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+          iconWrapperClassName="!w-7 !mr-0"
+          icon={
+            <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+          }
+          onClick={() => {
+            // if index is 0, then highlight the form title
+            const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+
+            remove(item.id);
+            document.getElementById(labelId)?.focus();
+          }}
+          tabIndex={getTabIndex("remove")}
+          buttonRef={(el) => {
+            const index = "button-3" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
+        >
+          <Label>{t("remove")}</Label>
+        </Button>
+
+        {!isRichText && (
+          <Modal
+            title={t("moreOptions")}
+            openButton={
+              <Button
+                theme="secondary"
+                className="group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover"
+                iconWrapperClassName="!w-7 !mr-0"
+                icon={
+                  <ThreeDotsIcon className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
+                }
+                onClick={() => null}
+                tabIndex={getTabIndex("more")}
+                buttonRef={(el) => {
+                  const index = "button-4" as unknown as number;
+                  if (el && itemsRef.current) {
+                    itemsRef.current[index] = el;
+                  }
+                }}
+              >
+                <Label>{t("more")}</Label>
+              </Button>
+            }
+            saveButton={renderSaveButton()}
+          >
+            {children}
+          </Modal>
+        )}
+      </Actions>
+      <AddButtonWrapper className="absolute right-0 top-0 mt-11 mr-8">
         <Button
           onClick={() => {
             setFocusInput(true);
             add(item.index);
           }}
           theme="secondary"
-          className="!border-1.5 !py-2 !px-4 leading-6"
-          tabIndex={getTabIndex("addElement")}
-          buttonRef={(el) => {
-            const index = "button-5" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
+          className="!border-1.5 !py-2 !px-4 leading-6 bg-white z-50"
+          tabIndex={0}
         >
           {t("addElement")}
         </Button>
       </AddButtonWrapper>
-    </Actions>
+    </div>
   );
 };
 

@@ -438,7 +438,6 @@ ModalForm.propTypes = {
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  position: relative;
   max-width: 800px;
   height: auto;
   margin-top: -1px;
