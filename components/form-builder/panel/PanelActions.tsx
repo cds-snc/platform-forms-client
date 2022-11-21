@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
@@ -8,25 +7,6 @@ import { ChevronUp, ChevronDown, Close, Duplicate, ThreeDotsIcon } from "../icon
 import { Modal } from "./Modal";
 import { FormElementWithIndex } from "../types";
 import { useTemplateStore } from "../store/useTemplateStore";
-
-const Actions = styled.div`
-  position: relative;
-  display: flex;
-  background-color: #ebebeb;
-  align-items: center;
-  padding: 10px;
-
-  @media (max-width: 1130px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-`;
-
-const Label = styled.span`
-  font-size: 16px;
-  margin-right: 3px;
-  margin-left: 3px;
-`;
 
 export const PanelActions = ({
   item,
@@ -115,8 +95,8 @@ export const PanelActions = ({
 
   return (
     <div className="relative">
-      <Actions
-        className={`panel-actions ${lang}`}
+      <div
+        className={`bg-gray-200 px-6 py-4 flex flex-wrap sm:flex-col ${lang}`}
         role="toolbar"
         aria-label={t("elementActions")}
         onKeyDown={handleNav}
@@ -140,7 +120,7 @@ export const PanelActions = ({
             }
           }}
         >
-          <Label>{t("moveUp")}</Label>
+          <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
         </Button>
         <Button
           theme="secondary"
@@ -161,7 +141,7 @@ export const PanelActions = ({
             }
           }}
         >
-          <Label>{t("moveDown")}</Label>
+          <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
         </Button>
 
         <Button
@@ -183,7 +163,7 @@ export const PanelActions = ({
             }
           }}
         >
-          <Label>{t("duplicate")}</Label>
+          <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
         </Button>
 
         <Button
@@ -208,7 +188,7 @@ export const PanelActions = ({
             }
           }}
         >
-          <Label>{t("remove")}</Label>
+          <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
         </Button>
 
         {!isRichText && (
@@ -231,7 +211,7 @@ export const PanelActions = ({
                   }
                 }}
               >
-                <Label>{t("more")}</Label>
+                <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
               </Button>
             }
             saveButton={renderSaveButton()}
@@ -239,9 +219,9 @@ export const PanelActions = ({
             {children}
           </Modal>
         )}
-      </Actions>
+      </div>
 
-      <div className="absolute right-0 bottom-0 -mb-5 mr-8">
+      <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
         <Button
           onClick={() => {
             setFocusInput(true);
