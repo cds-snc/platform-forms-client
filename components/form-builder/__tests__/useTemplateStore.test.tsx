@@ -18,7 +18,7 @@ const createStore = () => {
 describe("TemplateStore", () => {
   it("Updates the Element title", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.updateField(
@@ -32,7 +32,7 @@ describe("TemplateStore", () => {
 
   it("Adds default elements to the Form", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     // Add two elements
     act(() => {
@@ -40,14 +40,14 @@ describe("TemplateStore", () => {
       result.current.add();
     });
 
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements).toHaveLength(2);
     expect(result.current.form.elements[1].properties.titleEn).toBe("");
   });
 
   it("Inserts elements after the specified item index", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     // Add multiple elements
     act(() => {
@@ -73,7 +73,7 @@ describe("TemplateStore", () => {
 
   it("Adds Choices to an Element", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     // Add a default element
     act(() => {
@@ -81,7 +81,7 @@ describe("TemplateStore", () => {
     });
 
     // Default element expectations
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements).toHaveLength(1);
     expect(result.current.form.elements[0].properties.titleEn).toBe("");
     // By default, there is one choice available
@@ -110,7 +110,7 @@ describe("TemplateStore", () => {
 
   it("Updates existing choices", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.add();
@@ -130,7 +130,7 @@ describe("TemplateStore", () => {
 
   it("Removes choices", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     // Create an element with three choices
     act(() => {
@@ -151,7 +151,7 @@ describe("TemplateStore", () => {
 
   it("Duplicates an element and inserts after index of copied item", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     // Create an element with three choices
     act(() => {
@@ -177,7 +177,7 @@ describe("TemplateStore", () => {
 
   it("Moves an element up", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.add(0);
@@ -200,7 +200,7 @@ describe("TemplateStore", () => {
 
   it("Moves an element down", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.add(0);
@@ -223,7 +223,7 @@ describe("TemplateStore", () => {
 
   it("Adds a validation type", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.add(0);
@@ -242,7 +242,7 @@ describe("TemplateStore", () => {
 
   it("Removes a validation type", () => {
     const result = createStore();
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
 
     act(() => {
       result.current.add(0);
@@ -274,7 +274,7 @@ describe("TemplateStore", () => {
     const result = createStore();
 
     // Initial state
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements.length).toBe(0);
 
     // Make some changes to the form
@@ -293,7 +293,7 @@ describe("TemplateStore", () => {
       result.current.initialize();
     });
 
-    expect(result.current.form.titleEn).toBe("My Form");
+    expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements.length).toBe(0);
   });
 
