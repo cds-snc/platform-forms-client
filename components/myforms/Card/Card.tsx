@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import copy from "copy-to-clipboard";
 import { MenuDropdown } from "@components/myforms/MenuDropdown/MenuDropdown";
 
 export interface CardProps {
@@ -14,6 +15,41 @@ export interface CardProps {
 export const Card = (props: CardProps): React.ReactElement => {
   const { id, titleEn, titleFr, url, date, isPublished } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
+
+  const menuItemsList = [
+    {
+      title: t("card.menu.preview"),
+      url: `/${i18n.language}/form-builder/preview/${id} `,
+    },
+    {
+      title: t("card.menu.save"),
+      // NOTE: TODO: route endpoint is a WIP
+      url: `/${i18n.language}/form-builder/share/${id}`,
+    },
+    {
+      title: t("card.menu.settings"),
+      // Note: /preview for now as there is no direct link to /settings
+      // Settings is currently a sub menu in preview
+      url: `/${i18n.language}/form-builder/preview/${id}`,
+    },
+  ];
+
+  // Show slightly different list items depeneding on whether a Published or Draft card
+  if (!isPublished) {
+    menuItemsList.unshift({
+      title: t("card.menu.copyLink"),
+      callback: () => {
+        // TODO: show action success in UI - consider also trying equivalent React lib
+        copy(`/${i18n.language}/id/${id}`);
+      },
+    });
+  } else {
+    // Note: using /create for now as the /edit path doesn’t exist yet
+    menuItemsList.unshift({
+      title: t("card.menu.edit"),
+      url: `/${i18n.language}/form-builder/create/${id}`,
+    });
+  }
 
   function formatDate(date: string) {
     try {
@@ -57,26 +93,7 @@ export const Card = (props: CardProps): React.ReactElement => {
           <MenuDropdown
             id={id}
             title={t("card.menu.more")}
-            items={[
-              {
-                title: isPublished ? t("card.menu.copyLink") : t("card.menu.edit"),
-                url: isPublished
-                  ? `/${i18n.language}/id/${id}/settings`
-                  : `/form-builder/create/${id}`,
-              },
-              {
-                title: t("card.menu.preview"),
-                url: url,
-              },
-              {
-                title: t("card.menu.save"),
-                url: `/${i18n.language}/form-builder/share/${id}`,
-              },
-              {
-                title: t("card.menu.settings"),
-                url: `/${i18n.language}/id/${id}/settings`,
-              },
-            ]}
+            items={menuItemsList}
             direction={"up"}
           ></MenuDropdown>
         </div>

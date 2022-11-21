@@ -3,7 +3,8 @@ import { Menu } from "./Menu";
 
 interface MenuDropdownItemI {
   title: string;
-  url: string;
+  url?: string;
+  callback?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 interface MenuDropdownProps {
@@ -77,12 +78,21 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                 key={index}
                 className="px-4 py-2 first:pt-4 last:pb-4"
               >
-                <a
-                  href={item.url}
-                  className="action no-underline whitespace-nowrap hover:underline active:underline"
-                >
-                  {item.title}
-                </a>
+                {item.callback ? (
+                  <button
+                    className="gc-button-link no-underline hover:underline"
+                    onClick={item.callback}
+                  >
+                    {item.title}
+                  </button>
+                ) : (
+                  <a
+                    href={item.url}
+                    className="action no-underline whitespace-nowrap hover:underline active:underline"
+                  >
+                    {item.title}
+                  </a>
+                )}
               </li>
             );
           })}
