@@ -1,6 +1,6 @@
 {
   "title": "Se connecter",
-  "signUpLink": "Sign Up to GC Forms (FR)",
+  "signUpLink": "Se connecter",
   "fields": {
     "username": {
       "label": "Adresse courriel"
@@ -8,7 +8,7 @@
     "password": {
       "label": "Clé d'accès au formulaire",
       "errors": {
-        "maxLength": "This field must be no longer than 50 characters. (FR)"
+        "maxLength": "Le champ ne doit pas dépasser 50 caractères."
       }
     }
   }
