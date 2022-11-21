@@ -80,8 +80,6 @@ export const PanelActions = ({
   );
 
   const getTabIndex = (item: string) => {
-    if (item === "moveUp" && isFirstItem) return -1;
-    if (item === "moveDown" && isLastItem) return -1;
     if (elements.length === 1 && item === "duplicate") return 0;
 
     if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
