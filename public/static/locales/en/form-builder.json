@@ -161,5 +161,37 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code"
+  "viewCode": "View code",
+  "contactus": {
+    "title": "Contact Us",
+    "intro": "If you experience technical issues, please fill out the",
+    "supportLink": "Support Form",
+    "name": "Your Name",
+    "email": "Your Email",
+    "request": {
+      "title": "How can we help?",
+      "option1": "Ask a question about the product and how it can work in your department",
+      "option2": "Give feedback",
+      "option3": "Set up a demo to learn more about GC Forms",
+      "option4": "Other"
+    },
+    "success": {
+      "title": "Success",
+      "paragraph1": "Thank you for you submission!",
+      "paragraph2": "We have received your request and someone from CDS will be in touch with you shortly."
+    }
+  },
+  "support": {
+    "title": "Support",
+    "intro": "If you would like to learn more about the product or set up a demo, please fill out the",
+    "contactLink": "Contact us form",
+    "name": "Your Name",
+    "email": "Your Email",
+    "request": {
+      "title": "How can we help?",
+      "option1": "Ask a question",
+      "option2": "Get technical support",
+      "option3": "Other"
+    }
+  }
 }
