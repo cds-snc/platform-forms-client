@@ -17,7 +17,6 @@ import {
   TRANSFORMERS,
 } from "@lexical/markdown";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
-import { t } from "i18next";
 
 const RichTextWrapper = styled.div`
   height: 100%;
@@ -47,10 +46,12 @@ export const Editor = ({
   content,
   onChange,
   autoFocusEditor,
+  ariaLabel,
 }: {
   content: string;
   onChange: (value: string) => void;
   autoFocusEditor?: boolean;
+  ariaLabel?: string;
 }) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
@@ -90,7 +91,7 @@ export const Editor = ({
               <ContentEditable
                 className="editor-input"
                 id={editorId}
-                ariaLabel={t("richTextEditor")}
+                ariaLabel={ariaLabel && ariaLabel}
               />
             </div>
           }

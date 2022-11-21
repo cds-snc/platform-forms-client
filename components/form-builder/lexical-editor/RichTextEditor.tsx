@@ -9,11 +9,13 @@ export const RichTextEditor = ({
   content,
   autoFocusEditor,
   lang,
+  ariaLabel,
 }: {
   path: string;
   content: string;
   autoFocusEditor?: boolean;
   lang: Language;
+  ariaLabel?: string;
 }) => {
   const updateField = useTemplateStore((s) => s.updateField);
   const [value, setValue] = useState(content);
@@ -42,7 +44,12 @@ export const RichTextEditor = ({
 
   return (
     <div key={lang} className="w-full">
-      <Editor autoFocusEditor={autoFocusEditor} content={value} onChange={updateValue} />
+      <Editor
+        autoFocusEditor={autoFocusEditor}
+        content={value}
+        onChange={updateValue}
+        ariaLabel={ariaLabel}
+      />
     </div>
   );
 };
