@@ -28,16 +28,6 @@ const Label = styled.span`
   margin-left: 3px;
 `;
 
-const AddButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  button {
-    font-size: 16px;
-  }
-`;
-
 export const PanelActions = ({
   item,
   renderSaveButton,
@@ -250,19 +240,20 @@ export const PanelActions = ({
           </Modal>
         )}
       </Actions>
-      <AddButtonWrapper className="absolute right-0 top-0 mt-11 mr-8">
+
+      <div className="absolute right-0 bottom-0 -mb-5 mr-8">
         <Button
           onClick={() => {
             setFocusInput(true);
             add(item.index);
           }}
           theme="secondary"
-          className="!border-1.5 !py-2 !px-4 leading-6 bg-white z-50"
+          className="!border-1.5 !py-2 !px-4 leading-6 bg-white text-sm"
           tabIndex={0}
         >
           {t("addElement")}
         </Button>
-      </AddButtonWrapper>
+      </div>
     </div>
   );
 };
