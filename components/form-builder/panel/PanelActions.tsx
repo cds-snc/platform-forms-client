@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
@@ -63,8 +63,74 @@ export const PanelActions = ({
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
 
+  const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
+
+  const itemsRef = useRef<[HTMLButtonElement] | []>([]);
+  const [items] = useState([
+    { id: 1, txt: "moveUp" },
+    { id: 2, txt: "moveDown" },
+    { id: 3, txt: "duplicate" },
+    { id: 4, txt: "remove" },
+    { id: 5, txt: "more" },
+    { id: 6, txt: "addElement" },
+  ]);
+
+  useEffect(() => {
+    const index = `button-${currentFocusIndex}` as unknown as number;
+    const el = itemsRef.current[index];
+    if (el) {
+      el.focus();
+    }
+  }, [currentFocusIndex]);
+
+  const handleNav = useCallback(
+    (evt: KeyboardEvent<HTMLInputElement>) => {
+      const { key } = evt;
+      let step = 1;
+
+      if (key === "ArrowLeft") {
+        evt.preventDefault();
+        if (isFirstItem && currentFocusIndex === 1) {
+          return;
+        }
+        if (isLastItem && currentFocusIndex === 2) {
+          step = 2;
+        }
+        setCurrentFocusIndex((index) => Math.max(0, index - step));
+      }
+
+      if (key === "ArrowRight") {
+        evt.preventDefault();
+        if (isLastItem && currentFocusIndex === 0) {
+          step = 2;
+        }
+        setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
+      }
+    },
+    [items, setCurrentFocusIndex, currentFocusIndex]
+  );
+
+  const getTabIndex = (item: string) => {
+    if (item === "moveUp" && isFirstItem) return -1;
+    if (item === "moveDown" && isLastItem) return -1;
+
+    if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
+
+    if (currentFocusIndex === 0) {
+      if (isFirstItem && isLastItem && item === "duplicate") return 0;
+      if (isFirstItem && item === "moveDown") return 0;
+    }
+
+    return -1;
+  };
+
   return (
-    <Actions className={`panel-actions ${lang}`}>
+    <Actions
+      className={`panel-actions ${lang}`}
+      role="toolbar"
+      aria-label={t("elementActions")}
+      onKeyDown={handleNav}
+    >
       <Button
         theme="secondary"
         className={`${
@@ -76,6 +142,13 @@ export const PanelActions = ({
         }
         disabled={isFirstItem}
         onClick={() => moveUp(item.index)}
+        tabIndex={getTabIndex("moveUp")}
+        buttonRef={(el: HTMLButtonElement) => {
+          const index = "button-0" as unknown as number;
+          if (el && itemsRef.current) {
+            itemsRef.current[index] = el;
+          }
+        }}
       >
         <Label>{t("moveUp")}</Label>
       </Button>
@@ -90,6 +163,13 @@ export const PanelActions = ({
         }
         disabled={isLastItem}
         onClick={() => moveDown(item.index)}
+        tabIndex={getTabIndex("moveDown")}
+        buttonRef={(el) => {
+          const index = "button-1" as unknown as number;
+          if (el && itemsRef.current) {
+            itemsRef.current[index] = el;
+          }
+        }}
       >
         <Label>{t("moveDown")}</Label>
       </Button>
@@ -104,6 +184,13 @@ export const PanelActions = ({
         onClick={() => {
           setFocusInput(true);
           duplicateElement(item.index);
+        }}
+        tabIndex={getTabIndex("duplicate")}
+        buttonRef={(el) => {
+          const index = "button-2" as unknown as number;
+          if (el && itemsRef.current) {
+            itemsRef.current[index] = el;
+          }
         }}
       >
         <Label>{t("duplicate")}</Label>
@@ -123,6 +210,13 @@ export const PanelActions = ({
           remove(item.id);
           document.getElementById(labelId)?.focus();
         }}
+        tabIndex={getTabIndex("remove")}
+        buttonRef={(el) => {
+          const index = "button-3" as unknown as number;
+          if (el && itemsRef.current) {
+            itemsRef.current[index] = el;
+          }
+        }}
       >
         <Label>{t("remove")}</Label>
       </Button>
@@ -139,6 +233,13 @@ export const PanelActions = ({
                 <ThreeDotsIcon className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
               }
               onClick={() => null}
+              tabIndex={getTabIndex("more")}
+              buttonRef={(el) => {
+                const index = "button-4" as unknown as number;
+                if (el && itemsRef.current) {
+                  itemsRef.current[index] = el;
+                }
+              }}
             >
               <Label>{t("more")}</Label>
             </Button>
@@ -157,6 +258,13 @@ export const PanelActions = ({
           }}
           theme="secondary"
           className="!border-1.5 !py-2 !px-4 leading-6"
+          tabIndex={getTabIndex("addElement")}
+          buttonRef={(el) => {
+            const index = "button-5" as unknown as number;
+            if (el && itemsRef.current) {
+              itemsRef.current[index] = el;
+            }
+          }}
         >
           {t("addElement")}
         </Button>
