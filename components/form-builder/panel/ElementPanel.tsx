@@ -133,7 +133,7 @@ const Row = styled.div<RowProps>`
 const DivDisabled = styled.div`
   margin-top: 20px;
   padding: 5px 10px;
-  width: 460px;
+  width: 100%;
   cursor: not-allowed;
   border-radius: 4px;
   background: #f2f2f2;
@@ -235,20 +235,26 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <>
-      <Row isRichText={isRichText}>
-        <div style={isRichText ? {} : { flexBasis: "470px" }}>
+      <Row isRichText={isRichText} className="element-panel flex xxl:flex-col-reverse flex-row">
+        <div className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}>
           {!isRichText && (
-            <div>
-              <span className="absolute left-0 bg-gray-default py-2.5 px-1.5 rounded-r -ml-7">
+            <>
+              <span
+                className={`absolute left-0 bg-gray-default py-2.5 rounded-r -ml-7 ${
+                  item.index < 9 ? "px-1.5" : "pl-0.5 pr-1 tracking-tighter"
+                }`}
+              >
                 {questionNumber}
               </span>
-              <LabelHidden htmlFor={`item${item.index}`}>{t("question")}</LabelHidden>
+              <LabelHidden htmlFor={`item${item.index}`}>
+                {t("question")} {item.index + 1}
+              </LabelHidden>
               <QuestionInput
                 initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
                 index={item.index}
                 hasDescription={hasDescription}
               />
-            </div>
+            </>
           )}
           {hasDescription && item.type !== "richText" && (
             <DivDisabled id={`item${item.index}-describedby`}>
@@ -441,12 +447,35 @@ const ElementWrapperDiv = styled.div`
 export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-  const { elements, updateField } = useTemplateStore((s) => ({
+  const { elements, getFocusInput, updateField } = useTemplateStore((s) => ({
     updateField: s.updateField,
     elements: s.form.elements,
+    getFocusInput: s.getFocusInput,
   }));
 
   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
+
+  const [className, setClassName] = useState<string>("");
+  const [ifFocus, setIfFocus] = useState<boolean>(false);
+
+  if (ifFocus === false) {
+    // Only run this 1 time
+    setIfFocus(true);
+
+    // getFocusInput is only ever true if we press "duplicate" or "add question"
+    if (getFocusInput()) {
+      setClassName(
+        "bg-yellow-100 transition-colors ease-out duration-[1500ms] delay-500 outline-[2px] outline-blue-focus outline"
+      );
+    }
+  }
+
+  useEffect(() => {
+    // remove the yellow background immediately, CSS transition will fade the colour
+    setClassName(className.replace("bg-yellow-100 ", ""));
+    // remove the blue outline after 2.1 seconds
+    setTimeout(() => setClassName(""), 2100);
+  }, [getFocusInput]);
 
   React.useEffect(() => {
     if (item.type != "richText") {
@@ -464,7 +493,7 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   };
 
   return (
-    <ElementWrapperDiv className={`element-${item.index}`}>
+    <ElementWrapperDiv className={`element-${item.index} ${className}`}>
       <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
         <Form item={item} />
       </div>

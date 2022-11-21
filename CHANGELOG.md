@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
 - Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
 - New API path to request publishing permission [#1226](https://github.com/cds-snc/platform-forms-client/issues/1226)
+- Dynamic footer with SLA and Support links on admin and form builder related pages [#1080](https://github.com/cds-snc/platform-forms-client/issues/1080)
 
 ### Changed
 

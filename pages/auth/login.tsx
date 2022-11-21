@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
@@ -12,9 +12,8 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 
-const Register = () => {
+const Login = () => {
   const {
-    username,
     cognitoError,
     cognitoErrorDescription,
     cognitoErrorCallToActionLink,
@@ -23,8 +22,11 @@ const Register = () => {
     resetCognitoErrorState,
     login,
   } = useAuth();
-  const { t } = useTranslation(["login", "common"]);
+  const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const didConfirm = useRef(false);
+  const [isAuthorizationError, setIsAuthorizationError] = useState(false);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -35,18 +37,51 @@ const Register = () => {
       .max(50, t("fields.password.errors.maxLength")),
   });
 
-  if (username) {
-    return <Confirmation username={username} />;
+  const username = useRef("");
+  const password = useRef("");
+
+  const confirmationCallback = () => {
+    setNeedsConfirmation(false);
+    didConfirm.current = true;
+  };
+
+  if (needsConfirmation) {
+    return (
+      <Confirmation
+        username={username.current}
+        password={password.current}
+        setIsAuthorizationError={setIsAuthorizationError}
+        confirmationCallback={confirmationCallback}
+      />
+    );
   }
+
   return (
     <Formik
-      initialValues={{ username: "", password: "" }}
+      initialValues={{ username: isAuthorizationError ? username.current : "", password: "" }}
       onSubmit={async (values, helpers) => {
-        await login(values, helpers);
+        username.current = values.username;
+        password.current = values.password;
+        await login(
+          {
+            ...values,
+            needsConfirmation: setNeedsConfirmation,
+            didConfirm: didConfirm.current,
+          },
+          helpers
+        );
       }}
       validateOnChange={false}
       validateOnBlur={false}
       validationSchema={validationSchema}
+      initialErrors={
+        isAuthorizationError
+          ? {
+              username: t("UsernameOrPasswordIncorrect") as string,
+              password: t("UsernameOrPasswordIncorrect") as string,
+            }
+          : {}
+      }
     >
       {({ handleSubmit, errors }) => (
         <>
@@ -138,7 +173,7 @@ const Register = () => {
   );
 };
 
-Register.getLayout = (page: ReactElement) => {
+Login.getLayout = (page: ReactElement) => {
   return <UserNavLayout>{page}</UserNavLayout>;
 };
 
@@ -166,4 +201,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Register;
+export default Login;

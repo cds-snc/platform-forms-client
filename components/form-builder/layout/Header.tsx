@@ -1,5 +1,5 @@
 import React from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import LanguageToggle from "../../globals/LanguageToggle";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
@@ -31,7 +31,7 @@ export const Header = () => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
       // clear session storage here to allow moving back to start page
-      sessionStorage.clear();
+      clearTemplateStore();
       setTab(tab);
     };
   };

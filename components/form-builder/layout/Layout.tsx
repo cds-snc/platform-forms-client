@@ -21,13 +21,14 @@ import { Save } from "./Save";
 
 export const Layout = () => {
   const { status } = useSession();
-  const { form, setLang, email, updateField, id } = useTemplateStore((s) => ({
+  const { hasHydrated, form, setLang, email, updateField, id } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     form: s.form,
     id: s.id,
     setLang: s.setLang,
     email: s.submission?.email,
     updateField: s.updateField,
+    hasHydrated: s._hasHydrated,
   }));
 
   const { currentTab, setTab } = useNavigationStore((s) => ({
@@ -208,8 +209,8 @@ export const Layout = () => {
     }
   };
   /* eslint-disable */
-
-  return (
+  // Wait until the Template Store has fully hydrated before rendering the page
+  return hasHydrated ? (
     <div id="page-container">
       <div className="grid grid-cols-12 gap-4">
         {currentTab !== "start" && currentTab !== "published" && (
@@ -218,7 +219,7 @@ export const Layout = () => {
         <>{form && renderTab(currentTab)}</>
       </div>
     </div>
-  );
+  ) : null;
   /* eslint-enable */
 };
 

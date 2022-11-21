@@ -152,6 +152,11 @@ module.exports = {
       "-1": "-1,",
       100: "100,",
     },
+    listStyleType: {
+      disc: "disc",
+      decimal: "decimal",
+      circle: "circle",
+    },
   },
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   plugins: [require("@tailwindcss/line-clamp")],

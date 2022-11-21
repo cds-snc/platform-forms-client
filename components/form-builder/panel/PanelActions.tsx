@@ -13,43 +13,25 @@ const Actions = styled.div`
   position: relative;
   display: flex;
   background-color: #ebebeb;
-  padding-left: 20px;
-  height: 62px;
   align-items: center;
+  padding: 10px;
+
+  @media (max-width: 1130px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 `;
 
 const Label = styled.span`
-  line-height: 38px;
   font-size: 16px;
   margin-right: 3px;
   margin-left: 3px;
 `;
 
-const UpDown = styled.div`
-  display: flex;
-  margin-right: 10px;
-
-  svg {
-    margin-right: 0;
-  }
-
-  button:first-of-type {
-    padding-left: 0;
-  }
-
-  button:last-of-type {
-    padding-left: 0;
-  }
-`;
-
 const AddButtonWrapper = styled.div`
-  position: absolute;
-  top: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
-  right: 20px;
 
   button {
     font-size: 16px;
@@ -66,8 +48,9 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
     useTemplateStore((s) => ({
+      lang: s.lang,
       remove: s.remove,
       moveUp: s.moveUp,
       moveDown: s.moveDown,
@@ -81,37 +64,35 @@ export const PanelActions = ({
   const isRichText = item.type == "richText";
 
   return (
-    <Actions className="panel-actions">
-      <UpDown>
-        <Button
-          theme="secondary"
-          className={`${
-            isFirstItem ? "disabled" : ""
-          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={
-            <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
-          }
-          disabled={isFirstItem}
-          onClick={() => moveUp(item.index)}
-        >
-          <Label>{t("moveUp")}</Label>
-        </Button>
-        <Button
-          theme="secondary"
-          className={`${
-            isFirstItem ? "disabled" : ""
-          } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={
-            <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
-          }
-          disabled={isLastItem}
-          onClick={() => moveDown(item.index)}
-        >
-          <Label>{t("moveDown")}</Label>
-        </Button>
-      </UpDown>
+    <Actions className={`panel-actions ${lang}`}>
+      <Button
+        theme="secondary"
+        className={`${
+          isFirstItem ? "disabled" : ""
+        } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <ChevronUp className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+        }
+        disabled={isFirstItem}
+        onClick={() => moveUp(item.index)}
+      >
+        <Label>{t("moveUp")}</Label>
+      </Button>
+      <Button
+        theme="secondary"
+        className={`${
+          isFirstItem ? "disabled" : ""
+        } group border-none transition duration-100 h-0 !py-5 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent`}
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={
+          <ChevronDown className="group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100" />
+        }
+        disabled={isLastItem}
+        onClick={() => moveDown(item.index)}
+      >
+        <Label>{t("moveDown")}</Label>
+      </Button>
 
       <Button
         theme="secondary"
@@ -121,6 +102,7 @@ export const PanelActions = ({
           <Duplicate className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
         }
         onClick={() => {
+          setFocusInput(true);
           duplicateElement(item.index);
         }}
       >
@@ -135,11 +117,16 @@ export const PanelActions = ({
           <Close className="group-hover:fill-white-default group-focus:fill-white-default transition duration-100" />
         }
         onClick={() => {
+          // if index is 0, then highlight the form title
+          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+
           remove(item.id);
+          document.getElementById(labelId)?.focus();
         }}
       >
         <Label>{t("remove")}</Label>
       </Button>
+
       {!isRichText && (
         <Modal
           title={t("moreOptions")}
@@ -162,7 +149,7 @@ export const PanelActions = ({
         </Modal>
       )}
 
-      <AddButtonWrapper>
+      <AddButtonWrapper className="add-element">
         <Button
           onClick={() => {
             setFocusInput(true);
