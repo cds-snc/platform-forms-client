@@ -137,8 +137,8 @@ export const Translate = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
       <div>
+        <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
         <p>{t("translateDescription")}</p>
         <br />
 

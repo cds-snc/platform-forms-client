@@ -71,7 +71,6 @@ export const Layout = () => {
                 {t("gcFormsEdit")} — {t("gcForms")}
               </title>
             </Head>
-            <h1 className="visually-hidden">{t("edit")}</h1>
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <ElementPanel />
@@ -86,7 +85,6 @@ export const Layout = () => {
                 {t("gcFormsPreview")} — {t("gcForms")}
               </title>
             </Head>
-            <h1 className="visually-hidden">{t("preview")}</h1>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <Preview />
@@ -103,7 +101,6 @@ export const Layout = () => {
             </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
-              <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
               <TestDataDelivery />
             </main>
           </div>
@@ -133,7 +130,6 @@ export const Layout = () => {
               </title>
             </Head>
             <main id="content">
-              <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
               <Share />
             </main>
           </div>
@@ -147,7 +143,6 @@ export const Layout = () => {
               </title>
             </Head>
             <main id="content">
-              <h1 className="border-b-0 mb-8">{t("saveYourProgress")}</h1>
               <Save />
             </main>
           </div>
@@ -171,7 +166,6 @@ export const Layout = () => {
                 {t("gcFormsPublished")} — {t("gcForms")}
               </title>
             </Head>
-            <h1 className="visually-hidden">{t("published")}</h1>
             <Published id={id} />
           </main>
         ) : (
@@ -187,7 +181,6 @@ export const Layout = () => {
             </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
-              <h1 className="visually-hidden">Form settings</h1>
               <Settings />
             </main>
           </div>
@@ -200,7 +193,6 @@ export const Layout = () => {
                 {t("gcFormsStart")} — {t("gcForms")}
               </title>
             </Head>
-            <h1 className="visually-hidden">{t("start")}</h1>
             <Start changeTab={setTab} />
           </main>
         );

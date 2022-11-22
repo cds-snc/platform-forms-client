@@ -12,6 +12,7 @@ export const Save = () => {
 
   return (
     <>
+      <h1 className="border-b-0 mb-8">{t("saveYourProgress")}</h1>
       <p className="mb-6">{t("saveP1")}</p>
       <p className="mb-6">{t("saveP2")}</p>
       <br />

@@ -34,6 +34,7 @@ export const Settings = () => {
 
   return (
     <>
+      <h1 className="visually-hidden">{t("formSettings")}</h1>
       <div className="mb-10">
         <Label htmlFor="response-delivery">{t("settingsReponseTitle")}</Label>
         <HintText id="response-delivery-hint-1">{t("settingsReponseHint1")}</HintText>
