@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
-import { MenuDropdown } from "@components/myforms/MenuDropdown/MenuDropdown";
+import { MenuDropdown, MenuDropdownItemI } from "@components/myforms/MenuDropdown/MenuDropdown";
 
 export interface CardProps {
   id: string;
@@ -16,19 +16,19 @@ export const Card = (props: CardProps): React.ReactElement => {
   const { id, titleEn, titleFr, url, date, isPublished } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
 
-  const menuItemsList = [
+  const menuItemsList: Array<MenuDropdownItemI> = [
     {
       title: t("card.menu.preview"),
       url: `/${i18n.language}/form-builder/preview/${id} `,
     },
     {
       title: t("card.menu.save"),
-      // NOTE: TODO: route endpoint is a WIP
+      // TODO: route endpoint is a WIP
       url: `/${i18n.language}/form-builder/share/${id}`,
     },
     {
       title: t("card.menu.settings"),
-      // Note: /preview for now as there is no direct link to /settings
+      // TODO: /preview for now as there is no direct link to /settings
       // Settings is currently a sub menu in preview
       url: `/${i18n.language}/form-builder/preview/${id}`,
     },
@@ -38,17 +38,22 @@ export const Card = (props: CardProps): React.ReactElement => {
   if (!isPublished) {
     menuItemsList.unshift({
       title: t("card.menu.copyLink"),
-      callback: () => {
-        // TODO: show action success in UI - consider also trying equivalent React lib
-        copy(`/${i18n.language}/id/${id}`);
-      },
+      callback: copyLinkCallback,
     });
   } else {
-    // Note: using /create for now as the /edit path doesn’t exist yet
+    // TODO: using /create for now as the /edit path doesn’t exist yet
     menuItemsList.unshift({
       title: t("card.menu.edit"),
       url: `/${i18n.language}/form-builder/create/${id}`,
     });
+  }
+
+  function copyLinkCallback() {
+    const path = `${window.location.origin}/${i18n.language}/id/${id}`;
+    if (copy(path)) {
+      // TODO: temp until UI design for success
+      alert(`Successfully copied to your clipboard ${path}`);
+    }
   }
 
   function formatDate(date: string) {

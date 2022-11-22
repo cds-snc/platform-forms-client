@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Menu } from "./Menu";
 
-interface MenuDropdownItemI {
+export interface MenuDropdownItemI {
   title: string;
   url?: string;
   callback?: React.MouseEventHandler<HTMLButtonElement>;
@@ -80,7 +80,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
               >
                 {item.callback ? (
                   <button
-                    className="gc-button-link no-underline hover:underline"
+                    className="action gc-button-link no-underline hover:underline"
                     onClick={item.callback}
                   >
                     {item.title}
