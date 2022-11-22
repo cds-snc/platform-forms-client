@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
@@ -12,9 +12,23 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 
-const Register = () => {
-  const { username, cognitoError, setCognitoError, login } = useAuth();
-  const { t } = useTranslation(["login", "common"]);
+const Login = () => {
+  const {
+    username,
+    password,
+    didConfirm,
+    needsConfirmation,
+    setNeedsConfirmation,
+    cognitoError,
+    cognitoErrorDescription,
+    cognitoErrorCallToActionLink,
+    cognitoErrorCallToActionText,
+    cognitoErrorIsDismissible,
+    setCognitoErrorStates,
+    resetCognitoErrorState,
+    login,
+  } = useAuth();
+  const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
@@ -26,14 +40,34 @@ const Register = () => {
       .max(50, t("fields.password.errors.maxLength")),
   });
 
-  if (username) {
-    return <Confirmation username={username} />;
+  const confirmationCallback = () => {
+    setNeedsConfirmation(false);
+    didConfirm.current = true;
+  };
+
+  if (needsConfirmation) {
+    return (
+      <Confirmation
+        username={username.current}
+        password={password.current}
+        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
+        confirmationCallback={confirmationCallback}
+      />
+    );
   }
+
   return (
     <Formik
-      initialValues={{ username: "", password: "" }}
+      initialValues={{ username: cognitoError ? username.current : "", password: "" }}
       onSubmit={async (values, helpers) => {
-        await login(values, helpers);
+        username.current = values.username;
+        password.current = values.password;
+        await login(
+          {
+            ...values,
+          },
+          helpers
+        );
       }}
       validateOnChange={false}
       validateOnBlur={false}
@@ -45,12 +79,15 @@ const Register = () => {
             <Alert
               type="error"
               heading={cognitoError}
-              onDismiss={() => {
-                setCognitoError("");
-              }}
+              onDismiss={resetCognitoErrorState}
               id="cognitoErrors"
-              dismissible
-            />
+              dismissible={cognitoErrorIsDismissible}
+            >
+              {cognitoErrorDescription}&nbsp;
+              {cognitoErrorCallToActionLink ? (
+                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              ) : undefined}
+            </Alert>
           )}
           {Object.keys(errors).length > 0 && !cognitoError && (
             <Alert
@@ -74,23 +111,48 @@ const Register = () => {
             </Alert>
           )}
           <h1>{t("title")}</h1>
+          {registrationOpen && (
+            <p className="mb-10 -mt-6">
+              {t("signUpText")}&nbsp;
+              <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+            </p>
+          )}
           <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
-              <Label id={"label-username"} htmlFor={"username"} className="required">
+              <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("fields.username.label")}
               </Label>
-              <TextInput type={"email"} id={"username"} name={"username"} />
+              <Description className="text-p text-black-default" id="login">
+                {t("fields.username.description")}
+              </Description>
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"email"}
+                id={"username"}
+                name={"username"}
+                required
+              />
             </div>
             <div className="focus-group">
-              <Label id={"label-password"} htmlFor={"password"} className="required">
+              <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("fields.password.label")}
               </Label>
-              <TextInput type={"password"} id={"password"} name={"password"} />
+              <Description id="password" className="text-p text-black-default">
+                {t("fields.password.description")}
+              </Description>
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"password"}
+                id={"password"}
+                name={"password"}
+                required
+              />
             </div>
             <div className="buttons">
-              <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
+              <Button className="gc-button--blue" type="submit">
+                {t("signInButton")}
+              </Button>
             </div>
-            {registrationOpen && <Link href={"/signup/register"}>{t("signUpLink")}</Link>}
           </form>
         </>
       )}
@@ -98,7 +160,7 @@ const Register = () => {
   );
 };
 
-Register.getLayout = (page: ReactElement) => {
+Login.getLayout = (page: ReactElement) => {
   return <UserNavLayout>{page}</UserNavLayout>;
 };
 
@@ -126,4 +188,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default Register;
+export default Login;

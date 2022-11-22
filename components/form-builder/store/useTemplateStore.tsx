@@ -15,6 +15,7 @@ import { Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import { FormElement, FormProperties, FormElementTypes, FormRecord } from "@lib/types";
+import { logMessage } from "@lib/logger";
 
 const defaultField: FormElement = {
   id: 0,
@@ -33,8 +34,8 @@ const defaultField: FormElement = {
 
 export const defaultForm = {
   id: "",
-  titleEn: "My Form",
-  titleFr: "[fr] My Form",
+  titleEn: "",
+  titleFr: "",
   layout: [],
   version: 1,
   endPage: {
@@ -62,9 +63,10 @@ export interface TemplateStoreProps {
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
+  _hasHydrated: boolean;
   form: FormProperties;
   submission: {
-    email: string;
+    email?: string;
   };
   isPublished: boolean;
   securityAttribute: string;
@@ -72,6 +74,8 @@ export interface TemplateStoreProps {
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
+  _hasHydrated: boolean;
+  setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number) => void;
   moveDown: (index: number) => void;
@@ -107,10 +111,10 @@ const storage: StateStorage = {
   getItem: async (name: string) => {
     return sessionStorage.getItem(name) || null;
   },
-  setItem: (name: string, value: string) => {
+  setItem: async (name: string, value: string) => {
     sessionStorage.setItem(name, value);
   },
-  removeItem: (name: string) => {
+  removeItem: async (name: string) => {
     sessionStorage.removeItem(name);
   },
 };
@@ -121,6 +125,7 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
     lang: "en",
     translationLanguagePriority: "en",
     focusInput: false,
+    _hasHydrated: false,
     form: defaultForm,
     submission: {
       email: "",
@@ -142,6 +147,11 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
         (set, get) => ({
           ...DEFAULT_PROPS,
           ...initProps,
+          setHasHydrated: () => {
+            set((state) => {
+              state._hasHydrated = true;
+            });
+          },
           localizeField: (path, lang = get().lang) => {
             const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
               lang.slice(1)) as Capitalize<Language>;
@@ -247,6 +257,15 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
         {
           name: "form-storage",
           getStorage: () => storage,
+          onRehydrateStorage: () => {
+            logMessage.debug("Template Store Hydration starting");
+
+            // optional
+            return (state) => {
+              logMessage.debug("Template Store Hydrationfinished");
+              state?.setHasHydrated();
+            };
+          },
         }
       )
     )
@@ -263,8 +282,13 @@ export const TemplateStoreProvider = ({
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
   const storeRef = useRef<TemplateStore>();
   if (!storeRef.current) {
+    // When there is an incoming form to initialize the store, clear it first
+    if (props.id) {
+      clearTemplateStore();
+    }
     storeRef.current = createTemplateStore(props);
   }
+
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
       {children}
@@ -279,4 +303,10 @@ export const useTemplateStore = <T,>(
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
   return useStore(store, selector, equalityFn);
+};
+
+export const clearTemplateStore = () => {
+  if (typeof window !== "undefined") {
+    sessionStorage.removeItem("form-storage");
+  }
 };

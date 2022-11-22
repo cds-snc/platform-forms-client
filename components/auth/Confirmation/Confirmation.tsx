@@ -4,16 +4,37 @@ import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/form
 import { useAuth } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
+import Link from "next/link";
 
-export interface ConfirmationProps {
-  /**
-   * The email of the user being confirmed.
-   */
+interface ConfirmationProps {
   username: string;
+  password: string;
+  confirmationAuthenticationFailedCallback: (
+    cognitoError: string,
+    cognitoErrorDescription: string,
+    cognitoErrorCallToActionLink: string,
+    cognitoErrorCallToActionText: string,
+    cognitoErrorIsDismissible: boolean
+  ) => void;
+  confirmationCallback: () => void;
 }
 
-export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
-  const { cognitoError, setCognitoError, confirm, resendConfirmationCode } = useAuth();
+export const Confirmation = ({
+  username,
+  password,
+  confirmationAuthenticationFailedCallback,
+  confirmationCallback,
+}: ConfirmationProps): ReactElement => {
+  const {
+    cognitoError,
+    cognitoErrorDescription,
+    cognitoErrorCallToActionLink,
+    cognitoErrorCallToActionText,
+    cognitoErrorIsDismissible,
+    resetCognitoErrorState,
+    confirm,
+    resendConfirmationCode,
+  } = useAuth();
   const [showSentReconfirmationToast, setShowSentReconfirmationToast] = useState(false);
   const { t } = useTranslation(["signup", "cognito-errors", "common"]);
 
@@ -22,18 +43,19 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
       .typeError(t("signUpConfirmation.fields.confirmationCode.error.number"))
       .required(t("input-validation.required", { ns: "common" })),
   });
-  if (!username) {
-    return <p>{t("signUpConfirmation.noUsername")}</p>;
-  }
+
   return (
     <Formik
       validationSchema={validationSchema}
-      initialValues={{ username: username, confirmationCode: "" }}
+      initialValues={{ username: username, password: password, confirmationCode: "" }}
       validateOnBlur={false}
       validateOnChange={false}
       onSubmit={async (values, formikHelpers) => {
         setShowSentReconfirmationToast(false);
-        await confirm(values, formikHelpers);
+        await confirm(
+          { ...values, confirmationAuthenticationFailedCallback, confirmationCallback },
+          formikHelpers
+        );
       }}
     >
       {({ handleSubmit, errors }) => (
@@ -41,26 +63,29 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
           {showSentReconfirmationToast && !cognitoError && (
             <Alert
               type="success"
-              heading={t("signupConfirmation.resendConfirmationCode.success.title")}
+              heading={t("signUpConfirmation.resendConfirmationCode.title")}
               onDismiss={() => {
                 setShowSentReconfirmationToast(false);
               }}
               id="reconfirmationSuccess"
               dismissible
             >
-              {t("signupConfirmation.resendConfirmationCode.success.body")}
+              {t("signUpConfirmation.resendConfirmationCode.body")}
             </Alert>
           )}
           {cognitoError && (
             <Alert
               type="error"
               heading={cognitoError}
-              onDismiss={() => {
-                setCognitoError("");
-              }}
+              onDismiss={resetCognitoErrorState}
               id="cognitoErrors"
-              dismissible
-            />
+              dismissible={cognitoErrorIsDismissible}
+            >
+              {cognitoErrorDescription}&nbsp;
+              {cognitoErrorCallToActionLink ? (
+                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              ) : undefined}
+            </Alert>
           )}
           {Object.keys(errors).length > 0 && !cognitoError && (
             <Alert
@@ -84,28 +109,42 @@ export const Confirmation = ({ username }: ConfirmationProps): ReactElement => {
             </Alert>
           )}
           <h1>{t("signUpConfirmation.title")}</h1>
+          <p className="mb-10 -mt-6">
+            {t("signUpConfirmation.emailHasBeenSent")}&nbsp;{username}
+          </p>
           <form id="confirmation" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
-              <Label id={"label-confirmationCode"} htmlFor="confirmationCode" className="required">
+              <Label
+                id={"label-confirmationCode"}
+                htmlFor="confirmationCode"
+                className="required"
+                required
+              >
                 {t("signUpConfirmation.fields.confirmationCode.label")}
               </Label>
-              <TextInput type="text" id="confirmationCode" name="confirmationCode" />
+              <TextInput
+                className="h-10 w-36 rounded"
+                type="text"
+                id="confirmationCode"
+                name="confirmationCode"
+                required
+              />
             </div>
-            <div className="buttons">
-              <Button
-                type="button"
-                onClick={async () => {
-                  const error = await resendConfirmationCode(username);
-                  if (!error) {
-                    setShowSentReconfirmationToast(true);
-                  }
-                }}
-                secondary
-              >
-                {t("signUpConfirmation.resendConfirmationCodeButton")}
-              </Button>
-              <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
-            </div>
+            <Button className="gc-button--blue" type="submit">
+              {t("signUpConfirmation.confirmButton")}
+            </Button>
+            <button
+              type="button"
+              className="block my-10 shadow-none bg-transparent text-blue-dark hover:text-blue-hover underline border-0"
+              onClick={async () => {
+                const error = await resendConfirmationCode(username);
+                if (!error) {
+                  setShowSentReconfirmationToast(true);
+                }
+              }}
+            >
+              {t("signUpConfirmation.resendConfirmationCodeButton")}
+            </button>
           </form>
         </>
       )}

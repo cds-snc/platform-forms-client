@@ -3,6 +3,14 @@
     "terms": {
       "link": "/en/terms-avis",
       "desc": "Terms and conditions"
+    },
+    "sla": {
+      "link": "/en/sla",
+      "desc": "Service level agreement"
+    },
+    "support": {
+      "link": "/tbd",
+      "desc": "Support"
     }
   },
   "phase": {

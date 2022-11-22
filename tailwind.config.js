@@ -29,6 +29,9 @@ module.exports = {
         "10px": "10px",
         "9px": "9px",
       },
+      maxWidth: {
+        prose: "75ch",
+      },
     },
     container: {
       center: true,
@@ -55,9 +58,6 @@ module.exports = {
       small_h3: ["18px", "22px"],
       small_h2: ["20px", "28px"],
       small_h1: ["24px", "28px"],
-    },
-    maxWidth: {
-      prose: "75ch",
     },
     screens: {
       xxl: { max: "1200px" },
@@ -151,6 +151,11 @@ module.exports = {
     zIndex: {
       "-1": "-1,",
       100: "100,",
+    },
+    listStyleType: {
+      disc: "disc",
+      decimal: "decimal",
+      circle: "circle",
     },
   },
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],

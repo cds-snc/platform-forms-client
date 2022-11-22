@@ -10,10 +10,24 @@ import * as Yup from "yup";
 import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
 import emailDomainList from "../../email.domains.json";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth/next";
+import Link from "next/link";
 
 const Register = () => {
-  const { username, cognitoError, setCognitoError, register } = useAuth();
-  const { t } = useTranslation(["signup", "cognito-errors", "common"]);
+  const {
+    username,
+    password,
+    needsConfirmation,
+    cognitoError,
+    cognitoErrorDescription,
+    cognitoErrorCallToActionLink,
+    cognitoErrorCallToActionText,
+    cognitoErrorIsDismissible,
+    resetCognitoErrorState,
+    register,
+  } = useAuth();
+  const { t } = useTranslation(["signup", "common"]);
   const registrationOpen = useFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
@@ -60,8 +74,15 @@ const Register = () => {
       ),
   });
 
-  if (username) {
-    return <Confirmation username={username} />;
+  if (needsConfirmation) {
+    return (
+      <Confirmation
+        username={username.current}
+        password={password.current}
+        confirmationAuthenticationFailedCallback={() => undefined}
+        confirmationCallback={() => undefined}
+      />
+    );
   }
 
   if (!registrationOpen) {
@@ -71,7 +92,9 @@ const Register = () => {
     <Formik
       initialValues={{ username: "", password: "", name: "" }}
       onSubmit={async (values, formikHelpers) => {
-        await register(values, formikHelpers);
+        username.current = values.username;
+        password.current = values.password;
+        await register({ ...values }, formikHelpers);
       }}
       validateOnChange={false}
       validateOnBlur={false}
@@ -83,13 +106,15 @@ const Register = () => {
             <Alert
               type="error"
               heading={cognitoError}
-              onDismiss={() => {
-                setCognitoError("");
-              }}
+              onDismiss={resetCognitoErrorState}
               id="cognitoErrors"
-              tabIndex={0}
-              dismissible
-            />
+              dismissible={cognitoErrorIsDismissible}
+            >
+              {cognitoErrorDescription}&nbsp;
+              {cognitoErrorCallToActionLink ? (
+                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              ) : undefined}
+            </Alert>
           )}
           {Object.keys(errors).length > 0 && !cognitoError && (
             <Alert
@@ -113,21 +138,31 @@ const Register = () => {
             </Alert>
           )}
           <h1>{t("signUpRegistration.title")}</h1>
+          <p className="mb-10 -mt-6">
+            {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
+            <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
+          </p>
           <form id="registration" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
               <Label id={"label-name"} htmlFor={"name"} className="required" required>
                 {t("signUpRegistration.fields.name.label")}
               </Label>
-              <TextInput type={"text"} id={"name"} name={"name"} />
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"text"}
+                id={"name"}
+                name={"name"}
+              />
             </div>
             <div className="focus-group">
               <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("signUpRegistration.fields.username.label")}
               </Label>
-              <Description id={"username-hint"}>
+              <Description className="text-p text-black-default" id={"username-hint"}>
                 {t("signUpRegistration.fields.username.hint")}
               </Description>
               <TextInput
+                className="h-10 w-full max-w-lg rounded"
                 type={"email"}
                 id={"username"}
                 name={"username"}
@@ -138,10 +173,11 @@ const Register = () => {
               <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("signUpRegistration.fields.password.label")}
               </Label>
-              <Description id={"password-hint"}>
+              <Description className="text-p text-black-default" id={"password-hint"}>
                 {t("signUpRegistration.fields.password.hint")}
               </Description>
               <TextInput
+                className="h-10 w-full max-w-lg rounded"
                 type={"password"}
                 id={"password"}
                 name={"password"}
@@ -158,13 +194,20 @@ const Register = () => {
                 {t("signUpRegistration.fields.passwordConfirmation.label")}
               </Label>
               <TextInput
+                className="h-10 w-full max-w-lg rounded"
                 type={"password"}
                 id={"passwordConfirmation"}
                 name={"passwordConfirmation"}
               />
             </div>
+            <p className="mb-10 -mt-8 gc-description">
+              {t("signUpRegistration.slaAgreement")}&nbsp;
+              <Link href={"/sla"}>{t("signUpRegistration.slaAgreementLink")}</Link>
+            </p>
             <div className="buttons">
-              <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
+              <Button className="gc-button--blue" type="submit">
+                {t("signUpRegistration.signUpButton")}
+              </Button>
             </div>
           </form>
         </>
@@ -178,6 +221,15 @@ Register.getLayout = (page: ReactElement) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions);
+
+  if (session)
+    return {
+      redirect: {
+        destination: `/${context.locale}/myforms/`,
+        permanent: false,
+      },
+    };
   return {
     props: {
       ...(context.locale &&
