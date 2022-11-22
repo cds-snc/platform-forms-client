@@ -56,6 +56,8 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
           "hidden absolute z-10 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
           (direction === "up" ? " -top-[10.65rem]" : "")
         }
+        // Work around for list-none beeing ignored int tailwind, to look into
+        style={{ listStyle: "none" }}
         role="menu"
         tabIndex={-1}
         aria-labelledby={`button-${id}`}

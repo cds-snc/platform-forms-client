@@ -10,7 +10,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
 
   return (
     <ol
-      className="grid gap-4"
+      className="grid gap-4 p-0"
       style={{ gridTemplateColumns: "repeat(auto-fill, minmax(20rem, 1fr))" }}
     >
       {cards &&
