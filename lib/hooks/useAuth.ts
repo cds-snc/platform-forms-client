@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useRouter } from "next/router";
 import { getCsrfToken, signIn } from "next-auth/react";
 import axios, { AxiosError } from "axios";
@@ -9,6 +10,10 @@ import { useState } from "react";
 export const useAuth = () => {
   const router = useRouter();
   const { t } = useTranslation("cognito-errors");
+  const username = useRef("");
+  const password = useRef("");
+  const didConfirm = useRef(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [cognitoError, setCognitoError] = useState("");
   const [cognitoErrorDescription, setCognitoErrorDescription] = useState("");
   const [cognitoErrorIsDismissible, setCognitoErrorIsDismissible] = useState(true);
@@ -22,17 +27,30 @@ export const useAuth = () => {
     setCognitoErrorCallToActionLink("");
     setCognitoErrorCallToActionText("");
   };
+
+  const setCognitoErrorStates = (
+    cognitoError: string,
+    cognitoErrorDescription: string,
+    cognitoErrorCallToActionLink: string,
+    cognitoErrorCallToActionText: string,
+    cognitoErrorIsDismissible: boolean
+  ) => {
+    setCognitoError(cognitoError);
+    setCognitoErrorDescription(cognitoErrorDescription);
+    setCognitoErrorCallToActionLink(cognitoErrorCallToActionLink);
+    setCognitoErrorCallToActionText(cognitoErrorCallToActionText);
+    setCognitoErrorIsDismissible(cognitoErrorIsDismissible);
+  };
+
   const register = async (
     {
       username,
       password,
       name,
-      confirmationCallback,
     }: {
       username: string;
       password: string;
       name: string;
-      confirmationCallback: () => void;
     },
     { setSubmitting }: FormikHelpers<{ username: string; password: string; name: string }>
   ) => {
@@ -54,7 +72,7 @@ export const useAuth = () => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
-        confirmationCallback();
+        setNeedsConfirmation(true);
       }
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -78,16 +96,25 @@ export const useAuth = () => {
       username,
       password,
       confirmationCode,
-      setIsAuthorizationError,
+      confirmationAuthenticationFailedCallback,
       confirmationCallback,
     }: {
       username: string;
       password: string;
       confirmationCode: string;
-      setIsAuthorizationError: (s: boolean) => void;
+      confirmationAuthenticationFailedCallback: (
+        cognitoError: string,
+        cognitoErrorDescription: string,
+        cognitoErrorCallToActionLink: string,
+        cognitoErrorCallToActionText: string,
+        cognitoErrorIsDismissible: boolean
+      ) => void;
       confirmationCallback: () => void;
     },
-    { setSubmitting, setErrors }: FormikHelpers<{ username: string; confirmationCode: string }>
+    {
+      setSubmitting,
+      setErrors,
+    }: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
   ) => {
     resetCognitoErrorState();
 
@@ -134,7 +161,7 @@ export const useAuth = () => {
       setSubmitting(false);
     }
 
-    // Automated sign in with provided crednetials
+    // Automated sign in with provided credentials
     if (!confirmationSuccess) return;
     try {
       const response = await signIn<"credentials">("credentials", {
@@ -150,7 +177,13 @@ export const useAuth = () => {
           responseErrorMessage.includes("UserNotFoundException") ||
           responseErrorMessage.includes("NotAuthorizedException")
         ) {
-          setIsAuthorizationError(true);
+          confirmationAuthenticationFailedCallback(
+            t("UsernameOrPasswordIncorrect.title"),
+            t("UsernameOrPasswordIncorrect.description"),
+            t("UsernameOrPasswordIncorrect.link"),
+            t("UsernameOrPasswordIncorrect.linkText"),
+            false
+          );
         } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
         } else {
@@ -208,15 +241,11 @@ export const useAuth = () => {
     {
       username,
       password,
-      needsConfirmation,
-      didConfirm,
     }: {
       username: string;
       password: string;
-      needsConfirmation: React.Dispatch<React.SetStateAction<boolean>>;
-      didConfirm: boolean;
     },
-    { setSubmitting, setErrors }: FormikHelpers<{ username: string; password: string }>
+    { setSubmitting }: FormikHelpers<{ username: string; password: string }>
   ) => {
     resetCognitoErrorState();
     try {
@@ -231,7 +260,7 @@ export const useAuth = () => {
         setSubmitting(false);
 
         if (responseErrorMessage.includes("UserNotConfirmedException")) {
-          needsConfirmation(true);
+          setNeedsConfirmation(true);
         } else if (
           responseErrorMessage.includes("UserNotFoundException") ||
           responseErrorMessage.includes("NotAuthorizedException")
@@ -272,6 +301,11 @@ export const useAuth = () => {
     cognitoErrorCallToActionLink,
     cognitoErrorCallToActionText,
     cognitoErrorIsDismissible,
-    setCognitoError,
+    setCognitoErrorStates,
+    username,
+    password,
+    didConfirm,
+    needsConfirmation,
+    setNeedsConfirmation,
   };
 };

@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
@@ -14,19 +14,22 @@ import * as Yup from "yup";
 
 const Login = () => {
   const {
+    username,
+    password,
+    didConfirm,
+    needsConfirmation,
+    setNeedsConfirmation,
     cognitoError,
     cognitoErrorDescription,
     cognitoErrorCallToActionLink,
     cognitoErrorCallToActionText,
     cognitoErrorIsDismissible,
+    setCognitoErrorStates,
     resetCognitoErrorState,
     login,
   } = useAuth();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
-  const [needsConfirmation, setNeedsConfirmation] = useState(false);
-  const didConfirm = useRef(false);
-  const [isAuthorizationError, setIsAuthorizationError] = useState(false);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -36,9 +39,6 @@ const Login = () => {
       .required(t("input-validation.required", { ns: "common" }))
       .max(50, t("fields.password.errors.maxLength")),
   });
-
-  const username = useRef("");
-  const password = useRef("");
 
   const confirmationCallback = () => {
     setNeedsConfirmation(false);
@@ -50,7 +50,7 @@ const Login = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        setIsAuthorizationError={setIsAuthorizationError}
+        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
         confirmationCallback={confirmationCallback}
       />
     );
@@ -58,15 +58,13 @@ const Login = () => {
 
   return (
     <Formik
-      initialValues={{ username: isAuthorizationError ? username.current : "", password: "" }}
+      initialValues={{ username: cognitoError ? username.current : "", password: "" }}
       onSubmit={async (values, helpers) => {
         username.current = values.username;
         password.current = values.password;
         await login(
           {
             ...values,
-            needsConfirmation: setNeedsConfirmation,
-            didConfirm: didConfirm.current,
           },
           helpers
         );
@@ -74,14 +72,6 @@ const Login = () => {
       validateOnChange={false}
       validateOnBlur={false}
       validationSchema={validationSchema}
-      initialErrors={
-        isAuthorizationError
-          ? {
-              username: t("UsernameOrPasswordIncorrect") as string,
-              password: t("UsernameOrPasswordIncorrect") as string,
-            }
-          : {}
-      }
     >
       {({ handleSubmit, errors }) => (
         <>
@@ -159,10 +149,7 @@ const Login = () => {
               />
             </div>
             <div className="buttons">
-              <Button
-                className="h-16 min-w-32 rounded-lg py-3 px-6 text-[color:white] mx-auto bg-blue-800 shadow-default"
-                type="submit"
-              >
+              <Button className="gc-button--blue" type="submit">
                 {t("signInButton")}
               </Button>
             </div>
