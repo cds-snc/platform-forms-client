@@ -63,17 +63,6 @@ export const Layout = () => {
 
   const renderTab = (tab: string) => {
     switch (tab) {
-      case "start":
-        return (
-          <main id="content" className="col-span-12">
-            <Head>
-              <title>
-                {t("gcFormsStart")} — {t("gcForms")}
-              </title>
-            </Head>
-            <Start changeTab={setTab} />
-          </main>
-        );
       case "create":
         return (
           <div className="col-start-4 col-span-9">
@@ -82,6 +71,7 @@ export const Layout = () => {
                 {t("gcFormsEdit")} — {t("gcForms")}
               </title>
             </Head>
+            <h1 className="visually-hidden">{t("edit")}</h1>
             <EditNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <ElementPanel />
@@ -96,6 +86,7 @@ export const Layout = () => {
                 {t("gcFormsPreview")} — {t("gcForms")}
               </title>
             </Head>
+            <h1 className="visually-hidden">{t("preview")}</h1>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
               <Preview />
@@ -180,6 +171,7 @@ export const Layout = () => {
                 {t("gcFormsPublished")} — {t("gcForms")}
               </title>
             </Head>
+            <h1 className="visually-hidden">{t("published")}</h1>
             <Published id={id} />
           </main>
         ) : (
@@ -200,9 +192,15 @@ export const Layout = () => {
             </main>
           </div>
         );
-      default:
+      default: // Start page
         return (
           <main id="content" className="col-span-12">
+            <Head>
+              <title>
+                {t("gcFormsStart")} — {t("gcForms")}
+              </title>
+            </Head>
+            <h1 className="visually-hidden">{t("start")}</h1>
             <Start changeTab={setTab} />
           </main>
         );
