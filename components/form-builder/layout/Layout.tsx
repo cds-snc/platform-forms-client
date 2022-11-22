@@ -211,8 +211,8 @@ export const Layout = () => {
   /* eslint-disable */
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div id="page-container">
-      <div className="grid grid-cols-12 gap-4">
+    <div className="xs:px-4 md:px-8 lg:px-16 px-32">
+      <div className="flex">
         {currentTab !== "start" && currentTab !== "published" && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}

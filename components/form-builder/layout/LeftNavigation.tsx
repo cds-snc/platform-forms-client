@@ -41,7 +41,7 @@ export const LeftNavigation = ({
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
+    <nav className="" aria-label={t("navLabelFormBuilder")}>
       <Button
         isCurrentTab={["create", "translate"].includes(currentTab)}
         icon={<DesignIcon className={iconClassname} />}
