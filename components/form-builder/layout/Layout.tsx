@@ -65,7 +65,7 @@ export const Layout = () => {
     switch (tab) {
       case "start":
         return (
-          <main id="content" className="col-span-12">
+          <main id="content" className="mx-auto">
             <Head>
               <title>
                 {t("gcFormsStart")} — {t("gcForms")}
@@ -76,7 +76,7 @@ export const Layout = () => {
         );
       case "create":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsEdit")} — {t("gcForms")}
@@ -90,7 +90,7 @@ export const Layout = () => {
         );
       case "preview":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsPreview")} — {t("gcForms")}
@@ -104,7 +104,7 @@ export const Layout = () => {
         );
       case "test-data-delivery":
         return status === "authenticated" ? (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsResponseDelivery")} — {t("gcForms")}
@@ -121,7 +121,7 @@ export const Layout = () => {
         );
       case "translate":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsTranslate")} — {t("gcForms")}
@@ -135,7 +135,7 @@ export const Layout = () => {
         );
       case "share":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsShare")} — {t("gcForms")}
@@ -149,7 +149,7 @@ export const Layout = () => {
         );
       case "save":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsSave")} — {t("gcForms")}
@@ -163,7 +163,7 @@ export const Layout = () => {
         );
       case "publish":
         return (
-          <main id="content" className="col-start-4 col-span-9">
+          <main id="content">
             <Head>
               <title>
                 {t("gcFormsPublish")} — {t("gcForms")}
@@ -174,7 +174,7 @@ export const Layout = () => {
         );
       case "published":
         return status === "authenticated" ? (
-          <main id="content" className="col-start-4 col-span-9">
+          <main id="content">
             <Head>
               <title>
                 {t("gcFormsPublished")} — {t("gcForms")}
@@ -187,7 +187,7 @@ export const Layout = () => {
         );
       case "settings":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsSettings")} — {t("gcForms")}
@@ -202,7 +202,7 @@ export const Layout = () => {
         );
       default:
         return (
-          <main id="content" className="col-span-12">
+          <main id="content">
             <Start changeTab={setTab} />
           </main>
         );
@@ -211,12 +211,12 @@ export const Layout = () => {
   /* eslint-disable */
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div className="xs:px-4 md:px-8 lg:px-16 px-32">
-      <div className="flex">
+    <div className="lg:px-4 xl:px-8 px-32">
+      <div>
         {currentTab !== "start" && currentTab !== "published" && (
-          <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
+          <LeftNavigation currentTab={currentTab} handleClick={handleClick} className="absolute xl:content-center" />
         )}
-        <>{form && renderTab(currentTab)}</>
+        <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">{form && renderTab(currentTab)}</div>
       </div>
     </div>
   ) : null;
