@@ -24,6 +24,8 @@ export const Button = ({
   disabled = false,
   "aria-label": ariaLabel = undefined,
   theme = "primary",
+  tabIndex = 0,
+  buttonRef,
 }: {
   children?: JSX.Element | string;
   id?: string;
@@ -34,6 +36,8 @@ export const Button = ({
   disabled?: boolean;
   "aria-label"?: string;
   theme?: "primary" | "secondary" | "destructive" | "link" | "icon";
+  tabIndex?: number;
+  buttonRef?: (el: HTMLButtonElement) => void;
 }) => (
   <button
     onClick={onClick}
@@ -42,6 +46,8 @@ export const Button = ({
     disabled={disabled}
     aria-label={ariaLabel}
     type="button"
+    tabIndex={tabIndex}
+    ref={buttonRef}
   >
     {icon && (
       <div className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}>

@@ -438,7 +438,6 @@ ModalForm.propTypes = {
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
-  position: relative;
   max-width: 800px;
   height: auto;
   margin-top: -1px;
@@ -600,7 +599,7 @@ export const ElementPanel = () => {
         addElement={true}
         initialValue={introTextPlaceholder}
         schemaProperty="introduction"
-        aria-label={t("richTextIntroTitle")}
+        ariaLabel={t("richTextIntroTitle")}
       />
       {elements.map((element, index: number) => {
         const item = { ...element, index };
@@ -612,7 +611,7 @@ export const ElementPanel = () => {
             addElement={false}
             initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
-            aria-label={t("richTextPrivacyTitle")}
+            ariaLabel={t("richTextPrivacyTitle")}
           >
             <div>
               <h2 className="text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
@@ -623,7 +622,7 @@ export const ElementPanel = () => {
             addElement={false}
             initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
-            aria-label={t("richTextConfirmationTitle")}
+            ariaLabel={t("richTextConfirmationTitle")}
           >
             <div>
               <h2 className="text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
