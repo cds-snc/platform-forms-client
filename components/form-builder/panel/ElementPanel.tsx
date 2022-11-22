@@ -524,19 +524,6 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
   );
 };
 
-const ElementPanelDiv = styled.div`
-  > div:first-of-type {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-  }
-
-  > div:last-of-type,
-  > div:last-of-type .panel-actions {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-  }
-`;
-
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
   const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
@@ -581,7 +568,7 @@ export const ElementPanel = () => {
     privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
 
   return (
-    <ElementPanelDiv>
+    <>
       <RichTextLocked
         beforeContent={
           <>
@@ -631,7 +618,7 @@ export const ElementPanel = () => {
           </RichTextLocked>
         </>
       )}
-    </ElementPanelDiv>
+    </>
   );
 };
 
