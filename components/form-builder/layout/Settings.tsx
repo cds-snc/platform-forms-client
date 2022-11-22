@@ -1,10 +1,46 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { useNavigationStore } from "../store/useNavigationStore";
 import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
 import { useSession } from "next-auth/react";
+import { useDeleteForm } from "../hooks/useDelete";
+import { WarningIcon, CheckIcon } from "../icons";
+import Markdown from "markdown-to-jsx";
+
+const SuccessMessage = () => {
+  const { t } = useTranslation("form-builder");
+  return (
+    <div className="mt-10 p-5 bg-yellow-100 flex">
+      <div className="flex">
+        <div className="pr-7 pt-2">
+          <CheckIcon />
+        </div>
+      </div>
+      <div>
+        <h3 className="mb-1">{t("formDeletedTitle")}</h3>
+        <Markdown options={{ forceBlock: true }}>{t("formDeleted")}</Markdown>
+      </div>
+    </div>
+  );
+};
+
+const ErrorMessage = () => {
+  const { t } = useTranslation("form-builder");
+  return (
+    <div className="mt-10 p-5 bg-red-100 flex">
+      <div className="flex">
+        <div className="pr-7 pt-2">
+          <WarningIcon />
+        </div>
+      </div>
+      <div>
+        <h3 className="mb-1">{t("formDeleteTitleFailed")}</h3>
+        <Markdown options={{ forceBlock: true }}>{t("formDeleteFailed")}</Markdown>
+      </div>
+    </div>
+  );
+};
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -24,12 +60,15 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
 
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
-  const { initialize, email, updateField } = useTemplateStore((s) => ({
+  const { handleDelete } = useDeleteForm();
+  const [formDeleted, setFormDeleted] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const { id, initialize, email, updateField } = useTemplateStore((s) => ({
+    id: s.id,
     initialize: s.initialize,
     email: s.submission.email,
     updateField: s.updateField,
   }));
-  const setTab = useNavigationStore((s) => s.setTab);
   const { status } = useSession();
 
   return (
@@ -49,7 +88,7 @@ export const Settings = () => {
         />
       </div>
 
-      {status === "authenticated" && (
+      {status === "authenticated" && id && (
         <div className="mb-10">
           <Label htmlFor="delete">{t("settingsDeleteTitle")}</Label>
           <HintText id="delete-hint">{t("settingsDeleteHint")}</HintText>
@@ -57,9 +96,14 @@ export const Settings = () => {
             <Button
               id="delete-form"
               theme="destructive"
-              onClick={() => {
+              onClick={async () => {
+                const result = await handleDelete(id);
+                if (result && "error" in result) {
+                  setError(true);
+                  return;
+                }
+                setFormDeleted(true);
                 initialize(); // Reset the form
-                setTab("start"); // Back to start page
               }}
             >
               {t("settingsDeleteButton")}
@@ -67,6 +111,8 @@ export const Settings = () => {
           </div>
         </div>
       )}
+      {formDeleted && <SuccessMessage />}
+      {error && <ErrorMessage />}
     </>
   );
 };
