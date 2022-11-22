@@ -232,6 +232,7 @@ export const Translate = () => {
                     ]
                   }
                   lang={translationLanguagePriority}
+                  ariaLabel={t("formIntroduction")}
                 />
                 <RichTextEditor
                   autoFocusEditor={false}
@@ -248,6 +249,7 @@ export const Translate = () => {
                     ]
                   }
                   lang={translationLanguagePriorityAlt}
+                  ariaLabel={t("formIntroduction")}
                 />
               </div>
             </div>
@@ -343,6 +345,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriority}
+                ariaLabel={t("privacyStatement")}
               />
               <RichTextEditor
                 autoFocusEditor={false}
@@ -359,6 +362,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriorityAlt}
+                ariaLabel={t("privacyStatement")}
               />
             </div>
           </div>
@@ -389,6 +393,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriority}
+                ariaLabel={t("confirmationMessage")}
               />
               <RichTextEditor
                 autoFocusEditor={false}
@@ -405,6 +410,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriorityAlt}
+                ariaLabel={t("confirmationMessage")}
               />
             </div>
           </div>

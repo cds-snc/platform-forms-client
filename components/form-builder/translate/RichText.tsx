@@ -35,6 +35,7 @@ export const RichText = ({
               element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")] ?? ""
             }
             lang={translationLanguagePriority}
+            ariaLabel={t("pageText") + " " + t(translationLanguagePriority)}
           />
           <RichTextEditor
             autoFocusEditor={false}
@@ -46,6 +47,7 @@ export const RichText = ({
               element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")] ?? ""
             }
             lang={translationLanguagePriorityAlt}
+            ariaLabel={t("pageText") + " " + t(translationLanguagePriorityAlt)}
           />
         </div>
       </div>
