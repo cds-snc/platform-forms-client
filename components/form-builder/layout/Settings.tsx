@@ -5,40 +5,52 @@ import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
 import { useSession } from "next-auth/react";
 import { useDeleteForm } from "../hooks/useDelete";
-import { WarningIcon, CheckIcon } from "../icons";
 import Markdown from "markdown-to-jsx";
+import { useDialogRef, Dialog } from "../shared/Dialog";
+import { useNavigationStore } from "../store/useNavigationStore";
 
-const SuccessMessage = () => {
+const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
+  const { setTab } = useNavigationStore((s) => ({
+    setTab: s.setTab,
+  }));
+  const dialog = useDialogRef();
+  const actions = (
+    <Button
+      onClick={() => {
+        dialog.current?.close();
+        setTab("start");
+      }}
+    >
+      {t("formDeletedDialogOkay")}
+    </Button>
+  );
+
   return (
-    <div className="mt-10 p-5 bg-yellow-100 flex">
-      <div className="flex">
-        <div className="pr-7 pt-2">
-          <CheckIcon />
-        </div>
-      </div>
-      <div>
-        <h3 className="mb-1">{t("formDeletedTitle")}</h3>
-        <Markdown options={{ forceBlock: true }}>{t("formDeleted")}</Markdown>
-      </div>
-    </div>
+    <Dialog title={t("formDeletedDialogTitle")} dialogRef={dialog} actions={actions}>
+      <Markdown options={{ forceBlock: true }}>{t("formDeletedDialogMessage")}</Markdown>
+    </Dialog>
   );
 };
 
-const ErrorMessage = () => {
+const FormDeletedError = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");
+  const dialog = useDialogRef();
+  const actions = (
+    <Button
+      onClick={() => {
+        dialog.current?.close();
+        handleClose();
+      }}
+    >
+      {t("formDeletedDialogOkayFailed")}
+    </Button>
+  );
+
   return (
-    <div className="mt-10 p-5 bg-red-100 flex">
-      <div className="flex">
-        <div className="pr-7 pt-2">
-          <WarningIcon />
-        </div>
-      </div>
-      <div>
-        <h3 className="mb-1">{t("formDeleteTitleFailed")}</h3>
-        <Markdown options={{ forceBlock: true }}>{t("formDeleteFailed")}</Markdown>
-      </div>
-    </div>
+    <Dialog title={t("formDeleteDialogTitleFailed")} dialogRef={dialog} actions={actions}>
+      <Markdown options={{ forceBlock: true }}>{t("formDeletedDialogMessageFailed")}</Markdown>
+    </Dialog>
   );
 };
 
@@ -111,8 +123,14 @@ export const Settings = () => {
           </div>
         </div>
       )}
-      {formDeleted && <SuccessMessage />}
-      {error && <ErrorMessage />}
+      {formDeleted && <FormDeleted />}
+      {error && (
+        <FormDeletedError
+          handleClose={() => {
+            setError(false);
+          }}
+        />
+      )}
     </>
   );
 };
