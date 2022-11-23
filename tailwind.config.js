@@ -32,6 +32,11 @@ module.exports = {
       maxWidth: {
         prose: "75ch",
       },
+      listStyleType: {
+        disc: "disc",
+        decimal: "decimal",
+        circle: "circle",
+      },
     },
     container: {
       center: true,
@@ -151,11 +156,6 @@ module.exports = {
     zIndex: {
       "-1": "-1,",
       100: "100,",
-    },
-    listStyleType: {
-      disc: "disc",
-      decimal: "decimal",
-      circle: "circle",
     },
   },
   content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],

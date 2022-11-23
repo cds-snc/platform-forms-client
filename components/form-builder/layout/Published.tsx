@@ -27,6 +27,7 @@ export const Published = ({ id }: { id: string }) => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
+      <h1 className="visually-hidden">{t("published")}</h1>
       <div className="p-7 mb-10 flex bg-green-50">
         <div className="flex">
           <div className="flex p-7">

@@ -569,6 +569,7 @@ export const ElementPanel = () => {
 
   return (
     <>
+      <h1 className="visually-hidden">{t("edit")}</h1>
       <RichTextLocked
         beforeContent={
           <>

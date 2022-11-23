@@ -1,6 +1,6 @@
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement } from "react";
 import { Formik } from "formik";
-import { Button, TextInput, Label, Alert, ErrorListItem } from "@components/forms";
+import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
 import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
@@ -13,12 +13,23 @@ import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import * as Yup from "yup";
 
 const Login = () => {
-  const { cognitoError, setCognitoError, login } = useAuth();
+  const {
+    username,
+    password,
+    didConfirm,
+    needsConfirmation,
+    setNeedsConfirmation,
+    cognitoError,
+    cognitoErrorDescription,
+    cognitoErrorCallToActionLink,
+    cognitoErrorCallToActionText,
+    cognitoErrorIsDismissible,
+    setCognitoErrorStates,
+    resetCognitoErrorState,
+    login,
+  } = useAuth();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
-  const [needsConfirmation, setNeedsConfirmation] = useState(false);
-  const didConfirm = useRef(false);
-  const [isAuthorizationError, setIsAuthorizationError] = useState(false);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -28,9 +39,6 @@ const Login = () => {
       .required(t("input-validation.required", { ns: "common" }))
       .max(50, t("fields.password.errors.maxLength")),
   });
-
-  const username = useRef("");
-  const password = useRef("");
 
   const confirmationCallback = () => {
     setNeedsConfirmation(false);
@@ -42,7 +50,7 @@ const Login = () => {
       <Confirmation
         username={username.current}
         password={password.current}
-        setIsAuthorizationError={setIsAuthorizationError}
+        confirmationAuthenticationFailedCallback={setCognitoErrorStates}
         confirmationCallback={confirmationCallback}
       />
     );
@@ -50,15 +58,13 @@ const Login = () => {
 
   return (
     <Formik
-      initialValues={{ username: isAuthorizationError ? username.current : "", password: "" }}
+      initialValues={{ username: cognitoError ? username.current : "", password: "" }}
       onSubmit={async (values, helpers) => {
         username.current = values.username;
         password.current = values.password;
         await login(
           {
             ...values,
-            needsConfirmation: setNeedsConfirmation,
-            didConfirm: didConfirm.current,
           },
           helpers
         );
@@ -66,14 +72,6 @@ const Login = () => {
       validateOnChange={false}
       validateOnBlur={false}
       validationSchema={validationSchema}
-      initialErrors={
-        isAuthorizationError
-          ? {
-              username: t("UsernameOrPasswordIncorrect") as string,
-              password: t("UsernameOrPasswordIncorrect") as string,
-            }
-          : {}
-      }
     >
       {({ handleSubmit, errors }) => (
         <>
@@ -81,12 +79,15 @@ const Login = () => {
             <Alert
               type="error"
               heading={cognitoError}
-              onDismiss={() => {
-                setCognitoError("");
-              }}
+              onDismiss={resetCognitoErrorState}
               id="cognitoErrors"
-              dismissible
-            />
+              dismissible={cognitoErrorIsDismissible}
+            >
+              {cognitoErrorDescription}&nbsp;
+              {cognitoErrorCallToActionLink ? (
+                <Link href={cognitoErrorCallToActionLink}>{cognitoErrorCallToActionText}</Link>
+              ) : undefined}
+            </Alert>
           )}
           {Object.keys(errors).length > 0 && !cognitoError && (
             <Alert
@@ -110,23 +111,48 @@ const Login = () => {
             </Alert>
           )}
           <h1>{t("title")}</h1>
+          {registrationOpen && (
+            <p className="mb-10 -mt-6">
+              {t("signUpText")}&nbsp;
+              <Link href={"/signup/register"}>{t("signUpLink")}</Link>
+            </p>
+          )}
           <form id="login" method="POST" onSubmit={handleSubmit} noValidate>
             <div className="focus-group">
-              <Label id={"label-username"} htmlFor={"username"} className="required">
+              <Label id={"label-username"} htmlFor={"username"} className="required" required>
                 {t("fields.username.label")}
               </Label>
-              <TextInput type={"email"} id={"username"} name={"username"} />
+              <Description className="text-p text-black-default" id="login">
+                {t("fields.username.description")}
+              </Description>
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"email"}
+                id={"username"}
+                name={"username"}
+                required
+              />
             </div>
             <div className="focus-group">
-              <Label id={"label-password"} htmlFor={"password"} className="required">
+              <Label id={"label-password"} htmlFor={"password"} className="required" required>
                 {t("fields.password.label")}
               </Label>
-              <TextInput type={"password"} id={"password"} name={"password"} />
+              <Description id="password" className="text-p text-black-default">
+                {t("fields.password.description")}
+              </Description>
+              <TextInput
+                className="h-10 w-full max-w-lg rounded"
+                type={"password"}
+                id={"password"}
+                name={"password"}
+                required
+              />
             </div>
             <div className="buttons">
-              <Button type="submit">{t("submitButton", { ns: "common" })}</Button>
+              <Button className="gc-button--blue" type="submit">
+                {t("signInButton")}
+              </Button>
             </div>
-            {registrationOpen && <Link href={"/signup/register"}>{t("signUpLink")}</Link>}
           </form>
         </>
       )}

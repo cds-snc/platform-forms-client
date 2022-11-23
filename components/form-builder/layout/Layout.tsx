@@ -63,17 +63,6 @@ export const Layout = () => {
 
   const renderTab = (tab: string) => {
     switch (tab) {
-      case "start":
-        return (
-          <main id="content" className="mx-auto">
-            <Head>
-              <title>
-                {t("gcFormsStart")} — {t("gcForms")}
-              </title>
-            </Head>
-            <Start changeTab={setTab} />
-          </main>
-        );
       case "create":
         return (
           <div>
@@ -112,7 +101,6 @@ export const Layout = () => {
             </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
-              <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
               <TestDataDelivery />
             </main>
           </div>
@@ -142,7 +130,6 @@ export const Layout = () => {
               </title>
             </Head>
             <main id="content">
-              <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
               <Share />
             </main>
           </div>
@@ -156,7 +143,6 @@ export const Layout = () => {
               </title>
             </Head>
             <main id="content">
-              <h1 className="border-b-0 mb-8">{t("saveYourProgress")}</h1>
               <Save />
             </main>
           </div>
@@ -195,14 +181,18 @@ export const Layout = () => {
             </Head>
             <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
             <main id="content">
-              <h1 className="visually-hidden">Form settings</h1>
               <Settings />
             </main>
           </div>
         );
-      default:
+      default: // Start page
         return (
-          <main id="content">
+          <main id="content" className="mx-auto">
+            <Head>
+              <title>
+                {t("gcFormsStart")} — {t("gcForms")}
+              </title>
+            </Head>
             <Start changeTab={setTab} />
           </main>
         );
