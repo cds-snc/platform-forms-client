@@ -26,7 +26,6 @@ export const usePublish = () => {
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
-      // @todo this will be removed when the API gets updated
       if (publish && formID) {
         await axios({
           url: "/api/templates",
