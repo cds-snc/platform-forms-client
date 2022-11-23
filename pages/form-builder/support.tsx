@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Formik } from "formik";
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
+import axios from "axios";
+import { logMessage } from "@lib/logger";
 import {
   Button,
   TextInput,
@@ -17,13 +19,24 @@ import {
 
 export default function Support() {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
-  // const [errorState, setErrorState] = useState({ message: "" });
+  const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
 
-  // const handleRequest = async (name: string, email: string, request: string) => {
-  //   // TODO send email
-  // };
+  const handleRequestSupport = async (name: string, email: string, request: string) => {
+    return await axios({
+      url: "/api/request/support",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: { name, email, request },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    }).catch((err) => {
+      logMessage.error(err);
+      setErrorState({ message: t("submissionError") });
+    });
+  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -40,12 +53,21 @@ export default function Support() {
       {!isSuccessScreen && (
         <Formik
           initialValues={{ name: "", email: "", request: "" }}
-          onSubmit={async () => {
+          onSubmit={async ({ name, email, request }) => {
             setSubmitting(true);
-            //todo
-            // await handleRequest(name, email, request);
-            setSubmitting(false);
-            setIsSuccessScreen(true);
+            try {
+              const response = await handleRequestSupport(name, email, request);
+              setSubmitting(false);
+              if (response?.status !== 200) {
+                throw new Error(t("submissionError"));
+              }
+              setErrorState({ message: "" });
+              setIsSuccessScreen(true);
+            } catch (err) {
+              logMessage.error(err);
+              setSubmitting(false);
+              setErrorState({ message: t("submissionError") });
+            }
           }}
           validateOnChange={false}
           validateOnBlur={false}
@@ -53,7 +75,7 @@ export default function Support() {
         >
           {({ handleSubmit, errors }) => (
             <>
-              {/* {errorState.message && (
+              {errorState.message && (
                 <Alert
                   type="error"
                   validation={true}
@@ -63,7 +85,7 @@ export default function Support() {
                 >
                   {errorState.message}
                 </Alert>
-              )} */}
+              )}
 
               {Object.keys(errors).length > 0 && (
                 <Alert
