@@ -129,7 +129,7 @@ export const Publish = () => {
             </div>
           </div>
           <div>
-            <h3 className="mb-1">{t("publishingDisablesEditing")}</h3>
+            <h2 className="mb-1 text-h3 pb-0 mb-0">{t("publishingDisablesEditing")}</h2>
             <p>{t("publishingDisablesEditingDescription")}</p>
             <Markdown options={{ forceBlock: true }}>
               {t("contactSupportIfYouHaveQuestions")}

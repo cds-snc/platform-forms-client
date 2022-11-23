@@ -55,6 +55,7 @@ export const TestDataDelivery = () => {
 
   return (
     <div>
+      <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
       <div className="mb-8 bg-blue-200 p-5">
         {t("submittedResponsesText", { email })}{" "}
         <Link
