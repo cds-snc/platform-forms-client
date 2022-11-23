@@ -8,14 +8,14 @@ export interface MenuDropdownItemI {
 }
 
 interface MenuDropdownProps {
+  children: React.ReactNode;
   id: string;
-  title: string;
   items: Array<MenuDropdownItemI>;
   direction?: string;
 }
 
 export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
-  const { id, title, items, direction } = props;
+  const { children, id, items, direction } = props;
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
@@ -43,21 +43,19 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         }}
         type="button"
         id={`button-${id}`}
-        className="border border-2 border-white-default aria-expanded:border-black-default"
+        className="flex border border-2 border-white-default py-1 pr-1 pl-0 aria-expanded:border-black-default"
         aria-haspopup="true"
         aria-controls={`menu-${id}`}
         ref={menuButtonRef}
       >
-        {title}
+        {children}
       </button>
       <ul
         id={`menu-${id}`}
         className={
           "hidden absolute z-10 -left-[1rem] m-0 p-0 bg-white-default border border-1 border-black-default list-none" +
-          (direction === "up" ? " -top-[10.65rem]" : "")
+          (direction === "up" ? " -top-[13rem]" : "")
         }
-        // Work around for list-none beeing ignored int tailwind, to look into
-        style={{ listStyle: "none" }}
         role="menu"
         tabIndex={-1}
         aria-labelledby={`button-${id}`}

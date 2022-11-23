@@ -32,10 +32,15 @@ export const Card = (props: CardProps): React.ReactElement => {
       // Settings is currently a sub menu in preview
       url: `/${i18n.language}/form-builder/preview/${id}`,
     },
+    {
+      title: t("card.menu.delete"),
+      // TODO: /settings for now as there is no direct way to /delete (and we may not want to)
+      url: `/${i18n.language}/form-builder/settings/${id}`,
+    },
   ];
 
   // Show slightly different list items depeneding on whether a Published or Draft card
-  if (!isPublished) {
+  if (isPublished) {
     menuItemsList.unshift({
       title: t("card.menu.copyLink"),
       callback: copyLinkCallback,
@@ -70,7 +75,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     <div className="h-full border-1 border-black-default rounded" data-testid={`card-${id}`}>
       <div
         className={
-          "p-1 px-3 border-b-1 border-black border-solid rounded-t" +
+          "p-1 px-3 border-b-1 border-black-default border-solid rounded-t" +
           (isPublished ? " bg-green-500" : " bg-yellow-300")
         }
         aria-hidden="true"
@@ -78,9 +83,10 @@ export const Card = (props: CardProps): React.ReactElement => {
       >
         {isPublished === true ? t("card.states.published") : t("card.states.draft")}
       </div>
-      <p className="h-36 px-3 pt-3 pb-8">
+      <p className="h-36 px-3 pt-5 pb-8">
         <a
-          href={url}
+          // TODO: For edit cards, using /create for now as the /edit path doesn’t exist yet
+          href={isPublished ? url : `/${i18n.language}/form-builder/create/${id}`}
           className="line-clamp-3"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
@@ -92,15 +98,17 @@ export const Card = (props: CardProps): React.ReactElement => {
           {t("card.lastEdited")}: {formatDate(date)}
         </div>
         <div className="flex items-center text-sm">
-          <span className="font-bold mr-1" aria-hidden="true">
-            ⋮
-          </span>
           <MenuDropdown
             id={id}
-            title={t("card.menu.more")}
+            // title={t("card.menu.more")}
             items={menuItemsList}
             direction={"up"}
-          ></MenuDropdown>
+          >
+            <span className="mr-1 text-[2rem]" aria-hidden="true">
+              ⋮
+            </span>
+            {t("card.menu.more")}
+          </MenuDropdown>
         </div>
       </div>
     </div>
