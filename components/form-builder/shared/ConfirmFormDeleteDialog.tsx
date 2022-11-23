@@ -15,6 +15,7 @@ export const ConfirmFormDeleteDialog = ({
   const actions = (
     <>
       <Button
+        theme="secondary"
         onClick={() => {
           dialog.current?.close();
           handleClose();
@@ -23,7 +24,7 @@ export const ConfirmFormDeleteDialog = ({
         {t("formDeleteConfirmCancel")}
       </Button>
       <Button
-        className="ml-2"
+        className="ml-5"
         theme="destructive"
         onClick={() => {
           dialog.current?.close();
