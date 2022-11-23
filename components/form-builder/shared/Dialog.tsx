@@ -14,16 +14,19 @@ export const Dialog = ({
   children,
   title,
   actions,
+  handleClose,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
   title: string;
   actions: React.ReactElement;
+  handleClose?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
   const close = () => {
     dialogRef.current?.close();
+    handleClose && handleClose();
     changeOpen(false);
   };
 

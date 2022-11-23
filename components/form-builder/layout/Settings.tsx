@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { Button } from "../shared/Button";
@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useDeleteForm } from "../hooks/useDelete";
 import Markdown from "markdown-to-jsx";
 import { useDialogRef, Dialog } from "../shared/Dialog";
+import { ConfirmFormDeleteDialog } from "../shared/ConfirmFormDeleteDialog";
 import { useNavigationStore } from "../store/useNavigationStore";
 
 const FormDeleted = () => {
@@ -73,8 +74,9 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
   const { handleDelete } = useDeleteForm();
-  const [formDeleted, setFormDeleted] = React.useState(false);
-  const [error, setError] = React.useState(false);
+  const [formDeleted, setFormDeleted] = useState(false);
+  const [error, setError] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const { id, initialize, email, updateField } = useTemplateStore((s) => ({
     id: s.id,
     initialize: s.initialize,
@@ -109,19 +111,27 @@ export const Settings = () => {
               id="delete-form"
               theme="destructive"
               onClick={async () => {
-                const result = await handleDelete(id);
-                if (result && "error" in result) {
-                  setError(true);
-                  return;
-                }
-                setFormDeleted(true);
-                initialize(); // Reset the form
+                setShowConfirm(true);
               }}
             >
               {t("settingsDeleteButton")}
             </Button>
           </div>
         </div>
+      )}
+      {showConfirm && (
+        <ConfirmFormDeleteDialog
+          handleClose={() => setShowConfirm(false)}
+          handleConfirm={async () => {
+            const result = await handleDelete(id);
+            if (result && "error" in result) {
+              setError(true);
+              return;
+            }
+            setFormDeleted(true);
+            initialize(); // Reset the form
+          }}
+        />
       )}
       {formDeleted && <FormDeleted />}
       {error && (
