@@ -204,9 +204,16 @@ export const Layout = () => {
     <div className="lg:px-4 xl:px-8 px-32">
       <div>
         {currentTab !== "start" && currentTab !== "published" && (
-          <LeftNavigation currentTab={currentTab} handleClick={handleClick} className="absolute xl:content-center" />
+          <>
+            <LeftNavigation currentTab={currentTab} handleClick={handleClick} className="absolute xl:content-center" />
+          </>
         )}
-        <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">{form && renderTab(currentTab)}</div>
+
+        {currentTab === "start" ? (
+          <div className="mx-auto flex">{form && renderTab(currentTab)}</div>
+        ) : (
+          <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">{form && renderTab(currentTab)}</div>
+        )}
       </div>
     </div>
   ) : null;
