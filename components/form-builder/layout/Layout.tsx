@@ -61,7 +61,7 @@ export const Layout = () => {
     !email && currentTab !== "settings" && setEmail();
   }, [email, data, currentTab]);
 
-  const renderTab = (tab: string) => {
+  const renderTab = (tab: string): JSX.Element | null => {
     switch (tab) {
       case "create":
         return (
@@ -92,7 +92,11 @@ export const Layout = () => {
           </div>
         );
       case "test-data-delivery":
-        return status === "authenticated" ? (
+        if (status !== "authenticated") {
+          setTab("create");
+          return null;
+        }
+        return (
           <div>
             <Head>
               <title>
@@ -104,8 +108,6 @@ export const Layout = () => {
               <TestDataDelivery />
             </main>
           </div>
-        ) : (
-          setTab("create")
         );
       case "translate":
         return (
@@ -159,7 +161,11 @@ export const Layout = () => {
           </main>
         );
       case "published":
-        return status === "authenticated" ? (
+        if (status !== "authenticated") {
+          setTab("create");
+          return null;
+        }
+        return (
           <main id="content">
             <Head>
               <title>
@@ -168,8 +174,6 @@ export const Layout = () => {
             </Head>
             <Published id={id} />
           </main>
-        ) : (
-          setTab("create")
         );
       case "settings":
         return (
@@ -209,10 +213,10 @@ export const Layout = () => {
           </>
         )}
 
-        {currentTab === "start" ? (
-          <div className="mx-auto flex"><>{form && renderTab(currentTab)}</></div>
+        {currentTab === "start" || currentTab === "published" ? (
+          <div className="mx-auto flex">{form && renderTab(currentTab)}</div>
         ) : (
-          <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl"><>{form && renderTab(currentTab)}</></div>
+          <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">{form && renderTab(currentTab)}</div>
         )}
       </div>
     </div>
