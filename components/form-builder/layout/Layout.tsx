@@ -210,9 +210,9 @@ export const Layout = () => {
         )}
 
         {currentTab === "start" ? (
-          <div className="mx-auto flex">{form && renderTab(currentTab)}</div>
+          <div className="mx-auto flex"><>{form && renderTab(currentTab)}</></div>
         ) : (
-          <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">{form && renderTab(currentTab)}</div>
+          <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl"><>{form && renderTab(currentTab)}</></div>
         )}
       </div>
     </div>
