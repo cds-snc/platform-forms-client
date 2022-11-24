@@ -1,10 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
-import { useNavigationStore } from "../store/useNavigationStore";
 import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
 import { useSession } from "next-auth/react";
+import { useDeleteForm } from "../hooks/useDelete";
+import Markdown from "markdown-to-jsx";
+import { useDialogRef, Dialog } from "../shared/Dialog";
+import { ConfirmFormDeleteDialog } from "../shared/ConfirmFormDeleteDialog";
+import { useNavigationStore } from "../store/useNavigationStore";
+
+const FormDeleted = () => {
+  const { t } = useTranslation("form-builder");
+  const { setTab } = useNavigationStore((s) => ({
+    setTab: s.setTab,
+  }));
+  const dialog = useDialogRef();
+  const actions = (
+    <Button
+      onClick={() => {
+        dialog.current?.close();
+        setTab("start");
+      }}
+    >
+      {t("formDeletedDialogOkay")}
+    </Button>
+  );
+
+  return (
+    <Dialog title={t("formDeletedDialogTitle")} dialogRef={dialog} actions={actions}>
+      <Markdown options={{ forceBlock: true }}>{t("formDeletedDialogMessage")}</Markdown>
+    </Dialog>
+  );
+};
+
+const FormDeletedError = ({ handleClose }: { handleClose: () => void }) => {
+  const { t } = useTranslation("form-builder");
+  const dialog = useDialogRef();
+  const actions = (
+    <Button
+      onClick={() => {
+        dialog.current?.close();
+        handleClose();
+      }}
+    >
+      {t("formDeletedDialogOkayFailed")}
+    </Button>
+  );
+
+  return (
+    <Dialog title={t("formDeleteDialogTitleFailed")} dialogRef={dialog} actions={actions}>
+      <Markdown options={{ forceBlock: true }}>{t("formDeletedDialogMessageFailed")}</Markdown>
+    </Dialog>
+  );
+};
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -24,16 +73,21 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
 
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
-  const { initialize, email, updateField } = useTemplateStore((s) => ({
+  const { handleDelete } = useDeleteForm();
+  const [formDeleted, setFormDeleted] = useState(false);
+  const [error, setError] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const { id, initialize, email, updateField } = useTemplateStore((s) => ({
+    id: s.id,
     initialize: s.initialize,
     email: s.submission.email,
     updateField: s.updateField,
   }));
-  const setTab = useNavigationStore((s) => s.setTab);
   const { status } = useSession();
 
   return (
     <>
+      <h1 className="visually-hidden">{t("formSettings")}</h1>
       <div className="mb-10">
         <Label htmlFor="response-delivery">{t("settingsReponseTitle")}</Label>
         <HintText id="response-delivery-hint-1">{t("settingsReponseHint1")}</HintText>
@@ -49,7 +103,7 @@ export const Settings = () => {
         />
       </div>
 
-      {status === "authenticated" && (
+      {status === "authenticated" && id && (
         <div className="mb-10">
           <Label htmlFor="delete">{t("settingsDeleteTitle")}</Label>
           <HintText id="delete-hint">{t("settingsDeleteHint")}</HintText>
@@ -57,15 +111,36 @@ export const Settings = () => {
             <Button
               id="delete-form"
               theme="destructive"
-              onClick={() => {
-                initialize(); // Reset the form
-                setTab("start"); // Back to start page
+              onClick={async () => {
+                setShowConfirm(true);
               }}
             >
               {t("settingsDeleteButton")}
             </Button>
           </div>
         </div>
+      )}
+      {showConfirm && (
+        <ConfirmFormDeleteDialog
+          handleClose={() => setShowConfirm(false)}
+          handleConfirm={async () => {
+            const result = await handleDelete(id);
+            if (result && "error" in result) {
+              setError(true);
+              return;
+            }
+            setFormDeleted(true);
+            initialize(); // Reset the form
+          }}
+        />
+      )}
+      {formDeleted && <FormDeleted />}
+      {error && (
+        <FormDeletedError
+          handleClose={() => {
+            setError(false);
+          }}
+        />
       )}
     </>
   );
