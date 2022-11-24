@@ -10,7 +10,7 @@ export const Share = () => {
 
   return (
     <>
-      <h1 className="border-b-0 mb-8">{t("shareH1")}</h1>
+      <h1 className="border-b-0 mb-8 md:text-h1">{t("shareH1")}</h1>
       <p className="mb-6">{t("shareP1")}</p>
       <p className="mb-6">{t("shareP2")}</p>
       <br />
