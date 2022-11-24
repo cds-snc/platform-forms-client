@@ -31,7 +31,7 @@ export const RichTextLocked = ({
   }));
 
   return (
-    <ElementWrapperDiv className="h-auto -mt-px">
+    <ElementWrapperDiv className="h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
       <div className="mx-7 mt-5 mb-7">
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
