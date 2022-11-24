@@ -1,10 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
+import { useTranslation } from "next-i18next";
 import { Menu } from "./Menu";
+
+export interface MenuDropdownItemCallback {
+  message: string;
+  isError?: boolean;
+}
 
 export interface MenuDropdownItemI {
   title: string;
   url?: string;
-  callback?: React.MouseEventHandler<HTMLButtonElement>;
+  callback?: () => MenuDropdownItemCallback;
 }
 
 interface MenuDropdownProps {
@@ -16,6 +22,7 @@ interface MenuDropdownProps {
 
 export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
   const { children, id, items, direction } = props;
+  const { t } = useTranslation(["common"]);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuListRef = useRef<HTMLUListElement>(null);
   const [menuDropdown, setMenuDropdown] = useState({} as Menu);
@@ -64,9 +71,6 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
           menuDropdown?.onMenuListKeydown(e as unknown as KeyboardEvent);
         }}
-        onClick={() => {
-          menuDropdown?.activateClick();
-        }}
       >
         {items &&
           items?.length > 0 &&
@@ -76,15 +80,38 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
                 id={`mi-${id}-${index}`}
                 role="menuitem"
                 key={index}
-                className="px-4 py-2 first:pt-4 last:pb-4"
+                className={`px-4 py-2 first:pt-4 last:pb-4 ${item?.callback ? "relative" : ""}`}
               >
                 {item.callback ? (
-                  <button
-                    className="action gc-button-link no-underline hover:underline"
-                    onClick={item.callback}
-                  >
-                    {item.title}
-                  </button>
+                  <>
+                    <button
+                      className="action gc-button-link no-underline hover:underline"
+                      onClick={(e) => {
+                        // Shows a success or error status message from a callback
+                        if (!item || !item.callback) {
+                          return;
+                        }
+                        const result = item.callback();
+                        const el = (e.target as HTMLElement).nextElementSibling;
+                        if (el && result?.message) {
+                          el.classList.remove("hidden");
+                          el.textContent = `${result.isError ? t("error") + ": " : ""} ${
+                            result.message
+                          }`;
+                          if (result.isError) {
+                            el.classList.remove("text-green-default");
+                            el.classList.add("text-red-default");
+                          }
+                        }
+                      }}
+                    >
+                      {item.title}
+                    </button>
+                    <div
+                      aria-live="polite"
+                      className="hidden line-clamp-1 absolute top-8 text-[.7rem] text-green-default"
+                    ></div>
+                  </>
                 ) : (
                   <a
                     href={item.url}

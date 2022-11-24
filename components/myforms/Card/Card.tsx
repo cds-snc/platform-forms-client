@@ -1,7 +1,11 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
-import { MenuDropdown, MenuDropdownItemI } from "@components/myforms/MenuDropdown/MenuDropdown";
+import {
+  MenuDropdown,
+  MenuDropdownItemI,
+  MenuDropdownItemCallback,
+} from "@components/myforms/MenuDropdown/MenuDropdown";
 
 export interface CardProps {
   id: string;
@@ -53,12 +57,17 @@ export const Card = (props: CardProps): React.ReactElement => {
     });
   }
 
-  function copyLinkCallback() {
+  function copyLinkCallback(): MenuDropdownItemCallback {
     const path = `${window.location.origin}/${i18n.language}/id/${id}`;
     if (copy(path)) {
-      // TODO: temp until UI design for success
-      alert(`Successfully copied to your clipboard ${path}`);
+      return {
+        message: t("card.menu.coppiedToClipboard"),
+      };
     }
+    return {
+      message: t("card.menu.somethingWentWrong"),
+      isError: true,
+    };
   }
 
   function formatDate(date: string) {
@@ -98,12 +107,7 @@ export const Card = (props: CardProps): React.ReactElement => {
           {t("card.lastEdited")}: {formatDate(date)}
         </div>
         <div className="flex items-center text-sm">
-          <MenuDropdown
-            id={id}
-            // title={t("card.menu.more")}
-            items={menuItemsList}
-            direction={"up"}
-          >
+          <MenuDropdown id={id} items={menuItemsList} direction={"up"}>
             <span className="mr-1 text-[2rem]" aria-hidden="true">
               ⋮
             </span>

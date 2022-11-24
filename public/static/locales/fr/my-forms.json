@@ -26,7 +26,9 @@
       "preview": "Prévisualiser",
       "edit": "Modifier",
       "settings": "Settings [FR]",
-      "delete": "Delete form [FR]"
+      "delete": "Delete form [FR]",
+      "coppiedToClipboard": "Coppied to clipboard [FR]",
+      "somethingWentWrong": "Something went wrong [FR]"
     }
   }
 }
