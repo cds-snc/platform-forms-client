@@ -205,7 +205,7 @@ export const Layout = () => {
   /* eslint-disable */
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div className="lg:px-4 xl:px-8 px-32">
+    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
       <div>
         {currentTab !== "start" && currentTab !== "published" && (
           <>
