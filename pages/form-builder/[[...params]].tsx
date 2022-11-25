@@ -16,24 +16,12 @@ import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
 import { Layout } from "@components/form-builder/layout/Layout";
 
-type PageProps = {
+export type PageProps = {
   tab: string;
   initialForm: FormRecord | null;
 };
 
-const Page: NextPageWithLayout<PageProps> = () => {
-  const router = useRouter();
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    router.replace(router.pathname, router.pathname, { shallow: true });
-    setReady(true);
-  }, []);
-
-  return ready ? <Layout /> : null;
-};
-
-Page.getLayout = (page: ReactElement) => {
+export const Template = ({ page }: { page: ReactElement }) => {
   return (
     <NavigationStoreProvider currentTab={page.props.tab}>
       <TemplateStoreProvider {...(page.props.initialForm && page.props.initialForm)}>
@@ -53,7 +41,23 @@ Page.getLayout = (page: ReactElement) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
+const Page: NextPageWithLayout<PageProps> = () => {
+  const router = useRouter();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    router.replace(router.pathname, router.pathname, { shallow: true });
+    setReady(true);
+  }, []);
+
+  return ready ? <Layout /> : null;
+};
+
+Page.getLayout = (page: ReactElement) => {
+  return <Template page={page} />;
+};
+
+export const serverSideProps: GetServerSideProps = async ({
   query: { params },
   locale,
   req,
@@ -102,4 +106,5 @@ export const getServerSideProps: GetServerSideProps = async ({
   };
 };
 
+export const getServerSideProps = serverSideProps;
 export default Page;
