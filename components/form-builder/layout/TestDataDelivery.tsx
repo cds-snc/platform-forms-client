@@ -73,6 +73,7 @@ export const TestDataDelivery = () => {
           onClick={(e) => {
             e.preventDefault();
             setTab("settings");
+            router.push({ pathname: `/form-builder/settings` });
           }}
         >
           {t("updateResponseDestination")}
