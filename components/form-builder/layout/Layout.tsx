@@ -16,6 +16,7 @@ import { Publish } from "./Publish";
 import { Published } from "./Published";
 import { TestDataDelivery } from "./TestDataDelivery";
 import { Save } from "./Save";
+import { Loader } from "@components/globals/Loader";
 
 export const Layout = () => {
   const { status } = useSession();
@@ -183,7 +184,7 @@ export const Layout = () => {
         <>{form && renderTab(currentTab)}</>
       </div>
     </div>
-  ) : <div>hello</div>;
+  ) : <Loader message={t("loading")}></Loader>;
   /* eslint-enable */
 };
 
