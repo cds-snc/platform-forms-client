@@ -1,20 +1,28 @@
 import React, { ReactElement, useEffect, useState } from "react";
+import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Header } from "../../components/form-builder/layout/Header";
+import { GetServerSideProps } from "next";
+import { unstable_getServerSession } from "next-auth";
 import { NextPageWithLayout } from "../_app";
-import Footer from "../../components/globals/Footer";
 import { getFullTemplateByID } from "@lib/templates";
 import { FormRecord } from "@lib/types";
 import { useRouter } from "next/router";
-import { NavigationStoreProvider } from "@components/form-builder/store/useNavigationStore";
-import { TemplateStoreProvider } from "../../components/form-builder/store/useTemplateStore";
-import { GetServerSideProps } from "next";
-import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
-import { Layout } from "@components/form-builder/layout/Layout";
+import Footer from "@components/globals/Footer";
+import {
+  useTemplateStore,
+  useNavigationStore,
+  NavigationStoreProvider,
+  TemplateStoreProvider,
+} from "@components/form-builder/store";
+import {
+  LeftNavigation,
+  PreviewNavigation,
+  Header,
+  Layout,
+} from "@components/form-builder/layout/";
 
 export type PageProps = {
   tab: string;
@@ -41,6 +49,47 @@ export const Template = ({ page }: { page: ReactElement }) => {
   );
 };
 
+export const PageTemplate = ({ children, title }: { children: React.ReactNode; title: string }) => {
+  const router = useRouter();
+  const { hasHydrated, form } = useTemplateStore((s) => ({
+    form: s.form,
+    hasHydrated: s._hasHydrated,
+  }));
+
+  const { currentTab, setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
+  }));
+
+  const handleClick = (tab: string) => {
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      setTab(tab);
+      router.push({ pathname: `/form-builder` });
+    };
+  };
+
+  // Wait until the Template Store has fully hydrated before rendering the page
+  return hasHydrated ? (
+    <div id="page-container">
+      <div className="grid grid-cols-12 gap-4">
+        <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
+        <>
+          {form && (
+            <div className="col-start-4 col-span-9">
+              <Head>
+                <title>{title}</title>
+              </Head>
+              <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+              <main id="content">{children}</main>
+            </div>
+          )}
+        </>
+      </div>
+    </div>
+  ) : null;
+};
+
 const Page: NextPageWithLayout<PageProps> = () => {
   const router = useRouter();
   const [ready, setReady] = useState(false);
@@ -57,7 +106,7 @@ Page.getLayout = (page: ReactElement) => {
   return <Template page={page} />;
 };
 
-export const serverSideProps: GetServerSideProps = async ({
+export const getServerSideProps: GetServerSideProps = async ({
   query: { params },
   locale,
   req,
@@ -106,5 +155,4 @@ export const serverSideProps: GetServerSideProps = async ({
   };
 };
 
-export const getServerSideProps = serverSideProps;
 export default Page;
