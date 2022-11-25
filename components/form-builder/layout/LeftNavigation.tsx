@@ -77,7 +77,10 @@ export const LeftNavigation = ({
         <Button
           isCurrentTab={currentTab === "save"}
           icon={<SaveIcon className={iconClassname} />}
-          handleClick={handleClick("save")}
+          handleClick={() => {
+            setTab("save");
+            router.push({ pathname: `/form-builder/save` });
+          }}
         >
           {t("save")}
         </Button>

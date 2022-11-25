@@ -12,7 +12,6 @@ import { Preview } from "./Preview";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Published } from "./Published";
 import { TestDataDelivery } from "./TestDataDelivery";
-import { Save } from "./Save";
 import { Loader } from "@components/globals/Loader";
 
 export const Layout = () => {
@@ -63,6 +62,7 @@ export const Layout = () => {
       case "edit":
       case "create":
       case "translate":
+      case "save":
       case "publish":
         return <Loader message={t("loading")} />;
       case "preview":
@@ -105,19 +105,6 @@ export const Layout = () => {
             </Head>
             <main id="content">
               <Share />
-            </main>
-          </div>
-        );
-      case "save":
-        return (
-          <div className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsSave")} — {t("gcForms")}
-              </title>
-            </Head>
-            <main id="content">
-              <Save />
             </main>
           </div>
         );
