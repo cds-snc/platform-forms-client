@@ -18,12 +18,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   const title = `${t("gcFormsSettings")} — ${t("gcForms")}`;
   return ready ? (
-    <PageTemplate
-      title={title}
-      renderNavigation={(handleClick, currentTab) => {
-        return <PreviewNavigation handleClick={handleClick} currentTab={currentTab} />;
-      }}
-    >
+    <PageTemplate title={title} navigation={<PreviewNavigation />}>
       <Settings />
     </PageTemplate>
   ) : null;

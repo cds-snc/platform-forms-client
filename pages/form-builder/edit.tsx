@@ -18,12 +18,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   const title = `${t("gcFormsEdit")} — ${t("gcForms")}`;
   return ready ? (
-    <PageTemplate
-      title={title}
-      renderNavigation={(handleClick, currentTab) => {
-        return <EditNavigation handleClick={handleClick} currentTab={currentTab} />;
-      }}
-    >
+    <PageTemplate title={title} navigation={<EditNavigation />}>
       <ElementPanel />
     </PageTemplate>
   ) : null;

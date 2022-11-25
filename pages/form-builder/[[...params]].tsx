@@ -1,5 +1,6 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement } from "react";
 import Head from "next/head";
+import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
@@ -11,6 +12,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
+import Loader from "@components/globals/Loader";
 import {
   useTemplateStore,
   useNavigationStore,
@@ -47,16 +49,14 @@ export const Template = ({ page }: { page: ReactElement }) => {
 export const PageTemplate = ({
   children,
   title,
-  renderNavigation,
+  navigation,
 }: {
   children: React.ReactNode;
   title: string;
-  renderNavigation: (
-    handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void,
-    currentTab: string
-  ) => ReactElement;
+  navigation: React.ReactElement;
 }) => {
   const router = useRouter();
+  const { t } = useTranslation();
   const { hasHydrated, form } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
@@ -75,7 +75,7 @@ export const PageTemplate = ({
     };
   };
 
-  const Nav = renderNavigation(handleClick, currentTab);
+  const Nav = React.cloneElement(navigation, { currentTab, handleClick });
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
@@ -95,19 +95,13 @@ export const PageTemplate = ({
         </>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <Loader message={t("loading")} />
+  );
 };
 
 const Page: NextPageWithLayout<PageProps> = () => {
-  const router = useRouter();
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    router.replace(router.pathname, router.pathname, { shallow: true });
-    setReady(true);
-  }, []);
-
-  return ready ? <Layout /> : null;
+  return <Layout />;
 };
 
 Page.getLayout = (page: ReactElement) => {
