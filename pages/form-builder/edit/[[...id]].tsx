@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 
-import { NextPageWithLayout } from "../_app";
-import { Template, PageProps, PageTemplate, getServerSideProps } from "./[[...params]]";
+import { NextPageWithLayout } from "../../_app";
+import { Template, PageProps, PageTemplate, getServerSideProps } from "../[[...params]]";
 import { ElementPanel, EditNavigation } from "@components/form-builder/layout/";
 
 const Page: NextPageWithLayout<PageProps> = () => {
