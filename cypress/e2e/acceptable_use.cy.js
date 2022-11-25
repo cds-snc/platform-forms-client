@@ -2,7 +2,7 @@
  * Hard to find a  proper way to hack requireAuthentication
  * wrapper around policy and retrieval page.We will keep this file
  * for reference until we figure out.
- **/
+
 describe("Test acceptable use Page", () => {
   beforeEach(() => {
     cy.visit("/en/auth/policy", {
@@ -58,3 +58,5 @@ describe("Test agree and disagree on terms of use", () => {
     cy.url().should("contain", "/id/");
   });
 });
+
+ **/

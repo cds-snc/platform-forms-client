@@ -61,11 +61,11 @@ export const Layout = () => {
     !email && currentTab !== "settings" && setEmail();
   }, [email, data, currentTab]);
 
-  const renderTab = (tab: string) => {
+  const renderTab = (tab: string): JSX.Element | null => {
     switch (tab) {
       case "create":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsEdit")} — {t("gcForms")}
@@ -79,7 +79,7 @@ export const Layout = () => {
         );
       case "preview":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsPreview")} — {t("gcForms")}
@@ -92,8 +92,12 @@ export const Layout = () => {
           </div>
         );
       case "test-data-delivery":
-        return status === "authenticated" ? (
-          <div className="col-start-4 col-span-9">
+        if (status !== "authenticated") {
+          setTab("create");
+          return null;
+        }
+        return (
+          <div>
             <Head>
               <title>
                 {t("gcFormsResponseDelivery")} — {t("gcForms")}
@@ -104,12 +108,10 @@ export const Layout = () => {
               <TestDataDelivery />
             </main>
           </div>
-        ) : (
-          setTab("create")
         );
       case "translate":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsTranslate")} — {t("gcForms")}
@@ -123,7 +125,7 @@ export const Layout = () => {
         );
       case "share":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsShare")} — {t("gcForms")}
@@ -136,7 +138,7 @@ export const Layout = () => {
         );
       case "save":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsSave")} — {t("gcForms")}
@@ -149,7 +151,7 @@ export const Layout = () => {
         );
       case "publish":
         return (
-          <main id="content" className="col-start-4 col-span-9">
+          <main id="content">
             <Head>
               <title>
                 {t("gcFormsPublish")} — {t("gcForms")}
@@ -159,8 +161,12 @@ export const Layout = () => {
           </main>
         );
       case "published":
-        return status === "authenticated" ? (
-          <main id="content" className="col-start-4 col-span-9">
+        if (status !== "authenticated") {
+          setTab("create");
+          return null;
+        }
+        return (
+          <main id="content">
             <Head>
               <title>
                 {t("gcFormsPublished")} — {t("gcForms")}
@@ -168,12 +174,10 @@ export const Layout = () => {
             </Head>
             <Published id={id} />
           </main>
-        ) : (
-          setTab("create")
         );
       case "settings":
         return (
-          <div className="col-start-4 col-span-9">
+          <div>
             <Head>
               <title>
                 {t("gcFormsSettings")} — {t("gcForms")}
@@ -187,7 +191,7 @@ export const Layout = () => {
         );
       default: // Start page
         return (
-          <main id="content" className="col-span-12">
+          <main id="content" className="mx-auto">
             <Head>
               <title>
                 {t("gcFormsStart")} — {t("gcForms")}
@@ -201,12 +205,19 @@ export const Layout = () => {
   /* eslint-disable */
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div id="page-container">
-      <div className="grid grid-cols-12 gap-4">
+    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+      <div>
         {currentTab !== "start" && currentTab !== "published" && (
-          <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
+          <>
+            <LeftNavigation currentTab={currentTab} handleClick={handleClick} className="absolute xl:content-center" />
+          </>
         )}
-        <>{form && renderTab(currentTab)}</>
+
+        {currentTab === "start" || currentTab === "published" ? (
+          <div className="mx-auto flex">{form && renderTab(currentTab)}</div>
+        ) : (
+          <div className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">{form && renderTab(currentTab)}</div>
+        )}
       </div>
     </div>
   ) : null;
