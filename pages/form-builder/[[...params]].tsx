@@ -53,7 +53,7 @@ export const PageTemplate = ({
 }: {
   children: React.ReactNode;
   title: string;
-  navigation: React.ReactElement;
+  navigation?: React.ReactElement;
 }) => {
   const router = useRouter();
   const { t } = useTranslation();
@@ -75,8 +75,6 @@ export const PageTemplate = ({
     };
   };
 
-  const Nav = React.cloneElement(navigation, { currentTab, handleClick });
-
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
     <div id="page-container">
@@ -88,7 +86,7 @@ export const PageTemplate = ({
               <Head>
                 <title>{title}</title>
               </Head>
-              {Nav}
+              {navigation && React.cloneElement(navigation, { currentTab, handleClick })}
               <main id="content">{children}</main>
             </div>
           )}
