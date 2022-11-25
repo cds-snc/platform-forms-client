@@ -65,6 +65,7 @@ export const Layout = () => {
       case "translate":
       case "save":
       case "share":
+      case "published":
       case "publish":
         return <Loader message={t("loading")} />;
       case "test-data-delivery":
@@ -80,19 +81,6 @@ export const Layout = () => {
               <TestDataDelivery />
             </main>
           </div>
-        ) : (
-          setTab("create")
-        );
-      case "published":
-        return status === "authenticated" ? (
-          <main id="content" className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsPublished")} — {t("gcForms")}
-              </title>
-            </Head>
-            <Published id={id} />
-          </main>
         ) : (
           setTab("create")
         );

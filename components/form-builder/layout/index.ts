@@ -8,6 +8,7 @@ export { Start } from "./Start";
 export { Save } from "./Save";
 export { Preview } from "./Preview";
 export { Publish } from "./Publish";
+export { Published } from "./Published";
 export { Share } from "./Share";
 
 export { ElementPanel } from "../panel/ElementPanel";
