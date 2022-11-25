@@ -72,7 +72,10 @@ export const LeftNavigation = ({
       <Button
         isCurrentTab={currentTab === "share"}
         icon={<ShareIcon className={iconClassname} />}
-        handleClick={handleClick("share")}
+        handleClick={() => {
+          setTab("share");
+          router.push({ pathname: `/form-builder/share` });
+        }}
       >
         {t("share")}
       </Button>
