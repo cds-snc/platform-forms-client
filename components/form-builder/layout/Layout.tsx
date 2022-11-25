@@ -10,7 +10,6 @@ import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
 import { PreviewNavigation } from "./PreviewNavigation";
-import { Publish } from "./Publish";
 import { Published } from "./Published";
 import { TestDataDelivery } from "./TestDataDelivery";
 import { Save } from "./Save";
@@ -65,6 +64,7 @@ export const Layout = () => {
       case "create":
       case "preview":
       case "translate":
+      case "publish":
         return <Loader message={t("loading")} />;
       case "test-data-delivery":
         return status === "authenticated" ? (
@@ -107,17 +107,6 @@ export const Layout = () => {
               <Save />
             </main>
           </div>
-        );
-      case "publish":
-        return (
-          <main id="content" className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsPublish")} — {t("gcForms")}
-              </title>
-            </Head>
-            <Publish />
-          </main>
         );
       case "published":
         return status === "authenticated" ? (

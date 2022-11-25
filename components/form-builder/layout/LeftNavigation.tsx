@@ -88,7 +88,10 @@ export const LeftNavigation = ({
       <Button
         isCurrentTab={currentTab === "publish"}
         icon={<PublishIcon className={iconClassname} />}
-        handleClick={handleClick("publish")}
+        handleClick={() => {
+          setTab("publish");
+          router.push({ pathname: `/form-builder/publish` });
+        }}
       >
         {t("publish")}
       </Button>

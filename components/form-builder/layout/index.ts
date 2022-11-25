@@ -6,4 +6,6 @@ export { Layout } from "./Layout";
 export { Header } from "./Header";
 export { Start } from "./Start";
 export { Preview } from "./Preview";
+export { Publish } from "./Publish";
+
 export { ElementPanel } from "../panel/ElementPanel";
