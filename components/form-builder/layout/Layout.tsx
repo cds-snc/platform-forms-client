@@ -9,8 +9,6 @@ import { Language } from "../types";
 import { Share } from "./Share";
 import { Start } from "./Start";
 import { Preview } from "./Preview";
-import { Translate } from "../translate/Translate";
-import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Published } from "./Published";
@@ -65,6 +63,7 @@ export const Layout = () => {
       case "settings":
       case "edit":
       case "create":
+      case "translate":
         return <Loader message={t("loading")} />;
       case "preview":
         return (
@@ -95,20 +94,6 @@ export const Layout = () => {
           </div>
         ) : (
           setTab("create")
-        );
-      case "translate":
-        return (
-          <div className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsTranslate")} — {t("gcForms")}
-              </title>
-            </Head>
-            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <main id="content">
-              <Translate />
-            </main>
-          </div>
         );
       case "share":
         return (
