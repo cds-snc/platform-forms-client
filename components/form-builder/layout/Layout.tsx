@@ -65,7 +65,7 @@ export const Layout = () => {
       case "settings":
       case "edit":
       case "create":
-        return null;
+        return <Loader message={t("loading")} />;
       case "preview":
         return (
           <div className="col-start-4 col-span-9">
