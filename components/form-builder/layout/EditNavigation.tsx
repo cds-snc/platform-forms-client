@@ -5,8 +5,8 @@ export const EditNavigation = ({
   currentTab,
   handleClick,
 }: {
-  currentTab: string;
-  handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
+  currentTab?: string;
+  handleClick?: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   return (
@@ -15,7 +15,7 @@ export const EditNavigation = ({
         className={`mr-5 ${
           currentTab === "create" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
-        onClick={handleClick("create")}
+        onClick={handleClick && handleClick("create")}
       >
         {t("questions")}
       </button>
@@ -24,7 +24,7 @@ export const EditNavigation = ({
         className={`ml-5 mr-5 ${
           currentTab === "translate" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
-        onClick={handleClick("translate")}
+        onClick={handleClick && handleClick("translate")}
       >
         {t("translate")}
       </button>

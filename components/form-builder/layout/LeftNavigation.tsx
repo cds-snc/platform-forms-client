@@ -2,6 +2,8 @@ import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useNavigationStore } from "@components/form-builder/store";
 
 function Button({
   children,
@@ -36,6 +38,11 @@ export const LeftNavigation = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
+  const router = useRouter();
+  const { setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
+  }));
 
   const iconClassname =
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -45,7 +52,10 @@ export const LeftNavigation = ({
       <Button
         isCurrentTab={["create", "translate"].includes(currentTab)}
         icon={<DesignIcon className={iconClassname} />}
-        handleClick={handleClick("create")}
+        handleClick={() => {
+          setTab("create");
+          router.push({ pathname: `/form-builder/edit` });
+        }}
       >
         {t("edit")}
       </Button>

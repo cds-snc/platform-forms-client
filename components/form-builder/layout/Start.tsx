@@ -1,30 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
+import { useRouter } from "next/router";
 
 import { errorMessage } from "../validate";
 
 export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   const { t } = useTranslation("form-builder");
-
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem("form-storage")) {
-        const {
-          state: {
-            form: { elements },
-          },
-        } = JSON.parse(sessionStorage.getItem("form-storage") as string);
-        elements.length && changeTab("create");
-      }
-    } catch (e) {
-      // no-op
-    }
-  }, []);
-
+  const router = useRouter();
   const { importTemplate, initialize } = useTemplateStore((s) => ({
     importTemplate: s.importTemplate,
     initialize: s.initialize,
@@ -121,6 +107,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
             clearTemplateStore();
             initialize();
             changeTab("create");
+            router.push({ pathname: `/form-builder/edit` });
           }}
         >
           <DesignIcon className="mb-2 scale-125" />

@@ -1,5 +1,5 @@
 import React from "react";
-import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore } from "../store";
 import LanguageToggle from "../../globals/LanguageToggle";
 import LoginMenu from "../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
@@ -10,6 +10,7 @@ import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { usePublish } from "../hooks/usePublish";
 import { Button, withMessage } from "../shared/Button";
+import { useRouter } from "next/router";
 
 export const Header = () => {
   const { getSchema, id, setId } = useTemplateStore((s) => ({
@@ -20,19 +21,22 @@ export const Header = () => {
     email: s.submission?.email,
   }));
 
+  const router = useRouter();
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
   const { ability } = useAccessControl();
-  const currentTab = useNavigationStore((s) => s.currentTab);
-  const setTab = useNavigationStore((s) => s.setTab);
+  const { currentTab, setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
+  }));
+
   const { t } = useTranslation(["common", "form-builder"]);
 
-  const handleClick = (tab: string) => {
+  const handleClick = () => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
-      // clear session storage here to allow moving back to start page
-      clearTemplateStore();
-      setTab(tab);
+      setTab("start");
+      router.push({ pathname: `/form-builder` });
     };
   };
 
@@ -58,7 +62,7 @@ export const Header = () => {
         <div>
           <button
             type="button"
-            onClick={handleClick("start")}
+            onClick={handleClick()}
             className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
           >
             {t("title", { ns: "common" })}

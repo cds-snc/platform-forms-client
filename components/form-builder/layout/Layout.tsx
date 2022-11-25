@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
-import { ElementPanel } from "../panel/ElementPanel";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
@@ -62,20 +61,8 @@ export const Layout = () => {
 
   const renderTab = (tab: string) => {
     switch (tab) {
-      case "create":
-        return (
-          <div className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsEdit")} — {t("gcForms")}
-              </title>
-            </Head>
-            <EditNavigation currentTab={currentTab} handleClick={handleClick} />
-            <main id="content">
-              <ElementPanel />
-            </main>
-          </div>
-        );
+      case "settings":
+        return null;
       case "preview":
         return (
           <div className="col-start-4 col-span-9">
@@ -188,7 +175,7 @@ export const Layout = () => {
   return hasHydrated ? (
     <div id="page-container">
       <div className="grid grid-cols-12 gap-4">
-        {currentTab !== "start" && currentTab !== "published" && (
+        {currentTab && currentTab !== "start" && currentTab !== "published" && (
           <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
         )}
         <>{form && renderTab(currentTab)}</>

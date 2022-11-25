@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import { NextPageWithLayout } from "../_app";
 import { Template, PageProps, PageTemplate, getServerSideProps } from "./[[...params]]";
-import { ElementPanel } from "@components/form-builder/layout/";
+import { ElementPanel, EditNavigation } from "@components/form-builder/layout/";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const router = useRouter();
@@ -18,7 +18,12 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   const title = `${t("gcFormsEdit")} — ${t("gcForms")}`;
   return ready ? (
-    <PageTemplate title={title}>
+    <PageTemplate
+      title={title}
+      renderNavigation={(handleClick, currentTab) => {
+        return <EditNavigation handleClick={handleClick} currentTab={currentTab} />;
+      }}
+    >
       <ElementPanel />
     </PageTemplate>
   ) : null;

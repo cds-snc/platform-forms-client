@@ -17,12 +17,7 @@ import {
   NavigationStoreProvider,
   TemplateStoreProvider,
 } from "@components/form-builder/store";
-import {
-  LeftNavigation,
-  PreviewNavigation,
-  Header,
-  Layout,
-} from "@components/form-builder/layout/";
+import { LeftNavigation, Header, Layout } from "@components/form-builder/layout/";
 
 export type PageProps = {
   tab: string;
@@ -49,7 +44,18 @@ export const Template = ({ page }: { page: ReactElement }) => {
   );
 };
 
-export const PageTemplate = ({ children, title }: { children: React.ReactNode; title: string }) => {
+export const PageTemplate = ({
+  children,
+  title,
+  renderNavigation,
+}: {
+  children: React.ReactNode;
+  title: string;
+  renderNavigation: (
+    handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void,
+    currentTab: string
+  ) => ReactElement;
+}) => {
   const router = useRouter();
   const { hasHydrated, form } = useTemplateStore((s) => ({
     form: s.form,
@@ -69,6 +75,8 @@ export const PageTemplate = ({ children, title }: { children: React.ReactNode; t
     };
   };
 
+  const Nav = renderNavigation(handleClick, currentTab);
+
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
     <div id="page-container">
@@ -80,7 +88,7 @@ export const PageTemplate = ({ children, title }: { children: React.ReactNode; t
               <Head>
                 <title>{title}</title>
               </Head>
-              <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
+              {Nav}
               <main id="content">{children}</main>
             </div>
           )}
@@ -134,6 +142,10 @@ export const getServerSideProps: GetServerSideProps = async ({
   // @todo - look into better way to handle setting page for "real" pages
   if (req.url === "/form-builder/settings") {
     FormbuilderParams.tab = "settings";
+  }
+
+  if (req.url === "/form-builder/edit") {
+    FormbuilderParams.tab = "create";
   }
 
   if (formID && session) {
