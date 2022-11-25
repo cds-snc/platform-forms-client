@@ -15,6 +15,8 @@ import {
   Alert,
   ErrorListItem,
   MultipleChoiceGroup,
+  TextArea,
+  Description,
 } from "@components/forms";
 
 export default function Support() {
@@ -23,14 +25,19 @@ export default function Support() {
   const [submitting, setSubmitting] = useState(false);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
 
-  const handleRequestSupport = async (name: string, email: string, request: string) => {
+  const handleRequestSupport = async (
+    name: string,
+    email: string,
+    request: string,
+    context: string
+  ) => {
     return await axios({
       url: "/api/request/support",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      data: { name, email, request },
+      data: { name, email, request, context },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
@@ -46,17 +53,18 @@ export default function Support() {
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
     request: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    context: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
 
   return (
     <div aria-live="polite">
       {!isSuccessScreen && (
         <Formik
-          initialValues={{ name: "", email: "", request: "" }}
-          onSubmit={async ({ name, email, request }) => {
+          initialValues={{ name: "", email: "", request: "", context: "" }}
+          onSubmit={async ({ name, email, request, context }) => {
             setSubmitting(true);
             try {
-              const response = await handleRequestSupport(name, email, request);
+              const response = await handleRequestSupport(name, email, request, context);
               setSubmitting(false);
               if (response?.status !== 200) {
                 throw new Error(t("submissionError"));
@@ -110,13 +118,21 @@ export default function Support() {
               )}
 
               <h1>{t("support.title")}</h1>
-              <p className="mb-14">
-                {t("support.intro")}{" "}
+              <p className="mb-6 mt-[-2rem]">
+                {t("support.paragraph1")}&nbsp;
                 <Link href={`/${i18n.language}/form-builder/contactus`}>
-                  {t("support.contactLink")}
+                  {t("support.paragraph1Link")}
                 </Link>
                 .
               </p>
+              <p className="mb-6">
+                {t("support.paragraph2")}&nbsp;
+                <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
+                  {t("support.paragraph2Link")}
+                </Link>
+                &nbsp;{t("support.paragraph2Part2")}
+              </p>
+              <p className="mb-20">{t("support.paragraph3")}</p>
 
               <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
                 <div className="focus-group">
@@ -148,7 +164,7 @@ export default function Support() {
                   <legend className="gc-label required">
                     {t("support.request.title")}{" "}
                     <span data-testid="required" aria-hidden>
-                      ({t("required")})
+                      ({t("required", { ns: "common" })})
                     </span>
                   </legend>
                   <MultipleChoiceGroup
@@ -163,19 +179,46 @@ export default function Support() {
                       },
                       {
                         id: "request-technical",
-                        name: "feedback",
+                        name: "technical",
                         label: t("support.request.option2"),
                         required: true,
                       },
                       {
-                        id: "request-other",
-                        name: "demo",
+                        id: "request-form",
+                        name: "form",
                         label: t("support.request.option3"),
+                        required: true,
+                      },
+                      {
+                        id: "request-other",
+                        name: "other",
+                        label: t("support.request.option4"),
                         required: true,
                       },
                     ]}
                   ></MultipleChoiceGroup>
                 </fieldset>
+
+                <div className="focus-group">
+                  <Label id={"label-context"} htmlFor={"context"} className="required" required>
+                    {t("support.context.title")}
+                  </Label>
+                  <Description id={"description-context"}>
+                    {t("support.context.description")}
+                  </Description>
+                  <TextArea
+                    id={"context"}
+                    name={"context"}
+                    className="required w-[34rem] mt-4"
+                    required
+                    characterCountMessages={{
+                      part1: t("formElements.characterCount.part1"),
+                      part2: t("formElements.characterCount.part2"),
+                      part1Error: t("formElements.characterCount.part1-error"),
+                      part2Error: t("formElements.characterCount.part2-error"),
+                    }}
+                  />
+                </div>
 
                 <div className="flex mt-14">
                   <Button

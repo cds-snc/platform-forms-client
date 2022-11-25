@@ -184,15 +184,24 @@
   },
   "support": {
     "title": "Support",
-    "intro": "If you would like to learn more about the product or set up a demo, please fill out the",
-    "contactLink": "Contact us form",
+    "paragraph1": "If you would like to learn more about the product or set up a demo, please fill out the",
+    "paragraph1Link": "Contact us form",
+    "paragraph2": "For other enquiries, go to",
+    "paragraph2Link": "Canada.ca Contact us",
+    "paragraph2Part2": "to find the department or agency that can support you.",
+    "paragraph3": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
     "name": "Your Name",
     "email": "Your Email",
     "request": {
       "title": "How can we help?",
       "option1": "Ask a question",
       "option2": "Get technical support",
-      "option3": "Other"
+      "option3": "Problem with a published form",
+      "option4": "Other"
+    },
+    "context": {
+      "title": "Additional information",
+      "description": "Provide more context around the problem you are experiencing."
     }
   }
 }
