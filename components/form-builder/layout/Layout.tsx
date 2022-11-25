@@ -62,6 +62,8 @@ export const Layout = () => {
   const renderTab = (tab: string) => {
     switch (tab) {
       case "settings":
+      case "edit":
+      case "create":
         return null;
       case "preview":
         return (
@@ -181,7 +183,7 @@ export const Layout = () => {
         <>{form && renderTab(currentTab)}</>
       </div>
     </div>
-  ) : null;
+  ) : <div>hello</div>;
   /* eslint-enable */
 };
 
