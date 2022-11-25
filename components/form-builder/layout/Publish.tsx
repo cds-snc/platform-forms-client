@@ -57,6 +57,7 @@ export const Publish = () => {
 
     setId(result?.id);
     setTab("published");
+    router.push({ pathname: `/form-builder/published` });
   };
 
   const handleSaveAndRequest = useCallback(async () => {

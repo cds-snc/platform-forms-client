@@ -54,22 +54,10 @@ export const Layout = () => {
       case "translate":
       case "save":
       case "share":
+      case "published":
       case "publish":
       case "test-data-delivery":
         return <Loader message={t("loading")} />;
-      case "published":
-        return status === "authenticated" ? (
-          <main id="content" className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsPublished")} — {t("gcForms")}
-              </title>
-            </Head>
-            <Published id={id} />
-          </main>
-        ) : (
-          setTab("create")
-        );
       default: // Start page
         return (
           <main id="content" className="col-span-12">
