@@ -63,22 +63,9 @@ export const Layout = () => {
       case "settings":
       case "edit":
       case "create":
+      case "preview":
       case "translate":
         return <Loader message={t("loading")} />;
-      case "preview":
-        return (
-          <div className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsPreview")} — {t("gcForms")}
-              </title>
-            </Head>
-            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <main id="content">
-              <Preview />
-            </main>
-          </div>
-        );
       case "test-data-delivery":
         return status === "authenticated" ? (
           <div className="col-start-4 col-span-9">

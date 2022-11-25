@@ -62,7 +62,10 @@ export const LeftNavigation = ({
       <Button
         isCurrentTab={["preview", "test-data-delivery", "settings"].includes(currentTab)}
         icon={<PreviewIcon className={iconClassname} />}
-        handleClick={handleClick("preview")}
+        handleClick={() => {
+          setTab("preview");
+          router.push({ pathname: `/form-builder/preview` });
+        }}
       >
         {t("preview")}
       </Button>

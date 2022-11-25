@@ -26,7 +26,10 @@ export const PreviewNavigation = ({
         className={`mr-5 ${
           currentTab === "preview" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
-        onClick={handleClick && handleClick("preview")}
+        onClick={() => {
+          setTab("preview");
+          router.push({ pathname: `/form-builder/preview` });
+        }}
       >
         {t("preview")}
       </button>
