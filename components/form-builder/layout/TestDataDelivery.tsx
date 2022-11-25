@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { usePublish } from "../hooks/usePublish";
 import { useTranslation } from "next-i18next";
@@ -55,7 +55,13 @@ export const TestDataDelivery = () => {
     setId(result?.id);
   };
 
-  return (
+  useEffect(() => {
+    if (status !== "authenticated") {
+      router.push("/form-builder/edit");
+    }
+  }, [status, router]);
+
+  return status === "authenticated" ? (
     <div>
       <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
       <div className="mb-8 bg-blue-200 p-5">
@@ -128,5 +134,5 @@ export const TestDataDelivery = () => {
         )}
       </div>
     </div>
-  );
+  ) : null;
 };
