@@ -60,7 +60,7 @@ export const Card = (props: CardProps): React.ReactElement => {
             items={[
               {
                 title: "Edit",
-                url: `/form-builder/create/${id}`,
+                url: `/form-builder/edit/${id}`,
               },
               {
                 title: "Copy link",

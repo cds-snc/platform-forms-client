@@ -109,7 +109,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
       </TabPanel>
 
       <div className="absolute top-48" ref={createNewFormRef}>
-        <StyledLink href="/form-builder/start">
+        <StyledLink href="/form-builder">
           {t("actions.createNewForm")} <span aria-hidden="true">+</span>
         </StyledLink>
       </div>
