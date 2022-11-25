@@ -4,13 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useNavigationStore } from "@components/form-builder/store";
 
-export const PreviewNavigation = ({
-  currentTab,
-  handleClick,
-}: {
-  currentTab?: string;
-  handleClick?: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
-}) => {
+export const PreviewNavigation = ({ currentTab }: { currentTab?: string }) => {
   const { t } = useTranslation("form-builder");
 
   const { setTab } = useNavigationStore((s) => ({
@@ -40,7 +34,10 @@ export const PreviewNavigation = ({
             className={`ml-5 mr-5 ${
               currentTab === "test-data-delivery" ? "font-bold" : ""
             } outline-blue-focus outline-offset-2`}
-            onClick={handleClick && handleClick("test-data-delivery")}
+            onClick={() => {
+              setTab("test-data-delivery");
+              router.push({ pathname: `/form-builder/test-data-delivery` });
+            }}
           >
             {t("testDataDelivery")}
           </button>

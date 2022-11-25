@@ -6,12 +6,8 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { LeftNavigation } from "./LeftNavigation";
 import { Language } from "../types";
-import { Share } from "./Share";
 import { Start } from "./Start";
-import { Preview } from "./Preview";
-import { PreviewNavigation } from "./PreviewNavigation";
 import { Published } from "./Published";
-import { TestDataDelivery } from "./TestDataDelivery";
 import { Loader } from "@components/globals/Loader";
 
 export const Layout = () => {
@@ -33,13 +29,6 @@ export const Layout = () => {
 
   const { t, i18n } = useTranslation("form-builder");
   const locale = i18n.language as Language;
-
-  const handleClick = (tab: string) => {
-    return (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      setTab(tab);
-    };
-  };
 
   useEffect(() => {
     setLang(locale);
@@ -66,23 +55,8 @@ export const Layout = () => {
       case "save":
       case "share":
       case "publish":
-        return <Loader message={t("loading")} />;
       case "test-data-delivery":
-        return status === "authenticated" ? (
-          <div className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsResponseDelivery")} — {t("gcForms")}
-              </title>
-            </Head>
-            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <main id="content">
-              <TestDataDelivery />
-            </main>
-          </div>
-        ) : (
-          setTab("create")
-        );
+        return <Loader message={t("loading")} />;
       case "published":
         return status === "authenticated" ? (
           <main id="content" className="col-start-4 col-span-9">
@@ -115,7 +89,7 @@ export const Layout = () => {
     <div id="page-container">
       <div className="grid grid-cols-12 gap-4">
         {currentTab && currentTab !== "start" && currentTab !== "published" && (
-          <LeftNavigation currentTab={currentTab} handleClick={handleClick} />
+          <LeftNavigation currentTab={currentTab} />
         )}
         <>{form && renderTab(currentTab)}</>
       </div>

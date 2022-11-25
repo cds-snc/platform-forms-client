@@ -29,13 +29,7 @@ function Button({
   );
 }
 
-export const LeftNavigation = ({
-  currentTab,
-  handleClick,
-}: {
-  currentTab: string;
-  handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
-}) => {
+export const LeftNavigation = ({ currentTab }: { currentTab: string }) => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
   const router = useRouter();
