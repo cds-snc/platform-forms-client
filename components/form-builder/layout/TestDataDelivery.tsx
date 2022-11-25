@@ -8,10 +8,12 @@ import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 import { useNavigationStore } from "../store/useNavigationStore";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { RocketIcon } from "../icons/RocketIcon";
 import { Form } from "@components/forms";
 
 export const TestDataDelivery = () => {
+  const { status } = useSession();
   const { localizeField, getSchema, id, setId, email } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     getSchema: s.getSchema,
