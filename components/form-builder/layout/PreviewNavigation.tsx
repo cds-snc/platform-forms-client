@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export const PreviewNavigation = ({
   currentTab,
@@ -10,6 +11,7 @@ export const PreviewNavigation = ({
   handleClick: (tabName: string) => (evt: React.MouseEvent<HTMLElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   const { status } = useSession();
   return (
     <nav className="mb-8" aria-label={t("navLabelPreview")}>
@@ -39,7 +41,9 @@ export const PreviewNavigation = ({
         className={`ml-5 ${
           currentTab === "settings" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
-        onClick={handleClick("settings")}
+        onClick={() => {
+          router.push({ pathname: `/form-builder/settings` });
+        }}
       >
         {t("settings")}
       </button>

@@ -131,6 +131,11 @@ export const getServerSideProps: GetServerSideProps = async ({
     };
   }
 
+  // @todo - look into better way to handle setting page for "real" pages
+  if (req.url === "/form-builder/settings") {
+    FormbuilderParams.tab = "settings";
+  }
+
   if (formID && session) {
     try {
       const ability = createAbility(session.user.privileges);

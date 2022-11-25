@@ -15,7 +15,6 @@ import { EditNavigation } from "./EditNavigation";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { Publish } from "./Publish";
 import { Published } from "./Published";
-import { Settings } from "./Settings";
 import { TestDataDelivery } from "./TestDataDelivery";
 import { Save } from "./Save";
 
@@ -170,20 +169,6 @@ export const Layout = () => {
           </main>
         ) : (
           setTab("create")
-        );
-      case "settings":
-        return (
-          <div className="col-start-4 col-span-9">
-            <Head>
-              <title>
-                {t("gcFormsSettings")} — {t("gcForms")}
-              </title>
-            </Head>
-            <PreviewNavigation currentTab={currentTab} handleClick={handleClick} />
-            <main id="content">
-              <Settings />
-            </main>
-          </div>
         );
       default: // Start page
         return (
