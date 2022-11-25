@@ -99,13 +99,25 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
         </Tab>
       </TabsList>
       <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
-        <CardGrid cards={templatesDrafts}></CardGrid>
+        {templatesDrafts && templatesDrafts?.length > 0 ? (
+          <CardGrid cards={templatesDrafts}></CardGrid>
+        ) : (
+          <p>{t("cards.noDraftForms")}</p>
+        )}
       </TabPanel>
       <TabPanel id="tabpanel-published" labeledbyId="tab-published" isActive={path === "published"}>
-        <CardGrid cards={templatesPublished}></CardGrid>
+        {templatesPublished && templatesPublished?.length > 0 ? (
+          <CardGrid cards={templatesPublished}></CardGrid>
+        ) : (
+          <p>{t("cards.noPublishedForms")}</p>
+        )}
       </TabPanel>
       <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
-        <CardGrid cards={templatesAll}></CardGrid>
+        {templatesAll && templatesAll?.length > 0 ? (
+          <CardGrid cards={templatesAll}></CardGrid>
+        ) : (
+          <p>{t("cards.noForms")}</p>
+        )}
       </TabPanel>
 
       <div className="absolute top-48" ref={createNewFormRef}>
