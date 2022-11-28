@@ -15,7 +15,10 @@ import {
   Alert,
   ErrorListItem,
   MultipleChoiceGroup,
+  TextArea,
+  Description,
 } from "@components/forms";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
 export default function ContactUs() {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
@@ -23,14 +26,20 @@ export default function ContactUs() {
   const [submitting, setSubmitting] = useState(false);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
 
-  const handleRequestSupport = async (name: string, email: string, request: string) => {
+  const handleRequest = async (
+    name: string,
+    email: string,
+    request: string,
+    description: string
+  ) => {
+    const type = "contactus";
     return await axios({
-      url: "/api/request/contactus",
+      url: "/api/request/help",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      data: { name, email, request },
+      data: { type, name, email, request, description },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
@@ -46,17 +55,18 @@ export default function ContactUs() {
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
     request: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    description: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
 
   return (
     <div aria-live="polite">
       {!isSuccessScreen && (
         <Formik
-          initialValues={{ name: "", email: "", request: "" }}
-          onSubmit={async ({ name, email, request }) => {
+          initialValues={{ name: "", email: "", request: "", description: "" }}
+          onSubmit={async ({ name, email, request, description }) => {
             setSubmitting(true);
             try {
-              const response = await handleRequestSupport(name, email, request);
+              const response = await handleRequest(name, email, request, description);
               setSubmitting(false);
               if (response?.status !== 200) {
                 throw new Error(t("submissionError"));
@@ -110,13 +120,21 @@ export default function ContactUs() {
               )}
 
               <h1>{t("contactus.title")}</h1>
-              <p className="mb-14">
-                {t("contactus.intro")}{" "}
+              <p className="mb-6 mt-[-2rem]">
+                {t("support.paragraph1")}&nbsp;
                 <Link href={`/${i18n.language}/form-builder/support`}>
-                  {t("contactus.supportLink")}
+                  {t("support.paragraph1Link")}
                 </Link>
                 .
               </p>
+              <p className="mb-6">
+                {t("support.paragraph2")}&nbsp;
+                <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
+                  {t("support.paragraph2Link")}
+                </Link>
+                &nbsp;{t("support.paragraph2Part2")}
+              </p>
+              <p className="mb-20">{t("support.paragraph3")}</p>
 
               <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
                 <div className="focus-group">
@@ -183,6 +201,32 @@ export default function ContactUs() {
                   ></MultipleChoiceGroup>
                 </fieldset>
 
+                <div className="focus-group">
+                  <Label
+                    id={"label-description"}
+                    htmlFor={"description"}
+                    className="required"
+                    required
+                  >
+                    {t("contactus.description.title")}
+                  </Label>
+                  <Description id={"description-description"}>
+                    {t("contactus.description.description")}
+                  </Description>
+                  <TextArea
+                    id={"description"}
+                    name={"description"}
+                    className="required w-[34rem] mt-4"
+                    required
+                    characterCountMessages={{
+                      part1: t("formElements.characterCount.part1"),
+                      part2: t("formElements.characterCount.part2"),
+                      part1Error: t("formElements.characterCount.part1-error"),
+                      part2Error: t("formElements.characterCount.part2-error"),
+                    }}
+                  />
+                </div>
+
                 <div className="flex mt-14">
                   <Button
                     type="submit"
@@ -204,11 +248,28 @@ export default function ContactUs() {
       )}
       {isSuccessScreen && (
         <>
-          <h1>Success</h1>
-          <p className="mb-8">Thank you for you submission!</p>
-          <p>
-            We have received your request and someone from CDS will be in touch with you shortly.
+          <h1>{t("requestSuccess.title")}</h1>
+          <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.paragraph1")}</p>
+          <div className="mb-16">
+            <StyledLink
+              href={`/${i18n.language}/myforms`}
+              className={`
+                bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+                hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5 
+                visited:text-white-default visited:hover:text-white-default focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+              `}
+            >
+              {t("support.backToForms")}
+            </StyledLink>
+          </div>
+          <p className="mb-8">
+            {t("requestSuccess.paragraph2Part1")}&nbsp;
+            <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
+              {t("requestSuccess.paragraph2Link")}
+            </Link>
+            &nbsp;{t("requestSuccess.paragraph2Part2")}.
           </p>
+          <p>{t("requestSuccess.paragraph3")}</p>
         </>
       )}
     </div>

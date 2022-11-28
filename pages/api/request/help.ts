@@ -4,7 +4,8 @@ import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps } from "@lib/types";
 
-const SUPPORT_EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
+const SUPPORT_EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; // "assistance+forms@cds-snc.freshdesk.com";
+const CONTACTUS_EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; // "jose.jimenez@cds-snc.ca";
 
 const requestSupport = async (
   req: NextApiRequest,
@@ -14,9 +15,9 @@ const requestSupport = async (
   try {
     if (!session) return res.status(403).json({});
 
-    const { name, email, request, context } = req.body;
+    const { type, name, email, request, description } = req.body;
 
-    if (!name || !email || !request || !context) {
+    if (!name || !email || !request || !description) {
       return res.status(404).json({ error: "Malformed request" });
     }
 
@@ -26,27 +27,52 @@ const requestSupport = async (
       process.env.NOTIFY_API_KEY
     );
 
+    const TO_EMAIL_ADDRESS = type === "support" ? SUPPORT_EMAIL_ADDRESS : CONTACTUS_EMAIL_ADDRESS;
+
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-    await notifyClient.sendEmail(templateID, SUPPORT_EMAIL_ADDRESS, {
+    await notifyClient.sendEmail(templateID, TO_EMAIL_ADDRESS, {
       personalisation: {
-        subject: "Support request / Demande de soutien",
-        formResponse: `
-${session.user.name} (${session.user.email}) has requested support for the form-builder.
+        subject:
+          type === "support"
+            ? "Support request / Demande de soutien"
+            : "Contact request / Demande de soutien",
+        formResponse:
+          type === "support"
+            ? `
+${name} (${email}) has requested support for the form-builder.
 
 Support request:
 ${request}
 
 Additional details:
-${context}
+${description}
 
 ****
-${session.user.name} (${session.user.email}) a demandé de soutien des form-builder.
+${name} (${email}) a demandé de soutien des form-builder.
 
 Demande de soutien:
 ${request}
 
 Détails supplémentaires:
-${context}
+${description}
+`
+            : `
+${name} (${email}) has requested we contact them for the form-builder.
+
+Contact request:
+${request}
+
+Additional details:
+${description}
+
+****
+${name} (${email}) a demandé que nous les contactions pour le générateur de formulaires..
+
+Demande de contact soutien:
+${request}
+
+Détails supplémentaires:
+${description}
 `,
       },
       reference: null,

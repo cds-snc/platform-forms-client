@@ -18,6 +18,7 @@ import {
   TextArea,
   Description,
 } from "@components/forms";
+import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
 export default function Support() {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
@@ -25,19 +26,20 @@ export default function Support() {
   const [submitting, setSubmitting] = useState(false);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
 
-  const handleRequestSupport = async (
+  const handleRequest = async (
     name: string,
     email: string,
     request: string,
-    context: string
+    description: string
   ) => {
+    const type = "support";
     return await axios({
-      url: "/api/request/support",
+      url: "/api/request/help",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      data: { name, email, request, context },
+      data: { type, name, email, request, description },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
@@ -53,18 +55,18 @@ export default function Support() {
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
     request: Yup.string().required(t("input-validation.required", { ns: "common" })),
-    context: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    description: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
 
   return (
     <div aria-live="polite">
       {!isSuccessScreen && (
         <Formik
-          initialValues={{ name: "", email: "", request: "", context: "" }}
-          onSubmit={async ({ name, email, request, context }) => {
+          initialValues={{ name: "", email: "", request: "", description: "" }}
+          onSubmit={async ({ name, email, request, description }) => {
             setSubmitting(true);
             try {
-              const response = await handleRequestSupport(name, email, request, context);
+              const response = await handleRequest(name, email, request, description);
               setSubmitting(false);
               if (response?.status !== 200) {
                 throw new Error(t("submissionError"));
@@ -200,15 +202,20 @@ export default function Support() {
                 </fieldset>
 
                 <div className="focus-group">
-                  <Label id={"label-context"} htmlFor={"context"} className="required" required>
-                    {t("support.context.title")}
+                  <Label
+                    id={"label-description"}
+                    htmlFor={"description"}
+                    className="required"
+                    required
+                  >
+                    {t("support.description.title")}
                   </Label>
-                  <Description id={"description-context"}>
-                    {t("support.context.description")}
+                  <Description id={"description-description"}>
+                    {t("support.description.description")}
                   </Description>
                   <TextArea
-                    id={"context"}
-                    name={"context"}
+                    id={"description"}
+                    name={"description"}
                     className="required w-[34rem] mt-4"
                     required
                     characterCountMessages={{
@@ -241,11 +248,28 @@ export default function Support() {
       )}
       {isSuccessScreen && (
         <>
-          <h1>Success</h1>
-          <p className="mb-8">Thank you for you submission!</p>
-          <p>
-            We have received your request and someone from CDS will be in touch with you shortly.
+          <h1>{t("requestSuccess.title")}</h1>
+          <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.paragraph1")}</p>
+          <div className="mb-16">
+            <StyledLink
+              href={`/${i18n.language}/myforms`}
+              className={`
+                bg-blue-dark text-white-default border-black-default py-4 px-8 rounded-lg border-2 border-solid
+                hover:text-white-default hover:bg-blue-light active:text-white-default active:bg-blue-active active:top-0.5 
+                visited:text-white-default visited:hover:text-white-default focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500
+              `}
+            >
+              {t("support.backToForms")}
+            </StyledLink>
+          </div>
+          <p className="mb-8">
+            {t("requestSuccess.paragraph2Part1")}&nbsp;
+            <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
+              {t("requestSuccess.paragraph2Link")}
+            </Link>
+            &nbsp;{t("requestSuccess.paragraph2Part2")}.
           </p>
+          <p>{t("requestSuccess.paragraph3")}</p>
         </>
       )}
     </div>

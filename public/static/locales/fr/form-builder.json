@@ -162,37 +162,5 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code",
-  "contactus": {
-    "title": "Contact Us [FR]",
-    "intro": "If you experience technical issues, please fill out the [FR]",
-    "supportLink": "Support Form [FR]",
-    "name": "Your Name [FR]",
-    "email": "Your Email [FR]",
-    "request": {
-      "title": "How can we help? [FR]",
-      "option1": "Ask a question about the product and how it can work in your department [FR]",
-      "option2": "Give feedback [FR]",
-      "option3": "Set up a demo to learn more about GC Forms [FR]",
-      "option4": "Other [FR]"
-    },
-    "success": {
-      "title": "Success [FR]",
-      "paragraph1": "Thank you for you submission! [FR]",
-      "paragraph2": "We have received your request and someone from CDS will be in touch with you shortly. [FR]"
-    }
-  },
-  "support": {
-    "title": "Support [FR]",
-    "intro": "If you would like to learn more about the product or set up a demo, please fill out the [FR]",
-    "contactLink": "Contact us form [FR]",
-    "name": "Your Name [FR]",
-    "email": "Your Email [FR]",
-    "request": {
-      "title": "How can we help? [FR]",
-      "option1": "Ask a question [FR]",
-      "option2": "Get technical support [FR]",
-      "option3": "Other [FR]"
-    }
-  }
+  "viewCode": "Afficher le code"
 }
