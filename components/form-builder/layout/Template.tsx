@@ -44,17 +44,19 @@ export const PageTemplate = ({
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div id="page-container">
-      <div className="grid grid-cols-12 gap-4">
+    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+      <div>
         {leftNav && <LeftNavigation />}
         <>
           {form && (
-            <div className={leftNav ? "col-start-4 col-span-9" : "col-start-0 col-span-12"}>
+            <div>
               <Head>
                 <title>{title}</title>
               </Head>
-              {navigation}
-              <main id="content">{children}</main>
+              <main id="content" className={`${leftNav && "ml-60 xl:ml-40 md:pl-5 max-w-4xl"}`}>
+                {navigation}
+                {children}
+              </main>
             </div>
           )}
         </>

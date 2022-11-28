@@ -12,7 +12,7 @@ export const LeftNavigation = () => {
     "inline-block xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
-    <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
+    <nav className="absolute xl:content-center" aria-label={t("navLabelFormBuilder")}>
       <LeftNavLink href="/form-builder/edit">
         <>
           <DesignIcon className={iconClassname} />

@@ -97,7 +97,7 @@ export const Start = () => {
           </div>
         )}
       </div>
-      <div className="flex">
+      <div className="flex justify-center">
         <button
           className={boxClass}
           onClick={async (e) => {
