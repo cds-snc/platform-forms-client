@@ -23,7 +23,7 @@ export const defaultProperties: ElementProperties = {
   descriptionFr: "",
 };
 
-const useModalStore = create<ModalStore>()(
+export const useModalStore = create<ModalStore>()(
   immer((set) => ({
     isOpen: false,
     modals: [defaultProperties],

@@ -5,7 +5,6 @@ import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
 import { Button } from "../shared/Button";
-import { useNavigationStore } from "../store/useNavigationStore";
 import { useRouter } from "next/router";
 import { PublishNoAuth } from "./PublishNoAuth";
 import { useSession } from "next-auth/react";
@@ -27,11 +26,6 @@ export const Publish = () => {
     getSchema: s.getSchema,
     id: s.id,
     setId: s.setId,
-  }));
-
-  const { setTab } = useNavigationStore((s) => ({
-    currentTab: s.currentTab,
-    setTab: s.setTab,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -56,7 +50,7 @@ export const Publish = () => {
     }
 
     setId(result?.id);
-    setTab("published");
+    router.push({ pathname: `/form-builder/published` });
   };
 
   const handleSaveAndRequest = useCallback(async () => {

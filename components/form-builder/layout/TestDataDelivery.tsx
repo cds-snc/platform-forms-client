@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { usePublish } from "../hooks/usePublish";
 import { useTranslation } from "next-i18next";
@@ -6,12 +6,13 @@ import { Button } from "../shared/Button";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
-import { useNavigationStore } from "../store/useNavigationStore";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { RocketIcon } from "../icons/RocketIcon";
 import { Form } from "@components/forms";
 
 export const TestDataDelivery = () => {
+  const { status } = useSession();
   const { localizeField, getSchema, id, setId, email } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     getSchema: s.getSchema,
@@ -25,10 +26,6 @@ export const TestDataDelivery = () => {
     id: id || "test0form00000id000asdf11",
     ...JSON.parse(stringified),
   };
-
-  const { setTab } = useNavigationStore((s) => ({
-    setTab: s.setTab,
-  }));
 
   const router = useRouter();
   const { t: t1 } = useTranslation("");
@@ -53,7 +50,13 @@ export const TestDataDelivery = () => {
     setId(result?.id);
   };
 
-  return (
+  useEffect(() => {
+    if (status !== "authenticated") {
+      router.push("/form-builder/edit");
+    }
+  }, [status, router]);
+
+  return status === "authenticated" ? (
     <div>
       <h1 className="border-0 mb-0 md:text-h1">{t("testYourResponseDelivery")}</h1>
       <div className="mb-8 bg-blue-200 p-5">
@@ -64,7 +67,7 @@ export const TestDataDelivery = () => {
           className="text-underline inline"
           onClick={(e) => {
             e.preventDefault();
-            setTab("settings");
+            router.push({ pathname: `/form-builder/preview/settings` });
           }}
         >
           {t("updateResponseDestination")}
@@ -126,5 +129,5 @@ export const TestDataDelivery = () => {
         )}
       </div>
     </div>
-  );
+  ) : null;
 };
