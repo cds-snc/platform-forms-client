@@ -1,100 +1,84 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useNavigationStore } from "@components/form-builder/store";
+import Link from "next/link";
 
-function Button({
-  children,
-  handleClick,
-  icon,
-  isCurrentTab,
-}: {
-  children?: JSX.Element | string;
-  handleClick: (evt: React.MouseEvent<HTMLElement>) => void;
-  icon: ReactElement;
-  isCurrentTab: boolean;
-}) {
+const SideNavLink = ({ children, href }: { children: ReactElement; href: string }) => {
+  const { asPath, isReady } = useRouter();
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    // Check if the router fields are updated client-side
+    if (isReady) {
+      const linkPathname = new URL(href as string, location.href).pathname;
+      const activePathname = new URL(asPath, location.href).pathname;
+
+      if (linkPathname === activePathname) {
+        setActive(true);
+      }
+    }
+  }, [asPath, isReady, href, setActive]);
   return (
-    <button
-      className={`${
-        isCurrentTab ? "font-bold " : ""
-      }group no-underline rounded block mb-4 -ml-1 pl-1 pr-2 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default`}
-      onClick={handleClick}
-    >
-      {icon}
-      {children}
-    </button>
+    <Link href={href}>
+      <a
+        href={href}
+        className={`${
+          active ? "font-bold" : ""
+        } group no-underline rounded block mb-4 -ml-1 pl-1 pr-2 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default`}
+      >
+        {children}
+      </a>
+    </Link>
   );
-}
+};
 
-export const LeftNavigation = ({ currentTab }: { currentTab: string }) => {
+export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
-  const router = useRouter();
-  const { setTab } = useNavigationStore((s) => ({
-    currentTab: s.currentTab,
-    setTab: s.setTab,
-  }));
 
   const iconClassname =
     "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
     <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
-      <Button
-        isCurrentTab={["create", "translate"].includes(currentTab)}
-        icon={<DesignIcon className={iconClassname} />}
-        handleClick={() => {
-          setTab("create");
-          router.push({ pathname: `/form-builder/edit` });
-        }}
-      >
-        {t("edit")}
-      </Button>
-      <Button
-        isCurrentTab={["preview", "test-data-delivery", "settings"].includes(currentTab)}
-        icon={<PreviewIcon className={iconClassname} />}
-        handleClick={() => {
-          setTab("preview");
-          router.push({ pathname: `/form-builder/preview` });
-        }}
-      >
-        {t("preview")}
-      </Button>
-      <Button
-        isCurrentTab={currentTab === "share"}
-        icon={<ShareIcon className={iconClassname} />}
-        handleClick={() => {
-          setTab("share");
-          router.push({ pathname: `/form-builder/share` });
-        }}
-      >
-        {t("share")}
-      </Button>
+      <SideNavLink href="/form-builder/edit">
+        <>
+          <DesignIcon className={iconClassname} />
+          {t("edit")}
+        </>
+      </SideNavLink>
+
+      <SideNavLink href="/form-builder/preview">
+        <>
+          <PreviewIcon className={iconClassname} />
+          {t("preview")}
+        </>
+      </SideNavLink>
+
+      <SideNavLink href="/form-builder/share">
+        <>
+          <ShareIcon className={iconClassname} />
+          {t("share")}
+        </>
+      </SideNavLink>
+
       {status !== "authenticated" && (
-        <Button
-          isCurrentTab={currentTab === "save"}
-          icon={<SaveIcon className={iconClassname} />}
-          handleClick={() => {
-            setTab("save");
-            router.push({ pathname: `/form-builder/save` });
-          }}
-        >
-          {t("save")}
-        </Button>
+        <SideNavLink href="/form-builder/save">
+          <>
+            <SaveIcon className={iconClassname} />
+            {t("save")}
+          </>
+        </SideNavLink>
       )}
-      <Button
-        isCurrentTab={currentTab === "publish"}
-        icon={<PublishIcon className={iconClassname} />}
-        handleClick={() => {
-          setTab("publish");
-          router.push({ pathname: `/form-builder/publish` });
-        }}
-      >
-        {t("publish")}
-      </Button>
+
+      <SideNavLink href="/form-builder/publish">
+        <>
+          <PublishIcon className={iconClassname} />
+          {t("publish")}
+        </>
+      </SideNavLink>
     </nav>
   );
 };
