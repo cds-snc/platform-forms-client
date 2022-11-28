@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
-import { useNavigationStore, useTemplateStore } from "../../store";
+import { useTemplateStore } from "../../store";
 
 import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
@@ -25,9 +25,6 @@ export const Header = () => {
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
   const { ability } = useAccessControl();
-  const { currentTab } = useNavigationStore((s) => ({
-    currentTab: s.currentTab,
-  }));
 
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
@@ -65,7 +62,7 @@ export const Header = () => {
           >
             {t("title", { ns: "common" })}
           </button>
-          {currentTab !== "start" && isSaveable() && status === "authenticated" && (
+          {isSaveable() && status === "authenticated" && (
             <ButtonWithMessage className="ml-4" onClick={handlePublish}>
               {t("save", { ns: "form-builder" })}
             </ButtonWithMessage>
