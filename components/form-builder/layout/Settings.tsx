@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
@@ -12,6 +13,7 @@ import { useNavigationStore } from "../store/useNavigationStore";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
+  const router = useRouter();
   const { setTab } = useNavigationStore((s) => ({
     setTab: s.setTab,
   }));
@@ -20,7 +22,7 @@ const FormDeleted = () => {
     <Button
       onClick={() => {
         dialog.current?.close();
-        setTab("start");
+        router.push({ pathname: `/form-builder` });
       }}
     >
       {t("formDeletedDialogOkay")}
