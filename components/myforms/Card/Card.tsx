@@ -34,7 +34,7 @@ export const Card = (props: CardProps): React.ReactElement => {
       title: t("card.menu.settings"),
       // TODO: /preview for now as there is no direct link to /settings
       // Settings is currently a sub menu in preview
-      url: `/${i18n.language}/form-builder/preview/${id}`,
+      url: `/${i18n.language}/form-builder/preview/settings/${id}`,
     },
     {
       title: t("card.menu.delete"),
