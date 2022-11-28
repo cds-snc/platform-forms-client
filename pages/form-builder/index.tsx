@@ -34,8 +34,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const [formID = null] = params || [];
 
-  const FormbuilderParams: { tab: string; initialForm: null | FormRecord } = {
-    tab: "create",
+  const FormbuilderParams: { initialForm: null | FormRecord } = {
     initialForm: null,
   };
 
@@ -49,15 +48,6 @@ export const getServerSideProps: GetServerSideProps = async ({
         permanent: false,
       },
     };
-  }
-
-  // @todo - look into better way to handle setting page for "real" pages
-  if (req.url === "/form-builder/settings") {
-    FormbuilderParams.tab = "settings";
-  }
-
-  if (req.url === "/form-builder/edit") {
-    FormbuilderParams.tab = "create";
   }
 
   if (formID && session) {
