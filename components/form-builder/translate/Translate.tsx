@@ -13,10 +13,10 @@ import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { Button } from "../shared/Button";
 
 const FlexDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  // display: flex;
+  // flex-direction: row;
+  // align-items: center;
+  // justify-content: space-between;
 `;
 
 const LangSpan = styled.span`
@@ -137,13 +137,13 @@ export const Translate = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
       <div>
+        <h1 className="border-0 mb-0">{t("translateTitle")}</h1>
         <p>{t("translateDescription")}</p>
         <br />
 
-        <FlexDiv>
-          <FlexDiv>
+        <div className="flex lg:flex-col lg:items-start justify-between items-center">
+          <div>
             <LangSpan>{translationLanguagePriority === "en" ? t("english") : t("french")}</LangSpan>
             <Button
               className="mx-4"
@@ -153,9 +153,11 @@ export const Translate = () => {
               {t("switch")}
             </Button>
             <LangSpan>{translationLanguagePriority === "en" ? t("french") : t("english")}</LangSpan>
-          </FlexDiv>
-          <DownloadCSV />
-        </FlexDiv>
+          </div>
+          <div className="lg:mt-4">
+            <DownloadCSV />
+          </div>
+        </div>
 
         <SectionDiv>
           <div className="section-title">
@@ -232,6 +234,7 @@ export const Translate = () => {
                     ]
                   }
                   lang={translationLanguagePriority}
+                  ariaLabel={t("formIntroduction")}
                 />
                 <RichTextEditor
                   autoFocusEditor={false}
@@ -248,6 +251,7 @@ export const Translate = () => {
                     ]
                   }
                   lang={translationLanguagePriorityAlt}
+                  ariaLabel={t("formIntroduction")}
                 />
               </div>
             </div>
@@ -343,6 +347,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriority}
+                ariaLabel={t("privacyStatement")}
               />
               <RichTextEditor
                 autoFocusEditor={false}
@@ -359,6 +364,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriorityAlt}
+                ariaLabel={t("privacyStatement")}
               />
             </div>
           </div>
@@ -389,6 +395,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriority}
+                ariaLabel={t("confirmationMessage")}
               />
               <RichTextEditor
                 autoFocusEditor={false}
@@ -405,6 +412,7 @@ export const Translate = () => {
                   ] ?? ""
                 }
                 lang={translationLanguagePriorityAlt}
+                ariaLabel={t("confirmationMessage")}
               />
             </div>
           </div>

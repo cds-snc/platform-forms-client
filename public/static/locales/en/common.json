@@ -99,5 +99,6 @@
   "alert": {
     "dismissAlert": "Close this alert"
   },
-  "continue": "Continue"
+  "continue": "Continue",
+  "error": "Error"
 }

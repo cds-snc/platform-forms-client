@@ -3,6 +3,7 @@ import { Editor } from "./Editor";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { Language } from "../types";
 import debounce from "lodash.debounce";
+import { useTranslation } from "next-i18next";
 
 export const RichTextEditor = ({
   path,
@@ -19,6 +20,7 @@ export const RichTextEditor = ({
 }) => {
   const updateField = useTemplateStore((s) => s.updateField);
   const [value, setValue] = useState(content);
+  const { t } = useTranslation("form-builder");
 
   const _debounced = useCallback(
     debounce((value: string) => {
@@ -48,7 +50,7 @@ export const RichTextEditor = ({
         autoFocusEditor={autoFocusEditor}
         content={value}
         onChange={updateValue}
-        ariaLabel={ariaLabel}
+        ariaLabel={ariaLabel || t("richTextEditor")}
       />
     </div>
   );

@@ -100,5 +100,6 @@
   "alert": {
     "dismissAlert": "Fermer cette alerte"
   },
-  "continue": "Continue"
+  "continue": "Continue [FR]",
+  "error": "Error [FR]"
 }

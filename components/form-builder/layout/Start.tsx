@@ -89,6 +89,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
   /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
   return (
     <>
+      <h1 className="visually-hidden">{t("start")}</h1>
       <div role="alert">
         {errors && (
           <div className="bg-red-100 w-5/12 m-auto mb-8 p-6 flex">
@@ -111,7 +112,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           </div>
         )}
       </div>
-      <div className="flex justify-center">
+      <div className="flex">
         <button
           className={boxClass}
           onClick={async (e) => {

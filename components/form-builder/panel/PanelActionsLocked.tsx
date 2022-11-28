@@ -49,7 +49,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   }));
   const { t } = useTranslation("form-builder");
   return (
-    <Actions className="panel-actions">
+    <Actions className="last-of-type:rounded-b-md">
       <Label>
         <LockIcon /> {t("lockedElement")}
       </Label>

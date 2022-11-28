@@ -1,11 +1,16 @@
 {
   "signUpConfirmation": {
-    "title": "Confirm Your Email",
-    "noUsername": "No user to confirm",
-    "resendConfirmationCodeButton": "Resend Confirmation Code",
+    "title": "Check your email",
+    "resendConfirmationCodeButton": "Send a new verification code",
+    "emailHasBeenSent": "An email with a security code has been sent to",
+    "confirmButton": "Continue",
+    "resendConfirmationCode": {
+      "title": "Check your email",
+      "body": "An email with a security code has been sent to you"
+    },
     "fields": {
       "confirmationCode": {
-        "label": "Confirmation Code",
+        "label": "Enter the security code to finish creating your account",
         "error": {
           "number": "This field must be a number"
         }
@@ -14,6 +19,11 @@
   },
   "signUpRegistration": {
     "title": "Sign Up to GC Forms",
+    "alreadyHaveAnAccount": "If you already have an account,",
+    "alreadyHaveAnAccountLink": "sign in instead.",
+    "slaAgreement": "By creating an account you agree to the",
+    "slaAgreementLink": "Service Level Agreement.",
+    "signUpButton": "Continue",
     "fields": {
       "username": {
         "label": "Email",

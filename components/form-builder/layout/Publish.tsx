@@ -79,7 +79,7 @@ export const Publish = () => {
 
   return (
     <>
-      <h1 className="border-0 mb-0">{t("publishYourForm")}</h1>
+      <h1 className="border-0 mb-0 md:text-h1">{t("publishYourForm")}</h1>
       <p className="mb-0">{t("publishYourFormInstructions")}</p>
       {!userCanPublish && (
         <div className="mt-5 mb-5 p-5 bg-purple-200 flex">
@@ -129,7 +129,7 @@ export const Publish = () => {
             </div>
           </div>
           <div>
-            <h3 className="mb-1">{t("publishingDisablesEditing")}</h3>
+            <h2 className="mb-1 text-h3 pb-0 mb-0">{t("publishingDisablesEditing")}</h2>
             <p>{t("publishingDisablesEditingDescription")}</p>
             <Markdown options={{ forceBlock: true }}>
               {t("contactSupportIfYouHaveQuestions")}
