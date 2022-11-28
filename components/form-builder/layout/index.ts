@@ -3,7 +3,6 @@ export { LeftNavigation } from "./LeftNavigation";
 export { PreviewNavigation } from "./PreviewNavigation";
 export { EditNavigation } from "./EditNavigation";
 export { Template, PageTemplate } from "./Template";
-export { Layout } from "./Layout";
 export { Header } from "./Header";
 export { Start } from "./Start";
 export { Save } from "./Save";
