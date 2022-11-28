@@ -8,7 +8,7 @@ export const EditNavigation = () => {
   return (
     <nav className="mb-8 flex divide-x-2 divide-gray-600" aria-label={t("navLabelEditor")}>
       <SubNavLink href="/form-builder/edit">{t("questions")}</SubNavLink>
-      <SubNavLink href="/form-builder/translate">{t("translate")}</SubNavLink>
+      <SubNavLink href="/form-builder/edit/translate">{t("translate")}</SubNavLink>
     </nav>
   );
 };

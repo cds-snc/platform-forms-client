@@ -2,25 +2,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 
-export const LeftNavLink = ({
-  children,
-  href,
-  subPages,
-}: {
-  children: ReactElement;
-  href: string;
-  subPages?: string[];
-}) => {
+export const LeftNavLink = ({ children, href }: { children: ReactElement; href: string }) => {
   const { asPath, isReady } = useRouter();
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    // Check if the router fields are updated client-side
     if (isReady) {
       const linkPathname = new URL(href as string, location.href).pathname;
       const activePathname = new URL(asPath, location.href).pathname;
 
-      if (linkPathname === activePathname || subPages?.includes(activePathname)) {
+      if (linkPathname === activePathname || activePathname.startsWith(linkPathname)) {
         setActive(true);
       }
     }
