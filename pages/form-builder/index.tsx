@@ -1,16 +1,14 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-import { NextPageWithLayout } from "../_app";
-import { PageProps, FormRecord } from "@lib/types";
-import { Template, PageTemplate } from "@components/form-builder/layout/";
-import { Start } from "@components/form-builder/layout/";
-
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { getFullTemplateByID } from "@lib/templates";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
+import { NextPageWithLayout } from "../_app";
+import { PageProps, FormRecord } from "@lib/types";
+import { Template, PageTemplate, Start } from "@formbuilder/layout";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");

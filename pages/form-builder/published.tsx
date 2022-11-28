@@ -3,8 +3,8 @@ import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
-import { Published, Template, PageTemplate } from "@components/form-builder/layout/";
-import { useTemplateStore } from "@components/form-builder/store/useTemplateStore";
+import { Published, Template, PageTemplate } from "@formbuilder/layout/";
+import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
