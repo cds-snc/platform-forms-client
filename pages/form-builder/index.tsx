@@ -14,6 +14,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
+
   const title = `${t("gcFormsStart")} — ${t("gcForms")}`;
   return (
     <PageTemplate title={title} leftNav={false}>
