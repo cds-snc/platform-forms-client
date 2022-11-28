@@ -32,13 +32,10 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.settings"),
-      // TODO: /preview for now as there is no direct link to /settings
-      // Settings is currently a sub menu in preview
       url: `/${i18n.language}/form-builder/preview/settings/${id}`,
     },
     {
       title: t("card.menu.delete"),
-      // TODO: /settings for now as there is no direct way to /delete (and we may not want to)
       url: `/${i18n.language}/form-builder/preview/settings/${id}`,
     },
   ];
@@ -93,8 +90,7 @@ export const Card = (props: CardProps): React.ReactElement => {
       </div>
       <p className="h-36 px-3 pt-5 pb-8">
         <a
-          // TODO: For edit cards, using /create for now as the /edit path doesn’t exist yet
-          href={isPublished ? url : `/${i18n.language}/form-builder/create/${id}`}
+          href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
           className="line-clamp-3"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
