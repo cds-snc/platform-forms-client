@@ -11,7 +11,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
       const linkPathname = new URL(href as string, location.href).pathname;
       const activePathname = new URL(asPath, location.href).pathname;
 
-      if (linkPathname === activePathname || activePathname.startsWith(linkPathname)) {
+      if (activePathname.startsWith(linkPathname)) {
         setActive(true);
       }
     }

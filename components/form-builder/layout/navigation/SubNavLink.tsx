@@ -10,7 +10,13 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
     // Check if the router fields are updated client-side
     if (isReady) {
       const linkPathname = new URL(href as string, location.href).pathname;
-      const activePathname = new URL(asPath, location.href).pathname;
+      let activePathname = new URL(asPath, location.href).pathname;
+
+      // TemplateId is always 25 characters long. If present, remove it from the activePathname.
+      const end = activePathname.substring(activePathname.lastIndexOf("/") + 1);
+      if (end.length === 25) {
+        activePathname = activePathname.substring(0, activePathname.lastIndexOf("/"));
+      }
 
       if (linkPathname === activePathname) {
         setActive(true);
@@ -24,7 +30,7 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
         href={href}
         className={`${
           active ? "font-bold" : ""
-        } no-underline text-black-default visited:text-black-default first:pl-0 pl-4 pr-4`}
+        } no-underline !bg-white-default !text-black-default visited:text-black-default first:pl-0 pl-4 pr-4`}
       >
         {children}
       </a>
