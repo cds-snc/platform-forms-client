@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { RocketIcon } from "../icons/RocketIcon";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { themes } from "../shared/Button";
 import { useTranslation } from "next-i18next";
 import { useTemplateStore } from "../store/useTemplateStore";
@@ -13,6 +15,8 @@ const getHost = () => {
 };
 
 export const Published = ({ id }: { id: string }) => {
+  const { status } = useSession();
+  const router = useRouter();
   const [formId] = useState(id);
   const { ability } = useAccessControl();
   const resetForm = useTemplateStore((s) => s.initialize);
@@ -23,6 +27,16 @@ export const Published = ({ id }: { id: string }) => {
   useEffect(() => {
     resetForm();
   }, [resetForm]);
+
+  useEffect(() => {
+    if (status !== "authenticated" || !formId) {
+      router.push("/form-builder/edit");
+    }
+  }, [status, router, formId]);
+
+  if (!formId) {
+    return null;
+  }
 
   const { t } = useTranslation("form-builder");
   return (
