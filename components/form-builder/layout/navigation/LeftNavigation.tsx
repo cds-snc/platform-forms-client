@@ -13,14 +13,17 @@ export const LeftNavigation = () => {
 
   return (
     <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>
-      <LeftNavLink href="/form-builder/edit">
+      <LeftNavLink href="/form-builder/edit" subPages={["form-builder/translate"]}>
         <>
           <DesignIcon className={iconClassname} />
           {t("edit")}
         </>
       </LeftNavLink>
 
-      <LeftNavLink href="/form-builder/preview">
+      <LeftNavLink
+        href="/form-builder/preview"
+        subPages={["form-builder/test-data-delivery", "form-builder/settings"]}
+      >
         <>
           <PreviewIcon className={iconClassname} />
           {t("preview")}

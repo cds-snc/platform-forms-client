@@ -2,7 +2,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 
-export const LeftNavLink = ({ children, href }: { children: ReactElement; href: string }) => {
+export const LeftNavLink = ({
+  children,
+  href,
+  subPages,
+}: {
+  children: ReactElement;
+  href: string;
+  subPages?: string[];
+}) => {
   const { asPath, isReady } = useRouter();
   const [active, setActive] = useState(false);
 
@@ -12,7 +20,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
       const linkPathname = new URL(href as string, location.href).pathname;
       const activePathname = new URL(asPath, location.href).pathname;
 
-      if (linkPathname === activePathname) {
+      if (linkPathname === activePathname || subPages?.includes(activePathname)) {
         setActive(true);
       }
     }
