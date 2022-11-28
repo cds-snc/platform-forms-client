@@ -4,7 +4,6 @@ import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
 import { sortByLayout } from "../util";
 import { useRouter } from "next/router";
-import { useNavigationStore } from "@components/form-builder/store";
 import { errorMessage, validateTemplate } from "../validate";
 
 export const Start = () => {
@@ -13,11 +12,6 @@ export const Start = () => {
   const { importTemplate, initialize } = useTemplateStore((s) => ({
     importTemplate: s.importTemplate,
     initialize: s.initialize,
-  }));
-
-  const { setTab } = useNavigationStore((s) => ({
-    currentTab: s.currentTab,
-    setTab: s.setTab,
   }));
 
   const [errors, setErrors] = useState<errorMessage[]>();
