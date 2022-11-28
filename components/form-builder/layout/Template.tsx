@@ -67,6 +67,6 @@ export const PageTemplate = ({
       </div>
     </div>
   ) : (
-    <Loader message={t("loading")} />
+    <Loader message={""} />
   );
 };
