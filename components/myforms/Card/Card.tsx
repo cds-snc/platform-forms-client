@@ -39,7 +39,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     {
       title: t("card.menu.delete"),
       // TODO: /settings for now as there is no direct way to /delete (and we may not want to)
-      url: `/${i18n.language}/form-builder/settings/${id}`,
+      url: `/${i18n.language}/form-builder/preview/settings/${id}`,
     },
   ];
 
@@ -50,10 +50,9 @@ export const Card = (props: CardProps): React.ReactElement => {
       callback: copyLinkCallback,
     });
   } else {
-    // TODO: using /create for now as the /edit path doesn’t exist yet
     menuItemsList.unshift({
       title: t("card.menu.edit"),
-      url: `/${i18n.language}/form-builder/create/${id}`,
+      url: `/${i18n.language}/form-builder/edit/${id}`,
     });
   }
 
