@@ -1,10 +1,10 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-
 import { NextPageWithLayout } from "../_app";
-import { Template, PageProps, PageTemplate, getServerSideProps } from "./[[...params]]";
+import { PageProps } from "@lib/types";
+import { getServerSideProps } from "./index";
+import { EditNavigation, Template, PageTemplate } from "@components/form-builder/layout/";
 import { Translate } from "@components/form-builder/translate";
-import { EditNavigation } from "@components/form-builder/layout/";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");

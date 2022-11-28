@@ -1,9 +1,14 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-
 import { NextPageWithLayout } from "../../_app";
-import { Template, PageProps, PageTemplate, getServerSideProps } from "../[[...params]]";
-import { ElementPanel, EditNavigation } from "@components/form-builder/layout/";
+import { PageProps } from "@lib/types";
+import { getServerSideProps } from "../index";
+import {
+  ElementPanel,
+  EditNavigation,
+  Template,
+  PageTemplate,
+} from "@components/form-builder/layout/";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -20,4 +25,5 @@ Page.getLayout = (page: ReactElement) => {
 };
 
 export { getServerSideProps };
+
 export default Page;

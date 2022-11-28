@@ -1,9 +1,9 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-
 import { NextPageWithLayout } from "../_app";
-import { Template, PageProps, PageTemplate, getServerSideProps } from "./[[...params]]";
-import { Published } from "@components/form-builder/layout/";
+import { PageProps } from "@lib/types";
+import { getServerSideProps } from "./index";
+import { Published, Template, PageTemplate } from "@components/form-builder/layout/";
 import { useTemplateStore } from "@components/form-builder/store/useTemplateStore";
 
 const Page: NextPageWithLayout<PageProps> = () => {

@@ -2,19 +2,24 @@ import React, { useState } from "react";
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
-import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
 import { useRouter } from "next/router";
+import { useNavigationStore } from "@components/form-builder/store";
+import { errorMessage, validateTemplate } from "../validate";
 
-import { errorMessage } from "../validate";
-
-export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
+export const Start = () => {
   const { t } = useTranslation("form-builder");
   const router = useRouter();
   const { importTemplate, initialize } = useTemplateStore((s) => ({
     importTemplate: s.importTemplate,
     initialize: s.initialize,
   }));
+
+  const { setTab } = useNavigationStore((s) => ({
+    currentTab: s.currentTab,
+    setTab: s.setTab,
+  }));
+
   const [errors, setErrors] = useState<errorMessage[]>();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
@@ -59,7 +64,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
         // ensure elements follow layout array order
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
-        changeTab("preview");
+        setTab("preview");
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -106,7 +111,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
             // clear any existing form data
             clearTemplateStore();
             initialize();
-            changeTab("create");
+            setTab("create");
             router.push({ pathname: `/form-builder/edit` });
           }}
         >
