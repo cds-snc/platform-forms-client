@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { useNavigationStore } from "../store/useNavigationStore";
+import { useNavigationStore } from "../../store/useNavigationStore";
 import { useRouter } from "next/router";
 
 export const EditNavigation = ({ currentTab }: { currentTab?: string }) => {

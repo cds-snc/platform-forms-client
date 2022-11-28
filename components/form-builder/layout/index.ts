@@ -1,7 +1,7 @@
 export { Settings } from "./Settings";
-export { LeftNavigation } from "./LeftNavigation";
-export { PreviewNavigation } from "./PreviewNavigation";
-export { EditNavigation } from "./EditNavigation";
+export { LeftNavigation } from "./navigation/LeftNavigation";
+export { PreviewNavigation } from "./navigation/PreviewNavigation";
+export { EditNavigation } from "./navigation/EditNavigation";
 export { Template, PageTemplate } from "./Template";
 export { Header } from "./Header";
 export { Start } from "./Start";

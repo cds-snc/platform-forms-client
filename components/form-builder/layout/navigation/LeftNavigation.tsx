@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../icons";
+import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
