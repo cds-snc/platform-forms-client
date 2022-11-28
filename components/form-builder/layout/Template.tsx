@@ -1,13 +1,11 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
 import Loader from "@components/globals/Loader";
 import {
   useTemplateStore,
-  useNavigationStore,
   NavigationStoreProvider,
   TemplateStoreProvider,
 } from "@components/form-builder/store";
@@ -44,25 +42,11 @@ export const PageTemplate = ({
   navigation?: React.ReactElement;
   leftNav?: boolean;
 }) => {
-  const router = useRouter();
   const { t } = useTranslation();
   const { hasHydrated, form } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
   }));
-
-  const { currentTab, setTab } = useNavigationStore((s) => ({
-    currentTab: s.currentTab,
-    setTab: s.setTab,
-  }));
-
-  const handleClick = (tab: string) => {
-    return (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      setTab(tab);
-      router.push({ pathname: `/form-builder` });
-    };
-  };
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
@@ -75,7 +59,7 @@ export const PageTemplate = ({
               <Head>
                 <title>{title}</title>
               </Head>
-              {navigation && React.cloneElement(navigation, { currentTab, handleClick })}
+              {navigation}
               <main id="content">{children}</main>
             </div>
           )}
