@@ -1,16 +1,16 @@
 import React from "react";
-import { useTemplateStore } from "../store";
-import LanguageToggle from "../../globals/LanguageToggle";
-import LoginMenu from "../../auth/LoginMenu";
+import { useRouter } from "next/router";
+import LanguageToggle from "../../../globals/LanguageToggle";
+import LoginMenu from "../../../auth/LoginMenu";
 import { useSession } from "next-auth/react";
-import { useNavigationStore } from "../store/useNavigationStore";
-import { useAllowPublish } from "../hooks/useAllowPublish";
+import { useNavigationStore, useTemplateStore } from "../../store";
+
 import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
-import { usePublish } from "../hooks/usePublish";
-import { Button, withMessage } from "../shared/Button";
-import { useRouter } from "next/router";
+import { usePublish } from "../../hooks/usePublish";
+import { useAllowPublish } from "../../hooks/useAllowPublish";
+import { Button, withMessage } from "../../shared/Button";
 
 export const Header = () => {
   const { getSchema, id, setId } = useTemplateStore((s) => ({
