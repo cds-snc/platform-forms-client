@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
@@ -21,12 +21,25 @@ export const Header = () => {
     email: s.submission?.email,
   }));
 
+  const [isStartPage, setIsStartPage] = useState(false);
   const router = useRouter();
+  const { isReady, asPath } = useRouter();
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
   const { ability } = useAccessControl();
 
   const { t, i18n } = useTranslation(["common", "form-builder"]);
+
+  useEffect(() => {
+    if (isReady) {
+      const activePathname = new URL(asPath, location.href).pathname;
+      if (activePathname === "/form-builder") {
+        setIsStartPage(true);
+      } else {
+        setIsStartPage(false);
+      }
+    }
+  }, [asPath, isReady]);
 
   const handleClick = () => {
     return (e: React.MouseEvent<HTMLElement>) => {
@@ -62,7 +75,7 @@ export const Header = () => {
           >
             {t("title", { ns: "common" })}
           </button>
-          {isSaveable() && status === "authenticated" && (
+          {!isStartPage && isSaveable() && status === "authenticated" && (
             <ButtonWithMessage className="ml-4" onClick={handlePublish}>
               {t("save", { ns: "form-builder" })}
             </ButtonWithMessage>

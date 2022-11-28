@@ -1,15 +1,9 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
-
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
-import {
-  PreviewNavigation,
-  TestDataDelivery,
-  PageTemplate,
-  Template,
-} from "@components/form-builder/layout/";
+import { PreviewNavigation, TestDataDelivery, PageTemplate, Template } from "@formbuilder/layout";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");

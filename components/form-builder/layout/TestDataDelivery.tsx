@@ -67,7 +67,7 @@ export const TestDataDelivery = () => {
           className="text-underline inline"
           onClick={(e) => {
             e.preventDefault();
-            router.push({ pathname: `/form-builder/settings` });
+            router.push({ pathname: `/form-builder/preview/settings` });
           }}
         >
           {t("updateResponseDestination")}
