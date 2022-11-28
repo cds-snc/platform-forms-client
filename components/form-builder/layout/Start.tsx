@@ -64,7 +64,7 @@ export const Start = () => {
         // ensure elements follow layout array order
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
-        setTab("preview");
+        router.push({ pathname: `/form-builder/preview` });
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -111,7 +111,6 @@ export const Start = () => {
             // clear any existing form data
             clearTemplateStore();
             initialize();
-            setTab("create");
             router.push({ pathname: `/form-builder/edit` });
           }}
         >
