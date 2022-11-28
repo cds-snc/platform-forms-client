@@ -12,10 +12,12 @@ export const PreviewNavigation = () => {
       <SubNavLink href="/form-builder/preview">{t("preview")}</SubNavLink>
       {status === "authenticated" && (
         <>
-          <SubNavLink href="/form-builder/test-data-delivery">{t("testDataDelivery")}</SubNavLink>
+          <SubNavLink href="/form-builder/preview/test-data-delivery">
+            {t("testDataDelivery")}
+          </SubNavLink>
         </>
       )}
-      <SubNavLink href="/form-builder/settings">{t("settings")}</SubNavLink>
+      <SubNavLink href="/form-builder/preview/settings">{t("settings")}</SubNavLink>
     </nav>
   );
 };
