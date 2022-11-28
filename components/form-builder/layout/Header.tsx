@@ -30,7 +30,7 @@ export const Header = () => {
     setTab: s.setTab,
   }));
 
-  const { t } = useTranslation(["common", "form-builder"]);
+  const { t, i18n } = useTranslation(["common", "form-builder"]);
 
   const handleClick = () => {
     return (e: React.MouseEvent<HTMLElement>) => {
@@ -76,7 +76,9 @@ export const Header = () => {
         <div className="inline-flex gap-4">
           <div className="md:text-small_base text-base font-normal not-italic">
             {ability?.can("view", "FormRecord") && (
-              <Link href="/myforms/drafts">{t("adminNav.myForms", { ns: "common" })}</Link>
+              <Link href={`/${i18n.language}/myforms/drafts`}>
+                {t("adminNav.myForms", { ns: "common" })}
+              </Link>
             )}
           </div>
           {<LoginMenu isAuthenticated={status === "authenticated"} />}
