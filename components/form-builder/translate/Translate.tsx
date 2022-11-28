@@ -12,13 +12,6 @@ import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
 import { Button } from "../shared/Button";
 
-const FlexDiv = styled.div`
-  // display: flex;
-  // flex-direction: row;
-  // align-items: center;
-  // justify-content: space-between;
-`;
-
 const LangSpan = styled.span`
   width: 70px;
 `;

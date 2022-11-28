@@ -25,9 +25,8 @@ export const Header = () => {
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
   const { ability } = useAccessControl();
-  const { currentTab, setTab } = useNavigationStore((s) => ({
+  const { currentTab } = useNavigationStore((s) => ({
     currentTab: s.currentTab,
-    setTab: s.setTab,
   }));
 
   const { t, i18n } = useTranslation(["common", "form-builder"]);
@@ -35,7 +34,6 @@ export const Header = () => {
   const handleClick = () => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
-      setTab("start");
       router.push({ pathname: `/form-builder` });
     };
   };

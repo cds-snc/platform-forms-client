@@ -9,14 +9,10 @@ import { useDeleteForm } from "../hooks/useDelete";
 import Markdown from "markdown-to-jsx";
 import { useDialogRef, Dialog } from "../shared/Dialog";
 import { ConfirmFormDeleteDialog } from "../shared/ConfirmFormDeleteDialog";
-import { useNavigationStore } from "../store/useNavigationStore";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
   const router = useRouter();
-  const { setTab } = useNavigationStore((s) => ({
-    setTab: s.setTab,
-  }));
   const dialog = useDialogRef();
   const actions = (
     <Button

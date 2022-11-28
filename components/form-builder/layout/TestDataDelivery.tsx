@@ -6,7 +6,6 @@ import { Button } from "../shared/Button";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
-import { useNavigationStore } from "../store/useNavigationStore";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { RocketIcon } from "../icons/RocketIcon";
@@ -27,10 +26,6 @@ export const TestDataDelivery = () => {
     id: id || "test0form00000id000asdf11",
     ...JSON.parse(stringified),
   };
-
-  const { setTab } = useNavigationStore((s) => ({
-    setTab: s.setTab,
-  }));
 
   const router = useRouter();
   const { t: t1 } = useTranslation("");
@@ -72,7 +67,6 @@ export const TestDataDelivery = () => {
           className="text-underline inline"
           onClick={(e) => {
             e.preventDefault();
-            setTab("settings");
             router.push({ pathname: `/form-builder/settings` });
           }}
         >
