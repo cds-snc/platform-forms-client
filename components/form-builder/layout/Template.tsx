@@ -42,7 +42,7 @@ export const PageTemplate = ({
   navigation?: React.ReactElement;
   leftNav?: boolean;
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("form-builder");
   const { hasHydrated, form } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
@@ -67,6 +67,6 @@ export const PageTemplate = ({
       </div>
     </div>
   ) : (
-    <Loader message={""} />
+    <Loader message={t("loading")} />
   );
 };
