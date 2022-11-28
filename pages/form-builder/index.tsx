@@ -16,7 +16,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
   const title = `${t("gcFormsStart")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title}>
+    <PageTemplate title={title} leftNav={false}>
       <Start />
     </PageTemplate>
   );

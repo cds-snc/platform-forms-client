@@ -37,10 +37,12 @@ export const PageTemplate = ({
   children,
   title,
   navigation,
+  leftNav = true,
 }: {
   children: React.ReactNode;
   title: string;
   navigation?: React.ReactElement;
+  leftNav?: boolean;
 }) => {
   const router = useRouter();
   const { t } = useTranslation();
@@ -66,10 +68,10 @@ export const PageTemplate = ({
   return hasHydrated ? (
     <div id="page-container">
       <div className="grid grid-cols-12 gap-4">
-        <LeftNavigation currentTab={currentTab} />
+        {leftNav && <LeftNavigation currentTab={currentTab} />}
         <>
           {form && (
-            <div className="col-start-4 col-span-9">
+            <div className={leftNav ? "col-start-4 col-span-9" : "col-start-0 col-span-12"}>
               <Head>
                 <title>{title}</title>
               </Head>

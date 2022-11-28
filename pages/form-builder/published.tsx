@@ -17,7 +17,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
   }));
 
   return (
-    <PageTemplate title={title}>
+    <PageTemplate title={title} leftNav={false}>
       <Published id={id} />
     </PageTemplate>
   );
