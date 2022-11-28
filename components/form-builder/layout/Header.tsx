@@ -57,7 +57,7 @@ export const Header = () => {
   const ButtonWithMessage = withMessage(Button, t("saveDraftMessage", { ns: "form-builder" }));
 
   return (
-    <header className="border-b-3 border-blue-dark my-10">
+    <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
         <div>
           <button

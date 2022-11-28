@@ -27,14 +27,18 @@ describe("Card component", () => {
 
   test("renders without errors", () => {
     render(
-      <MenuDropdown id={menuData.id} title={menuData.title} items={menuData.items}></MenuDropdown>
+      <MenuDropdown id={menuData.id} items={menuData.items}>
+        {menuData.title}
+      </MenuDropdown>
     );
     expect(screen.getByText(/Menu Title/i)).toBeInTheDocument();
   });
 
   test("menu has list items", async () => {
     render(
-      <MenuDropdown id={menuData.id} title={menuData.title} items={menuData.items}></MenuDropdown>
+      <MenuDropdown id={menuData.id} items={menuData.items}>
+        {menuData.title}
+      </MenuDropdown>
     );
 
     expect(screen.getByText(/Menu Item A/i)).toBeInTheDocument();
@@ -47,7 +51,9 @@ describe("Card component", () => {
 
   test("menu opens on click", async () => {
     render(
-      <MenuDropdown id={menuData.id} title={menuData.title} items={menuData.items}></MenuDropdown>
+      <MenuDropdown id={menuData.id} items={menuData.items}>
+        {menuData.title}
+      </MenuDropdown>
     );
 
     const user = userEvent.setup();
@@ -57,7 +63,9 @@ describe("Card component", () => {
 
   test("menu closes on click", async () => {
     render(
-      <MenuDropdown id={menuData.id} title={menuData.title} items={menuData.items}></MenuDropdown>
+      <MenuDropdown id={menuData.id} items={menuData.items}>
+        {menuData.title}
+      </MenuDropdown>
     );
 
     const user = userEvent.setup();

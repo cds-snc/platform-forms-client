@@ -63,7 +63,7 @@ export const TestDataDelivery = () => {
 
   return status === "authenticated" ? (
     <div>
-      <h1 className="border-0 mb-0">{t("testYourResponseDelivery")}</h1>
+      <h1 className="border-0 mb-0 md:text-h1">{t("testYourResponseDelivery")}</h1>
       <div className="mb-8 bg-blue-200 p-5">
         {t("submittedResponsesText", { email })}{" "}
         <Link

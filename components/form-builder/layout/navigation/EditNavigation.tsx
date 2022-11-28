@@ -13,9 +13,9 @@ export const EditNavigation = ({ currentTab }: { currentTab?: string }) => {
   }));
 
   return (
-    <nav className="mb-8" aria-label={t("navLabelEditor")}>
+    <nav className="mb-8 flex divide-x-2 divide-gray-600" aria-label={t("navLabelEditor")}>
       <button
-        className={`mr-5 ${
+        className={`pr-4 ${
           currentTab === "create" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
         onClick={() => {
@@ -25,9 +25,8 @@ export const EditNavigation = ({ currentTab }: { currentTab?: string }) => {
       >
         {t("questions")}
       </button>
-      |
       <button
-        className={`ml-5 mr-5 ${
+        className={`pl-4 ${
           currentTab === "translate" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
         onClick={() => {

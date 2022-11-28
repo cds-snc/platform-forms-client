@@ -26,7 +26,7 @@ const SideNavLink = ({ children, href }: { children: ReactElement; href: string 
         href={href}
         className={`${
           active ? "font-bold" : ""
-        } group no-underline rounded block mb-4 -ml-1 pl-1 pr-2 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default`}
+        } group no-underline rounded block xl:w-36 xl:pb-0 xl:pt-2 xl:mb-2 mb-4 -ml-1 pl-1 pr-2 md:pr-0 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default`}
       >
         {children}
       </a>
@@ -39,7 +39,7 @@ export const LeftNavigation = () => {
   const { status } = useSession();
 
   const iconClassname =
-    "inline-block group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
     <nav className="col-span-3" aria-label={t("navLabelFormBuilder")}>

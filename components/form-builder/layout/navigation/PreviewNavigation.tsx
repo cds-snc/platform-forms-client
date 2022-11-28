@@ -15,9 +15,9 @@ export const PreviewNavigation = ({ currentTab }: { currentTab?: string }) => {
   const router = useRouter();
   const { status } = useSession();
   return (
-    <nav className="mb-8" aria-label={t("navLabelPreview")}>
+    <nav className="mb-8 flex divide-x-2 divide-gray-600" aria-label={t("navLabelPreview")}>
       <button
-        className={`mr-5 ${
+        className={`pr-4 ${
           currentTab === "preview" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
         onClick={() => {
@@ -29,9 +29,8 @@ export const PreviewNavigation = ({ currentTab }: { currentTab?: string }) => {
       </button>
       {status === "authenticated" && (
         <>
-          |
           <button
-            className={`ml-5 mr-5 ${
+            className={`pl-4 pr-4 ${
               currentTab === "test-data-delivery" ? "font-bold" : ""
             } outline-blue-focus outline-offset-2`}
             onClick={() => {
@@ -43,9 +42,8 @@ export const PreviewNavigation = ({ currentTab }: { currentTab?: string }) => {
           </button>
         </>
       )}
-      |{" "}
       <button
-        className={`ml-5 ${
+        className={`pl-4 ${
           currentTab === "settings" ? "font-bold" : ""
         } outline-blue-focus outline-offset-2`}
         onClick={() => {
