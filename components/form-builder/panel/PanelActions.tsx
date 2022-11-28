@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  KeyboardEvent,
-  ReactElement,
-} from "react";
+import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 

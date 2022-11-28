@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
@@ -8,19 +9,16 @@ import { useDeleteForm } from "../hooks/useDelete";
 import Markdown from "markdown-to-jsx";
 import { useDialogRef, Dialog } from "../shared/Dialog";
 import { ConfirmFormDeleteDialog } from "../shared/ConfirmFormDeleteDialog";
-import { useNavigationStore } from "../store/useNavigationStore";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
-  const { setTab } = useNavigationStore((s) => ({
-    setTab: s.setTab,
-  }));
+  const router = useRouter();
   const dialog = useDialogRef();
   const actions = (
     <Button
       onClick={() => {
         dialog.current?.close();
-        setTab("start");
+        router.push({ pathname: `/form-builder` });
       }}
     >
       {t("formDeletedDialogOkay")}

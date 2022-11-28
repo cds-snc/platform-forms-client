@@ -1,34 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTemplateStore, clearTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "../icons";
-import { validateTemplate } from "../validate";
 import { sortByLayout } from "../util";
+import { useRouter } from "next/router";
+import { errorMessage, validateTemplate } from "../validate";
 
-import { errorMessage } from "../validate";
-
-export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
+export const Start = () => {
   const { t } = useTranslation("form-builder");
-
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem("form-storage")) {
-        const {
-          state: {
-            form: { elements },
-          },
-        } = JSON.parse(sessionStorage.getItem("form-storage") as string);
-        elements.length && changeTab("create");
-      }
-    } catch (e) {
-      // no-op
-    }
-  }, []);
-
+  const router = useRouter();
   const { importTemplate, initialize } = useTemplateStore((s) => ({
     importTemplate: s.importTemplate,
     initialize: s.initialize,
   }));
+
   const [errors, setErrors] = useState<errorMessage[]>();
 
   // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
@@ -73,7 +58,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
         // ensure elements follow layout array order
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
-        changeTab("preview");
+        router.push({ pathname: `/form-builder/preview` });
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -112,7 +97,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
           </div>
         )}
       </div>
-      <div className="flex">
+      <div className="flex justify-center">
         <button
           className={boxClass}
           onClick={async (e) => {
@@ -120,7 +105,7 @@ export const Start = ({ changeTab }: { changeTab: (tab: string) => void }) => {
             // clear any existing form data
             clearTemplateStore();
             initialize();
-            changeTab("create");
+            router.push({ pathname: `/form-builder/edit` });
           }}
         >
           <DesignIcon className="mb-2 scale-125" />
