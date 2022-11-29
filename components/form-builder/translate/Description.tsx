@@ -3,6 +3,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
 import { FormElement } from "@lib/types";
+import { LanguageLabel } from "./LanguageLabel";
 
 export const Description = ({
   element,
@@ -33,49 +34,65 @@ export const Description = ({
           >
             {t(`${translationLanguagePriority}-text`)}
           </label>
-          <textarea
-            id={`element-${element.id}-description-${translationLanguagePriority}`}
-            value={
-              element.properties[
-                localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
-              ]
-            }
-            onChange={(e) => {
-              updateField(
-                `form.elements[${index}].properties.${localizeField(
-                  LocalizedElementProperties.DESCRIPTION,
-                  translationLanguagePriority
-                )}`,
-                e.target.value
-              );
-            }}
-          ></textarea>
+          <div className="relative">
+            <LanguageLabel
+              id={`element-${element.id}-description-${translationLanguagePriority}-language`}
+            >
+              {t(translationLanguagePriority)}
+            </LanguageLabel>
+            <textarea
+              id={`element-${element.id}-description-${translationLanguagePriority}`}
+              aria-describedby={`element-${element.id}-description-${translationLanguagePriority}-language`}
+              value={
+                element.properties[
+                  localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+                ]
+              }
+              onChange={(e) => {
+                updateField(
+                  `form.elements[${index}].properties.${localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    translationLanguagePriority
+                  )}`,
+                  e.target.value
+                );
+              }}
+            ></textarea>
+          </div>
           <label
             className="sr-only"
             htmlFor={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
           >
             {t(`${translationLanguagePriorityAlt}-text`)}
           </label>
-          <textarea
-            id={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
-            value={
-              element.properties[
-                localizeField(
-                  LocalizedElementProperties.DESCRIPTION,
-                  translationLanguagePriorityAlt
-                )
-              ]
-            }
-            onChange={(e) => {
-              updateField(
-                `form.elements[${index}].properties.${localizeField(
-                  LocalizedElementProperties.DESCRIPTION,
-                  translationLanguagePriorityAlt
-                )}`,
-                e.target.value
-              );
-            }}
-          ></textarea>
+          <div className="relative">
+            <LanguageLabel
+              id={`element-${element.id}-description-${translationLanguagePriorityAlt}-language`}
+            >
+              {t(translationLanguagePriorityAlt)}
+            </LanguageLabel>
+            <textarea
+              id={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
+              aria-describedby={`element-${element.id}-description-${translationLanguagePriorityAlt}-language`}
+              value={
+                element.properties[
+                  localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    translationLanguagePriorityAlt
+                  )
+                ]
+              }
+              onChange={(e) => {
+                updateField(
+                  `form.elements[${index}].properties.${localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    translationLanguagePriorityAlt
+                  )}`,
+                  e.target.value
+                );
+              }}
+            ></textarea>
+          </div>
         </div>
       </fieldset>
     </>
