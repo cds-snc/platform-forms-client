@@ -123,9 +123,9 @@ const storage: StateStorage = {
 const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
-    locale: "en",
-    lang: "en",
-    translationLanguagePriority: "en",
+    locale: initProps?.locale || "en",
+    lang: (initProps?.locale as Language) || "en",
+    translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
     _hasHydrated: false,
     form: defaultForm,
