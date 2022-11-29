@@ -22,7 +22,6 @@ export const Header = () => {
   }));
 
   const [isStartPage, setIsStartPage] = useState(false);
-  const router = useRouter();
   const { isReady, asPath } = useRouter();
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
@@ -40,13 +39,6 @@ export const Header = () => {
       }
     }
   }, [asPath, isReady]);
-
-  const handleClick = () => {
-    return (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      router.push({ pathname: `/form-builder` });
-    };
-  };
 
   const { uploadJson } = usePublish();
 
@@ -68,13 +60,12 @@ export const Header = () => {
     <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
         <div>
-          <button
-            type="button"
-            onClick={handleClick()}
-            className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
-          >
-            {t("title", { ns: "common" })}
-          </button>
+          <Link href="/form-builder">
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a className="inline-block mr-10 text-h2 mb-6 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none">
+              {t("title", { ns: "common" })}
+            </a>
+          </Link>
           {!isStartPage && isSaveable() && status === "authenticated" && (
             <ButtonWithMessage className="ml-4" onClick={handlePublish}>
               {t("save", { ns: "form-builder" })}
