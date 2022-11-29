@@ -157,6 +157,15 @@ function FloatingLinkEditor({
     }
   }, [isEditMode]);
 
+  const confirmLink = () => {
+    if (lastSelection !== null) {
+      if (linkUrl !== "") {
+        editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
+      }
+      setEditMode(false);
+    }
+  };
+
   return (
     <div
       ref={editorRef}
@@ -180,15 +189,11 @@ function FloatingLinkEditor({
             onChange={(event) => {
               setLinkUrl(event.target.value);
             }}
+            onBlur={() => confirmLink()}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 event.preventDefault();
-                if (lastSelection !== null) {
-                  if (linkUrl !== "") {
-                    editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
-                  }
-                  setEditMode(false);
-                }
+                confirmLink();
               } else if (event.key === "Escape") {
                 event.preventDefault();
                 setEditMode(false);
