@@ -573,6 +573,9 @@ export const ElementPanel = () => {
       <RichTextLocked
         beforeContent={
           <>
+            <label htmlFor="formTitle" className="visually-hidden">
+              {t("formTitle")}
+            </label>
             <Input
               id="formTitle"
               placeholder={t("placeHolderFormTitle")}
