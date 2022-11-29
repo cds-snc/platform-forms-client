@@ -19,6 +19,7 @@
     "paths": {
       "@lib/*": ["lib/*"],
       "@components/*": ["components/*"],
+      "@formbuilder/*": ["components/form-builder/*"],
       "@pages/*": ["pages/*"],
       "@jestFixtures/*": ["__fixtures__/*"],
       "@jestUtils": ["__utils__"]

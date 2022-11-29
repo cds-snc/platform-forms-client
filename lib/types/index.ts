@@ -1,3 +1,5 @@
+import { FormRecord } from "@lib/types";
+
 export type {
   ValidationProperties,
   PropertyChoices,
@@ -13,6 +15,11 @@ export { FormElementTypes } from "./form-types";
 export type { Submission, SubmissionRequestBody } from "./submission-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
+
+export type PageProps = {
+  tab: string;
+  initialForm: FormRecord | null;
+};
 
 export type {
   InputFieldProps,
