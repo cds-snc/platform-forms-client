@@ -211,7 +211,10 @@ export const Translate = () => {
               <div className="section-heading">
                 {t("formIntroduction")}: {t("description")}
               </div>
-              <div className="section-text section-text--rich-text">
+              <div
+                className="section-text section-text--rich-text"
+                key={translationLanguagePriority}
+              >
                 <RichTextEditor
                   autoFocusEditor={false}
                   path={`form.introduction.${localizeField(
@@ -324,7 +327,7 @@ export const Translate = () => {
               {t("pageText")}: {t("description")}
             </div>
 
-            <div className="section-text section-text--rich-text">
+            <div className="section-text section-text--rich-text" key={translationLanguagePriority}>
               <RichTextEditor
                 autoFocusEditor={false}
                 path={`form.privacyPolicy.${localizeField(
@@ -372,7 +375,7 @@ export const Translate = () => {
             <div className="section-heading">
               {t("pageText")}: {t("description")}
             </div>
-            <div className="section-text section-text--rich-text">
+            <div className="section-text section-text--rich-text" key={translationLanguagePriority}>
               <RichTextEditor
                 autoFocusEditor={false}
                 path={`form.endPage.${localizeField(
