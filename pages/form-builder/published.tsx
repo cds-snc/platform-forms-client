@@ -8,7 +8,7 @@ import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
-  const title = `${t("gcFormsTranslate")} — ${t("gcForms")}`;
+  const title = `${t("gcFormsPublished")} — ${t("gcForms")}`;
 
   const { id } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
