@@ -102,6 +102,21 @@ module.exports = {
         },
         transparent: "transparent",
       },
+      fontSize: {
+        badge: ["14px", "14px"],
+        sm: ["16px", "22px"],
+        base: ["20px", "28px"],
+        p: ["20px", "28px"],
+        h3: ["26px", "32px"],
+        h2: ["30px", "38px"],
+        h1: ["34px", "44px"],
+        small_sm: ["12px", "14px"],
+        small_base: ["16px", "22px"],
+        small_p: ["16px", "22px"],
+        small_h3: ["18px", "22px"],
+        small_h2: ["20px", "28px"],
+        small_h1: ["24px", "28px"],
+      },
     },
     container: {
       center: true,
@@ -110,24 +125,6 @@ module.exports = {
       sans: ["lato"],
       body: ["Noto Sans"],
       mono: ["monospace"],
-    },
-    /* ["fontSize", "lineHeight"]
-       These typography rules have been pulled from the design system
-    */
-    fontSize: {
-      badge: ["14px", "14px"],
-      sm: ["16px", "22px"],
-      base: ["20px", "28px"],
-      p: ["20px", "28px"],
-      h3: ["26px", "32px"],
-      h2: ["30px", "38px"],
-      h1: ["34px", "44px"],
-      small_sm: ["12px", "14px"],
-      small_base: ["16px", "22px"],
-      small_p: ["16px", "22px"],
-      small_h3: ["18px", "22px"],
-      small_h2: ["20px", "28px"],
-      small_h1: ["24px", "28px"],
     },
     screens: {
       xxl: { max: "1200px" },
