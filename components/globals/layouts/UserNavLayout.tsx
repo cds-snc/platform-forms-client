@@ -14,7 +14,6 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
   const { ability } = useAccessControl();
   const { status } = useSession();
   const { t } = useTranslation("common");
-  const router = useRouter();
 
   return (
     <div className="flex flex-col h-full">
