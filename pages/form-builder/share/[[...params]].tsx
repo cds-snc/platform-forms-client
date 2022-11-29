@@ -7,7 +7,7 @@ import { Share, Template, PageTemplate } from "@formbuilder/layout/";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
-  const title = `${t("gcFormsSettings")} — ${t("gcForms")}`;
+  const title = `${t("gcFormsShare")} — ${t("gcForms")}`;
   return (
     <PageTemplate title={title}>
       <Share />

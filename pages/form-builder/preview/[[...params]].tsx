@@ -7,7 +7,7 @@ import { Preview, PreviewNavigation, Template, PageTemplate } from "@formbuilder
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
-  const title = `${t("gcFormsSettings")} — ${t("gcForms")}`;
+  const title = `${t("gcFormsPreview")} — ${t("gcForms")}`;
   return (
     <PageTemplate title={title} navigation={<PreviewNavigation />}>
       <Preview />
