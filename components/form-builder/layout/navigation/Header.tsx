@@ -22,7 +22,6 @@ export const Header = () => {
   }));
 
   const [isStartPage, setIsStartPage] = useState(false);
-  const router = useRouter();
   const { isReady, asPath } = useRouter();
   const { status } = useSession();
   const { isSaveable } = useAllowPublish();
