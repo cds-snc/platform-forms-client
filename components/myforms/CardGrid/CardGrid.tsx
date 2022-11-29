@@ -1,5 +1,4 @@
 import React from "react";
-import { useTranslation } from "next-i18next";
 import { Card, CardProps } from "@components/myforms/Card/Card";
 
 interface CardGridProps {
@@ -8,11 +7,10 @@ interface CardGridProps {
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {
   const { cards } = props;
-  const { t } = useTranslation(["my-forms"]);
 
   return (
     <ol
-      className="grid gap-4"
+      className="grid gap-4 p-0"
       style={{ gridTemplateColumns: "repeat(auto-fill, minmax(20rem, 1fr))" }}
     >
       {cards &&
@@ -31,7 +29,6 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
             </li>
           );
         })}
-      {cards && cards?.length === 0 && <p>{t("cards.noForms")}</p>}
     </ol>
   );
 };
