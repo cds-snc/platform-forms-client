@@ -7,7 +7,7 @@ import { Save, Template, PageTemplate } from "@formbuilder/layout/";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
-  const title = `${t("gcFormsTranslate")} — ${t("gcForms")}`;
+  const title = `${t("gcFormsSave")} — ${t("gcForms")}`;
   return (
     <PageTemplate title={title}>
       <Save />
