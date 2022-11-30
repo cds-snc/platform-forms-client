@@ -30,7 +30,7 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
         href={href}
         className={`${
           active ? "font-bold" : ""
-        } no-underline !bg-white-default !text-black-default visited:text-black-default first:pl-0 pl-4 pr-4`}
+        } no-underline !bg-white !text-black first:pl-0 pl-4 pr-4 !shadow-none`}
       >
         {children}
       </a>
