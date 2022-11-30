@@ -4,8 +4,8 @@ import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps } from "@lib/types";
 
-const SUPPORT_EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; // "assistance+forms@cds-snc.freshdesk.com";
-const CONTACTUS_EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; // "jose.jimenez@cds-snc.ca";
+const SUPPORT_EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
+const CONTACTUS_EMAIL_ADDRESS = "jose.jimenez@cds-snc.ca";
 
 const requestSupport = async (
   req: NextApiRequest,
