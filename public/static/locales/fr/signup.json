@@ -59,10 +59,10 @@
   "accountCreated": {
     "title": "Compte créé",
     "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
-    "yourAccountListDescription": "Ce compte vous permet de:",
+    "yourAccountListDescription": "Ce compte vous permet de",
     "yourAccountList": {
       "item1": "rédiger une ébauche de formulaire",
-      "item2": "sauvegarder les ébauches dans Formulaires GC;",
+      "item2": "sauvegarder les ébauches dans Formulaires GC",
       "item3": "tester la livraison des réponses. "
     },
     "notIncluded": {
