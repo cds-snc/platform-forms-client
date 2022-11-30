@@ -53,7 +53,7 @@ export const RichTextEditor = ({
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
-        ariaDescribedBy={ariaDescribedBy || null}
+        ariaDescribedBy={ariaDescribedBy}
       />
     </div>
   );
