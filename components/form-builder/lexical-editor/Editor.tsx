@@ -5,6 +5,7 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { $createParagraphNode, $getRoot } from "lexical";
 import { editorConfig } from "./config";
@@ -47,11 +48,13 @@ export const Editor = ({
   onChange,
   autoFocusEditor,
   ariaLabel,
+  ariaDescribedBy,
 }: {
   content: string;
   onChange: (value: string) => void;
   autoFocusEditor?: boolean;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
 }) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
@@ -92,12 +95,14 @@ export const Editor = ({
                 className="editor-input"
                 id={editorId}
                 ariaLabel={ariaLabel && ariaLabel}
+                ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
               />
             </div>
           }
           placeholder={""}
         />
         <FocusPlugin autoFocusEditor={autoFocusEditor} />
+        <HistoryPlugin />
         <OnChangePlugin
           onChange={(editorState) => {
             editorState.read(() => {
