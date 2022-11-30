@@ -33,8 +33,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const [formID = null] = params || [];
 
-  const FormbuilderParams: { initialForm: null | FormRecord } = {
+  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
+    locale: locale || "en",
   };
 
   const session = await unstable_getServerSession(req, res, authOptions);

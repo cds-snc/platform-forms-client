@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import SkipLink from "@components/globals/SkipLink";
@@ -6,10 +6,13 @@ import Footer from "@components/globals/Footer";
 import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation, Header } from "@components/form-builder/layout/";
+import { Language } from "../types";
 
 export const Template = ({ page }: { page: ReactElement }) => {
   return (
-    <TemplateStoreProvider {...(page.props.initialForm && page.props.initialForm)}>
+    <TemplateStoreProvider
+      {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
+    >
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
@@ -36,11 +39,18 @@ export const PageTemplate = ({
   navigation?: React.ReactElement;
   leftNav?: boolean;
 }) => {
-  const { t } = useTranslation("form-builder");
-  const { hasHydrated, form } = useTemplateStore((s) => ({
+  const { t, i18n } = useTranslation("form-builder");
+  const { hasHydrated, form, setLang } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
+    setLang: s.setLang,
   }));
+
+  const locale = i18n.language as Language;
+
+  useEffect(() => {
+    setLang(locale);
+  }, [locale]);
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (

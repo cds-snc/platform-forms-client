@@ -48,11 +48,13 @@ export const Editor = ({
   onChange,
   autoFocusEditor,
   ariaLabel,
+  ariaDescribedBy,
 }: {
   content: string;
   onChange: (value: string) => void;
   autoFocusEditor?: boolean;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
 }) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
@@ -93,6 +95,7 @@ export const Editor = ({
                 className="editor-input"
                 id={editorId}
                 ariaLabel={ariaLabel && ariaLabel}
+                ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
               />
             </div>
           }

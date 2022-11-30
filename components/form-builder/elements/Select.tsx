@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useSelect, UseSelectStateChange } from "downshift";
 import styled from "styled-components";
 import { ElementOption, DropdownProps, DropdownLabelProps } from "../types";
+import { ChevronDown } from "../icons";
 
 const DropDownContainer = styled.div`
   width: 250px;
@@ -44,7 +45,7 @@ const DropDownList = styled.ul`
 const DropDownListItem = styled.li`
   display: flex;
   align-content: flex-start;
-  background: ${(props: DropdownProps) => (props.ishighlighted ? "#303FC3" : "")};
+  background: ${(props: DropdownProps) => (props.ishighlighted ? "#718096" : "")};
   cursor: pointer;
   padding-left: 20px;
   padding-right: 26px;
@@ -77,6 +78,16 @@ const DropDownListLabel = styled.div`
   line-height: 24px;
 `;
 
+const DropDownListLabelActive = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  svg {
+    margin-right: 20px;
+  }
+`;
+
 export const DropDown = ({
   items,
   selectedItem,
@@ -92,13 +103,21 @@ export const DropDown = ({
     onSelectedItemChange: onChange,
   });
 
+  const headerProps = {
+    ...getToggleButtonProps(),
+    "aria-label": "Select an Element type",
+    "aria-labelledby": null,
+  };
+
   return (
     <DropDownContainer style={{ position: "relative", zIndex: isOpen ? 20000 : 1 }}>
-      <DropDownHeader {...getToggleButtonProps()}>
+      <DropDownHeader {...headerProps}>
         {selectedItem && (
           <>
-            <DropDownListIcon>{selectedItem.icon}</DropDownListIcon>
-            <DropDownListLabel>{selectedItem.value}</DropDownListLabel>
+            <DropDownListLabelActive>
+              {selectedItem.value}
+              <ChevronDown />
+            </DropDownListLabelActive>
           </>
         )}
       </DropDownHeader>

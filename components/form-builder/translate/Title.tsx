@@ -3,6 +3,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
 import { FormElement } from "@lib/types";
+import { LanguageLabel } from "./LanguageLabel";
 
 export const Title = ({
   element,
@@ -33,46 +34,62 @@ export const Title = ({
           >
             {t(`${translationLanguagePriority}-text`)}
           </label>
-          <textarea
-            id={`element-${element.id}-title-${translationLanguagePriority}`}
-            value={
-              element.properties[
-                localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
-              ]
-            }
-            onChange={(e) => {
-              updateField(
-                `form.elements[${index}].properties.${localizeField(
-                  LocalizedElementProperties.TITLE,
-                  translationLanguagePriority
-                )}`,
-                e.target.value
-              );
-            }}
-          />
+          <div className="relative">
+            <LanguageLabel
+              id={`element-${element.id}-title-${translationLanguagePriority}-language`}
+            >
+              {t(translationLanguagePriority)}
+            </LanguageLabel>
+            <textarea
+              id={`element-${element.id}-title-${translationLanguagePriority}`}
+              aria-describedby={`element-${element.id}-title-${translationLanguagePriority}-language`}
+              value={
+                element.properties[
+                  localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
+                ]
+              }
+              onChange={(e) => {
+                updateField(
+                  `form.elements[${index}].properties.${localizeField(
+                    LocalizedElementProperties.TITLE,
+                    translationLanguagePriority
+                  )}`,
+                  e.target.value
+                );
+              }}
+            />
+          </div>
           <label
             className="sr-only"
             htmlFor={`element-${element.id}-title-${translationLanguagePriorityAlt}`}
           >
             {t(`${translationLanguagePriorityAlt}-text`)}
           </label>
-          <textarea
-            id={`element-${element.id}-title-${translationLanguagePriorityAlt}`}
-            value={
-              element.properties[
-                localizeField(LocalizedElementProperties.TITLE, translationLanguagePriorityAlt)
-              ]
-            }
-            onChange={(e) => {
-              updateField(
-                `form.elements[${index}].properties.${localizeField(
-                  LocalizedElementProperties.TITLE,
-                  translationLanguagePriorityAlt
-                )}`,
-                e.target.value
-              );
-            }}
-          />
+          <div className="relative">
+            <LanguageLabel
+              id={`element-${element.id}-title-${translationLanguagePriorityAlt}-language`}
+            >
+              {t(translationLanguagePriorityAlt)}
+            </LanguageLabel>
+            <textarea
+              id={`element-${element.id}-title-${translationLanguagePriorityAlt}`}
+              aria-describedby={`element-${element.id}-title-${translationLanguagePriorityAlt}-language`}
+              value={
+                element.properties[
+                  localizeField(LocalizedElementProperties.TITLE, translationLanguagePriorityAlt)
+                ]
+              }
+              onChange={(e) => {
+                updateField(
+                  `form.elements[${index}].properties.${localizeField(
+                    LocalizedElementProperties.TITLE,
+                    translationLanguagePriorityAlt
+                  )}`,
+                  e.target.value
+                );
+              }}
+            />
+          </div>
         </div>
       </fieldset>
     </>
