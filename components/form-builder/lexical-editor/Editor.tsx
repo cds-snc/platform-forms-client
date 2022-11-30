@@ -19,6 +19,7 @@ import {
 } from "@lexical/markdown";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { TabEscape } from "./plugins/TabEscape";
+import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
 
 const RichTextWrapper = styled.div`
   height: 100%;
@@ -117,6 +118,7 @@ export const Editor = ({
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
         <TabEscape />
+        <ListMaxIndentPlugin maxDepth={5} />
       </LexicalComposer>
     </RichTextWrapper>
   );
