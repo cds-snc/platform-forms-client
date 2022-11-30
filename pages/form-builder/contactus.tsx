@@ -20,7 +20,7 @@ import {
 } from "@components/forms";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
-export default function ContactUs() {
+export default function Contactus() {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const [errorState, setErrorState] = useState({ message: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -102,7 +102,7 @@ export default function ContactUs() {
                   type="error"
                   validation={true}
                   tabIndex={0}
-                  id="unlockPublishingValidationErrors"
+                  id="validationErrors"
                   heading={t("input-validation.heading", { ns: "common" })}
                 >
                   <ol className="gc-ordered-list">
@@ -121,21 +121,20 @@ export default function ContactUs() {
 
               <h1>{t("contactus.title")}</h1>
               <p className="mb-6 mt-[-2rem]">
-                {t("support.paragraph1")}&nbsp;
+                {t("contactus.paragraph1")}&nbsp;
                 <Link href={`/${i18n.language}/form-builder/support`}>
-                  {t("support.paragraph1Link")}
+                  {t("contactus.paragraph1Link")}
                 </Link>
                 .
               </p>
               <p className="mb-6">
-                {t("support.paragraph2")}&nbsp;
+                {t("contactus.paragraph2")}&nbsp;
                 <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
-                  {t("support.paragraph2Link")}
+                  {t("contactus.paragraph2Link")}
                 </Link>
-                &nbsp;{t("support.paragraph2Part2")}
+                &nbsp;{t("contactus.paragraph2Part2")}
               </p>
-              <p className="mb-20">{t("support.paragraph3")}</p>
-
+              <p className="mb-20">{t("contactus.paragraph3")}</p>
               <form id="contactus" method="POST" onSubmit={handleSubmit} noValidate>
                 <div className="focus-group">
                   <Label id={"label-name"} htmlFor={"name"} className="required" required>
@@ -148,7 +147,6 @@ export default function ContactUs() {
                     className="required w-[34rem]"
                   />
                 </div>
-
                 <div className="focus-group">
                   <Label id={"label-email"} htmlFor={"email"} className="required" required>
                     {t("contactus.email")}
@@ -161,7 +159,6 @@ export default function ContactUs() {
                     required
                   />
                 </div>
-
                 <fieldset className="focus-group">
                   <legend className="gc-label required">
                     {t("contactus.request.title")}{" "}
@@ -200,7 +197,6 @@ export default function ContactUs() {
                     ]}
                   ></MultipleChoiceGroup>
                 </fieldset>
-
                 <div className="focus-group">
                   <Label
                     id={"label-description"}
@@ -226,7 +222,6 @@ export default function ContactUs() {
                     }}
                   />
                 </div>
-
                 <div className="flex mt-14">
                   <Button
                     type="submit"

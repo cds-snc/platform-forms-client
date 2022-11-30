@@ -177,8 +177,12 @@
   "viewCode": "View code",
   "contactus": {
     "title": "Contact Us",
-    "intro": "If you experience technical issues, please fill out the",
-    "supportLink": "Support Form",
+    "paragraph1": "If you experience technical issues, please fill out the",
+    "paragraph1Link": "Support Form",
+    "paragraph2": "For other enquiries, go to",
+    "paragraph2Link": "Canada.ca Contact us",
+    "paragraph2Part2": "to find the department or agency that can support you.",
+    "paragraph3": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
     "name": "Your Name",
     "email": "Your Email",
     "request": {

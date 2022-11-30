@@ -102,7 +102,7 @@ export default function Support() {
                   type="error"
                   validation={true}
                   tabIndex={0}
-                  id="unlockPublishingValidationErrors"
+                  id="validationErrors"
                   heading={t("input-validation.heading", { ns: "common" })}
                 >
                   <ol className="gc-ordered-list">
