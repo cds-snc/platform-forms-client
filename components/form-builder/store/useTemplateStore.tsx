@@ -60,6 +60,7 @@ export const defaultForm = {
 
 export interface TemplateStoreProps {
   id: string;
+  locale: string; // used to set the initial language priority
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
@@ -122,8 +123,9 @@ const storage: StateStorage = {
 const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
-    lang: "en",
-    translationLanguagePriority: "en",
+    locale: initProps?.locale || "en",
+    lang: (initProps?.locale as Language) || "en",
+    translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
     _hasHydrated: false,
     form: defaultForm,

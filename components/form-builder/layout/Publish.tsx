@@ -64,7 +64,7 @@ export const Publish = () => {
       return;
     }
 
-    router.push({ pathname: `/signup/unlock-publishing` });
+    router.push({ pathname: `/unlock-publishing` });
   }, []);
 
   if (status !== "authenticated") {

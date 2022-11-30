@@ -90,7 +90,7 @@ export const Start = () => {
                   );
                 })}
               </ul>
-              <a href="https://example.com" className="ml-6">
+              <a href="/form-builder/support" className="ml-6">
                 {t("contactSupport")}
               </a>
             </div>
