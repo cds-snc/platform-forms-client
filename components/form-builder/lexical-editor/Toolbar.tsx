@@ -9,7 +9,7 @@ import { FormatItalic } from "@styled-icons/material/FormatItalic";
 import { Link } from "@styled-icons/material/Link";
 import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
 import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
-import { TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useTranslation } from "next-i18next";
 
 import {
@@ -32,6 +32,7 @@ import { $wrapNodes } from "@lexical/selection";
 import styled from "styled-components";
 import { sanitizeUrl } from "./utils/sanitizeUrl";
 import { useEditorFocus } from "./useEditorFocus";
+import { getSelectedNode } from "./utils/getSelectedNode";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -81,7 +82,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
-  const [isLink] = useState(false);
+  const [isLink, setIsLink] = useState(false);
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
 
@@ -202,6 +203,17 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
       setIsBold(selection.hasFormat("bold"));
       setIsItalic(selection.hasFormat("italic"));
 
+      // Get current node and parent
+      const node = getSelectedNode(selection);
+      const parent = node.getParent();
+
+      // Update links
+      if ($isLinkNode(parent) || $isLinkNode(node)) {
+        setIsLink(true);
+      } else {
+        setIsLink(false);
+      }
+
       if (elementDOM !== null) {
         setSelectedElementKey(elementKey);
         if ($isListNode(element)) {
@@ -262,6 +274,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             "toolbar-item spaced " + (blockType === "h2" && editorHasFocus ? "active" : "")
           }
           aria-label={t("formatH2")}
+          aria-pressed={blockType === "h2"}
           title={t("tooltipFormatH2")}
         >
           <LooksTwo size={20} />
@@ -282,6 +295,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             "toolbar-item spaced " + (blockType === "h3" && editorHasFocus ? "active" : "")
           }
           aria-label={t("formatH3")}
+          aria-pressed={blockType === "h3"}
           title={t("tooltipFormatH3")}
         >
           <Looks3 size={20} />
@@ -300,6 +314,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           className={"toolbar-item " + (isBold && editorHasFocus ? "active" : "")}
           aria-label={t("formatBold")}
+          aria-pressed={isBold}
           title={t("tooltipFormatBold")}
         >
           <FormatBold size={20} />
@@ -318,6 +333,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           }}
           className={"toolbar-item " + (isItalic && editorHasFocus ? "active" : "")}
           aria-label={t("formatItalic")}
+          aria-pressed={isItalic}
           title={t("tooltipFormatItalic")}
         >
           <FormatItalic size={20} />
@@ -334,6 +350,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={formatBulletList}
           className={"toolbar-item " + (blockType === "bullet" && editorHasFocus ? "active" : "")}
           aria-label={t("formatBulletList")}
+          aria-pressed={blockType === "bullet"}
           title={t("tooltipFormatBulletList")}
         >
           <FormatListBulleted size={20} />
@@ -350,6 +367,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={formatNumberedList}
           className={"toolbar-item " + (blockType === "number" && editorHasFocus ? "active" : "")}
           aria-label={t("formatNumberedList")}
+          aria-pressed={blockType === "number"}
           title={t("tooltipFormatNumberedList")}
         >
           <FormatListNumbered size={20} />
@@ -367,6 +385,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
           onClick={insertLink}
           className={"toolbar-item " + (isLink && editorHasFocus ? "active" : "")}
           aria-label={t("insertLink")}
+          aria-pressed={isLink}
           title={t("tooltipInsertLink")}
         >
           <Link size={20} />
