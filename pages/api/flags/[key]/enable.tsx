@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { enableFlag, checkAll } from "@lib/cache/flags";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 
 const allowedMethods = ["GET"];
@@ -10,10 +10,10 @@ const allowedMethods = ["GET"];
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ): Promise<void> => {
   try {
-    if (!session) return res.status(401).send("Unauthorized");
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
     const key = req.query.key as string;
     if (Array.isArray(key) || !key)
       return res.status(400).json({ error: "Malformed API Request Flag Key is not defined" });
