@@ -18,6 +18,7 @@ import {
   TRANSFORMERS,
 } from "@lexical/markdown";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
+import { TabEscape } from "./plugins/TabEscape";
 
 const RichTextWrapper = styled.div`
   height: 100%;
@@ -115,6 +116,7 @@ export const Editor = ({
         <LinkPlugin />
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
+        <TabEscape />
       </LexicalComposer>
     </RichTextWrapper>
   );
