@@ -103,9 +103,15 @@ export const DropDown = ({
     onSelectedItemChange: onChange,
   });
 
+  const headerProps = {
+    ...getToggleButtonProps(),
+    "aria-label": "Select an Element type",
+    "aria-labelledby": null,
+  };
+
   return (
     <DropDownContainer style={{ position: "relative", zIndex: isOpen ? 20000 : 1 }}>
-      <DropDownHeader {...getToggleButtonProps()}>
+      <DropDownHeader {...headerProps}>
         {selectedItem && (
           <>
             <DropDownListLabelActive>
