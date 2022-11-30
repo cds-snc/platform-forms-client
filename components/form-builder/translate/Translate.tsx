@@ -253,6 +253,7 @@ export const Translate = () => {
                     }
                     lang={translationLanguagePriority}
                     ariaLabel={t("formIntroduction")}
+                    ariaDescribedBy="form-introduction-english-language"
                   />
                 </div>
                 <div className="relative">
@@ -275,6 +276,7 @@ export const Translate = () => {
                     }
                     lang={translationLanguagePriorityAlt}
                     ariaLabel={t("formIntroduction")}
+                    ariaDescribedBy="form-introduction-french-language"
                   />
                 </div>
               </div>
@@ -376,6 +378,7 @@ export const Translate = () => {
                   }
                   lang={translationLanguagePriority}
                   ariaLabel={t("privacyStatement")}
+                  ariaDescribedBy={`privacyPolicy-${translationLanguagePriority}-language`}
                 />
               </div>
               <div className="relative">
@@ -398,6 +401,7 @@ export const Translate = () => {
                   }
                   lang={translationLanguagePriorityAlt}
                   ariaLabel={t("privacyStatement")}
+                  ariaDescribedBy={`privacyPolicy-${translationLanguagePriorityAlt}->language`}
                 />
               </div>
             </div>
@@ -434,6 +438,7 @@ export const Translate = () => {
                   }
                   lang={translationLanguagePriority}
                   ariaLabel={t("confirmationMessage")}
+                  ariaDescribedBy={`endpage-${translationLanguagePriority}-language`}
                 />
               </div>
               <div className="relative">
@@ -456,6 +461,7 @@ export const Translate = () => {
                   }
                   lang={translationLanguagePriorityAlt}
                   ariaLabel={t("confirmationMessage")}
+                  ariaDescribedBy={`endpage-${translationLanguagePriorityAlt}-language`}
                 />
               </div>
             </div>

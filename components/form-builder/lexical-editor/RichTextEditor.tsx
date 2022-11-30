@@ -11,12 +11,14 @@ export const RichTextEditor = ({
   autoFocusEditor,
   lang,
   ariaLabel,
+  ariaDescribedBy,
 }: {
   path: string;
   content: string;
   autoFocusEditor?: boolean;
   lang: Language;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
 }) => {
   const updateField = useTemplateStore((s) => s.updateField);
   const [value, setValue] = useState(content);
@@ -51,6 +53,7 @@ export const RichTextEditor = ({
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
+        ariaDescribedBy={ariaDescribedBy || null}
       />
     </div>
   );

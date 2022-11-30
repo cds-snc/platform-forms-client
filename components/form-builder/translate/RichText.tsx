@@ -44,6 +44,7 @@ export const RichText = ({
               }
               lang={translationLanguagePriority}
               ariaLabel={t("pageText") + " " + t(translationLanguagePriority)}
+              ariaDescribedBy={`elements-${index}-description-${translationLanguagePriority}-language`}
             />
           </div>
           <div className="relative">
@@ -64,6 +65,7 @@ export const RichText = ({
               }
               lang={translationLanguagePriorityAlt}
               ariaLabel={t("pageText") + " " + t(translationLanguagePriorityAlt)}
+              ariaDescribedBy={`elements-${index}-description-${translationLanguagePriorityAlt}-language`}
             />
           </div>
         </div>
