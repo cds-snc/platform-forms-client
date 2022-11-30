@@ -7,6 +7,8 @@ import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation, Header } from "@components/form-builder/layout/";
 import { Language } from "../types";
+import { useSession } from "next-auth/react";
+import { useActivePathname } from "../hooks/useActivePathname";
 
 export const Template = ({ page }: { page: ReactElement }) => {
   return (
@@ -40,17 +42,30 @@ export const PageTemplate = ({
   leftNav?: boolean;
 }) => {
   const { t, i18n } = useTranslation("form-builder");
-  const { hasHydrated, form, setLang } = useTemplateStore((s) => ({
+  const { hasHydrated, form, setLang, updateField, email } = useTemplateStore((s) => ({
     form: s.form,
     hasHydrated: s._hasHydrated,
     setLang: s.setLang,
+    email: s.submission?.email,
+    updateField: s.updateField,
   }));
 
   const locale = i18n.language as Language;
+  const { data } = useSession();
+  const { currentPage } = useActivePathname();
 
   useEffect(() => {
     setLang(locale);
   }, [locale]);
+
+  useEffect(() => {
+    const setEmail = () => {
+      if (data && data.user.email) {
+        updateField("submission.email", data.user.email);
+      }
+    };
+    !email && currentPage !== "settings" && setEmail();
+  }, [email, data]);
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
