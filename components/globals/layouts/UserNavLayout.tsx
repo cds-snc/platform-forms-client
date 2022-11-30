@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import SkipLink from "../SkipLink";
 
 const UserNavLayout = ({ children }: React.PropsWithChildren) => {
