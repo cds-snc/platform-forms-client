@@ -4,7 +4,7 @@ import { getUsers } from "@lib/users";
 
 import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
 import { MongoAbility } from "@casl/ability";
@@ -56,11 +56,10 @@ const updatePrivilegeOnUser = async (
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ): Promise<void> => {
+  const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    if (!session) return res.status(401).json({ error: "Unauthorized" });
-
     const ability = createAbility(session.user.privileges);
 
     switch (req.method) {
