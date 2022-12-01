@@ -90,6 +90,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
+  setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   add: (index?: number) => void;
   remove: (id: number) => void;
@@ -175,6 +176,10 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
             set((state) => {
               state.translationLanguagePriority =
                 state.translationLanguagePriority === "en" ? "fr" : "en";
+            }),
+          setTranslationLanguagePriority: (lang: Language) =>
+            set((state) => {
+              state.translationLanguagePriority = lang;
             }),
           setFocusInput: (isSet) =>
             set((state) => {

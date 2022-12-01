@@ -176,15 +176,21 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
-  const { localizeField, elements, updateField, unsetField, resetChoices } = useTemplateStore(
-    (s) => ({
-      localizeField: s.localizeField,
-      elements: s.form.elements,
-      updateField: s.updateField,
-      unsetField: s.unsetField,
-      resetChoices: s.resetChoices,
-    })
-  );
+  const {
+    localizeField,
+    elements,
+    updateField,
+    unsetField,
+    resetChoices,
+    translationLanguagePriority,
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    elements: s.form.elements,
+    updateField: s.updateField,
+    unsetField: s.unsetField,
+    resetChoices: s.resetChoices,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const questionNumber =
     elements
@@ -250,7 +256,11 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
                 {t("question")} {item.index + 1}
               </LabelHidden>
               <QuestionInput
-                initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
+                initialValue={
+                  item.properties[
+                    localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
+                  ]
+                }
                 index={item.index}
                 hasDescription={hasDescription}
               />
@@ -258,7 +268,11 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
           )}
           {hasDescription && item.type !== "richText" && (
             <DivDisabled id={`item${item.index}-describedby`}>
-              {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+              {
+                item.properties[
+                  localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+                ]
+              }
             </DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
@@ -526,22 +540,36 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
 
 export const ElementPanel = () => {
   const { t } = useTranslation("form-builder");
-  const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
-    useTemplateStore((s) => ({
-      title: s.form[s.localizeField(LocalizedFormProperties.TITLE)] ?? "",
-      elements: s.form.elements,
-      introduction: s.form.introduction,
-      endPage: s.form.endPage,
-      privacyPolicy: s.form.privacyPolicy,
-      localizeField: s.localizeField,
-      updateField: s.updateField,
-    }));
+  const {
+    form,
+    elements,
+    introduction,
+    endPage,
+    privacyPolicy,
+    localizeField,
+    updateField,
+    translationLanguagePriority,
+  } = useTemplateStore((s) => ({
+    form: s.form,
+    elements: s.form.elements,
+    introduction: s.form.introduction,
+    endPage: s.form.endPage,
+    privacyPolicy: s.form.privacyPolicy,
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const title = form[localizeField(LocalizedFormProperties.TITLE, translationLanguagePriority)];
 
   const [value, setValue] = useState<string>(title);
 
   const _debounced = useCallback(
     debounce((val: string | boolean) => {
-      updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, val);
+      updateField(
+        `form.${localizeField(LocalizedFormProperties.TITLE, translationLanguagePriority)}`,
+        val
+      );
     }, 100),
     []
   );
@@ -559,13 +587,18 @@ export const ElementPanel = () => {
   );
 
   const introTextPlaceholder =
-    introduction?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
+    introduction?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+    ] ?? "";
 
   const confirmTextPlaceholder =
-    endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
+    endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)] ??
+    "";
 
   const policyTextPlaceholder =
-    privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
+    privacyPolicy?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+    ] ?? "";
 
   return (
     <>

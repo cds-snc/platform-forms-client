@@ -19,14 +19,15 @@ export const Preview = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField } = useTemplateStore((s) => ({
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
   }));
 
   const router = useRouter();
   const { t: t1 } = useTranslation();
-  const { t, i18n } = useTranslation("form-builder");
-  const language = i18n.language as string;
+  const { t } = useTranslation("form-builder");
+  const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
 
   return (
