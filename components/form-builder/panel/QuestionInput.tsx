@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { LocalizedElementProperties } from "../types";
-import debounce from "lodash.debounce";
-import { Input } from "../shared/Input";
-
-import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
+import debounce from "lodash.debounce";
+
+import { Input } from "../shared";
+import { LocalizedElementProperties } from "../types";
+import { useTemplateStore } from "../store";
 
 export const QuestionInput = ({
   index,

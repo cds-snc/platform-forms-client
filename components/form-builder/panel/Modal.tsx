@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-import { Button } from "../shared/Button";
-import { Close } from "../icons/Close";
+import { Button } from "../shared";
+import { Close } from "../icons";
 import { CDSHTMLDialogElement } from "../types";
-import useModalStore from "../store/useModalStore";
+import { useModalStore } from "../store";
 
 const StyledDialog = styled.dialog`
   padding: 0;
@@ -214,27 +214,27 @@ export const ModalContainer = ({
   /* eslint-disable */
   return (
     <StyledDialog tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
-            <h2 className="modal-title">{title}</h2>
-            <ModalButton isOpenButton={false}>
-              <Button
-                theme="icon"
-                className="group"
-                icon={<Close className="group-focus:fill-white-default" />}
-                aria-label={t("Close")}
-                onClick={close}
-              ></Button>
-            </ModalButton>
-          </div>
-          <div className="modal-body">
-            {children}
-          </div>
-          <div className="modal-footer">
-            {saveButton}
-            <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
-          </div>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2 className="modal-title">{title}</h2>
+          <ModalButton isOpenButton={false}>
+            <Button
+              theme="icon"
+              className="group"
+              icon={<Close className="group-focus:fill-white-default" />}
+              aria-label={t("Close")}
+              onClick={close}
+            ></Button>
+          </ModalButton>
         </div>
+        <div className="modal-body">
+          {children}
+        </div>
+        <div className="modal-footer">
+          {saveButton}
+          <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
+        </div>
+      </div>
     </StyledDialog>
   );
   /* eslint-enable */

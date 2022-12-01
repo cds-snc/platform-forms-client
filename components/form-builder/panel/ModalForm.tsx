@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes, ElementProperties } from "@lib/types";
+
 import { FormElementWithIndex, LocalizedElementProperties } from "../types";
 import { Checkbox, Input, TextArea } from "../shared";
 import { useTemplateStore } from "../store/";
