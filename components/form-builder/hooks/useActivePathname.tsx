@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+export const cleanPath = (path = "") => {
+  // remove id from path
+  const idRegex = /\/[a-zA-Z0-9]{25}$/;
+  if (path && path.match(idRegex)) {
+    return path.substring(0, path.lastIndexOf("/"));
+  }
+  return path;
+};
+
 export const useActivePathname = () => {
   const { asPath, isReady } = useRouter();
   const [activePathname, setActivePathname] = useState("");
 
   useEffect(() => {
     if (isReady) {
-      let path = new URL(asPath, location.href).pathname;
-      // TemplateId is always 25 characters long. If present, remove it from the activePathname.
-      const end = path.substring(path.lastIndexOf("/") + 1);
-      if (end.length === 25) {
-        path = path.substring(0, path.lastIndexOf("/"));
-      }
-
-      setActivePathname(path);
+      setActivePathname(cleanPath(asPath));
     }
   }, [asPath, isReady, setActivePathname]);
 
