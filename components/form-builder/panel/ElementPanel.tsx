@@ -64,9 +64,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <ElementWrapperDiv className={`element-${item.index} ${className}`}>
-      <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
-        <PanelBody item={item} />
-      </div>
+      <PanelBody item={item} />
       <PanelActions
         item={item}
         renderSaveButton={() => (

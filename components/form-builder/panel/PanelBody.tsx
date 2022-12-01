@@ -134,7 +134,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const hasDescription = item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
 
   return (
-    <>
+    <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
       <Row isRichText={isRichText} className="element-panel flex xxl:flex-col-reverse flex-row">
         <div className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}>
           {!isRichText && (
@@ -199,6 +199,6 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
           </>
         )}
       </Row>
-    </>
+    </div>
   );
 };
