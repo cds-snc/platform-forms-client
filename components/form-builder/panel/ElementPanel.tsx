@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../types";
 import { useTemplateStore, useModalStore } from "../store/";
 import { PanelActions, ModalButton, ModalForm, PanelBody } from "./";
 import { Button } from "../shared";
-
-const ElementWrapperDiv = styled.div`
-  border: 1.5px solid #000000;
-  max-width: 800px;
-  height: auto;
-  margin-top: -1px;
-`;
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
@@ -63,7 +55,9 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   };
 
   return (
-    <ElementWrapperDiv className={`element-${item.index} ${className}`}>
+    <div
+      className={`element-${item.index} ${className} border border-black max-w-[800px] h-auto -mt-1`}
+    >
       <PanelBody item={item} />
       <PanelActions
         item={item}
@@ -89,6 +83,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
           />
         )}
       </PanelActions>
-    </ElementWrapperDiv>
+    </div>
   );
 };
