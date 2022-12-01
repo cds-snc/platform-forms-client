@@ -1,8 +1,7 @@
-import React from "react";
-import uniqueId from "lodash/uniqueId";
+import React, { useId } from "react";
 
 export const ToolTip = ({ children, text }: { children: React.ReactElement; text: string }) => {
-  const id = uniqueId("tooltip-");
+  const id = `tooltip-${useId()}`;
 
   const Children = () =>
     React.cloneElement(children, {
