@@ -1,114 +1,30 @@
 import React, { useState, useCallback, useEffect } from "react";
+import debounce from "lodash.debounce";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
-import { useTemplateStore } from "../store/useTemplateStore";
-import useModalStore from "../store/useModalStore";
-import { Select } from "../elements";
-import { PanelActions } from "./PanelActions";
-import debounce from "lodash.debounce";
+
 import {
   ElementOption,
   FormElementWithIndex,
   LocalizedElementProperties,
   LocalizedFormProperties,
 } from "../types";
-import { ElementProperties, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
+import { useTemplateStore, useModalStore } from "../store/";
 import { UseSelectStateChange } from "downshift";
-import { ShortAnswer, Options, RichText, RichTextLocked } from "../elements";
-import { useElementOptions } from "../hooks/useElementOptions";
-import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
-import { ModalButton } from "./Modal";
-import { Checkbox } from "../shared/MultipleChoice";
-import { Button } from "../shared/Button";
-import { Input } from "../shared/Input";
-import { TextArea } from "../shared/TextArea";
-import { ConfirmationDescription } from "./ConfirmationDescription";
-import { PrivacyDescription } from "./PrivacyDescription";
-import { QuestionInput } from "./QuestionInput";
-
-const SelectedElement = ({
-  selected,
-  item,
-}: {
-  selected: ElementOption;
-  item: FormElementWithIndex;
-}) => {
-  const { t } = useTranslation("form-builder");
-
-  let element = null;
-
-  switch (selected.id) {
-    case "text":
-    case "textField":
-      element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
-      break;
-    case "richText":
-      element = <RichText parentIndex={item.index} />;
-      break;
-    case "textArea":
-      element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
-      break;
-    case "radio":
-      element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
-      break;
-    case "checkbox":
-      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
-      break;
-    case "dropdown":
-      element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
-      break;
-    case "email":
-      element = <ShortAnswer>{t("example@canada.gc.ca")}</ShortAnswer>;
-      break;
-    case "phone":
-      element = <ShortAnswer>555-555-0000</ShortAnswer>;
-      break;
-    case "date":
-      element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
-      break;
-    case "number":
-      element = <ShortAnswer>0123456789</ShortAnswer>;
-      break;
-    default:
-      element = null;
-  }
-
-  return element;
-};
-
-const getSelectedOption = (item: FormElementWithIndex): ElementOption => {
-  const elementOptions = useElementOptions();
-  const { validationType, type } = useTemplateStore(
-    useCallback(
-      (s) => {
-        return {
-          type: s.form?.elements[item.index]?.type,
-          validationType: s.form?.elements[item.index].properties?.validation?.type,
-        };
-      },
-      [item.index]
-    )
-  );
-
-  let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
-
-  if (!type) {
-    return elementOptions[2];
-  } else if (type === "textField") {
-    /**
-     * Email, phone, and date fields are specialized text field types.
-     * That is to say, their "type" is "textField" but they have specalized validation "type"s.
-     * So if we have a "textField", we want to first check properties.validation.type to see if
-     * it is a true Short Answer, or one of the other types.
-     * The one exception to this is validationType === "text" types, for which we want to return "textField"
-     */
-    selectedType = validationType && validationType !== "text" ? validationType : type;
-  }
-
-  const selected = elementOptions.filter((item) => item.id === selectedType);
-  return selected && selected.length ? selected[0] : elementOptions[2];
-};
+import {
+  PanelActions,
+  ConfirmationDescription,
+  PrivacyDescription,
+  QuestionInput,
+  ModalButton,
+  ModalForm,
+  SelectedElement,
+  getSelectedOption,
+} from "./";
+import { RichTextLocked, Select } from "../elements";
+import { useElementOptions } from "../hooks";
+import { Checkbox, Button, Input } from "../shared";
 
 interface RowProps {
   isRichText: boolean;
@@ -307,135 +223,6 @@ Form.propTypes = {
   item: PropTypes.object,
 };
 
-const ModalRow = styled.div`
-  margin-bottom: 20px;
-`;
-
-const HintText = styled.p`
-  font-size: 16.5px;
-  margin-bottom: 10px;
-  line-height: 1.4;
-  margin-top: -2px;
-`;
-
-const ModalForm = ({
-  item,
-  properties,
-  updateModalProperties,
-  unsetModalField,
-}: {
-  item: FormElementWithIndex;
-  properties: ElementProperties;
-  updateModalProperties: (index: number, properties: ElementProperties) => void;
-  unsetModalField: (path: string) => void;
-}) => {
-  const { t } = useTranslation("form-builder");
-  const localizeField = useTemplateStore((s) => s.localizeField);
-
-  return (
-    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
-      <ModalRow>
-        <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</FormLabel>
-        <Input
-          id={`title--modal--${item.index}`}
-          name={`item${item.index}`}
-          placeholder={t("question")}
-          value={properties[localizeField(LocalizedElementProperties.TITLE)]}
-          className="w-11/12"
-          onChange={(e) =>
-            updateModalProperties(item.index, {
-              ...properties,
-              ...{ [localizeField(LocalizedElementProperties.TITLE)]: e.target.value },
-            })
-          }
-        />
-      </ModalRow>
-      <ModalRow>
-        <FormLabel>{t("description")}</FormLabel>
-        <HintText>{t("descriptionDescription")}</HintText>
-        <TextArea
-          id={`description--modal--${item.index}`}
-          placeholder={t("Description")}
-          className="w-11/12"
-          onChange={(e) => {
-            const description = e.target.value.replace(/[\r\n]/gm, "");
-            updateModalProperties(item.index, {
-              ...properties,
-              ...{ [localizeField(LocalizedElementProperties.DESCRIPTION)]: description },
-            });
-          }}
-          value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
-        />
-      </ModalRow>
-      <ModalRow>
-        <h3>{t("addRules")}</h3>
-      </ModalRow>
-      <ModalRow>
-        <Checkbox
-          id={`required-${item.index}-id-modal`}
-          value={`required-${item.index}-value-modal`}
-          checked={properties.validation?.required}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            // clone the existing properties so that we don't overwrite other keys in "validation"
-            const validation = Object.assign({}, properties.validation, {
-              required: e.target.checked,
-            });
-            updateModalProperties(item.index, {
-              ...properties,
-              ...{ validation },
-            });
-          }}
-          label={t("required")}
-        ></Checkbox>
-      </ModalRow>
-      {item.type === FormElementTypes.textField &&
-        (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
-          <ModalRow>
-            <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
-              {t("maximumCharacterLength")}
-            </FormLabel>
-            <HintText>{t("characterLimitDescription")}</HintText>
-            <Input
-              id={`characterLength--modal--${item.index}`}
-              type="number"
-              min="1"
-              className="w-1/4"
-              value={properties.validation?.maxLength || ""}
-              onKeyDown={(e) => {
-                if (["-", "+", ".", "e"].includes(e.key)) {
-                  e.preventDefault();
-                }
-              }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                // if value is "", unset the field
-                if (e.target.value === "") {
-                  unsetModalField(`modals[${item.index}].validation.maxLength`);
-                  return;
-                }
-
-                const value = parseInt(e.target.value);
-                if (!isNaN(value) && value >= 1) {
-                  // clone the existing properties so that we don't overwrite other keys in "validation"
-                  const validation = Object.assign({}, properties.validation, {
-                    maxLength: value,
-                  });
-                  updateModalProperties(item.index, {
-                    ...properties,
-                    ...{ validation },
-                  });
-                }
-              }}
-            />
-          </ModalRow>
-        )}
-    </form>
-  );
-};
-
-ModalForm.propTypes = {
-  item: PropTypes.object,
-};
-
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
   max-width: 800px;
@@ -476,7 +263,7 @@ export const ElementWrapper = ({ item }: { item: FormElementWithIndex }) => {
     setTimeout(() => setClassName(""), 2100);
   }, [getFocusInput]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (item.type != "richText") {
       updateModalProperties(item.index, elements[item.index].properties);
     }
