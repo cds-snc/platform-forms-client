@@ -66,6 +66,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.get": "4.4.2",
     "lodash.set": "4.3.2",
+    "lodash.uniqueid": "^4.0.1",
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.1.7",
     "markdown-to-txt": "^2.0.1",
