@@ -2,17 +2,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, sessionExists } from "@lib/middleware";
 import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 
 const SUPPORT_EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
 
 const requestPublishingPermission = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ) => {
   try {
-    if (!session) return res.status(403).json({});
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
 
     const { managerEmail, department, goals } = req.body;
 
