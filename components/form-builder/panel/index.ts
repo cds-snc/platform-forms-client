@@ -8,4 +8,4 @@ export { Modal, ModalButton } from "./Modal";
 export { ModalForm } from "./ModalForm";
 export { PrivacyDescription } from "./PrivacyDescription";
 export { SelectedElement, getSelectedOption } from "./SelectedElement";
-export { Form } from "./Form";
+export { PanelBody } from "./PanelBody";

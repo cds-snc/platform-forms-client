@@ -2,12 +2,11 @@ import React, { useState, useCallback } from "react";
 import { UseSelectStateChange } from "downshift";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import PropTypes from "prop-types";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../types";
-import { QuestionInput, SelectedElement, getSelectedOption } from "./";
+import { QuestionInput, SelectedElement, getSelectedOption } from ".";
 import { Select } from "../elements";
-import { useTemplateStore } from "../store/";
+import { useTemplateStore } from "../store";
 import { Checkbox } from "../shared";
 import { useElementOptions } from "../hooks";
 
@@ -73,7 +72,7 @@ const LabelHidden = styled(FormLabel)`
   border-width: 0;
 `;
 
-export const Form = ({ item }: { item: FormElementWithIndex }) => {
+export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
@@ -202,8 +201,4 @@ export const Form = ({ item }: { item: FormElementWithIndex }) => {
       </Row>
     </>
   );
-};
-
-Form.propTypes = {
-  item: PropTypes.object,
 };

@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../types";
 import { useTemplateStore, useModalStore } from "../store/";
-import { Form, PanelActions, ModalButton, ModalForm } from "./";
+import { PanelActions, ModalButton, ModalForm, PanelBody } from "./";
 import { Button } from "../shared";
 
 const ElementWrapperDiv = styled.div`
@@ -65,7 +65,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   return (
     <ElementWrapperDiv className={`element-${item.index} ${className}`}>
       <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
-        <Form item={item} />
+        <PanelBody item={item} />
       </div>
       <PanelActions
         item={item}
