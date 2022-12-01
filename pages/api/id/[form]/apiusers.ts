@@ -6,7 +6,7 @@ import { isValidGovEmail } from "@lib/validation";
 import emailDomainList from "../../../../email.domains.json";
 import { Session } from "next-auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
 import { MongoAbility } from "@casl/ability";
@@ -14,10 +14,10 @@ import { MongoAbility } from "@casl/ability";
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ): Promise<void> => {
+  const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    if (!session) return res.status(401).json({ error: "Unauthorized" });
     const ability = createAbility(session.user.privileges);
     switch (req.method) {
       case "GET":
