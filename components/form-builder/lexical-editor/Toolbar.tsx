@@ -277,7 +277,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatH2")}
             aria-pressed={blockType === "h2"}
-            title={t("tooltipFormatH2")}
           >
             <LooksTwo size={20} />
           </button>
@@ -300,7 +299,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatH3")}
             aria-pressed={blockType === "h3"}
-            title={t("tooltipFormatH3")}
           >
             <Looks3 size={20} />
           </button>
@@ -321,7 +319,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isBold && editorHasFocus ? "active" : "")}
             aria-label={t("formatBold")}
             aria-pressed={isBold}
-            title={t("tooltipFormatBold")}
           >
             <FormatBold size={20} />
           </button>
@@ -342,7 +339,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isItalic && editorHasFocus ? "active" : "")}
             aria-label={t("formatItalic")}
             aria-pressed={isItalic}
-            title={t("tooltipFormatItalic")}
           >
             <FormatItalic size={20} />
           </button>
@@ -363,7 +359,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatBulletList")}
             aria-pressed={blockType === "bullet"}
-            title={t("tooltipFormatBulletList")}
           >
             <FormatListBulleted size={20} />
           </button>
@@ -384,7 +379,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatNumberedList")}
             aria-pressed={blockType === "number"}
-            title={t("tooltipFormatNumberedList")}
           >
             <FormatListNumbered size={20} />
           </button>
@@ -404,7 +398,6 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isLink && editorHasFocus ? "active" : "")}
             aria-label={t("insertLink")}
             aria-pressed={isLink}
-            title={t("tooltipInsertLink")}
           >
             <Link size={20} />
           </button>
