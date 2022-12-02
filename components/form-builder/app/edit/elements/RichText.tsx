@@ -1,7 +1,7 @@
 import React from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-import { LocalizedElementProperties } from "../types";
+import { useTemplateStore } from "../../../store/useTemplateStore";
+import { RichTextEditor } from "../../../lexical-editor/RichTextEditor";
+import { LocalizedElementProperties } from "../../../types";
 import { useTranslation } from "next-i18next";
 
 export const RichText = ({ parentIndex }: { parentIndex: number }) => {

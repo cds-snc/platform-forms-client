@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { QuestionInput, SelectedElement, getSelectedOption } from ".";
-import { Select } from "../../elements";
+import { Select } from "./elements";
 import { useTemplateStore } from "../../store";
 import { Checkbox } from "../../shared";
 import { useElementOptions } from "../../hooks";

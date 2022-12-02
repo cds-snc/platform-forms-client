@@ -2,11 +2,11 @@ import React, { useState, ReactElement, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
-import { useTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Option } from "./Option";
 import { BulkAdd } from "./BulkAdd";
-import { Button } from "../shared/Button";
-import { FormElementWithIndex } from "../types";
+import { Button } from "../../../shared/Button";
+import { FormElementWithIndex } from "../../../types";
 
 const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
   const { t } = useTranslation("form-builder");

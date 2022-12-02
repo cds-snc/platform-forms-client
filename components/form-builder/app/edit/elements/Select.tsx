@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useSelect, UseSelectStateChange } from "downshift";
 import styled from "styled-components";
-import { ElementOption, DropdownProps, DropdownLabelProps } from "../types";
-import { ChevronDown } from "../icons";
+import { ElementOption, DropdownProps, DropdownLabelProps } from "../../../types";
+import { ChevronDown } from "../../../icons";
 
 const DropDownContainer = styled.div`
   width: 250px;

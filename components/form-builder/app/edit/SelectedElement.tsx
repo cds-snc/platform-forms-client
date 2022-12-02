@@ -3,7 +3,7 @@ import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
-import { ShortAnswer, Options, RichText } from "../../elements";
+import { ShortAnswer, Options, RichText } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
 import { useTemplateStore } from "../../store";

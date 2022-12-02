@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
-import { useTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore } from "../../../store/useTemplateStore";
 import { PropertyChoices } from "@lib/types";
 
 const LinkButton = styled.button`

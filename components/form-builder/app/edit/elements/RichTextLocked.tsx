@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-import { PanelActionsLocked } from "../app/edit/PanelActionsLocked";
-import { LocalizedElementProperties } from "../types";
+import { useTemplateStore } from "../../../store/useTemplateStore";
+import { RichTextEditor } from "../../../lexical-editor/RichTextEditor";
+import { PanelActionsLocked } from "../PanelActionsLocked";
+import { LocalizedElementProperties } from "../../../types";
 
 const ElementWrapperDiv = styled.div`
   border: 1.5px solid #000000;
