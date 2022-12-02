@@ -121,11 +121,30 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
     }
   };
 
+  const _setDefaultDescription = (id: string, index: number) => {
+    switch (id) {
+      case "email":
+      case "phone":
+      case "date":
+      case "number":
+        updateField(
+          `form.elements[${index}].properties.${localizeField(
+            LocalizedElementProperties.DESCRIPTION
+          )}`,
+          t(`defaultElementDescription.${id}`)
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
       if (selectedItem) {
         setSelectedItem(selectedItem);
         _updateState(selectedItem.id, item.index);
+        _setDefaultDescription(selectedItem.id, item.index);
       }
     },
     [setSelectedItem]
