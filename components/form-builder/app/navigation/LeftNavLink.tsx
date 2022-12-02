@@ -1,21 +1,20 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
+import { useActivePathname } from "../../hooks/useActivePathname";
 
 export const LeftNavLink = ({ children, href }: { children: ReactElement; href: string }) => {
-  const { asPath, isReady } = useRouter();
   const [active, setActive] = useState(false);
+  const { isReady, activePathname } = useActivePathname();
 
   useEffect(() => {
     if (isReady) {
       const linkPathname = new URL(href as string, location.href).pathname;
-      const activePathname = new URL(asPath, location.href).pathname;
 
       if (activePathname.startsWith(linkPathname)) {
         setActive(true);
       }
     }
-  }, [asPath, isReady, href, setActive]);
+  }, [activePathname, isReady, href, setActive]);
   return (
     <Link href={href}>
       <a
