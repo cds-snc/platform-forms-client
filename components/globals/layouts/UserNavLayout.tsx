@@ -7,14 +7,12 @@ import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import SkipLink from "../SkipLink";
 
 const UserNavLayout = ({ children }: React.PropsWithChildren) => {
   const { ability } = useAccessControl();
   const { status } = useSession();
   const { t } = useTranslation("common");
-  const router = useRouter();
 
   return (
     <div className="flex flex-col h-full">
@@ -28,13 +26,12 @@ const UserNavLayout = ({ children }: React.PropsWithChildren) => {
       <header className="border-b-3 border-blue-dark my-10">
         <div className="flex justify-between">
           <div>
-            <button
-              type="button"
-              onClick={() => router.push("/")}
-              className="inline-block mr-10 text-h2 mb-6 font-bold font-sans"
-            >
-              {t("title")}
-            </button>
+            <Link href="/form-builder">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a className="inline-block mr-10 text-h2 mb-6 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none">
+                {t("title", { ns: "common" })}
+              </a>
+            </Link>
           </div>
           <div className="inline-flex gap-4">
             <div className="md:text-small_base text-base font-normal not-italic">

@@ -8,7 +8,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "../_app";
 import { PageProps, FormRecord } from "@lib/types";
-import { Template, PageTemplate, Start } from "@formbuilder/layout";
+import { Template, PageTemplate, Start } from "@components/form-builder/app";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -33,8 +33,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const [formID = null] = params || [];
 
-  const FormbuilderParams: { initialForm: null | FormRecord } = {
+  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
+    locale: locale || "en",
   };
 
   const session = await unstable_getServerSession(req, res, authOptions);

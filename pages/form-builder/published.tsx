@@ -3,12 +3,12 @@ import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "./index";
-import { Published, Template, PageTemplate } from "@formbuilder/layout/";
+import { Published, Template, PageTemplate } from "@components/form-builder/app";
 import { useTemplateStore } from "@formbuilder/store/useTemplateStore";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
-  const title = `${t("gcFormsTranslate")} — ${t("gcForms")}`;
+  const title = `${t("gcFormsPublished")} — ${t("gcForms")}`;
 
   const { id } = useTemplateStore((s) => ({
     getSchema: s.getSchema,
