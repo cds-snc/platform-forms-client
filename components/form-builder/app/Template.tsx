@@ -5,7 +5,7 @@ import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
 import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
-import { LeftNavigation, Header } from "@components/form-builder/layout/";
+import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 
 export const Template = ({ page }: { page: ReactElement }) => {
