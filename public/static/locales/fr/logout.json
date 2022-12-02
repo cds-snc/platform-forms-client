@@ -1,5 +1,5 @@
 {
   "messageContent": "Vous avez fermé votre session.",
-  "goToLoginLabel": "Se connecter",
+  "goToSignInLabel": "Se connecter",
   "logoutDate": "Votre dernière session s'est terminée à"
 }

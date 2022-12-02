@@ -169,6 +169,13 @@
   "testYourResponseDelivery": "Tester la réception des réponses",
   "textFormatting": "Formatage du texte  ",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
+  "tooltipFormatH2": "[FR] Heading 2",
+  "tooltipFormatH3": "[FR] Heading 3",
+  "tooltipFormatBold": "[FR] Bold (⌘B)",
+  "tooltipFormatItalic": "[FR] Italic (⌘I)",
+  "tooltipFormatBulletList": "[FR] Bullet list",
+  "tooltipFormatNumberedList": "[FR] Numbered list",
+  "tooltipInsertLink": "[FR] Insert link",
   "toTestInstructions": "Pour tester la façon dont vous allez recueillir les réponses du formulaire, veuillez suivre les étapes suivantes : ",
   "translate": "Traduire",
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
@@ -177,5 +184,11 @@
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
   "viewCode": "Afficher le code",
-  "mainNavAriaLabel": "[FR] Main"
+  "mainNavAriaLabel": "[FR] Main",
+  "defaultElementDescription": {
+    "email": "Entrez une adresse email comme name@example.com",
+    "phone": "Entrez un numéro de téléphone comme 111-222-3333",
+    "date": "Entrez une date comme mm/dd/yyyy",
+    "number": "N'entrez que des nombres"
+  }
 }
