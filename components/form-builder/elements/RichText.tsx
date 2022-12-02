@@ -17,7 +17,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     "";
 
   return (
-    <div className="flex mx-7 mt-5 mb-7 border-2 rounded">
+    <div className="flex mx-7 mt-5 mb-7 border-2 rounded" data-testid="richText">
       <RichTextEditor
         autoFocusEditor={true}
         path={`form.elements[${parentIndex}].properties.${localizeField(

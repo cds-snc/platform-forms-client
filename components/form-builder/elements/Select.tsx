@@ -114,7 +114,7 @@ export const DropDown = ({
       <DropDownHeader {...headerProps}>
         {selectedItem && (
           <>
-            <DropDownListLabelActive>
+            <DropDownListLabelActive data-testid="element-select-active">
               {selectedItem.value}
               <ChevronDown />
             </DropDownListLabelActive>
@@ -135,7 +135,7 @@ export const DropDown = ({
                     {item.icon}
                   </DropDownListIcon>
                 )}
-                <DropDownListLabel ishighlighted={highlightedIndex === index}>
+                <DropDownListLabel data-testid={item.id} ishighlighted={highlightedIndex === index}>
                   {item.value}
                 </DropDownListLabel>
               </DropDownListItem>

@@ -7,6 +7,6 @@ const TextHint = styled.div`
   border-bottom: 1px dotted rgba(0, 0, 0, 0.45);
 `;
 
-export const ShortAnswer = ({ children }: { children: string }) => {
-  return <TextHint>{children}</TextHint>;
+export const ShortAnswer = ({ children, ...props }: { children: string }) => {
+  return <TextHint {...props}>{children}</TextHint>;
 };
