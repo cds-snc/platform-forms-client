@@ -34,6 +34,7 @@ export type {
   MiddlewareRequest,
   MiddlewareProps,
   HTMLTextInputTypeAttribute,
+  WithRequired,
 } from "./utility-types";
 
 export type { BearerTokenPayload, TemporaryTokenPayload, BearerResponse } from "./retrieval-types";
