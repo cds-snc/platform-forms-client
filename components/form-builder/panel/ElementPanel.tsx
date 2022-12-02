@@ -59,10 +59,10 @@ const SelectedElement = ({
       element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
       break;
     case "email":
-      element = <ShortAnswer>{t("example@canada.gc.ca")}</ShortAnswer>;
+      element = <ShortAnswer>name@example.com</ShortAnswer>;
       break;
     case "phone":
-      element = <ShortAnswer>555-555-0000</ShortAnswer>;
+      element = <ShortAnswer>111-222-3333</ShortAnswer>;
       break;
     case "date":
       element = <ShortAnswer>mm/dd/yyyy</ShortAnswer>;
@@ -221,11 +221,30 @@ const Form = ({ item }: { item: FormElementWithIndex }) => {
     }
   };
 
+  const _setDefaultDescription = (id: string, index: number) => {
+    switch (id) {
+      case "email":
+      case "phone":
+      case "date":
+      case "number":
+        updateField(
+          `form.elements[${index}].properties.${localizeField(
+            LocalizedElementProperties.DESCRIPTION
+          )}`,
+          t(`defaultElementDescription.${id}`)
+        );
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleElementChange = useCallback(
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
       if (selectedItem) {
         setSelectedItem(selectedItem);
         _updateState(selectedItem.id, item.index);
+        _setDefaultDescription(selectedItem.id, item.index);
       }
     },
     [setSelectedItem]
