@@ -4,7 +4,7 @@ import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
 import { EditNavigation, Template, PageTemplate } from "@components/form-builder/app";
-import { Translate } from "@formbuilder/translate";
+import { Translate } from "@components/form-builder/app/translate";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");

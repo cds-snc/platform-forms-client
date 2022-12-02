@@ -1,8 +1,8 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "next-i18next";
 import React from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { Language } from "../types";
+import { useTemplateStore } from "../../store/useTemplateStore";
+import { Language } from "../../types";
 import { LanguageLabel } from "./LanguageLabel";
 
 export const Options = ({

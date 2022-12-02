@@ -1,6 +1,6 @@
 import React from "react";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { Language, LocalizedElementProperties } from "../types";
+import { useTemplateStore } from "../../store/useTemplateStore";
+import { Language, LocalizedElementProperties } from "../../types";
 import { useTranslation } from "next-i18next";
 import { FormElement } from "@lib/types";
 import { LanguageLabel } from "./LanguageLabel";
