@@ -10,7 +10,7 @@ import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { usePublish } from "../../hooks/usePublish";
 import { useAllowPublish } from "../../hooks/useAllowPublish";
-import { Button, withMessage } from "../../shared/Button";
+import { Button, withMessage } from "../shared/Button";
 
 export const Header = () => {
   const { getSchema, id, setId } = useTemplateStore((s) => ({

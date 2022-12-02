@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
-import { Button } from "../../shared";
+import { Button } from "../shared";
 import { ChevronUp, ChevronDown, Close, Duplicate, ThreeDotsIcon } from "../../icons";
 import { Modal } from "./Modal";
 import { FormElementWithIndex } from "../../types";

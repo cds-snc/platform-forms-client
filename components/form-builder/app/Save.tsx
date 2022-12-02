@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 import { DownloadFileButton } from "./DownloadFileButton";
 import { CopyToClipboard } from "./CopyToClipboard";
 import { Output } from "./Output";
-import { withMessage } from "../shared/Button";
+import { withMessage } from "./shared/Button";
 
 export const Save = () => {
   const { t } = useTranslation("form-builder");

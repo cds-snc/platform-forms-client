@@ -6,7 +6,7 @@ import { LocalizedElementProperties, LocalizedFormProperties } from "../../types
 import { useTemplateStore } from "../../store";
 import { RichTextLocked } from "./elements";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
-import { Input } from "../../shared";
+import { Input } from "../shared";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");

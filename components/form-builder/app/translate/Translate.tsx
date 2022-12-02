@@ -10,7 +10,7 @@ import { Options } from "./Options";
 import { LocalizedElementProperties } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
-import { Button } from "../../shared/Button";
+import { Button } from "../shared/Button";
 import { LanguageLabel } from "./LanguageLabel";
 
 const LangSpan = styled.span`

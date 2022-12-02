@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../store/useTemplateStore";
-import { Button, withMessage } from "../shared/Button";
+import { Button, withMessage } from "./shared/Button";
 
 export const CopyToClipboard = () => {
   const { t } = useTranslation("form-builder");

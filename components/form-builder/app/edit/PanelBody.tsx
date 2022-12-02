@@ -7,7 +7,7 @@ import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from 
 import { QuestionInput, SelectedElement, getSelectedOption } from ".";
 import { Select } from "./elements";
 import { useTemplateStore } from "../../store";
-import { Checkbox } from "../../shared";
+import { Checkbox } from "../shared";
 import { useElementOptions } from "../../hooks";
 
 interface RowProps {

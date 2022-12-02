@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../store";
 import { LockIcon } from "../../icons";
-import { Button } from "../../shared";
+import { Button } from "../shared";
 
 const Actions = styled.div`
   position: relative;

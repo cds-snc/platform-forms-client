@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { Close } from "../../../icons";
-import { Button } from "../../../shared/Button";
-import { Input } from "../../../shared/Input";
+import { Button } from "../../shared/Button";
+import { Input } from "../../shared/Input";
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";

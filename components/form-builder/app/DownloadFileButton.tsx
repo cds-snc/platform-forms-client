@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../store/useTemplateStore";
-import { Button } from "../shared/Button";
+import { Button } from "./shared/Button";
 
 const slugify = (str: string) =>
   str

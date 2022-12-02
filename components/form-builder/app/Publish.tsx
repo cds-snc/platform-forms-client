@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useAllowPublish } from "../hooks/useAllowPublish";
 import { usePublish } from "../hooks/usePublish";
 import { CancelIcon, CircleCheckIcon, WarningIcon, LockIcon } from "../icons";
-import { Button } from "../shared/Button";
+import { Button } from "./shared/Button";
 import { useRouter } from "next/router";
 import { PublishNoAuth } from "./PublishNoAuth";
 import { useSession } from "next-auth/react";

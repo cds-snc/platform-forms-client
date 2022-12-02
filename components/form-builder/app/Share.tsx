@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { DownloadFileButton } from "./DownloadFileButton";
-import { withMessage } from "../shared/Button";
+import { withMessage } from "./shared/Button";
 
 export const Share = () => {
   const { t } = useTranslation("form-builder");

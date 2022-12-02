@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { usePublish } from "../hooks/usePublish";
 import { useTranslation } from "next-i18next";
-import { Button } from "../shared/Button";
+import { Button } from "./shared/Button";
 import { LocalizedFormProperties } from "../types";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useDialogRef, Dialog } from "./Dialog";
 import { useTranslation } from "next-i18next";
-import { Button } from "../shared/Button";
+import { Button } from "./Button";
 export const ConfirmFormDeleteDialog = ({
   handleConfirm,
   handleClose,
