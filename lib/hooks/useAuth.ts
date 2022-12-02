@@ -290,11 +290,118 @@ export const useAuth = () => {
     }
   };
 
+  const sendForgotPassword = async (username: string) => {
+    resetCognitoErrorState();
+    try {
+      const token = await getCsrfToken();
+      if (token) {
+        await axios({
+          url: "/api/account/forgotpassword",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token,
+          },
+          data: {
+            username,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
+
+        if (router.pathname !== "/auth/forgotpassword") {
+          await router.push("/auth/forgotpassword");
+        }
+      }
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      logMessage.error(axiosError);
+      if (axiosError.response?.data?.message) {
+        const errorResponseMessage = axiosError.response.data.message;
+
+        if (errorResponseMessage.includes("InvalidParameterException")) {
+          // TODO: if a user is not yet confirmed but tries to reset their password
+          //    then we need to show them the confirmation page first and get them to confirm their account
+          //    then continue with the password reset
+          setCognitoError(t("InvalidParameterException.sendForgotPassword.title"));
+        } else {
+          setCognitoError(t("InternalServiceException"));
+        }
+      } else {
+        setCognitoError(t("InternalServiceException"));
+      }
+    }
+  };
+
+  const confirmPasswordReset = async (
+    {
+      username,
+      password,
+      confirmationCode,
+    }: {
+      username: string;
+      password: string;
+      confirmationCode: string;
+    },
+    {
+      setSubmitting,
+      setErrors,
+    }: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
+  ) => {
+    resetCognitoErrorState();
+    try {
+      const token = await getCsrfToken();
+      if (token) {
+        await axios({
+          url: "/api/signup/confirm",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token,
+          },
+          data: {
+            username,
+            password,
+            confirmationCode,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
+      }
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      logMessage.error(axiosError);
+      if (axiosError.response?.data?.message) {
+        const errorResponseMessage = axiosError.response.data.message;
+
+        if (errorResponseMessage.includes("CodeMismatchException")) {
+          setErrors({
+            confirmationCode: t("CodeMismatchException"),
+          });
+        } else if (errorResponseMessage.includes("ExpiredCodeException")) {
+          setErrors({
+            confirmationCode: t("ExpiredCodeException"),
+          });
+        } else if (errorResponseMessage.includes("InvalidPasswordException")) {
+          setErrors({
+            password: t("InvalidPasswordException"),
+          });
+        } else {
+          setCognitoError(t("InternalServiceException"));
+        }
+      } else {
+        setCognitoError(t("InternalServiceException"));
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return {
     register,
     confirm,
     resendConfirmationCode,
     login,
+    sendForgotPassword,
+    confirmPasswordReset,
     resetCognitoErrorState,
     cognitoError,
     cognitoErrorDescription,
