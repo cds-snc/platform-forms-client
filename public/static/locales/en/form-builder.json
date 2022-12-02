@@ -184,6 +184,7 @@
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
   "viewCode": "View code",
+  "mainNavAriaLabel": "Main",
   "defaultElementDescription": {
     "email": "Enter an email address like, name@example.com",
     "phone": "Enter a phone number like, 111-222-3333",

@@ -184,6 +184,7 @@
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
   "viewCode": "Afficher le code",
+  "mainNavAriaLabel": "[FR] Main",
   "defaultElementDescription": {
     "email": "Entrez une adresse email comme name@example.com",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333",

@@ -11,7 +11,8 @@
     "support": {
       "link": "/tbd",
       "desc": "Soutien"
-    }
+    },
+    "ariaLabel": "[FR] Footer"
   },
   "phase": {
     "desc": "Ce site évoluera au fur et à mesure que nous testons des idées."

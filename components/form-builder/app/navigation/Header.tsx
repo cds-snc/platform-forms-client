@@ -72,7 +72,10 @@ export const Header = () => {
             </ButtonWithMessage>
           )}
         </div>
-        <div className="inline-flex gap-4">
+        <nav
+          className="inline-flex gap-4"
+          aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
+        >
           <div className="md:text-small_base text-base font-normal not-italic">
             {ability?.can("view", "FormRecord") && (
               <Link href={`/${i18n.language}/myforms/drafts`}>
@@ -82,7 +85,7 @@ export const Header = () => {
           </div>
           {<LoginMenu isAuthenticated={status === "authenticated"} />}
           {<LanguageToggle />}
-        </div>
+        </nav>
       </div>
     </header>
   );
