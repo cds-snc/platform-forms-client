@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
-import { useTemplateStore } from "../store";
-import { LockIcon } from "../icons";
-import { Button } from "../shared";
+import { useTemplateStore } from "../../store";
+import { LockIcon } from "../../icons";
+import { Button } from "../../shared";
 
 const Actions = styled.div`
   position: relative;

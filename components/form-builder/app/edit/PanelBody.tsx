@@ -3,12 +3,12 @@ import { UseSelectStateChange } from "downshift";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
-import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../types";
+import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { QuestionInput, SelectedElement, getSelectedOption } from ".";
-import { Select } from "../elements";
-import { useTemplateStore } from "../store";
-import { Checkbox } from "../shared";
-import { useElementOptions } from "../hooks";
+import { Select } from "../../elements";
+import { useTemplateStore } from "../../store";
+import { Checkbox } from "../../shared";
+import { useElementOptions } from "../../hooks";
 
 interface RowProps {
   isRichText: boolean;

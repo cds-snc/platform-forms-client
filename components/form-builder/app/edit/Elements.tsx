@@ -2,11 +2,11 @@ import React, { useState, useCallback, useEffect } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
-import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
-import { useTemplateStore } from "../store";
-import { RichTextLocked } from "../elements";
+import { LocalizedElementProperties, LocalizedFormProperties } from "../../types";
+import { useTemplateStore } from "../../store";
+import { RichTextLocked } from "../../elements";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
-import { Input } from "../shared";
+import { Input } from "../../shared";
 
 export const Elements = () => {
   const { t } = useTranslation("form-builder");

@@ -3,7 +3,7 @@ import { cleanup, render, waitFor, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ElementPanel } from "../ElementPanel";
 import { SessionProvider } from "next-auth/react";
-import { TemplateStoreProvider } from "../../store";
+import { TemplateStoreProvider } from "../../../store";
 import { FormElementTypes } from "@lib/types";
 
 const options = ["richText", "email", "date", "phone"];

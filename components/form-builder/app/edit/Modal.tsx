@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-import { Button } from "../shared";
-import { Close } from "../icons";
-import { CDSHTMLDialogElement } from "../types";
-import { useModalStore } from "../store";
+import { Button } from "../../shared";
+import { Close } from "../../icons";
+import { CDSHTMLDialogElement } from "../../types";
+import { useModalStore } from "../../store";
 
 const StyledDialog = styled.dialog`
   padding: 0;
