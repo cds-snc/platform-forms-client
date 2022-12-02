@@ -29,3 +29,4 @@ export { ShortAnswerIcon } from "./ShortAnswerIcon";
 export { ThreeDotsIcon } from "./ThreeDotsIcon";
 export { RocketIcon } from "./RocketIcon";
 export { WarningIcon } from "./WarningIcon";
+export { GearIcon } from "./GearIcon";

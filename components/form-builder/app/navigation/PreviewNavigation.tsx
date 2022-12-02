@@ -15,7 +15,6 @@ export const PreviewNavigation = () => {
           <SubNavLink href="/form-builder/preview/test-data-delivery">{t("test")}</SubNavLink>
         </>
       )}
-      <SubNavLink href="/form-builder/preview/settings">{t("settings")}</SubNavLink>
     </nav>
   );
 };

@@ -1,14 +1,15 @@
 import React, { ReactElement, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
+
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "@components/globals/Footer";
 import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
-import { useSession } from "next-auth/react";
-import { useActivePathname } from "../hooks/useActivePathname";
+import { useActivePathname } from "../hooks";
 
 export const Template = ({ page }: { page: ReactElement }) => {
   return (
