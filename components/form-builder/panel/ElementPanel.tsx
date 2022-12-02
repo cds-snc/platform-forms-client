@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../types";
 import { useTemplateStore, useModalStore } from "../store/";
-import { PanelActions, ModalButton, ModalForm, PanelBody } from "./";
+import { PanelActions, ModalButton, ModalForm, PanelBody } from "./index";
 import { Button } from "../shared";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
