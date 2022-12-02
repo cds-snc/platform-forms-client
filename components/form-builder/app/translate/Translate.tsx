@@ -9,7 +9,7 @@ import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
-import { RichTextEditor } from "../../lexical-editor/RichTextEditor";
+import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { Button } from "../../shared/Button";
 import { LanguageLabel } from "./LanguageLabel";
 

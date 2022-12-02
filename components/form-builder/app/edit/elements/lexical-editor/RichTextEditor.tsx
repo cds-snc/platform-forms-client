@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Editor } from "./Editor";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { Language } from "../types";
+import { useTemplateStore } from "../../../../store/useTemplateStore";
+import { Language } from "../../../../types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 

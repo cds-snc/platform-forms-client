@@ -1,7 +1,7 @@
 import { FormElement } from "@lib/types";
 import { useTranslation } from "next-i18next";
 import React from "react";
-import { RichTextEditor } from "../../lexical-editor/RichTextEditor";
+import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "../../types";
 import { LanguageLabel } from "./LanguageLabel";

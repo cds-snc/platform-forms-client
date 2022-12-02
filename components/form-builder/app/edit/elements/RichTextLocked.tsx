@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTemplateStore } from "../../../store/useTemplateStore";
-import { RichTextEditor } from "../../../lexical-editor/RichTextEditor";
+import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { PanelActionsLocked } from "../PanelActionsLocked";
 import { LocalizedElementProperties } from "../../../types";
 
