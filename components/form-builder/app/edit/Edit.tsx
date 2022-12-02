@@ -8,7 +8,7 @@ import { RichTextLocked } from "../../elements";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { Input } from "../../shared";
 
-export const Elements = () => {
+export const Edit = () => {
   const { t } = useTranslation("form-builder");
   const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
     useTemplateStore((s) => ({
