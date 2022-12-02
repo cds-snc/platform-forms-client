@@ -183,5 +183,11 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code"
+  "viewCode": "View code",
+  "defaultElementDescription": {
+    "email": "Enter an email address like, name@example.com",
+    "phone": "Enter a phone number like, 111-222-3333",
+    "date": "Enter a date like, mm/dd/yyyy",
+    "number": "Only enter numbers"
+  }
 }
