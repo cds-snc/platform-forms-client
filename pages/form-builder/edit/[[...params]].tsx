@@ -3,14 +3,15 @@ import { useTranslation } from "next-i18next";
 import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
-import { ElementPanel, EditNavigation, Template, PageTemplate } from "@formbuilder/layout";
+import { EditNavigation, Template, PageTemplate } from "@components/form-builder/app";
+import { Edit } from "@components/form-builder/app/edit";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
   const title = `${t("gcFormsEdit")} — ${t("gcForms")}`;
   return (
     <PageTemplate title={title} navigation={<EditNavigation />}>
-      <ElementPanel />
+      <Edit />
     </PageTemplate>
   );
 };
