@@ -87,14 +87,11 @@ describe("Element Panel", () => {
 
       const dropdown = rendered.getByTestId("element-select-active");
 
-      for (const option of options) {
-        // eslint-disable-next-line no-await-in-loop
-        await userEvent.click(dropdown);
-        // eslint-disable-next-line no-await-in-loop
-        await userEvent.click(rendered.getByTestId(option));
-        expect(rendered.getByTestId("element-select-active").textContent).toContain(option);
-        expect(rendered.getByTestId(option)).toBeInTheDocument();
-      }
+      await userEvent.click(dropdown);
+      await userEvent.click(rendered.getByTestId(options[1]));
+      expect(rendered.getByTestId("element-select-active").textContent).toContain(options[1]);
+      expect(rendered.getByTestId(options[1])).toBeInTheDocument();
+
       const panelActions = rendered.getByLabelText("elementActions");
       expect(panelActions).toBeInTheDocument();
     });
@@ -112,7 +109,7 @@ describe("Element Panel", () => {
       );
     });
 
-    await waitFor(async () => {
+    await waitFor(() => {
       const question = rendered.getByLabelText("question 2");
       expect(question.value).toBe("question 2");
       expect(rendered.getByTestId("element-select-active").textContent).toContain("email");
