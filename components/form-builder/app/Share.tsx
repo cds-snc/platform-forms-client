@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DownloadFileButton } from "./DownloadFileButton";
+import { DownloadFileButton } from "./shared/DownloadFileButton";
 import { withMessage } from "./shared/Button";
 
 export const Share = () => {

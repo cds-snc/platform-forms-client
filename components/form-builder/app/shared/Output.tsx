@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useTemplateStore } from "../store/useTemplateStore";
+import { useTemplateStore } from "../../store/useTemplateStore";
 
 const JSONOutput = styled.pre`
   margin-top: 20px;

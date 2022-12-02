@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../../icons";
+import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon, GearIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import { LeftNavLink } from "./LeftNavLink";
 
@@ -47,6 +47,13 @@ export const LeftNavigation = () => {
         <>
           <PublishIcon className={iconClassname} />
           {t("publish")}
+        </>
+      </LeftNavLink>
+
+      <LeftNavLink href="/form-builder/settings">
+        <>
+          <GearIcon className={iconClassname} />
+          {t("settings")}
         </>
       </LeftNavLink>
     </nav>

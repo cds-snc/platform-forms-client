@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DownloadFileButton } from "./DownloadFileButton";
-import { CopyToClipboard } from "./CopyToClipboard";
-import { Output } from "./Output";
+import { DownloadFileButton } from "./shared/DownloadFileButton";
+import { CopyToClipboard } from "./shared/CopyToClipboard";
+import { Output } from "./shared/Output";
 import { withMessage } from "./shared/Button";
 
 export const Save = () => {
