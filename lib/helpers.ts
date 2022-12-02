@@ -2,6 +2,8 @@ import axios from "axios";
 import { NextRouter } from "next/router";
 import { logger, logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
+import { NotifyClient } from "notifications-node-client";
+import { NextApiResponse } from "next";
 import {
   FileInputResponse,
   FormElement,
@@ -49,6 +51,45 @@ export function extractFormData(submission: Submission): Array<string> {
     }
   });
   return dataCollector;
+}
+
+export interface Email {
+  toEmail: string;
+  subject: string;
+  body: string;
+}
+
+// Note: Any errors bubbles up
+export async function sendEmail({ toEmail, subject, body }: Email) {
+  const templateID = process.env.TEMPLATE_ID;
+  const notifyClient = new NotifyClient(
+    "https://api.notification.canada.ca",
+    process.env.NOTIFY_API_KEY
+  );
+
+  // Here is the documentation for the `sendEmail` function:
+  // https://docs.notifications.service.gov.uk/node.html#send-an-email
+  await notifyClient.sendEmail(templateID, toEmail, {
+    personalisation: {
+      subject,
+      formResponse: body,
+      reference: null,
+    },
+  });
+}
+
+export interface HandledEmail extends Email {
+  res: NextApiResponse;
+}
+
+export async function handledSendEmail({ res, toEmail, subject, body }: HandledEmail) {
+  try {
+    await sendEmail({ toEmail, subject, body });
+    return res.status(200).json({});
+  } catch (error) {
+    logMessage.error(error);
+    return res.status(500).json({ error: "Failed to send request" });
+  }
 }
 
 function handleType(question: FormElement, response: Response, collector: Array<string>) {

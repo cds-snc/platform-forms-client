@@ -32,14 +32,13 @@ export default function Support() {
     request: string,
     description: string
   ) => {
-    const type = "support";
     return await axios({
-      url: "/api/request/help",
+      url: "/api/request/support",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      data: { type, name, email, request, description },
+      data: { name, email, request, description },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
