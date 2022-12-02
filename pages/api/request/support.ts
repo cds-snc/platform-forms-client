@@ -3,7 +3,7 @@ import { cors, middleware } from "@lib/middleware";
 import { handledSendEmail } from "@lib/helpers";
 
 // TODO: consider moving to .env var
-const EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; //"assistance+forms@cds-snc.freshdesk.com";
+const EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
 
 // Allows an authenticated or unauthenticated user to send an email requesting support
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
