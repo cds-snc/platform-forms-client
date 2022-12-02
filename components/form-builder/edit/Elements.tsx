@@ -3,9 +3,9 @@ import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
-import { useTemplateStore } from "../store/";
+import { useTemplateStore } from "../store";
 import { RichTextLocked } from "../elements";
-import { ElementPanel, ConfirmationDescription, PrivacyDescription } from "./";
+import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { Input } from "../shared";
 
 export const Elements = () => {

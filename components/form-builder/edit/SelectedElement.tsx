@@ -6,7 +6,7 @@ import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../icons";
 import { ShortAnswer, Options, RichText } from "../elements";
 import { ElementOption, FormElementWithIndex } from "../types";
 import { useElementOptions } from "../hooks";
-import { useTemplateStore } from "../store/";
+import { useTemplateStore } from "../store";
 
 export const SelectedElement = ({
   selected,

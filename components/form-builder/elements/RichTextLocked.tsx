@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { RichTextEditor } from "../lexical-editor/RichTextEditor";
-import { PanelActionsLocked } from "../panel/PanelActionsLocked";
+import { PanelActionsLocked } from "../edit/PanelActionsLocked";
 import { LocalizedElementProperties } from "../types";
 
 const ElementWrapperDiv = styled.div`

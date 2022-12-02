@@ -6,7 +6,7 @@ import { FormElementTypes, ElementProperties } from "@lib/types";
 
 import { FormElementWithIndex, LocalizedElementProperties } from "../types";
 import { Checkbox, Input, TextArea } from "../shared";
-import { useTemplateStore } from "../store/";
+import { useTemplateStore } from "../store";
 
 const FormLabel = styled.label`
   font-weight: 700;

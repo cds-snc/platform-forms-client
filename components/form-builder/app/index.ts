@@ -11,4 +11,4 @@ export { Publish } from "./Publish";
 export { Published } from "./Published";
 export { Share } from "./Share";
 export { TestDataDelivery } from "./TestDataDelivery";
-export { Elements } from "../panel";
+export { Elements } from "../edit";
