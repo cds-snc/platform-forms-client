@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import { LeftNavLink } from "./LeftNavLink";
+import { SaveButton } from "../shared/SaveButton";
 
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -49,6 +50,8 @@ export const LeftNavigation = () => {
           {t("publish")}
         </>
       </LeftNavLink>
+
+      <SaveButton />
     </nav>
   );
 };
