@@ -9,7 +9,7 @@ export const LeftNavigation = () => {
   const { status } = useSession();
 
   const iconClassname =
-    "inline-block w-8 h-8 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
     <nav className="absolute xl:content-center" aria-label={t("navLabelFormBuilder")}>
