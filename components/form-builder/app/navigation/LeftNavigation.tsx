@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon } from "../../icons";
+import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon, GearIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import { LeftNavLink } from "./LeftNavLink";
 
@@ -9,7 +9,7 @@ export const LeftNavigation = () => {
   const { status } = useSession();
 
   const iconClassname =
-    "inline-block xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
 
   return (
     <nav className="absolute xl:content-center" aria-label={t("navLabelFormBuilder")}>
@@ -47,6 +47,13 @@ export const LeftNavigation = () => {
         <>
           <PublishIcon className={iconClassname} />
           {t("publish")}
+        </>
+      </LeftNavLink>
+
+      <LeftNavLink href="/form-builder/settings">
+        <>
+          <GearIcon className={iconClassname} />
+          {t("settings")}
         </>
       </LeftNavLink>
     </nav>
