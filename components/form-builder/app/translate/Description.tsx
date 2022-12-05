@@ -36,6 +36,7 @@ export const Description = ({
           </label>
           <div className="relative">
             <LanguageLabel
+              lang={translationLanguagePriority}
               id={`element-${element.id}-description-${translationLanguagePriority}-language`}
             >
               {t(translationLanguagePriority)}
@@ -67,6 +68,7 @@ export const Description = ({
           </label>
           <div className="relative">
             <LanguageLabel
+              lang={translationLanguagePriorityAlt}
               id={`element-${element.id}-description-${translationLanguagePriorityAlt}-language`}
             >
               {t(translationLanguagePriorityAlt)}

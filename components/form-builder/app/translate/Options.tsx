@@ -35,7 +35,10 @@ export const Options = ({
                   {t(`${translationLanguagePriority}-text`)}
                 </label>
                 <div className="relative">
-                  <LanguageLabel id={`element-${index}-choice-${choiceIndex}-en-language`}>
+                  <LanguageLabel
+                    id={`element-${index}-choice-${choiceIndex}-en-language`}
+                    lang={translationLanguagePriority}
+                  >
                     {t(translationLanguagePriority)}
                   </LanguageLabel>
                   <input
@@ -58,7 +61,10 @@ export const Options = ({
                   {t(`${translationLanguagePriorityAlt}-text`)}
                 </label>
                 <div className="relative">
-                  <LanguageLabel id={`element-${index}-choice-${choiceIndex}-fr-language`}>
+                  <LanguageLabel
+                    id={`element-${index}-choice-${choiceIndex}-fr-language`}
+                    lang={translationLanguagePriorityAlt}
+                  >
                     {t(translationLanguagePriorityAlt)}
                   </LanguageLabel>
                   <input

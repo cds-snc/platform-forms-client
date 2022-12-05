@@ -138,7 +138,12 @@ export const Translate = () => {
 
         <div className="flex lg:flex-col lg:items-start justify-between items-center">
           <div>
-            <LangSpan>{translationLanguagePriority === "en" ? t("english") : t("french")}</LangSpan>
+            <LangSpan>
+              <span className="rounded-full text-white bg-black items-center justify-center px-2 font-bold text-sm mx-2">
+                {translationLanguagePriority === "en" ? "1" : "2"}
+              </span>
+              {translationLanguagePriority === "en" ? t("english") : t("french")}
+            </LangSpan>
             <Button
               className="mx-4"
               onClick={switchLanguage}
@@ -146,7 +151,12 @@ export const Translate = () => {
             >
               {t("switch")}
             </Button>
-            <LangSpan>{translationLanguagePriority === "en" ? t("french") : t("english")}</LangSpan>
+            <LangSpan>
+              <span className="rounded-full text-white bg-black items-center justify-center px-2 font-bold text-sm mx-2">
+                {translationLanguagePriority === "fr" ? "1" : "2"}
+              </span>
+              {translationLanguagePriority === "en" ? t("french") : t("english")}
+            </LangSpan>
           </div>
           <div className="lg:mt-4">
             <DownloadCSV />
@@ -168,7 +178,7 @@ export const Translate = () => {
                 {t(`${translationLanguagePriority}-text`)}
               </label>
               <div className="relative">
-                <LanguageLabel id="form-title-en-language">
+                <LanguageLabel id="form-title-en-language" lang={translationLanguagePriority}>
                   {t(translationLanguagePriority)}
                 </LanguageLabel>
                 <input
@@ -195,7 +205,7 @@ export const Translate = () => {
                 {t(`${translationLanguagePriorityAlt}-text`)}
               </label>
               <div className="relative">
-                <LanguageLabel id="form-title-fr-language">
+                <LanguageLabel id="form-title-fr-language" lang={translationLanguagePriorityAlt}>
                   {t(translationLanguagePriorityAlt)}
                 </LanguageLabel>
                 <input
@@ -234,7 +244,10 @@ export const Translate = () => {
                 key={translationLanguagePriority}
               >
                 <div className="relative">
-                  <LanguageLabel id="form-introduction-english-language">
+                  <LanguageLabel
+                    id="form-introduction-english-language"
+                    lang={translationLanguagePriority}
+                  >
                     {t(translationLanguagePriority)}
                   </LanguageLabel>
                   <RichTextEditor
@@ -257,7 +270,10 @@ export const Translate = () => {
                   />
                 </div>
                 <div className="relative">
-                  <LanguageLabel id="form-introduction-french-language">
+                  <LanguageLabel
+                    id="form-introduction-french-language"
+                    lang={translationLanguagePriorityAlt}
+                  >
                     {t(translationLanguagePriorityAlt)}
                   </LanguageLabel>
                   <RichTextEditor
@@ -359,7 +375,10 @@ export const Translate = () => {
 
             <div className="section-text section-text--rich-text" key={translationLanguagePriority}>
               <div className="relative">
-                <LanguageLabel id={`privacyPolicy-${translationLanguagePriority}-language`}>
+                <LanguageLabel
+                  id={`privacyPolicy-${translationLanguagePriority}-language`}
+                  lang={translationLanguagePriority}
+                >
                   {t(translationLanguagePriority)}
                 </LanguageLabel>
                 <RichTextEditor
@@ -382,7 +401,10 @@ export const Translate = () => {
                 />
               </div>
               <div className="relative">
-                <LanguageLabel id={`privacyPolicy-${translationLanguagePriorityAlt}->language`}>
+                <LanguageLabel
+                  id={`privacyPolicy-${translationLanguagePriorityAlt}->language`}
+                  lang={translationLanguagePriorityAlt}
+                >
                   {t(translationLanguagePriorityAlt)}
                 </LanguageLabel>
                 <RichTextEditor
@@ -419,7 +441,10 @@ export const Translate = () => {
             </div>
             <div className="section-text section-text--rich-text" key={translationLanguagePriority}>
               <div className="relative">
-                <LanguageLabel id={`endpage-${translationLanguagePriority}-language`}>
+                <LanguageLabel
+                  id={`endpage-${translationLanguagePriority}-language`}
+                  lang={translationLanguagePriority}
+                >
                   {t(translationLanguagePriority)}
                 </LanguageLabel>
                 <RichTextEditor
@@ -442,7 +467,10 @@ export const Translate = () => {
                 />
               </div>
               <div className="relative">
-                <LanguageLabel id={`endpage-${translationLanguagePriorityAlt}-language`}>
+                <LanguageLabel
+                  id={`endpage-${translationLanguagePriorityAlt}-language`}
+                  lang={translationLanguagePriorityAlt}
+                >
                   {t(translationLanguagePriorityAlt)}
                 </LanguageLabel>
                 <RichTextEditor
