@@ -6,6 +6,7 @@
     "all": "Tous"
   },
   "actions": {
+    "resumeForm": "[fr] Resume editing form",
     "createNewForm": "Créer un nouveau formulaire +"
   },
   "cards": {
