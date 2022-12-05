@@ -88,7 +88,7 @@ export const TestDataDelivery = () => {
                 error ? "" : "hidden"
               }`}
             >
-              <p>{t("thereWasAnErrorPublishing")}</p>
+              <p>{t("thereWasAnErrorSaving")}</p>
             </div>
           </li>
         )}
