@@ -3,7 +3,6 @@ import { NextRouter } from "next/router";
 import { logger, logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
 import { NotifyClient } from "notifications-node-client";
-import { NextApiResponse } from "next";
 import {
   FileInputResponse,
   FormElement,
@@ -11,6 +10,7 @@ import {
   PublicFormRecord,
   Response,
   Responses,
+  Email,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
@@ -53,13 +53,7 @@ export function extractFormData(submission: Submission): Array<string> {
   return dataCollector;
 }
 
-export interface Email {
-  toEmail: string;
-  subject: string;
-  body: string;
-}
-
-// Note: Any errors bubbles up
+// Sends an email using the Notify API
 export async function sendEmail({ toEmail, subject, body }: Email) {
   const templateID = process.env.TEMPLATE_ID;
   const notifyClient = new NotifyClient(
@@ -76,20 +70,6 @@ export async function sendEmail({ toEmail, subject, body }: Email) {
       reference: null,
     },
   });
-}
-
-export interface HandledEmail extends Email {
-  res: NextApiResponse;
-}
-
-export async function handledSendEmail({ res, toEmail, subject, body }: HandledEmail) {
-  try {
-    await sendEmail({ toEmail, subject, body });
-    return res.status(200).json({});
-  } catch (error) {
-    logMessage.error(error);
-    return res.status(500).json({ error: "Failed to send request" });
-  }
 }
 
 function handleType(question: FormElement, response: Response, collector: Array<string>) {
