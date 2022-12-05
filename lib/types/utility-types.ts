@@ -40,9 +40,3 @@ export type HTMLTextInputTypeAttribute =
   | "search"
   | "tel"
   | "url";
-
-export interface Email {
-  to: string;
-  subject: string;
-  body: string;
-}

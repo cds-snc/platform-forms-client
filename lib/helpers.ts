@@ -2,7 +2,6 @@ import axios from "axios";
 import { NextRouter } from "next/router";
 import { logger, logMessage } from "@lib/logger";
 import type { FormikBag } from "formik";
-import { NotifyClient } from "notifications-node-client";
 import {
   FileInputResponse,
   FormElement,
@@ -10,7 +9,6 @@ import {
   PublicFormRecord,
   Response,
   Responses,
-  Email,
 } from "@lib/types";
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
@@ -51,25 +49,6 @@ export function extractFormData(submission: Submission): Array<string> {
     }
   });
   return dataCollector;
-}
-
-// Sends an email using the Notify API
-export async function sendEmail({ to, subject, body }: Email) {
-  const templateID = process.env.TEMPLATE_ID;
-  const notifyClient = new NotifyClient(
-    "https://api.notification.canada.ca",
-    process.env.NOTIFY_API_KEY
-  );
-
-  // Here is the documentation for the `sendEmail` function:
-  // https://docs.notifications.service.gov.uk/node.html#send-an-email
-  await notifyClient.sendEmail(templateID, to, {
-    personalisation: {
-      subject,
-      formResponse: body,
-      reference: null,
-    },
-  });
 }
 
 function handleType(question: FormElement, response: Response, collector: Array<string>) {

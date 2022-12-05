@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware } from "@lib/middleware";
-import { sendEmail } from "@lib/helpers";
+import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
 import { CONTACTUS_EMAIL_ADDRESS, SUPPORT_EMAIL_ADDRESS } from "@lib/types";
 
@@ -11,6 +11,13 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!name || !email || !request || !description) {
     return res.status(404).json({ error: "Malformed request" });
   }
+
+  const to = supportType === "contactus" ? CONTACTUS_EMAIL_ADDRESS : SUPPORT_EMAIL_ADDRESS;
+
+  const subject =
+    supportType === "contactus"
+      ? "Contact request / Demande de soutien"
+      : "Support request / Demande de soutien";
 
   let emailBody = "";
   if (supportType === "contactus") {
@@ -54,14 +61,22 @@ ${description}
   }
 
   try {
-    await sendEmail({
-      to: supportType === "contactus" ? CONTACTUS_EMAIL_ADDRESS : SUPPORT_EMAIL_ADDRESS,
-      subject:
-        supportType === "contactus"
-          ? "Contact request / Demande de soutien"
-          : "Support request / Demande de soutien",
-      body: emailBody,
+    const templateID = process.env.TEMPLATE_ID;
+    const notifyClient = new NotifyClient(
+      "https://api.notification.canada.ca",
+      process.env.NOTIFY_API_KEY
+    );
+
+    // Here is the documentation for the `sendEmail` function:
+    // https://docs.notifications.service.gov.uk/node.html#send-an-email
+    await notifyClient.sendEmail(templateID, to, {
+      personalisation: {
+        subject: subject,
+        formResponse: emailBody,
+      },
+      reference: null,
     });
+
     return res.status(200).json({});
   } catch (error) {
     logMessage.error(error);
