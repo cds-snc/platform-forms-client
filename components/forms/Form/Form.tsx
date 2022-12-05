@@ -226,7 +226,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
               <RichText>
                 {form.privacyPolicy &&
-                  form.privacyPolicy[props.language == "en" ? "descrptionEn" : "descriptionFr"]}
+                  form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
               </RichText>
 
               <div className="buttons">
