@@ -67,8 +67,8 @@ export default function Contactus() {
   });
 
   // Chooses content based on supportType. This allows both the Support and Contactus pages to be
-  // combined in this file, along witht he confirmation page. If the form structure changes then
-  // this file should be separated into three files support, contactus, confirmation.
+  // combined in this file, along with he confirmation page. If the form structure changes then
+  // this file should be separated into three files: support, contactus, confirmation.
   let content: React.ReactNode = null;
   if (supportType === "contactus") {
     content = (

@@ -185,6 +185,61 @@
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
   "viewCode": "Afficher le code",
+  "contactus": {
+    "title": "Contactez-nous",
+    "useThisForm": "Pour obtenir du soutien technique, veuillez contacter l'équipe de soutien.",
+    "gcFormsTeamPart1": "",
+    "gcFormsTeamLink": "",
+    "gcFormsTeamPart2": "",
+    "needSupport": "",
+    "ifYouExperience": "",
+    "supportFormLink": "",
+    "name": "Votre nom",
+    "email": "Votre courriel",
+    "request": {
+      "title": "Quel est votre besoin?",
+      "option1": "Poser une question",
+      "option2": "Donner votre avis",
+      "option3": "Organiser une démo pour en savoir plus sur Formulaires GC ",
+      "option4": "Autre"
+    },
+    "description": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "support": {
+    "title": "Soutien",
+    "useThisForm": "Pour en savoir plus sur le produit ou organiser une démonstration, veuillez remplir le formulaire \"Contactez-nous\".",
+    "gcFormsTeamPart1": "",
+    "gcFormsTeamLink": "",
+    "gcFormsTeamPart2": "",
+    "lookingForADemo": "",
+    "ifYouWouldLike": "",
+    "contactUs": "",
+    "name": "Votre nom",
+    "email": "Votre courriel",
+    "request": {
+      "title": "Quel est votre besoin?",
+      "option1": "",
+      "option2": "",
+      "option3": "",
+      "option4": ""
+    },
+    "description": {
+      "title": "",
+      "description": ""
+    }
+  },
+  "requestSuccess": {
+    "title": "",
+    "weWillRespond": "",
+    "forOtherEnquiriesPart1": "",
+    "forOtherEnquiriesLink": "",
+    "forOtherEnquiriesPart2": "",
+    "theGCFormsTeam": "",
+    "backToForms": ""
+  },
   "mainNavAriaLabel": "[FR] Main",
   "defaultElementDescription": {
     "email": "Entrez une adresse email comme name@example.com",

@@ -2,13 +2,13 @@ import React from "react";
 import { WarningIcon } from "@components/form-builder/icons";
 
 interface AttentionProps {
-  type: "warning"; //TODO: | "info" | "error"
+  type?: "warning"; //TODO: | "info" | "error"
   heading?: React.ReactNode;
   children: React.ReactNode;
 }
 
 export const Attention = ({
-  type,
+  type = "warning",
   heading,
   children,
 }: AttentionProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
