@@ -34,13 +34,10 @@ export const Edit = () => {
   const [value, setValue] = useState<string>(title);
 
   const _debounced = useCallback(
-    debounce((val: string | boolean) => {
-      updateField(
-        `form.${localizeField(LocalizedFormProperties.TITLE, translationLanguagePriority)}`,
-        val
-      );
+    debounce((val: string | boolean, lang) => {
+      updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
     }, 100),
-    []
+    [translationLanguagePriority]
   );
 
   useEffect(() => {
@@ -50,9 +47,9 @@ export const Edit = () => {
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value);
-      _debounced(e.target.value);
+      _debounced(e.target.value, translationLanguagePriority);
     },
-    [setValue]
+    [setValue, translationLanguagePriority]
   );
 
   const introTextPlaceholder =

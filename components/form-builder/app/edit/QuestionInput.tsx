@@ -41,11 +41,11 @@ export const QuestionInput = ({
   }, [initialValue]);
 
   const _debounced = useCallback(
-    debounce((index, val) => {
+    debounce((index, val, lang) => {
       updateField(
         `form.elements[${index}].properties.${localizeField(
           LocalizedElementProperties.TITLE,
-          translationLanguagePriority
+          lang
         )}`,
         val
       );
@@ -56,9 +56,9 @@ export const QuestionInput = ({
   const updateValue = useCallback(
     (index: number, value: string) => {
       setValue(value);
-      _debounced(index, value);
+      _debounced(index, value, translationLanguagePriority);
     },
-    [setValue]
+    [setValue, translationLanguagePriority]
   );
 
   return (

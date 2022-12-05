@@ -62,21 +62,18 @@ export const Option = ({
   };
 
   const _debounced = useCallback(
-    debounce((parentIndex, val) => {
-      updateField(
-        `form.elements[${parentIndex}].properties.choices[${index}].${translationLanguagePriority}`,
-        val
-      );
+    debounce((parentIndex, val, lang) => {
+      updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
     }, 100),
-    []
+    [translationLanguagePriority]
   );
 
   const updateValue = useCallback(
     (parentIndex: number, value: string) => {
       setValue(value);
-      _debounced(parentIndex, value);
+      _debounced(parentIndex, value, translationLanguagePriority);
     },
-    [setValue]
+    [setValue, translationLanguagePriority]
   );
 
   return (
