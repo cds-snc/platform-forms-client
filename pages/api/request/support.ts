@@ -2,10 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware } from "@lib/middleware";
 import { sendEmail } from "@lib/helpers";
 import { logMessage } from "@lib/logger";
-
-// TODO: consider moving to .env var
-const CONTACTUS_EMAIL_ADDRESS = "jose.jimenez@cds-snc.ca";
-const SUPPORT_EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
+import { CONTACTUS_EMAIL_ADDRESS, SUPPORT_EMAIL_ADDRESS } from "@lib/types";
 
 // Allows an authenticated or unauthenticated user to send an email requesting help
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
