@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "../",
     "allowJs": true,
     "types": ["cypress", "cypress-axe"]
   },
