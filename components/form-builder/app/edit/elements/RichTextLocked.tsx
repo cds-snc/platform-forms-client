@@ -37,7 +37,10 @@ export const RichTextLocked = ({
         <div className="flex">{children}</div>
         <div className="flex border-2 rounded" key={translationLanguagePriority}>
           <RichTextEditor
-            path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
+            path={`form.${schemaProperty}.${localizeField(
+              LocalizedElementProperties.DESCRIPTION,
+              translationLanguagePriority
+            )}`}
             content={initialValue}
             lang={translationLanguagePriority}
             autoFocusEditor={false}

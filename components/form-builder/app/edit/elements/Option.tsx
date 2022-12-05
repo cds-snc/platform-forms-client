@@ -22,15 +22,21 @@ export const Option = ({
 }) => {
   const input = useRef<HTMLInputElement>(null);
 
-  const { addChoice, removeChoice, updateField, lang, getFocusInput, setFocusInput } =
-    useTemplateStore((s) => ({
-      addChoice: s.addChoice,
-      removeChoice: s.removeChoice,
-      updateField: s.updateField,
-      lang: s.lang,
-      setFocusInput: s.setFocusInput,
-      getFocusInput: s.getFocusInput,
-    }));
+  const {
+    addChoice,
+    removeChoice,
+    updateField,
+    getFocusInput,
+    setFocusInput,
+    translationLanguagePriority,
+  } = useTemplateStore((s) => ({
+    addChoice: s.addChoice,
+    removeChoice: s.removeChoice,
+    updateField: s.updateField,
+    setFocusInput: s.setFocusInput,
+    getFocusInput: s.getFocusInput,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const icon = renderIcon && renderIcon(index);
   const { t } = useTranslation("form-builder");
@@ -57,7 +63,10 @@ export const Option = ({
 
   const _debounced = useCallback(
     debounce((parentIndex, val) => {
-      updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
+      updateField(
+        `form.elements[${parentIndex}].properties.choices[${index}].${translationLanguagePriority}`,
+        val
+      );
     }, 100),
     []
   );
