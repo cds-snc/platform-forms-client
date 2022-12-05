@@ -1,4 +1,12 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
-  return sessionStorage.getItem("form-storage") ? <div>{children}</div> : null;
+  const [isReady, setReady] = React.useState(false);
+
+  useEffect(() => {
+    if (typeof sessionStorage !== "undefined" && sessionStorage.getItem("form-storage")) {
+      setReady(true);
+    }
+  }, []);
+
+  return isReady ? <div>{children}</div> : null;
 };
