@@ -24,11 +24,18 @@ import { Attention } from "@components/globals/Attention/Attention";
 
 export default function Contactus() {
   const router = useRouter();
-  const pageType = String(router.query.pageType);
+  const supportType = router.query.supportType === undefined ? "support" : "contactus";
   const { t, i18n } = useTranslation(["form-builder", "common"]);
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    // Default route is "support" and all other routes should go to contactus.
+    if (supportType === "contactus" && String(router.query.supportType) !== "contactus") {
+      router.push(`/${i18n.language}/form-builder/support/contactus`, undefined, { shallow: true });
+    }
+  }, [router.query?.path]);
 
   const handleRequest = async (
     name: string,
@@ -37,12 +44,12 @@ export default function Contactus() {
     description: string
   ) => {
     return await axios({
-      url: "/api/request/help",
+      url: "/api/request/support",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      data: { type: pageType, name, email, request, description },
+      data: { supportType, name, email, request, description },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
@@ -59,8 +66,11 @@ export default function Contactus() {
     description: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
 
+  // Chooses content based on supportType. This allows both the Support and Contactus pages to be
+  // combined in this file, along witht he confirmation page. If the form structure changes then
+  // this file should be separated into three files support, contactus, confirmation.
   let content: React.ReactNode = null;
-  if (pageType === "contactus") {
+  if (supportType === "contactus") {
     content = (
       <>
         <h1>{t("contactus.title")}</h1>
@@ -250,13 +260,6 @@ export default function Contactus() {
     );
   }
 
-  useEffect(() => {
-    // Default route is "support".
-    if (!/^(contactus|support)$/gi.test(pageType)) {
-      router.push(`/${i18n.language}/form-builder/help/support`, undefined, { shallow: true });
-    }
-  }, [router.query?.path]);
-
   return (
     <div aria-live="polite">
       {!isSuccessScreen && (
@@ -331,20 +334,20 @@ export default function Contactus() {
       {isSuccessScreen && (
         <>
           <h1>{t("requestSuccess.title")}</h1>
-          <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.paragraph1")}</p>
+          <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
           <div className="mb-16">
             <StyledLink href={`/myforms`} className="gc-button--blue">
               {t("requestSuccess.backToForms")}
             </StyledLink>
           </div>
           <p className="mb-8">
-            {t("requestSuccess.paragraph2Part1")}&nbsp;
+            {t("requestSuccess.forOtherEnquiriesPart1")}&nbsp;
             <Link href={`https://www.canada.ca/${i18n.language}/contact.html`}>
-              {t("requestSuccess.paragraph2Link")}
+              {t("requestSuccess.forOtherEnquiriesLink")}
             </Link>
-            &nbsp;{t("requestSuccess.paragraph2Part2")}.
+            &nbsp;{t("requestSuccess.forOtherEnquiriesPart2")}.
           </p>
-          <p>{t("requestSuccess.paragraph3")}</p>
+          <p>{t("requestSuccess.theGCFormsTeam")}</p>
         </>
       )}
     </div>

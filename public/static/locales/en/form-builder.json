@@ -233,11 +233,11 @@
   },
   "requestSuccess": {
     "title": "Thank you for your request",
-    "paragraph1": "We will respond to you in 2 business days.",
-    "paragraph2Part1": "For other enquiries, go to",
-    "paragraph2Link": "Canada.ca Contact us",
-    "paragraph2Part2": "to find the department or agency that can support you.",
-    "paragraph3": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
+    "weWillRespond": "We will respond to you in 2 business days.",
+    "forOtherEnquiriesPart1": "For other enquiries, go to",
+    "forOtherEnquiriesLink": "Canada.ca Contact us",
+    "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
+    "theGCFormsTeam": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
     "backToForms": "Back To Forms"
   },
   "mainNavAriaLabel": "Main",

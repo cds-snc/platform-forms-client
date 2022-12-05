@@ -54,7 +54,7 @@ export function extractFormData(submission: Submission): Array<string> {
 }
 
 // Sends an email using the Notify API
-export async function sendEmail({ toEmail, subject, body }: Email) {
+export async function sendEmail({ to, subject, body }: Email) {
   const templateID = process.env.TEMPLATE_ID;
   const notifyClient = new NotifyClient(
     "https://api.notification.canada.ca",
@@ -63,7 +63,7 @@ export async function sendEmail({ toEmail, subject, body }: Email) {
 
   // Here is the documentation for the `sendEmail` function:
   // https://docs.notifications.service.gov.uk/node.html#send-an-email
-  await notifyClient.sendEmail(templateID, toEmail, {
+  await notifyClient.sendEmail(templateID, to, {
     personalisation: {
       subject,
       formResponse: body,

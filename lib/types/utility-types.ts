@@ -42,7 +42,7 @@ export type HTMLTextInputTypeAttribute =
   | "url";
 
 export interface Email {
-  toEmail: string;
+  to: string;
   subject: string;
   body: string;
 }

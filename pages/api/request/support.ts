@@ -4,19 +4,19 @@ import { sendEmail } from "@lib/helpers";
 import { logMessage } from "@lib/logger";
 
 // TODO: consider moving to .env var
-const CONTACTUS_EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; //"jose.jimenez@cds-snc.ca";
-const SUPPORT_EMAIL_ADDRESS = "peter.thiessen@cds-snc.ca"; //"assistance+forms@cds-snc.freshdesk.com";
+const CONTACTUS_EMAIL_ADDRESS = "jose.jimenez@cds-snc.ca";
+const SUPPORT_EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
 
-// Allows an authenticated or unauthenticated user to send an email requesting to be contacted
+// Allows an authenticated or unauthenticated user to send an email requesting help
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { type, name, email, request, description } = req.body;
+  const { supportType, name, email, request, description } = req.body;
 
   if (!name || !email || !request || !description) {
     return res.status(404).json({ error: "Malformed request" });
   }
 
   let emailBody = "";
-  if (type === "contactus") {
+  if (supportType === "contactus") {
     emailBody = `
 ${name} (${email}) has requested we contact them for the form-builder.
 
@@ -58,9 +58,9 @@ ${description}
 
   try {
     await sendEmail({
-      toEmail: type === "contactus" ? CONTACTUS_EMAIL_ADDRESS : SUPPORT_EMAIL_ADDRESS,
+      to: supportType === "contactus" ? CONTACTUS_EMAIL_ADDRESS : SUPPORT_EMAIL_ADDRESS,
       subject:
-        type === "contactus"
+        supportType === "contactus"
           ? "Contact request / Demande de soutien"
           : "Support request / Demande de soutien",
       body: emailBody,
@@ -68,7 +68,7 @@ ${description}
     return res.status(200).json({});
   } catch (error) {
     logMessage.error(error);
-    return res.status(500).json({ error: "Failed to send request" });
+    return res.status(500).json({ error: "Internal Service Error: Failed to send request" });
   }
 };
 
