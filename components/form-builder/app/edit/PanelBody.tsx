@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { QuestionInput, SelectedElement, getSelectedOption } from ".";
-import { Select } from "./elements";
+import { DropDown } from "./elements";
 import { useTemplateStore } from "../../store";
 import { Checkbox } from "../shared";
 import { useElementOptions } from "../../hooks";
@@ -191,8 +191,9 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
         {!isRichText && (
           <>
             <div>
-              <Select
-                options={elementOptions}
+              <DropDown
+                ariaLabel={t("selectElement")}
+                items={elementOptions}
                 selectedItem={selectedItem}
                 onChange={handleElementChange}
               />
