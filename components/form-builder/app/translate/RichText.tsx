@@ -25,7 +25,7 @@ export const RichText = ({
         <div className="section-heading">
           {t(element.type)}: {t("Description")}
         </div>
-        <div className="section-text section-text--rich-text">
+        <div className="section-text section-text--rich-text divide-x-2">
           <div className="relative">
             <LanguageLabel
               id={`elements-${index}-description-${primaryLanguage}-language`}

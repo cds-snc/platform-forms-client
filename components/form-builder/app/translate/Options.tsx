@@ -27,7 +27,7 @@ export const Options = ({
               <legend className="section-heading">
                 {t(element.type)}: {t("optionText")}
               </legend>
-              <div className="section-text">
+              <div className="section-text divide-x-2">
                 <label
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}

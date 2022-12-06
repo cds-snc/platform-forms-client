@@ -27,7 +27,7 @@ export const Description = ({
         <legend className="section-heading">
           {t(element.type)}: {t("Description")}
         </legend>
-        <div className="section-text">
+        <div className="section-text divide-x-2">
           <label
             className="sr-only"
             htmlFor={`element-${element.id}-description-${primaryLanguage}`}

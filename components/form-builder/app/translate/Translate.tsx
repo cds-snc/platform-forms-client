@@ -59,15 +59,6 @@ const SectionDiv = styled.div`
           }
         }
 
-        &:first-of-type {
-          border-right: 1px solid black;
-        }
-
-        &:last-of-type {
-          border-left: 1px solid black;
-          margin-left: -1px;
-        }
-
         .editor-input {
           height: 100%;
         }
@@ -83,10 +74,6 @@ const SectionDiv = styled.div`
         padding: 8px;
         margin-top: 5;
         z-index: 1;
-
-        &:first-of-type {
-          border-right: 1px solid black;
-        }
 
         &:focus {
           border-color: #303fc3;
@@ -133,11 +120,11 @@ export const Translate = () => {
             <legend className="section-heading">
               {t("formIntroduction")}: {t("title")}
             </legend>
-            <div className="section-text">
+            <div className="section-text divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
                 {t(`${primaryLanguage}-text`)}
               </label>
-              <div className="relative">
+              <div className="relative pb-7">
                 <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
                   {t(primaryLanguage)}
                 </LanguageLabel>
@@ -182,7 +169,10 @@ export const Translate = () => {
               <div className="section-heading">
                 {t("formIntroduction")}: {t("description")}
               </div>
-              <div className="section-text section-text--rich-text" key={primaryLanguage}>
+              <div
+                className="section-text section-text--rich-text divide-x-2"
+                key={primaryLanguage}
+              >
                 <div className="relative">
                   <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
                     {t(primaryLanguage)}
@@ -285,7 +275,7 @@ export const Translate = () => {
               {t("pageText")}: {t("description")}
             </div>
 
-            <div className="section-text section-text--rich-text" key={primaryLanguage}>
+            <div className="section-text section-text--rich-text divide-x-2" key={primaryLanguage}>
               <div className="relative">
                 <LanguageLabel
                   id={`privacyPolicy-${primaryLanguage}-language`}
@@ -345,7 +335,7 @@ export const Translate = () => {
             <div className="section-heading">
               {t("pageText")}: {t("description")}
             </div>
-            <div className="section-text section-text--rich-text" key={primaryLanguage}>
+            <div className="section-text section-text--rich-text divide-x-2" key={primaryLanguage}>
               <div className="relative">
                 <LanguageLabel id={`endpage-${primaryLanguage}-language`} lang={primaryLanguage}>
                   {t(primaryLanguage)}
