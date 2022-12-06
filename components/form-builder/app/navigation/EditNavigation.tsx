@@ -2,19 +2,21 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { SubNavLink } from "./SubNavLink";
 import { useTemplateStore } from "@components/form-builder/store";
-import { Language } from "@components/form-builder/types";
 import { useActivePathname } from "@components/form-builder/hooks";
+import { ToggleLeft, ToggleRight } from "@components/form-builder/icons";
 
 export const EditNavigation = () => {
   const { t } = useTranslation("form-builder");
-  const { setTranslationLanguagePriority, translationLanguagePriority } = useTemplateStore((s) => ({
-    setTranslationLanguagePriority: s.setTranslationLanguagePriority,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
+  const { toggleTranslationLanguagePriority, translationLanguagePriority } = useTemplateStore(
+    (s) => ({
+      translationLanguagePriority: s.translationLanguagePriority,
+      toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
+    })
+  );
   const { activePathname } = useActivePathname();
 
-  const switchLang = (lang: Language) => {
-    setTranslationLanguagePriority(lang);
+  const switchLang = () => {
+    toggleTranslationLanguagePriority();
   };
 
   return (
@@ -25,17 +27,25 @@ export const EditNavigation = () => {
       </nav>
       {activePathname.endsWith("/edit") && (
         <div className="absolute right-0 mr-24 top-0">
-          <label htmlFor="lang" className="font-bold">
-            Currently editing:{" "}
+          <label htmlFor="lang" className="font-bold text-sm">
+            Editing in:{" "}
           </label>
-          <select
-            id="lang"
-            value={translationLanguagePriority}
-            onChange={(e) => switchLang(e.target.value as Language)}
-          >
-            <option value="en">English</option>
-            <option value="fr">French</option>
-          </select>
+          <label htmlFor="lang" className="text-sm">
+            English
+          </label>{" "}
+          {translationLanguagePriority === "fr" && (
+            <button id="lang" onClick={() => switchLang()}>
+              <ToggleRight className="inline-block w-12 fill-fuchsia-300" />
+            </button>
+          )}
+          {translationLanguagePriority === "en" && (
+            <button id="lang" onClick={() => switchLang()}>
+              <ToggleLeft className="inline-block w-12 fill-violet-300" />
+            </button>
+          )}{" "}
+          <label htmlFor="lang" className="text-sm">
+            French
+          </label>
         </div>
       )}
     </div>

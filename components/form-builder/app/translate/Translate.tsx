@@ -94,6 +94,7 @@ export const Translate = () => {
   }));
   const { t } = useTranslation("form-builder");
 
+  // Set default left-hand language
   const primaryLanguage = "en";
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
