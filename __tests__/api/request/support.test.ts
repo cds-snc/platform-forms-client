@@ -11,11 +11,13 @@ import { Session } from "next-auth";
 
 const mockGetCSRFToken = mocked(getCsrfToken, true);
 
+jest.mock("next-auth/react");
+
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
 jest.mock("next-auth/next");
 
-const IsGCNotifyServiceAvailable = true;
+let IsGCNotifyServiceAvailable = true;
 
 const mockSendEmail = {
   sendEmail: jest.fn(() => {
@@ -31,45 +33,50 @@ jest.mock("notifications-node-client", () => ({
   NotifyClient: jest.fn(() => mockSendEmail),
 }));
 
-describe("Request support API test (without active session)", () => {
-  //---------------------------
-  //--------- HERE ---------
-  //---------------------------
-  // mockGetCSRFToken is undefined
+describe("Support email API tests - WITHOUT an active session", () => {
+  beforeEach(() => {
+    mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
+    IsGCNotifyServiceAvailable = true;
+  });
 
-  // afterEach(() => {
-  //   mockGetCSRFToken.mockReset();
-  // });
+  afterEach(() => {
+    mockGetCSRFToken.mockReset();
+  });
 
-  // it("Should be able to use the API without an active session", async () => {
-  //   console.log("--------------", mockGetCSRFToken);
-  //   mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
-  //   const { req, res } = createMocks({
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "X-CSRF-Token": "valid_csrf",
-  //       Origin: "http://localhost:3000",
-  //     },
-  //     body: {
-  //       supportType: "support",
-  //       name: "name",
-  //       email: "email@email.com",
-  //       request: "request",
-  //       description: "description",
-  //     },
-  //   });
+  runEmailAPITests();
+});
 
-  //   await support(req, res);
-  //   expect(res.statusCode).toEqual(200);
-  // });
+describe("Support email API tests - WITH an active session", () => {
+  beforeEach(() => {
+    const mockSession: Session = {
+      expires: "1",
+      user: {
+        id: "1",
+        email: "a@b.com",
+        name: "Testing Forms",
+        privileges: [],
+      },
+    };
+    IsGCNotifyServiceAvailable = true;
+    mockGetSession.mockResolvedValue(mockSession);
+    mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
+  });
 
-  it("Should not be able to use the API without a CSRF token", async () => {
+  afterEach(() => {
+    mockGetSession.mockReset();
+  });
+
+  runEmailAPITests();
+});
+
+function runEmailAPITests() {
+  it("Should fail if CSRF token is valid", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Origin: "http://localhost:3000",
+        "X-CSRF-Token": "invalid_csrf",
       },
       body: {
         supportType: "support",
@@ -84,114 +91,96 @@ describe("Request support API test (without active session)", () => {
 
     expect(res.statusCode).toEqual(403);
   });
-});
 
-// describe("Request publishing permission API tests (with active session)", () => {
-//   beforeEach(() => {
-//     const mockSession: Session = {
-//       expires: "1",
-//       user: {
-//         id: "1",
-//         email: "a@b.com",
-//         name: "Testing Forms",
-//         privileges: [],
-//       },
-//     };
+  it("Should succeed if CSRF token is valid", async () => {
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": "valid_csrf",
+        Origin: "http://localhost:3000",
+      },
+      body: {
+        supportType: "support",
+        name: "name",
+        email: "email@email.com",
+        request: "request",
+        description: "description",
+      },
+    });
 
-//     mockGetSession.mockResolvedValue(mockSession);
-//   });
+    await support(req, res);
+    expect(res.statusCode).toEqual(200);
+  });
 
-//   afterEach(() => {
-//     mockGetSession.mockReset();
-//   });
+  it.each(["GET", "PUT", "DELETE"])(
+    "Should not be able to use the API with unsupported HTTP methods",
+    async (httpMethod) => {
+      const { req, res } = createMocks({
+        method: httpMethod as RequestMethod,
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+          "X-CSRF-Token": "valid_csrf",
+        },
+        body: {
+          supportType: "support",
+          name: "name",
+          email: "email@email.com",
+          request: "request",
+          description: "description",
+        },
+      });
 
-//   it.each(["GET", "PUT", "DELETE"])(
-//     "Should not be able to use the API with unsupported HTTP methods",
-//     async (httpMethod) => {
-//       const { req, res } = createMocks({
-//         method: httpMethod as RequestMethod,
-//         headers: {
-//           "Content-Type": "application/json",
-//           Origin: "http://localhost:3000",
-//         },
-//         body: {
-//           supportType: "support",
-//           name: "name",
-//           email: "email@email.com",
-//           request: "request",
-//           description: "description",
-//         },
-//       });
+      await support(req, res);
 
-//       await support(req, res);
+      expect(res.statusCode).toEqual(403);
+    }
+  );
 
-//       expect(res.statusCode).toEqual(403);
-//     }
-//   );
+  it("Should not be able to use the API if payload is invalid", async () => {
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+        "X-CSRF-Token": "valid_csrf",
+      },
+      body: {
+        email: "email@email.com",
+      },
+    });
 
-//   it("Should not be able to use the API if payload is invalid", async () => {
-//     const { req, res } = createMocks({
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Origin: "http://localhost:3000",
-//       },
-//       body: {
-//         email: "email@email.com",
-//       },
-//     });
+    await support(req, res);
 
-//     await support(req, res);
+    expect(res.statusCode).toEqual(404);
+    expect(JSON.parse(res._getData())).toMatchObject({ error: "Malformed request" });
+  });
 
-//     expect(res.statusCode).toEqual(404);
-//     expect(JSON.parse(res._getData())).toMatchObject({ error: "Malformed request" });
-//   });
+  it("Should fail if GC Notify service is unavailable", async () => {
+    IsGCNotifyServiceAvailable = false;
 
-//   it("Should succeed if payload is valid", async () => {
-//     const { req, res } = createMocks({
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Origin: "http://localhost:3000",
-//         "X-CSRF-Token": "123",
-//       },
-//       body: {
-//         supportType: "support",
-//         name: "name",
-//         email: "email@email.com",
-//         request: "request",
-//         description: "description",
-//       },
-//     });
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+        "X-CSRF-Token": "valid_csrf",
+      },
+      body: {
+        supportType: "support",
+        name: "name",
+        email: "email@email.com",
+        request: "request",
+        description: "description",
+      },
+    });
 
-//     await support(req, res);
+    await support(req, res);
 
-//     expect(res.statusCode).toEqual(200);
-//   });
-
-//   it("Should fail if GC Notify service is unavailable", async () => {
-//     IsGCNotifyServiceAvailable = false;
-
-//     const { req, res } = createMocks({
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Origin: "http://localhost:3000",
-//       },
-//       body: {
-//         supportType: "support",
-//         name: "name",
-//         email: "email@email.com",
-//         request: "request",
-//         description: "description",
-//       },
-//     });
-
-//     await support(req, res);
-
-//     expect(res.statusCode).toEqual(500);
-//     expect(JSON.parse(res._getData())).toMatchObject({
-//       error: "Internal Service Error: Failed to send request",
-//     });
-//   });
-// });
+    expect(res.statusCode).toEqual(500);
+    expect(JSON.parse(res._getData())).toMatchObject({
+      error: "Internal Service Error: Failed to send request",
+    });
+  });
+}
