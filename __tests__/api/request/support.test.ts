@@ -70,7 +70,7 @@ describe("Support email API tests - WITH an active session", () => {
 });
 
 function runEmailAPITests() {
-  it("Should fail if CSRF token is valid", async () => {
+  it("Should fail if CSRF token is not valid", async () => {
     const { req, res } = createMocks({
       method: "POST",
       headers: {
