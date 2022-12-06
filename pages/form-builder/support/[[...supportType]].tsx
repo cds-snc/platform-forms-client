@@ -1,7 +1,7 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
@@ -29,13 +29,6 @@ export default function Contactus() {
   const [isSuccessScreen, setIsSuccessScreen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  useEffect(() => {
-    // Default route is "support" and all other routes should go to contactus.
-    if (supportType === "contactus" && String(router.query.supportType) !== "contactus") {
-      router.push(`/${i18n.language}/form-builder/support/contactus`, undefined, { shallow: true });
-    }
-  }, [router.query?.path]);
 
   const handleRequest = async (
     name: string,
@@ -355,6 +348,16 @@ export default function Contactus() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // For any URLs other than /support and /support/contactus, redirect the user to the 404 page
+  if (
+    context.query?.supportType !== undefined &&
+    String(context.query.supportType) !== "contactus"
+  ) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       ...(context.locale &&
