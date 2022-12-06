@@ -50,7 +50,7 @@ export const SaveButton = () => {
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <ButtonWithMessage className="ml-4" onClick={handlePublish}>
-      {t("save", { ns: "form-builder" })}
+      {t("saveDraft", { ns: "form-builder" })}
     </ButtonWithMessage>
   ) : null;
 };
