@@ -46,10 +46,14 @@ export const SaveButton = () => {
     }
   }, [asPath, isReady]);
 
-  const ButtonWithMessage = withMessage(Button, t("saveDraftMessage", { ns: "form-builder" }));
+  const ButtonWithMessage = withMessage(
+    Button,
+    t("saveDraftMessage", { ns: "form-builder" }),
+    "mt-4 -ml-8 block"
+  );
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
-    <ButtonWithMessage className="ml-4" onClick={handlePublish}>
+    <ButtonWithMessage onClick={handlePublish}>
       {t("saveDraft", { ns: "form-builder" })}
     </ButtonWithMessage>
   ) : null;

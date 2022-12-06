@@ -74,22 +74,20 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const withMessage = (
   Button: any, // eslint-disable-line  @typescript-eslint/no-explicit-any
-  message?: string
+  message?: string,
+  messageClassName = "inline"
 ) => {
   const ButtonWithMessage: React.FC<ButtonProps> = ({ onClick, ...restProps }) => {
-    const [isCopied, setIsCopied] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const [showMessage, setShowMessage] = useState(false);
 
-    const successMessage = () => {
-      setIsCopied(message || "default");
+    const onFinish = () => {
+      setSuccessMessage(message || "default");
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
-
         // 300ms after isMessage is false, remove the message string (the message span has "transition-300" class)
-        setTimeout(() => {
-          setIsCopied("");
-        }, 300);
+        setTimeout(() => setSuccessMessage(""), 300);
       }, 1500);
     };
 
@@ -100,21 +98,21 @@ export const withMessage = (
     const NewButton = () => {
       return React.createElement(Button, {
         ...restProps,
-        onClick: callAll(onClick, successMessage),
+        onClick: callAll(onClick, onFinish),
       });
     };
 
     return (
       <>
         <NewButton />
-        <div className="inline" id="button-message" role="alert" aria-live="polite">
-          {isCopied && (
+        <div className={messageClassName} id="button-message" role="alert" aria-live="polite">
+          {successMessage && (
             <span
-              className={`bg-green-light text-green-darker ml-4 transition-opacity ease-in-out duration-300 inline-block py-1 px-3 ${
+              className={`bg-green-light text-green-darker ml-4 transition-opacity ease-in-out duration-1000 inline-block py-1 px-3 ${
                 showMessage ? "" : "opacity-0"
               }`}
             >
-              {isCopied}
+              {successMessage}
             </span>
           )}
         </div>
