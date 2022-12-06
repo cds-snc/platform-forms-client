@@ -26,8 +26,8 @@
     "format": "prettier --config .prettierrc.json --write .",
     "format:check": "prettier --config .prettierrc.json --check .",
     "test": "APP_ENV=test DATABASE_URL=postgres://postgres:password@localhost:5432 jest",
-    "cypress": "cypress open --config-file cypress/config/cypress.config.ts",
-    "cypress:headless": "cypress run --config-file cypress/config/cypress.config.ts --browser chrome --headless",
+    "cypress": "cypress open",
+    "cypress:headless": "cypress run --browser chrome --headless",
     "build-storybook": "build-storybook -s public --no-dll",
     "storybook": "start-storybook -s public -p 6006",
     "postinstall": "[ \"$NODE_ENV\" = production ] && exit 0; husky install"

@@ -26,7 +26,6 @@ jobs:
           start: yarn start:test
           wait-on: "http://localhost:3000"
           config: baseUrl=http://localhost:3000
-          config-file: cypress/config/cypress.config.ts
       - uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # tag=v1
         if: failure()
         with:

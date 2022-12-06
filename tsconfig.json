@@ -28,6 +28,6 @@
   },
   "include": ["next-env.d.ts", "types", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "utils", ".next", "cypress",
-    "./cypress/config/cypress.config.ts"
+    "./cypress.config.js"
   ]
 }
