@@ -105,10 +105,11 @@ export const withMessage = (
     return (
       <>
         <NewButton />
+        {/*  */}
         <div className={messageClassName} id="button-message" role="alert" aria-live="polite">
           {successMessage && (
             <span
-              className={`bg-green-light text-green-darker ml-4 transition-opacity ease-in-out duration-1000 inline-block py-1 px-3 ${
+              className={`transition-opacity ease-in-out duration-1000 bg-green-light justify-center mt-2 w-[100%] text-green-darker inline-flex py-1 px-3 ${
                 showMessage ? "" : "opacity-0"
               }`}
             >

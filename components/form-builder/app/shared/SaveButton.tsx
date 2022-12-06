@@ -49,12 +49,14 @@ export const SaveButton = () => {
   const ButtonWithMessage = withMessage(
     Button,
     t("saveDraftMessage", { ns: "form-builder" }),
-    "mt-4 -ml-8 block"
+    "mt-4 center block"
   );
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
-    <ButtonWithMessage onClick={handlePublish}>
-      {t("saveDraft", { ns: "form-builder" })}
-    </ButtonWithMessage>
+    <div className="mt-12 p-4 -ml-4">
+      <ButtonWithMessage onClick={handlePublish}>
+        {t("saveDraft", { ns: "form-builder" })}
+      </ButtonWithMessage>
+    </div>
   ) : null;
 };
