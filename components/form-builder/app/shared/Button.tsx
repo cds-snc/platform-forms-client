@@ -14,6 +14,28 @@ export const themes = {
   icon: "!border-none bg-gray-selected hover:bg-gray-600 !rounded-full max-h-9 !p-1.5 ml-1.5",
 };
 
+export const SuccessAlert = ({
+  successMessage,
+  showMessage,
+}: {
+  successMessage: string;
+  showMessage: boolean;
+}) => {
+  return (
+    <div className="inline" id="button-message" role="alert" aria-live="polite">
+      {successMessage && (
+        <span
+          className={`transition-opacity ease-in-out duration-1000 bg-green-light ml-4 justify-center mt-2 text-green-darker inline-block py-1 px-3 ${
+            showMessage ? "" : "opacity-0"
+          }`}
+        >
+          {successMessage}
+        </span>
+      )}
+    </div>
+  );
+};
+
 export const Button = ({
   children,
   onClick,
@@ -75,7 +97,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const withMessage = (
   Button: any, // eslint-disable-line  @typescript-eslint/no-explicit-any
   message?: string,
-  messageClassName = "inline"
+  onSuccess?: CallBack
 ) => {
   const ButtonWithMessage: React.FC<ButtonProps> = ({ onClick, ...restProps }) => {
     const [successMessage, setSuccessMessage] = useState("");
@@ -105,18 +127,11 @@ export const withMessage = (
     return (
       <>
         <NewButton />
-        {/*  */}
-        <div className={messageClassName} id="button-message" role="alert" aria-live="polite">
-          {successMessage && (
-            <span
-              className={`transition-opacity ease-in-out duration-1000 bg-green-light justify-center mt-2 w-[100%] text-green-darker inline-flex py-1 px-3 ${
-                showMessage ? "" : "opacity-0"
-              }`}
-            >
-              {successMessage}
-            </span>
-          )}
-        </div>
+        {onSuccess
+          ? showMessage && onSuccess()
+          : showMessage && (
+              <SuccessAlert showMessage={showMessage} successMessage={successMessage} />
+            )}
       </>
     );
   };

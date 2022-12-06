@@ -49,7 +49,9 @@ export const SaveButton = () => {
   const ButtonWithMessage = withMessage(
     Button,
     t("saveDraftMessage", { ns: "form-builder" }),
-    "mt-4 center block"
+    () => {
+      return <div>save draft message here!</div>;
+    }
   );
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
