@@ -7,8 +7,9 @@ import { FormRecord } from "@lib/types";
 
 import { useTemplateStore } from "../../store";
 import { usePublish, useAllowPublish } from "../../hooks";
-import { Button, withMessage } from "../shared/Button";
+import { Button } from "../shared/Button";
 
+// @todo - move this to a helper file but first figure out the fr formatting
 const formatDate = (updatedAt: number | undefined, at: string) => {
   const date = new Date(updatedAt || 0);
   const options: Intl.DateTimeFormatOptions = {
@@ -84,25 +85,15 @@ export const SaveButton = () => {
     }
   }, [asPath, isReady]);
 
-  const ButtonWithMessage = withMessage(
-    Button,
-    t("saveDraftMessage", { ns: "form-builder" }),
-    () => {
-      return null;
-    }
-  );
-
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div className="mt-12 p-4 -ml-4 bg-yellow-100">
-      <ButtonWithMessage onClick={handlePublish}>
-        {t("saveDraft", { ns: "form-builder" })}
-      </ButtonWithMessage>
-      <div className="mt-4 " role="alert" aria-live="polite">
-        <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-        <div className="text-sm">
-          {updatedAt && formatDate(new Date(updatedAt).getTime(), t("at"))}
+      <Button onClick={handlePublish}>{t("saveDraft", { ns: "form-builder" })}</Button>
+      {updatedAt && (
+        <div className="mt-4 " role="alert" aria-live="polite">
+          <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
+          <div className="text-sm">{formatDate(new Date(updatedAt).getTime(), t("at"))}</div>
         </div>
-      </div>
+      )}
     </div>
   ) : null;
 };
