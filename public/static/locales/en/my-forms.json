@@ -6,6 +6,7 @@
     "all": "All"
   },
   "actions": {
+    "resumeForm": "Resume editing form",
     "createNewForm": "Create new form"
   },
   "cards": {
