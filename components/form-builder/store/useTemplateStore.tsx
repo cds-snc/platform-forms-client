@@ -61,7 +61,6 @@ export const defaultForm = {
 
 export interface TemplateStoreProps {
   id: string;
-  locale: string; // used to set the initial language priority
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
@@ -72,6 +71,10 @@ export interface TemplateStoreProps {
   };
   isPublished: boolean;
   securityAttribute: string;
+}
+
+export interface InitialTemplateStoreProps extends TemplateStoreProps {
+  locale?: Language;
 }
 
 export interface TemplateStoreState extends TemplateStoreProps {
@@ -122,10 +125,9 @@ const storage: StateStorage = {
   },
 };
 
-const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
+const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
-    locale: initProps?.locale || "en",
     lang: (initProps?.locale as Language) || "en",
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
