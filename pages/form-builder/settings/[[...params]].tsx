@@ -1,15 +1,15 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "next-i18next";
 import { PageProps } from "@lib/types";
-import { getServerSideProps } from "../../index";
-import { NextPageWithLayout } from "../../../_app";
-import { Settings, PreviewNavigation, Template, PageTemplate } from "@components/form-builder/app";
+import { getServerSideProps } from "../index";
+import { NextPageWithLayout } from "../../_app";
+import { Settings, Template, PageTemplate } from "@components/form-builder/app";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
   const title = `${t("gcFormsSettings")} — ${t("gcForms")}`;
   return (
-    <PageTemplate title={title} navigation={<PreviewNavigation />}>
+    <PageTemplate title={title}>
       <Settings />
     </PageTemplate>
   );
