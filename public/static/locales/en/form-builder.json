@@ -192,5 +192,7 @@
     "phone": "Enter a phone number like, 111-222-3333",
     "date": "Enter a date like, mm/dd/yyyy",
     "number": "Only enter numbers"
-  }
+  },
+  "lastSaved": "Last saved:",
+  "at": "at"
 }

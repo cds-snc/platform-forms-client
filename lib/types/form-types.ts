@@ -133,6 +133,7 @@ export type FormRecord = {
   form: FormProperties;
   securityAttribute: string;
   reCaptchaID?: string;
+  updatedAt: string;
   [key: string]: string | boolean | SubmissionProperties | FormProperties | undefined;
 };
 

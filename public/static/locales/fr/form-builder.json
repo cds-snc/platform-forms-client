@@ -192,5 +192,7 @@
     "phone": "Entrez un numéro de téléphone comme 111-222-3333",
     "date": "Entrez une date comme mm/dd/yyyy",
     "number": "N'entrez que des nombres"
-  }
+  },
+  "lastSaved": "[fr] Last saved:",
+  "at": "[fr] at"
 }
