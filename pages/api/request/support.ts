@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { cors, middleware } from "@lib/middleware";
+import { cors, middleware, csrfProtected } from "@lib/middleware";
 import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
 import { CONTACTUS_EMAIL_ADDRESS, SUPPORT_EMAIL_ADDRESS } from "@lib/types";
@@ -84,4 +84,7 @@ ${description}
   }
 };
 
-export default middleware([cors({ allowedMethods: ["POST"] })], requestSupport);
+export default middleware(
+  [cors({ allowedMethods: ["POST"] }), csrfProtected(["POST"])],
+  requestSupport
+);

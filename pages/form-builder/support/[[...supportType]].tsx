@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Formik } from "formik";
 import { useTranslation } from "next-i18next";
+import { getCsrfToken } from "next-auth/react";
 import * as Yup from "yup";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
@@ -36,13 +37,16 @@ export default function Contactus() {
     request: string,
     description: string
   ) => {
+    const token: string = (await getCsrfToken()) || "";
     return await axios({
       url: "/api/request/support",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRF-Token": token,
       },
       data: { supportType, name, email, request, description },
+      // If development mode disable timeout
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).catch((err) => {
       logMessage.error(err);
