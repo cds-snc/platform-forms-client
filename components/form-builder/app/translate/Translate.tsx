@@ -3,19 +3,13 @@ import styled from "styled-components";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
-import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
-import { Button } from "../shared/Button";
 import { LanguageLabel } from "./LanguageLabel";
-
-const LangSpan = styled.span`
-  width: 70px;
-`;
 
 const SectionDiv = styled.div`
   .section-title {
