@@ -7,23 +7,8 @@ import { FormRecord } from "@lib/types";
 
 import { useTemplateStore } from "../../store";
 import { usePublish, useAllowPublish } from "../../hooks";
-import { Button } from "../shared/Button";
-
-// @todo - move this to a helper file but first figure out the fr formatting
-const formatDate = (updatedAt: number | undefined, at: string) => {
-  const date = new Date(updatedAt || 0);
-  const options: Intl.DateTimeFormatOptions = {
-    year: "2-digit",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  };
-  const localeString = date.toLocaleDateString("en-CA", options);
-  const dateSplit = localeString.split(",");
-  return `${dateSplit[0].replace(/-/g, "/")} ${at} ${dateSplit[1].replace(/\./g, "")}`;
-};
+import { Button } from "../shared";
+import { formatDateTime } from "../../util";
 
 export const SaveButton = () => {
   const { getSchema, id, setId } = useTemplateStore((s) => ({
@@ -58,7 +43,7 @@ export const SaveButton = () => {
         templates?.data.find((template: FormRecord) => template.id === id || "")?.updatedAt || ""
       );
     };
-    fetchTemplate();
+    status === "authenticated" && fetchTemplate();
   }, [id, savedAt]);
 
   const handlePublish = async () => {
@@ -85,13 +70,17 @@ export const SaveButton = () => {
     }
   }, [asPath, isReady]);
 
+  const dateTime = (updatedAt && formatDateTime(new Date(updatedAt).getTime())) || [];
+
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div className="mt-12 p-4 -ml-4 bg-yellow-100">
       <Button onClick={handlePublish}>{t("saveDraft", { ns: "form-builder" })}</Button>
-      {updatedAt && (
+      {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">
           <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-          <div className="text-sm">{formatDate(new Date(updatedAt).getTime(), t("at"))}</div>
+          <div className="text-sm">
+            {dateTime[0]} {t("at")} {dateTime[1]}{" "}
+          </div>
         </div>
       )}
     </div>

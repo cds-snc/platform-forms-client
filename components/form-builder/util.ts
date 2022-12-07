@@ -135,3 +135,27 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
 
   return schema;
 };
+
+// @todo this will need to be updated to support other locales i.e. fr-CA
+export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") => {
+  const date = new Date(updatedAt || 0);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+
+  const localeString = date.toLocaleDateString(locale, options);
+  const parts = localeString.split(",");
+
+  if (parts.length < 2) {
+    return [];
+  }
+
+  const yearMonthDay = parts[0].replace(/-/g, "/");
+  const time = parts[1].replace(/\./g, "").trim();
+  return [yearMonthDay, time];
+};

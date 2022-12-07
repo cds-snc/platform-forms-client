@@ -37,6 +37,9 @@ const AdminWelcome: NextPageWithLayout<AdminWelcomeProps> = (props: AdminWelcome
         <div className="flex-auto mb-10 w-60">
           <h3>Create Forms</h3>
           <p>
+            <Link href="/myforms">GC Forms</Link>
+          </p>
+          <p>
             <Link href="/admin/upload">Upload Form Templates</Link>
           </p>
         </div>
