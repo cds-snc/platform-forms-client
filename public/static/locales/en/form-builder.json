@@ -249,13 +249,6 @@
     "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
     "theGCFormsTeam": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
     "backToForms": "Back To Forms"
-  },
-  "mainNavAriaLabel": "Main",
-  "defaultElementDescription": {
-    "email": "Enter an email address like, name@example.com",
-    "phone": "Enter a phone number like, 111-222-3333",
-    "date": "Enter a date like, mm/dd/yyyy",
-    "number": "Only enter numbers"
   }
 }
 

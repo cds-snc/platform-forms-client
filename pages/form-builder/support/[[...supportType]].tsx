@@ -175,7 +175,7 @@ export default function Contactus() {
         </p>
         <Attention type="warning" heading={t("support.lookingForADemo")}>
           {t("support.ifYouWouldLike")}&nbsp;
-          <Link href={`/form-builder/support`}>{t("support.contactUs")}</Link>.
+          <Link href={`/form-builder/support/contactus`}>{t("support.contactUs")}</Link>.
         </Attention>
         <div className="focus-group mt-14">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
