@@ -74,7 +74,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
     <div id="page-container" className="lg:!mx-4 xl:!mx-8">
       <div>
         <LeftNavigation />
-        <main id="content" className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">
+        <main id="content" className="ml-60 xl:ml-40 md:pl-5">
           <h1 className="border-b-0 mb-8 md:text-h1">{t("title")}</h1>
           <div className="top-40">
             <ResumeEditingForm>
