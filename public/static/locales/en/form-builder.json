@@ -144,6 +144,7 @@
   "saveP4": "Open the form file from the GC Form Builder’s start page to pick-up where you left off.",
   "saveYourForm": "Save your form",
   "saveYourProgress": "Save your progress",
+  "selectElement": "Select an Element type",
   "settings": "Settings",
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
