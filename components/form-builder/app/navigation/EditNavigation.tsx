@@ -28,10 +28,10 @@ export const EditNavigation = () => {
       {activePathname.endsWith("/edit") && (
         <div className="absolute right-0 mr-24 top-0">
           <label htmlFor="lang" className="font-bold text-sm">
-            Editing in:{" "}
+            {t("editingIn")}{" "}
           </label>
           <label htmlFor="lang" className="text-sm">
-            English
+            {t("English")}
           </label>{" "}
           {translationLanguagePriority === "fr" && (
             <button id="lang" onClick={() => switchLang()}>
@@ -44,7 +44,7 @@ export const EditNavigation = () => {
             </button>
           )}{" "}
           <label htmlFor="lang" className="text-sm">
-            French
+            {t("French")}
           </label>
         </div>
       )}
