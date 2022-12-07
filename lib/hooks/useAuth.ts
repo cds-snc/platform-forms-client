@@ -331,6 +331,8 @@ export const useAuth = () => {
 
         if (errorResponseMessage.includes("InvalidParameterException") && failedCallback) {
           failedCallback("InvalidParameterException");
+        } else if (errorResponseMessage.includes("UserNotFoundException")) {
+          await router.push("/signup/register");
         } else {
           setCognitoError(t("InternalServiceException"));
           if (failedCallback) failedCallback("InternalServiceException");
