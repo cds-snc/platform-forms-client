@@ -197,5 +197,61 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code"
+  "viewCode": "Afficher le code",
+  "contactus": {
+    "title": "Contactez-nous",
+    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur les Formulaires GC et sur la façon dont ce service peut être utile à votre département.",
+    "gcFormsTeamPart1": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
+    "gcFormsTeamLink": "Canada.ca Contactez-nous",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider. ",
+    "needSupport": "Besoin d'aide?",
+    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
+    "supportFormLink": "formulaire de soutien",
+    "name": "Votre nom",
+    "email": "Votre courriel",
+    "request": {
+      "title": "Quel est votre besoin?",
+      "option1": "Poser une question",
+      "option2": "Donner votre avis",
+      "option3": "Organiser une démo pour en savoir plus sur Formulaires GC ",
+      "option4": "Autre"
+    },
+    "description": {
+      "title": "Plus d'informations",
+      "description": "Ajouter plus d'informations."
+    }
+  },
+  "support": {
+    "title": "Soutien",
+    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC.",
+    "gcFormsTeamPart1": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
+    "gcFormsTeamLink": "Canada.ca Contactez-nous",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "lookingForADemo": "À la recherche d'une démo de produit?",
+    "ifYouWouldLike": "Pour en savoir plus sur le produit ou organiser une démonstration, veuillez remplir ",
+    "contactUs": "le formulaire \"Contactez-nous\"",
+    "name": "Votre nom",
+    "email": "Votre courriel",
+    "request": {
+      "title": "Quel est votre besoin?",
+      "option1": "Poser une question",
+      "option2": "Obtenir du soutien technique",
+      "option3": "Problème avec un formulaire publié",
+      "option4": "Autre"
+    },
+    "description": {
+      "title": "Plus d'informations",
+      "description": "Fournissez plus de contexte autour du problème que vous rencontrez."
+    }
+  },
+  "requestSuccess": {
+    "title": "Merci pour votre demande",
+    "weWillRespond": "Nous vous répondrons dans les deux prochains jours ouvrables.",
+    "forOtherEnquiriesPart1": "Pour toute autre question, allez à ",
+    "forOtherEnquiriesLink": "Canada.ca Contactez-nous",
+    "forOtherEnquiriesPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "theGCFormsTeam": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
+    "backToForms": "Retourner au Formulaires GC"
+  }
 }
+

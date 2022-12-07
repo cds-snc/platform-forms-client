@@ -1,9 +1,17 @@
 import React from "react";
-export const WarningIcon = ({ className, title }: { className?: string; title?: string }) => (
+export const WarningIcon = ({
+  className,
+  title,
+  width,
+}: {
+  className?: string;
+  title?: string;
+  width?: string;
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="38"
-    width="32"
+    height={width ? "auto" : "38"}
+    width={width ? width : "32"}
     className={className}
     viewBox="0 0 38 32"
     focusable="false"
