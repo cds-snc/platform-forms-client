@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { QuestionInput, SelectedElement, getSelectedOption } from ".";
-import { Select } from "./elements";
+import { DropDown } from "./elements";
 import { useTemplateStore } from "../../store";
 import { Checkbox } from "../shared";
 import { useElementOptions } from "../../hooks";
@@ -76,15 +76,21 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
   const elementOptions = useElementOptions();
-  const { localizeField, elements, updateField, unsetField, resetChoices } = useTemplateStore(
-    (s) => ({
-      localizeField: s.localizeField,
-      elements: s.form.elements,
-      updateField: s.updateField,
-      unsetField: s.unsetField,
-      resetChoices: s.resetChoices,
-    })
-  );
+  const {
+    localizeField,
+    elements,
+    updateField,
+    unsetField,
+    resetChoices,
+    translationLanguagePriority,
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    elements: s.form.elements,
+    updateField: s.updateField,
+    unsetField: s.unsetField,
+    resetChoices: s.resetChoices,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const questionNumber =
     elements
@@ -128,9 +134,9 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
       case "date":
       case "number":
         updateField(
-          `form.elements[${index}].properties.${localizeField(
-            LocalizedElementProperties.DESCRIPTION
-          )}`,
+          `form.elements[${index}].properties.${
+            (localizeField(LocalizedElementProperties.DESCRIPTION), translationLanguagePriority)
+          }`,
           t(`defaultElementDescription.${id}`)
         );
         break;
@@ -150,7 +156,10 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
     [setSelectedItem]
   );
 
-  const hasDescription = item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)];
+  const hasDescription =
+    item.properties[
+      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+    ];
 
   return (
     <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
@@ -169,7 +178,11 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
                 {t("question")} {item.index + 1}
               </LabelHidden>
               <QuestionInput
-                initialValue={item.properties[localizeField(LocalizedElementProperties.TITLE)]}
+                initialValue={
+                  item.properties[
+                    localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
+                  ]
+                }
                 index={item.index}
                 hasDescription={hasDescription}
               />
@@ -177,7 +190,11 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
           )}
           {hasDescription && item.type !== "richText" && (
             <DivDisabled id={`item${item.index}-describedby`}>
-              {item.properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
+              {
+                item.properties[
+                  localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+                ]
+              }
             </DivDisabled>
           )}
           <SelectedElement item={item} selected={selectedItem} />
@@ -191,8 +208,9 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
         {!isRichText && (
           <>
             <div>
-              <Select
-                options={elementOptions}
+              <DropDown
+                ariaLabel={t("selectElement")}
+                items={elementOptions}
                 selectedItem={selectedItem}
                 onChange={handleElementChange}
               />

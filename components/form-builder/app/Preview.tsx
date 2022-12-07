@@ -19,14 +19,15 @@ export const Preview = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField } = useTemplateStore((s) => ({
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
   }));
 
   const router = useRouter();
   const { t: t1 } = useTranslation();
-  const { t, i18n } = useTranslation("form-builder");
-  const language = i18n.language as string;
+  const { t } = useTranslation("form-builder");
+  const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
 
   return (
@@ -34,7 +35,7 @@ export const Preview = () => {
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("page1")}</span>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none">
         <h1 className="md:text-h1">
-          {formRecord.form[localizeField(LocalizedFormProperties.TITLE)] || t("preview")}
+          {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
         </h1>
 
         <Form
@@ -60,7 +61,9 @@ export const Preview = () => {
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
         <RichText>
           {formRecord.form.endPage
-            ? formRecord.form.endPage[localizeField(LocalizedElementProperties.DESCRIPTION)]
+            ? formRecord.form.endPage[
+                localizeField(LocalizedElementProperties.DESCRIPTION, language)
+              ]
             : ""}
         </RichText>
       </div>

@@ -30,3 +30,5 @@ export { ThreeDotsIcon } from "./ThreeDotsIcon";
 export { RocketIcon } from "./RocketIcon";
 export { WarningIcon } from "./WarningIcon";
 export { GearIcon } from "./GearIcon";
+export { ToggleRight } from "./ToggleRight";
+export { ToggleLeft } from "./ToggleLeft";
