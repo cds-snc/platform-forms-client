@@ -194,5 +194,6 @@
     "number": "N'entrez que des nombres"
   },
   "lastSaved": "[fr] Last saved:",
-  "at": "[fr] at"
+  "at": "[fr] at",
+  "selectElement": "[FR] Select an Element type"
 }

@@ -194,5 +194,6 @@
     "number": "Only enter numbers"
   },
   "lastSaved": "Last saved:",
-  "at": "at"
+  "at": "at",
+  "selectElement": "Select an Element type"
 }

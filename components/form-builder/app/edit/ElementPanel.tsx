@@ -9,7 +9,8 @@ import { Button } from "../shared";
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
-  const { elements, getFocusInput, updateField } = useTemplateStore((s) => ({
+  const { lang, elements, getFocusInput, updateField } = useTemplateStore((s) => ({
+    lang: s.lang,
     updateField: s.updateField,
     elements: s.form.elements,
     getFocusInput: s.getFocusInput,
@@ -56,6 +57,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <div
+      key={lang}
       className={`element-${item.index} ${className} border border-black max-w-[800px] h-auto -mt-1`}
     >
       <PanelBody item={item} />
