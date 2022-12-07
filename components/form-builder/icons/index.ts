@@ -33,3 +33,5 @@ export { GearIcon } from "./GearIcon";
 export { PageIcon } from "./PageIcon";
 export { GlobeIcon } from "./GlobeIcon";
 export { FolderIcon } from "./FolderIcon";
+export { ToggleRight } from "./ToggleRight";
+export { ToggleLeft } from "./ToggleLeft";

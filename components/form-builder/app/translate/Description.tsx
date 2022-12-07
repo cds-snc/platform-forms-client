@@ -8,18 +8,18 @@ import { LanguageLabel } from "./LanguageLabel";
 export const Description = ({
   element,
   index,
-  translationLanguagePriority,
+  primaryLanguage,
 }: {
   element: FormElement;
   index: number;
-  translationLanguagePriority: Language;
+  primaryLanguage: Language;
 }) => {
   const { updateField, localizeField } = useTemplateStore((s) => ({
     updateField: s.updateField,
     localizeField: s.localizeField,
   }));
   const { t } = useTranslation("form-builder");
-  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
+  const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
   return (
     <>
@@ -27,32 +27,33 @@ export const Description = ({
         <legend className="section-heading">
           {t(element.type)}: {t("Description")}
         </legend>
-        <div className="section-text">
+        <div className="section-text divide-x-2">
           <label
             className="sr-only"
-            htmlFor={`element-${element.id}-description-${translationLanguagePriority}`}
+            htmlFor={`element-${element.id}-description-${primaryLanguage}`}
           >
-            {t(`${translationLanguagePriority}-text`)}
+            {t(`${primaryLanguage}-text`)}
           </label>
           <div className="relative">
             <LanguageLabel
-              id={`element-${element.id}-description-${translationLanguagePriority}-language`}
+              lang={primaryLanguage}
+              id={`element-${element.id}-description-${primaryLanguage}-language`}
             >
-              {t(translationLanguagePriority)}
+              {t(primaryLanguage)}
             </LanguageLabel>
             <textarea
-              id={`element-${element.id}-description-${translationLanguagePriority}`}
-              aria-describedby={`element-${element.id}-description-${translationLanguagePriority}-language`}
+              id={`element-${element.id}-description-${primaryLanguage}`}
+              aria-describedby={`element-${element.id}-description-${primaryLanguage}-language`}
               value={
                 element.properties[
-                  localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+                  localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                 ]
               }
               onChange={(e) => {
                 updateField(
                   `form.elements[${index}].properties.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriority
+                    primaryLanguage
                   )}`,
                   e.target.value
                 );
@@ -61,32 +62,30 @@ export const Description = ({
           </div>
           <label
             className="sr-only"
-            htmlFor={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
+            htmlFor={`element-${element.id}-description-${secondaryLanguage}`}
           >
-            {t(`${translationLanguagePriorityAlt}-text`)}
+            {t(`${secondaryLanguage}-text`)}
           </label>
           <div className="relative">
             <LanguageLabel
-              id={`element-${element.id}-description-${translationLanguagePriorityAlt}-language`}
+              lang={secondaryLanguage}
+              id={`element-${element.id}-description-${secondaryLanguage}-language`}
             >
-              {t(translationLanguagePriorityAlt)}
+              {t(secondaryLanguage)}
             </LanguageLabel>
             <textarea
-              id={`element-${element.id}-description-${translationLanguagePriorityAlt}`}
-              aria-describedby={`element-${element.id}-description-${translationLanguagePriorityAlt}-language`}
+              id={`element-${element.id}-description-${secondaryLanguage}`}
+              aria-describedby={`element-${element.id}-description-${secondaryLanguage}-language`}
               value={
                 element.properties[
-                  localizeField(
-                    LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriorityAlt
-                  )
+                  localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                 ]
               }
               onChange={(e) => {
                 updateField(
                   `form.elements[${index}].properties.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriorityAlt
+                    secondaryLanguage
                   )}`,
                   e.target.value
                 );

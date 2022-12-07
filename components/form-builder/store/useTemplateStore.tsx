@@ -60,7 +60,6 @@ export const defaultForm = {
 
 export interface TemplateStoreProps {
   id: string;
-  locale: string; // used to set the initial language priority
   lang: Language;
   translationLanguagePriority: Language;
   focusInput: boolean;
@@ -71,6 +70,10 @@ export interface TemplateStoreProps {
   };
   isPublished: boolean;
   securityAttribute: string;
+}
+
+export interface InitialTemplateStoreProps extends TemplateStoreProps {
+  locale?: Language;
 }
 
 export interface TemplateStoreState extends TemplateStoreProps {
@@ -90,6 +93,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
+  setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   add: (index?: number) => void;
   remove: (id: number) => void;
@@ -120,10 +124,9 @@ const storage: StateStorage = {
   },
 };
 
-const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
+const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
-    locale: initProps?.locale || "en",
     lang: (initProps?.locale as Language) || "en",
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
@@ -175,6 +178,10 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
             set((state) => {
               state.translationLanguagePriority =
                 state.translationLanguagePriority === "en" ? "fr" : "en";
+            }),
+          setTranslationLanguagePriority: (lang: Language) =>
+            set((state) => {
+              state.translationLanguagePriority = lang;
             }),
           setFocusInput: (isSet) =>
             set((state) => {

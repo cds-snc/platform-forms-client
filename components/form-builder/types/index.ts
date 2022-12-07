@@ -52,12 +52,6 @@ export interface ElementOption {
   append?: ReactElement;
 }
 
-export interface DropdownProps {
-  options: ElementOption[];
-  onChange?: (selectedItem: string) => void;
-  ishighlighted: boolean;
-}
-
 export interface DropdownLabelProps {
   ishighlighted?: boolean;
 }

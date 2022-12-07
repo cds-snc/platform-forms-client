@@ -25,9 +25,9 @@ export const RichTextLocked = ({
   schemaProperty: string;
   ariaLabel?: string;
 }) => {
-  const { localizeField, lang } = useTemplateStore((s) => ({
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
-    lang: s.lang,
+    translationLanguagePriority: s.translationLanguagePriority,
   }));
 
   return (
@@ -35,11 +35,14 @@ export const RichTextLocked = ({
       <div className="mx-7 mt-5 mb-7">
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
-        <div className="flex border-2 rounded" key={lang}>
+        <div className="flex border-2 rounded" key={translationLanguagePriority}>
           <RichTextEditor
-            path={`form.${schemaProperty}.${localizeField(LocalizedElementProperties.DESCRIPTION)}`}
+            path={`form.${schemaProperty}.${localizeField(
+              LocalizedElementProperties.DESCRIPTION,
+              translationLanguagePriority
+            )}`}
             content={initialValue}
-            lang={lang}
+            lang={translationLanguagePriority}
             autoFocusEditor={false}
             ariaLabel={ariaLabel}
           />

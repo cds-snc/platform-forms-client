@@ -17,12 +17,14 @@ export const QuestionInput = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
-  const { localizeField, updateField, getFocusInput, setFocusInput } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    updateField: s.updateField,
-    setFocusInput: s.setFocusInput,
-    getFocusInput: s.getFocusInput,
-  }));
+  const { localizeField, updateField, getFocusInput, setFocusInput, translationLanguagePriority } =
+    useTemplateStore((s) => ({
+      localizeField: s.localizeField,
+      updateField: s.updateField,
+      setFocusInput: s.setFocusInput,
+      getFocusInput: s.getFocusInput,
+      translationLanguagePriority: s.translationLanguagePriority,
+    }));
 
   const input = useRef<HTMLInputElement>(null);
 
@@ -39,9 +41,12 @@ export const QuestionInput = ({
   }, [initialValue]);
 
   const _debounced = useCallback(
-    debounce((index, val) => {
+    debounce((index, val, lang) => {
       updateField(
-        `form.elements[${index}].properties.${localizeField(LocalizedElementProperties.TITLE)}`,
+        `form.elements[${index}].properties.${localizeField(
+          LocalizedElementProperties.TITLE,
+          lang
+        )}`,
         val
       );
     }, 100),
@@ -51,9 +56,9 @@ export const QuestionInput = ({
   const updateValue = useCallback(
     (index: number, value: string) => {
       setValue(value);
-      _debounced(index, value);
+      _debounced(index, value, translationLanguagePriority);
     },
-    [setValue]
+    [setValue, translationLanguagePriority]
   );
 
   return (

@@ -9,15 +9,15 @@ import { LanguageLabel } from "./LanguageLabel";
 export const RichText = ({
   element,
   index,
-  translationLanguagePriority,
+  primaryLanguage,
 }: {
   element: FormElement;
   index: number;
-  translationLanguagePriority: Language;
+  primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
   const localizeField = useTemplateStore((s) => s.localizeField);
-  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
+  const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
   return (
     <>
@@ -25,47 +25,49 @@ export const RichText = ({
         <div className="section-heading">
           {t(element.type)}: {t("Description")}
         </div>
-        <div className="section-text section-text--rich-text">
+        <div className="section-text section-text--rich-text divide-x-2">
           <div className="relative">
             <LanguageLabel
-              id={`elements-${index}-description-${translationLanguagePriority}-language`}
+              id={`elements-${index}-description-${primaryLanguage}-language`}
+              lang={primaryLanguage}
             >
-              {t(translationLanguagePriority)}
+              {t(primaryLanguage)}
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
               path={`form.elements[${index}].properties.${localizeField(
                 LocalizedElementProperties.DESCRIPTION,
-                translationLanguagePriority
+                primaryLanguage
               )}`}
               content={
                 element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")] ??
                 ""
               }
-              lang={translationLanguagePriority}
-              ariaLabel={t("pageText") + " " + t(translationLanguagePriority)}
-              ariaDescribedBy={`elements-${index}-description-${translationLanguagePriority}-language`}
+              lang={primaryLanguage}
+              ariaLabel={t("pageText") + " " + t(primaryLanguage)}
+              ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
             />
           </div>
           <div className="relative">
             <LanguageLabel
-              id={`elements-${index}-description-${translationLanguagePriorityAlt}-language`}
+              id={`elements-${index}-description-${secondaryLanguage}-language`}
+              lang={secondaryLanguage}
             >
-              {t(translationLanguagePriorityAlt)}
+              {t(secondaryLanguage)}
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
               path={`form.elements[${index}].properties.${localizeField(
                 LocalizedElementProperties.DESCRIPTION,
-                translationLanguagePriorityAlt
+                secondaryLanguage
               )}`}
               content={
                 element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")] ??
                 ""
               }
-              lang={translationLanguagePriorityAlt}
-              ariaLabel={t("pageText") + " " + t(translationLanguagePriorityAlt)}
-              ariaDescribedBy={`elements-${index}-description-${translationLanguagePriorityAlt}-language`}
+              lang={secondaryLanguage}
+              ariaLabel={t("pageText") + " " + t(secondaryLanguage)}
+              ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}
             />
           </div>
         </div>

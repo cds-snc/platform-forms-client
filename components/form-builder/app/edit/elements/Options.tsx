@@ -91,7 +91,10 @@ export const Options = ({
   item: FormElementWithIndex;
   renderIcon?: RenderIcon;
 }) => {
-  const { elements, lang } = useTemplateStore((s) => ({ elements: s.form.elements, lang: s.lang }));
+  const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
+    elements: s.form.elements,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const [bulkAddAction, setBulkAddAction] = useState(false);
 
@@ -120,7 +123,8 @@ export const Options = ({
   const options = choices.map((child, index) => {
     if (!child || !item) return null;
 
-    const initialValue = elements[item.index].properties.choices?.[index][lang] ?? "";
+    const initialValue =
+      elements[item.index].properties.choices?.[index][translationLanguagePriority] ?? "";
 
     return (
       <Option
