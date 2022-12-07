@@ -32,11 +32,11 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.settings"),
-      url: `/${i18n.language}/form-builder/preview/settings/${id}`,
+      url: `/${i18n.language}/form-builder/settings/${id}`,
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/preview/settings/${id}`,
+      url: `/${i18n.language}/form-builder/settings/${id}`,
     },
   ];
 

@@ -15,6 +15,7 @@ import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { NextPageWithLayout } from "@pages/_app";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
+import { ResumeEditingForm } from "@components/form-builder/app/shared";
 
 interface FormsDataItem {
   id: string;
@@ -120,10 +121,17 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
         )}
       </TabPanel>
 
-      <div className="absolute top-48" ref={createNewFormRef}>
-        <StyledLink href="/form-builder">
-          {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-        </StyledLink>
+      <div className="absolute top-40">
+        <ResumeEditingForm>
+          <StyledLink href="/form-builder/edit">
+            <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
+          </StyledLink>
+        </ResumeEditingForm>
+        <div ref={createNewFormRef}>
+          <StyledLink href="/form-builder">
+            {t("actions.createNewForm")} <span aria-hidden="true">+</span>
+          </StyledLink>
+        </div>
       </div>
     </div>
   );
