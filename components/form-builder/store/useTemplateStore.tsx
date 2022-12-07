@@ -1,6 +1,5 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { devtools } from "zustand/middleware";
 import { persist, StateStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 
