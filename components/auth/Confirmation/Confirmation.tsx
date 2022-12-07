@@ -17,6 +17,7 @@ interface ConfirmationProps {
     cognitoErrorIsDismissible: boolean
   ) => void;
   confirmationCallback: () => void;
+  shouldSignIn?: boolean;
 }
 
 export const Confirmation = ({
@@ -24,6 +25,7 @@ export const Confirmation = ({
   password,
   confirmationAuthenticationFailedCallback,
   confirmationCallback,
+  shouldSignIn = true,
 }: ConfirmationProps): ReactElement => {
   const {
     cognitoError,
@@ -53,7 +55,12 @@ export const Confirmation = ({
       onSubmit={async (values, formikHelpers) => {
         setShowSentReconfirmationToast(false);
         await confirm(
-          { ...values, confirmationAuthenticationFailedCallback, confirmationCallback },
+          {
+            ...values,
+            confirmationAuthenticationFailedCallback,
+            confirmationCallback,
+            shouldSignIn,
+          },
           formikHelpers
         );
       }}

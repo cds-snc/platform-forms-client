@@ -98,6 +98,7 @@ export const useAuth = () => {
       confirmationCode,
       confirmationAuthenticationFailedCallback,
       confirmationCallback,
+      shouldSignIn = true,
     }: {
       username: string;
       password: string;
@@ -110,6 +111,7 @@ export const useAuth = () => {
         cognitoErrorIsDismissible: boolean
       ) => void;
       confirmationCallback: () => void;
+      shouldSignIn: boolean;
     },
     {
       setSubmitting,
@@ -157,47 +159,54 @@ export const useAuth = () => {
       } else {
         setCognitoError(t("InternalServiceException"));
       }
-    } finally {
-      setSubmitting(false);
     }
+    // set the formik submitting state to false
+    setSubmitting(false);
 
-    // Automated sign in with provided credentials
+    // end the execution of the function if the confirmation did not succeed
     if (!confirmationSuccess) return;
-    try {
-      const response = await signIn<"credentials">("credentials", {
-        redirect: false,
-        username,
-        password,
-      });
 
-      if (response?.error) {
-        const responseErrorMessage = response.error;
-        logMessage.error(responseErrorMessage);
-        if (
-          responseErrorMessage.includes("UserNotFoundException") ||
-          responseErrorMessage.includes("NotAuthorizedException")
-        ) {
-          confirmationAuthenticationFailedCallback(
-            t("UsernameOrPasswordIncorrect.title"),
-            t("UsernameOrPasswordIncorrect.description"),
-            t("UsernameOrPasswordIncorrect.link"),
-            t("UsernameOrPasswordIncorrect.linkText"),
-            false
-          );
-        } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
-          await router.push("/admin/login");
-        } else {
-          setCognitoError(t("InternalServiceException"));
+    // try and sign the user in automatically if shouldSignIn is true, otherwise just
+    // call the passed in confirmationCallback
+    if (shouldSignIn) {
+      try {
+        const response = await signIn<"credentials">("credentials", {
+          redirect: false,
+          username,
+          password,
+        });
+
+        if (response?.error) {
+          const responseErrorMessage = response.error;
+          logMessage.error(responseErrorMessage);
+          if (
+            responseErrorMessage.includes("UserNotFoundException") ||
+            responseErrorMessage.includes("NotAuthorizedException")
+          ) {
+            confirmationAuthenticationFailedCallback(
+              t("UsernameOrPasswordIncorrect.title"),
+              t("UsernameOrPasswordIncorrect.description"),
+              t("UsernameOrPasswordIncorrect.link"),
+              t("UsernameOrPasswordIncorrect.linkText"),
+              false
+            );
+          } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
+            await router.push("/admin/login");
+          } else {
+            setCognitoError(t("InternalServiceException"));
+          }
+        } else if (response?.ok) {
+          await router.push("/auth/policy?referer=/signup/account-created");
         }
-      } else if (response?.ok) {
-        await router.push("/auth/policy?referer=/signup/account-created");
+      } catch (err) {
+        logMessage.error(err);
+        setCognitoError(t("InternalServiceException"));
+        // Internal error on sign in, not confirmation, so redirect to login page
+        await router.push("/auth/login");
+      } finally {
+        confirmationCallback();
       }
-    } catch (err) {
-      logMessage.error(err);
-      setCognitoError(t("InternalServiceException"));
-      // Internal error on sign in, not confirmation, so redirect to login page
-      await router.push("/auth/login");
-    } finally {
+    } else {
       confirmationCallback();
     }
   };
@@ -290,7 +299,11 @@ export const useAuth = () => {
     }
   };
 
-  const sendForgotPassword = async (username: string) => {
+  const sendForgotPassword = async (
+    username: string,
+    successCallback?: () => void,
+    failedCallback?: (error: string) => void
+  ) => {
     resetCognitoErrorState();
     try {
       const token = await getCsrfToken();
@@ -308,9 +321,7 @@ export const useAuth = () => {
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
 
-        if (router.pathname !== "/auth/forgotpassword") {
-          await router.push("/auth/forgotpassword");
-        }
+        if (successCallback) successCallback();
       }
     } catch (err) {
       const axiosError = err as AxiosError;
@@ -318,16 +329,15 @@ export const useAuth = () => {
       if (axiosError.response?.data?.message) {
         const errorResponseMessage = axiosError.response.data.message;
 
-        if (errorResponseMessage.includes("InvalidParameterException")) {
-          // TODO: if a user is not yet confirmed but tries to reset their password
-          //    then we need to show them the confirmation page first and get them to confirm their account
-          //    then continue with the password reset
-          setCognitoError(t("InvalidParameterException.sendForgotPassword.title"));
+        if (errorResponseMessage.includes("InvalidParameterException") && failedCallback) {
+          failedCallback("InvalidParameterException");
         } else {
           setCognitoError(t("InternalServiceException"));
+          if (failedCallback) failedCallback("InternalServiceException");
         }
       } else {
         setCognitoError(t("InternalServiceException"));
+        if (failedCallback) failedCallback("InternalServiceException");
       }
     }
   };
@@ -352,7 +362,7 @@ export const useAuth = () => {
       const token = await getCsrfToken();
       if (token) {
         await axios({
-          url: "/api/signup/confirm",
+          url: "/api/account/confirmpassword",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -365,6 +375,8 @@ export const useAuth = () => {
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
+
+        await router.push("/auth/login");
       }
     } catch (err) {
       const axiosError = err as AxiosError;
