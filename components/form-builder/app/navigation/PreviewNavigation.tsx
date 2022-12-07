@@ -5,18 +5,21 @@ import { useTemplateStore } from "@components/form-builder/store";
 import { Language } from "@components/form-builder/types";
 import { useActivePathname } from "@components/form-builder/hooks";
 import { useSession } from "next-auth/react";
+import { ToggleLeft, ToggleRight } from "@components/form-builder/icons";
 
 export const PreviewNavigation = () => {
   const { t } = useTranslation("form-builder");
-  const { setTranslationLanguagePriority, translationLanguagePriority } = useTemplateStore((s) => ({
-    setTranslationLanguagePriority: s.setTranslationLanguagePriority,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
+  const { toggleTranslationLanguagePriority, translationLanguagePriority } = useTemplateStore(
+    (s) => ({
+      translationLanguagePriority: s.translationLanguagePriority,
+      toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
+    })
+  );
   const { activePathname } = useActivePathname();
   const { status } = useSession();
 
-  const switchLang = (lang: Language) => {
-    setTranslationLanguagePriority(lang);
+  const switchLang = () => {
+    toggleTranslationLanguagePriority();
   };
 
   return (
@@ -28,18 +31,26 @@ export const PreviewNavigation = () => {
         </nav>
       )}
       {activePathname.endsWith("/preview") && (
-        <div className="absolute right-0 top-0 mt-1">
-          <label htmlFor="lang" className="font-bold">
-            Preview language:{" "}
+        <div className="absolute right-0 top-0">
+          <label htmlFor="lang" className="font-bold text-sm">
+            {t("previewingIn")}{" "}
           </label>
-          <select
-            id="lang"
-            value={translationLanguagePriority}
-            onChange={(e) => switchLang(e.target.value as Language)}
-          >
-            <option value="en">English</option>
-            <option value="fr">French</option>
-          </select>
+          <label htmlFor="lang" className="text-sm">
+            {t("English")}
+          </label>{" "}
+          {translationLanguagePriority === "fr" && (
+            <button id="lang" onClick={() => switchLang()}>
+              <ToggleRight className="inline-block w-12 fill-fuchsia-300" />
+            </button>
+          )}
+          {translationLanguagePriority === "en" && (
+            <button id="lang" onClick={() => switchLang()}>
+              <ToggleLeft className="inline-block w-12 fill-violet-300" />
+            </button>
+          )}{" "}
+          <label htmlFor="lang" className="text-sm">
+            {t("French")}
+          </label>
         </div>
       )}
     </div>
