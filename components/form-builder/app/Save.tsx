@@ -38,7 +38,6 @@ export const Save = () => {
 
       <details>
         <summary className="cursor-pointer underline mb-6">{t("viewCode")}</summary>
-
         <CopyToClipboard />
         <Output />
       </details>
