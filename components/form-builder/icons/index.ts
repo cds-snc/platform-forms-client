@@ -30,3 +30,6 @@ export { ThreeDotsIcon } from "./ThreeDotsIcon";
 export { RocketIcon } from "./RocketIcon";
 export { WarningIcon } from "./WarningIcon";
 export { GearIcon } from "./GearIcon";
+export { PageIcon } from "./PageIcon";
+export { GlobeIcon } from "./GlobeIcon";
+export { FolderIcon } from "./FolderIcon";
