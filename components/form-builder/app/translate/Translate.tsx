@@ -3,19 +3,13 @@ import styled from "styled-components";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
-import { SwapHoriz } from "@styled-icons/material/SwapHoriz";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
 import { LocalizedElementProperties } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
-import { Button } from "../shared/Button";
 import { LanguageLabel } from "./LanguageLabel";
-
-const LangSpan = styled.span`
-  width: 70px;
-`;
 
 const SectionDiv = styled.div`
   .section-title {
@@ -65,15 +59,6 @@ const SectionDiv = styled.div`
           }
         }
 
-        &:first-of-type {
-          border-right: 1px solid black;
-        }
-
-        &:last-of-type {
-          border-left: 1px solid black;
-          margin-left: -1px;
-        }
-
         .editor-input {
           height: 100%;
         }
@@ -90,10 +75,6 @@ const SectionDiv = styled.div`
         margin-top: 5;
         z-index: 1;
 
-        &:first-of-type {
-          border-right: 1px solid black;
-        }
-
         &:focus {
           border-color: #303fc3;
           box-shadow: 0 0 0 2.5px #303fc3;
@@ -106,26 +87,16 @@ const SectionDiv = styled.div`
 `;
 
 export const Translate = () => {
-  const {
-    updateField,
-    form,
-    toggleTranslationLanguagePriority,
-    translationLanguagePriority,
-    localizeField,
-  } = useTemplateStore((s) => ({
+  const { updateField, form, localizeField } = useTemplateStore((s) => ({
     updateField: s.updateField,
     form: s.form,
-    toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
-    translationLanguagePriority: s.translationLanguagePriority,
     localizeField: s.localizeField,
   }));
   const { t } = useTranslation("form-builder");
 
-  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
-
-  const switchLanguage = () => {
-    toggleTranslationLanguagePriority();
-  };
+  // Set default left-hand language
+  const primaryLanguage = "en";
+  const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
   let questionsIndex = 1;
 
@@ -136,21 +107,8 @@ export const Translate = () => {
         <p>{t("translateDescription")}</p>
         <br />
 
-        <div className="flex lg:flex-col lg:items-start justify-between items-center">
-          <div>
-            <LangSpan>{translationLanguagePriority === "en" ? t("english") : t("french")}</LangSpan>
-            <Button
-              className="mx-4"
-              onClick={switchLanguage}
-              icon={<SwapHoriz className="fill-white-default" />}
-            >
-              {t("switch")}
-            </Button>
-            <LangSpan>{translationLanguagePriority === "en" ? t("french") : t("english")}</LangSpan>
-          </div>
-          <div className="lg:mt-4">
-            <DownloadCSV />
-          </div>
+        <div className="lg:mt-4">
+          <DownloadCSV />
         </div>
 
         <SectionDiv>
@@ -163,59 +121,42 @@ export const Translate = () => {
             <legend className="section-heading">
               {t("formIntroduction")}: {t("title")}
             </legend>
-            <div className="section-text">
+            <div className="section-text divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
-                {t(`${translationLanguagePriority}-text`)}
+                {t(`${primaryLanguage}-text`)}
               </label>
-              <div className="relative">
-                <LanguageLabel id="form-title-en-language">
-                  {t(translationLanguagePriority)}
+              <div className="relative pb-7">
+                <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
+                  {t(primaryLanguage)}
                 </LanguageLabel>
                 <input
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   type="text"
-                  value={
-                    form[
-                      localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
-                    ]
-                  }
+                  value={form[localizeField(LocalizedElementProperties.TITLE, primaryLanguage)]}
                   onChange={(e) => {
                     updateField(
-                      `form.${localizeField(
-                        LocalizedElementProperties.TITLE,
-                        translationLanguagePriority
-                      )}`,
+                      `form.${localizeField(LocalizedElementProperties.TITLE, primaryLanguage)}`,
                       e.target.value
                     );
                   }}
                 />
               </div>
               <label htmlFor="form-title-fr" className="sr-only">
-                {t(`${translationLanguagePriorityAlt}-text`)}
+                {t(`${secondaryLanguage}-text`)}
               </label>
               <div className="relative">
-                <LanguageLabel id="form-title-fr-language">
-                  {t(translationLanguagePriorityAlt)}
+                <LanguageLabel id="form-title-fr-language" lang={secondaryLanguage}>
+                  {t(secondaryLanguage)}
                 </LanguageLabel>
                 <input
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
                   type="text"
-                  value={
-                    form[
-                      localizeField(
-                        LocalizedElementProperties.TITLE,
-                        translationLanguagePriorityAlt
-                      )
-                    ]
-                  }
+                  value={form[localizeField(LocalizedElementProperties.TITLE, secondaryLanguage)]}
                   onChange={(e) => {
                     updateField(
-                      `form.${localizeField(
-                        LocalizedElementProperties.TITLE,
-                        translationLanguagePriorityAlt
-                      )}`,
+                      `form.${localizeField(LocalizedElementProperties.TITLE, secondaryLanguage)}`,
                       e.target.value
                     );
                   }}
@@ -230,51 +171,45 @@ export const Translate = () => {
                 {t("formIntroduction")}: {t("description")}
               </div>
               <div
-                className="section-text section-text--rich-text"
-                key={translationLanguagePriority}
+                className="section-text section-text--rich-text divide-x-2"
+                key={primaryLanguage}
               >
                 <div className="relative">
-                  <LanguageLabel id="form-introduction-english-language">
-                    {t(translationLanguagePriority)}
+                  <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
+                    {t(primaryLanguage)}
                   </LanguageLabel>
                   <RichTextEditor
                     autoFocusEditor={false}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriority
+                      primaryLanguage
                     )}`}
                     content={
                       form.introduction[
-                        localizeField(
-                          LocalizedElementProperties.DESCRIPTION,
-                          translationLanguagePriority
-                        )
+                        localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                       ]
                     }
-                    lang={translationLanguagePriority}
+                    lang={primaryLanguage}
                     ariaLabel={t("formIntroduction")}
                     ariaDescribedBy="form-introduction-english-language"
                   />
                 </div>
                 <div className="relative">
-                  <LanguageLabel id="form-introduction-french-language">
-                    {t(translationLanguagePriorityAlt)}
+                  <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
+                    {t(secondaryLanguage)}
                   </LanguageLabel>
                   <RichTextEditor
                     autoFocusEditor={false}
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
-                      translationLanguagePriorityAlt
+                      secondaryLanguage
                     )}`}
                     content={
                       form.introduction[
-                        localizeField(
-                          LocalizedElementProperties.DESCRIPTION,
-                          translationLanguagePriorityAlt
-                        )
+                        localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                       ]
                     }
-                    lang={translationLanguagePriorityAlt}
+                    lang={secondaryLanguage}
                     ariaLabel={t("formIntroduction")}
                     ariaDescribedBy="form-introduction-french-language"
                   />
@@ -297,45 +232,29 @@ export const Translate = () => {
                 </div>
 
                 {element.type === "richText" && (
-                  <RichText
-                    translationLanguagePriority={translationLanguagePriority}
-                    element={element}
-                    index={index}
-                  />
+                  <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
                 )}
 
                 {["radio", "checkbox", "dropdown"].includes(element.type) && (
                   <>
-                    <Title
-                      translationLanguagePriority={translationLanguagePriority}
-                      element={element}
-                      index={index}
-                    />
+                    <Title primaryLanguage={primaryLanguage} element={element} index={index} />
                     {(element.properties.descriptionEn || element.properties.descriptionFr) && (
                       <Description
-                        translationLanguagePriority={translationLanguagePriority}
+                        primaryLanguage={primaryLanguage}
                         element={element}
                         index={index}
                       />
                     )}
-                    <Options
-                      translationLanguagePriority={translationLanguagePriority}
-                      element={element}
-                      index={index}
-                    />
+                    <Options primaryLanguage={primaryLanguage} element={element} index={index} />
                   </>
                 )}
 
                 {["textField", "textArea"].includes(element.type) && (
                   <>
-                    <Title
-                      translationLanguagePriority={translationLanguagePriority}
-                      element={element}
-                      index={index}
-                    />
+                    <Title primaryLanguage={primaryLanguage} element={element} index={index} />
                     {(element.properties.descriptionEn || element.properties.descriptionFr) && (
                       <Description
-                        translationLanguagePriority={translationLanguagePriority}
+                        primaryLanguage={primaryLanguage}
                         element={element}
                         index={index}
                       />
@@ -357,51 +276,51 @@ export const Translate = () => {
               {t("pageText")}: {t("description")}
             </div>
 
-            <div className="section-text section-text--rich-text" key={translationLanguagePriority}>
+            <div className="section-text section-text--rich-text divide-x-2" key={primaryLanguage}>
               <div className="relative">
-                <LanguageLabel id={`privacyPolicy-${translationLanguagePriority}-language`}>
-                  {t(translationLanguagePriority)}
+                <LanguageLabel
+                  id={`privacyPolicy-${primaryLanguage}-language`}
+                  lang={primaryLanguage}
+                >
+                  {t(primaryLanguage)}
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriority
+                    primaryLanguage
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                      localizeField(
-                        LocalizedElementProperties.DESCRIPTION,
-                        translationLanguagePriority
-                      )
+                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
-                  lang={translationLanguagePriority}
+                  lang={primaryLanguage}
                   ariaLabel={t("privacyStatement")}
-                  ariaDescribedBy={`privacyPolicy-${translationLanguagePriority}-language`}
+                  ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
                 />
               </div>
               <div className="relative">
-                <LanguageLabel id={`privacyPolicy-${translationLanguagePriorityAlt}->language`}>
-                  {t(translationLanguagePriorityAlt)}
+                <LanguageLabel
+                  id={`privacyPolicy-${secondaryLanguage}->language`}
+                  lang={secondaryLanguage}
+                >
+                  {t(secondaryLanguage)}
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriorityAlt
+                    secondaryLanguage
                   )}`}
                   content={
                     form.privacyPolicy?.[
-                      localizeField(
-                        LocalizedElementProperties.DESCRIPTION,
-                        translationLanguagePriorityAlt
-                      )
+                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
-                  lang={translationLanguagePriorityAlt}
+                  lang={secondaryLanguage}
                   ariaLabel={t("privacyStatement")}
-                  ariaDescribedBy={`privacyPolicy-${translationLanguagePriorityAlt}->language`}
+                  ariaDescribedBy={`privacyPolicy-${secondaryLanguage}->language`}
                 />
               </div>
             </div>
@@ -417,51 +336,48 @@ export const Translate = () => {
             <div className="section-heading">
               {t("pageText")}: {t("description")}
             </div>
-            <div className="section-text section-text--rich-text" key={translationLanguagePriority}>
+            <div className="section-text section-text--rich-text divide-x-2" key={primaryLanguage}>
               <div className="relative">
-                <LanguageLabel id={`endpage-${translationLanguagePriority}-language`}>
-                  {t(translationLanguagePriority)}
+                <LanguageLabel id={`endpage-${primaryLanguage}-language`} lang={primaryLanguage}>
+                  {t(primaryLanguage)}
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
                   path={`form.endPage.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriority
+                    primaryLanguage
                   )}`}
                   content={
                     form.endPage?.[
-                      localizeField(
-                        LocalizedElementProperties.DESCRIPTION,
-                        translationLanguagePriority
-                      )
+                      localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
-                  lang={translationLanguagePriority}
+                  lang={primaryLanguage}
                   ariaLabel={t("confirmationMessage")}
-                  ariaDescribedBy={`endpage-${translationLanguagePriority}-language`}
+                  ariaDescribedBy={`endpage-${primaryLanguage}-language`}
                 />
               </div>
               <div className="relative">
-                <LanguageLabel id={`endpage-${translationLanguagePriorityAlt}-language`}>
-                  {t(translationLanguagePriorityAlt)}
+                <LanguageLabel
+                  id={`endpage-${secondaryLanguage}-language`}
+                  lang={secondaryLanguage}
+                >
+                  {t(secondaryLanguage)}
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
                   path={`form.endPage.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
-                    translationLanguagePriorityAlt
+                    secondaryLanguage
                   )}`}
                   content={
                     form.endPage?.[
-                      localizeField(
-                        LocalizedElementProperties.DESCRIPTION,
-                        translationLanguagePriorityAlt
-                      )
+                      localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
-                  lang={translationLanguagePriorityAlt}
+                  lang={secondaryLanguage}
                   ariaLabel={t("confirmationMessage")}
-                  ariaDescribedBy={`endpage-${translationLanguagePriorityAlt}-language`}
+                  ariaDescribedBy={`endpage-${secondaryLanguage}-language`}
                 />
               </div>
             </div>
