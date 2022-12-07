@@ -78,11 +78,11 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
           <h1 className="border-b-0 mb-8 md:text-h1">{t("title")}</h1>
           <div className="top-40">
             <ResumeEditingForm>
-              <StyledLink href="/form-builder/edit">
+              <StyledLink href="/form-builder/edit" className="mr-8">
                 <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
               </StyledLink>
             </ResumeEditingForm>
-            <div ref={createNewFormRef} className="inline ml-8">
+            <div ref={createNewFormRef} className="inline">
               <StyledLink href="/form-builder">
                 <span aria-hidden="true">+</span> {t("actions.createNewForm")}
               </StyledLink>
