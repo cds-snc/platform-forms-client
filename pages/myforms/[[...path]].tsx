@@ -1,5 +1,6 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getAllTemplates } from "@lib/templates";
+import Link from "next/link";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 
@@ -8,14 +9,13 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { CardProps } from "@components/myforms/Card/Card";
-import { TabsList } from "@components/myforms/Tabs/TabsList";
-import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
-import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import { NextPageWithLayout } from "@pages/_app";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
+import { Template } from "@components/form-builder/app";
+import { SaveIcon } from "@components/form-builder/icons";
+import { NextPageWithLayout } from "@pages/_app";
 
 interface FormsDataItem {
   id: string;
@@ -28,6 +28,73 @@ interface FormsDataItem {
 interface MyFormsProps {
   templates: Array<FormsDataItem>;
 }
+
+const LeftNavLink = ({
+  children,
+  href,
+  id,
+  isActive,
+}: {
+  children: ReactElement;
+  href: string;
+  id: string;
+  isActive: boolean;
+}) => {
+  return (
+    <Link href={href} id={id}>
+      <a
+        href={href}
+        className={`${
+          isActive ? "font-bold" : ""
+        } group xl:text-center no-underline rounded block xl:w-36 xl:pb-0 xl:pt-2 xl:mb-2 mb-4 -ml-1 pl-1 pr-2 md:pr-0 text-black-default hover:text-blue-hover visited:text-black-default focus:text-white-default focus:bg-blue-hover active:no-underline active:bg-blue-hover active:text-white-default`}
+      >
+        {children}
+      </a>
+    </Link>
+  );
+};
+
+export const LeftNavigation = () => {
+  const { t, i18n } = useTranslation(["my-forms"]);
+  const router = useRouter();
+  const path = String(router.query?.path);
+
+  const iconClassname =
+    "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+
+  return (
+    <nav className="absolute xl:content-center" aria-label={t("navLabelFormBuilder")}>
+      <LeftNavLink
+        id="tab-drafts"
+        href={`/${i18n.language}/myforms/drafts`}
+        isActive={path === "drafts"}
+      >
+        <>
+          <SaveIcon className={iconClassname} />
+          {t("nav.drafts")}
+        </>
+      </LeftNavLink>
+
+      <LeftNavLink
+        id="tab-published"
+        href={`/${i18n.language}/myforms/published`}
+        isActive={path === "published"}
+      >
+        <>
+          <SaveIcon className={iconClassname} />
+          {t("nav.published")}
+        </>
+      </LeftNavLink>
+
+      <LeftNavLink id="tab-all" href={`/${i18n.language}/myforms/all`} isActive={path === "all"}>
+        <>
+          <SaveIcon className={iconClassname} />
+          {t("nav.all")}
+        </>
+      </LeftNavLink>
+    </nav>
+  );
+};
 
 const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsProps) => {
   const router = useRouter();
@@ -71,74 +138,59 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
   }, []);
 
   return (
-    <div className="relative">
-      <h1 id="title-myforms">{t("title")}</h1>
-      <TabsList labeledby="title-myforms">
-        <Tab
-          url={`/${i18n.language}/myforms/drafts`}
-          isActive={path === "drafts"}
-          id="tab-drafts"
-          tabpanelId="tabpanel-drafts"
-        >
-          {t("nav.drafts")}
-        </Tab>
-        <Tab
-          url={`/${i18n.language}/myforms/published`}
-          isActive={path === "published"}
-          id="tab-published"
-          tabpanelId="tabpanel-published"
-        >
-          {t("nav.published")}
-        </Tab>
-        <Tab
-          url={`/${i18n.language}/myforms/all`}
-          isActive={path === "all"}
-          id="tab-all"
-          tabpanelId="tabpanel-all"
-        >
-          {t("nav.all")}
-        </Tab>
-      </TabsList>
-      <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
-        {templatesDrafts && templatesDrafts?.length > 0 ? (
-          <CardGrid cards={templatesDrafts}></CardGrid>
-        ) : (
-          <p>{t("cards.noDraftForms")}</p>
-        )}
-      </TabPanel>
-      <TabPanel id="tabpanel-published" labeledbyId="tab-published" isActive={path === "published"}>
-        {templatesPublished && templatesPublished?.length > 0 ? (
-          <CardGrid cards={templatesPublished}></CardGrid>
-        ) : (
-          <p>{t("cards.noPublishedForms")}</p>
-        )}
-      </TabPanel>
-      <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
-        {templatesAll && templatesAll?.length > 0 ? (
-          <CardGrid cards={templatesAll}></CardGrid>
-        ) : (
-          <p>{t("cards.noForms")}</p>
-        )}
-      </TabPanel>
+    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+      <div>
+        <LeftNavigation />
 
-      <div className="absolute top-40">
-        <ResumeEditingForm>
-          <StyledLink href="/form-builder/edit">
-            <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
-          </StyledLink>
-        </ResumeEditingForm>
-        <div ref={createNewFormRef}>
-          <StyledLink href="/form-builder">
-            {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-          </StyledLink>
-        </div>
+        <main id="content" className="ml-60 xl:ml-40 md:pl-5 max-w-4xl">
+          <h1 className="border-b-0 mb-8 md:text-h1">{t("title")}</h1>
+
+          <div className="top-40">
+            <ResumeEditingForm>
+              <StyledLink href="/form-builder/edit">
+                <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
+              </StyledLink>
+            </ResumeEditingForm>
+            <div ref={createNewFormRef} className="inline ml-8">
+              <StyledLink href="/form-builder">
+                <span aria-hidden="true">+</span> {t("actions.createNewForm")}
+              </StyledLink>
+            </div>
+          </div>
+
+          <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
+            {templatesDrafts && templatesDrafts?.length > 0 ? (
+              <CardGrid cards={templatesDrafts}></CardGrid>
+            ) : (
+              <p>{t("cards.noDraftForms")}</p>
+            )}
+          </TabPanel>
+          <TabPanel
+            id="tabpanel-published"
+            labeledbyId="tab-published"
+            isActive={path === "published"}
+          >
+            {templatesPublished && templatesPublished?.length > 0 ? (
+              <CardGrid cards={templatesPublished}></CardGrid>
+            ) : (
+              <p>{t("cards.noPublishedForms")}</p>
+            )}
+          </TabPanel>
+          <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
+            {templatesAll && templatesAll?.length > 0 ? (
+              <CardGrid cards={templatesAll}></CardGrid>
+            ) : (
+              <p>{t("cards.noForms")}</p>
+            )}
+          </TabPanel>
+        </main>
       </div>
     </div>
   );
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <Template page={page}></Template>;
 };
 
 export const getServerSideProps = requireAuthentication(
