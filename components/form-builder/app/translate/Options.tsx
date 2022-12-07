@@ -8,15 +8,15 @@ import { LanguageLabel } from "./LanguageLabel";
 export const Options = ({
   element,
   index,
-  translationLanguagePriority,
+  primaryLanguage,
 }: {
   element: FormElement;
   index: number;
-  translationLanguagePriority: Language;
+  primaryLanguage: Language;
 }) => {
   const updateField = useTemplateStore((s) => s.updateField);
   const { t } = useTranslation("form-builder");
-  const translationLanguagePriorityAlt = translationLanguagePriority === "en" ? "fr" : "en";
+  const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
   return (
     <>
@@ -27,25 +27,28 @@ export const Options = ({
               <legend className="section-heading">
                 {t(element.type)}: {t("optionText")}
               </legend>
-              <div className="section-text">
+              <div className="section-text divide-x-2">
                 <label
                   className="sr-only"
-                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
+                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}
                 >
-                  {t(`${translationLanguagePriority}-text`)}
+                  {t(`${primaryLanguage}-text`)}
                 </label>
                 <div className="relative">
-                  <LanguageLabel id={`element-${index}-choice-${choiceIndex}-en-language`}>
-                    {t(translationLanguagePriority)}
+                  <LanguageLabel
+                    id={`element-${index}-choice-${choiceIndex}-en-language`}
+                    lang={primaryLanguage}
+                  >
+                    {t(primaryLanguage)}
                   </LanguageLabel>
                   <input
-                    id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriority}`}
+                    id={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}
                     aria-describedby={`element-${index}-choice-${choiceIndex}-en-language`}
                     type="text"
-                    value={choice[translationLanguagePriority]}
+                    value={choice[primaryLanguage]}
                     onChange={(e) => {
                       updateField(
-                        `form.elements[${index}].properties.choices[${choiceIndex}].${translationLanguagePriority}`,
+                        `form.elements[${index}].properties.choices[${choiceIndex}].${primaryLanguage}`,
                         e.target.value
                       );
                     }}
@@ -53,22 +56,25 @@ export const Options = ({
                 </div>
                 <label
                   className="sr-only"
-                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
+                  htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${secondaryLanguage}`}
                 >
-                  {t(`${translationLanguagePriorityAlt}-text`)}
+                  {t(`${secondaryLanguage}-text`)}
                 </label>
                 <div className="relative">
-                  <LanguageLabel id={`element-${index}-choice-${choiceIndex}-fr-language`}>
-                    {t(translationLanguagePriorityAlt)}
+                  <LanguageLabel
+                    id={`element-${index}-choice-${choiceIndex}-fr-language`}
+                    lang={secondaryLanguage}
+                  >
+                    {t(secondaryLanguage)}
                   </LanguageLabel>
                   <input
-                    id={`element-${element.id}-choice-${choiceIndex}-text-${translationLanguagePriorityAlt}`}
+                    id={`element-${element.id}-choice-${choiceIndex}-text-${secondaryLanguage}`}
                     aria-describedby={`element-${index}-choice-${choiceIndex}-fr-language`}
                     type="text"
-                    value={choice[translationLanguagePriorityAlt]}
+                    value={choice[secondaryLanguage]}
                     onChange={(e) => {
                       updateField(
-                        `form.elements[${index}].properties.choices[${choiceIndex}].${translationLanguagePriorityAlt}`,
+                        `form.elements[${index}].properties.choices[${choiceIndex}].${secondaryLanguage}`,
                         e.target.value
                       );
                     }}

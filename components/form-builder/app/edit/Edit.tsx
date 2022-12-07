@@ -10,24 +10,34 @@ import { Input } from "../shared";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
-  const { title, elements, introduction, endPage, privacyPolicy, localizeField, updateField } =
-    useTemplateStore((s) => ({
-      title: s.form[s.localizeField(LocalizedFormProperties.TITLE)] ?? "",
-      elements: s.form.elements,
-      introduction: s.form.introduction,
-      endPage: s.form.endPage,
-      privacyPolicy: s.form.privacyPolicy,
-      localizeField: s.localizeField,
-      updateField: s.updateField,
-    }));
+  const {
+    title,
+    elements,
+    introduction,
+    endPage,
+    privacyPolicy,
+    localizeField,
+    updateField,
+    translationLanguagePriority,
+  } = useTemplateStore((s) => ({
+    title:
+      s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
+    elements: s.form.elements,
+    introduction: s.form.introduction,
+    endPage: s.form.endPage,
+    privacyPolicy: s.form.privacyPolicy,
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
 
   const [value, setValue] = useState<string>(title);
 
   const _debounced = useCallback(
-    debounce((val: string | boolean) => {
-      updateField(`form.${localizeField(LocalizedFormProperties.TITLE)}`, val);
+    debounce((val: string | boolean, lang) => {
+      updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
     }, 100),
-    []
+    [translationLanguagePriority]
   );
 
   useEffect(() => {
@@ -37,19 +47,24 @@ export const Edit = () => {
   const updateValue = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value);
-      _debounced(e.target.value);
+      _debounced(e.target.value, translationLanguagePriority);
     },
-    [setValue]
+    [setValue, translationLanguagePriority]
   );
 
   const introTextPlaceholder =
-    introduction?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
+    introduction?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+    ] ?? "";
 
   const confirmTextPlaceholder =
-    endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
+    endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)] ??
+    "";
 
   const policyTextPlaceholder =
-    privacyPolicy?.[localizeField(LocalizedElementProperties.DESCRIPTION)] ?? "";
+    privacyPolicy?.[
+      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+    ] ?? "";
 
   return (
     <>
