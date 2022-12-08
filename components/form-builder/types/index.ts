@@ -49,7 +49,7 @@ export interface ElementOption {
   id: string;
   value: string | undefined;
   icon?: ReactElement;
-  className?: ReactElement;
+  className?: string;
 }
 
 export interface DropdownLabelProps {
