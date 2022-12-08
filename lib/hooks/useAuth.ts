@@ -166,47 +166,49 @@ export const useAuth = () => {
     // end the execution of the function if the confirmation did not succeed
     if (!confirmationSuccess) return;
 
+    // if automated sign up is disabled. call the confirmation callback and end the execution
+    if (!shouldSignIn) {
+      confirmationCallback();
+      return;
+    }
+
     // try and sign the user in automatically if shouldSignIn is true, otherwise just
     // call the passed in confirmationCallback
-    if (shouldSignIn) {
-      try {
-        const response = await signIn<"credentials">("credentials", {
-          redirect: false,
-          username,
-          password,
-        });
+    try {
+      const response = await signIn<"credentials">("credentials", {
+        redirect: false,
+        username,
+        password,
+      });
 
-        if (response?.error) {
-          const responseErrorMessage = response.error;
-          logMessage.error(responseErrorMessage);
-          if (
-            responseErrorMessage.includes("UserNotFoundException") ||
-            responseErrorMessage.includes("NotAuthorizedException")
-          ) {
-            confirmationAuthenticationFailedCallback(
-              t("UsernameOrPasswordIncorrect.title"),
-              t("UsernameOrPasswordIncorrect.description"),
-              t("UsernameOrPasswordIncorrect.link"),
-              t("UsernameOrPasswordIncorrect.linkText"),
-              false
-            );
-          } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
-            await router.push("/admin/login");
-          } else {
-            setCognitoError(t("InternalServiceException"));
-          }
-        } else if (response?.ok) {
-          await router.push("/auth/policy?referer=/signup/account-created");
+      if (response?.error) {
+        const responseErrorMessage = response.error;
+        logMessage.error(responseErrorMessage);
+        if (
+          responseErrorMessage.includes("UserNotFoundException") ||
+          responseErrorMessage.includes("NotAuthorizedException")
+        ) {
+          confirmationAuthenticationFailedCallback(
+            t("UsernameOrPasswordIncorrect.title"),
+            t("UsernameOrPasswordIncorrect.description"),
+            t("UsernameOrPasswordIncorrect.link"),
+            t("UsernameOrPasswordIncorrect.linkText"),
+            false
+          );
+        } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
+          await router.push("/admin/login");
+        } else {
+          setCognitoError(t("InternalServiceException"));
         }
-      } catch (err) {
-        logMessage.error(err);
-        setCognitoError(t("InternalServiceException"));
-        // Internal error on sign in, not confirmation, so redirect to login page
-        await router.push("/auth/login");
-      } finally {
-        confirmationCallback();
+      } else if (response?.ok) {
+        await router.push("/auth/policy?referer=/signup/account-created");
       }
-    } else {
+    } catch (err) {
+      logMessage.error(err);
+      setCognitoError(t("InternalServiceException"));
+      // Internal error on sign in, not confirmation, so redirect to login page
+      await router.push("/auth/login");
+    } finally {
       confirmationCallback();
     }
   };

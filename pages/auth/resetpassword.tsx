@@ -11,7 +11,6 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import * as Yup from "yup";
 import { isLowerCase, isNumber, isSymbol, isUpperCase, isValidGovEmail } from "@lib/validation";
-import emailDomainList from "../../email.domains.json";
 
 const ResetPassword = () => {
   const {
@@ -41,7 +40,7 @@ const ResetPassword = () => {
       .test(
         "username-govEmail",
         t("provideUsername.fields.username.error.validGovEmail"),
-        (value = "") => isValidGovEmail(value, emailDomainList.domains)
+        (value = "") => isValidGovEmail(value)
       ),
   });
 
