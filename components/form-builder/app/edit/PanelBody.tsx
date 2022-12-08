@@ -30,48 +30,6 @@ const Row = styled.div<RowProps>`
   }
 `;
 
-const DivDisabled = styled.div`
-  margin-top: 20px;
-  padding: 5px 10px;
-  width: 100%;
-  cursor: not-allowed;
-  border-radius: 4px;
-  background: #f2f2f2;
-  color: #6e6e6e;
-`;
-
-const RequiredWrapper = styled.div`
-  margin-top: 20px;
-
-  span {
-    display: inline-block;
-    margin-left: 10px;
-  }
-
-  label {
-    padding-top: 4px;
-  }
-`;
-
-const FormLabel = styled.label`
-  font-weight: 700;
-  display: block;
-  margin-bottom: 3px;
-`;
-
-const LabelHidden = styled(FormLabel)`
-  /* same as .sr-only */
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-`;
-
 export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
@@ -174,9 +132,13 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
               >
                 {questionNumber}
               </span>
-              <LabelHidden htmlFor={`item${item.index}`}>
+              <label
+                className="mb-1 sr-only block font-[700] absolute w-px h-px p-0 -m-px overflow-hidden whitespace-no-wrap border-0"
+                style={{ clip: "rect(0, 0, 0, 0)" }}
+                htmlFor={`item${item.index}`}
+              >
                 {t("question")} {item.index + 1}
-              </LabelHidden>
+              </label>
               <QuestionInput
                 initialValue={
                   item.properties[
@@ -189,20 +151,20 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
             </>
           )}
           {hasDescription && item.type !== "richText" && (
-            <DivDisabled id={`item${item.index}-describedby`}>
+            <div className="disabled" id={`item${item.index}-describedby`}>
               {
                 item.properties[
                   localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
                 ]
               }
-            </DivDisabled>
+            </div>
           )}
           <SelectedElement item={item} selected={selectedItem} />
           {item.properties.validation?.maxLength && (
-            <DivDisabled>
+            <div className="disabled">
               {t("maxCharacterLength")}
               {item.properties.validation?.maxLength}
-            </DivDisabled>
+            </div>
           )}
         </div>
         {!isRichText && (
@@ -214,7 +176,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
                 selectedItem={selectedItem}
                 onChange={handleElementChange}
               />
-              <RequiredWrapper>
+              <div className="required mt-5">
                 <Checkbox
                   id={`required-${item.index}-id`}
                   value={`required-${item.index}-value`}
@@ -231,7 +193,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
                   }}
                   label={t("required")}
                 ></Checkbox>
-              </RequiredWrapper>
+              </div>
             </div>
           </>
         )}

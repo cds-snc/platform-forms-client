@@ -338,7 +338,7 @@
       display: block;
       margin-bottom: 3px;
     }
-    
+
     .hint {
       font-size: 16.5px;
       margin-bottom: 10px;
@@ -475,6 +475,34 @@
     border: none;
     background-color: #00000013;
     border-radius: 4px;
+  }
+
+  /*--------------------------------------------*
+  * Required field
+  *--------------------------------------------*/
+
+  .required {
+    span {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    label {
+      padding-top: 4px;
+    }
+  }
+
+  /*--------------------------------------------*
+  * Disabled field
+  *--------------------------------------------*/
+  .disabled{
+    margin-top: 20px;
+    padding: 5px 10px;
+    width: 100%;
+    cursor: not-allowed;
+    border-radius: 4px;
+    background: #f2f2f2;
+    color: #6e6e6e;
   }
 
   /* end form builder styles */
