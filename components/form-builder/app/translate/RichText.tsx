@@ -5,6 +5,7 @@ import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "../../types";
 import { LanguageLabel } from "./LanguageLabel";
+import { FieldsetLegend } from "./FieldsetLegend";
 
 export const RichText = ({
   element,
@@ -22,11 +23,11 @@ export const RichText = ({
   return (
     <>
       <div className="text-entry">
-        <div className="section-heading">
+        <FieldsetLegend>
           {t(element.type)}: {t("Description")}
-        </div>
-        <div className="section-text section-text--rich-text divide-x-2">
-          <div className="relative">
+        </FieldsetLegend>
+        <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
+          <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               id={`elements-${index}-description-${primaryLanguage}-language`}
               lang={primaryLanguage}
@@ -48,7 +49,7 @@ export const RichText = ({
               ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
             />
           </div>
-          <div className="relative">
+          <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               id={`elements-${index}-description-${secondaryLanguage}-language`}
               lang={secondaryLanguage}

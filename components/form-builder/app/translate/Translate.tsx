@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { RichText } from "./RichText";
@@ -10,62 +9,7 @@ import { LocalizedElementProperties } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
-
-const SectionDiv = styled.div`
-  .text-entry {
-    .section-heading {
-      font-size: 16px;
-      padding: 8px 6px;
-      border: #dfdfdf 1px solid;
-      border-bottom: none;
-      background: #f5f5f5;
-      width: 100%;
-    }
-
-    .section-text {
-      display: grid;
-      grid-auto-flow: column;
-      margin-bottom: 20px;
-      grid-auto-columns: minmax(0, 1fr);
-      border: 1px solid #cacaca;
-
-      &.section-text--rich-text > div {
-        .editor {
-          height: calc(100% - 90px);
-        }
-
-        @media (min-width: 992px) {
-          .editor {
-            height: calc(100% - 56px);
-          }
-        }
-
-        .editor-input {
-          height: 100%;
-        }
-      }
-
-      > * {
-        flex: 1;
-      }
-
-      input,
-      textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5;
-        z-index: 1;
-
-        &:focus {
-          border-color: #303fc3;
-          box-shadow: 0 0 0 2.5px #303fc3;
-          outline: 0;
-          z-index: 10;
-        }
-      }
-    }
-  }
-`;
+import { FieldsetLegend, SectionTitle } from ".";
 
 export const Translate = () => {
   const { updateField, form, localizeField } = useTemplateStore((s) => ({
@@ -81,15 +25,6 @@ export const Translate = () => {
 
   let questionsIndex = 1;
 
-  const SectionHeader = ({ title }: { title: string }) => {
-    return (
-      <div className="mt-8 mb-6 flex">
-        <h2 className="text-[24px] m-0 p-0 pr-4">{title}</h2>
-        <hr className="border mt-5 border-black border-dotted flex grow" />
-      </div>
-    );
-  };
-
   return (
     <>
       <div>
@@ -101,22 +36,24 @@ export const Translate = () => {
           <DownloadCSV />
         </div>
 
-        <SectionDiv>
-          <SectionHeader title={t("start")} />
+        <section>
+          <SectionTitle>{t("start")}</SectionTitle>
 
-          <fieldset className="text-entry">
-            <legend className="section-heading">
+          <fieldset>
+            <FieldsetLegend>
               {t("formIntroduction")}: {t("title")}
-            </legend>
-            <div className="section-text divide-x-2">
+            </FieldsetLegend>
+
+            <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
                 {t(`${primaryLanguage}-text`)}
               </label>
-              <div className="relative pb-7">
+              <div className="relative flex-1">
                 <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
                   {t(primaryLanguage)}
                 </LanguageLabel>
                 <input
+                  className="w-full p-4 h-full"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   type="text"
@@ -132,11 +69,12 @@ export const Translate = () => {
               <label htmlFor="form-title-fr" className="sr-only">
                 {t(`${secondaryLanguage}-text`)}
               </label>
-              <div className="relative">
+              <div className="relative flex-1">
                 <LanguageLabel id="form-title-fr-language" lang={secondaryLanguage}>
                   {t(secondaryLanguage)}
                 </LanguageLabel>
                 <input
+                  className="w-full p-4 h-full"
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
                   type="text"
@@ -153,15 +91,15 @@ export const Translate = () => {
           </fieldset>
 
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
-            <div className="text-entry">
-              <div className="section-heading">
+            <fieldset>
+              <FieldsetLegend>
                 {t("formIntroduction")}: {t("description")}
-              </div>
+              </FieldsetLegend>
               <div
-                className="section-text section-text--rich-text divide-x-2"
+                className="flex gap-px border border-gray-300 mb-10 divide-x-2"
                 key={primaryLanguage}
               >
-                <div className="relative">
+                <div className="w-1/2 flex-1 relative">
                   <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
                     {t(primaryLanguage)}
                   </LanguageLabel>
@@ -181,7 +119,7 @@ export const Translate = () => {
                     ariaDescribedBy="form-introduction-english-language"
                   />
                 </div>
-                <div className="relative">
+                <div className="w-1/2 flex-1 relative">
                   <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
                     {t(secondaryLanguage)}
                   </LanguageLabel>
@@ -202,19 +140,18 @@ export const Translate = () => {
                   />
                 </div>
               </div>
-            </div>
+            </fieldset>
           )}
-        </SectionDiv>
+        </section>
 
-        <SectionDiv>
+        <section>
           {form.elements.map((element, index) => {
             return (
               <div className="section" key={`section-${index}`} id={`section-${index}`}>
-                <SectionHeader
-                  title={
-                    element.type === "richText" ? t("pageText") : "Question " + questionsIndex++
-                  }
-                />
+                <SectionTitle>
+                  {element.type === "richText" && <>{t("pageText")}</>}
+                  {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
+                </SectionTitle>
 
                 {element.type === "richText" && (
                   <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
@@ -249,17 +186,20 @@ export const Translate = () => {
               </div>
             );
           })}
-        </SectionDiv>
+        </section>
 
-        <SectionDiv>
-          <SectionHeader title={t("privacyStatement")} />
-          <div className="text-entry">
-            <div className="section-heading">
+        <section>
+          <SectionTitle>{t("privacyStatement")}</SectionTitle>
+          <fieldset>
+            <FieldsetLegend>
               {t("pageText")}: {t("description")}
-            </div>
+            </FieldsetLegend>
 
-            <div className="section-text section-text--rich-text divide-x-2" key={primaryLanguage}>
-              <div className="relative">
+            <div
+              className="flex gap-px border border-gray-300 mb-10 divide-x-2"
+              key={primaryLanguage}
+            >
+              <div className="w-1/2 flex-1 relative">
                 <LanguageLabel
                   id={`privacyPolicy-${primaryLanguage}-language`}
                   lang={primaryLanguage}
@@ -282,7 +222,7 @@ export const Translate = () => {
                   ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
                 />
               </div>
-              <div className="relative">
+              <div className="w-1/2 flex-1 relative">
                 <LanguageLabel
                   id={`privacyPolicy-${secondaryLanguage}->language`}
                   lang={secondaryLanguage}
@@ -306,17 +246,20 @@ export const Translate = () => {
                 />
               </div>
             </div>
-          </div>
-        </SectionDiv>
+          </fieldset>
+        </section>
 
-        <SectionDiv>
-          <SectionHeader title={t("confirmationMessage")} />
-          <div className="text-entry">
-            <div className="section-heading">
+        <section>
+          <SectionTitle>{t("confirmationMessage")}</SectionTitle>
+          <fieldset>
+            <FieldsetLegend>
               {t("pageText")}: {t("description")}
-            </div>
-            <div className="section-text section-text--rich-text divide-x-2" key={primaryLanguage}>
-              <div className="relative">
+            </FieldsetLegend>
+            <div
+              className="flex gap-px border border-gray-300 mb-10 divide-x-2"
+              key={primaryLanguage}
+            >
+              <div className="w-1/2 flex-1 relative">
                 <LanguageLabel id={`endpage-${primaryLanguage}-language`} lang={primaryLanguage}>
                   {t(primaryLanguage)}
                 </LanguageLabel>
@@ -336,7 +279,7 @@ export const Translate = () => {
                   ariaDescribedBy={`endpage-${primaryLanguage}-language`}
                 />
               </div>
-              <div className="relative">
+              <div className="w-1/2 flex-1 relative">
                 <LanguageLabel
                   id={`endpage-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
@@ -360,8 +303,8 @@ export const Translate = () => {
                 />
               </div>
             </div>
-          </div>
-        </SectionDiv>
+          </fieldset>
+        </section>
       </div>
     </>
   );

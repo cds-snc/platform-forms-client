@@ -27,10 +27,6 @@ const RichTextWrapper = styled.div`
   .editor-input {
     padding: 20px;
 
-    &:focus {
-      outline: 2px #303fc3 solid;
-    }
-
     p:first-child {
       margin-top: 0;
     }

@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import React from "react";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Language } from "../../types";
+import { FieldsetLegend } from "./FieldsetLegend";
 import { LanguageLabel } from "./LanguageLabel";
 
 export const Options = ({
@@ -23,18 +24,18 @@ export const Options = ({
       <div>
         {element.properties.choices?.map((choice, choiceIndex) => (
           <div className="choice" key={`choice-${choiceIndex}`}>
-            <fieldset className="text-entry">
-              <legend className="section-heading">
+            <fieldset>
+              <FieldsetLegend>
                 {t(element.type)}: {t("optionText")}
-              </legend>
-              <div className="section-text divide-x-2">
+              </FieldsetLegend>
+              <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
                 <label
                   className="sr-only"
                   htmlFor={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}
                 >
                   {t(`${primaryLanguage}-text`)}
                 </label>
-                <div className="relative">
+                <div className="w-1/2 flex-1 relative">
                   <LanguageLabel
                     id={`element-${index}-choice-${choiceIndex}-en-language`}
                     lang={primaryLanguage}
@@ -42,6 +43,7 @@ export const Options = ({
                     {t(primaryLanguage)}
                   </LanguageLabel>
                   <input
+                    className="w-full p-4"
                     id={`element-${element.id}-choice-${choiceIndex}-text-${primaryLanguage}`}
                     aria-describedby={`element-${index}-choice-${choiceIndex}-en-language`}
                     type="text"
@@ -60,7 +62,7 @@ export const Options = ({
                 >
                   {t(`${secondaryLanguage}-text`)}
                 </label>
-                <div className="relative">
+                <div className="w-1/2 flex-1 relative">
                   <LanguageLabel
                     id={`element-${index}-choice-${choiceIndex}-fr-language`}
                     lang={secondaryLanguage}
@@ -68,6 +70,7 @@ export const Options = ({
                     {t(secondaryLanguage)}
                   </LanguageLabel>
                   <input
+                    className="w-full p-4"
                     id={`element-${element.id}-choice-${choiceIndex}-text-${secondaryLanguage}`}
                     aria-describedby={`element-${index}-choice-${choiceIndex}-fr-language`}
                     type="text"
