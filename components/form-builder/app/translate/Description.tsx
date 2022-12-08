@@ -4,6 +4,7 @@ import { Language, LocalizedElementProperties } from "../../types";
 import { useTranslation } from "next-i18next";
 import { FormElement } from "@lib/types";
 import { LanguageLabel } from "./LanguageLabel";
+import { FieldsetLegend } from "./FieldsetLegend";
 
 export const Description = ({
   element,
@@ -23,18 +24,18 @@ export const Description = ({
 
   return (
     <>
-      <fieldset className="text-entry">
-        <legend className="section-heading">
+      <fieldset>
+        <FieldsetLegend>
           {t(element.type)}: {t("Description")}
-        </legend>
-        <div className="section-text divide-x-2">
+        </FieldsetLegend>
+        <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
           <label
             className="sr-only"
             htmlFor={`element-${element.id}-description-${primaryLanguage}`}
           >
             {t(`${primaryLanguage}-text`)}
           </label>
-          <div className="relative">
+          <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               lang={primaryLanguage}
               id={`element-${element.id}-description-${primaryLanguage}-language`}
@@ -42,6 +43,7 @@ export const Description = ({
               {t(primaryLanguage)}
             </LanguageLabel>
             <textarea
+              className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-description-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${primaryLanguage}-language`}
               value={
@@ -66,7 +68,7 @@ export const Description = ({
           >
             {t(`${secondaryLanguage}-text`)}
           </label>
-          <div className="relative">
+          <div className="w-1/2 flex-1 relative">
             <LanguageLabel
               lang={secondaryLanguage}
               id={`element-${element.id}-description-${secondaryLanguage}-language`}
@@ -74,6 +76,7 @@ export const Description = ({
               {t(secondaryLanguage)}
             </LanguageLabel>
             <textarea
+              className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-description-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${secondaryLanguage}-language`}
               value={

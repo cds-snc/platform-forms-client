@@ -69,7 +69,7 @@ export const Editor = ({
           contentEditable={
             <div className="editor relative" ref={onRef}>
               <ContentEditable
-                className="editor-input"
+                className="editor-input focus:outline-blue-focus"
                 id={editorId}
                 ariaLabel={ariaLabel && ariaLabel}
                 ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
