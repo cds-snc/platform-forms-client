@@ -30,6 +30,7 @@ const Login = () => {
   } = useAuth();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
   const registrationOpen = useFlag("accountRegistration");
+  const passwordResetEnabled = useFlag("passwordReset");
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -148,6 +149,13 @@ const Login = () => {
                 required
               />
             </div>
+            {passwordResetEnabled && (
+              <p className="mb-10 -mt-6">
+                <Link href={"/auth/resetpassword"} className="-mt-8 mb-10">
+                  {t("resetPasswordText")}
+                </Link>
+              </p>
+            )}
             <div className="buttons">
               <Button className="gc-button--blue" type="submit">
                 {t("signInButton")}
