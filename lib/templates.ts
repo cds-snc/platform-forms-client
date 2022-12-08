@@ -129,6 +129,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         jsonConfig: true,
         isPublished: true,
         ttl: true,
+        updated_at: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -447,6 +448,7 @@ const _onlyIncludePublicProperties = (template: FormRecord): PublicFormRecord =>
   return {
     id: template.id,
     isPublished: template.isPublished,
+    updatedAt: template.updated_at,
     displayAlphaBanner: template.displayAlphaBanner ?? true,
     securityAttribute: template.securityAttribute ?? "Unclassified",
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {

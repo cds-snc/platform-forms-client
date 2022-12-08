@@ -8,7 +8,6 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
-import emailDomainList from "../../email.domains.json";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
@@ -40,7 +39,7 @@ const Register = () => {
       .test(
         "username-govEmail",
         t("signUpRegistration.fields.username.error.validGovEmail"),
-        (value = "") => isValidGovEmail(value, emailDomainList.domains)
+        (value = "") => isValidGovEmail(value)
       ),
     password: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))

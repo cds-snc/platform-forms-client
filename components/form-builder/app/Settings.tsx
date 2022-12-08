@@ -9,6 +9,7 @@ import { useDeleteForm } from "../hooks/useDelete";
 import Markdown from "markdown-to-jsx";
 import { useDialogRef, Dialog } from "./shared/Dialog";
 import { ConfirmFormDeleteDialog } from "./shared/ConfirmFormDeleteDialog";
+import { isValidGovEmail } from "@lib/validation";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
@@ -69,6 +70,26 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
   );
 };
 
+const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) => {
+  const { t } = useTranslation("form-builder");
+
+  return (
+    <div id={id} className="mt-2 mb-2" role="alert">
+      {isActive && (
+        <>
+          <h2 className="text-red text-sm font-bold pb-1">{t("settingsInvalidEmailAlertTitle")}</h2>
+          <div className="bg-red-100 w-3/5 text-sm p-2">
+            <span>{t("settingsInvalidEmailAlertDesc1")}</span>
+            <br />
+            <a href="/form-builder/support">{t("contactSupport")}</a>
+            <span> {t("settingsInvalidEmailAlertDesc2")}</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 export const Settings = () => {
   const { t } = useTranslation("form-builder");
   const { handleDelete } = useDeleteForm();
@@ -82,6 +103,28 @@ export const Settings = () => {
     updateField: s.updateField,
   }));
   const { status } = useSession();
+  const [inputEmail, setInputEmail] = useState(email ?? "");
+  const [IsInvalidEmailErrorActive, setIsInvalidEmailErrorActive] = useState(false);
+
+  const handleEmailChange = (email: string) => {
+    setInputEmail(email);
+
+    const completeEmailAddressRegex =
+      /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
+
+    // We want to make sure the email address is complete before validating it
+    if (!completeEmailAddressRegex.test(email)) {
+      setIsInvalidEmailErrorActive(false);
+      return;
+    }
+
+    if (isValidGovEmail(email)) {
+      setIsInvalidEmailErrorActive(false);
+      updateField(`submission.email`, email);
+    } else {
+      setIsInvalidEmailErrorActive(true);
+    }
+  };
 
   return (
     <>
@@ -90,14 +133,15 @@ export const Settings = () => {
         <Label htmlFor="response-delivery">{t("settingsReponseTitle")}</Label>
         <HintText id="response-delivery-hint-1">{t("settingsReponseHint1")}</HintText>
         <HintText id="response-delivery-hint-2">{t("settingsReponseHint2")}</HintText>
+        <InvalidEmailError id="invalidEmailError" isActive={IsInvalidEmailErrorActive} />
         <Input
           id="response-delivery"
-          describedBy="response-delivery-hint-1 response-delivery-hint-2"
-          value={email ?? ""}
+          isInvalid={IsInvalidEmailErrorActive}
+          describedBy="response-delivery-hint-1 response-delivery-hint-2 invalidEmailError"
+          value={inputEmail}
+          theme={IsInvalidEmailErrorActive ? "error" : "default"}
           className="w-3/5"
-          onChange={(e) => {
-            updateField(`submission.email`, e.target.value);
-          }}
+          onChange={(e) => handleEmailChange(e.target.value)}
         />
       </div>
 

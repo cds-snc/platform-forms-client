@@ -205,7 +205,11 @@
   }
 
   &:active {
-    @apply bg-blue-active top-0.5;
+    @apply text-white-default top-0.5;
+  }
+ 
+  &:visited {
+    @apply text-white-default top-0.5;
   }
 }
 

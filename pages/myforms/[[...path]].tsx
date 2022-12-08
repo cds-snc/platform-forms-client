@@ -1,21 +1,21 @@
+import React, { ReactElement, useEffect, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
 import { getAllTemplates } from "@lib/templates";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 
-import React, { ReactElement, useEffect, useRef } from "react";
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
+import { NextPageWithLayout } from "@pages/_app";
 import { CardGrid } from "@components/myforms/CardGrid/CardGrid";
 import { CardProps } from "@components/myforms/Card/Card";
-import { TabsList } from "@components/myforms/Tabs/TabsList";
-import { Tab } from "@components/myforms/Tabs/Tab";
 import { TabPanel } from "@components/myforms/Tabs/TabPanel";
-import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import { NextPageWithLayout } from "@pages/_app";
+import { LeftNavigation } from "@components/myforms/LeftNav";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
+import { Template } from "@components/form-builder/app";
 
 interface FormsDataItem {
   id: string;
@@ -71,74 +71,56 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
   }, []);
 
   return (
-    <div className="relative">
-      <h1 id="title-myforms">{t("title")}</h1>
-      <TabsList labeledby="title-myforms">
-        <Tab
-          url={`/${i18n.language}/myforms/drafts`}
-          isActive={path === "drafts"}
-          id="tab-drafts"
-          tabpanelId="tabpanel-drafts"
-        >
-          {t("nav.drafts")}
-        </Tab>
-        <Tab
-          url={`/${i18n.language}/myforms/published`}
-          isActive={path === "published"}
-          id="tab-published"
-          tabpanelId="tabpanel-published"
-        >
-          {t("nav.published")}
-        </Tab>
-        <Tab
-          url={`/${i18n.language}/myforms/all`}
-          isActive={path === "all"}
-          id="tab-all"
-          tabpanelId="tabpanel-all"
-        >
-          {t("nav.all")}
-        </Tab>
-      </TabsList>
-      <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
-        {templatesDrafts && templatesDrafts?.length > 0 ? (
-          <CardGrid cards={templatesDrafts}></CardGrid>
-        ) : (
-          <p>{t("cards.noDraftForms")}</p>
-        )}
-      </TabPanel>
-      <TabPanel id="tabpanel-published" labeledbyId="tab-published" isActive={path === "published"}>
-        {templatesPublished && templatesPublished?.length > 0 ? (
-          <CardGrid cards={templatesPublished}></CardGrid>
-        ) : (
-          <p>{t("cards.noPublishedForms")}</p>
-        )}
-      </TabPanel>
-      <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
-        {templatesAll && templatesAll?.length > 0 ? (
-          <CardGrid cards={templatesAll}></CardGrid>
-        ) : (
-          <p>{t("cards.noForms")}</p>
-        )}
-      </TabPanel>
-
-      <div className="absolute top-40">
-        <ResumeEditingForm>
-          <StyledLink href="/form-builder/edit">
-            <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
-          </StyledLink>
-        </ResumeEditingForm>
-        <div ref={createNewFormRef}>
-          <StyledLink href="/form-builder">
-            {t("actions.createNewForm")} <span aria-hidden="true">+</span>
-          </StyledLink>
-        </div>
+    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
+      <div>
+        <LeftNavigation />
+        <main id="content" className="ml-60 xl:ml-40 md:pl-5">
+          <h1 className="border-b-0 mb-8 md:text-h1">{t("title")}</h1>
+          <div className="top-40">
+            <ResumeEditingForm>
+              <StyledLink href="/form-builder/edit" className="mr-8">
+                <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
+              </StyledLink>
+            </ResumeEditingForm>
+            <div ref={createNewFormRef} className="inline">
+              <StyledLink href="/form-builder">
+                <span aria-hidden="true">+</span> {t("actions.createNewForm")}
+              </StyledLink>
+            </div>
+          </div>
+          <TabPanel id="tabpanel-drafts" labeledbyId="tab-drafts" isActive={path === "drafts"}>
+            {templatesDrafts && templatesDrafts?.length > 0 ? (
+              <CardGrid cards={templatesDrafts}></CardGrid>
+            ) : (
+              <p>{t("cards.noDraftForms")}</p>
+            )}
+          </TabPanel>
+          <TabPanel
+            id="tabpanel-published"
+            labeledbyId="tab-published"
+            isActive={path === "published"}
+          >
+            {templatesPublished && templatesPublished?.length > 0 ? (
+              <CardGrid cards={templatesPublished}></CardGrid>
+            ) : (
+              <p>{t("cards.noPublishedForms")}</p>
+            )}
+          </TabPanel>
+          <TabPanel id="tabpanel-all" labeledbyId="tab-all" isActive={path === "all"}>
+            {templatesAll && templatesAll?.length > 0 ? (
+              <CardGrid cards={templatesAll}></CardGrid>
+            ) : (
+              <p>{t("cards.noForms")}</p>
+            )}
+          </TabPanel>
+        </main>
       </div>
     </div>
   );
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <Template page={page}></Template>;
 };
 
 export const getServerSideProps = requireAuthentication(
@@ -166,7 +148,8 @@ export const getServerSideProps = requireAuthentication(
       return {
         props: {
           templates,
-          ...(locale && (await serverSideTranslations(locale, ["common", "my-forms"]))),
+          ...(locale &&
+            (await serverSideTranslations(locale, ["common", "my-forms", "form-builder"]))),
         },
       };
     }

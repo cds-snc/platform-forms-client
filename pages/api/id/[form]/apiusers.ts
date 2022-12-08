@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
-import emailDomainList from "../../../../email.domains.json";
 import { Session } from "next-auth";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
@@ -184,7 +183,7 @@ export async function addEmailToForm(
 ): Promise<void> {
   //Checking the payload's content
   const { email } = req.body;
-  if (!isValidGovEmail(email, emailDomainList.domains)) {
+  if (!isValidGovEmail(email)) {
     return res.status(400).json({ error: "The email is not a valid GC email" });
   }
   const formID = req.query.form;

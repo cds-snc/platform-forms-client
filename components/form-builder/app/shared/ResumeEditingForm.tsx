@@ -8,5 +8,5 @@ export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
     }
   }, []);
 
-  return isReady ? <div>{children}</div> : null;
+  return isReady ? <div className="inline">{children}</div> : null;
 };
