@@ -16,7 +16,6 @@ import {
 import { useTranslation } from "next-i18next";
 import * as Yup from "yup";
 import { isValidGovEmail } from "@lib/validation";
-import emailDomainList from "../email.domains.json";
 import { logMessage } from "@lib/logger";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import axios from "axios";
@@ -56,7 +55,7 @@ export default function UnlockPublishing() {
       .test(
         "managerEmail-govEmail",
         t("input-validation.validGovEmail", { ns: "common" }),
-        (value = "") => isValidGovEmail(value, emailDomainList.domains)
+        (value = "") => isValidGovEmail(value)
       ),
     goals: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
