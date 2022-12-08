@@ -12,25 +12,6 @@ import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 
 const SectionDiv = styled.div`
-  .section-title {
-    display: flex;
-    align-items: center;
-    margin-top: 30px;
-    margin-bottom: 20px;
-
-    h2 {
-      font-size: 24px;
-      margin: 0;
-      padding: 0;
-      padding-right: 10px;
-    }
-
-    hr {
-      flex-grow: 1;
-      border-top: 2px dotted black;
-    }
-  }
-
   .text-entry {
     .section-heading {
       font-size: 16px;
@@ -100,6 +81,15 @@ export const Translate = () => {
 
   let questionsIndex = 1;
 
+  const SectionHeader = ({ title }: { title: string }) => {
+    return (
+      <div className="mt-8 mb-6 flex">
+        <h2 className="text-[24px] m-0 p-0 pr-4">{title}</h2>
+        <hr className="border mt-5 border-black border-dotted flex grow" />
+      </div>
+    );
+  };
+
   return (
     <>
       <div>
@@ -112,10 +102,7 @@ export const Translate = () => {
         </div>
 
         <SectionDiv>
-          <div className="section-title">
-            <h2>{t("start")}</h2>
-            <hr />
-          </div>
+          <SectionHeader title={t("start")} />
 
           <fieldset className="text-entry">
             <legend className="section-heading">
@@ -223,13 +210,11 @@ export const Translate = () => {
           {form.elements.map((element, index) => {
             return (
               <div className="section" key={`section-${index}`} id={`section-${index}`}>
-                <div className="section-title">
-                  <h2>
-                    {element.type !== "richText" && <>Question {questionsIndex++}</>}{" "}
-                    {element.type === "richText" && <>{t("pageText")}</>}
-                  </h2>
-                  <hr />
-                </div>
+                <SectionHeader
+                  title={
+                    element.type === "richText" ? t("pageText") : "Question " + questionsIndex++
+                  }
+                />
 
                 {element.type === "richText" && (
                   <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
@@ -267,10 +252,7 @@ export const Translate = () => {
         </SectionDiv>
 
         <SectionDiv>
-          <div className="section-title">
-            <h2>{t("privacyStatement")}</h2>
-            <hr />
-          </div>
+          <SectionHeader title={t("privacyStatement")} />
           <div className="text-entry">
             <div className="section-heading">
               {t("pageText")}: {t("description")}
@@ -328,10 +310,7 @@ export const Translate = () => {
         </SectionDiv>
 
         <SectionDiv>
-          <div className="section-title">
-            <h2>{t("confirmationMessage")}</h2>
-            <hr />
-          </div>
+          <SectionHeader title={t("confirmationMessage")} />
           <div className="text-entry">
             <div className="section-heading">
               {t("pageText")}: {t("description")}
