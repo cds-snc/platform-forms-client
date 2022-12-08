@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
 import { UseSelectStateChange } from "downshift";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
@@ -9,26 +8,6 @@ import { DropDown } from "./elements";
 import { useTemplateStore } from "../../store";
 import { Checkbox } from "../shared";
 import { useElementOptions } from "../../hooks";
-
-interface RowProps {
-  isRichText: boolean;
-}
-
-const Row = styled.div<RowProps>`
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  font-size: 16px;
-  & > div {
-    ${({ isRichText }) =>
-      isRichText &&
-      `
-      width: 100%;
-      margin: 0;
-      font-size: 1.25em;
-    `}
-  }
-`;
 
 export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
@@ -121,8 +100,11 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
-      <Row isRichText={isRichText} className="element-panel flex xxl:flex-col-reverse flex-row">
-        <div className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}>
+      <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base">
+        <div
+          style={isRichText ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}
+          className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}
+        >
           {!isRichText && (
             <>
               <span
@@ -197,7 +179,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
             </div>
           </>
         )}
-      </Row>
+      </div>
     </div>
   );
 };
