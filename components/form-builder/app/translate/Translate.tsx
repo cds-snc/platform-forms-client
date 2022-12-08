@@ -44,7 +44,7 @@ export const Translate = () => {
               {t("formIntroduction")}: {t("title")}
             </FieldsetLegend>
 
-            <div className="flex gap-px border-b border-r border-t border-gray-300 mb-10 divide-x-2">
+            <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
                 {t(`${primaryLanguage}-text`)}
               </label>
