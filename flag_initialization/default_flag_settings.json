@@ -4,5 +4,6 @@
   "submitToReliabilityQueue": false,
   "reCaptcha": false,
   "formTimer": false,
-  "accountRegistration": true
+  "accountRegistration": true,
+  "passwordReset": false
 }

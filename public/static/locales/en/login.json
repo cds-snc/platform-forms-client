@@ -3,6 +3,7 @@
   "signUpText": "If you do not have an account, you can",
   "signUpLink": "create one now.",
   "signInButton": "Sign In",
+  "resetPasswordText": "Reset your password",
   "fields": {
     "username": {
       "label": "Email",

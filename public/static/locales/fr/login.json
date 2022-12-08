@@ -3,6 +3,7 @@
   "signUpText": "Si vous n’en avez pas, vous pouvez en",
   "signUpLink": "créer un maintenant.",
   "signInButton": "Se connecter",
+  "resetPasswordText": "Réinitialiser votre mot de passe",
   "fields": {
     "username": {
       "label": "Adresse courriel",
