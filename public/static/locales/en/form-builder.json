@@ -7,6 +7,7 @@
   "at": "at",
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
+  "checkbox": "Multiple choice",
   "checkboxes": "Multiple choice",
   "confirmationDescriptionItem1": "details of what happens next and when",
   "confirmationDescriptionItem2": "contact details for the service",
@@ -17,6 +18,29 @@
   "confirmationPage": "Confirmation page",
   "contactSupport": "Contact support",
   "contactSupportIfYouHaveQuestions": "<a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a> if you have any questions.",
+  "contactus": {
+    "description": {
+      "description": "Provide more context.",
+      "title": "Additional information"
+    },
+    "email": "Your Email",
+    "gcFormsTeamLink": "Canada.ca Contact",
+    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
+    "gcFormsTeamPart2": "us to find the department or agency that can help you.",
+    "ifYouExperience": "If you experience technical issues, please fill out the",
+    "name": "Your Name",
+    "needSupport": "Need Support?",
+    "request": {
+      "option1": "Ask a question about the product and how it can work in your department",
+      "option2": "Give feedback",
+      "option3": "Set up a demo to learn more about GC Forms",
+      "option4": "Other",
+      "title": "How can we help?"
+    },
+    "supportFormLink": "Support Form",
+    "title": "Contact Us",
+    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department."
+  },
   "copyButton": "Copy to clipboard",
   "copyMessage": "(template copied)",
   "dataDeliveredMessage": "Check your email for the submitted form response.",
@@ -124,8 +148,18 @@
   "question": "Question",
   "questions": "Questions",
   "questionTitle": "Question title",
+  "radio": "Single choice",
   "remove": "Remove",
   "removeOption": "Remove option:",
+  "requestSuccess": {
+    "backToForms": "Back To Forms",
+    "forOtherEnquiriesLink": "Canada.ca Contact us",
+    "forOtherEnquiriesPart1": "For other enquiries, go to",
+    "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
+    "theGCFormsTeam": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
+    "title": "Thank you for your request",
+    "weWillRespond": "We will respond to you in 2 business days."
+  },
   "required": "Required",
   "responseDelivery": "Response delivery",
   "richText": "Page text",
@@ -152,12 +186,12 @@
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteTitle": "Delete form",
+  "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
+  "settingsInvalidEmailAlertDesc2": "to register email address.",
+  "settingsInvalidEmailAlertTitle": "Government email address",
   "settingsReponseHint1": "Provide a Government of Canada email address to send form responses to.",
   "settingsReponseHint2": "In order to publish, you need to provide a response delivery destination.",
   "settingsReponseTitle": "Response delivery destination",
-  "settingsInvalidEmailAlertTitle": "Government email address",
-  "settingsInvalidEmailAlertDesc1": "Must be a Government of Canada email address.",
-  "settingsInvalidEmailAlertDesc2": "to register email address.",
   "share": "Share",
   "shareH1": "Share your form",
   "shareH2": "Save the form file on your computer",
@@ -179,10 +213,35 @@
   "startP2": "See and edit a form by opening it from your computer",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "submitToTestDataDelivery": "Click submit to test response delivery",
+  "support": {
+    "contactUs": "Contact us form",
+    "description": {
+      "description": "Provide more context around the problem you are experiencing.",
+      "title": "Additional information"
+    },
+    "email": "Your Email",
+    "gcFormsTeamLink": "Canada.ca Contact us",
+    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
+    "gcFormsTeamPart2": "to find the department or agency that can help you.",
+    "ifYouWouldLike": "If you would like to learn more about GC Forms or set up a demo, please fill out the ",
+    "lookingForADemo": "Looking for a product demo?",
+    "name": "Your Name",
+    "request": {
+      "option1": "Ask a question",
+      "option2": "Get technical support",
+      "option3": "Problem with a published form",
+      "option4": "Other",
+      "title": "How can we help?"
+    },
+    "title": "Get support",
+    "useThisForm": "Use this form if you experience technical issues with GC Forms."
+  },
   "switch": "Switch",
   "test": "Test",
   "testDataDelivery": "Response delivery",
   "testYourResponseDelivery": "Test your response delivery",
+  "textArea": "Long answer",
+  "textField": "Short answer",
   "textFormatting": "Text formatting",
   "thereWasAnErrorPublishing": "There was an error publishing the form",
   "thereWasAnErrorSaving": "There was an error saving the form",
@@ -200,61 +259,5 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code",
-  "contactus": {
-    "title": "Contact Us",
-    "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department.",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
-    "gcFormsTeamLink": "Canada.ca Contact",
-    "gcFormsTeamPart2": "us to find the department or agency that can help you.",
-    "needSupport": "Need Support?",
-    "ifYouExperience": "If you experience technical issues, please fill out the",
-    "supportFormLink": "Support Form",
-    "name": "Your Name",
-    "email": "Your Email",
-    "request": {
-      "title": "How can we help?",
-      "option1": "Ask a question about the product and how it can work in your department",
-      "option2": "Give feedback",
-      "option3": "Set up a demo to learn more about GC Forms",
-      "option4": "Other"
-    },
-    "description": {
-      "title": "Additional information",
-      "description": "Provide more context."
-    }
-  },
-  "support": {
-    "title": "Get support",
-    "useThisForm": "Use this form if you experience technical issues with GC Forms.",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
-    "gcFormsTeamLink": "Canada.ca Contact us",
-    "gcFormsTeamPart2": "to find the department or agency that can help you.",
-    "lookingForADemo": "Looking for a product demo?",
-    "ifYouWouldLike": "If you would like to learn more about GC Forms or set up a demo, please fill out the ",
-    "contactUs": "Contact us form",
-    "name": "Your Name",
-    "email": "Your Email",
-    "request": {
-      "title": "How can we help?",
-      "option1": "Ask a question",
-      "option2": "Get technical support",
-      "option3": "Problem with a published form",
-      "option4": "Other"
-    },
-    "description": {
-      "title": "Additional information",
-      "description": "Provide more context around the problem you are experiencing."
-    }
-  },
-  "requestSuccess": {
-    "title": "Thank you for your request",
-    "weWillRespond": "We will respond to you in 2 business days.",
-    "forOtherEnquiriesPart1": "For other enquiries, go to",
-    "forOtherEnquiriesLink": "Canada.ca Contact us",
-    "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
-    "theGCFormsTeam": "The GC Forms team provides support to people who work in the government. We cannot give general advice to the public about the forms that we host.",
-    "backToForms": "Back To Forms"
-  }
+  "viewCode": "View code"
 }
-

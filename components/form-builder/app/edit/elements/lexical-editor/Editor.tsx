@@ -27,10 +27,6 @@ const RichTextWrapper = styled.div`
   .editor-input {
     padding: 20px;
 
-    &:focus {
-      outline: 2px #303fc3 solid;
-    }
-
     p:first-child {
       margin-top: 0;
     }
@@ -94,7 +90,7 @@ export const Editor = ({
           contentEditable={
             <div className="editor relative" ref={onRef}>
               <ContentEditable
-                className="editor-input"
+                className="editor-input focus:outline-blue-focus"
                 id={editorId}
                 ariaLabel={ariaLabel && ariaLabel}
                 ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
