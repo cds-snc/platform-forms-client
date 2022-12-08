@@ -53,7 +53,7 @@ export const Translate = () => {
                   {t(primaryLanguage)}
                 </LanguageLabel>
                 <input
-                  className="w-full p-4 h-full focus:outline-blue-[#303fc3]"
+                  className="w-full p-4 h-full focus:outline-blue-focus"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   type="text"
@@ -74,7 +74,7 @@ export const Translate = () => {
                   {t(secondaryLanguage)}
                 </LanguageLabel>
                 <input
-                  className="w-full p-4 h-full focus:outline-blue-[#303fc3]"
+                  className="w-full p-4 h-full focus:outline-blue-focus"
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
                   type="text"

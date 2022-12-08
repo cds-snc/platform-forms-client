@@ -43,7 +43,7 @@ export const Description = ({
               {t(primaryLanguage)}
             </LanguageLabel>
             <textarea
-              className="w-full p-4 h-full"
+              className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-description-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${primaryLanguage}-language`}
               value={
@@ -76,7 +76,7 @@ export const Description = ({
               {t(secondaryLanguage)}
             </LanguageLabel>
             <textarea
-              className="w-full p-4 h-full"
+              className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-description-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${secondaryLanguage}-language`}
               value={
