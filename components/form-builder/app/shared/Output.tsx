@@ -1,17 +1,8 @@
 import React from "react";
-import styled from "styled-components";
-import { useTemplateStore } from "../../store/useTemplateStore";
-
-const JSONOutput = styled.pre`
-  margin-top: 20px;
-  padding: 20px;
-  border: 2px solid rgba(0, 0, 0, 0.5);
-  overflow: "scroll";
-`;
+import { useTemplateStore } from "../../store";
 
 export const Output = () => {
   const getSchema = useTemplateStore((s) => s.getSchema);
   const stringified = getSchema();
-
-  return <JSONOutput>{stringified}</JSONOutput>;
+  return <pre className="mt-5 p-5 border-2 border-black/50 overflow-scroll">{stringified}</pre>;
 };

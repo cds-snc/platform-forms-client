@@ -79,7 +79,10 @@ export const PageTemplate = ({
               <Head>
                 <title>{title}</title>
               </Head>
-              <main id="content" className={`${leftNav && "ml-60 xl:ml-40 md:pl-5 max-w-4xl"}`}>
+              <main
+                id="content"
+                className={`${leftNav && "ml-60 xl:ml-40 md:pl-5 max-w-4xl"} form-builder`}
+              >
                 {navigation}
                 {children}
               </main>

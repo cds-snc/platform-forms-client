@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes, ElementProperties } from "@lib/types";
@@ -7,23 +6,6 @@ import { FormElementTypes, ElementProperties } from "@lib/types";
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { Checkbox, Input, TextArea } from "../shared";
 import { useTemplateStore } from "../../store";
-
-const FormLabel = styled.label`
-  font-weight: 700;
-  display: block;
-  margin-bottom: 3px;
-`;
-
-const ModalRow = styled.div`
-  margin-bottom: 20px;
-`;
-
-const HintText = styled.p`
-  font-size: 16.5px;
-  margin-bottom: 10px;
-  line-height: 1.4;
-  margin-top: -2px;
-`;
 
 export const ModalForm = ({
   item,
@@ -40,9 +22,12 @@ export const ModalForm = ({
   const localizeField = useTemplateStore((s) => s.localizeField);
 
   return (
-    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
-      <ModalRow>
-        <FormLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</FormLabel>
+    <form
+      className="modal-form"
+      onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
+    >
+      <div className="mb-2">
+        <label htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</label>
         <Input
           id={`title--modal--${item.index}`}
           name={`item${item.index}`}
@@ -56,10 +41,10 @@ export const ModalForm = ({
             })
           }
         />
-      </ModalRow>
-      <ModalRow>
-        <FormLabel>{t("description")}</FormLabel>
-        <HintText>{t("descriptionDescription")}</HintText>
+      </div>
+      <div className="mb-2">
+        <label>{t("description")}</label>
+        <p className="hint">{t("descriptionDescription")}</p>
         <TextArea
           id={`description--modal--${item.index}`}
           placeholder={t("Description")}
@@ -73,11 +58,11 @@ export const ModalForm = ({
           }}
           value={properties[localizeField(LocalizedElementProperties.DESCRIPTION)]}
         />
-      </ModalRow>
-      <ModalRow>
+      </div>
+      <div className="mb-2">
         <h3>{t("addRules")}</h3>
-      </ModalRow>
-      <ModalRow>
+      </div>
+      <div className="mb-2">
         <Checkbox
           id={`required-${item.index}-id-modal`}
           value={`required-${item.index}-value-modal`}
@@ -94,14 +79,14 @@ export const ModalForm = ({
           }}
           label={t("required")}
         ></Checkbox>
-      </ModalRow>
+      </div>
       {item.type === FormElementTypes.textField &&
         (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
-          <ModalRow>
-            <FormLabel htmlFor={`characterLength--modal--${item.index}`}>
+          <div className="mb-2">
+            <label htmlFor={`characterLength--modal--${item.index}`}>
               {t("maximumCharacterLength")}
-            </FormLabel>
-            <HintText>{t("characterLimitDescription")}</HintText>
+            </label>
+            <p className="hint">{t("characterLimitDescription")}</p>
             <Input
               id={`characterLength--modal--${item.index}`}
               type="number"
@@ -133,7 +118,7 @@ export const ModalForm = ({
                 }
               }}
             />
-          </ModalRow>
+          </div>
         )}
     </form>
   );

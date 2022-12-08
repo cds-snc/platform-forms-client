@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, createContext, useContext } from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
@@ -7,60 +6,6 @@ import { Button } from "../shared";
 import { Close } from "../../icons";
 import { CDSHTMLDialogElement } from "../../types";
 import { useModalStore } from "../../store";
-
-const StyledDialog = styled.dialog`
-  padding: 0;
-  background: transparent;
-  margin: 0;
-  background-clip: padding-box;
-  width: 100%;
-  max-width: none;
-  max-height: none;
-  height: 100%;
-
-  .modal-content {
-    width: 750px; /* TODO: fix this for mobile */
-    margin: 1.75rem auto;
-    border: 1.5px solid #000000;
-    box-shadow: 0px 4px 0px -1px #000000;
-    background: #ffffff;
-    border-radius: 12px;
-    outline: 0;
-    max-height: none;
-    overflow-x: scroll;
-
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    pointer-events: auto;
-  }
-
-  .modal-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 15px;
-    border-bottom: 1px solid #cacaca;
-  }
-
-  .modal-title {
-    padding-bottom: 15px;
-  }
-
-  .modal-body {
-    position: relative;
-    flex: 1 1 auto;
-    padding: 15px;
-  }
-
-  .modal-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 15px;
-    border-top: 1px solid #cacaca;
-  }
-`;
 
 interface IModalContext {
   isOpen: boolean;
@@ -213,7 +158,7 @@ export const ModalContainer = ({
 
   /* eslint-disable */
   return (
-    <StyledDialog tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
+    <dialog className="modal" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
@@ -235,7 +180,7 @@ export const ModalContainer = ({
           <Button theme="secondary" onClick={close}>{t("cancel")}</Button>
         </div>
       </div>
-    </StyledDialog>
+    </dialog>
   );
   /* eslint-enable */
 };

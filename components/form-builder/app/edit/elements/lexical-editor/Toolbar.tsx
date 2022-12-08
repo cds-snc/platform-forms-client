@@ -29,7 +29,6 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import styled from "styled-components";
 import { sanitizeUrl } from "./utils/sanitizeUrl";
 import { useEditorFocus } from "./useEditorFocus";
 import { getSelectedNode } from "./utils/getSelectedNode";
@@ -49,32 +48,6 @@ const blockTypeToBlockName = {
   paragraph: "Normal",
   quote: "Quote",
 };
-
-const ToolbarContainer = styled.div`
-  border-bottom: 1px solid #ddd;
-  background-color: #f7f7f7;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  padding: 10px;
-
-  &:focus-within {
-    margin: -2px;
-    border: 2px solid #015ecc;
-  }
-
-  button {
-    padding: 4px;
-    border: 1.5px solid transparent;
-    border-radius: 4px;
-    margin-right: 5px;
-    svg {
-      display: block;
-    }
-    &.active {
-      border: 1.5px solid #015ecc;
-    }
-  }
-`;
 
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
@@ -254,7 +227,8 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
 
   return (
     <>
-      <ToolbarContainer
+      <div
+        className="toolbar-container"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}
@@ -402,7 +376,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             <Link size={20} />
           </button>
         </ToolTip>
-      </ToolbarContainer>
+      </div>
     </>
   );
 };
