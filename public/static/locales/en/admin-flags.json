@@ -34,10 +34,13 @@
       "title": "Form Timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
     },
-
     "accountRegistration": {
       "title": "Account Registration",
       "description": "Allow users to register for an account"
+    },
+    "passwordReset": {
+      "title": "Allow Password Resets",
+      "description": "Allow users to reset their passwords"
     }
   }
 }

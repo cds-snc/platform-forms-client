@@ -98,6 +98,7 @@ export const useAuth = () => {
       confirmationCode,
       confirmationAuthenticationFailedCallback,
       confirmationCallback,
+      shouldSignIn = true,
     }: {
       username: string;
       password: string;
@@ -110,6 +111,7 @@ export const useAuth = () => {
         cognitoErrorIsDismissible: boolean
       ) => void;
       confirmationCallback: () => void;
+      shouldSignIn: boolean;
     },
     {
       setSubmitting,
@@ -157,12 +159,21 @@ export const useAuth = () => {
       } else {
         setCognitoError(t("InternalServiceException"));
       }
-    } finally {
-      setSubmitting(false);
+    }
+    // set the formik submitting state to false
+    setSubmitting(false);
+
+    // end the execution of the function if the confirmation did not succeed
+    if (!confirmationSuccess) return;
+
+    // if automated sign up is disabled. call the confirmation callback and end the execution
+    if (!shouldSignIn) {
+      confirmationCallback();
+      return;
     }
 
-    // Automated sign in with provided credentials
-    if (!confirmationSuccess) return;
+    // try and sign the user in automatically if shouldSignIn is true, otherwise just
+    // call the passed in confirmationCallback
     try {
       const response = await signIn<"credentials">("credentials", {
         redirect: false,
@@ -290,11 +301,123 @@ export const useAuth = () => {
     }
   };
 
+  const sendForgotPassword = async (
+    username: string,
+    successCallback?: () => void,
+    failedCallback?: (error: string) => void
+  ) => {
+    resetCognitoErrorState();
+    try {
+      const token = await getCsrfToken();
+      if (token) {
+        await axios({
+          url: "/api/account/forgotpassword",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token,
+          },
+          data: {
+            username,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
+
+        if (successCallback) successCallback();
+      }
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      logMessage.error(axiosError);
+      if (axiosError.response?.data?.message) {
+        const errorResponseMessage = axiosError.response.data.message;
+
+        if (errorResponseMessage.includes("InvalidParameterException") && failedCallback) {
+          failedCallback("InvalidParameterException");
+        } else if (errorResponseMessage.includes("UserNotFoundException")) {
+          await router.push("/signup/register");
+        } else {
+          setCognitoError(t("InternalServiceException"));
+          if (failedCallback) failedCallback("InternalServiceException");
+        }
+      } else {
+        setCognitoError(t("InternalServiceException"));
+        if (failedCallback) failedCallback("InternalServiceException");
+      }
+    }
+  };
+
+  const confirmPasswordReset = async (
+    {
+      username,
+      password,
+      confirmationCode,
+    }: {
+      username: string;
+      password: string;
+      confirmationCode: string;
+    },
+    {
+      setSubmitting,
+      setErrors,
+    }: FormikHelpers<{ username: string; password: string; confirmationCode: string }>
+  ) => {
+    resetCognitoErrorState();
+    try {
+      const token = await getCsrfToken();
+      if (token) {
+        await axios({
+          url: "/api/account/confirmpassword",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": token,
+          },
+          data: {
+            username,
+            password,
+            confirmationCode,
+          },
+          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        });
+
+        await router.push("/auth/login");
+      }
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      logMessage.error(axiosError);
+      if (axiosError.response?.data?.message) {
+        const errorResponseMessage = axiosError.response.data.message;
+
+        if (errorResponseMessage.includes("CodeMismatchException")) {
+          setErrors({
+            confirmationCode: t("CodeMismatchException"),
+          });
+        } else if (errorResponseMessage.includes("ExpiredCodeException")) {
+          setErrors({
+            confirmationCode: t("ExpiredCodeException"),
+          });
+        } else if (errorResponseMessage.includes("InvalidPasswordException")) {
+          setErrors({
+            password: t("InvalidPasswordException"),
+          });
+        } else {
+          setCognitoError(t("InternalServiceException"));
+        }
+      } else {
+        setCognitoError(t("InternalServiceException"));
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return {
     register,
     confirm,
     resendConfirmationCode,
     login,
+    sendForgotPassword,
+    confirmPasswordReset,
     resetCognitoErrorState,
     cognitoError,
     cognitoErrorDescription,

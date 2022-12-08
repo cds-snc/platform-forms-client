@@ -43,7 +43,18 @@ describe("confirmation component", () => {
 
   test("when form is submitted, the user is confirmed", async () => {
     const user = userEvent.setup();
-    render(<Confirmation username={"test"} language={"en"} t={(key) => key} />);
+    const confirmationCallback = jest.fn();
+    const confirmationAuthenticationFailedCallback = jest.fn();
+    render(
+      <Confirmation
+        username={"test"}
+        password={"test"}
+        language={"en"}
+        t={(key) => key}
+        confirmationCallback={confirmationCallback}
+        confirmationAuthenticationFailedCallback={confirmationAuthenticationFailedCallback}
+      />
+    );
     await act(async () => {
       await user.type(screen.getByRole("textbox"), "7876657");
       await user.click(screen.getByText("signUpConfirmation.confirmButton"));
@@ -51,7 +62,11 @@ describe("confirmation component", () => {
     expect(confirmMock.mock.calls.length).toBe(1);
     expect(confirmMock.mock.calls[0][0]).toEqual({
       username: "test",
+      password: "test",
       confirmationCode: "7876657",
+      shouldSignIn: true,
+      confirmationCallback,
+      confirmationAuthenticationFailedCallback,
     });
   });
 });
