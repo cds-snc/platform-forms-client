@@ -100,7 +100,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
-      <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base">
+      <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base !text-sm">
         <div
           style={isRichText ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}
           className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}
