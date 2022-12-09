@@ -17,7 +17,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
         <LockIcon className="inline-block mr-2 !w-7" /> {t("lockedElement")}
       </label>
       {addElement && (
-        <div className="absolute top-[25px] right-[30px]">
+        <div className="absolute top-[35px] right-[30px]">
           <Button
             onClick={() => {
               // ensure element gets added to start of elements array
