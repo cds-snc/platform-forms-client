@@ -31,6 +31,9 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
     <Dialog dialogRef={dialog} handleClose={handleClose}>
       <>
         <Image
+          layout="responsive"
+          width={"690"}
+          height={"382"}
           alt=""
           className="inline-block mb-10 w-full"
           src="/img/form-builder-file-import.png"
