@@ -5,7 +5,6 @@ export { EditNavigation } from "./navigation/EditNavigation";
 export { Template, PageTemplate } from "./Template";
 export { Header } from "./navigation/Header";
 export { Start } from "./Start";
-export { Save } from "./Save";
 export { Preview } from "./Preview";
 export { Publish } from "./Publish";
 export { Published } from "./Published";

@@ -28,15 +28,6 @@ export const LeftNavigation = () => {
         </>
       </LeftNavLink>
 
-      {status !== "authenticated" && (
-        <LeftNavLink href="/form-builder/save">
-          <>
-            <SaveIcon className={iconClassname} />
-            {t("save")}
-          </>
-        </LeftNavLink>
-      )}
-
       <LeftNavLink href="/form-builder/publish">
         <>
           <PublishIcon className={iconClassname} />
