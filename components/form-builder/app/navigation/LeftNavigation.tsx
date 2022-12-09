@@ -28,13 +28,6 @@ export const LeftNavigation = () => {
         </>
       </LeftNavLink>
 
-      <LeftNavLink href="/form-builder/share">
-        <>
-          <ShareIcon className={iconClassname} />
-          {t("share")}
-        </>
-      </LeftNavLink>
-
       {status !== "authenticated" && (
         <LeftNavLink href="/form-builder/save">
           <>

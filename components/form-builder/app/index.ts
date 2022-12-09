@@ -9,6 +9,5 @@ export { Save } from "./Save";
 export { Preview } from "./Preview";
 export { Publish } from "./Publish";
 export { Published } from "./Published";
-export { Share } from "./Share";
 export { TestDataDelivery } from "./TestDataDelivery";
 export { Edit } from "./edit";
