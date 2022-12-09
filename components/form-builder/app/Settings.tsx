@@ -135,10 +135,15 @@ export const Settings = () => {
     <>
       <h1 className="visually-hidden">{t("formSettings")}</h1>
       <div className="mb-10">
-        <Label htmlFor="response-delivery">{t("settingsReponseTitle")}</Label>
-        <HintText id="response-delivery-hint-1">{t("settingsReponseHint1")}</HintText>
-        <HintText id="response-delivery-hint-2">{t("settingsReponseHint2")}</HintText>
+        <Label htmlFor="response-delivery">{t("settingsResponseTitle")}</Label>
+        <HintText id="response-delivery-hint-1">{t("settingsResponseHint1")}</HintText>
+        <HintText id="response-delivery-hint-2">{t("settingsResponseHint2")}</HintText>
+        <div className="mt-4 p-4 bg-purple-200 text-sm inline-block">
+          <Markdown options={{ forceBlock: true }}>{t("settingsResponseNote")}</Markdown>
+        </div>
         <InvalidEmailError id="invalidEmailError" isActive={IsInvalidEmailErrorActive} />
+
+        <div className="block font-bold mb-1 text-sm">{t("settingsResponseEmailTitle")}</div>
         <Input
           id="response-delivery"
           isInvalid={IsInvalidEmailErrorActive}
