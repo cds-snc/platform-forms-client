@@ -161,7 +161,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
                 selectedItem={selectedItem}
                 onChange={handleElementChange}
               />
-              <div className="required mt-5">
+              <div className="mt-5 required-checkbox">
                 <Checkbox
                   id={`required-${item.index}-id`}
                   value={`required-${item.index}-value`}

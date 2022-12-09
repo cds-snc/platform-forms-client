@@ -372,11 +372,11 @@
       .editor-nested-listitem {
         list-style-type: none;
       }
-    }
-  }
 
-  .editor-list-ol {
-    padding-left: 20px;
+      .editor-list-ol {
+        padding-left: 20px;
+      }
+    }
   }
 
   .toolbar-container {
@@ -480,8 +480,8 @@
   /*--------------------------------------------*
   * Required field
   *--------------------------------------------*/
-
-  .required {
+  /* move to tailwind when >=3.1 https://tailwindcss.com/blog/tailwindcss-v3-1#arbitrary-values-but-for-variants*/
+  .required-checkbox {
     span {
       display: inline-block;
       margin-left: 10px;
@@ -491,6 +491,5 @@
       padding-top: 4px;
     }
   }
-
   /* end form builder styles */
 }
