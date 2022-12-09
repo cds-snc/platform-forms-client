@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon, GearIcon } from "../../icons";
+import { DesignIcon, PreviewIcon, PublishIcon, GearIcon } from "../../icons";
 import { useSession } from "next-auth/react";
 import { LeftNavLink } from "./LeftNavLink";
 import { SaveButton } from "../shared/SaveButton";
