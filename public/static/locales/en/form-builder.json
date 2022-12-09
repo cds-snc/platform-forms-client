@@ -260,9 +260,12 @@
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
   "viewCode": "View code",
-  "formDownload":{
+  "formDownload": {
+    "title": "Download form file",
+    "description": "Keep a version of your form on your computer",
+    "downloadBtnText": "Download form file",
     "btnText": "What can I do with a form file?",
     "dialogTitle": "Form file uses",
-    "dialogMessage": "Form dialog message here"
+    "dialogMessage": "<h2>Form file uses</h2> <h3 class='mb-1'>Share</h3> \nDownload a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made. <h3 class='mt-6 mb-1'>Save a copy</h3> <p className='mb-10'>Download a copy of the your form to store locally on your computer.</p> "
   }
 }

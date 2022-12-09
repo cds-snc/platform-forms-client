@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Markdown from "markdown-to-jsx";
+import Image from "next/image";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "./Button";
@@ -27,8 +28,15 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const dialog = useDialogRef();
 
   return (
-    <Dialog title={t("formDownload.dialogTitle")} dialogRef={dialog} handleClose={handleClose}>
-      <Markdown options={{ forceBlock: true }}>{t("formDownload.dialogMessage")}</Markdown>
+    <Dialog dialogRef={dialog} handleClose={handleClose}>
+      <>
+        <Image
+          alt=""
+          className="inline-block mb-10 w-full"
+          src="/img/form-builder-file-import.png"
+        />
+        <Markdown options={{ forceBlock: true }}>{t("formDownload.dialogMessage")}</Markdown>
+      </>
     </Dialog>
   );
 };
@@ -83,7 +91,7 @@ export const DownloadFileButton = ({
           onClick && onClick();
         }}
       >
-        {t("saveButton")}
+        {t("formDownload.downloadBtnText")}
       </Button>
       <InfoIcon className="ml-4 inline-block" />
       <div className="ml-2 inline-block">

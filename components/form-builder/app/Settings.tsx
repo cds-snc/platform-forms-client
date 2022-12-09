@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { Button } from "./shared/Button";
-import { Input } from "./shared/Input";
-import { useSession } from "next-auth/react";
-import { useDeleteForm } from "../hooks/useDelete";
 import Markdown from "markdown-to-jsx";
-import { useDialogRef, Dialog } from "./shared/Dialog";
-import { ConfirmFormDeleteDialog } from "./shared/ConfirmFormDeleteDialog";
+
+import { useTemplateStore } from "../store";
+import {
+  Button,
+  Input,
+  ConfirmFormDeleteDialog,
+  useDialogRef,
+  Dialog,
+  DownloadFileButton,
+} from "./shared";
+import { useDeleteForm } from "../hooks";
 import { isValidGovEmail } from "@lib/validation";
 
 const FormDeleted = () => {
@@ -143,6 +148,13 @@ export const Settings = () => {
           className="w-3/5"
           onChange={(e) => handleEmailChange(e.target.value)}
         />
+      </div>
+      <div>
+        <Label htmlFor="download">{t("formDownload.title")}</Label>
+        <HintText id="download-hint">{t("formDownload.description")}</HintText>
+        <div className="mt-5">
+          <DownloadFileButton />
+        </div>
       </div>
 
       {status === "authenticated" && id && (
