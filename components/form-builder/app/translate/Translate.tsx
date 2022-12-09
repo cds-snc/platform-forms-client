@@ -92,7 +92,7 @@ export const Translate = () => {
     form: s.form,
     localizeField: s.localizeField,
   }));
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   // Set default left-hand language
   const primaryLanguage = "en";
@@ -140,9 +140,14 @@ export const Translate = () => {
                       e.target.value
                     );
                   }}
+                  {...(i18n.language !== primaryLanguage && { lang: primaryLanguage })}
                 />
               </div>
-              <label htmlFor="form-title-fr" className="sr-only">
+              <label
+                htmlFor="form-title-fr"
+                className="sr-only"
+                {...(i18n.language !== secondaryLanguage && { lang: secondaryLanguage })}
+              >
                 {t(`${secondaryLanguage}-text`)}
               </label>
               <div className="relative">
@@ -160,6 +165,7 @@ export const Translate = () => {
                       e.target.value
                     );
                   }}
+                  {...(i18n.language !== secondaryLanguage && { lang: secondaryLanguage })}
                 />
               </div>
             </div>

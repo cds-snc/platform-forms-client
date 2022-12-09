@@ -15,7 +15,7 @@ export const QuestionInput = ({
   hasDescription: string | undefined;
   initialValue: string;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
   const { localizeField, updateField, getFocusInput, setFocusInput, translationLanguagePriority } =
     useTemplateStore((s) => ({
@@ -73,6 +73,7 @@ export const QuestionInput = ({
       aria-describedby={hasDescription ? `item${index}-describedby` : undefined}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateValue(index, e.target.value)}
       theme="title"
+      {...(i18n.language !== translationLanguagePriority && { lang: translationLanguagePriority })}
     />
   );
 };

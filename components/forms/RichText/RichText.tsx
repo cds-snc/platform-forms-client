@@ -6,6 +6,7 @@ interface RichTextProps {
   children?: string | undefined;
   id?: string;
   className?: string;
+  lang?: string;
 }
 
 // override the default h1 element such that to place a tabindex value of -1 to make it
@@ -54,14 +55,15 @@ const TableTD = ({ children, ...props }: { children: React.ReactElement }) => {
 };
 
 export const RichText = (props: RichTextProps): React.ReactElement | null => {
-  const { children, className, id } = props;
+  const { children, className, id, lang } = props;
+
   if (!children) {
     return null;
   }
 
   const classes = classnames("gc-richText", className);
   return (
-    <div data-testid="richText" className={classes} id={id}>
+    <div data-testid="richText" className={classes} id={id} {...(lang && { lang: lang })}>
       <Markdown
         options={{
           forceBlock: true,

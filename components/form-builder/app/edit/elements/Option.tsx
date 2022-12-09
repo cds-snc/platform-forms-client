@@ -39,7 +39,7 @@ export const Option = ({
   }));
 
   const icon = renderIcon && renderIcon(index);
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -90,6 +90,9 @@ export const Option = ({
         }
         onKeyDown={handleKeyDown}
         className="ml-5 w-80 max-h-9 !my-0"
+        {...(i18n.language !== translationLanguagePriority && {
+          lang: translationLanguagePriority,
+        })}
       />
       <Button
         theme="icon"

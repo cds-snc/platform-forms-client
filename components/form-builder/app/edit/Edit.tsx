@@ -9,7 +9,7 @@ import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { Input } from "../shared";
 
 export const Edit = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const {
     title,
     elements,
@@ -72,7 +72,13 @@ export const Edit = () => {
       <RichTextLocked
         beforeContent={
           <>
-            <label htmlFor="formTitle" className="visually-hidden">
+            <label
+              htmlFor="formTitle"
+              className="visually-hidden"
+              {...(i18n.language !== translationLanguagePriority && {
+                lang: translationLanguagePriority,
+              })}
+            >
               {t("formTitle")}
             </label>
             <Input
@@ -82,6 +88,9 @@ export const Edit = () => {
               onChange={updateValue}
               className="w-3/4 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
               theme="title"
+              {...(i18n.language !== translationLanguagePriority && {
+                lang: translationLanguagePriority,
+              })}
             />
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>

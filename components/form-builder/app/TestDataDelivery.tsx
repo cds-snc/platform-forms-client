@@ -13,13 +13,15 @@ import { Form } from "@components/forms";
 
 export const TestDataDelivery = () => {
   const { status } = useSession();
-  const { localizeField, getSchema, id, setId, email } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    getSchema: s.getSchema,
-    id: s.id,
-    setId: s.setId,
-    email: s.submission?.email,
-  }));
+  const { localizeField, getSchema, id, setId, email, translationLanguagePriority } =
+    useTemplateStore((s) => ({
+      localizeField: s.localizeField,
+      getSchema: s.getSchema,
+      id: s.id,
+      setId: s.setId,
+      email: s.submission?.email,
+      translationLanguagePriority: s.translationLanguagePriority,
+    }));
   const stringified = getSchema();
 
   const formRecord = {
@@ -94,7 +96,12 @@ export const TestDataDelivery = () => {
         )}
         <li>{t("fillFormClickSubmit")}</li>
       </ol>
-      <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
+      <div
+        className="border-3 border-dashed border-blue-focus p-4 mb-8"
+        {...(i18n.language !== translationLanguagePriority && {
+          lang: translationLanguagePriority,
+        })}
+      >
         <h1>{formRecord.form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
         {sent ? (
           <div className="p-7 mb-10 flex bg-green-50">
@@ -116,8 +123,8 @@ export const TestDataDelivery = () => {
             t={t1}
             renderSubmit={(submitButton) => (
               <>
-                {submitButton}
-                <div className="inline-block py-1 px-4 bg-purple-200">
+                <span lang={i18n.language}>{submitButton}</span>
+                <div className="inline-block py-1 px-4 bg-purple-200" lang={i18n.language}>
                   {t("submitToTestDataDelivery")}
                 </div>
               </>

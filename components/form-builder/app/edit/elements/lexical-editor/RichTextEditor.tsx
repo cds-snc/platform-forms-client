@@ -22,7 +22,7 @@ export const RichTextEditor = ({
 }) => {
   const updateField = useTemplateStore((s) => s.updateField);
   const [value, setValue] = useState(content);
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   const _debounced = useCallback(
     debounce((value: string) => {
@@ -54,6 +54,7 @@ export const RichTextEditor = ({
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
         ariaDescribedBy={ariaDescribedBy}
+        {...(i18n.language !== lang && { lang: lang })}
       />
     </div>
   );

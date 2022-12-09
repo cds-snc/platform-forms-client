@@ -51,12 +51,14 @@ export const Editor = ({
   autoFocusEditor,
   ariaLabel,
   ariaDescribedBy,
+  lang,
 }: {
   content: string;
   onChange: (value: string) => void;
   autoFocusEditor?: boolean;
   ariaLabel?: string;
   ariaDescribedBy?: string;
+  lang?: string;
 }) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
@@ -92,7 +94,7 @@ export const Editor = ({
         <Toolbar editorId={editorId} />
         <RichTextPlugin
           contentEditable={
-            <div className="editor relative" ref={onRef}>
+            <div className="editor relative" ref={onRef} {...(lang && { lang: lang })}>
               <ContentEditable
                 className="editor-input"
                 id={editorId}

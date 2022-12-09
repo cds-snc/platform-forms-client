@@ -14,6 +14,7 @@ interface Props {
   ref?: React.RefObject<HTMLInputElement>;
   theme?: "default" | "title" | "error";
   isInvalid?: boolean;
+  lang?: string;
 }
 
 type Ref = HTMLInputElement;
@@ -32,6 +33,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     type = "text",
     theme = "default",
     isInvalid = false,
+    lang,
   } = props;
   const themes = {
     default:
@@ -56,6 +58,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       onChange={onChange}
       onKeyDown={onKeyDown}
       ref={ref}
+      {...(lang && { lang: lang })}
     />
   );
 });

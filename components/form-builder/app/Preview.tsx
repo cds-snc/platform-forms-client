@@ -26,14 +26,19 @@ export const Preview = () => {
 
   const router = useRouter();
   const { t: t1 } = useTranslation();
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
 
   return (
     <>
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("page1")}</span>
-      <div className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none">
+      <div
+        className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none"
+        {...(i18n.language !== translationLanguagePriority && {
+          lang: translationLanguagePriority,
+        })}
+      >
         <h1 className="md:text-h1">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
         </h1>
@@ -46,8 +51,8 @@ export const Preview = () => {
           isPreview={true}
           renderSubmit={(submitButton) => (
             <>
-              {submitButton}
-              <div className="inline-block py-1 px-4 bg-purple-200">
+              <span lang={i18n.language}>{submitButton}</span>
+              <div className="inline-block py-1 px-4 bg-purple-200" lang={i18n.language}>
                 {t("formSubmissionDisabledInPreview")}
               </div>
             </>
@@ -59,7 +64,11 @@ export const Preview = () => {
 
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
-        <RichText>
+        <RichText
+          {...(i18n.language !== translationLanguagePriority && {
+            lang: translationLanguagePriority,
+          })}
+        >
           {formRecord.form.endPage
             ? formRecord.form.endPage[
                 localizeField(LocalizedElementProperties.DESCRIPTION, language)
