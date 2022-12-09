@@ -7,6 +7,18 @@ import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { Checkbox, Input, TextArea } from "../shared";
 import { useTemplateStore } from "../../store";
 
+const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
+  <label {...props} className="block mb-50 font-[700]">
+    {children}
+  </label>
+);
+
+const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+  <p {...props} className="font[16.5px] mb-5 leading-snug">
+    {children}
+  </p>
+);
+
 export const ModalForm = ({
   item,
   properties,
@@ -27,7 +39,7 @@ export const ModalForm = ({
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
     >
       <div className="mb-2">
-        <label htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</label>
+        <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
         <Input
           id={`title--modal--${item.index}`}
           name={`item${item.index}`}
@@ -43,8 +55,8 @@ export const ModalForm = ({
         />
       </div>
       <div className="mb-2">
-        <label>{t("description")}</label>
-        <p className="hint">{t("descriptionDescription")}</p>
+        <ModalLabel>{t("description")}</ModalLabel>
+        <Hint>{t("descriptionDescription")}</Hint>
         <TextArea
           id={`description--modal--${item.index}`}
           placeholder={t("Description")}
@@ -83,10 +95,10 @@ export const ModalForm = ({
       {item.type === FormElementTypes.textField &&
         (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
           <div className="mb-2">
-            <label htmlFor={`characterLength--modal--${item.index}`}>
+            <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
               {t("maximumCharacterLength")}
-            </label>
-            <p className="hint">{t("characterLimitDescription")}</p>
+            </ModalLabel>
+            <Hint>{t("characterLimitDescription")}</Hint>
             <Input
               id={`characterLength--modal--${item.index}`}
               type="number"
