@@ -43,7 +43,9 @@ export const DropDown = ({
         {isOpen &&
           items.map((item, index) => (
             <li
-              className={highlightedIndex === index ? "highlighted" : ""}
+              className={
+                highlightedIndex === index ? `highlighted ${item.className}` : item.className
+              }
               key={`${item.id}-${index}`}
               {...getItemProps({ item, index })}
             >
@@ -58,7 +60,6 @@ export const DropDown = ({
               >
                 {item.value}
               </div>
-              {item.append && item.append}
             </li>
           ))}
       </ul>

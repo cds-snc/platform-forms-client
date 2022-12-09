@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -20,26 +19,6 @@ import {
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { TabEscape } from "./plugins/TabEscape";
 import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
-
-const RichTextWrapper = styled.div`
-  height: 100%;
-
-  .editor-input {
-    padding: 20px;
-
-    p:first-child {
-      margin-top: 0;
-    }
-
-    p {
-      margin: 20px 0;
-    }
-
-    .editor-nested-listitem {
-      list-style-type: none;
-    }
-  }
-`;
 
 export const Editor = ({
   content,
@@ -72,7 +51,7 @@ export const Editor = ({
     content = "";
   }
   return (
-    <RichTextWrapper>
+    <div className="rich-text-wrapper">
       <LexicalComposer
         initialConfig={{
           ...editorConfig,
@@ -118,7 +97,7 @@ export const Editor = ({
         <TabEscape />
         <ListMaxIndentPlugin maxDepth={5} />
       </LexicalComposer>
-    </RichTextWrapper>
+    </div>
   );
 };
 

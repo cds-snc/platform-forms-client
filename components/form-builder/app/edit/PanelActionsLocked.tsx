@@ -1,47 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../store";
 import { LockIcon } from "../../icons";
 import { Button } from "../shared";
-
-const Actions = styled.div`
-  position: relative;
-  display: flex;
-  background-color: #ebebeb;
-  padding-left: 20px;
-  height: 62px;
-  align-items: center;
-`;
-
-const Label = styled.span`
-  display: flex;
-  align-items: center;
-  line-height: 38px;
-  font-size: 16px;
-  margin-right: 3px;
-  margin-left: 3px;
-
-  & svg {
-    display: inline-block;
-    margin-right: 15px;
-  }
-`;
-
-const AddButtonWrapper = styled.div`
-  position: absolute;
-  top: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  right: 20px;
-
-  button {
-    font-size: 16px;
-  }
-`;
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const { add, setFocusInput } = useTemplateStore((s) => ({
@@ -50,12 +12,12 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   }));
   const { t } = useTranslation("form-builder");
   return (
-    <Actions className="last-of-type:rounded-b-md">
-      <Label>
-        <LockIcon /> {t("lockedElement")}
-      </Label>
+    <div className="z-index-[999] pl-8 pt-2 pb-2 relative flex items-center a bg-gray-200 h-[62px] last-of-type:rounded-b-md">
+      <label className="flex  text-sm line-height-[38px]">
+        <LockIcon className="inline-block mr-2 !w-7" /> {t("lockedElement")}
+      </label>
       {addElement && (
-        <AddButtonWrapper>
+        <div className="absolute top-[35px] right-[30px]">
           <Button
             onClick={() => {
               // ensure element gets added to start of elements array
@@ -64,12 +26,12 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
               add(-1);
             }}
             theme="secondary"
-            className="!border-1.5 !py-2 !px-4 leading-6"
+            className="!border-1.5 !py-2 !px-4 leading-6 text-sm"
           >
             {t("addElement")}
           </Button>
-        </AddButtonWrapper>
+        </div>
       )}
-    </Actions>
+    </div>
   );
 };
