@@ -133,7 +133,10 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
             </>
           )}
           {hasDescription && item.type !== "richText" && (
-            <div className="disabled" id={`item${item.index}-describedby`}>
+            <div
+              className="mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-gray-600"
+              id={`item${item.index}-describedby`}
+            >
               {
                 item.properties[
                   localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
