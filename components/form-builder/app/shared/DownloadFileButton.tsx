@@ -89,6 +89,7 @@ export const DownloadFileButton = ({
     <div>
       <Button
         className={className}
+        theme="secondary"
         onClick={() => {
           downloadfile();
           onClick && onClick();
