@@ -7,6 +7,7 @@
   "at": "[fr] at",
   "cancel": "Annuler  ",
   "characterLimitDescription": "[FR] Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
+  "checkboxe": "Case à cocher",
   "checkboxes": "Case à cocher",
   "confirmationDescriptionItem1": "des précisions sur la suite de choses",
   "confirmationDescriptionItem2": "les coordonnées du service",
@@ -17,6 +18,29 @@
   "confirmationPage": "Page du confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
   "contactSupportIfYouHaveQuestions": "<a href=\"/fr/form-builder/support\" target=\"_blank\">Veuillez contacter</a>  l’équipe de soutien si vous avez des questions. ",
+  "contactus": {
+    "description": {
+      "description": "Ajouter plus d'informations.",
+      "title": "Plus d'informations"
+    },
+    "email": "Votre courriel",
+    "gcFormsTeamLink": "Canada.ca Contactez-nous",
+    "gcFormsTeamPart1": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider. ",
+    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
+    "name": "Votre nom",
+    "needSupport": "Besoin d'aide?",
+    "request": {
+      "option1": "Poser une question",
+      "option2": "Donner votre avis",
+      "option3": "Organiser une démo pour en savoir plus sur Formulaires GC ",
+      "option4": "Autre",
+      "title": "Quel est votre besoin?"
+    },
+    "supportFormLink": "formulaire de soutien",
+    "title": "Contactez-nous",
+    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur les Formulaires GC et sur la façon dont ce service peut être utile à votre département."
+  },
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
   "dataDeliveredMessage": "Vérifiez votre e-mail pour la réponse au formulaire soumis",
@@ -124,8 +148,18 @@
   "question": "Question",
   "questions": "Des questions",
   "questionTitle": "Titre de question",
+  "radio": "Choix unique",
   "remove": "Supprimer",
   "removeOption": "Supprimer l'option:  ",
+  "requestSuccess": {
+    "backToForms": "Retourner au Formulaires GC",
+    "forOtherEnquiriesLink": "Canada.ca Contactez-nous",
+    "forOtherEnquiriesPart1": "Pour toute autre question, allez à ",
+    "forOtherEnquiriesPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "theGCFormsTeam": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
+    "title": "Merci pour votre demande",
+    "weWillRespond": "Nous vous répondrons dans les deux prochains jours ouvrables."
+  },
   "required": "Obligatoire",
   "responseDelivery": "Tester la réception des réponses",
   "richText": "Section texte",
@@ -152,12 +186,12 @@
   "settingsDeleteButton": "Supprimer un formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
   "settingsDeleteTitle": "Supprimer un formulaire",
+  "settingsInvalidEmailAlertDesc1": "Doit être une adresse électronique du gouvernement du Canada.",
+  "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
+  "settingsInvalidEmailAlertTitle": "Adresse électronique du gouvernement",
   "settingsReponseHint1": "Fournissez une adresse électronique du gouvernement du Canada où envoyer les réponses aux questions du formulaire. Vous devez indiquer une adresse pour publier un formulaire.",
   "settingsReponseHint2": "Indiquer l’adresse courriel pour la réception des réponses",
   "settingsReponseTitle": "Adresse courriel pour la réception des réponses",
-  "settingsInvalidEmailAlertTitle": "Adresse électronique du gouvernement",
-  "settingsInvalidEmailAlertDesc1": "Doit être une adresse électronique du gouvernement du Canada.",
-  "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "share": "Partager",
   "shareH1": "Partager votre formulaire",
   "shareH2": "Enregistrez le formulaire sur votre ordinateur.",
@@ -179,10 +213,35 @@
   "startP2": "Consultez et modifiez un formulaire en l’ouvrant depuis votre ordinateur.",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "submitToTestDataDelivery": "Cliquez sur Soumettre pour tester la réception des réponses.",
+  "support": {
+    "contactUs": "le formulaire \"Contactez-nous\"",
+    "description": {
+      "description": "Fournissez plus de contexte autour du problème que vous rencontrez.",
+      "title": "Plus d'informations"
+    },
+    "email": "Votre courriel",
+    "gcFormsTeamLink": "Canada.ca Contactez-nous",
+    "gcFormsTeamPart1": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "ifYouWouldLike": "Pour en savoir plus sur le produit ou organiser une démonstration, veuillez remplir ",
+    "lookingForADemo": "À la recherche d'une démo de produit?",
+    "name": "Votre nom",
+    "request": {
+      "option1": "Poser une question",
+      "option2": "Obtenir du soutien technique",
+      "option3": "Problème avec un formulaire publié",
+      "option4": "Autre",
+      "title": "Quel est votre besoin?"
+    },
+    "title": "Soutien",
+    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC."
+  },
   "switch": "Changer",
   "test": "Tester",
   "testDataDelivery": "Livraison des réponses",
   "testYourResponseDelivery": "Tester la réception des réponses",
+  "textArea": "Réponse longue",
+  "textField": "Réponse courte",
   "textFormatting": "Formatage du texte  ",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "thereWasAnErrorSaving": "Une erreur s'est produite lors de la sauvegarde de votre formulaire",
@@ -200,61 +259,5 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code",
-  "contactus": {
-    "title": "Contactez-nous",
-    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur les Formulaires GC et sur la façon dont ce service peut être utile à votre département.",
-    "gcFormsTeamPart1": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
-    "gcFormsTeamLink": "Canada.ca Contactez-nous",
-    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider. ",
-    "needSupport": "Besoin d'aide?",
-    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-    "supportFormLink": "formulaire de soutien",
-    "name": "Votre nom",
-    "email": "Votre courriel",
-    "request": {
-      "title": "Quel est votre besoin?",
-      "option1": "Poser une question",
-      "option2": "Donner votre avis",
-      "option3": "Organiser une démo pour en savoir plus sur Formulaires GC ",
-      "option4": "Autre"
-    },
-    "description": {
-      "title": "Plus d'informations",
-      "description": "Ajouter plus d'informations."
-    }
-  },
-  "support": {
-    "title": "Soutien",
-    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC.",
-    "gcFormsTeamPart1": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à ",
-    "gcFormsTeamLink": "Canada.ca Contactez-nous",
-    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "lookingForADemo": "À la recherche d'une démo de produit?",
-    "ifYouWouldLike": "Pour en savoir plus sur le produit ou organiser une démonstration, veuillez remplir ",
-    "contactUs": "le formulaire \"Contactez-nous\"",
-    "name": "Votre nom",
-    "email": "Votre courriel",
-    "request": {
-      "title": "Quel est votre besoin?",
-      "option1": "Poser une question",
-      "option2": "Obtenir du soutien technique",
-      "option3": "Problème avec un formulaire publié",
-      "option4": "Autre"
-    },
-    "description": {
-      "title": "Plus d'informations",
-      "description": "Fournissez plus de contexte autour du problème que vous rencontrez."
-    }
-  },
-  "requestSuccess": {
-    "title": "Merci pour votre demande",
-    "weWillRespond": "Nous vous répondrons dans les deux prochains jours ouvrables.",
-    "forOtherEnquiriesPart1": "Pour toute autre question, allez à ",
-    "forOtherEnquiriesLink": "Canada.ca Contactez-nous",
-    "forOtherEnquiriesPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "theGCFormsTeam": "L'équipe de Formulaire GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons.",
-    "backToForms": "Retourner au Formulaires GC"
-  }
+  "viewCode": "Afficher le code"
 }
-
