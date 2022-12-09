@@ -2,13 +2,17 @@ import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
-import { Looks3 } from "@styled-icons/material/Looks3";
-import { LooksTwo } from "@styled-icons/material/LooksTwo";
-import { FormatBold } from "@styled-icons/material/FormatBold";
-import { FormatItalic } from "@styled-icons/material/FormatItalic";
-import { Link } from "@styled-icons/material/Link";
-import { FormatListBulleted } from "@styled-icons/material/FormatListBulleted";
-import { FormatListNumbered } from "@styled-icons/material/FormatListNumbered";
+
+import {
+  H2Icon,
+  H3Icon,
+  BoldIcon,
+  ItalicIcon,
+  BulletListIcon,
+  NumberedListIcon,
+  LinkIcon,
+} from "@components/form-builder/icons";
+
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useTranslation } from "next-i18next";
 
@@ -29,7 +33,6 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import styled from "styled-components";
 import { sanitizeUrl } from "./utils/sanitizeUrl";
 import { useEditorFocus } from "./useEditorFocus";
 import { getSelectedNode } from "./utils/getSelectedNode";
@@ -49,32 +52,6 @@ const blockTypeToBlockName = {
   paragraph: "Normal",
   quote: "Quote",
 };
-
-const ToolbarContainer = styled.div`
-  border-bottom: 1px solid #ddd;
-  background-color: #f7f7f7;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  padding: 10px;
-
-  &:focus-within {
-    margin: -2px;
-    border: 2px solid #015ecc;
-  }
-
-  button {
-    padding: 4px;
-    border: 1.5px solid transparent;
-    border-radius: 4px;
-    margin-right: 5px;
-    svg {
-      display: block;
-    }
-    &.active {
-      border: 1.5px solid #015ecc;
-    }
-  }
-`;
 
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
@@ -254,7 +231,8 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
 
   return (
     <>
-      <ToolbarContainer
+      <div
+        className="toolbar-container"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}
@@ -278,7 +256,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("formatH2")}
             aria-pressed={blockType === "h2"}
           >
-            <LooksTwo size={20} />
+            <H2Icon />
           </button>
         </ToolTip>
 
@@ -300,7 +278,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("formatH3")}
             aria-pressed={blockType === "h3"}
           >
-            <Looks3 size={20} />
+            <H3Icon />
           </button>
         </ToolTip>
 
@@ -320,7 +298,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("formatBold")}
             aria-pressed={isBold}
           >
-            <FormatBold size={20} />
+            <BoldIcon />
           </button>
         </ToolTip>
 
@@ -340,7 +318,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("formatItalic")}
             aria-pressed={isItalic}
           >
-            <FormatItalic size={20} />
+            <ItalicIcon />
           </button>
         </ToolTip>
 
@@ -360,7 +338,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("formatBulletList")}
             aria-pressed={blockType === "bullet"}
           >
-            <FormatListBulleted size={20} />
+            <BulletListIcon />
           </button>
         </ToolTip>
 
@@ -380,7 +358,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("formatNumberedList")}
             aria-pressed={blockType === "number"}
           >
-            <FormatListNumbered size={20} />
+            <NumberedListIcon />
           </button>
         </ToolTip>
 
@@ -399,10 +377,10 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             aria-label={t("insertLink")}
             aria-pressed={isLink}
           >
-            <Link size={20} />
+            <LinkIcon />
           </button>
         </ToolTip>
-      </ToolbarContainer>
+      </div>
     </>
   );
 };

@@ -1,27 +1,8 @@
 import React, { useState, useCallback } from "react";
-import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { PropertyChoices } from "@lib/types";
-
-const LinkButton = styled.button`
-  margin-top: 20px;
-  margin-right: 20px;
-  text-decoration: underline;
-
-  &:hover {
-    text-decoration: none;
-  }
-`;
-
-const TextInput = styled.textarea`
-  margin: 20px 0 0 0;
-  padding: 20px;
-  width: 460px;
-  height: 200px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-`;
 
 export const BulkAdd = ({
   index,
@@ -48,25 +29,25 @@ export const BulkAdd = ({
   return (
     <>
       <div>
-        <TextInput onChange={handleChange}>{textContent}</TextInput>
+        <textarea onChange={handleChange}>{textContent}</textarea>
       </div>
 
       <div>
-        <LinkButton
+        <button
           onClick={() => {
             bulkAddChoices(index, textContent);
             toggleBulkAdd(false);
           }}
         >
           {t("addOptions")}
-        </LinkButton>
-        <LinkButton
+        </button>
+        <button
           onClick={() => {
             toggleBulkAdd(false);
           }}
         >
           {t("cancel")}
-        </LinkButton>
+        </button>
       </div>
     </>
   );
