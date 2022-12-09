@@ -35,3 +35,4 @@ export { GlobeIcon } from "./GlobeIcon";
 export { FolderIcon } from "./FolderIcon";
 export { ToggleRight } from "./ToggleRight";
 export { ToggleLeft } from "./ToggleLeft";
+export { InfoIcon } from "./InfoIcon";

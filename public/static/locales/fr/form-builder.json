@@ -259,5 +259,10 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code"
+  "viewCode": "Afficher le code",
+  "formDownload":{
+    "btnText": "[FR] What can I do with a form file?",
+    "dialogTitle": "[FR] Form file uses",
+    "dialogMessage": "[FR] Form dialog message here"
+  }
 }

@@ -259,5 +259,10 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code"
+  "viewCode": "View code",
+  "formDownload":{
+    "btnText": "What can I do with a form file?",
+    "dialogTitle": "Form file uses",
+    "dialogMessage": "Form dialog message here"
+  }
 }

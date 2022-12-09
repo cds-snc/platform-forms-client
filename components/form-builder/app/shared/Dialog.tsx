@@ -19,7 +19,7 @@ export const Dialog = ({
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
   title: string;
-  actions: React.ReactElement;
+  actions?: React.ReactElement;
   handleClose?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -65,7 +65,7 @@ export const Dialog = ({
           ></Button>
         </div>
         <div className="modal-body">{children}</div>
-        <div className="modal-footer">{actions}</div>
+        {actions && <div className="modal-footer">{actions}</div>}
       </div>
     </dialog>
   );
