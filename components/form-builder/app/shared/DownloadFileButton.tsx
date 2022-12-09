@@ -29,17 +29,21 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
-      <>
-        <Image
-          layout="responsive"
-          width={"690"}
-          height={"382"}
-          alt=""
-          className="inline-block mb-10 w-full"
-          src="/img/form-builder-file-import.png"
-        />
-        <Markdown options={{ forceBlock: true }}>{t("formDownload.dialogMessage")}</Markdown>
-      </>
+      <div className="p-5">
+        <div className="px-10">
+          <Image
+            layout="responsive"
+            width={"690"}
+            height={"555"}
+            alt=""
+            className="block w-full"
+            src="/img/form-builder-download.png"
+          />
+        </div>
+        <div className="mt-10">
+          <Markdown options={{ forceBlock: true }}>{t("formDownload.dialogMessage")}</Markdown>
+        </div>
+      </div>
     </Dialog>
   );
 };
