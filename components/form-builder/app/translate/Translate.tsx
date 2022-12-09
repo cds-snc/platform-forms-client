@@ -5,11 +5,12 @@ import { RichText } from "./RichText";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
-import { LocalizedElementProperties } from "../../types";
+import { LocalizedElementProperties, LocalizedFormProperties } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
+import { formatEmailSubject } from "../edit/Edit";
 
 export const Translate = () => {
   const { updateField, form, localizeField } = useTemplateStore((s) => ({
@@ -57,11 +58,19 @@ export const Translate = () => {
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   type="text"
-                  value={form[localizeField(LocalizedElementProperties.TITLE, primaryLanguage)]}
+                  value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}
                   onChange={(e) => {
                     updateField(
-                      `form.${localizeField(LocalizedElementProperties.TITLE, primaryLanguage)}`,
+                      `form.${localizeField(LocalizedFormProperties.TITLE, primaryLanguage)}`,
                       e.target.value
+                    );
+                    // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
+                    updateField(
+                      `form.${localizeField(
+                        LocalizedFormProperties.EMAIL_SUBJECT,
+                        primaryLanguage
+                      )}`,
+                      formatEmailSubject(e.target.value, primaryLanguage)
                     );
                   }}
                   {...(i18n.language !== primaryLanguage && { lang: primaryLanguage })}
@@ -83,11 +92,19 @@ export const Translate = () => {
                   id="form-title-fr"
                   aria-describedby="form-title-fr-language"
                   type="text"
-                  value={form[localizeField(LocalizedElementProperties.TITLE, secondaryLanguage)]}
+                  value={form[localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)]}
                   onChange={(e) => {
                     updateField(
-                      `form.${localizeField(LocalizedElementProperties.TITLE, secondaryLanguage)}`,
+                      `form.${localizeField(LocalizedFormProperties.TITLE, secondaryLanguage)}`,
                       e.target.value
+                    );
+                    // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
+                    updateField(
+                      `form.${localizeField(
+                        LocalizedFormProperties.EMAIL_SUBJECT,
+                        secondaryLanguage
+                      )}`,
+                      formatEmailSubject(e.target.value, secondaryLanguage)
                     );
                   }}
                   {...(i18n.language !== secondaryLanguage && { lang: secondaryLanguage })}
