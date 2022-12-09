@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
-import { LocalizedElementProperties, LocalizedFormProperties } from "../../types";
+import { Language, LocalizedElementProperties, LocalizedFormProperties } from "../../types";
 import { useTemplateStore } from "../../store";
 import { RichTextLocked } from "./elements";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
@@ -34,8 +34,13 @@ export const Edit = () => {
   const [value, setValue] = useState<string>(title);
 
   const _debounced = useCallback(
-    debounce((val: string | boolean, lang) => {
+    debounce((val: string, lang: Language) => {
       updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
+      // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
+      updateField(
+        `form.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
+        formatEmailSubject(val, lang)
+      );
     }, 100),
     [translationLanguagePriority]
   );
@@ -123,4 +128,12 @@ export const Edit = () => {
       )}
     </>
   );
+};
+
+/**
+ * This is part of a temporary fix as the current email response implementation relies on the `emailSubject` property to be set.
+ * The email reponse design will be reworked at some point in the future so we will probably get rid of it when we get there.
+ */
+export const formatEmailSubject = (title: string, lang: Language) => {
+  return `${title} - ${lang === "en" ? "Response" : "Réponse"}`;
 };

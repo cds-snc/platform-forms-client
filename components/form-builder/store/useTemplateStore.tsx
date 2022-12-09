@@ -53,8 +53,8 @@ export const defaultForm = {
     descriptionFr: "",
   },
   elements: [],
-  emailSubjectEn: "Form builder test [en]",
-  emailSubjectFr: "Form builder test [fr]",
+  emailSubjectEn: "",
+  emailSubjectFr: "",
   securityAttribute: "Unclassified",
 };
 
