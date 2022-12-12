@@ -9,6 +9,7 @@ export const TextArea = ({
   onKeyDown,
   className,
   placeholder,
+  lang,
 }: {
   id: string;
   name?: string;
@@ -18,6 +19,7 @@ export const TextArea = ({
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   className?: string;
+  lang?: string;
 }) => {
   return (
     <textarea
@@ -29,6 +31,7 @@ export const TextArea = ({
       placeholder={placeholder}
       onChange={onChange}
       onKeyDown={onKeyDown}
+      {...(lang && { lang: lang })}
     >
       {value}
     </textarea>

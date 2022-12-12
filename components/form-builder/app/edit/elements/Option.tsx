@@ -29,6 +29,7 @@ export const Option = ({
     getFocusInput,
     setFocusInput,
     translationLanguagePriority,
+    getLocalizationAttribute,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -36,6 +37,7 @@ export const Option = ({
     setFocusInput: s.setFocusInput,
     getFocusInput: s.getFocusInput,
     translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -90,6 +92,7 @@ export const Option = ({
         }
         onKeyDown={handleKeyDown}
         className="ml-5 w-80 max-h-9 !my-0"
+        {...getLocalizationAttribute()}
       />
       <Button
         theme="icon"

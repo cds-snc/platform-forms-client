@@ -19,6 +19,7 @@ export const Edit = () => {
     localizeField,
     updateField,
     translationLanguagePriority,
+    getLocalizationAttribute,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -29,6 +30,7 @@ export const Edit = () => {
     localizeField: s.localizeField,
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -77,7 +79,7 @@ export const Edit = () => {
       <RichTextLocked
         beforeContent={
           <>
-            <label htmlFor="formTitle" className="visually-hidden">
+            <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
               {t("formTitle")}
             </label>
             <Input
@@ -87,6 +89,7 @@ export const Edit = () => {
               onChange={updateValue}
               className="w-3/4 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
               theme="title"
+              {...getLocalizationAttribute()}
             />
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
           </>

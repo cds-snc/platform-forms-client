@@ -19,10 +19,13 @@ export const Preview = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
+  const { localizeField, translationLanguagePriority, getLocalizationAttribute } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      translationLanguagePriority: s.translationLanguagePriority,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+    })
+  );
 
   const router = useRouter();
   const { t: t1 } = useTranslation();
@@ -33,7 +36,10 @@ export const Preview = () => {
   return (
     <>
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("page1")}</span>
-      <div className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none">
+      <div
+        className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none"
+        {...getLocalizationAttribute()}
+      >
         <h1 className="md:text-h1">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
         </h1>
@@ -46,8 +52,8 @@ export const Preview = () => {
           isPreview={true}
           renderSubmit={(submitButton) => (
             <>
-              {submitButton}
-              <div className="inline-block py-1 px-4 bg-purple-200">
+              <span {...getLocalizationAttribute()}>{submitButton}</span>
+              <div className="inline-block py-1 px-4 bg-purple-200" {...getLocalizationAttribute()}>
                 {t("formSubmissionDisabledInPreview")}
               </div>
             </>
@@ -59,7 +65,7 @@ export const Preview = () => {
 
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
-        <RichText>
+        <RichText {...getLocalizationAttribute()}>
           {formRecord.form.endPage
             ? formRecord.form.endPage[
                 localizeField(LocalizedElementProperties.DESCRIPTION, language)
