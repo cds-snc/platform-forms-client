@@ -9,7 +9,7 @@ import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { Input } from "../shared";
 
 export const Edit = () => {
-  const { t, i18n } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder");
   const {
     title,
     elements,
