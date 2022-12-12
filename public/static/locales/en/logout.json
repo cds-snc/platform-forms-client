@@ -1,4 +1,5 @@
 {
+  "title": "You are signed out",
   "messageContent": "You are signed out",
   "goToSignInLabel": "Go to sign in",
   "logoutDate": "Your last session ended at"

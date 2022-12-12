@@ -3,6 +3,7 @@ import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import Loader from "@components/globals/Loader";
 import { Button } from "@components/forms";
 import { checkPrivileges } from "@lib/privileges";
@@ -19,6 +20,9 @@ const Flags = () => {
 
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1>{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       {flags ? (

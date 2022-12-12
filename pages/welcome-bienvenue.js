@@ -1,12 +1,16 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 const Home = () => {
   const { t } = useTranslation("welcome");
 
   return (
     <>
+      <Head>
+        <title>{t("full")}</title>
+      </Head>
       <div className="gc-homepage">
         <h1>{t("title")}</h1>
         <div>
