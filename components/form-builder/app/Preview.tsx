@@ -19,14 +19,17 @@ export const Preview = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
+  const { localizeField, translationLanguagePriority, getLocalizationAttribute } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      translationLanguagePriority: s.translationLanguagePriority,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+    })
+  );
 
   const router = useRouter();
   const { t: t1 } = useTranslation();
-  const { t, i18n } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder");
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
 
@@ -35,9 +38,7 @@ export const Preview = () => {
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("page1")}</span>
       <div
         className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none"
-        {...(i18n.language !== translationLanguagePriority && {
-          lang: translationLanguagePriority,
-        })}
+        {...getLocalizationAttribute()}
       >
         <h1 className="md:text-h1">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
@@ -51,8 +52,8 @@ export const Preview = () => {
           isPreview={true}
           renderSubmit={(submitButton) => (
             <>
-              <span lang={i18n.language}>{submitButton}</span>
-              <div className="inline-block py-1 px-4 bg-purple-200" lang={i18n.language}>
+              <span {...getLocalizationAttribute()}>{submitButton}</span>
+              <div className="inline-block py-1 px-4 bg-purple-200" {...getLocalizationAttribute()}>
                 {t("formSubmissionDisabledInPreview")}
               </div>
             </>
@@ -64,11 +65,7 @@ export const Preview = () => {
 
       <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
       <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
-        <RichText
-          {...(i18n.language !== translationLanguagePriority && {
-            lang: translationLanguagePriority,
-          })}
-        >
+        <RichText {...getLocalizationAttribute()}>
           {formRecord.form.endPage
             ? formRecord.form.endPage[
                 localizeField(LocalizedElementProperties.DESCRIPTION, language)

@@ -13,15 +13,23 @@ import { Form } from "@components/forms";
 
 export const TestDataDelivery = () => {
   const { status } = useSession();
-  const { localizeField, getSchema, id, setId, email, translationLanguagePriority } =
-    useTemplateStore((s) => ({
-      localizeField: s.localizeField,
-      getSchema: s.getSchema,
-      id: s.id,
-      setId: s.setId,
-      email: s.submission?.email,
-      translationLanguagePriority: s.translationLanguagePriority,
-    }));
+  const {
+    localizeField,
+    getSchema,
+    id,
+    setId,
+    email,
+    translationLanguagePriority,
+    getLocalizationAttribute,
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    getSchema: s.getSchema,
+    id: s.id,
+    setId: s.setId,
+    email: s.submission?.email,
+    translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
   const stringified = getSchema();
 
   const formRecord = {
@@ -123,8 +131,11 @@ export const TestDataDelivery = () => {
             t={t1}
             renderSubmit={(submitButton) => (
               <>
-                <span lang={i18n.language}>{submitButton}</span>
-                <div className="inline-block py-1 px-4 bg-purple-200" lang={i18n.language}>
+                <span {...getLocalizationAttribute()}>{submitButton}</span>
+                <div
+                  className="inline-block py-1 px-4 bg-purple-200"
+                  {...getLocalizationAttribute()}
+                >
                   {t("submitToTestDataDelivery")}
                 </div>
               </>

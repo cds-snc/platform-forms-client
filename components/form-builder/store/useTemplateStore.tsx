@@ -189,6 +189,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.focusInput = isSet;
             }),
           getFocusInput: () => get().focusInput,
+          // Use on a child element to declare the language when the parent element lang attribute is different
           getLocalizationAttribute: () =>
             get().lang !== get().translationLanguagePriority
               ? { lang: get().translationLanguagePriority }

@@ -29,6 +29,7 @@ export const Option = ({
     getFocusInput,
     setFocusInput,
     translationLanguagePriority,
+    getLocalizationAttribute,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -36,10 +37,11 @@ export const Option = ({
     setFocusInput: s.setFocusInput,
     getFocusInput: s.getFocusInput,
     translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
   const icon = renderIcon && renderIcon(index);
-  const { t, i18n } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -90,9 +92,7 @@ export const Option = ({
         }
         onKeyDown={handleKeyDown}
         className="ml-5 w-80 max-h-9 !my-0"
-        {...(i18n.language !== translationLanguagePriority && {
-          lang: translationLanguagePriority,
-        })}
+        {...getLocalizationAttribute()}
       />
       <Button
         theme="icon"
