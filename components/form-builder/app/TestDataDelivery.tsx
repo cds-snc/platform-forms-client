@@ -13,23 +13,16 @@ import { Form } from "@components/forms";
 
 export const TestDataDelivery = () => {
   const { status } = useSession();
-  const {
-    localizeField,
-    getSchema,
-    id,
-    setId,
-    email,
-    translationLanguagePriority,
-    getLocalizationAttribute,
-  } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    getSchema: s.getSchema,
-    id: s.id,
-    setId: s.setId,
-    email: s.submission?.email,
-    translationLanguagePriority: s.translationLanguagePriority,
-    getLocalizationAttribute: s.getLocalizationAttribute,
-  }));
+  const { localizeField, getSchema, id, setId, email, getLocalizationAttribute } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      getSchema: s.getSchema,
+      id: s.id,
+      setId: s.setId,
+      email: s.submission?.email,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+    })
+  );
   const stringified = getSchema();
 
   const formRecord = {
