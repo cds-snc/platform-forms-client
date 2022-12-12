@@ -79,13 +79,7 @@ export const Edit = () => {
       <RichTextLocked
         beforeContent={
           <>
-            <label
-              htmlFor="formTitle"
-              className="visually-hidden"
-              {...(i18n.language !== translationLanguagePriority && {
-                lang: translationLanguagePriority,
-              })}
-            >
+            <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
               {t("formTitle")}
             </label>
             <Input
