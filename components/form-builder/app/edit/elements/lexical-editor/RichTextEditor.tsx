@@ -20,7 +20,10 @@ export const RichTextEditor = ({
   ariaLabel?: string;
   ariaDescribedBy?: string;
 }) => {
-  const updateField = useTemplateStore((s) => s.updateField);
+  const { updateField, getLocalizationAttribute } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
   const [value, setValue] = useState(content);
   const { t } = useTranslation("form-builder");
 
@@ -54,6 +57,7 @@ export const RichTextEditor = ({
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
         ariaDescribedBy={ariaDescribedBy}
+        {...getLocalizationAttribute()}
       />
     </div>
   );

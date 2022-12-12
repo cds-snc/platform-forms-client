@@ -41,6 +41,10 @@
     "passwordReset": {
       "title": "Allow Password Resets",
       "description": "Allow users to reset their passwords"
+    },
+    "supportForms": {
+      "title": "Support Forms",
+      "description": "Whether or not support forms are enabled"
     }
   }
 }

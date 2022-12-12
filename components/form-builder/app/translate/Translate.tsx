@@ -13,10 +13,11 @@ import { FieldsetLegend, SectionTitle } from ".";
 import { formatEmailSubject } from "../edit/Edit";
 
 export const Translate = () => {
-  const { updateField, form, localizeField } = useTemplateStore((s) => ({
+  const { updateField, form, localizeField, getLocalizationAttribute } = useTemplateStore((s) => ({
     updateField: s.updateField,
     form: s.form,
     localizeField: s.localizeField,
+    getLocalizationAttribute: s.getLocalizationAttribute,
   }));
   const { t } = useTranslation("form-builder");
 
@@ -73,9 +74,10 @@ export const Translate = () => {
                       formatEmailSubject(e.target.value, primaryLanguage)
                     );
                   }}
+                  {...getLocalizationAttribute()}
                 />
               </div>
-              <label htmlFor="form-title-fr" className="sr-only">
+              <label htmlFor="form-title-fr" className="sr-only" {...getLocalizationAttribute()}>
                 {t(`${secondaryLanguage}-text`)}
               </label>
               <div className="relative flex-1">
@@ -102,6 +104,7 @@ export const Translate = () => {
                       formatEmailSubject(e.target.value, secondaryLanguage)
                     );
                   }}
+                  {...getLocalizationAttribute()}
                 />
               </div>
             </div>

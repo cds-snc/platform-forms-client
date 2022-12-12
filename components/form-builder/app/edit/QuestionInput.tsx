@@ -17,14 +17,21 @@ export const QuestionInput = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
-  const { localizeField, updateField, getFocusInput, setFocusInput, translationLanguagePriority } =
-    useTemplateStore((s) => ({
-      localizeField: s.localizeField,
-      updateField: s.updateField,
-      setFocusInput: s.setFocusInput,
-      getFocusInput: s.getFocusInput,
-      translationLanguagePriority: s.translationLanguagePriority,
-    }));
+  const {
+    localizeField,
+    updateField,
+    getFocusInput,
+    setFocusInput,
+    translationLanguagePriority,
+    getLocalizationAttribute,
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    updateField: s.updateField,
+    setFocusInput: s.setFocusInput,
+    getFocusInput: s.getFocusInput,
+    translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
 
   const input = useRef<HTMLInputElement>(null);
 
@@ -73,6 +80,7 @@ export const QuestionInput = ({
       aria-describedby={hasDescription ? `item${index}-describedby` : undefined}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateValue(index, e.target.value)}
       theme="title"
+      {...getLocalizationAttribute()}
     />
   );
 };

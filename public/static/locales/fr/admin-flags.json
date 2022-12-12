@@ -41,6 +41,10 @@
     "passwordReset": {
       "title": "Autoriser les réinitialisations de mot de passe",
       "description": "Autoriser les utilisateurs à réinitialiser leur mot de passe"
+    },
+    "supportForms": {
+      "title": "Formulaires de support",
+      "description": "Activation ou désactivation des formulaires de support"
     }
   }
 }
