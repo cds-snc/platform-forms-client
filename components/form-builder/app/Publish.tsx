@@ -115,24 +115,22 @@ export const Publish = () => {
         </li>
       </ul>
 
-      {userCanPublish && (
-        <div className="mt-10 p-5 bg-yellow-100 flex">
-          <div className="flex">
-            <div className="pr-7">
-              <WarningIcon />
+      {userCanPublish && isPublishable() && (
+        <>
+          <div className="mt-10 p-5 bg-yellow-100 flex">
+            <div className="flex">
+              <div className="pr-7">
+                <WarningIcon />
+              </div>
+            </div>
+            <div>
+              <h2 className="mb-1 text-h3 pb-0 mb-0">{t("publishingDisablesEditing")}</h2>
+              <p>{t("publishingDisablesEditingDescription")}</p>
+              <Markdown options={{ forceBlock: true }}>
+                {t("contactSupportIfYouHaveQuestions")}
+              </Markdown>
             </div>
           </div>
-          <div>
-            <h2 className="mb-1 text-h3 pb-0 mb-0">{t("publishingDisablesEditing")}</h2>
-            <p>{t("publishingDisablesEditingDescription")}</p>
-            <Markdown options={{ forceBlock: true }}>
-              {t("contactSupportIfYouHaveQuestions")}
-            </Markdown>
-          </div>
-        </div>
-      )}
-      {isPublishable() && (
-        <>
           <Button className="mt-5" onClick={handlePublish}>
             {t("publish")}
           </Button>
