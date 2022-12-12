@@ -154,7 +154,7 @@ export const Settings = () => {
           onChange={(e) => handleEmailChange(e.target.value)}
         />
       </div>
-      <div>
+      <div id="download-form" className="mb-6">
         <Label htmlFor="download">{t("formDownload.title")}</Label>
         <HintText id="download-hint">{t("formDownload.description")}</HintText>
         <div className="mt-5">

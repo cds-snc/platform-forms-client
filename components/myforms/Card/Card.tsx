@@ -27,8 +27,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.save"),
-      // TODO: route endpoint is a WIP
-      url: `/${i18n.language}/form-builder/share/${id}`,
+      url: `/${i18n.language}/form-builder/settings/${id}#download-form`,
     },
     {
       title: t("card.menu.settings"),
@@ -36,7 +35,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/settings/${id}`,
+      url: `/${i18n.language}/form-builder/settings/${id}#download-form`,
     },
   ];
 
