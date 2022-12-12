@@ -22,6 +22,7 @@ import {
 } from "@components/forms";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { Attention } from "@components/globals/Attention/Attention";
+import { checkOne } from "@lib/cache/flags";
 
 export default function Contactus() {
   const router = useRouter();
@@ -352,6 +353,15 @@ export default function Contactus() {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const supportFormsEnabled = await checkOne("supportForms");
+  if (!supportFormsEnabled) {
+    return {
+      redirect: {
+        destination: `/${context.locale}/myforms`,
+        permanent: false,
+      },
+    };
+  }
   // For any URLs other than /support and /support/contactus, redirect the user to the 404 page
   if (
     context.query?.supportType !== undefined &&
