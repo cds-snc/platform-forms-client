@@ -106,9 +106,7 @@ export const TestDataDelivery = () => {
       </ol>
       <div
         className="border-3 border-dashed border-blue-focus p-4 mb-8"
-        {...(i18n.language !== translationLanguagePriority && {
-          lang: translationLanguagePriority,
-        })}
+        {...getLocalizationAttribute()}
       >
         <h1>{formRecord.form[localizeField(LocalizedFormProperties.TITLE)]}</h1>
         {sent ? (
