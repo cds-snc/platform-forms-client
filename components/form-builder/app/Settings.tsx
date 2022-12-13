@@ -15,6 +15,7 @@ import {
 } from "./shared";
 import { useDeleteForm } from "../hooks";
 import { isValidGovEmail } from "@lib/validation";
+import Link from "next/link";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
@@ -76,7 +77,7 @@ const HintText = ({ id, children }: { id: string; children?: JSX.Element | strin
 };
 
 const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   return (
     <div id={id} className="mt-2 mb-2" role="alert">
@@ -86,7 +87,9 @@ const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) 
           <div className="bg-red-100 w-3/5 text-sm p-2">
             <span>{t("settingsInvalidEmailAlertDesc1")}</span>
             <br />
-            <a href="/form-builder/support">{t("contactSupport")}</a>
+            <a href={`/${i18n.language}/form-builder/support`} target="_blank" rel="noreferrer">
+              {t("contactSupport")}
+            </a>
             <span> {t("settingsInvalidEmailAlertDesc2")}</span>
           </div>
         </>
@@ -96,7 +99,7 @@ const InvalidEmailError = ({ id, isActive }: { id: string; isActive: boolean }) 
 };
 
 export const Settings = () => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const { handleDelete } = useDeleteForm();
   const [formDeleted, setFormDeleted] = useState(false);
   const [error, setError] = useState(false);
@@ -143,7 +146,12 @@ export const Settings = () => {
           <HintText id="response-delivery-hint-2">{t("settingsResponseHint2")}</HintText>
           <div className="mt-4 mb-4 p-4 bg-purple-200 text-sm inline-block">
             {t("settingsResponseNotePublished")}
-            <a href="/form-builder/support" className="ml-2">
+            <a
+              href={`/${i18n.language}/form-builder/support`}
+              className="ml-2"
+              target="_blank"
+              rel="noreferrer"
+            >
               {t("contactSupport")}
             </a>
             .
@@ -159,7 +167,12 @@ export const Settings = () => {
           <HintText id="response-delivery-hint-2">{t("settingsResponseHint2")}</HintText>
           <div className="mt-4 p-4 bg-purple-200 text-sm inline-block">
             {t("settingsResponseNote")}
-            <a href="/form-builder/support" className="ml-2">
+            <a
+              href={`/${i18n.language}/form-builder/support`}
+              className="ml-2"
+              target="_blank"
+              rel="noreferrer"
+            >
               {t("contactSupport")}
             </a>
             .
