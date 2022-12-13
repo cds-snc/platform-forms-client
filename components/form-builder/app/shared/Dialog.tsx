@@ -18,8 +18,8 @@ export const Dialog = ({
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
-  title: string;
-  actions: React.ReactElement;
+  title?: string;
+  actions?: React.ReactElement;
   handleClose?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -54,18 +54,19 @@ export const Dialog = ({
   return (
     <dialog className="modal-dialog" aria-labelledby="modal-title" ref={dialogRef}>
       <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
+        <div className="modal-header inline-flex justify-between">
+          {title && <h2 className="modal-title">{title}</h2>}
+          {!title && <div />}
           <Button
             theme="icon"
-            className="group"
+            className="group justify-self-end"
             icon={<Close className="group-focus:fill-white-default" />}
             aria-label={t("Close")}
             onClick={close}
           ></Button>
         </div>
         <div className="modal-body">{children}</div>
-        <div className="modal-footer">{actions}</div>
+        {actions && <div className="modal-footer">{actions}</div>}
       </div>
     </dialog>
   );
