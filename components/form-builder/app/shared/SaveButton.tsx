@@ -21,7 +21,7 @@ export const SaveButton = () => {
   const [isStartPage, setIsStartPage] = useState(false);
   const { uploadJson } = usePublish();
   const { isSaveable } = useAllowPublish();
-  const { isPublished, updatedAt, getTemplateById } = useTemplateStatus();
+  const { updatedAt, getTemplateById } = useTemplateStatus();
 
   const handlePublish = async () => {
     const schema = JSON.parse(getSchema());
@@ -49,8 +49,8 @@ export const SaveButton = () => {
 
   const dateTime = (updatedAt && formatDateTime(new Date(updatedAt).getTime())) || [];
 
-  return !isStartPage && isSaveable() && !isPublished && status === "authenticated" ? (
-    <div data-is-published={isPublished} data-id={id} className="mt-12 p-4 -ml-4 bg-yellow-100">
+  return !isStartPage && isSaveable() && status === "authenticated" ? (
+    <div data-id={id} className="mt-12 p-4 -ml-4 bg-yellow-100">
       <Button onClick={handlePublish}>{t("saveDraft", { ns: "form-builder" })}</Button>
       {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">
@@ -61,7 +61,5 @@ export const SaveButton = () => {
         </div>
       )}
     </div>
-  ) : (
-    <div data-is-published={isPublished} data-id={id} />
-  );
+  ) : null;
 };

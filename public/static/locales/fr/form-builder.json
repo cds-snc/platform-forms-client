@@ -186,6 +186,7 @@
   "settingsResponseHint2": "Indiquer l’adresse courriel pour la réception des réponses",
   "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
   "settingsResponseNote": " [fr] Set response delivery before previewing delivery and publishing. <a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a>",
+  "settingsResponseNotePublished": "[fr] To change the response delivery destination. <a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a>",
   "settingsResponseEmailTitle": "[fr] Government email address",
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",

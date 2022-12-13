@@ -185,6 +185,7 @@
   "settingsResponseHint1": "Provide a Government of Canada email address to send form responses to.",
   "settingsResponseHint2": "In order to publish, you need to provide a response delivery destination.",
   "settingsResponseNote": "Set response delivery before previewing delivery and publishing. <a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a>",
+  "settingsResponseNotePublished": "To change the response delivery destination. <a href=\"/en/form-builder/support\" target=\"_blank\">Contact support</a>",
   "settingsResponseEmailTitle": "Government email address",
   "settingsResponseTitle": "Response delivery destination",
   "shortAnswer": "Short answer",
