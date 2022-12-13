@@ -39,15 +39,20 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
   }
 
   return (
-    <div className={classes}>
+    <>
       <Head>
-        <title>{formTitle}</title>
+        <title>{t("formTitle")}</title>
       </Head>
-      <h1>{formTitle}</h1>
-      <Form formRecord={formRecord} language={language} router={router} t={t}>
-        {currentForm}
-      </Form>
-    </div>
+      <div className={classes}>
+        <Head>
+          <title>{formTitle}</title>
+        </Head>
+        <h1>{formTitle}</h1>
+        <Form formRecord={formRecord} language={language} router={router} t={t}>
+          {currentForm}
+        </Form>
+      </div>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { unstable_getServerSession } from "next-auth/next";
 import { useTranslation } from "next-i18next";
@@ -9,6 +10,9 @@ const Unauthorized: React.FC = () => {
   const { t } = useTranslation("admin-login");
   return (
     <>
+      <Head>
+        <title>{t("unauthorized.title")}</title>
+      </Head>
       <h1>{t("unauthorized.title")}</h1>
       <div className="mt-4">{t("unauthorized.detail")}</div>
     </>

@@ -6,6 +6,7 @@ import { useRefresh } from "@lib/hooks";
 import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { Privilege } from "@prisma/client";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
@@ -68,6 +69,9 @@ const ManageUser = ({
 
   return (
     <div>
+      <Head>
+        <title>{`${t("managePermissionsFor")} ${user.name}`}</title>
+      </Head>
       <div className="mb-8">{`${t("managePermissionsFor")} ${user.name}`}</div>
       <ul className="flex flex-row flex-wrap gap-8 pb-8 pl-0 list-none">
         {privileges?.map((privilege) => {
@@ -145,6 +149,9 @@ const Users = ({
   };
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1>{t("title")}</h1>
       {!selectedUser ? (
         <ul className="list-none p-0">

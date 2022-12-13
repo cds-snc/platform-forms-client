@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { unstable_getServerSession } from "next-auth/next";
 
@@ -14,6 +15,11 @@ const Login = (): JSX.Element => {
 
   return (
     <>
+      <Head>
+        <title>
+          {t("title")}: {t("sub-title")}
+        </title>
+      </Head>
       <h1>{t("title")}</h1>
       <div>
         <h2 className="pb-10">{t("sub-title")}</h2>
