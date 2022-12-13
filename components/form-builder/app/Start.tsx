@@ -123,7 +123,7 @@ export const Start = () => {
           }}
           tabIndex={0}
         >
-          <ExternalLinkIcon className="mb-2" />
+          <ExternalLinkIcon className="mb-2 scale-125" />
           <h2 className="p-0 mb-1 group-hover:underline group-focus:underline">{t("startH3")}</h2>
           <p className="text-sm">{t("startP2")}</p>
         </label>

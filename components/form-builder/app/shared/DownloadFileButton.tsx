@@ -1,8 +1,12 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
+import Markdown from "markdown-to-jsx";
+import Image from "next/image";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "./Button";
+import { useDialogRef, Dialog } from "../shared";
+import { InfoIcon } from "../../icons";
 
 const slugify = (str: string) =>
   str
@@ -19,6 +23,31 @@ const getDate = () => {
   return date.toISOString().split("T")[0];
 };
 
+const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
+  const { t } = useTranslation("form-builder");
+  const dialog = useDialogRef();
+
+  return (
+    <Dialog dialogRef={dialog} handleClose={handleClose}>
+      <div className="p-5">
+        <div className="px-10">
+          <Image
+            layout="responsive"
+            width={"690"}
+            height={"555"}
+            alt=""
+            className="block w-full"
+            src="/img/form-builder-download.png"
+          />
+        </div>
+        <div className="mt-10">
+          <Markdown options={{ forceBlock: true }}>{t("formDownload.dialogMessage")}</Markdown>
+        </div>
+      </div>
+    </Dialog>
+  );
+};
+
 export const DownloadFileButton = ({
   className,
   onClick,
@@ -31,6 +60,9 @@ export const DownloadFileButton = ({
     getSchema: s.getSchema,
     form: s.form,
   }));
+
+  const [downloadDialog, showDownloadDialog] = useState(false);
+
   const downloadfile = useCallback(async () => {
     async function retrieveFileBlob() {
       try {
@@ -49,15 +81,33 @@ export const DownloadFileButton = ({
     retrieveFileBlob();
   }, [getSchema]);
 
+  const handleOpenDialog = useCallback(() => {
+    showDownloadDialog(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    showDownloadDialog(false);
+  }, []);
+
   return (
-    <Button
-      className={className}
-      onClick={() => {
-        downloadfile();
-        onClick && onClick();
-      }}
-    >
-      {t("saveButton")}
-    </Button>
+    <div>
+      <Button
+        className={className}
+        theme="secondary"
+        onClick={() => {
+          downloadfile();
+          onClick && onClick();
+        }}
+      >
+        {t("formDownload.downloadBtnText")}
+      </Button>
+      <InfoIcon className="ml-4 inline-block" />
+      <div className="ml-2 inline-block">
+        <Button onClick={handleOpenDialog} theme="link">
+          {t("formDownload.btnText")}
+        </Button>
+        {downloadDialog && <FormDownloadDialog handleClose={handleCloseDialog} />}
+      </div>
+    </div>
   );
 };
