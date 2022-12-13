@@ -7,6 +7,8 @@ import jwt, { Secret } from "jsonwebtoken";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { MongoAbility } from "@casl/ability";
 
+export class TemplateAlreadyPublishedError extends Error {}
+
 /**
  * Creates a Form Template record
  * @param config Form Template configuration
@@ -271,6 +273,9 @@ async function _updateTemplate(
       },
     },
   ]);
+
+  // Prevent already published templates from being updated
+  if (templateWithAssociatedUsers.formRecord.isPublished) throw new TemplateAlreadyPublishedError();
 
   const updatedTemplate = await prisma.template
     .update({

@@ -18,6 +18,7 @@ import {
   updateIsPublishedForTemplate,
   getTemplateWithAssociatedUsers,
   updateAssignedUsersForTemplate,
+  TemplateAlreadyPublishedError,
 } from "../templates";
 
 import { BetterOmit, FormRecord } from "@lib/types";
@@ -418,6 +419,32 @@ describe("Template CRUD functions", () => {
         isPublished: true,
       },
     });
+  });
+
+  it("Updates to published forms are not allowed", async () => {
+    const ability = createAbility(
+      getUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
+    );
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: formConfiguration,
+      users: [{ id: "1" }],
+      isPublished: true,
+    });
+
+    const updatedFormConfig = structuredClone(
+      formConfiguration as unknown as BetterOmit<FormRecord, "id" | "isPublished">
+    );
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+      id: "formtestID",
+      jsonConfig: updatedFormConfig,
+    });
+
+    await expect(async () => {
+      await updateTemplate(ability, "test1", updatedFormConfig);
+    }).rejects.toThrowError(new TemplateAlreadyPublishedError());
   });
 
   it.each([[Base], [ManageForms]])("Delete template", async (privileges) => {

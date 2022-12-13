@@ -7,6 +7,7 @@ import {
   updateIsPublishedForTemplate,
   updateAssignedUsersForTemplate,
   onlyIncludePublicProperties,
+  TemplateAlreadyPublishedError,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -84,7 +85,9 @@ const templates = async (
     return res.status(200).json(response);
   } catch (err) {
     if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
-    res.status(500).json({ error: "Malformed API Request" });
+    else if (err instanceof TemplateAlreadyPublishedError)
+      return res.status(500).json({ error: "Can't update published form" });
+    else return res.status(500).json({ error: "Malformed API Request" });
   }
 };
 
