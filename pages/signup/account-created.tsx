@@ -2,6 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 
 import React from "react";
+import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 
@@ -10,6 +11,9 @@ export default function AccountCreated() {
 
   return (
     <>
+      <Head>
+        <title>{t("accountCreated.title")}</title>
+      </Head>
       <h1>{t("accountCreated.title")}</h1>
       <h2>{t("accountCreated.yourAccountTitle")}</h2>
       <p>{t("accountCreated.yourAccountListDescription")}:</p>

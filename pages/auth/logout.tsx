@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
+import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
@@ -19,6 +20,9 @@ const Logout = () => {
 
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <div>
         <h2>{t("messageContent")}</h2>
         <div className="gc-last-logout-time">

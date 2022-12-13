@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import Link from "next/link";
+import Head from "next/head";
 import { User } from "next-auth";
 import { NextPageWithLayout } from "@pages/_app";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
@@ -17,6 +18,9 @@ const AdminWelcome: NextPageWithLayout<AdminWelcomeProps> = (props: AdminWelcome
 
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1>{t("title")}</h1>
       <div className="flex flex-wrap">
         <div className="flex-auto mb-10">

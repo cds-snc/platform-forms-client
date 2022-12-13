@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { Formik } from "formik";
 import { useTranslation } from "next-i18next";
 import { getCsrfToken } from "next-auth/react";
+import Head from "next/head";
 import * as Yup from "yup";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
@@ -71,6 +72,9 @@ export default function Contactus() {
   if (supportType === "contactus") {
     content = (
       <>
+        <Head>
+          <title>{t("contactus.title")}</title>
+        </Head>
         <h1>{t("contactus.title")}</h1>
         <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
         <p className="mb-14">
@@ -165,6 +169,9 @@ export default function Contactus() {
   } else {
     content = (
       <>
+        <Head>
+          <title>{t("support.title")}</title>
+        </Head>
         <h1>{t("support.title")}</h1>
         <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
         <p className="mb-14">
