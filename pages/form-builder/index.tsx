@@ -66,6 +66,17 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
+  if (FormbuilderParams.initialForm?.isPublished) {
+    if (req.url?.includes("edit") || req.url?.includes("publish")) {
+      return {
+        redirect: {
+          destination: `/${locale}/myforms`,
+          permanent: false,
+        },
+      };
+    }
+  }
+
   return {
     props: {
       ...FormbuilderParams,
