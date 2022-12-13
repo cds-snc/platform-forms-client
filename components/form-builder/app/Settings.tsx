@@ -142,7 +142,11 @@ export const Settings = () => {
           <HintText id="response-delivery-hint-1">{t("settingsResponseHint1")}</HintText>
           <HintText id="response-delivery-hint-2">{t("settingsResponseHint2")}</HintText>
           <div className="mt-4 mb-4 p-4 bg-purple-200 text-sm inline-block">
-            <Markdown options={{ forceBlock: true }}>{t("settingsResponseNotePublished")}</Markdown>
+            {t("settingsResponseNotePublished")}
+            <a href="/form-builder/support" className="ml-2">
+              {t("contactSupport")}
+            </a>
+            .
           </div>
           <div>{inputEmail}</div>
         </div>
@@ -154,7 +158,11 @@ export const Settings = () => {
           <HintText id="response-delivery-hint-1">{t("settingsResponseHint1")}</HintText>
           <HintText id="response-delivery-hint-2">{t("settingsResponseHint2")}</HintText>
           <div className="mt-4 p-4 bg-purple-200 text-sm inline-block">
-            <Markdown options={{ forceBlock: true }}>{t("settingsResponseNote")}</Markdown>
+            {t("settingsResponseNote")}
+            <a href="/form-builder/support" className="ml-2">
+              {t("contactSupport")}
+            </a>
+            .
           </div>
           <InvalidEmailError id="invalidEmailError" isActive={IsInvalidEmailErrorActive} />
 
