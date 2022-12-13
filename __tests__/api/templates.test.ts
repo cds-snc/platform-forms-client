@@ -198,6 +198,39 @@ describe("Test templates API functions", () => {
         "Form id: test0form00000id000asdf11 has been updated"
       );
     });
+
+    it("Should failed when trying to update published template", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+        isPublished: true,
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formID: "test0form00000id000asdf11",
+          formConfig: validFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(500);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "Can't update published form" })
+      );
+    });
   });
 
   describe("PUT API that modifies `isPublished`", () => {
