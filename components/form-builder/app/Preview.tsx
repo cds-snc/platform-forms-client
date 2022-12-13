@@ -6,8 +6,11 @@ import { getRenderedForm } from "@lib/formBuilder";
 import { RichText } from "@components/forms/RichText/RichText";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { Form } from "@components/forms";
+import { useSession } from "next-auth/react";
+import Markdown from "markdown-to-jsx";
 
 export const Preview = () => {
+  const { status } = useSession();
   const { getSchema, id } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
@@ -35,9 +38,15 @@ export const Preview = () => {
 
   return (
     <>
-      <span className="bg-purple-200 p-2 inline-block mb-1">{t("page1")}</span>
+      <span className="bg-purple-200 p-2 inline-block mb-1">
+        {status !== "authenticated" && (
+          <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+        )}
+      </span>
       <div
-        className="border-3 border-dashed border-blue-focus p-4 mb-8 pointer-events-none"
+        className={`border-3 border-dashed border-blue-focus p-4 mb-8 ${
+          status !== "authenticated" && "pointer-events-none"
+        }`}
         {...getLocalizationAttribute()}
       >
         <h1 className="md:text-h1">
@@ -49,12 +58,12 @@ export const Preview = () => {
           language={language}
           router={router}
           t={t1}
-          isPreview={true}
+          isPreview={status === "authenticated" ? false : true}
           renderSubmit={(submitButton) => (
             <>
               <span {...getLocalizationAttribute()}>{submitButton}</span>
               <div className="inline-block py-1 px-4 bg-purple-200" {...getLocalizationAttribute()}>
-                {t("formSubmissionDisabledInPreview")}
+                <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
               </div>
             </>
           )}

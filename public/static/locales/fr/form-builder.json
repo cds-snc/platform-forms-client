@@ -247,12 +247,13 @@
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
   "viewCode": "Afficher le code",
-  "formDownload":{
+  "formDownload": {
     "title": "Download form file",
     "description": "Keep a version of your form on your computer",
     "downloadBtnText": "[FR] Download form file",
     "btnText": "[FR] What can I do with a form file?",
     "dialogTitle": "[FR] Form file uses",
     "dialogMessage": "[FR] Form dialog message here"
-  }
+  },
+  "signInToTest": "<a href=\"\">Sign in</a> to test how you can submit and view responses"
 }
