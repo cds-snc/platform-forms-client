@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { getRenderedForm } from "@lib/formBuilder";
 import { RichText } from "@components/forms/RichText/RichText";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
-import { Form } from "@components/forms";
+import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
+import { usePublish } from "../hooks";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -22,13 +23,13 @@ export const Preview = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField, translationLanguagePriority, getLocalizationAttribute } = useTemplateStore(
-    (s) => ({
+  const { localizeField, translationLanguagePriority, getLocalizationAttribute, setId } =
+    useTemplateStore((s) => ({
       localizeField: s.localizeField,
       translationLanguagePriority: s.translationLanguagePriority,
       getLocalizationAttribute: s.getLocalizationAttribute,
-    })
-  );
+      setId: s.setId,
+    }));
 
   const router = useRouter();
   const { t: t1 } = useTranslation();
@@ -36,16 +37,38 @@ export const Preview = () => {
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
 
+  const { uploadJson } = usePublish();
+  const [error, setError] = useState(false);
+
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    if (status !== "authenticated") {
+      e.preventDefault();
+      return false;
+    }
+    const schema = JSON.parse(getSchema());
+    delete schema.id;
+    delete schema.isPublished;
+
+    const result = await uploadJson(JSON.stringify(schema), id);
+    if (result && result?.error) {
+      setError(true);
+    }
+
+    setId(result?.id);
+  };
+
   return (
     <>
-      <span className="bg-purple-200 p-2 inline-block mb-1">
-        {status !== "authenticated" && (
+      {status !== "authenticated" ? (
+        <span className="bg-purple-200 p-2 inline-block mb-1">
           <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
-        )}
-      </span>
+        </span>
+      ) : (
+        <div className="h-12"></div>
+      )}
       <div
         className={`border-3 border-dashed border-blue-focus p-4 mb-8 ${
-          status !== "authenticated" && "pointer-events-none"
+          status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
       >
@@ -59,9 +82,13 @@ export const Preview = () => {
           router={router}
           t={t1}
           isPreview={status === "authenticated" ? false : true}
-          renderSubmit={(submitButton) => (
+          renderSubmit={() => (
             <>
-              <span {...getLocalizationAttribute()}>{submitButton}</span>
+              <span {...getLocalizationAttribute()}>
+                <Button type="submit" onClick={handleSubmit}>
+                  {t("submit")}
+                </Button>
+              </span>
               <div className="inline-block py-1 px-4 bg-purple-200" {...getLocalizationAttribute()}>
                 <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
               </div>
