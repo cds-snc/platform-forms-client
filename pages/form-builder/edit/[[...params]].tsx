@@ -18,7 +18,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
   if (isPublished) {
     return (
       <PageTemplate title={title}>
-        <div>Already published</div>
+        <div />
       </PageTemplate>
     );
   }
