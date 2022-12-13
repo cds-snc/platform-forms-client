@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { useTemplateStore } from "../store/useTemplateStore";
-import { Button } from "./shared/Button";
-import { Input } from "./shared/Input";
-import { useSession } from "next-auth/react";
-import { useDeleteForm } from "../hooks/useDelete";
 import Markdown from "markdown-to-jsx";
-import { useDialogRef, Dialog } from "./shared/Dialog";
-import { ConfirmFormDeleteDialog } from "./shared/ConfirmFormDeleteDialog";
+
+import { useTemplateStore } from "../store";
+import {
+  Button,
+  Input,
+  ConfirmFormDeleteDialog,
+  useDialogRef,
+  Dialog,
+  DownloadFileButton,
+} from "./shared";
+import { useDeleteForm } from "../hooks";
 import { isValidGovEmail } from "@lib/validation";
 
 const FormDeleted = () => {
@@ -130,10 +135,15 @@ export const Settings = () => {
     <>
       <h1 className="visually-hidden">{t("formSettings")}</h1>
       <div className="mb-10">
-        <Label htmlFor="response-delivery">{t("settingsReponseTitle")}</Label>
-        <HintText id="response-delivery-hint-1">{t("settingsReponseHint1")}</HintText>
-        <HintText id="response-delivery-hint-2">{t("settingsReponseHint2")}</HintText>
+        <Label htmlFor="response-delivery">{t("settingsResponseTitle")}</Label>
+        <HintText id="response-delivery-hint-1">{t("settingsResponseHint1")}</HintText>
+        <HintText id="response-delivery-hint-2">{t("settingsResponseHint2")}</HintText>
+        <div className="mt-4 p-4 bg-purple-200 text-sm inline-block">
+          <Markdown options={{ forceBlock: true }}>{t("settingsResponseNote")}</Markdown>
+        </div>
         <InvalidEmailError id="invalidEmailError" isActive={IsInvalidEmailErrorActive} />
+
+        <div className="block font-bold mb-1 text-sm">{t("settingsResponseEmailTitle")}</div>
         <Input
           id="response-delivery"
           isInvalid={IsInvalidEmailErrorActive}
@@ -143,6 +153,13 @@ export const Settings = () => {
           className="w-3/5"
           onChange={(e) => handleEmailChange(e.target.value)}
         />
+      </div>
+      <div id="download-form" className="mb-6">
+        <Label htmlFor="download">{t("formDownload.title")}</Label>
+        <HintText id="download-hint">{t("formDownload.description")}</HintText>
+        <div className="mt-5">
+          <DownloadFileButton />
+        </div>
       </div>
 
       {status === "authenticated" && id && (

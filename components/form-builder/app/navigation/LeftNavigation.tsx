@@ -1,13 +1,11 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, ShareIcon, PublishIcon, SaveIcon, GearIcon } from "../../icons";
-import { useSession } from "next-auth/react";
+import { DesignIcon, PreviewIcon, PublishIcon, GearIcon } from "../../icons";
 import { LeftNavLink } from "./LeftNavLink";
 import { SaveButton } from "../shared/SaveButton";
 
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
-  const { status } = useSession();
 
   const iconClassname =
     "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -27,22 +25,6 @@ export const LeftNavigation = () => {
           {t("preview")}
         </>
       </LeftNavLink>
-
-      <LeftNavLink href="/form-builder/share">
-        <>
-          <ShareIcon className={iconClassname} />
-          {t("share")}
-        </>
-      </LeftNavLink>
-
-      {status !== "authenticated" && (
-        <LeftNavLink href="/form-builder/save">
-          <>
-            <SaveIcon className={iconClassname} />
-            {t("save")}
-          </>
-        </LeftNavLink>
-      )}
 
       <LeftNavLink href="/form-builder/publish">
         <>
