@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTemplateStore } from "../store/useTemplateStore";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -39,22 +39,36 @@ export const Preview = () => {
 
   const { uploadJson } = usePublish();
   const [error, setError] = useState(false);
+  const saved = useRef(false);
+
+  useEffect(() => {
+    if (status === "authenticated" && !saved.current) {
+      const saveForm = async () => {
+        const schema = JSON.parse(getSchema());
+        delete schema.id;
+        delete schema.isPublished;
+
+        const result = await uploadJson(JSON.stringify(schema), id);
+        if (result && result?.error) {
+          setError(true);
+        }
+
+        setId(result?.id);
+      };
+
+      saveForm();
+
+      return () => {
+        saved.current = true;
+      };
+    }
+  }, [status, router]);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     if (status !== "authenticated") {
       e.preventDefault();
       return false;
     }
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
-
-    const result = await uploadJson(JSON.stringify(schema), id);
-    if (result && result?.error) {
-      setError(true);
-    }
-
-    setId(result?.id);
   };
 
   return (
@@ -85,13 +99,18 @@ export const Preview = () => {
           renderSubmit={() => (
             <>
               <span {...getLocalizationAttribute()}>
-                <Button type="submit" onClick={handleSubmit}>
+                <Button type="submit" id="SubmitButton" onClick={handleSubmit}>
                   {t("submit")}
                 </Button>
               </span>
-              <div className="inline-block py-1 px-4 bg-purple-200" {...getLocalizationAttribute()}>
-                <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
-              </div>
+              {status !== "authenticated" && (
+                <div
+                  className="inline-block py-1 px-4 bg-purple-200"
+                  {...getLocalizationAttribute()}
+                >
+                  <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+                </div>
+              )}
             </>
           )}
         >
