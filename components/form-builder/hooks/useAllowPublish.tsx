@@ -1,7 +1,9 @@
 import { useCallback } from "react";
-import { Description, publishRequiredFields, Title } from "../types";
+import { useSession } from "next-auth/react";
+
 import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
 import { useAccessControl } from "@lib/hooks";
+import { Description, publishRequiredFields, Title } from "../types";
 import { useTemplateStore } from "../store/useTemplateStore";
 
 export class MissingTranslation extends Error {}
@@ -80,6 +82,7 @@ export const isFormTranslated = (form: FormProperties) => {
 };
 
 export const useAllowPublish = () => {
+  const { status } = useSession();
   const { ability } = useAccessControl();
   const { form, submission } = useTemplateStore((s) => ({
     form: s.form,
@@ -116,8 +119,8 @@ export const useAllowPublish = () => {
   }, [data, hasData]);
 
   const isSaveable = useCallback(() => {
-    return hasData(["title", "questions"]);
-  }, [hasData]);
+    return status === "authenticated" && hasData(["title", "questions"]);
+  }, [hasData, status]);
 
   return { data, hasData, isPublishable, isSaveable, userCanPublish };
 };

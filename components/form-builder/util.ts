@@ -145,6 +145,7 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
     day: "2-digit",
     hour: "numeric",
     minute: "numeric",
+    second: "numeric",
     hour12: true,
   };
 
