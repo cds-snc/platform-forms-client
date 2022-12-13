@@ -8,7 +8,6 @@ import { useTemplateStore } from "../store";
 interface FormTemplate {
   id: string;
   updatedAt: number;
-  isPublished: boolean;
 }
 
 export const byId = async (id: string): Promise<FormTemplate | null> => {
@@ -38,13 +37,11 @@ export const useTemplateStatus = () => {
     id: s.id,
   }));
 
-  const [isPublished, setIsPublished] = useState<boolean>(false);
   const [updatedAt, setUpdatedAt] = useState<number | undefined>();
 
   const getTemplateById = useCallback(async () => {
     if ("authenticated" === status) {
       const template = await byId(id);
-      setIsPublished(template?.isPublished || false);
       setUpdatedAt(template?.updatedAt);
     }
   }, [id, status]);
@@ -53,5 +50,5 @@ export const useTemplateStatus = () => {
     getTemplateById();
   }, [id, status]);
 
-  return { isPublished, updatedAt, getTemplateById };
+  return { updatedAt, getTemplateById };
 };
