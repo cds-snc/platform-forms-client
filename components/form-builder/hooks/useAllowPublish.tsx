@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { useSession } from "next-auth/react";
 
 import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
 import { useAccessControl } from "@lib/hooks";
@@ -82,7 +81,6 @@ export const isFormTranslated = (form: FormProperties) => {
 };
 
 export const useAllowPublish = () => {
-  const { status } = useSession();
   const { ability } = useAccessControl();
   const { form, submission } = useTemplateStore((s) => ({
     form: s.form,
@@ -119,8 +117,8 @@ export const useAllowPublish = () => {
   }, [data, hasData]);
 
   const isSaveable = useCallback(() => {
-    return status === "authenticated" && hasData(["title", "questions"]);
-  }, [hasData, status]);
+    return hasData(["title", "questions"]);
+  }, [hasData]);
 
   return { data, hasData, isPublishable, isSaveable, userCanPublish };
 };

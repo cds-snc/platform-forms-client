@@ -45,8 +45,7 @@ Object.defineProperty(window, "sessionStorage", {
   value: localStorageMock,
 });
 
-/* needs to be updated to wrap session store + fix act warnings */
-describe.skip("useAllowPublish", () => {
+describe("useAllowPublish", () => {
   beforeEach(() => {
     window.sessionStorage.clear();
     jest.restoreAllMocks();
