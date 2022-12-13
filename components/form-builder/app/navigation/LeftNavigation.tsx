@@ -7,7 +7,7 @@ import { useTemplateStore } from "../../store/useTemplateStore";
 
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
-  const { isPublished } = useTemplateStore((s) => ({ isPublished: s.isPublished }));
+  const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
 
   const iconClassname =
     "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -39,7 +39,7 @@ export const LeftNavigation = () => {
         </LeftNavLink>
       )}
 
-      <LeftNavLink href="/form-builder/settings">
+      <LeftNavLink href={`/form-builder/settings/${id}`}>
         <>
           <GearIcon className={iconClassname} />
           {t("settings")}

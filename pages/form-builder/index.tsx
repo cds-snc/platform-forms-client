@@ -70,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     if (req.url?.includes("edit") || req.url?.includes("publish")) {
       return {
         redirect: {
-          destination: `/${locale}/myforms`,
+          destination: `/${locale}/form-builder/settings/${formID}`,
           permanent: false,
         },
       };
