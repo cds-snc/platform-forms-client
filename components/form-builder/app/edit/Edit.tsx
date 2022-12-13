@@ -3,10 +3,10 @@ import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
 import { Language, LocalizedElementProperties, LocalizedFormProperties } from "../../types";
-import { useTemplateStore } from "../../store";
-import { RichTextLocked } from "./elements";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
+import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
+import { useTemplateStore } from "../../store";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
