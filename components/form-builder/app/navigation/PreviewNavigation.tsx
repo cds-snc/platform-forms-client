@@ -1,10 +1,10 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { SubNavLink } from "./SubNavLink";
 import { useTemplateStore } from "@components/form-builder/store";
 import { useActivePathname } from "@components/form-builder/hooks";
 import { useSession } from "next-auth/react";
 import { ToggleLeft, ToggleRight } from "@components/form-builder/icons";
+import { SubNavLink } from "./SubNavLink";
 
 export const PreviewNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -14,8 +14,6 @@ export const PreviewNavigation = () => {
       toggleTranslationLanguagePriority: s.toggleTranslationLanguagePriority,
     })
   );
-  const { activePathname } = useActivePathname();
-  const { status } = useSession();
 
   const switchLang = () => {
     toggleTranslationLanguagePriority();
