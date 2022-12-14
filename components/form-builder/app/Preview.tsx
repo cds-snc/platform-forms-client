@@ -9,7 +9,6 @@ import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { usePublish } from "../hooks";
-import Link from "next/link";
 import { BackArrowIcon } from "../icons";
 
 export const Preview = () => {
@@ -41,7 +40,7 @@ export const Preview = () => {
   const currentForm = getRenderedForm(formRecord, language, t);
 
   const { uploadJson } = usePublish();
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
   const [sent, setSent] = useState<string | null>();
   const saved = useRef(false);
 
@@ -58,7 +57,7 @@ export const Preview = () => {
 
         const result = await uploadJson(JSON.stringify(schema), id);
         if (result && result?.error) {
-          setError(true);
+          // setError(true);
         }
 
         setId(result?.id);
