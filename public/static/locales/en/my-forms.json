@@ -19,6 +19,10 @@
       "draft": "Draft",
       "published": "Published"
     },
+    "title": {
+      "notTranslatedEn": "No English translation",
+      "notTranslatedFr": "No French translation"
+    },
     "lastEdited": "Last edited",
     "menu": {
       "more": "More",
