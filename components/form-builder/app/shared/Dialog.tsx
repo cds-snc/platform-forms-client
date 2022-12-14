@@ -58,12 +58,16 @@ export const Dialog = ({
           {title && <h2 className="modal-title">{title}</h2>}
           {!title && <div />}
           <Button
-            theme="icon"
-            className="group justify-self-end"
-            icon={<Close className="group-focus:fill-white-default" />}
+            theme="link"
+            className="group justify-self-end block pl-2 pr-2"
             aria-label={t("Close")}
             onClick={close}
-          ></Button>
+          >
+            <span className="block w-30 mr-2">
+              <Close className="group-focus:fill-white-default inline-block mr-2" />
+              {t("Close")}
+            </span>
+          </Button>
         </div>
         <div className="modal-body">{children}</div>
         {actions && <div className="modal-footer">{actions}</div>}

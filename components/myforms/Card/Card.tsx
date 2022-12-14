@@ -27,7 +27,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.save"),
-      url: `/${i18n.language}/form-builder/settings/${id}#download-form`,
+      url: `/${i18n.language}/form-builder/settings/${id}?downloadconfirm=true`,
     },
     {
       title: t("card.menu.settings"),
@@ -35,7 +35,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/settings/${id}#download-form`,
+      url: `/${i18n.language}/form-builder/settings/${id}?deleteconfirm=true`,
     },
   ];
 
@@ -90,10 +90,12 @@ export const Card = (props: CardProps): React.ReactElement => {
       <p className="h-36 px-3 pt-5 pb-8">
         <a
           href={isPublished ? url : `/${i18n.language}/form-builder/edit/${id}`}
-          className="line-clamp-3"
+          className="line-clamp-3 inline-block wrap overflow-hidden inline-block"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
-          {i18n.language === "en" ? titleEn : titleFr}
+          {titleEn ? titleEn : t("card.title.notTranslatedEn", { ns: "my-forms" })}
+          {" / "}
+          {titleFr ? titleFr : t("card.title.notTranslatedFr", { ns: "my-forms" })}
         </a>
       </p>
       <div className="flex justify-between items-center p-3">
