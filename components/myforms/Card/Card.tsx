@@ -27,7 +27,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.save"),
-      url: `/${i18n.language}/form-builder/settings/${id}#download-form`,
+      url: `/${i18n.language}/form-builder/settings/${id}?downloadconfirm=true`,
     },
     {
       title: t("card.menu.settings"),
@@ -35,7 +35,7 @@ export const Card = (props: CardProps): React.ReactElement => {
     },
     {
       title: t("card.menu.delete"),
-      url: `/${i18n.language}/form-builder/settings/${id}#download-form`,
+      url: `/${i18n.language}/form-builder/settings/${id}?deleteconfirm=true`,
     },
   ];
 

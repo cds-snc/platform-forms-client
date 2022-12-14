@@ -74,11 +74,21 @@
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
-  "formDeleteConfirmCancel": "Cancel",
-  "formDeleteConfirmMessage": "Are you sure you want to delete this form? This action cannot be undone.",
-  "formDeleteConfirmOkay": "Yes, Delete",
-  "formDeleteConfirmTitle": "Delete form?",
   "formDeletedDialogMessage": "Form deleted",
+  "formDelete": {
+    "title": "Are you sure you want to delete your form?",
+    "published": {
+      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
+      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
+      "message3": "The URL of your form will change if you upload your form again."
+    },
+    "draft": {
+      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list.",
+      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
+    },
+    "okay": "Delete form",
+    "downloadButtonText": "Download a copy"
+  },
   "formDeletedDialogMessageFailed": "Failed to delete form",
   "formDeletedDialogOkay": "Back to home",
   "formDeletedDialogOkayFailed": "Close",
