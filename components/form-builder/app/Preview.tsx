@@ -39,10 +39,11 @@ export const Preview = () => {
 
   const { uploadJson } = usePublish();
   const [error, setError] = useState(false);
+  const [sent, setSent] = useState<string | null>();
   const saved = useRef(false);
 
   useEffect(() => {
-    if (status === "authenticated" && !saved.current) {
+    if (status === "authenticated" && !saved.current && !id) {
       const saveForm = async () => {
         const schema = JSON.parse(getSchema());
         delete schema.id;
@@ -90,44 +91,64 @@ export const Preview = () => {
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
         </h1>
 
-        <Form
-          formRecord={formRecord}
-          language={language}
-          router={router}
-          t={t1}
-          isPreview={status === "authenticated" ? false : true}
-          renderSubmit={() => (
-            <>
-              <span {...getLocalizationAttribute()}>
-                <Button type="submit" id="SubmitButton" onClick={handleSubmit}>
-                  {t("submit")}
-                </Button>
-              </span>
-              {status !== "authenticated" && (
-                <div
-                  className="inline-block py-1 px-4 bg-purple-200"
-                  {...getLocalizationAttribute()}
-                >
-                  <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
-                </div>
-              )}
-            </>
-          )}
-        >
-          {currentForm}
-        </Form>
+        {sent ? (
+          <RichText {...getLocalizationAttribute()}>
+            {formRecord.form.endPage
+              ? formRecord.form.endPage[
+                  localizeField(LocalizedElementProperties.DESCRIPTION, language)
+                ]
+              : ""}
+          </RichText>
+        ) : (
+          <Form
+            formRecord={formRecord}
+            language={language}
+            router={router}
+            t={t1}
+            isPreview={status === "authenticated" ? false : true}
+            onSuccess={setSent}
+            renderSubmit={() => (
+              <>
+                <span {...getLocalizationAttribute()}>
+                  <Button
+                    type="submit"
+                    id="SubmitButton"
+                    onClick={handleSubmit}
+                    disabled={status !== "authenticated"}
+                  >
+                    {t("submit")}
+                  </Button>
+                </span>
+                {status !== "authenticated" && (
+                  <div
+                    className="inline-block py-1 px-4 bg-purple-200"
+                    {...getLocalizationAttribute()}
+                  >
+                    <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+                  </div>
+                )}
+              </>
+            )}
+          >
+            {currentForm}
+          </Form>
+        )}
       </div>
 
-      <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
-      <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
-        <RichText {...getLocalizationAttribute()}>
-          {formRecord.form.endPage
-            ? formRecord.form.endPage[
-                localizeField(LocalizedElementProperties.DESCRIPTION, language)
-              ]
-            : ""}
-        </RichText>
-      </div>
+      {status !== "authenticated" && (
+        <>
+          <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
+          <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
+            <RichText {...getLocalizationAttribute()}>
+              {formRecord.form.endPage
+                ? formRecord.form.endPage[
+                    localizeField(LocalizedElementProperties.DESCRIPTION, language)
+                  ]
+                : ""}
+            </RichText>
+          </div>
+        </>
+      )}
     </>
   );
 };

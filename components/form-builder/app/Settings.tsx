@@ -15,7 +15,6 @@ import {
 } from "./shared";
 import { useDeleteForm } from "../hooks";
 import { isValidGovEmail } from "@lib/validation";
-import Link from "next/link";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");

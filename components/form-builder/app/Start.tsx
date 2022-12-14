@@ -58,7 +58,7 @@ export const Start = () => {
         // ensure elements follow layout array order
         data.form.elements = sortByLayout(data.form);
         importTemplate(data);
-        router.push({ pathname: `/form-builder/test` });
+        router.push({ pathname: `/form-builder/preview` });
       };
     } catch (e) {
       if (e instanceof Error) {

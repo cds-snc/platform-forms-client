@@ -23,7 +23,7 @@ export const LeftNavigation = () => {
         </LeftNavLink>
       )}
 
-      <LeftNavLink href="/form-builder/test">
+      <LeftNavLink href="/form-builder/preview">
         <>
           <PreviewIcon className={iconClassname} />
           {t("test")}
