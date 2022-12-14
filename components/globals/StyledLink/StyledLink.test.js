@@ -15,4 +15,13 @@ describe("StyledLink component", () => {
     screen.queryByRole("a", { href: "abc", className: className });
     expect(screen.queryByText(linkText)).toBeInTheDocument();
   });
+
+  it("Adds aria-label attribute", () => {
+    render(
+      <StyledLink href="http://test-href" className={className} ariaLabel="test label">
+        {linkText}
+      </StyledLink>
+    );
+    expect(screen.getByRole("link", { name: "test label" }));
+  });
 });

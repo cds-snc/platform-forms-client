@@ -1,10 +1,6 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 
-// TODO: look into whether it's possible to do shallow routing with just an attribute something
-// like <Link shallow={true}.. or if this is only possible with
-// router.push('/a', undefined, { shallow: true })
-
 // Note: the below seems unnecessarily complex vs. just having the parent Link component pass an
 // href to a custom anchor component. But this is the recommended way, so staying with this for now.
 // see https://nextjs.org/docs/api-reference/next/link#if-the-child-is-a-custom-component-that-wraps-an-a-tag
@@ -16,7 +12,7 @@ interface StyledLinkProps {
   href: string;
   className?: string;
   locale?: string;
-  // Note: try not to over use aria-label and instead put the label info in the anchor if possible
+  // Note: try not to overuse aria-label. Instead put the label info in the anchor if possible
   ariaLabel?: string;
 }
 
@@ -25,7 +21,7 @@ export const StyledLink = (props: StyledLinkProps) => {
   const ref = useRef<HTMLAnchorElement>(null);
 
   return (
-    <Link href={href} {...(locale && { locale: locale })} shallow={true} passHref legacyBehavior>
+    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
       <WrappedLink
         href={href}
         className={className}
