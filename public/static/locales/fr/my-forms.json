@@ -19,6 +19,10 @@
       "draft": "Ébauche",
       "published": "Publier"
     },
+    "title": {
+      "notTranslatedEn": "[FR] No English translation",
+      "notTranslatedFr": "[FR] No French translation"
+    },
     "lastEdited": "Dernière modification",
     "menu": {
       "more": "Plus",
