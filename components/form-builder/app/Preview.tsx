@@ -9,6 +9,8 @@ import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { usePublish } from "../hooks";
+import Link from "next/link";
+import { BackArrowIcon } from "../icons";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -23,12 +25,13 @@ export const Preview = () => {
     ...JSON.parse(stringified),
   };
 
-  const { localizeField, translationLanguagePriority, getLocalizationAttribute, setId } =
+  const { localizeField, translationLanguagePriority, getLocalizationAttribute, setId, email } =
     useTemplateStore((s) => ({
       localizeField: s.localizeField,
       translationLanguagePriority: s.translationLanguagePriority,
       getLocalizationAttribute: s.getLocalizationAttribute,
       setId: s.setId,
+      email: s.submission?.email,
     }));
 
   const router = useRouter();
@@ -41,6 +44,10 @@ export const Preview = () => {
   const [error, setError] = useState(false);
   const [sent, setSent] = useState<string | null>();
   const saved = useRef(false);
+
+  const clearSent = () => {
+    setSent(null);
+  };
 
   useEffect(() => {
     if (status === "authenticated" && !saved.current && !id) {
@@ -74,31 +81,45 @@ export const Preview = () => {
 
   return (
     <>
-      {status !== "authenticated" ? (
-        <span className="bg-purple-200 p-2 inline-block mb-1">
-          <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
-        </span>
-      ) : (
-        <div className="h-12"></div>
-      )}
+      <div className="h-12"></div>
       <div
         className={`border-3 border-dashed border-blue-focus p-4 mb-8 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
       >
-        <h1 className="md:text-h1">
+        {status !== "authenticated" ? (
+          <div className="bg-purple-200 p-2 inline-block mb-1">
+            <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+          </div>
+        ) : (
+          <div className="bg-purple-200 p-2 inline-block mb-1">
+            {t("submittedResponsesText", { email })}
+          </div>
+        )}
+
+        {sent && (
+          <>
+            <button className="mt-4 clear-both block" onClick={() => clearSent()}>
+              <BackArrowIcon className="inline-block" /> Back to form
+            </button>
+          </>
+        )}
+
+        <h1 className="md:text-h1 mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
         </h1>
 
         {sent ? (
-          <RichText {...getLocalizationAttribute()}>
-            {formRecord.form.endPage
-              ? formRecord.form.endPage[
-                  localizeField(LocalizedElementProperties.DESCRIPTION, language)
-                ]
-              : ""}
-          </RichText>
+          <>
+            <RichText {...getLocalizationAttribute()}>
+              {formRecord.form.endPage
+                ? formRecord.form.endPage[
+                    localizeField(LocalizedElementProperties.DESCRIPTION, language)
+                  ]
+                : ""}
+            </RichText>
+          </>
         ) : (
           <Form
             formRecord={formRecord}
