@@ -101,7 +101,7 @@ export const Preview = () => {
         {sent && (
           <>
             <button className="mt-4 clear-both block" onClick={() => clearSent()}>
-              <BackArrowIcon className="inline-block" /> Back to form
+              <BackArrowIcon className="inline-block" /> {t("backToForm")}
             </button>
           </>
         )}
@@ -158,7 +158,7 @@ export const Preview = () => {
 
       {status !== "authenticated" && (
         <>
-          <span className="bg-purple-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
+          <span className="bg-slate-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
           <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.endPage
