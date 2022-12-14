@@ -15,7 +15,6 @@ import {
 } from "./shared";
 import { useDeleteForm } from "../hooks";
 import { isValidGovEmail } from "@lib/validation";
-import Link from "next/link";
 
 const FormDeleted = () => {
   const { t } = useTranslation("form-builder");
@@ -103,7 +102,11 @@ export const Settings = () => {
   const { handleDelete } = useDeleteForm();
   const [formDeleted, setFormDeleted] = useState(false);
   const [error, setError] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+
+  const router = useRouter();
+  const { deleteconfirm, downloadconfirm } = router.query;
+  const [showConfirm, setShowConfirm] = useState(deleteconfirm || false);
+
   const { id, initialize, email, updateField, isPublished } = useTemplateStore((s) => ({
     id: s.id,
     initialize: s.initialize,
@@ -196,7 +199,7 @@ export const Settings = () => {
         <Label htmlFor="download">{t("formDownload.title")}</Label>
         <HintText id="download-hint">{t("formDownload.description")}</HintText>
         <div className="mt-5">
-          <DownloadFileButton />
+          <DownloadFileButton autoShowDialog={Boolean(downloadconfirm) || false} />
         </div>
       </div>
 
@@ -229,6 +232,7 @@ export const Settings = () => {
             setFormDeleted(true);
             initialize(); // Reset the form
           }}
+          isPublished={isPublished}
         />
       )}
       {formDeleted && <FormDeleted />}
