@@ -75,11 +75,21 @@
   "formatItalic": "[FR] Format italic",
   "formatNumberedList": "[FR] Format numbered list",
   "formConfirmationMessage": "Message de confirmation du formulaire",
-  "formDeleteConfirmCancel": "[FR] Cancel",
-  "formDeleteConfirmMessage": "[FR] Are you sure you want to delete this form? This action cannot be undone.",
-  "formDeleteConfirmOkay": "[FR] Yes, Delete",
-  "formDeleteConfirmTitle": "[FR] Delete form?",
-  "formDeletedDialogMessage": "[FR]  Form deleted",
+  "formDelete": {
+    "title": "[FR] Are you sure you want to delete your form?",
+    "published": {
+      "message1": "[FR] Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
+      "message2": "[FR] Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
+      "message3": "[FR] The URL of your form will change if you upload your form again."
+    },
+    "draft": {
+      "message1": "[FR] Deleting a form can not be undone. Your form will be removed from your forms list.",
+      "message2": "[FR] Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
+    },
+    "okay": "[FR] Delete form",
+    "downloadButtonText": "[FR] Download a copy"
+  },
+  "formDeletedDialogMessage": "[FR] Form deleted",
   "formDeletedDialogMessageFailed": "[FR] Failed to delete form",
   "formDeletedDialogOkay": "[FR] Back to home",
   "formDeletedDialogOkayFailed": "[FR] close",

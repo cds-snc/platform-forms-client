@@ -33,11 +33,11 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
         <div className="px-10">
           <Image
             layout="responsive"
-            width={"690"}
-            height={"555"}
+            width={"597"}
+            height={"480"}
             alt=""
             className="block w-full"
-            src="/img/form-builder-download.png"
+            src="/img/form-builder-download.svg"
           />
         </div>
         <div className="mt-10">
@@ -51,9 +51,15 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
 export const DownloadFileButton = ({
   className,
   onClick,
+  showInfo = true,
+  buttonText,
+  autoShowDialog = false,
 }: {
   className?: string;
   onClick?: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
+  showInfo?: boolean;
+  buttonText?: string;
+  autoShowDialog?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const { getSchema, form } = useTemplateStore((s) => ({
@@ -61,7 +67,7 @@ export const DownloadFileButton = ({
     form: s.form,
   }));
 
-  const [downloadDialog, showDownloadDialog] = useState(false);
+  const [downloadDialog, showDownloadDialog] = useState(autoShowDialog);
 
   const downloadfile = useCallback(async () => {
     async function retrieveFileBlob() {
@@ -99,15 +105,19 @@ export const DownloadFileButton = ({
           onClick && onClick();
         }}
       >
-        {t("formDownload.downloadBtnText")}
+        {buttonText ? buttonText : t("formDownload.downloadBtnText")}
       </Button>
-      <InfoIcon className="ml-4 inline-block" />
-      <div className="ml-2 inline-block">
-        <Button onClick={handleOpenDialog} theme="link">
-          {t("formDownload.btnText")}
-        </Button>
-        {downloadDialog && <FormDownloadDialog handleClose={handleCloseDialog} />}
-      </div>
+      {showInfo && (
+        <>
+          <InfoIcon className="ml-4 inline-block" />
+          <div className="ml-2 inline-block">
+            <Button onClick={handleOpenDialog} theme="link">
+              {t("formDownload.btnText")}
+            </Button>
+            {downloadDialog && <FormDownloadDialog handleClose={handleCloseDialog} />}
+          </div>
+        </>
+      )}
     </div>
   );
 };
