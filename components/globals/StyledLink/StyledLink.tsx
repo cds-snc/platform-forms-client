@@ -12,7 +12,8 @@ interface StyledLinkProps {
   href: string;
   className?: string;
   locale?: string;
-  // Note: try not to overuse aria-label. Instead put the label info in the anchor if possible
+  // Note: Try not to overuse aria-label. Instead put the label info in the anchor if possible.
+  // Keep in mind that the aria-label will override any link text.
   ariaLabel?: string;
 }
 
