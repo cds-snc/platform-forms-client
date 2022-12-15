@@ -4,6 +4,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { User } from "next-auth";
 import { useAccessControl } from "@lib/hooks";
+import { clearTemplateStore } from "@formbuilder/store";
 
 type AdminNavProps = {
   user: User;
@@ -48,7 +49,13 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             </Link>
           )}
           {user && user.name && (
-            <button className="gc-button-link" onClick={() => signOut()}>
+            <button
+              className="gc-button-link"
+              onClick={() => {
+                clearTemplateStore();
+                signOut();
+              }}
+            >
               {t("adminNav.logout")}
             </button>
           )}
