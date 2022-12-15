@@ -95,14 +95,6 @@
   "formDeletedDialogOkayFailed": "[FR] close",
   "formDeletedDialogTitle": "[FR] Success",
   "formDeleteDialogTitleFailed": "[FR]  Error",
-  "formDownload": {
-    "btnText": "[FR] What can I do with a form file?",
-    "description": "Keep a version of your form on your computer",
-    "dialogMessage": "[FR] Form dialog message here",
-    "dialogTitle": "[FR] Form file uses",
-    "downloadBtnText": "[FR] Download form file",
-    "title": "Download form file"
-  },
   "formIntroduction": "Présentation du formulaire",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
@@ -267,5 +259,19 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code"
+  "viewCode": "Afficher le code",
+  "formDownload": {
+    "title": "Download form file",
+    "description": "Keep a version of your form on your computer",
+    "downloadBtnText": "[FR] Download form file",
+    "btnText": "[FR] What can I do with a form file?",
+    "dialog": {
+      "title": "[FR] Form file uses",
+      "subtitle1": "[FR] Share",
+      "message1": "[FR] Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
+      "subtitle2": "[FR] Save a copy",
+      "message2": "[FR] Download a copy of the your form to store locally on your computer.",
+      "downloadButtonText": "[FR] Download a copy"
+    }
+  }
 }
