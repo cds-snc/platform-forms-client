@@ -263,7 +263,13 @@
     "description": "Keep a version of your form on your computer",
     "downloadBtnText": "[FR] Download form file",
     "btnText": "[FR] What can I do with a form file?",
-    "dialogTitle": "[FR] Form file uses",
-    "dialogMessage": "[FR] Form dialog message here"
+    "dialog": {
+      "title": "[FR] Form file uses",
+      "subtitle1": "[FR] Share",
+      "message1": "[FR] Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
+      "subtitle2": "[FR] Save a copy",
+      "message2": "[FR] Download a copy of the your form to store locally on your computer.",
+      "downloadButtonText": "[FR] Download a copy"
+    }
   }
 }

@@ -263,7 +263,13 @@
     "description": "Keep a version of your form on your computer",
     "downloadBtnText": "Download form file",
     "btnText": "What can I do with a form file?",
-    "dialogTitle": "Form file uses",
-    "dialogMessage": "<h2>Form file uses</h2> <h3 class='mb-1'>Share</h3> \nDownload a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made. <h3 class='mt-6 mb-1'>Save a copy</h3> <p className='mb-10'>Download a copy of the your form to store locally on your computer.</p> "
+    "dialog": {
+      "title": "Form file uses",
+      "subtitle1": "Share",
+      "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
+      "subtitle2": "Save a copy",
+      "message2": "Download a copy of the your form to store locally on your computer.",
+      "downloadButtonText": "Download a copy"
+    }
   }
 }

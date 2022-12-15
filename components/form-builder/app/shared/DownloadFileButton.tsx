@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
-import Markdown from "markdown-to-jsx";
 import Image from "next/image";
 
-import { useTemplateStore } from "../../store/useTemplateStore";
 import { Button } from "./Button";
+import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
 import { InfoIcon } from "../../icons";
 
@@ -28,7 +27,16 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const dialog = useDialogRef();
 
   return (
-    <Dialog dialogRef={dialog} handleClose={handleClose}>
+    <Dialog
+      dialogRef={dialog}
+      handleClose={handleClose}
+      actions={
+        <DownloadFileButton
+          showInfo={false}
+          buttonText={t("formDownload.dialog.downloadButtonText")}
+        />
+      }
+    >
       <div className="p-5">
         <div className="px-10">
           <Image
@@ -41,7 +49,11 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
           />
         </div>
         <div className="mt-10">
-          <Markdown options={{ forceBlock: true }}>{t("formDownload.dialogMessage")}</Markdown>
+          <h2>{t("formDownload.dialog.title")}</h2>
+          <h3 className="mb-1">{t("formDownload.dialog.subtitle1")}</h3>
+          <p className="mb-10">{t("formDownload.dialog.message1")}</p>
+          <h3 className="mt-6 mb-1">{t("formDownload.dialog.subtitle2")}</h3>
+          <p className="mb-2">{t("formDownload.dialog.message2")}</p>
         </div>
       </div>
     </Dialog>
