@@ -16,7 +16,9 @@ import { LeftNavigation } from "@components/myforms/LeftNav";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { clearTemplateStore } from "@components/form-builder/store/useTemplateStore";
 import { ResumeEditingForm } from "@components/form-builder/app/shared";
-import { Template } from "@components/form-builder/app";
+import { Header } from "@components/form-builder/app";
+import SkipLink from "@components/globals/SkipLink";
+import Footer from "@components/globals/Footer";
 
 interface FormsDataItem {
   id: string;
@@ -126,7 +128,21 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <Template page={page}></Template>;
+  return (
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta charSet="utf-8" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+      </Head>
+      <div className="flex flex-col h-full">
+        <SkipLink />
+        <Header />
+        {page}
+        <Footer displaySLAAndSupportLinks />
+      </div>
+    </>
+  );
 };
 
 export const getServerSideProps = requireAuthentication(

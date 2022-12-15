@@ -48,7 +48,13 @@ const AdminNav = (props: AdminNavProps): React.ReactElement => {
             </Link>
           )}
           {user && user.name && (
-            <button className="gc-button-link" onClick={() => signOut()}>
+            <button
+              className="gc-button-link"
+              onClick={() => {
+                sessionStorage.clear();
+                signOut();
+              }}
+            >
               {t("adminNav.logout")}
             </button>
           )}

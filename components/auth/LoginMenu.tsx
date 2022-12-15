@@ -11,6 +11,7 @@ type LoginMenuProp = {
 const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
+    sessionStorage.clear();
     signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
