@@ -16,9 +16,7 @@ const Login = (): JSX.Element => {
   return (
     <>
       <Head>
-        <title>
-          {t("title")}: {t("sub-title")}
-        </title>
+        <title>{`${t("title")}: ${t("sub-title")}`}</title>
       </Head>
       <h1>{t("title")}</h1>
       <div>
