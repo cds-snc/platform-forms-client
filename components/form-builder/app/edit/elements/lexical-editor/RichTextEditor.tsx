@@ -9,7 +9,6 @@ export const RichTextEditor = ({
   path,
   content,
   autoFocusEditor,
-  lang,
   ariaLabel,
   ariaDescribedBy,
 }: {
@@ -50,7 +49,7 @@ export const RichTextEditor = ({
   );
 
   return (
-    <div key={lang} className="w-full">
+    <div className="w-full">
       <Editor
         autoFocusEditor={autoFocusEditor}
         content={value}
