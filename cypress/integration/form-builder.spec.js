@@ -26,7 +26,7 @@ describe("Test acceptable use Page", () => {
   it("Renders form builder home page", () => {
     cy.get("h2").should("contain", "Design a form");
     cy.get("h2").should("contain", "Open a form file");
-    cy.get("button[lang='fr']").click();
+    cy.get("a[lang='fr']").click();
     cy.get("h2").should("contain", "Créer un formulaire");
     cy.get("h2").should("contain", "Ouvrir un formulaire");
   });

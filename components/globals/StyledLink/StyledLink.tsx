@@ -15,10 +15,11 @@ interface StyledLinkProps {
   // Note: Try not to overuse aria-label. Instead put the label info in the anchor if possible.
   // Keep in mind that the aria-label will override any link text.
   ariaLabel?: string;
+  addLang?: string;
 }
 
 export const StyledLink = (props: StyledLinkProps) => {
-  const { children, href = "", className, locale, ariaLabel } = props;
+  const { children, href = "", className, locale, ariaLabel, addLang } = props;
   const ref = useRef<HTMLAnchorElement>(null);
 
   return (
@@ -27,6 +28,7 @@ export const StyledLink = (props: StyledLinkProps) => {
         href={href}
         className={className}
         {...(ariaLabel && { ariaLabel: ariaLabel })}
+        {...(addLang && { addLang: addLang })}
         ref={ref}
       >
         {children}
@@ -40,6 +42,7 @@ interface WrappedLinkProps {
   href: string;
   className?: string;
   ariaLabel?: string;
+  addLang?: string;
 }
 
 const WrappedLink = React.forwardRef(
@@ -47,13 +50,14 @@ const WrappedLink = React.forwardRef(
     // Note: href is populated by passHref "magic" and is needed for the case of getting the locale
     // prefix in the url. The passed prop href is ignored it seems, so this works. The prop is
     // included above for TypeScript but otherwise not needed.
-    const { children, className, ariaLabel } = props;
+    const { children, className, ariaLabel, addLang } = props;
 
     return (
       <a
         href={href}
         className={className}
         {...(ariaLabel && { "aria-label": ariaLabel })}
+        {...(addLang && { lang: addLang })}
         ref={ref}
       >
         {children}
