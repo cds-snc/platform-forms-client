@@ -1,4 +1,7 @@
 import React, { ReactElement, useEffect } from "react";
+
+import { clearTemplateStore } from "../../store";
+
 export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
   const [hasSession, setHasSession] = React.useState(false);
 
@@ -26,7 +29,7 @@ export const ResumeEditingForm = ({ children }: { children: ReactElement }) => {
       throw new Error("Invalid form session");
     } catch (e) {
       // noop
-      sessionStorage.removeItem("form-storage");
+      clearTemplateStore();
     }
   }, []);
 
