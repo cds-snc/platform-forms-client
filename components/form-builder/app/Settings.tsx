@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import Markdown from "markdown-to-jsx";
 
-import { useTemplateStore } from "../store";
+import { useTemplateStore, clearTemplateStore } from "../store";
 import {
   Button,
   Input,
@@ -230,6 +230,7 @@ export const Settings = () => {
               return;
             }
             setFormDeleted(true);
+            clearTemplateStore();
             initialize(); // Reset the form
           }}
           isPublished={isPublished}
