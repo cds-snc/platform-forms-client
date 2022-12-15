@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
+import { clearTemplateStore } from "@formbuilder/store";
 
 type LoginMenuProp = {
   isAuthenticated: boolean;
@@ -11,7 +12,7 @@ type LoginMenuProp = {
 const LoginMenu = ({ isAuthenticated }: LoginMenuProp) => {
   const { i18n, t } = useTranslation("common");
   const handleClick = () => {
-    sessionStorage.clear();
+    clearTemplateStore();
     signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
