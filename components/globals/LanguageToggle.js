@@ -14,7 +14,7 @@ const LanguageToggle = () => {
       className="gc-language-toggle"
       locale={locale === "en" ? "fr" : "en"}
       ariaLabel={`${t("lang-toggle")}: ${locale == "en" ? "Français" : "English"}`}
-      addLang={locale === "en" ? "fr" : "en"}
+      lang={locale === "en" ? "fr" : "en"}
     >
       {locale === "en" ? "Français" : "English"}
     </StyledLink>

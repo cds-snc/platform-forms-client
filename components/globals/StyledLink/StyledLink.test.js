@@ -59,7 +59,7 @@ describe("StyledLink component", () => {
 
   it("Should have lang attribute", () => {
     render(
-      <StyledLink href="http://test-href" addLang="fr">
+      <StyledLink href="http://test-href" lang="fr">
         {linkText}
       </StyledLink>
     );
