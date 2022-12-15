@@ -18,7 +18,7 @@ describe("StyledLink component", () => {
     render(<StyledLink href="http://test-href">{linkText}</StyledLink>);
     const anchor = screen.getByRole("link");
     expect(anchor).toBeInTheDocument();
-    expect(anchor).not.toHaveClass("testClassname");
+    expect(anchor).not.toHaveClass(className);
   });
 
   it("Shold have a class", () => {
