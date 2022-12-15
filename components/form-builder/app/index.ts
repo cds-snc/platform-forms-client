@@ -8,5 +8,4 @@ export { Start } from "./Start";
 export { Preview } from "./Preview";
 export { Publish } from "./Publish";
 export { Published } from "./Published";
-export { TestDataDelivery } from "./TestDataDelivery";
 export { Edit } from "./edit";
