@@ -71,11 +71,9 @@ export const Preview = () => {
     }
   }, [status, router]);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    if (status !== "authenticated") {
-      e.preventDefault();
-      return false;
-    }
+  const preventSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    return false;
   };
 
   return (
@@ -133,8 +131,11 @@ export const Preview = () => {
                   <Button
                     type="submit"
                     id="SubmitButton"
-                    onClick={handleSubmit}
-                    disabled={status !== "authenticated"}
+                    onClick={(e) => {
+                      if (status !== "authenticated") {
+                        return preventSubmit(e);
+                      }
+                    }}
                   >
                     {t("submit")}
                   </Button>
