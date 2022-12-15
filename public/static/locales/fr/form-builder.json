@@ -5,6 +5,7 @@
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Add rules",
   "at": "[fr] at",
+  "backToForm": "Back to form",
   "cancel": "Annuler  ",
   "characterLimitDescription": "[FR] Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
   "checkboxe": "Case à cocher",
@@ -192,14 +193,15 @@
   "settingsInvalidEmailAlertDesc1": "Doit être une adresse électronique du gouvernement du Canada.",
   "settingsInvalidEmailAlertDesc2": "pour enregistrer l'adresse courriel.",
   "settingsInvalidEmailAlertTitle": "Adresse électronique du gouvernement",
+  "settingsResponseEmailTitle": "[fr] Government email address",
   "settingsResponseHint1": "Fournissez une adresse électronique du gouvernement du Canada où envoyer les réponses aux questions du formulaire. Vous devez indiquer une adresse pour publier un formulaire.",
   "settingsResponseHint2": "Indiquer l’adresse courriel pour la réception des réponses",
-  "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
   "settingsResponseNote": " [fr] Set response delivery before previewing delivery and publishing.",
   "settingsResponseNotePublished": "[fr] To change the response delivery destination.",
-  "settingsResponseEmailTitle": "[fr] Government email address",
+  "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
+  "signInToTest": "<a href=\"\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Choix unique",
   "start": "Commencer",
   "startErrorParse": "L’ouverture du fichier de formulaire a echoué",
@@ -263,7 +265,13 @@
     "description": "Keep a version of your form on your computer",
     "downloadBtnText": "[FR] Download form file",
     "btnText": "[FR] What can I do with a form file?",
-    "dialogTitle": "[FR] Form file uses",
-    "dialogMessage": "[FR] Form dialog message here"
+    "dialog": {
+      "title": "[FR] Form file uses",
+      "subtitle1": "[FR] Share",
+      "message1": "[FR] Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
+      "subtitle2": "[FR] Save a copy",
+      "message2": "[FR] Download a copy of the your form to store locally on your computer.",
+      "downloadButtonText": "[FR] Download a copy"
+    }
   }
 }

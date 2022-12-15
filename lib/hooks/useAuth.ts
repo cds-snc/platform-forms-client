@@ -287,7 +287,7 @@ export const useAuth = () => {
           setCognitoError(t("InternalServiceException"));
         }
       } else if (response?.ok) {
-        if (didConfirm) {
+        if (didConfirm.current) {
           await router.push("/auth/policy?referer=/signup/account-created");
         } else {
           await router.push("/auth/policy");
