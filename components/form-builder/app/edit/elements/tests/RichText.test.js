@@ -1,9 +1,7 @@
 import React from "react";
 import { cleanup } from "@testing-library/react";
-
 import { RichText } from "../RichText";
-import { withProviders } from "@formbuilder/test-utils";
-import store from "../../../../test-utils/defaultStore.json";
+import { withProviders, defaultStore as store } from "@formbuilder/test-utils";
 
 describe("RichText", () => {
   afterEach(cleanup);

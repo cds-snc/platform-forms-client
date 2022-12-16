@@ -22,6 +22,5 @@ export const withProviders = async (store, Element) => {
   await act(() => {
     rendered = render(<Providers form={store.form}>{Element}</Providers>);
   });
-
   return rendered;
 };
