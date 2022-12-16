@@ -26,6 +26,7 @@
     "format": "prettier --config .prettierrc.json --write .",
     "format:check": "prettier --config .prettierrc.json --check .",
     "test": "APP_ENV=test DATABASE_URL=postgres://postgres:password@localhost:5432 jest",
+    "test:watch": "APP_ENV=test DATABASE_URL=postgres://postgres:password@localhost:5432 jest --watch",
     "cypress": "cypress open",
     "cypress:headless": "cypress run --browser chrome --headless",
     "build-storybook": "build-storybook -s public --no-dll",
