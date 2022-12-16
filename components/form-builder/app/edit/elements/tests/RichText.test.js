@@ -30,11 +30,17 @@ describe("RichText", () => {
   });
 
   it.skip("sets text to bold", async () => {
+    // There seems to be an issue with userEvent.keyboard('{selectall}')
+    // https://github.com/testing-library/user-event/issues/442
+
     const rendered = await withProviders(store, <RichText parentIndex={0} />);
     const user = userEvent.setup();
+
+    rendered.container.querySelector(".editor-paragraph").focus();
+    userEvent.keyboard("{selectall}");
     await user.click(rendered.getByLabelText("formatBold"));
 
-    const editor = rendered.container.querySelector(".editor-text-bold span");
-    expect(editor.innerHTML).toContain("description 2 en");
+    const editor = rendered.container.querySelector(".editor-text-bold");
+    expect(editor).toContain("description 1 en");
   });
 });
