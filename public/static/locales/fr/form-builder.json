@@ -44,12 +44,12 @@
   },
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
-  "dataDeliveredMessage": "Vérifiez votre e-mail pour la réponse au formulaire soumis",
+  "dataDeliveredMessage": "Vérifiez votre courriel pour la réponse au formulaire soumis",
   "dataDeliveredTitle": "Succès  ",
   "date": "Date",
   "defaultElementDescription": {
     "date": "Entrez une date comme mm/dd/yyyy",
-    "email": "Entrez une adresse email comme name@example.com",
+    "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333"
   },
@@ -272,7 +272,7 @@
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
-  "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
+  "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
   "viewCode": "Afficher le code"
 }
