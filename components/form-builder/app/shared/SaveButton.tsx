@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Button } from "../shared";
 import { useTemplateStore } from "../../store";
-import { usePublish, useAllowPublish, useTemplateStatus } from "../../hooks";
+import { usePublish, useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
 import { formatDateTime } from "../../util";
 
 export const SaveButton = () => {
@@ -14,6 +14,8 @@ export const SaveButton = () => {
     setId: s.setId,
     getSchema: s.getSchema,
   }));
+
+  const { error } = useTemplateApi();
 
   const { status } = useSession();
   const { t } = useTranslation(["common", "form-builder"]);
@@ -51,6 +53,7 @@ export const SaveButton = () => {
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div data-id={id} className="mt-12 p-4 -ml-4 bg-yellow-100">
+      {error && <div className="text-red-500">{error}</div>}
       <Button onClick={handlePublish}>{t("saveDraft", { ns: "form-builder" })}</Button>
       {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">

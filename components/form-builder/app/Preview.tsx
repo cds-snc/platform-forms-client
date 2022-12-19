@@ -8,7 +8,7 @@ import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-import { usePublish } from "../hooks";
+import { usePublish, useTemplateApi } from "../hooks";
 import { BackArrowIcon } from "../icons";
 
 export const Preview = () => {
@@ -38,6 +38,7 @@ export const Preview = () => {
   const { t } = useTranslation("form-builder");
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
+  const { setApiError } = useTemplateApi();
 
   const { uploadJson } = usePublish();
   // const [error, setError] = useState(false);
@@ -57,7 +58,7 @@ export const Preview = () => {
 
         const result = await uploadJson(JSON.stringify(schema), id);
         if (result && result?.error) {
-          // setError(true);
+          setApiError("Error saving form");
         }
 
         setId(result?.id);
