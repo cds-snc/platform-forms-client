@@ -31,7 +31,7 @@ export const EditNavigation = () => {
             {t("editingIn")}{" "}
           </label>
           <label htmlFor="lang" className="text-sm">
-            {t("English")}
+            {t("english")}
           </label>{" "}
           {translationLanguagePriority === "fr" && (
             <button id="lang" onClick={() => switchLang()}>
@@ -44,7 +44,7 @@ export const EditNavigation = () => {
             </button>
           )}{" "}
           <label htmlFor="lang" className="text-sm">
-            {t("French")}
+            {t("french")}
           </label>
         </div>
       )}
