@@ -1,0 +1,12 @@
+{
+  "CodeMismatchException": "The confirmation code provided does not match our records",
+  "InternalServiceException": "We've encountered an error with your request. Please try again later",
+  "TooManyRequestsException": "TooManyRequestsException",
+  "UsernameExistsException": "UsernameExistsException",
+  "UsernameOrPasswordIncorrect": {
+    "title": "L’adresse courriel ou le mot de passe que vous avez saisi est incorrect.",
+    "description": "L’adresse courriel ou le mot de passe que vous avez saisi est incorrect ou le compte n’existe pas.",
+    "link": "/signup/register",
+    "linkText": "Si vous n’avez pas de compte, créez-en un maintenant."
+  }
+}

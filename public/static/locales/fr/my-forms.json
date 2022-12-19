@@ -1,0 +1,39 @@
+{
+  "title": "Mes formulaires ",
+  "nav": {
+    "drafts": "Ébauches de formulaires",
+    "published": "Publié",
+    "all": "Tous"
+  },
+  "actions": {
+    "resumeForm": "[fr] Resume editing form",
+    "createNewForm": "Créer un nouveau formulaire +"
+  },
+  "cards": {
+    "noForms": "You have no forms. [FR]",
+    "noDraftForms": "You have no draft forms. [FR]",
+    "noPublishedForms": "You have no published forms. [FR]"
+  },
+  "card": {
+    "states": {
+      "draft": "Ébauche",
+      "published": "Publier"
+    },
+    "title": {
+      "notTranslatedEn": "[FR] No English translation",
+      "notTranslatedFr": "[FR] No French translation"
+    },
+    "lastEdited": "Dernière modification",
+    "menu": {
+      "more": "Plus",
+      "save": "Enregistrer",
+      "copyLink": "Copy Link [FR]",
+      "preview": "Prévisualiser",
+      "edit": "Modifier",
+      "settings": "Settings [FR]",
+      "delete": "Delete form [FR]",
+      "coppiedToClipboard": "Coppied to clipboard [FR]",
+      "somethingWentWrong": "Something went wrong [FR]"
+    }
+  }
+}

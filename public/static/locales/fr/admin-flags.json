@@ -26,10 +26,6 @@
       "title": "Soumettre à la file d'attente de fiabilité",
       "description": "Soumettez les réponses du formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
     },
-    "notifyPreview": {
-      "title": "Prévisualiser par e-mail",
-      "description": "Sur la page de confirmation après la soumission, affichez une copie de l'e-mail envoyé à l'administrateur du formulaire"
-    },
     "reCatpcha": {
       "title": "Je ne suis pas un robot",
       "description": "Active la protection Je ne suis pas un robot pour tous les formulaires avant leur soumission"
@@ -37,6 +33,18 @@
     "formTimer": {
       "title": "Minuteur de formulaire",
       "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
+    },
+    "accountRegistration": {
+      "title": "Enregistrement du compte",
+      "description": "Permettre aux utilisateurs de s'inscrire pour obtenir un compte"
+    },
+    "passwordReset": {
+      "title": "Autoriser les réinitialisations de mot de passe",
+      "description": "Autoriser les utilisateurs à réinitialiser leur mot de passe"
+    },
+    "supportForms": {
+      "title": "Formulaires de support",
+      "description": "Activation ou désactivation des formulaires de support"
     }
   }
 }

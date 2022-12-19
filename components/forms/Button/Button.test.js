@@ -1,7 +1,7 @@
 import React from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button } from "./Button";
+import { Button } from "@components/forms";
 
 describe("Button component", () => {
   afterEach(cleanup);
@@ -28,7 +28,7 @@ describe("Button component", () => {
     });
   });
   test("button click", async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     const mockOnClick = jest.fn();
     render(
       <Button type="button" onClick={mockOnClick}>
@@ -36,7 +36,7 @@ describe("Button component", () => {
       </Button>
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "Click Me" }));
+    await user.click(screen.getByRole("button", { name: "Click Me" }));
     expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { extractBearerTokenFromReq } from "@lib/middleware/validBearerToken";
-import executeQuery from "@lib/integration/queryManager";
-import dbConnector from "@lib/integration/dbConnector";
-import jwt from "jsonwebtoken";
-import { MiddlewareRequest, MiddlewareReturn, TemporaryTokenPayload } from "@lib/types";
+import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
+import { validateTemporaryToken } from "@lib/auth";
 
 /**
  * @description
@@ -33,16 +30,11 @@ export const validTemporaryToken = (): MiddlewareRequest => {
       }
       //Get the token from request object
       const token = extractBearerTokenFromReq(req);
-      //Verify the token
-      const temporaryTokenPayload = jwt.verify(
-        token,
-        process.env.TOKEN_SECRET || ""
-      ) as TemporaryTokenPayload;
-      const { email } = temporaryTokenPayload;
-      //Check if an active formUserRecord exists for the given bearerToken.
-      if (await isTokenExists(formID, email as string, token)) {
-        return { next: true, props: { email, temporaryToken: token } };
-      }
+
+      const user = await validateTemporaryToken(token);
+
+      if (user !== null) return { next: true, props: { email: user.email, temporaryToken: token } };
+
       res.status(403).json({ error: "Missing or invalid bearer token." });
       return { next: false };
     } catch (err) {
@@ -53,21 +45,20 @@ export const validTemporaryToken = (): MiddlewareRequest => {
   };
 };
 
-/*@description
- * It returns true if there is an active token otherwise false.
- * @param formID - The id of the form
- * @param email - The email that is associated to the formID
- * @token - The temporary token
- * @returns true or false
+/**
+ * Extracts the bearer token from the authorization header
+ *
+ * @param req - the api request containing the authorization header
+ * @returns The bearer token string
+ *
+ * @throws
+ * This exception is thrown if the bearer token is not found
  */
-const isTokenExists = async (formID: string, email: string, token: string): Promise<boolean> => {
-  return (
-    (
-      await executeQuery(
-        await dbConnector(),
-        "SELECT 1 FROM form_users WHERE template_id = ($1) and email = ($2) and temporary_token = ($3) and active = true",
-        [formID, email, token]
-      )
-    ).rows.length === 1
-  );
+export const extractBearerTokenFromReq = (req: NextApiRequest): string => {
+  const authHeader = String(req.headers["authorization"] || "");
+  if (authHeader.startsWith("Bearer ")) {
+    return authHeader.substring(7, authHeader.length);
+  } else {
+    throw new Error("Missing bearer token.");
+  }
 };

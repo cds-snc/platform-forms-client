@@ -1,10 +1,10 @@
 // PHASE BANNER STYLES
 
 .gc-phase-banner {
-  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 bg-gray-background flex items-center py-6 px-64;
+  @apply bg-gray-background flex items-center py-6 xs:-mx-4 md:-mx-8 lg:-mx-16 xl:-mx-32 xxl:-mx-48 -mx-64;
 
   .banner-container {
-    @apply flex;
+    @apply flex xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 px-64;
   }
 
   .phase-badge {
@@ -13,7 +13,7 @@
   }
 
   .phase-text {
-    @apply md:pb-2 md:text-small_sm md:top-3 md:mb-2 mb-0 top-2 pb-2 text-sm pb-0 block relative;
+    @apply md:pb-2 md:text-small_sm md:top-3 md:mb-2 mb-0 top-2 text-sm pb-2 block relative;
   }
 
   span span {
@@ -24,7 +24,7 @@
 // FIP STYLES
 
 .gc-fip {
-  @apply xs:px-4 md:px-8 lg:px-16 lg:flex-col-reverse lg:items-start lg:my-10 xl:px-32 xxl:px-48 flex flex-row justify-between items-center my-20 px-64;
+  @apply lg:flex-col-reverse lg:items-start lg:my-10 flex flex-row justify-between items-center my-20;
 }
 
 .gc-fip a {
@@ -54,10 +54,6 @@
     box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
     @apply underline bg-blue-active text-white-default;
   }
-}
-// ADMIN HEADER
-.gc-admin {
-  @apply xs:px-4 md:px-8 lg:px-16 xl:px-32 xxl:px-48 border-t-1 border-b-1 mb-20 py-5 flex items-center px-64;
 }
 
 header {

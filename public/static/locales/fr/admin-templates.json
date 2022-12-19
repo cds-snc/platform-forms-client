@@ -9,7 +9,16 @@
   "view": {
     "title": "Voir le modèle des formulaires",
     "update": "Modifier",
-    "formID": "Identifiant du formulaire:"
+    "formID": "Identifiant du formulaire:",
+    "view": "Visioner",
+    "formTitle": "Titre du formulaire",
+    "status": "Statut",
+    "published": "Publié",
+    "draft": "Brouillon",
+    "publishForm": "Publier",
+    "unpublishForm": "Brouillon",
+    "users": "Utilisateurs",
+    "assign": "Assigner"
   },
   "settings": {
     "title": "Paramètres du formulaire",

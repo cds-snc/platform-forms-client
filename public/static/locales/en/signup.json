@@ -1,0 +1,83 @@
+{
+  "signUpConfirmation": {
+    "title": "Check your email",
+    "resendConfirmationCodeButton": "Send a new verification code",
+    "emailHasBeenSent": "An email with a security code has been sent to",
+    "confirmButton": "Continue",
+    "resendConfirmationCode": {
+      "title": "Check your email",
+      "body": "An email with a security code has been sent to you"
+    },
+    "fields": {
+      "confirmationCode": {
+        "label": "Enter the security code to finish creating your account",
+        "error": {
+          "number": "This field must be a number"
+        }
+      }
+    }
+  },
+  "signUpRegistration": {
+    "title": "Sign Up to GC Forms",
+    "alreadyHaveAnAccount": "If you already have an account,",
+    "alreadyHaveAnAccountLink": "sign in instead.",
+    "slaAgreement": "By creating an account you agree to the",
+    "slaAgreementLink": "Service Level Agreement.",
+    "signUpButton": "Continue",
+    "fields": {
+      "username": {
+        "label": "Email",
+        "hint": "Must be a federal government email address",
+        "error": {
+          "validGovEmail": "This field must be a valid government email."
+        }
+      },
+      "password": {
+        "label": "Password",
+        "hint": "Must be at least 8 characters with a capital, number and symbol",
+        "error": {
+          "minLength": "The minimum length of the value must be 8 characters.",
+          "maxLength": "The field must be no longer than 50 characters.",
+          "oneLowerCase": "The field must contain at least 1 lowercase character.",
+          "oneUpperCase": "The field must contain at least 1 uppercase character.",
+          "oneNumber": "The field must contain at least 1 number.",
+          "oneSymbol": "The field must contain at least 1 symbol."
+        }
+      },
+      "passwordConfirmation": {
+        "label": "Password confirmation",
+        "error": {
+          "mustMatch": "The value must match the value of the password field."
+        }
+      },
+      "name": {
+        "label": "Full name",
+        "error": {
+          "maxLength": "The field must be no longer than 50 characters."
+        }
+      }
+    }
+  },
+  "registrationClosed": "Registration is closed at this time",
+  "accountCreated": {
+    "title": "GC Forms account created",
+    "yourAccountTitle": "What you can do with your account",
+    "yourAccountListDescription": "With this account you can",
+    "yourAccountList": {
+      "item1": "draft a form",
+      "item2": "save drafts within GC Forms",
+      "item3": "test the delivery of responses"
+    },
+    "notIncluded": {
+      "title": "What's not included",
+      "paragraph1": "You cannot publish forms to the internet yet."
+    },
+    "unlockPublishing": {
+      "title": "Unlock form publishing",
+      "paragraph1": "To unlock publishing, provide the contact information of the person you report to.",
+      "paragraph2": "We'll process your request within 2 business days."
+    },
+    "unlockPublishingButton": "Unlock publishing",
+    "skipStepButton": "Skip this step for now"
+  }
+}

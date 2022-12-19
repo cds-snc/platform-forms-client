@@ -1,0 +1,29 @@
+name: "Test Production Container Build"
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  GITHUB_SHA: ${{ github.sha }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_SECRET }}
+  GOOGLE_CLIENT_ID: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_ID }}
+  COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
+  COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
+
+jobs:
+  test-container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@e2f20e631ae6d7dd3b768f56a5d2af784dd54791 # tag=v2
+
+      - name: Build Container
+        run: |
+          docker build -t base \
+          --build-arg PRODUCTION_ENV=true \
+          --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
+          --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
+          --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
+          --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
+          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .

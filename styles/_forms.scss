@@ -92,26 +92,9 @@
   @apply md:text-small_sm text-gray-text mb-3 text-sm w-3/4 xl:w-full;
 }
 
-.gc-h1 {
-  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
-}
-
-.gc-h2 {
-  @apply md:text-small_h2 font-bold text-h2 pb-6;
-}
-
 .gc-richText {
   p {
     @extend .gc-p;
-  }
-  h1 {
-    @extend .gc-h1;
-  }
-  h2 {
-    @extend .gc-h2;
-  }
-  h3 {
-    @extend .gc-h3;
   }
   h4 {
     @extend .gc-section-header;
@@ -167,10 +150,6 @@
   }
 }
 
-.gc-h3 {
-  @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
-}
-
 .gc-section-header {
   @apply md:text-small_h2 font-bold text-h2 mb-16 mt-12 p-6 bg-gray-background;
 }
@@ -202,11 +181,35 @@
   }
 }
 
+.gc-button--icon {
+  @apply md:text-base text-h3 md:w-10 md:h-10 w-12 h-12 py-0 px-0 rounded-md;
+}
+
 .gc-button--secondary {
   @apply mb-14 mr-5 bg-gray-300 text-black-default;
 
   &:hover {
     @apply bg-gray-500;
+  }
+}
+
+.gc-button--blue {
+  @apply h-16 rounded-lg py-3 px-6 text-white-default mx-auto bg-blue-800 shadow-default;
+
+  &:hover {
+    @apply bg-blue-light;
+  }
+
+  &:focus {
+    @apply outline-[3px] outline-blue-focus outline outline-offset-2 bg-blue-focus;
+  }
+
+  &:active {
+    @apply text-white-default top-0.5;
+  }
+ 
+  &:visited {
+    @apply text-white-default top-0.5;
   }
 }
 
@@ -315,7 +318,7 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-small_base block font-normal text-base flex items-center;
+  @apply md:text-small_base font-normal text-base flex items-center;
 
   .checkbox-label-text,
   .radio-label-text {
@@ -389,7 +392,7 @@
 .page-preview-form,
 .page-en-preview-form,
 .page-fr-preview-form {
-  .gc-h1::before {
+  h1::before {
     content: "[Preview/Prévisualisation]";
     @apply mb-10 block font-bold text-green-700;
   }
@@ -429,5 +432,18 @@
 
   p:last-of-type {
     @apply font-bold md:text-small_p;
+  }
+}
+
+.gc-last-logout-time {
+  @apply text-sm not-italic font-sans items-center font-normal pb-10 pt-3;
+  line-height: 125%;
+}
+
+.gc-go-to-login-btn {
+  a {
+    @apply bg-blue-500 hover:bg-blue-700 text-white-default font-bold py-2 px-4 rounded;
+    text-decoration: none !important;
+    background-color: #26374a;
   }
 }

@@ -1,0 +1,20 @@
+{
+  "title": "Sign In to GC Forms",
+  "signUpText": "If you do not have an account, you can",
+  "signUpLink": "create one now.",
+  "signInButton": "Sign In",
+  "resetPasswordText": "Reset your password",
+  "fields": {
+    "username": {
+      "label": "Email",
+      "description": "Must be a federal government email address"
+    },
+    "password": {
+      "label": "Password",
+      "description": "Must be at least 8 characters with a capital, number and symbol",
+      "errors": {
+        "maxLength": "This field must be no longer than 50 characters."
+      }
+    }
+  }
+}

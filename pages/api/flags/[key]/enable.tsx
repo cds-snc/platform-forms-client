@@ -1,15 +1,25 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isAdmin } from "@lib/auth";
-import { enableFlag, checkAll } from "@lib/flags";
-import { logAdminActivity } from "@lib/adminLogs";
-import { AdminLogAction, AdminLogEvent } from "@lib/types";
+import { enableFlag, checkAll } from "@lib/cache/flags";
+import { middleware, cors, sessionExists } from "@lib/middleware";
+import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { MiddlewareProps, WithRequired } from "@lib/types";
+import { AccessControlError, createAbility } from "@lib/privileges";
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const session = await isAdmin({ req });
-  if (session) {
+const allowedMethods = ["GET"];
+
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  props: MiddlewareProps
+): Promise<void> => {
+  try {
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
     const key = req.query.key as string;
-    await enableFlag(key);
-    const flags = await checkAll();
+    if (Array.isArray(key) || !key)
+      return res.status(400).json({ error: "Malformed API Request Flag Key is not defined" });
+    const ability = createAbility(session.user.privileges);
+    await enableFlag(ability, key);
+    const flags = await checkAll(ability);
 
     if (session.user.id) {
       await logAdminActivity(
@@ -21,7 +31,10 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     }
 
     res.status(200).json(flags);
-  } else {
-    res.status(403).send("Forbidden");
+  } catch (e) {
+    if (e instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export default middleware([cors({ allowedMethods }), sessionExists()], handler);

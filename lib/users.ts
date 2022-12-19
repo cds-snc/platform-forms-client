@@ -1,42 +1,138 @@
-import dbConnector from "@lib/integration/dbConnector";
-import executeQuery from "@lib/integration/queryManager";
-import { User } from "next-auth";
-
-import { logMessage } from "@lib/logger";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { DefaultJWT } from "next-auth/jwt";
+import { ApiAccessLog } from "@prisma/client";
+import { LoggingAction } from "@lib/auth";
+import { checkPrivileges } from "@lib/privileges";
+import { MongoAbility } from "@casl/ability";
 
 /**
- * Get all users
- * @returns An array of all Users
+ * Get or Create a user if a record does not exist
+ * @returns A User Object
  */
-export const getUsers = async (): Promise<User[]> => {
-  try {
-    const result = await executeQuery(
-      await dbConnector(),
-      "SELECT id, name, email, admin FROM users"
-    );
-    return result.rows as User[];
-  } catch (e) {
-    logMessage.error(e as Error);
-    return [];
+export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT) => {
+  if (!sub) throw new Error("Sub does not exist on token");
+  const user = await prisma.user
+    .findUnique({
+      where: {
+        id: sub,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        privileges: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  // If a user already exists and has privileges return the record
+  if (user !== null && user.privileges.length) return user;
+
+  // User does not exist, create and return a record or assign base privileges
+  const basePrivileges = await prisma.privilege
+    .findUnique({
+      where: {
+        nameEn: "Base",
+      },
+      select: {
+        id: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (basePrivileges === null) throw new Error("Base Privileges is not set in Database");
+
+  if (!user) {
+    return await prisma.user
+      .create({
+        data: {
+          id: sub,
+          name,
+          email,
+          image: picture,
+          privileges: {
+            connect: basePrivileges,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          privileges: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+  } else {
+    return await prisma.user
+      .update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          privileges: {
+            connect: basePrivileges,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          privileges: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
   }
 };
 
 /**
- * Modifies the Admin role on a user
- * @param isAdmin
- * @param userID
- * @returns boolean that indicates success or failure and if a user exists
+ * Get all Users
+ * @returns An array of all Users
  */
-export const adminRole = async (isAdmin: boolean, userID: number): Promise<[boolean, boolean]> => {
+export const getUsers = async (ability: MongoAbility) => {
+  checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+
+  const users = await prisma.user
+    .findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        privileges: {
+          select: {
+            id: true,
+            nameEn: true,
+            nameFr: true,
+            descriptionEn: true,
+            descriptionFr: true,
+          },
+        },
+      },
+      orderBy: {
+        id: "asc",
+      },
+    })
+    .catch((e) => prismaErrors(e, []));
+
+  return users;
+};
+
+/**
+ * Retrieves the accessLog entry for the last login for an API user
+ * @param userId
+ * @returns AccessLog object
+ */
+export const userLastLogin = async (userId: string): Promise<ApiAccessLog | null> => {
   try {
-    const result = await executeQuery(
-      await dbConnector(),
-      "UPDATE users SET admin = ($1) WHERE id = ($2)",
-      [isAdmin.toString(), userID.toString()]
-    );
-    return [true, Boolean(result.rowCount)];
+    return await prisma.apiAccessLog.findFirst({
+      where: {
+        userId: userId,
+        action: LoggingAction.LOGIN,
+      },
+      orderBy: {
+        timestamp: "desc",
+      },
+    });
   } catch (e) {
-    logMessage.error(e as Error);
-    return [false, false];
+    return prismaErrors(e, null);
   }
 };

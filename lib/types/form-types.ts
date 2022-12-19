@@ -4,6 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
+import { BetterOmit } from ".";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -37,8 +38,8 @@ export interface ElementProperties {
   descriptionEn?: string;
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
-  choices?: Array<PropertyChoices>;
-  subElements?: Array<FormElement>;
+  choices?: PropertyChoices[];
+  subElements?: FormElement[];
   fileType?: string | undefined;
   headingLevel?: string | undefined;
   isSectional?: boolean;
@@ -94,60 +95,50 @@ export interface BrandProperties {
   urlFr?: string;
   // if set to true the GC branding will be removed from the footer
   disableGcBranding?: boolean;
+  [key: string]: string | boolean | undefined;
 }
 
 // defines the fields for the main form configuration object
 export interface FormProperties {
-  id?: string;
   titleEn: string;
   titleFr: string;
   emailSubjectEn?: string;
   emailSubjectFr?: string;
-  version: string;
-  layout: Array<string>;
+  version: number;
+  layout: number[];
   brand?: BrandProperties;
-  elements: Array<FormElement>;
+  elements: FormElement[];
   endPage?: Record<string, string>;
+  introduction?: Record<string, string>;
+  privacyPolicy?: Record<string, string>;
   [key: string]:
     | string
+    | number
     | boolean
-    | Array<string>
-    | Array<FormElement>
+    | Array<string | number | FormElement>
     | Record<string, string>
     | BrandProperties
     | undefined;
 }
 
-// defines the fields for the top level form object
-export interface FormConfiguration {
+// defines the fields for the form record that is available in authenticated spaces and backend processes
+export type FormRecord = {
+  id: string;
+  bearerToken?: string;
   internalTitleEn?: string;
   internalTitleFr?: string;
-  publishingStatus: boolean;
+  isPublished: boolean;
   submission: SubmissionProperties;
   displayAlphaBanner?: boolean;
   form: FormProperties;
   securityAttribute: string;
   reCaptchaID?: string;
-}
+  updated_at?: string | undefined;
+  [key: string]: string | boolean | SubmissionProperties | FormProperties | undefined;
+};
 
 // defines the fields for the form record that is available to unauthenticated users
-export interface PublicFormRecord {
-  formID: number;
-  formConfig: Omit<FormConfiguration, "internalTitleEn" | "internalTitleFr" | "submission">;
-  organization?: boolean;
-}
-
-// defines the fields for the form record that is available in authenticated spaces and backend processes
-export interface FormRecord extends PublicFormRecord {
-  formConfig: FormConfiguration;
-  bearerToken?: string;
-}
-
-// the object that is passed to the crud function which calls the template lambda
-export interface TemplateLambdaInput {
-  method: string;
-  formID?: number;
-  formConfig?: FormConfiguration;
-  limit?: number;
-  offset?: number;
-}
+export type PublicFormRecord = BetterOmit<
+  FormRecord,
+  "bearerToken" | "internalTitleEn" | "internalTitleFr" | "submission"
+>;

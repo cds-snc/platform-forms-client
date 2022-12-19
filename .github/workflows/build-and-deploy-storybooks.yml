@@ -1,15 +1,25 @@
 name: Build and Deploy Storybooks
 on:
   pull_request:
+    paths-ignore:
+      # Ignore all files and folders that start with '.'
+      - ".**"
+      # Ignore all files and folder in fixtures, tests, utils, etc.
+      - "__*/**"
   push:
     branches: [main]
+    paths-ignore:
+      # Ignore all files and folders that start with '.'
+      - ".**"
+      # Ignore all files and folder in fixtures, tests, utils, etc.
+      - "__*/**"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b # tag=v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
 
       - name: Install 🔧 # This example project is built using yarn and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: yarn install
@@ -23,7 +33,7 @@ jobs:
         id: extract_branch
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.6.2
+        uses: JamesIves/github-pages-deploy-action@e80c869f0057899fc2cd28819b5bbe9de890524a # tag=3.6.2
         with:
           TARGET_FOLDER: ${{ steps.extract_branch.outputs.branch }}
           BRANCH: gh-pages # The branch the action should deploy to.
@@ -32,7 +42,7 @@ jobs:
 
       - name: Find Comment
         if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/find-comment@v1
+        uses: peter-evans/find-comment@d2dae40ed151c634e4189471272b57e76ec19ba8 # tag=v1
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -43,7 +53,7 @@ jobs:
 
       - name: Create or update comment # comment in pull request storybooks link
         if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae # tag=v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}

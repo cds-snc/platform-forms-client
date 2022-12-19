@@ -1,11 +1,20 @@
 * {
   box-sizing: border-box;
 }
+html,
+body,
+#__next,
+#safeHydrate {
+  height: 100%;
+}
 
-main {
-  min-height: calc(100vh - 450px);
-  display: block;
-  @apply xs:mx-4 md:mx-8 lg:mx-16 xl:mx-32 xxl:mx-48 mx-64;
+footer,
+header {
+  @apply xs:px-4 md:px-8 lg:px-16 px-32;
+}
+
+#page-container {
+  @apply xs:mx-4 md:mx-8 lg:mx-16 mx-32 grow shrink-0 basis-auto;
 }
 
 .gc-richText {
@@ -56,91 +65,18 @@ ul.custom {
   @apply mb-12;
 }
 
-// HORIZONTAL NAV LIST STYLES
-.gc-horizontal-list {
-  @apply lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none;
-
-  .gc-horizontal-item {
-    @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
-
-    &:last-of-type {
-      @apply lg:pb-20 pr-0 pb-0;
-    }
-  }
-}
-
-// FOOTER STYLES
-
-.gc-footer {
-  @apply lg:mt-10 border-0 bg-gray-100 mt-16;
-
-  div img {
-    @apply lg:h-8 h-10;
-  }
-
-  .gc-footer-container {
-    @apply xs:px-4 md:px-8 lg:flex-col lg:items-start lg:px-16 xl:px-32 xxl:px-48 flex py-10 px-64 flex-row items-center justify-between;
-
-    ul {
-      @apply lg:flex-col lg:text-small_base p-0 mb-0 flex text-base list-none;
-
-      li {
-        @apply lg:pr-0 lg:pb-4 pr-8 pb-0;
-
-        a:visited {
-          @apply text-purple-default;
-        }
-
-        a {
-          @apply no-underline hover:underline text-blue-dark hover:text-blue-hover;
-        }
-
-        a:focus {
-          outline: none;
-          box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-          @apply underline bg-blue-focus text-white-default;
-        }
-
-        a:active {
-          box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-          @apply underline bg-blue-active text-white-default;
-        }
-      }
-      li:last-of-type {
-        @apply lg:pb-20 pr-0 pb-0;
-      }
-    }
-  }
-}
-
-/* Admin styling */
-ul.data_list {
-  @apply list-none;
-  li {
-    @apply border-2 border-solid border-gray-400 cursor-pointer inline-block overflow-hidden break-words;
-    max-height: 100px;
-    max-width: 100%;
-    width: 100%;
-    font-family: monospace;
-    margin: 0 1rem;
-
-    div.update-buttons {
-      display: inline-block;
-    }
-    div.form-title {
-      max-width: 70%;
-    }
-  }
-}
-
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
 
 ol {
-  @apply list-decimal;
+  @apply list-decimal pl-10;
 }
 
 ul {
   @apply list-disc pl-10;
+}
+
+li ul {
+  @apply list-circle;
 }
 
 a:visited {
@@ -174,10 +110,6 @@ a:active {
   }
 }
 
-.canada-wordmark img {
-  @apply inline;
-}
-
 body {
   margin: 0;
   font-size: 1.25em;
@@ -194,6 +126,18 @@ h6 {
   font-family: "Lato", sans-serif;
   line-height: 1.33;
   font-weight: 600;
+}
+
+h1 {
+  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
+}
+
+h2 {
+  @apply md:text-small_h2 font-bold text-h2 pb-6;
+}
+
+h3 {
+  @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
 }
 
 .outer-container {
