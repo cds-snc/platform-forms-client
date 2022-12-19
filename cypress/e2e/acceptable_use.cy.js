@@ -34,7 +34,7 @@ describe("Test acceptable use Page", () => {
   });
 
   it.skip("Fr page renders properly", () => {
-    cy.get("button[lang='fr']").click();
+    cy.get("a[lang='fr']").click();
     cy.url().should("contain", "/fr");
     cy.get("h1").should("contain", "Content de vous revoir");
     cy.get(".gc-agree-btn").should("be.visible");
