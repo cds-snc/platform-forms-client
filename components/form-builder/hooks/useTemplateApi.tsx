@@ -4,12 +4,12 @@ import { usePublish } from "../hooks";
 import { useTranslation } from "next-i18next";
 
 interface TemplateApiType {
-  error: string;
+  error: string | null;
   saveForm: () => Promise<string | false>;
 }
 
 const defaultTemplateApi: TemplateApiType = {
-  error: "",
+  error: null,
   saveForm: async () => new Promise((resolve) => resolve(false)),
 };
 
@@ -17,30 +17,32 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation(["form-builder"]);
-  const [error, setError] = useState<string>("");
-  const { uploadJson } = usePublish();
+  const [error, setError] = useState<string | null>(null);
   const { getSchema, id } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
   }));
 
-  const saveForm = async () => {
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
+  const { uploadJson } = usePublish();
 
-    const result = await uploadJson(JSON.stringify(schema), id);
-    if (result && result?.error) {
-      setApiError(t("errorSaving"));
+  const saveForm = async () => {
+    try {
+      const schema = JSON.parse(getSchema());
+      delete schema.id;
+      delete schema.isPublished;
+
+      const result = await uploadJson(JSON.stringify(schema), id);
+
+      if (result && result?.error) {
+        throw new Error();
+      }
+
+      setError(null);
+      return result?.id;
+    } catch (err) {
+      setError(t("errorSaving"));
       return false;
     }
-
-    setApiError();
-    return result?.id;
-  };
-
-  const setApiError = (title = "") => {
-    setError(title);
   };
 
   return (
