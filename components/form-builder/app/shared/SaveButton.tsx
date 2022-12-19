@@ -9,10 +9,9 @@ import { useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks"
 import { formatDateTime } from "../../util";
 
 export const SaveButton = () => {
-  const { getSchema, id, setId } = useTemplateStore((s) => ({
+  const { id, setId } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
-    getSchema: s.getSchema,
   }));
 
   const { error, saveForm } = useTemplateApi();
