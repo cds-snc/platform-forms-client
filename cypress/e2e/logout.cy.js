@@ -4,7 +4,7 @@ describe("Logout Page test", () => {
   });
 
   it("Display french page version", () => {
-    cy.get("button[lang='fr']").click();
+    cy.get("a[lang='fr']").click();
     cy.get("h2").should("contain", "Vous avez fermé votre session");
     cy.get("div[id=login-menu]").should("contain", "Se connecter");
   });
