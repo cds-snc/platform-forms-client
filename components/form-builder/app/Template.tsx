@@ -9,24 +9,26 @@ import Loader from "@components/globals/Loader";
 import { useTemplateStore, TemplateStoreProvider } from "@components/form-builder/store";
 import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
-import { useActivePathname } from "../hooks";
+import { useActivePathname, TemplateApiProvider } from "../hooks";
 
 export const Template = ({ page }: { page: ReactElement }) => {
   return (
     <TemplateStoreProvider
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
     >
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta charSet="utf-8" />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
-      </Head>
-      <div className="flex flex-col h-full">
-        <SkipLink />
-        <Header />
-        {page}
-        <Footer displaySLAAndSupportLinks />
-      </div>
+      <TemplateApiProvider>
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+          <meta charSet="utf-8" />
+          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+        </Head>
+        <div className="flex flex-col h-full">
+          <SkipLink />
+          <Header />
+          {page}
+          <Footer displaySLAAndSupportLinks />
+        </div>
+      </TemplateApiProvider>
     </TemplateStoreProvider>
   );
 };
