@@ -18,26 +18,45 @@ export const PreviewNavigation = () => {
 
   return (
     <div className="relative">
-      <div className="absolute right-0 top-0">
-        <label htmlFor="lang" className="font-bold text-sm">
-          {t("previewingIn")}{" "}
-        </label>
-        <label htmlFor="lang" className="text-sm">
-          {t("English")}
-        </label>{" "}
-        {translationLanguagePriority === "fr" && (
-          <button id="lang" onClick={() => switchLang()}>
-            <ToggleRight className="inline-block w-12 fill-fuchsia-300" />
-          </button>
-        )}
-        {translationLanguagePriority === "en" && (
-          <button id="lang" onClick={() => switchLang()}>
+      <div className="absolute right-0 top-0 flex items-baseline">
+        <span id="switch-heading" className="font-bold text-sm mr-1" aria-hidden="true">
+          {t("previewingIn")}
+        </span>
+        <div
+          role="button spinbutton"
+          tabIndex={0}
+          aria-activedescendant={
+            translationLanguagePriority === "en" ? "switch-english" : "switch-french"
+          }
+          onClick={() => switchLang()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              switchLang();
+            }
+          }}
+        >
+          <span
+            id="switch-english"
+            className="text-sm"
+            aria-label={`${t("previewingIn")} ${t("English")}`}
+          >
+            {t("English")}{" "}
+          </span>
+          {translationLanguagePriority === "en" && (
             <ToggleLeft className="inline-block w-12 fill-violet-300" />
-          </button>
-        )}{" "}
-        <label htmlFor="lang" className="text-sm">
-          {t("French")}
-        </label>
+          )}
+          {translationLanguagePriority === "fr" && (
+            <ToggleRight className="inline-block w-12 fill-fuchsia-300" />
+          )}
+          <span
+            id="switch-french"
+            className="text-sm"
+            aria-label={`${t("previewingIn")} ${t("French")}`}
+          >
+            {" "}
+            {t("French")}
+          </span>
+        </div>
       </div>
     </div>
   );
