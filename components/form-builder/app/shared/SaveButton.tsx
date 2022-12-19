@@ -7,6 +7,7 @@ import { Button } from "../shared";
 import { useTemplateStore } from "../../store";
 import { useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
 import { formatDateTime } from "../../util";
+import Markdown from "markdown-to-jsx";
 
 export const SaveButton = () => {
   const { id, setId } = useTemplateStore((s) => ({
@@ -46,9 +47,18 @@ export const SaveButton = () => {
   const dateTime = (updatedAt && formatDateTime(new Date(updatedAt).getTime())) || [];
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
-    <div data-id={id} className="mt-12 p-4 -ml-4 bg-yellow-100">
-      {error && <div className="text-red-500">{error}</div>}
+    <div
+      data-id={id}
+      className={`mt-12 p-4 -ml-4 w-52 xl:w-40 xl:text-sm ${
+        error ? "bg-red-100" : "bg-yellow-100"
+      }`}
+    >
       <Button onClick={handleSave}>{t("saveDraft", { ns: "form-builder" })}</Button>
+      {error && (
+        <div className="text-red-500 pt-4 text-sm">
+          <Markdown options={{ forceBlock: true }}>{error}</Markdown>
+        </div>
+      )}
       {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">
           <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>

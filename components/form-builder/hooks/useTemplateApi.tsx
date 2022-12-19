@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from "react";
 import { useTemplateStore } from "../store";
 import { usePublish } from "../hooks";
+import { useTranslation } from "next-i18next";
 
 interface TemplateApiType {
   error: string;
@@ -15,6 +16,7 @@ const defaultTemplateApi: TemplateApiType = {
 const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string>("");
   const { uploadJson } = usePublish();
   const { getSchema, id } = useTemplateStore((s) => ({
@@ -29,10 +31,11 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
 
     const result = await uploadJson(JSON.stringify(schema), id);
     if (result && result?.error) {
-      setApiError("Error saving form");
+      setApiError(t("errorSaving"));
       return false;
     }
 
+    setError("");
     return result?.id;
   };
 
