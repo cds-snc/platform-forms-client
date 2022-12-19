@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext } from "react";
 import { useTemplateStore } from "../store";
 import { usePublish } from "../hooks";
 import { useTranslation } from "next-i18next";
+import { logMessage } from "@lib/logger";
 
 interface TemplateApiType {
   error: string | null;
@@ -34,12 +35,13 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
       const result = await uploadJson(JSON.stringify(schema), id);
 
       if (result && result?.error) {
-        throw new Error();
+        throw result?.error as Error;
       }
 
       setError(null);
       return result?.id;
     } catch (err) {
+      logMessage.error(err as Error);
       setError(t("errorSaving"));
       return false;
     }
