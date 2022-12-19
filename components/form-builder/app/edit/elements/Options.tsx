@@ -14,6 +14,7 @@ const AddButton = ({ index, onClick }: { index: number; onClick: (index: number)
     <Button
       className="!m-0 !mt-4"
       theme="link"
+      id={`add-option-${index}`}
       onClick={() => {
         onClick(index);
       }}

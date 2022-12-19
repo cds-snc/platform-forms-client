@@ -15,7 +15,7 @@
         "properties": {
           "titleEn": "question 1",
           "titleFr": "question 1 fr",
-          "choices": [],
+          "choices": [{ "id": 1, "labelEn": "choice 1", "labelFr": "choice 1 fr" }],
           "validation": { "required": false },
           "descriptionEn": "description 1 en",
           "descriptionFr": "description 1 fr"
@@ -27,7 +27,7 @@
         "properties": {
           "titleEn": "question 2",
           "titleFr": "question 2 fr",
-          "choices": [],
+          "choices": [{ "id": 2, "labelEn": "choice 2", "labelFr": "choice 2 fr" }],
           "validation": { "required": false },
           "descriptionEn": "description 2 en",
           "descriptionFr": "description 2 fr"
@@ -38,5 +38,6 @@
     "endPage": { "descriptionEn": "confirm text en", "descriptionFr": "confirm text fr" }
   },
   "submission": { "email": "test@example.com" },
-  "isPublished": false
+  "isPublished": false,
+  "translationLanguagePriority": "en"
 }
