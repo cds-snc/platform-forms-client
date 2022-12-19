@@ -8,7 +8,7 @@ import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { Button, Form } from "@components/forms";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-import { usePublish, useTemplateApi } from "../hooks";
+import { useTemplateApi } from "../hooks";
 import { BackArrowIcon } from "../icons";
 
 export const Preview = () => {
@@ -38,10 +38,7 @@ export const Preview = () => {
   const { t } = useTranslation("form-builder");
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
-  const { setApiError } = useTemplateApi();
-
-  const { uploadJson } = usePublish();
-  // const [error, setError] = useState(false);
+  const { saveForm } = useTemplateApi();
   const [sent, setSent] = useState<string | null>();
   const saved = useRef(false);
 
@@ -51,20 +48,14 @@ export const Preview = () => {
 
   useEffect(() => {
     if (status === "authenticated" && !saved.current && !id) {
-      const saveForm = async () => {
-        const schema = JSON.parse(getSchema());
-        delete schema.id;
-        delete schema.isPublished;
-
-        const result = await uploadJson(JSON.stringify(schema), id);
-        if (result && result?.error) {
-          setApiError("Error saving form");
+      const save = async () => {
+        const result = await saveForm();
+        if (result) {
+          setId(result);
         }
-
-        setId(result?.id);
       };
 
-      saveForm();
+      save();
 
       return () => {
         saved.current = true;
