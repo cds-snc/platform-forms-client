@@ -44,12 +44,12 @@
   },
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
-  "dataDeliveredMessage": "Vérifiez votre e-mail pour la réponse au formulaire soumis",
+  "dataDeliveredMessage": "Vérifiez votre courriel pour la réponse au formulaire soumis",
   "dataDeliveredTitle": "Succès  ",
   "date": "Date",
   "defaultElementDescription": {
     "date": "Entrez une date comme mm/dd/yyyy",
-    "email": "Entrez une adresse email comme name@example.com",
+    "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333"
   },
@@ -66,6 +66,7 @@
   "email": "Courriel",
   "en": "Anglais",
   "english": "Anglais",
+  "errorSaving": "[FR] There was an error saving the form. Try again or <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "failedToReadFormFile": "Failed to read form file",
   "fillFormClickSubmit": "Remplissez le formulaire et cliquez sur Soumettre.",
   "formatBold": "Mettre en gras",
@@ -76,18 +77,18 @@
   "formatNumberedList": "[FR] Format numbered list",
   "formConfirmationMessage": "Message de confirmation du formulaire",
   "formDelete": {
-    "title": "[FR] Are you sure you want to delete your form?",
-    "published": {
-      "message1": "[FR] Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
-      "message2": "[FR] Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
-      "message3": "[FR] The URL of your form will change if you upload your form again."
-    },
+    "downloadButtonText": "[FR] Download a copy",
     "draft": {
       "message1": "[FR] Deleting a form can not be undone. Your form will be removed from your forms list.",
       "message2": "[FR] Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
     },
     "okay": "[FR] Delete form",
-    "downloadButtonText": "[FR] Download a copy"
+    "published": {
+      "message1": "[FR] Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
+      "message2": "[FR] Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
+      "message3": "[FR] The URL of your form will change if you upload your form again."
+    },
+    "title": "[FR] Are you sure you want to delete your form?"
   },
   "formDeletedDialogMessage": "[FR] Form deleted",
   "formDeletedDialogMessageFailed": "[FR] Failed to delete form",
@@ -95,6 +96,20 @@
   "formDeletedDialogOkayFailed": "[FR] close",
   "formDeletedDialogTitle": "[FR] Success",
   "formDeleteDialogTitleFailed": "[FR]  Error",
+  "formDownload": {
+    "btnText": "[FR] What can I do with a form file?",
+    "description": "Keep a version of your form on your computer",
+    "dialog": {
+      "downloadButtonText": "[FR] Download a copy",
+      "message1": "[FR] Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
+      "message2": "[FR] Download a copy of the your form to store locally on your computer.",
+      "subtitle1": "[FR] Share",
+      "subtitle2": "[FR] Save a copy",
+      "title": "[FR] Form file uses"
+    },
+    "downloadBtnText": "[FR] Download form file",
+    "title": "Download form file"
+  },
   "formIntroduction": "Présentation du formulaire",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
@@ -257,21 +272,7 @@
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
-  "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne a qui vous relevez. ",
+  "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code",
-  "formDownload": {
-    "title": "Download form file",
-    "description": "Keep a version of your form on your computer",
-    "downloadBtnText": "[FR] Download form file",
-    "btnText": "[FR] What can I do with a form file?",
-    "dialog": {
-      "title": "[FR] Form file uses",
-      "subtitle1": "[FR] Share",
-      "message1": "[FR] Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
-      "subtitle2": "[FR] Save a copy",
-      "message2": "[FR] Download a copy of the your form to store locally on your computer.",
-      "downloadButtonText": "[FR] Download a copy"
-    }
-  }
+  "viewCode": "Afficher le code"
 }

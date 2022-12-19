@@ -6,12 +6,6 @@ const A11Y_OPTIONS = {
 };
 
 describe("Accessibility (A11Y) Check", () => {
-  it("Welcome Page Passes accessibility tests", () => {
-    cy.visit("/en/welcome-bienvenue");
-    cy.injectAxe();
-    cy.checkA11y(null, A11Y_OPTIONS);
-  });
-
   it("All components page Accessibility (A11Y) Check", () => {
     cy.mockForm("../../__fixtures__/accessibilityTestForm.json");
     cy.injectAxe();
