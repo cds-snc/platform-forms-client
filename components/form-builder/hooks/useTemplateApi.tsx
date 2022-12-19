@@ -36,8 +36,8 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
     return result?.id;
   };
 
-  const setApiError = (title: string) => {
-    title && setError(title);
+  const setApiError = (title = "") => {
+    setError(title);
   };
 
   return (
