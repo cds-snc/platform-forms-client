@@ -66,6 +66,7 @@
   "email": "Email",
   "en": "English",
   "english": "English",
+  "errorSaving": "There was an error saving the form. Try again or <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "failedToReadFormFile": "Failed to read form file",
   "fillFormClickSubmit": "Fill out the form, and click submit.",
   "formatBold": "Format bold",
@@ -75,26 +76,40 @@
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
-  "formDeletedDialogMessage": "Form deleted",
   "formDelete": {
-    "title": "Are you sure you want to delete your form?",
-    "published": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
-      "message3": "The URL of your form will change if you upload your form again."
-    },
+    "downloadButtonText": "Download a copy",
     "draft": {
       "message1": "Deleting a form can not be undone. Your form will be removed from your forms list.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
     },
     "okay": "Delete form",
-    "downloadButtonText": "Download a copy"
+    "published": {
+      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
+      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
+      "message3": "The URL of your form will change if you upload your form again."
+    },
+    "title": "Are you sure you want to delete your form?"
   },
+  "formDeletedDialogMessage": "Form deleted",
   "formDeletedDialogMessageFailed": "Failed to delete form",
   "formDeletedDialogOkay": "Back to home",
   "formDeletedDialogOkayFailed": "Close",
   "formDeletedDialogTitle": "Success",
   "formDeleteDialogTitleFailed": "Error",
+  "formDownload": {
+    "btnText": "What can I do with a form file?",
+    "description": "Keep a version of your form on your computer",
+    "dialog": {
+      "downloadButtonText": "Download a copy",
+      "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
+      "message2": "Download a copy of the your form to store locally on your computer.",
+      "subtitle1": "Share",
+      "subtitle2": "Save a copy",
+      "title": "Form file uses"
+    },
+    "downloadBtnText": "Download form file",
+    "title": "Download form file"
+  },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
@@ -259,19 +274,5 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code",
-  "formDownload": {
-    "title": "Download form file",
-    "description": "Keep a version of your form on your computer",
-    "downloadBtnText": "Download form file",
-    "btnText": "What can I do with a form file?",
-    "dialog": {
-      "title": "Form file uses",
-      "subtitle1": "Share",
-      "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
-      "subtitle2": "Save a copy",
-      "message2": "Download a copy of the your form to store locally on your computer.",
-      "downloadButtonText": "Download a copy"
-    }
-  }
+  "viewCode": "View code"
 }
