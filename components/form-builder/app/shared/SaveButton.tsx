@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Button } from "../shared";
 import { useTemplateStore } from "../../store";
-import { usePublish, useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
+import { useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
 import { formatDateTime } from "../../util";
 
 export const SaveButton = () => {
@@ -15,25 +15,20 @@ export const SaveButton = () => {
     getSchema: s.getSchema,
   }));
 
-  const { error } = useTemplateApi();
+  const { error, saveForm } = useTemplateApi();
 
   const { status } = useSession();
   const { t } = useTranslation(["common", "form-builder"]);
   const { isReady, asPath } = useRouter();
   const [isStartPage, setIsStartPage] = useState(false);
-  const { uploadJson } = usePublish();
   const { isSaveable } = useAllowPublish();
   const { updatedAt, getTemplateById } = useTemplateStatus();
 
-  const handlePublish = async () => {
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
+  const handleSave = async () => {
+    const result = await saveForm();
 
-    const result = await uploadJson(JSON.stringify(schema), id);
-
-    if (result?.id) {
-      setId(result?.id);
+    if (result) {
+      setId(result);
       getTemplateById();
     }
   };
@@ -54,7 +49,7 @@ export const SaveButton = () => {
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div data-id={id} className="mt-12 p-4 -ml-4 bg-yellow-100">
       {error && <div className="text-red-500">{error}</div>}
-      <Button onClick={handlePublish}>{t("saveDraft", { ns: "form-builder" })}</Button>
+      <Button onClick={handleSave}>{t("saveDraft", { ns: "form-builder" })}</Button>
       {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">
           <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
