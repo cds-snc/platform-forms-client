@@ -35,7 +35,7 @@ export function TemplateApiProvider({ children }: { children: React.ReactNode })
       return false;
     }
 
-    setError("");
+    setApiError("");
     return result?.id;
   };
 
