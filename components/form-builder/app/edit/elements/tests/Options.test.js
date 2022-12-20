@@ -1,17 +1,22 @@
 import React from "react";
-import { cleanup } from "@testing-library/react";
+import { cleanup, render, waitFor } from "@testing-library/react";
 import { Options } from "../Options";
 import userEvent from "@testing-library/user-event";
-import { withProviders, defaultStore as store } from "@formbuilder/test-utils";
+import { defaultStore as store, Providers } from "@formbuilder/test-utils";
 
 describe("Options", () => {
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanup();
+  });
+
   it("renders with props and test content", async () => {
-    const user = userEvent.setup();
-
     const item = { id: 1, index: 0, ...store.form.elements[0] };
-
-    const rendered = await withProviders(store, <Options item={item} />);
+    const rendered = render(
+      <Providers form={store.form}>
+        <Options item={item} />
+      </Providers>
+    );
+    const user = userEvent.setup();
 
     const button = rendered.container.querySelector("#add-option-0");
     expect(button).toHaveTextContent("addOption");
@@ -31,5 +36,24 @@ describe("Options", () => {
     const remove1 = rendered.container.querySelector("#remove--0--1");
     await user.click(remove1);
     expect(rendered.container.querySelectorAll("input")).toHaveLength(2);
+  });
+
+  it("renders null when no choices exist", async () => {
+    let newStore = {
+      form: {
+        elements: [],
+      },
+    };
+
+    const item = { id: 1, index: 0, ...newStore.form.elements[0] };
+    const rendered = render(
+      <Providers form={store.form}>
+        <Options item={item} />
+      </Providers>
+    );
+
+    waitFor(() => {
+      expect(rendered.container).toBeEmptyDOMElement();
+    });
   });
 });

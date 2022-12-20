@@ -108,7 +108,7 @@ export const Options = ({
 
   const index = item.index;
 
-  if (!elements[index].properties) {
+  if (!elements[index]?.properties) {
     return null;
   }
   const { choices } = elements[index].properties;
