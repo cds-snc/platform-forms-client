@@ -89,6 +89,27 @@ describe("/signup/register", () => {
         message: "username and password need to be provided in the body of the request",
       });
     });
+    it("handler returns 400 status code when username is not part of the acceptable domain", async () => {
+      mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
+
+      const { req, res } = createMocks({
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": "valid_csrf",
+        },
+        body: {
+          username: "test@uknown_domain.com",
+          password: "test",
+          name: "test",
+        },
+      });
+      await register(req, res);
+      expect(res.statusCode).toBe(400);
+      expect(JSON.parse(res._getData())).toEqual({
+        message: "username does not meet requirements",
+      });
+    });
     it("handler returns empty body and cognito status code when command succeeds", async () => {
       mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
       sendFunctionMock.mockImplementation(async () => {
@@ -109,7 +130,7 @@ describe("/signup/register", () => {
           "x-csrf-token": "valid_csrf",
         },
         body: {
-          username: "test",
+          username: "test@domain.gc.ca",
           password: "test",
           name: "test",
         },
@@ -120,7 +141,7 @@ describe("/signup/register", () => {
       expect(mockedCognitoIdentityProviderClient).toBeCalledTimes(1);
       expect(mockedSignUpCommand.mock.calls[0][0]).toEqual({
         ClientId: "somemockvalue",
-        Username: "test",
+        Username: "test@domain.gc.ca",
         Password: "test",
         UserAttributes: [
           {
@@ -150,7 +171,7 @@ describe("/signup/register", () => {
           "x-csrf-token": "valid_csrf",
         },
         body: {
-          username: "test",
+          username: "test@domain.gc.ca",
           password: "test",
           name: "test",
         },
