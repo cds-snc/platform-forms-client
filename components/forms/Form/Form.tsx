@@ -128,11 +128,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [timerActive]);
 
-  const submitButton = (
-    <Button type="submit" disabled={props.isPreview}>
-      {t("submitButton")}
-    </Button>
-  );
+  const submitButton = <Button type="submit">{t("submitButton")}</Button>;
 
   return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
     <Loader message={t("loading")} />
@@ -181,7 +177,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   });
                   setSubmitTooEarly(true);
                   // In case the useEffect timer failed check again
-                  //formTimerDispatch({ type: "check" });
                   return;
                 }
                 // Only change state if submitTooEarly is already set to true
@@ -197,6 +192,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             noValidate
           >
             {children}
+
+            <RichText>
+              {form.privacyPolicy &&
+                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
             <div
               className={classNames({
                 "border-l-2": submitTooEarly,
@@ -224,11 +224,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   </div>
                 ))}
 
-              <RichText>
-                {form.privacyPolicy &&
-                  form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-              </RichText>
-
               <div className="buttons">
                 {props.renderSubmit ? props.renderSubmit(submitButton) : submitButton}
               </div>
@@ -246,7 +241,7 @@ interface FormProps {
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
-  renderSubmit?: (submit: JSX.Element) => JSX.Element;
+  renderSubmit?: () => JSX.Element;
   onSuccess?: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
