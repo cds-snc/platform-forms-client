@@ -34,8 +34,8 @@ export const Preview = () => {
     }));
 
   const router = useRouter();
-  const { t: t1 } = useTranslation();
-  const { t } = useTranslation("form-builder");
+
+  const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
   const { saveForm } = useTemplateApi();
@@ -114,8 +114,7 @@ export const Preview = () => {
             formRecord={formRecord}
             language={language}
             router={router}
-            t={t1}
-            isPreview={status === "authenticated" ? false : true}
+            t={t}
             onSuccess={setSent}
             renderSubmit={() => (
               <>
@@ -129,7 +128,7 @@ export const Preview = () => {
                       }
                     }}
                   >
-                    {t("submit")}
+                    {t("submitButton")}
                   </Button>
                 </span>
                 {status !== "authenticated" && (
