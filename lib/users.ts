@@ -9,12 +9,12 @@ import { MongoAbility } from "@casl/ability";
  * Get or Create a user if a record does not exist
  * @returns A User Object
  */
-export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT) => {
-  if (!sub) throw new Error("Sub does not exist on token");
+export const getOrCreateUser = async ({ name, email, picture }: DefaultJWT) => {
+  if (!email) throw new Error("Sub does not exist on token");
   const user = await prisma.user
     .findUnique({
       where: {
-        id: sub,
+        email: email,
       },
       select: {
         id: true,
@@ -46,7 +46,6 @@ export const getOrCreateUser = async ({ sub, name, email, picture }: DefaultJWT)
     return await prisma.user
       .create({
         data: {
-          id: sub,
           name,
           email,
           image: picture,

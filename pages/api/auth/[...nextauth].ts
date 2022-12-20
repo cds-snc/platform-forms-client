@@ -150,8 +150,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
-        if (!token.sub) {
-          throw new Error(`JWT token does not have an id for user with email ${token.email}`);
+        if (!token.email) {
+          throw new Error(`JWT token does not have an email for user with name ${token.name}`);
         }
         const user = await getOrCreateUser(token);
         if (user === null)
