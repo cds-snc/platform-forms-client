@@ -97,6 +97,7 @@ export const Option = ({
       <Button
         theme="icon"
         className="group"
+        id={`remove--${parentIndex}--${index + 1}`}
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
