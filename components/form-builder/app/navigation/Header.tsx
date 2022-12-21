@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
@@ -9,8 +9,13 @@ import LoginMenu from "../../../auth/LoginMenu";
 
 export const Header = () => {
   const { status } = useSession();
-  const { ability } = useAccessControl();
+  const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
+
+  useEffect(() => {
+    refreshAbility();
+  }, []);
+
   return (
     <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
