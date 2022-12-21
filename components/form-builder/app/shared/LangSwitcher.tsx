@@ -47,9 +47,9 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
         <span
           id="switch-english"
           className="text-sm mr-1"
-          aria-label={`${t(descriptionLangKey)} ${t("English")}`}
+          aria-label={`${t(descriptionLangKey)} ${t("english")}`}
         >
-          {t("English")}
+          {t("english")}
         </span>
         {translationLanguagePriority === "en" && (
           <ToggleLeft className="inline-block w-12 fill-violet-300" />
@@ -60,9 +60,9 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
         <span
           id="switch-french"
           className="text-sm ml-1"
-          aria-label={`${t(descriptionLangKey)} ${t("French")}`}
+          aria-label={`${t(descriptionLangKey)} ${t("french")}`}
         >
-          {t("French")}
+          {t("french")}
         </span>
       </div>
     </div>
