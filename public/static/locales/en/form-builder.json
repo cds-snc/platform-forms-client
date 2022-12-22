@@ -274,5 +274,11 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "updateResponseDestination": "Update response destination.",
-  "viewCode": "View code"
+  "viewCode": "View code",
+  "openModal": "Open Modal",
+  "closeModal": "Close Modal",
+  "close": "Close",
+  "inputDescription": "Description",
+  "maximumCharacterLength": "Maximum character length",
+  "completed": "Completed"
 }

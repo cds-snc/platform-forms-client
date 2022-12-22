@@ -80,7 +80,7 @@ export const ModalButton = ({
   if (!children) {
     return (
       <button onClick={() => changeOpen(isOpenButton)}>
-        {isOpenButton ? t("Open modal") : t("Close modal")}
+        {isOpenButton ? t("openModal") : t("closeModal")}
       </button>
     );
   }
@@ -167,7 +167,7 @@ export const ModalContainer = ({
               theme="icon"
               className="group"
               icon={<Close className="group-focus:fill-white-default" />}
-              aria-label={t("Close")}
+              aria-label={t("close")}
               onClick={close}
             ></Button>
           </ModalButton>

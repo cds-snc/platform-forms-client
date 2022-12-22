@@ -274,5 +274,11 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "updateResponseDestination": " Actualiser la destination des réponses. ",
-  "viewCode": "Afficher le code"
+  "viewCode": "Afficher le code",
+  "openModal": "[FR] Open Modal",
+  "closeModal": "[FR] Close Modal",
+  "close": "[FR] Close",
+  "inputDescription": "[FR] Description",
+  "maximumCharacterLength": "[FR] Maximum character length",
+  "completed": "[FR] Completed"
 }
