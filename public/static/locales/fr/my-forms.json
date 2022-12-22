@@ -6,13 +6,13 @@
     "all": "Tous"
   },
   "actions": {
-    "resumeForm": "[fr] Resume editing form",
+    "resumeForm": "Reprendre la rédaction de formulaire en cours",
     "createNewForm": "Créer un nouveau formulaire +"
   },
   "cards": {
-    "noForms": "You have no forms. [FR]",
-    "noDraftForms": "You have no draft forms. [FR]",
-    "noPublishedForms": "You have no published forms. [FR]"
+    "noForms": "Vous n’avez aucun formulaire enregistré.",
+    "noDraftForms": "Vous n’avez aucune ébauche enregistré.",
+    "noPublishedForms": "Vous n’avez aucun formulaire publié."
   },
   "card": {
     "states": {
@@ -20,20 +20,20 @@
       "published": "Publier"
     },
     "title": {
-      "notTranslatedEn": "[FR] No English translation",
-      "notTranslatedFr": "[FR] No French translation"
+      "notTranslatedEn": "Traduction en anglais non fournie.",
+      "notTranslatedFr": "Traduction en français non fournie."
     },
     "lastEdited": "Dernière modification",
     "menu": {
       "more": "Plus",
       "save": "Enregistrer",
-      "copyLink": "Copy Link [FR]",
+      "copyLink": "Copier le lien",
       "preview": "Prévisualiser",
       "edit": "Modifier",
-      "settings": "Settings [FR]",
-      "delete": "Delete form [FR]",
-      "coppiedToClipboard": "Coppied to clipboard [FR]",
-      "somethingWentWrong": "Something went wrong [FR]"
+      "settings": "Réglages",
+      "delete": "Supprimer le formulaire",
+      "coppiedToClipboard": "Copié dans le presse-papier",
+      "somethingWentWrong": "Il y a eu un problème"
     }
   }
 }
