@@ -280,5 +280,8 @@
   "close": "[FR] Close",
   "inputDescription": "[FR] Description",
   "maximumCharacterLength": "[FR] Maximum character length",
-  "completed": "[FR] Completed"
+  "completed": "[FR] Completed",
+  "submit": "[FR] Submit",
+  "published": "[FR] Published",
+  "formSettings": "Form settings"
 }

@@ -98,8 +98,10 @@
     "logout": "Sign out"
   },
   "alert": {
-    "dismissAlert": "Close this alert"
+    "dismissAlert": "Close this alert",
+    "dismissNotification": "Close this alert"
   },
   "continue": "Continue",
-  "error": "Error"
+  "error": "Error",
+  "unknown": "unknown"
 }

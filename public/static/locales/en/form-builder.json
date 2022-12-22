@@ -280,5 +280,8 @@
   "close": "Close",
   "inputDescription": "Description",
   "maximumCharacterLength": "Maximum character length",
-  "completed": "Completed"
+  "completed": "Completed",
+  "submit": "Submit",
+  "published": "Published",
+  "formSettings": "Form settings"
 }

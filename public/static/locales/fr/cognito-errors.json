@@ -3,6 +3,7 @@
   "InternalServiceException": "We've encountered an error with your request. Please try again later",
   "TooManyRequestsException": "TooManyRequestsException",
   "UsernameExistsException": "UsernameExistsException",
+  "ExpiredCodeException": "[FR] The confirmation code has expired. Please request a new one",
   "UsernameOrPasswordIncorrect": {
     "title": "L’adresse courriel ou le mot de passe que vous avez saisi est incorrect.",
     "description": "L’adresse courriel ou le mot de passe que vous avez saisi est incorrect ou le compte n’existe pas.",
