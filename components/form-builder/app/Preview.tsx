@@ -96,7 +96,8 @@ export const Preview = () => {
         )}
 
         <h1 className="md:text-h1 mt-4">
-          {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] || t("preview")}
+          {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
+            t("pagePreview")}
         </h1>
 
         {sent ? (
