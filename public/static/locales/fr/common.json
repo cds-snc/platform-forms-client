@@ -75,7 +75,7 @@
     "login": "Connexion",
     "logout": "Déconnexion",
     "privileges": "Privileges",
-    "myForms": "My Forms [FR]"
+    "myForms": "Mes formulaires"
   },
   "formElements": {
     "characterCount": {
