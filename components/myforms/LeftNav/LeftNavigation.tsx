@@ -19,7 +19,7 @@ export const LeftNavigation = () => {
   const path = String(router.query?.path);
 
   const iconClassname =
-    "inline-block mr-1 inline-block min-w-[24px] w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 mt-1";
+    "inline-block mr-1 inline-block min-w-[24px] w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2.5 mt-1";
 
   return (
     <nav className="absolute xl:content-center">
