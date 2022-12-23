@@ -20,10 +20,12 @@ export const LeftNavigation = () => {
         href={`/${i18n.language}/myforms/drafts`}
         isActive={path === "drafts"}
       >
-        <>
-          <PageIcon className={iconClassname} />
-          {t("nav.drafts")}
-        </>
+        <div className="flex max-w-[180px]">
+          <span className="inline-block mr-1 w-[24px]">
+            <PageIcon className={iconClassname} />
+          </span>
+          <span className="inline-block leading-[24px] mt-1">{t("nav.drafts")}</span>
+        </div>
       </LeftNavLink>
 
       <LeftNavLink
