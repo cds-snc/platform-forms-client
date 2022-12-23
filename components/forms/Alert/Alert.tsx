@@ -46,7 +46,7 @@ export const Alert = ({
       {dismissible ? (
         <button
           id="dismissButton"
-          aria-label={t("alert.dismissNotification")}
+          aria-label={t("alert.dismissAlert")}
           className="gc-button gc-button--icon gc-button--secondary float-right"
           onClick={onDismiss}
         >

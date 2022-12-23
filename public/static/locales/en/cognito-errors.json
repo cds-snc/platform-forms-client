@@ -3,6 +3,7 @@
   "InternalServiceException": "We've encountered an error with your request. Please try again later",
   "TooManyRequestsException": "TooManyRequestsException",
   "UsernameExistsException": "UsernameExistsException",
+  "ExpiredCodeException": "The confirmation code has expired. Please request a new one",
   "InvalidPasswordException": "This password does not comply with our password policies",
   "InvalidParameterException": {
     "sendForgotPassword": {

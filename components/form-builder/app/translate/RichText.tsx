@@ -24,7 +24,7 @@ export const RichText = ({
     <>
       <div className="text-entry">
         <FieldsetLegend>
-          {t(element.type)}: {t("Description")}
+          {t(element.type)}: {t("inputDescription")}
         </FieldsetLegend>
         <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
           <div className="w-1/2 flex-1 relative">
