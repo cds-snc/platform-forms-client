@@ -99,10 +99,9 @@
     "logout": "Se déconnecter"
   },
   "alert": {
-    "dismissAlert": "Fermer cette alerte",
-    "dismissNotification": "Close this alert"
+    "dismissAlert": "Fermer cette alerte"
   },
-  "continue": "Continue [FR]",
-  "error": "Error [FR]",
-  "unknown": "unknown"
+  "continue": "[FR] Continue",
+  "error": "[FR] Error ",
+  "unknown": "[FR] Unknown"
 }
