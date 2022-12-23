@@ -1,9 +1,17 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { LeftNavLink } from "./LeftNavLink";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 import { PageIcon, GlobeIcon, FolderIcon } from "@components/form-builder/icons";
+
+const LinkWrapper = ({ children }: { children: ReactNode }) => (
+  <div className="flex max-w-[200px] py-1">{children}</div>
+);
+
+const LinkText = ({ children }: { children: ReactNode }) => (
+  <span className="inline-block leading-[24px] mt-1">{children}</span>
+);
 
 export const LeftNavigation = () => {
   const { t, i18n } = useTranslation(["my-forms", "form-builder"]);
@@ -11,7 +19,7 @@ export const LeftNavigation = () => {
   const path = String(router.query?.path);
 
   const iconClassname =
-    "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+    "inline-block mr-1 inline-block min-w-[24px] w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2.5 mt-1";
 
   return (
     <nav className="absolute xl:content-center">
@@ -20,10 +28,10 @@ export const LeftNavigation = () => {
         href={`/${i18n.language}/myforms/drafts`}
         isActive={path === "drafts"}
       >
-        <>
+        <LinkWrapper>
           <PageIcon className={iconClassname} />
-          {t("nav.drafts")}
-        </>
+          <LinkText>{t("nav.drafts")}</LinkText>
+        </LinkWrapper>
       </LeftNavLink>
 
       <LeftNavLink
@@ -31,17 +39,17 @@ export const LeftNavigation = () => {
         href={`/${i18n.language}/myforms/published`}
         isActive={path === "published"}
       >
-        <>
+        <LinkWrapper>
           <GlobeIcon className={iconClassname} />
-          {t("nav.published")}
-        </>
+          <LinkText>{t("nav.published")}</LinkText>
+        </LinkWrapper>
       </LeftNavLink>
 
       <LeftNavLink id="tab-all" href={`/${i18n.language}/myforms/all`} isActive={path === "all"}>
-        <>
+        <LinkWrapper>
           <FolderIcon className={iconClassname} />
-          {t("nav.all")}
-        </>
+          <LinkText>{t("nav.all")}</LinkText>
+        </LinkWrapper>
       </LeftNavLink>
     </nav>
   );
