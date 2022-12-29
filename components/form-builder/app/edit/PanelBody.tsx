@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-
 import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
-import { QuestionInput, SelectedElement, getSelectedOption, ElementDropDown } from ".";
+import {
+  QuestionInput,
+  SelectedElement,
+  getSelectedOption,
+  ElementDropDown,
+  ElementRequired,
+} from ".";
 import { useTemplateStore } from "../../store";
-import { Checkbox } from "../shared";
 
 export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
@@ -95,24 +99,7 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
               />
-              <div className="mt-5 required-checkbox">
-                <Checkbox
-                  id={`required-${item.index}-id`}
-                  value={`required-${item.index}-value`}
-                  checked={item.properties.validation?.required}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (!e.target) {
-                      return;
-                    }
-
-                    updateField(
-                      `form.elements[${item.index}].properties.validation.required`,
-                      e.target.checked
-                    );
-                  }}
-                  label={t("required")}
-                ></Checkbox>
-              </div>
+              <ElementRequired item={item} updateField={updateField} />
             </div>
           </>
         )}
