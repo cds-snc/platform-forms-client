@@ -1,7 +1,7 @@
 import React from "react";
-import { FormElementWithIndex, LocalizedElementProperties } from "../../../../types";
+import { FormElementWithIndex, LocalizedElementProperties } from "@formbuilder/types";
+import { useTemplateStore } from "@formbuilder/store";
 import { QuestionInput, QuestionNumber } from "../";
-import { useTemplateStore } from "../../../../store";
 
 export const Question = ({ item }: { item: FormElementWithIndex }) => {
   const { elements, localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -21,6 +21,7 @@ export const Question = ({ item }: { item: FormElementWithIndex }) => {
   return isRichText ? null : (
     <>
       <QuestionNumber item={item} elements={elements} />
+
       <QuestionInput initialValue={title} index={itemIndex} hasDescription={description} />
 
       {description && !isRichText && (

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { FormElementWithIndex } from "../../types";
+import { FormElementWithIndex } from "@formbuilder/types";
 import { FormProperties } from "@lib/types";
 
 export const QuestionNumber = ({
