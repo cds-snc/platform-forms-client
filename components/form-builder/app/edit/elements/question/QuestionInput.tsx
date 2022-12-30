@@ -47,6 +47,7 @@ export const QuestionInput = ({
     setValue(initialValue);
   }, [initialValue]);
 
+  // @todo pull this updater up to the panel body
   const _debounced = useCallback(
     debounce((index, val, lang) => {
       updateField(
