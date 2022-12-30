@@ -3,15 +3,12 @@ import { useTranslation } from "next-i18next";
 
 import { Checkbox } from "../shared";
 import { FormElementWithIndex } from "../../types";
+import { useTemplateStore } from "../../store";
 
-export const ElementRequired = ({
-  item,
-  updateField,
-}: {
-  item: FormElementWithIndex;
-  updateField: (path: string, value: boolean) => void;
-}) => {
+export const ElementRequired = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
+  const { updateField } = useTemplateStore((s) => ({ updateField: s.updateField }));
+
   return (
     <div className="mt-5 required-checkbox">
       <Checkbox

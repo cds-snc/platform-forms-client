@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
-import { Input } from "../shared";
-import { LocalizedElementProperties } from "../../types";
-import { useTemplateStore } from "../../store";
+import { Input } from "../../../shared";
+import { LocalizedElementProperties } from "@formbuilder/types";
+import { useTemplateStore } from "@formbuilder/store";
 
 export const QuestionInput = ({
   index,
