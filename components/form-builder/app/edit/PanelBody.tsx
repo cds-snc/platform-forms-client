@@ -1,97 +1,36 @@
-import React, { useState, useCallback } from "react";
-import { UseSelectStateChange } from "downshift";
+import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
-import { QuestionInput, SelectedElement, getSelectedOption } from ".";
-import { DropDown } from "./elements";
+import {
+  QuestionInput,
+  SelectedElement,
+  getSelectedOption,
+  ElementDropDown,
+  ElementRequired,
+} from ".";
 import { useTemplateStore } from "../../store";
-import { Checkbox } from "../shared";
-import { useElementOptions } from "../../hooks";
 
 export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
   const isRichText = item.type == "richText";
   const { t } = useTranslation("form-builder");
-  const elementOptions = useElementOptions();
-  const {
-    localizeField,
-    elements,
-    updateField,
-    unsetField,
-    resetChoices,
-    translationLanguagePriority,
-  } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    elements: s.form.elements,
-    updateField: s.updateField,
-    unsetField: s.unsetField,
-    resetChoices: s.resetChoices,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
+  const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
+
+  const { localizeField, elements, updateField, translationLanguagePriority } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      elements: s.form.elements,
+      updateField: s.updateField,
+      unsetField: s.unsetField,
+      resetChoices: s.resetChoices,
+      translationLanguagePriority: s.translationLanguagePriority,
+    })
+  );
 
   const questionNumber =
     elements
       .filter((item) => item.type != "richText")
       .findIndex((object) => object.id === item.id) + 1;
-
-  const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
-
-  const _updateState = (id: string, index: number) => {
-    switch (id) {
-      case "text":
-      case "textField":
-      case "email":
-      case "phone":
-      case "date":
-      case "number":
-        updateField(`form.elements[${index}].type`, "textField");
-
-        if (id === "textField" || id === "text") {
-          unsetField(`form.elements[${index}].properties.validation.type`);
-        } else {
-          updateField(`form.elements[${index}].properties.validation.type`, id);
-          unsetField(`form.elements[${index}].properties.validation.maxLength`);
-        }
-        break;
-      case "richText":
-        resetChoices(index);
-      // no break here (we want default to happen)
-      default: // eslint-disable-line no-fallthrough
-        updateField(`form.elements[${index}].type`, id);
-        unsetField(`form.elements[${index}].properties.validation.type`);
-        unsetField(`form.elements[${index}].properties.validation.maxLength`);
-        break;
-    }
-  };
-
-  const _setDefaultDescription = (id: string, index: number) => {
-    switch (id) {
-      case "email":
-      case "phone":
-      case "date":
-      case "number":
-        updateField(
-          `form.elements[${index}].properties.${
-            (localizeField(LocalizedElementProperties.DESCRIPTION), translationLanguagePriority)
-          }`,
-          t(`defaultElementDescription.${id}`)
-        );
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleElementChange = useCallback(
-    ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
-      if (selectedItem) {
-        setSelectedItem(selectedItem);
-        _updateState(selectedItem.id, item.index);
-        _setDefaultDescription(selectedItem.id, item.index);
-      }
-    },
-    [setSelectedItem]
-  );
 
   const hasDescription =
     item.properties[
@@ -155,30 +94,12 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
         {!isRichText && (
           <>
             <div>
-              <DropDown
-                ariaLabel={t("selectElement")}
-                items={elementOptions}
+              <ElementDropDown
+                item={item}
                 selectedItem={selectedItem}
-                onChange={handleElementChange}
+                setSelectedItem={setSelectedItem}
               />
-              <div className="mt-5 required-checkbox">
-                <Checkbox
-                  id={`required-${item.index}-id`}
-                  value={`required-${item.index}-value`}
-                  checked={item.properties.validation?.required}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (!e.target) {
-                      return;
-                    }
-
-                    updateField(
-                      `form.elements[${item.index}].properties.validation.required`,
-                      e.target.checked
-                    );
-                  }}
-                  label={t("required")}
-                ></Checkbox>
-              </div>
+              <ElementRequired item={item} updateField={updateField} />
             </div>
           </>
         )}
