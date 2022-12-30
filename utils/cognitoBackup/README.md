@@ -5,6 +5,7 @@ These scripts can be used to create a copy of user entries in a cogntio user poo
 Things to remember:
 
 - Ensure your AWS credentials are added to `.env`.
+- Once the import job is created you can track it's status through the Cognito panel and any errors in Cloudwatch.
 
 ## Backup command
 
