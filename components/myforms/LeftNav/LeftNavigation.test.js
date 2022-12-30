@@ -17,15 +17,16 @@ describe("LeftNavigation component", () => {
       query: { path: "published" },
     }));
 
-    render(
+    const rendered = render(
       <>
         <h2 id={tabsData.id}>{tabsData.title}</h2>
         <LeftNavigation />
       </>
     );
+
     expect(screen.getByText(/nav.drafts/i)).toBeInTheDocument();
     expect(screen.getByText(/nav.published/i)).toBeInTheDocument();
-    expect(screen.getByText(/nav.published/i)).toHaveClass("font-bold");
+    expect(rendered.container.querySelector(".font-bold")).toHaveTextContent(/nav.published/i);
     expect(screen.getByText(/nav.all/i)).toBeInTheDocument();
   });
 });

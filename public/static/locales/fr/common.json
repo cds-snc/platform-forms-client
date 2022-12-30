@@ -75,7 +75,7 @@
     "login": "Connexion",
     "logout": "Déconnexion",
     "privileges": "Privileges",
-    "myForms": "My Forms [FR]"
+    "myForms": "Mes formulaires"
   },
   "formElements": {
     "characterCount": {
@@ -101,6 +101,7 @@
   "alert": {
     "dismissAlert": "Fermer cette alerte"
   },
-  "continue": "Continue [FR]",
-  "error": "Error [FR]"
+  "continue": "[FR] Continue",
+  "error": "[FR] Error ",
+  "unknown": "[FR] Unknown"
 }

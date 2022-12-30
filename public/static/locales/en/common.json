@@ -101,5 +101,6 @@
     "dismissAlert": "Close this alert"
   },
   "continue": "Continue",
-  "error": "Error"
+  "error": "Error",
+  "unknown": "Unknown"
 }
