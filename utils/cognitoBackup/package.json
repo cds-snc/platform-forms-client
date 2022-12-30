@@ -1,7 +1,7 @@
 {
   "name": "cognito_user_pool_backup",
   "version": "0.1.0",
-  "description": "Retrieve and store users form Cognito User Pool",
+  "description": "Retrieve and store users from Cognito User Pool",
   "main": "retrieveUsers.ts",
   "scripts": {
     "backup": "ts-node retrieveUsers.ts",

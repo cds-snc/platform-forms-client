@@ -1,6 +1,6 @@
 # Cognito User Pool backup and restore scripts
 
-These scripts can be used to create a copy of user entries in a cogntio user pool. They will download user information into a CSV file and then use the CSV file to import users into a new User Pool.
+These scripts can be used to create a copy of user entries in a cognito user pool. They will download user information into a CSV file and then use the CSV file to import users into a new User Pool.
 
 Things to remember:
 
