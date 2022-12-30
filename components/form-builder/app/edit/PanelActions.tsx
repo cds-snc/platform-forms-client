@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
 import { Button } from "../shared/Button";
@@ -235,10 +234,4 @@ export const PanelActions = ({
       </div>
     </div>
   );
-};
-
-PanelActions.propTypes = {
-  item: PropTypes.object,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.any]),
-  renderSaveButton: PropTypes.func,
 };

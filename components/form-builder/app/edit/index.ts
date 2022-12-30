@@ -9,3 +9,5 @@ export { ModalForm } from "./ModalForm";
 export { PrivacyDescription } from "./PrivacyDescription";
 export { SelectedElement, getSelectedOption } from "./SelectedElement";
 export { PanelBody } from "./PanelBody";
+export { ElementDropDown } from "./ElementDropDown";
+export { ElementRequired } from "./ElementRequired";
