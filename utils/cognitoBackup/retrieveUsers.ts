@@ -9,7 +9,9 @@ import { config } from "dotenv";
 
 // Configurable Variables
 const COGNITO_REGION = "ca-central-1";
-const USER_POOL_ID = process.argv[2] ?? "ca-central-1_Cguq9JNQ1";
+const USER_POOL_ID = process.argv[2];
+
+if (!USER_POOL_ID) throw new Error("Must supply User Pool ID");
 
 interface UserAttributes {
   [key: string]: string | undefined;

@@ -12,8 +12,10 @@ import { networkInterfaces } from "os";
 
 // Configurable Variables
 const REGION = "ca-central-1";
-const USER_POOL_ID = process.argv[2] ?? "ca-central-1_Cguq9JNQ1";
-const USER_CSV_FILE = process.argv[3] ?? `./user_pool_${USER_POOL_ID ?? ""}_users.csv`;
+const USER_POOL_ID = process.argv[2];
+const USER_CSV_FILE = process.argv[3] ?? `./user_pool_${USER_POOL_ID}_users.csv`;
+
+if (!USER_POOL_ID) throw new Error("Must supply User Pool ID");
 
 // Cognito Limits
 const maxUploadByteSize = 100000000; // max 100mb file size per import job
