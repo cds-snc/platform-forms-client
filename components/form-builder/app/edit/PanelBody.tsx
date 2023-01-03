@@ -39,9 +39,9 @@ export const PanelBody = ({
         {!isRichText && (
           <div>
             <ElementDropDown
+              item={item}
               stateUpdater={stateUpdater}
               descriptionUpdater={descriptionUpdater}
-              item={item}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />
