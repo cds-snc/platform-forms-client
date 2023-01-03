@@ -118,7 +118,7 @@ export const Preview = () => {
             t={t}
             onSuccess={setSent}
             renderSubmit={() => (
-              <>
+              <div id="PreviewSubmitButton">
                 <span {...getLocalizationAttribute()}>
                   <Button
                     type="submit"
@@ -140,7 +140,7 @@ export const Preview = () => {
                     <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
                   </div>
                 )}
-              </>
+              </div>
             )}
           >
             {currentForm}
