@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 
 import { PanelBody } from "./";
-import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
+import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { useTemplateStore } from "../../store";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
@@ -23,6 +23,17 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   // and make updates to the store accordingly
   // the `panel body` should be the ony thing that knows about the store
   // and the only thing that should be able to update the store
+
+  const onQuestionChange = (itemIndex: number, val: string, lang: Language) => {
+    updateField(
+      `form.elements[${itemIndex}].properties.${localizeField(
+        LocalizedElementProperties.TITLE,
+        lang
+      )}`,
+      val
+    );
+  };
+
   const onElementChange = (id: string, itemIndex: number) => {
     switch (id) {
       case "text":
@@ -70,5 +81,7 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     }
   };
 
-  return <PanelBody item={item} onElementChange={onElementChange} />;
+  return (
+    <PanelBody item={item} onElementChange={onElementChange} onQuestionChange={onQuestionChange} />
+  );
 };

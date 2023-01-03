@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import { ElementOption, FormElementWithIndex } from "../../types";
+import { ElementOption, FormElementWithIndex, Language } from "../../types";
 import { SelectedElement, getSelectedOption, ElementDropDown, ElementRequired } from ".";
 import { Question } from "./elements";
 
 export const PanelBody = ({
   item,
   onElementChange,
+  onQuestionChange,
 }: {
   item: FormElementWithIndex;
   onElementChange: (id: string, itemIndex: number) => void;
+  onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
@@ -25,7 +27,7 @@ export const PanelBody = ({
           style={isRichText ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}
           className={isRichText ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}
         >
-          <Question item={item} />
+          <Question item={item} onQuestionChange={onQuestionChange} />
           <SelectedElement item={item} selected={selectedItem} />
           {maxLength && (
             <div className="disabled">
