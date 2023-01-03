@@ -34,6 +34,10 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     );
   };
 
+  const onRequiredChange = (itemIndex: number, checked: boolean) => {
+    updateField(`form.elements[${itemIndex}].properties.validation.required`, checked);
+  };
+
   const onElementChange = (id: string, itemIndex: number) => {
     switch (id) {
       case "text":
@@ -82,6 +86,11 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   };
 
   return (
-    <PanelBody item={item} onElementChange={onElementChange} onQuestionChange={onQuestionChange} />
+    <PanelBody
+      item={item}
+      onElementChange={onElementChange}
+      onQuestionChange={onQuestionChange}
+      onRequiredChange={onRequiredChange}
+    />
   );
 };

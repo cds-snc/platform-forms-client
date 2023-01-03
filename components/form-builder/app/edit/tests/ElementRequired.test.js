@@ -16,7 +16,7 @@ describe("ElementRequired", () => {
     const item = { id: 1, index: 0, ...store.form.elements[0] };
     const rendered = render(
       <Providers form={store.form}>
-        <ElementRequired item={item} />
+        <ElementRequired item={item} onRequiredChange={jest.fn} />
       </Providers>
     );
 

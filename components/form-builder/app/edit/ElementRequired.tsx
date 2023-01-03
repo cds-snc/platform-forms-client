@@ -3,11 +3,15 @@ import { useTranslation } from "next-i18next";
 
 import { Checkbox } from "../shared";
 import { FormElementWithIndex } from "../../types";
-import { useTemplateStore } from "../../store";
 
-export const ElementRequired = ({ item }: { item: FormElementWithIndex }) => {
+export const ElementRequired = ({
+  item,
+  onRequiredChange,
+}: {
+  item: FormElementWithIndex;
+  onRequiredChange: (itemIndex: number, checked: boolean) => void;
+}) => {
   const { t } = useTranslation("form-builder");
-  const { updateField } = useTemplateStore((s) => ({ updateField: s.updateField }));
 
   return (
     <div className="mt-5 required-checkbox">
@@ -20,10 +24,7 @@ export const ElementRequired = ({ item }: { item: FormElementWithIndex }) => {
             return;
           }
 
-          updateField(
-            `form.elements[${item.index}].properties.validation.required`,
-            e.target.checked
-          );
+          onRequiredChange(item.index, e.target.checked);
         }}
         label={t("required")}
       />

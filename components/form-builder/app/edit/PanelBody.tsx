@@ -9,10 +9,12 @@ export const PanelBody = ({
   item,
   onElementChange,
   onQuestionChange,
+  onRequiredChange,
 }: {
   item: FormElementWithIndex;
   onElementChange: (id: string, itemIndex: number) => void;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
+  onRequiredChange: (itemIndex: number, checked: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
@@ -44,7 +46,7 @@ export const PanelBody = ({
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />
-            <ElementRequired item={item} />
+            <ElementRequired onRequiredChange={onRequiredChange} item={item} />
           </div>
         )}
       </div>
