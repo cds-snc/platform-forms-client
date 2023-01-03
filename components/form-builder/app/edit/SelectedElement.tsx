@@ -40,10 +40,10 @@ export const SelectedElement = ({
       element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
       break;
     case "email":
-      element = <ShortAnswer data-testid="email">{t("example@canada.gc.ca")}</ShortAnswer>;
+      element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
       break;
     case "phone":
-      element = <ShortAnswer data-testid="phone">555-555-0000</ShortAnswer>;
+      element = <ShortAnswer data-testid="phone">111-222-3333</ShortAnswer>;
       break;
     case "date":
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;

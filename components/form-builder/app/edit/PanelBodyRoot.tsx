@@ -74,9 +74,10 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
       case "date":
       case "number":
         updateField(
-          `form.elements[${itemIndex}].properties.${
-            (localizeField(LocalizedElementProperties.DESCRIPTION), translationLanguagePriority)
-          }`,
+          `form.elements[${itemIndex}].properties[${localizeField(
+            LocalizedElementProperties.DESCRIPTION,
+            translationLanguagePriority
+          )}]`,
           t(`defaultElementDescription.${id}`)
         );
         break;
