@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Option to preview form submission email to through Notify [#1021](https://github.com/cds-snc/platform-forms-client/pull/1021)
+- `displayAlphaBanner` property in JSON form template is not supported anymore. [#772](https://github.com/cds-snc/platform-forms-client/issues/772)
 
 ## [1.3.0] 2022-07-15
 
