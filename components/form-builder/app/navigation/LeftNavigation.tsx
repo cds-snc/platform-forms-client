@@ -28,7 +28,7 @@ export const LeftNavigation = () => {
       <LeftNavLink href="/form-builder/preview">
         <>
           <PreviewIcon className={iconClassname} />
-          {status === "authenticated" ? t("test") : t("preview")}
+          {status === "authenticated" ? t("test") : t("pagePreview")}
         </>
       </LeftNavLink>
 
@@ -44,7 +44,7 @@ export const LeftNavigation = () => {
       <LeftNavLink href={`/form-builder/settings/${id}`}>
         <>
           <GearIcon className={iconClassname} />
-          {t("settings")}
+          {t("pageSettings")}
         </>
       </LeftNavLink>
 

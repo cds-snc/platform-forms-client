@@ -1,13 +1,14 @@
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../store/useTemplateStore";
-import { renderHook } from "@testing-library/react";
-import { act } from "react-dom/test-utils";
+import { renderHook, act } from "@testing-library/react";
 
 const createStore = () => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
     <TemplateStoreProvider>{children}</TemplateStoreProvider>
   );
+
   const { result } = renderHook(() => useTemplateStore((s) => s), { wrapper });
+
   act(() => {
     result.current.initialize();
   });
@@ -15,9 +16,12 @@ const createStore = () => {
   return result;
 };
 
+const promise = Promise.resolve();
+
 describe("TemplateStore", () => {
-  it("Updates the Element title", () => {
+  it("Updates the Element title", async () => {
     const result = createStore();
+
     expect(result.current.form.titleEn).toBe("");
 
     act(() => {
@@ -28,9 +32,13 @@ describe("TemplateStore", () => {
     });
 
     expect(result.current.form.elements[1].properties.titleEn).toBe("updated element title!!!!");
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Adds default elements to the Form", () => {
+  it("Adds default elements to the Form", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -43,9 +51,13 @@ describe("TemplateStore", () => {
     expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements).toHaveLength(2);
     expect(result.current.form.elements[1].properties.titleEn).toBe("");
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Inserts elements after the specified item index", () => {
+  it("Inserts elements after the specified item index", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -69,9 +81,13 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[1].id).toBe(4);
     expect(result.current.form.elements[2].id).toBe(2);
     expect(result.current.form.elements[3].id).toBe(3);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Adds Choices to an Element", () => {
+  it("Adds Choices to an Element", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -106,9 +122,13 @@ describe("TemplateStore", () => {
     } else {
       expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
     }
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Updates existing choices", () => {
+  it("Updates existing choices", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -126,9 +146,13 @@ describe("TemplateStore", () => {
     } else {
       expect(result.current.form.elements[0].properties.choices).not.toBeFalsy(); // fails if it is called
     }
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Removes choices", () => {
+  it("Removes choices", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -147,9 +171,13 @@ describe("TemplateStore", () => {
     });
 
     expect(result.current.form.elements[0].properties.choices).toHaveLength(2);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Duplicates an element and inserts after index of copied item", () => {
+  it("Duplicates an element and inserts after index of copied item", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -173,9 +201,13 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements).toHaveLength(4);
     expect(result.current.form.elements[2].properties.titleEn).toBe("Element two copy");
     expect(result.current.form.elements[3].properties.titleEn).toBe("Element three");
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Moves an element up", () => {
+  it("Moves an element up", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -196,9 +228,13 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[0].id).toBe(1);
     expect(result.current.form.elements[1].id).toBe(3);
     expect(result.current.form.elements[2].id).toBe(2);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Moves an element down", () => {
+  it("Moves an element down", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -219,9 +255,13 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements[0].id).toBe(2);
     expect(result.current.form.elements[1].id).toBe(1);
     expect(result.current.form.elements[2].id).toBe(3);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Adds a validation type", () => {
+  it("Adds a validation type", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -238,9 +278,13 @@ describe("TemplateStore", () => {
     } else {
       expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
     }
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Removes a validation type", () => {
+  it("Removes a validation type", async () => {
     const result = createStore();
     expect(result.current.form.titleEn).toBe("");
 
@@ -268,9 +312,13 @@ describe("TemplateStore", () => {
     } else {
       expect(result.current.form.elements[0].properties.validation).not.toBeFalsy(); // fails if it is called
     }
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Initializes the default form", () => {
+  it("Initializes the default form", async () => {
     const result = createStore();
 
     // Initial state
@@ -295,9 +343,13 @@ describe("TemplateStore", () => {
 
     expect(result.current.form.titleEn).toBe("");
     expect(result.current.form.elements.length).toBe(0);
+
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("Creates localized property", () => {
+  it("Creates localized property", async () => {
     const result = createStore();
     let titleProp = "";
     let descProp = "";
@@ -318,5 +370,9 @@ describe("TemplateStore", () => {
 
     expect(titleProp).toBe("titleFr");
     expect(descProp).toBe("descriptionFr");
+
+    await act(async () => {
+      await promise;
+    });
   });
 });

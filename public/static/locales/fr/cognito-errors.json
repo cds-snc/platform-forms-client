@@ -1,8 +1,9 @@
 {
-  "CodeMismatchException": "The confirmation code provided does not match our records",
-  "InternalServiceException": "We've encountered an error with your request. Please try again later",
+  "CodeMismatchException": "Le code de confirmation fourni ne correspond pas à nos registres.",
+  "InternalServiceException": "Une erreur s’est produite lors de votre demande. Veuillez réessayer plus tard.",
   "TooManyRequestsException": "TooManyRequestsException",
   "UsernameExistsException": "UsernameExistsException",
+  "ExpiredCodeException": "Le code de confirmation a expiré. Veuillez en demander un nouveau.",
   "UsernameOrPasswordIncorrect": {
     "title": "L’adresse courriel ou le mot de passe que vous avez saisi est incorrect.",
     "description": "L’adresse courriel ou le mot de passe que vous avez saisi est incorrect ou le compte n’existe pas.",

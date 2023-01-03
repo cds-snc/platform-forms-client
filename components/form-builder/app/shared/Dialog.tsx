@@ -60,12 +60,12 @@ export const Dialog = ({
           <Button
             theme="link"
             className="group justify-self-end block pl-2 pr-2"
-            aria-label={t("Close")}
+            aria-label={t("close")}
             onClick={close}
           >
             <span className="block w-30 mr-2">
               <Close className="group-focus:fill-white-default inline-block mr-2" />
-              {t("Close")}
+              {t("close")}
             </span>
           </Button>
         </div>

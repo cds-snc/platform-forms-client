@@ -59,7 +59,7 @@ export const ModalForm = ({
         <Hint>{t("descriptionDescription")}</Hint>
         <TextArea
           id={`description--modal--${item.index}`}
-          placeholder={t("Description")}
+          placeholder={t("inputDescription")}
           className="w-11/12"
           onChange={(e) => {
             const description = e.target.value.replace(/[\r\n]/gm, "");
