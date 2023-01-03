@@ -7,12 +7,10 @@ import { Question } from "./elements";
 
 export const PanelBody = ({
   item,
-  stateUpdater,
-  descriptionUpdater,
+  onElementChange,
 }: {
   item: FormElementWithIndex;
-  stateUpdater: (id: string, itemIndex: number) => void;
-  descriptionUpdater: (id: string, itemIndex: number) => void;
+  onElementChange: (id: string, itemIndex: number) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
@@ -40,8 +38,7 @@ export const PanelBody = ({
           <div>
             <ElementDropDown
               item={item}
-              stateUpdater={stateUpdater}
-              descriptionUpdater={descriptionUpdater}
+              onElementChange={onElementChange}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />

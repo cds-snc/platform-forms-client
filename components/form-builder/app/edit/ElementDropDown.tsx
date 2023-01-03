@@ -8,14 +8,12 @@ import { useElementOptions } from "../../hooks";
 
 export const ElementDropDown = ({
   item,
-  stateUpdater,
-  descriptionUpdater,
+  onElementChange,
   selectedItem,
   setSelectedItem,
 }: {
   item: FormElementWithIndex;
-  stateUpdater: (id: string, itemIndex: number) => void;
-  descriptionUpdater: (id: string, itemIndex: number) => void;
+  onElementChange: (id: string, itemIndex: number) => void;
   selectedItem: ElementOption;
   setSelectedItem: (selectedItem: ElementOption) => void;
 }) => {
@@ -28,11 +26,10 @@ export const ElementDropDown = ({
     ({ selectedItem }: UseSelectStateChange<ElementOption | null | undefined>) => {
       if (selectedItem) {
         setSelectedItem(selectedItem);
-        stateUpdater(selectedItem.id, itemIndex);
-        descriptionUpdater(selectedItem.id, itemIndex);
+        onElementChange(selectedItem.id, itemIndex);
       }
     },
-    [setSelectedItem, stateUpdater, descriptionUpdater]
+    [setSelectedItem, onElementChange]
   );
 
   return (

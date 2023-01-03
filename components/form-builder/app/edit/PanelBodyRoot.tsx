@@ -23,7 +23,7 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   // and make updates to the store accordingly
   // the `panel body` should be the ony thing that knows about the store
   // and the only thing that should be able to update the store
-  const _updateState = (id: string, itemIndex: number) => {
+  const onElementChange = (id: string, itemIndex: number) => {
     switch (id) {
       case "text":
       case "textField":
@@ -48,6 +48,8 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
         unsetField(`form.elements[${itemIndex}].properties.validation.maxLength`);
         break;
     }
+
+    _setDefaultDescription(id, itemIndex);
   };
 
   const _setDefaultDescription = (id: string, itemIndex: number) => {
@@ -68,11 +70,5 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     }
   };
 
-  return (
-    <PanelBody
-      item={item}
-      stateUpdater={_updateState}
-      descriptionUpdater={_setDefaultDescription}
-    />
-  );
+  return <PanelBody item={item} onElementChange={onElementChange} />;
 };
