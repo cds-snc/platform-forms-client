@@ -12,7 +12,7 @@
       "link": "/fr/form-builder/support",
       "desc": "Soutien"
     },
-    "ariaLabel": "[FR] Footer"
+    "ariaLabel": "Bas de page"
   },
   "phase": {
     "desc": "Ce site évoluera au fur et à mesure que nous testons des idées."
@@ -101,7 +101,7 @@
   "alert": {
     "dismissAlert": "Fermer cette alerte"
   },
-  "continue": "[FR] Continue",
-  "error": "[FR] Error ",
-  "unknown": "[FR] Unknown"
+  "continue": "Continuer",
+  "error": "Erreur",
+  "unknown": "Inconnu"
 }
