@@ -223,10 +223,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                     <p className="gc-description">{t("spam-error.success-prompt")}</p>
                   </div>
                 ))}
-
-              <div className="buttons">
-                {props.renderSubmit ? props.renderSubmit(submitButton) : submitButton}
-              </div>
+              {props.renderSubmit ? props.renderSubmit() : submitButton}
             </div>
           </form>
         </>
