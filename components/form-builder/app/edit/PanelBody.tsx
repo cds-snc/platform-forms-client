@@ -4,13 +4,10 @@ import { useTranslation } from "next-i18next";
 import { ElementOption, FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { SelectedElement, getSelectedOption, ElementDropDown, ElementRequired } from ".";
 import { useTemplateStore } from "../../store";
-
 import { Question } from "./elements";
 
-export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
+export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
-  const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
-
   const { localizeField, updateField, unsetField, resetChoices, translationLanguagePriority } =
     useTemplateStore((s) => ({
       localizeField: s.localizeField,
@@ -20,10 +17,6 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
       resetChoices: s.resetChoices,
       translationLanguagePriority: s.translationLanguagePriority,
     }));
-
-  const isRichText = item.type === "richText";
-  const properties = item.properties;
-  const maxLength = properties.validation?.maxLength;
 
   // all element state updaters should be setup at this level
   // we should be able to pass and `item` + `updaters`to build up each element panel
@@ -40,7 +33,6 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
       case "date":
       case "number":
         updateField(`form.elements[${itemIndex}].type`, "textField");
-
         if (id === "textField" || id === "text") {
           unsetField(`form.elements[${itemIndex}].properties.validation.type`);
         } else {
@@ -77,8 +69,30 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
     }
   };
 
-  // todo --- we should be able to make this generic for top level and sub level elements
-  // it can become it's own component
+  return (
+    <PanelBody
+      item={item}
+      stateUpdater={_updateState}
+      descriptionUpdater={_setDefaultDescription}
+    />
+  );
+};
+
+export const PanelBody = ({
+  item,
+  stateUpdater,
+  descriptionUpdater,
+}: {
+  item: FormElementWithIndex;
+  stateUpdater: (id: string, itemIndex: number) => void;
+  descriptionUpdater: (id: string, itemIndex: number) => void;
+}) => {
+  const { t } = useTranslation("form-builder");
+  const isRichText = item.type === "richText";
+  const properties = item.properties;
+  const maxLength = properties.validation?.maxLength;
+  const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
+
   return (
     <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
       <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base !text-sm">
@@ -98,8 +112,8 @@ export const PanelBody = ({ item }: { item: FormElementWithIndex }) => {
         {!isRichText && (
           <div>
             <ElementDropDown
-              stateUpdater={_updateState}
-              descriptionUpdater={_setDefaultDescription}
+              stateUpdater={stateUpdater}
+              descriptionUpdater={descriptionUpdater}
               item={item}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}

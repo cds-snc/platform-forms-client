@@ -32,7 +32,7 @@ export const ElementDropDown = ({
         descriptionUpdater(selectedItem.id, itemIndex);
       }
     },
-    [setSelectedItem]
+    [setSelectedItem, stateUpdater, descriptionUpdater]
   );
 
   return (
