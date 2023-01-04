@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, Language } from "../../types";
-import { SelectedElement, getSelectedOption, ElementDropDown, ElementRequired } from ".";
+import { SelectedElement, useGetSelectedOption, ElementDropDown, ElementRequired } from ".";
 import { Question } from "./elements";
 
 export const PanelBody = ({
@@ -20,7 +20,7 @@ export const PanelBody = ({
   const isRichText = item.type === "richText";
   const properties = item.properties;
   const maxLength = properties.validation?.maxLength;
-  const [selectedItem, setSelectedItem] = useState<ElementOption>(getSelectedOption(item));
+  const [selectedItem, setSelectedItem] = useState<ElementOption>(useGetSelectedOption(item));
 
   return (
     <div className={isRichText ? "mt-7" : "mx-7 my-7"}>

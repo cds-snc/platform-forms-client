@@ -23,7 +23,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
       router.replace(`/form-builder/settings/${id}`);
       return;
     }
-  }, [isPublished]);
+  }, [isPublished, id, router]);
 
   if (isPublished) {
     return (

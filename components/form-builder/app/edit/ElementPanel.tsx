@@ -38,13 +38,13 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     setClassName(className.replace("bg-yellow-100 ", ""));
     // remove the blue outline after 2.1 seconds
     setTimeout(() => setClassName(""), 2100);
-  }, [getFocusInput]);
+  }, [getFocusInput, className]);
 
   useEffect(() => {
     if (item.type != "richText") {
       updateModalProperties(item.index, elements[item.index].properties);
     }
-  }, [item, isOpen, isRichText]);
+  }, [item, isOpen, isRichText, elements, updateModalProperties]);
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {

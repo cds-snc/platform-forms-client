@@ -48,7 +48,7 @@ export const useTemplateStatus = () => {
 
   useEffect(() => {
     getTemplateById();
-  }, [id, status]);
+  }, [id, status, getTemplateById]);
 
   return { updatedAt, getTemplateById };
 };

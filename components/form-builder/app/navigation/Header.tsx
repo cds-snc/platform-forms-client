@@ -14,7 +14,7 @@ export const Header = () => {
 
   useEffect(() => {
     refreshAbility();
-  }, []);
+  }, [refreshAbility]);
 
   return (
     <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">

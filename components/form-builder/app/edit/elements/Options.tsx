@@ -1,10 +1,9 @@
-import React, { useState, ReactElement, useCallback } from "react";
+import React, { ReactElement } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 
 import { useTemplateStore } from "../../../store/useTemplateStore";
 import { Option } from "./Option";
-import { BulkAdd } from "./BulkAdd";
 import { Button } from "../../shared/Button";
 import { FormElementWithIndex } from "../../../types";
 
@@ -97,15 +96,6 @@ export const Options = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const [bulkAddAction, setBulkAddAction] = useState(false);
-
-  const toggleBulkAdd = useCallback(
-    (toggle: boolean) => {
-      setBulkAddAction(toggle);
-    },
-    [bulkAddAction]
-  );
-
   const index = item.index;
 
   if (!elements[index]?.properties) {
@@ -115,10 +105,6 @@ export const Options = ({
 
   if (!choices) {
     return <AddOptions index={index} />;
-  }
-
-  if (bulkAddAction) {
-    return <BulkAdd index={index} toggleBulkAdd={toggleBulkAdd} choices={choices} />;
   }
 
   const options = choices.map((child, index) => {

@@ -35,7 +35,7 @@ export const QuestionInput = ({
       input.current.focus();
       setFocusInput(false);
     }
-  }, [getFocusInput]);
+  }, [getFocusInput, setFocusInput]);
 
   useEffect(() => {
     setValue(initialValue);
