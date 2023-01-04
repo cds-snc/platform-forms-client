@@ -6,12 +6,13 @@ import { FormElementWithIndex } from "../../types";
 
 export const ElementRequired = ({
   item,
-  updateField,
+  onRequiredChange,
 }: {
   item: FormElementWithIndex;
-  updateField: (path: string, value: boolean) => void;
+  onRequiredChange: (itemIndex: number, checked: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+
   return (
     <div className="mt-5 required-checkbox">
       <Checkbox
@@ -23,10 +24,7 @@ export const ElementRequired = ({
             return;
           }
 
-          updateField(
-            `form.elements[${item.index}].properties.validation.required`,
-            e.target.checked
-          );
+          onRequiredChange(item.index, e.target.checked);
         }}
         label={t("required")}
       />
