@@ -2,36 +2,30 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
-import { Input } from "../shared";
-import { LocalizedElementProperties } from "../../types";
-import { useTemplateStore } from "../../store";
+import { Input } from "@formbuilder/app/shared";
+import { Language } from "@formbuilder/types";
+import { useTemplateStore } from "@formbuilder/store";
 
 export const QuestionInput = ({
   index,
   hasDescription,
   initialValue,
+  onQuestionChange,
 }: {
   index: number;
   hasDescription: string | undefined;
   initialValue: string;
+  onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
-  const {
-    localizeField,
-    updateField,
-    getFocusInput,
-    setFocusInput,
-    translationLanguagePriority,
-    getLocalizationAttribute,
-  } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    updateField: s.updateField,
-    setFocusInput: s.setFocusInput,
-    getFocusInput: s.getFocusInput,
-    translationLanguagePriority: s.translationLanguagePriority,
-    getLocalizationAttribute: s.getLocalizationAttribute,
-  }));
+  const { getFocusInput, setFocusInput, translationLanguagePriority, getLocalizationAttribute } =
+    useTemplateStore((s) => ({
+      setFocusInput: s.setFocusInput,
+      getFocusInput: s.getFocusInput,
+      translationLanguagePriority: s.translationLanguagePriority,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+    }));
 
   const input = useRef<HTMLInputElement>(null);
 
@@ -49,15 +43,9 @@ export const QuestionInput = ({
 
   const _debounced = useCallback(
     debounce((index, val, lang) => {
-      updateField(
-        `form.elements[${index}].properties.${localizeField(
-          LocalizedElementProperties.TITLE,
-          lang
-        )}`,
-        val
-      );
+      onQuestionChange(index, val, lang);
     }, 100),
-    []
+    [onQuestionChange]
   );
 
   const updateValue = useCallback(
