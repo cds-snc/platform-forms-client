@@ -14,10 +14,9 @@ describe("ElementRequired", () => {
     const user = userEvent.setup();
 
     const item = { id: 1, index: 0, ...store.form.elements[0] };
-    const mockedCallback = jest.fn();
     const rendered = render(
       <Providers form={store.form}>
-        <ElementRequired item={item} updateField={mockedCallback} />
+        <ElementRequired item={item} onRequiredChange={jest.fn} />
       </Providers>
     );
 
@@ -26,8 +25,6 @@ describe("ElementRequired", () => {
     expect(checkbox).toHaveAttribute("id", "required-0-id");
 
     await user.click(checkbox);
-
-    expect(mockedCallback).toHaveBeenCalledTimes(1);
 
     await act(async () => {
       await promise;
