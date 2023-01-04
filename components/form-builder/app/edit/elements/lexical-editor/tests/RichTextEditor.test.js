@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, act } from "@testing-library/react";
+import { cleanup, render, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { defaultStore as store, Providers } from "@formbuilder/test-utils";
 import { RichTextEditor } from "../RichTextEditor";
@@ -12,6 +12,7 @@ describe("RichTextEditor", () => {
   });
 
   it("Renders the RichTextEditor", async () => {
+    //
     const rendered = render(
       <Providers form={store.form}>
         <RichTextEditor
@@ -145,8 +146,11 @@ describe("RichTextEditor", () => {
     await user.click(linkButton);
 
     // Doesn't work - trying to find the link editor
-    // const linkEditor = rendered.container.querySelector('[data-test-id="link-editor"]');
-    // expect(linkEditor).toBeInTheDocument();
+    const linkEditor = rendered.container.querySelector('[data-test-id="link-editor"]');
+
+    waitFor(() => {
+      expect(linkEditor).toBeInTheDocument();
+    });
 
     // The string is wrapped with a link
     const link = contentArea.querySelector("a");
