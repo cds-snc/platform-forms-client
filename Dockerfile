@@ -1,4 +1,4 @@
-FROM node:16@sha256:1f06b4131f62ae12ce78653cb05baef1932a745a8d194f4a1c50fc48cdf2681e
+FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
 
 ENV NODE_ENV=production
 
@@ -15,19 +15,19 @@ RUN yarn install --silent --production=false
 RUN yarn build
 RUN yarn install --production
 
-FROM node:16@sha256:1f06b4131f62ae12ce78653cb05baef1932a745a8d194f4a1c50fc48cdf2681e
+FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
 
 COPY migrations /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:1f06b4131f62ae12ce78653cb05baef1932a745a8d194f4a1c50fc48cdf2681e
+FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
 
 COPY flag_initialization /src
 WORKDIR /src
 RUN yarn install --silent 
 
-FROM node:16@sha256:1f06b4131f62ae12ce78653cb05baef1932a745a8d194f4a1c50fc48cdf2681e
+FROM node:16@sha256:1bbd8b82f5a78b6461d3285b62293db99ad60cf4eca35c715636d7143abb057c
 LABEL maintainer="-"
 
 ARG GOOGLE_CLIENT_ID
