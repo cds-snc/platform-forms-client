@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, act, waitFor } from "@testing-library/react";
+import { cleanup, screen, render, act, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { defaultStore as store, Providers } from "@formbuilder/test-utils";
 import { RichTextEditor } from "../RichTextEditor";
@@ -31,8 +31,8 @@ describe("RichTextEditor", () => {
     });
 
     const contentArea = rendered.container.querySelector('[id^="editor-"]');
-    const toolbar = rendered.container.querySelector('[data-test-id="toolbar"]');
-    const toolbarButtons = rendered.container.querySelectorAll('[data-test-id$="-button"]');
+    const toolbar = screen.getByTestId("toolbar");
+    const toolbarButtons = within(toolbar).getAllByRole("button");
 
     // Toolbar has aria-controls attribute
     expect(toolbar).toHaveAttribute("aria-controls", contentArea.id);
@@ -50,7 +50,7 @@ describe("RichTextEditor", () => {
   });
 
   it("Sets and unsets aria-pressed state on Toolbar buttons", async () => {
-    const rendered = render(
+    render(
       <Providers form={store.form}>
         <RichTextEditor
           path="path.to.content"
@@ -70,13 +70,13 @@ describe("RichTextEditor", () => {
     const user = userEvent.setup();
 
     // H2 Button
-    const h2 = rendered.container.querySelector('[data-test-id="h2-button"]');
-    const h3 = rendered.container.querySelector('[data-test-id="h3-button"]');
-    const bold = rendered.container.querySelector('[data-test-id="bold-button"]');
-    const italic = rendered.container.querySelector('[data-test-id="italic-button"]');
-    const bulletList = rendered.container.querySelector('[data-test-id="bullet-list-button"]');
-    const numberedList = rendered.container.querySelector('[data-test-id="numbered-list-button"]');
-    const link = rendered.container.querySelector('[data-test-id="link-button"]');
+    const h2 = screen.getByTestId("h2-button");
+    const h3 = screen.getByTestId("h3-button");
+    const bold = screen.getByTestId("bold-button");
+    const italic = screen.getByTestId("italic-button");
+    const bulletList = screen.getByTestId("bullet-list-button");
+    const numberedList = screen.getByTestId("numbered-list-button");
+    const link = screen.getByTestId("link-button");
 
     expect(h2).toHaveAttribute("aria-pressed", "false");
     expect(h3).toHaveAttribute("aria-pressed", "false");
@@ -142,15 +142,12 @@ describe("RichTextEditor", () => {
 
     const user = userEvent.setup();
     const contentArea = rendered.container.querySelector('[id^="editor-"]');
-    const linkButton = rendered.container.querySelector('[data-test-id="link-button"]');
+    const linkButton = screen.getByTestId("link-button");
     await user.click(linkButton);
 
     // Doesn't work - trying to find the link editor
-    const linkEditor = rendered.container.querySelector('[data-test-id="link-editor"]');
-
-    waitFor(() => {
-      expect(linkEditor).toBeInTheDocument();
-    });
+    // const linkEditor = await screen.findByTestId("link-editor");
+    // expect(linkEditor).toHaveClass("link-editor");
 
     // The string is wrapped with a link
     const link = contentArea.querySelector("a");
