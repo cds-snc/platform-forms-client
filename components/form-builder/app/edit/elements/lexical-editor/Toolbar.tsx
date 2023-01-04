@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, KeyboardEvent, useId } from "react";
+import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
