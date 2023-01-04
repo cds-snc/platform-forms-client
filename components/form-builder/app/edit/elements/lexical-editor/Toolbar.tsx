@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
+import React, { useState, useCallback, useEffect, useRef, KeyboardEvent, useId } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
@@ -237,6 +237,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
         aria-label={t("textFormatting")}
         aria-controls={editorId}
         onKeyDown={handleNav}
+        data-test-id="toolbar"
       >
         <ToolTip text={t("tooltipFormatH2")}>
           <button
@@ -255,6 +256,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatH2")}
             aria-pressed={blockType === "h2"}
+            data-test-id={`h2-button`}
           >
             <H2Icon />
           </button>
@@ -277,6 +279,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatH3")}
             aria-pressed={blockType === "h3"}
+            data-test-id={`h3-button`}
           >
             <H3Icon />
           </button>
@@ -297,6 +300,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isBold && editorHasFocus ? "active" : "")}
             aria-label={t("formatBold")}
             aria-pressed={isBold}
+            data-test-id={`bold-button`}
           >
             <BoldIcon />
           </button>
@@ -317,6 +321,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isItalic && editorHasFocus ? "active" : "")}
             aria-label={t("formatItalic")}
             aria-pressed={isItalic}
+            data-test-id={`italic-button`}
           >
             <ItalicIcon />
           </button>
@@ -337,6 +342,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatBulletList")}
             aria-pressed={blockType === "bullet"}
+            data-test-id={`bullet-list-button`}
           >
             <BulletListIcon />
           </button>
@@ -357,6 +363,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             }
             aria-label={t("formatNumberedList")}
             aria-pressed={blockType === "number"}
+            data-test-id={`numbered-list-button`}
           >
             <NumberedListIcon />
           </button>
@@ -376,6 +383,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
             className={"peer toolbar-item " + (isLink && editorHasFocus ? "active" : "")}
             aria-label={t("insertLink")}
             aria-pressed={isLink}
+            data-test-id={`link-button`}
           >
             <LinkIcon />
           </button>
