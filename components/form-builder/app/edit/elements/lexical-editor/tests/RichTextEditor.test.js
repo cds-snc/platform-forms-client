@@ -62,8 +62,6 @@ describe("RichTextEditor", () => {
 
     // rendered.debug();
 
-    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
-    // > especially if there's no visual indication of the async task completing.
     await act(async () => {
       await promise;
     });
@@ -137,8 +135,6 @@ describe("RichTextEditor", () => {
 
     // rendered.debug();
 
-    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
-    // > especially if there's no visual indication of the async task completing.
     await act(async () => {
       await promise;
     });
@@ -158,5 +154,9 @@ describe("RichTextEditor", () => {
     expect(link).toHaveAttribute("rel", "noopener");
     expect(link).toHaveAttribute("class", "editor-link ltr");
     expect(link).toHaveTextContent("Here is some test content");
+  });
+
+  it.skip("Updates field on change", async () => {
+    // Can I test to see if updateField is called and receives the content and path?
   });
 });
