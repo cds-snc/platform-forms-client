@@ -39,9 +39,13 @@ describe("RichTextEditor", () => {
     // Toolbar contains 7 formatting buttons
     expect(toolbarButtons).toHaveLength(7);
 
-    // Content area has aria-label attribute and default content
+    // Content area has default content and attributes
     expect(contentArea).toHaveAttribute("aria-label", "AriaLabel");
     expect(contentArea).toContainHTML("Here is some test content");
+    expect(contentArea).toHaveAttribute("contenteditable", "true");
+    expect(contentArea).toHaveAttribute("role", "textbox");
+    expect(contentArea).toHaveAttribute("spellcheck", "true");
+    expect(contentArea).toHaveAttribute("data-lexical-editor", "true");
   });
 
   it("Sets and unsets aria-pressed state on Toolbar buttons", async () => {
@@ -117,5 +121,42 @@ describe("RichTextEditor", () => {
     expect(link).toHaveAttribute("aria-pressed", "true");
     await user.click(link);
     expect(link).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("Can create links", async () => {
+    const rendered = render(
+      <Providers form={store.form}>
+        <RichTextEditor
+          path="path.to.content"
+          content="Here is some test content"
+          autoFocusEditor={true}
+          ariaLabel="AriaLabel"
+        />
+      </Providers>
+    );
+
+    // rendered.debug();
+
+    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+    // > especially if there's no visual indication of the async task completing.
+    await act(async () => {
+      await promise;
+    });
+
+    const user = userEvent.setup();
+    const contentArea = rendered.container.querySelector('[id^="editor-"]');
+    const linkButton = rendered.container.querySelector('[data-test-id="link-button"]');
+    await user.click(linkButton);
+
+    // Doesn't work - trying to find the link editor
+    // const linkEditor = rendered.container.querySelector('[data-test-id="link-editor"]');
+    // expect(linkEditor).toBeInTheDocument();
+
+    // The string is wrapped with a link
+    const link = contentArea.querySelector("a");
+    expect(link).toHaveAttribute("href", "https://");
+    expect(link).toHaveAttribute("rel", "noopener");
+    expect(link).toHaveAttribute("class", "editor-link ltr");
+    expect(link).toHaveTextContent("Here is some test content");
   });
 });

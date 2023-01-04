@@ -178,7 +178,7 @@ function FloatingLinkEditor({
   }, [isEditMode]);
 
   return (
-    <div ref={editorRef} className="link-editor">
+    <div ref={editorRef} className="link-editor" data-test-id="link-editor">
       {isEditMode ? (
         <input
           ref={inputRef}
