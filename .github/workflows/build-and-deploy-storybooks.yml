@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b # tag=v2.3.1 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        uses: actions/checkout@dc323e67f16fb5f7663d20ff7941f27f5809e9b6 # v2.6.0 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
 
       - name: Install 🔧 # This example project is built using yarn and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: yarn install
@@ -42,7 +42,7 @@ jobs:
 
       - name: Find Comment
         if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/find-comment@d2dae40ed151c634e4189471272b57e76ec19ba8 # tag=v1
+        uses: peter-evans/find-comment@d2dae40ed151c634e4189471272b57e76ec19ba8 # v1.3.0
         id: fc
         with:
           issue-number: ${{ github.event.pull_request.number }}
@@ -53,7 +53,7 @@ jobs:
 
       - name: Create or update comment # comment in pull request storybooks link
         if: ${{ github.event_name == 'pull_request' }}
-        uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae # tag=v1
+        uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae # v1.4.5
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
