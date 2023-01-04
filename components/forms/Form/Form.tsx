@@ -14,15 +14,18 @@ import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
 interface SubmitButtonProps {
   submitTooEarly: boolean;
+  formTimerState: {
+    canSubmit: boolean;
+    remainingTime: number;
+    timerDelay?: number;
+    timeLock?: number;
+  };
   checkTimer: () => void;
-  timerDelay?: number;
-  remainingTime: number;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
   submitTooEarly,
+  formTimerState: { remainingTime, timerDelay },
   checkTimer,
-  timerDelay,
-  remainingTime,
 }) => {
   const { t } = useTranslation();
   const [countDown, setCountDown] = useState(remainingTime);
@@ -73,7 +76,12 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
             </div>
           ))}
       </div>
-      <Button type="submit" onClick={() => checkTimer()}>
+      <Button
+        type="submit"
+        onClick={(e) => {
+          checkTimer();
+        }}
+      >
         {t("submitButton")}
       </Button>
     </>
@@ -267,9 +275,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             ) : (
               <SubmitButton
                 submitTooEarly={submitTooEarly}
+                formTimerState={formTimerState}
                 checkTimer={checkTimer}
-                remainingTime={formTimerState.remainingTime}
-                timerDelay={formTimerState.timerDelay}
+                // The key is needed so that if the Timer Delay changes a new instance of SubmitButton is created
+                // This ensures the SubmitButton state is initialized with the latest Timer Delay
                 key={formTimerState.timerDelay}
               />
             )}
