@@ -2,12 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
+import Head from "next/head";
 
 function Error({ statusCode }) {
   const { t } = useTranslation("error");
   return (
     <>
-      <h1 className="gc-h1">
+      <Head>
+        <title>{t("500.title")}</title>
+      </Head>
+      <h1>
         {t("500.title")} {statusCode}
       </h1>
       <p>{t("500.body")}</p>

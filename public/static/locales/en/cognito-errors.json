@@ -1,0 +1,19 @@
+{
+  "CodeMismatchException": "The confirmation code provided does not match our records",
+  "InternalServiceException": "We've encountered an error with your request. Please try again later",
+  "TooManyRequestsException": "TooManyRequestsException",
+  "UsernameExistsException": "UsernameExistsException",
+  "ExpiredCodeException": "The confirmation code has expired. Please request a new one",
+  "InvalidPasswordException": "This password does not comply with our password policies",
+  "InvalidParameterException": {
+    "sendForgotPassword": {
+      "title": "In order to reset your credentials you must first verify your email"
+    }
+  },
+  "UsernameOrPasswordIncorrect": {
+    "title": "The email address or password you entered is incorrect.",
+    "description": "The email address or password you entered is incorrect or the account does not exist.",
+    "link": "/signup/register",
+    "linkText": "If you don’t have an account, create one now."
+  }
+}

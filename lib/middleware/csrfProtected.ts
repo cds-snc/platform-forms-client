@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { getCsrfToken } from "next-auth/client";
+import { getCsrfToken } from "next-auth/react";
 
 export const csrfProtected = (protectedMethods: string[]): MiddlewareRequest => {
   return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {

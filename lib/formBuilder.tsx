@@ -11,7 +11,7 @@ import {
   RichText,
   TextArea,
   TextInput,
-} from "../components/forms";
+} from "@components/forms";
 import {
   FormElement,
   FormElementTypes,
@@ -205,7 +205,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     case FormElementTypes.richText:
       return (
         <>
-          {labelText && <h3 className="gc-h3">{labelText}</h3>}
+          {labelText && <h3>{labelText}</h3>}
           <RichText>{description}</RichText>
         </>
       );
@@ -258,18 +258,16 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
  * @param language
  */
 const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
-  if (!formRecord?.formConfig) {
+  if (!formRecord?.form) {
     return null;
   }
 
-  return formRecord.formConfig.form.layout.map((item: string) => {
-    const element = formRecord.formConfig.form.elements.find(
-      (element: FormElement) => element.id === parseInt(item)
-    );
+  return formRecord.form.layout.map((item: number) => {
+    const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
     if (element) {
       return <GenerateElement key={element.id} element={element} language={language} t={t} />;
     } else {
-      logMessage.error(`Failed component ID look up ${item} on form ID ${formRecord.formID}`);
+      logMessage.error(`Failed component ID look up ${item} on form ID ${formRecord.id}`);
     }
   });
 };
@@ -314,13 +312,13 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
  * @param language
  */
 const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
-  if (!formRecord?.formConfig) {
+  if (!formRecord?.form) {
     return {};
   }
 
   const initialValues: Responses = {};
 
-  formRecord.formConfig.form.elements
+  formRecord.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
       initialValues[element.id] = _getElementInitialValue(element, language);

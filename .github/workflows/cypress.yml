@@ -9,23 +9,24 @@ jobs:
     name: Cypress
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.LAMBDA_AWS_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.LAMBDA_AWS_SECRET}}
+      # Needed for Next Auth to initialize
       NEXTAUTH_URL: http://localhost:3000
+      TOKEN_SECRET: testKey
+      GOOGLE_CLIENT_ID: testClientID
+      GOOGLE_CLIENT_SECRET: testClientSecret
       APP_ENV: test
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - uses: cypress-io/github-action@v2
+        uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - uses: cypress-io/github-action@d79d2d530a66e641eb4a5f227e13bc985c60b964 # v4.2.2
         with:
+          browser: chrome
+          headed: false
           build: yarn build
           start: yarn start:test
           wait-on: "http://localhost:3000"
-          command: yarn cypress:headless
           config: baseUrl=http://localhost:3000
-          parallel: false
-          group: "Form E2E Tests"
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # tag=v1
         if: failure()
         with:
           name: cypress-screenshots

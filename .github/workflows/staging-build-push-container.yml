@@ -3,17 +3,26 @@ name: "Staging — Push container to ECR"
 on:
   push:
     branches: [develop]
+    paths-ignore:
+      # Ignore all files and folders that start with '.'
+      - ".**"
+      # Ignore all files and folder in fixtures, tests, utils, etc.
+      - "__*/**"
 
 env:
   ECR_REPOSITORY: form_viewer_staging
   GITHUB_SHA: ${{ github.sha }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_CLIENT_SECRET }}
+  GOOGLE_CLIENT_ID: ${{ secrets.STAGING_GOOGLE_CLIENT_ID }}
+  COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
+  COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
 
 jobs:
   push-staging:
     runs-on: ubuntu-latest
     steps:
       - name: Wait for Jest tests to pass
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@297be350cf8393728ea4d4b39435c7d7ae167c93 # v1.1.0
         id: wait-for-jest-tests
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -21,7 +30,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Wait for Cypress tests to pass
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@297be350cf8393728ea4d4b39435c7d7ae167c93 # v1.1.0
         id: wait-for-cypress-tests
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -29,7 +38,7 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Wait for ESLint tests to pass
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@297be350cf8393728ea4d4b39435c7d7ae167c93 # v1.1.0
         id: wait-for-eslint-tests
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -37,16 +46,20 @@ jobs:
           ref: ${{ github.sha }}
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@dc323e67f16fb5f7663d20ff7941f27f5809e9b6 # v2.6.0
 
       - name: Build Form Viewer
         run: |
           docker build -t base \
-            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA .
+            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
+            --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
+            --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
+            --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
+            --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
 
       - name: Configure Staging AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@51e2d042f8c5cf77f151685c9338e989dc0b8fc8
+        uses: aws-actions/configure-aws-credentials@3654529dc6db288721684d6c54fefa0c1182728f
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -54,7 +67,7 @@ jobs:
 
       - name: Login to Staging Amazon ECR
         id: login-ecr-staging
-        uses: aws-actions/amazon-ecr-login@b9c809dc38d74cd0fde3c13cc4fe4ac72ebecdae
+        uses: aws-actions/amazon-ecr-login@d2897b5335975f749897eb8cb16345b12a17042f
 
       - name: Tag Images for Staging
         env:
@@ -75,11 +88,11 @@ jobs:
         run: docker logout ${{ steps.login-ecr-staging.outputs.registry }}
 
       - name: Generate forms-client/app/docker SBOM
-        uses: cds-snc/security-tools/.github/actions/generate-sbom@4c6b386722985552f3f008d04279a3f01402cc35 # renovate: tag=v1
+        uses: cds-snc/security-tools/.github/actions/generate-sbom@4368a5486da1f0bb698ffe717687612d4231c6cd # v1.1.7
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr-staging.outputs.registry }}        
+          ECR_REGISTRY: ${{ steps.login-ecr-staging.outputs.registry }}
         with:
           dependency_track_api_key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
           docker_image: $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
           project_name: forms-client/app/docker
-          project_type: docker        
+          project_type: docker

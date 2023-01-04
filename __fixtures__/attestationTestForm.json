@@ -1,0 +1,47 @@
+{
+  "form": {
+    "layout": [1],
+    "titleEn": "Lemonade Stand Funding",
+    "titleFr": "Financement des stands de limonade",
+    "version": 1,
+    "elements": [
+      {
+        "id": 1,
+        "type": "checkbox",
+        "properties": {
+          "titleEn": "Do you attest that the information you are providing is true and correct to your knowledge?",
+          "titleFr": "Attestez-vous que les informations que vous fournissez sont, à votre connaissance, vraies et correctes ?",
+          "choices": [
+            {
+              "en": "I prefer lemons to oranges.",
+              "fr": "Je préfère les citrons aux oranges."
+            },
+            {
+              "en": "I agree to keep my lemonade stand a minimum of 1 metre from the sidewalk.",
+              "fr": "Je m'engage à maintenir mon stand de limonade à un minimum d'un mètre du trottoir."
+            }
+          ],
+          "validation": {
+            "all": true,
+            "required": true
+          },
+          "descriptionEn": "",
+          "descriptionFr": ""
+        }
+      }
+    ],
+    "emailSubjectEn": "Lemonade Stand Funding Testing Response",
+    "emailSubjectFr": ""
+  },
+  "submission": {
+    "vault": true
+  },
+  "endPage": {
+    "descriptionEn": "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.  \n\r <a href='https://digital.canada.ca'>Go back</a>",
+    "descriptionFr": "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days. \n\r <a href='https://digital.canada.ca'>Go back</a>",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "internalTitleEn": "CDS - Lemonade Stand Funding",
+  "internalTitleFr": "CDS - Lemonade Stand Funding"
+}

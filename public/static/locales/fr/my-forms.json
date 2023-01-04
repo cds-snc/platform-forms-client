@@ -1,0 +1,39 @@
+{
+  "title": "Mes formulaires ",
+  "nav": {
+    "drafts": "Ébauches de formulaires",
+    "published": "Publié",
+    "all": "Tous"
+  },
+  "actions": {
+    "resumeForm": "Reprendre la rédaction de formulaire en cours",
+    "createNewForm": "Créer un nouveau formulaire +"
+  },
+  "cards": {
+    "noForms": "Vous n’avez aucun formulaire enregistré.",
+    "noDraftForms": "Vous n’avez aucune ébauche enregistré.",
+    "noPublishedForms": "Vous n’avez aucun formulaire publié."
+  },
+  "card": {
+    "states": {
+      "draft": "Ébauche",
+      "published": "Publier"
+    },
+    "title": {
+      "notTranslatedEn": "Traduction en anglais non fournie.",
+      "notTranslatedFr": "Traduction en français non fournie."
+    },
+    "lastEdited": "Dernière modification",
+    "menu": {
+      "more": "Plus",
+      "save": "Enregistrer",
+      "copyLink": "Copier le lien",
+      "preview": "Prévisualiser",
+      "edit": "Modifier",
+      "settings": "Réglages",
+      "delete": "Supprimer le formulaire",
+      "coppiedToClipboard": "Copié dans le presse-papier",
+      "somethingWentWrong": "Il y a eu un problème"
+    }
+  }
+}

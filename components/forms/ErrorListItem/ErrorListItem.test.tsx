@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import ErrorListItem from "./ErrorListItem";
+import { ErrorListItem } from "@components/forms";
 
 describe("ErrorListItem component", () => {
   it("renders without errors", async () => {

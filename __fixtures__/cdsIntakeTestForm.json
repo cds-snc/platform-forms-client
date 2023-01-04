@@ -1,0 +1,130 @@
+{
+  "form": {
+    "brand": {
+      "name": "cds-snc",
+      "urlEn": "https://digital.canada.ca/",
+      "urlFr": "https://numerique.canada.ca/",
+      "logoEn": "https://digital.canada.ca/img/cds/cds-lockup-ko-en.svg",
+      "logoFr": "https://numerique.canada.ca/img/cds/cds-lockup-ko-fr.svg",
+      "logoTitleEn": "Canadian Digital Service",
+      "logoTitleFr": "Service numérique canadien"
+    },
+    "layout": [1, 2, 3, 4, 5, 6, 7],
+    "endPage": {
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "referrerUrlEn": "https://digital.canada.ca/",
+      "referrerUrlFr": "https://numerique.canada.ca/"
+    },
+    "titleEn": "CDS Intake Form",
+    "titleFr": "SNC Formulaire d'admission",
+    "version": 1,
+    "elements": [
+      {
+        "id": 1,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What is your full name?",
+          "titleFr": "Quel est votre nom complet?",
+          "validation": {
+            "required": true
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 2,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What is your email address?",
+          "titleFr": "Quelle est votre adresse électronique?",
+          "validation": {
+            "required": true
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 3,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What department do you work for?",
+          "titleFr": "Pour quel service travaillez-vous?",
+          "validation": {
+            "required": false
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 4,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What is the name of your service?",
+          "titleFr": "Quel est le nom de votre service?",
+          "validation": {
+            "required": false
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 5,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "What is the problem you are facing",
+          "titleFr": "Quel est le problème auquel vous êtes confronté?",
+          "validation": {
+            "required": false
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 6,
+        "type": "textField",
+        "properties": {
+          "titleEn": "What is your timeline?",
+          "titleFr": "Quel est votre calendrier?",
+          "validation": {
+            "required": false
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      },
+      {
+        "id": 7,
+        "type": "textArea",
+        "properties": {
+          "titleEn": "How did you hear about us?",
+          "titleFr": "Comment avez-vous entendu parler de nous?",
+          "validation": {
+            "required": false
+          },
+          "description": "",
+          "placeholderEn": "",
+          "placeholderFr": ""
+        }
+      }
+    ],
+    "startPage": {}
+  },
+  "submission": {
+    "email": "fitore.jaha.price@cds-snc.ca"
+  },
+  "internalTitleEn": "CDS Intake Form",
+  "internalTitleFr": "SNC Formulaire d'admission",
+  "securityAttribute": "Unclassified"
+}
