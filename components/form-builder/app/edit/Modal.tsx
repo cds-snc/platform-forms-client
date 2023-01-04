@@ -17,21 +17,23 @@ const modalDefaultContext: IModalContext = {
   changeOpen: () => null,
 };
 
-const ModalContext = createContext<IModalContext>(modalDefaultContext);
+export const ModalContext = createContext<IModalContext>(modalDefaultContext);
 
 export const Modal = ({
   title,
   children,
   openButton,
   saveButton,
+  defaultOpen = false,
 }: {
   title: string;
   children: React.ReactNode;
   openButton?: React.ReactElement;
   saveButton?: React.ReactElement | string | undefined;
+  defaultOpen?: boolean;
 }) => {
   const { updateIsOpen } = useModalStore();
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
   const changeOpen = (open: boolean) => {
     setIsOpen(open);
     updateIsOpen(open);
@@ -79,8 +81,12 @@ export const ModalButton = ({
 
   if (!children) {
     return (
-      <button onClick={() => changeOpen(isOpenButton)}>
-        {isOpenButton ? t("Open modal") : t("Close modal")}
+      <button
+        onClick={() => {
+          changeOpen(isOpenButton);
+        }}
+      >
+        {isOpenButton ? t("openModal") : t("closeModal")}
       </button>
     );
   }
@@ -158,18 +164,22 @@ export const ModalContainer = ({
 
   /* eslint-disable */
   return (
-    <dialog className="modal" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
+    <dialog data-testid="modal" className="modal-dialog" tabIndex={-1} role="dialog" onClick={close} ref={modalContainer}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
           <ModalButton isOpenButton={false}>
             <Button
-              theme="icon"
-              className="group"
-              icon={<Close className="group-focus:fill-white-default" />}
-              aria-label={t("Close")}
+              theme="link"
+              className="group justify-self-end block pl-2 pr-2"
+              aria-label={t("close")}
               onClick={close}
-            ></Button>
+            >
+              <span className="block w-30 mr-2">
+                <Close className="group-focus:fill-white-default inline-block mr-2" />
+                {t("close")}
+              </span>
+            </Button>
           </ModalButton>
         </div>
         <div className="modal-body">

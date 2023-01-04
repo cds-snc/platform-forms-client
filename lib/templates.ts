@@ -454,7 +454,6 @@ const _onlyIncludePublicProperties = (template: FormRecord): PublicFormRecord =>
     id: template.id,
     isPublished: template.isPublished,
     updatedAt: template.updated_at,
-    displayAlphaBanner: template.displayAlphaBanner ?? true,
     securityAttribute: template.securityAttribute ?? "Unclassified",
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,

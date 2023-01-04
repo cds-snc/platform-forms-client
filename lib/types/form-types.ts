@@ -129,7 +129,6 @@ export type FormRecord = {
   internalTitleFr?: string;
   isPublished: boolean;
   submission: SubmissionProperties;
-  displayAlphaBanner?: boolean;
   form: FormProperties;
   securityAttribute: string;
   reCaptchaID?: string;

@@ -283,6 +283,8 @@ export const useAuth = () => {
           setCognitoErrorIsDismissible(false);
         } else if (responseErrorMessage.includes("GoogleCredentialsExist")) {
           await router.push("/admin/login");
+        } else if (responseErrorMessage.includes("PasswordResetRequiredException")) {
+          await router.push("/auth/resetpassword");
         } else {
           setCognitoError(t("InternalServiceException"));
         }

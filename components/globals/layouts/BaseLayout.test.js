@@ -6,7 +6,7 @@ import { SessionProvider } from "next-auth/react";
 describe("Generate the Base structure of a page", () => {
   afterEach(cleanup);
 
-  test("Alpha banner and FIP should be displayed", () => {
+  test("FIP should be displayed", () => {
     render(
       <SessionProvider session={null}>
         <BaseLayout>
@@ -15,7 +15,6 @@ describe("Generate the Base structure of a page", () => {
       </SessionProvider>
     );
 
-    expect(screen.queryByTestId("PhaseBanner")).toBeInTheDocument();
     expect(screen.queryByTestId("fip")).toBeInTheDocument();
   });
 });

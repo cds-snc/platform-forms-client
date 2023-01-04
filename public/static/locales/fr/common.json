@@ -12,10 +12,7 @@
       "link": "/fr/form-builder/support",
       "desc": "Soutien"
     },
-    "ariaLabel": "[FR] Footer"
-  },
-  "phase": {
-    "desc": "Ce site évoluera au fur et à mesure que nous testons des idées."
+    "ariaLabel": "Bas de page"
   },
   "skip-link": "Passer au contenu principal",
   "fip": {
@@ -75,7 +72,7 @@
     "login": "Connexion",
     "logout": "Déconnexion",
     "privileges": "Privileges",
-    "myForms": "My Forms [FR]"
+    "myForms": "Mes formulaires"
   },
   "formElements": {
     "characterCount": {
@@ -101,6 +98,7 @@
   "alert": {
     "dismissAlert": "Fermer cette alerte"
   },
-  "continue": "Continue [FR]",
-  "error": "Error [FR]"
+  "continue": "Continuer",
+  "error": "Erreur",
+  "unknown": "Inconnu"
 }
