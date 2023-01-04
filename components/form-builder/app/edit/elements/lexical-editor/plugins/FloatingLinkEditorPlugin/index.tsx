@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+// import "./index.css";
 
 import { $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -13,28 +14,35 @@ import {
   $getSelection,
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
+  COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
   GridSelection,
+  KEY_ESCAPE_COMMAND,
   LexicalEditor,
   NodeSelection,
   RangeSelection,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
-import { getSelectedNode } from "../utils/getSelectedNode";
-import { sanitizeUrl } from "../utils/sanitizeUrl";
-import { setFloatingElemPosition } from "../utils/setFloatingElemPosition";
+// import LinkPreview from "../../ui/LinkPreview";
+import { getSelectedNode } from "../../utils/getSelectedNode";
+import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
+import { sanitizeUrl } from "../../utils/url";
 import { EditIcon } from "@components/form-builder/icons/EditIcon";
 import { useTranslation } from "react-i18next";
 
 function FloatingLinkEditor({
   editor,
+  isLink,
+  setIsLink,
   anchorElem,
 }: {
   editor: LexicalEditor;
+  isLink: boolean;
+  setIsLink: Dispatch<boolean>;
   anchorElem: HTMLElement;
 }): JSX.Element {
   const editorRef = useRef<HTMLDivElement | null>(null);
@@ -74,7 +82,8 @@ function FloatingLinkEditor({
       selection !== null &&
       nativeSelection !== null &&
       rootElement !== null &&
-      rootElement.contains(nativeSelection.anchorNode)
+      rootElement.contains(nativeSelection.anchorNode) &&
+      editor.isEditable()
     ) {
       const domRange = nativeSelection.getRangeAt(0);
       let rect;
@@ -141,9 +150,20 @@ function FloatingLinkEditor({
           return true;
         },
         COMMAND_PRIORITY_LOW
+      ),
+      editor.registerCommand(
+        KEY_ESCAPE_COMMAND,
+        () => {
+          if (isLink) {
+            setIsLink(false);
+            return true;
+          }
+          return false;
+        },
+        COMMAND_PRIORITY_HIGH
       )
     );
-  }, [editor, updateLinkEditor]);
+  }, [editor, updateLinkEditor, setIsLink, isLink]);
 
   useEffect(() => {
     editor.getEditorState().read(() => {
@@ -157,54 +177,28 @@ function FloatingLinkEditor({
     }
   }, [isEditMode]);
 
-  const confirmLink = () => {
-    if (lastSelection !== null) {
-      if (linkUrl !== "") {
-        editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
-      }
-      setEditMode(false);
-    }
-  };
-
   return (
-    <div
-      ref={editorRef}
-      className="link-editor"
-      role="dialog"
-      aria-labelledby={"link-editor-label-" + editor._key}
-    >
-      <div id={"link-editor-label-" + editor._key} className="sr-only">
-        {t("editLink")}
-      </div>
+    <div ref={editorRef} className="link-editor">
       {isEditMode ? (
-        <>
-          <input
-            ref={inputRef}
-            id={"link-editor-description-" + editor._key}
-            className="link-input"
-            value={linkUrl}
-            onFocus={(e) => {
-              e.target.select();
-            }}
-            onChange={(event) => {
-              setLinkUrl(event.target.value);
-            }}
-            onBlur={() => confirmLink()}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                confirmLink();
-              } else if (event.key === "Escape") {
-                event.preventDefault();
+        <input
+          ref={inputRef}
+          className="link-input"
+          value={linkUrl}
+          onChange={(event) => {
+            setLinkUrl(event.target.value);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === "Escape") {
+              event.preventDefault();
+              if (lastSelection !== null) {
+                if (linkUrl !== "") {
+                  editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
+                }
                 setEditMode(false);
-                editor.focus();
               }
-            }}
-          />
-          <label className="visually-hidden" htmlFor={"link-editor-description-" + editor._key}>
-            {t("linkUrl")}
-          </label>
-        </>
+            }
+          }}
+        />
       ) : (
         <>
           <div className="link-input">
@@ -227,6 +221,7 @@ function FloatingLinkEditor({
               <EditIcon title={t("editLink")} className="w-5 h-5 inline-block absolute right-0" />
             </button>
           </div>
+          {/* <LinkPreview url={linkUrl} /> */}
         </>
       )}
     </div>
@@ -269,7 +264,15 @@ function useFloatingLinkEditorToolbar(
   }, [editor, updateToolbar]);
 
   return isLink
-    ? createPortal(<FloatingLinkEditor editor={activeEditor} anchorElem={anchorElem} />, anchorElem)
+    ? createPortal(
+        <FloatingLinkEditor
+          editor={activeEditor}
+          isLink={isLink}
+          anchorElem={anchorElem}
+          setIsLink={setIsLink}
+        />,
+        anchorElem
+      )
     : null;
 }
 
