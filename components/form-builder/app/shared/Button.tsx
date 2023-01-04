@@ -48,6 +48,7 @@ export const Button = ({
   theme = "primary",
   tabIndex = 0,
   buttonRef,
+  dataTestId,
 }: {
   children?: JSX.Element | string;
   id?: string;
@@ -60,6 +61,7 @@ export const Button = ({
   theme?: "primary" | "secondary" | "destructive" | "link" | "icon";
   tabIndex?: number;
   buttonRef?: (el: HTMLButtonElement) => void;
+  dataTestId?: string;
 }) => (
   <button
     onClick={onClick}
@@ -70,6 +72,7 @@ export const Button = ({
     type="button"
     tabIndex={tabIndex}
     ref={buttonRef}
+    data-testid={dataTestId}
   >
     {icon && (
       <div className={`${iconWrapperClassName || ""} ${theme === "icon" ? "" : "w-8 -ml-2 mr-2"}`}>

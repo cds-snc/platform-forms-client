@@ -112,6 +112,7 @@ export const PanelActions = ({
         role="toolbar"
         aria-label={t("elementActions")}
         onKeyDown={handleNav}
+        data-testid="panel-actions"
       >
         <Button
           theme="secondary"
@@ -127,6 +128,7 @@ export const PanelActions = ({
               itemsRef.current[index] = el;
             }
           }}
+          dataTestId="move-up"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
         </Button>
@@ -144,6 +146,7 @@ export const PanelActions = ({
               itemsRef.current[index] = el;
             }
           }}
+          dataTestId="move-down"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
         </Button>
@@ -164,6 +167,7 @@ export const PanelActions = ({
               itemsRef.current[index] = el;
             }
           }}
+          dataTestId="duplicate"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
         </Button>
@@ -187,6 +191,7 @@ export const PanelActions = ({
               itemsRef.current[index] = el;
             }
           }}
+          dataTestId="remove"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
         </Button>
@@ -208,6 +213,7 @@ export const PanelActions = ({
                     itemsRef.current[index] = el;
                   }
                 }}
+                dataTestId="more"
               >
                 <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
               </Button>
@@ -228,6 +234,7 @@ export const PanelActions = ({
           theme="secondary"
           className="!border-1.5 !py-2 !px-4 leading-6 bg-white text-sm"
           tabIndex={0}
+          dataTestId="add-element"
         >
           {t("addElement")}
         </Button>
