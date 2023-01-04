@@ -202,11 +202,6 @@
         }
       ]
     },
-    "displayAlphaBanner": {
-      "description": "If set to false, the ALPHA tag will not appear in the header of the page. If not set if will be defaulted to true.",
-      "id": "#/properties/displayAlphaBanner",
-      "type": "boolean"
-    },
     "securityAttribute": {
       "description": "It shows an administrator what procedure should be taken when accessing a form's responses",
       "id": "#/properties/securityAttribute",

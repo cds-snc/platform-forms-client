@@ -1,7 +1,6 @@
 import React from "react";
 import { getPageClassNames } from "@lib/routeUtils";
 import Head from "next/head";
-import PhaseBanner from "@components/globals/PhaseBanner";
 import Footer from "@components/globals/Footer";
 import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
@@ -11,15 +10,9 @@ import { useTranslation } from "next-i18next";
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
   embedded: boolean;
-  displayAlphaBanner: boolean;
 }
 
-const FormDisplayLayout = ({
-  children,
-  formRecord,
-  embedded,
-  displayAlphaBanner,
-}: FormDisplayLayoutProps) => {
+const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayoutProps) => {
   const classes = getPageClassNames(formRecord);
 
   const { t } = useTranslation("common");
@@ -37,7 +30,6 @@ const FormDisplayLayout = ({
       <div className={classes}>
         {!embedded && (
           <header>
-            {displayAlphaBanner && <PhaseBanner />}
             <Fip formRecord={formRecord} showLogin={false} showLanguageToggle={true} />
           </header>
         )}

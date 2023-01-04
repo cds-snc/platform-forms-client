@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import Footer from "../Footer";
 import Head from "next/head";
-import PhaseBanner from "../PhaseBanner";
 import SkipLink from "../SkipLink";
 import Fip from "../Fip";
 
@@ -23,7 +22,6 @@ const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
       <SkipLink />
 
       <header>
-        <PhaseBanner />
         <Fip {...{ showLanguageToggle, showLogin }} />
       </header>
       <div id="page-container">

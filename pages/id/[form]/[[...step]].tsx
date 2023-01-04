@@ -69,13 +69,8 @@ function redirect(locale: string | undefined) {
 
 RenderForm.getLayout = function getLayout(page: ReactElement) {
   const isEmbeddable = page.props.formRecord && page.props.isEmbeddable;
-  const shouldDisplayAlphaBanner = page.props.formRecord?.displayAlphaBanner ?? true;
   return (
-    <FormDisplayLayout
-      formRecord={page.props.formRecord}
-      embedded={isEmbeddable}
-      displayAlphaBanner={shouldDisplayAlphaBanner}
-    >
+    <FormDisplayLayout formRecord={page.props.formRecord} embedded={isEmbeddable}>
       {page}
     </FormDisplayLayout>
   );

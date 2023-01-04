@@ -496,7 +496,6 @@ describe("Template CRUD functions", () => {
     expect(publicFormRecord).not.toHaveProperty("submission");
     expect(publicFormRecord).not.toHaveProperty("internalTitleEn");
     expect(publicFormRecord).not.toHaveProperty("internalTitleFr");
-    expect(publicFormRecord).toHaveProperty("displayAlphaBanner");
     expect(publicFormRecord).toHaveProperty("securityAttribute");
   });
 
