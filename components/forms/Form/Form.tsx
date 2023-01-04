@@ -12,6 +12,73 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
+interface SubmitButtonProps {
+  submitTooEarly: boolean;
+  checkTimer: () => void;
+  timerDelay?: number;
+  remainingTime: number;
+}
+const SubmitButton: React.FC<SubmitButtonProps> = ({
+  submitTooEarly,
+  checkTimer,
+  timerDelay,
+  remainingTime,
+}) => {
+  const { t } = useTranslation();
+  const [countDown, setCountDown] = useState(remainingTime);
+  useEffect(() => {
+    const intervalID = setInterval(() => {
+      setCountDown((prev) => --prev);
+    }, 1000);
+    logMessage.debug(`Created interval ${intervalID}`);
+
+    // Ensures the inverval timer is stopped when coundDown gets to zero
+    const timeoutID = setTimeout(() => {
+      logMessage.debug(`Remaining Time: ${remainingTime}`);
+      logMessage.debug(`Cancelling interval ${intervalID}`);
+      clearInterval(intervalID);
+    }, remainingTime * 1000);
+
+    return () => {
+      logMessage.debug(`Clearing out interval ${intervalID} and timeout ${timeoutID}`);
+      clearInterval(intervalID);
+      clearTimeout(timeoutID);
+    };
+  }, [remainingTime, timerDelay]);
+
+  return (
+    <>
+      <div
+        className={classNames({
+          "border-l-2": submitTooEarly,
+          "border-red-default": submitTooEarly,
+          "border-green-default": submitTooEarly && countDown === 0,
+          "pl-3": submitTooEarly,
+        })}
+      >
+        {submitTooEarly &&
+          (countDown > 0 ? (
+            <div role="alert">
+              <p className="gc-label text-red-default">
+                {t("spam-error.error-part-1")} {timerDelay} {t("spam-error.error-part-2")}
+              </p>
+              <p className="gc-description">
+                {t("spam-error.prompt-part-1")} {countDown} {t("spam-error.prompt-part-2")}
+              </p>
+            </div>
+          ) : (
+            <div role="alert">
+              <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
+              <p className="gc-description">{t("spam-error.success-prompt")}</p>
+            </div>
+          ))}
+      </div>
+      <Button type="submit" onClick={() => checkTimer()}>
+        {t("submitButton")}
+      </Button>
+    </>
+  );
+};
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
@@ -28,24 +95,23 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
-
+  const timerActive = useFlag("formTimer");
   const { t } = useTranslation();
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-  const timerActive = useFlag("formTimer");
-  const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
 
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
+
+  const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
+  const [submitTooEarly, setSubmitTooEarly] = useState(false);
 
   useExternalScript(
     `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
     isReCaptchaEnableOnSite
   );
-
-  const [submitTooEarly, setSubmitTooEarly] = useState(false);
 
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -101,7 +167,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
+    let timeoutId: NodeJS.Timeout;
     // calculate initial delay for submit timer
     if (timerActive) {
       const secondsBaseDelay = 2;
@@ -128,8 +194,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     };
   }, [timerActive]);
 
-  const submitButton = <Button type="submit">{t("submitButton")}</Button>;
-
   return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
     <Loader message={t("loading")} />
   ) : (
@@ -148,11 +212,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           {errorList}
         </Alert>
       )}
-      {/**
-       * method attribute needs to stay here in case javascript does not load
-       * otherwise GET request will be sent which will result in leaking all the user data
-       * to the URL
-       */}
+
       {
         <>
           <RichText>
@@ -163,6 +223,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           <form
             id="form"
             data-testid="form"
+            /**
+             * method attribute needs to stay here in case javascript does not load
+             * otherwise GET request will be sent which will result in leaking all the user data
+             * to the URL
+             */
             method="POST"
             onSubmit={(e) => {
               e.preventDefault();
@@ -197,34 +262,17 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               {form.privacyPolicy &&
                 form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
             </RichText>
-            <div
-              className={classNames({
-                "border-l-2": submitTooEarly,
-                "border-red-default": submitTooEarly,
-                "border-green-default": formTimerState.remainingTime === 0 && submitTooEarly,
-                "pl-3": submitTooEarly,
-              })}
-            >
-              {submitTooEarly &&
-                (formTimerState.remainingTime > 0 ? (
-                  <div role="alert">
-                    <p className="gc-label text-red-default">
-                      {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
-                      {t("spam-error.error-part-2")}
-                    </p>
-                    <p className="gc-description">
-                      {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
-                      {t("spam-error.prompt-part-2")}
-                    </p>
-                  </div>
-                ) : (
-                  <div role="alert">
-                    <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
-                    <p className="gc-description">{t("spam-error.success-prompt")}</p>
-                  </div>
-                ))}
-              {props.renderSubmit ? props.renderSubmit() : submitButton}
-            </div>
+            {props.renderSubmit ? (
+              props.renderSubmit()
+            ) : (
+              <SubmitButton
+                submitTooEarly={submitTooEarly}
+                checkTimer={checkTimer}
+                remainingTime={formTimerState.remainingTime}
+                timerDelay={formTimerState.timerDelay}
+                key={formTimerState.timerDelay}
+              />
+            )}
           </form>
         </>
       }
