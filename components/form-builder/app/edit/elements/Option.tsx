@@ -70,7 +70,7 @@ export const Option = ({
       (parentIndex: number, value: string, lang: Language) => {
         updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, value);
       },
-      [translationLanguagePriority, updateField]
+      [updateField, index]
     ),
     100
   );
@@ -80,7 +80,9 @@ export const Option = ({
       setValue(value);
       _debounced(parentIndex, value, translationLanguagePriority);
     },
-    // @todo add react-hooks/exhaustive-deps
+
+    // exclude _debounced from the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue, translationLanguagePriority]
   );
 

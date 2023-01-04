@@ -49,7 +49,7 @@ export const Edit = () => {
           formatEmailSubject(val, lang)
         );
       },
-      [translationLanguagePriority, updateField]
+      [updateField, localizeField]
     ),
     100
   );
@@ -59,7 +59,8 @@ export const Edit = () => {
       setValue(e.target.value);
       _debounced(e.target.value, translationLanguagePriority);
     },
-    // @todo add react-hooks/exhaustive-deps
+    // exclude _debounced from the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue, translationLanguagePriority]
   );
 

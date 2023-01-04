@@ -56,7 +56,8 @@ export const QuestionInput = ({
       setValue(value);
       _debounced(index, value, translationLanguagePriority);
     },
-    // @todo add react-hooks/exhaustive-deps
+    // exclude _debounced from the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue, translationLanguagePriority]
   );
 

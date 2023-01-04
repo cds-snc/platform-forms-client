@@ -48,6 +48,8 @@ export const RichTextEditor = ({
       setValue(value);
       _debounced(value);
     },
+    // exclude _debounced from the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setValue]
   );
 
