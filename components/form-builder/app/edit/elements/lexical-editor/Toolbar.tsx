@@ -33,7 +33,7 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import { sanitizeUrl } from "./utils/sanitizeUrl";
+import { sanitizeUrl } from "./utils/url";
 import { useEditorFocus } from "./useEditorFocus";
 import { getSelectedNode } from "./utils/getSelectedNode";
 import { ToolTip } from "./ToolTip";
