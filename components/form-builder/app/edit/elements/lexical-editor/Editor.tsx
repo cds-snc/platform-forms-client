@@ -6,6 +6,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { $createParagraphNode, $getRoot } from "lexical";
 import { editorConfig } from "./config";
 import { Toolbar } from "./Toolbar";
@@ -17,7 +18,6 @@ import {
   TRANSFORMERS,
 } from "@lexical/markdown";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
-import { TabEscape } from "./plugins/TabEscape";
 import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
 
 export const Editor = ({
@@ -78,7 +78,8 @@ export const Editor = ({
               />
             </div>
           }
-          placeholder={""}
+          placeholder={null}
+          ErrorBoundary={LexicalErrorBoundary}
         />
         <FocusPlugin autoFocusEditor={autoFocusEditor} />
         <HistoryPlugin />
@@ -94,7 +95,6 @@ export const Editor = ({
         <LinkPlugin />
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
-        <TabEscape />
         <ListMaxIndentPlugin maxDepth={5} />
       </LexicalComposer>
     </div>

@@ -9,7 +9,7 @@ jobs:
     name: Jest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # tag=v1
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
       - name: "Install dependencies"
         run: yarn install
       - name: Jest Tests

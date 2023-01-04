@@ -11,7 +11,7 @@ describe("ShortAnswer", () => {
       <ShortAnswer data-testid="short-answer">test content</ShortAnswer>
     );
     const renderedElement = rendered.getByTestId("short-answer");
-    expect(renderedElement).toHaveClass("border-bottom-1");
+    expect(renderedElement).toHaveClass("border-b-1.5");
     expect(rendered.container).toHaveTextContent("test content");
   });
 });
