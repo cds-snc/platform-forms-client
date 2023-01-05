@@ -85,8 +85,8 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       <Button
         type="submit"
         onClick={(e) => {
-          checkTimer();
           if (timerActive) {
+            checkTimer();
             if (!formTimerState.canSubmit) {
               e.preventDefault();
 
