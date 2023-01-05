@@ -59,7 +59,7 @@ export const PanelActions = ({
       }
     }
     setIsInit(true);
-  }, [currentFocusIndex]);
+  }, [currentFocusIndex, isInit]);
 
   const handleNav = useCallback(
     (evt: KeyboardEvent<HTMLInputElement>) => {
@@ -85,7 +85,7 @@ export const PanelActions = ({
         setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
       }
     },
-    [items, setCurrentFocusIndex, currentFocusIndex]
+    [items, setCurrentFocusIndex, currentFocusIndex, isFirstItem, isLastItem]
   );
 
   const getTabIndex = (item: string) => {

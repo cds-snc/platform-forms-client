@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, createContext, useContext } from "react";
+import React, { useEffect, useRef, createContext, useContext, useCallback } from "react";
 import { useTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
@@ -116,10 +116,10 @@ export const ModalContainer = ({
 
   const modalContainer = useRef<CDSHTMLDialogElement>(null);
 
-  const close = () => {
+  const close = useCallback(() => {
     modalContainer.current?.close();
     changeOpen(false);
-  };
+  }, [changeOpen]);
 
   // focus modal when opened
   useEffect(() => {
@@ -131,6 +131,7 @@ export const ModalContainer = ({
     }
 
     document.body.style.overflow = isOpen ? "hidden" : "unset";
+    // see: https://github.com/facebook/react/issues/24399
   }, [isOpen]);
 
   // Trap focus in the modal
@@ -156,7 +157,7 @@ export const ModalContainer = ({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [close]);
 
   if (!isOpen) {
     return null;

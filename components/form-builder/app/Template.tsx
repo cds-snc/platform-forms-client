@@ -59,7 +59,7 @@ export const PageTemplate = ({
 
   useEffect(() => {
     setLang(locale);
-  }, [locale]);
+  }, [locale, setLang]);
 
   useEffect(() => {
     const setEmail = () => {
@@ -68,7 +68,7 @@ export const PageTemplate = ({
       }
     };
     !email && currentPage !== "settings" && setEmail();
-  }, [email, data]);
+  }, [email, data, currentPage, updateField]);
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (

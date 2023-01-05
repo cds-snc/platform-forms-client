@@ -15,6 +15,7 @@ const getHost = () => {
 };
 
 export const Published = ({ id }: { id: string }) => {
+  const { t } = useTranslation("form-builder");
   const { status } = useSession();
   const router = useRouter();
   const [formId] = useState(id);
@@ -38,7 +39,6 @@ export const Published = ({ id }: { id: string }) => {
     return null;
   }
 
-  const { t } = useTranslation("form-builder");
   return (
     <div>
       <h1 className="visually-hidden">{t("published")}</h1>

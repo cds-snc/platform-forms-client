@@ -97,7 +97,7 @@ export const DownloadFileButton = ({
     }
 
     retrieveFileBlob();
-  }, [getSchema]);
+  }, [getSchema, form.titleEn]);
 
   const handleOpenDialog = useCallback(() => {
     showDownloadDialog(true);
