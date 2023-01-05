@@ -21,6 +21,8 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
 
   useEffect(() => {
     getFormOwners();
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ownersApiUrl = `/api/id/${formID}/owners`;

@@ -38,7 +38,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     setClassName(className.replace("bg-yellow-100 ", ""));
     // remove the blue outline after 2.1 seconds
     setTimeout(() => setClassName(""), 2100);
-  }, [getFocusInput, className]);
+  }, [className]);
 
   useEffect(() => {
     if (item.type != "richText") {

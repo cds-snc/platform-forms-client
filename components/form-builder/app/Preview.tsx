@@ -61,7 +61,7 @@ export const Preview = () => {
         saved.current = true;
       };
     }
-  }, [status, router, id, saveForm, setId]);
+  }, [status, id, saveForm, setId]);
 
   const preventSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();

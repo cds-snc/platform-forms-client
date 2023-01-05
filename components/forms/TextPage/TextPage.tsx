@@ -18,12 +18,12 @@ interface PageContextProps {
 }
 
 const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
+  const { t } = useTranslation("confirmation");
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{pageText}</RichText>;
   }
-
-  const { t } = useTranslation("confirmation");
 
   // Otherwise, display the default confirmation text
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
