@@ -12,6 +12,7 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
+
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
   formID: string;
@@ -27,7 +28,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   useEffect(() => {
-    let intervalID: NodeJS.Timeout;
+    let intervalID: NodeJS.Timer;
     // calculate initial delay for submit timer
     if (timerActive) {
       const secondsBaseDelay = 2;
@@ -35,7 +36,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 
       const submitDelaySeconds =
         secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-      logMessage.debug(`Starting Timer`);
       startTimer(submitDelaySeconds);
       // Initiate a callback to ensure that state of submit button is correctly displayed
       intervalID = setInterval(() => {
@@ -46,6 +46,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
     }
 
     return () => {
+      // If the timer exists remove it when the component unmounts
       if (intervalID !== null) {
         clearInterval(intervalID);
       }
@@ -57,7 +58,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       <div
         className={classNames({
           "border-l-2": submitTooEarly,
-          "border-red-default": submitTooEarly,
+          "border-red-default": submitTooEarly && formTimerState.remainingTime > 0,
           "border-green-default": submitTooEarly && formTimerState.remainingTime === 0,
           "pl-3": submitTooEarly,
         })}
