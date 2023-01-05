@@ -185,6 +185,74 @@ describe("RichTextEditor", () => {
     expect(contentArea).toHaveFocus();
   });
 
+  it("can keyboard navigate the RichTextEditor", async () => {
+    render(
+      <Providers form={store.form}>
+        <RichTextEditor
+          path="path.to.content"
+          content="Here is some test content"
+          autoFocusEditor={false}
+          ariaLabel="AriaLabel"
+        />
+      </Providers>
+    );
+
+    // rendered.debug();
+
+    await act(async () => {
+      await promise;
+    });
+
+    const toolbar = screen.getByTestId("toolbar");
+    const [h2, h3, bold, italic, bulletList, numberedList, link] =
+      within(toolbar).getAllByRole("button");
+
+    expect(document.body).toHaveFocus();
+
+    // tab into toolbar
+    await userEvent.tab();
+    expect(h2).toHaveFocus();
+
+    // tab back out of toolbar
+    await userEvent.tab({ shift: true });
+    expect(document.body).toHaveFocus();
+
+    // tab back into toolbar
+    await userEvent.tab();
+    await userEvent.keyboard("{arrowright}");
+    expect(h3).toHaveFocus();
+
+    await userEvent.keyboard("{arrowright}");
+    expect(bold).toHaveFocus();
+
+    await userEvent.keyboard("{arrowright}");
+    expect(italic).toHaveFocus();
+
+    await userEvent.keyboard("{arrowright}");
+    expect(bulletList).toHaveFocus();
+
+    await userEvent.keyboard("{arrowright}");
+    expect(numberedList).toHaveFocus();
+
+    await userEvent.keyboard("{arrowright}");
+    expect(link).toHaveFocus();
+
+    await userEvent.keyboard("{arrowleft}");
+    expect(numberedList).toHaveFocus();
+
+    // tab back out of toolbar
+    await userEvent.tab({ shift: true });
+    expect(document.body).toHaveFocus();
+
+    // tab back into toolbar
+    await userEvent.tab();
+    expect(numberedList).toHaveFocus();
+  });
+
+  it.skip("can use keyboard shortcuts to apply formatting", async () => {
+    //
+  });
+
   it.skip("Updates field on change", async () => {
     // Can I test to see if updateField is called and receives the content and path?
   });
