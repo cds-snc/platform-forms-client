@@ -14,6 +14,7 @@ export const Header = () => {
 
   useEffect(() => {
     refreshAbility();
+    // we only want to run this once on mount
   }, []);
 
   return (

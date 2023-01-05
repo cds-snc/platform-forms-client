@@ -50,7 +50,7 @@ export const Option = ({
       input.current.focus();
       setFocusInput(false);
     }
-  }, [getFocusInput]);
+  }, [getFocusInput, setFocusInput]);
 
   useEffect(() => {
     setValue(initialValue);
