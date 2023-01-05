@@ -43,6 +43,7 @@ describe("PanelActions roving index", () => {
     expect(moreButton).toHaveAttribute("tabIndex", "-1");
     expect(addElementButton).toHaveAttribute("tabIndex", "0");
 
+    document.body.focus();
     // default focus on document.body
     expect(document.body).toHaveFocus();
 
@@ -120,6 +121,7 @@ describe("PanelActions roving index", () => {
     expect(moreButton).toHaveAttribute("tabIndex", "-1");
     expect(addElementButton).toHaveAttribute("tabIndex", "0");
 
+    document.body.focus();
     // default focus on document.body
     expect(document.body).toHaveFocus();
 
@@ -184,6 +186,7 @@ describe("PanelActions roving index", () => {
     expect(moreButton).toHaveAttribute("tabIndex", "-1");
     expect(addElementButton).toHaveAttribute("tabIndex", "0");
 
+    document.body.focus();
     // default focus on document.body
     expect(document.body).toHaveFocus();
 
