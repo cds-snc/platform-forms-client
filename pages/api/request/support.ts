@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, csrfProtected } from "@lib/middleware";
 import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
-import { CONTACTUS_EMAIL_ADDRESS, SUPPORT_EMAIL_ADDRESS } from "@lib/types";
 
 // Allows an authenticated or unauthenticated user to send an email requesting help
 const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,7 +11,10 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404).json({ error: "Malformed request" });
   }
 
-  const to = supportType === "contactus" ? CONTACTUS_EMAIL_ADDRESS : SUPPORT_EMAIL_ADDRESS;
+  const to =
+    supportType === "contactus"
+      ? process.env.EMAIL_ADDRESS_CONTACT_US
+      : process.env.EMAIL_ADDRESS_SUPPORT;
 
   const subject =
     supportType === "contactus"
