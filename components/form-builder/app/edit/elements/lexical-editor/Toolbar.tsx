@@ -85,13 +85,13 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
   ]);
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(-1);
+  const [currentFocusIndex, setCurrentFocusIndex] = useState(0);
   const [toolbarInit, setToolbarInit] = useState(false);
 
   useEffect(() => {
     const index = `button-${currentFocusIndex}` as unknown as number;
     const el = itemsRef.current[index];
-    if (el) {
+    if (el && toolbarInit) {
       el.focus();
     }
   }, [currentFocusIndex]);
@@ -241,7 +241,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
       >
         <ToolTip text={t("tooltipFormatH2")}>
           <button
-            tabIndex={0}
+            tabIndex={currentFocusIndex == 0 ? 0 : -1}
             ref={(el) => {
               const index = "button-0" as unknown as number;
               if (el && itemsRef.current) {
