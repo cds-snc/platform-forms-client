@@ -43,7 +43,7 @@ export const QuestionInput = ({
 
   const _debounced = debounce(
     useCallback(
-      (index, val, lang) => {
+      (index: number, val: string, lang: Language) => {
         onQuestionChange(index, val, lang);
       },
       [onQuestionChange]

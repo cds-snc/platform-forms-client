@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { Close } from "../../../icons";
-import { Button } from "../../shared/Button";
-import { Input } from "../../shared/Input";
+import { Input, Button } from "../../shared";
 import { useTemplateStore } from "../../../store/useTemplateStore";
+import { Language } from "@formbuilder/types";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
@@ -65,7 +65,7 @@ export const Option = ({
 
   const _debounced = debounce(
     useCallback(
-      (parentIndex, val, lang) => {
+      (parentIndex: number, val: string, lang: Language) => {
         updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
       },
       [updateField, index]
