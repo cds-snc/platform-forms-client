@@ -132,7 +132,6 @@ export const ModalContainer = ({
 
     document.body.style.overflow = isOpen ? "hidden" : "unset";
     // see: https://github.com/facebook/react/issues/24399
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   // Trap focus in the modal
