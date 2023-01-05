@@ -86,7 +86,7 @@ Formulaires GC adopte une approche de livraison continue, aussi peut-il arriver 
 Cette garantie sur le temps de fonctionnement exclut toute immobilisation d’Amazon, notre fournisseur d’infrastructure. Amazon promet un taux de temps de fonctionnement de 99,9 %. ([https://aws.amazon.com/messaging/sla/](https://d1.awsstatic.com/legal/AmazonMessaging_SQS_SNS/Amazon%20Messaging%20\(SQS%2C%20SNS\)%20Service%20Level%20Agreement-April%202019_FR.pdf))
 
 ### Temps de réponse du service et mode de contact
-Durant la phase alpha, toutes les demandes de soutien doivent être envoyées à [toassistance+forms@cds-snc.freshdesk.com](mailto:toassistance+forms@cds-snc.freshdesk.com). Le SNC répondra dans les huit heures suivant la réception de votre demande. L’assistance est uniquement disponible les jours ouvrables, de 9 h à 17 h.
+Durant la phase alpha, toutes les demandes de soutien doivent être envoyées à [assistance+forms@cds-snc.freshdesk.com](mailto:assistance+forms@cds-snc.freshdesk.com). Le SNC répondra dans les huit heures suivant la réception de votre demande. L’assistance est uniquement disponible les jours ouvrables, de 9 h à 17 h.
 
 Les tickets de service seront clôturés au bout de 10 jours si aucune réponse n’est reçue de la part de l’entité cliente.
 
