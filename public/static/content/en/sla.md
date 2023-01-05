@@ -86,7 +86,7 @@ As GC Forms uses a continuous delivery approach, sometimes patching multiple tim
 This uptime guarantee excludes any downtime experienced by Amazon as they are our infrastructure provider. Amazon promises 99.9% uptime. ([https://aws.amazon.com/messaging/sla/](https://aws.amazon.com/messaging/sla/))
 
 ### Service response time and contacts
-During Alpha, all support requests should be directed [toassistance+forms@cds-snc.freshdesk.com](mailto:toassistance+forms@cds-snc.freshdesk.com). CDS will respond within eight hours of receiving your request. Support is limited to 9am - 5pm on regular business days.
+During Alpha, all support requests should be directed to [assistance+forms@cds-snc.freshdesk.com](mailto:assistance+forms@cds-snc.freshdesk.com). CDS will respond within eight hours of receiving your request. Support is limited to 9am - 5pm on regular business days.
 
 Service tickets will be closed after 10 days if there is no response from the client.
 

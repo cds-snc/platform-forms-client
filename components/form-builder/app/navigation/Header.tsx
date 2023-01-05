@@ -14,7 +14,8 @@ export const Header = () => {
 
   useEffect(() => {
     refreshAbility();
-  }, [refreshAbility]);
+    // we only want to run this once on mount
+  }, []);
 
   return (
     <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">
