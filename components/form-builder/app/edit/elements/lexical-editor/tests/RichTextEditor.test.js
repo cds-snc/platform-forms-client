@@ -24,8 +24,6 @@ describe("RichTextEditor", () => {
       </Providers>
     );
 
-    // rendered.debug();
-
     await act(async () => {
       await promise;
     });
@@ -71,8 +69,6 @@ describe("RichTextEditor", () => {
         />
       </Providers>
     );
-
-    // rendered.debug();
 
     await act(async () => {
       await promise;
@@ -140,8 +136,6 @@ describe("RichTextEditor", () => {
       </Providers>
     );
 
-    // rendered.debug();
-
     await act(async () => {
       await promise;
     });
@@ -150,8 +144,6 @@ describe("RichTextEditor", () => {
     const contentArea = rendered.container.querySelector('[id^="editor-"]');
     const linkButton = screen.getByTestId("link-button");
     await user.click(linkButton);
-
-    // rendered.debug();
 
     // Doesn't work - trying to find the link editor
     // await screen.findByTestId("link-editor");
@@ -196,8 +188,6 @@ describe("RichTextEditor", () => {
         />
       </Providers>
     );
-
-    // rendered.debug();
 
     await act(async () => {
       await promise;
