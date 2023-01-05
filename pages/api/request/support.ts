@@ -13,7 +13,7 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const to =
     supportType === "contactus"
-      ? process.env.EMAIL_ADDRESS_CONTACTUS
+      ? process.env.EMAIL_ADDRESS_CONTACT_US
       : process.env.EMAIL_ADDRESS_SUPPORT;
 
   const subject =
