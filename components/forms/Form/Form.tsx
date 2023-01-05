@@ -13,41 +13,44 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
 interface SubmitButtonProps {
-  submitTooEarly: boolean;
-  formTimerState: {
-    canSubmit: boolean;
-    remainingTime: number;
-    timerDelay?: number;
-    timeLock?: number;
-  };
-  checkTimer: () => void;
+  numberOfRequiredQuestions: number;
+  formID: string;
+  formTitle: string;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
-  submitTooEarly,
-  formTimerState: { remainingTime, timerDelay },
-  checkTimer,
+  numberOfRequiredQuestions,
+  formID,
+  formTitle,
 }) => {
   const { t } = useTranslation();
-  const [countDown, setCountDown] = useState(remainingTime);
+  const timerActive = useFlag("formTimer");
+  const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
+  const [submitTooEarly, setSubmitTooEarly] = useState(false);
   useEffect(() => {
-    const intervalID = setInterval(() => {
-      setCountDown((prev) => --prev);
-    }, 1000);
-    logMessage.debug(`Created interval ${intervalID}`);
+    let intervalID: NodeJS.Timeout;
+    // calculate initial delay for submit timer
+    if (timerActive) {
+      const secondsBaseDelay = 2;
+      const secondsPerFormElement = 2;
 
-    // Ensures the inverval timer is stopped when coundDown gets to zero
-    const timeoutID = setTimeout(() => {
-      logMessage.debug(`Remaining Time: ${remainingTime}`);
-      logMessage.debug(`Cancelling interval ${intervalID}`);
-      clearInterval(intervalID);
-    }, remainingTime * 1000);
+      const submitDelaySeconds =
+        secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
+      logMessage.debug(`Starting Timer`);
+      startTimer(submitDelaySeconds);
+      // Initiate a callback to ensure that state of submit button is correctly displayed
+      intervalID = setInterval(() => {
+        checkTimer();
+      }, 1000);
+    } else {
+      disableTimer();
+    }
 
     return () => {
-      logMessage.debug(`Clearing out interval ${intervalID} and timeout ${timeoutID}`);
-      clearInterval(intervalID);
-      clearTimeout(timeoutID);
+      if (intervalID !== null) {
+        clearInterval(intervalID);
+      }
     };
-  }, [remainingTime, timerDelay]);
+  }, [timerActive]);
 
   return (
     <>
@@ -55,18 +58,20 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         className={classNames({
           "border-l-2": submitTooEarly,
           "border-red-default": submitTooEarly,
-          "border-green-default": submitTooEarly && countDown === 0,
+          "border-green-default": submitTooEarly && formTimerState.remainingTime === 0,
           "pl-3": submitTooEarly,
         })}
       >
         {submitTooEarly &&
-          (countDown > 0 ? (
+          (formTimerState.remainingTime > 0 ? (
             <div role="alert">
               <p className="gc-label text-red-default">
-                {t("spam-error.error-part-1")} {timerDelay} {t("spam-error.error-part-2")}
+                {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
+                {t("spam-error.error-part-2")}
               </p>
               <p className="gc-description">
-                {t("spam-error.prompt-part-1")} {countDown} {t("spam-error.prompt-part-2")}
+                {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
+                {t("spam-error.prompt-part-2")}
               </p>
             </div>
           ) : (
@@ -80,6 +85,25 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         type="submit"
         onClick={(e) => {
           checkTimer();
+          if (timerActive) {
+            if (!formTimerState.canSubmit) {
+              e.preventDefault();
+
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                event: "form_submission_spam_trigger",
+                formID: formID,
+                formTitle: formTitle,
+                submitTime: formTimerState.remainingTime,
+              });
+
+              setSubmitTooEarly(true);
+              // In case the useEffect timer failed check again
+              return;
+            }
+            // Only change state if submitTooEarly is already set to true
+            submitTooEarly && setSubmitTooEarly(false);
+          }
         }}
       >
         {t("submitButton")}
@@ -98,12 +122,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const {
     children,
     handleSubmit,
-    isSubmitting,
+    status,
     formRecord: { id: formID, reCaptchaID, form },
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
-  const timerActive = useFlag("formTimer");
+
   const { t } = useTranslation();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -112,9 +136,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
   const isReCaptchaEnableOnSite = useFlag("reCaptcha");
-
-  const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
-  const [submitTooEarly, setSubmitTooEarly] = useState(false);
 
   useExternalScript(
     `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
@@ -174,35 +195,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     }
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    // calculate initial delay for submit timer
-    if (timerActive) {
-      const secondsBaseDelay = 2;
-      const secondsPerFormElement = 2;
-      const numberOfRequiredElements = form.elements.filter(
-        (element) => element.properties.validation?.required === true
-      ).length;
-
-      const submitDelaySeconds =
-        secondsBaseDelay + numberOfRequiredElements * secondsPerFormElement;
-      startTimer(submitDelaySeconds);
-      // Initiate a callback to ensure that state of submit button is correctly displayed
-      timeoutId = setTimeout(() => {
-        checkTimer();
-      }, submitDelaySeconds * 1000);
-    } else {
-      disableTimer();
-    }
-
-    return () => {
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [timerActive]);
-
-  return isSubmitting || (props.submitCount > 0 && props.isValid && !formStatusError) ? (
+  return status === "submitting" ? (
     <Loader message={t("loading")} />
   ) : (
     <>
@@ -239,22 +232,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             method="POST"
             onSubmit={(e) => {
               e.preventDefault();
-              if (timerActive) {
-                if (!formTimerState.canSubmit) {
-                  window.dataLayer = window.dataLayer || [];
-                  window.dataLayer.push({
-                    event: "form_submission_spam_trigger",
-                    formID: formID,
-                    formTitle: form.titleEn,
-                    submitTime: formTimerState.remainingTime,
-                  });
-                  setSubmitTooEarly(true);
-                  // In case the useEffect timer failed check again
-                  return;
-                }
-                // Only change state if submitTooEarly is already set to true
-                submitTooEarly && setSubmitTooEarly(false);
-              }
 
               if (isReCaptchaEnableOnSite) {
                 handleSubmitReCaptcha(e);
@@ -274,12 +251,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               props.renderSubmit()
             ) : (
               <SubmitButton
-                submitTooEarly={submitTooEarly}
-                formTimerState={formTimerState}
-                checkTimer={checkTimer}
-                // The key is needed so that if the Timer Delay changes a new instance of SubmitButton is created
-                // This ensures the SubmitButton state is initialized with the latest Timer Delay
-                key={formTimerState.timerDelay}
+                numberOfRequiredQuestions={
+                  form.elements.filter(
+                    (element) => element.properties.validation?.required === true
+                  ).length
+                }
+                formID={formID}
+                formTitle={form.titleEn}
               />
             )}
           </form>
@@ -318,6 +296,8 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    // Needed so the Loader is displayed
+    formikBag.setStatus("submitting");
     try {
       const result = await submitToAPI(values, formikBag, formikBag.props.onSuccess ? false : true);
       result && formikBag.props.onSuccess && formikBag.props.onSuccess(result);
