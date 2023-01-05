@@ -36,7 +36,9 @@ export const Dialog = ({
       dialog?.showModal();
     }
     return () => dialog?.close();
-  }, [isOpen, dialogRef]);
+    // see: https://github.com/facebook/react/issues/24399
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   // Close modal if "ESC" key is pressed
   useEffect(() => {
