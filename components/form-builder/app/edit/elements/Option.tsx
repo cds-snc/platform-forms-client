@@ -50,7 +50,7 @@ export const Option = ({
       input.current.focus();
       setFocusInput(false);
     }
-  }, [getFocusInput]);
+  }, [getFocusInput, setFocusInput]);
 
   useEffect(() => {
     setValue(initialValue);
@@ -63,11 +63,14 @@ export const Option = ({
     }
   };
 
-  const _debounced = useCallback(
-    debounce((parentIndex, val, lang) => {
-      updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
-    }, 100),
-    [translationLanguagePriority]
+  const _debounced = debounce(
+    useCallback(
+      (parentIndex, val, lang) => {
+        updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
+      },
+      [updateField, index]
+    ),
+    100
   );
 
   const updateValue = useCallback(
@@ -75,7 +78,7 @@ export const Option = ({
       setValue(value);
       _debounced(parentIndex, value, translationLanguagePriority);
     },
-    [setValue, translationLanguagePriority]
+    [setValue, translationLanguagePriority, _debounced]
   );
 
   return (

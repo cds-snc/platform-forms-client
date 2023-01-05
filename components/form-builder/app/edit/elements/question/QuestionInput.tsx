@@ -41,11 +41,14 @@ export const QuestionInput = ({
     setValue(initialValue);
   }, [initialValue]);
 
-  const _debounced = useCallback(
-    debounce((index, val, lang) => {
-      onQuestionChange(index, val, lang);
-    }, 100),
-    [onQuestionChange]
+  const _debounced = debounce(
+    useCallback(
+      (index, val, lang) => {
+        onQuestionChange(index, val, lang);
+      },
+      [onQuestionChange]
+    ),
+    100
   );
 
   const updateValue = useCallback(
@@ -53,7 +56,7 @@ export const QuestionInput = ({
       setValue(value);
       _debounced(index, value, translationLanguagePriority);
     },
-    [setValue, translationLanguagePriority]
+    [setValue, translationLanguagePriority, _debounced]
   );
 
   return (

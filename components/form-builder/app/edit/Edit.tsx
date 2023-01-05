@@ -35,16 +35,19 @@ export const Edit = () => {
 
   const [value, setValue] = useState<string>(title);
 
-  const _debounced = useCallback(
-    debounce((val: string, lang: Language) => {
-      updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
-      // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
-      updateField(
-        `form.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
-        formatEmailSubject(val, lang)
-      );
-    }, 100),
-    [translationLanguagePriority]
+  const _debounced = debounce(
+    useCallback(
+      (val: string, lang: Language) => {
+        updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
+        // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
+        updateField(
+          `form.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
+          formatEmailSubject(val, lang)
+        );
+      },
+      [localizeField, updateField]
+    ),
+    100
   );
 
   useEffect(() => {
@@ -56,7 +59,7 @@ export const Edit = () => {
       setValue(e.target.value);
       _debounced(e.target.value, translationLanguagePriority);
     },
-    [setValue, translationLanguagePriority]
+    [setValue, translationLanguagePriority, _debounced]
   );
 
   const introTextPlaceholder =

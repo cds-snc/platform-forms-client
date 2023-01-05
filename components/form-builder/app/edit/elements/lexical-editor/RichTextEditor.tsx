@@ -26,14 +26,17 @@ export const RichTextEditor = ({
   const [value, setValue] = useState(content);
   const { t } = useTranslation("form-builder");
 
-  const _debounced = useCallback(
-    debounce((value: string) => {
-      if (typeof value === "undefined") {
-        value = "";
-      }
-      updateField(path, value);
-    }, 100),
-    []
+  const _debounced = debounce(
+    useCallback(
+      (value: string) => {
+        if (typeof value === "undefined") {
+          value = "";
+        }
+        updateField(path, value);
+      },
+      [updateField, path]
+    ),
+    100
   );
 
   useEffect(() => {
@@ -45,7 +48,7 @@ export const RichTextEditor = ({
       setValue(value);
       _debounced(value);
     },
-    [setValue]
+    [setValue, _debounced]
   );
 
   return (
