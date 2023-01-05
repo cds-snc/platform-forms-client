@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CDSHTMLDialogElement } from "../../types";
 import { useTranslation } from "next-i18next";
 import { Button } from "./Button";
@@ -24,11 +24,11 @@ export const Dialog = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
-  const close = () => {
+  const close = useCallback(() => {
     dialogRef.current?.close();
     handleClose && handleClose();
     changeOpen(false);
-  };
+  }, [dialogRef, handleClose]);
 
   useEffect(() => {
     const dialog = dialogRef?.current;
@@ -36,7 +36,7 @@ export const Dialog = ({
       dialog?.showModal();
     }
     return () => dialog?.close();
-  }, [isOpen]);
+  }, [isOpen, dialogRef]);
 
   // Close modal if "ESC" key is pressed
   useEffect(() => {
@@ -49,7 +49,7 @@ export const Dialog = ({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [close]);
 
   return (
     <dialog className="modal-dialog" aria-labelledby="modal-title" ref={dialogRef}>

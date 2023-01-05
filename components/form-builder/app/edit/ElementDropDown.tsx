@@ -29,7 +29,7 @@ export const ElementDropDown = ({
         onElementChange(selectedItem.id, itemIndex);
       }
     },
-    [setSelectedItem, onElementChange]
+    [setSelectedItem, onElementChange, itemIndex]
   );
 
   return (

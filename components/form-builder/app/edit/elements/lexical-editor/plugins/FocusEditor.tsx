@@ -8,7 +8,7 @@ export const FocusPlugin = ({ autoFocusEditor = false }: { autoFocusEditor?: boo
     if (autoFocusEditor) {
       editor.focus();
     }
-  }, [autoFocusEditor]);
+  }, [autoFocusEditor, editor]);
 
   return null;
 };

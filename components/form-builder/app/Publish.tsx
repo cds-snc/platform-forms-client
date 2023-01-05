@@ -65,7 +65,7 @@ export const Publish = () => {
     }
 
     router.push({ pathname: `/unlock-publishing` });
-  }, []);
+  }, [getSchema, id, uploadJson, router]);
 
   if (status !== "authenticated") {
     return <PublishNoAuth />;
