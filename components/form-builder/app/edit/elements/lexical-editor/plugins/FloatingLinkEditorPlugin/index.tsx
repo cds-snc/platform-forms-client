@@ -13,6 +13,7 @@ import { $findMatchingParent, mergeRegister } from "@lexical/utils";
 import {
   $getSelection,
   $isRangeSelection,
+  BLUR_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
@@ -151,8 +152,21 @@ function FloatingLinkEditor({
         },
         COMMAND_PRIORITY_LOW
       ),
+      // Hide link editor by pressing escape
       editor.registerCommand(
         KEY_ESCAPE_COMMAND,
+        () => {
+          if (isLink) {
+            setIsLink(false);
+            return true;
+          }
+          return false;
+        },
+        COMMAND_PRIORITY_HIGH
+      ),
+      // Hide link editor when editor loses focus
+      editor.registerCommand(
+        BLUR_COMMAND,
         () => {
           if (isLink) {
             setIsLink(false);
