@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
@@ -27,6 +27,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const timerActive = useFlag("formTimer");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
+  const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   useEffect(() => {
     let intervalID: NodeJS.Timer;
     // calculate initial delay for submit timer
@@ -65,16 +66,21 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       >
         {submitTooEarly &&
           (formTimerState.remainingTime > 0 ? (
-            <div role="alert">
-              <p className="gc-label text-red-default">
+            <>
+              <div role="alert" className="gc-label text-red-default">
                 {t("spam-error.error-part-1")} {formTimerState.timerDelay}{" "}
                 {t("spam-error.error-part-2")}
-              </p>
-              <p className="gc-description">
+                <span className="sr-only">
+                  {" "}
+                  {t("spam-error.prompt-part-1")} {screenReaderRemainingTime.current}{" "}
+                  {t("spam-error.prompt-part-2")}
+                </span>
+              </div>
+              <div aria-hidden={true} className="gc-description">
                 {t("spam-error.prompt-part-1")} {formTimerState.remainingTime}{" "}
                 {t("spam-error.prompt-part-2")}
-              </p>
-            </div>
+              </div>
+            </>
           ) : (
             <div role="alert">
               <p className="gc-label text-green-default">{t("spam-error.success-message")}</p>
@@ -87,6 +93,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         onClick={(e) => {
           if (timerActive) {
             checkTimer();
+            screenReaderRemainingTime.current = formTimerState.remainingTime;
             if (!formTimerState.canSubmit) {
               e.preventDefault();
 
