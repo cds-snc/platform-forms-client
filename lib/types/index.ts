@@ -53,6 +53,3 @@ export type {
 
 // Utility type creator
 export type BetterOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };
-
-// Constants global/application wide usage
-export { CONTACTUS_EMAIL_ADDRESS, SUPPORT_EMAIL_ADDRESS } from "./constants";
