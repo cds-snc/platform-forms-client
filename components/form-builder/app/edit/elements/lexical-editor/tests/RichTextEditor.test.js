@@ -32,7 +32,18 @@ describe("RichTextEditor", () => {
 
     const contentArea = rendered.container.querySelector('[id^="editor-"]');
     const toolbar = screen.getByTestId("toolbar");
+    const [h2, h3, bold, italic, bulletList, numberedList, link] =
+      within(toolbar).getAllByRole("button");
+
     const toolbarButtons = within(toolbar).getAllByRole("button");
+
+    expect(h2).toHaveAttribute("tabindex", "0");
+    expect(h3).toHaveAttribute("tabindex", "-1");
+    expect(bold).toHaveAttribute("tabindex", "-1");
+    expect(italic).toHaveAttribute("tabindex", "-1");
+    expect(bulletList).toHaveAttribute("tabindex", "-1");
+    expect(numberedList).toHaveAttribute("tabindex", "-1");
+    expect(link).toHaveAttribute("tabindex", "-1");
 
     // Toolbar has aria-controls attribute
     expect(toolbar).toHaveAttribute("aria-controls", contentArea.id);
@@ -69,14 +80,9 @@ describe("RichTextEditor", () => {
 
     const user = userEvent.setup();
 
-    // H2 Button
-    const h2 = screen.getByTestId("h2-button");
-    const h3 = screen.getByTestId("h3-button");
-    const bold = screen.getByTestId("bold-button");
-    const italic = screen.getByTestId("italic-button");
-    const bulletList = screen.getByTestId("bullet-list-button");
-    const numberedList = screen.getByTestId("numbered-list-button");
-    const link = screen.getByTestId("link-button");
+    const toolbar = screen.getByTestId("toolbar");
+    const [h2, h3, bold, italic, bulletList, numberedList, link] =
+      within(toolbar).getAllByRole("button");
 
     expect(h2).toHaveAttribute("aria-pressed", "false");
     expect(h3).toHaveAttribute("aria-pressed", "false");
@@ -145,8 +151,10 @@ describe("RichTextEditor", () => {
     const linkButton = screen.getByTestId("link-button");
     await user.click(linkButton);
 
+    // rendered.debug();
+
     // Doesn't work - trying to find the link editor
-    // const linkEditor = await screen.findByTestId("link-editor");
+    // await screen.findByTestId("link-editor");
     // expect(linkEditor).toHaveClass("link-editor");
 
     // The string is wrapped with a link
@@ -155,6 +163,26 @@ describe("RichTextEditor", () => {
     expect(link).toHaveAttribute("rel", "noopener");
     expect(link).toHaveAttribute("class", "editor-link ltr");
     expect(link).toHaveTextContent("Here is some test content");
+  });
+
+  it("can autofocus the editor", async () => {
+    const rendered = render(
+      <Providers form={store.form}>
+        <RichTextEditor
+          path="path.to.content"
+          content="Here is some test content"
+          autoFocusEditor={true}
+          ariaLabel="AriaLabel"
+        />
+      </Providers>
+    );
+
+    await act(async () => {
+      await promise;
+    });
+
+    const contentArea = rendered.container.querySelector('[id^="editor-"]');
+    expect(contentArea).toHaveFocus();
   });
 
   it.skip("Updates field on change", async () => {
