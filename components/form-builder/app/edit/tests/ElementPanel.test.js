@@ -114,7 +114,7 @@ describe("Element Panel", () => {
       expect(question.value).toBe("question 2");
       expect(rendered.getByTestId("element-select-active").textContent).toContain("email");
       expect(rendered.getByTestId("email")).toBeInTheDocument();
-      expect(rendered.getByTestId("email").textContent).toContain("example@canada.gc.ca");
+      expect(rendered.getByTestId("email").textContent).toContain("name@example.com");
     });
   });
 });

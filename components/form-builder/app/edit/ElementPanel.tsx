@@ -3,7 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore, useModalStore } from "../../store";
-import { PanelActions, ModalButton, ModalForm, PanelBody } from "./index";
+import { PanelActions, ModalButton, ModalForm, PanelBodyRoot } from "./index";
 import { Button } from "../shared";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
@@ -60,7 +60,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       key={lang}
       className={`element-${item.index} ${className} border border-black max-w-[800px] h-auto -mt-1`}
     >
-      <PanelBody item={item} />
+      <PanelBodyRoot item={item} />
       <PanelActions
         item={item}
         renderSaveButton={() => (
