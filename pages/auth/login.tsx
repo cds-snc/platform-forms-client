@@ -161,11 +161,10 @@ const Login = () => {
                   </Link>
                 </p>
               )}
-              <div className="buttons">
-                <Button className="gc-button--blue" type="submit">
-                  {t("signInButton")}
-                </Button>
-              </div>
+
+              <Button className="gc-button--blue" type="submit">
+                {t("signInButton")}
+              </Button>
             </form>
           </>
         )}
