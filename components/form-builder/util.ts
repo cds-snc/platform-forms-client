@@ -125,11 +125,10 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     return element.id;
   });
 
-  const schema: FormRecord = {
+  const schema: Partial<FormRecord> = {
     id,
     form,
     submission,
-    isPublished: true,
     securityAttribute,
   };
 
