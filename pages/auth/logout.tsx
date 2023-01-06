@@ -16,6 +16,8 @@ const Logout = () => {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       })
     );
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

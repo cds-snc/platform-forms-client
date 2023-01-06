@@ -58,7 +58,7 @@ export const SelectedElement = ({
   return element;
 };
 
-export const getSelectedOption = (item: FormElementWithIndex): ElementOption => {
+export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
   const { validationType, type } = useTemplateStore(
     useCallback(
