@@ -102,7 +102,7 @@ export const useAllowPublish = () => {
       translate: isFormTranslated(form),
       responseDelivery: !!email,
     }),
-    [form, email]
+    [form.titleEn, form.titleFr, email]
   );
 
   const hasData = useCallback(
