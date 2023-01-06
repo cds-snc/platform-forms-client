@@ -30,6 +30,11 @@
     }
   ],
   "properties": {
+    "id": {
+      "description": "The unique identifier of the form",
+      "id": "#/properties/id",
+      "type": "string"
+    },
     "internalTitleEn": {
       "description": "The internal title of the form in English",
       "id": "#/properties/internalTitleEn",
@@ -159,6 +164,7 @@
         },
         "endPage": {
           "description": "Content that will be displayed after a form is submitted.",
+          "id": "#/properties/endPage",
           "type": "object",
           "properties": {
             "descriptionEn": {
@@ -174,9 +180,36 @@
               "type": "string"
             }
           }
+        },
+        "introduction": {
+          "description": "Form introduction",
+          "id": "#/properties/introduction",
+          "type": "object",
+          "properties": {
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            }
+          }
+        },
+        "privacyPolicy": {
+          "description": "Form privacy policy",
+          "id": "#/properties/privacyPolicy",
+          "type": "object",
+          "properties": {
+            "descriptionEn": {
+              "type": "string"
+            },
+            "descriptionFr": {
+              "type": "string"
+            }
+          }
         }
       },
-      "required": ["elements", "layout", "titleEn", "titleFr"]
+      "required": ["titleEn", "titleFr", "layout", "elements", "privacyPolicy", "endPage"],
+      "additionalProperties": false
     },
     "submission": {
       "id": "#/properties/submission",
@@ -192,7 +225,6 @@
           "type": "boolean"
         }
       },
-      "additionalProperties": false,
       "oneOf": [
         {
           "required": ["email"]
@@ -200,21 +232,18 @@
         {
           "required": ["vault"]
         }
-      ]
+      ],
+      "additionalProperties": false
     },
     "securityAttribute": {
       "description": "It shows an administrator what procedure should be taken when accessing a form's responses",
       "id": "#/properties/securityAttribute",
       "type": "string",
       "enum": ["Protected A", "Protected B", "Unclassified"]
-    },
-    "reCaptchaID": {
-      "type": "string",
-      "description": ""
     }
   },
   "required": ["form", "submission"],
-  "additionalProperties": true,
+  "additionalProperties": false,
   "definitions": {
     "element": {
       "type": "object",

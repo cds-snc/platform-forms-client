@@ -1,15 +1,23 @@
 {
   "form": {
+    "version": 1,
+    "titleEn": "Lemonade Stand Funding",
+    "titleFr": "[fr] Lemonade Stand Funding",
     "layout": [1, 2, 3, 4, 5, 7, 8, 9, 10, 12, 13, 14],
+    "introduction": {
+      "descriptionEn": "Introduction",
+      "descriptionFr": "[FR] Introduction"
+    },
+    "privacyPolicy": {
+      "descriptionEn": "Privacy statement",
+      "descriptionFr": "[FR] Privacy statement"
+    },
     "endPage": {
       "descriptionEn": "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.  \n\r <a href='https://digital.canada.ca'>Go back</a>",
       "descriptionFr": "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days. \n\r <a href='https://digital.canada.ca'>Go back</a>",
       "referrerUrlEn": "",
       "referrerUrlFr": ""
     },
-    "titleEn": "Lemonade Stand Funding",
-    "titleFr": "[fr] Lemonade Stand Funding",
-    "version": 1,
     "elements": [
       {
         "id": 1,
