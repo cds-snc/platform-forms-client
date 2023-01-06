@@ -38,7 +38,7 @@ export const RichTextEditor = ({
         }
         updateField(path, value);
       },
-      [updateField]
+      [updateField, path]
     ),
     100
   );

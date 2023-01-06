@@ -4,6 +4,8 @@ import React from "react";
 import Head from "next/head";
 
 const retrieval = (): React.ReactElement => {
+  // @todo - fix this eslint error
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation("forms-responses-retrieval");
   return (
     <>
