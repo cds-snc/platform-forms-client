@@ -103,7 +103,7 @@ export const Options = ({
     (toggle: boolean) => {
       setBulkAddAction(toggle);
     },
-    [bulkAddAction]
+    [setBulkAddAction]
   );
 
   const index = item.index;

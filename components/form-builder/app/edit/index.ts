@@ -6,7 +6,7 @@ export { ConfirmationDescription } from "./ConfirmationDescription";
 export { Modal, ModalButton } from "./Modal";
 export { ModalForm } from "./ModalForm";
 export { PrivacyDescription } from "./PrivacyDescription";
-export { SelectedElement, getSelectedOption } from "./SelectedElement";
+export { SelectedElement, useGetSelectedOption } from "./SelectedElement";
 export { PanelBody } from "./PanelBody";
 export { PanelBodyRoot } from "./PanelBodyRoot";
 export { ElementDropDown } from "./ElementDropDown";

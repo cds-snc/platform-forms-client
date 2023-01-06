@@ -35,6 +35,18 @@
           "descriptionEn": "description 2 en",
           "descriptionFr": "description 2 fr"
         }
+      },
+      {
+        "id": 2,
+        "type": "date",
+        "properties": {
+          "titleEn": "question 3",
+          "titleFr": "question 3 fr",
+          "choices": [],
+          "validation": { "required": false },
+          "descriptionEn": "description 3 en",
+          "descriptionFr": "description 3 fr"
+        }
       }
     ],
     "privacyPolicy": { "descriptionEn": "privacy text en", "descriptionFr": "privacy text fr" },

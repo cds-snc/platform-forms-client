@@ -201,6 +201,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       setFocusOnErrorMessage(props, errorId);
       setCanFocusOnError(false);
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   return status === "submitting" ? (

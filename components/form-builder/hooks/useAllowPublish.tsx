@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 import { FormElement, FormElementTypes, FormProperties, PropertyChoices } from "@lib/types";
 import { useAccessControl } from "@lib/hooks";
@@ -93,14 +93,17 @@ export const useAllowPublish = () => {
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
 
-  const data = {
-    title: !!form?.titleEn || !!form?.titleFr,
-    questions: !!form?.elements?.length,
-    privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
-    confirmationMessage: !!form?.endPage?.descriptionEn || !!form?.endPage?.descriptionFr,
-    translate: isFormTranslated(form),
-    responseDelivery: !!email,
-  };
+  const data = useMemo(
+    () => ({
+      title: !!form?.titleEn || !!form?.titleFr,
+      questions: !!form?.elements?.length,
+      privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
+      confirmationMessage: !!form?.endPage?.descriptionEn || !!form?.endPage?.descriptionFr,
+      translate: isFormTranslated(form),
+      responseDelivery: !!email,
+    }),
+    [form, email]
+  );
 
   const hasData = useCallback(
     (fields: publishRequiredFields[]) => {

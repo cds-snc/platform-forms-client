@@ -17,7 +17,7 @@ export const useEditorFocus = () => {
         },
         COMMAND_PRIORITY_LOW
       ),
-    []
+    [editor]
   );
 
   useEffect(
@@ -30,7 +30,7 @@ export const useEditorFocus = () => {
         },
         COMMAND_PRIORITY_LOW
       ),
-    []
+    [editor]
   );
 
   return hasFocus;
