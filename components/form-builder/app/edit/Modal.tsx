@@ -132,6 +132,7 @@ export const ModalContainer = ({
 
     document.body.style.overflow = isOpen ? "hidden" : "unset";
     // see: https://github.com/facebook/react/issues/24399
+    // @todo add react-hooks/exhaustive-deps
   }, [isOpen]);
 
   // Trap focus in the modal

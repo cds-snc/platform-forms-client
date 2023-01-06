@@ -1,11 +1,13 @@
 import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "next-i18next";
+import debounce from "lodash.debounce";
+
 import { Close } from "../../../icons";
 import { Button } from "../../shared/Button";
 import { Input } from "../../shared/Input";
 import { useTemplateStore } from "../../../store/useTemplateStore";
-import { useTranslation } from "next-i18next";
-import debounce from "lodash.debounce";
+import { Language } from "../../../types";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
@@ -63,11 +65,14 @@ export const Option = ({
     }
   };
 
-  const _debounced = useCallback(
-    debounce((parentIndex, val, lang) => {
-      updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, val);
-    }, 100),
-    [translationLanguagePriority]
+  const _debounced = debounce(
+    useCallback(
+      (parentIndex: number, value: string, lang: Language) => {
+        updateField(`form.elements[${parentIndex}].properties.choices[${index}].${lang}`, value);
+      },
+      [translationLanguagePriority, updateField]
+    ),
+    100
   );
 
   const updateValue = useCallback(
@@ -75,6 +80,7 @@ export const Option = ({
       setValue(value);
       _debounced(parentIndex, value, translationLanguagePriority);
     },
+    // @todo add react-hooks/exhaustive-deps
     [setValue, translationLanguagePriority]
   );
 
