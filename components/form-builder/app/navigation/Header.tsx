@@ -15,6 +15,7 @@ export const Header = () => {
   useEffect(() => {
     refreshAbility();
     // we only want to run this once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

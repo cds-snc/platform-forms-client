@@ -55,6 +55,8 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
     if (!formStateRegex.test(String(path))) {
       router.push(`/${i18n.language}/myforms/drafts`, undefined, { shallow: true });
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query?.path]);
 
   useEffect(() => {
