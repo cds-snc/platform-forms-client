@@ -1,12 +1,26 @@
 {
   "form": {
+    "version": 1,
+    "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
+    "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
     "layout": [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
       27
     ],
-    "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
-    "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
-    "version": 1,
+    "introduction": {
+      "descriptionEn": "Introduction",
+      "descriptionFr": "[FR] Introduction"
+    },
+    "privacyPolicy": {
+      "descriptionEn": "Privacy statement",
+      "descriptionFr": "[FR] Privacy statement"
+    },
+    "endPage": {
+      "descriptionEn": "Confirmed",
+      "descriptionFr": "Confirmé",
+      "referrerUrlEn": "",
+      "referrerUrlFr": ""
+    },
     "elements": [
       {
         "id": 1,

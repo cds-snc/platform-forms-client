@@ -208,7 +208,7 @@
           }
         }
       },
-      "required": ["elements", "layout", "titleEn", "titleFr"],
+      "required": ["titleEn", "titleFr", "layout", "elements", "privacyPolicy", "endPage"],
       "additionalProperties": false
     },
     "submission": {
