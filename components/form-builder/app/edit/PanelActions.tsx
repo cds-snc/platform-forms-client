@@ -39,7 +39,7 @@ export const PanelActions = ({
   const isRichText = item.type == "richText";
 
   const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
-  const [isInit, setIsInit] = useState(false);
+  const isInit = useRef(false);
 
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
   const [items] = useState([
@@ -51,14 +51,15 @@ export const PanelActions = ({
   ]);
 
   useEffect(() => {
-    if (isInit) {
-      const index = `button-${currentFocusIndex}` as unknown as number;
-      const el = itemsRef.current[index];
-      if (el) {
-        el.focus();
-      }
+    if (!isInit.current) {
+      isInit.current = true;
+      return;
     }
-    setIsInit(true);
+    const index = `button-${currentFocusIndex}` as unknown as number;
+    const el = itemsRef.current[index];
+    if (el) {
+      el.focus();
+    }
   }, [currentFocusIndex, isInit]);
 
   const handleNav = useCallback(
