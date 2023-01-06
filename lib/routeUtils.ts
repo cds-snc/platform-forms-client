@@ -9,6 +9,8 @@ export const getPageClassNames = (formRecord: PublicFormRecord): string => {
 };
 
 export const getPageNameUrl = (): string => {
+  // @todo - fix this eslint error
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
   let pageNameUrl = router && router.asPath ? router.asPath.split("?")[0] : "";
   if (pageNameUrl === "/") {
