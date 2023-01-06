@@ -208,11 +208,10 @@ const Register = () => {
                 {t("signUpRegistration.slaAgreement")}&nbsp;
                 <Link href={"/sla"}>{t("signUpRegistration.slaAgreementLink")}</Link>
               </p>
-              <div className="buttons">
-                <Button className="gc-button--blue" type="submit">
-                  {t("signUpRegistration.signUpButton")}
-                </Button>
-              </div>
+
+              <Button className="gc-button--blue" type="submit">
+                {t("signUpRegistration.signUpButton")}
+              </Button>
             </form>
           </>
         )}

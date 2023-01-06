@@ -58,24 +58,16 @@ describe("Test acceptable use Page", () => {
     cy.get("#required-0-id").should("be.checked");
 
     // preview form
-    cy.get("button").contains("Preview").click();
+    cy.get("a").contains("Preview").click();
     cy.get("#content h1").should("contain", "Cypress Test Form");
     cy.get(".gc-richText p").should("contain", "form intro");
     cy.get("#label-1").should("contain", "Question 1-1");
     cy.get("#desc-1").should("contain", "Question 1 description");
     cy.get(".gc-input-radio").first().should("contain", "option 1");
-    cy.get(".buttons div").should("contain", "Form submission is disabled in preview");
-
-    // share form
-    cy.get("button").contains("Share").click();
-    cy.get("h1").should("contain", "Share your form");
-
-    // save form
-    cy.get("button").contains("Save").click();
-    cy.get("h1").should("contain", "Save your progress");
+    cy.get("#PreviewSubmitButton").should("contain", "signInToTest");
 
     // publish form
-    cy.get("button").contains("Publish").click();
+    cy.get("a").contains("Publish").click();
     cy.get("h1").should("contain", "Sign in to publish your form");
     cy.get("a").contains("create one").click();
 

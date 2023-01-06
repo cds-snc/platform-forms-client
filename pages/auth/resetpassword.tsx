@@ -190,11 +190,10 @@ const ResetPassword = () => {
                     ariaDescribedBy="desc-username-hint"
                   />
                 </div>
-                <div className="buttons">
-                  <Button className="gc-button--blue" type="submit">
-                    {t("provideUsername.resetPasswordButton")}
-                  </Button>
-                </div>
+
+                <Button className="gc-button--blue" type="submit">
+                  {t("provideUsername.resetPasswordButton")}
+                </Button>
               </form>
             </>
           )}
