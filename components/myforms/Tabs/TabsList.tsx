@@ -19,9 +19,7 @@ export const TabsList = (props: TabsProps): React.ReactElement => {
         })
       );
     }
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabsListRef.current]);
+  }, []);
 
   // Note: the only purpose of the tabIndex is to have the eslint tests pass
   return (
