@@ -36,9 +36,7 @@ export const MenuDropdown = (props: MenuDropdownProps): React.ReactElement => {
         })
       );
     }
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menuButtonRef.current, menuListRef.current]);
+  }, []);
 
   return (
     <div className="relative">
