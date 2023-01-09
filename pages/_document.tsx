@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript, OriginProps } from "next/document";
 import React from "react";
 import { googleTagManager, cspHashOf } from "@lib/cspScripts";
+import JSDisabled from "./js-disabled";
 
 const scriptHashes: Array<string> = [];
 const externalScripts: Array<string> = [];
@@ -216,6 +217,13 @@ class MyDocument extends Document {
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           {GoogleTagScript}
         </CustomHead>
+        <noscript>
+          <style type="text/css">{`#__next {display:none;}`}</style>
+          <JSDisabled
+            brand={this.props.__NEXT_DATA__.props.pageProps.formRecord?.form?.brand}
+            lang={this.props.__NEXT_DATA__.locale}
+          />
+        </noscript>
         <body>
           {/* Will only run if Browser does not have JS enabled */}
           <noscript>
