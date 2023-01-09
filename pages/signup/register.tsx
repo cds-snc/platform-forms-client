@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { useAuth, useFlag } from "@lib/hooks";
+import { useAuth, useLoadFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -9,6 +9,7 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
 import Link from "next/link";
@@ -28,7 +29,7 @@ const Register = () => {
     register,
   } = useAuth();
   const { t } = useTranslation(["signup", "common"]);
-  const registrationOpen = useFlag("accountRegistration");
+  const [isLoading, registrationOpen] = useLoadFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -83,6 +84,15 @@ const Register = () => {
         confirmationCallback={() => undefined}
       />
     );
+  }
+
+  if (isLoading) {
+    <>
+      <Head>
+        <title>{t("signUpRegistration.title")}</title>
+      </Head>
+      <Loader message={t("loading")} />
+    </>;
   }
 
   if (!registrationOpen) {
