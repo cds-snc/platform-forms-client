@@ -86,6 +86,10 @@ const Register = () => {
     );
   }
 
+  if (!registrationOpen) {
+    return <div>{t("registrationClosed")}</div>;
+  }
+
   if (needsConfirmation) {
     return (
       <Confirmation
@@ -95,10 +99,6 @@ const Register = () => {
         confirmationCallback={() => undefined}
       />
     );
-  }
-
-  if (!registrationOpen) {
-    return <div>{t("registrationClosed")}</div>;
   }
 
   return (
