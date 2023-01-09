@@ -75,6 +75,17 @@ const Register = () => {
       ),
   });
 
+  if (isLoading) {
+    return (
+      <>
+        <Head>
+          <title>{t("signUpRegistration.title")}</title>
+        </Head>
+        <Loader message={t("loading")} />
+      </>
+    );
+  }
+
   if (needsConfirmation) {
     return (
       <Confirmation
@@ -86,18 +97,10 @@ const Register = () => {
     );
   }
 
-  if (isLoading) {
-    <>
-      <Head>
-        <title>{t("signUpRegistration.title")}</title>
-      </Head>
-      <Loader message={t("loading")} />
-    </>;
-  }
-
   if (!registrationOpen) {
     return <div>{t("registrationClosed")}</div>;
   }
+
   return (
     <>
       <Head>
