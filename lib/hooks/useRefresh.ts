@@ -19,9 +19,7 @@ export const useRefresh = (
 
   useEffect(() => {
     setIsRefreshing(false);
-    // @todo - fix this eslint error
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, data);
+  }, [data]);
 
   return { refreshData, isRefreshing };
 };
