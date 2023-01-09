@@ -16,6 +16,7 @@ import Link from "next/link";
 import Head from "next/head";
 
 const Register = () => {
+  const [isFlagLoading, registrationOpen] = useLoadFlag("accountRegistration");
   const {
     username,
     password,
@@ -29,7 +30,6 @@ const Register = () => {
     register,
   } = useAuth();
   const { t } = useTranslation(["signup", "common"]);
-  const [isLoading, registrationOpen] = useLoadFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -75,7 +75,7 @@ const Register = () => {
       ),
   });
 
-  if (isLoading) {
+  if (isFlagLoading) {
     return (
       <>
         <Head>
