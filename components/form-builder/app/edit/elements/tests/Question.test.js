@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, render, act } from "@testing-library/react";
+import { cleanup, render, act, waitFor } from "@testing-library/react";
 import { Question } from "../question/Question";
 import { useTemplateStore } from "@formbuilder/store";
 import { defaultStore as store, Providers, localStorageMock } from "@formbuilder/test-utils";
@@ -82,7 +82,6 @@ describe("Question", () => {
   });
 
   it("Calls updater function", async () => {
-    const promise = Promise.resolve();
     const user = userEvent.setup();
 
     const Container = () => {
@@ -111,17 +110,14 @@ describe("Question", () => {
     );
 
     const question = rendered.container.querySelector("#item0");
+
     await user.type(question, "!!!");
 
     expect(question).toHaveValue("question 1!!!");
-    // wait for debounce to finish
-    await new Promise((r) => setTimeout(r, 125));
 
-    const sessionStore = JSON.parse(window.sessionStorage.getItem("form-storage"));
-    expect(sessionStore.state.form.elements[0].properties.titleEn).toEqual("question 1!!!");
-
-    await act(async () => {
-      await promise;
+    await waitFor(async () => {
+      const sessionStore = JSON.parse(window.sessionStorage.getItem("form-storage"));
+      expect(sessionStore.state.form.elements[0].properties.titleEn).toEqual("question 1!!!");
     });
   });
 });
