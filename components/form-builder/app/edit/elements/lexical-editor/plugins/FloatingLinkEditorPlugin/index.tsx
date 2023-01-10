@@ -217,7 +217,7 @@ function FloatingLinkEditor({
             setLinkUrl(event.target.value);
           }}
           onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === "Escape") {
+            if (event.key === "Enter" || event.key === "Escape" || event.key === "Tab") {
               event.preventDefault();
               if (lastSelection !== null) {
                 if (linkUrl !== "") {
@@ -240,6 +240,9 @@ function FloatingLinkEditor({
                 if (event.key === "Escape") {
                   event.preventDefault();
                   editor.focus();
+                }
+                if (event.key === "Tab") {
+                  setIsLink(false);
                 }
               }}
               onClick={() => {
