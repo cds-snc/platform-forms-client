@@ -79,7 +79,9 @@ export const Preview = () => {
       >
         {status !== "authenticated" ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+            <Markdown options={{ forceBlock: true }}>
+              {t("signInToTest", { ns: "form-builder" })}
+            </Markdown>
           </div>
         ) : (
           <div className="bg-purple-200 p-2 inline-block mb-1">
@@ -97,7 +99,7 @@ export const Preview = () => {
 
         <h1 className="md:text-h1 mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-            t("pagePreview")}
+            t("pagePreview", { ns: "form-builder" })}
         </h1>
 
         {sent ? (
@@ -137,7 +139,9 @@ export const Preview = () => {
                     className="inline-block py-1 px-4 bg-purple-200"
                     {...getLocalizationAttribute()}
                   >
-                    <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+                    <Markdown options={{ forceBlock: true }}>
+                      {t("signInToTest", { ns: "form-builder" })}
+                    </Markdown>
                   </div>
                 )}
               </div>
@@ -150,7 +154,9 @@ export const Preview = () => {
 
       {status !== "authenticated" && (
         <>
-          <span className="bg-slate-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
+          <span className="bg-slate-200 p-2 inline-block mb-1">
+            {t("confirmationPage", { ns: "form-builder" })}
+          </span>
           <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.endPage
