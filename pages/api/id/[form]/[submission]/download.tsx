@@ -4,7 +4,6 @@ import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, WithRequired } from "@lib/types";
-import { Prisma } from "@prisma/client";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { AccessControlError, createAbility, checkPrivilegesAsBoolean } from "@lib/privileges";
 import React from "react";
