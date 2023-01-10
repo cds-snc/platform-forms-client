@@ -1,6 +1,6 @@
 describe("CDS Intake Form functionality", () => {
   beforeEach(() => {
-    cy.useFlag("formTimer", false);
+    cy.useFlag("formTimer", { status: false });
     cy.mockForm("../../__fixtures__/cdsIntakeTestForm.json");
   });
   it("CDS Intake Form renders", () => {

@@ -24,7 +24,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   formTitle,
 }) => {
   const { t } = useTranslation();
-  const timerActive = useFlag("formTimer");
+  const { status: timerActive } = useFlag("formTimer");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
@@ -143,7 +143,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const isReCaptchaEnableOnSite = useFlag("reCaptcha");
+  const { status: isReCaptchaEnableOnSite } = useFlag("reCaptcha");
 
   useExternalScript(
     `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
