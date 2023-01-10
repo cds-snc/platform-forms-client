@@ -70,7 +70,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     const queryCommand = new QueryCommand(getItemsDbParams);
 
     const response = await documentClient.send(queryCommand);
-    logMessage.debug(response);
 
     const parsedResponse = response.Items?.map(
       ({
