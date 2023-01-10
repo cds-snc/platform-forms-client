@@ -1,6 +1,7 @@
 describe("Forms Functionality - Character Counts", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
+    cy.useFlag("reCaptcha", false);
     cy.mockForm("../../__fixtures__/textFieldTestForm.json");
   });
 

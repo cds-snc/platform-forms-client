@@ -2,6 +2,7 @@ describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", false);
+      cy.useFlag("reCaptcha", false);
       cy.mockForm("../../__fixtures__/textFieldTestForm.json");
     });
     it("the form displays an error when it is submitted and a field is required", () => {
