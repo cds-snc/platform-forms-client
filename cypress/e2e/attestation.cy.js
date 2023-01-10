@@ -1,6 +1,6 @@
 describe("Attestation functionality", () => {
   beforeEach(() => {
-    cy.useFlag("formTimer", { status: false });
+    cy.useFlag("formTimer", { isLoading: false, status: false });
     cy.mockForm("../../__fixtures__/attestationTestForm.json");
   });
 

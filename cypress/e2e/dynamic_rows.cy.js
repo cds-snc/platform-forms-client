@@ -1,6 +1,6 @@
 describe("Dynamic Row Functionality", () => {
   beforeEach(() => {
-    cy.useFlag("formTimer", { status: false });
+    cy.useFlag("formTimer", { isLoading: false, status: false });
     cy.mockForm("../../__fixtures__/dynamicRowsTestForm.json");
   });
   it("Adds then deletes a dynamic row", () => {

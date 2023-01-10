@@ -1,6 +1,6 @@
 describe("Forms Functionality - Character Counts", () => {
   beforeEach(() => {
-    cy.useFlag("formTimer", { status: false });
+    cy.useFlag("formTimer", { isLoading: false, status: false });
     cy.mockForm("../../__fixtures__/textFieldTestForm.json");
   });
 

@@ -1,7 +1,7 @@
 describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
-      cy.useFlag("formTimer", { status: false });
+      cy.useFlag("formTimer", { isLoading: false, status: false });
       cy.mockForm("../../__fixtures__/textFieldTestForm.json");
     });
     it("the form displays an error when it is submitted and a field is required", () => {
@@ -21,7 +21,7 @@ describe("Forms Functionality", () => {
 
   describe("Submit Delay", () => {
     it("should display alert message when submitting too quickly", () => {
-      cy.useFlag("formTimer", { status: true });
+      cy.useFlag("formTimer", { isLoading: false, status: true });
       cy.mockForm("../../__fixtures__/textFieldTestForm.json");
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
@@ -30,7 +30,7 @@ describe("Forms Functionality", () => {
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
       cy.clock();
-      cy.useFlag("formTimer", { status: true });
+      cy.useFlag("formTimer", { isLoading: false, status: true });
       cy.mockForm("../../__fixtures__/textFieldTestForm.json");
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.tick(1000);
@@ -42,7 +42,7 @@ describe("Forms Functionality", () => {
     });
     it("should submit the button after the proper delay", () => {
       cy.clock();
-      cy.useFlag("formTimer", { status: true });
+      cy.useFlag("formTimer", { isLoading: false, status: true });
       cy.mockForm("../../__fixtures__/textFieldTestForm.json");
       cy.tick(1000);
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
