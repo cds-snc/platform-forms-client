@@ -95,7 +95,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     const TestReactElement: React.FC<{
       formSubmission: Record<string, string>;
-      confirmationCode: string;
+      confirmationCode?: string;
     }> = ({ formSubmission, confirmationCode = "TEST-CODE" }) => {
       return (
         <div>
