@@ -35,7 +35,7 @@ export const Preview = () => {
 
   const router = useRouter();
 
-  const { t } = useTranslation(["common", "form-builder"]);
+  const { t } = useTranslation(["form-builder", "common"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
   const { saveForm } = useTemplateApi();
@@ -129,7 +129,7 @@ export const Preview = () => {
                       }
                     }}
                   >
-                    {t("submitButton")}
+                    {t("submitButton", { ns: "common" })}
                   </Button>
                 </span>
                 {status !== "authenticated" && (
