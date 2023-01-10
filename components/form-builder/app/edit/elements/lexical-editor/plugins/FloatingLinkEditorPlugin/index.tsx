@@ -19,6 +19,7 @@ import {
   COMMAND_PRIORITY_LOW,
   GridSelection,
   KEY_ESCAPE_COMMAND,
+  KEY_TAB_COMMAND,
   LexicalEditor,
   NodeSelection,
   RangeSelection,
@@ -175,6 +176,17 @@ function FloatingLinkEditor({
             return true;
           }
           popped.current = false;
+          return false;
+        },
+        COMMAND_PRIORITY_HIGH
+      ),
+      // Don't hide link editor when tabbing into it
+      editor.registerCommand(
+        KEY_TAB_COMMAND,
+        () => {
+          if (isLink) {
+            popped.current = true;
+          }
           return false;
         },
         COMMAND_PRIORITY_HIGH
