@@ -35,7 +35,7 @@ export const Preview = () => {
 
   const router = useRouter();
 
-  const { t } = useTranslation(["common", "form-builder"]);
+  const { t } = useTranslation(["form-builder", "common"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
   const { saveForm } = useTemplateApi();
@@ -79,9 +79,7 @@ export const Preview = () => {
       >
         {status !== "authenticated" ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            <Markdown options={{ forceBlock: true }}>
-              {t("signInToTest", { ns: "form-builder" })}
-            </Markdown>
+            <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
           </div>
         ) : (
           <div className="bg-purple-200 p-2 inline-block mb-1">
@@ -99,7 +97,7 @@ export const Preview = () => {
 
         <h1 className="md:text-h1 mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-            t("pagePreview", { ns: "form-builder" })}
+            t("pagePreview")}
         </h1>
 
         {sent ? (
@@ -131,7 +129,7 @@ export const Preview = () => {
                       }
                     }}
                   >
-                    {t("submitButton")}
+                    {t("submitButton", { ns: "common" })}
                   </Button>
                 </span>
                 {status !== "authenticated" && (
@@ -139,9 +137,7 @@ export const Preview = () => {
                     className="inline-block py-1 px-4 bg-purple-200"
                     {...getLocalizationAttribute()}
                   >
-                    <Markdown options={{ forceBlock: true }}>
-                      {t("signInToTest", { ns: "form-builder" })}
-                    </Markdown>
+                    <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
                   </div>
                 )}
               </div>
@@ -154,9 +150,7 @@ export const Preview = () => {
 
       {status !== "authenticated" && (
         <>
-          <span className="bg-slate-200 p-2 inline-block mb-1">
-            {t("confirmationPage", { ns: "form-builder" })}
-          </span>
+          <span className="bg-slate-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
           <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.endPage
