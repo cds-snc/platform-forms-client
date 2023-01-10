@@ -79,7 +79,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
           <div>
             {Object.entries(formSubmission).map(([key, value]) => (
               <div key={key}>
-                <p>Name: {key}</p>
+                <p>Name: {formTemplate.form.elements[parseInt(key)].properties.titleEn}</p>
                 <p>Value: {value}</p>
               </div>
             ))}
