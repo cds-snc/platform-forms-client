@@ -55,6 +55,7 @@ function FloatingLinkEditor({
   >(null);
 
   const { t } = useTranslation();
+  const popped = useRef(false);
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -168,10 +169,12 @@ function FloatingLinkEditor({
       editor.registerCommand(
         BLUR_COMMAND,
         () => {
-          if (isLink) {
+          if (isLink && !popped.current) {
             setIsLink(false);
+            popped.current = false;
             return true;
           }
+          popped.current = false;
           return false;
         },
         COMMAND_PRIORITY_HIGH
@@ -228,6 +231,7 @@ function FloatingLinkEditor({
                 }
               }}
               onClick={() => {
+                popped.current = true;
                 setEditMode(true);
               }}
             >
