@@ -91,7 +91,7 @@ export const Editor = ({
 
               // Add two spaces to previous line for linebreaks (this is not handled properly by $convertToMarkdownString)
               const lines = markdown.split("\n");
-              lines.forEach((currentLine, i) => {
+              lines.map((currentLine, i) => {
                 if (i > 0) {
                   const previousLine = lines[i - 1];
                   if (previousLine !== "" && currentLine !== "") {
