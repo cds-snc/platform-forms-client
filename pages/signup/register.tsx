@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Formik } from "formik";
 import { Button, TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
-import { useAuth, useLoadFlag } from "@lib/hooks";
+import { useAuth, useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -16,7 +16,7 @@ import Link from "next/link";
 import Head from "next/head";
 
 const Register = () => {
-  const { isLoading, status: registrationOpen } = useLoadFlag("accountRegistration");
+  const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
   const {
     username,
     password,
