@@ -1,7 +1,7 @@
 describe("Forms Functionality", () => {
   describe("text field tests", () => {
     beforeEach(() => {
-      cy.useFlag("formTimer", { isLoading: false, status: false });
+      cy.useFlag("formTimer", false);
       cy.mockForm("../../__fixtures__/textFieldTestForm.json");
     });
     it("the form displays an error when it is submitted and a field is required", () => {

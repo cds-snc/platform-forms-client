@@ -1,6 +1,6 @@
 describe("TSB Contact Form functionality", () => {
   beforeEach(() => {
-    cy.useFlag("formTimer", { isLoading: false, status: false });
+    cy.useFlag("formTimer", false);
     cy.mockForm("../../__fixtures__/tsbContactTestForm.json");
   });
 
