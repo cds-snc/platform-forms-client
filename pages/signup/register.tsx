@@ -16,7 +16,7 @@ import Link from "next/link";
 import Head from "next/head";
 
 const Register = () => {
-  const [isFlagLoading, registrationOpen] = useLoadFlag("accountRegistration");
+  const { isLoading, status: registrationOpen } = useLoadFlag("accountRegistration");
   const {
     username,
     password,
@@ -75,7 +75,7 @@ const Register = () => {
       ),
   });
 
-  if (isFlagLoading) {
+  if (isLoading) {
     return (
       <>
         <Head>
