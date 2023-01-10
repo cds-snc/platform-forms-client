@@ -3,11 +3,12 @@ import { logMessage } from "@lib/logger";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
-import { MiddlewareProps, WithRequired } from "@lib/types";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { AccessControlError, createAbility, checkPrivilegesAsBoolean } from "@lib/privileges";
+import { FormRecord, MiddlewareProps, WithRequired } from "@lib/types";
+
+import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToStaticNodeStream } from "react-dom/server";
+import { getFullTemplateByID } from "@lib/templates";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -26,33 +27,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   if (Array.isArray(formID) || !formID) return res.status(400).json({ error: "Bad Request" });
 
   try {
-    if (
-      !checkPrivilegesAsBoolean(createAbility(session.user.privileges), [
-        {
-          action: "view",
-          subject: {
-            type: "FormRecord",
-            object: {
-              users: await prisma.template
-                .findUnique({
-                  where: {
-                    id: formID,
-                  },
-                  select: {
-                    users: {
-                      select: {
-                        id: true,
-                      },
-                    },
-                  },
-                })
-                .catch((e) => prismaErrors(e, null)),
-            },
-          },
-        },
-      ])
-    )
-      throw new AccessControlError();
+    const formTemplate = await getFullTemplateByID(createAbility(session.user.privileges), formID);
+
+    if (formTemplate === null) return res.status(404).json({ error: "Form Not Found" });
 
     const documentClient = connectToDynamo();
 
@@ -93,6 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     const TestReactElement: React.FC<{
       formSubmission: Record<string, string>;
+      formTemplate: FormRecord;
       confirmationCode?: string;
     }> = ({ formSubmission, confirmationCode = "TEST-CODE" }) => {
       return (
@@ -112,7 +90,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     };
 
     const htmlFile = renderToStaticNodeStream(
-      <TestReactElement formSubmission={parsedResponse?.formSubmission} />
+      <TestReactElement
+        formSubmission={parsedResponse?.formSubmission}
+        formTemplate={formTemplate}
+      />
     );
 
     logMessage.info(
