@@ -3,9 +3,7 @@ import { useTranslation } from "next-i18next";
 import React from "react";
 import Head from "next/head";
 
-const retrieval = (): React.ReactElement => {
-  // @todo - fix this eslint error
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+const Retrieval = (): React.ReactElement => {
   const { t } = useTranslation("forms-responses-retrieval");
   return (
     <>
@@ -49,4 +47,4 @@ export const getServerSideProps = requireAuthentication(async ({ locale, params 
   */
 });
 
-export default retrieval;
+export default Retrieval;
