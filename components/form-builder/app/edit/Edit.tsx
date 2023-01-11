@@ -13,9 +13,6 @@ export const Edit = () => {
   const {
     title,
     elements,
-    introduction,
-    endPage,
-    privacyPolicy,
     localizeField,
     updateField,
     translationLanguagePriority,
@@ -24,9 +21,6 @@ export const Edit = () => {
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
     elements: s.form.elements,
-    introduction: s.form.introduction,
-    endPage: s.form.endPage,
-    privacyPolicy: s.form.privacyPolicy,
     localizeField: s.localizeField,
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -64,20 +58,6 @@ export const Edit = () => {
     [setValue, translationLanguagePriority]
   );
 
-  const introTextPlaceholder =
-    introduction?.[
-      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
-    ] ?? "";
-
-  const confirmTextPlaceholder =
-    endPage?.[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)] ??
-    "";
-
-  const policyTextPlaceholder =
-    privacyPolicy?.[
-      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
-    ] ?? "";
-
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
@@ -100,7 +80,6 @@ export const Edit = () => {
           </>
         }
         addElement={true}
-        initialValue={introTextPlaceholder}
         schemaProperty="introduction"
         ariaLabel={t("richTextIntroTitle")}
       />
@@ -112,7 +91,6 @@ export const Edit = () => {
         <>
           <RichTextLocked
             addElement={false}
-            initialValue={policyTextPlaceholder}
             schemaProperty="privacyPolicy"
             ariaLabel={t("richTextPrivacyTitle")}
           >
@@ -123,7 +101,6 @@ export const Edit = () => {
           </RichTextLocked>
           <RichTextLocked
             addElement={false}
-            initialValue={confirmTextPlaceholder}
             schemaProperty="endPage"
             ariaLabel={t("richTextConfirmationTitle")}
           >
