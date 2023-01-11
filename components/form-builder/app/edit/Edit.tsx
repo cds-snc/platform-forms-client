@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import debounce from "lodash.debounce";
 import { useTranslation } from "next-i18next";
 
-import { Language, LocalizedElementProperties, LocalizedFormProperties } from "../../types";
+import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
