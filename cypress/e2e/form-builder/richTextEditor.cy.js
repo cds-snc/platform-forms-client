@@ -1,4 +1,4 @@
-describe("Test FormBuilder language switching", () => {
+describe("Test RichTextEditor", () => {
   beforeEach(() => {
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
@@ -23,7 +23,7 @@ describe("Test FormBuilder language switching", () => {
     });
   });
 
-  it("Can enter English and French text in Introduction", () => {
+  it("Can add some text and a link", () => {
     // Setup a form with one question
     cy.get("h2").first().click();
 
