@@ -29,8 +29,8 @@ describe("Test FormBuilder language switching", () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
     cy.get("button").contains("Add element").click();
-    cy.get("#downshift-1-toggle-button").click();
-    cy.get("#downshift-1-item-0").click();
+    cy.get(".builder-element-dropdown").click();
+    cy.get('[data-testid="richText"]').click();
 
     // Enter English Title and Introduction
     cy.get("#formTitle").type("Cypress Test Form").should("have.value", "Cypress Test Form");
