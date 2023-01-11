@@ -52,6 +52,8 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         clearInterval(intervalID);
       }
     };
+    // we only want to run this effect when the timerActive flag changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerActive]);
 
   return (
@@ -201,7 +203,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       setFocusOnErrorMessage(props, errorId);
       setCanFocusOnError(false);
     }
-    // @todo - fix this eslint error
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
