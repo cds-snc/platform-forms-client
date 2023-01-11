@@ -97,6 +97,14 @@ export const authOptions: NextAuthOptions = {
           }
           return null;
         } catch (e) {
+          if (
+            e instanceof CognitoIdentityProviderServiceException &&
+            e.name === "NotAuthorizedException" &&
+            e.message === "Password attempts exceeded"
+          )
+            logMessage.warn(
+              `Cognito Lockout: Password attempts exceeded for ${credentials.username}`
+            );
           // throw new Error with cognito error converted to string so as to include the exception name
           throw new Error((e as CognitoIdentityProviderServiceException).toString());
         }
