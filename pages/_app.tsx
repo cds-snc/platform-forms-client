@@ -17,9 +17,26 @@ which generates a warning in the browser console.
 */
 
 const SafeHydrate = ({ children }: { children: React.ReactNode }) => {
+  const isTestEnv = Boolean(process.env.APP_ENV === "test");
   return (
-    <div id="safeHydrate" suppressHydrationWarning={Boolean(process.env.APP_ENV === "test")}>
-      {typeof window === "undefined" && process.env.APP_ENV === "test" ? null : children}
+    <div id="safeHydrate" suppressHydrationWarning={isTestEnv}>
+      {/* in test mode avoid Next JS dialog overlay */}
+      {isTestEnv && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+        window.addEventListener('error', event => {
+          event.stopImmediatePropagation()
+        })
+      
+        window.addEventListener('unhandledrejection', event => {
+          event.stopImmediatePropagation()
+        })
+    `,
+          }}
+        />
+      )}
+      {typeof window === "undefined" ? null : children}
     </div>
   );
 };
