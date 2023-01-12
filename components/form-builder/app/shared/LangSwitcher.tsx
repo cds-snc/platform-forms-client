@@ -31,6 +31,7 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
         {t(descriptionLangKey)}
       </span>
       <div
+        data-testid="lang-switcher"
         role="button spinbutton"
         tabIndex={0}
         aria-activedescendant={
