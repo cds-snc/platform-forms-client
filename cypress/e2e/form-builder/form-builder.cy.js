@@ -1,4 +1,4 @@
-describe("Test acceptable use Page", () => {
+describe("Test FormBuilder", () => {
   beforeEach(() => {
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
@@ -32,8 +32,9 @@ describe("Test acceptable use Page", () => {
   });
 
   it("Designs a form", () => {
-    cy.get("h2").first().click();
+    cy.visit("/form-builder/edit");
     cy.get("#formTitle").type("Cypress Test Form");
+    cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add element").click();
     cy.get("#item0").type("Question 1");
@@ -59,6 +60,7 @@ describe("Test acceptable use Page", () => {
 
     // preview form
     cy.get("a").contains("Preview").click();
+    cy.get("a").contains("Preview").should("have.class", "font-bold");
     cy.get("#content h1").should("contain", "Cypress Test Form");
     cy.get(".gc-richText p").should("contain", "form intro");
     cy.get("#label-1").should("contain", "Question 1-1");
@@ -69,8 +71,15 @@ describe("Test acceptable use Page", () => {
       "Sign in to test how you can submit and view responses"
     );
 
+    // settings
+    cy.get("a").contains("Settings").click();
+    cy.get("a").contains("Settings").should("have.class", "font-bold");
+    cy.get("h1").should("contain", "Form settings");
+    cy.get("label").contains("Response delivery destination");
+
     // publish form
     cy.get("a").contains("Publish").click();
+    cy.get("a").contains("Publish").should("have.class", "font-bold");
     cy.get("h1").should("contain", "Sign in to publish your form");
     cy.get("a").contains("create one").click();
 

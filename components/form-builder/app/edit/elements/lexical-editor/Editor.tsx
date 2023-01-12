@@ -88,7 +88,18 @@ export const Editor = ({
             editorState.read(() => {
               // Read the contents of the EditorState here.
               const markdown = $convertToMarkdownString(TRANSFORMERS);
-              onChange(markdown);
+
+              // Add two spaces to previous line for linebreaks (this is not handled properly by $convertToMarkdownString)
+              const lines = markdown.split("\n");
+              lines.forEach((currentLine, i) => {
+                if (i > 0) {
+                  const previousLine = lines[i - 1];
+                  if (previousLine !== "" && currentLine !== "") {
+                    lines[i - 1] = previousLine.trim() + "  ";
+                  }
+                }
+              });
+              onChange(lines.join("\n"));
             });
           }}
         />
