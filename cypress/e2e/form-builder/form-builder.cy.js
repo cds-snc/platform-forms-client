@@ -32,9 +32,9 @@ describe("Test FormBuilder", () => {
   });
 
   it("Designs a form", () => {
-    cy.get("h2").first().click();
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
+    cy.visit("/form-builder/edit");
     cy.get("#formTitle").type("Cypress Test Form");
+    cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add element").click();
     cy.get("#item0").type("Question 1");
