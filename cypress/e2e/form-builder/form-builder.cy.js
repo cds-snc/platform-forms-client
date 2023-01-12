@@ -1,4 +1,4 @@
-describe("Test acceptable use Page", () => {
+describe("Test FormBuilder", () => {
   beforeEach(() => {
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {

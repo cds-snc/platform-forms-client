@@ -13,11 +13,14 @@ import { $findMatchingParent, mergeRegister } from "@lexical/utils";
 import {
   $getSelection,
   $isRangeSelection,
+  BLUR_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
+  COMMAND_PRIORITY_NORMAL,
   GridSelection,
   KEY_ESCAPE_COMMAND,
+  KEY_TAB_COMMAND,
   LexicalEditor,
   NodeSelection,
   RangeSelection,
@@ -54,6 +57,7 @@ function FloatingLinkEditor({
   >(null);
 
   const { t } = useTranslation();
+  const popped = useRef(false);
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -151,6 +155,7 @@ function FloatingLinkEditor({
         },
         COMMAND_PRIORITY_LOW
       ),
+      // Hide link editor by pressing escape
       editor.registerCommand(
         KEY_ESCAPE_COMMAND,
         () => {
@@ -161,9 +166,34 @@ function FloatingLinkEditor({
           return false;
         },
         COMMAND_PRIORITY_HIGH
+      ),
+      // Hide link editor when editor loses focus
+      editor.registerCommand(
+        BLUR_COMMAND,
+        () => {
+          if (isLink && !popped.current) {
+            setIsLink(false);
+            return true;
+          }
+          popped.current = false;
+          return false;
+        },
+        COMMAND_PRIORITY_NORMAL
+      ),
+      // Don't hide link editor when tabbing into it
+      editor.registerCommand(
+        KEY_TAB_COMMAND,
+        () => {
+          if (isLink) {
+            popped.current = true;
+            return true;
+          }
+          return false;
+        },
+        COMMAND_PRIORITY_NORMAL
       )
     );
-  }, [editor, updateLinkEditor, setIsLink, isLink]);
+  }, [editor, updateLinkEditor, setIsLink, isLink, popped]);
 
   useEffect(() => {
     editor.getEditorState().read(() => {
@@ -188,7 +218,7 @@ function FloatingLinkEditor({
             setLinkUrl(event.target.value);
           }}
           onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === "Escape") {
+            if (event.key === "Enter" || event.key === "Escape" || event.key === "Tab") {
               event.preventDefault();
               if (lastSelection !== null) {
                 if (linkUrl !== "") {
@@ -212,8 +242,12 @@ function FloatingLinkEditor({
                   event.preventDefault();
                   editor.focus();
                 }
+                if (event.key === "Tab") {
+                  setIsLink(false);
+                }
               }}
               onClick={() => {
+                popped.current = true;
                 setEditMode(true);
               }}
             >

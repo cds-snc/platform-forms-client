@@ -94,7 +94,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
     if (el && toolbarInit) {
       el.focus();
     }
-  }, [currentFocusIndex]);
+  }, [currentFocusIndex, toolbarInit]);
 
   const handleNav = useCallback(
     (evt: KeyboardEvent<HTMLInputElement>) => {
