@@ -52,7 +52,7 @@ export const Translate = () => {
               </label>
               <div className="relative flex-1">
                 <LanguageLabel id="form-title-en-language" lang={primaryLanguage}>
-                  {t(primaryLanguage)}
+                  <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <input
                   className="w-full p-4 h-full focus:outline-blue-focus"
@@ -82,7 +82,7 @@ export const Translate = () => {
               </label>
               <div className="relative flex-1">
                 <LanguageLabel id="form-title-fr-language" lang={secondaryLanguage}>
-                  {t(secondaryLanguage)}
+                  <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <input
                   className="w-full p-4 h-full focus:outline-blue-focus"
@@ -121,7 +121,7 @@ export const Translate = () => {
               >
                 <div className="w-1/2 flex-1 relative">
                   <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
-                    {t(primaryLanguage)}
+                    <>{t(primaryLanguage)}</>
                   </LanguageLabel>
                   <RichTextEditor
                     autoFocusEditor={false}
@@ -141,7 +141,7 @@ export const Translate = () => {
                 </div>
                 <div className="w-1/2 flex-1 relative">
                   <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
-                    {t(secondaryLanguage)}
+                    <>{t(secondaryLanguage)}</>
                   </LanguageLabel>
                   <RichTextEditor
                     autoFocusEditor={false}
@@ -224,7 +224,7 @@ export const Translate = () => {
                   id={`privacyPolicy-${primaryLanguage}-language`}
                   lang={primaryLanguage}
                 >
-                  {t(primaryLanguage)}
+                  <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
@@ -247,7 +247,7 @@ export const Translate = () => {
                   id={`privacyPolicy-${secondaryLanguage}->language`}
                   lang={secondaryLanguage}
                 >
-                  {t(secondaryLanguage)}
+                  <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
@@ -281,7 +281,7 @@ export const Translate = () => {
             >
               <div className="w-1/2 flex-1 relative">
                 <LanguageLabel id={`endpage-${primaryLanguage}-language`} lang={primaryLanguage}>
-                  {t(primaryLanguage)}
+                  <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
@@ -304,7 +304,7 @@ export const Translate = () => {
                   id={`endpage-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
                 >
-                  {t(secondaryLanguage)}
+                  <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}

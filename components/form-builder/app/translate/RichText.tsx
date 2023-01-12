@@ -32,7 +32,7 @@ export const RichText = ({
               id={`elements-${index}-description-${primaryLanguage}-language`}
               lang={primaryLanguage}
             >
-              {t(primaryLanguage)}
+              <>{t(primaryLanguage)}</>
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
@@ -54,7 +54,7 @@ export const RichText = ({
               id={`elements-${index}-description-${secondaryLanguage}-language`}
               lang={secondaryLanguage}
             >
-              {t(secondaryLanguage)}
+              <>{t(secondaryLanguage)}</>
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
