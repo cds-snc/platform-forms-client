@@ -23,14 +23,6 @@ describe("Form builder description text", () => {
     });
   });
 
-  it("Renders phone element with example text", () => {
-    cy.get("button").contains("Add element").click();
-    cy.get(".builder-element-dropdown").click();
-    cy.get('[data-testid="phone"]').click();
-    cy.get(".description-text").should("exist").contains("Enter a phone number like, 111-222-3333");
-    cy.get(".example-text").should("exist").contains("111-222-3333");
-  });
-
   it("Renders email element with example text", () => {
     cy.get("button").contains("Add element").click();
     cy.get(".builder-element-dropdown").click();
@@ -55,5 +47,18 @@ describe("Form builder description text", () => {
     cy.get('[data-testid="number"]').click();
     cy.get(".description-text").should("exist").contains("Only enter numbers");
     cy.get(".example-text").should("exist").contains("0123456789");
+  });
+
+  it("Renders phone element with example text + toggles to FR", () => {
+    cy.get("button").contains("Add element").click();
+    cy.get(".builder-element-dropdown").click();
+    cy.get('[data-testid="phone"]').click();
+    cy.get(".description-text").should("exist").contains("Enter a phone number like, 111-222-3333");
+    cy.get(".example-text").should("exist").contains("111-222-3333");
+
+    cy.get("#switch-english").click();
+    cy.get(".description-text")
+      .should("exist")
+      .contains("Entrez un numéro de téléphone comme 111-222-3333");
   });
 });
