@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
-import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
+import { useActivePathname } from "../../hooks/useActivePathname";
 
 export const LeftNavLink = ({ children, href }: { children: ReactElement; href: string }) => {
   const [active, setActive] = useState(false);
@@ -8,7 +8,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
 
   useEffect(() => {
     if (isReady) {
-      const linkPathname = cleanPath(new URL(href as string, location.href).pathname);
+      const linkPathname = new URL(href as string, location.href).pathname.replace(/\/*$/, "");
       if (activePathname.startsWith(linkPathname)) {
         setActive(true);
       }
