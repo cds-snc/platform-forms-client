@@ -13,10 +13,14 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     lang: s.lang,
   }));
 
-  const content =
-    form.elements[parentIndex].properties[
-      localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
-    ];
+  const localizedField = localizeField(
+    LocalizedElementProperties.DESCRIPTION,
+    translationLanguagePriority
+  );
+
+  const path = `form.elements[${parentIndex}].properties[${localizedField}]`;
+
+  const content = form.elements[parentIndex].properties[localizedField];
 
   return (
     <div
@@ -25,9 +29,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
       data-testid="richText"
     >
       <RichTextEditor
-        path={`form.elements[${parentIndex}].properties.${localizeField(
-          LocalizedElementProperties.DESCRIPTION
-        )}`}
+        path={path}
         content={content || ""}
         lang={translationLanguagePriority}
         autoFocusEditor={false}

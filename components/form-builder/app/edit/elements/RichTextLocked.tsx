@@ -8,21 +8,29 @@ export const RichTextLocked = ({
   beforeContent = null,
   addElement,
   children,
-  initialValue,
   schemaProperty,
   ariaLabel,
 }: {
   beforeContent?: React.ReactElement | null;
   addElement: boolean;
   children?: React.ReactElement;
-  initialValue: string;
-  schemaProperty: string;
+  schemaProperty: "introduction" | "endPage" | "privacyPolicy";
   ariaLabel?: string;
 }) => {
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+  const { localizeField, form, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
+    form: s.form,
     translationLanguagePriority: s.translationLanguagePriority,
   }));
+
+  const localizedField = localizeField(
+    LocalizedElementProperties.DESCRIPTION,
+    translationLanguagePriority
+  );
+
+  const content = form[schemaProperty]?.[localizedField] ?? "";
+
+  const path = `form.${schemaProperty}[${localizedField}]]`;
 
   return (
     <div className="max-w-[800px] border-1 border-black h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
@@ -31,11 +39,8 @@ export const RichTextLocked = ({
         <div className="flex">{children}</div>
         <div key={translationLanguagePriority} className="flex border-2 rounded">
           <RichTextEditor
-            path={`form.${schemaProperty}.${localizeField(
-              LocalizedElementProperties.DESCRIPTION,
-              translationLanguagePriority
-            )}`}
-            content={initialValue}
+            path={path}
+            content={content}
             lang={translationLanguagePriority}
             autoFocusEditor={false}
             ariaLabel={ariaLabel}
