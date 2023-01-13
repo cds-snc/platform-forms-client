@@ -45,6 +45,10 @@
     "supportForms": {
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
+    },
+    "formBuilderDebug": {
+      "title": "Form Builder Debug",
+      "description": "Enable the form builder debug mode"
     }
   }
 }

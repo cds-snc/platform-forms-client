@@ -45,6 +45,10 @@
     "supportForms": {
       "title": "Support Forms",
       "description": "Whether or not support forms are enabled"
+    },
+    "formBuilderDebug": {
+      "title": "Form Builder Debug",
+      "description": "Enable the form builder debug mode"
     }
   }
 }

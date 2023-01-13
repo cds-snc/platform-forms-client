@@ -20,6 +20,7 @@ import {
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
+import { useFlag } from "@lib/hooks";
 
 export const Editor = ({
   content,
@@ -40,7 +41,8 @@ export const Editor = ({
     undefined
   );
 
-  const showTreeView = process.env.NEXT_PUBLIC_FORM_BUILDER_DEBUG;
+  const debug = useFlag("formBuilderDebug");
+  const [showTreeView, setShowTreeView] = useState<boolean>(false);
 
   const editorId = "editor-" + Math.random().toString(36).substr(2, 9);
 
@@ -69,7 +71,11 @@ export const Editor = ({
           },
         }}
       >
-        <Toolbar editorId={editorId} />
+        <Toolbar
+          editorId={editorId}
+          setShowTreeView={setShowTreeView}
+          showTreeView={showTreeView}
+        />
         <RichTextPlugin
           contentEditable={
             <div className="editor relative" ref={onRef} {...(lang && { lang: lang })}>
@@ -110,7 +116,13 @@ export const Editor = ({
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
         <ListMaxIndentPlugin maxDepth={5} />
-        {showTreeView && <TreeViewPlugin />}
+        <div>
+          {showTreeView && debug && (
+            <div className="bg-gray-900 text-white -m-0.5 p-4">
+              <TreeViewPlugin />
+            </div>
+          )}
+        </div>
       </LexicalComposer>
     </div>
   );
