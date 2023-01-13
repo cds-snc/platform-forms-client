@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { ElementProperties } from "@lib/types";
 import unset from "lodash.unset";

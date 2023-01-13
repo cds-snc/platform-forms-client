@@ -30,11 +30,11 @@ jest.mock("@lib/hooks", () => {
     useFlag: jest.fn((flag) => {
       switch (flag) {
         case "formTimer":
-          return true;
+          return { isLoading: false, status: true };
         case "reCaptcha":
-          return false;
+          return { isLoading: false, status: false };
         case "submitToReliabilityQueue":
-          return false;
+          return { isLoading: false, status: false };
         default:
           return useFlag(flag);
       }
