@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Initiates the Feature Flags between application versions",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "initialize": "node index.js"
   },
