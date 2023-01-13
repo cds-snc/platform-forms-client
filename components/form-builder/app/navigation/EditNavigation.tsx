@@ -11,8 +11,12 @@ export const EditNavigation = () => {
   return (
     <div className="relative flex">
       <nav className="mb-8 flex divide-x-2 divide-gray-600" aria-label={t("navLabelEditor")}>
-        <SubNavLink href="/form-builder/edit">{t("questions")}</SubNavLink>
-        <SubNavLink href="/form-builder/edit/translate">{t("translate")}</SubNavLink>
+        <SubNavLink href="/form-builder/edit">
+          <>{t("questions")}</>
+        </SubNavLink>
+        <SubNavLink href="/form-builder/edit/translate">
+          <>{t("translate")}</>
+        </SubNavLink>
       </nav>
       {activePathname.endsWith("/edit") && (
         <div className="absolute right-0 mr-24 top-0">
