@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors");
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   theme: {
@@ -144,8 +145,8 @@ module.exports = {
       center: true,
     },
     fontFamily: {
-      sans: ["lato"],
-      body: ["Noto Sans"],
+      sans: ["Lato", ...defaultTheme.fontFamily.sans],
+      body: ['"Noto Sans"'],
       mono: ["monospace"],
     },
     screens: {
