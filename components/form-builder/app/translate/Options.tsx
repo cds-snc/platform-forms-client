@@ -40,7 +40,7 @@ export const Options = ({
                     id={`element-${index}-choice-${choiceIndex}-en-language`}
                     lang={primaryLanguage}
                   >
-                    {t(primaryLanguage)}
+                    <>{t(primaryLanguage)}</>
                   </LanguageLabel>
                   <input
                     className="w-full p-4"
@@ -67,7 +67,7 @@ export const Options = ({
                     id={`element-${index}-choice-${choiceIndex}-fr-language`}
                     lang={secondaryLanguage}
                   >
-                    {t(secondaryLanguage)}
+                    <>{t(secondaryLanguage)}</>
                   </LanguageLabel>
                   <input
                     className="w-full p-4"
