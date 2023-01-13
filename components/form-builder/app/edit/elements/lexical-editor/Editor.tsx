@@ -19,6 +19,7 @@ import {
 } from "@lexical/markdown";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import ListMaxIndentPlugin from "./plugins/ListMaxIndentPlugin";
+import TreeViewPlugin from "./plugins/TreeViewPlugin";
 
 export const Editor = ({
   content,
@@ -38,6 +39,8 @@ export const Editor = ({
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
   );
+
+  const showTreeView = process.env.NEXT_PUBLIC_FORM_BUILDER_DEBUG;
 
   const editorId = "editor-" + Math.random().toString(36).substr(2, 9);
 
@@ -107,6 +110,7 @@ export const Editor = ({
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
         <ListMaxIndentPlugin maxDepth={5} />
+        {showTreeView && <TreeViewPlugin />}
       </LexicalComposer>
     </div>
   );
