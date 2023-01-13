@@ -22,7 +22,7 @@ describe("ElementDropDown", () => {
       </Providers>
     );
 
-    const button = rendered.getByRole("button");
+    const button = rendered.getByTestId("element-dropdown-select");
     expect(button).toHaveAttribute("aria-expanded", "false");
     expect(rendered.container.querySelector(".header-button")).toBeInTheDocument();
 
