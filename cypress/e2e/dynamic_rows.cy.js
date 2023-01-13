@@ -1,7 +1,6 @@
 describe("Dynamic Row Functionality", () => {
   beforeEach(() => {
     cy.useFlag("formTimer", false);
-    cy.useFlag("reCaptcha", false);
     cy.mockForm("../../__fixtures__/dynamicRowsTestForm.json");
   });
   it("Adds then deletes a dynamic row", () => {
