@@ -14,9 +14,9 @@ function getCsp() {
   csp += `script-src 'self' 'strict-dynamic' ${scriptHashes.map((hash) => `'${hash}'`).join(" ")} ${
     process.env.APP_ENV === "test" ? "'unsafe-eval'" : ""
   } 'unsafe-inline' https:;`;
-  csp += `style-src 'self' fonts.googleapis.com 'unsafe-inline' data:;`;
-  csp += `img-src 'self' https: data:;`;
-  csp += `font-src 'self' fonts.gstatic.com;`;
+  csp += `style-src 'self' 'unsafe-inline' data:;`;
+  csp += `img-src 'self';`;
+  csp += `font-src 'self';`;
   csp += `frame-src www.googletagmanager.com www.google.com/recaptcha/ recaptcha.google.com/recaptcha/;`;
   csp += `connect-src 'self' www.googletagmanager.com www.google-analytics.com`;
   return csp;
