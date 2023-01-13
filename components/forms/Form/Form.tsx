@@ -24,7 +24,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   formTitle,
 }) => {
   const { t } = useTranslation();
-  const timerActive = useFlag("formTimer");
+  const { status: timerActive } = useFlag("formTimer");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
@@ -52,6 +52,8 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         clearInterval(intervalID);
       }
     };
+    // we only want to run this effect when the timerActive flag changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timerActive]);
 
   return (
@@ -143,7 +145,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const isReCaptchaEnableOnSite = useFlag("reCaptcha");
+  const { status: isReCaptchaEnableOnSite } = useFlag("reCaptcha");
 
   useExternalScript(
     `https://www.google.com/recaptcha/api.js?render=${reCaptchaID}`,
@@ -201,7 +203,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       setFocusOnErrorMessage(props, errorId);
       setCanFocusOnError(false);
     }
-    // @todo - fix this eslint error
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
