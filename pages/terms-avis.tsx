@@ -16,7 +16,7 @@ const Terms = ({ content }: TermsProps) => {
       <Head>
         <title>{t("title")}</title>
       </Head>
-      <RichText>{content}</RichText>;
+      <RichText>{content}</RichText>
     </>
   );
 };

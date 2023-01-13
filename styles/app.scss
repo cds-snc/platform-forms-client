@@ -1,8 +1,6 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Noto+Sans:wght@400;700");
-
 // Custom Variables
 @import "./_mixins";
 
@@ -11,6 +9,32 @@
 @import "./_forms";
 @import "./_form-builder";
 @import "./_header";
+
+@layer base {
+  /* latin */
+  @font-face {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Lato"), url("../public/static/fonts/Lato-Regular.ttf") format("ttf");
+  }
+
+  /* latin */
+  @font-face {
+    font-family: "Noto Sans";
+    font-style: normal;
+    font-weight: 400;
+    src: url("../public/static/fonts/NotoSans-Regular.ttf") format("ttf");
+  }
+
+  /* latin */
+  @font-face {
+    font-family: "Noto Sans";
+    font-style: bold;
+    font-weight: 700;
+    src: url("../public/static/fonts/NotoSans-Bold.ttf") format("ttf");
+  }
+}
 
 // Tailwind Utilities needs to be loaded last to use inline
 @import "tailwindcss/utilities";

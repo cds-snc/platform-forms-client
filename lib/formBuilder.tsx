@@ -258,18 +258,14 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
  * @param language
  */
 const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
-  if (!formRecord?.form) {
-    return null;
-  }
-
-  return formRecord.form.layout.map((item: number) => {
-    const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
-    if (element) {
-      return <GenerateElement key={element.id} element={element} language={language} t={t} />;
-    } else {
-      logMessage.error(`Failed component ID look up ${item} on form ID ${formRecord.id}`);
-    }
-  });
+  return formRecord.form.layout
+    .map((item: number) => {
+      const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
+      if (element) {
+        return <GenerateElement key={element.id} element={element} language={language} t={t} />;
+      }
+    })
+    .filter((element): element is JSX.Element => typeof element !== "undefined");
 };
 
 /**

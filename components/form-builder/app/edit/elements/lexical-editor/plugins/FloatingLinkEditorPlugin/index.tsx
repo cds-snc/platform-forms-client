@@ -97,6 +97,12 @@ function FloatingLinkEditor({
           inner = inner.firstElementChild as HTMLElement;
         }
         rect = inner.getBoundingClientRect();
+      } else if (domRange.startContainer.firstChild) {
+        // we've got the anchor node but we want the inner text node
+        // this happens when you backspace to the end of a link node
+        const child = domRange.startContainer.firstChild as HTMLElement;
+
+        rect = child.getBoundingClientRect();
       } else {
         rect = domRange.getBoundingClientRect();
       }
