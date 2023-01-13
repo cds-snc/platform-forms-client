@@ -265,6 +265,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
           },
           importTemplate: (json) =>
             set((state) => {
+              state.id = "";
+              state.isPublished = false;
               state.submission = { email: json.submission?.email || "" };
               state.form = { ...defaultForm, ...json.form };
             }),
