@@ -27,12 +27,6 @@ const AdminWelcome: NextPageWithLayout<AdminWelcomeProps> = (props: AdminWelcome
           <h3>
             {i18n.language === "en" ? "Welcome" : "Bienvenue"} {user.name}!
           </h3>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {user.image && (
-            <picture>
-              <img src={user.image} alt="profile" className="rounded-full" />
-            </picture>
-          )}
           <p className="text-sm mb-8">
             {t("logged-in")} {user.email}
           </p>
