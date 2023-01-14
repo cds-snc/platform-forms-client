@@ -35,7 +35,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@d2897b5335975f749897eb8cb16345b12a17042f
+        uses: aws-actions/amazon-ecr-login@b58751791baba4f22424ed109af916dfcb78b04e
 
       - name: Get Cluster Name
         id: cluster
