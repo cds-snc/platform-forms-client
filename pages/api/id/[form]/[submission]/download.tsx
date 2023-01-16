@@ -47,7 +47,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     const response = await documentClient.send(queryCommand);
 
-    const parsedResponse = response.Items?.map(
+    // If the SubmissionID does not exist return a 404
+    if (response.Items === undefined || response.Items.length === 0)
+      return res.status(404).json({ error: "Submission not Found" });
+
+    const parsedResponse = response.Items.map(
       ({
         FormID: formID,
         SubmissionID: submissionID,
@@ -91,15 +95,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     const htmlFile = renderToStaticNodeStream(
       <TestReactElement
-        formSubmission={parsedResponse?.formSubmission}
+        formSubmission={parsedResponse.formSubmission}
         formTemplate={formTemplate}
       />
     );
 
     logMessage.info(
-      `user:${session?.user.email} retrieved form responses ${
-        parsedResponse && parsedResponse.submissionID
-      } from form ID:${formID}}`
+      `user:${session?.user.email} retrieved form responses ${parsedResponse.submissionID} from form ID:${formID}}`
     );
 
     res.setHeader("Content-Disposition", `attachment; filename=${htmlFileName}.html`);
