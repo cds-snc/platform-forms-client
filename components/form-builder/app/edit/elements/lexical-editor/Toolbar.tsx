@@ -76,7 +76,8 @@ export const Toolbar = ({
 
   const [isEditable] = useState(() => editor.isEditable());
 
-  const debug = useFlag("formBuilderDebug");
+  const { status: formBuilderDebugEnabled } = useFlag("formBuilderDebug");
+
   const toggleTreeView = () => {
     setShowTreeView(!showTreeView);
   };
@@ -403,7 +404,7 @@ export const Toolbar = ({
             <LinkIcon />
           </button>
         </ToolTip>
-        {debug && (
+        {formBuilderDebugEnabled && (
           <ToolTip text="Toggle TreeView">
             <button
               className={"peer toolbar-item " + (showTreeView && "active")}

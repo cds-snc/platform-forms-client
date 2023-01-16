@@ -41,7 +41,7 @@ export const Editor = ({
     undefined
   );
 
-  const debug = useFlag("formBuilderDebug");
+  const { status: formBuilderDebugEnabled } = useFlag("formBuilderDebug");
   const [showTreeView, setShowTreeView] = useState<boolean>(false);
 
   const editorId = "editor-" + Math.random().toString(36).substr(2, 9);
@@ -117,7 +117,7 @@ export const Editor = ({
         <ListPlugin />
         <ListMaxIndentPlugin maxDepth={5} />
         <div>
-          {showTreeView && debug && (
+          {showTreeView && formBuilderDebugEnabled && (
             <div className="bg-gray-900 text-white -m-0.5 p-4">
               <TreeViewPlugin />
             </div>
