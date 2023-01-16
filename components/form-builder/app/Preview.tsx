@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { useTemplateApi } from "../hooks";
 import { BackArrowIcon } from "../icons";
+import { useProgress } from "../hooks";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -18,6 +19,8 @@ export const Preview = () => {
     getSchema: s.getSchema,
   }));
   const stringified = getSchema();
+
+  const { userProgress } = useProgress();
 
   const formRecord = {
     id: id || "test0form00000id000asdf11",
@@ -113,10 +116,7 @@ export const Preview = () => {
         ) : (
           <Form
             formRecord={formRecord}
-            importValues={{
-              1: "option 2",
-              2: "my data",
-            }}
+            importValues={userProgress}
             language={language}
             router={router}
             t={t}

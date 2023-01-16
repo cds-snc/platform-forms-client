@@ -4,6 +4,7 @@ import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
 import { PreviewNavigation, PageTemplate, Template, Preview } from "@components/form-builder/app";
+import { ProgressProvider } from "@components/form-builder/hooks";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
@@ -11,7 +12,14 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   return (
     <PageTemplate title={title} navigation={<PreviewNavigation />}>
-      <Preview />
+      <ProgressProvider
+        data={{
+          1: "option 2",
+          2: "my data!!!!!",
+        }}
+      >
+        <Preview />
+      </ProgressProvider>
     </PageTemplate>
   );
 };
