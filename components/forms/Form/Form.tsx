@@ -316,25 +316,40 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 formTitle={form.titleEn}
               />
             )}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                // saveProgress(props.values);
+            <span className="flex flex-row mt-8">
+              <div className="w-1/2">
+                <button
+                  className="border border-gray-400 rounded-md px-4 py-2 hover:bg-gray-200"
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    // saveProgress(props.values);
 
-                const blob = new Blob([JSON.stringify(props.values)], { type: "application/json" });
+                    const blob = new Blob([JSON.stringify(props.values)], {
+                      type: "application/json",
+                    });
 
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "progress.json";
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-            >
-              Save progress
-            </button>
-            <input id="file-upload" type="file" onChange={handleChange} />
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "progress.json";
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                >
+                  Save progress
+                </button>
+              </div>
+              <div className="w-1/2 text-right">
+                <label
+                  htmlFor="file-upload"
+                  className="border border-gray-400 rounded-md px-4 py-2 cursor-pointer hover:bg-gray-200"
+                >
+                  Upload progress file
+                  <input className="hidden" id="file-upload" type="file" onChange={handleChange} />
+                </label>
+              </div>
+            </span>
           </form>
         </>
       }
