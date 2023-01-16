@@ -26,7 +26,7 @@ const Logout = () => {
         <title>{t("title")}</title>
       </Head>
       <div>
-        <h2>{t("messageContent")}</h2>
+        <h1>{t("messageContent")}</h1>
         <div className="gc-last-logout-time">
           {t("logoutDate")} : {logoutDate}
         </div>
