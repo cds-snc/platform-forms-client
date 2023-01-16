@@ -113,6 +113,10 @@ export const Preview = () => {
         ) : (
           <Form
             formRecord={formRecord}
+            importValues={{
+              1: "option 2",
+              2: "my data",
+            }}
             language={language}
             router={router}
             t={t}

@@ -273,14 +273,18 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
  * @param element
  * @param language
  */
-const _getElementInitialValue = (element: FormElement, language: string): Response => {
+const _getElementInitialValue = (
+  element: FormElement,
+  language: string,
+  importValues: Record<string, string> | undefined
+): Response => {
   switch (element.type) {
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
     case FormElementTypes.dropdown:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
-      return "";
+      return importValues && importValues[element.id] ? importValues[element.id] : "";
     case FormElementTypes.checkbox:
       return [];
     case FormElementTypes.fileInput:
@@ -290,7 +294,11 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
           if (![FormElementTypes.richText].includes(currentValue.type)) {
-            accumulator[subElementID] = _getElementInitialValue(currentValue, language);
+            accumulator[subElementID] = _getElementInitialValue(
+              currentValue,
+              language,
+              importValues
+            );
           }
           return accumulator;
         }, {} as Responses) ?? {};
@@ -307,7 +315,11 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
  * @param formRecord
  * @param language
  */
-const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
+const _getFormInitialValues = (
+  formRecord: PublicFormRecord,
+  language: string,
+  importValues: Record<string, string> | undefined
+): Responses => {
   if (!formRecord?.form) {
     return {};
   }
@@ -317,7 +329,7 @@ const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): 
   formRecord.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
-      initialValues[element.id] = _getElementInitialValue(element, language);
+      initialValues[element.id] = _getElementInitialValue(element, language, importValues);
     });
 
   return initialValues;
