@@ -276,7 +276,7 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
 const _getElementInitialValue = (
   element: FormElement,
   language: string,
-  importValues: Record<string, string> | undefined
+  importValues: Responses | undefined
 ): Response => {
   switch (element.type) {
     // Radio and dropdown resolve to string values
@@ -318,7 +318,7 @@ const _getElementInitialValue = (
 const _getFormInitialValues = (
   formRecord: PublicFormRecord,
   language: string,
-  importValues: Record<string, string> | undefined
+  importValues: Responses | undefined
 ): Responses => {
   if (!formRecord?.form) {
     return {};

@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, Dispatch, SetStateAction } from "react";
+import { Responses } from "@lib/types";
 
 interface ProgressType {
-  userProgress?: Record<string, string> | undefined;
-  saveProgress?: Dispatch<SetStateAction<Record<string, string> | undefined>>;
+  userProgress?: Responses | undefined;
+  importProgress: Dispatch<SetStateAction<Responses | undefined>>;
 }
 
 export const ProgressContext = createContext<ProgressType | null>(null);
@@ -14,10 +15,10 @@ export function ProgressProvider({
   children: React.ReactNode;
   data: Record<string, string> | undefined;
 }) {
-  const [userProgress, saveProgress] = useState<Record<string, string> | undefined>(data);
+  const [userProgress, importProgress] = useState<Responses | undefined>(data);
 
   return (
-    <ProgressContext.Provider value={{ userProgress, saveProgress }}>
+    <ProgressContext.Provider value={{ userProgress, importProgress }}>
       {children}
     </ProgressContext.Provider>
   );
