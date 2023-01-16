@@ -12,12 +12,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   return (
     <PageTemplate title={title} navigation={<PreviewNavigation />}>
-      <ProgressProvider
-        data={{
-          1: "option 2",
-          2: "my data!!!!!",
-        }}
-      >
+      <ProgressProvider>
         <Preview />
       </ProgressProvider>
     </PageTemplate>

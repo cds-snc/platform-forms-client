@@ -8,15 +8,8 @@ interface ProgressType {
 
 export const ProgressContext = createContext<ProgressType | null>(null);
 
-export function ProgressProvider({
-  children,
-  data,
-}: {
-  children: React.ReactNode;
-  data: Record<string, string> | undefined;
-}) {
-  const [userProgress, importProgress] = useState<Responses | undefined>(data);
-
+export function ProgressProvider({ children }: { children: React.ReactNode }) {
+  const [userProgress, importProgress] = useState<Responses | undefined>({});
   return (
     <ProgressContext.Provider value={{ userProgress, importProgress }}>
       {children}
