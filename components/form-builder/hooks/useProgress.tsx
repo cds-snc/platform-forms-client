@@ -19,6 +19,13 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
 export const useProgress = () => {
   const value = useContext(ProgressContext);
-  if (value === null) throw new Error("Provider missing");
+  if (value === null) {
+    return {
+      importProgress: () => {
+        return;
+      },
+      userProgress: undefined,
+    };
+  }
   return value;
 };
