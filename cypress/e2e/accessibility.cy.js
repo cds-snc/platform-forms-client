@@ -29,7 +29,7 @@ describe("Accessibility (A11Y) Check", () => {
       { title: "Form Builder Translation", path: "/form-builder/edit/translate" },
       { title: "FormBuilder Settings", path: "/form-builder/settings" },
       { title: "Terms and Conditions", path: "/terms-avis" },
-      { title: "Service Level Agreeemnt", path: "/sla" },
+      { title: "Service Level Agreement", path: "/sla" },
       { title: "Registration", path: "/signup/register" },
       { title: "Login", path: "/auth/login" },
       { title: "Logout", path: "/auth/logout" },
