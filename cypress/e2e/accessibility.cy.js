@@ -23,7 +23,7 @@ describe("Accessibility (A11Y) Check", () => {
   });
   describe("Unauthenticated Pages", () => {
     it.each([
-      { title: "Language Selecton", path: "/" },
+      { title: "Language Selection", path: "/" },
       { title: "Form Builder Landing", path: "/form-builder" },
       { title: "Form Builder Edit", path: "/form-builder/edit" },
       { title: "Form Builder Translation", path: "/form-builder/edit/translate" },
