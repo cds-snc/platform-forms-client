@@ -35,5 +35,26 @@
       "coppiedToClipboard": "Coppied to clipboard",
       "somethingWentWrong": "Something went wrong"
     }
+  },
+  "responseTemplate": {
+    "responseNumber": "Response Number",
+    "submissionDate": "Submission Date",
+    "errorNoQuestionsAnswers": "Error no questions and answers were found.",
+    "jumpTo": "Jump To:",
+    "columnTable": "Column table",
+    "rowTable": "Row table",
+    "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet. Use your cursor to select the row of answers.",
+    "confirmReceiptResponse": "Confirm receipt of response",
+    "confirmReceipt": "Confirm receipt",
+    "confirmReceiptInfo": "Copy the code below and paste it into the Confirm Receipt of Responses page in the website.",
+    "copyCode": "Copy code",
+    "copyCodeClipboard": "Copy code to clipboard",
+    "copiedCode": "Copied code to clipboard",
+    "errorrCopiedCode": "Error copying code to clipboard"
+  },
+  "protectedBWarning": {
+    "officialRecord": "This is an official record",
+    "retainCopy": "Retain this copy in accordance to your retention policy.",
+    "protectedB": "PROTECTED B"
   }
 }
