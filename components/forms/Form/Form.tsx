@@ -139,6 +139,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
+  const { status: saveFormProgress } = useFlag("saveFormProgress");
+
   const { t } = useTranslation();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -272,7 +274,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               />
             )}
 
-            <SaveProgress values={props.values} />
+            {saveFormProgress && <SaveProgress values={props.values} />}
           </form>
         </>
       }

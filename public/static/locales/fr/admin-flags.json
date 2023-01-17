@@ -45,6 +45,10 @@
     "supportForms": {
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
+    },
+    "saveFormProgress": {
+      "title": "[FR] Save Form Progress",
+      "description": "[FR] Enable saving of form progress"
     }
   }
 }
