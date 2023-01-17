@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "@pages/_app";
+import { ProgressProvider } from "@components/form-builder/hooks";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
@@ -48,9 +49,11 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
           <title>{formTitle}</title>
         </Head>
         <h1>{formTitle}</h1>
-        <Form formRecord={formRecord} language={language} router={router} t={t}>
-          {currentForm}
-        </Form>
+        <ProgressProvider>
+          <Form formRecord={formRecord} language={language} router={router} t={t}>
+            {currentForm}
+          </Form>
+        </ProgressProvider>
       </div>
     </>
   );

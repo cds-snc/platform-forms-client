@@ -30,4 +30,5 @@ Cypress.on("uncaught:exception", () => {
 
 beforeEach(() => {
   cy.useFlag("reCaptcha", false);
+  cy.useFlag("saveFormProgress", false);
 });
