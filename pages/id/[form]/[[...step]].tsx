@@ -23,7 +23,7 @@ interface RenderFormProps {
   formRecord: PublicFormRecord;
 }
 
-const FormWrapper = ({ formRecord }: RenderFormProps): React.ReactElement => {
+const FormWithSaveProgress = ({ formRecord }: RenderFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
@@ -68,7 +68,7 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
         </Head>
         <h1>{formTitle}</h1>
         <ProgressProvider>
-          <FormWrapper formRecord={formRecord} />
+          <FormWithSaveProgress formRecord={formRecord} />
         </ProgressProvider>
       </div>
     </>
