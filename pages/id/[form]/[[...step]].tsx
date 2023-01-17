@@ -28,10 +28,10 @@ const FormWrapper = ({ formRecord }: RenderFormProps): React.ReactElement => {
   const language = i18n.language as string;
   const currentForm = getRenderedForm(formRecord, language, t);
   const router = useRouter();
-  const { userProgress } = useProgress();
+  const { userProgress: initialValues } = useProgress();
   return (
     <Form
-      initialValues={userProgress}
+      initialValues={initialValues}
       formRecord={formRecord}
       language={language}
       router={router}
