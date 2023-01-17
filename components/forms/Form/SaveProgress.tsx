@@ -2,7 +2,7 @@ import React from "react";
 import { useProgress } from "@components/form-builder/hooks";
 import { Responses } from "@lib/types";
 
-export const SaveProgress = ({ values }: { values: Responses }) => {
+export const SaveProgress = ({ values, formId }: { values: Responses; formId: string }) => {
   const { importProgress, saveProgress } = useProgress();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,10 +17,10 @@ export const SaveProgress = ({ values }: { values: Responses }) => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        let data;
+        let upload;
 
         try {
-          data = JSON.parse(e.target.result);
+          upload = JSON.parse(e.target.result);
         } catch (e) {
           if (e instanceof SyntaxError) {
             // setErrors([{ message: t("startErrorParse") }]);
@@ -28,7 +28,11 @@ export const SaveProgress = ({ values }: { values: Responses }) => {
             return;
           }
         }
-        importProgress(data);
+        if (upload.id === formId) {
+          importProgress(upload.data);
+        } else {
+          // wrong form
+        }
       };
     } catch (e) {
       if (e instanceof Error) {
@@ -45,7 +49,7 @@ export const SaveProgress = ({ values }: { values: Responses }) => {
           className="border border-gray-400 rounded-md px-4 py-2 hover:bg-gray-200"
           onClick={(e) => {
             e.preventDefault();
-            saveProgress(values);
+            saveProgress({ values, formId });
           }}
         >
           Save progress

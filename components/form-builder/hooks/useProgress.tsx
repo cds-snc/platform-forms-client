@@ -4,7 +4,7 @@ import { Responses } from "@lib/types";
 interface ProgressType {
   userProgress?: Responses | undefined;
   importProgress: Dispatch<SetStateAction<Responses | undefined>>;
-  saveProgress: (values: Responses | undefined) => void;
+  saveProgress: (values?: Responses | undefined, formId?: string | undefined) => void;
 }
 
 export const ProgressContext = createContext<ProgressType | null>(null);
@@ -12,8 +12,13 @@ export const ProgressContext = createContext<ProgressType | null>(null);
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [userProgress, importProgress] = useState<Responses | undefined>({});
 
-  const saveProgress = (values: Responses | undefined) => {
-    const blob = new Blob([JSON.stringify(values)], { type: "application/json" });
+  const saveProgress = (values?: Responses | undefined, formId?: string) => {
+    const data = {
+      id: formId,
+      data: values,
+    };
+
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

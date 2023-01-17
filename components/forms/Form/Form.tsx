@@ -273,7 +273,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 formTitle={form.titleEn}
               />
             )}
-            {saveFormProgress && <SaveProgress values={props.values} />}
+            {saveFormProgress && <SaveProgress formId={formID} values={props.values} />}
           </form>
         </>
       }
