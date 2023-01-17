@@ -39,7 +39,7 @@ export const SaveProgress = ({ values }: { values: Responses }) => {
 
   return (
     <span className="flex flex-row mt-8">
-      <div className="w-1/2">
+      <div className="">
         <button
           type="button"
           className="border border-gray-400 rounded-md px-4 py-2 hover:bg-gray-200"
@@ -51,13 +51,19 @@ export const SaveProgress = ({ values }: { values: Responses }) => {
           Save progress
         </button>
       </div>
-      <div className="w-1/2 text-right">
-        <label
-          htmlFor="file-upload"
-          className="border border-gray-400 rounded-md px-4 py-2 cursor-pointer hover:bg-gray-200"
-        >
-          Upload progress file
-          <input className="hidden" id="file-upload" type="file" onChange={handleChange} />
+      <div className="ml-4">
+        <label className="block border border-gray-400 rounded-md p-1.5">
+          <span className="sr-only">Upload progress file</span>
+          <input
+            onChange={handleChange}
+            type="file"
+            className="block w-full text-sm text-slate-500 
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm
+              file:bg-gray-300 file:text-gray-900
+              hover:file:bg-gray-100"
+          />
         </label>
       </div>
     </span>
