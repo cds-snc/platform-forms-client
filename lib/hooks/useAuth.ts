@@ -76,8 +76,8 @@ export const useAuth = () => {
       }
     } catch (err) {
       const axiosError = err as AxiosError;
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      if (axiosError.message) {
+        const errorResponseMessage = axiosError.message;
         if (errorResponseMessage.includes("UsernameExistsException")) {
           setCognitoError(t("UsernameExistsException"));
         } else {
@@ -142,8 +142,8 @@ export const useAuth = () => {
       const axiosError = err as AxiosError;
       confirmationSuccess = false;
       logMessage.error(axiosError);
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      if (axiosError.message) {
+        const errorResponseMessage = axiosError.message;
 
         if (errorResponseMessage.includes("CodeMismatchException")) {
           setErrors({
@@ -234,8 +234,8 @@ export const useAuth = () => {
     } catch (err) {
       logMessage.error(err);
       const axiosError = err as AxiosError;
-      if (axiosError?.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      if (axiosError.message) {
+        const errorResponseMessage = axiosError.message;
         if (errorResponseMessage.includes("TooManyRequestsException")) {
           setCognitoError(t("TooManyRequestsException"));
         } else {
@@ -330,8 +330,8 @@ export const useAuth = () => {
     } catch (err) {
       const axiosError = err as AxiosError;
       logMessage.error(axiosError);
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      if (axiosError.message) {
+        const errorResponseMessage = axiosError.message;
 
         if (errorResponseMessage.includes("InvalidParameterException") && failedCallback) {
           failedCallback("InvalidParameterException");
@@ -387,8 +387,8 @@ export const useAuth = () => {
     } catch (err) {
       const axiosError = err as AxiosError;
       logMessage.error(axiosError);
-      if (axiosError.response?.data?.message) {
-        const errorResponseMessage = axiosError.response.data.message;
+      if (axiosError.message) {
+        const errorResponseMessage = axiosError.message;
 
         if (errorResponseMessage.includes("CodeMismatchException")) {
           setErrors({
