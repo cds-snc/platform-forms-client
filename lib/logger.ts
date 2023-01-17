@@ -39,7 +39,7 @@ const sanitizeErrorObject = (log: unknown) => {
   if (Axios.isAxiosError(log)) {
     // If it's an axios error delete the data key that can
     // potentially contain form data
-    delete log.config.data;
+    delete log?.config?.data;
     delete log.request.data;
   }
   return log;
