@@ -47,7 +47,7 @@ const AdminWelcome: NextPageWithLayout<AdminWelcomeProps> = (props: AdminWelcome
             <Link href="/admin/view-templates">View Form Templates</Link>
           </p>
           <p>
-            <Link href="/admin/vault">View Form Submissions</Link>
+            <Link href="/admin/stats">View Form Statistics</Link>
           </p>
         </div>
       </div>

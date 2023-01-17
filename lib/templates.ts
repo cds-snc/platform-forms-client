@@ -9,6 +9,55 @@ import { MongoAbility } from "@casl/ability";
 
 export class TemplateAlreadyPublishedError extends Error {}
 
+const canUserAccessAllTemplates = (ability: MongoAbility) => {
+  return checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
+        object: {},
+      },
+    },
+  ]);
+};
+
+async function _countPublishedTemplates(ability: MongoAbility, userID: string) {
+  return await prisma.template
+    .count({
+      where: {
+        ttl: null,
+        isPublished: true,
+        ...(!canUserAccessAllTemplates(ability) && {
+          users: {
+            some: {
+              id: userID,
+            },
+          },
+        }),
+      },
+    })
+    .catch((e) => prismaErrors(e, []));
+}
+
+async function _countUnpublishedTemplates(ability: MongoAbility, userID: string) {
+  return await prisma.template
+    .count({
+      where: {
+        ttl: null,
+        isPublished: false,
+        ...(!canUserAccessAllTemplates(ability) && {
+          users: {
+            some: {
+              id: userID,
+            },
+          },
+        }),
+      },
+    })
+    .catch((e) => prismaErrors(e, []));
+}
+
 /**
  * Creates a Form Template record
  * @param config Form Template configuration
@@ -70,22 +119,11 @@ async function _createTemplate(
 async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<Array<FormRecord>> {
   checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
-  const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
-    {
-      action: "view",
-      subject: {
-        type: "FormRecord",
-        // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-        object: {},
-      },
-    },
-  ]);
-
   const templates = await prisma.template
     .findMany({
       where: {
         ttl: null,
-        ...(!canUserAccessAllTemplates && {
+        ...(!canUserAccessAllTemplates(ability) && {
           users: {
             some: {
               id: userID,
@@ -196,9 +234,7 @@ async function _getTemplateSubmissionTypeByID(
  * This function is for internal use only since it does not require any permission.
  * There is an exported version `_getTemplateWithAssociatedUsers` that checks for permissions.
  */
-async function _unprotectedGetTemplateWithAssociatedUsers(
-  formID: string
-): Promise<{ formRecord: FormRecord; users: { id: string; name: string | null }[] } | null> {
+async function _unprotectedGetTemplateWithAssociatedUsers(formID: string) {
   const templateWithUsers = await prisma.template
     .findUnique({
       where: {
@@ -503,3 +539,5 @@ export const updateIsPublishedForTemplate = logger(_updateIsPublishedForTemplate
 export const updateAssignedUsersForTemplate = logger(_updateAssignedUsersForTemplate);
 export const deleteTemplate = logger(_deleteTemplate);
 export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);
+export const countPublishedTemplates = logger(_countPublishedTemplates);
+export const countUnpublishedTemplates = logger(_countUnpublishedTemplates);
