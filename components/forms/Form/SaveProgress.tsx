@@ -38,17 +38,28 @@ export const SaveProgress = ({ values }: { values: Responses }) => {
   };
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          saveProgress(values);
-        }}
-      >
-        Save progress
-      </button>
-      <input id="file-upload" type="file" onChange={handleChange} />
-    </>
+    <span className="flex flex-row mt-8">
+      <div className="w-1/2">
+        <button
+          type="button"
+          className="border border-gray-400 rounded-md px-4 py-2 hover:bg-gray-200"
+          onClick={(e) => {
+            e.preventDefault();
+            saveProgress(values);
+          }}
+        >
+          Save progress
+        </button>
+      </div>
+      <div className="w-1/2 text-right">
+        <label
+          htmlFor="file-upload"
+          className="border border-gray-400 rounded-md px-4 py-2 cursor-pointer hover:bg-gray-200"
+        >
+          Upload progress file
+          <input className="hidden" id="file-upload" type="file" onChange={handleChange} />
+        </label>
+      </div>
+    </span>
   );
 };
