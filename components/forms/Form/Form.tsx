@@ -12,7 +12,7 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord } from "@lib/types";
 import { NextRouter } from "next/router";
-import { useProgress } from "@components/form-builder/hooks";
+import { SaveProgress } from "./SaveProgress";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -188,51 +188,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
   };
-
-  const { importProgress } = useProgress();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target || !e.target.files) {
-      return;
-    }
-
-    const target = e.target;
-
-    try {
-      const fileReader = new FileReader();
-
-      fileReader.readAsText(e.target.files[0], "UTF-8");
-      fileReader.onload = (e) => {
-        if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        let data;
-
-        try {
-          data = JSON.parse(e.target.result);
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            // setErrors([{ message: t("startErrorParse") }]);
-            target.value = "";
-            return;
-          }
-        }
-
-        // if (!validationResult.valid) {
-        //   // setErrors(validationResult.errors);
-        //   target.value = "";
-        //   return;
-        // }
-
-        // ensure elements follow layout array order
-        importProgress(data);
-        // router.push({ pathname: `/form-builder/preview` });
-      };
-    } catch (e) {
-      if (e instanceof Error) {
-        // setErrors([{ message: e.message }]);
-      }
-    }
-  };
-
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
     if (formStatusError) {
@@ -316,25 +271,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 formTitle={form.titleEn}
               />
             )}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                // saveProgress(props.values);
 
-                const blob = new Blob([JSON.stringify(props.values)], { type: "application/json" });
-
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "progress.json";
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-            >
-              Save progress
-            </button>
-            <input id="file-upload" type="file" onChange={handleChange} />
+            <SaveProgress values={props.values} />
           </form>
         </>
       }
