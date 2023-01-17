@@ -158,3 +158,17 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
   const time = parts[1].replace(/\./g, "").trim();
   return [yearMonthDay, time];
 };
+
+export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-CA") => {
+  const date = new Date(updatedAt || 0);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+
+  return date.toLocaleDateString(locale, options);
+};

@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "../shared";
 import { useTemplateStore } from "../../store";
 import { useAllowPublish, useTemplateStatus, useTemplateApi } from "../../hooks";
-import { formatDateTime } from "../../util";
+import { formatDateTime, formatDateTimeLong } from "../../util";
 import Markdown from "markdown-to-jsx";
 
 export const SaveButton = () => {
@@ -45,6 +45,7 @@ export const SaveButton = () => {
   }, [asPath, isReady]);
 
   const dateTime = (updatedAt && formatDateTime(new Date(updatedAt).getTime())) || [];
+  const fullDate = (updatedAt && formatDateTimeLong(new Date(updatedAt).getTime())) || "";
 
   return !isStartPage && isSaveable() && status === "authenticated" ? (
     <div
@@ -62,7 +63,7 @@ export const SaveButton = () => {
       {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">
           <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-          <div className="text-sm">
+          <div className="text-sm" aria-label={fullDate}>
             {dateTime[0]} {t("at")} {dateTime[1]}{" "}
           </div>
         </div>
