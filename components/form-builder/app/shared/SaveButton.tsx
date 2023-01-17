@@ -63,7 +63,7 @@ export const SaveButton = () => {
       {dateTime.length == 2 && (
         <div className="mt-4 " role="alert" aria-live="polite">
           <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-          <div className="text-sm" aria-label={fullDate}>
+          <div aria-label={fullDate} className="text-sm">
             {dateTime[0]} {t("at")} {dateTime[1]}{" "}
           </div>
         </div>

@@ -154,7 +154,7 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
     return [];
   }
 
-  const yearMonthDay = parts[0].replace(/-/g, "/");
+  const yearMonthDay = parts[0];
   const time = parts[1].replace(/\./g, "").trim();
   return [yearMonthDay, time];
 };
