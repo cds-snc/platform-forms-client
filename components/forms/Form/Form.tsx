@@ -283,7 +283,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
 interface FormProps {
   formRecord: PublicFormRecord;
-  importValues?: Responses | undefined;
+  initialValues?: Responses | undefined;
   language: string;
   router: NextRouter;
   isReCaptchaEnableOnSite?: boolean;
@@ -307,7 +307,7 @@ export const Form = withFormik<FormProps, Responses>({
   enableReinitialize: true, // needed when switching languages
 
   mapPropsToValues: (props) =>
-    getFormInitialValues(props.formRecord, props.language, props.importValues),
+    getFormInitialValues(props.formRecord, props.language, props.initialValues),
 
   validate: (values, props) => validateOnSubmit(values, props),
 

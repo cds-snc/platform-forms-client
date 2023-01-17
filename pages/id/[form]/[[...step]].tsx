@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "@pages/_app";
-import { ProgressProvider } from "@components/form-builder/hooks";
+import { ProgressProvider, useProgress } from "@components/form-builder/hooks";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
@@ -23,13 +23,31 @@ interface RenderFormProps {
   formRecord: PublicFormRecord;
 }
 
+const FormWrapper = ({ formRecord }: RenderFormProps): React.ReactElement => {
+  const { t, i18n } = useTranslation();
+  const language = i18n.language as string;
+  const currentForm = getRenderedForm(formRecord, language, t);
+  const router = useRouter();
+  const { userProgress } = useProgress();
+  return (
+    <Form
+      initialValues={userProgress}
+      formRecord={formRecord}
+      language={language}
+      router={router}
+      t={t}
+    >
+      {currentForm}
+    </Form>
+  );
+};
+
 const RenderForm: NextPageWithLayout<RenderFormProps> = ({
   formRecord,
 }: RenderFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
-  const language = i18n.language as string;
   const classes = classnames("gc-form-wrapper");
-  const currentForm = getRenderedForm(formRecord, language, t);
+  const language = i18n.language as string;
   const formTitle = formRecord.form[getProperty("title", language)] as string;
   const router = useRouter();
   const { step } = router.query;
@@ -50,9 +68,7 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
         </Head>
         <h1>{formTitle}</h1>
         <ProgressProvider>
-          <Form formRecord={formRecord} language={language} router={router} t={t}>
-            {currentForm}
-          </Form>
+          <FormWrapper formRecord={formRecord} />
         </ProgressProvider>
       </div>
     </>

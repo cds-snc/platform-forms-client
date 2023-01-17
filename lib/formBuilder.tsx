@@ -276,7 +276,7 @@ const _getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFu
 const _getElementInitialValue = (
   element: FormElement,
   language: string,
-  importValues: Responses | undefined
+  initialValues: Responses | undefined
 ): Response => {
   switch (element.type) {
     // Radio and dropdown resolve to string values
@@ -284,7 +284,7 @@ const _getElementInitialValue = (
     case FormElementTypes.dropdown:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
-      return importValues && importValues[element.id] ? importValues[element.id] : "";
+      return initialValues && initialValues[element.id] ? initialValues[element.id] : "";
     case FormElementTypes.checkbox:
       return [];
     case FormElementTypes.fileInput:
@@ -297,7 +297,7 @@ const _getElementInitialValue = (
             accumulator[subElementID] = _getElementInitialValue(
               currentValue,
               language,
-              importValues
+              initialValues
             );
           }
           return accumulator;
@@ -318,18 +318,15 @@ const _getElementInitialValue = (
 const _getFormInitialValues = (
   formRecord: PublicFormRecord,
   language: string,
-  importValues: Responses | undefined
+  initialValues: Responses | undefined = {}
 ): Responses => {
   if (!formRecord?.form) {
     return {};
   }
-
-  const initialValues: Responses = {};
-
   formRecord.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
-      initialValues[element.id] = _getElementInitialValue(element, language, importValues);
+      initialValues[element.id] = _getElementInitialValue(element, language, initialValues);
     });
 
   return initialValues;
