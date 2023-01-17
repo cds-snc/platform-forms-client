@@ -12,9 +12,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 
   return (
     <PageTemplate title={title} navigation={<PreviewNavigation />}>
-      <ProgressProvider>
-        <Preview />
-      </ProgressProvider>
+      <Preview />
     </PageTemplate>
   );
 };
