@@ -4,7 +4,6 @@ import { NextPageWithLayout } from "../../_app";
 import { PageProps } from "@lib/types";
 import { getServerSideProps } from "../index";
 import { PreviewNavigation, PageTemplate, Template, Preview } from "@components/form-builder/app";
-import { ProgressProvider } from "@components/form-builder/hooks";
 
 const Page: NextPageWithLayout<PageProps> = () => {
   const { t } = useTranslation("form-builder");
