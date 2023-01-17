@@ -249,12 +249,6 @@ const processFormData = async (
       return res.status(400).json({ error: "No form submitted with request" });
     }
 
-    logMessage.info(
-      `Path: ${req.url}, Method: ${req.method}, Form ID: ${
-        reqFields ? reqFields.formID : "No form attached"
-      }`
-    );
-
     const form = await getPublicTemplateByID(reqFields.formID as string);
 
     if (!form) {
@@ -267,7 +261,7 @@ const processFormData = async (
     });
 
     if (!submitToReliabilityQueue) {
-      // Local development and Heroku
+      // Local development
       // Set this to a 200 response as it's valid if the send to reliability queue option is off.
       return res.status(200).json({ received: true });
     }
@@ -318,6 +312,12 @@ const processFormData = async (
         // pass in the language from the header content language... assume english as the default
         req.headers?.["content-language"] ? req.headers["content-language"] : "en",
         reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Unclassified"
+      );
+      // Only log if the submission was sucessful
+      logMessage.info(
+        `Path: ${req.url}, Method: ${req.method}, Form ID: ${
+          reqFields ? reqFields.formID : "No form attached"
+        }`
       );
 
       return res.status(201).json({ received: true });
