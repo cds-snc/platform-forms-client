@@ -49,6 +49,10 @@
     "saveFormProgress": {
       "title": "Save Form Progress",
       "description": "Enable saving of form progress"
+    },
+    "formBuilderDebug": {
+      "title": "Form Builder Debug",
+      "description": "Enable the form builder debug mode"
     }
   }
 }

@@ -42,3 +42,4 @@ export { BoldIcon } from "./BoldIcon";
 export { ItalicIcon } from "./ItalicIcon";
 export { BulletListIcon } from "./BulletListIcon";
 export { LinkIcon } from "./LinkIcon";
+export { TreeViewIcon } from "./TreeViewIcon";

@@ -7,5 +7,6 @@
   "accountRegistration": true,
   "passwordReset": false,
   "supportForms": false,
-  "saveFormProgress": false
+  "saveFormProgress": false,
+  "formBuilderDebug": false
 }
