@@ -114,7 +114,7 @@ const templateCRUD = async ({
   switch (method) {
     case "GET":
       if (formID) return await getPublicTemplateByID(formID);
-      if (request.query.id) return await getPublicTemplateByID(request.query.id[0]);
+      if (request.query.id) return await getPublicTemplateByID(request.query.id as string);
 
       return getAllTemplates(ability, user.id);
     case "POST":
