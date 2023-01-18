@@ -20,7 +20,9 @@ export const SaveProgress = ({ values, formId }: { values: Responses; formId: st
         let upload;
 
         try {
-          const str = Buffer.from(e.target.result, "base64").toString("utf8");
+          const fileString = e.target.result;
+          const fileStringArray = fileString.split("@@==");
+          const str = Buffer.from(fileStringArray[1], "base64").toString("utf8");
           upload = JSON.parse(str);
         } catch (e) {
           if (e instanceof SyntaxError) {
