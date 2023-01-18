@@ -110,7 +110,7 @@ export const Settings = () => {
   const { id, initialize, email, updateField, isPublished } = useTemplateStore((s) => ({
     id: s.id,
     initialize: s.initialize,
-    email: s.submission.email,
+    email: s.deliveryOption?.emailAddress,
     updateField: s.updateField,
     isPublished: s.isPublished,
   }));
@@ -132,7 +132,7 @@ export const Settings = () => {
 
     if (isValidGovEmail(email)) {
       setIsInvalidEmailErrorActive(false);
-      updateField(`submission.email`, email);
+      updateField(`deliveryOption.emailAddress`, email);
     } else {
       setIsInvalidEmailErrorActive(true);
     }

@@ -40,18 +40,18 @@ model ApiAccessLog {
   userId    String
   timestamp DateTime @default(now()) @db.Timestamptz(6)
   action    String
-  user      ApiUser @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user      ApiUser  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model ApiUser {
-  id             String      @id @default(cuid())
+  id             String         @id @default(cuid())
   templateId     String
-  email          String      @db.VarChar(80)
+  email          String         @db.VarChar(80)
   temporaryToken String?
-  active         Boolean     @default(true)
-  created_at     DateTime    @default(now()) @db.Timestamptz(6)
-  updated_at     DateTime    @updatedAt @db.Timestamptz(6)
-  template       Template    @relation(fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  active         Boolean        @default(true)
+  created_at     DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime       @updatedAt @db.Timestamptz(6)
+  template       Template       @relation(fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   accessLogs     ApiAccessLog[]
 
   @@unique([templateId, email])
@@ -66,26 +66,38 @@ model Session {
 }
 
 model Template {
-  id          String    @id @default(cuid())
-  jsonConfig  Json
-  bearerToken String?
-  isPublished Boolean   @default(false)
-  created_at  DateTime    @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime    @updatedAt @default(now()) @db.Timestamptz(6)
-  ttl         DateTime?
-  apiUsers    ApiUser[]
-  users       User[]
+  id                String          @id @default(cuid())
+  created_at        DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime        @updatedAt @db.Timestamptz(6)
+  name              String          @default("")
+  jsonConfig        Json
+  isPublished       Boolean         @default(false)
+  deliveryOption    DeliveryOption?
+  securityAttribute String          @default("Unclassified")
+  bearerToken       String?
+  ttl               DateTime?
+  apiUsers          ApiUser[]
+  users             User[]
+}
+
+model DeliveryOption {
+  id             String   @id @default(cuid())
+  emailAddress   String
+  emailSubjectEn String
+  emailSubjectFr String
+  templateId     String   @unique
+  template       Template @relation(fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Privilege {
-  id          String  @id @default(cuid())
-  nameEn        String @unique
-  nameFr        String @unique
+  id            String  @id @default(cuid())
+  nameEn        String  @unique
+  nameFr        String  @unique
   descriptionEn String?
   descriptionFr String?
-  permissions Json
-  priority    Int
-  users       User[]
+  permissions   Json
+  priority      Int
+  users         User[]
 }
 
 model User {

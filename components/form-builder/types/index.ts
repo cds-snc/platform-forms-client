@@ -24,7 +24,6 @@ export interface Title {
 export enum LocalizedFormProperties {
   TITLE = "title",
   REFERRER = "referrerUrl",
-  INTERNAL_TITLE = "internalTitle",
   EMAIL_SUBJECT = "emailSubject",
 }
 

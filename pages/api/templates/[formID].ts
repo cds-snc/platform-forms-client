@@ -17,7 +17,7 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { BetterOmit, MiddlewareProps, FormRecord } from "@lib/types";
+import { MiddlewareProps, FormProperties, DeliveryOption } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { MongoAbility } from "@casl/ability";
 
@@ -85,16 +85,20 @@ const templateCRUD = async ({
   ability,
   method,
   request,
+  name,
   formConfig,
+  deliveryOption,
   isPublished,
   users,
 }: {
   ability: MongoAbility;
   method: string;
   request: NextApiRequest;
-  formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
-  isPublished: boolean;
-  users: { id: string; action: "add" | "remove" }[];
+  name?: string;
+  formConfig?: FormProperties;
+  deliveryOption?: DeliveryOption;
+  isPublished?: boolean;
+  users?: { id: string; action: "add" | "remove" }[];
 }) => {
   const formID = request.query.formID as string;
   switch (method) {
@@ -103,8 +107,8 @@ const templateCRUD = async ({
       break;
     case "PUT":
       if (formID && formConfig) {
-        return await updateTemplate(ability, formID, formConfig);
-      } else if (formID && isPublished !== undefined) {
+        return await updateTemplate(ability, formID, formConfig, name, deliveryOption);
+      } else if (formID && isPublished) {
         return await updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (formID && users) {
         return await updateAssignedUsersForTemplate(ability, formID, users);

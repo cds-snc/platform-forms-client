@@ -1,7 +1,7 @@
 import { logger } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
+import { PublicFormRecord, FormRecord, FormProperties, DeliveryOption } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
@@ -17,25 +17,38 @@ export class TemplateAlreadyPublishedError extends Error {}
 async function _createTemplate(
   ability: MongoAbility,
   userID: string,
-  config: BetterOmit<FormRecord, "id" | "isPublished">
+  formConfig: FormProperties,
+  name?: string,
+  deliveryOption?: DeliveryOption
 ): Promise<FormRecord | null> {
   try {
     checkPrivileges(ability, [{ action: "create", subject: "FormRecord" }]);
 
-    const createdTemplate = _parseTemplate(
-      await prisma.template.create({
-        data: {
-          jsonConfig: config as Prisma.JsonObject,
-          users: {
-            connect: { id: userID },
+    const createdTemplateId = await prisma.template.create({
+      data: {
+        jsonConfig: formConfig as Prisma.JsonObject,
+        ...(name && {
+          name: name,
+        }),
+        deliveryOption: {
+          create: {
+            emailAddress: deliveryOption?.emailAddress ?? "",
+            emailSubjectEn: deliveryOption?.emailSubjectEn ?? "",
+            emailSubjectFr: deliveryOption?.emailSubjectFr ?? "",
           },
         },
-      })
-    );
+        users: {
+          connect: { id: userID },
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
 
     const bearerToken = jwt.sign(
       {
-        formID: createdTemplate.id,
+        formID: createdTemplateId.id,
       },
       process.env.TOKEN_SECRET as Secret,
       {
@@ -46,15 +59,20 @@ async function _createTemplate(
     return _parseTemplate(
       await prisma.template.update({
         where: {
-          id: createdTemplate.id,
+          id: createdTemplateId.id,
         },
         data: {
           bearerToken,
         },
         select: {
           id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
           jsonConfig: true,
           isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
         },
       })
     );
@@ -95,10 +113,13 @@ async function _getAllTemplates(ability: MongoAbility, userID: string): Promise<
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
-        updated_at: true,
-        created_at: true,
+        deliveryOption: true,
+        securityAttribute: true,
       },
     })
     .catch((e) => prismaErrors(e, []));
@@ -128,10 +149,14 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
         ttl: true,
-        updated_at: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -184,12 +209,12 @@ async function _getFullTemplateByID(
   return templateWithAssociatedUsers.formRecord;
 }
 
-// Get the submission format by using the form ID
-// Returns => json object of the submission details.
-async function _getTemplateSubmissionTypeByID(
-  formID: string
-): Promise<SubmissionProperties | null> {
-  return _unprotectedGetTemplateByID(formID).then((formRecord) => formRecord?.submission ?? null);
+// Get the delivery option object for a specific form using the form ID
+// Returns => DeliveryOption object.
+async function _getTemplateDeliveryOptionByID(formID: string): Promise<DeliveryOption | null> {
+  return _unprotectedGetTemplateByID(formID).then(
+    (formRecord) => formRecord?.deliveryOption ?? null
+  );
 }
 
 /**
@@ -206,9 +231,13 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
-        updated_at: true,
+        deliveryOption: true,
+        securityAttribute: true,
         ttl: true,
         users: {
           select: {
@@ -257,7 +286,9 @@ async function _getTemplateWithAssociatedUsers(
 async function _updateTemplate(
   ability: MongoAbility,
   formID: string,
-  formConfig: BetterOmit<FormRecord, "id" | "bearerToken" | "isPublished">
+  formConfig: FormProperties,
+  name?: string,
+  deliveryOption?: DeliveryOption
 ): Promise<FormRecord | null> {
   const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
   if (!templateWithAssociatedUsers) return null;
@@ -285,11 +316,28 @@ async function _updateTemplate(
       },
       data: {
         jsonConfig: formConfig as Prisma.JsonObject,
+        ...(name && {
+          name: name,
+        }),
+        ...(deliveryOption && {
+          deliveryOption: {
+            update: {
+              emailAddress: deliveryOption.emailAddress,
+              emailSubjectEn: deliveryOption.emailSubjectEn,
+              emailSubjectFr: deliveryOption.emailSubjectFr,
+            },
+          },
+        }),
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -333,8 +381,13 @@ async function _updateIsPublishedForTemplate(
       data: { isPublished },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -381,8 +434,13 @@ async function _updateAssignedUsersForTemplate(
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -428,8 +486,13 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
         jsonConfig: true,
         isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -453,42 +516,49 @@ async function _deleteTemplate(ability: MongoAbility, formID: string): Promise<F
 const _onlyIncludePublicProperties = (template: FormRecord): PublicFormRecord => {
   return {
     id: template.id,
+    updatedAt: template.updatedAt,
+    form: template.form,
     isPublished: template.isPublished,
-    updatedAt: template.updated_at,
-    securityAttribute: template.securityAttribute ?? "Unclassified",
+    securityAttribute: template.securityAttribute,
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
     }),
-    form: template.form,
   };
 };
 
 const _parseTemplate = (template: {
   id: string;
+  created_at?: Date;
+  updated_at?: Date;
+  name: string;
   jsonConfig: Prisma.JsonValue;
   isPublished: boolean;
-  updated_at?: Date;
-  created_at?: Date;
+  deliveryOption: {
+    emailAddress: string;
+    emailSubjectEn: string;
+    emailSubjectFr: string;
+  } | null;
+  securityAttribute: string;
 }): FormRecord => {
   return {
-    // Converting to unknown first as Prisma is not aware of what is stored
-    // in the JSON Object type, only that it is an object.
-    ...(template.jsonConfig as unknown as BetterOmit<
-      FormRecord,
-      "id" | "reCaptchaID" | "bearerToken" | "isPublished" | "updated_at" | "created_at"
-    >),
-
+    id: template.id,
+    ...(template.created_at && {
+      createdAt: template.created_at?.toString(),
+    }),
+    ...(template.updated_at && {
+      updatedAt: template.updated_at.toString(),
+    }),
+    name: template.name,
+    form: template.jsonConfig as FormProperties,
+    isPublished: template.isPublished,
+    deliveryOption: {
+      emailAddress: template.deliveryOption?.emailAddress ?? "",
+      emailSubjectEn: template.deliveryOption?.emailSubjectEn ?? "",
+      emailSubjectFr: template.deliveryOption?.emailSubjectFr ?? "",
+    },
+    securityAttribute: template.securityAttribute,
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-    }),
-    // Direct field properties override jsonConfig
-    id: template.id,
-    isPublished: template.isPublished,
-    ...(template.updated_at && {
-      updated_at: template.updated_at.toString(),
-    }),
-    ...(template.created_at && {
-      created_at: template.created_at?.toString(),
     }),
   };
 };
@@ -497,7 +567,7 @@ export const createTemplate = logger(_createTemplate);
 export const getAllTemplates = logger(_getAllTemplates);
 export const getPublicTemplateByID = logger(_getPublicTemplateByID);
 export const getFullTemplateByID = logger(_getFullTemplateByID);
-export const getTemplateSubmissionTypeByID = logger(_getTemplateSubmissionTypeByID);
+export const getTemplateDeliveryOptionByID = logger(_getTemplateDeliveryOptionByID);
 export const getTemplateWithAssociatedUsers = logger(_getTemplateWithAssociatedUsers);
 export const updateTemplate = logger(_updateTemplate);
 export const updateIsPublishedForTemplate = logger(_updateIsPublishedForTemplate);

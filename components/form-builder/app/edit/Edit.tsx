@@ -39,7 +39,7 @@ export const Edit = () => {
         updateField(`form.${localizeField(LocalizedFormProperties.TITLE, lang)}`, val);
         // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
         updateField(
-          `form.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
+          `deliveryOption.${localizeField(LocalizedFormProperties.EMAIL_SUBJECT, lang)}`,
           formatEmailSubject(val, lang)
         );
       },
@@ -101,7 +101,7 @@ export const Edit = () => {
           </RichTextLocked>
           <RichTextLocked
             addElement={false}
-            schemaProperty="endPage"
+            schemaProperty="confirmation"
             ariaLabel={t("richTextConfirmationTitle")}
           >
             <div>

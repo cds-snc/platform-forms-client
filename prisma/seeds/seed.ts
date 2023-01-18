@@ -7,15 +7,24 @@ import seedPrivileges from "./fixtures/privileges";
 const prisma = new PrismaClient();
 
 async function createTemplates(env: string) {
-  // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
-  const typeSafeTemplateData = seedTemplates[env].map((template) => ({
-    jsonConfig:
-      template.jsonConfig !== null ? (template.jsonConfig as Prisma.JsonObject) : Prisma.JsonNull,
-  }));
-
-  return prisma.template.createMany({
-    data: [...typeSafeTemplateData],
+  const templatesToCreate = seedTemplates[env].map((formConfig) => {
+    return prisma.template.create({
+      data: {
+        jsonConfig: formConfig,
+        deliveryOption: {
+          create: {
+            emailAddress: "",
+            emailSubjectEn: "",
+            emailSubjectFr: "",
+          },
+        },
+      },
+    });
   });
+
+  await Promise.all(templatesToCreate);
+
+  console.log(`Created ${seedTemplates[env].length} templates`);
 }
 
 async function createPrivileges(env: string) {
@@ -23,10 +32,13 @@ async function createPrivileges(env: string) {
     ...privilege,
     permissions: privilege.permissions !== null ? privilege.permissions : Prisma.JsonNull,
   }));
-  return prisma.privilege.createMany({
+
+  await prisma.privilege.createMany({
     data: typeSafePrivilegeData,
     skipDuplicates: true,
   });
+
+  console.log(`Created ${seedPrivileges[env].length} privileges`);
 }
 
 //Can be removed once we know that the migration is completed
@@ -68,7 +80,8 @@ async function main() {
   });
 
   console.log(`Seeding Database for ${environment} enviroment`);
-  await Promise.all([createTemplates(environment), createPrivileges(environment)]);
+  await createTemplates(environment);
+  await createPrivileges(environment);
 
   console.log("Running 'publishingStatus' migration");
   await publishingStatusMigration();

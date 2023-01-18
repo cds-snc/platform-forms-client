@@ -55,7 +55,7 @@ export const PageTemplate = ({
     form: s.form,
     hasHydrated: s._hasHydrated,
     setLang: s.setLang,
-    email: s.submission?.email,
+    email: s.deliveryOption?.emailAddress,
     updateField: s.updateField,
   }));
 
@@ -70,7 +70,7 @@ export const PageTemplate = ({
   useEffect(() => {
     const setEmail = () => {
       if (data && data.user.email) {
-        updateField("submission.email", data.user.email);
+        updateField("deliveryOption.emailAddress", data.user.email);
       }
     };
     !email && currentPage !== "settings" && setEmail();

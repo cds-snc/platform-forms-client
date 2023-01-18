@@ -1,7 +1,7 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists, jsonValidator } from "@lib/middleware";
 import { createTemplate, getAllTemplates, onlyIncludePublicProperties } from "@lib/templates";
-import { BetterOmit, FormRecord, MiddlewareProps } from "@lib/types";
+import { DeliveryOption, FormProperties, FormRecord, MiddlewareProps } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MongoAbility } from "@casl/ability";
 import { Session } from "next-auth";
@@ -58,19 +58,23 @@ const route = async ({
   ability,
   user,
   method,
+  name,
   formConfig,
+  deliveryOption,
 }: {
   ability: MongoAbility;
   user: Session["user"];
   method: string;
-  formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
+  name?: string;
+  formConfig?: FormProperties;
+  deliveryOption?: DeliveryOption;
 }) => {
   switch (method) {
     case "GET":
       return getAllTemplates(ability, user.id);
-      break;
     case "POST":
-      if (formConfig) return await createTemplate(ability, user.id, formConfig);
+      if (formConfig)
+        return await createTemplate(ability, user.id, formConfig, name, deliveryOption);
       throw new Error("Missing Form Configuration");
   }
 };
