@@ -1,4 +1,4 @@
-import { logger } from "@lib/logger";
+import { logger, logMessage } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { PublicFormRecord, SubmissionProperties, FormRecord, BetterOmit } from "@lib/types";
@@ -245,6 +245,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(formID: string) {
         jsonConfig: true,
         isPublished: true,
         ttl: true,
+        created_at: true,
         users: {
           select: {
             id: true,
@@ -377,6 +378,15 @@ async function _updateIsPublishedForTemplate(
   if (updatedTemplate === null) return updatedTemplate;
 
   if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+  // Log how long it took to go from draft to published
+  if (templateWithAssociatedUsers.formRecord.created_at) {
+    const createdDate = new Date(templateWithAssociatedUsers.formRecord.created_at);
+    const timeDiff = Date.now() - createdDate.getTime();
+    logMessage.info(
+      `METRIC Time to Publish: ${timeDiff} ms : formID ${templateWithAssociatedUsers.formRecord.id}`
+    );
+  }
 
   return _parseTemplate(updatedTemplate);
 }
