@@ -30,8 +30,8 @@ const Login = () => {
     login,
   } = useAuth();
   const { t } = useTranslation(["login", "cognito-errors", "common"]);
-  const registrationOpen = useFlag("accountRegistration");
-  const passwordResetEnabled = useFlag("passwordReset");
+  const { status: registrationOpen } = useFlag("accountRegistration");
+  const { status: passwordResetEnabled } = useFlag("passwordReset");
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()

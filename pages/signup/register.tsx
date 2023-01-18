@@ -9,12 +9,14 @@ import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import { isValidGovEmail, isUpperCase, isLowerCase, isNumber, isSymbol } from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
+import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { unstable_getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
 
 const Register = () => {
+  const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
   const {
     username,
     password,
@@ -28,7 +30,6 @@ const Register = () => {
     register,
   } = useAuth();
   const { t } = useTranslation(["signup", "common"]);
-  const registrationOpen = useFlag("accountRegistration");
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -74,6 +75,21 @@ const Register = () => {
       ),
   });
 
+  if (isLoading) {
+    return (
+      <>
+        <Head>
+          <title>{t("signUpRegistration.title")}</title>
+        </Head>
+        <Loader message={t("loading")} />
+      </>
+    );
+  }
+
+  if (!registrationOpen) {
+    return <div>{t("registrationClosed")}</div>;
+  }
+
   if (needsConfirmation) {
     return (
       <Confirmation
@@ -85,9 +101,6 @@ const Register = () => {
     );
   }
 
-  if (!registrationOpen) {
-    return <div>{t("registrationClosed")}</div>;
-  }
   return (
     <>
       <Head>

@@ -27,7 +27,7 @@ describe("DropDown", () => {
       </Providers>
     );
 
-    const button = rendered.getByRole("button");
+    const button = rendered.getByTestId("element-dropdown-select");
     expect(button).toHaveAttribute("aria-expanded", "false");
 
     const selectedItemDefault = rendered.getByTestId("element-select-active");

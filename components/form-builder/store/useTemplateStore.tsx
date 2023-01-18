@@ -1,6 +1,6 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist, StateStorage } from "zustand/middleware";
+import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 
 import {
@@ -271,7 +271,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
         }),
         {
           name: "form-storage",
-          getStorage: () => storage,
+          storage: createJSONStorage(() => storage),
           onRehydrateStorage: () => {
             logMessage.debug("Template Store Hydration starting");
 

@@ -22,7 +22,7 @@ jobs:
         with:
           browser: chrome
           headed: false
-          build: yarn build
+          build: yarn build:test
           start: yarn start:test
           wait-on: "http://localhost:3000"
           config: baseUrl=http://localhost:3000

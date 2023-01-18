@@ -31,7 +31,7 @@ export const DropDown = ({
       className="builder-element-dropdown"
       style={{ position: "relative", zIndex: isOpen ? 20000 : 1 }}
     >
-      <button className="header-button" {...headerProps}>
+      <button data-testid="element-dropdown-select" className="header-button" {...headerProps}>
         {selectedItem && (
           <div className="selected" data-testid="element-select-active">
             {selectedItem.value}
