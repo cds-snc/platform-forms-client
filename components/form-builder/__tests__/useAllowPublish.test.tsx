@@ -13,9 +13,13 @@ import { FormElementTypes } from "@lib/types";
 
 const promise = Promise.resolve();
 
-const createTemplateStore = ({ form, submission, isPublished }: Partial<TemplateStoreProps>) => {
+const createTemplateStore = ({
+  form,
+  deliveryOption,
+  isPublished,
+}: Partial<TemplateStoreProps>) => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
-    <TemplateStoreProvider form={form} submission={submission} isPublished={isPublished}>
+    <TemplateStoreProvider form={form} deliveryOption={deliveryOption} isPublished={isPublished}>
       {children}
     </TemplateStoreProvider>
   );
@@ -56,14 +60,15 @@ describe("useAllowPublish", () => {
   it("checks required fields needed to publish or save", async () => {
     const store = {
       form: {
-        version: 1,
-        layout: [],
+        titleEn: "form title",
+        titleFr: "",
         introduction: {
           descriptionEn: "",
           descriptionFr: "",
         },
-        titleEn: "form title",
-        titleFr: "",
+        privacyPolicy: { descriptionEn: "", descriptionFr: "" },
+        confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        layout: [],
         elements: [
           {
             id: 1,
@@ -78,18 +83,20 @@ describe("useAllowPublish", () => {
             },
           },
         ],
-        privacyPolicy: { descriptionEn: "", descriptionFr: "" },
-        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
-      submission: { email: "test@example.com" },
       isPublished: true,
+      deliveryOption: {
+        emailAddress: "test@example.com",
+        emailSubjectEn: "email subject in English",
+        emailSubjectFr: "email subject in French",
+      },
     };
     const {
       current: { data, hasData, isSaveable, isPublishable },
     } = createTemplateStore({
       form: store.form,
-      submission: store.submission,
       isPublished: store.isPublished,
+      deliveryOption: store.deliveryOption,
     });
 
     expect(data.title).toBe(true);
@@ -112,14 +119,15 @@ describe("useAllowPublish", () => {
   it("isPublishable", async () => {
     const store = {
       form: {
-        version: 1,
-        layout: [],
+        titleEn: "form title",
+        titleFr: "form title fr",
         introduction: {
           descriptionEn: "introduction text en",
           descriptionFr: "introduction text fr",
         },
-        titleEn: "form title",
-        titleFr: "form title fr",
+        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
+        confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        layout: [],
         elements: [
           {
             id: 1,
@@ -134,18 +142,20 @@ describe("useAllowPublish", () => {
             },
           },
         ],
-        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
-        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
-      submission: { email: "test@example.com" },
       isPublished: true,
+      deliveryOption: {
+        emailAddress: "test@example.com",
+        emailSubjectEn: "email subject in English",
+        emailSubjectFr: "email subject in French",
+      },
     };
     const {
       current: { isPublishable },
     } = createTemplateStore({
       form: store.form,
-      submission: store.submission,
       isPublished: store.isPublished,
+      deliveryOption: store.deliveryOption,
     });
 
     expect(isPublishable()).toBe(true);
@@ -459,14 +469,15 @@ describe("useAllowPublish", () => {
   describe("Validate form translated tests", () => {
     const defaultStore = {
       form: {
-        version: 1,
-        layout: [],
+        titleEn: "form title",
+        titleFr: "form title fr",
         introduction: {
           descriptionEn: "introduction text en",
           descriptionFr: "introduction text fr",
         },
-        titleEn: "form title",
-        titleFr: "form title fr",
+        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
+        confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        layout: [],
         elements: [
           {
             id: 1,
@@ -499,10 +510,13 @@ describe("useAllowPublish", () => {
             },
           },
         ],
-        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
-        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
-      submission: { email: "test@example.com" },
+      isPublished: true,
+      deliveryOption: {
+        emailAddress: "test@example.com",
+        emailSubjectEn: "email subject in English",
+        emailSubjectFr: "email subject in French",
+      },
     };
 
     it("fails when form title translation is missing", async () => {
@@ -514,8 +528,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
       expect(data.translate).toBe(false);
 
@@ -535,8 +549,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
@@ -555,8 +569,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
@@ -568,16 +582,16 @@ describe("useAllowPublish", () => {
       });
     });
 
-    it("fails when form endPage translation is missing", async () => {
+    it("fails when form confirmation translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
-      store.form.endPage.descriptionFr = "";
+      store.form.confirmation.descriptionFr = "";
       const {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
@@ -597,8 +611,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
@@ -620,8 +634,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(true);
@@ -641,8 +655,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
@@ -662,8 +676,8 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);

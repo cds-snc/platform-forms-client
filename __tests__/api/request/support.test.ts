@@ -9,7 +9,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import { mocked } from "jest-mock";
 import { Session } from "next-auth";
 
-const mockGetCSRFToken = mocked(getCsrfToken, true);
+const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 
 jest.mock("next-auth/react");
 

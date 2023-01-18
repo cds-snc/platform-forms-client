@@ -124,7 +124,9 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(400);
-      expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
+      expect(JSON.parse(res._getData()).error).toContain(
+        'JSON Validation Error: instance requires property "privacyPolicy",instance requires property "confirmation"'
+      );
     });
 
     it("Should reject JSON with html", async () => {

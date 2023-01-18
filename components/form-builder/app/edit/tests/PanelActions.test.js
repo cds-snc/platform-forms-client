@@ -14,10 +14,10 @@ describe("PanelActions roving index", () => {
 
   it("can keyboard navigate panel actions", async () => {
     // note: there are by default 3 elements in the form in this case we are rendering the middle one
-    const item = { id: 1, index: 1, ...store.form.elements[0] };
+    const item = { id: 1, index: 1, ...store.elements[0] };
 
     render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <PanelActions item={item} renderSaveButton={() => null} />
       </Providers>
     );
@@ -91,10 +91,10 @@ describe("PanelActions roving index", () => {
 
   it("can navigate panel actions on the first element", async () => {
     // note: there are by default 3 elements in the form in this case we are rendering the first one
-    const item = { id: 1, index: 0, ...store.form.elements[0] };
+    const item = { id: 1, index: 0, ...store.elements[0] };
 
     render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <PanelActions item={item} renderSaveButton={() => null} />
       </Providers>
     );
@@ -155,10 +155,10 @@ describe("PanelActions roving index", () => {
 
   it("can navigate panel actions on the last element", async () => {
     // note: there are by default 3 elements in the form in this case we are rendering the last one
-    const item = { id: 1, index: 2, ...store.form.elements[0] };
+    const item = { id: 1, index: 2, ...store.elements[0] };
 
     render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <PanelActions item={item} renderSaveButton={() => null} />
       </Providers>
     );
