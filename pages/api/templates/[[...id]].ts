@@ -41,6 +41,7 @@ const templates = async (
       ability: ability,
       user: session?.user,
       method: req.method,
+      request: req,
       ...req.body,
     });
 
@@ -95,6 +96,7 @@ const templateCRUD = async ({
   ability,
   method,
   user,
+  request,
   formID,
   formConfig,
   isPublished,
@@ -102,6 +104,7 @@ const templateCRUD = async ({
 }: {
   ability: MongoAbility;
   method: string;
+  request: NextApiRequest;
   user: Session["user"];
   formID?: string;
   formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
@@ -111,6 +114,8 @@ const templateCRUD = async ({
   switch (method) {
     case "GET":
       if (formID) return await getPublicTemplateByID(formID);
+      if (request.query.id) return await getPublicTemplateByID(request.query.id[0]);
+
       return getAllTemplates(ability, user.id);
     case "POST":
       if (formConfig) return await createTemplate(ability, user.id, formConfig);

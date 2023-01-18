@@ -13,10 +13,9 @@ interface FormTemplate {
 export const byId = async (id: string): Promise<FormTemplate | null> => {
   try {
     const result = await axios({
-      url: "/api/templates",
+      url: `/api/templates/${id}`,
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      data: { formID: id },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
 
@@ -24,7 +23,7 @@ export const byId = async (id: string): Promise<FormTemplate | null> => {
       return null;
     }
 
-    return result?.data.find((template: FormTemplate) => template.id === id);
+    return result.data;
   } catch (err) {
     logMessage.error(err);
     return null;
