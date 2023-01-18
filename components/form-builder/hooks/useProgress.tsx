@@ -13,16 +13,18 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [userProgress, importProgress] = useState<Responses | undefined>({});
 
   const saveProgress = (values?: Responses | undefined, formId?: string) => {
-    const data = {
-      id: formId,
-      data: values,
-    };
+    const base64 = Buffer.from(
+      JSON.stringify({
+        id: formId,
+        responses: values,
+      })
+    ).toString("base64");
 
-    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    const blob = new Blob([base64], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "progress.json";
+    a.download = "form-progress.txt";
     a.click();
     URL.revokeObjectURL(url);
   };

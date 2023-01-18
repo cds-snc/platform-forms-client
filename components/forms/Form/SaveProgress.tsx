@@ -20,7 +20,8 @@ export const SaveProgress = ({ values, formId }: { values: Responses; formId: st
         let upload;
 
         try {
-          upload = JSON.parse(e.target.result);
+          const str = Buffer.from(e.target.result, "base64").toString("utf8");
+          upload = JSON.parse(str);
         } catch (e) {
           if (e instanceof SyntaxError) {
             // setErrors([{ message: t("startErrorParse") }]);
@@ -28,8 +29,9 @@ export const SaveProgress = ({ values, formId }: { values: Responses; formId: st
             return;
           }
         }
-        if (upload.id === formId) {
-          importProgress(upload.data);
+
+        if (upload.responses.formId === formId) {
+          importProgress(upload.responses.values);
         } else {
           // wrong form
         }
