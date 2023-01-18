@@ -7,242 +7,164 @@
   "default": {},
   "examples": [
     {
-      "internalTitleEn": "",
-      "internalTitleFr": "",
-      "securityAttribute": "",
-      "submission": {
-        "email": ""
-      },
-      "form": {
-        "version": 1,
-        "titleEn": "",
-        "titleFr": "",
-        "emailSubjectEn": "",
-        "emailSubjectFr": "",
-        "layout": [],
-        "brand": {},
-        "elements": [],
-        "startPage": {},
-        "endPage": {},
-        "introduction": {},
-        "privacyPolicy": {}
-      }
+      "titleEn": "",
+      "titleFr": "",
+      "introduction": {},
+      "privacyPolicy": {},
+      "confirmation": {},
+      "layout": [],
+      "elements": [],
+      "startPage": {},
+      "brand": {}
     }
   ],
   "properties": {
-    "id": {
-      "description": "The unique identifier of the form",
-      "id": "#/properties/id",
+    "titleEn": {
+      "description": "The displayed title of the form to the user in English",
+      "id": "#/properties/titleEn",
       "type": "string"
     },
-    "internalTitleEn": {
-      "description": "The internal title of the form in English",
-      "id": "#/properties/internalTitleEn",
+    "titleFr": {
+      "description": "The displayed title of the form to the user in French",
+      "id": "#/properties/titleFr",
       "type": "string"
     },
-    "internalTitleFr": {
-      "description": "The internal title of the form in French",
-      "id": "#/properties/internalTitleFr",
-      "type": "string"
-    },
-    "form": {
+    "introduction": {
+      "description": "Form introduction",
+      "id": "#/properties/introduction",
       "type": "object",
       "properties": {
-        "version": {
-          "description": "The version number of the form.",
-          "type": "number",
-          "mimimum": 0
-        },
-        "titleEn": {
-          "description": "The displayed title of the form to the user in English",
-          "id": "#/properties/titleEn",
+        "descriptionEn": {
           "type": "string"
         },
-        "titleFr": {
-          "description": "The displayed title of the form to the user in French",
-          "id": "#/properties/titleFr",
+        "descriptionFr": {
+          "type": "string"
+        }
+      }
+    },
+    "privacyPolicy": {
+      "description": "Form privacy policy",
+      "id": "#/properties/privacyPolicy",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
           "type": "string"
         },
-        "layout": {
-          "description": "A list of element IDs that determines the order or elements in the form.",
-          "type": "array",
-          "items": {
-            "type": "number"
-          },
-          "uniqueItems": true,
-          "examples": [[2, 3, 4, 6, 9, 5]]
+        "descriptionFr": {
+          "type": "string"
+        }
+      }
+    },
+    "confirmation": {
+      "description": "Content that will be displayed after a form is submitted.",
+      "id": "#/properties/confirmation",
+      "type": "object",
+      "properties": {
+        "descriptionEn": {
+          "type": "string"
         },
-        "elements": {
-          "description": "A list of elements contained within the form.",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/element"
-          },
-          "examples": [
-            {
-              "id": 1,
-              "type": "richText",
-              "properties": {
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "#### Section 1: Nomination Category",
-                "descriptionFr": "#### Section 1: Catégorie de la nomination"
+        "descriptionFr": {
+          "type": "string"
+        },
+        "referrerUrlEn": {
+          "type": "string"
+        },
+        "referrerUrlFr": {
+          "type": "string"
+        }
+      }
+    },
+    "layout": {
+      "description": "A list of element IDs that determines the order or elements in the form.",
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "uniqueItems": true,
+      "examples": [[2, 3, 4, 6, 9, 5]]
+    },
+    "elements": {
+      "description": "A list of elements contained within the form.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/element"
+      },
+      "examples": [
+        {
+          "id": 1,
+          "type": "richText",
+          "properties": {
+            "validation": {
+              "required": false
+            },
+            "descriptionEn": "#### Section 1: Nomination Category",
+            "descriptionFr": "#### Section 1: Catégorie de la nomination"
+          }
+        },
+        {
+          "id": 2,
+          "type": "radio",
+          "properties": {
+            "choices": [
+              {
+                "en": "Team nomination",
+                "fr": "Mise en candidature d’une équipe"
+              },
+              {
+                "en": "Individual Nomination",
+                "fr": "Mise en candidature d’une personne"
               }
+            ],
+            "titleEn": "Is this a Team or Individual Nomination?",
+            "titleFr": "Is this a Team or Individual Nomination?",
+            "validation": {
+              "required": true
             },
-            {
-              "id": 2,
-              "type": "radio",
-              "properties": {
-                "choices": [
-                  {
-                    "en": "Team nomination",
-                    "fr": "Mise en candidature d’une équipe"
-                  },
-                  {
-                    "en": "Individual Nomination",
-                    "fr": "Mise en candidature d’une personne"
-                  }
-                ],
-                "titleEn": "Is this a Team or Individual Nomination?",
-                "titleFr": "Is this a Team or Individual Nomination?",
-                "validation": {
-                  "required": true
-                },
-                "descriptionEn": "",
-                "descriptionFr": ""
-              }
-            }
-          ]
-        },
-        "brand": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "description": "The brand name.",
-              "type": "string"
-            },
-            "urlEn": {
-              "description": "URL for English version of the site.",
-              "type": "string"
-            },
-            "urlFr": {
-              "description": "URL for a French version of the site.",
-              "type": "string"
-            },
-            "logoEn": {
-              "description": "English logo path.",
-              "type": "string"
-            },
-            "logoFr": {
-              "description": "French logo path.",
-              "type": "string"
-            },
-            "logoTitleEn": {
-              "description": "logo title.",
-              "type": "string"
-            },
-            "logoTitleFr": {
-              "description": "logo title.",
-              "type": "string"
-            },
-            "disableGCBranding": {
-              "description": "If set to true, GC branding will not be rendered in the footer.",
-              "type": "boolean"
-            }
-          }
-        },
-        "emailSubjectEn": {
-          "description": "The email subject used in the Notify template in English.",
-          "id": "#/properties/emailSubjectEn",
-          "type": "string"
-        },
-        "emailSubjectFr": {
-          "description": "The email subject used in the Notify template in French.",
-          "id": "#/properties/emailSubjectFr",
-          "type": "string"
-        },
-        "endPage": {
-          "description": "Content that will be displayed after a form is submitted.",
-          "id": "#/properties/endPage",
-          "type": "object",
-          "properties": {
-            "descriptionEn": {
-              "type": "string"
-            },
-            "descriptionFr": {
-              "type": "string"
-            },
-            "referrerUrlEn": {
-              "type": "string"
-            },
-            "referrerUrlFr": {
-              "type": "string"
-            }
-          }
-        },
-        "introduction": {
-          "description": "Form introduction",
-          "id": "#/properties/introduction",
-          "type": "object",
-          "properties": {
-            "descriptionEn": {
-              "type": "string"
-            },
-            "descriptionFr": {
-              "type": "string"
-            }
-          }
-        },
-        "privacyPolicy": {
-          "description": "Form privacy policy",
-          "id": "#/properties/privacyPolicy",
-          "type": "object",
-          "properties": {
-            "descriptionEn": {
-              "type": "string"
-            },
-            "descriptionFr": {
-              "type": "string"
-            }
+            "descriptionEn": "",
+            "descriptionFr": ""
           }
         }
-      },
-      "required": ["titleEn", "titleFr", "layout", "elements", "privacyPolicy", "endPage"],
-      "additionalProperties": false
+      ]
     },
-    "submission": {
-      "id": "#/properties/submission",
+    "brand": {
       "type": "object",
       "properties": {
-        "email": {
-          "description": "The email address to which the form submission should be sent.",
-          "type": "string",
-          "pattern": "^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@((?:[a-zA-Z0-9-.]+.gc.ca|cds-snc.freshdesk.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil).ca)$"
+        "name": {
+          "description": "The brand name.",
+          "type": "string"
         },
-        "vault": {
-          "description": "If set to true, the form submission will be saved in the vault.",
+        "urlEn": {
+          "description": "URL for English version of the site.",
+          "type": "string"
+        },
+        "urlFr": {
+          "description": "URL for a French version of the site.",
+          "type": "string"
+        },
+        "logoEn": {
+          "description": "English logo path.",
+          "type": "string"
+        },
+        "logoFr": {
+          "description": "French logo path.",
+          "type": "string"
+        },
+        "logoTitleEn": {
+          "description": "logo title.",
+          "type": "string"
+        },
+        "logoTitleFr": {
+          "description": "logo title.",
+          "type": "string"
+        },
+        "disableGCBranding": {
+          "description": "If set to true, GC branding will not be rendered in the footer.",
           "type": "boolean"
         }
-      },
-      "oneOf": [
-        {
-          "required": ["email"]
-        },
-        {
-          "required": ["vault"]
-        }
-      ],
-      "additionalProperties": false
-    },
-    "securityAttribute": {
-      "description": "It shows an administrator what procedure should be taken when accessing a form's responses",
-      "id": "#/properties/securityAttribute",
-      "type": "string",
-      "enum": ["Protected A", "Protected B", "Unclassified"]
+      }
     }
   },
-  "required": ["form", "submission"],
+  "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],
   "additionalProperties": false,
   "definitions": {
     "element": {
