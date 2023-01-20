@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
+import { FormElementTypes } from "@lib/types";
 
 import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
@@ -24,7 +25,7 @@ const ElementDialog = ({
         <Button
           onClick={() => {
             handleClose();
-            add(position);
+            add(position, FormElementTypes.dropdown);
           }}
         >
           {t("addElementDialog.addButton")}
