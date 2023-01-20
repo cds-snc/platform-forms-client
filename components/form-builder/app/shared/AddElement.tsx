@@ -1,11 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "next-i18next";
-import Image from "next/image";
 
 import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
-import { InfoIcon } from "../../icons";
 
 const ElementDialog = ({
   handleClose,
@@ -16,7 +14,6 @@ const ElementDialog = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
-
   const { add } = useTemplateStore((s) => ({
     add: s.add,
   }));
@@ -64,7 +61,6 @@ export const AddElement = ({
         onClick={() => {
           handleOpenDialog();
           onClick && onClick();
-          // alert("Add element");
         }}
         theme="secondary"
         className="!border-1.5 !py-2 !px-4 leading-6 text-sm"
