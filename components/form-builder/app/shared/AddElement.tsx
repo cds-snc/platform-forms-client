@@ -5,6 +5,7 @@ import { FormElementTypes } from "@lib/types";
 import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog } from "../shared";
+import { useElementOptions } from "../../hooks";
 
 const ElementDialog = ({
   handleClose,
@@ -18,6 +19,24 @@ const ElementDialog = ({
   const { add } = useTemplateStore((s) => ({
     add: s.add,
   }));
+  const elementOptions = useElementOptions();
+
+  const [selected, setSelected] = useState("");
+
+  const options = elementOptions.map((option) => {
+    return (
+      <li key={option.id}>
+        <button
+          className="mb-2"
+          onClick={() => {
+            setSelected(option.id);
+          }}
+        >
+          {option.value}
+        </button>
+      </li>
+    );
+  });
 
   return (
     <Dialog
@@ -25,7 +44,7 @@ const ElementDialog = ({
         <Button
           onClick={() => {
             handleClose();
-            add(position, FormElementTypes.dropdown);
+            add(position, selected as FormElementTypes);
           }}
         >
           {t("addElementDialog.addButton")}
@@ -34,7 +53,12 @@ const ElementDialog = ({
       dialogRef={dialog}
       handleClose={handleClose}
     >
-      <div className="p-5">Hello</div>
+      <div className="p-5">
+        <div>
+          <ul>{options}</ul>
+          {selected}
+        </div>
+      </div>
     </Dialog>
   );
 };
