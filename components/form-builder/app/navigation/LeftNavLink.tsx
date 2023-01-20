@@ -15,7 +15,7 @@ export const LeftNavLink = ({ children, href }: { children: ReactElement; href: 
     }
   }, [activePathname, isReady, href, setActive]);
   return (
-    <Link href={href}>
+    <Link href={href} legacyBehavior>
       <a
         href={href}
         className={`${
