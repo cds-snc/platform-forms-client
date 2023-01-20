@@ -33,7 +33,7 @@
   }
 }
 
-// header { -- For reuse outside just the header, though may be edge cases, keeping commented for now 
+header {
   .canada-flag {
     @apply xxs:w-flag-fold xs:w-flag-5s md:w-flag-6s lg:mt-10 w-flag-desktop mt-0;
 
@@ -51,7 +51,7 @@
       @apply bg-white-default;
     }
   }
-// }
+}
 
 .visually-hidden {
   @include visuallyHidden();

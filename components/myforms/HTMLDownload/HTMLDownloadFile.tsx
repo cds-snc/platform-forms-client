@@ -23,7 +23,6 @@ export const HTMLDownloadFile = (props: HTMLDownloadFileProps) => {
   return (
     <>
       <ProtectedWarning lang="en" />
-      {/* TODO?: FIP may be  being using beyond intention. Re-create if so and revert _header.scss */}
       <Fip language="en" />
       <div className="mt-14" />
       <HTMLDownloadPage
