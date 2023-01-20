@@ -8,9 +8,10 @@ import Fip from "../Fip";
 interface BaseProps extends React.PropsWithChildren {
   showLanguageToggle?: boolean;
   showLogin?: boolean;
+  isHTMLFileDownload?: boolean;
 }
 
-const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
+const Base = ({ children, showLanguageToggle, showLogin, isHTMLFileDownload }: BaseProps) => {
   return (
     <div className="flex flex-col h-full">
       <Head>
@@ -21,14 +22,16 @@ const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
 
       <SkipLink />
 
-      <header>
-        <Fip {...{ showLanguageToggle, showLogin }} />
-      </header>
+      {!isHTMLFileDownload && (
+        <header>
+          <Fip {...{ showLanguageToggle, showLogin }} />
+        </header>
+      )}
       <div id="page-container">
         <main id="content">{children}</main>
       </div>
 
-      <Footer />
+      <Footer isEmbedImages={isHTMLFileDownload} />
     </div>
   );
 };

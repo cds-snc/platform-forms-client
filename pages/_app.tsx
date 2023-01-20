@@ -36,6 +36,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
+  const { isHTMLFileDownload } = pageProps;
   return (
     <SessionProvider
       session={session}
@@ -49,7 +50,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
           {Component.getLayout ? (
             Component.getLayout(<Component {...pageProps} />)
           ) : (
-            <BaseLayout>
+            <BaseLayout isHTMLFileDownload={isHTMLFileDownload}>
               <Component {...pageProps} />
             </BaseLayout>
           )}

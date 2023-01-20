@@ -148,6 +148,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
           },
         },
       },
+      isHTMLFileDownload: true,
     };
 
     res.setHeader("Content-Disposition", `attachment; filename=${htmlFileName}.html`);

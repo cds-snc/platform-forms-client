@@ -22,6 +22,7 @@ export const HTMLDownloadFile = (props: HTMLDownloadFileProps) => {
 
   return (
     <>
+      <div className="mt-14" />
       <ProtectedWarning lang="en" />
       <Fip language="en" />
       <div className="mt-14" />
