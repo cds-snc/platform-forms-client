@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { useTranslation } from "next-i18next";
 
-import { Button } from "../shared/Button";
+import { Button, AddElement } from "../shared";
 import { Modal } from "./Modal";
 import { FormElementWithIndex } from "@components/form-builder/types";
 import { useTemplateStore } from "@components/form-builder/store";
@@ -23,13 +23,12 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+  const { lang, remove, moveUp, moveDown, duplicateElement, elements, setFocusInput } =
     useTemplateStore((s) => ({
       lang: s.lang,
       remove: s.remove,
       moveUp: s.moveUp,
       moveDown: s.moveDown,
-      add: s.add,
       duplicateElement: s.duplicateElement,
       elements: s.form.elements,
       setFocusInput: s.setFocusInput,
@@ -225,20 +224,8 @@ export const PanelActions = ({
           </Modal>
         )}
       </div>
-
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <Button
-          onClick={() => {
-            setFocusInput(true);
-            add(item.index);
-          }}
-          theme="secondary"
-          className="!border-1.5 !py-2 !px-4 leading-6 bg-white text-sm"
-          tabIndex={0}
-          dataTestId="add-element"
-        >
-          {t("addElement")}
-        </Button>
+        <AddElement position={item.index} />
       </div>
     </div>
   );

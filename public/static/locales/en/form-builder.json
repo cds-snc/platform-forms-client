@@ -252,5 +252,8 @@
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
-  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to."
+  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
+  "addElementDialog": {
+    "addButton": "Add"
+  }
 }

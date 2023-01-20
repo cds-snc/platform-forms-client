@@ -252,5 +252,8 @@
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
-  "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. "
+  "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
+  "addElementDialog": {
+    "addButton": "[FR] Add"
+  }
 }
