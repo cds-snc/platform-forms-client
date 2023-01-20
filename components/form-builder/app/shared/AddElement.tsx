@@ -4,7 +4,7 @@ import { FormElementTypes } from "@lib/types";
 
 import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
-import { useDialogRef, Dialog } from "../shared";
+import { useDialogRef, Dialog, ListBox } from "../shared";
 import { useElementOptions } from "../../hooks";
 
 const ElementDialog = ({
@@ -58,6 +58,8 @@ const ElementDialog = ({
           <ul>{options}</ul>
           {selected}
         </div>
+
+        <ListBox options={elementOptions} />
       </div>
     </Dialog>
   );
