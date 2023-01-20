@@ -1,7 +1,7 @@
 import React from "react";
 import { HTMLDownloadPage } from "./HTMLDownloadPage";
 import { ProtectedWarning } from "./ProtectedWarning";
-import Fip from "@components/globals/Fip";
+import Fip from "./HTMLDownloadFip";
 
 interface HTMLDownloadFileProps {
   formResponse: any; //TODO
@@ -24,7 +24,7 @@ export const HTMLDownloadFile = (props: HTMLDownloadFileProps) => {
     <>
       <ProtectedWarning lang="en" />
       {/* TODO?: FIP may be  being using beyond intention. Re-create if so and revert _header.scss */}
-      <Fip />
+      <Fip language="en" />
       <div className="mt-14" />
       <HTMLDownloadPage
         confirmReceiptCode={confirmReceiptCode}
@@ -39,7 +39,7 @@ export const HTMLDownloadFile = (props: HTMLDownloadFileProps) => {
       <div className="mt-20" />
 
       <ProtectedWarning lang="fr" />
-      <Fip />
+      <Fip language="fr" />
       <div className="mt-14" />
       <HTMLDownloadPage
         confirmReceiptCode={confirmReceiptCode}
