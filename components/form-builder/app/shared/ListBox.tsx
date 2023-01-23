@@ -1,6 +1,12 @@
 import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "react";
 
-export const ListBox = ({ options }: { options: { id: string; value: string }[] }) => {
+export const ListBox = ({
+  options,
+  handleChange,
+}: {
+  options: { id: string; value: string }[];
+  handleChange: (val: number) => void;
+}) => {
   const rowsRef = useRef<[HTMLElement] | []>([]);
   const [focusIndex, setFocusIndex] = useState(0);
   const [activeId, setActiveId] = useState("");
@@ -23,8 +29,9 @@ export const ListBox = ({ options }: { options: { id: string; value: string }[] 
     if (el && rowsRef.current) {
       el.focus();
       setActiveId(el.id);
+      handleChange(focusIndex);
     }
-  }, [focusIndex]);
+  }, [focusIndex, handleChange]);
 
   return (
     <div

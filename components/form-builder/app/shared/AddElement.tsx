@@ -21,30 +21,40 @@ const ElementDialog = ({
   }));
   const elementOptions = useElementOptions();
 
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(0);
+
+  const id = elementOptions[selected].id as FormElementTypes;
 
   return (
-    <Dialog
-      actions={
-        <Button
-          onClick={() => {
-            handleClose();
-            add(position, selected as FormElementTypes);
-          }}
-        >
-          {t("addElementDialog.addButton")}
-        </Button>
-      }
-      dialogRef={dialog}
-      handleClose={handleClose}
-    >
-      <div className="p-5">
-        <ListBox
-          options={elementOptions}
-          handleChange={(val) => {
-            setSelected(val);
-          }}
-        />
+    <Dialog dialogRef={dialog} handleClose={handleClose}>
+      <div className="p-5 grid grid-cols-[30%_70%] w-full">
+        <div>
+          <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
+          <ListBox
+            options={elementOptions}
+            handleChange={(val) => {
+              setSelected(val);
+            }}
+          />
+        </div>
+        <div className="ml-10 border-l-1 border-black grid grid-rows-w">
+          <div className="h-full flex content-center items-center justify-center">
+            <div>
+              <h3>{t(`addElementDialog.${id}.title`)}</h3>
+              <p>{t(`addElementDialog.${id}.description`)}</p>
+            </div>
+          </div>
+          <div className="self-end justify-self-end">
+            <Button
+              onClick={() => {
+                handleClose();
+                add(position, elementOptions[selected].id as FormElementTypes);
+              }}
+            >
+              {t("addElementDialog.addButton")}
+            </Button>
+          </div>
+        </div>
       </div>
     </Dialog>
   );
