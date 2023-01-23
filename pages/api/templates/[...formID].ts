@@ -1,8 +1,6 @@
 import {
-  getAllTemplates,
   getPublicTemplateByID,
   deleteTemplate,
-  createTemplate,
   updateTemplate,
   updateIsPublishedForTemplate,
   updateAssignedUsersForTemplate,
@@ -19,7 +17,6 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { Session } from "next-auth";
 import { BetterOmit, MiddlewareProps, FormRecord } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { MongoAbility } from "@casl/ability";
@@ -39,7 +36,6 @@ const templates = async (
 
     const response = await templateCRUD({
       ability: ability,
-      user: session?.user,
       method: req.method,
       request: req,
       ...req.body,
@@ -47,15 +43,7 @@ const templates = async (
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
 
-    if (session && session.user.id && ["POST", "PUT", "DELETE"].includes(req.method as string)) {
-      if (req.method === "POST") {
-        await logAdminActivity(
-          session.user.id,
-          AdminLogAction.Create,
-          AdminLogEvent.UploadForm,
-          `Form id: ${(response as FormRecord).id} has been uploaded`
-        );
-      }
+    if (session && session.user.id && ["PUT", "DELETE"].includes(req.method as string)) {
       if (req.method === "PUT") {
         await logAdminActivity(
           session.user.id,
@@ -82,6 +70,7 @@ const templates = async (
         return res.status(200).json(publicTemplates);
       }
     }
+
     // If not GET then we're authenticated and can safely return the complete Form Record.
     return res.status(200).json(response);
   } catch (err) {
@@ -95,9 +84,7 @@ const templates = async (
 const templateCRUD = async ({
   ability,
   method,
-  user,
   request,
-  formID,
   formConfig,
   isPublished,
   users,
@@ -105,20 +92,15 @@ const templateCRUD = async ({
   ability: MongoAbility;
   method: string;
   request: NextApiRequest;
-  user: Session["user"];
-  formID?: string;
   formConfig?: BetterOmit<FormRecord, "id" | "bearerToken">;
   isPublished: boolean;
   users: { id: string; action: "add" | "remove" }[];
 }) => {
+  const formID = request.query.formID ? (request.query.formID[0] as string) : undefined;
   switch (method) {
     case "GET":
-      if (request.query.formID) return await getPublicTemplateByID(request.query.formID[0]);
-
-      return getAllTemplates(ability, user.id);
-    case "POST":
-      if (formConfig) return await createTemplate(ability, user.id, formConfig);
-      throw new Error("Missing Form Configuration");
+      if (formID) return await getPublicTemplateByID(formID);
+      break;
     case "PUT":
       if (formID && formConfig) {
         return await updateTemplate(ability, formID, formConfig);
