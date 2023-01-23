@@ -42,7 +42,7 @@
     "@aws-sdk/client-sqs": "3.188.0",
     "@aws-sdk/lib-dynamodb": "3.188.0",
     "@casl/ability": "6.3.3",
-    "@lexical/react": "0.7.5",
+    "@lexical/react": "0.7.6",
     "@next-auth/prisma-adapter": "1.0.5",
     "@prisma/client": "4.3.1",
     "@tailwindcss/line-clamp": "0.4.2",
@@ -55,12 +55,12 @@
     "formik": "2.2.9",
     "htmlparser2": "8.0.1",
     "i18next": "^22.4.9",
-    "immer": "9.0.17",
-    "ioredis": "5.2.4",
+    "immer": "9.0.18",
+    "ioredis": "5.2.5",
     "json2md": "1.13.0",
     "jsonschema": "1.4.1",
     "jsonwebtoken": "9.0.0",
-    "lexical": "0.7.5",
+    "lexical": "0.7.6",
     "lint-staged": "13.0.4",
     "lodash.debounce": "4.0.8",
     "lodash.get": "4.4.2",
@@ -86,7 +86,7 @@
     "ts-node": "10.9.1",
     "uuid": "8.3.2",
     "yup": "0.32.11",
-    "zustand": "4.3.1"
+    "zustand": "4.3.2"
   },
   "devDependencies": {
     "@aws-sdk/types": "3.188.0",
