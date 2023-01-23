@@ -29,7 +29,7 @@ const templates = async (
   const response = await route({ ability: ability, user: user, method: req.method, ...req.body });
 
   if (!response) return res.status(500).json({ error: "Error on Server Side" });
-  
+
   if (req.method === "POST") {
     await logAdminActivity(
       session.user.id,
