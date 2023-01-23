@@ -12,15 +12,16 @@ export const usePublish = () => {
     }
 
     try {
+      const url = formID ? `/api/templates/${formID}` : "/api/templates";
+
       const result = await axios({
-        url: "/api/templates",
+        url: url,
         method: formID ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
         data: {
           isPublished: publish ? true : false,
-          formID: formID,
           formConfig: formData,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
@@ -28,14 +29,13 @@ export const usePublish = () => {
 
       if (publish && formID) {
         await axios({
-          url: "/api/templates",
+          url: url,
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           data: {
             isPublished: true,
-            formID: formID,
           },
           timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
         });
