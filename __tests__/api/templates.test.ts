@@ -283,7 +283,6 @@ describe("Test templates API functions", () => {
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           isPublished: true,
         },
       });
@@ -475,7 +474,6 @@ describe("Templates API functions should throw an error if user does not have pe
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           formConfig: validFormTemplate,
         },
       });
@@ -515,7 +513,6 @@ describe("Templates API functions should throw an error if user does not have pe
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           isPublished: true,
         },
       });
