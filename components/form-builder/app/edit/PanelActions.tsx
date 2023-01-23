@@ -23,9 +23,10 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, remove, moveUp, moveDown, duplicateElement, elements, setFocusInput } =
+  const { lang, add, remove, moveUp, moveDown, duplicateElement, elements, setFocusInput } =
     useTemplateStore((s) => ({
       lang: s.lang,
+      add: s.add,
       remove: s.remove,
       moveUp: s.moveUp,
       moveDown: s.moveDown,
@@ -225,7 +226,14 @@ export const PanelActions = ({
         )}
       </div>
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <AddElement position={item.index} />
+        <AddElement
+          position={item.index}
+          onClick={() => {
+            // remove onClick once element dialog if fully merged
+            setFocusInput(true);
+            add(item.index);
+          }}
+        />
       </div>
     </div>
   );

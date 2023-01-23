@@ -6,6 +6,7 @@ import { Button } from "./Button";
 import { useTemplateStore } from "../../store";
 import { useDialogRef, Dialog, ListBox } from "../shared";
 import { useElementOptions } from "../../hooks";
+import { useFlag } from "@lib/hooks";
 
 const ElementDialog = ({
   handleClose,
@@ -72,6 +73,7 @@ export const AddElement = ({
   onClick?: any; // eslint-disable-line  @typescript-eslint/no-explicit-any
   position: number;
 }) => {
+  const { status: dialogEnabled } = useFlag("formBuilderAddElementDialog");
   const { t } = useTranslation("form-builder");
   const [elementDialog, showElementDialog] = useState(false);
   const handleOpenDialog = useCallback(() => {
@@ -86,8 +88,8 @@ export const AddElement = ({
     <>
       <Button
         onClick={() => {
-          handleOpenDialog();
-          onClick && onClick();
+          dialogEnabled && handleOpenDialog();
+          !dialogEnabled && onClick && onClick();
         }}
         theme="secondary"
         className="!border-1.5 !py-2 !px-4 leading-6 text-sm"
