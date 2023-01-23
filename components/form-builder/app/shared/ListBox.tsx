@@ -1,5 +1,8 @@
 import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "react";
 
+// for specs see:
+// https://www.w3.org/WAI/ARIA/apg/patterns/listbox
+
 export const ListBox = ({
   options,
   handleChange,
@@ -27,7 +30,6 @@ export const ListBox = ({
   useEffect(() => {
     const el = rowsRef.current[`row-${focusIndex}` as unknown as number] as HTMLElement;
     if (el && rowsRef.current) {
-      el.focus();
       setActiveId(el.id);
       handleChange(focusIndex);
     }
