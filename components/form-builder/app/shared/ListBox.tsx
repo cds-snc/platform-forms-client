@@ -1,11 +1,10 @@
 import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "react";
 
-export const ListBox = ({ options }: { options: any }) => {
-  const containerRef = useRef(null);
+export const ListBox = ({ options }: { options: { id: string; value: string }[] }) => {
   const rowsRef = useRef<[HTMLElement] | []>([]);
   const [focusIndex, setFocusIndex] = useState(0);
-  const [activeId, setActiveId] = useState();
-  const handleListBoxNav = useCallback(
+  const [activeId, setActiveId] = useState("");
+  const handleFocus = useCallback(
     (evt: KeyboardEvent<HTMLInputElement>) => {
       const { key } = evt;
       if (key === "ArrowUp") {
@@ -20,42 +19,42 @@ export const ListBox = ({ options }: { options: any }) => {
   );
 
   useEffect(() => {
-    const index = `row-${focusIndex}` as unknown as number;
-    const el = rowsRef.current[index] as any;
+    const el = rowsRef.current[`row-${focusIndex}` as unknown as number] as HTMLElement;
     if (el && rowsRef.current) {
       el.focus();
       setActiveId(el.id);
     }
   }, [focusIndex]);
 
-  const isListBoxActiveRow = (index: number) => focusIndex === index;
-
   return (
     <div
-      ref={containerRef}
       role="listbox"
+      className="w-42"
       tabIndex={0}
-      onKeyDown={handleListBoxNav}
+      onKeyDown={handleFocus}
       aria-activedescendant={activeId ? activeId : options[0]?.id}
     >
-      {options.map((option: any, index: number) => {
-        const id = option.id;
-        const rowIndex = `row-${index}` as unknown as number;
+      {options.map(({ id, value }: { id: string; value: string }, index: number) => {
+        const focussed = focusIndex === index;
         return (
+          /* eslint-disable jsx-a11y/click-events-have-key-events */
           <div
             id={`row-${id}`}
             ref={(el) => {
               if (el && rowsRef.current) {
-                rowsRef.current[rowIndex] = el;
+                rowsRef.current[`row-${index}` as unknown as number] = el;
               }
             }}
+            className={`${
+              focussed ? "font-bold" : "font-normal"
+            } group xl:text-center no-underline xl:w-36 xl:pb-0 xl:pt-2 xl:mb-2 -ml-1 pl-1 pr-2 md:pr-0 text-black-default hover:text-blue-hover visited:text-black-default focus:text-blue-hover focus:active:no-underline`}
             key={id}
             tabIndex={-1}
             role="option"
             onClick={() => setFocusIndex(index)}
-            aria-selected={isListBoxActiveRow(index)}
+            aria-selected={focussed}
           >
-            {option.value}
+            {value}
           </div>
         );
       })}

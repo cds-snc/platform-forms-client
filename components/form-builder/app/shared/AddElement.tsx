@@ -23,21 +23,6 @@ const ElementDialog = ({
 
   const [selected, setSelected] = useState("");
 
-  const options = elementOptions.map((option) => {
-    return (
-      <li key={option.id}>
-        <button
-          className="mb-2"
-          onClick={() => {
-            setSelected(option.id);
-          }}
-        >
-          {option.value}
-        </button>
-      </li>
-    );
-  });
-
   return (
     <Dialog
       actions={
@@ -54,12 +39,12 @@ const ElementDialog = ({
       handleClose={handleClose}
     >
       <div className="p-5">
-        <div>
-          <ul>{options}</ul>
-          {selected}
-        </div>
-
-        <ListBox options={elementOptions} />
+        <ListBox
+          options={elementOptions}
+          handleChange={(val) => {
+            setSelected(val);
+          }}
+        />
       </div>
     </Dialog>
   );
