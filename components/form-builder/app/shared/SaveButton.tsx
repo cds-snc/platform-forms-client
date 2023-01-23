@@ -59,14 +59,16 @@ export const SaveButton = () => {
           <Markdown options={{ forceBlock: true }}>{error}</Markdown>
         </div>
       )}
-      {dateTime.length == 2 && (
-        <div className="mt-4 " role="alert" aria-live="polite">
-          <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
-          <div className="text-sm">
-            {dateTime[0]} {t("at")} {dateTime[1]}{" "}
-          </div>
-        </div>
-      )}
+      <div className="mt-4" aria-live="polite">
+        {dateTime.length == 2 && (
+          <>
+            <div className="font-bold">{t("lastSaved", { ns: "form-builder" })}</div>
+            <div className="text-sm">
+              {dateTime[0]} {t("at")} {dateTime[1]}{" "}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   ) : null;
 };
