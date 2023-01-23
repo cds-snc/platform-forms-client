@@ -16,12 +16,21 @@ const ElementDialog = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
-  const { add } = useTemplateStore((s) => ({
+  const { add, setFocusInput } = useTemplateStore((s) => ({
     add: s.add,
+    setFocusInput: s.setFocusInput,
   }));
+
   const elementOptions = useElementOptions();
 
   const [selected, setSelected] = useState(0);
+
+  const handleChange = useCallback(
+    (val: number) => {
+      setSelected(val);
+    },
+    [setSelected]
+  );
 
   const id = elementOptions[selected].id as FormElementTypes;
 
@@ -30,12 +39,7 @@ const ElementDialog = ({
       <div className="p-5 grid grid-cols-[30%_70%] w-full">
         <div>
           <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
-          <ListBox
-            options={elementOptions}
-            handleChange={(val) => {
-              setSelected(val);
-            }}
-          />
+          <ListBox options={elementOptions} handleChange={handleChange} />
         </div>
         <div className="ml-10 border-l-1 border-black grid grid-rows-w">
           <div className="h-full flex content-center items-center justify-center">
@@ -49,6 +53,7 @@ const ElementDialog = ({
               onClick={() => {
                 handleClose();
                 add(position, elementOptions[selected].id as FormElementTypes);
+                setFocusInput(true);
               }}
             >
               {t("addElementDialog.addButton")}

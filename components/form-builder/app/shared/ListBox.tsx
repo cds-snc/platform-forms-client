@@ -10,6 +10,7 @@ export const ListBox = ({
   options: { id: string; value: string }[];
   handleChange: (val: number) => void;
 }) => {
+  const listBoxRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<[HTMLElement] | []>([]);
   const [focusIndex, setFocusIndex] = useState(0);
   const [activeId, setActiveId] = useState("");
@@ -33,10 +34,12 @@ export const ListBox = ({
       setActiveId(el.id);
       handleChange(focusIndex);
     }
-  }, [focusIndex, handleChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusIndex]);
 
   return (
     <div
+      ref={listBoxRef}
       role="listbox"
       className="w-42"
       tabIndex={0}
