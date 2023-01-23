@@ -16,7 +16,7 @@ import { AdminLogAction, AdminLogEvent, logAdminActivity } from "@lib/adminLogs"
 const allowedMethods = ["GET", "POST"];
 const authenticatedMethods = ["POST"];
 
-const templatesRoot = async (
+const templates = async (
   req: NextApiRequest,
   res: NextApiResponse,
   { session }: MiddlewareProps
@@ -97,5 +97,5 @@ export default middleware(
       jsonKey: "formConfig",
     }),
   ],
-  templatesRoot
+  templates
 );
