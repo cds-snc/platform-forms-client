@@ -1,4 +1,4 @@
-import { createAbility } from "@lib/privileges";
+import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists, jsonValidator } from "@lib/middleware";
 import { createTemplate, getAllTemplates, onlyIncludePublicProperties } from "@lib/templates";
 import { BetterOmit, FormRecord, MiddlewareProps } from "@lib/types";
@@ -16,37 +16,42 @@ import { AdminLogAction, AdminLogEvent, logAdminActivity } from "@lib/adminLogs"
 const allowedMethods = ["GET", "POST"];
 const authenticatedMethods = ["POST"];
 
-const templates = async (
+const templatesRoot = async (
   req: NextApiRequest,
   res: NextApiResponse,
   { session }: MiddlewareProps
 ) => {
-  if (!session) return res.status(401).json({ error: "Unauthorized" });
+  try {
+    if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-  const ability = createAbility(session.user.privileges);
-  const user = session.user;
+    const ability = createAbility(session.user.privileges);
+    const user = session.user;
 
-  const response = await route({ ability: ability, user: user, method: req.method, ...req.body });
+    const response = await route({ ability: ability, user: user, method: req.method, ...req.body });
 
-  if (!response) return res.status(500).json({ error: "Error on Server Side" });
+    if (!response) return res.status(500).json({ error: "Error on Server Side" });
 
-  if (req.method === "POST") {
-    await logAdminActivity(
-      session.user.id,
-      AdminLogAction.Create,
-      AdminLogEvent.UploadForm,
-      `Form id: ${(response as FormRecord).id} has been uploaded`
-    );
-  }
-
-  if (req.method === "GET") {
-    if (Array.isArray(response)) {
-      const publicTemplates = response.map((template) => onlyIncludePublicProperties(template));
-      return res.status(200).json(publicTemplates);
+    if (req.method === "POST") {
+      await logAdminActivity(
+        session.user.id,
+        AdminLogAction.Create,
+        AdminLogEvent.UploadForm,
+        `Form id: ${(response as FormRecord).id} has been uploaded`
+      );
     }
-  }
 
-  return res.status(200).json(response);
+    if (req.method === "GET") {
+      if (Array.isArray(response)) {
+        const publicTemplates = response.map((template) => onlyIncludePublicProperties(template));
+        return res.status(200).json(publicTemplates);
+      }
+    }
+
+    return res.status(200).json(response);
+  } catch (err) {
+    if (err instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
+    else return res.status(500).json({ error: "Malformed API Request" });
+  }
 };
 
 const route = async ({
@@ -92,5 +97,5 @@ export default middleware(
       jsonKey: "formConfig",
     }),
   ],
-  templates
+  templatesRoot
 );

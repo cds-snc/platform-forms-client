@@ -1,11 +1,11 @@
 import {
-  getPublicTemplateByID,
   deleteTemplate,
   updateTemplate,
   updateIsPublishedForTemplate,
   updateAssignedUsersForTemplate,
   onlyIncludePublicProperties,
   TemplateAlreadyPublishedError,
+  getFullTemplateByID,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -50,8 +50,8 @@ const templates = async (
           AdminLogAction.Update,
           AdminLogEvent.UpdateForm,
           req.body.isPublished !== undefined
-            ? `Form id: ${req.body.formID} 'isPublished' value has been updated`
-            : `Form id: ${req.body.formID} has been updated`
+            ? `Form id: ${req.query.formID} 'isPublished' value has been updated`
+            : `Form id: ${req.query.formID} has been updated`
         );
       }
       if (req.method === "DELETE") {
@@ -59,7 +59,7 @@ const templates = async (
           session.user.id,
           AdminLogAction.Delete,
           AdminLogEvent.DeleteForm,
-          `Form id: ${req.body.formID} has been deleted`
+          `Form id: ${req.query.formID} has been deleted`
         );
       }
     }
@@ -99,7 +99,7 @@ const templateCRUD = async ({
   const formID = request.query.formID ? (request.query.formID[0] as string) : undefined;
   switch (method) {
     case "GET":
-      if (formID) return await getPublicTemplateByID(formID);
+      if (formID) return await getFullTemplateByID(ability, formID);
       break;
     case "PUT":
       if (formID && formConfig) {
