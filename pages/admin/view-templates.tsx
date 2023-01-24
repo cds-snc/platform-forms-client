@@ -31,12 +31,12 @@ enum WhereToRedirect {
 
 const handlePublish = async (formID: string, isPublished: boolean) => {
   return await axios({
-    url: "/api/templates",
+    url: `/api/templates/${formID}`,
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    data: { formID, isPublished },
+    data: { isPublished },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   }).catch((err) => logMessage.error(err));
 };

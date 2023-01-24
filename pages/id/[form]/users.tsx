@@ -33,10 +33,9 @@ const updateUsersToTemplateAssignations = async (
 ) => {
   try {
     return await axios({
-      url: `/api/templates`,
+      url: `/api/templates/${formID}`,
       method: "PUT",
       data: {
-        formID,
         users,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
