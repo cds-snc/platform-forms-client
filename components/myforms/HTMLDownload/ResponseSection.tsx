@@ -1,18 +1,20 @@
 import React from "react";
-import { HTMLDownloadTable, HTMLDownloadTableI } from "@components/myforms/HTMLDownload/Table";
+import { Table, TableProps } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
 
-export interface HTMLDownloadPageI {
+export interface ResponseSectionProps {
   // id: string;
   title: string;
   lang?: string;
   confirmReceiptCode: string;
 }
 
-interface HTMLDownloadPageProps extends HTMLDownloadPageI, HTMLDownloadTableI {}
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-export const HTMLDownloadPage = (props: HTMLDownloadPageProps) => {
+export const ResponseSection = (props: ResponseSectionProps & TableProps) => {
   const { t } = useTranslation(["my-forms"]);
   const {
     // id,
@@ -24,6 +26,8 @@ export const HTMLDownloadPage = (props: HTMLDownloadPageProps) => {
     confirmReceiptCode,
   } = props;
   const confirmCodeOutputRef = React.createRef<HTMLSpanElement>();
+
+  const capitalizedLang = capitalize(lang);
 
   function handleCopyCode(elRef: React.RefObject<HTMLSpanElement>) {
     if (copy(confirmReceiptCode)) {
@@ -42,19 +46,26 @@ export const HTMLDownloadPage = (props: HTMLDownloadPageProps) => {
 
   return (
     <>
-      <nav className="flex items-center" aria-labelledby={"navTitle" + lang}>
-        <div id={"navTitle" + lang} className="mr-4 pl-3 pr-4 py-1 bg-gray-800 text-white">
+      <nav className="flex items-center" aria-labelledby={"navTitle" + capitalizedLang}>
+        <div
+          id={"navTitle" + capitalizedLang}
+          className="mr-4 pl-3 pr-4 py-1 bg-gray-800 text-white"
+        >
           {t("responseTemplate.jumpTo", { lng: lang })}
         </div>
         <ul className="flex list-none p-0">
           <li className="mr-4">
-            <a href={"#columnTable" + lang}>{t("responseTemplate.columnTable", { lng: lang })}</a>
+            <a href={"#columnTable" + capitalizedLang}>
+              {t("responseTemplate.columnTable", { lng: lang })}
+            </a>
           </li>
           <li className="mr-4">
-            <a href={"#rowTable" + lang}>{t("responseTemplate.rowTable", { lng: lang })}</a>
+            <a href={"#rowTable" + capitalizedLang}>
+              {t("responseTemplate.rowTable", { lng: lang })}
+            </a>
           </li>
           <li className="mr-4">
-            <a href={"#confirmReceipt" + lang}>
+            <a href={"#confirmReceipt" + capitalizedLang}>
               {t("responseTemplate.confirmReceipt", { lng: lang })}
             </a>
           </li>
@@ -62,30 +73,30 @@ export const HTMLDownloadPage = (props: HTMLDownloadPageProps) => {
       </nav>
 
       <h1 className="mt-20">{title}</h1>
-      <h2 id={"columnTable" + lang} className="mt-20">
+      <h2 id={"columnTable" + capitalizedLang} className="mt-20">
         {t("responseTemplate.columnTable", { lng: lang })}
       </h2>
-      <HTMLDownloadTable
+      <Table
         responseNumber={responseNumber}
         submissionDate={submissionDate}
         questionsAnswers={questionsAnswers}
         isRowTable={false}
-        lang={lang}
+        lang={capitalizedLang}
       />
 
-      <h2 id={"rowTable" + lang} className="mt-20">
+      <h2 id={"rowTable" + capitalizedLang} className="mt-20">
         {t("responseTemplate.rowTable", { lng: lang })}
       </h2>
       <p className="mb-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
-      <HTMLDownloadTable
+      <Table
         responseNumber={responseNumber}
         submissionDate={submissionDate}
         questionsAnswers={questionsAnswers}
         isRowTable={true}
-        lang={lang}
+        lang={capitalizedLang}
       />
 
-      <h2 id={"confirmReceipt" + lang} className="mt-20">
+      <h2 id={"confirmReceipt" + capitalizedLang} className="mt-20">
         {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
       </h2>
       <p className="mt-4">{t("responseTemplate.confirmReceiptInfo", { lng: lang })}</p>

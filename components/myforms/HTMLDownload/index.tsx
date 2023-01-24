@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { HTMLDownloadPage } from "./ResponseSection";
+import { ResponseSection } from "./ResponseSection";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { NextPageWithLayout } from "@pages/_app";
@@ -7,12 +7,12 @@ import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "./Footer";
 
-interface HTMLDownloadFileProps {
+interface HTMLDownloadProps {
   formResponse: any; //TODO
   confirmReceiptCode: string;
 }
 
-const HTMLDownload: NextPageWithLayout<HTMLDownloadFileProps> = (props: HTMLDownloadFileProps) => {
+const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = (props: HTMLDownloadProps) => {
   const { formResponse, confirmReceiptCode } = props;
   const {
     // id,
@@ -30,7 +30,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadFileProps> = (props: HTMLDown
       <ProtectedWarning lang="en" />
       <Fip language="en" />
       <div className="mt-14" />
-      <HTMLDownloadPage
+      <ResponseSection
         confirmReceiptCode={confirmReceiptCode}
         lang={"en"}
         // id={id}
@@ -45,7 +45,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadFileProps> = (props: HTMLDown
       <ProtectedWarning lang="fr" />
       <Fip language="fr" />
       <div className="mt-14" />
-      <HTMLDownloadPage
+      <ResponseSection
         confirmReceiptCode={confirmReceiptCode}
         lang={"fr"}
         // id={id}

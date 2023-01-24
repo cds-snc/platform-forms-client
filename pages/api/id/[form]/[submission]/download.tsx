@@ -1,5 +1,5 @@
 /* eslint-disable no-useless-escape */
-import { NextApiRequest, NextApiResponse, NextComponentType } from "next";
+import { NextApiRequest, NextApiResponse, NextComponentType, NextPageContext } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -12,7 +12,9 @@ import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
 import { Router } from "next/router";
-import { Base } from "__utils__/permissions";
+
+// Temporary Import for Testing
+import LemonadeStand from "../../../../../__fixtures__/accessibilityTestForm.json";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -76,10 +78,34 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     */
 
     // This will eventually be replaced by the user friendly random name on the submission object
-    const htmlFileName = "ABC-123";
+    const responseID = "ABC-123";
+    const confirmReceiptCode = "123456789-TODO";
+    const template = LemonadeStand.form;
+
+    const vault = {
+      "2": "Bryan Robitaille",
+      "3": "English",
+      "5": "Home Sweet Home",
+      "6": "",
+      "7": "Sweet but tangy",
+      "8": "Driveway",
+      "9": "",
+      "11": [
+        {
+          "0": "Sugar",
+          "1": "2 lbs",
+        },
+        {
+          "0": "Lemons",
+          "1": "4 lbs",
+        },
+      ],
+      "12": ["Cups", "Napkins"],
+      "14": "Yes",
+    };
 
     const formResponse = {
-      id: "cla7829dw0005f4kggctsrndu",
+      submissionId: "d3836135-a516-4415-a24e-b9c3f3c74302",
       responseNumber: "111111111111",
       submissionDate: new Date().toDateString(),
       questionsAnswersEn: {
@@ -121,11 +147,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     };
 
     //TODO ..
-    const confirmReceiptCode = "123456789-TODO";
 
     const pageProps = {
       formResponse,
       confirmReceiptCode,
+      pathname: "/",
+      query: {},
       _nextI18Next: {
         initialLocale: "en",
         ns: ["my-forms", "common"],
@@ -151,7 +178,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       isHTMLFileDownload: true,
     };
 
-    res.setHeader("Content-Disposition", `attachment; filename=${htmlFileName}.html`);
+    res.setHeader("Content-Disposition", `attachment; filename=${responseID}.html`);
 
     let didError = false;
 
@@ -166,7 +193,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
           <body>
             <BaseApp
               pageProps={pageProps}
-              Component={HTMLDownloadFile as unknown as NextComponentType<any>}
+              Component={HTMLDownloadFile as unknown as NextComponentType<NextPageContext>}
               router={{} as unknown as Router}
               __N_SSG={true}
             />

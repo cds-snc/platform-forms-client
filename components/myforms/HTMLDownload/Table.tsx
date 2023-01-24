@@ -1,18 +1,15 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 
-export interface HTMLDownloadTableI {
+export interface TableProps {
+  isRowTable?: boolean;
+  lang?: string;
   responseNumber: string;
   submissionDate: string;
   questionsAnswers: Array<any>; //TODO
 }
 
-interface HTMLDownloadTableProps extends HTMLDownloadTableI {
-  isRowTable?: boolean;
-  lang?: string;
-}
-
-export const HTMLDownloadTable = (props: HTMLDownloadTableProps): React.ReactElement => {
+export const Table = (props: TableProps): React.ReactElement => {
   const { t } = useTranslation(["my-forms"]);
   const {
     responseNumber,
