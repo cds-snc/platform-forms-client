@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { requireAuthentication } from "@lib/auth";
 import { checkPrivileges } from "@lib/privileges";
 import Link from "next/link";
-import { HTMLDownloadFile } from "@components/myforms/HTMLDownload/HTMLDownloadFile";
+import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 
 //TODO download api path: /api/id/[form]/[submission]/download
 

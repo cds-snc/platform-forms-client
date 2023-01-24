@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  HTMLDownloadTable,
-  HTMLDownloadTableI,
-} from "@components/myforms/HTMLDownload/HTMLDownloadTable";
+import { HTMLDownloadTable, HTMLDownloadTableI } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
 

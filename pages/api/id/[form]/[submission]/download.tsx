@@ -9,7 +9,7 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToPipeableStream } from "react-dom/server";
 import { getFullTemplateByID } from "@lib/templates";
-import { HTMLDownloadFile } from "@components/myforms/HTMLDownload/HTMLDownloadFile";
+import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
 import { Router } from "next/router";
 import { Base } from "__utils__/permissions";
