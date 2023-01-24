@@ -15,14 +15,18 @@ export const ElementDescription = ({
   return (
     <div className="ml-10 border-l-1 border-black grid grid-rows-w">
       <div className="h-full flex content-center items-center justify-center">
-        <div>
+        <div data-testid="element-description-content">
           <h3>{t(`addElementDialog.${id}.title`)}</h3>
           <p>{t(`addElementDialog.${id}.description`)}</p>
         </div>
       </div>
       {handleAdd && (
         <div className="self-end justify-self-end">
-          <Button onClick={handleAdd} className="btn btn-primary">
+          <Button
+            dataTestId="element-description-add-element"
+            onClick={handleAdd}
+            className="btn btn-primary"
+          >
             {t("addElementDialog.addButton")}
           </Button>
         </div>
