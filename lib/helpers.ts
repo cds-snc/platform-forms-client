@@ -18,13 +18,10 @@ import { getCsrfToken } from "next-auth/react";
 async function _getFormByID(formID: string): Promise<PublicFormRecord | undefined> {
   try {
     const response = await axios({
-      url: "/api/templates",
+      url: `/api/templates/${formID}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-      },
-      data: {
-        formID: formID,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
