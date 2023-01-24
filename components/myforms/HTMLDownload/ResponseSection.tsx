@@ -1,33 +1,74 @@
 import React from "react";
-import { Table, TableProps } from "@components/myforms/HTMLDownload/Table";
+import { Table } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
 import copy from "copy-to-clipboard";
+import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 
 export interface ResponseSectionProps {
-  // id: string;
-  title: string;
-  lang?: string;
   confirmReceiptCode: string;
+  lang: string;
+  responseID: string;
+  submissionID: string;
+  submissionDate: number;
+  formTemplate: FormProperties;
+  formResponse: Responses;
 }
 
 function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export const ResponseSection = (props: ResponseSectionProps & TableProps) => {
+function getProperty(field: string, lang: string): string {
+  if (!field) {
+    throw new Error("Field does not exist");
+  }
+  return field + lang.charAt(0).toUpperCase() + lang.slice(1);
+}
+
+const parseQuestionsAndAnswers = (
+  formTemplate: FormProperties,
+  formResponse: Responses,
+  lang: string
+): Response[][] => {
+  // Filter out only questions that have possible responses
+  const questionsOnly = formTemplate.elements.filter(
+    (element) => ![FormElementTypes.richText].includes(element.type)
+  );
+  return (
+    formTemplate.layout
+      .map((elementID) => {
+        const question = questionsOnly.filter((element) => element.id === elementID)[0]?.properties[
+          getProperty("title", lang)
+        ];
+
+        // If the question type does not have a possible response it will return undefined here.
+        // Short circuit and return undefined to be filtered out in the next step
+
+        if (!question) return;
+
+        const response = formResponse[elementID];
+        return [question as string, response];
+      })
+      // Filter out the undefined from the array.
+      .filter((responsePair) => responsePair !== undefined) as Response[][]
+  );
+};
+
+export const ResponseSection = ({
+  confirmReceiptCode,
+  lang,
+  responseID,
+  submissionID,
+  submissionDate,
+  formTemplate,
+  formResponse,
+}: ResponseSectionProps) => {
   const { t } = useTranslation(["my-forms"]);
-  const {
-    // id,
-    responseNumber,
-    submissionDate,
-    questionsAnswers,
-    title,
-    lang = "en",
-    confirmReceiptCode,
-  } = props;
+
   const confirmCodeOutputRef = React.createRef<HTMLSpanElement>();
 
   const capitalizedLang = capitalize(lang);
+  const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
 
   function handleCopyCode(elRef: React.RefObject<HTMLSpanElement>) {
     if (copy(confirmReceiptCode)) {
@@ -72,13 +113,14 @@ export const ResponseSection = (props: ResponseSectionProps & TableProps) => {
         </ul>
       </nav>
 
-      <h1 className="mt-20">{title}</h1>
+      <h1 className="mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h1>
       <h2 id={"columnTable" + capitalizedLang} className="mt-20">
         {t("responseTemplate.columnTable", { lng: lang })}
       </h2>
       <Table
-        responseNumber={responseNumber}
+        responseID={responseID}
         submissionDate={submissionDate}
+        submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={false}
         lang={capitalizedLang}
@@ -89,8 +131,9 @@ export const ResponseSection = (props: ResponseSectionProps & TableProps) => {
       </h2>
       <p className="mb-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
       <Table
-        responseNumber={responseNumber}
+        responseID={responseID}
         submissionDate={submissionDate}
+        submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={true}
         lang={capitalizedLang}

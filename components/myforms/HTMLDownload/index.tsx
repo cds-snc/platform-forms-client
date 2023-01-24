@@ -6,24 +6,25 @@ import { NextPageWithLayout } from "@pages/_app";
 import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
 import Footer from "./Footer";
+import { FormProperties, Responses } from "@lib/types";
 
 interface HTMLDownloadProps {
-  formResponse: any; //TODO
+  formTemplate: FormProperties;
+  formResponse: Responses;
   confirmReceiptCode: string;
+  submissionID: string;
+  responseID: string;
+  createdAt: number;
 }
 
-const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = (props: HTMLDownloadProps) => {
-  const { formResponse, confirmReceiptCode } = props;
-  const {
-    // id,
-    responseNumber,
-    submissionDate,
-    questionsAnswersEn,
-    questionsAnswersFr,
-    titleEn,
-    titleFr,
-  } = formResponse;
-
+const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
+  formTemplate,
+  formResponse,
+  confirmReceiptCode,
+  submissionID,
+  responseID,
+  createdAt,
+}: HTMLDownloadProps) => {
   return (
     <>
       <div className="mt-14" />
@@ -33,11 +34,11 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = (props: HTMLDownload
       <ResponseSection
         confirmReceiptCode={confirmReceiptCode}
         lang={"en"}
-        // id={id}
-        responseNumber={responseNumber}
-        submissionDate={submissionDate}
-        title={titleEn}
-        questionsAnswers={questionsAnswersEn}
+        responseID={responseID}
+        submissionID={submissionID}
+        submissionDate={createdAt}
+        formTemplate={formTemplate}
+        formResponse={formResponse}
       />
 
       <div className="mt-20" />
@@ -48,11 +49,11 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = (props: HTMLDownload
       <ResponseSection
         confirmReceiptCode={confirmReceiptCode}
         lang={"fr"}
-        // id={id}
-        responseNumber={responseNumber}
-        submissionDate={submissionDate}
-        title={titleFr}
-        questionsAnswers={questionsAnswersFr}
+        responseID={responseID}
+        submissionID={submissionID}
+        submissionDate={createdAt}
+        formTemplate={formTemplate}
+        formResponse={formResponse}
       />
     </>
   );

@@ -48,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         ":submissionID": submissionID,
       },
       KeyConditionExpression: "FormID = :formID AND SubmissionID = :submissionID",
-      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute",
+      ProjectionExpression: "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute, CreatedAt",
     };
     const queryCommand = new QueryCommand(getItemsDbParams);
 
@@ -64,13 +64,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         SubmissionID: submissionID,
         FormSubmission: formSubmission,
         SecurityAttribute: securityAttribute,
+        CreatedAt: createdAt
       }) => ({
         formID,
         submissionID,
         formSubmission: JSON.parse(formSubmission),
+           securityAttribute,
+           createdAt,
         // In the future add Form Sumbission Files here
         // fileAttachments: getFileAttachments(submissionID, formSubmission),
-        securityAttribute,
         // In the future add the Confirmation Code here
         // confirmationCode
       })
@@ -80,9 +82,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     // This will eventually be replaced by the user friendly random name on the submission object
     const responseID = "ABC-123";
     const confirmReceiptCode = "123456789-TODO";
-    const template = LemonadeStand.form;
+    const formTemplate = LemonadeStand.form;
+    const createdAt = Date.now();
 
-    const vault = {
+    const formResponse = {
       "2": "Bryan Robitaille",
       "3": "English",
       "5": "Home Sweet Home",
@@ -104,53 +107,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       "14": "Yes",
     };
 
-    const formResponse = {
-      submissionId: "d3836135-a516-4415-a24e-b9c3f3c74302",
-      responseNumber: "111111111111",
-      submissionDate: new Date().toDateString(),
-      questionsAnswersEn: {
-        "Long Question":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse",
-        "1": "yes",
-        "2": "Numero Uno",
-        "3": ["Uno", "Dos", "Tres"],
-        "4": "List item 1",
-        "5": "1",
-        "6": "111-111-1111",
-        "7": "test@test.com",
-        "8": "01/01/2001",
-        "9": "2",
-        "Question about questions":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse",
-        questionssss:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse",
-      },
-      questionsAnswersFr: {
-        "Long Question[fr]":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse",
-        "1": "yes",
-        "2": "Numero Uno",
-        "3": ["Uno", "Dos", "Tres"],
-        "4": "List item 1",
-        "5": "1",
-        "6": "111-111-1111",
-        "7": "test@test.com",
-        "8": "01/01/2001",
-        "9": "2",
-        "Question about questions":
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse",
-        questionssss:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse",
-      },
-      titleEn: "Simple Form",
-      titleFr: "Formulaire Simple",
-    };
-
     //TODO ..
 
     const pageProps = {
       formResponse,
+      formTemplate,
       confirmReceiptCode,
+      submissionID,
+      responseID,
+      createdAt,
       pathname: "/",
       query: {},
       _nextI18Next: {
@@ -211,15 +176,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         onShellError(error) {
           // Something errored before we could complete the shell so we emit an alternative shell.
           res.statusCode = 500;
-          res.send('<!doctype html><p>Loading...</p><script src="clientrender.js"></script>');
-        },
-        onAllReady() {
-          // If you don't want streaming, use this instead of onShellReady.
-          // This will fire after the entire page content is ready.
-          // You can use this for crawlers or static generation.
-          // res.statusCode = didError ? 500 : 200;
-          // res.setHeader('Content-type', 'text/html');
-          // stream.pipe(res);
+          res.send("<!doctype html><p>Oh Oh...</p>");
         },
         onError(err) {
           didError = true;

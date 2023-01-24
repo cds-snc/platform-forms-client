@@ -50,7 +50,8 @@
     "copyCode": "Copy code",
     "copyCodeClipboard": "Copy code to clipboard",
     "copiedCode": "Copied code to clipboard",
-    "errorrCopiedCode": "Error copying code to clipboard"
+    "errorrCopiedCode": "Error copying code to clipboard",
+    "submissionID": "Submission ID"
   },
   "protectedBWarning": {
     "officialRecord": "This is an official record",
