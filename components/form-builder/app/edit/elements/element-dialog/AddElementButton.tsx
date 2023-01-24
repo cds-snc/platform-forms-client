@@ -32,7 +32,7 @@ export const AddElementButton = ({
       <Button
         onClick={() => {
           dialogEnabled && handleOpenDialog();
-          handleAdd && handleAdd(position);
+          !dialogEnabled && handleAdd && handleAdd(position);
         }}
         theme="secondary"
         className="!border-1.5 !py-2 !px-4 leading-6 text-sm"
