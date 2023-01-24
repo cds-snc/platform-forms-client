@@ -252,5 +252,49 @@
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
-  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to."
+  "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
+  "addElementDialog": {
+    "addButton": "Add",
+    "questionElement": "Question element",
+    "richText": {
+      "title": "Rich Text title",
+      "description": "Rich Text desc"
+    },
+    "radio": {
+      "title": "Radio title",
+      "description": "Radio desc"
+    },
+    "checkbox": {
+      "title": "Multiple Choice title",
+      "description": "Multiple Choice title desc"
+    },
+    "dropdown": {
+      "title": "Dropdown list title",
+      "description": "Dropdown list Answer desc"
+    },
+    "textField": {
+      "title": "Short answer title",
+      "description": "Short answer desc"
+    },
+    "textArea": {
+      "title": "Long answer title",
+      "description": "Long answer  desc"
+    },
+    "phone": {
+      "title": "Phone title",
+      "description": "Phone desc"
+    },
+    "email": {
+      "title": "Email title",
+      "description": "Email desc"
+    },
+    "date": {
+      "title": "Date title",
+      "description": "Date desc"
+    },
+    "number": {
+      "title": "Numeric title",
+      "description": "Numeric desc"
+    }
+  }
 }

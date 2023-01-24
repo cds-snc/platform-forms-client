@@ -96,7 +96,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (index?: number) => void;
+  add: (index?: number, type?: FormElementTypes) => void;
   remove: (id: number) => void;
   addChoice: (index: number) => void;
   resetChoices: (index: number) => void;
@@ -210,12 +210,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             set((state) => {
               state.form.elements = moveDown(state.form.elements, index);
             }),
-          add: (index = 0) =>
+          add: (index = 0, type = FormElementTypes.radio) =>
             set((state) => {
               state.form.elements.splice(index + 1, 0, {
                 ...defaultField,
                 id: incrementElementId(state.form.elements),
-                type: FormElementTypes.radio,
+                type,
               });
             }),
           remove: (elementId) =>
