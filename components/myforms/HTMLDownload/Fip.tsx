@@ -43,7 +43,7 @@ const Fip = ({ language }: { language: string }) => {
       </div>
       <div className="inline-flex gap-4">
         <a
-          href={language === "en" ? "#navTitleFr" : "navTitleEn"}
+          href={language === "en" ? "#navTitleFr" : "#navTitleEn"}
           className="gc-language-toggle"
           aria-label={`${t("lang-toggle")}: ${language == "en" ? "Français" : "English"}`}
           lang={language === "en" ? "fr" : "en"}
