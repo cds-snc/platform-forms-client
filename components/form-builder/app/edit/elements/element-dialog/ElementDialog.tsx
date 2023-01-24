@@ -4,22 +4,19 @@ import { FormElementTypes } from "@lib/types";
 
 import { useDialogRef, Dialog, ListBox } from "../../../shared";
 import { useElementOptions } from "../../../../hooks";
-import { useTemplateStore } from "../../../../store";
 import { ElementDescription } from "./ElementDescription";
 
 export const ElementDialog = ({
+  handleAdd,
   handleClose,
   position,
 }: {
+  handleAdd?: (index: number, type?: FormElementTypes) => void;
   handleClose: () => void;
   position: number;
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
-  const { add, setFocusInput } = useTemplateStore((s) => ({
-    add: s.add,
-    setFocusInput: s.setFocusInput,
-  }));
 
   const elementOptions = useElementOptions();
 
@@ -36,9 +33,8 @@ export const ElementDialog = ({
 
   const handleAddElement = useCallback(() => {
     handleClose();
-    add(position, elementOptions[selected].id as FormElementTypes);
-    setFocusInput(true);
-  }, [handleClose, add, position, elementOptions, selected, setFocusInput]);
+    handleAdd && handleAdd(position, id);
+  }, [handleClose, handleAdd, position, id]);
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
