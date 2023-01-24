@@ -39,6 +39,7 @@ export const ListBox = ({
 
   return (
     <div
+      data-testid="listbox"
       ref={listBoxRef}
       role="listbox"
       className="w-42"
