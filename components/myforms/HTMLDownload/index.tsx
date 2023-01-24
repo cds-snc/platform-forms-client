@@ -5,6 +5,7 @@ import Fip from "./Fip";
 import { NextPageWithLayout } from "@pages/_app";
 import Head from "next/head";
 import SkipLink from "@components/globals/SkipLink";
+import Footer from "./Footer";
 
 interface HTMLDownloadFileProps {
   formResponse: any; //TODO
@@ -71,6 +72,7 @@ HTMLDownload.getLayout = (page: ReactElement) => {
       <div id="page-container">
         <main id="content">{page}</main>
       </div>
+      <Footer />
     </div>
   );
 };
