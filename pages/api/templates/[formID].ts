@@ -96,7 +96,7 @@ const templateCRUD = async ({
   isPublished: boolean;
   users: { id: string; action: "add" | "remove" }[];
 }) => {
-  const formID = request.query.formID ? (request.query.formID[0] as string) : undefined;
+  const formID = request.query.formID ? (request.query.formID as string) : undefined;
   switch (method) {
     case "GET":
       if (formID) return await getFullTemplateByID(ability, formID);
