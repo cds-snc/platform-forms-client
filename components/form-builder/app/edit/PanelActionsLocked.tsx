@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { LockIcon } from "../../icons";
-import { AddElement } from "../shared";
+import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
@@ -19,7 +19,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
       </label>
       {addElement && (
         <div className="absolute top-[35px] right-[30px]">
-          <AddElement
+          <AddElementButton
             position={-1}
             onClick={() => {
               // remove onClick once element dialog if fully merged

@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { useTranslation } from "next-i18next";
 
-import { Button, AddElement } from "../shared";
+import { Button } from "../shared";
+import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { Modal } from "./Modal";
 import { FormElementWithIndex } from "@components/form-builder/types";
 import { useTemplateStore } from "@components/form-builder/store";
@@ -226,7 +227,7 @@ export const PanelActions = ({
         )}
       </div>
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <AddElement
+        <AddElementButton
           position={item.index}
           onClick={() => {
             // remove onClick once element dialog if fully merged
