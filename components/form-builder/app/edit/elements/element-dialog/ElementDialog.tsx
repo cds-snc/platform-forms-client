@@ -7,15 +7,14 @@ import { useElementOptions } from "../../../../hooks";
 import { ElementDescription } from "./ElementDescription";
 
 export const ElementDialog = ({
-  handleAdd,
+  handleAddType,
   handleClose,
-  position,
 }: {
-  handleAdd?: (index: number, type?: FormElementTypes) => void;
+  handleAddType?: (type?: FormElementTypes) => void;
   handleClose: () => void;
-  position: number;
 }) => {
   const { t } = useTranslation("form-builder");
+
   const dialog = useDialogRef();
 
   const elementOptions = useElementOptions();
@@ -31,10 +30,10 @@ export const ElementDialog = ({
 
   const id = elementOptions[selected].id as FormElementTypes;
 
-  const handleAddElement = useCallback(() => {
+  const handleAdd = useCallback(() => {
+    handleAddType && handleAddType(id);
     handleClose();
-    handleAdd && handleAdd(position, id);
-  }, [handleClose, handleAdd, position, id]);
+  }, [handleClose, handleAddType, id]);
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
@@ -43,7 +42,7 @@ export const ElementDialog = ({
           <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
           <ListBox options={elementOptions} handleChange={handleChange} />
         </div>
-        <ElementDescription id={id} handleAdd={handleAddElement} />
+        <ElementDescription id={id} handleAdd={handleAdd} />
       </div>
     </Dialog>
   );

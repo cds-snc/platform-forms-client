@@ -41,7 +41,12 @@ export const AddElementButton = ({
         {t("addElement")}
       </Button>
       {elementDialog && (
-        <ElementDialog position={position} handleAdd={handleAdd} handleClose={handleCloseDialog} />
+        <ElementDialog
+          handleAddType={(type) => {
+            handleAdd && handleAdd(position, type);
+          }}
+          handleClose={handleCloseDialog}
+        />
       )}
     </>
   );
