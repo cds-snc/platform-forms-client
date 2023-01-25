@@ -52,7 +52,7 @@ const MyApp: React.FC<AppPropsWithLayout> = ({
           {Component.getLayout ? (
             Component.getLayout(<Component {...pageProps} />)
           ) : (
-            <BaseLayout isHTMLFileDownload={isHTMLFileDownload}>
+            <BaseLayout>
               <Component {...pageProps} />
             </BaseLayout>
           )}
