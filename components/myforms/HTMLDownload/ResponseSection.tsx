@@ -69,17 +69,18 @@ export const ResponseSection = ({
   const CopyToClipboardScript = React.createElement("script", {
     dangerouslySetInnerHTML: {
       __html: `
-      (function () {
-    var btn = document.getElementById("copyCodeButton${capitalize(lang)}");
-    btn.addEventListener("click", function () {
-                var el = document.getElementById("copyCodeMessage${capitalize(lang)}")
-        if(window.copyToClipboard("${t("responseTemplate.copiedCode")}")){
-          el.classList.remove("hidden")
-          el.textContent = "${t("responseTemplate.copiedCode")}"
+(function () {
+    var btn = document.getElementById("copyCodeButton-${capitalize(lang)}");
+    btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        var el = document.getElementById("copyCodeOutput-${capitalize(lang)}");
+        if(window.copyToClipboard("${confirmReceiptCode}")){
+          el.classList.remove("hidden");
+          el.textContent = " ${t("responseTemplate.copiedCode")}";
         } else {
-          el.classList.remove("hidden")
-          el.classList.add("text-red-default")
-          el.textContent = "${t("responseTemplate.copiedCode")}"
+          el.classList.remove("hidden");
+          el.classList.add("text-red-default");
+          el.textContent = " ${t("responseTemplate.copiedCode")}";
         }
     }, false);
 })();
@@ -141,36 +142,44 @@ export const ResponseSection = ({
         lang={capitalizedLang}
       />
 
-      <h2 id={"confirmReceipt" + capitalizedLang} className="mt-20">
-        {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
-      </h2>
-      <p className="mt-4" id={"confirmReceiptInfo-" + lang}>
-        {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
-      </p>
-      <div className="mt-8 font-bold">
-        <input
-          id={"confirmReceiptCodeText-" + lang}
-          type="text"
-          value={confirmReceiptCode}
-          aria-labelledby={"confirmReceiptInfo-" + lang}
-          readOnly
-        />
-      </div>
-      <div className="mt-4 mb-32">
-        <button
-          id={`copyCodeButton${capitalize(lang)}`}
-          className="gc-button--blue"
-          aria-label={t("responseTemplate.copyCodeClipboard")}
-        >
-          {t("responseTemplate.copyCode", { lng: lang })}
-        </button>
-        <span
-          id={`copyCodeMessage${capitalize(lang)}`}
-          aria-live="polite"
-          className="hidden text-green-default ml-8"
-        ></span>
-        {CopyToClipboardScript}
-      </div>
+      {/* Note: form semantics not necessary for a single button but adding to make legend 
+      description, label.. relationships really obvious for AT */}
+      <form>
+        <h2 id={"confirmReceipt" + capitalizedLang} className="mt-20">
+          {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
+        </h2>
+        <fieldset>
+          <legend className="mt-4" id={"confirmReceiptInfo-" + capitalizedLang}>
+            {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
+          </legend>
+          <div className="mt-8 font-bold">
+            <label className="sr-only" htmlFor={"confirmReceiptCodeText-" + capitalizedLang}>
+              Confirm Receipt Code
+            </label>
+            <input
+              id={"confirmReceiptCodeText-" + capitalizedLang}
+              type="text"
+              value={confirmReceiptCode}
+              readOnly
+            />
+          </div>
+          <div className="mt-4 mb-32">
+            <button
+              id={"copyCodeButton-" + capitalizedLang}
+              className="gc-button--blue"
+              type="button"
+            >
+              {t("responseTemplate.copyCode", { lng: lang })}
+            </button>
+            <span
+              id={"copyCodeOutput-" + capitalizedLang}
+              aria-live="polite"
+              className="hidden text-green-default ml-8"
+            ></span>
+            {CopyToClipboardScript}
+          </div>
+        </fieldset>
+      </form>
     </>
   );
 };
