@@ -11,7 +11,7 @@ import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { useActivePathname, TemplateApiProvider } from "../hooks";
 
-export const Template = ({ page, className = "" }: { page: ReactElement; className: string }) => {
+export const Template = ({ page, className = "" }: { page: ReactElement; className?: string }) => {
   return (
     <TemplateStoreProvider
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
