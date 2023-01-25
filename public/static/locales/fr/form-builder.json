@@ -296,5 +296,9 @@
       "title": "Numeric title",
       "description": "Numeric desc"
     }
+  },
+  "share": {
+    "title": "[FR] Share",
+    "email": "[FR] Share with email"
   }
 }
