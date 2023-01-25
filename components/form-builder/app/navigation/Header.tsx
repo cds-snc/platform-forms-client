@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
+import { SiteLogo } from "@formbuilder/icons";
 
 export const Header = () => {
   const { status } = useSession();
@@ -19,13 +20,16 @@ export const Header = () => {
   }, []);
 
   return (
-    <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">
+    <header className="border-b-1 border-gray-500 mt-4 mb-12 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
         <div>
           <Link href="/form-builder">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a className="inline-block mr-10 text-h2 mb-6 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none">
-              {t("title", { ns: "common" })}
+            <a
+              id="logo"
+              className="inline-block pr-5 border-r-1 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
+            >
+              <SiteLogo title={t("title", { ns: "common" })} />
             </a>
           </Link>
         </div>

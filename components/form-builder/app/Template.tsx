@@ -11,7 +11,7 @@ import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { useActivePathname, TemplateApiProvider } from "../hooks";
 
-export const Template = ({ page }: { page: ReactElement }) => {
+export const Template = ({ page, className = "" }: { page: ReactElement; className: string }) => {
   return (
     <TemplateStoreProvider
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
@@ -22,7 +22,7 @@ export const Template = ({ page }: { page: ReactElement }) => {
           <meta charSet="utf-8" />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         </Head>
-        <div className="flex flex-col h-full">
+        <div className={`flex flex-col h-full ${className}`}>
           <SkipLink />
           <Header />
           {page}
