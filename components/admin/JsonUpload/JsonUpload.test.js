@@ -43,7 +43,7 @@ describe("JSON Upload Component", () => {
     fireEvent.click(screen.queryByTestId("upload"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "PUT" })
+      expect.objectContaining({ url: "/api/templates/test", method: "PUT" })
     );
     expect(await screen.findByTestId("submitStatus")).toBeInTheDocument();
   });

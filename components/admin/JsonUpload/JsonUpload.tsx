@@ -83,15 +83,16 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
    * @throws Error if the JSON is invalid
    */
   const uploadJson = async (jsonConfig: string, formID?: string) => {
+    const url = formID ? `/api/templates/${formID}` : "/api/templates";
+
     return await axios({
-      url: "/api/templates",
+      url: url,
       method: formID ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
       },
       data: {
         formConfig: JSON.parse(jsonConfig),
-        formID: formID,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });
