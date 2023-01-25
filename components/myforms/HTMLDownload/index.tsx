@@ -32,6 +32,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
   });
   return (
     <>
+      <h1 className="sr-only">{`${formTemplate.titleEn} - ${formTemplate.titleFr}`}</h1>
       <div className="mt-14" />
       <ProtectedWarning lang="en" />
       <Fip language="en" />
@@ -45,9 +46,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
         formTemplate={formTemplate}
         formResponse={formResponse}
       />
-
       <div className="mt-20" />
-
       <ProtectedWarning lang="fr" />
       <Fip language="fr" />
       <div className="mt-14" />

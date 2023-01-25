@@ -76,11 +76,11 @@ export const ResponseSection = ({
         var el = document.getElementById("copyCodeOutput-${capitalize(lang)}");
         if(window.copyToClipboard("${confirmReceiptCode}")){
           el.classList.remove("hidden");
-          el.textContent = " ${t("responseTemplate.copiedCode")}";
+          el.textContent = "${t("responseTemplate.copiedCode")}";
         } else {
           el.classList.remove("hidden");
           el.classList.add("text-red-default");
-          el.textContent = " ${t("responseTemplate.copiedCode")}";
+          el.textContent = "${t("responseTemplate.copiedCode")}";
         }
     }, false);
 })();
@@ -116,10 +116,10 @@ export const ResponseSection = ({
         </ul>
       </nav>
 
-      <h1 className="mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h1>
-      <h2 id={"columnTable" + capitalizedLang} className="mt-20">
+      <h2 className="gc-h1 mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h2>
+      <h3 id={"columnTable" + capitalizedLang} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
-      </h2>
+      </h3>
       <Table
         responseID={responseID}
         submissionDate={submissionDate}
@@ -129,9 +129,9 @@ export const ResponseSection = ({
         lang={capitalizedLang}
       />
 
-      <h2 id={"rowTable" + capitalizedLang} className="mt-20">
+      <h3 id={"rowTable" + capitalizedLang} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}
-      </h2>
+      </h3>
       <p className="mb-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
       <Table
         responseID={responseID}
@@ -145,9 +145,9 @@ export const ResponseSection = ({
       {/* Note: form semantics not necessary for a single button but adding to make legend 
       description, label.. relationships really obvious for AT */}
       <form>
-        <h2 id={"confirmReceipt" + capitalizedLang} className="mt-20">
+        <h3 id={"confirmReceipt" + capitalizedLang} className="gc-h2 mt-20">
           {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
-        </h2>
+        </h3>
         <fieldset>
           <legend className="mt-4" id={"confirmReceiptInfo-" + capitalizedLang}>
             {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
