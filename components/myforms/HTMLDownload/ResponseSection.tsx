@@ -1,7 +1,7 @@
 import React from "react";
 import { Table } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
-import copy from "copy-to-clipboard";
+
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 
 export interface ResponseSectionProps {
@@ -71,7 +71,7 @@ export const ResponseSection = ({
   const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
 
   function handleCopyCode(elRef: React.RefObject<HTMLSpanElement>) {
-    if (copy(confirmReceiptCode)) {
+    if (confirmReceiptCode) {
       if (elRef?.current) {
         elRef.current.classList.remove("hidden");
         elRef.current.textContent = t("responseTemplate.copiedCode");
