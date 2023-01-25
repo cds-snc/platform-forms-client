@@ -37,7 +37,11 @@ export const Table = (props: TableProps): React.ReactElement => {
             <dt className="w-80 font-bold pt-2 pb-2">
               {t("responseTemplate.submissionDate", { lng: lang })}
             </dt>
-            <dd className="max-w-[50rem] pt-2 pb-2">{submissionDate}</dd>
+            <dd className="max-w-[50rem] pt-2 pb-2">
+              {new Date(submissionDate).toLocaleString(`${lang + "-CA"}`, {
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+              })}
+            </dd>
           </div>
           <div className="flex border-b border-grey-default">
             <dt className="w-80 font-bold pt-2 pb-2">

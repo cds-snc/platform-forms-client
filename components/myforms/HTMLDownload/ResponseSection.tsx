@@ -70,20 +70,26 @@ export const ResponseSection = ({
   const capitalizedLang = capitalize(lang);
   const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
 
-  function handleCopyCode(elRef: React.RefObject<HTMLSpanElement>) {
-    if (confirmReceiptCode) {
-      if (elRef?.current) {
-        elRef.current.classList.remove("hidden");
-        elRef.current.textContent = t("responseTemplate.copiedCode");
-      }
-    } else {
-      if (elRef?.current) {
-        elRef.current.classList.remove("hidden");
-        elRef.current.classList.add("text-red-default");
-        elRef.current.textContent = t("responseTemplate.errorrCopiedCode");
-      }
-    }
-  }
+  const CopyToClipboardScript = React.createElement("script", {
+    dangerouslySetInnerHTML: {
+      __html: `
+      (function () {
+    var btn = document.getElementById("copyCodeButton${capitalize(lang)}");
+    btn.addEventListener("click", function () {
+                var el = document.getElementById("copyCodeMessage${capitalize(lang)}")
+        if(window.copyToClipboard("${t("responseTemplate.copiedCode")}")){
+          el.classList.remove("hidden")
+          el.textContent = "${t("responseTemplate.copiedCode")}"
+        } else {
+          el.classList.remove("hidden")
+          el.classList.add("text-red-default")
+          el.textContent = "${t("responseTemplate.copiedCode")}"
+        }
+    }, false);
+})();
+      `,
+    },
+  });
 
   return (
     <>
@@ -146,19 +152,19 @@ export const ResponseSection = ({
       <p className="mt-8 font-bold">{confirmReceiptCode}</p>
       <div className="mt-4 mb-32">
         <button
+          id={`copyCodeButton${capitalize(lang)}`}
           className="gc-button--blue"
           aria-label={t("responseTemplate.copyCodeClipboard")}
-          onClick={() => {
-            handleCopyCode(confirmCodeOutputRef);
-          }}
         >
           {t("responseTemplate.copyCode", { lng: lang })}
         </button>
         <span
+          id={`copyCodeMessage${capitalize(lang)}`}
           ref={confirmCodeOutputRef}
           aria-live="polite"
           className="hidden text-green-default ml-8"
         ></span>
+        {CopyToClipboardScript}
       </div>
     </>
   );
