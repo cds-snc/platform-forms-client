@@ -1,7 +1,6 @@
 import React from "react";
 import { Table } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
-import copy from "copy-to-clipboard";
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
 
 export interface ResponseSectionProps {
@@ -64,26 +63,8 @@ export const ResponseSection = ({
   formResponse,
 }: ResponseSectionProps) => {
   const { t } = useTranslation(["my-forms"]);
-
-  const confirmCodeOutputRef = React.createRef<HTMLSpanElement>();
-
   const capitalizedLang = capitalize(lang);
   const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
-
-  function handleCopyCode(elRef: React.RefObject<HTMLSpanElement>) {
-    if (copy(confirmReceiptCode)) {
-      if (elRef?.current) {
-        elRef.current.classList.remove("hidden");
-        elRef.current.textContent = t("responseTemplate.copiedCode");
-      }
-    } else {
-      if (elRef?.current) {
-        elRef.current.classList.remove("hidden");
-        elRef.current.classList.add("text-red-default");
-        elRef.current.textContent = t("responseTemplate.errorrCopiedCode");
-      }
-    }
-  }
 
   return (
     <>
@@ -142,20 +123,28 @@ export const ResponseSection = ({
       <h2 id={"confirmReceipt" + capitalizedLang} className="mt-20">
         {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
       </h2>
-      <p className="mt-4">{t("responseTemplate.confirmReceiptInfo", { lng: lang })}</p>
-      <p className="mt-8 font-bold">{confirmReceiptCode}</p>
+      <p className="mt-4" id={"confirmReceiptInfo-" + lang}>
+        {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
+      </p>
+      <div className="mt-8 font-bold">
+        <input
+          id={"confirmReceiptCodeText-" + lang}
+          type="text"
+          value={confirmReceiptCode}
+          aria-labelledby={"confirmReceiptInfo-" + lang}
+          readOnly
+        />
+      </div>
       <div className="mt-4 mb-32">
         <button
+          id={"copyCodeButton-" + lang}
           className="gc-button--blue"
           aria-label={t("responseTemplate.copyCodeClipboard")}
-          onClick={() => {
-            handleCopyCode(confirmCodeOutputRef);
-          }}
         >
           {t("responseTemplate.copyCode", { lng: lang })}
         </button>
         <span
-          ref={confirmCodeOutputRef}
+          id={"copyCodeOutput-" + lang}
           aria-live="polite"
           className="hidden text-green-default ml-8"
         ></span>
