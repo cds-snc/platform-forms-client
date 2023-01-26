@@ -234,6 +234,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         ttl: true,
+        updated_at: true,
         users: {
           select: {
             id: true,
@@ -295,6 +296,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         ttl: true,
+        updated_at: true,
         users: {
           select: {
             id: true,

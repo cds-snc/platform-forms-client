@@ -50,7 +50,7 @@ export const SaveButton = () => {
     <div
       data-id={id}
       className={`mt-12 p-4 -ml-4 w-52 xl:w-40 xl:text-sm ${
-        error ? "bg-red-100" : "bg-yellow-100"
+        id && (error ? "bg-red-100" : "bg-yellow-100")
       }`}
     >
       <Button onClick={handleSave}>{t("saveDraft", { ns: "form-builder" })}</Button>

@@ -208,6 +208,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(
         id: true,
         jsonConfig: true,
         isPublished: true,
+        updated_at: true,
         ttl: true,
         users: {
           select: {

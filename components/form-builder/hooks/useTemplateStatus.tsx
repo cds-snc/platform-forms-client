@@ -7,10 +7,14 @@ import { useTemplateStore } from "../store";
 
 interface FormTemplate {
   id: string;
-  updatedAt: number;
+  updated_at: number;
 }
 
 export const byId = async (id: string): Promise<FormTemplate | null> => {
+  if (!id) {
+    return null;
+  }
+
   try {
     const result = await axios({
       url: `/api/templates/${id}`,
@@ -22,7 +26,6 @@ export const byId = async (id: string): Promise<FormTemplate | null> => {
     if (result.status !== 200) {
       return null;
     }
-
     return result.data;
   } catch (err) {
     logMessage.error(err);
@@ -41,7 +44,7 @@ export const useTemplateStatus = () => {
   const getTemplateById = useCallback(async () => {
     if ("authenticated" === status) {
       const template = await byId(id);
-      setUpdatedAt(template?.updatedAt);
+      setUpdatedAt(template?.updated_at);
     }
   }, [id, status]);
 
