@@ -53,6 +53,10 @@
     "formBuilderAddElementDialog": {
       "title": "Form Builder Add Element Dialog",
       "description": "Enable dialog when adding elements to the form builder"
+    },
+    "shareMenu": {
+      "title": "Share Menu",
+      "description": "Enable share menu dropdown"
     }
   }
 }
