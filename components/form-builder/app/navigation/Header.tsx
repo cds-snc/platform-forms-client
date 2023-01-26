@@ -6,6 +6,7 @@ import { useTranslation } from "next-i18next";
 
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
+import { ShareButton } from "../share/ShareButton";
 
 export const Header = () => {
   const { status } = useSession();
@@ -34,6 +35,9 @@ export const Header = () => {
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
+            <li>
+              <ShareButton />
+            </li>
             <li className="md:text-small_base text-base font-normal not-italic mr-4">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>

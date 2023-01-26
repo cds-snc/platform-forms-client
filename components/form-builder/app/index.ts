@@ -9,3 +9,5 @@ export { Preview } from "./Preview";
 export { Publish } from "./Publish";
 export { Published } from "./Published";
 export { Edit } from "./edit";
+export { ShareButton } from "./share/ShareButton";
+export { ShareModal } from "./share/ShareModal";
