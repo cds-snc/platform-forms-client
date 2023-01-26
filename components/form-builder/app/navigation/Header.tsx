@@ -11,7 +11,7 @@ import { SiteLogo } from "@formbuilder/icons";
 import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
 
-export const Header = ({ shareMenu = false }: { shareMenu: boolean }) => {
+export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
   const { status } = useSession();
   const { isLoading, status: shareEnabled } = useFlag("shareMenu");
   const { status: editableFilename } = useFlag("editableFilename");
@@ -43,14 +43,14 @@ export const Header = ({ shareMenu = false }: { shareMenu: boolean }) => {
               )}
             </a>
           </Link>
-          {editableFilename && <FileNameInput />}
+          {isFormBuilder && editableFilename && <FileNameInput />}
         </div>
         <nav
           className={`${editableFilename && "mt-3"} inline-flex gap-4 `}
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
-            {shareMenu && !isLoading && shareEnabled && (
+            {isFormBuilder && !isLoading && shareEnabled && (
               <li className="md:text-small_base text-base font-normal not-italic mr-4">
                 <ShareDropdown />
               </li>

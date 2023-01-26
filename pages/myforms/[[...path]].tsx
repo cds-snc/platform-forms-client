@@ -129,7 +129,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <Template page={page}></Template>;
+  return <Template page={page} className="my-forms"></Template>;
 };
 
 export const getServerSideProps = requireAuthentication(

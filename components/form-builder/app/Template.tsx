@@ -13,11 +13,11 @@ import { useActivePathname, TemplateApiProvider } from "../hooks";
 
 export const Template = ({
   page,
-  shareMenu = false,
+  isFormBuilder = false,
   className = "",
 }: {
   page: ReactElement;
-  shareMenu?: boolean;
+  isFormBuilder?: boolean;
   className?: string;
 }) => {
   return (
@@ -32,7 +32,7 @@ export const Template = ({
         </Head>
         <div className={`flex flex-col h-full ${className}`}>
           <SkipLink />
-          <Header shareMenu={shareMenu} />
+          <Header isFormBuilder={isFormBuilder} />
           {page}
           <Footer displaySLAAndSupportLinks />
         </div>
