@@ -297,5 +297,9 @@
       "description": "Numeric desc"
     }
   },
-  "untitledForm": "Untitled form"
+  "untitledForm": "Untitled form",
+  "share": {
+    "title": "[FR] Share",
+    "email": "[FR] Share with email"
+  }
 }

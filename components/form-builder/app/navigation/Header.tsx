@@ -4,13 +4,16 @@ import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
+import { useFlag } from "@lib/hooks";
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
 import { FileNameInput } from "./FileName";
+import { ShareDropdown } from "./ShareDropdown";
 
-export const Header = () => {
+export const Header = ({ shareMenu = false }: { shareMenu: boolean }) => {
   const { status } = useSession();
+  const { isLoading, status: shareEnabled } = useFlag("shareMenu");
   const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
@@ -48,6 +51,11 @@ export const Header = () => {
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
+            {shareMenu && !isLoading && shareEnabled && (
+              <li className="md:text-small_base text-base font-normal not-italic mr-4">
+                <ShareDropdown />
+              </li>
+            )}
             <li className="md:text-small_base text-base font-normal not-italic mr-4">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
