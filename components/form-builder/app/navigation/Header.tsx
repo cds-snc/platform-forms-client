@@ -7,6 +7,7 @@ import { useTranslation } from "next-i18next";
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
+import { FileNameInput } from "./FileName";
 
 export const Header = () => {
   const { status } = useSession();
@@ -22,19 +23,20 @@ export const Header = () => {
   return (
     <header className="border-b-1 border-gray-500 mt-4 mb-12 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
-        <div>
+        <div className="flex">
           <Link href="/form-builder">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className="inline-block pr-5 border-r-1 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
+              className="mb-2 inline-block pr-5 border-r-1 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
             >
               <SiteLogo title={t("title", { ns: "common" })} />
             </a>
           </Link>
+          <FileNameInput />
         </div>
         <nav
-          className="inline-flex gap-4"
+          className="inline-flex gap-4 mt-3"
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">

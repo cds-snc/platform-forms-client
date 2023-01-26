@@ -102,6 +102,8 @@ export interface BrandProperties {
 export interface FormProperties {
   titleEn: string;
   titleFr: string;
+  internalTitleEn?: string;
+  internalTitleFr?: string;
   emailSubjectEn?: string;
   emailSubjectFr?: string;
   version: number;
