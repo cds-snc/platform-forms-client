@@ -14,6 +14,8 @@ export const Header = () => {
   const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
+  const editableFilename = true;
+
   useEffect(() => {
     refreshAbility();
     // we only want to run this once on mount
@@ -28,15 +30,21 @@ export const Header = () => {
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className="mb-2 inline-block pr-5 border-r-1 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
+              className={`${
+                editableFilename && "border-r-1"
+              } mb-2 inline-block pr-5 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
             >
-              <SiteLogo title={t("title", { ns: "common" })} />
+              {editableFilename ? (
+                <SiteLogo title={t("title", { ns: "common" })} />
+              ) : (
+                t("title", { ns: "common" })
+              )}
             </a>
           </Link>
-          <FileNameInput />
+          {editableFilename && <FileNameInput />}
         </div>
         <nav
-          className="inline-flex gap-4 mt-3"
+          className={`${editableFilename && "mt-3"} inline-flex gap-4 `}
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
