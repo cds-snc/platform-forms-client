@@ -83,8 +83,8 @@ model Template {
 model DeliveryOption {
   id             String   @id @default(cuid())
   emailAddress   String
-  emailSubjectEn String
-  emailSubjectFr String
+  emailSubjectEn String?
+  emailSubjectFr String?
   templateId     String   @unique
   template       Template @relation(fields: [templateId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

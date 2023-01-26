@@ -19,6 +19,7 @@ import {
   getTemplateWithAssociatedUsers,
   updateAssignedUsersForTemplate,
   TemplateAlreadyPublishedError,
+  removeDeliveryOption,
 } from "../templates";
 
 import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
@@ -52,7 +53,7 @@ const buildPrismaResponse = (
   id: string,
   jsonConfig: object,
   isPublished = false,
-  deliveryOption: DeliveryOption = { emailAddress: "", emailSubjectEn: "", emailSubjectFr: "" },
+  deliveryOption?: DeliveryOption,
   securityAttribute = "Unclassified"
 ) => {
   return {
@@ -89,13 +90,6 @@ describe("Template CRUD functions", () => {
     expect(prismaMock.template.create).toHaveBeenCalledWith({
       data: {
         jsonConfig: formConfiguration,
-        deliveryOption: {
-          create: {
-            emailAddress: "",
-            emailSubjectEn: "",
-            emailSubjectFr: "",
-          },
-        },
         users: {
           connect: { id: "1" },
         },
@@ -109,11 +103,6 @@ describe("Template CRUD functions", () => {
       id: "formtestID",
       form: formConfiguration,
       isPublished: false,
-      deliveryOption: {
-        emailAddress: "",
-        emailSubjectEn: "",
-        emailSubjectFr: "",
-      },
       securityAttribute: "Unclassified",
     });
   });
@@ -133,22 +122,12 @@ describe("Template CRUD functions", () => {
         id: "formtestID",
         form: formConfiguration,
         isPublished: false,
-        deliveryOption: {
-          emailAddress: "",
-          emailSubjectEn: "",
-          emailSubjectFr: "",
-        },
         securityAttribute: "Unclassified",
       },
       {
         id: "formtestID2",
         form: formConfiguration,
         isPublished: false,
-        deliveryOption: {
-          emailAddress: "",
-          emailSubjectEn: "",
-          emailSubjectFr: "",
-        },
         securityAttribute: "Unclassified",
       },
     ]);
@@ -289,11 +268,6 @@ describe("Template CRUD functions", () => {
       id: "formtestID",
       form: formConfiguration,
       isPublished: false,
-      deliveryOption: {
-        emailAddress: "",
-        emailSubjectEn: "",
-        emailSubjectFr: "",
-      },
       securityAttribute: "Unclassified",
     });
   });
@@ -408,11 +382,6 @@ describe("Template CRUD functions", () => {
       id: "formtestID",
       form: updatedFormConfig,
       isPublished: true,
-      deliveryOption: {
-        emailAddress: "",
-        emailSubjectEn: "",
-        emailSubjectFr: "",
-      },
       securityAttribute: "Unclassified",
     });
   });
@@ -454,11 +423,6 @@ describe("Template CRUD functions", () => {
       id: "formtestID",
       form: formConfiguration,
       isPublished: true,
-      deliveryOption: {
-        emailAddress: "",
-        emailSubjectEn: "",
-        emailSubjectFr: "",
-      },
       securityAttribute: "Unclassified",
     });
   });
@@ -523,6 +487,51 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new TemplateAlreadyPublishedError());
   });
 
+  it.each([[Base], [ManageForms]])("Remove DeliveryOption from template", async (privileges) => {
+    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      ...buildPrismaResponse("formtestID", formConfiguration),
+      users: [{ id: "1" }],
+    });
+
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      buildPrismaResponse("formtestID", formConfiguration)
+    );
+
+    const updatedTemplate = await removeDeliveryOption(ability, "formtestID");
+
+    expect(prismaMock.template.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          id: "formtestID",
+        },
+        data: {
+          deliveryOption: {
+            delete: true,
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+    );
+
+    expect(updatedTemplate).toEqual({
+      id: "formtestID",
+      form: formConfiguration,
+      isPublished: false,
+      securityAttribute: "Unclassified",
+    });
+  });
+
   it.each([[Base], [ManageForms]])("Delete template", async (privileges) => {
     const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
 
@@ -562,11 +571,6 @@ describe("Template CRUD functions", () => {
       id: "formtestID",
       form: formConfiguration,
       isPublished: false,
-      deliveryOption: {
-        emailAddress: "",
-        emailSubjectEn: "",
-        emailSubjectFr: "",
-      },
       securityAttribute: "Unclassified",
     });
   });
@@ -624,6 +628,10 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
+      await removeDeliveryOption(ability, "formtestID");
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    await expect(async () => {
       await deleteTemplate(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
@@ -646,6 +654,10 @@ describe("Template CRUD functions", () => {
 
     await expect(async () => {
       await updateIsPublishedForTemplate(ability, "formtestID", true);
+    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+
+    await expect(async () => {
+      await removeDeliveryOption(ability, "formtestID");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {

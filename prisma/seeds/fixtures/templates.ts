@@ -16,16 +16,14 @@ const LemonadeStand = {
       "[fr] Thank you for your interest in the CDS. Send your question using the form below.",
   },
   privacyPolicy: {
-    descriptionEn:
-      "Find out how <a href='https://digital.canada.ca/legal/privacy'>CDS protects your privacy</a>.",
-    descriptionFr:
-      "[fr] Find out how <a href='https://digital.canada.ca/legal/privacy'>CDS protects your privacy</a>.",
+    descriptionEn: "Find out how CDS protects your privacy.",
+    descriptionFr: "[fr] Find out how CDS protects your privacy.",
   },
   confirmation: {
     descriptionEn:
-      "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.  \n\r <a href='https://digital.canada.ca'>Go back</a>",
+      "#Your submission has been received \n\r Thank you for your interest. We will contact you within 3-5 business days.",
     descriptionFr:
-      "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days. \n\r <a href='https://digital.canada.ca'>Go back</a>",
+      "#[fr] Your submission has been received. \n\r Thank you for your interest. We will contact you within 3-5 business days.",
     referrerUrlEn: "",
     referrerUrlFr: "",
   },

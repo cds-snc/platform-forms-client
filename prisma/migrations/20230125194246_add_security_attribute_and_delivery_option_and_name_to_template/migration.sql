@@ -7,8 +7,8 @@ ALTER COLUMN "updated_at" DROP DEFAULT;
 CREATE TABLE "DeliveryOption" (
     "id" TEXT NOT NULL,
     "emailAddress" TEXT NOT NULL,
-    "emailSubjectEn" TEXT NOT NULL,
-    "emailSubjectFr" TEXT NOT NULL,
+    "emailSubjectEn" TEXT,
+    "emailSubjectFr" TEXT,
     "templateId" TEXT NOT NULL,
 
     CONSTRAINT "DeliveryOption_pkey" PRIMARY KEY ("id")

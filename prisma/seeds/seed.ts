@@ -3,29 +3,19 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { parse } from "ts-command-line-args";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
-import { AnyObject } from "@lib/types";
+import { AnyObject, DeliveryOption } from "@lib/types";
 
 const prisma = new PrismaClient();
 
 async function createTemplates(env: string) {
-  const templatesToCreate = seedTemplates[env].map((formConfig) => {
-    return prisma.template.create({
-      data: {
-        jsonConfig: formConfig,
-        deliveryOption: {
-          create: {
-            emailAddress: "",
-            emailSubjectEn: "",
-            emailSubjectFr: "",
-          },
-        },
-      },
-    });
+  // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
+  const typeSafeTemplateData = seedTemplates[env].map((formConfig) => ({
+    jsonConfig: formConfig !== null ? (formConfig as Prisma.JsonObject) : Prisma.JsonNull,
+  }));
+
+  return prisma.template.createMany({
+    data: [...typeSafeTemplateData],
   });
-
-  await Promise.all(templatesToCreate);
-
-  console.log(`Created ${seedTemplates[env].length} templates`);
 }
 
 async function createPrivileges(env: string) {
@@ -33,13 +23,10 @@ async function createPrivileges(env: string) {
     ...privilege,
     permissions: privilege.permissions !== null ? privilege.permissions : Prisma.JsonNull,
   }));
-
-  await prisma.privilege.createMany({
+  return prisma.privilege.createMany({
     data: typeSafePrivilegeData,
     skipDuplicates: true,
   });
-
-  console.log(`Created ${seedPrivileges[env].length} privileges`);
 }
 
 //Can be removed once we know that the migration is completed
@@ -111,11 +98,18 @@ async function templateSchemaMigration() {
 
       const name = formProperties.internalTitleEn ?? "";
 
-      const deliveryOption = {
-        emailAddress: formProperties.submission.email ?? "",
-        emailSubjectEn: formProperties.form.emailSubjectEn ?? "",
-        emailSubjectFr: formProperties.form.emailSubjectFr ?? "",
+      const findDeliveryOption = (): DeliveryOption | null => {
+        if (formProperties.submission.email && formProperties.submission.email !== "") {
+          return {
+            emailAddress: formProperties.submission.email,
+            emailSubjectEn: formProperties.form.emailSubjectEn,
+            emailSubjectFr: formProperties.form.emailSubjectFr,
+          };
+        }
+        return null;
       };
+
+      const deliveryOption = findDeliveryOption();
 
       const securityAttribute = formProperties.form.securityAttribute ?? "Unclassified";
 
@@ -126,13 +120,15 @@ async function templateSchemaMigration() {
         data: {
           name: name,
           jsonConfig: newJsonConfiguration as Prisma.JsonObject,
-          deliveryOption: {
-            create: {
-              emailAddress: deliveryOption.emailAddress as string,
-              emailSubjectEn: deliveryOption.emailSubjectEn as string,
-              emailSubjectFr: deliveryOption.emailSubjectFr as string,
+          ...(deliveryOption && {
+            deliveryOption: {
+              create: {
+                emailAddress: deliveryOption.emailAddress as string,
+                emailSubjectEn: deliveryOption.emailSubjectEn as string,
+                emailSubjectFr: deliveryOption.emailSubjectFr as string,
+              },
             },
-          },
+          }),
           securityAttribute: securityAttribute as string,
         },
       });
@@ -149,8 +145,7 @@ async function main() {
   });
 
   console.log(`Seeding Database for ${environment} enviroment`);
-  await createTemplates(environment);
-  await createPrivileges(environment);
+  await Promise.all([createTemplates(environment), createPrivileges(environment)]);
 
   console.log("Running 'publishingStatus' migration");
   await publishingStatusMigration();

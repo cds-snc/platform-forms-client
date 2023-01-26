@@ -115,8 +115,8 @@ export interface FormProperties {
 // defines the fields in the object that controls how form submissions are delivered
 export interface DeliveryOption {
   emailAddress: string;
-  emailSubjectEn: string;
-  emailSubjectFr: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
 }
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes
@@ -127,7 +127,7 @@ export type FormRecord = {
   name: string;
   form: FormProperties;
   isPublished: boolean;
-  deliveryOption: DeliveryOption;
+  deliveryOption?: DeliveryOption;
   securityAttribute: string;
   bearerToken?: string;
   reCaptchaID?: string;

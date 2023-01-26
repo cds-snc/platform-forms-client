@@ -6,6 +6,7 @@ import {
   onlyIncludePublicProperties,
   TemplateAlreadyPublishedError,
   getFullTemplateByID,
+  removeDeliveryOption,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -90,6 +91,7 @@ const templateCRUD = async ({
   deliveryOption,
   isPublished,
   users,
+  sendResponsesToVault,
 }: {
   ability: MongoAbility;
   method: string;
@@ -99,6 +101,7 @@ const templateCRUD = async ({
   deliveryOption?: DeliveryOption;
   isPublished?: boolean;
   users?: { id: string; action: "add" | "remove" }[];
+  sendResponsesToVault?: boolean;
 }) => {
   const formID = request.query.formID as string;
   switch (method) {
@@ -112,6 +115,8 @@ const templateCRUD = async ({
         return await updateIsPublishedForTemplate(ability, formID, isPublished);
       } else if (formID && users) {
         return await updateAssignedUsersForTemplate(ability, formID, users);
+      } else if (formID && sendResponsesToVault) {
+        return await removeDeliveryOption(ability, formID);
       }
       throw new Error("Missing formID and/or formConfig");
     case "DELETE":

@@ -62,7 +62,7 @@ export interface TemplateStoreProps {
   form: FormProperties;
   isPublished: boolean;
   name: string;
-  deliveryOption: DeliveryOption;
+  deliveryOption?: DeliveryOption;
   securityAttribute: string;
 }
 
@@ -103,7 +103,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSchema: () => string;
   getIsPublished: () => boolean;
   getName: () => string;
-  getDeliveryOption: () => DeliveryOption;
+  getDeliveryOption: () => DeliveryOption | undefined;
   getSecurityAttribute: () => string;
   initialize: () => void;
 }
@@ -133,11 +133,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     form: defaultForm,
     isPublished: false,
     name: "",
-    deliveryOption: {
-      emailAddress: "",
-      emailSubjectEn: "",
-      emailSubjectFr: "",
-    },
     securityAttribute: "Unclassified",
   };
 
@@ -265,7 +260,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = defaultForm;
               state.isPublished = false;
               state.name = "";
-              state.deliveryOption = { emailAddress: "", emailSubjectEn: "", emailSubjectFr: "" };
               state.securityAttribute = "Unclassified";
             });
           },
@@ -276,7 +270,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               state.form = { ...defaultForm, ...jsonConfig };
               state.isPublished = false;
               state.name = "";
-              state.deliveryOption = { emailAddress: "", emailSubjectEn: "", emailSubjectFr: "" };
               state.securityAttribute = "Unclassified";
             }),
         }),

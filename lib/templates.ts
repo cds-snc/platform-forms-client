@@ -30,13 +30,15 @@ async function _createTemplate(
         ...(name && {
           name: name,
         }),
-        deliveryOption: {
-          create: {
-            emailAddress: deliveryOption?.emailAddress ?? "",
-            emailSubjectEn: deliveryOption?.emailSubjectEn ?? "",
-            emailSubjectFr: deliveryOption?.emailSubjectFr ?? "",
+        ...(deliveryOption && {
+          deliveryOption: {
+            create: {
+              emailAddress: deliveryOption.emailAddress,
+              emailSubjectEn: deliveryOption.emailSubjectEn,
+              emailSubjectFr: deliveryOption.emailSubjectFr,
+            },
           },
-        },
+        }),
         users: {
           connect: { id: userID },
         },
@@ -321,10 +323,17 @@ async function _updateTemplate(
         }),
         ...(deliveryOption && {
           deliveryOption: {
-            update: {
-              emailAddress: deliveryOption.emailAddress,
-              emailSubjectEn: deliveryOption.emailSubjectEn,
-              emailSubjectFr: deliveryOption.emailSubjectFr,
+            upsert: {
+              create: {
+                emailAddress: deliveryOption.emailAddress,
+                emailSubjectEn: deliveryOption.emailSubjectEn,
+                emailSubjectFr: deliveryOption.emailSubjectFr,
+              },
+              update: {
+                emailAddress: deliveryOption.emailAddress,
+                emailSubjectEn: deliveryOption.emailSubjectEn,
+                emailSubjectFr: deliveryOption.emailSubjectFr,
+              },
             },
           },
         }),
@@ -453,6 +462,63 @@ async function _updateAssignedUsersForTemplate(
 }
 
 /**
+ * Remove DeliveryOption from template. Form responses will be sent to the Vault.
+ * @param formID The unique identifier of the form you want to modify
+ * @returns The updated form template or null if the record does not exist
+ */
+async function _removeDeliveryOption(
+  ability: MongoAbility,
+  formID: string
+): Promise<FormRecord | null> {
+  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+  if (!templateWithAssociatedUsers) return null;
+
+  checkPrivileges(ability, [
+    {
+      action: "update",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...templateWithAssociatedUsers.formRecord,
+          users: templateWithAssociatedUsers.users,
+        },
+      },
+    },
+  ]);
+
+  // Prevent already published templates from being updated
+  if (templateWithAssociatedUsers.formRecord.isPublished) throw new TemplateAlreadyPublishedError();
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formID,
+      },
+      data: {
+        deliveryOption: {
+          delete: true,
+        },
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  return _parseTemplate(updatedTemplate);
+}
+
+/**
  * Deletes a form template. The template will stay in the database for 30 days in an archived state until a lambda function deletes it from the database.
  * @param formID ID of the form template
  * @returns A boolean status if operation is sucessful
@@ -535,8 +601,8 @@ const _parseTemplate = (template: {
   isPublished: boolean;
   deliveryOption: {
     emailAddress: string;
-    emailSubjectEn: string;
-    emailSubjectFr: string;
+    emailSubjectEn: string | null;
+    emailSubjectFr: string | null;
   } | null;
   securityAttribute: string;
 }): FormRecord => {
@@ -551,11 +617,17 @@ const _parseTemplate = (template: {
     name: template.name,
     form: template.jsonConfig as FormProperties,
     isPublished: template.isPublished,
-    deliveryOption: {
-      emailAddress: template.deliveryOption?.emailAddress ?? "",
-      emailSubjectEn: template.deliveryOption?.emailSubjectEn ?? "",
-      emailSubjectFr: template.deliveryOption?.emailSubjectFr ?? "",
-    },
+    ...(template.deliveryOption && {
+      deliveryOption: {
+        emailAddress: template.deliveryOption.emailAddress,
+        ...(template.deliveryOption.emailSubjectEn && {
+          emailSubjectEn: template.deliveryOption.emailSubjectEn,
+        }),
+        ...(template.deliveryOption.emailSubjectFr && {
+          emailSubjectFr: template.deliveryOption.emailSubjectFr,
+        }),
+      },
+    }),
     securityAttribute: template.securityAttribute,
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
@@ -572,5 +644,6 @@ export const getTemplateWithAssociatedUsers = logger(_getTemplateWithAssociatedU
 export const updateTemplate = logger(_updateTemplate);
 export const updateIsPublishedForTemplate = logger(_updateIsPublishedForTemplate);
 export const updateAssignedUsersForTemplate = logger(_updateAssignedUsersForTemplate);
+export const removeDeliveryOption = logger(_removeDeliveryOption);
 export const deleteTemplate = logger(_deleteTemplate);
 export const onlyIncludePublicProperties = logger(_onlyIncludePublicProperties);
