@@ -14,10 +14,9 @@ import { ShareDropdown } from "./ShareDropdown";
 export const Header = ({ shareMenu = false }: { shareMenu: boolean }) => {
   const { status } = useSession();
   const { isLoading, status: shareEnabled } = useFlag("shareMenu");
+  const { status: editableFilename } = useFlag("editableFilename");
   const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
-
-  const editableFilename = true;
 
   useEffect(() => {
     refreshAbility();

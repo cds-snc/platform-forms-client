@@ -57,6 +57,10 @@
     "shareMenu": {
       "title": "[FR] Share Menu",
       "description": "[FR] Enable share menu dropdown"
+    },
+    "editableFilename": {
+      "title": "[FR] Form Builder Editable Filename",
+      "description": "[FR] Updates header to include editable filename"
     }
   }
 }

@@ -55,8 +55,12 @@
       "description": "Enable dialog when adding elements to the form builder"
     },
     "shareMenu": {
-      "title": "Share Menu",
+      "title": "Form Builder Share Menu",
       "description": "Enable share menu dropdown"
+    },
+    "editableFilename": {
+      "title": "Form Builder Editable Filename",
+      "description": "Updates header to include editable filename"
     }
   }
 }
