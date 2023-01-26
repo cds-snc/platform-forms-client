@@ -11,7 +11,13 @@ import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { useActivePathname, TemplateApiProvider } from "../hooks";
 
-export const Template = ({ page }: { page: ReactElement }) => {
+export const Template = ({
+  page,
+  shareMenu = false,
+}: {
+  page: ReactElement;
+  shareMenu?: boolean;
+}) => {
   return (
     <TemplateStoreProvider
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
@@ -24,7 +30,7 @@ export const Template = ({ page }: { page: ReactElement }) => {
         </Head>
         <div className="flex flex-col h-full">
           <SkipLink />
-          <Header />
+          <Header shareMenu={shareMenu} />
           {page}
           <Footer displaySLAAndSupportLinks />
         </div>
