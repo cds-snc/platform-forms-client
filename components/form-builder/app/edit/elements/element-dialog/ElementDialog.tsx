@@ -29,6 +29,7 @@ export const ElementDialog = ({
   );
 
   const id = elementOptions[selected].id as FormElementTypes;
+  const value = elementOptions[selected].value;
   const Description = elementOptions[selected].description;
 
   const handleAdd = useCallback(() => {
@@ -43,7 +44,11 @@ export const ElementDialog = ({
           <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
           <ListBox options={elementOptions} handleChange={handleChange} />
         </div>
-        <ElementDescription id={id} handleAdd={handleAdd}>
+        <ElementDescription
+          id={id}
+          title={`${value} ${t("addElementDialog.example")}`}
+          handleAdd={handleAdd}
+        >
           <div className="mb-10 rounded border-1 border-gray-900 px-4 py-1 inline-block bg-gray-background">
             {t("addElementDialog.exampleElement")}
           </div>
