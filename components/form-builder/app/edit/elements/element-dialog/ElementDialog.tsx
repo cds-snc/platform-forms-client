@@ -42,7 +42,11 @@ export const ElementDialog = ({
       <div className="grid grid-cols-[30%_70%] w-full">
         <div>
           <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
-          <ListBox options={elementOptions} handleChange={handleChange} />
+          <ListBox
+            ariaLabel={t("addElementDialog.questionElement")}
+            options={elementOptions}
+            handleChange={handleChange}
+          />
         </div>
         <ElementDescription
           id={id}

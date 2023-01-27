@@ -6,9 +6,11 @@ import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "
 export const ListBox = ({
   options,
   handleChange,
+  ariaLabel,
 }: {
   options: { id: string; value: string; className: string }[];
   handleChange: (val: number) => void;
+  ariaLabel?: string;
 }) => {
   const listBoxRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<[HTMLElement] | []>([]);
@@ -39,6 +41,7 @@ export const ListBox = ({
 
   return (
     <div
+      aria-label={ariaLabel ? ariaLabel : ""}
       data-testid="listbox"
       ref={listBoxRef}
       role="listbox"
