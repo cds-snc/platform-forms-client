@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Tags } from "./Tags";
 import { Input } from "./Input";
 
-export const TagInput = () => {
-  const [tags, setTags] = useState<string[]>([]);
-
+export const TagInput = ({
+  tags,
+  setTags,
+}: {
+  tags: string[];
+  setTags: (tag: string[]) => void;
+}) => {
   const onRemove = (text: string) => {
     setTags(tags.filter((tag) => tag !== text));
   };
