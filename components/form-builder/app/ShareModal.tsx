@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
-import { useDialogRef, Dialog } from "../shared";
+import { useDialogRef, Dialog } from "./shared";
 
 export const ShareModal = ({
   handleClose,
