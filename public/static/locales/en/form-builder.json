@@ -254,11 +254,18 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "addElementDialog": {
-    "addButton": "Add",
+    "addButton": "Select element",
     "questionElement": "Question element",
+    "listItem": "List item ",
+    "checkboxItem": "Checkbox item",
+    "yes": "Yes",
+    "no": "No",
+    "answer": "Answer...",
+    "sometimes": "Sometimes",
+    "exampleElement": "example element",
     "richText": {
-      "title": "Rich Text title",
-      "description": "Rich Text desc"
+      "title": "Large text",
+      "description": "Small text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
     },
     "radio": {
       "title": "Radio title",
@@ -266,35 +273,35 @@
     },
     "checkbox": {
       "title": "Multiple Choice title",
-      "description": "Multiple Choice title desc"
+      "description": "Description"
     },
     "dropdown": {
-      "title": "Dropdown list title",
-      "description": "Dropdown list Answer desc"
+      "title": "Dropdown",
+      "description": "Description"
     },
     "textField": {
-      "title": "Short answer title",
-      "description": "Short answer desc"
+      "title": "Question",
+      "description": "Description"
     },
     "textArea": {
-      "title": "Long answer title",
-      "description": "Long answer  desc"
+      "title": "Question",
+      "description": "Description"
     },
     "phone": {
-      "title": "Phone title",
-      "description": "Phone desc"
+      "title": "Mobile phone",
+      "description": "Description"
     },
     "email": {
-      "title": "Email title",
-      "description": "Email desc"
+      "title": "Email address",
+      "description": "Description"
     },
     "date": {
-      "title": "Date title",
-      "description": "Date desc"
+      "title": "Date",
+      "description": "Description"
     },
     "number": {
-      "title": "Numeric title",
-      "description": "Numeric desc"
+      "title": "Number",
+      "description": "Description"
     }
   },
   "share": {

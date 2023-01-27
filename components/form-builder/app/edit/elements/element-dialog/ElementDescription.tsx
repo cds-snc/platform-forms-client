@@ -6,18 +6,19 @@ import { Button } from "../../../shared";
 
 export const ElementDescription = ({
   id,
+  children,
   handleAdd,
 }: {
   id: FormElementTypes;
+  children: React.ReactNode;
   handleAdd?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <div className="ml-10 border-l-1 border-black grid grid-rows-w">
-      <div className="h-full flex content-center items-center justify-center">
-        <div data-testid="element-description-content">
-          <h3>{t(`addElementDialog.${id}.title`)}</h3>
-          <p>{t(`addElementDialog.${id}.description`)}</p>
+    <div id={id} className="ml-10 border-l-1 border-black grid grid-rows-w">
+      <div className="h-full flex">
+        <div className="mx-10 mb-10" data-testid="element-description-content">
+          {children}
         </div>
       </div>
       {handleAdd && (

@@ -256,6 +256,13 @@
   "addElementDialog": {
     "addButton": "Add",
     "questionElement": "[fr] Question element",
+    "listItem": "[fr] List item ",
+    "checkboxItem": "[fr] Checkbox item",
+    "answer": "Answer...",
+    "yes": "[fr] Yes",
+    "no": "[fr] No",
+    "sometimes": "[fr] Sometimes",
+    "exampleElement": "example element",
     "richText": {
       "title": "Rich Text title",
       "description": "Rich Text desc"
