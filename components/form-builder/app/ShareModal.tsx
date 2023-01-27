@@ -3,6 +3,8 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
 import { useDialogRef, Dialog, TagInput, Button } from "./shared";
+import axios from "axios";
+import { useTemplateStore } from "../store";
 
 export const ShareModal = ({
   handleClose,
@@ -11,12 +13,24 @@ export const ShareModal = ({
   handleClose: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const [tags, setTags] = useState<string[]>([]);
+  const [emails, setEmails] = useState<string[]>([]);
 
   const dialog = useDialogRef();
 
-  const handleSend = () => {
-    //
+  const { getSchema } = useTemplateStore((s) => ({
+    getSchema: s.getSchema,
+  }));
+
+  const handleSend = async () => {
+    await axios({
+      url: "/api/share",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: { form: getSchema(), emails: emails },
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    });
   };
 
   const actions = (
@@ -59,7 +73,7 @@ export const ShareModal = ({
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Enter email address
             </label>
-            <TagInput tags={tags} setTags={setTags} />
+            <TagInput tags={emails} setTags={setEmails} />
           </div>
 
           <div className="mt-5">See a preview of the email message +</div>
