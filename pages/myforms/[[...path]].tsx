@@ -141,6 +141,7 @@ export const getServerSideProps = requireAuthentication(
         const {
           id,
           form: { titleEn, titleFr },
+          name,
           isPublished,
           updatedAt,
         } = template;
@@ -148,6 +149,7 @@ export const getServerSideProps = requireAuthentication(
           id,
           titleEn,
           titleFr,
+          name,
           isPublished,
           date: updatedAt,
           url: `/${locale}/id/${id}`,

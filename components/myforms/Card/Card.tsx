@@ -11,13 +11,14 @@ export interface CardProps {
   id: string;
   titleEn: string;
   titleFr: string;
+  name: string;
   url: string;
   date: string;
   isPublished: boolean;
 }
 
 export const Card = (props: CardProps): React.ReactElement => {
-  const { id, titleEn, titleFr, url, date, isPublished } = props;
+  const { id, name, titleEn, titleFr, url, date, isPublished } = props;
   const { t, i18n } = useTranslation(["my-forms", "common"]);
 
   const menuItemsList: Array<MenuDropdownItemI> = [
@@ -93,9 +94,14 @@ export const Card = (props: CardProps): React.ReactElement => {
           className="line-clamp-3 inline-block wrap overflow-hidden inline-block"
           aria-describedby={`card-title-${id} card-date-${id}`}
         >
-          {titleEn ? titleEn : t("card.title.notTranslatedEn", { ns: "my-forms" })}
-          {" / "}
-          {titleFr ? titleFr : t("card.title.notTranslatedFr", { ns: "my-forms" })}
+          {name ? name : ""}
+          {!name && (
+            <>
+              {titleEn ? titleEn : t("card.title.notTranslatedEn", { ns: "my-forms" })}
+              {" / "}
+              {titleFr ? titleFr : t("card.title.notTranslatedFr", { ns: "my-forms" })}
+            </>
+          )}
         </a>
       </p>
       <div className="flex justify-between items-center p-3">
