@@ -16,16 +16,17 @@ export const TagInput = ({
 
   const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.stopPropagation();
+    // console.log(e.key);
     const text = (e.target as HTMLInputElement).value;
 
     if (!text && tags.length && e.key === "Backspace") {
-      (e.target as HTMLInputElement).value = `${tags.at(-1)} `;
+      (e.target as HTMLInputElement).value = `${tags.at(-1)}`;
       setTags([...new Set(tags.slice(0, -1))]);
     }
 
-    if (text && ["Enter"].includes(e.key)) {
+    if (text && ["Enter", " "].includes(e.key)) {
       e.preventDefault();
-      setTags([...new Set([...tags, text])]);
+      setTags([...new Set([...tags, text.trim()])]);
       (e.target as HTMLInputElement).value = "";
     }
   };
