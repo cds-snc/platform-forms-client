@@ -3254,11 +3254,6 @@
     "@radix-ui/react-primitive" "1.0.1"
     "@radix-ui/react-use-callback-ref" "1.0.0"
 
-"@radix-ui/react-icons@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@radix-ui/react-icons/-/react-icons-1.1.1.tgz#38d2aa548035dd3b799c169bd17177b1cec3152b"
-  integrity sha512-xc3wQC59rsFylVbSusQCrrM+6695ppF730Q6yqzhRdqDcRNWIm2R6ngpzBoSOQMcwnq4p805F+Gr7xo4fmtN1A==
-
 "@radix-ui/react-id@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/react-id/-/react-id-1.0.0.tgz#8d43224910741870a45a8c9d092f25887bb6d11e"

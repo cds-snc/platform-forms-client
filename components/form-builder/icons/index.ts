@@ -46,3 +46,4 @@ export { TreeViewIcon } from "./TreeViewIcon";
 export { RoundCloseIcon } from "./RoundCloseIcon";
 export { ShareExternalLinkIcon } from "./ShareExternalLinkIcon";
 export { CopyIcon } from "./CopyIcon";
+export { ChevronRight } from "./ChevronRight";
