@@ -1,134 +1,126 @@
 {
-  "form": {
-    "layout": [1, 2, 3, 4, 5, 6, 7],
-    "endPage": {
-      "descriptionEn": "",
-      "descriptionFr": "",
-      "referrerUrlEn": "https://digital.canada.ca/",
-      "referrerUrlFr": "https://numerique.canada.ca/"
-    },
-    "titleEn": "Work with CDS on a Digital Form",
-    "titleFr": "Travailler avec le SNC sur un formulaire numérique",
-    "version": 1,
-    "elements": [
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms product. <br/><br/> Please provide your information below so CDS can contact you about improving, updating, or digitizing a form.",
-          "descriptionFr": "Merci beaucoup de l’intérêt que vous portez au produit de Formulaire du Service Numérique Canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter davantage l'amélioration, la mise à jour ou la numérisation d'un formulaire."
-        }
-      },
-      {
-        "id": 2,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Full name",
-          "titleFr": "Nom au complet",
-          "validation": {
-            "type": "name",
-            "required": true
-          },
-          "descriptionEn": "",
-          "descriptionFr": ""
-        }
-      },
-      {
-        "id": 3,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Work email",
-          "titleFr": "Courriel professionnel",
-          "validation": {
-            "type": "email",
-            "required": true
-          }
-        }
-      },
-      {
-        "id": 4,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Which department do you work for?",
-          "titleFr": "Pour quel ministère travaillez-vous?",
-          "validation": {
-            "required": false
-          },
-          "description": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 5,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Work phone number",
-          "titleFr": "Numéro de téléphone professionnel",
-          "validation": {
-            "type": "phone",
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 6,
-        "type": "checkbox",
-        "properties": {
-          "choices": [
-            {
-              "en": "I have a form I would like to publish",
-              "fr": "J’ai un formulaire à faire publier."
-            },
-            {
-              "en": "I'm interested in learning more - please contact me to set up a demo",
-              "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place une démo."
-            },
-            {
-              "en": "Keep me in the loop by adding me to your mailing list",
-              "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
-            },
-            {
-              "en": "Other (specify below)",
-              "fr": "Autre (spécifier ci-dessous)"
-            }
-          ],
-          "titleEn": "How can we work together?",
-          "titleFr": "Comment pouvons-nous collaborer?",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Select all that apply",
-          "descriptionFr": "Cocher tous les choix qui s’appliquent"
-        }
-      },
-      {
-        "id": 7,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Please specify",
-          "titleFr": "Veuillez spécifier",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "If you selected Other in the previous question",
-          "descriptionFr": "Si vous avez sélectionné Autre à la question précédente"
-        }
-      }
-    ],
-    "startPage": {},
+  "titleEn": "Work with CDS on a Digital Form",
+  "titleFr": "Travailler avec le SNC sur un formulaire numérique",
+  "introduction": {
     "descriptionEn": "Register to learn more about the work CDS is doing on forms",
     "descriptionFr": "Inscrivez-vous pour en savoir plus sur le travail du SNC sur les formulaires"
   },
-  "submission": {
-    "email": "leanne.labelle@cds-snc.ca"
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "https://digital.canada.ca/",
+    "referrerUrlFr": "https://numerique.canada.ca/"
   },
-  "internalTitleEn": "Work with CDS on a Digital Form",
-  "internalTitleFr": "Travailler avec le SNC sur un formulaire numérique",
-  "securityAttribute": "Unclassified"
+  "layout": [1, 2, 3, 4, 5, 6, 7],
+  "elements": [
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Thank you so much for your interest in the Canadian Digital Service’s Forms product. <br/><br/> Please provide your information below so CDS can contact you about improving, updating, or digitizing a form.",
+        "descriptionFr": "Merci beaucoup de l’intérêt que vous portez au produit de Formulaire du Service Numérique Canadien. <br/><br/> Veuillez fournir vos renseignements ci-dessous afin que le SNC puisse vous contacter pour discuter davantage l'amélioration, la mise à jour ou la numérisation d'un formulaire."
+      }
+    },
+    {
+      "id": 2,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Full name",
+        "titleFr": "Nom au complet",
+        "validation": {
+          "type": "name",
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": ""
+      }
+    },
+    {
+      "id": 3,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Work email",
+        "titleFr": "Courriel professionnel",
+        "validation": {
+          "type": "email",
+          "required": true
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Which department do you work for?",
+        "titleFr": "Pour quel ministère travaillez-vous?",
+        "validation": {
+          "required": false
+        },
+        "description": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 5,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Work phone number",
+        "titleFr": "Numéro de téléphone professionnel",
+        "validation": {
+          "type": "phone",
+          "required": false
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "checkbox",
+      "properties": {
+        "choices": [
+          {
+            "en": "I have a form I would like to publish",
+            "fr": "J’ai un formulaire à faire publier."
+          },
+          {
+            "en": "I'm interested in learning more - please contact me to set up a demo",
+            "fr": "Je suis intéressé d’en apprendre plus. Veuillez me contacter pour mettre en place une démo."
+          },
+          {
+            "en": "Keep me in the loop by adding me to your mailing list",
+            "fr": "Tenez-moi au courant de vos projets en m’ajoutant à votre liste de distribution."
+          },
+          {
+            "en": "Other (specify below)",
+            "fr": "Autre (spécifier ci-dessous)"
+          }
+        ],
+        "titleEn": "How can we work together?",
+        "titleFr": "Comment pouvons-nous collaborer?",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Select all that apply",
+        "descriptionFr": "Cocher tous les choix qui s’appliquent"
+      }
+    },
+    {
+      "id": 7,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Please specify",
+        "titleFr": "Veuillez spécifier",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "If you selected Other in the previous question",
+        "descriptionFr": "Si vous avez sélectionné Autre à la question précédente"
+      }
+    }
+  ]
 }

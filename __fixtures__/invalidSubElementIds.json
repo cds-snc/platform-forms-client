@@ -1,177 +1,168 @@
 {
-  "form": {
-    "layout": [22],
-    "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
-    "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
-    "version": 1,
-    "elements": [
-      {
-        "id": 22,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": false
-          },
-          "subElements": [
-            {
-              "id": 2201,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Family name",
-                "titleFr": "Nom",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2301,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Given name",
-                "titleFr": "Prénom",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2202,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Department or organization",
-                "titleFr": "Ministère ou organisme",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2204,
-              "type": "dropdown",
-              "properties": {
-                "choices": [
-                  {
-                    "en": "",
-                    "fr": ""
-                  },
-                  {
-                    "en": "Alberta",
-                    "fr": "Alberta"
-                  },
-                  {
-                    "en": "British Columbia",
-                    "fr": "Colombie-Britannique"
-                  },
-                  {
-                    "en": "Manitoba",
-                    "fr": "Manitoba"
-                  },
-                  {
-                    "en": "New Brunswick",
-                    "fr": "Nouveau-Brunswick"
-                  },
-                  {
-                    "en": "Newfoundland and Labrador",
-                    "fr": "Terre-Neuve-et-Labrador"
-                  },
-                  {
-                    "en": "Northwest Territories",
-                    "fr": "Territoires du Nord-Ouest"
-                  },
-                  {
-                    "en": "Nova Scotia",
-                    "fr": "Nouvelle-Écosse"
-                  },
-                  {
-                    "en": "Nunavut",
-                    "fr": "Nunavut"
-                  },
-                  {
-                    "en": "Ontario",
-                    "fr": "Ontario"
-                  },
-                  {
-                    "en": "Prince Edward Island",
-                    "fr": "Île-du-Prince-Édouard"
-                  },
-                  {
-                    "en": "Quebec",
-                    "fr": "Québec"
-                  },
-                  {
-                    "en": "Saskatchewan",
-                    "fr": "Saskatchewan"
-                  },
-                  {
-                    "en": "Yukon",
-                    "fr": "Yukon"
-                  }
-                ],
-                "titleEn": "Province or territory",
-                "titleFr": "Province ou territoire",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2207,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Preferred language",
-                "titleFr": "Langue préférée",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2208,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Group and level",
-                "titleFr": "Groupe et niveau",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
+  "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
+  "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
+  "layout": [22],
+  "elements": [
+    {
+      "id": 22,
+      "type": "dynamicRow",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [
+          {
+            "id": 2201,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Family name",
+              "titleFr": "Nom",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
             }
-          ]
-        }
+          },
+          {
+            "id": 2301,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Given name",
+              "titleFr": "Prénom",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2202,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Department or organization",
+              "titleFr": "Ministère ou organisme",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2204,
+            "type": "dropdown",
+            "properties": {
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                },
+                {
+                  "en": "Alberta",
+                  "fr": "Alberta"
+                },
+                {
+                  "en": "British Columbia",
+                  "fr": "Colombie-Britannique"
+                },
+                {
+                  "en": "Manitoba",
+                  "fr": "Manitoba"
+                },
+                {
+                  "en": "New Brunswick",
+                  "fr": "Nouveau-Brunswick"
+                },
+                {
+                  "en": "Newfoundland and Labrador",
+                  "fr": "Terre-Neuve-et-Labrador"
+                },
+                {
+                  "en": "Northwest Territories",
+                  "fr": "Territoires du Nord-Ouest"
+                },
+                {
+                  "en": "Nova Scotia",
+                  "fr": "Nouvelle-Écosse"
+                },
+                {
+                  "en": "Nunavut",
+                  "fr": "Nunavut"
+                },
+                {
+                  "en": "Ontario",
+                  "fr": "Ontario"
+                },
+                {
+                  "en": "Prince Edward Island",
+                  "fr": "Île-du-Prince-Édouard"
+                },
+                {
+                  "en": "Quebec",
+                  "fr": "Québec"
+                },
+                {
+                  "en": "Saskatchewan",
+                  "fr": "Saskatchewan"
+                },
+                {
+                  "en": "Yukon",
+                  "fr": "Yukon"
+                }
+              ],
+              "titleEn": "Province or territory",
+              "titleFr": "Province ou territoire",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2207,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Preferred language",
+              "titleFr": "Langue préférée",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2208,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Group and level",
+              "titleFr": "Groupe et niveau",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          }
+        ]
       }
-    ]
-  },
-  "submission": {
-    "email": "steven.talbot@cds-snc.ca"
-  },
-  "internalTitleEn": "Public Service Award of Excellence 2020",
-  "internalTitleFr": "Prix d’excellence de la fonction publique 2020",
-  "securityAttribute": "Unclassified"
+    }
+  ]
 }

@@ -13,136 +13,6 @@ import {
 import { Submission } from "@lib/types/submission-types";
 import { getCsrfToken } from "next-auth/react";
 
-// Get the form json object by using the form ID
-// Returns => json object of form
-async function _getFormByID(formID: string): Promise<PublicFormRecord | undefined> {
-  try {
-    const response = await axios({
-      url: `/api/templates/${formID}`,
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-    const { data }: { data: Array<PublicFormRecord> } = response.data;
-    if (data?.length === 1 && data[0].id) {
-      return data[0];
-    }
-  } catch (err) {
-    logMessage.error(err as Error);
-  }
-}
-
-// Email submission data manipulation
-export function extractFormData(submission: Submission): Array<string> {
-  const formResponses = submission.responses;
-  const formOrigin = submission.form;
-  const dataCollector: Array<string> = [];
-  formOrigin.form.layout.map((qID) => {
-    const question = formOrigin.form.elements.find((element: FormElement) => element.id === qID);
-    if (question) {
-      handleType(question, formResponses[question.id], dataCollector);
-    }
-  });
-  return dataCollector;
-}
-
-function handleType(question: FormElement, response: Response, collector: Array<string>) {
-  // Add i18n here later on?
-  // Do we detect lang submission or output with mixed lang?
-  const qTitle = question.properties.titleEn;
-  switch (question.type) {
-    case FormElementTypes.textField:
-    case FormElementTypes.textArea:
-    case FormElementTypes.dropdown:
-    case FormElementTypes.radio:
-      handleTextResponse(qTitle, response as string, collector);
-      break;
-
-    case FormElementTypes.checkbox:
-      handleArrayResponse(qTitle, response as Array<string>, collector);
-      break;
-    case FormElementTypes.dynamicRow:
-      handleDynamicForm(
-        qTitle,
-        question.properties.placeholderEn,
-        response as Array<Responses>,
-        question.properties.subElements as FormElement[],
-        collector
-      );
-      break;
-    case FormElementTypes.fileInput:
-      handleTextResponse(qTitle, response as string, collector);
-      break;
-    case FormElementTypes.richText:
-      collector.push(`${question.properties.descriptionEn}`);
-  }
-}
-
-function handleDynamicForm(
-  title: string,
-  rowLabel = "Item",
-  response: Array<Responses>,
-  question: Array<FormElement>,
-  collector: Array<string>
-) {
-  const responseCollector = response.map((row, rIndex) => {
-    const rowCollector: Array<string> = [];
-    question.map((qItem, qIndex) => {
-      // Add i18n here eventually?
-      const qTitle = qItem.properties.titleEn;
-      switch (qItem.type) {
-        case FormElementTypes.textField:
-        case FormElementTypes.textArea:
-        case FormElementTypes.dropdown:
-        case FormElementTypes.radio:
-        case FormElementTypes.fileInput:
-          handleTextResponse(qTitle, row[qIndex] as string, rowCollector);
-          break;
-
-        case FormElementTypes.checkbox:
-          handleArrayResponse(qTitle, row[qIndex] as Array<string>, rowCollector);
-          break;
-
-        default:
-          break;
-      }
-    });
-    rowCollector.unshift(`${String.fromCharCode(13)}***${rowLabel} ${rIndex + 1}***`);
-    return rowCollector.join(String.fromCharCode(13));
-  });
-  responseCollector.unshift(`**${title}**`);
-  collector.push(responseCollector.join(String.fromCharCode(13)));
-}
-
-function handleArrayResponse(title: string, response: Array<string>, collector: Array<string>) {
-  if (response.length) {
-    if (Array.isArray(response)) {
-      const responses = response
-        .map((item) => {
-          return `-  ${item}`;
-        })
-        .join(String.fromCharCode(13));
-      collector.push(`**${title}**${String.fromCharCode(13)}${responses}`);
-      return;
-    } else {
-      handleTextResponse(title, response, collector);
-      return;
-    }
-  }
-  collector.push(`**${title}**${String.fromCharCode(13)}No response`);
-}
-
-function handleTextResponse(title: string, response: string, collector: Array<string>) {
-  if (response !== undefined && response !== null && response !== "") {
-    collector.push(`**${title}**${String.fromCharCode(13)}${response}`);
-    return;
-  }
-
-  collector.push(`**${title}**${String.fromCharCode(13)}No Response`);
-}
-
 function _buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
   const formData = {} as { [key: string]: string | FileInputResponse };
 
@@ -158,7 +28,7 @@ function _buildFormDataObject(formRecord: PublicFormRecord, values: Responses) {
   }
 
   formData["formID"] = `${formRecord.id}`;
-  formData["securityAttribute"] = formRecord.securityAttribute ?? "Unclassified";
+  formData["securityAttribute"] = formRecord.securityAttribute;
 
   return formData;
 }
@@ -374,7 +244,6 @@ function _rehydrateCheckBoxResponse(response: Response) {
   return response ? JSON.parse(response as string).value : [];
 }
 
-export const getFormByID = logger(_getFormByID);
 export const submitToAPI = logger(_submitToAPI);
 export const buildFormDataObject = logger(_buildFormDataObject);
 export const rehydrateFormResponses = logger(_rehydrateFormResponses);

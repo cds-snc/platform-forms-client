@@ -68,7 +68,7 @@ export const isFormTranslated = (form: FormProperties) => {
     }
 
     isDescriptionTranslated(form.privacyPolicy ?? {});
-    isDescriptionTranslated(form.endPage ?? {});
+    isDescriptionTranslated(form.confirmation ?? {});
 
     form.elements.forEach((element) => {
       isFormElementTranslated(element);
@@ -82,13 +82,13 @@ export const isFormTranslated = (form: FormProperties) => {
 
 export const useAllowPublish = () => {
   const { ability } = useAccessControl();
-  const { form, submission } = useTemplateStore((s) => ({
+  const { form, deliveryOption } = useTemplateStore((s) => ({
     form: s.form,
-    submission: s.submission,
+    deliveryOption: s.deliveryOption,
   }));
   let email = "";
-  if (submission?.email) {
-    email = submission?.email;
+  if (deliveryOption?.emailAddress) {
+    email = deliveryOption.emailAddress;
   }
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
@@ -98,7 +98,8 @@ export const useAllowPublish = () => {
       title: !!form?.titleEn || !!form?.titleFr,
       questions: !!form?.elements?.length,
       privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
-      confirmationMessage: !!form?.endPage?.descriptionEn || !!form?.endPage?.descriptionFr,
+      confirmationMessage:
+        !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
       translate: isFormTranslated(form),
       responseDelivery: !!email,
     }),

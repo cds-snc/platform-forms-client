@@ -307,6 +307,11 @@
   },
   "share": {
     "title": "Share",
-    "email": "Share with email"
+    "email": "Share with email",
+    "link": "Get the link",
+    "enLink": "English link",
+    "frLink": "French link",
+    "copy": "Copy",
+    "open": "Open"
   }
 }
