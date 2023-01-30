@@ -10,7 +10,7 @@ export const FileNameInput = () => {
     updateField: s.updateField,
   }));
 
-  const [content, setContent] = useState(form.internalTitleEn || "");
+  const [content, setContent] = useState(form.brand?.name || "");
 
   useEffect(() => {
     if (span?.current) {
@@ -38,7 +38,7 @@ export const FileNameInput = () => {
         placeholder={t("untitledForm", { ns: "form-builder" })}
         value={content}
         onBlur={() => {
-          updateField(`form.internalTitleEn`, content);
+          updateField(`form.brand.name`, content);
         }}
         onChange={(e) => {
           setContent(e.target.value);
