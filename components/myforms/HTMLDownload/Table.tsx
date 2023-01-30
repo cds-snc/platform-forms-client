@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
 import { Response } from "@lib/types";
+import { capitalize } from "./ResponseSection";
 
 export interface TableProps {
   isRowTable?: boolean;
@@ -26,7 +27,10 @@ export const Table = (props: TableProps): React.ReactElement => {
     <>
       {!questionsAnswers && <p>{t("responseTemplate.errorNoQuestionsAnswers")}</p>}
       {!isRowTable && questionsAnswers && (
-        <dl className="border-b-2 border-t-2 border-grey-default">
+        <dl
+          id={`responseTableRow-${capitalize(lang)}`}
+          className="border-b-2 border-t-2 border-grey-default"
+        >
           <div className="flex border-b border-grey-default">
             <dt className="w-80 font-bold pt-2 pb-2">
               {t("responseTemplate.responseNumber", { lng: lang })}

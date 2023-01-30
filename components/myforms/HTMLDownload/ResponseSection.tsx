@@ -13,7 +13,7 @@ export interface ResponseSectionProps {
   formResponse: Responses;
 }
 
-function capitalize(string: string) {
+export function capitalize(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -66,21 +66,47 @@ export const ResponseSection = ({
   const capitalizedLang = capitalize(lang);
   const questionsAnswers = parseQuestionsAndAnswers(formTemplate, formResponse, lang);
 
-  const CopyToClipboardScript = React.createElement("script", {
+  const CopyToClipboardScripts = React.createElement("script", {
     dangerouslySetInnerHTML: {
       __html: `
 (function () {
-    var btn = document.getElementById("copyCodeButton-${capitalize(lang)}");
-    btn.addEventListener("click", function (e) {
-        e.preventDefault();
+    var btnCopyCode = document.getElementById("copyCodeButton-${capitalize(lang)}");
+    btnCopyCode.addEventListener("click", function () {
         var el = document.getElementById("copyCodeOutput-${capitalize(lang)}");
-        if(window.copyToClipboard("${confirmReceiptCode}")){
+        var code = ("${confirmReceiptCode}").trim();
+        if(window.copyTextToClipboard(code)){
           el.classList.remove("hidden");
           el.textContent = "${t("responseTemplate.copiedCode")}";
         } else {
           el.classList.remove("hidden");
           el.classList.add("text-red-default");
           el.textContent = "${t("responseTemplate.copiedCode")}";
+        }
+    }, false);
+
+    var btnCopyResponse = document.getElementById("copyResponseButton-${capitalize(lang)}");
+    btnCopyResponse.addEventListener("click", function () {
+        var outputEl = document.getElementById("copyResponseOutput-${capitalize(lang)}");
+        var responseItems = Array.from(document.querySelectorAll("#responseTableRow-${capitalize(
+          lang
+        )} dd"));
+
+        // Format with tab separators for Excel copy+paste
+        var responseText = responseItems.map(item => {
+          var text = item.textContent;
+          // This is needed for Excell that relies on tabs or multiple spaces to delimit a new cell
+          // and will stop any user content that may accidentally start a new cell.
+          // Replace 1 or more tabs or newlines with nothing, and two or more spaces with nothing.
+          return text.replace(/[\\t|\\n]{1,}|[ ]{2,}/g, "");
+        }).join(String.fromCharCode(9));
+
+        if(window.copyTextToClipboard(responseText)){
+          outputEl.classList.remove("hidden");
+          outputEl.textContent = "${t("responseTemplate.copiedCode")}";
+        } else {
+          outputEl.classList.remove("hidden");
+          outputEl.classList.add("text-red-default");
+          outputEl.textContent = "${t("responseTemplate.copiedCode")}";
         }
     }, false);
 })();
@@ -90,26 +116,26 @@ export const ResponseSection = ({
 
   return (
     <>
-      <nav className="flex items-center" aria-labelledby={"navTitle" + capitalizedLang}>
+      <nav className="flex items-center" aria-labelledby={`navTitle-${capitalizedLang}`}>
         <div
-          id={"navTitle" + capitalizedLang}
+          id={`navTitle-${capitalizedLang}`}
           className="mr-4 pl-3 pr-4 py-1 bg-gray-800 text-white"
         >
           {t("responseTemplate.jumpTo", { lng: lang })}
         </div>
         <ul className="flex list-none p-0">
           <li className="mr-4">
-            <a href={"#columnTable" + capitalizedLang}>
+            <a href={`#columnTable-${capitalizedLang}`}>
               {t("responseTemplate.columnTable", { lng: lang })}
             </a>
           </li>
           <li className="mr-4">
-            <a href={"#rowTable" + capitalizedLang}>
+            <a href={`#rowTable-${capitalizedLang}`}>
               {t("responseTemplate.rowTable", { lng: lang })}
             </a>
           </li>
           <li className="mr-4">
-            <a href={"#confirmReceipt" + capitalizedLang}>
+            <a href={`#confirmReceipt-${capitalizedLang}`}>
               {t("responseTemplate.confirmReceipt", { lng: lang })}
             </a>
           </li>
@@ -117,7 +143,7 @@ export const ResponseSection = ({
       </nav>
 
       <h2 className="gc-h1 mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h2>
-      <h3 id={"columnTable" + capitalizedLang} className="gc-h2 mt-20" tabIndex={-1}>
+      <h3 id={`columnTable-${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>
       <Table
@@ -129,7 +155,7 @@ export const ResponseSection = ({
         lang={capitalizedLang}
       />
 
-      <h3 id={"rowTable" + capitalizedLang} className="gc-h2 mt-20" tabIndex={-1}>
+      <h3 id={`rowTable-${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}
       </h3>
       <p className="mb-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
@@ -141,45 +167,51 @@ export const ResponseSection = ({
         isRowTable={true}
         lang={capitalizedLang}
       />
+      <p className="mt-8" id={`copyResponseLabel-${capitalizedLang}`}>
+        {t("responseTemplate.copyResponseInfo", { lng: lang })}
+      </p>
+      <div className="mt-4 mb-32">
+        <button
+          id={`copyResponseButton-${capitalizedLang}`}
+          aria-labelledby={`copyResponseLabel-${capitalizedLang}`}
+          className="gc-button--blue"
+          type="button"
+        >
+          {t("responseTemplate.copyResponse", { lng: lang })}
+        </button>
+        <span
+          id={`copyResponseOutput-${capitalizedLang}`}
+          aria-live="polite"
+          className="hidden text-green-default ml-8"
+        ></span>
+      </div>
 
-      {/* Note: form semantics not necessary for a single button but adding to make legend 
-      description, label.. relationships really obvious for AT */}
-      <form>
-        <h3 id={"confirmReceipt" + capitalizedLang} className="gc-h2 mt-20">
-          {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
-        </h3>
-        <fieldset>
-          <legend className="mt-4" id={"confirmReceiptInfo-" + capitalizedLang}>
-            {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
-          </legend>
-          <div className="mt-8 font-bold">
-            <label className="sr-only" htmlFor={"confirmReceiptCodeText-" + capitalizedLang}>
-              Confirm Receipt Code
-            </label>
-            <input
-              id={"confirmReceiptCodeText-" + capitalizedLang}
-              type="text"
-              value={confirmReceiptCode}
-              readOnly
-            />
-          </div>
-          <div className="mt-4 mb-32">
-            <button
-              id={"copyCodeButton-" + capitalizedLang}
-              className="gc-button--blue"
-              type="button"
-            >
-              {t("responseTemplate.copyCode", { lng: lang })}
-            </button>
-            <span
-              id={"copyCodeOutput-" + capitalizedLang}
-              aria-live="polite"
-              className="hidden text-green-default ml-8"
-            ></span>
-            {CopyToClipboardScript}
-          </div>
-        </fieldset>
-      </form>
+      <h3 id={`confirmReceipt-${capitalizedLang}`} className="gc-h2 mt-20">
+        {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
+      </h3>
+      <p className="mt-4" id={`confirmReceiptInfo-${capitalizedLang}`}>
+        {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
+      </p>
+      <div id={`confirmReceiptCodeText-${capitalizedLang}`} className="mt-8 font-bold">
+        {confirmReceiptCode}
+      </div>
+      <div className="mt-4 mb-32">
+        <button
+          id={`copyCodeButton-${capitalizedLang}`}
+          className="gc-button--blue"
+          type="button"
+          aria-labelledby={`confirmReceiptInfo-${capitalizedLang}`}
+        >
+          {t("responseTemplate.copyCode", { lng: lang })}
+        </button>
+        <span
+          id={`copyCodeOutput-${capitalizedLang}`}
+          aria-live="polite"
+          className="hidden text-green-default ml-8"
+        ></span>
+      </div>
+
+      {CopyToClipboardScripts}
     </>
   );
 };
