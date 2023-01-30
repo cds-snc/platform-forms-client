@@ -3,7 +3,11 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { parse } from "ts-command-line-args";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
-import { AnyObject, DeliveryOption } from "@lib/types";
+
+type AnyObject = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+};
 
 const prisma = new PrismaClient();
 
@@ -98,7 +102,7 @@ async function templateSchemaMigration() {
 
       const name = formProperties.internalTitleEn ?? "";
 
-      const findDeliveryOption = (): DeliveryOption | null => {
+      const findDeliveryOption = () => {
         if (formProperties.submission.email && formProperties.submission.email !== "") {
           return {
             emailAddress: formProperties.submission.email,
