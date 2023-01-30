@@ -41,8 +41,14 @@ describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
     id: "test0form00000id000asdf11",
+    form: validFormTemplate,
     isPublished: true,
-    ...validFormTemplate,
+    deliveryOption: {
+      emailAddress: "",
+      emailSubjectEn: "",
+      emailSubjectFr: "",
+    },
+    securityAttribute: "Unclassified",
   };
   test("renders without errors", () => {
     useRouter.mockImplementation(() => ({

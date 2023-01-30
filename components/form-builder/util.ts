@@ -1,5 +1,5 @@
 import { Language } from "./types";
-import { FormElement, FormProperties, FormRecord, PropertyChoices } from "@lib/types";
+import { FormElement, FormProperties, PropertyChoices } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const getPreviousIndex = (items: FormElement[], index: number) => {
@@ -92,47 +92,20 @@ export const newlineToOptions = (
 
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
-    id,
-    form: {
-      endPage,
-      introduction,
-      privacyPolicy,
-      elements,
-      titleEn,
-      titleFr,
-      version,
-      emailSubjectEn,
-      emailSubjectFr,
-    },
-    submission,
-    securityAttribute,
+    form: { titleEn, titleFr, introduction, privacyPolicy, confirmation, elements },
   } = state;
 
   const form: FormProperties = {
-    layout: [],
-    endPage,
-    introduction,
-    privacyPolicy,
     titleEn,
     titleFr,
-    version,
+    introduction,
+    privacyPolicy,
+    confirmation,
+    layout: elements.map((element) => element.id),
     elements,
-    emailSubjectEn,
-    emailSubjectFr,
   };
 
-  form.layout = elements.map((element) => {
-    return element.id;
-  });
-
-  const schema: Partial<FormRecord> = {
-    id,
-    form,
-    submission,
-    securityAttribute,
-  };
-
-  return schema;
+  return form;
 };
 
 // @todo this will need to be updated to support other locales i.e. fr-CA

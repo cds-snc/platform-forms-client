@@ -14,9 +14,7 @@ interface JSONUploadProps {
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const { t, i18n } = useTranslation("admin-templates");
   const { form } = props;
-  // extracting `isPublished` to avoid having it displayed in the JSON
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id: formID, isPublished, ...formConfig } = form || { id: undefined };
+  const { id: formID, form: formConfig } = form || { id: undefined };
   const [jsonConfig, setJsonConfig] = useState(formID ? JSON.stringify(formConfig, null, 2) : "");
   const [submitStatus, setSubmitStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);

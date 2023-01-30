@@ -28,8 +28,8 @@ describe("Element Panel", () => {
     await act(() => {
       rendered = render(
         <SessionProvider session={null}>
-          <TemplateStoreProvider form={store.form} submission={null} isPublished={null}>
-            <ElementPanel item={{ index: 0, ...store.form.elements[0] }} />
+          <TemplateStoreProvider form={store} submission={null} isPublished={null}>
+            <ElementPanel item={{ index: 0, ...store.elements[0] }} />
           </TemplateStoreProvider>
         </SessionProvider>
       );
@@ -59,8 +59,8 @@ describe("Element Panel", () => {
     await act(() => {
       rendered = render(
         <SessionProvider session={null}>
-          <TemplateStoreProvider form={store.form} submission={null} isPublished={null}>
-            <ElementPanel item={{ index: 1, ...store.form.elements[1] }} />
+          <TemplateStoreProvider form={store} submission={null} isPublished={null}>
+            <ElementPanel item={{ index: 1, ...store.elements[1] }} />
           </TemplateStoreProvider>
         </SessionProvider>
       );
