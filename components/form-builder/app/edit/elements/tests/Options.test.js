@@ -10,9 +10,9 @@ describe("Options", () => {
   });
 
   it("renders with props and test content", async () => {
-    const item = { id: 1, index: 0, ...store.form.elements[0] };
+    const item = { id: 1, index: 0, ...store.elements[0] };
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <Options item={item} />
       </Providers>
     );
@@ -40,14 +40,12 @@ describe("Options", () => {
 
   it("renders null when no choices exist", async () => {
     let newStore = {
-      form: {
-        elements: [],
-      },
+      elements: [],
     };
 
-    const item = { id: 1, index: 0, ...newStore.form.elements[0] };
+    const item = { id: 1, index: 0, ...newStore.elements[0] };
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <Options item={item} />
       </Providers>
     );

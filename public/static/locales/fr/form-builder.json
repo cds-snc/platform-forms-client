@@ -300,6 +300,11 @@
   "untitledForm": "Untitled form",
   "share": {
     "title": "[FR] Share",
-    "email": "[FR] Share with email"
+    "email": "[FR] Share with email",
+    "link": "[FR] Get the link",
+    "enLink": "[FR] English link",
+    "frLink": "[FR] French link",
+    "copy": "[FR] Copy",
+    "open": "[FR] Open"
   }
 }

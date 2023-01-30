@@ -124,7 +124,9 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(400);
-      expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
+      expect(JSON.parse(res._getData()).error).toContain(
+        'JSON Validation Error: instance requires property "privacyPolicy",instance requires property "confirmation"'
+      );
     });
 
     it("Should reject JSON with html", async () => {
@@ -237,6 +239,38 @@ describe("Test templates API functions", () => {
       expect(JSON.parse(res._getData())).toEqual(
         expect.objectContaining({ error: "Can't update published form" })
       );
+    });
+
+    it("Should successfully handle PUT request that removes the DeliveryOption object", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          sendResponsesToVault: true,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(200);
     });
   });
 
