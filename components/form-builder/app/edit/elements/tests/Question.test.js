@@ -23,10 +23,10 @@ describe("Question", () => {
   it("renders with descripton", async () => {
     const promise = Promise.resolve();
 
-    const item = { id: 1, index: 0, ...store.form.elements[0] };
+    const item = { id: 1, index: 0, ...store.elements[0] };
 
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <Question item={item} />
       </Providers>
     );
@@ -63,7 +63,7 @@ describe("Question", () => {
     };
 
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <Question item={item} />
       </Providers>
     );
@@ -104,7 +104,7 @@ describe("Question", () => {
     };
 
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <Container />
       </Providers>
     );

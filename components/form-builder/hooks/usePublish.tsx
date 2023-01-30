@@ -1,7 +1,14 @@
+import { DeliveryOption } from "@lib/types";
 import axios, { AxiosError } from "axios";
 
 export const usePublish = () => {
-  const uploadJson = async (jsonConfig: string, formID?: string, publish = false) => {
+  const uploadJson = async (
+    jsonConfig: string,
+    name?: string,
+    deliveryOption?: DeliveryOption,
+    formID?: string,
+    publish = false
+  ) => {
     let formData;
     try {
       formData = JSON.parse(jsonConfig);
@@ -23,10 +30,13 @@ export const usePublish = () => {
         data: {
           isPublished: publish ? true : false,
           formConfig: formData,
+          name: name,
+          deliveryOption: deliveryOption,
         },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
 
+      // PUT request with a { formID, isPublished } payload will update the Form Template isPublished property
       if (publish && formID) {
         await axios({
           url: url,
