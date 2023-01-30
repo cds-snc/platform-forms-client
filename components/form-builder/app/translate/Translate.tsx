@@ -67,7 +67,7 @@ export const Translate = () => {
                     );
                     // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
                     updateField(
-                      `form.${localizeField(
+                      `deliveryOption.${localizeField(
                         LocalizedFormProperties.EMAIL_SUBJECT,
                         primaryLanguage
                       )}`,
@@ -97,7 +97,7 @@ export const Translate = () => {
                     );
                     // Temporary fix (see function `formatEmailSubject` in Edit.tsx file)
                     updateField(
-                      `form.${localizeField(
+                      `deliveryOption.${localizeField(
                         LocalizedFormProperties.EMAIL_SUBJECT,
                         secondaryLanguage
                       )}`,
@@ -280,46 +280,49 @@ export const Translate = () => {
               key={primaryLanguage}
             >
               <div className="w-1/2 flex-1 relative">
-                <LanguageLabel id={`endpage-${primaryLanguage}-language`} lang={primaryLanguage}>
+                <LanguageLabel
+                  id={`confirmation-${primaryLanguage}-language`}
+                  lang={primaryLanguage}
+                >
                   <>{t(primaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
-                  path={`form.endPage.${localizeField(
+                  path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     primaryLanguage
                   )}`}
                   content={
-                    form.endPage?.[
+                    form.confirmation?.[
                       localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
                     ] ?? ""
                   }
                   lang={primaryLanguage}
                   ariaLabel={t("confirmationMessage")}
-                  ariaDescribedBy={`endpage-${primaryLanguage}-language`}
+                  ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
                 />
               </div>
               <div className="w-1/2 flex-1 relative">
                 <LanguageLabel
-                  id={`endpage-${secondaryLanguage}-language`}
+                  id={`confirmation-${secondaryLanguage}-language`}
                   lang={secondaryLanguage}
                 >
                   <>{t(secondaryLanguage)}</>
                 </LanguageLabel>
                 <RichTextEditor
                   autoFocusEditor={false}
-                  path={`form.endPage.${localizeField(
+                  path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
                     secondaryLanguage
                   )}`}
                   content={
-                    form.endPage?.[
+                    form.confirmation?.[
                       localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
                     ] ?? ""
                   }
                   lang={secondaryLanguage}
                   ariaLabel={t("confirmationMessage")}
-                  ariaDescribedBy={`endpage-${secondaryLanguage}-language`}
+                  ariaDescribedBy={`confirmation-${secondaryLanguage}-language`}
                 />
               </div>
             </div>

@@ -10,18 +10,22 @@ import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { useTemplateApi } from "../hooks";
 import { BackArrowIcon } from "../icons";
+import { PublicFormRecord } from "@lib/types";
 
 export const Preview = () => {
   const { status } = useSession();
-  const { getSchema, id } = useTemplateStore((s) => ({
+  const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
+    getIsPublished: s.getIsPublished,
+    getSecurityAttribute: s.getSecurityAttribute,
   }));
-  const stringified = getSchema();
 
-  const formRecord = {
+  const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    ...JSON.parse(stringified),
+    form: JSON.parse(getSchema()),
+    isPublished: getIsPublished(),
+    securityAttribute: getSecurityAttribute(),
   };
 
   const { localizeField, translationLanguagePriority, getLocalizationAttribute, setId, email } =
@@ -30,7 +34,7 @@ export const Preview = () => {
       translationLanguagePriority: s.translationLanguagePriority,
       getLocalizationAttribute: s.getLocalizationAttribute,
       setId: s.setId,
-      email: s.submission?.email,
+      email: s.deliveryOption?.emailAddress,
     }));
 
   const router = useRouter();
@@ -103,8 +107,8 @@ export const Preview = () => {
         {sent ? (
           <>
             <RichText {...getLocalizationAttribute()}>
-              {formRecord.form.endPage
-                ? formRecord.form.endPage[
+              {formRecord.form.confirmation
+                ? formRecord.form.confirmation[
                     localizeField(LocalizedElementProperties.DESCRIPTION, language)
                   ]
                 : ""}
@@ -153,8 +157,8 @@ export const Preview = () => {
           <span className="bg-slate-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
           <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
             <RichText {...getLocalizationAttribute()}>
-              {formRecord.form.endPage
-                ? formRecord.form.endPage[
+              {formRecord.form.confirmation
+                ? formRecord.form.confirmation[
                     localizeField(LocalizedElementProperties.DESCRIPTION, language)
                   ]
                 : ""}

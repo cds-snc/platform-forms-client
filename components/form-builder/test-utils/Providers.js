@@ -20,7 +20,7 @@ Providers.propTypes = {
 export const withProviders = async (store, Element) => {
   let rendered = null;
   await act(() => {
-    rendered = render(<Providers form={store.form}>{Element}</Providers>);
+    rendered = render(<Providers form={store}>{Element}</Providers>);
   });
   return rendered;
 };

@@ -14,7 +14,7 @@ export const RichTextLocked = ({
   beforeContent?: React.ReactElement | null;
   addElement: boolean;
   children?: React.ReactElement;
-  schemaProperty: "introduction" | "endPage" | "privacyPolicy";
+  schemaProperty: "introduction" | "privacyPolicy" | "confirmation";
   ariaLabel?: string;
 }) => {
   const { localizeField, form, translationLanguagePriority } = useTemplateStore((s) => ({

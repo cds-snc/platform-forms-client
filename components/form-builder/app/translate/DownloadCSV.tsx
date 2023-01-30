@@ -81,11 +81,11 @@ export const DownloadCSV = () => {
       ]);
     }
 
-    if (form.endPage?.descriptionEn || form.endPage?.descriptionFr) {
+    if (form.confirmation?.descriptionEn || form.confirmation?.descriptionFr) {
       data.push([
         "Confirmation message",
-        formatText(form.endPage.descriptionEn),
-        formatText(form.endPage.descriptionFr),
+        formatText(form.confirmation.descriptionEn),
+        formatText(form.confirmation.descriptionFr),
       ]);
     }
 

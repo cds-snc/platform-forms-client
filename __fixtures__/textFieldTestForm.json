@@ -1,50 +1,40 @@
 {
-  "internalTitleEn": "Text Field Test Form",
-  "internalTitleFr": "Text Field Test Form (FR)",
-  "submission": {
-    "email": "test@cds-snc.ca"
+  "titleEn": "Text Field Test Form",
+  "titleFr": "TExt Field Test Form (FR)",
+  "confirmation": {
+    "descriptionEn": "# Submitted thank you!",
+    "descriptionFr": "# Submitted thank you (FR)",
+    "referrerUrlEn": "https://digital.canada.ca/",
+    "referrerUrlFr": "https://numerique.canada.ca/"
   },
-  "form": {
-    "version": 1,
-    "titleEn": "Text Field Test Form",
-    "titleFr": "TExt Field Test Form (FR)",
-    "emailSubjectEn": "Test Form Subject",
-    "emailSubjectFr": "Test Form Subject FR",
-    "layout": [1, 2],
-    "elements": [
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "descriptionEn": "## Test Section with Text Fields",
-          "descriptionFr": "## Test Section with Text Fields (FR)",
-          "validation": {
-            "required": false
-          }
-        }
-      },
-      {
-        "id": 2,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Text Field 1",
-          "titleFr": "Text Field 1 (FR)",
-          "placeholderEn": "text field 1 placeholder",
-          "placeholderFr": "text field 1 placeholder (FR)",
-          "descriptionEn": "text field 1 description",
-          "descriptionFr": "text field 1 description (FR)",
-          "validation": {
-            "required": true,
-            "maxLength": 40
-          }
+  "layout": [1, 2],
+  "elements": [
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "descriptionEn": "## Test Section with Text Fields",
+        "descriptionFr": "## Test Section with Text Fields (FR)",
+        "validation": {
+          "required": false
         }
       }
-    ],
-    "endPage": {
-      "descriptionEn": "# Submitted thank you!",
-      "descriptionFr": "# Submitted thank you (FR)",
-      "referrerUrlEn": "https://digital.canada.ca/",
-      "referrerUrlFr": "https://numerique.canada.ca/"
+    },
+    {
+      "id": 2,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Text Field 1",
+        "titleFr": "Text Field 1 (FR)",
+        "placeholderEn": "text field 1 placeholder",
+        "placeholderFr": "text field 1 placeholder (FR)",
+        "descriptionEn": "text field 1 description",
+        "descriptionFr": "text field 1 description (FR)",
+        "validation": {
+          "required": true,
+          "maxLength": 40
+        }
+      }
     }
-  }
+  ]
 }
