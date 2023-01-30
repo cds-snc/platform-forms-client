@@ -43,3 +43,4 @@ export { ItalicIcon } from "./ItalicIcon";
 export { BulletListIcon } from "./BulletListIcon";
 export { LinkIcon } from "./LinkIcon";
 export { TreeViewIcon } from "./TreeViewIcon";
+export { RoundCloseIcon } from "./RoundCloseIcon";
