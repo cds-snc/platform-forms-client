@@ -22,10 +22,12 @@ export const Publish = () => {
 
   const [error, setError] = useState(false);
 
-  const { getSchema, id, setId } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
+  const { id, setId, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
+    getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
   }));
 
   const Icon = ({ checked }: { checked: boolean }) => {
@@ -39,11 +41,8 @@ export const Publish = () => {
   const { uploadJson } = usePublish();
 
   const handlePublish = async () => {
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
+    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id, true);
 
-    const result = await uploadJson(JSON.stringify(schema), id, true);
     if (result && result?.error) {
       setError(true);
       return;
@@ -54,18 +53,15 @@ export const Publish = () => {
   };
 
   const handleSaveAndRequest = useCallback(async () => {
-    const schema = JSON.parse(getSchema());
-    delete schema.id;
-    delete schema.isPublished;
+    const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id, false);
 
-    const result = await uploadJson(JSON.stringify(schema), id, false);
     if (result && result?.error) {
       setError(true);
       return;
     }
 
     router.push({ pathname: `/unlock-publishing` });
-  }, [getSchema, id, uploadJson, router]);
+  }, [getSchema, getName, getDeliveryOption, id, uploadJson, router]);
 
   if (status !== "authenticated") {
     return <PublishNoAuth />;

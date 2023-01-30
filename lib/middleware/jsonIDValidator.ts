@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { BetterOmit, MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { FormElement, FormElementTypes, FormRecord } from "@lib/types/form-types";
+import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
+import { FormElement, FormElementTypes, FormProperties } from "@lib/types/form-types";
 
 export type ValidateOptions = {
   runValidationIf?: (req: NextApiRequest) => boolean;
@@ -18,10 +18,10 @@ export const uniqueIDValidator = (options?: ValidateOptions): MiddlewareRequest 
       if (options?.runValidationIf?.(req) === false) {
         return { next: true };
       }
-      const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
+      const formProperties: FormProperties = options?.jsonKey
         ? req.body[options.jsonKey]
         : req.body;
-      const elementIDs: Array<number> = jsonConfig.form.elements.map((element) => {
+      const elementIDs: Array<number> = formProperties.elements.map((element) => {
         return element.id;
       });
       const duplicateElementIDs = elementIDs.filter(
@@ -53,13 +53,13 @@ export const layoutIDValidator = (options?: ValidateOptions): MiddlewareRequest 
       if (options?.runValidationIf?.(req) === false) {
         return { next: true };
       }
-      const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
+      const formProperties: FormProperties = options?.jsonKey
         ? req.body[options.jsonKey]
         : req.body;
-      const elementIDs: Array<number> = jsonConfig.form.elements.map((element) => {
+      const elementIDs: Array<number> = formProperties.elements.map((element) => {
         return element.id;
       });
-      const missingLayoutIDs = jsonConfig.form.layout.filter(
+      const missingLayoutIDs = formProperties.layout.filter(
         (layoutID) => elementIDs.indexOf(layoutID) === -1
       );
       if (missingLayoutIDs.length === 0) {
@@ -88,11 +88,11 @@ export const subElementsIDValidator = (options?: ValidateOptions): MiddlewareReq
       if (options?.runValidationIf?.(req) === false) {
         return { next: true };
       }
-      const jsonConfig: BetterOmit<FormRecord, "id" | "bearerToken"> = options?.jsonKey
+      const formProperties: FormProperties = options?.jsonKey
         ? req.body[options.jsonKey]
         : req.body;
 
-      const dynamicRowElements: Array<FormElement> = jsonConfig.form.elements.filter((element) => {
+      const dynamicRowElements: Array<FormElement> = formProperties.elements.filter((element) => {
         return element.type === FormElementTypes.dynamicRow;
       });
 

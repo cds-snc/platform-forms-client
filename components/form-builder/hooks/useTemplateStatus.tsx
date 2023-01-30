@@ -7,7 +7,7 @@ import { useTemplateStore } from "../store";
 
 interface FormTemplate {
   id: string;
-  updated_at: number;
+  updatedAt: number;
 }
 
 export const byId = async (id: string): Promise<FormTemplate | null> => {
@@ -44,7 +44,7 @@ export const useTemplateStatus = () => {
   const getTemplateById = useCallback(async () => {
     if ("authenticated" === status) {
       const template = await byId(id);
-      setUpdatedAt(template?.updated_at);
+      setUpdatedAt(template?.updatedAt);
     }
   }, [id, status]);
 

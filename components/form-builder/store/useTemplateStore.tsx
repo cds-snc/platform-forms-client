@@ -14,7 +14,7 @@ import {
 import { Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
-import { FormElement, FormProperties, FormElementTypes, FormRecord } from "@lib/types";
+import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { logMessage } from "@lib/logger";
 
 const defaultField: FormElement = {
@@ -33,17 +33,8 @@ const defaultField: FormElement = {
 };
 
 export const defaultForm = {
-  id: "",
   titleEn: "",
   titleFr: "",
-  layout: [],
-  version: 1,
-  endPage: {
-    descriptionEn: "",
-    descriptionFr: "",
-    referrerUrlEn: "",
-    referrerUrlFr: "",
-  },
   introduction: {
     descriptionEn: "",
     descriptionFr: "",
@@ -52,10 +43,14 @@ export const defaultForm = {
     descriptionEn: "",
     descriptionFr: "",
   },
+  confirmation: {
+    descriptionEn: "",
+    descriptionFr: "",
+    referrerUrlEn: "",
+    referrerUrlFr: "",
+  },
+  layout: [],
   elements: [],
-  emailSubjectEn: "",
-  emailSubjectFr: "",
-  securityAttribute: "Unclassified",
 };
 
 export interface TemplateStoreProps {
@@ -65,10 +60,9 @@ export interface TemplateStoreProps {
   focusInput: boolean;
   _hasHydrated: boolean;
   form: FormProperties;
-  submission: {
-    email?: string;
-  };
   isPublished: boolean;
+  name: string;
+  deliveryOption?: DeliveryOption;
   securityAttribute: string;
 }
 
@@ -105,8 +99,12 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (index: number) => void;
   bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: FormRecord) => void;
+  importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
+  getIsPublished: () => boolean;
+  getName: () => string;
+  getDeliveryOption: () => DeliveryOption | undefined;
+  getSecurityAttribute: () => string;
   initialize: () => void;
 }
 
@@ -133,10 +131,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     focusInput: false,
     _hasHydrated: false,
     form: defaultForm,
-    submission: {
-      email: "",
-    },
     isPublished: false,
+    name: "",
     securityAttribute: "Unclassified",
   };
 
@@ -253,20 +249,28 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             });
           },
           getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+          getIsPublished: () => get().isPublished,
+          getName: () => get().name,
+          getDeliveryOption: () => get().deliveryOption,
+          getSecurityAttribute: () => get().securityAttribute,
           initialize: () => {
             set((state) => {
               state.id = "";
               state.lang = "en";
               state.form = defaultForm;
-              state.submission = { email: "" };
               state.isPublished = false;
+              state.name = "";
               state.securityAttribute = "Unclassified";
             });
           },
-          importTemplate: (json) =>
+          importTemplate: (jsonConfig) =>
             set((state) => {
-              state.submission = { email: json.submission?.email || "" };
-              state.form = { ...defaultForm, ...json.form };
+              state.id = "";
+              state.lang = "en";
+              state.form = { ...defaultForm, ...jsonConfig };
+              state.isPublished = false;
+              state.name = "";
+              state.securityAttribute = "Unclassified";
             }),
         }),
         {

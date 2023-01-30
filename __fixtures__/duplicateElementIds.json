@@ -1,384 +1,375 @@
 {
-  "form": {
-    "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
-    "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
-    "version": 1,
-    "elements": [
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Section 1: Nomination Category",
-          "descriptionFr": "#### Section 1: Catégorie de la nomination"
-        }
-      },
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Purposely a duplicate ID",
-          "descriptionFr": "Purposely a duplicate ID"
-        }
-      },
-      {
-        "id": 2,
-        "type": "radio",
-        "properties": {
-          "choices": [
-            {
-              "en": "Team nomination",
-              "fr": "Mise en candidature d’une équipe"
-            },
-            {
-              "en": "Individual Nomination",
-              "fr": "Mise en candidature d’une personne"
-            }
-          ],
-          "titleEn": "Is this a Team or Individual Nomination?",
-          "titleFr": "Is this a Team or Individual Nomination?",
-          "validation": {
-            "required": true
-          },
-          "descriptionEn": "",
-          "descriptionFr": ""
-        }
-      },
-      {
-        "id": 3,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Purposely a duplicate ID",
-          "descriptionFr": "Purposely a duplicate ID"
-        }
-      },
-      {
-        "id": 3,
-        "type": "radio",
-        "properties": {
-          "choices": [
-            {
-              "en": "Excellence in Profession",
-              "fr": "Excellence en profession"
-            },
-            {
-              "en": "Exceptional Young Public Servant",
-              "fr": "Jeunes fonctionnaires exceptionnels"
-            },
-            {
-              "en": "Exemplary Contribution Under Extraordinary Circumstances (Team only)",
-              "fr": "Contribution exemplaire dans des circonstances extraordinaires (Équipe seulement)"
-            },
-            {
-              "en": "Joan Atkinson Award for Public Sector Balues in the Workplace",
-              "fr": "Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
-            },
-            {
-              "en": "Outstanding Career (Individual only)",
-              "fr": "Carrière exceptionnelle (Personne seulement)"
-            },
-            {
-              "en": "60 Years of Service Special Award (Individual only)",
-              "fr": "Prix spécial récompensant 60 années de service (Personne seulement)"
-            }
-          ],
-          "titleEn": "Category",
-          "titleFr": "Catégorie",
-          "validation": {
-            "required": true
-          },
-          "descriptionEn": "",
-          "descriptionFr": ""
-        }
-      },
-      {
-        "id": 4,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Section 2: Nominator Information",
-          "descriptionFr": "#### Section 2: Information sur le proposant"
-        }
-      },
-      {
-        "id": 5,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Family name",
-          "titleFr": "Nom",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 6,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Given name",
-          "titleFr": "Prénom",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 7,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or organization",
-          "titleFr": "Ministère ou organisme",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 8,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "Titre",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 9,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Phone number",
-          "titleFr": "Numéro de téléphone",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 10,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Email address",
-          "titleFr": "Adresse de courriel",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 10,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Purposely a duplicate ID",
-          "descriptionFr": "Purposely a duplicate ID"
-        }
-      },
-      {
-        "id": 22,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": false
-          },
-          "subElements": [
-            {
-              "id": 2201,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Family name",
-                "titleFr": "Nom",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2202,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Given name",
-                "titleFr": "Prénom",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2203,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Department or organization",
-                "titleFr": "Ministère ou organisme",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2206,
-              "type": "dropdown",
-              "properties": {
-                "choices": [
-                  {
-                    "en": "",
-                    "fr": ""
-                  },
-                  {
-                    "en": "Alberta",
-                    "fr": "Alberta"
-                  },
-                  {
-                    "en": "British Columbia",
-                    "fr": "Colombie-Britannique"
-                  },
-                  {
-                    "en": "Manitoba",
-                    "fr": "Manitoba"
-                  },
-                  {
-                    "en": "New Brunswick",
-                    "fr": "Nouveau-Brunswick"
-                  },
-                  {
-                    "en": "Newfoundland and Labrador",
-                    "fr": "Terre-Neuve-et-Labrador"
-                  },
-                  {
-                    "en": "Northwest Territories",
-                    "fr": "Territoires du Nord-Ouest"
-                  },
-                  {
-                    "en": "Nova Scotia",
-                    "fr": "Nouvelle-Écosse"
-                  },
-                  {
-                    "en": "Nunavut",
-                    "fr": "Nunavut"
-                  },
-                  {
-                    "en": "Ontario",
-                    "fr": "Ontario"
-                  },
-                  {
-                    "en": "Prince Edward Island",
-                    "fr": "Île-du-Prince-Édouard"
-                  },
-                  {
-                    "en": "Quebec",
-                    "fr": "Québec"
-                  },
-                  {
-                    "en": "Saskatchewan",
-                    "fr": "Saskatchewan"
-                  },
-                  {
-                    "en": "Yukon",
-                    "fr": "Yukon"
-                  }
-                ],
-                "titleEn": "Province or territory",
-                "titleFr": "Province ou territoire",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2206,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Preferred language",
-                "titleFr": "Langue préférée",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2206,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Group and level",
-                "titleFr": "Groupe et niveau",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            }
-          ]
-        }
+  "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
+  "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
+  "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "elements": [
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Section 1: Nomination Category",
+        "descriptionFr": "#### Section 1: Catégorie de la nomination"
       }
-    ]
-  },
-  "submission": {
-    "email": "steven.talbot@cds-snc.ca"
-  },
-  "internalTitleEn": "Public Service Award of Excellence 2020",
-  "internalTitleFr": "Prix d’excellence de la fonction publique 2020",
-  "securityAttribute": "Unclassified"
+    },
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Purposely a duplicate ID",
+        "descriptionFr": "Purposely a duplicate ID"
+      }
+    },
+    {
+      "id": 2,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "Team nomination",
+            "fr": "Mise en candidature d’une équipe"
+          },
+          {
+            "en": "Individual Nomination",
+            "fr": "Mise en candidature d’une personne"
+          }
+        ],
+        "titleEn": "Is this a Team or Individual Nomination?",
+        "titleFr": "Is this a Team or Individual Nomination?",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": ""
+      }
+    },
+    {
+      "id": 3,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Purposely a duplicate ID",
+        "descriptionFr": "Purposely a duplicate ID"
+      }
+    },
+    {
+      "id": 3,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "Excellence in Profession",
+            "fr": "Excellence en profession"
+          },
+          {
+            "en": "Exceptional Young Public Servant",
+            "fr": "Jeunes fonctionnaires exceptionnels"
+          },
+          {
+            "en": "Exemplary Contribution Under Extraordinary Circumstances (Team only)",
+            "fr": "Contribution exemplaire dans des circonstances extraordinaires (Équipe seulement)"
+          },
+          {
+            "en": "Joan Atkinson Award for Public Sector Balues in the Workplace",
+            "fr": "Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
+          },
+          {
+            "en": "Outstanding Career (Individual only)",
+            "fr": "Carrière exceptionnelle (Personne seulement)"
+          },
+          {
+            "en": "60 Years of Service Special Award (Individual only)",
+            "fr": "Prix spécial récompensant 60 années de service (Personne seulement)"
+          }
+        ],
+        "titleEn": "Category",
+        "titleFr": "Catégorie",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": ""
+      }
+    },
+    {
+      "id": 4,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Section 2: Nominator Information",
+        "descriptionFr": "#### Section 2: Information sur le proposant"
+      }
+    },
+    {
+      "id": 5,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Family name",
+        "titleFr": "Nom",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 6,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Given name",
+        "titleFr": "Prénom",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 7,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Department or organization",
+        "titleFr": "Ministère ou organisme",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 8,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Title",
+        "titleFr": "Titre",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 9,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Phone number",
+        "titleFr": "Numéro de téléphone",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 10,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Email address",
+        "titleFr": "Adresse de courriel",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 10,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Purposely a duplicate ID",
+        "descriptionFr": "Purposely a duplicate ID"
+      }
+    },
+    {
+      "id": 22,
+      "type": "dynamicRow",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [
+          {
+            "id": 2201,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Family name",
+              "titleFr": "Nom",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2202,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Given name",
+              "titleFr": "Prénom",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2203,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Department or organization",
+              "titleFr": "Ministère ou organisme",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2206,
+            "type": "dropdown",
+            "properties": {
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                },
+                {
+                  "en": "Alberta",
+                  "fr": "Alberta"
+                },
+                {
+                  "en": "British Columbia",
+                  "fr": "Colombie-Britannique"
+                },
+                {
+                  "en": "Manitoba",
+                  "fr": "Manitoba"
+                },
+                {
+                  "en": "New Brunswick",
+                  "fr": "Nouveau-Brunswick"
+                },
+                {
+                  "en": "Newfoundland and Labrador",
+                  "fr": "Terre-Neuve-et-Labrador"
+                },
+                {
+                  "en": "Northwest Territories",
+                  "fr": "Territoires du Nord-Ouest"
+                },
+                {
+                  "en": "Nova Scotia",
+                  "fr": "Nouvelle-Écosse"
+                },
+                {
+                  "en": "Nunavut",
+                  "fr": "Nunavut"
+                },
+                {
+                  "en": "Ontario",
+                  "fr": "Ontario"
+                },
+                {
+                  "en": "Prince Edward Island",
+                  "fr": "Île-du-Prince-Édouard"
+                },
+                {
+                  "en": "Quebec",
+                  "fr": "Québec"
+                },
+                {
+                  "en": "Saskatchewan",
+                  "fr": "Saskatchewan"
+                },
+                {
+                  "en": "Yukon",
+                  "fr": "Yukon"
+                }
+              ],
+              "titleEn": "Province or territory",
+              "titleFr": "Province ou territoire",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2206,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Preferred language",
+              "titleFr": "Langue préférée",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2206,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Group and level",
+              "titleFr": "Groupe et niveau",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
 }

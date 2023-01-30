@@ -12,16 +12,23 @@ jest.mock("@lib/hooks/useRefresh", () => ({
 describe("JSON Upload Component", () => {
   afterEach(cleanup);
   const formConfig = { test: "test JSON" };
+  const form = {
+    id: "test",
+    form: formConfig,
+    isPublished: false,
+    deliveryOption: {
+      emailAddress: "",
+      emailSubjectEn: "",
+      emailSubjectFr: "",
+    },
+    securityAttribute: "Unclassified",
+  };
   it("renders without errors", async () => {
     render(<JSONUpload></JSONUpload>);
     expect(screen.queryByTestId("jsonInput")).toBeInTheDocument();
     expect(screen.queryByTestId("submitStatus")).not.toBeInTheDocument();
   });
   it("renders existing form JSON if passed in", async () => {
-    const form = {
-      id: "test",
-      ...formConfig,
-    };
     render(<JSONUpload form={form}></JSONUpload>);
     expect(screen.queryByTestId("jsonInput").value).toBe(JSON.stringify(formConfig, null, 2));
   });
@@ -33,10 +40,6 @@ describe("JSON Upload Component", () => {
     expect(await screen.findByTestId("alert")).toBeInTheDocument();
   });
   it("Shows a submit status message if successfully submitted to API", async () => {
-    const form = {
-      id: "test",
-      ...formConfig,
-    };
     mockedAxios.mockResolvedValue();
 
     render(<JSONUpload form={form}></JSONUpload>);
