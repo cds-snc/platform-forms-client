@@ -1,8 +1,10 @@
 import React from "react";
 export const Input = ({
   handleChange,
+  onBlur,
 }: {
   handleChange: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onBlur: () => void;
 }) => {
   return (
     <div className="grow my-[4px] mx-[8px]">
@@ -12,6 +14,7 @@ export const Input = ({
         type="text"
         name="tag-input"
         onKeyUp={handleChange}
+        onBlur={onBlur}
       />
     </div>
   );

@@ -30,10 +30,19 @@ export const TagInput = ({
     }
   };
 
+  const onBlur = (e: { target: HTMLInputElement }) => {
+    const text = (e.target as HTMLInputElement).value;
+
+    if (text) {
+      setTags([...new Set([...tags, text.trim().replace(",", "")])]);
+      (e.target as HTMLInputElement).value = "";
+    }
+  };
+
   return (
     <div className="flex flex-wrap rounded-md box-border border-black-default border-2 w-[533px]">
       <Tags tags={tags} onRemove={onRemove} />
-      <Input handleChange={onKeyUp} />
+      <Input handleChange={onKeyUp} onBlur={onBlur} />
     </div>
   );
 };

@@ -42,6 +42,9 @@ describe("TagInput", () => {
     expect(removeButtons1[0]).toHaveFocus();
 
     await userEvent.tab();
+    const removeButtons2 = await rendered.findAllByRole("button");
+    expect(removeButtons2[1]).toHaveFocus();
+    await userEvent.tab();
     expect(input).toHaveFocus();
   });
 });
