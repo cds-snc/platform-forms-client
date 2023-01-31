@@ -6,7 +6,6 @@ import { useDialogRef, Dialog, TagInput, Button } from "./shared";
 import axios from "axios";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
-import { userAgent } from "next/server";
 import { AddIcon, RemoveIcon } from "../icons";
 
 export const ShareModal = ({
