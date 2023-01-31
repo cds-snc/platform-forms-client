@@ -5,6 +5,7 @@ import { FormElementTypes } from "@lib/types";
 import { useDialogRef, Dialog, TagInput, Button } from "./shared";
 import axios from "axios";
 import { useTemplateStore } from "../store";
+import { useSession } from "next-auth/react";
 
 export const ShareModal = ({
   handleClose,
@@ -14,6 +15,7 @@ export const ShareModal = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [emails, setEmails] = useState<string[]>([]);
+  const { data } = useSession();
 
   const dialog = useDialogRef();
 
@@ -88,7 +90,7 @@ export const ShareModal = ({
               <span className="hidden group-open:inline">-</span>
             </summary>
             <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
-              <h4>Steve From Accounting has shared a GC Form with you</h4>
+              <h4>{data?.user.name || "Someone"} has shared a GC Form with you</h4>
               <p className="mt-4">
                 To preview this form:
                 <ul>
