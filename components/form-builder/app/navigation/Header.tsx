@@ -16,7 +16,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
   const { isLoading, status: shareEnabled } = useFlag("shareMenu");
   const { status: editableFilename } = useFlag("editableFilename");
   const { ability, refreshAbility } = useAccessControl();
-  const { t, i18n } = useTranslation(["form-builder", "common"]);
+  const { t, i18n } = useTranslation(["common", "form-builder"]);
 
   useEffect(() => {
     refreshAbility();
@@ -39,18 +39,18 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               {editableFilename ? (
                 <>
                   <div className="inline-block">
-                    <SiteLogo title={t("gcForms")} />
+                    <SiteLogo title={t("title")} />
                   </div>
                 </>
               ) : (
-                t("gcForms", { ns: "common" })
+                t("title", { ns: "common" })
               )}
             </a>
           </Link>
 
           {!isFormBuilder && (
             <div className="px-2 box-border block mt-3 h-[40px] text-base font-bold">
-              {t("gcForms")}
+              {t("title", { ns: "common" })}
             </div>
           )}
           {isFormBuilder && editableFilename && <FileNameInput />}
