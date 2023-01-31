@@ -13,9 +13,9 @@ describe("ElementRequired", () => {
     const promise = Promise.resolve();
     const user = userEvent.setup();
 
-    const item = { id: 1, index: 0, ...store.form.elements[0] };
+    const item = { id: 1, index: 0, ...store.elements[0] };
     const rendered = render(
-      <Providers form={store.form}>
+      <Providers form={store}>
         <ElementRequired item={item} onRequiredChange={jest.fn} />
       </Providers>
     );

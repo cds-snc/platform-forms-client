@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { useTranslation } from "next-i18next";
 
-import { Button } from "../shared/Button";
+import { FormElementTypes } from "@lib/types";
+import { Button } from "../shared";
+import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { Modal } from "./Modal";
 import { FormElementWithIndex } from "@components/form-builder/types";
 import { useTemplateStore } from "@components/form-builder/store";
@@ -23,13 +25,13 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, remove, moveUp, moveDown, add, duplicateElement, elements, setFocusInput } =
+  const { lang, add, remove, moveUp, moveDown, duplicateElement, elements, setFocusInput } =
     useTemplateStore((s) => ({
       lang: s.lang,
+      add: s.add,
       remove: s.remove,
       moveUp: s.moveUp,
       moveDown: s.moveDown,
-      add: s.add,
       duplicateElement: s.duplicateElement,
       elements: s.form.elements,
       setFocusInput: s.setFocusInput,
@@ -100,6 +102,14 @@ export const PanelActions = ({
 
     return -1;
   };
+
+  const handleAddElement = useCallback(
+    (index: number, type?: FormElementTypes) => {
+      setFocusInput(true);
+      add(index, type);
+    },
+    [add, setFocusInput]
+  );
 
   const buttonClasses =
     "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
@@ -225,20 +235,8 @@ export const PanelActions = ({
           </Modal>
         )}
       </div>
-
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <Button
-          onClick={() => {
-            setFocusInput(true);
-            add(item.index);
-          }}
-          theme="secondary"
-          className="!border-1.5 !py-2 !px-4 leading-6 bg-white text-sm"
-          tabIndex={0}
-          dataTestId="add-element"
-        >
-          {t("addElement")}
-        </Button>
+        <AddElementButton position={item.index} handleAdd={handleAddElement} />
       </div>
     </div>
   );

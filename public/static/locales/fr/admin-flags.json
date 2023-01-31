@@ -49,6 +49,18 @@
     "formBuilderDebug": {
       "title": "Form Builder Debug",
       "description": "Enable the form builder debug mode"
+    },
+    "formBuilderAddElementDialog": {
+      "title": "[FR] Form Builder Add Element Dialog",
+      "description": "[FR] Enable dialog when adding elements to the form builder"
+    },
+    "shareMenu": {
+      "title": "[FR] Share Menu",
+      "description": "[FR] Enable share menu dropdown"
+    },
+    "editableFilename": {
+      "title": "[FR] Form Builder Editable Filename",
+      "description": "[FR] Updates header to include editable filename"
     }
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, FormRecord } from "@lib/types";
 import { JSONUpload } from "./JsonUpload";
 
 export default {
@@ -9,15 +9,10 @@ export default {
 
 export const defaultJSONUpload = (): React.ReactElement => <JSONUpload></JSONUpload>;
 
-const testForm = {
+const testForm: FormRecord = {
   id: "test0form00000id000asdf11",
-  securityAttribute: "Unclassified",
-  submission: {
-    email: "test@test.com",
-  },
-  isPublished: true,
+  name: "Test JSON!",
   form: {
-    version: 1,
     titleEn: "Test JSON!",
     titleFr: "Test JSON!",
     layout: [1],
@@ -32,6 +27,13 @@ const testForm = {
       },
     ],
   },
+  isPublished: true,
+  deliveryOption: {
+    emailAddress: "test@test.com",
+    emailSubjectEn: "",
+    emailSubjectFr: "",
+  },
+  securityAttribute: "Unclassified",
 };
 
 export const populatedJSONUpload = (): React.ReactElement => <JSONUpload form={testForm} />;

@@ -16,7 +16,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <Template page={page} isFormBuilder />;
 };
 
 export { getServerSideProps };

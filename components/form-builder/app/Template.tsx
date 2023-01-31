@@ -11,7 +11,15 @@ import { LeftNavigation, Header } from "@components/form-builder/app";
 import { Language } from "../types";
 import { useActivePathname, TemplateApiProvider } from "../hooks";
 
-export const Template = ({ page }: { page: ReactElement }) => {
+export const Template = ({
+  page,
+  isFormBuilder = false,
+  className = "",
+}: {
+  page: ReactElement;
+  isFormBuilder?: boolean;
+  className?: string;
+}) => {
   return (
     <TemplateStoreProvider
       {...{ ...(page.props.initialForm && page.props.initialForm), locale: page.props.locale }}
@@ -22,9 +30,9 @@ export const Template = ({ page }: { page: ReactElement }) => {
           <meta charSet="utf-8" />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         </Head>
-        <div className="flex flex-col h-full">
+        <div className={`flex flex-col h-full ${className}`}>
           <SkipLink />
-          <Header />
+          <Header isFormBuilder={isFormBuilder} />
           {page}
           <Footer displaySLAAndSupportLinks />
         </div>
@@ -49,7 +57,7 @@ export const PageTemplate = ({
     form: s.form,
     hasHydrated: s._hasHydrated,
     setLang: s.setLang,
-    email: s.submission?.email,
+    email: s.deliveryOption?.emailAddress,
     updateField: s.updateField,
   }));
 
@@ -64,7 +72,7 @@ export const PageTemplate = ({
   useEffect(() => {
     const setEmail = () => {
       if (data && data.user.email) {
-        updateField("submission.email", data.user.email);
+        updateField("deliveryOption.emailAddress", data.user.email);
       }
     };
     !email && currentPage !== "settings" && setEmail();

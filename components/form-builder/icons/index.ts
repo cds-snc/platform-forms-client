@@ -43,3 +43,8 @@ export { ItalicIcon } from "./ItalicIcon";
 export { BulletListIcon } from "./BulletListIcon";
 export { LinkIcon } from "./LinkIcon";
 export { TreeViewIcon } from "./TreeViewIcon";
+export { SiteLogo } from "./SiteLogo";
+export { RoundCloseIcon } from "./RoundCloseIcon";
+export { ShareExternalLinkIcon } from "./ShareExternalLinkIcon";
+export { CopyIcon } from "./CopyIcon";
+export { ChevronRight } from "./ChevronRight";

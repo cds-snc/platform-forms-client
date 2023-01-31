@@ -129,7 +129,7 @@ const RenderMyForms: NextPageWithLayout<MyFormsProps> = ({ templates }: MyFormsP
 };
 
 RenderMyForms.getLayout = (page: ReactElement) => {
-  return <Template page={page}></Template>;
+  return <Template page={page} className="my-forms"></Template>;
 };
 
 export const getServerSideProps = requireAuthentication(
@@ -142,14 +142,14 @@ export const getServerSideProps = requireAuthentication(
           id,
           form: { titleEn, titleFr },
           isPublished,
-          updated_at,
+          updatedAt,
         } = template;
         return {
           id,
           titleEn,
           titleFr,
           isPublished,
-          date: updated_at,
+          date: updatedAt,
           url: `/${locale}/id/${id}`,
         };
       });

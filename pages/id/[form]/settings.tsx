@@ -26,13 +26,10 @@ interface FormSettingsProps {
 const handleDelete = async (formID: string) => {
   // redirect to view templates page on success
   const resp = await axios({
-    url: "/api/templates",
+    url: `/api/templates/${formID}`,
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-    },
-    data: {
-      formID: formID,
     },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   })

@@ -19,20 +19,18 @@ const TemplateApiContext = createContext<TemplateApiType>(defaultTemplateApi);
 export function TemplateApiProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation(["form-builder"]);
   const [error, setError] = useState<string | null>(null);
-  const { getSchema, id } = useTemplateStore((s) => ({
+  const { id, getSchema, getName, getDeliveryOption } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
+    getName: s.getName,
+    getDeliveryOption: s.getDeliveryOption,
   }));
 
   const { uploadJson } = usePublish();
 
   const saveForm = async () => {
     try {
-      const schema = JSON.parse(getSchema());
-      delete schema.id;
-      delete schema.isPublished;
-
-      const result = await uploadJson(JSON.stringify(schema), id);
+      const result = await uploadJson(getSchema(), getName(), getDeliveryOption(), id);
 
       if (result && result?.error) {
         throw result?.error as Error;

@@ -6,7 +6,7 @@ export type {
   ElementProperties,
   FormElement,
   PublicFormRecord,
-  SubmissionProperties,
+  DeliveryOption,
   FormRecord,
   FormProperties,
 } from "./form-types";

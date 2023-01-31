@@ -1,5 +1,5 @@
 import { Language } from "./types";
-import { FormElement, FormProperties, FormRecord, PropertyChoices } from "@lib/types";
+import { FormElement, FormProperties, PropertyChoices } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const getPreviousIndex = (items: FormElement[], index: number) => {
@@ -92,47 +92,20 @@ export const newlineToOptions = (
 
 export const getSchemaFromState = (state: TemplateStoreState) => {
   const {
-    id,
-    form: {
-      endPage,
-      introduction,
-      privacyPolicy,
-      elements,
-      titleEn,
-      titleFr,
-      version,
-      emailSubjectEn,
-      emailSubjectFr,
-    },
-    submission,
-    securityAttribute,
+    form: { titleEn, titleFr, introduction, privacyPolicy, confirmation, elements },
   } = state;
 
   const form: FormProperties = {
-    layout: [],
-    endPage,
-    introduction,
-    privacyPolicy,
     titleEn,
     titleFr,
-    version,
+    introduction,
+    privacyPolicy,
+    confirmation,
+    layout: elements.map((element) => element.id),
     elements,
-    emailSubjectEn,
-    emailSubjectFr,
   };
 
-  form.layout = elements.map((element) => {
-    return element.id;
-  });
-
-  const schema: Partial<FormRecord> = {
-    id,
-    form,
-    submission,
-    securityAttribute,
-  };
-
-  return schema;
+  return form;
 };
 
 // @todo this will need to be updated to support other locales i.e. fr-CA
@@ -154,7 +127,21 @@ export const formatDateTime = (updatedAt: number | undefined, locale = "en-CA") 
     return [];
   }
 
-  const yearMonthDay = parts[0].replace(/-/g, "/");
+  const yearMonthDay = parts[0];
   const time = parts[1].replace(/\./g, "").trim();
   return [yearMonthDay, time];
+};
+
+export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-CA") => {
+  const date = new Date(updatedAt || 0);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  };
+
+  return date.toLocaleDateString(locale, options);
 };
