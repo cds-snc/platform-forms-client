@@ -140,7 +140,8 @@ export const getServerSideProps = requireAuthentication(
       const templates = (await getAllTemplates(ability, id)).map((template) => {
         const {
           id,
-          form: { titleEn, titleFr },
+          form: { titleEn = "", titleFr = "" },
+          name,
           isPublished,
           updatedAt,
         } = template;
@@ -148,6 +149,7 @@ export const getServerSideProps = requireAuthentication(
           id,
           titleEn,
           titleFr,
+          name,
           isPublished,
           date: updatedAt,
           url: `/${locale}/id/${id}`,
