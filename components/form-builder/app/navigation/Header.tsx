@@ -7,11 +7,14 @@ import { useTranslation } from "next-i18next";
 import { useFlag } from "@lib/hooks";
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
+import { SiteLogo } from "@formbuilder/icons";
+import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
 
-export const Header = ({ shareMenu = false }: { shareMenu: boolean }) => {
+export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
   const { status } = useSession();
   const { isLoading, status: shareEnabled } = useFlag("shareMenu");
+  const { status: editableFilename } = useFlag("editableFilename");
   const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
@@ -22,22 +25,32 @@ export const Header = ({ shareMenu = false }: { shareMenu: boolean }) => {
   }, []);
 
   return (
-    <header className="border-b-3 border-blue-dark my-10 lg:px-4 xl:px-8 px-32">
+    <header className="border-b-1 border-gray-500 mt-4 mb-12 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
-        <div>
+        <div className="flex">
           <Link href="/form-builder">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a className="inline-block mr-10 text-h2 mb-6 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none">
-              {t("title", { ns: "common" })}
+            <a
+              id="logo"
+              className={`${
+                editableFilename && "border-r-1"
+              } mb-2 inline-block pr-5 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
+            >
+              {editableFilename ? (
+                <SiteLogo title={t("title", { ns: "common" })} />
+              ) : (
+                t("title", { ns: "common" })
+              )}
             </a>
           </Link>
+          {isFormBuilder && editableFilename && <FileNameInput />}
         </div>
         <nav
-          className="inline-flex gap-4"
+          className={`${editableFilename && "mt-3"} inline-flex gap-4 `}
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
-            {shareMenu && !isLoading && shareEnabled && (
+            {isFormBuilder && !isLoading && shareEnabled && (
               <li className="md:text-small_base text-base font-normal not-italic mr-4">
                 <ShareDropdown />
               </li>
