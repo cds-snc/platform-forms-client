@@ -20,6 +20,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
             <li className="flex flex-col" key={index}>
               <Card
                 id={card.id}
+                name={card.name}
                 titleEn={card.titleEn}
                 titleFr={card.titleFr}
                 url={card.url}
