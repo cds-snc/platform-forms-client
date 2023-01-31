@@ -127,7 +127,7 @@ export const ShareDropdown = () => {
                                 }}
                               >
                                 <CopyIcon className="scale-[80%]" />
-                                <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 text-sm underline underline-offset-4 text-blue">
+                                <span className="focus:border-2 focus:border-blue-focus focus:rounded-md focus:no-underline hover:no-underline inline-block mr-1 ml-1 text-sm underline underline-offset-4 text-blue">
                                   {t("share.copy")}
                                 </span>
                               </button>
@@ -136,17 +136,15 @@ export const ShareDropdown = () => {
 
                             {/* open link */}
                             <DropdownMenuPrimitive.Item asChild>
-                              <Link href={url}>
-                                <a
-                                  href={url}
-                                  className="inline-block mr-1 flex text-sm no-underline"
-                                >
-                                  <ShareExternalLinkIcon className="scale-[70%]" />
-                                  <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 underline underline-offset-4 text-blue">
-                                    {t("share.open")}
-                                  </span>
-                                </a>
-                              </Link>
+                              <a
+                                href={url}
+                                className="inline-block focus:shadow-none focus:bg-transparent focus:border-2 focus:border-blue-focus focus:rounded-md mr-1 flex text-sm no-underline"
+                              >
+                                <ShareExternalLinkIcon className="scale-[70%]" />
+                                <span className="focus:no-underline focus:bg-red hover:no-underline inline-block mr-1 ml-1 underline underline-offset-4 text-blue">
+                                  {t("share.open")}
+                                </span>
+                              </a>
                             </DropdownMenuPrimitive.Item>
                             {/* end open link */}
                           </div>
