@@ -4,7 +4,8 @@ import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/clie
 import { cors, middleware } from "@lib/middleware";
 import { extractBearerTokenFromReq } from "@lib/middleware/validTemporaryToken";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
 /**
@@ -40,6 +41,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
   });
 
   try {
+    // Remove previous process completion identifier
+    await removeProcessedMark(submissionID);
+
     const getQueueURLCommand = new GetQueueUrlCommand({
       QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
     });
@@ -54,12 +58,43 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
     });
 
     await sqsClient.send(sendMessageCommand);
+    logMessage.info(
+      `Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
+    );
 
     return res.status(200).json({ status: "submission will be reprocessed" });
   } catch (error) {
     logMessage.warn(error as Error);
     return res.status(500).json({ responses: "Processing error on the server side" });
   }
+}
+
+/**
+ * Removes the NotifyProcessed identifier that is used to ensure no duplicated submissions
+ * @param submissionID
+ * @returns void
+ */
+async function removeProcessedMark(submissionID: string) {
+  const documentClient = DynamoDBDocumentClient.from(
+    new DynamoDBClient({
+      region: process.env.AWS_REGION ?? "ca-central-1",
+      endpoint: process.env.LOCAL_AWS_ENDPOINT,
+    })
+  );
+
+  const updateItem = {
+    TableName: "ReliabilityQueue",
+    Key: {
+      SubmissionID: submissionID,
+    },
+    UpdateExpression: "SET NotifyProcessed = :processed",
+    ExpressionAttributeValues: {
+      ":processed": false,
+    },
+    ReturnValues: "NONE",
+  };
+
+  return await documentClient.send(new UpdateCommand(updateItem));
 }
 
 /**
