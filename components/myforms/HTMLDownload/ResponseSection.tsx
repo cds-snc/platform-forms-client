@@ -70,9 +70,9 @@ export const ResponseSection = ({
     dangerouslySetInnerHTML: {
       __html: `
 (function () {
-    var btnCopyCode = document.getElementById("copyCodeButton-${capitalize(lang)}");
+    var btnCopyCode = document.getElementById("copyCodeButton${capitalizedLang}");
     btnCopyCode.addEventListener("click", function () {
-        var el = document.getElementById("copyCodeOutput-${capitalize(lang)}");
+        var el = document.getElementById("copyCodeOutput${capitalizedLang}");
         var code = ("${confirmReceiptCode}").trim();
         if(window.copyTextToClipboard(code)){
           el.classList.remove("hidden");
@@ -84,12 +84,10 @@ export const ResponseSection = ({
         }
     }, false);
 
-    var btnCopyResponse = document.getElementById("copyResponseButton-${capitalize(lang)}");
+    var btnCopyResponse = document.getElementById("copyResponseButton${capitalizedLang}");
     btnCopyResponse.addEventListener("click", function () {
-        var outputEl = document.getElementById("copyResponseOutput-${capitalize(lang)}");
-        var responseItems = Array.from(document.querySelectorAll("#responseTableRow-${capitalize(
-          lang
-        )} dd"));
+        var outputEl = document.getElementById("copyResponseOutput${capitalizedLang}");
+        var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd"));
 
         // Format with tab separators for Excel copy+paste
         var responseText = responseItems.map(item => {
@@ -116,26 +114,31 @@ export const ResponseSection = ({
 
   return (
     <>
-      <nav className="flex items-center" aria-labelledby={`navTitle-${capitalizedLang}`}>
+      <nav
+        id={`navTitle${capitalizedLang}`}
+        tabIndex={-1}
+        className="flex items-center"
+        aria-labelledby={`navTitle${capitalizedLang}`}
+      >
         <div
-          id={`navTitle-${capitalizedLang}`}
+          id={`navTitle${capitalizedLang}`}
           className="mr-4 pl-3 pr-4 py-1 bg-gray-800 text-white"
         >
           {t("responseTemplate.jumpTo", { lng: lang })}
         </div>
         <ul className="flex list-none p-0">
           <li className="mr-4">
-            <a href={`#columnTable-${capitalizedLang}`}>
+            <a href={`#columnTable${capitalizedLang}`}>
               {t("responseTemplate.columnTable", { lng: lang })}
             </a>
           </li>
           <li className="mr-4">
-            <a href={`#rowTable-${capitalizedLang}`}>
+            <a href={`#rowTable${capitalizedLang}`}>
               {t("responseTemplate.rowTable", { lng: lang })}
             </a>
           </li>
           <li className="mr-4">
-            <a href={`#confirmReceipt-${capitalizedLang}`}>
+            <a href={`#confirmReceipt${capitalizedLang}`}>
               {t("responseTemplate.confirmReceipt", { lng: lang })}
             </a>
           </li>
@@ -143,7 +146,7 @@ export const ResponseSection = ({
       </nav>
 
       <h2 className="gc-h1 mt-20">{formTemplate[getProperty("title", lang)]?.toString()}</h2>
-      <h3 id={`columnTable-${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
+      <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>
       <Table
@@ -155,7 +158,7 @@ export const ResponseSection = ({
         lang={capitalizedLang}
       />
 
-      <h3 id={`rowTable-${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
+      <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}
       </h3>
       <p className="mb-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
@@ -167,45 +170,47 @@ export const ResponseSection = ({
         isRowTable={true}
         lang={capitalizedLang}
       />
-      <p className="mt-8" id={`copyResponseLabel-${capitalizedLang}`}>
+
+      <h3 className="gc-h2 mt-20">{t("responseTemplate.copyResponseRow", { lng: lang })}</h3>
+      <p className="mt-8" id={`copyResponseLabel${capitalizedLang}`}>
         {t("responseTemplate.copyResponseInfo", { lng: lang })}
       </p>
       <div className="mt-4 mb-32">
         <button
-          id={`copyResponseButton-${capitalizedLang}`}
-          aria-labelledby={`copyResponseLabel-${capitalizedLang}`}
+          id={`copyResponseButton${capitalizedLang}`}
+          aria-labelledby={`copyResponseLabel${capitalizedLang}`}
           className="gc-button--blue"
           type="button"
         >
           {t("responseTemplate.copyResponse", { lng: lang })}
         </button>
         <span
-          id={`copyResponseOutput-${capitalizedLang}`}
+          id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
           className="hidden text-green-default ml-8"
         ></span>
       </div>
 
-      <h3 id={`confirmReceipt-${capitalizedLang}`} className="gc-h2 mt-20">
+      <h3 id={`confirmReceipt${capitalizedLang}`} className="gc-h2 mt-20">
         {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
       </h3>
-      <p className="mt-4" id={`confirmReceiptInfo-${capitalizedLang}`}>
+      <p className="mt-4" id={`confirmReceiptInfo${capitalizedLang}`}>
         {t("responseTemplate.confirmReceiptInfo", { lng: lang })}
       </p>
-      <div id={`confirmReceiptCodeText-${capitalizedLang}`} className="mt-8 font-bold">
+      <div id={`confirmReceiptCodeText${capitalizedLang}`} className="mt-8 font-bold">
         {confirmReceiptCode}
       </div>
       <div className="mt-4 mb-32">
         <button
-          id={`copyCodeButton-${capitalizedLang}`}
+          id={`copyCodeButton${capitalizedLang}`}
           className="gc-button--blue"
           type="button"
-          aria-labelledby={`confirmReceiptInfo-${capitalizedLang}`}
+          aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
         >
           {t("responseTemplate.copyCode", { lng: lang })}
         </button>
         <span
-          id={`copyCodeOutput-${capitalizedLang}`}
+          id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"
           className="hidden text-green-default ml-8"
         ></span>

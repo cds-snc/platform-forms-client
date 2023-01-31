@@ -28,7 +28,7 @@ export const Table = (props: TableProps): React.ReactElement => {
       {!questionsAnswers && <p>{t("responseTemplate.errorNoQuestionsAnswers")}</p>}
       {!isRowTable && questionsAnswers && (
         <dl
-          id={`responseTableRow-${capitalize(lang)}`}
+          id={`responseTableRow${capitalize(lang)}`}
           className="border-b-2 border-t-2 border-grey-default"
         >
           <div className="flex border-b border-grey-default">
@@ -62,15 +62,16 @@ export const Table = (props: TableProps): React.ReactElement => {
             ))}
         </dl>
       )}
+      {/* Note: Inline styles used where Tailwind classes would fail, espcially custom e.g. min-w-[20rem] */}
       {isRowTable && questionsAnswers && (
         <dl className="flex overflow-x-auto border-b-2 border-t-2 border-grey-default">
-          <div className="flex flex-col min-w-[14rem] max-w-[40rem]">
+          <div className="flex flex-col" style={{ minWidth: "20rem", maxWidth: "40rem" }}>
             <dt className="font-bold border-b border-grey-default pt-2 pb-2">
               {t("responseTemplate.responseNumber", { lng: lang })}
             </dt>
             <dd className="pt-2 pb-2">{responseID}</dd>
           </div>
-          <div className="flex flex-col min-w-[14rem] max-w-[40rem]">
+          <div className="flex flex-col" style={{ minWidth: "20rem", maxWidth: "40rem" }}>
             <dt className="font-bold border-b border-grey-default pt-2 pb-2">
               {t("responseTemplate.submissionDate", { lng: lang })}
             </dt>
@@ -78,7 +79,11 @@ export const Table = (props: TableProps): React.ReactElement => {
           </div>
           {questionsAnswers &&
             questionsAnswers.map(([question, answer], index) => (
-              <div key={"row" + index + lang} className="flex flex-col min-w-[14rem] max-w-[40rem]">
+              <div
+                key={"row" + index + lang}
+                className="flex flex-col"
+                style={{ minWidth: "20rem", maxWidth: "40rem" }}
+              >
                 <dt className="font-bold border-b border-grey-default pt-2 pb-2">
                   {question.toString()}
                 </dt>

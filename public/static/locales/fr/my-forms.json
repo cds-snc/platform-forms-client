@@ -52,8 +52,9 @@
     "copiedCode": "Copied code to clipboard [fr]",
     "errorrCopiedCode": "Error copying code to clipboard [fr]",
     "submissionID": "[FR] Submission ID",
-    "copyResponseInfo": "Activating the 'Copy response' button will copy the above response to the clipboard. This will allow you to paste the response in an application like Excel. [fr]",
-    "copyResponse": "Copy response [fr]"
+    "copyResponseInfo": "The below button will copy the Response Row data to the clipboard. This will allow you to paste the response in an application like Excel. [fr]",
+    "copyResponse": "Copy response [fr]",
+    "copyResponseRow": "Copy Response Row [fr]"
   },
   "protectedBWarning": {
     "officialRecord": "[Fr] This is an official record [/Fr]",
