@@ -92,9 +92,7 @@ export const ShareModal = ({
               </span>
             </summary>
             <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
-              <h4>
-                {t("share.someoneHasShared", { name: data?.user.name || t("share.someone") })}
-              </h4>
+              <h4>{t("share.someoneHasShared", { name: data?.user.name })}</h4>
               <p className="mt-4">
                 {t("share.toPreview")}
                 <ul>
