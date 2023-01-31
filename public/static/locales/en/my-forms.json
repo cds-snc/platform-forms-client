@@ -49,12 +49,11 @@
     "confirmReceiptInfo": "Copy the code below and paste it into the Confirm Receipt of Responses page in the website.",
     "copyCode": "Copy code",
     "copyCodeClipboard": "Copy code to clipboard",
-    "copiedCode": "Copied code to clipboard",
-    "errorrCopiedCode": "Error copying code to clipboard",
+    "copiedToCipboard": "Copied to clipboard",
+    "errorrCopyingToClipboard": "Error copying to clipboard",
     "submissionID": "Submission ID",
     "copyResponseInfo": "The below button will copy the Response Row data to the clipboard. This will allow you to paste the response in an application like Excel.",
-    "copyResponse": "Copy response",
-    "copyResponseRow": "Copy Response Row"
+    "copyResponse": "Copy response"
   },
   "protectedBWarning": {
     "officialRecord": "This is an official record",

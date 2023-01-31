@@ -76,11 +76,11 @@ export const ResponseSection = ({
         var code = ("${confirmReceiptCode}").trim();
         if(window.copyTextToClipboard(code)){
           el.classList.remove("hidden");
-          el.textContent = "${t("responseTemplate.copiedCode")}";
+          el.textContent = "${t("responseTemplate.copiedToCipboard")}";
         } else {
           el.classList.remove("hidden");
           el.classList.add("text-red-default");
-          el.textContent = "${t("responseTemplate.copiedCode")}";
+          el.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
         }
     }, false);
 
@@ -100,11 +100,11 @@ export const ResponseSection = ({
 
         if(window.copyTextToClipboard(responseText)){
           outputEl.classList.remove("hidden");
-          outputEl.textContent = "${t("responseTemplate.copiedCode")}";
+          outputEl.textContent = "${t("responseTemplate.copiedToCipboard")}";
         } else {
           outputEl.classList.remove("hidden");
           outputEl.classList.add("text-red-default");
-          outputEl.textContent = "${t("responseTemplate.copiedCode")}";
+          outputEl.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
         }
     }, false);
 })();
@@ -171,7 +171,6 @@ export const ResponseSection = ({
         lang={capitalizedLang}
       />
 
-      <h3 className="gc-h2 mt-20">{t("responseTemplate.copyResponseRow", { lng: lang })}</h3>
       <p className="mt-8" id={`copyResponseLabel${capitalizedLang}`}>
         {t("responseTemplate.copyResponseInfo", { lng: lang })}
       </p>
