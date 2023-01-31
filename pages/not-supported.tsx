@@ -3,7 +3,7 @@ import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
-import { getFormByID } from "@lib/helpers";
+import { getPublicTemplateByID } from "@lib/templates";
 import { PublicFormRecord } from "@lib/types";
 import LanguageToggle from "@components/globals/LanguageToggle";
 import { useRouter } from "next/router";
@@ -137,7 +137,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const formId = getFormIDFromURL(con.referer);
     if (formId) {
       //to avoid formInfo cannot be serialized as json if `getServerSideProps` return undefined
-      formConfig = (await getFormByID(formId)) ?? null;
+      formConfig = (await getPublicTemplateByID(formId)) ?? null;
     }
     return {
       props: {
