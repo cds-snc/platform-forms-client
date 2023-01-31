@@ -34,7 +34,7 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
           },
           subject: "Form shared / Formulaire partagé",
           formResponse: `
-### ${session.user.name} (${session.user.email}) has shared a form with you.
+**${session.user.name} (${session.user.email}) has shared a form with you.**
 
 To preview this form:
 - **Step 1**:
