@@ -38,12 +38,12 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
             >
               {editableFilename ? (
                 <>
-                  <div className="inline-block">
+                  <div className="inline-block w-[66px] h-[63px]">
                     <SiteLogo title={t("title")} />
                   </div>
                 </>
               ) : (
-                t("title", { ns: "common" })
+                <> {!isLoading ? t("title", { ns: "common" }) : null}</>
               )}
             </a>
           </Link>
