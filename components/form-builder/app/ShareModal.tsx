@@ -21,6 +21,11 @@ export const ShareModal = ({
     getSchema: s.getSchema,
   }));
 
+  const validateEmail = (email: string) => {
+    /* eslint-disable-next-line */
+    return new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email);
+  };
+
   const handleSend = async () => {
     await axios({
       url: "/api/share",
@@ -73,10 +78,39 @@ export const ShareModal = ({
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Enter email address
             </label>
-            <TagInput tags={emails} setTags={setEmails} />
+            <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
           </div>
 
-          <div className="mt-5">See a preview of the email message +</div>
+          <details className="group mt-5">
+            <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer">
+              See a preview of the email message
+              <span className="inline group-open:hidden">+</span>
+              <span className="hidden group-open:inline">-</span>
+            </summary>
+            <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
+              <h4>Steve From Accounting has shared a GC Form with you</h4>
+              <p className="mt-4">
+                To preview this form:
+                <ul>
+                  <li className="list-disc">
+                    <strong>Step 1:</strong>
+                    <br />
+                    Save the attached JSON form file to your computer.
+                  </li>
+                  <li className="list-disc">
+                    <strong>Step 2:</strong>
+                    <br />
+                    Go to GC Forms. No account needed.
+                  </li>
+                  <li className="list-disc">
+                    <strong>Step 3:</strong>
+                    <br />
+                    Select open a form file.
+                  </li>
+                </ul>
+              </p>
+            </div>
+          </details>
         </div>
       </Dialog>
     </div>
