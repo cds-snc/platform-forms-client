@@ -34,7 +34,15 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
           },
           subject: "Form shared / Formulaire partagé",
           formResponse: `
-${session.user.name} (${session.user.email}) has shared a form with you.
+### ${session.user.name} (${session.user.email}) has shared a form with you.
+
+To preview this form:
+- **Step 1**:
+  Save the attached JSON form file to your computer.
+- **Step 2**:
+  Go to GC Forms. No account needed.
+- **Step 3**:
+  Select open a form file.
       `,
         },
         reference: null,
