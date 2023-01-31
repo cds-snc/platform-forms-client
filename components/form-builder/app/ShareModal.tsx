@@ -6,6 +6,8 @@ import { useDialogRef, Dialog, TagInput, Button } from "./shared";
 import axios from "axios";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
+import { userAgent } from "next/server";
+import { AddIcon, RemoveIcon } from "../icons";
 
 export const ShareModal = ({
   handleClose,
@@ -71,43 +73,46 @@ export const ShareModal = ({
       <Dialog dialogRef={dialog} handleClose={handleClose} actions={actions}>
         <div className="p-4">
           <h3 className="mb-5">{t("share.title")}</h3>
-          <p>
-            People you share to will receive an email with an attached JSON file. They can view the
-            JSON form file using GC Forms, no account required.
-          </p>
+          <p>{t("share.message")}</p>
 
           <div className="mt-5">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Enter email address
+              {t("share.emailLabel")}
             </label>
             <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
           </div>
 
           <details className="group mt-5">
             <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer">
-              See a preview of the email message
-              <span className="inline group-open:hidden">+</span>
-              <span className="hidden group-open:inline">-</span>
+              {t("share.seePreview")}
+              <span className="inline group-open:hidden">
+                <AddIcon className="inline" />
+              </span>
+              <span className="hidden group-open:inline">
+                <RemoveIcon className="inline" />
+              </span>
             </summary>
             <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
-              <h4>{data?.user.name || "Someone"} has shared a GC Form with you</h4>
+              <h4>
+                {t("share.someoneHasShared", { name: data?.user.name || t("share.someone") })}
+              </h4>
               <p className="mt-4">
-                To preview this form:
+                {t("share.toPreview")}
                 <ul>
                   <li className="list-disc">
-                    <strong>Step 1:</strong>
+                    <strong>{t("share.stepOne")}</strong>
                     <br />
-                    Save the attached JSON form file to your computer.
+                    {t("share.stepOneDetails")}.
                   </li>
                   <li className="list-disc">
-                    <strong>Step 2:</strong>
+                    <strong>{t("share.stepTwo")}</strong>
                     <br />
-                    Go to GC Forms. No account needed.
+                    {t("share.stepTwoDetails")}
                   </li>
                   <li className="list-disc">
-                    <strong>Step 3:</strong>
+                    <strong>{t("share.stepThree")}</strong>
                     <br />
-                    Select open a form file.
+                    {t("share.stepThreeDetails")}
                   </li>
                 </ul>
               </p>
