@@ -9,5 +9,6 @@
   "supportForms": false,
   "formBuilderDebug": false,
   "formBuilderAddElementDialog": false,
-  "shareMenu": false
+  "shareMenu": false,
+  "editableFilename": false
 }
