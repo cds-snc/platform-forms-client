@@ -49,7 +49,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
           </Link>
 
           {!isFormBuilder && (
-            <div className="px-2 box-border min-w-[200px] border-2 border-white block mt-2 h-[40px] text-base font-bold">
+            <div className="px-2 box-border block mt-3 h-[40px] text-base font-bold">
               {t("gcForms")}
             </div>
           )}
