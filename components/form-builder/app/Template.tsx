@@ -13,10 +13,12 @@ import { useActivePathname, TemplateApiProvider } from "../hooks";
 
 export const Template = ({
   page,
-  shareMenu = false,
+  isFormBuilder = false,
+  className = "",
 }: {
   page: ReactElement;
-  shareMenu?: boolean;
+  isFormBuilder?: boolean;
+  className?: string;
 }) => {
   return (
     <TemplateStoreProvider
@@ -28,9 +30,9 @@ export const Template = ({
           <meta charSet="utf-8" />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
         </Head>
-        <div className="flex flex-col h-full">
+        <div className={`flex flex-col h-full ${className}`}>
           <SkipLink />
-          <Header shareMenu={shareMenu} />
+          <Header isFormBuilder={isFormBuilder} />
           {page}
           <Footer displaySLAAndSupportLinks />
         </div>
