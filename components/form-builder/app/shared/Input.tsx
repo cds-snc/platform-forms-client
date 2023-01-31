@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FocusEventHandler } from "react";
 
 interface Props {
   id: string;
@@ -15,6 +15,7 @@ interface Props {
   theme?: "default" | "title" | "error";
   isInvalid?: boolean;
   lang?: string;
+  onBlur?: FocusEventHandler;
 }
 
 type Ref = HTMLInputElement;
@@ -34,6 +35,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     theme = "default",
     isInvalid = false,
     lang,
+    onBlur,
   } = props;
   const themes = {
     default:
@@ -57,6 +59,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       placeholder={placeholder}
       onChange={onChange}
       onKeyDown={onKeyDown}
+      onBlur={onBlur && onBlur}
       ref={ref}
       {...(lang && { lang: lang })}
     />

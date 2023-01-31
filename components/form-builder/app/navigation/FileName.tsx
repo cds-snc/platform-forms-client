@@ -5,12 +5,12 @@ import { useTranslation } from "next-i18next";
 
 export const FileNameInput = () => {
   const { t } = useTranslation(["form-builder"]);
-  const { updateField, form } = useTemplateStore((s) => ({
-    form: s.form,
+  const { updateField, getName } = useTemplateStore((s) => ({
+    getName: s.getName,
     updateField: s.updateField,
   }));
 
-  const [content, setContent] = useState(form.brand?.name || "");
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     if (span?.current) {
@@ -36,9 +36,9 @@ export const FileNameInput = () => {
         className={`${boxStyle} max-w-[500px] placeholder-black hover:border-2 hover:border-gray-default`}
         name="filename"
         placeholder={t("untitledForm", { ns: "form-builder" })}
-        value={content}
+        value={content ? content : getName()}
         onBlur={() => {
-          updateField(`form.brand.name`, content);
+          updateField(`name`, content);
         }}
         onChange={(e) => {
           setContent(e.target.value);
