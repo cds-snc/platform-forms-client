@@ -34,15 +34,25 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               id="logo"
               className={`${
                 editableFilename && "border-r-1"
-              } mb-2 inline-block pr-5 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
+              } mb-2 flex pr-5 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
             >
               {editableFilename ? (
-                <SiteLogo title={t("title", { ns: "common" })} />
+                <>
+                  <div className="inline-block w-[66px] h-[63px]">
+                    <SiteLogo title={t("title")} />
+                  </div>
+                </>
               ) : (
-                t("title", { ns: "common" })
+                <> {!isLoading ? t("title", { ns: "common" }) : null}</>
               )}
             </a>
           </Link>
+
+          {!isFormBuilder && (
+            <div className="px-2 box-border block mt-3 h-[40px] text-base font-bold">
+              {t("title", { ns: "common" })}
+            </div>
+          )}
           {isFormBuilder && editableFilename && <FileNameInput />}
         </div>
         <nav
