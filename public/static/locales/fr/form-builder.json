@@ -255,7 +255,15 @@
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "addElementDialog": {
     "addButton": "Add",
-    "questionElement": "[fr] Question element",
+    "questionElement": "[FR] Question element",
+    "listItem": "[FR] List item ",
+    "checkboxItem": "[FR] Checkbox item",
+    "example": "[FR] example",
+    "answer": "Answer...",
+    "yes": "[FR] Yes",
+    "no": "[FR] No",
+    "sometimes": "[FR] Sometimes",
+    "exampleElement": "example element",
     "richText": {
       "title": "Rich Text title",
       "description": "Rich Text desc"

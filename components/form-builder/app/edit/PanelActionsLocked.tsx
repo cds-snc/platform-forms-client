@@ -3,23 +3,30 @@ import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
 import { LockIcon } from "../../icons";
+import { isValidatedTextType } from "../../util";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const { t } = useTranslation("form-builder");
 
-  const { add, setFocusInput } = useTemplateStore((s) => ({
+  const { add, setFocusInput, updateField } = useTemplateStore((s) => ({
     add: s.add,
+    updateField: s.updateField,
     setFocusInput: s.setFocusInput,
   }));
 
+  /* Note this callback is also in PanelActionsLocked */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       setFocusInput(true);
-      add(index, type);
+      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
+      if (isValidatedTextType(type)) {
+        // add 1 to index because it's a new element
+        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
+      }
     },
-    [add, setFocusInput]
+    [add, setFocusInput, updateField]
   );
 
   return (

@@ -15,6 +15,8 @@ import {
   ThreeDotsIcon,
 } from "@components/form-builder/icons";
 
+import { isValidatedTextType } from "../../util";
+
 export const PanelActions = ({
   item,
   renderSaveButton,
@@ -25,17 +27,27 @@ export const PanelActions = ({
   children?: React.ReactNode;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, add, remove, moveUp, moveDown, duplicateElement, elements, setFocusInput } =
-    useTemplateStore((s) => ({
-      lang: s.lang,
-      add: s.add,
-      remove: s.remove,
-      moveUp: s.moveUp,
-      moveDown: s.moveDown,
-      duplicateElement: s.duplicateElement,
-      elements: s.form.elements,
-      setFocusInput: s.setFocusInput,
-    }));
+  const {
+    lang,
+    add,
+    updateField,
+    remove,
+    moveUp,
+    moveDown,
+    duplicateElement,
+    elements,
+    setFocusInput,
+  } = useTemplateStore((s) => ({
+    lang: s.lang,
+    add: s.add,
+    updateField: s.updateField,
+    remove: s.remove,
+    moveUp: s.moveUp,
+    moveDown: s.moveDown,
+    duplicateElement: s.duplicateElement,
+    elements: s.form.elements,
+    setFocusInput: s.setFocusInput,
+  }));
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
@@ -103,12 +115,17 @@ export const PanelActions = ({
     return -1;
   };
 
+  /* Note this callback is also in PanelActions */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       setFocusInput(true);
-      add(index, type);
+      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
+      if (isValidatedTextType(type)) {
+        // add 1 to index because it's a new element
+        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
+      }
     },
-    [add, setFocusInput]
+    [add, setFocusInput, updateField]
   );
 
   const buttonClasses =
