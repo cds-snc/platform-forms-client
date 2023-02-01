@@ -2,46 +2,54 @@
   "addElement": "Ajouter un élément + ",
   "addElementDialog": {
     "addButton": "Add",
-    "checkbox": {
-      "description": "Multiple Choice title desc",
-      "title": "Multiple Choice title"
+    "questionElement": "[FR] Question element",
+    "listItem": "[FR] List item ",
+    "checkboxItem": "[FR] Checkbox item",
+    "example": "[FR] example",
+    "answer": "Answer...",
+    "yes": "[FR] Yes",
+    "no": "[FR] No",
+    "sometimes": "[FR] Sometimes",
+    "exampleElement": "example element",
+    "richText": {
+      "title": "Rich Text title",
+      "description": "Rich Text desc"
     },
-    "date": {
-      "description": "Date desc",
-      "title": "Date title"
+    "radio": {
+      "title": "Radio title",
+      "description": "Radio desc"
+    },
+    "checkbox": {
+      "title": "Multiple Choice title",
+      "description": "Multiple Choice title desc"
     },
     "dropdown": {
-      "description": "Dropdown list Answer desc",
-      "title": "Dropdown list title"
-    },
-    "email": {
-      "description": "Email desc",
-      "title": "Email title"
-    },
-    "number": {
-      "description": "Numeric desc",
-      "title": "Numeric title"
-    },
-    "phone": {
-      "description": "Phone desc",
-      "title": "Phone title"
-    },
-    "questionElement": "[fr] Question element",
-    "radio": {
-      "description": "Radio desc",
-      "title": "Radio title"
-    },
-    "richText": {
-      "description": "Rich Text desc",
-      "title": "Rich Text title"
-    },
-    "textArea": {
-      "description": "Long answer  desc",
-      "title": "Long answer title"
+      "title": "Dropdown list title",
+      "description": "Dropdown list Answer desc"
     },
     "textField": {
-      "description": "Short answer desc",
-      "title": "Short answer title"
+      "title": "Short answer title",
+      "description": "Short answer desc"
+    },
+    "textArea": {
+      "title": "Long answer title",
+      "description": "Long answer  desc"
+    },
+    "phone": {
+      "title": "Phone title",
+      "description": "Phone desc"
+    },
+    "email": {
+      "title": "Email title",
+      "description": "Email desc"
+    },
+    "date": {
+      "title": "Date title",
+      "description": "Date desc"
+    },
+    "number": {
+      "title": "Numeric title",
+      "description": "Numeric desc"
     }
   },
   "addMultiple": "Ajouter plusieurs options",
