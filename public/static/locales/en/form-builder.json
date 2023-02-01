@@ -328,5 +328,12 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "untitledForm": "Untitled form"
+  "untitledForm": "Untitled form",
+  "responses": {
+    "title": "Download Responses",
+    "navLabel": "Responses",
+    "confirmReceipt": "Confirm Receipt",
+    "reportProblems": "Report Problems",
+    "changeSetup": "Change Setup"
+  }
 }

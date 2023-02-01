@@ -329,5 +329,12 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "untitledForm": "[FR] Untitled form"
+  "untitledForm": "[FR] Untitled form",
+  "responses": {
+    "title": "Download Responses",
+    "navLabel": "Responses",
+    "confirmReceipt": "Confirm Receipt",
+    "reportProblems": "Report Problems",
+    "changeSetup": "Change Setup"
+  }
 }
