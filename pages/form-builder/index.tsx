@@ -22,7 +22,7 @@ const Page: NextPageWithLayout<PageProps> = () => {
 };
 
 Page.getLayout = (page: ReactElement) => {
-  return <Template page={page} />;
+  return <Template page={page} className="form-builder-start" />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

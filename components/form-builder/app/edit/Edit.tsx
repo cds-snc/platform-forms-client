@@ -17,6 +17,7 @@ export const Edit = () => {
     updateField,
     translationLanguagePriority,
     getLocalizationAttribute,
+    getName,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -25,6 +26,7 @@ export const Edit = () => {
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -58,6 +60,12 @@ export const Edit = () => {
     [setValue, translationLanguagePriority]
   );
 
+  const updateName = useCallback(() => {
+    if (getName() === "") {
+      updateField("name", value);
+    }
+  }, [value, getName, updateField]);
+
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
@@ -74,6 +82,7 @@ export const Edit = () => {
               onChange={updateValue}
               className="w-3/4 mb-4 !text-h2 !font-sans !pb-0.5 !pt-1.5"
               theme="title"
+              onBlur={updateName}
               {...getLocalizationAttribute()}
             />
             <p className="text-sm mb-4">{t("startFormIntro")}</p>
