@@ -82,7 +82,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     // This will eventually be replaced by the user friendly random name on the submission object
     const responseID = "ABC-123";
     const confirmReceiptCode = "123456789-TODO";
-    const formTemplate = LemonadeStand.form;
+    const formTemplate = LemonadeStand;
     const createdAt = Date.now();
 
     const formResponse = {

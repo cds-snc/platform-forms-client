@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "@components/myforms/HTMLDownload/Table";
 import { useTranslation } from "next-i18next";
 import { FormProperties, Response, Responses, FormElementTypes } from "@lib/types";
+import { filterUndef } from "@lib/tsUtils";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -28,28 +29,57 @@ const parseQuestionsAndAnswers = (
   formTemplate: FormProperties,
   formResponse: Responses,
   lang: string
-): Response[][] => {
+): {
+  question: string;
+  response:
+    | {
+        question: string;
+        response: Response[];
+        questionType: FormElementTypes;
+      }[]
+    | Response;
+  questionType: FormElementTypes;
+}[] => {
   // Filter out only questions that have possible responses
   const questionsOnly = formTemplate.elements.filter(
     (element) => ![FormElementTypes.richText].includes(element.type)
   );
-  return (
-    formTemplate.layout
-      .map((elementID) => {
-        const question = questionsOnly.filter((element) => element.id === elementID)[0]?.properties[
-          getProperty("title", lang)
-        ];
+  // Filters out any undefined entries caused by richtext elements
+  return filterUndef(
+    formTemplate.layout.map((elementID, index) => {
+      const question = questionsOnly.filter((element) => element.id === elementID)[0]?.properties[
+        getProperty("title", lang)
+      ] as string;
 
-        // If the question type does not have a possible response it will return undefined here.
+      // If the question type does not have a possible response it will return undefined here.
+      // Short circuit and return undefined to be filtered out in the next step
+
+      if (!question) return;
+
+      const response = formResponse[elementID];
+      const questionType = formTemplate.elements[index].type;
+      if (questionType === FormElementTypes.dynamicRow) {
+        // Remove the rich text fields and parse the questions and answers
+        const nonRichTextElements = formTemplate.elements[index].properties.subElements?.filter(
+          (element) => ![FormElementTypes.richText].includes(element.type)
+        );
+        // If dynamic row does not have answerable subelements
         // Short circuit and return undefined to be filtered out in the next step
+        if (!nonRichTextElements || nonRichTextElements?.length === 0) {
+          return;
+        }
 
-        if (!question) return;
-
-        const response = formResponse[elementID];
-        return [question as string, response];
-      })
-      // Filter out the undefined from the array.
-      .filter((responsePair) => responsePair !== undefined) as Response[][]
+        const dynamicRowResponse = nonRichTextElements.map((element, index) => {
+          const question = element.properties[getProperty("title", lang)] as string;
+          const response = (formResponse[elementID] as Record<string, Response>[]).map((answer) => {
+            return answer[index];
+          });
+          return { question, response, questionType: element.type };
+        });
+        return { question, response: dynamicRowResponse, questionType };
+      }
+      return { question, response, questionType };
+    })
   );
 };
 
