@@ -191,20 +191,8 @@ export const ResponseSection = ({
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.rowTable", { lng: lang })}
       </h3>
-      <p className="mb-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
-      <Table
-        responseID={responseID}
-        submissionDate={submissionDate}
-        submissionID={submissionID}
-        questionsAnswers={questionsAnswers}
-        isRowTable={true}
-        lang={capitalizedLang}
-      />
-
-      <p className="mt-8" id={`copyResponseLabel${capitalizedLang}`}>
-        {t("responseTemplate.copyResponseInfo", { lng: lang })}
-      </p>
-      <div className="mt-4 mb-32">
+      <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
+      <div className="mt-4 mb-8">
         <button
           id={`copyResponseButton${capitalizedLang}`}
           aria-labelledby={`copyResponseLabel${capitalizedLang}`}
@@ -219,6 +207,14 @@ export const ResponseSection = ({
           className="hidden text-green-default ml-8"
         ></span>
       </div>
+      <Table
+        responseID={responseID}
+        submissionDate={submissionDate}
+        submissionID={submissionID}
+        questionsAnswers={questionsAnswers}
+        isRowTable={true}
+        lang={capitalizedLang}
+      />
 
       <h3 id={`confirmReceipt${capitalizedLang}`} className="gc-h2 mt-20">
         {t("responseTemplate.confirmReceiptResponse", { lng: lang })}
