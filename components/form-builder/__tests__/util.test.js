@@ -6,6 +6,7 @@ import {
   moveDown,
   removeElementById,
   newlineToOptions,
+  isValidatedTextType,
 } from "../util";
 
 describe("Util", () => {
@@ -104,5 +105,14 @@ describe("Util", () => {
     ];
 
     expect(newlineToOptions("en", currentChoices, bulkChoices)).toEqual(result);
+  });
+
+  it("detects text fields that have a validation type", () => {
+    expect(isValidatedTextType("textField")).toEqual(false);
+    expect(isValidatedTextType("richText")).toEqual(false);
+    expect(isValidatedTextType("email")).toEqual(true);
+    expect(isValidatedTextType("phone")).toEqual(true);
+    expect(isValidatedTextType("date")).toEqual(true);
+    expect(isValidatedTextType("number")).toEqual(true);
   });
 });
