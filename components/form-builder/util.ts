@@ -150,3 +150,8 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
 export const isValidatedTextType = (type: FormElementTypes | undefined) => {
   return type && ["email", "phone", "date", "number"].includes(type);
 };
+
+export const getHost = () => {
+  if (typeof window === "undefined") return "";
+  return `${window.location.protocol}//${window.location.host}`;
+};

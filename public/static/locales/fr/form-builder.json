@@ -1,5 +1,57 @@
 {
   "addElement": "Ajouter un élément + ",
+  "addElementDialog": {
+    "addButton": "Add",
+    "questionElement": "[FR] Question element",
+    "listItem": "[FR] List item ",
+    "checkboxItem": "[FR] Checkbox item",
+    "example": "[FR] example",
+    "answer": "Answer...",
+    "yes": "[FR] Yes",
+    "no": "[FR] No",
+    "sometimes": "[FR] Sometimes",
+    "exampleElement": "example element",
+    "richText": {
+      "title": "Rich Text title",
+      "description": "Rich Text desc"
+    },
+    "radio": {
+      "title": "Radio title",
+      "description": "Radio desc"
+    },
+    "checkbox": {
+      "title": "Multiple Choice title",
+      "description": "Multiple Choice title desc"
+    },
+    "dropdown": {
+      "title": "Dropdown list title",
+      "description": "Dropdown list Answer desc"
+    },
+    "textField": {
+      "title": "Short answer title",
+      "description": "Short answer desc"
+    },
+    "textArea": {
+      "title": "Long answer title",
+      "description": "Long answer  desc"
+    },
+    "phone": {
+      "title": "Phone title",
+      "description": "Phone desc"
+    },
+    "email": {
+      "title": "Email title",
+      "description": "Email desc"
+    },
+    "date": {
+      "title": "Date title",
+      "description": "Date desc"
+    },
+    "number": {
+      "title": "Numeric title",
+      "description": "Numeric desc"
+    }
+  },
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter ou modifier une liste",
@@ -144,11 +196,12 @@
   "openModal": "Ouvrir fenêtre modale",
   "option": "Option",
   "optionText": "Texte d'option",
+  "pagePreview": "Prévisualiser",
+  "pageSettings": "Paramètres",
   "pageText": "Section texte",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
-  "pagePreview": "Prévisualiser",
   "previewingIn": "Prévisualiser en",
   "privacyNoticeDescription": "Les personnes chargées de l’élaboration des formulaires doivent rédiger des avis de confidentialité conformes aux exigences de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">directive sur les pratiques relatives à la protection de la vie privée.</a>",
   "privacyStatement": "Déclaration de confidentialité ",
@@ -191,7 +244,7 @@
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
   "saveDraft": "Enregistrer l’ebauche",
   "selectElement": "Sélectionnez un type d'élément",
-  "pageSettings": "Paramètres",
+  "send": "[FR] Send",
   "settingsDeleteButton": "Supprimer un formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
   "settingsDeleteTitle": "Supprimer un formulaire",
@@ -204,6 +257,29 @@
   "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
   "settingsResponseNotePublished": "Pour modifier la destination de la livraison des réponses.",
   "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
+  "share": {
+    "copy": "[FR] Copy",
+    "email": "[FR] Share with email",
+    "emailLabel": "[FR] Enter email address",
+    "enLink": "[FR] English link",
+    "frLink": "[FR] French link",
+    "link": "[FR] Get the link",
+    "message": "[FR] People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
+    "open": "[FR] Open",
+    "seePreview": "[FR] See a preview of the email message",
+    "someone": "[FR] Someone",
+    "someoneHasShared": "[FR] {{name}} has shared a GC Form with you",
+    "stepOne": "[FR] Step 1:",
+    "stepOneDetails": "[FR] Save the attached JSON form file to your computer",
+    "stepThree": "[FR] Step 3:",
+    "stepThreeDetails": "[FR] Select open a form file.",
+    "stepTwo": "[FR] Step 2:",
+    "stepTwoDetails": "[FR] Go to GC Forms. No account needed.",
+    "title": "[FR] Share",
+    "toPreview": "[FR] To preview this form:",
+    "messageSent": "[FR] The message has been sent",
+    "startOver": "[FR] Start over"
+  },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
   "signInToTest": "<a href=\"\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
@@ -253,66 +329,5 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "addElementDialog": {
-    "addButton": "Add",
-    "questionElement": "[FR] Question element",
-    "listItem": "[FR] List item ",
-    "checkboxItem": "[FR] Checkbox item",
-    "example": "[FR] example",
-    "answer": "Answer...",
-    "yes": "[FR] Yes",
-    "no": "[FR] No",
-    "sometimes": "[FR] Sometimes",
-    "exampleElement": "example element",
-    "richText": {
-      "title": "Rich Text title",
-      "description": "Rich Text desc"
-    },
-    "radio": {
-      "title": "Radio title",
-      "description": "Radio desc"
-    },
-    "checkbox": {
-      "title": "Multiple Choice title",
-      "description": "Multiple Choice title desc"
-    },
-    "dropdown": {
-      "title": "Dropdown list title",
-      "description": "Dropdown list Answer desc"
-    },
-    "textField": {
-      "title": "Short answer title",
-      "description": "Short answer desc"
-    },
-    "textArea": {
-      "title": "Long answer title",
-      "description": "Long answer  desc"
-    },
-    "phone": {
-      "title": "Phone title",
-      "description": "Phone desc"
-    },
-    "email": {
-      "title": "Email title",
-      "description": "Email desc"
-    },
-    "date": {
-      "title": "Date title",
-      "description": "Date desc"
-    },
-    "number": {
-      "title": "Numeric title",
-      "description": "Numeric desc"
-    }
-  },
-  "untitledForm": "[FR] Untitled form",
-  "share": {
-    "title": "[FR] Share",
-    "email": "[FR] Share with email",
-    "link": "[FR] Get the link",
-    "enLink": "[FR] English link",
-    "frLink": "[FR] French link",
-    "copy": "[FR] Copy",
-    "open": "[FR] Open"
-  }
+  "untitledForm": "[FR] Untitled form"
 }
