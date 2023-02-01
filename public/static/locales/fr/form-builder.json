@@ -306,5 +306,12 @@
     "frLink": "[FR] French link",
     "copy": "[FR] Copy",
     "open": "[FR] Open"
+  },
+  "responses": {
+    "title": "Download Responses",
+    "navLabel": "Responses",
+    "confirmReceipt": "Confirm Receipt",
+    "reportProblems": "Report Problems",
+    "changeSetup": "Change Setup"
   }
 }
