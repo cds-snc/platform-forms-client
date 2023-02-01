@@ -26,7 +26,7 @@ export const ShareModal = ({
 
   const validateEmail = (email: string) => {
     /* eslint-disable-next-line */
-    return new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email);
+    return new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(email);
   };
 
   const handleSend = async () => {
@@ -93,7 +93,7 @@ export const ShareModal = ({
             </summary>
             <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
               <h4>{t("share.someoneHasShared", { name: data?.user.name })}</h4>
-              <p className="mt-4">
+              <div className="mt-4">
                 {t("share.toPreview")}
                 <ul>
                   <li className="list-disc">
@@ -112,7 +112,7 @@ export const ShareModal = ({
                     {t("share.stepThreeDetails")}
                   </li>
                 </ul>
-              </p>
+              </div>
             </div>
           </details>
         </div>
