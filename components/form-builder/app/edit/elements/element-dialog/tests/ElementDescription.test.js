@@ -11,10 +11,13 @@ describe("Element description", () => {
   it("renders element description", async () => {
     const user = userEvent.setup();
     const mockCallback = jest.fn((e) => e);
-    const rendered = render(<ElementDescription id={"richText"} handleAdd={mockCallback} />);
+    const rendered = render(
+      <ElementDescription id={"richText"} handleAdd={mockCallback}>
+        my text
+      </ElementDescription>
+    );
     const content = rendered.getByTestId("element-description-content");
-    expect(content).toHaveTextContent("richText.title");
-    expect(content).toHaveTextContent("richText.description");
+    expect(content).toHaveTextContent("my text");
     const button = rendered.getByTestId("element-description-add-element");
     expect(button).toHaveTextContent("addElementDialog.addButton");
     await user.click(button);
