@@ -10,7 +10,7 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
 
     const { emails, form } = req.body;
 
-    const buffer = new Buffer(JSON.stringify(form));
+    const buffer = new Buffer(form);
     const base64data = buffer.toString("base64");
 
     if (!emails) {
@@ -29,7 +29,7 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
         personalisation: {
           application_file: {
             file: base64data,
-            filename: "form.txt",
+            filename: "form.json",
             sending_method: "attach",
           },
           subject: "Form shared / Formulaire partagé",
