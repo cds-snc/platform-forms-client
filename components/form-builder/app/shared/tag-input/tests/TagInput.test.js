@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";
 import { TagInput } from "../TagInput";
 import userEvent from "@testing-library/user-event";
@@ -9,7 +9,14 @@ describe("TagInput", () => {
   });
 
   it("should render and handle keyboard events", async () => {
-    const rendered = render(<TagInput />);
+    const Container = () => {
+      const [tags, setTags] = useState([]);
+
+      return <TagInput tags={tags} setTags={setTags} />;
+    };
+
+    const rendered = render(<Container />);
+
     const input = await rendered.findByTestId("tag-input");
     await userEvent.type(input, "test@example.com{enter}");
     expect(rendered.getByText("test@example.com")).toBeInTheDocument();
@@ -34,6 +41,9 @@ describe("TagInput", () => {
     await userEvent.tab({ shift: true });
     expect(removeButtons1[0]).toHaveFocus();
 
+    await userEvent.tab();
+    const removeButtons2 = await rendered.findAllByRole("button");
+    expect(removeButtons2[1]).toHaveFocus();
     await userEvent.tab();
     expect(input).toHaveFocus();
   });

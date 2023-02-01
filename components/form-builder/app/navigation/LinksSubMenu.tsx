@@ -4,16 +4,12 @@ import { useTranslation } from "next-i18next";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { ShareExternalLinkIcon, CopyIcon } from "../../icons";
+import { getHost } from "@components/form-builder/util";
 
 interface LinkItem {
   name: string;
   url: string;
 }
-
-const getHost = () => {
-  if (typeof window === "undefined") return "";
-  return `${window.location.protocol}//${window.location.host}`;
-};
 
 export const LinksSubMenu = () => {
   const { t } = useTranslation("form-builder");

@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "next-i18next";
 
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
+import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");
 
-  const { id: formId, isPublished } = useTemplateStore((s) => ({
+  const [shareModal, showShareModal] = useState(false);
+
+  const handleCloseDialog = useCallback(() => {
+    showShareModal(false);
+  }, []);
+
+  const { isPublished, id: formId } = useTemplateStore((s) => ({
     id: s.id,
     isPublished: s.isPublished,
   }));
@@ -36,7 +43,7 @@ export const ShareDropdown = () => {
             {/* share.email */}
             <DropdownMenuPrimitive.Item
               onClick={() => {
-                alert("share.email");
+                showShareModal(true);
               }}
               className={
                 "flex cursor-default items-center rounded-md px-2 py-2 text-sm outline-none focus:bg-gray-100"
@@ -80,6 +87,7 @@ export const ShareDropdown = () => {
           </DropdownMenuPrimitive.Content>
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
+      {shareModal && <ShareModal handleClose={handleCloseDialog} />}
     </div>
   );
 };

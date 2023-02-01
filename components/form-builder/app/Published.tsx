@@ -8,11 +8,7 @@ import { useTemplateStore } from "../store/useTemplateStore";
 import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
 import Markdown from "markdown-to-jsx";
-
-const getHost = () => {
-  if (typeof window === "undefined") return "";
-  return `${window.location.protocol}//${window.location.host}`;
-};
+import { getHost } from "../util";
 
 export const Published = ({ id }: { id: string }) => {
   const { t } = useTranslation("form-builder");
