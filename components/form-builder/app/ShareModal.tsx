@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
+import axios from "axios";
 
 import { useDialogRef, Dialog, TagInput, Button } from "./shared";
-import axios from "axios";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
 import { AddIcon, RemoveIcon } from "../icons";
