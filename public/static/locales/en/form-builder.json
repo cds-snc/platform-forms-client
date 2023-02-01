@@ -244,6 +244,7 @@
   "saveAndRequest": "Save form and request publishing ability",
   "saveDraft": "Save draft",
   "selectElement": "Select an Element type",
+  "send": "Send",
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteTitle": "Delete form",
@@ -274,7 +275,9 @@
     "stepTwo": "Step 2:",
     "stepTwoDetails": "Go to GC Forms. No account needed.",
     "title": "Share",
-    "toPreview": "To preview this form:"
+    "toPreview": "To preview this form:",
+    "messageSent": "The message has been sent",
+    "startOver": "Start over"
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer text",

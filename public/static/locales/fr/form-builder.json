@@ -244,6 +244,7 @@
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
   "saveDraft": "Enregistrer l’ebauche",
   "selectElement": "Sélectionnez un type d'élément",
+  "send": "[FR] Send",
   "settingsDeleteButton": "Supprimer un formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
   "settingsDeleteTitle": "Supprimer un formulaire",
@@ -275,7 +276,9 @@
     "stepTwo": "[FR] Step 2:",
     "stepTwoDetails": "[FR] Go to GC Forms. No account needed.",
     "title": "[FR] Share",
-    "toPreview": "[FR] To preview this form:"
+    "toPreview": "[FR] To preview this form:",
+    "messageSent": "[FR] The message has been sent",
+    "startOver": "[FR] Start over"
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
