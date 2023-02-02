@@ -1,26 +1,26 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
-import { ShortAnswer, Options, RichText } from "./elements";
+import { ShortAnswer, Options, SubOptions, RichText, DynamicRow } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
-import { useTemplateStore } from "../../store";
 
 export const SelectedElement = ({
   selected,
   item,
+  elIndex = -1,
 }: {
   selected: ElementOption;
   item: FormElementWithIndex;
+  elIndex: number;
 }) => {
   const { t } = useTranslation("form-builder");
 
   let element = null;
 
   switch (selected.id) {
-    case "text":
     case "textField":
       element = <ShortAnswer>{t("shortAnswerText")}</ShortAnswer>;
       break;
@@ -31,13 +31,31 @@ export const SelectedElement = ({
       element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
       break;
     case "radio":
-      element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <RadioEmptyIcon />} />
+        );
+      } else {
+        element = <Options item={item} renderIcon={() => <RadioEmptyIcon />} />;
+      }
       break;
     case "checkbox":
-      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
+        );
+      } else {
+        element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+      }
       break;
     case "dropdown":
-      element = <Options item={item} renderIcon={(index) => `${index + 1}.`} />;
+      if (elIndex !== -1) {
+        element = (
+          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+        );
+      } else {
+        element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+      }
       break;
     case "email":
       element = <ShortAnswer data-testid="email">name@example.com</ShortAnswer>;
@@ -51,6 +69,9 @@ export const SelectedElement = ({
     case "number":
       element = <ShortAnswer>0123456789</ShortAnswer>;
       break;
+    case "dynamicRow":
+      element = <DynamicRow elIndex={item.index} />;
+      break;
     default:
       element = null;
   }
@@ -60,17 +81,9 @@ export const SelectedElement = ({
 
 export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
-  const { validationType, type } = useTemplateStore(
-    useCallback(
-      (s) => {
-        return {
-          type: s.form?.elements[item.index]?.type,
-          validationType: s.form?.elements[item.index].properties?.validation?.type,
-        };
-      },
-      [item.index]
-    )
-  );
+
+  const validationType = item.properties?.validation?.type;
+  const type = item.type;
 
   let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
 

@@ -50,6 +50,10 @@
     "number": {
       "title": "Numéro",
       "description": "Description du numéro"
+    },
+    "dynamicRow": {
+      "title": "[FR] Repeating question sets",
+      "description": "[FR] Repeating question sets allows form fillers to add more than one answer to the same set of questions, they can be used to gather things like work histories or addresses where the number of answers is unknown."
     }
   },
   "addMultiple": "Ajouter plusieurs options",
@@ -329,5 +333,6 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "untitledForm": "[FR] Untitled form"
+  "untitledForm": "[FR] Untitled form",
+  "dyanamicRow": "[FR] Repeating question set"
 }
