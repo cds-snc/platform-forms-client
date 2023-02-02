@@ -39,7 +39,7 @@ export const ElementDialog = ({
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
-      <div className="grid grid-cols-[30%_70%] w-full">
+      <div className="grid grid-cols-[30%_70%] w-full select-none">
         <div>
           <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
           <ListBox
