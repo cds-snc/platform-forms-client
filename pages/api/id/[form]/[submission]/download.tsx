@@ -4,7 +4,7 @@ import { logMessage } from "@lib/logger";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
-import { FormRecord, MiddlewareProps, WithRequired } from "@lib/types";
+import { FormRecord, MiddlewareProps, WithRequired, Responses } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToPipeableStream } from "react-dom/server";
@@ -12,9 +12,6 @@ import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
 import { Router } from "next/router";
-
-// Temporary Import for Testing
-import LemonadeStand from "../../../../../__fixtures__/accessibilityTestForm.json";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -33,22 +30,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   if (Array.isArray(formID) || !formID) return res.status(400).json({ error: "Bad Request" });
 
   try {
-    /*
-    const formTemplate = await getFullTemplateByID(createAbility(session.user.privileges), formID);
+    const fullFormTemplate = await getFullTemplateByID(
+      createAbility(session.user.privileges),
+      formID
+    );
 
-    if (formTemplate === null) return res.status(404).json({ error: 'Form Not Found' });
+    if (fullFormTemplate === null) return res.status(404).json({ error: "Form Not Found" });
 
     const documentClient = connectToDynamo();
 
     const getItemsDbParams: QueryCommandInput = {
-      TableName: 'Vault',
+      TableName: "Vault",
 
       ExpressionAttributeValues: {
-        ':formID': formID,
-        ':submissionID': submissionID,
+        ":formID": formID,
+        ":submissionID": submissionID,
       },
-      KeyConditionExpression: 'FormID = :formID AND SubmissionID = :submissionID',
-      ProjectionExpression: 'FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute, CreatedAt',
+      KeyConditionExpression: "FormID = :formID AND SubmissionID = :submissionID",
+      ProjectionExpression:
+        "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute,ConfirmationCode,ResponseID,CreatedAt",
     };
     const queryCommand = new QueryCommand(getItemsDbParams);
 
@@ -56,62 +56,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     // If the SubmissionID does not exist return a 404
     if (response.Items === undefined || response.Items.length === 0)
-      return res.status(404).json({ error: 'Submission not Found' });
+      return res.status(404).json({ error: "Submission not Found" });
 
-    const parsedResponse = response.Items.map(
-      ({
-        FormID: formID,
-        SubmissionID: submissionID,
-        FormSubmission: formSubmission,
-        SecurityAttribute: securityAttribute,
-        CreatedAt: createdAt
-      }) => ({
-        formID,
-        submissionID,
-        formSubmission: JSON.parse(formSubmission),
-           securityAttribute,
-           createdAt,
-        // In the future add Form Sumbission Files here
-        // fileAttachments: getFileAttachments(submissionID, formSubmission),
-        // In the future add the Confirmation Code here
-        // confirmationCode
-      })
-    )[0];
-    */
+    // If there is more then one submission returned something is seriously wrong
+    if (response.Items.length > 1) return res.status(500).json({ error: "Internal Server Error" });
 
-    // This will eventually be replaced by the user friendly random name on the submission object
-    const responseID = "ABC-123";
-    const confirmReceiptCode = "123456789-TODO";
-    const formTemplate = LemonadeStand;
-    const createdAt = Date.now();
-
-    const formResponse = {
-      "2": "Bryan Robitaille",
-      "3": "English",
-      "5": "Home Sweet Home",
-      "6": "",
-      "7": "Sweet but tangy",
-      "8": "Driveway",
-      "9": "",
-      "11": [
-        {
-          "0": "Sugar",
-          "1": "2 lbs",
-        },
-        {
-          "0": "Lemons",
-          "1": "4 lbs",
-        },
-      ],
-      "12": ["Cups", "Napkins"],
-      "14": "Yes",
-    };
-
-    //TODO ..
+    const { formResponse, createdAt, confirmReceiptCode, responseID } = ((
+      vaultResult
+    ): {
+      formResponse: Responses;
+      createdAt: number;
+      confirmReceiptCode: string;
+      responseID: string;
+    } => {
+      return {
+        formResponse: JSON.parse(vaultResult.FormSubmission),
+        createdAt: vaultResult.CreatedAt,
+        confirmReceiptCode: vaultResult.ConfirmationCode,
+        responseID: vaultResult.ResponseID ?? "ABC-TEST",
+      };
+    })(response.Items[0]);
 
     const pageProps = {
       formResponse,
-      formTemplate,
+      formTemplate: fullFormTemplate.form,
       confirmReceiptCode,
       submissionID,
       responseID,
@@ -153,7 +121,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
           {/* eslint-disable-next-line @next/next/no-head-element */}
           <head>
             <meta charSet="utf-8" />
-            <title>{`${formTemplate.titleEn} - ${formTemplate.titleFr}`}</title>
+            <title>{`${fullFormTemplate.form.titleEn} - ${fullFormTemplate.form.titleFr}`}</title>
             <style dangerouslySetInnerHTML={{ __html: css }}></style>
           </head>
           <body>
