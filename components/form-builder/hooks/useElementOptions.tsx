@@ -10,6 +10,7 @@ import {
   RadioIcon,
   SelectMenuIcon,
   ShortAnswerIcon,
+  AddIcon,
 } from "../icons";
 
 import {
@@ -23,11 +24,14 @@ import {
   Email,
   Date,
   Number,
+  RepeatableQuestionSet,
 } from "../app/edit/elements/element-dialog";
 
-export const useElementOptions = () => {
+import { ElementOptionsFilter, ElementOption } from "../types";
+
+export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const elementOptions = [
+  const elementOptions: ElementOption[] = [
     {
       id: "richText",
       value: t("richText"),
@@ -98,7 +102,14 @@ export const useElementOptions = () => {
       description: Number,
       className: "",
     },
+    {
+      id: "dynamicRow",
+      value: t("dyanamicRow"),
+      icon: <AddIcon />,
+      description: RepeatableQuestionSet,
+      className: "",
+    },
   ];
 
-  return elementOptions;
+  return filterElements ? filterElements(elementOptions) : elementOptions;
 };

@@ -27,7 +27,7 @@ describe("Question", () => {
 
     const rendered = render(
       <Providers form={store}>
-        <Question item={item} />
+        <Question item={item} elements={[]} />
       </Providers>
     );
 
@@ -64,7 +64,7 @@ describe("Question", () => {
 
     const rendered = render(
       <Providers form={store}>
-        <Question item={item} />
+        <Question item={item} elements={[]} />
       </Providers>
     );
 
@@ -98,7 +98,7 @@ describe("Question", () => {
 
       return (
         <div>
-          <Question item={item} onQuestionChange={onQuestionChange} />
+          <Question item={item} onQuestionChange={onQuestionChange} elements={elements} />
         </div>
       );
     };

@@ -5,11 +5,14 @@ import { useFlag } from "@lib/hooks";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "../../../shared/Button";
 import { ElementDialog } from "./ElementDialog";
+import { ElementOptionsFilter } from "../../../../types";
 
 export const AddElementButton = ({
+  filterElements,
   handleAdd,
   position, // the postion where we want to insert the new element
 }: {
+  filterElements?: ElementOptionsFilter | undefined;
   handleAdd?: (index: number, type?: FormElementTypes) => void;
   position: number;
 }) => {
@@ -42,6 +45,7 @@ export const AddElementButton = ({
       </Button>
       {elementDialog && (
         <ElementDialog
+          filterElements={filterElements}
           handleAddType={(type) => {
             handleAdd && handleAdd(position, type);
           }}
