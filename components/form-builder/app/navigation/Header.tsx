@@ -25,7 +25,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
   }, []);
 
   return (
-    <header className="border-b-1 border-gray-500 mt-4 mb-12 lg:px-4 xl:px-8 px-32">
+    <header className="border-b-1 border-gray-500 pt-4 mb-12 lg:px-4 xl:px-8 px-32 bg-white z-[1000] w-full fixed">
       <div className="flex justify-between">
         <div className="flex">
           <Link href="/form-builder">
