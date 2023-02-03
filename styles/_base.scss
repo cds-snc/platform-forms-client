@@ -14,7 +14,7 @@ header {
 }
 
 #page-container {
-  @apply xs:mx-4 md:mx-8 lg:mx-16 mx-32 grow shrink-0 basis-auto;
+  @apply xs:mx-4 md:mx-8 lg:mx-16 mx-32 grow shrink-0 basis-auto mt-[130px];
 }
 
 .gc-richText {

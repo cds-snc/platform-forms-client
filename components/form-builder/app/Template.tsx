@@ -80,7 +80,7 @@ export const PageTemplate = ({
 
   // Wait until the Template Store has fully hydrated before rendering the page
   return hasHydrated ? (
-    <div id="page-container" className="lg:!mx-4 xl:!mx-8 mt-[125px]">
+    <div id="page-container" className="lg:!mx-4 xl:!mx-8">
       <div>
         {leftNav && <LeftNavigation />}
         <>
