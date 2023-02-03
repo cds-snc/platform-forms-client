@@ -80,10 +80,16 @@ describe("TagInput", () => {
     expect(rendered.getAllByTestId("tag").length).toBe(5);
     expect(input.value).toBe("");
 
+    // Handles onBlur
+    await userEvent.type(input, "six");
+    await userEvent.tab();
+    expect(rendered.getAllByTestId("tag").length).toBe(6);
+
     // Handles "tabbing"
     await userEvent.tab({ shift: true });
+    expect(input).toHaveFocus();
 
-    // Focus will go to the last tag
+    await userEvent.tab({ shift: true });
     const removeButtons1 = await rendered.findAllByRole("button");
     expect(removeButtons1[removeButtons1.length - 1]).toHaveFocus();
 
