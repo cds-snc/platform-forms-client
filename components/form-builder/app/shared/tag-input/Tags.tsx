@@ -13,17 +13,19 @@ export const Tag = ({ tag, onRemove }: TagProps) => {
   const label = `${t("remove")} ${tag}`;
   return (
     <div
-      data-testid="tags"
+      data-testid="tag"
       className="m-1 pl-3 pr-3 border-grey-default border-2 rounded-l-xl rounded-r-xl inline-block relative"
     >
-      <span className="break-all inline-bock mr-6">{tag}</span>
-      <button
-        className="[&_svg]:fill-gray-500 [&_svg]:hover:fill-red-500 [&_svg]:focus:fill-red-500 ml-2 absolute p-[1px] right-[6px] top-[6px]"
-        onClick={() => onRemove(tag)}
-        aria-label={label}
-      >
-        <RoundCloseIcon />
-      </button>
+      <span className="break-all inline-bock mr-6">
+        {tag}
+        <button
+          className="[&_svg]:fill-gray-500 [&_svg]:hover:fill-red-500 [&_svg]:focus:fill-red-500 ml-2 absolute p-[1px] top-1"
+          onClick={() => onRemove(tag)}
+          aria-label={label}
+        >
+          <RoundCloseIcon />
+        </button>
+      </span>
     </div>
   );
 };

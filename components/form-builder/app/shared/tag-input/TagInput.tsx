@@ -46,7 +46,10 @@ export const TagInput = ({
   };
 
   return (
-    <div className="flex flex-wrap rounded-md box-border border-black-default border-2 w-[533px]">
+    <div
+      className="flex flex-wrap rounded-md box-border border-black-default border-2 w-[533px]"
+      data-testid="tags"
+    >
       <Tags tags={tags} onRemove={onRemove} />
       <Input onKeyUp={onKeyUp} onBlur={onBlur} />
     </div>
