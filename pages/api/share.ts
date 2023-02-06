@@ -40,7 +40,7 @@ To preview this form:
 - **Step 1**:
   Save the attached JSON form file to your computer.
 - **Step 2**:
-  Go to [GC Forms](${req.headers.host}). No account needed.
+  Go to [GC Forms](https://${req.headers.host}). No account needed.
 - **Step 3**:
   Select open a form file.
       `,
