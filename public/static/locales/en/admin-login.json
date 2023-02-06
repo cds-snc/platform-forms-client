@@ -6,7 +6,7 @@
     "login": "Login",
     "logout": "Logout"
   },
-  "formResponses": "Stored Responses from forms",
+  "formResponses": "Stored responses from forms",
   "unauthorized": {
     "title": "Administrative Privileges Required",
     "detail": "The page you are trying to access requires Application Administrative privileges"
