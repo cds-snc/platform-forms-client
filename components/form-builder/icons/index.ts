@@ -48,3 +48,5 @@ export { RoundCloseIcon } from "./RoundCloseIcon";
 export { ShareExternalLinkIcon } from "./ShareExternalLinkIcon";
 export { CopyIcon } from "./CopyIcon";
 export { ChevronRight } from "./ChevronRight";
+export { AddIcon } from "./AddIcon";
+export { RemoveIcon } from "./RemoveIcon";
