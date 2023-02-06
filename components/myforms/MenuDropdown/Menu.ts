@@ -1,21 +1,32 @@
+interface Options {
+  isCloseOnActivate: boolean;
+}
+
 interface MenuProps {
   menuButton: HTMLButtonElement;
   menuList: HTMLUListElement;
+  options?: Options;
 }
 
 // TODO: could also add character search on menu list in future
 // TODO: could add a layer mask to close on click outside, and or use "mouseout" event on container
+
+/**
+ * Adds keybaord behavior for a HTML list element.
+ */
 export class Menu {
   menuButton: HTMLButtonElement;
   menuList: HTMLUListElement;
   menuListItems: NodeListOf<HTMLElement>;
   menuListActiveIndex: number;
+  isCloseOnActivate: boolean;
 
-  constructor({ menuButton, menuList }: MenuProps) {
+  constructor({ menuButton, menuList, options }: MenuProps) {
     this.menuList = menuList;
     this.menuButton = menuButton;
     this.menuListItems = menuList.querySelectorAll("li > .action");
     this.menuListActiveIndex = 0;
+    this.isCloseOnActivate = options?.isCloseOnActivate || false;
 
     if (this.menuListItems.length === 0) {
       throw new Error("MenuDrop down requires a menu list with a size greater than 0.");
@@ -30,10 +41,6 @@ export class Menu {
       // Note: close() called when this emits click event to activateClick()
       itemToActivate.click();
     }
-  }
-
-  activateClick() {
-    this.close();
   }
 
   setFocus(menuItem: HTMLElement, index: number) {
@@ -150,7 +157,9 @@ export class Menu {
       case " ":
       case "Enter":
         flag = true;
-        this.close();
+        if (this.isCloseOnActivate) {
+          this.close();
+        }
         this.activateKey(e);
         break;
       case "Esc":

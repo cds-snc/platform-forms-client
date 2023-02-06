@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { rehydrateFormResponses } from "@lib/helpers";
-import { getPublicTemplateByID, getTemplateSubmissionTypeByID } from "@lib/templates";
+import { getPublicTemplateByID, getTemplateDeliveryOptionByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
 import { checkOne } from "@lib/cache/flags";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
@@ -60,7 +60,7 @@ const callLambda = async (
   language: string,
   securityAttribute: string
 ) => {
-  const submission = await getTemplateSubmissionTypeByID(formID);
+  const deliveryOption = await getTemplateDeliveryOptionByID(formID);
 
   const encoder = new TextEncoder();
 
@@ -71,7 +71,7 @@ const callLambda = async (
         formID,
         language,
         responses: fields,
-        submission,
+        deliveryOption,
         securityAttribute,
       })
     ),

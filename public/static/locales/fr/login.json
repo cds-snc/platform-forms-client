@@ -1,14 +1,19 @@
 {
   "title": "Se connecter",
-  "signUpLink": "Sign Up to GC Forms (FR)",
+  "signUpText": "Si vous n’en avez pas, vous pouvez en",
+  "signUpLink": "créer un maintenant.",
+  "signInButton": "Se connecter",
+  "resetPasswordText": "Réinitialiser votre mot de passe",
   "fields": {
     "username": {
-      "label": "Adresse courriel"
+      "label": "Adresse courriel",
+      "description": "Il faut fournir une adresse courriel du gouvernement fédéral."
     },
     "password": {
       "label": "Clé d'accès au formulaire",
+      "description": "Il doit comporter au moins 8 caractères avec une majuscule, un chiffre et un symbole",
       "errors": {
-        "maxLength": "This field must be no longer than 50 characters. (FR)"
+        "maxLength": "Ce champ de saisie ne doit pas dépasser 50 caractères."
       }
     }
   }

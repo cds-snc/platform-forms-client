@@ -4,7 +4,7 @@ import { logMessage } from "@lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
 import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createAbility, checkPrivileges, AccessControlError } from "@lib/privileges";
 import { Session } from "next-auth";
 import { MongoAbility } from "@casl/ability";
@@ -12,8 +12,9 @@ import { MongoAbility } from "@casl/ability";
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ): Promise<void> => {
+  const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
     const formID = req.query.form;
     if (Array.isArray(formID) || !formID)

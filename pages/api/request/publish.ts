@@ -2,17 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, sessionExists } from "@lib/middleware";
 import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
-import { MiddlewareProps } from "@lib/types";
-
-const SUPPORT_EMAIL_ADDRESS = "assistance+forms@cds-snc.freshdesk.com";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 
 const requestPublishingPermission = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ) => {
   try {
-    if (!session) return res.status(403).json({});
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
 
     const { managerEmail, department, goals } = req.body;
 
@@ -27,7 +25,7 @@ const requestPublishingPermission = async (
     );
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
-    await notifyClient.sendEmail(templateID, SUPPORT_EMAIL_ADDRESS, {
+    await notifyClient.sendEmail(templateID, process.env.EMAIL_ADDRESS_SUPPORT, {
       personalisation: {
         subject: "Publishing permission request / Demande d'autorisation de publication",
         formResponse: `

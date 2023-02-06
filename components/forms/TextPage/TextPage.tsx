@@ -18,12 +18,12 @@ interface PageContextProps {
 }
 
 const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
+  const { t } = useTranslation("confirmation");
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return <RichText className="confirmation">{pageText}</RichText>;
   }
-
-  const { t } = useTranslation("confirmation");
 
   // Otherwise, display the default confirmation text
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
@@ -42,14 +42,14 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
   const {
     formRecord: {
-      form: { endPage },
+      form: { confirmation },
     },
   } = props;
   const language = i18n.language as string;
 
-  const pageText = endPage ? endPage[getProperty("description", language)] : "";
+  const pageText = confirmation ? confirmation[getProperty("description", language)] : "";
 
-  const urlQuery = endPage ? endPage[getProperty("referrerUrl", language)] : null;
+  const urlQuery = confirmation ? confirmation[getProperty("referrerUrl", language)] : null;
 
   // autoFocus h1 element of page to ensure its read out
   useEffect(() => {

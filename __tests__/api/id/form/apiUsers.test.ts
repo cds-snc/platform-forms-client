@@ -801,7 +801,7 @@ describe("/id/[forms]/owners", () => {
           expires: "1",
           user: {
             id: "1",
-            email: "forms@cds.ca",
+            email: "forms@cds-snc.ca",
             name: "forms user",
             privileges: getUserPrivileges(Base, { user: { id: "1" } }),
           },
@@ -830,7 +830,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "888",
@@ -865,7 +865,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test9@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "9",
@@ -901,7 +901,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test9@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "9",
@@ -985,7 +985,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test9@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "9",
@@ -999,7 +999,7 @@ describe("/id/[forms]/owners", () => {
           "1",
           "Create",
           "GrantInitialFormAccess",
-          "Email: test9@gc.ca has been given access to form id: 9"
+          "Email: forms@cds-snc.ca has been given access to form id: 9"
         );
       });
     });
@@ -1039,7 +1039,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "888",
@@ -1074,7 +1074,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test9@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "9",
@@ -1110,7 +1110,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test9@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "9",
@@ -1196,7 +1196,7 @@ describe("/id/[forms]/owners", () => {
             "Content-Type": "application/json",
           },
           body: {
-            email: "test9@gc.ca",
+            email: "forms@cds-snc.ca",
           },
           query: {
             form: "9",
@@ -1210,7 +1210,7 @@ describe("/id/[forms]/owners", () => {
           "1",
           "Create",
           "GrantInitialFormAccess",
-          "Email: test9@gc.ca has been given access to form id: 9"
+          "Email: forms@cds-snc.ca has been given access to form id: 9"
         );
       });
     });

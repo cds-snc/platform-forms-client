@@ -5,7 +5,6 @@ import axios from "axios";
 import { useTranslation } from "next-i18next";
 import React, { useEffect, useState } from "react";
 import { isValidGovEmail } from "@lib/validation";
-import emailDomainList from "../../../email.domains.json";
 import { FormOwner } from "@lib/types";
 
 export interface FormAccessProps {
@@ -22,6 +21,8 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
 
   useEffect(() => {
     getFormOwners();
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ownersApiUrl = `/api/id/${formID}/owners`;
@@ -120,7 +121,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorState({ message: "" });
-    if (isValidGovEmail(newEmail, emailDomainList.domains)) {
+    if (isValidGovEmail(newEmail)) {
       addEmailToForm(newEmail);
     } else {
       setErrorState({ message: t("settings.formAccess.invalidEmailError") });

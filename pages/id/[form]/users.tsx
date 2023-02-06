@@ -13,6 +13,7 @@ import { getProperty } from "@lib/formBuilder";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
 interface User {
@@ -32,10 +33,9 @@ const updateUsersToTemplateAssignations = async (
 ) => {
   try {
     return await axios({
-      url: `/api/templates`,
+      url: `/api/templates/${formID}`,
       method: "PUT",
       data: {
-        formID,
         users,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
@@ -87,6 +87,9 @@ const Users = ({
 
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1 className="gc-h1">{formRecord.form[getProperty("title", language)] as string}</h1>
       <div className="mb-4">{t("assignUsersToTemplate")}</div>
       <Select

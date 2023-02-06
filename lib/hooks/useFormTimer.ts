@@ -5,19 +5,19 @@ import { useReducer } from "react";
  * @returns state that includes: {cansubmit: boolean, remainingTime: seconds, timerDelay: seconds, timeLock: unix time}
  */
 
-type formTimerStateType = {
+type FormTimerStateType = {
   canSubmit: boolean;
   remainingTime: number;
   timerDelay?: number;
   timeLock?: number;
 };
 
-type formTimerDispatchType = {
+type FormTimerDispatchType = {
   startTimer: (timerDelay: number) => void;
   checkTimer: () => void;
   disableTimer: () => void;
 };
-export const useFormTimer = (): [formTimerStateType, formTimerDispatchType] => {
+export const useFormTimer = (): [FormTimerStateType, FormTimerDispatchType] => {
   enum actions {
     START = "START",
     CHECK = "CHECK",
@@ -25,7 +25,7 @@ export const useFormTimer = (): [formTimerStateType, formTimerDispatchType] => {
   }
 
   function formTimerReducer(
-    state: formTimerStateType,
+    state: FormTimerStateType,
     action: { type: string; timerDelay?: number }
   ): { canSubmit: boolean; remainingTime: number; timerDelay?: number; timeLock?: number } {
     switch (action.type) {

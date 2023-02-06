@@ -29,6 +29,8 @@ export interface MiddlewareProps {
   temporaryToken?: string;
 }
 
+export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
 export type HTMLTextInputTypeAttribute =
   | "text"
   | "email"

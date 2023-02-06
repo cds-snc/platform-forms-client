@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, csrfProtected, sessionExists } from "@lib/middleware";
 import { setAcceptableUse } from "@lib/acceptableUseCache";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 
 const acceptableUse = async (
   _req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ) => {
   try {
-    if (!session) return res.status(401).json({ error: "Unauthorized" });
+    const { session } = props as WithRequired<MiddlewareProps, "session">;
     await setAcceptableUse(session.user.id);
     res.status(200).json({});
   } catch (err) {

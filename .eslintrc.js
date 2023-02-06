@@ -11,7 +11,7 @@ module.exports = {
 
       parser: "@typescript-eslint/parser",
       parserOptions: {
-        project: "./tsconfig.json",
+        project: ["./tsconfig.json", "cypress/tsconfig.json"],
       },
       plugins: ["@typescript-eslint", "jsx-a11y", "prettier"],
       rules: {
@@ -28,6 +28,7 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:cypress/recommended",
     "plugin:prettier/recommended",

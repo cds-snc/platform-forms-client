@@ -6,13 +6,22 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
+import { isValidGovEmail } from "@lib/validation";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
+
   // craft registration params for the SignUpCommand
   if (!req.body.username || !req.body.password || !req.body.name) {
     return res.status(400).json({
       message: "username and password need to be provided in the body of the request",
+    });
+  }
+
+  // Ensure email is part of acceptable domain list
+  if (!isValidGovEmail(req.body.username)) {
+    return res.status(400).json({
+      message: "username does not meet requirements",
     });
   }
   const params: SignUpCommandInput = {

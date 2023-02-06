@@ -6,24 +6,34 @@
     "all": "All"
   },
   "actions": {
+    "resumeForm": "Resume editing form",
     "createNewForm": "Create new form"
   },
   "cards": {
-    "label": "List of your forms",
-    "noForms": "No forms to list."
+    "noForms": "You have no forms.",
+    "noDraftForms": "You have no draft forms.",
+    "noPublishedForms": "You have no published forms."
   },
   "card": {
     "states": {
       "draft": "Draft",
       "published": "Published"
     },
+    "title": {
+      "notTranslatedEn": "No English translation",
+      "notTranslatedFr": "No French translation"
+    },
     "lastEdited": "Last edited",
     "menu": {
       "more": "More",
-      "save": "Save",
-      "copyLink": "copyLink",
-      "preview": "Priview",
-      "edit": "Edit"
+      "save": "Save to computer",
+      "copyLink": "Copy Link",
+      "preview": "Preview",
+      "edit": "Edit",
+      "settings": "Settings",
+      "delete": "Delete form",
+      "coppiedToClipboard": "Coppied to clipboard",
+      "somethingWentWrong": "Something went wrong"
     }
   }
 }

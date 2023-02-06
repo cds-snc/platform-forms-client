@@ -24,7 +24,6 @@ export interface Title {
 export enum LocalizedFormProperties {
   TITLE = "title",
   REFERRER = "referrerUrl",
-  INTERNAL_TITLE = "internalTitle",
   EMAIL_SUBJECT = "emailSubject",
 }
 
@@ -49,13 +48,7 @@ export interface ElementOption {
   id: string;
   value: string | undefined;
   icon?: ReactElement;
-  append?: ReactElement;
-}
-
-export interface DropdownProps {
-  options: ElementOption[];
-  onChange?: (selectedItem: string) => void;
-  ishighlighted: boolean;
+  className?: string;
 }
 
 export interface DropdownLabelProps {

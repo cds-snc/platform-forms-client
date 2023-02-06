@@ -4,5 +4,11 @@
   "submitToReliabilityQueue": false,
   "reCaptcha": false,
   "formTimer": false,
-  "accountRegistration": true
+  "accountRegistration": true,
+  "passwordReset": false,
+  "supportForms": false,
+  "formBuilderDebug": false,
+  "formBuilderAddElementDialog": false,
+  "shareMenu": false,
+  "editableFilename": false
 }

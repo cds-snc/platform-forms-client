@@ -4,7 +4,7 @@ import { getAllPrivileges } from "@lib/privileges";
 
 import { AdminLogAction } from "@lib/adminLogs";
 import { Session } from "next-auth";
-import { MiddlewareProps } from "@lib/types";
+import { MiddlewareProps, WithRequired } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import {
   createAbility,
@@ -85,13 +85,10 @@ const updatePrivilege = async (
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  { session }: MiddlewareProps
+  props: MiddlewareProps
 ): Promise<void> => {
+  const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    if (!session) {
-      res.status(403);
-      return;
-    }
     const ability = createAbility(session.user.privileges);
 
     switch (req.method) {

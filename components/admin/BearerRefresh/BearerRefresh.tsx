@@ -19,6 +19,8 @@ const BearerRefresh = (props: BearerRefreshProps): React.ReactElement => {
 
   useEffect(() => {
     getBearerToken(formID);
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getBearerToken = async (formID: string) => {

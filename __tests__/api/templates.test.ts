@@ -5,7 +5,8 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import Redis from "ioredis-mock";
-import templates from "@pages/api/templates";
+import templates from "@pages/api/templates/[formID]";
+import templatesRoot from "@pages/api/templates/index";
 import { unstable_getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormTemplateWithHTMLInDynamicRow.json";
@@ -97,7 +98,7 @@ describe("Test templates API functions", () => {
         },
       });
 
-      await templates(req, res);
+      await templatesRoot(req, res);
 
       expect(res.statusCode).toBe(200);
       expect(logAdminActivity).toHaveBeenCalledWith(
@@ -123,7 +124,9 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(400);
-      expect(JSON.parse(res._getData()).error).toContain('instance requires property "form"');
+      expect(JSON.parse(res._getData()).error).toContain(
+        'JSON Validation Error: instance requires property "privacyPolicy",instance requires property "confirmation"'
+      );
     });
 
     it("Should reject JSON with html", async () => {
@@ -178,12 +181,15 @@ describe("Test templates API functions", () => {
 
       const { req, res } = createMocks({
         method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
         headers: {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           formConfig: validFormTemplate,
         },
       });
@@ -197,6 +203,74 @@ describe("Test templates API functions", () => {
         "UpdateForm",
         "Form id: test0form00000id000asdf11 has been updated"
       );
+    });
+
+    it("Should failed when trying to update published template", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+        isPublished: true,
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          formConfig: validFormTemplate,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(500);
+      expect(JSON.parse(res._getData())).toEqual(
+        expect.objectContaining({ error: "Can't update published form" })
+      );
+    });
+
+    it("Should successfully handle PUT request that removes the DeliveryOption object", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "formtestID",
+        jsonConfig: validFormTemplate,
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue({
+        id: "test0form00000id000asdf11",
+        jsonConfig: validFormTemplate,
+      });
+
+      const { req, res } = createMocks({
+        method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "http://localhost:3000",
+        },
+        body: {
+          sendResponsesToVault: true,
+        },
+      });
+
+      await templates(req, res);
+
+      expect(res.statusCode).toBe(200);
     });
   });
 
@@ -234,12 +308,15 @@ describe("Test templates API functions", () => {
 
       const { req, res } = createMocks({
         method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
         headers: {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           isPublished: true,
         },
       });
@@ -289,12 +366,13 @@ describe("Test templates API functions", () => {
 
       const { req, res } = createMocks({
         method: "DELETE",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
         headers: {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000",
-        },
-        body: {
-          formID: "test0form00000id000asdf11",
         },
       });
 
@@ -330,7 +408,8 @@ describe("Templates API functions should throw an error if user does not have pe
       mockGetSession.mockReset();
     });
 
-    it.each(["GET", "POST", "PUT", "DELETE"])(
+    // base routes
+    it.each(["GET", "POST"])(
       "User with no permission should not be able to use %s API functions",
       async (httpMethod) => {
         (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -339,14 +418,50 @@ describe("Templates API functions should throw an error if user does not have pe
           users: [{ id: "1" }],
         });
 
+        const url = "/api/templates";
+
         const { req, res } = createMocks({
           method: httpMethod as RequestMethod,
+          url: url,
           headers: {
             "Content-Type": "application/json",
             Origin: "http://localhost:3000",
           },
           body: {
-            ...(httpMethod !== "GET" && { formID: "test0form00000id000asdf11" }), // To target the getAllTemplates API when testing GET request
+            formConfig: validFormTemplate,
+          },
+        });
+
+        await templatesRoot(req, res);
+
+        expect(res.statusCode).toBe(403);
+        expect(JSON.parse(res._getData())).toEqual(expect.objectContaining({ error: "Forbidden" }));
+      }
+    );
+
+    // resource-specific routes
+    it.each(["GET", "PUT", "DELETE"])(
+      "User with no permission should not be able to use %s API functions",
+      async (httpMethod) => {
+        (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+          id: "formtestID",
+          jsonConfig: validFormTemplate,
+          users: [{ id: "1" }],
+        });
+
+        const url = "/api/templates/test0form00000id000asdf11";
+
+        const { req, res } = createMocks({
+          method: httpMethod as RequestMethod,
+          url: url,
+          query: {
+            formID: "test0form00000id000asdf11",
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Origin: "http://localhost:3000",
+          },
+          body: {
             formConfig: validFormTemplate,
           },
         });
@@ -384,12 +499,15 @@ describe("Templates API functions should throw an error if user does not have pe
 
       const { req, res } = createMocks({
         method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
         headers: {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           formConfig: validFormTemplate,
         },
       });
@@ -420,12 +538,15 @@ describe("Templates API functions should throw an error if user does not have pe
 
       const { req, res } = createMocks({
         method: "PUT",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
         headers: {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000",
         },
         body: {
-          formID: "test0form00000id000asdf11",
           isPublished: true,
         },
       });
@@ -456,12 +577,13 @@ describe("Templates API functions should throw an error if user does not have pe
 
       const { req, res } = createMocks({
         method: "DELETE",
+        url: "/api/templates/test0form00000id000asdf11",
+        query: {
+          formID: "test0form00000id000asdf11",
+        },
         headers: {
           "Content-Type": "application/json",
           Origin: "http://localhost:3000",
-        },
-        body: {
-          formID: "test0form00000id000asdf11",
         },
       });
 

@@ -193,6 +193,26 @@
   }
 }
 
+.gc-button--blue {
+  @apply h-16 rounded-lg py-3 px-6 text-white-default mx-auto bg-blue-800 shadow-default;
+
+  &:hover {
+    @apply bg-blue-light;
+  }
+
+  &:focus {
+    @apply outline-[3px] outline-blue-focus outline outline-offset-2 bg-blue-focus;
+  }
+
+  &:active {
+    @apply text-white-default top-0.5;
+  }
+ 
+  &:visited {
+    @apply text-white-default top-0.5;
+  }
+}
+
 .gc-button--destructive {
   @apply mb-14 mr-5 bg-red-destructive;
 

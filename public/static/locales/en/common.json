@@ -9,12 +9,10 @@
       "desc": "Service level agreement"
     },
     "support": {
-      "link": "/tbd",
+      "link": "/en/form-builder/support",
       "desc": "Support"
-    }
-  },
-  "phase": {
-    "desc": "This site will change as we test ideas."
+    },
+    "ariaLabel": "Footer"
   },
   "skip-link": "Skip to main content",
   "fip": {
@@ -99,5 +97,7 @@
   "alert": {
     "dismissAlert": "Close this alert"
   },
-  "continue": "Continue"
+  "continue": "Continue",
+  "error": "Error",
+  "unknown": "Unknown"
 }

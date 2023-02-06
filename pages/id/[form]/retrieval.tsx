@@ -1,11 +1,15 @@
 import { requireAuthentication } from "@lib/auth";
 import { useTranslation } from "next-i18next";
 import React from "react";
+import Head from "next/head";
 
-const retrieval = (): React.ReactElement => {
+const Retrieval = (): React.ReactElement => {
   const { t } = useTranslation("forms-responses-retrieval");
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1 className="gc-h1">{t("title")}</h1>
       <div data-testid="formID" className="mb-4">
         {t("content")}
@@ -43,4 +47,4 @@ export const getServerSideProps = requireAuthentication(async ({ locale, params 
   */
 });
 
-export default retrieval;
+export default Retrieval;

@@ -9,12 +9,10 @@
       "desc": "Accord sur les niveaux de service"
     },
     "support": {
-      "link": "/tbd",
+      "link": "/fr/form-builder/support",
       "desc": "Soutien"
-    }
-  },
-  "phase": {
-    "desc": "Ce site évoluera au fur et à mesure que nous testons des idées."
+    },
+    "ariaLabel": "Bas de page"
   },
   "skip-link": "Passer au contenu principal",
   "fip": {
@@ -42,7 +40,7 @@
     "file-type-invalid": "Veuillez sélectionner un autre type de fichier.",
     "too-many-characters": "Veuillez raccourcir votre réponse.",
     "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
-    "validGovEmail": "This field must be a valid government email."
+    "validGovEmail": "Ce champ doit être une adresse courriel valide du gouvernement."
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -74,7 +72,7 @@
     "login": "Connexion",
     "logout": "Déconnexion",
     "privileges": "Privileges",
-    "myForms": "My Forms [FR]"
+    "myForms": "Mes formulaires"
   },
   "formElements": {
     "characterCount": {
@@ -100,5 +98,7 @@
   "alert": {
     "dismissAlert": "Fermer cette alerte"
   },
-  "continue": "Continue"
+  "continue": "Continuer",
+  "error": "Erreur",
+  "unknown": "Inconnu"
 }

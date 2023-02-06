@@ -41,8 +41,14 @@ describe("Form Settings Page", () => {
   afterEach(cleanup);
   const form = {
     id: "test0form00000id000asdf11",
+    form: validFormTemplate,
     isPublished: true,
-    ...validFormTemplate,
+    deliveryOption: {
+      emailAddress: "",
+      emailSubjectEn: "",
+      emailSubjectFr: "",
+    },
+    securityAttribute: "Unclassified",
   };
   test("renders without errors", () => {
     useRouter.mockImplementation(() => ({
@@ -75,7 +81,7 @@ describe("Form Settings Page", () => {
     await user.click(screen.queryByTestId("confirmDelete"));
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "DELETE" })
+      expect.objectContaining({ url: "/api/templates/test0form00000id000asdf11", method: "DELETE" })
     );
     await waitFor(() => {
       expect(push).toHaveBeenCalled();
@@ -100,7 +106,7 @@ describe("Form Settings Page", () => {
     spy.mockRestore();
     expect(mockedAxios.mock.calls.length).toBe(1);
     expect(mockedAxios).toHaveBeenCalledWith(
-      expect.objectContaining({ url: "/api/templates", method: "DELETE" })
+      expect.objectContaining({ url: "/api/templates/test0form00000id000asdf11", method: "DELETE" })
     );
   });
 });

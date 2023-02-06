@@ -5,6 +5,7 @@ import { Button } from "@components/forms";
 import React, { ReactElement, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "next-i18next";
+import Head from "next/head";
 import { checkPrivileges, getAllPrivileges } from "@lib/privileges";
 import { Privilege } from "@lib/types";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
@@ -203,6 +204,9 @@ const Privileges = ({ allPrivileges }: { allPrivileges: Privilege[] }): React.Re
 
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <h1>{t("title")}</h1>
       <div className="shadow-lg border-4">
         {modifyMode ? (

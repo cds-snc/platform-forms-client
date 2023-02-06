@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           if (idToken) {
             const cognitoIDTokenParts = idToken.split(".");
             const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
-            const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("ascii"));
+            const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
             return {
               id: cognitoIDTokenClaims.sub,
               name: cognitoIDTokenClaims.name,
@@ -97,6 +97,14 @@ export const authOptions: NextAuthOptions = {
           }
           return null;
         } catch (e) {
+          if (
+            e instanceof CognitoIdentityProviderServiceException &&
+            e.name === "NotAuthorizedException" &&
+            e.message === "Password attempts exceeded"
+          )
+            logMessage.warn(
+              `Cognito Lockout: Password attempts exceeded for ${credentials.username}`
+            );
           // throw new Error with cognito error converted to string so as to include the exception name
           throw new Error((e as CognitoIdentityProviderServiceException).toString());
         }
@@ -150,8 +158,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
-        if (!token.sub) {
-          throw new Error(`JWT token does not have an id for user with email ${token.email}`);
+        if (!token.email) {
+          throw new Error(`JWT token does not have an email for user with name ${token.name}`);
         }
         const user = await getOrCreateUser(token);
         if (user === null)

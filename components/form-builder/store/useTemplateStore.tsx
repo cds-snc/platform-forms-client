@@ -1,6 +1,6 @@
 import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist, StateStorage } from "zustand/middleware";
+import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
 
 import {
@@ -14,7 +14,7 @@ import {
 import { Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
-import { FormElement, FormProperties, FormElementTypes, FormRecord } from "@lib/types";
+import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { logMessage } from "@lib/logger";
 
 const defaultField: FormElement = {
@@ -33,17 +33,8 @@ const defaultField: FormElement = {
 };
 
 export const defaultForm = {
-  id: "",
-  titleEn: "My Form",
-  titleFr: "[fr] My Form",
-  layout: [],
-  version: 1,
-  endPage: {
-    descriptionEn: "",
-    descriptionFr: "",
-    referrerUrlEn: "",
-    referrerUrlFr: "",
-  },
+  titleEn: "",
+  titleFr: "",
   introduction: {
     descriptionEn: "",
     descriptionFr: "",
@@ -52,10 +43,14 @@ export const defaultForm = {
     descriptionEn: "",
     descriptionFr: "",
   },
+  confirmation: {
+    descriptionEn: "",
+    descriptionFr: "",
+    referrerUrlEn: "",
+    referrerUrlFr: "",
+  },
+  layout: [],
   elements: [],
-  emailSubjectEn: "Form builder test [en]",
-  emailSubjectFr: "Form builder test [fr]",
-  securityAttribute: "Unclassified",
 };
 
 export interface TemplateStoreProps {
@@ -65,11 +60,14 @@ export interface TemplateStoreProps {
   focusInput: boolean;
   _hasHydrated: boolean;
   form: FormProperties;
-  submission: {
-    email?: string;
-  };
   isPublished: boolean;
+  name: string;
+  deliveryOption?: DeliveryOption;
   securityAttribute: string;
+}
+
+export interface InitialTemplateStoreProps extends TemplateStoreProps {
+  locale?: Language;
 }
 
 export interface TemplateStoreState extends TemplateStoreProps {
@@ -89,8 +87,10 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
+  setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
-  add: (index?: number) => void;
+  getLocalizationAttribute: () => Record<"lang", Language> | undefined;
+  add: (index?: number, type?: FormElementTypes) => void;
   remove: (id: number) => void;
   addChoice: (index: number) => void;
   resetChoices: (index: number) => void;
@@ -99,8 +99,12 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (index: number) => void;
   bulkAddChoices: (index: number, bulkChoices: string) => void;
-  importTemplate: (json: FormRecord) => void;
+  importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
+  getIsPublished: () => boolean;
+  getName: () => string;
+  getDeliveryOption: () => DeliveryOption | undefined;
+  getSecurityAttribute: () => string;
   initialize: () => void;
 }
 
@@ -119,18 +123,16 @@ const storage: StateStorage = {
   },
 };
 
-const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
+const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
-    lang: "en",
-    translationLanguagePriority: "en",
+    lang: (initProps?.locale as Language) || "en",
+    translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
     _hasHydrated: false,
     form: defaultForm,
-    submission: {
-      email: "",
-    },
     isPublished: false,
+    name: "",
     securityAttribute: "Unclassified",
   };
 
@@ -174,11 +176,20 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
               state.translationLanguagePriority =
                 state.translationLanguagePriority === "en" ? "fr" : "en";
             }),
+          setTranslationLanguagePriority: (lang: Language) =>
+            set((state) => {
+              state.translationLanguagePriority = lang;
+            }),
           setFocusInput: (isSet) =>
             set((state) => {
               state.focusInput = isSet;
             }),
           getFocusInput: () => get().focusInput,
+          // Use on a child element to declare the language when the parent element lang attribute is different
+          getLocalizationAttribute: () =>
+            get().lang !== get().translationLanguagePriority
+              ? { lang: get().translationLanguagePriority }
+              : undefined,
           updateField: (path, value) =>
             set((state) => {
               update(state, path, value);
@@ -195,12 +206,12 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
             set((state) => {
               state.form.elements = moveDown(state.form.elements, index);
             }),
-          add: (index = 0) =>
+          add: (index = 0, type = FormElementTypes.radio) =>
             set((state) => {
               state.form.elements.splice(index + 1, 0, {
                 ...defaultField,
                 id: incrementElementId(state.form.elements),
-                type: FormElementTypes.radio,
+                type,
               });
             }),
           remove: (elementId) =>
@@ -238,25 +249,33 @@ const createTemplateStore = (initProps?: Partial<TemplateStoreProps>) => {
             });
           },
           getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+          getIsPublished: () => get().isPublished,
+          getName: () => get().name,
+          getDeliveryOption: () => get().deliveryOption,
+          getSecurityAttribute: () => get().securityAttribute,
           initialize: () => {
             set((state) => {
               state.id = "";
               state.lang = "en";
               state.form = defaultForm;
-              state.submission = { email: "" };
               state.isPublished = false;
+              state.name = "";
               state.securityAttribute = "Unclassified";
             });
           },
-          importTemplate: (json) =>
+          importTemplate: (jsonConfig) =>
             set((state) => {
-              state.submission = { email: json.submission?.email || "" };
-              state.form = { ...defaultForm, ...json.form };
+              state.id = "";
+              state.lang = "en";
+              state.form = { ...defaultForm, ...jsonConfig };
+              state.isPublished = false;
+              state.name = "";
+              state.securityAttribute = "Unclassified";
             }),
         }),
         {
           name: "form-storage",
-          getStorage: () => storage,
+          storage: createJSONStorage(() => storage),
           onRehydrateStorage: () => {
             logMessage.debug("Template Store Hydration starting");
 

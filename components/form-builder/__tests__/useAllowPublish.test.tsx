@@ -1,7 +1,7 @@
 import React from "react";
 import { TemplateStoreProvider, TemplateStoreProps } from "../store/useTemplateStore";
 import { useAllowPublish } from "../hooks/useAllowPublish";
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import {
   isTitleTranslated,
   isDescriptionTranslated,
@@ -11,9 +11,15 @@ import {
 } from "../hooks/useAllowPublish";
 import { FormElementTypes } from "@lib/types";
 
-const createTemplateStore = ({ form, submission, isPublished }: Partial<TemplateStoreProps>) => {
+const promise = Promise.resolve();
+
+const createTemplateStore = ({
+  form,
+  deliveryOption,
+  isPublished,
+}: Partial<TemplateStoreProps>) => {
   const wrapper = ({ children }: React.PropsWithChildren) => (
-    <TemplateStoreProvider form={form} submission={submission} isPublished={isPublished}>
+    <TemplateStoreProvider form={form} deliveryOption={deliveryOption} isPublished={isPublished}>
       {children}
     </TemplateStoreProvider>
   );
@@ -51,17 +57,18 @@ describe("useAllowPublish", () => {
     jest.restoreAllMocks();
   });
 
-  it("checks required fields needed to publish or save", () => {
+  it("checks required fields needed to publish or save", async () => {
     const store = {
       form: {
-        version: 1,
-        layout: [],
+        titleEn: "form title",
+        titleFr: "",
         introduction: {
           descriptionEn: "",
           descriptionFr: "",
         },
-        titleEn: "form title",
-        titleFr: "",
+        privacyPolicy: { descriptionEn: "", descriptionFr: "" },
+        confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        layout: [],
         elements: [
           {
             id: 1,
@@ -76,18 +83,20 @@ describe("useAllowPublish", () => {
             },
           },
         ],
-        privacyPolicy: { descriptionEn: "", descriptionFr: "" },
-        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
-      submission: { email: "test@example.com" },
       isPublished: true,
+      deliveryOption: {
+        emailAddress: "test@example.com",
+        emailSubjectEn: "email subject in English",
+        emailSubjectFr: "email subject in French",
+      },
     };
     const {
       current: { data, hasData, isSaveable, isPublishable },
     } = createTemplateStore({
       form: store.form,
-      submission: store.submission,
       isPublished: store.isPublished,
+      deliveryOption: store.deliveryOption,
     });
 
     expect(data.title).toBe(true);
@@ -99,19 +108,26 @@ describe("useAllowPublish", () => {
     expect(hasData(["title", "confirmationMessage"])).toBe(true);
     expect(isSaveable()).toBe(true);
     expect(isPublishable()).toBe(false);
+
+    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+    // > especially if there's no visual indication of the async task completing.
+    await act(async () => {
+      await promise;
+    });
   });
 
-  it("isPublishable", () => {
+  it("isPublishable", async () => {
     const store = {
       form: {
-        version: 1,
-        layout: [],
+        titleEn: "form title",
+        titleFr: "form title fr",
         introduction: {
           descriptionEn: "introduction text en",
           descriptionFr: "introduction text fr",
         },
-        titleEn: "form title",
-        titleFr: "form title fr",
+        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
+        confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        layout: [],
         elements: [
           {
             id: 1,
@@ -126,21 +142,29 @@ describe("useAllowPublish", () => {
             },
           },
         ],
-        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
-        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
-      submission: { email: "test@example.com" },
       isPublished: true,
+      deliveryOption: {
+        emailAddress: "test@example.com",
+        emailSubjectEn: "email subject in English",
+        emailSubjectFr: "email subject in French",
+      },
     };
     const {
       current: { isPublishable },
     } = createTemplateStore({
       form: store.form,
-      submission: store.submission,
       isPublished: store.isPublished,
+      deliveryOption: store.deliveryOption,
     });
 
     expect(isPublishable()).toBe(true);
+
+    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+    // > especially if there's no visual indication of the async task completing.
+    await act(async () => {
+      await promise;
+    });
   });
 
   describe("Translation helper methods", () => {
@@ -445,14 +469,15 @@ describe("useAllowPublish", () => {
   describe("Validate form translated tests", () => {
     const defaultStore = {
       form: {
-        version: 1,
-        layout: [],
+        titleEn: "form title",
+        titleFr: "form title fr",
         introduction: {
           descriptionEn: "introduction text en",
           descriptionFr: "introduction text fr",
         },
-        titleEn: "form title",
-        titleFr: "form title fr",
+        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
+        confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        layout: [],
         elements: [
           {
             id: 1,
@@ -485,13 +510,16 @@ describe("useAllowPublish", () => {
             },
           },
         ],
-        privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
-        endPage: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
       },
-      submission: { email: "test@example.com" },
+      isPublished: true,
+      deliveryOption: {
+        emailAddress: "test@example.com",
+        emailSubjectEn: "email subject in English",
+        emailSubjectFr: "email subject in French",
+      },
     };
 
-    it("fails when form title translation is missing", () => {
+    it("fails when form title translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.titleFr = "";
@@ -500,13 +528,19 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
       expect(data.translate).toBe(false);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("fails when form introduction translation is missing", () => {
+    it("fails when form introduction translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.introduction.descriptionFr = "";
@@ -515,14 +549,18 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
+
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("fails when form privacyPolicy translation is missing", () => {
+    it("fails when form privacyPolicy translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.privacyPolicy.descriptionEn = "";
@@ -531,29 +569,41 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("fails when form endPage translation is missing", () => {
+    it("fails when form confirmation translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
-      store.form.endPage.descriptionFr = "";
+      store.form.confirmation.descriptionFr = "";
       const {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("fails when an element title translation is missing", () => {
+    it("fails when an element title translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.titleFr = "";
@@ -561,14 +611,20 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("passes when an optional element description is not set", () => {
+    it("passes when an optional element description is not set", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.descriptionEn = "";
@@ -578,14 +634,20 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(true);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("fails when an optional element description is provided but translation is missing", () => {
+    it("fails when an optional element description is provided but translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.descriptionFr = "";
@@ -593,14 +655,20 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
 
-    it("fails when a choice element translation is missing", () => {
+    it("fails when a choice element translation is missing", async () => {
       const store = JSON.parse(JSON.stringify(defaultStore));
 
       store.form.elements[0].properties.choices[0].fr = "";
@@ -608,11 +676,17 @@ describe("useAllowPublish", () => {
         current: { data },
       } = createTemplateStore({
         form: store.form,
-        submission: store.submission,
         isPublished: store.isPublished,
+        deliveryOption: store.deliveryOption,
       });
 
       expect(data.translate).toBe(false);
+
+      // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+      // > especially if there's no visual indication of the async task completing.
+      await act(async () => {
+        await promise;
+      });
     });
   });
 });

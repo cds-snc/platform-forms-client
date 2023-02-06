@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
+import Head from "next/head";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { GetServerSideProps } from "next";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
@@ -15,17 +16,22 @@ const Logout = () => {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       })
     );
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+      </Head>
       <div>
-        <h2>{t("messageContent")}</h2>
+        <h1>{t("messageContent")}</h1>
         <div className="gc-last-logout-time">
           {t("logoutDate")} : {logoutDate}
         </div>
         <div className="gc-go-to-login-btn">
-          <Link href={`/${i18n.language}/auth/login`}>{t("goToLoginLabel")}</Link>
+          <Link href={`/${i18n.language}/auth/login`}>{t("goToSignInLabel")}</Link>
         </div>
       </div>
     </>

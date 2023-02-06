@@ -1,69 +1,80 @@
 {
   "signUpConfirmation": {
-    "title": "Confirm Your Email (FR)",
-    "noUsername": "No user to confirm (FR)",
+    "title": "Vérifiez votre boîte de réception courriel",
+    "resendConfirmationCodeButton": "Envoyer un nouveau code d’authentification",
+    "emailHasBeenSent": "Un courriel contenant un code de sécurité a été envoyé à",
+    "confirmButton": "Continuer",
+    "resendConfirmationCode": {
+      "title": "Vérifiez votre boîte de réception courriel",
+      "body": "Un courriel contenant un code de sécurité a été envoyé à vous"
+    },
     "fields": {
       "confirmationCode": {
-        "label": "Confirmation Code (FR)",
+        "label": "Inscrivez le code de sécurité pour terminer la création de votre compte",
         "error": {
-          "number": "This field must be a number (FR)"
+          "number": "La valeur doit être un nombre"
         }
       }
     }
   },
   "signUpRegistration": {
-    "title": "Sign Up to GC Forms (FR)",
+    "title": "Créer un compte",
+    "alreadyHaveAnAccount": "Si vous avez déjà un compte,",
+    "alreadyHaveAnAccountLink": "connectez-vous.",
+    "slaAgreement": "En créant un compte, vous acceptez l’accord sur les",
+    "slaAgreementLink": "niveaux de service.",
+    "signUpButton": "Continuer",
     "fields": {
       "username": {
-        "label": "Email (FR)",
-        "hint": "Must be a federal government email address (FR)"
+        "label": "Adresse courrier",
+        "hint": "Il faut fournir une adresse courriel du gouvernement fédéral."
       },
       "password": {
-        "label": "Password (FR)",
-        "hint": "Must be at least 8 characters with a capital, number and symbol (FR)",
+        "label": "Mot de passe",
+        "hint": "Il doit comporter au moins 8 caractères avec une majuscule, un chiffre et un symbole.",
         "error": {
-          "minLength": "The minimum length of the value must be 8 characters. (FR)",
-          "maxLength": "The field must be no longer than 50 characters. (FR)",
-          "oneLowerCase": "The field must contain at least 1 lowercase character. (FR)",
-          "oneUpperCase": "The field must contain at least 1 uppercase character. (FR)",
-          "oneNumber": "The field must contain at least 1 number. (FR)",
-          "oneSymbol": "The field must contain at least 1 symbol. (FR)"
+          "minLength": "La longueur minimale de la valeur doit être de 8 caractères.",
+          "maxLength": "Le champ ne doit pas dépasser 50 caractères.",
+          "oneLowerCase": "Le champ doit contenir au moins 1 caractère minuscule.",
+          "oneUpperCase": "Le champ doit contenir au moins 1 caractère majuscule.",
+          "oneNumber": "Le champ doit contenir au moins 1 chiffre.",
+          "oneSymbol": "Le champ doit contenir au moins 1 symbole."
         }
       },
       "passwordConfirmation": {
-        "label": "Password confirmation (FR)",
+        "label": "Confirmation du mot de passe",
         "error": {
-          "mustMatch": "The value must match the value of the password field. (FR)"
+          "mustMatch": "La valeur doit correspondre à la valeur du champ mot de passe."
         }
       },
       "name": {
-        "label": "Full name (FR)",
+        "label": "Nom complet",
         "error": {
-          "maxLength": "The field must be no longer than 50 characters. (FR)"
+          "maxLength": "Le champ ne doit pas dépasser 50 caractères."
         }
       }
     }
   },
   "registrationClosed": "L'inscription est fermée pour le moment.",
   "accountCreated": {
-    "title": "GC Forms account created (FR)",
-    "yourAccountTitle": "What you can do with your account (FR)",
-    "yourAccountListDescription": "With this account you can (FR)",
+    "title": "Compte créé",
+    "yourAccountTitle": "Ce que vous pouvez faire avec votre compte",
+    "yourAccountListDescription": "Ce compte vous permet de",
     "yourAccountList": {
-      "item1": "draft a form (FR)",
-      "item2": "save drafts within GC Forms (FR)",
-      "item3": "test the delivery of responses (FR)"
+      "item1": "rédiger une ébauche de formulaire",
+      "item2": "sauvegarder les ébauches dans Formulaires GC",
+      "item3": "tester la livraison des réponses. "
     },
     "notIncluded": {
-      "title": "What's not included (FR)",
-      "paragraph1": "You cannot publish forms to the internet yet. (FR)"
+      "title": "Ce qui n'est pas compris",
+      "paragraph1": "Vous ne pouvez pas encore publier de formulaires."
     },
     "unlockPublishing": {
-      "title": "Unlock form publishing (FR)",
-      "paragraph1": "To unlock publishing, provide the contact information of the person you report to. (FR)",
-      "paragraph2": "We'll process your request within 2 business days. (FR)"
+      "title": "Déverrouiller la publication de formulaires",
+      "paragraph1": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez.",
+      "paragraph2": "Nous traiterons votre demande dans les 2 jours ouvrables."
     },
-    "unlockPublishingButton": "Unlock publishing (FR)",
-    "skipStepButton": "Skip this step for now (FR)"
+    "unlockPublishingButton": "Déverouiller la publication",
+    "skipStepButton": "Passez cette étape pour l'instant"
   }
 }

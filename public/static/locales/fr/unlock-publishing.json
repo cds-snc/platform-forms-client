@@ -1,23 +1,23 @@
 {
   "unlockPublishing": {
-    "title": "Unlock publishing [FR]",
-    "paragraph1": "Before you publish your first form, provide the contact information of your manager or the person you report to. GC Forms will not display their contact information publicly. [FR]",
+    "title": "Déverrouiller la publication de formulaires",
+    "paragraph1": "Avant de publier votre premier formulaire, fournissez les coordonnées de votre gestionnaire ou de la personne a qui vous relevez. Les formulaires GC n'afficheront pas leurs coordonnées publiquement.",
     "form": {
       "field1": {
-        "title": "Provide the email of your manager, or the person you report to (required) [FR]",
-        "description": "We'll notify them about your publishing ability in GC Forms and our service level agreement. [FR]"
+        "title": "Fournissez l’adresse courriel de votre gestionnaire ou de votre supérieur·e direct·e (obligatoire)",
+        "description": "Nous les informerons de votre capacité de publication dans les formulaires GC et de notre accord de niveau de service."
       },
       "field2": {
-        "title": "What department or organization do you work for? (required) [FR]"
+        "title": "Dans quel ministère ou organisme travaillez-vous? (obligatoire)"
       },
       "field3": {
-        "title": "What are your program or service goals? (required) [FR]"
+        "title": "Quels sont les objectifs de votre programme ou service ? (obligatoire)"
       }
     },
-    "skipStepButton": "Skip this step for now [FR]"
+    "skipStepButton": "Pas maintenant"
   },
   "unlockPublishingSubmitted": {
-    "title": "Unlock publishing request submitted [FR]",
+    "title": "Déverrouiller la publication de formulaires",
     "whatNext": {
       "title": "Quelle est la suite?",
       "paragraph1": "Quelqu’un traitera votre demande et informera votre gestionnaire de l’état de votre publication.",
@@ -26,5 +26,5 @@
       "paragraph4": "Entre-temps, vous pouvez tout de même consulter et rédiger des formulaires."
     }
   },
-  "submissionError": "There was an error. Please try again later. [FR]"
+  "submissionError": "Il y avait une erreur. Veuillez réessayer"
 }

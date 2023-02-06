@@ -23,7 +23,9 @@ const Footer = (props: FooterProps) => {
   return (
     <footer className="lg:mt-10 border-0 bg-gray-100 mt-16 flex-none" data-testid="footer">
       <div className="lg:flex-col lg:items-start lg:gap-4 flex pt-10 pb-5 flex-row items-center justify-between">
-        <div>{!isSplashPage() && linksToDisplay}</div>
+        <div>
+          {!isSplashPage() && <nav aria-label={t("footer.ariaLabel")}>{linksToDisplay}</nav>}
+        </div>
         {!props.disableGcBranding && (
           <div>
             <picture>

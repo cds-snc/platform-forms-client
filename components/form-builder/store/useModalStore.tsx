@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { ElementProperties } from "@lib/types";
 import unset from "lodash.unset";
@@ -23,7 +23,7 @@ export const defaultProperties: ElementProperties = {
   descriptionFr: "",
 };
 
-const useModalStore = create<ModalStore>()(
+export const useModalStore = create<ModalStore>()(
   immer((set) => ({
     isOpen: false,
     modals: [defaultProperties],

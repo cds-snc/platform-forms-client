@@ -8,6 +8,7 @@ import JSONUpload from "@components/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "next-i18next";
 import { DeleteButton, Label } from "@components/forms";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
@@ -25,13 +26,10 @@ interface FormSettingsProps {
 const handleDelete = async (formID: string) => {
   // redirect to view templates page on success
   const resp = await axios({
-    url: "/api/templates",
+    url: `/api/templates/${formID}`,
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-    },
-    data: {
-      formID: formID,
     },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   })
@@ -60,6 +58,9 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
 
   return (
     <>
+      <Head>
+        <title>{t("settings.title")}</title>
+      </Head>
       <h1>{t("settings.title")}</h1>
       <div data-testid="formID" className="mb-4">
         <b>Form Title:</b> {formRecord.form[getProperty("title", language)] as string}

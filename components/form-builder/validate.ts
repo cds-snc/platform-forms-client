@@ -5,7 +5,9 @@ import { FormRecord } from "@lib/types";
 export type errorMessage = { property?: string; message: string };
 
 const getErrorMessageTranslationString = (error: ValidationError) => {
-  let property = error.path[error.path.length - 1].toString();
+  let property = error.path[error.path.length - 1]
+    ? error.path[error.path.length - 1].toString()
+    : error.argument;
   let message = "formInvalidProperty";
 
   if (error.name === "required") {
@@ -22,12 +24,7 @@ const getErrorMessageTranslationString = (error: ValidationError) => {
 export const validateTemplate = (data: FormRecord) => {
   const validator = new Validator();
   const validatorResult: ValidatorResult = validator.validate(data, templatesSchema);
-
-  const errors: errorMessage[] = [];
-
-  validatorResult.errors.forEach((error) => {
-    errors.push(getErrorMessageTranslationString(error));
-  });
+  const errors: errorMessage[] = validatorResult.errors.map(getErrorMessageTranslationString);
 
   return {
     valid: validatorResult.valid,

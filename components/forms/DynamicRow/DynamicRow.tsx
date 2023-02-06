@@ -61,6 +61,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       //Refreshing rows from Formik's state
       setRows(Array(field.value.length).fill(rowElements));
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -72,6 +74,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     setRowRefs(newRowRefs);
 
     // Trigger on any change to the length of the rows state
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows.length]);
 
   useEffect(() => {
@@ -79,12 +83,16 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
       rowRefs[focussedRow].current?.focus();
       rowRefs[focussedRow].current?.scrollIntoView();
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focussedRow]);
 
   useEffect(() => {
     if (maxNumberOfRows) {
       setHasReachedMaxNumberOfRows(rows.length >= maxNumberOfRows);
     }
+    // @todo - fix this eslint error
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows.length]);
 
   const addRow = () => {

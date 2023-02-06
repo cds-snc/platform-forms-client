@@ -4,6 +4,7 @@ import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Head from "next/head";
 
 const Changelog = (): React.ReactElement => {
   const [version, setVersion] = useState<string>("unavailable");
@@ -29,6 +30,9 @@ const Changelog = (): React.ReactElement => {
 
   return (
     <>
+      <Head>
+        <title>Changelog</title>
+      </Head>
       <h2>Version: {version}</h2>
       <br />
       <RichText>{changelog}</RichText>

@@ -5,9 +5,17 @@ import { createMocks } from "node-mocks-http";
 import notifyCallback from "../../pages/api/notify-callback";
 import { SQSClient } from "@aws-sdk/client-sqs";
 
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
 jest.mock("@aws-sdk/client-sqs");
+jest.mock("@aws-sdk/client-dynamodb");
+jest.mock("@aws-sdk/lib-dynamodb");
 
 const sqsClient = {
+  send: jest.fn(),
+};
+
+const dynamodbDocumentClient = {
   send: jest.fn(),
 };
 
@@ -181,6 +189,12 @@ describe("/api/notify-callbacks", () => {
         QueueUrl: "http://queue_url",
       };
     });
+
+    dynamodbDocumentClient.send.mockImplementation(() => {
+      return {};
+    });
+
+    DynamoDBDocumentClient.from.mockReturnValue(dynamodbDocumentClient);
 
     SQSClient.mockReturnValue(sqsClient);
 

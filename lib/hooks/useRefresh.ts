@@ -19,7 +19,7 @@ export const useRefresh = (
 
   useEffect(() => {
     setIsRefreshing(false);
-  }, data);
+  }, [data]);
 
   return { refreshData, isRefreshing };
 };

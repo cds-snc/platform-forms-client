@@ -2,10 +2,10 @@ import React from "react";
 export const NumberedListIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="24"
-    width="24"
+    height="20"
+    width="20"
     className={className}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 20"
     focusable="false"
     aria-hidden={title ? false : true}
     role={title ? "img" : "presentation"}

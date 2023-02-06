@@ -1,644 +1,635 @@
 {
-  "form": {
-    "layout": [
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-      27
-    ],
-    "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
-    "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
-    "version": 1,
-    "elements": [
-      {
-        "id": 1,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Section 1: Nomination Category",
-          "descriptionFr": "#### Section 1: Catégorie de la nomination"
-        }
-      },
-      {
-        "id": 2,
-        "type": "radio",
-        "properties": {
-          "choices": [
-            {
-              "en": "Team nomination",
-              "fr": "Mise en candidature d’une équipe"
-            },
-            {
-              "en": "Individual Nomination",
-              "fr": "Mise en candidature d’une personne"
-            }
-          ],
-          "titleEn": "Is this a Team or Individual Nomination?",
-          "titleFr": "Is this a Team or Individual Nomination?",
-          "validation": {
-            "required": true
-          },
-          "descriptionEn": "",
-          "descriptionFr": ""
-        }
-      },
-      {
-        "id": 3,
-        "type": "radio",
-        "properties": {
-          "choices": [
-            {
-              "en": "Excellence in Profession",
-              "fr": "Excellence en profession"
-            },
-            {
-              "en": "Exceptional Young Public Servant",
-              "fr": "Jeunes fonctionnaires exceptionnels"
-            },
-            {
-              "en": "Exemplary Contribution Under Extraordinary Circumstances (Team only)",
-              "fr": "Contribution exemplaire dans des circonstances extraordinaires (Équipe seulement)"
-            },
-            {
-              "en": "Joan Atkinson Award for Public Sector Balues in the Workplace",
-              "fr": "Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
-            },
-            {
-              "en": "Outstanding Career (Individual only)",
-              "fr": "Carrière exceptionnelle (Personne seulement)"
-            },
-            {
-              "en": "60 Years of Service Special Award (Individual only)",
-              "fr": "Prix spécial récompensant 60 années de service (Personne seulement)"
-            }
-          ],
-          "titleEn": "Category",
-          "titleFr": "Catégorie",
-          "validation": {
-            "required": true
-          },
-          "descriptionEn": "",
-          "descriptionFr": ""
-        }
-      },
-      {
-        "id": 4,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Section 2: Nominator Information",
-          "descriptionFr": "#### Section 2: Information sur le proposant"
-        }
-      },
-      {
-        "id": 5,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Family name",
-          "titleFr": "Nom",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 6,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Given name",
-          "titleFr": "Prénom",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 7,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or organization",
-          "titleFr": "Ministère ou organisme",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 8,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Title",
-          "titleFr": "Titre",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 9,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Phone number",
-          "titleFr": "Numéro de téléphone",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 10,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Email address",
-          "titleFr": "Adresse de courriel",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 11,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Section 3: Individual Information (For an Individual Nomination)",
-          "descriptionFr": "#### Section 3: Mise en candidature d'une personne (For an Individual Nomination)"
-        }
-      },
-      {
-        "id": 12,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Family name",
-          "titleFr": "Nom",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 13,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Given name",
-          "titleFr": "Prénom",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 14,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Department or organization",
-          "titleFr": "Ministère ou organisme",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 15,
-        "type": "dropdown",
-        "properties": {
-          "choices": [
-            {
-              "en": "",
-              "fr": ""
-            },
-            {
-              "en": "Alberta",
-              "fr": "Alberta"
-            },
-            {
-              "en": "British Columbia",
-              "fr": "Colombie-Britannique"
-            },
-            {
-              "en": "Manitoba",
-              "fr": "Manitoba"
-            },
-            {
-              "en": "New Brunswick",
-              "fr": "Nouveau-Brunswick"
-            },
-            {
-              "en": "Newfoundland and Labrador",
-              "fr": "Terre-Neuve-et-Labrador"
-            },
-            {
-              "en": "Northwest Territories",
-              "fr": "Territoires du Nord-Ouest"
-            },
-            {
-              "en": "Nova Scotia",
-              "fr": "Nouvelle-Écosse"
-            },
-            {
-              "en": "Nunavut",
-              "fr": "Nunavut"
-            },
-            {
-              "en": "Ontario",
-              "fr": "Ontario"
-            },
-            {
-              "en": "Prince Edward Island",
-              "fr": "Île-du-Prince-Édouard"
-            },
-            {
-              "en": "Quebec",
-              "fr": "Québec"
-            },
-            {
-              "en": "Saskatchewan",
-              "fr": "Saskatchewan"
-            },
-            {
-              "en": "Yukon",
-              "fr": "Yukon"
-            }
-          ],
-          "titleEn": "Province or territory",
-          "titleFr": "Province ou territoire",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 16,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Preferred language",
-          "titleFr": "Langue préférée",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 17,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Group and level",
-          "titleFr": "Groupe et niveau",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 18,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Section 4: Team Nomination (for a Team Nomination)",
-          "descriptionFr": "#### Section 4: Mise en candidature d’une équipe (for a Team Nomination)"
-        }
-      },
-      {
-        "id": 19,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Team name in english",
-          "titleFr": "Nom de l’équipe en anglais",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 20,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Team name in french",
-          "titleFr": "Nom de l’équipe en français",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 21,
-        "type": "richText",
-        "properties": {
-          "titleEn": "Team Members",
-          "titleFr": "Membres de l’équipe",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "You can click Add a row to add more than one team member to your application. Please note that you can only list a maximum of 15 team members.",
-          "descriptionFr": "You can click Add a row to add more than one team member to your application. Please note that you can only list a maximum of 15 team members.",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 22,
-        "type": "dynamicRow",
-        "properties": {
-          "titleEn": "",
-          "titleFr": "",
-          "validation": {
-            "required": false
-          },
-          "subElements": [
-            {
-              "id": 2201,
-              "type": "textField",
-              "properties": {
-                "titleEn": "<p>fsdfdsfdsfdssdfsdfs</p>",
-                "titleFr": "Nom",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "<p>fsdfsfsdfsdfdsf</p>",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2202,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Given name",
-                "titleFr": "Prénom",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2203,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Department or organization",
-                "titleFr": "Ministère ou organisme",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2204,
-              "type": "dropdown",
-              "properties": {
-                "choices": [
-                  {
-                    "en": "",
-                    "fr": ""
-                  },
-                  {
-                    "en": "Alberta",
-                    "fr": "Alberta"
-                  },
-                  {
-                    "en": "British Columbia",
-                    "fr": "Colombie-Britannique"
-                  },
-                  {
-                    "en": "Manitoba",
-                    "fr": "Manitoba"
-                  },
-                  {
-                    "en": "New Brunswick",
-                    "fr": "Nouveau-Brunswick"
-                  },
-                  {
-                    "en": "Newfoundland and Labrador",
-                    "fr": "Terre-Neuve-et-Labrador"
-                  },
-                  {
-                    "en": "Northwest Territories",
-                    "fr": "Territoires du Nord-Ouest"
-                  },
-                  {
-                    "en": "Nova Scotia",
-                    "fr": "Nouvelle-Écosse"
-                  },
-                  {
-                    "en": "Nunavut",
-                    "fr": "Nunavut"
-                  },
-                  {
-                    "en": "Ontario",
-                    "fr": "Ontario"
-                  },
-                  {
-                    "en": "Prince Edward Island",
-                    "fr": "Île-du-Prince-Édouard"
-                  },
-                  {
-                    "en": "Quebec",
-                    "fr": "Québec"
-                  },
-                  {
-                    "en": "Saskatchewan",
-                    "fr": "Saskatchewan"
-                  },
-                  {
-                    "en": "Yukon",
-                    "fr": "Yukon"
-                  }
-                ],
-                "titleEn": "Province or territory",
-                "titleFr": "Province ou territoire",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2205,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Preferred language",
-                "titleFr": "Langue préférée",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            },
-            {
-              "id": 2206,
-              "type": "textField",
-              "properties": {
-                "titleEn": "Group and level",
-                "titleFr": "Groupe et niveau",
-                "validation": {
-                  "required": false
-                },
-                "descriptionEn": "",
-                "descriptionFr": "",
-                "placeholderEn": "",
-                "placeholderFr": ""
-              }
-            }
-          ]
-        }
-      },
-      {
-        "id": 23,
-        "type": "richText",
-        "properties": {
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "#### Annex A: Achievement Summary",
-          "descriptionFr": "#### Annex A: Résumé des réalisations"
-        }
-      },
-      {
-        "id": 24,
-        "type": "textArea",
-        "properties": {
-          "titleEn": "Briefly describe the achievement for which the nomination is being submitted.",
-          "titleFr": "Décrire brièvement la réalisation pour laquelle la candidature est présentée.",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "Do not include headings or other formatting. Use a maximum of 200 words",
-          "descriptionFr": "Do not include headings or other formatting. Use a maximum of 200 words",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 25,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Name of Nominator",
-          "titleFr": "Nom du proposant",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 26,
-        "type": "textField",
-        "properties": {
-          "titleEn": "Date",
-          "titleFr": "Date",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": "",
-          "placeholderEn": "",
-          "placeholderFr": ""
-        }
-      },
-      {
-        "id": 27,
-        "type": "checkbox",
-        "properties": {
-          "choices": [
-            {
-              "en": "I hereby certify that, to the best of my knowledge, the information in this form is true and correct.",
-              "fr": "J’atteste par la présente qu’à ma connaissance, les renseignements fournis dans ce formulaire sont véridiques et corrects."
-            }
-          ],
-          "titleEn": "Consent of the Nominator",
-          "titleFr": "Consent of the Nominator",
-          "validation": {
-            "required": false
-          },
-          "descriptionEn": "",
-          "descriptionFr": ""
-        }
+  "titleEn": "Public Service Award of Excellence 2020 - Nomination form",
+  "titleFr": "Prix d’excellence de la fonction publique 2020 - Formulaire de mise en candidature",
+  "layout": [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+    27
+  ],
+  "elements": [
+    {
+      "id": 1,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Section 1: Nomination Category",
+        "descriptionFr": "#### Section 1: Catégorie de la nomination"
       }
-    ]
-  },
-  "submission": {
-    "email": "steven.talbot@cds-snc.ca"
-  },
-  "internalTitleEn": "Public Service Award of Excellence 2020",
-  "internalTitleFr": "Prix d’excellence de la fonction publique 2020",
-  "securityAttribute": "Unclassified"
+    },
+    {
+      "id": 2,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "Team nomination",
+            "fr": "Mise en candidature d’une équipe"
+          },
+          {
+            "en": "Individual Nomination",
+            "fr": "Mise en candidature d’une personne"
+          }
+        ],
+        "titleEn": "Is this a Team or Individual Nomination?",
+        "titleFr": "Is this a Team or Individual Nomination?",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": ""
+      }
+    },
+    {
+      "id": 3,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "Excellence in Profession",
+            "fr": "Excellence en profession"
+          },
+          {
+            "en": "Exceptional Young Public Servant",
+            "fr": "Jeunes fonctionnaires exceptionnels"
+          },
+          {
+            "en": "Exemplary Contribution Under Extraordinary Circumstances (Team only)",
+            "fr": "Contribution exemplaire dans des circonstances extraordinaires (Équipe seulement)"
+          },
+          {
+            "en": "Joan Atkinson Award for Public Sector Balues in the Workplace",
+            "fr": "Prix Joan Atkinson pour les Valeurs du secteur public en milieu de travail"
+          },
+          {
+            "en": "Outstanding Career (Individual only)",
+            "fr": "Carrière exceptionnelle (Personne seulement)"
+          },
+          {
+            "en": "60 Years of Service Special Award (Individual only)",
+            "fr": "Prix spécial récompensant 60 années de service (Personne seulement)"
+          }
+        ],
+        "titleEn": "Category",
+        "titleFr": "Catégorie",
+        "validation": {
+          "required": true
+        },
+        "descriptionEn": "",
+        "descriptionFr": ""
+      }
+    },
+    {
+      "id": 4,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Section 2: Nominator Information",
+        "descriptionFr": "#### Section 2: Information sur le proposant"
+      }
+    },
+    {
+      "id": 5,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Family name",
+        "titleFr": "Nom",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 6,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Given name",
+        "titleFr": "Prénom",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 7,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Department or organization",
+        "titleFr": "Ministère ou organisme",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 8,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Title",
+        "titleFr": "Titre",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 9,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Phone number",
+        "titleFr": "Numéro de téléphone",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 10,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Email address",
+        "titleFr": "Adresse de courriel",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 11,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Section 3: Individual Information (For an Individual Nomination)",
+        "descriptionFr": "#### Section 3: Mise en candidature d'une personne (For an Individual Nomination)"
+      }
+    },
+    {
+      "id": 12,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Family name",
+        "titleFr": "Nom",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 13,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Given name",
+        "titleFr": "Prénom",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 14,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Department or organization",
+        "titleFr": "Ministère ou organisme",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 15,
+      "type": "dropdown",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          },
+          {
+            "en": "Alberta",
+            "fr": "Alberta"
+          },
+          {
+            "en": "British Columbia",
+            "fr": "Colombie-Britannique"
+          },
+          {
+            "en": "Manitoba",
+            "fr": "Manitoba"
+          },
+          {
+            "en": "New Brunswick",
+            "fr": "Nouveau-Brunswick"
+          },
+          {
+            "en": "Newfoundland and Labrador",
+            "fr": "Terre-Neuve-et-Labrador"
+          },
+          {
+            "en": "Northwest Territories",
+            "fr": "Territoires du Nord-Ouest"
+          },
+          {
+            "en": "Nova Scotia",
+            "fr": "Nouvelle-Écosse"
+          },
+          {
+            "en": "Nunavut",
+            "fr": "Nunavut"
+          },
+          {
+            "en": "Ontario",
+            "fr": "Ontario"
+          },
+          {
+            "en": "Prince Edward Island",
+            "fr": "Île-du-Prince-Édouard"
+          },
+          {
+            "en": "Quebec",
+            "fr": "Québec"
+          },
+          {
+            "en": "Saskatchewan",
+            "fr": "Saskatchewan"
+          },
+          {
+            "en": "Yukon",
+            "fr": "Yukon"
+          }
+        ],
+        "titleEn": "Province or territory",
+        "titleFr": "Province ou territoire",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 16,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Preferred language",
+        "titleFr": "Langue préférée",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 17,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Group and level",
+        "titleFr": "Groupe et niveau",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 18,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Section 4: Team Nomination (for a Team Nomination)",
+        "descriptionFr": "#### Section 4: Mise en candidature d’une équipe (for a Team Nomination)"
+      }
+    },
+    {
+      "id": 19,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Team name in english",
+        "titleFr": "Nom de l’équipe en anglais",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 20,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Team name in french",
+        "titleFr": "Nom de l’équipe en français",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 21,
+      "type": "richText",
+      "properties": {
+        "titleEn": "Team Members",
+        "titleFr": "Membres de l’équipe",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "You can click Add a row to add more than one team member to your application. Please note that you can only list a maximum of 15 team members.",
+        "descriptionFr": "You can click Add a row to add more than one team member to your application. Please note that you can only list a maximum of 15 team members.",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 22,
+      "type": "dynamicRow",
+      "properties": {
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [
+          {
+            "id": 2201,
+            "type": "textField",
+            "properties": {
+              "titleEn": "<p>fsdfdsfdsfdssdfsdfs</p>",
+              "titleFr": "Nom",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "<p>fsdfsfsdfsdfdsf</p>",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2202,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Given name",
+              "titleFr": "Prénom",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2203,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Department or organization",
+              "titleFr": "Ministère ou organisme",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2204,
+            "type": "dropdown",
+            "properties": {
+              "choices": [
+                {
+                  "en": "",
+                  "fr": ""
+                },
+                {
+                  "en": "Alberta",
+                  "fr": "Alberta"
+                },
+                {
+                  "en": "British Columbia",
+                  "fr": "Colombie-Britannique"
+                },
+                {
+                  "en": "Manitoba",
+                  "fr": "Manitoba"
+                },
+                {
+                  "en": "New Brunswick",
+                  "fr": "Nouveau-Brunswick"
+                },
+                {
+                  "en": "Newfoundland and Labrador",
+                  "fr": "Terre-Neuve-et-Labrador"
+                },
+                {
+                  "en": "Northwest Territories",
+                  "fr": "Territoires du Nord-Ouest"
+                },
+                {
+                  "en": "Nova Scotia",
+                  "fr": "Nouvelle-Écosse"
+                },
+                {
+                  "en": "Nunavut",
+                  "fr": "Nunavut"
+                },
+                {
+                  "en": "Ontario",
+                  "fr": "Ontario"
+                },
+                {
+                  "en": "Prince Edward Island",
+                  "fr": "Île-du-Prince-Édouard"
+                },
+                {
+                  "en": "Quebec",
+                  "fr": "Québec"
+                },
+                {
+                  "en": "Saskatchewan",
+                  "fr": "Saskatchewan"
+                },
+                {
+                  "en": "Yukon",
+                  "fr": "Yukon"
+                }
+              ],
+              "titleEn": "Province or territory",
+              "titleFr": "Province ou territoire",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2205,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Preferred language",
+              "titleFr": "Langue préférée",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          },
+          {
+            "id": 2206,
+            "type": "textField",
+            "properties": {
+              "titleEn": "Group and level",
+              "titleFr": "Groupe et niveau",
+              "validation": {
+                "required": false
+              },
+              "descriptionEn": "",
+              "descriptionFr": "",
+              "placeholderEn": "",
+              "placeholderFr": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "type": "richText",
+      "properties": {
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "#### Annex A: Achievement Summary",
+        "descriptionFr": "#### Annex A: Résumé des réalisations"
+      }
+    },
+    {
+      "id": 24,
+      "type": "textArea",
+      "properties": {
+        "titleEn": "Briefly describe the achievement for which the nomination is being submitted.",
+        "titleFr": "Décrire brièvement la réalisation pour laquelle la candidature est présentée.",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Do not include headings or other formatting. Use a maximum of 200 words",
+        "descriptionFr": "Do not include headings or other formatting. Use a maximum of 200 words",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 25,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Name of Nominator",
+        "titleFr": "Nom du proposant",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 26,
+      "type": "textField",
+      "properties": {
+        "titleEn": "Date",
+        "titleFr": "Date",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 27,
+      "type": "checkbox",
+      "properties": {
+        "choices": [
+          {
+            "en": "I hereby certify that, to the best of my knowledge, the information in this form is true and correct.",
+            "fr": "J’atteste par la présente qu’à ma connaissance, les renseignements fournis dans ce formulaire sont véridiques et corrects."
+          }
+        ],
+        "titleEn": "Consent of the Nominator",
+        "titleFr": "Consent of the Nominator",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": ""
+      }
+    }
+  ]
 }

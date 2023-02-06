@@ -39,15 +39,20 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
   }
 
   return (
-    <div className={classes}>
+    <>
       <Head>
-        <title>{formTitle}</title>
+        <title>{t("formTitle")}</title>
       </Head>
-      <h1>{formTitle}</h1>
-      <Form formRecord={formRecord} language={language} router={router} t={t}>
-        {currentForm}
-      </Form>
-    </div>
+      <div className={classes}>
+        <Head>
+          <title>{formTitle}</title>
+        </Head>
+        <h1>{formTitle}</h1>
+        <Form formRecord={formRecord} language={language} router={router} t={t}>
+          {currentForm}
+        </Form>
+      </div>
+    </>
   );
 };
 
@@ -64,13 +69,8 @@ function redirect(locale: string | undefined) {
 
 RenderForm.getLayout = function getLayout(page: ReactElement) {
   const isEmbeddable = page.props.formRecord && page.props.isEmbeddable;
-  const shouldDisplayAlphaBanner = page.props.formRecord?.displayAlphaBanner ?? true;
   return (
-    <FormDisplayLayout
-      formRecord={page.props.formRecord}
-      embedded={isEmbeddable}
-      displayAlphaBanner={shouldDisplayAlphaBanner}
-    >
+    <FormDisplayLayout formRecord={page.props.formRecord} embedded={isEmbeddable}>
       {page}
     </FormDisplayLayout>
   );

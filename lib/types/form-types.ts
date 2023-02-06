@@ -78,12 +78,6 @@ export interface FormElement {
  * types to define form configuration objects
  */
 
-// defines the fields in the object that controls how form submissions are handled
-export interface SubmissionProperties {
-  email?: string;
-  vault?: boolean;
-}
-
 // defines the fields in the object that controls form branding
 export interface BrandProperties {
   name?: string;
@@ -102,15 +96,12 @@ export interface BrandProperties {
 export interface FormProperties {
   titleEn: string;
   titleFr: string;
-  emailSubjectEn?: string;
-  emailSubjectFr?: string;
-  version: number;
-  layout: number[];
-  brand?: BrandProperties;
-  elements: FormElement[];
-  endPage?: Record<string, string>;
   introduction?: Record<string, string>;
   privacyPolicy?: Record<string, string>;
+  confirmation?: Record<string, string>;
+  layout: number[];
+  elements: FormElement[];
+  brand?: BrandProperties;
   [key: string]:
     | string
     | number
@@ -121,23 +112,27 @@ export interface FormProperties {
     | undefined;
 }
 
+// defines the fields in the object that controls how form submissions are delivered
+export interface DeliveryOption {
+  emailAddress: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
+}
+
 // defines the fields for the form record that is available in authenticated spaces and backend processes
 export type FormRecord = {
   id: string;
-  bearerToken?: string;
-  internalTitleEn?: string;
-  internalTitleFr?: string;
-  isPublished: boolean;
-  submission: SubmissionProperties;
-  displayAlphaBanner?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  name: string;
   form: FormProperties;
+  isPublished: boolean;
+  deliveryOption?: DeliveryOption;
   securityAttribute: string;
+  bearerToken?: string;
   reCaptchaID?: string;
-  [key: string]: string | boolean | SubmissionProperties | FormProperties | undefined;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = BetterOmit<
-  FormRecord,
-  "bearerToken" | "internalTitleEn" | "internalTitleFr" | "submission"
->;
+export type PublicFormRecord = BetterOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;

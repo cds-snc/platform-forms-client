@@ -11,35 +11,55 @@ interface StyledLinkProps {
   children: React.ReactNode;
   href: string;
   className?: string;
+  locale?: string;
+  // Note: Try not to overuse aria-label. Instead put the label info in the anchor if possible.
+  // Keep in mind that the aria-label will override any link text.
+  ariaLabel?: string;
+  lang?: string;
 }
 
 export const StyledLink = (props: StyledLinkProps) => {
-  const { children, href, className } = props;
+  const { children, href = "", className, locale, ariaLabel, lang } = props;
   const ref = useRef<HTMLAnchorElement>(null);
 
   return (
-    <Link href={href} passHref legacyBehavior>
-      <WrappedLink to={href} className={className} ref={ref}>
+    <Link href={href} {...(locale && { locale: locale })} passHref legacyBehavior>
+      <WrappedLink
+        href={href}
+        className={className}
+        {...(ariaLabel && { ariaLabel: ariaLabel })}
+        {...(lang && { lang: lang })}
+        ref={ref}
+      >
         {children}
       </WrappedLink>
     </Link>
   );
 };
 
-// Note: using prop name "to" just encase passHref's implicit passing of href would conflict with
-// the prop name "href". It's possible to use the implicit href but then the typescript problem..
 interface WrappedLinkProps {
   children: React.ReactNode;
-  to: string;
+  href: string;
   className?: string;
+  ariaLabel?: string;
+  lang?: string;
 }
 
 const WrappedLink = React.forwardRef(
-  ({ to, ...props }: WrappedLinkProps, ref: React.LegacyRef<HTMLAnchorElement>) => {
-    const { children, className } = props;
+  ({ href, ...props }: WrappedLinkProps, ref: React.LegacyRef<HTMLAnchorElement>) => {
+    // Note: href is populated by passHref "magic" and is needed for the case of getting the locale
+    // prefix in the url. The passed prop href is ignored it seems, so this works. The prop is
+    // included above for TypeScript but otherwise not needed.
+    const { children, className, ariaLabel, lang } = props;
 
     return (
-      <a href={to} className={className} ref={ref}>
+      <a
+        href={href}
+        className={className}
+        {...(ariaLabel && { "aria-label": ariaLabel })}
+        {...(lang && { lang: lang })}
+        ref={ref}
+      >
         {children}
       </a>
     );
