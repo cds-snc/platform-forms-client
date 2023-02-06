@@ -41,15 +41,6 @@ export const LeftNavigation = () => {
         </LeftNavLink>
       )}
 
-      {isPublished && (
-        <LeftNavLink href={`/form-builder/responses/${id}`}>
-          <>
-            <GearIcon className={iconClassname} />
-            {t("responses.navLabel")}
-          </>
-        </LeftNavLink>
-      )}
-
       <LeftNavLink href={`/form-builder/settings/${id}`}>
         <>
           <GearIcon className={iconClassname} />
