@@ -8,7 +8,6 @@ import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
 import BaseLayout from "@components/globals/layouts/BaseLayout";
 import "../styles/app.scss";
-import { logMessage } from "@lib/logger";
 
 /*
 This component disables SSR when in testing mode.
