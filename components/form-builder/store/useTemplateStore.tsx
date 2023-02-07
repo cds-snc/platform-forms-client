@@ -22,7 +22,6 @@ const defaultField: FormElement = {
   type: FormElementTypes.textField,
   properties: {
     choices: [{ en: "", fr: "" }],
-    subElements: [],
     titleEn: "",
     titleFr: "",
     validation: {
@@ -214,8 +213,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             }),
           add: (elIndex = 0, type = FormElementTypes.radio) =>
             set((state) => {
+              const subElements = type === "dynamicRow" ? { subElements: [] } : {};
+              const defaultProperties = { ...defaultField.properties, ...subElements };
+              const defaultValues = defaultField;
+              defaultValues.properties = defaultProperties;
               state.form.elements.splice(elIndex + 1, 0, {
-                ...defaultField,
+                ...defaultValues,
                 id: incrementElementId(state.form.elements),
                 type,
               });
