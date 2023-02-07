@@ -13,43 +13,43 @@
     "exampleElement": "example element",
     "richText": {
       "title": "Large text",
-      "description": "Small text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
+      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
     },
     "radio": {
-      "title": "Radio title",
-      "description": "Radio desc"
+      "title": "Radio buttons",
+      "description": "Radio buttons description"
     },
     "checkbox": {
-      "title": "Multiple Choice title",
-      "description": "Description"
+      "title": "Multiple choice",
+      "description": "Multiple choice description"
     },
     "dropdown": {
       "title": "Dropdown",
-      "description": "Description"
+      "description": "Dropdown description"
     },
     "textField": {
-      "title": "Question",
-      "description": "Description"
+      "title": "Short answer question",
+      "description": "Short answer question description"
     },
     "textArea": {
-      "title": "Question",
-      "description": "Description"
+      "title": "Long answer question",
+      "description": "Long answer question description"
     },
     "phone": {
       "title": "Mobile phone",
-      "description": "Description"
+      "description": "Mobile phone description"
     },
     "email": {
       "title": "Email address",
-      "description": "Description"
+      "description": "Email address description"
     },
     "date": {
       "title": "Date",
-      "description": "Description"
+      "description": "Date description"
     },
     "number": {
       "title": "Number",
-      "description": "Description"
+      "description": "Number description"
     }
   },
   "addMultiple": "Add multiple options",

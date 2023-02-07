@@ -2,54 +2,54 @@
   "addElement": "Ajouter un élément",
   "addElementDialog": {
     "addButton": "Sélectionner un élément",
-    "questionElement": "[FR] Question element",
-    "listItem": "[FR] List item ",
-    "checkboxItem": "[FR] Checkbox item",
-    "example": "[FR] example",
-    "answer": "Answer...",
-    "yes": "[FR] Yes",
-    "no": "[FR] No",
-    "sometimes": "[FR] Sometimes",
-    "exampleElement": "example element",
+    "questionElement": "Élément de question",
+    "listItem": "Élément de liste ",
+    "checkboxItem": "Élément de case à cocher",
+    "example": "exemple",
+    "answer": "Réponse...",
+    "yes": "Oui",
+    "no": "Non",
+    "sometimes": "Parfois",
+    "exampleElement": "élément d'exemple",
     "richText": {
-      "title": "Rich Text title",
-      "description": "Rich Text desc"
+      "title": "Texte en grand format",
+      "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."
     },
     "radio": {
-      "title": "Radio title",
-      "description": "Radio desc"
+      "title": "Boutons radio",
+      "description": "Description des boutons radio"
     },
     "checkbox": {
-      "title": "Multiple Choice title",
-      "description": "Multiple Choice title desc"
+      "title": "Choix multiples",
+      "description": "Description des choix multiples"
     },
     "dropdown": {
-      "title": "Dropdown list title",
-      "description": "Dropdown list Answer desc"
+      "title": "Liste déroulante",
+      "description": "Description de la liste déroulante"
     },
     "textField": {
       "title": "Short answer title",
-      "description": "Short answer desc"
+      "description": "Description de la question à réponse courte"
     },
     "textArea": {
-      "title": "Long answer title",
-      "description": "Long answer  desc"
+      "title": "Question à réponse longue",
+      "description": "Description de la question à réponse longue"
     },
     "phone": {
-      "title": "Phone title",
-      "description": "Phone desc"
+      "title": "Téléphone mobile",
+      "description": "Description du téléphone mobile"
     },
     "email": {
-      "title": "Email title",
-      "description": "Email desc"
+      "title": "Adresse courriel",
+      "description": "Description de l'adresse courriel"
     },
     "date": {
-      "title": "Date title",
-      "description": "Date desc"
+      "title": "Date",
+      "description": "Description de la date"
     },
     "number": {
-      "title": "Numeric title",
-      "description": "Numeric desc"
+      "title": "Numéro",
+      "description": "Description du numéro"
     }
   },
   "addMultiple": "Ajouter plusieurs options",
@@ -163,7 +163,7 @@
   "formIntroduction": "Présentation du formulaire",
   "formInvalidProperty": "Invalide: {{property}}",
   "formMissingProperty": "Disparues: {{property}}",
-  "formSettings": "Form settings",
+  "formSettings": "Paramétres du formulaire",
   "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
   "formTitle": "Titre du formulaire",
   "french": "Français",
