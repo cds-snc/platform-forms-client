@@ -6,6 +6,7 @@
     "login": "Acceder",
     "logout": "Disconnexion"
   },
+  "formResponses": "Réponses stockées des formulaires",
   "unauthorized": {
     "title": "Privilèges administratifs requis",
     "detail": "La page à laquelle vous essayez d'accéder nécessite des privilèges d'administrateur d'application"
