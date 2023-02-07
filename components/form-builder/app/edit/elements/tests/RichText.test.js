@@ -7,13 +7,13 @@ import { withProviders, defaultStore as store } from "@formbuilder/test-utils";
 describe("RichText", () => {
   afterEach(cleanup);
   it("renders rich text editor", async () => {
-    let rendered = await withProviders(store, <RichText parentIndex={0} />);
+    let rendered = await withProviders(store, <RichText elIndex={0} />);
     const editor = rendered.getByTestId("richText");
     expect(editor.innerHTML).toContain("description 1 en");
   });
 
   it("sets text to H2", async () => {
-    const rendered = await withProviders(store, <RichText parentIndex={0} />);
+    const rendered = await withProviders(store, <RichText elIndex={0} />);
     const user = userEvent.setup();
     await user.click(rendered.getByLabelText("formatH2"));
 
@@ -22,7 +22,7 @@ describe("RichText", () => {
   });
 
   it("sets text to H3", async () => {
-    const rendered = await withProviders(store, <RichText parentIndex={0} />);
+    const rendered = await withProviders(store, <RichText elIndex={0} />);
     const user = userEvent.setup();
     await user.click(rendered.getByLabelText("formatH3"));
     const editor = rendered.container.querySelector(".editor-heading-h3 span");
@@ -33,7 +33,7 @@ describe("RichText", () => {
     // There seems to be an issue with userEvent.keyboard('{selectall}')
     // https://github.com/testing-library/user-event/issues/442
 
-    const rendered = await withProviders(store, <RichText parentIndex={0} />);
+    const rendered = await withProviders(store, <RichText elIndex={0} />);
     const user = userEvent.setup();
 
     rendered.container.querySelector(".editor-paragraph").focus();
