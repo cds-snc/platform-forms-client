@@ -1,23 +1,10 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { MongoAbility } from "@casl/ability";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList } from "@lib/types";
+import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
-
-/**
- * Helper function to instantiate DynamoDB and Document client.
- */
-function connectToDynamo(): DynamoDBDocumentClient {
-  //Create dynamodb client
-  const db = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "ca-central-1",
-    endpoint: process.env.LOCAL_AWS_ENDPOINT,
-  });
-
-  return DynamoDBDocumentClient.from(db);
-}
 
 /**
  * Returns the users associated with a Template

@@ -2,9 +2,7 @@
 import { NextApiRequest, NextApiResponse, NextComponentType, NextPageContext } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
-  DynamoDBDocumentClient,
   QueryCommand,
   QueryCommandInput,
   UpdateCommand,
@@ -19,6 +17,7 @@ import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
 import { Router } from "next/router";
 import { checkOne } from "@lib/cache/flags";
+import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -175,20 +174,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     res.status(500).json({ error: "Error on Server Side when fetching form's responses" });
   }
 };
-
-/**
- * Helper function to instantiate DynamoDB and Document client.
- * https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html
- */
-function connectToDynamo(): DynamoDBDocumentClient {
-  //Create dynamodb client
-  const db = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "ca-central-1",
-    endpoint: process.env.LOCAL_AWS_ENDPOINT,
-  });
-
-  return DynamoDBDocumentClient.from(db);
-}
 
 /**
  * Sets who last downloaded the Form Submission on the Vault Submission record
