@@ -274,7 +274,7 @@
     "stepThree": "[FR] Step 3:",
     "stepThreeDetails": "[FR] Select open a form file.",
     "stepTwo": "[FR] Step 2:",
-    "stepTwoDetails": "[FR] Go to GC Forms. No account needed.",
+    "stepTwoDetails": "[FR] Go to <a href=\"/\">GC Forms</a>. No account needed.",
     "title": "[FR] Share",
     "toPreview": "[FR] To preview this form:",
     "messageSent": "[FR] The message has been sent",
