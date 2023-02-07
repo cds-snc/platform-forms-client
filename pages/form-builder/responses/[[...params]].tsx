@@ -1,14 +1,16 @@
 import React, { ReactElement, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
-
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivileges } from "@lib/privileges";
-
+import { getFullTemplateByID } from "@lib/templates";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, Input, useDialogRef, Dialog } from "@components/form-builder/app/shared";
+import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
+import { GetServerSideProps } from "next";
+import { FormRecord } from "@lib/types";
 
 interface ResponsesProps {
   todo?: string;
@@ -97,38 +99,54 @@ Responses.getLayout = (page: ReactElement) => {
   return <Template page={page} />;
 };
 
-export const getServerSideProps = requireAuthentication(
-  async ({ user: { ability, id }, locale }) => {
-    {
-      checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { params },
+  locale,
+  req,
+  res,
+}) => {
+  const [formID = null] = params || [];
 
-      // const templates = (await getAllTemplates(ability, id)).map((template) => {
-      //   const {
-      //     id,
-      //     form: { titleEn = "", titleFr = "" },
-      //     name,
-      //     isPublished,
-      //     updatedAt,
-      //   } = template;
-      //   return {
-      //     id,
-      //     titleEn,
-      //     titleFr,
-      //     name,
-      //     isPublished,
-      //     date: updatedAt,
-      //     url: `/${locale}/id/${id}`,
-      //   };
-      // });
+  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
+    initialForm: null,
+    locale: locale || "en",
+  };
 
-      return {
-        props: {
-          // templates,
-          ...(locale && (await serverSideTranslations(locale, ["form-builder", "common"]))),
-        },
-      };
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  if (session && !session.user.acceptableUse) {
+    // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
+    return {
+      redirect: {
+        destination: `/${locale}/auth/policy`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (formID && session) {
+    try {
+      const ability = createAbility(session.user.privileges);
+      FormbuilderParams.initialForm = await getFullTemplateByID(ability, formID);
+    } catch (e) {
+      if (e instanceof AccessControlError) {
+        return {
+          redirect: {
+            destination: `/${locale}/admin/unauthorized`,
+            permanent: false,
+          },
+        };
+      }
     }
   }
-);
+
+  return {
+    props: {
+      ...FormbuilderParams,
+      ...(locale &&
+        (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
+    },
+  };
+};
 
 export default Responses;
