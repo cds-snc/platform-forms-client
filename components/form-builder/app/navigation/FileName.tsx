@@ -23,7 +23,7 @@ export const FileNameInput = () => {
 
   const widthStyle = width ? { width: `${width}px` } : {};
 
-  const boxStyle = "px-2 box-border min-w-[200px] border-2 border-white text-base font-bold";
+  const boxStyle = "px-2 min-w-[200px] border-2 border-white text-base font-bold";
 
   return (
     <div className="flex py-2">
