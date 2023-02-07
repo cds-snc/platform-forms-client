@@ -60,7 +60,7 @@ jobs:
 
       - name: Configure Production AWS credentials
         id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@5ed46d9d6a0a7a1132bc73efce74908f5d34dfc8
+        uses: aws-actions/configure-aws-credentials@07d5781915aab44cbbcbd613a6a8c86b5e9f2f94
         with:
           aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
