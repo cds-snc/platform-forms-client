@@ -37,7 +37,12 @@ export type {
   WithRequired,
 } from "./utility-types";
 
-export type { BearerTokenPayload, TemporaryTokenPayload, BearerResponse } from "./retrieval-types";
+export type {
+  BearerTokenPayload,
+  TemporaryTokenPayload,
+  BearerResponse,
+  VaultSubmission,
+} from "./retrieval-types";
 
 export type { FormOwner } from "./user-types";
 
@@ -52,4 +57,4 @@ export type {
 } from "./privileges-types";
 
 // Utility type creator
-export type BetterOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };
+export type TypeOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };
