@@ -7,6 +7,7 @@ import { useDialogRef, Dialog, TagInput, Button } from "./shared";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
 import { AddIcon, RemoveIcon } from "../icons";
+import Markdown from "markdown-to-jsx";
 
 export const ShareModal = ({
   handleClose,
@@ -139,7 +140,9 @@ export const ShareModal = ({
                       <li className="list-disc">
                         <strong>{t("share.stepTwo")}</strong>
                         <br />
-                        {t("share.stepTwoDetails")}
+                        <Markdown options={{ forceBlock: true }}>
+                          {t("share.stepTwoDetails")}
+                        </Markdown>
                       </li>
                       <li className="list-disc">
                         <strong>{t("share.stepThree")}</strong>
