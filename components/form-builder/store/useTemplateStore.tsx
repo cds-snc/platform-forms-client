@@ -10,6 +10,7 @@ import {
   incrementElementId,
   newlineToOptions,
   getSchemaFromState,
+  incrementSubElementId,
 } from "../util";
 import { Language } from "../types";
 import update from "lodash.set";
@@ -227,7 +228,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             set((state) => {
               state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
                 ...defaultField,
-                id: incrementElementId(state.form.elements[elIndex].properties.subElements || []),
+                id: incrementSubElementId(
+                  state.form.elements[elIndex].properties.subElements || [],
+                  state.form.elements[elIndex].id
+                ),
                 type,
               });
             }),

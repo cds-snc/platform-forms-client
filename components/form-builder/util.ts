@@ -50,6 +50,15 @@ export const incrementElementId = (elements: FormElement[]) => {
   return ids[ids.length - 1] + 1;
 };
 
+export const incrementSubElementId = (subElements: FormElement[], elId: number) => {
+  if (!subElements || !subElements.length) {
+    return Number(elId.toString() + "01");
+  }
+  const ids = subElements.map((element) => element.id).sort((a, b) => a - b);
+
+  return ids[ids.length - 1] + 1;
+};
+
 export const sortByLayout = ({
   layout,
   elements,
