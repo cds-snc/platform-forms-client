@@ -3,12 +3,25 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes, Response } from "@lib/types";
 import { capitalize } from "./ResponseSection";
 
+// Note: For the layout why DL or Table? The DL element fits a list structure better and is
+// announced as a list by most screen readers when nested. A Table with 1 row/col of data is a bit
+// weird as a table and when nested is announced differently depending on the screen reader. After
+// implementing and testing both DL and Table they worked similarly. After some back and forth, DL
+// was decided. Though if a Table is needed/desired in the future, the implementation is simple and
+// one render function can be used and the table orientation changed using CSS (flex).
+
+// Note: some Tailwind classes classes related to widths were not "working" embeded, so some styles
+// were hardcoded.
+
+// Note: the use of CSS min-width and max-width is used to force an element width contained in an
+// overflow.
+
 export interface TableProps {
   isRowTable?: boolean;
   lang?: string;
   responseID: string;
   submissionDate: number;
-  submissionID: string;
+  // submissionID: string;
   questionsAnswers: {
     question: string;
     response:
@@ -31,10 +44,12 @@ const formatColumnAnswers = (
   if (Array.isArray(response)) {
     return (
       <div key={`col-${parentIndex}-${lang}`} className="flex border-b border-grey-default">
-        <dt className="w-80 pt-2 pb-2 font-bold">{question}</dt>
-        <dd className="max-w-[50rem] pt-2 pb-2">
+        <dt className="py-4 font-bold" style={{ width: "20rem" }}>
+          {question}
+        </dt>
+        <dd className="py-4">
           {response.map((subItem, subIndex) => (
-            <p key={`${parentIndex}-${subIndex}`}>{subItem.toString()}</p>
+            <p key={`${parentIndex}-${subIndex}`}>{subItem.toString() || "-"}</p>
           ))}
         </dd>
       </div>
@@ -42,9 +57,11 @@ const formatColumnAnswers = (
   } else {
     return (
       <div key={`col-${parentIndex}-${lang}`} className="flex border-b border-grey-default">
-        <dt className="w-80 pt-2 pb-2 font-bold">{question}</dt>
-        <dd className="max-w-[50rem] pt-2 pb-2">
-          <p>{response.toString()}</p>
+        <dt className="py-4 font-bold" style={{ width: "30rem" }}>
+          {question}
+        </dt>
+        <dd className="py-4">
+          <p>{response.toString() || "-"}</p>
         </dd>
       </div>
     );
@@ -62,12 +79,12 @@ const formatRowAnswers = (
       <div
         key={`row-${parentIndex}-${lang}`}
         className="flex flex-col"
-        style={{ minWidth: "20rem", maxWidth: "40rem" }}
+        style={{ minWidth: "40rem", maxWidth: "40rem" }}
       >
-        <dt className="font-bold border-b border-grey-default pt-2 pb-2">{question}</dt>
-        <dd className="pt-2 pb-2">
+        <dt className="font-bold border-b border-grey-default py-4">{question}</dt>
+        <dd className="py-4">
           {response.map((subItem, subIndex) => (
-            <p key={`${parentIndex}-${subIndex}`}>{subItem.toString()}</p>
+            <p key={`${parentIndex}-${subIndex}`}>{subItem.toString() || "-"}</p>
           ))}
         </dd>
       </div>
@@ -77,11 +94,13 @@ const formatRowAnswers = (
       <div
         key={`row-${parentIndex}-${lang}`}
         className="flex flex-col"
-        style={{ minWidth: "20rem", maxWidth: "40rem" }}
+        style={{ minWidth: "60rem", maxWidth: "60rem" }}
       >
-        <dt className="font-bold border-b border-grey-default pt-2 pb-2">{question}</dt>
-        <dd className="pt-2 pb-2">
-          <p>{response.toString()}</p>
+        <dt className="flex items-center font-bold border-b border-grey-default py-4 pr-8">
+          {question}
+        </dt>
+        <dd className="py-4 pr-8">
+          <p>{response.toString() || "-"}</p>
         </dd>
       </div>
     );
@@ -118,11 +137,11 @@ const QuestionRows = ({
           key={"row" + index + lang}
           style={{
             minWidth: `${20 * dynamicRowResponse.length}rem`,
-            maxWidth: `${40 * dynamicRowResponse.length}rem`,
+            maxWidth: `${20 * dynamicRowResponse.length}rem`,
           }}
         >
-          <dt className="pt-2 pb-2 font-bold border-b-2 border-grey-default">{question}</dt>
-          <dd className="pt-2 pb-2">
+          <dt className="py-4 font-bold border-b-2 border-grey-default">{question}</dt>
+          <dd className="py-4">
             <dl className="flex flex-row">
               {dynamicRowResponse.map((item, subindex) => {
                 return formatRowAnswers(item.question, item.response, `${index}-${subindex}`, lang);
@@ -178,9 +197,9 @@ const QuestionColumns = ({
 
       return (
         <div key={"col" + index + lang}>
-          <dt className="w-full pt-2 pb-2 font-bold border-b-2 border-grey-default">{question}</dt>
-          <dd className="w-full pt-2 pb-2">
-            <dl>
+          <dt className="w-full py-4 font-bold border-b-2 border-grey-default">{question}</dt>
+          <dd className="w-full py-4">
+            <dl className="ml-8">
               {dynamicRow.map((item, subindex) => {
                 return formatColumnAnswers(
                   item.question,
@@ -207,59 +226,56 @@ export const Table = (props: TableProps): React.ReactElement => {
     questionsAnswers,
     isRowTable = true,
     lang = "en",
-    submissionID,
+    // submissionID,
   } = props;
 
   return (
     <>
       {!isRowTable && (
         <dl
-          id={`responseTableRow${capitalize(lang)}`}
+          id={`responseTableCol${capitalize(lang)}`}
           className="border-b-2 border-t-2 border-grey-default"
         >
           <div className="flex border-b border-grey-default">
-            <dt className="w-80 font-bold pt-2 pb-2">
+            <dt className="font-bold py-4" style={{ width: "30rem" }}>
               {t("responseTemplate.responseNumber", { lng: lang })}
             </dt>
-            <dd className="max-w-[50rem] pt-2 pb-2">{responseID}</dd>
+            <dd className="max-w-[50rem] py-4">{responseID}</dd>
           </div>
           <div className="flex border-b border-grey-default">
-            <dt className="w-80 font-bold pt-2 pb-2">
+            <dt className="font-bold py-4" style={{ width: "30rem" }}>
               {t("responseTemplate.submissionDate", { lng: lang })}
             </dt>
-            <dd className="max-w-[50rem] pt-2 pb-2">
+            <dd className="max-w-[50rem] py-4">
               {new Date(submissionDate).toLocaleString(`${lang + "-CA"}`, {
                 timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
               })}
             </dd>
           </div>
-          <div className="flex border-b border-grey-default">
-            <dt className="w-80 font-bold pt-2 pb-2">
-              {t("responseTemplate.submissionID", { lng: lang })}
-            </dt>
-            <dd className="max-w-[50rem] pt-2 pb-2">{submissionID}</dd>
-          </div>
-
           <QuestionColumns questionsAnswers={questionsAnswers} lang={lang} />
         </dl>
       )}
-      {/* Note: Inline styles used where Tailwind classes would fail, espcially custom e.g. min-w-[20rem] */}
       {isRowTable && (
-        <dl className="flex overflow-x-auto border-b-2 border-t-2 border-grey-default">
-          <div className="flex flex-col" style={{ minWidth: "20rem", maxWidth: "40rem" }}>
-            <dt className="font-bold border-b border-grey-default pt-2 pb-2">
-              {t("responseTemplate.responseNumber", { lng: lang })}
-            </dt>
-            <dd className="pt-2 pb-2">{responseID}</dd>
-          </div>
-          <div className="flex flex-col" style={{ minWidth: "20rem", maxWidth: "40rem" }}>
-            <dt className="font-bold border-b border-grey-default pt-2 pb-2">
-              {t("responseTemplate.submissionDate", { lng: lang })}
-            </dt>
-            <dd className="pt-2 pb-2">{submissionDate}</dd>
-          </div>
-          <QuestionRows questionsAnswers={questionsAnswers} lang={lang} />
-        </dl>
+        <div className="overflow-x-auto">
+          <dl
+            id={`responseTableRow${capitalize(lang)}`}
+            className="flex overflow-x-auto border-b-2 border-t-2 border-grey-default"
+          >
+            <div className="flex flex-col" style={{ minWidth: "20rem", maxWidth: "20rem" }}>
+              <dt className="flex items-center font-bold border-b border-grey-default py-4">
+                {t("responseTemplate.responseNumber", { lng: lang })}
+              </dt>
+              <dd className="py-4">{responseID}</dd>
+            </div>
+            <div className="flex flex-col" style={{ minWidth: "20rem", maxWidth: "20rem" }}>
+              <dt className="flex items-center font-bold border-b border-grey-default py-4">
+                {t("responseTemplate.submissionDate", { lng: lang })}
+              </dt>
+              <dd className="py-4">{submissionDate}</dd>
+            </div>
+            <QuestionRows questionsAnswers={questionsAnswers} lang={lang} />
+          </dl>
+        </div>
       )}
     </>
   );

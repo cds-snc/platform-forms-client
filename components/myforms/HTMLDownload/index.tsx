@@ -11,7 +11,7 @@ interface HTMLDownloadProps {
   formTemplate: FormProperties;
   formResponse: Responses;
   confirmReceiptCode: string;
-  submissionID: string;
+  // submissionID: string;
   responseID: string;
   createdAt: number;
 }
@@ -20,15 +20,83 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
   formTemplate,
   formResponse,
   confirmReceiptCode,
-  submissionID,
+  // submissionID,
   responseID,
   createdAt,
 }: HTMLDownloadProps) => {
-  // Note: copy+paste from NPM Library https://www.npmjs.com/package/copy-text-to-clipboard
   const CopyToClipboardScript = React.createElement("script", {
     dangerouslySetInnerHTML: {
       // eslint-disable-next-line no-useless-escape
-      __html: `function copyTextToClipboard(e,{target:t=document.body}={}){const n=document.createElement("textarea"),o=document.activeElement;n.value=e,n.setAttribute("readonly",""),n.style.contain="strict",n.style.position="absolute",n.style.left="-9999px",n.style.fontSize="12pt";const c=document.getSelection();let l=!1;0<c.rangeCount&&(l=c.getRangeAt(0)),t.append(n),n.select(),n.selectionStart=0,n.selectionEnd=e.length;let a=!1;try{a=document.execCommand("copy")}catch{}return n.remove(),l&&(c.removeAllRanges(),c.addRange(l)),o&&o.focus(),a}
+      __html: `
+      // From: https://www.npmjs.com/package/copy-text-to-clipboard
+      function copyTextToClipboard(input, {target = document.body} = {}) {
+        const element = document.createElement('textarea');
+        const previouslyFocusedElement = document.activeElement;
+      
+        element.value = input;
+      
+        // Prevent keyboard from showing on mobile
+        element.setAttribute('readonly', '');
+      
+        element.style.contain = 'strict';
+        element.style.position = 'absolute';
+        element.style.left = '-9999px';
+        element.style.fontSize = '12pt'; // Prevent zooming on iOS
+      
+        const selection = document.getSelection();
+        const originalRange = selection.rangeCount > 0 && selection.getRangeAt(0);
+      
+        target.append(element);
+        element.select();
+      
+        // Explicit selection workaround for iOS
+        element.selectionStart = 0;
+        element.selectionEnd = input.length;
+      
+        let isSuccess = false;
+        try {
+          isSuccess = document.execCommand('copy');
+        } catch(e) {}
+      
+        element.remove();
+      
+        if (originalRange) {
+          selection.removeAllRanges();
+          selection.addRange(originalRange);
+        }
+      
+        // Get the focus back on the previously focused element, if any
+        if (previouslyFocusedElement) {
+          previouslyFocusedElement.focus();
+        }
+      
+        return isSuccess;
+      }
+
+      // Row layout question element height depends on content. Give a consistent height using JS.
+      document.addEventListener("DOMContentLoaded", function() {
+        function getMaxElementsHeight(el) {
+          var elList = Array.from(el);
+          var elHeights = elList.map(item => item.offsetHeight);
+          var maxHeight = Math.max(...elHeights);
+          var remHeight = parseFloat(getComputedStyle(document.documentElement).fontSize);
+          if (maxHeight <= remHeight) {
+            return 1;
+          }
+          var maxHeightAsRem = Math.ceil(maxHeight / remHeight);
+          return maxHeightAsRem;
+        }
+        function setElementsHeight(el, height) {
+          var elList = Array.from(el);
+          elList.forEach(item => item.style.height = height + "rem");
+        }
+        var tableRowEnEl = document.querySelectorAll("#responseTableRowEn > div > dt");
+        var tableRowFrEl = document.querySelectorAll("#responseTableRowFr > div > dt");
+        var heightRowEn = getMaxElementsHeight(tableRowEnEl);
+        var heightRowFr = getMaxElementsHeight(tableRowFrEl);
+        setElementsHeight(tableRowEnEl, heightRowEn);
+        setElementsHeight(tableRowEnEl, heightRowFr);
+      });
       `,
     },
   });
@@ -43,7 +111,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
         confirmReceiptCode={confirmReceiptCode}
         lang={"en"}
         responseID={responseID}
-        submissionID={submissionID}
+        // submissionID={submissionID}
         submissionDate={createdAt}
         formTemplate={formTemplate}
         formResponse={formResponse}
@@ -56,7 +124,7 @@ const HTMLDownload: NextPageWithLayout<HTMLDownloadProps> = ({
         confirmReceiptCode={confirmReceiptCode}
         lang={"fr"}
         responseID={responseID}
-        submissionID={submissionID}
+        // submissionID={submissionID}
         submissionDate={createdAt}
         formTemplate={formTemplate}
         formResponse={formResponse}

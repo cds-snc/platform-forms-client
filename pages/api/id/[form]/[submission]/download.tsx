@@ -4,7 +4,7 @@ import { logMessage } from "@lib/logger";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
-import { FormRecord, MiddlewareProps, WithRequired, Responses } from "@lib/types";
+import { MiddlewareProps, WithRequired, Responses } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToPipeableStream } from "react-dom/server";
@@ -46,9 +46,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         ":formID": formID,
         ":submissionID": submissionID,
       },
+      ExpressionAttributeNames: {
+        "#Name": "Name",
+      },
       KeyConditionExpression: "FormID = :formID AND SubmissionID = :submissionID",
       ProjectionExpression:
-        "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute,ConfirmationCode,ResponseID,CreatedAt",
+        "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute,ConfirmationCode,#Name,CreatedAt",
     };
     const queryCommand = new QueryCommand(getItemsDbParams);
 
@@ -73,7 +76,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         formResponse: JSON.parse(vaultResult.FormSubmission),
         createdAt: vaultResult.CreatedAt,
         confirmReceiptCode: vaultResult.ConfirmationCode,
-        responseID: vaultResult.ResponseID ?? "ABC-TEST",
+        // Note: "name" is not a reserved word in JS, encase anyone else was worried
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#reserved_words
+        responseID: vaultResult.Name,
       };
     })(response.Items[0]);
 
@@ -81,7 +86,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       formResponse,
       formTemplate: fullFormTemplate.form,
       confirmReceiptCode,
-      submissionID,
+      // submissionID,
       responseID,
       createdAt,
       pathname: "/",
@@ -95,7 +100,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
             locales: ["en", "fr"],
           },
           returnNull: false,
-          localePath: "/Users/BryanR/repos/form_client/public/static/locales",
+          localePath: "./public/static/locales",
           reloadOnPrerender: true,
           default: {
             i18n: {
@@ -103,7 +108,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
               locales: ["en", "fr"],
             },
             returnNull: false,
-            localePath: "/Users/BryanR/repos/form_client/public/static/locales",
+            localePath: "./public/static/locales",
             reloadOnPrerender: true,
           },
         },
@@ -142,7 +147,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
           res.setHeader("Content-type", "text/html");
           stream.pipe(res);
         },
-        onShellError(error) {
+        onShellError() {
           // Something errored before we could complete the shell so we emit an alternative shell.
           res.statusCode = 500;
           res.send("<!doctype html><p>Oh Oh...</p>");

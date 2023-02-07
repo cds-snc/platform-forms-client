@@ -8,7 +8,7 @@ export interface ResponseSectionProps {
   confirmReceiptCode: string;
   lang: string;
   responseID: string;
-  submissionID: string;
+  // submissionID: string;
   submissionDate: number;
   formTemplate: FormProperties;
   formResponse: Responses;
@@ -87,7 +87,7 @@ export const ResponseSection = ({
   confirmReceiptCode,
   lang,
   responseID,
-  submissionID,
+  // submissionID,
   submissionDate,
   formTemplate,
   formResponse,
@@ -182,7 +182,7 @@ export const ResponseSection = ({
       <Table
         responseID={responseID}
         submissionDate={submissionDate}
-        submissionID={submissionID}
+        // submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={false}
         lang={capitalizedLang}
@@ -210,7 +210,7 @@ export const ResponseSection = ({
       <Table
         responseID={responseID}
         submissionDate={submissionDate}
-        submissionID={submissionID}
+        // submissionID={submissionID}
         questionsAnswers={questionsAnswers}
         isRowTable={true}
         lang={capitalizedLang}
