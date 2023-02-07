@@ -25,20 +25,20 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
   }, []);
 
   return (
-    <header className="border-b-1 border-gray-500 mt-4 mb-12 lg:px-4 xl:px-8 px-32">
+    <header className="border-b-1 border-gray-500 mb-12 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
         <div className="flex">
           <Link href="/form-builder">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className={`${
-                editableFilename && "border-r-1"
-              } mb-2 flex pr-5 border-gray-500 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
+              className={`pt-4 ${
+                editableFilename && "pt-0 border-r-1"
+              } flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
             >
               {editableFilename ? (
                 <>
-                  <div className="inline-block w-[66px] h-[63px]">
+                  <div className="inline-block w-[46px] h-[45px] py-2">
                     <SiteLogo title={t("title")} />
                   </div>
                 </>
@@ -49,14 +49,14 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
           </Link>
 
           {!isFormBuilder && (
-            <div className="px-2 box-border block mt-3 h-[40px] text-base font-bold">
+            <div className="px-2 py-2 box-border block mt-3 h-[40px] text-base font-bold">
               {t("title", { ns: "common" })}
             </div>
           )}
           {isFormBuilder && editableFilename && <FileNameInput />}
         </div>
         <nav
-          className={`${editableFilename && "mt-3"} inline-flex gap-4 `}
+          className={`${editableFilename && ""} py-2`}
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
@@ -65,7 +65,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
                 <ShareDropdown />
               </li>
             )}
-            <li className="md:text-small_base text-base font-normal not-italic mr-4">
+            <li className="md:text-small_base text-base font-normal not-italic mr-4 py-2">
               {ability?.can("view", "FormRecord") && (
                 <Link href={`/${i18n.language}/myforms/drafts`}>
                   {t("adminNav.myForms", { ns: "common" })}
@@ -73,12 +73,12 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               )}
             </li>
             {
-              <li className="mr-4">
+              <li className="mr-4 py-2">
                 <LoginMenu isAuthenticated={status === "authenticated"} />
               </li>
             }
             {
-              <li className="mr-4">
+              <li className="mr-4 py-2">
                 <LanguageToggle />
               </li>
             }
