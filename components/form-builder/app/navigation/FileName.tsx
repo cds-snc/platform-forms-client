@@ -23,16 +23,14 @@ export const FileNameInput = () => {
 
   const widthStyle = width ? { width: `${width}px` } : {};
 
-  const boxStyle = "px-2 min-w-[200px] border-2 border-white text-base font-bold";
-
   return (
     <div className="flex py-2">
-      <span className={`${boxStyle} invisible absolute`} ref={span}>
+      <span className={`px-2 invisible absolute`} ref={span}>
         {content}
       </span>
       <input
         style={widthStyle}
-        className={`${boxStyle} max-w-[500px] placeholder-black hover:border-2 hover:border-gray-default`}
+        className="px-2 min-w-[200px] max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default"
         name="filename"
         placeholder={t("untitledForm", { ns: "form-builder" })}
         value={content ? content : getName()}
