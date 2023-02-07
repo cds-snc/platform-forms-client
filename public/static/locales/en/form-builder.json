@@ -273,7 +273,7 @@
     "stepThree": "Step 3:",
     "stepThreeDetails": "Select open a form file.",
     "stepTwo": "Step 2:",
-    "stepTwoDetails": "Go to GC Forms. No account needed.",
+    "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
     "title": "Share",
     "toPreview": "To preview this form:",
     "messageSent": "The message has been sent",
