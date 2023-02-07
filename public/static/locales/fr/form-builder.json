@@ -1,7 +1,7 @@
 {
-  "addElement": "Ajouter un élément + ",
+  "addElement": "Ajouter un élément",
   "addElementDialog": {
-    "addButton": "Add",
+    "addButton": "Sélectionner un élément",
     "questionElement": "[FR] Question element",
     "listItem": "[FR] List item ",
     "checkboxItem": "[FR] Checkbox item",

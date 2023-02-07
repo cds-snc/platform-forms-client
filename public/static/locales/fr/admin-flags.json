@@ -47,7 +47,7 @@
       "description": "Activation ou désactivation des formulaires de support"
     },
     "formBuilderDebug": {
-      "title": "Form Builder Debug",
+      "title": "Débogage du ",
       "description": "Enable the form builder debug mode"
     },
     "formBuilderAddElementDialog": {
