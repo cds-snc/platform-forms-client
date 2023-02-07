@@ -49,7 +49,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
           </Link>
 
           {!isFormBuilder && (
-            <div className="px-2 py-2 box-border block mt-3 h-[40px] text-base font-bold">
+            <div className="px-2 py-1 box-border block mt-3 h-[40px] text-base font-bold">
               {t("title", { ns: "common" })}
             </div>
           )}
