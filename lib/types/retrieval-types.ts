@@ -1,4 +1,5 @@
 import { Responses } from "./form-response-types";
+import { TypeOmit } from ".";
 
 export interface BearerTokenPayload {
   formID: string;
@@ -17,6 +18,13 @@ export type VaultSubmission = {
   formID: string;
   submissionID: string;
   formSubmission: Responses;
-  fileAttachments: { fileName: string }[];
+  fileAttachments?: { fileName: string }[];
   securityAttribute: string;
+  createdAt: Date;
+  status: string;
+  confirmationCode: string;
+  responseID: string;
+  retrieved: number;
 };
+
+export type VaultSubmissionList = TypeOmit<VaultSubmission, "formSubmission">;

@@ -42,6 +42,7 @@ export type {
   TemporaryTokenPayload,
   BearerResponse,
   VaultSubmission,
+  VaultSubmissionList,
 } from "./retrieval-types";
 
 export type { FormOwner } from "./user-types";

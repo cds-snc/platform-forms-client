@@ -10,14 +10,19 @@ import { PageTemplate, Template } from "@components/form-builder/app";
 import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
-import { FormRecord } from "@lib/types";
+import { FormRecord, VaultSubmissionList } from "@lib/types";
+import { listAllSubmissions } from "@lib/vault";
+import { logMessage } from "@lib/logger";
+import { useSession } from "next-auth/react";
 
 interface ResponsesProps {
-  todo?: string;
+  vaultSubmissions?: VaultSubmissionList[];
 }
 
-const Responses: NextPageWithLayout<ResponsesProps> = () => {
+const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: ResponsesProps) => {
   const { t } = useTranslation("form-builder");
+
+  const { status } = useSession();
   const secondaryButtonClass =
     "whitespace-nowrap relative py-0 px-2 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500  bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500";
 
@@ -51,6 +56,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = () => {
               onClick={() => setIsShowConfirmReceiptDialog(true)}
               type="button"
               className={`mr-4 ${secondaryButtonClass}`}
+              disabled={status !== "authenticated"}
             >
               {t("responses.confirmReceipt")}
             </button>
@@ -58,6 +64,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = () => {
               onClick={() => setIsShowReportProblemsDialog(true)}
               type="button"
               className={`mr-4 ${secondaryButtonClass}`}
+              disabled={status !== "authenticated"}
             >
               {t("responses.reportProblems")}
             </button>
@@ -66,7 +73,35 @@ const Responses: NextPageWithLayout<ResponsesProps> = () => {
             </StyledLink>
           </nav>
         </div>
-        <div>TODO responses table here</div>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Response ID</th>
+                <th>Status</th>
+                <th>Download Response</th>
+                <th>Last Downloaded By</th>
+                <th>Confirm Receipt</th>
+                <th>Removal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <>
+                {vaultSubmissions &&
+                  vaultSubmissions.map((submission, index) => (
+                    <tr key={index}>
+                      <td>{submission.responseID}</td>
+                      <td>{submission.status}</td>
+                      <td></td>
+                      <td></td>
+                      <td>{submission.retrieved ? "Confirmed" : "Confirm By XXXX"}</td>
+                      <td>Not Set</td>
+                    </tr>
+                  ))}
+              </>
+            </tbody>
+          </table>
+        </div>
         <div>TODO download button here</div>
       </PageTemplate>
 
@@ -112,6 +147,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     locale: locale || "en",
   };
 
+  const vaultSubmissions: VaultSubmissionList[] = [];
+
   const session = await unstable_getServerSession(req, res, authOptions);
 
   if (session && !session.user.acceptableUse) {
@@ -127,9 +164,17 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (formID && session) {
     try {
       const ability = createAbility(session.user.privileges);
-      FormbuilderParams.initialForm = await getFullTemplateByID(ability, formID);
+      const [initialForm, submissions] = await Promise.all([
+        getFullTemplateByID(ability, formID),
+        listAllSubmissions(ability, formID),
+      ]);
+      FormbuilderParams.initialForm = initialForm;
+      vaultSubmissions.push(...submissions);
     } catch (e) {
       if (e instanceof AccessControlError) {
+        logMessage.info(
+          `NOT AUTHORIZED: User ${session.user.id} attempted to access form responses for form ID ${formID}`
+        );
         return {
           redirect: {
             destination: `/${locale}/admin/unauthorized`,
@@ -143,6 +188,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   return {
     props: {
       ...FormbuilderParams,
+      vaultSubmissions,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },
