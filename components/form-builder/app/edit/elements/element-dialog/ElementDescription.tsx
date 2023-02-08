@@ -23,7 +23,7 @@ export const ElementDescription = ({
       id={id}
       className="ml-10 border-l-1 border-black grid grid-rows-w"
     >
-      <div className="h-full flex">
+      <div className="h-full flex select-none pointer-events-none">
         <div className="mx-10 mb-10" data-testid="element-description-content">
           {children}
         </div>
