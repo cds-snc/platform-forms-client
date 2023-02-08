@@ -1,8 +1,8 @@
 {
-  "title": "Sign In to GC Forms",
+  "title": "Sign in to GC Forms",
   "signUpText": "If you do not have an account, you can",
   "signUpLink": "create one now.",
-  "signInButton": "Sign In",
+  "signInButton": "Sign in",
   "resetPasswordText": "Reset your password",
   "fields": {
     "username": {

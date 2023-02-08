@@ -3,10 +3,10 @@
   "body": "The form you are trying to access does not exist",
   "home-link": {
     "link": "/",
-    "desc": "Return to the home page"
+    "desc": "Return to the homepage"
   },
   "404": {
-    "title": "We couldn't find that Web page",
+    "title": "We couldn't find that webpage",
     "body": "We're sorry you ended up here. Sometimes a page gets moved or deleted."
   },
   "500": {
