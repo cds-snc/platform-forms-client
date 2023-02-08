@@ -57,10 +57,10 @@ export const Dialog = ({
     <dialog className="modal-dialog" aria-labelledby="modal-title" ref={dialogRef}>
       <div className="w-[750px] mx-auto my-8 bg-white border-2 border-black rounded-md">
         <div className="relative">
-          {title && <h2 className="modal-title inline-block">{title}</h2>}
+          {title && <h2 className="modal-title inline-block mt-4 ml-8">{title}</h2>}
           <Button
             theme="link"
-            className="group absolute right-0 top-0 mr-4 mt-4 z-[1000]"
+            className="group absolute right-0 top-0 mr-8 mt-4 z-[1000]"
             aria-label={t("close")}
             onClick={close}
           >
@@ -70,7 +70,7 @@ export const Dialog = ({
             </span>
           </Button>
         </div>
-        <div className="">{children}</div>
+        <div className="px-4">{children}</div>
         {actions && <div className="modal-footer">{actions}</div>}
       </div>
     </dialog>
