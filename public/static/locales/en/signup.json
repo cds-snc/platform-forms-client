@@ -34,7 +34,7 @@
       },
       "password": {
         "label": "Password",
-        "hint": "Must be at least 8 characters with a capital, number and symbol",
+        "hint": "Must be at least 8 characters with a capital, number, and symbol",
         "error": {
           "minLength": "The minimum length of the value must be 8 characters.",
           "maxLength": "The field must be no longer than 50 characters.",
