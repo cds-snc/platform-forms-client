@@ -60,7 +60,7 @@ export const Dialog = ({
           {title && <h2 className="modal-title inline-block">{title}</h2>}
           <Button
             theme="link"
-            className="group absolute right-0 top-0 mr-4 mt-4"
+            className="group absolute right-0 top-0 mr-4 mt-4 z-[1000]"
             aria-label={t("close")}
             onClick={close}
           >
