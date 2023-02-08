@@ -170,7 +170,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                 onRequiredChange(elIndex, subIndex, checked);
               }}
             />
-            <div className="mt-5">
+            <div className="mt-5 flex justify-end">
               <AddElementButton
                 text={t("addToSet")}
                 position={subIndex}
