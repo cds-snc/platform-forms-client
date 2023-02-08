@@ -12,12 +12,12 @@ export const ListBox = ({
   handleChange: (val: number) => void;
   ariaLabel?: string;
 }) => {
-  const listBoxRef = useRef<HTMLDivElement>(null);
+  const listBoxRef = useRef<HTMLUListElement>(null);
   const rowsRef = useRef<[HTMLElement] | []>([]);
   const [focusIndex, setFocusIndex] = useState(0);
   const [activeId, setActiveId] = useState("");
   const handleFocus = useCallback(
-    (evt: KeyboardEvent<HTMLInputElement>) => {
+    (evt: KeyboardEvent<HTMLElement>) => {
       const { key } = evt;
       if (key === "ArrowUp") {
         evt.preventDefault();
@@ -40,12 +40,12 @@ export const ListBox = ({
   }, [focusIndex]);
 
   return (
-    <div
+    <ul
       aria-label={ariaLabel ? ariaLabel : ""}
       data-testid="listbox"
       ref={listBoxRef}
       role="listbox"
-      className="list-box"
+      className="list-box list-none pl-0"
       tabIndex={0}
       onKeyDown={handleFocus}
       aria-activedescendant={activeId ? activeId : options[0]?.id}
@@ -58,7 +58,7 @@ export const ListBox = ({
           const focussed = focusIndex === index;
           return (
             /* eslint-disable jsx-a11y/click-events-have-key-events */
-            <div
+            <li
               id={`row-${id}`}
               ref={(el) => {
                 if (el && rowsRef.current) {
@@ -75,10 +75,10 @@ export const ListBox = ({
               aria-selected={focussed}
             >
               {value}
-            </div>
+            </li>
           );
         }
       )}
-    </div>
+    </ul>
   );
 };
