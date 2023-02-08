@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useTranslation } from "next-i18next";
 
 import { ElementProperties } from "@lib/types";
@@ -29,13 +29,6 @@ export const DynamicRowModal = ({
   const iconClasses =
     "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
-  useEffect(() => {
-    if (item.type != "richText") {
-      updateModalProperties(item.index, item.properties);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleSubmit = ({
     elIndex,
     subIndex,
@@ -64,17 +57,19 @@ export const DynamicRowModal = ({
           className="btn inline-block ml-5 !border-1.5 leading-6 text-sm"
           iconWrapperClassName="!w-7 !mr-0"
           icon={<ThreeDotsIcon className={`${iconClasses}`} />}
-          onClick={() => null}
+          onClick={() => {
+            updateModalProperties(item.index, item.properties);
+          }}
         >
           <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
         </Button>
       }
       saveButton={
         <ModalButton isOpenButton={false}>
-          {modals[item.id] && (
+          {modals[item.index] && (
             <Button
               className="mr-4"
-              onClick={handleSubmit({ elIndex, subIndex, properties: modals[item.id] })}
+              onClick={handleSubmit({ elIndex, subIndex, properties: modals[item.index] })}
             >
               {t("save")}
             </Button>
@@ -84,7 +79,7 @@ export const DynamicRowModal = ({
     >
       <ModalForm
         item={item}
-        properties={modals[item.id]}
+        properties={modals[item.index]}
         updateModalProperties={updateModalProperties}
         unsetModalField={unsetModalField}
       />

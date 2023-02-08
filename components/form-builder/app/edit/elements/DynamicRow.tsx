@@ -180,8 +180,15 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                 className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
                 onClick={() => removeSubItem(elIndex, item.id)}
               >
-                Remove
+                {t("remove")}
               </Button>
+              {/* 
+                
+                Note: we modify the item index for the modal / state 
+                The "actual" item index remains untouched
+  
+                By doing this to avoid conflicting indexes with the top level element
+                */}
               <DynamicRowModal
                 elIndex={elIndex}
                 subIndex={subIndex}
