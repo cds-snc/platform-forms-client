@@ -117,7 +117,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
         );
         // update default description fr
         updateField(
-          `form.elements[${elIndex}].subElements[${subIndex}].properties[${localizeField(
+          `form.elements[${elIndex}].properties.subElements[${subIndex}].properties[${localizeField(
             LocalizedElementProperties.DESCRIPTION,
             "fr"
           )}]`,
