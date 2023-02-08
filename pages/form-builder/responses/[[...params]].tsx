@@ -16,7 +16,7 @@ import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
 
 interface ResponsesProps {
-  vaultSubmissions?: VaultSubmissionList[];
+  vaultSubmissions: VaultSubmissionList[];
 }
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: ResponsesProps) => {
@@ -50,30 +50,33 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     <>
       <PageTemplate title={t("responses.title")}>
         <div className="flex justify-between items-baseline">
-          <h1 className="gc-h2">{t("responses.title")}</h1>
-          <nav className="flex">
-            <button
+          <h1 className="text-2xl border-none font-normal">{t("responses.title")}</h1>
+          <nav className="flex gap-3">
+            <Button
               onClick={() => setIsShowConfirmReceiptDialog(true)}
-              type="button"
-              className={`mr-4 ${secondaryButtonClass}`}
+              className="text-sm rounded-full"
+              theme="secondary"
               disabled={status !== "authenticated"}
             >
               {t("responses.confirmReceipt")}
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setIsShowReportProblemsDialog(true)}
-              type="button"
-              className={`mr-4 ${secondaryButtonClass}`}
+              theme="secondary"
+              className="text-sm rounded-full"
               disabled={status !== "authenticated"}
             >
               {t("responses.reportProblems")}
-            </button>
-            <StyledLink href="setup" className={`no-underline ${secondaryButtonClass}`}>
+            </Button>
+            <StyledLink
+              href="/form-builder/settings"
+              className={`text-sm no-underline ${secondaryButtonClass} rounded-full`}
+            >
               {t("responses.changeSetup")}
             </StyledLink>
           </nav>
         </div>
-        <div>
+        <div className="border-2 border-solid border-black">
           <table>
             <thead>
               <tr>
@@ -87,7 +90,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
             </thead>
             <tbody>
               <>
-                {vaultSubmissions &&
+                {vaultSubmissions?.length > 0 ? (
                   vaultSubmissions.map((submission, index) => (
                     <tr key={index}>
                       <td>{submission.responseID}</td>
@@ -97,7 +100,27 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       <td>{submission.retrieved ? "Confirmed" : "Confirm By XXXX"}</td>
                       <td>Not Set</td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <>
+                    <tr key="1">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>Not Set</td>
+                    </tr>
+                    <tr key="2">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>Not Set</td>
+                    </tr>
+                  </>
+                )}
               </>
             </tbody>
           </table>
@@ -107,7 +130,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
       {isShowConfirmReceiptDialog && (
         <Dialog
-          title={t("todo")}
+          title="Confirm receipt of responses"
           dialogRef={dialogConfirmReceipt}
           actions={buttonActionsConfirmReceipt}
           handleClose={dialogConfirmReceiptHandleClose}
@@ -118,7 +141,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
       {isShowReportProblemsDialog && (
         <Dialog
-          title={t("todo")}
+          title="Report problems with responses"
           dialogRef={dialogReportProblems}
           actions={buttonActionsReportProblems}
           handleClose={dialogReportProblemsHandleClose}
