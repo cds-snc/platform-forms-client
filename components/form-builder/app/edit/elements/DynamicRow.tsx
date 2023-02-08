@@ -8,6 +8,7 @@ import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../elements/element-dialog/AddElementButton";
 import { Button } from "../../shared/Button";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../types";
+import { DynamicRowModal } from "./DynamicRowModal";
 
 export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -181,6 +182,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
               >
                 Remove
               </Button>
+              <DynamicRowModal item={item} />
             </div>
           </div>
         );
