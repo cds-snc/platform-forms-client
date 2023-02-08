@@ -39,8 +39,8 @@ export const ElementDialog = ({
 
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
-      <div className="grid grid-cols-[30%_70%] w-full">
-        <div>
+      <div className="flex">
+        <div className="w-1/3 p-4 overflow-y-auto max-h-[600px]">
           <h4 className="mb-5">{t("addElementDialog.questionElement")}</h4>
           <ListBox
             ariaLabel={t("addElementDialog.questionElement")}
@@ -48,19 +48,21 @@ export const ElementDialog = ({
             handleChange={handleChange}
           />
         </div>
-        <ElementDescription
-          id={id}
-          title={`${value} ${t("addElementDialog.example")}`}
-          handleAdd={handleAdd}
-        >
-          <div className="mb-10 rounded border-1 border-gray-900 px-4 py-1 inline-block bg-gray-background">
-            {t("addElementDialog.exampleElement")}
-          </div>
-          <Description
-            title={t(`addElementDialog.${id}.title`)}
-            description={t(`addElementDialog.${id}.description`)}
-          />
-        </ElementDescription>
+        <div className="border-l-1 border-black p-4 w-2/3 max-h-[600px]">
+          <ElementDescription
+            id={id}
+            title={`${value} ${t("addElementDialog.example")}`}
+            handleAdd={handleAdd}
+          >
+            <div className="mb-10 rounded border-1 border-gray-900 px-4 py-1 inline-block bg-gray-background">
+              {t("addElementDialog.exampleElement")}
+            </div>
+            <Description
+              title={t(`addElementDialog.${id}.title`)}
+              description={t(`addElementDialog.${id}.description`)}
+            />
+          </ElementDescription>
+        </div>
       </div>
     </Dialog>
   );

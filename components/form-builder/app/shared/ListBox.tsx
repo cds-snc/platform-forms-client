@@ -45,7 +45,7 @@ export const ListBox = ({
       data-testid="listbox"
       ref={listBoxRef}
       role="listbox"
-      className="w-42 list-box"
+      className="list-box"
       tabIndex={0}
       onKeyDown={handleFocus}
       aria-activedescendant={activeId ? activeId : options[0]?.id}
@@ -67,7 +67,7 @@ export const ListBox = ({
               }}
               className={`${
                 focussed ? "font-bold" : "font-normal"
-              } ${className} group xl:text-center no-underline xl:w-36 xl:pb-0 xl:pt-2 xl:mb-3 pl-1 pr-2 pb-2 mb-2 md:pr-0 text-black-default hover:text-blue-hover visited:text-black-default focus:text-blue-hover focus:active:no-underline`}
+              } ${className} group xl:pb-0 xl:pt-2 xl:mb-3 pl-1 pr-2 pb-2 mb-2 md:pr-0 text-black hover:text-blue-hover focus:text-blue-hover cursor-pointer`}
               key={id}
               tabIndex={-1}
               role="option"
