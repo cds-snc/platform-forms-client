@@ -102,14 +102,21 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       description: Number,
       className: "",
     },
-    {
+  ];
+
+  /* 
+  As this is experimental, 
+  we only want to show this option in development mode for now
+  */
+  if (process.env.NODE_ENV === "development") {
+    elementOptions.push({
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
       description: RepeatableQuestionSet,
       className: "",
-    },
-  ];
+    });
+  }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
 };
