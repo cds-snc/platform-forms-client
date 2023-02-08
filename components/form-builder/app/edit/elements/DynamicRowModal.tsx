@@ -31,9 +31,10 @@ export const DynamicRowModal = ({
 
   useEffect(() => {
     if (item.type != "richText") {
-      // updateModalProperties(item.index, item.properties);
+      updateModalProperties(item.index, item.properties);
     }
-  }, [item, updateModalProperties]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = ({
     elIndex,
@@ -47,7 +48,10 @@ export const DynamicRowModal = ({
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
       // replace all of "properties" with the new properties set in the ModalForm
-      updateField(`form.elements[${elIndex}].properties.subElements[${subIndex}]`, properties);
+      updateField(
+        `form.elements[${elIndex}].properties.subElements[${subIndex}].properties`,
+        properties
+      );
     };
   };
 
@@ -67,10 +71,10 @@ export const DynamicRowModal = ({
       }
       saveButton={
         <ModalButton isOpenButton={false}>
-          {modals[item.index] && (
+          {modals[item.id] && (
             <Button
               className="mr-4"
-              onClick={handleSubmit({ elIndex, subIndex, properties: modals[item.index] })}
+              onClick={handleSubmit({ elIndex, subIndex, properties: modals[item.id] })}
             >
               {t("save")}
             </Button>
@@ -80,7 +84,7 @@ export const DynamicRowModal = ({
     >
       <ModalForm
         item={item}
-        properties={modals[item.index]}
+        properties={modals[item.id]}
         updateModalProperties={updateModalProperties}
         unsetModalField={unsetModalField}
       />

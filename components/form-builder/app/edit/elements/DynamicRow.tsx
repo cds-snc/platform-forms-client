@@ -182,7 +182,11 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
               >
                 Remove
               </Button>
-              <DynamicRowModal elIndex={elIndex} subIndex={subIndex} item={item} />
+              <DynamicRowModal
+                elIndex={elIndex}
+                subIndex={subIndex}
+                item={{ ...item, index: item.id }}
+              />
             </div>
           </div>
         );
