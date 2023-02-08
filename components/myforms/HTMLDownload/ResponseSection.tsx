@@ -99,45 +99,47 @@ export const ResponseSection = ({
   const CopyToClipboardScripts = React.createElement("script", {
     dangerouslySetInnerHTML: {
       __html: `
-(function () {
-    var btnCopyCode = document.getElementById("copyCodeButton${capitalizedLang}");
-    btnCopyCode.addEventListener("click", function () {
-        var el = document.getElementById("copyCodeOutput${capitalizedLang}");
-        var code = ("${confirmReceiptCode}").trim();
-        if(window.copyTextToClipboard(code)){
-          el.classList.remove("hidden");
-          el.textContent = "${t("responseTemplate.copiedToCipboard")}";
-        } else {
-          el.classList.remove("hidden");
-          el.classList.add("text-red-default");
-          el.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
-        }
-    }, false);
+          document.addEventListener("DOMContentLoaded", function() {
+            // Copy Code
+            var btnCopyCode = document.getElementById("copyCodeButton${capitalizedLang}");
+            var outputCopyCode = document.getElementById("copyCodeOutput${capitalizedLang}");
+            var clipboardCode = new ClipboardJS("#copyCodeButton${capitalizedLang}");
+            clipboardCode.on('success', function () {
+              outputCopyCode.classList.remove("hidden");
+              outputCopyCode.textContent = "${t("responseTemplate.copiedToCipboard")}";
+              e.clearSelection();
+            });
+            clipboardCode.on('error', function (e) {
+              outputCopyCode.classList.remove("hidden");
+              outputCopyCode.classList.add("text-red-default");
+              outputCopyCode.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
+            });
 
-    var btnCopyResponse = document.getElementById("copyResponseButton${capitalizedLang}");
-    btnCopyResponse.addEventListener("click", function () {
-        var outputEl = document.getElementById("copyResponseOutput${capitalizedLang}");
-        var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd"));
-
-        // Format with tab separators for Excel copy+paste
-        var responseText = responseItems.map(item => {
-          var text = item.textContent;
-          // This is needed for Excell that relies on tabs or multiple spaces to delimit a new cell
-          // and will stop any user content that may accidentally start a new cell.
-          // Replace 1 or more tabs or newlines with nothing, and two or more spaces with nothing.
-          return text.replace(/[\\t|\\n]{1,}|[ ]{2,}/g, "");
-        }).join(String.fromCharCode(9));
-
-        if(window.copyTextToClipboard(responseText)){
-          outputEl.classList.remove("hidden");
-          outputEl.textContent = "${t("responseTemplate.copiedToCipboard")}";
-        } else {
-          outputEl.classList.remove("hidden");
-          outputEl.classList.add("text-red-default");
-          outputEl.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
-        }
-    }, false);
-})();
+            // Copy Row Response
+            var btnCopyResponse = document.getElementById("copyResponseButton${capitalizedLang}");
+            var outputCopyResponse = document.getElementById("copyResponseOutput${capitalizedLang}");
+            var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd"));
+            // Format with tab separators for Excel copy+paste
+            var responseText = responseItems.map(item => {
+              var text = item.textContent;
+              // This is needed for Excell that relies on tabs or multiple spaces to delimit a new cell
+              // and should replace any user content that may accidentally start a new cell.
+              // Replace 1 or more tabs or newlines with nothing, and two or more spaces with nothing.
+              return text.replace(/[\\t|\\n]{1,}|[ ]{2,}/g, "");
+            }).join(String.fromCharCode(9));
+            btnCopyResponse.dataset.clipboardText = responseText;
+            var clipboardResponse = new ClipboardJS("#copyResponseButton${capitalizedLang}");
+            clipboardResponse.on('success', function () {
+              outputCopyResponse.classList.remove("hidden");
+              outputCopyResponse.textContent = "${t("responseTemplate.copiedToCipboard")}";
+              e.clearSelection();
+            });
+            clipboardResponse.on('error', function (e) {
+              outputCopyResponse.classList.remove("hidden");
+              outputCopyResponse.classList.add("text-red-default");
+              outputCopyResponse.textContent = "${t("responseTemplate.errorrCopyingToClipboard")}";
+            });
+          });
       `,
     },
   });
@@ -186,6 +188,7 @@ export const ResponseSection = ({
         questionsAnswers={questionsAnswers}
         isRowTable={false}
         lang={capitalizedLang}
+        data-clipboard-text=""
       />
 
       <h3 id={`rowTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
@@ -198,6 +201,7 @@ export const ResponseSection = ({
           aria-labelledby={`copyResponseLabel${capitalizedLang}`}
           className="gc-button--blue"
           type="button"
+          data-clipboard-text=""
         >
           {t("responseTemplate.copyResponse", { lng: lang })}
         </button>
@@ -231,6 +235,7 @@ export const ResponseSection = ({
           className="gc-button--blue"
           type="button"
           aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
+          data-clipboard-text={confirmReceiptCode}
         >
           {t("responseTemplate.copyCode", { lng: lang })}
         </button>
