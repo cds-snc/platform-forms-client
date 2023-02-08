@@ -12,19 +12,92 @@ import {
   ShortAnswerIcon,
 } from "../icons";
 
+import {
+  RichText,
+  Radio,
+  CheckBox,
+  DropDown,
+  TextField,
+  TextArea,
+  Phone,
+  Email,
+  Date,
+  Number,
+} from "../app/edit/elements/element-dialog";
+
 export const useElementOptions = () => {
   const { t } = useTranslation("form-builder");
   const elementOptions = [
-    { id: "richText", value: t("richText"), icon: <ParagraphIcon />, className: "separator" },
-    { id: "radio", value: t("singleChoice"), icon: <RadioIcon />, className: "" },
-    { id: "checkbox", value: t("checkboxes"), icon: <CheckIcon />, className: "" },
-    { id: "dropdown", value: t("dropdown"), icon: <SelectMenuIcon />, className: "separator" },
-    { id: "textField", value: t("shortAnswer"), icon: <ShortAnswerIcon />, className: "" },
-    { id: "textArea", value: t("paragraph"), icon: <ParagraphIcon />, className: "separator" },
-    { id: "phone", value: t("phoneNumber"), icon: <PhoneIcon />, className: "" },
-    { id: "email", value: t("email"), icon: <EmailIcon />, className: "" },
-    { id: "date", value: t("date"), icon: <CalendarIcon />, className: "" },
-    { id: "number", value: t("numericField"), icon: <NumericFieldIcon />, className: "" },
+    {
+      id: "richText",
+      value: t("richText"),
+      icon: <ParagraphIcon />,
+      description: RichText,
+      className: "separator",
+    },
+    {
+      id: "radio",
+      value: t("singleChoice"),
+      icon: <RadioIcon />,
+      description: Radio,
+      className: "",
+    },
+    {
+      id: "checkbox",
+      value: t("checkboxes"),
+      icon: <CheckIcon />,
+      description: CheckBox,
+      className: "",
+    },
+    {
+      id: "dropdown",
+      value: t("dropdown"),
+      icon: <SelectMenuIcon />,
+      description: DropDown,
+      className: "separator",
+    },
+    {
+      id: "textField",
+      value: t("shortAnswer"),
+      icon: <ShortAnswerIcon />,
+      description: TextField,
+      className: "",
+    },
+    {
+      id: "textArea",
+      value: t("paragraph"),
+      icon: <ParagraphIcon />,
+      description: TextArea,
+      className: "separator",
+    },
+    {
+      id: "phone",
+      value: t("phoneNumber"),
+      icon: <PhoneIcon />,
+      description: Phone,
+      className: "",
+    },
+    {
+      id: "email",
+      value: t("email"),
+      icon: <EmailIcon />,
+      description: Email,
+      className: "",
+    },
+    {
+      id: "date",
+      value: t("date"),
+      icon: <CalendarIcon />,
+      description: Date,
+      className: "",
+    },
+    {
+      id: "number",
+      value: t("numericField"),
+      icon: <NumericFieldIcon />,
+      description: Number,
+      className: "",
+    },
   ];
 
   return elementOptions;

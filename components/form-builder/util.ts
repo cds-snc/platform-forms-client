@@ -1,5 +1,5 @@
 import { Language } from "./types";
-import { FormElement, FormProperties, PropertyChoices } from "@lib/types";
+import { FormElement, FormProperties, PropertyChoices, FormElementTypes } from "@lib/types";
 import { TemplateStoreState } from "./store/useTemplateStore";
 
 export const getPreviousIndex = (items: FormElement[], index: number) => {
@@ -144,4 +144,14 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
   };
 
   return date.toLocaleDateString(locale, options);
+};
+
+// check if the type is being passed is a "text field" input but has a ƒspecific type
+export const isValidatedTextType = (type: FormElementTypes | undefined) => {
+  return type && ["email", "phone", "date", "number"].includes(type);
+};
+
+export const getHost = () => {
+  if (typeof window === "undefined") return "";
+  return `${window.location.protocol}//${window.location.host}`;
 };

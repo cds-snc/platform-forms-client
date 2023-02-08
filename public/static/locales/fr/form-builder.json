@@ -1,5 +1,57 @@
 {
-  "addElement": "Ajouter un élément + ",
+  "addElement": "Ajouter un élément",
+  "addElementDialog": {
+    "addButton": "Sélectionner un élément",
+    "questionElement": "Élément de question",
+    "listItem": "Élément de liste ",
+    "checkboxItem": "Élément de case à cocher",
+    "example": "exemple",
+    "answer": "Réponse...",
+    "yes": "Oui",
+    "no": "Non",
+    "sometimes": "Parfois",
+    "exampleElement": "élément d'exemple",
+    "richText": {
+      "title": "Texte en grand format",
+      "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."
+    },
+    "radio": {
+      "title": "Boutons radio",
+      "description": "Description des boutons radio"
+    },
+    "checkbox": {
+      "title": "Choix multiples",
+      "description": "Description des choix multiples"
+    },
+    "dropdown": {
+      "title": "Liste déroulante",
+      "description": "Description de la liste déroulante"
+    },
+    "textField": {
+      "title": "Short answer title",
+      "description": "Description de la question à réponse courte"
+    },
+    "textArea": {
+      "title": "Question à réponse longue",
+      "description": "Description de la question à réponse longue"
+    },
+    "phone": {
+      "title": "Téléphone mobile",
+      "description": "Description du téléphone mobile"
+    },
+    "email": {
+      "title": "Adresse courriel",
+      "description": "Description de l'adresse courriel"
+    },
+    "date": {
+      "title": "Date",
+      "description": "Description de la date"
+    },
+    "number": {
+      "title": "Numéro",
+      "description": "Description du numéro"
+    }
+  },
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter ou modifier une liste",
@@ -111,7 +163,7 @@
   "formIntroduction": "Présentation du formulaire",
   "formInvalidProperty": "Invalide: {{property}}",
   "formMissingProperty": "Disparues: {{property}}",
-  "formSettings": "Form settings",
+  "formSettings": "Paramétres du formulaire",
   "formSubmissionDisabledInPreview": "Testez votre formulaire et le fonctionnement de la collecte de réponses sous l’onglet Livraison des réponses.",
   "formTitle": "Titre du formulaire",
   "french": "Français",
@@ -144,11 +196,12 @@
   "openModal": "Ouvrir fenêtre modale",
   "option": "Option",
   "optionText": "Texte d'option",
+  "pagePreview": "Prévisualiser",
+  "pageSettings": "Paramètres",
   "pageText": "Section texte",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
-  "pagePreview": "Prévisualiser",
   "previewingIn": "Prévisualiser en",
   "privacyNoticeDescription": "Les personnes chargées de l’élaboration des formulaires doivent rédiger des avis de confidentialité conformes aux exigences de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">directive sur les pratiques relatives à la protection de la vie privée.</a>",
   "privacyStatement": "Déclaration de confidentialité ",
@@ -191,7 +244,7 @@
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
   "saveDraft": "Enregistrer l’ebauche",
   "selectElement": "Sélectionnez un type d'élément",
-  "pageSettings": "Paramètres",
+  "send": "Envoyer",
   "settingsDeleteButton": "Supprimer un formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
   "settingsDeleteTitle": "Supprimer un formulaire",
@@ -204,6 +257,29 @@
   "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
   "settingsResponseNotePublished": "Pour modifier la destination de la livraison des réponses.",
   "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
+  "share": {
+    "copy": "Copier",
+    "email": "Partager par courriel",
+    "emailLabel": "Entrer l'adresse courriel",
+    "enLink": "Lien en anglais",
+    "frLink": "Lien en français",
+    "link": "Obtenir le lien",
+    "message": "Les personnes avec qui vous partagez recevront un courriel avec un fichier JSON joint. Elles peuvent afficher le fichier JSON à l'aide de Formulaires GC, sans compte requis.",
+    "open": "Ouvrir",
+    "seePreview": "Voir un aperçu du message courriel",
+    "someone": "Quelqu'un",
+    "someoneHasShared": "{{name}} a partagé un formulaire avec vous sur Formulaires GC",
+    "stepOne": "Étape 1 :",
+    "stepOneDetails": "Enregistrer le fichier JSON du formulaire ci-joint sur votre ordinateur",
+    "stepThree": "Étape 3 :",
+    "stepThreeDetails": "Sélectionnez ouvrir un fichier de formulaire.",
+    "stepTwo": "Étape 2 :",
+    "stepTwoDetails": "Allez sur Formulaires GC. Auncun compte n'est nécessaire.",
+    "title": "Partager",
+    "toPreview": "Pour prévisualiser ce formulaire :",
+    "messageSent": "Le message a été envoyé",
+    "startOver": "Recommencer"
+  },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
   "signInToTest": "<a href=\"\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
@@ -253,58 +329,5 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "addElementDialog": {
-    "addButton": "Add",
-    "questionElement": "[fr] Question element",
-    "richText": {
-      "title": "Rich Text title",
-      "description": "Rich Text desc"
-    },
-    "radio": {
-      "title": "Radio title",
-      "description": "Radio desc"
-    },
-    "checkbox": {
-      "title": "Multiple Choice title",
-      "description": "Multiple Choice title desc"
-    },
-    "dropdown": {
-      "title": "Dropdown list title",
-      "description": "Dropdown list Answer desc"
-    },
-    "textField": {
-      "title": "Short answer title",
-      "description": "Short answer desc"
-    },
-    "textArea": {
-      "title": "Long answer title",
-      "description": "Long answer  desc"
-    },
-    "phone": {
-      "title": "Phone title",
-      "description": "Phone desc"
-    },
-    "email": {
-      "title": "Email title",
-      "description": "Email desc"
-    },
-    "date": {
-      "title": "Date title",
-      "description": "Date desc"
-    },
-    "number": {
-      "title": "Numeric title",
-      "description": "Numeric desc"
-    }
-  },
-  "untitledForm": "[FR] Untitled form",
-  "share": {
-    "title": "[FR] Share",
-    "email": "[FR] Share with email",
-    "link": "[FR] Get the link",
-    "enLink": "[FR] English link",
-    "frLink": "[FR] French link",
-    "copy": "[FR] Copy",
-    "open": "[FR] Open"
-  }
+  "untitledForm": "[FR] Untitled form"
 }

@@ -1,5 +1,57 @@
 {
   "addElement": "Add element",
+  "addElementDialog": {
+    "addButton": "Select element",
+    "questionElement": "Question element",
+    "listItem": "List item ",
+    "checkboxItem": "Checkbox item",
+    "example": "example",
+    "yes": "Yes",
+    "no": "No",
+    "answer": "Answer...",
+    "sometimes": "Sometimes",
+    "exampleElement": "example element",
+    "richText": {
+      "title": "Large text",
+      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
+    },
+    "radio": {
+      "title": "Radio buttons",
+      "description": "Radio buttons description"
+    },
+    "checkbox": {
+      "title": "Multiple choice",
+      "description": "Multiple choice description"
+    },
+    "dropdown": {
+      "title": "Dropdown",
+      "description": "Dropdown description"
+    },
+    "textField": {
+      "title": "Short answer question",
+      "description": "Short answer question description"
+    },
+    "textArea": {
+      "title": "Long answer question",
+      "description": "Long answer question description"
+    },
+    "phone": {
+      "title": "Mobile phone",
+      "description": "Mobile phone description"
+    },
+    "email": {
+      "title": "Email address",
+      "description": "Email address description"
+    },
+    "date": {
+      "title": "Date",
+      "description": "Date description"
+    },
+    "number": {
+      "title": "Number",
+      "description": "Number description"
+    }
+  },
   "addMultiple": "Add multiple options",
   "addOption": "Add an option",
   "addOptions": "Add options",
@@ -144,11 +196,12 @@
   "openModal": "Open Modal",
   "option": "Option",
   "optionText": "Option text",
+  "pagePreview": "Preview",
+  "pageSettings": "Settings",
   "pageText": "Page text",
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form Title",
-  "pagePreview": "Preview",
   "previewingIn": "Previewing in",
   "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.",
   "privacyStatement": "Privacy statement",
@@ -191,7 +244,7 @@
   "saveAndRequest": "Save form and request publishing ability",
   "saveDraft": "Save draft",
   "selectElement": "Select an Element type",
-  "pageSettings": "Settings",
+  "send": "Send",
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
   "settingsDeleteTitle": "Delete form",
@@ -204,6 +257,29 @@
   "settingsResponseNote": "Set response delivery before previewing delivery and publishing.",
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
+  "share": {
+    "copy": "Copy",
+    "email": "Share by email",
+    "emailLabel": "Enter email address",
+    "enLink": "English link",
+    "frLink": "French link",
+    "link": "Get the link",
+    "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
+    "open": "Open",
+    "seePreview": "See a preview of the email message",
+    "someone": "Someone",
+    "someoneHasShared": "{{name}} has shared a form with you on GC Forms",
+    "stepOne": "Step 1:",
+    "stepOneDetails": "Save the attached JSON form file to your computer",
+    "stepThree": "Step 3:",
+    "stepThreeDetails": "Select open a form file.",
+    "stepTwo": "Step 2:",
+    "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
+    "title": "Share",
+    "toPreview": "To preview this form:",
+    "messageSent": "The message has been sent",
+    "startOver": "Start over"
+  },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer text",
   "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
@@ -253,58 +329,5 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "addElementDialog": {
-    "addButton": "Add",
-    "questionElement": "Question element",
-    "richText": {
-      "title": "Rich Text title",
-      "description": "Rich Text desc"
-    },
-    "radio": {
-      "title": "Radio title",
-      "description": "Radio desc"
-    },
-    "checkbox": {
-      "title": "Multiple Choice title",
-      "description": "Multiple Choice title desc"
-    },
-    "dropdown": {
-      "title": "Dropdown list title",
-      "description": "Dropdown list Answer desc"
-    },
-    "textField": {
-      "title": "Short answer title",
-      "description": "Short answer desc"
-    },
-    "textArea": {
-      "title": "Long answer title",
-      "description": "Long answer  desc"
-    },
-    "phone": {
-      "title": "Phone title",
-      "description": "Phone desc"
-    },
-    "email": {
-      "title": "Email title",
-      "description": "Email desc"
-    },
-    "date": {
-      "title": "Date title",
-      "description": "Date desc"
-    },
-    "number": {
-      "title": "Numeric title",
-      "description": "Numeric desc"
-    }
-  },
-  "untitledForm": "Untitled form",
-  "share": {
-    "title": "Share",
-    "email": "Share with email",
-    "link": "Get the link",
-    "enLink": "English link",
-    "frLink": "French link",
-    "copy": "Copy",
-    "open": "Open"
-  }
+  "untitledForm": "Untitled form"
 }
