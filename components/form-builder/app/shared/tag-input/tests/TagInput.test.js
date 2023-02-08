@@ -3,6 +3,13 @@ import { render, cleanup } from "@testing-library/react";
 import { TagInput } from "../TagInput";
 import userEvent from "@testing-library/user-event";
 
+const validator = (tag) => {
+  if (tag === "fail") {
+    return false;
+  }
+  return true;
+};
+
 describe("TagInput", () => {
   afterEach(() => {
     cleanup();
@@ -12,38 +19,81 @@ describe("TagInput", () => {
     const Container = () => {
       const [tags, setTags] = useState([]);
 
-      return <TagInput tags={tags} setTags={setTags} />;
+      return <TagInput tags={tags} setTags={setTags} validateTag={validator} />;
     };
 
     const rendered = render(<Container />);
 
     const input = await rendered.findByTestId("tag-input");
-    await userEvent.type(input, "test@example.com{enter}");
-    expect(rendered.getByText("test@example.com")).toBeInTheDocument();
 
+    // Invalid tag fails validation and is not added
+    await userEvent.type(input, "fail{enter}");
+    expect(rendered.queryByTestId("tag")).not.toBeInTheDocument();
+    expect(input.value).toBe("fail");
+    await userEvent.clear(input);
+
+    // Add and remove a tag
+    await userEvent.type(input, "one{enter}");
+    expect(rendered.getAllByTestId("tag").length).toBe(1);
+    expect(rendered.getAllByTestId("tag")[0].textContent).toBe("one");
     const removeButtons = await rendered.findAllByRole("button");
     await userEvent.click(removeButtons[0]);
-    expect(rendered.queryByTestId("tags")).toBeNull();
+    expect(rendered.queryByTestId("tag")).toBeNull();
+    await userEvent.clear(input);
 
-    // handles "enter"
+    // Handles "enter"
     await userEvent.type(input, "one{enter}");
     await userEvent.type(input, "two{enter}");
 
     expect(rendered.getByText("one")).toBeInTheDocument();
     expect(rendered.getByText("two")).toBeInTheDocument();
 
-    // handles "backspace"
+    expect(rendered.getAllByTestId("tag").length).toBe(2);
+    // Two tags carry forward
+
+    // Handles "comma"
+    await userEvent.type(input, "three,");
+    await userEvent.type(input, "four,");
+
+    expect(rendered.getByText("three")).toBeInTheDocument();
+    expect(rendered.getByText("four")).toBeInTheDocument();
+
+    expect(rendered.getAllByTestId("tag").length).toBe(4);
+    // Four tags carry forward
+
+    // Handles "space"
+    await userEvent.type(input, "five ");
+    await userEvent.type(input, "six ");
+
+    expect(rendered.getByText("five")).toBeInTheDocument();
+    expect(rendered.getByText("six")).toBeInTheDocument();
+
+    expect(rendered.getAllByTestId("tag").length).toBe(6);
+    // Six tags carry forward
+
+    // Handles "backspace" to untag last tag
     await userEvent.type(input, "{backspace}");
-    expect(rendered.queryByText("two")).toBeNull();
+    expect(rendered.getAllByTestId("tag").length).toBe(5);
+    expect(input.value).toBe("six");
+    await userEvent.clear(input);
 
-    // handled "tabbing"
-    const removeButtons1 = await rendered.findAllByRole("button");
-    await userEvent.tab({ shift: true });
-    expect(removeButtons1[0]).toHaveFocus();
+    expect(rendered.getAllByTestId("tag").length).toBe(5);
+    expect(input.value).toBe("");
 
+    // Handles onBlur
+    await userEvent.type(input, "six");
     await userEvent.tab();
-    const removeButtons2 = await rendered.findAllByRole("button");
-    expect(removeButtons2[1]).toHaveFocus();
+    expect(rendered.getAllByTestId("tag").length).toBe(6);
+
+    // Handles "tabbing"
+    await userEvent.tab({ shift: true });
+    expect(input).toHaveFocus();
+
+    await userEvent.tab({ shift: true });
+    const removeButtons1 = await rendered.findAllByRole("button");
+    expect(removeButtons1[removeButtons1.length - 1]).toHaveFocus();
+
+    // Tab to input
     await userEvent.tab();
     expect(input).toHaveFocus();
   });
