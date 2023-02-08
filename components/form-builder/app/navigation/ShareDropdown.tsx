@@ -27,7 +27,7 @@ export const ShareDropdown = () => {
       <DropdownMenuPrimitive.Root>
         {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className="flex border-black rounded border-2 py-1 px-3 -mt-10">
+          <button className="flex border-black rounded border-2 py-1 px-3">
             <span className="inline-block mr-1">{t("share.title")}</span>
             <ChevronDown className="mt-[2px]" />
           </button>
