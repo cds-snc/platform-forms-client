@@ -23,7 +23,7 @@ export type VaultSubmission = {
   createdAt: Date;
   status: string;
   confirmationCode: string;
-  responseID: string;
+  name: string;
   retrieved: number;
 };
 

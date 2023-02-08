@@ -93,7 +93,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                 {vaultSubmissions?.length > 0 ? (
                   vaultSubmissions.map((submission, index) => (
                     <tr key={index}>
-                      <td>{submission.responseID}</td>
+                      <td>{submission.name}</td>
                       <td>{submission.status}</td>
                       <td></td>
                       <td></td>

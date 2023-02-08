@@ -92,9 +92,10 @@ export async function listAllSubmissions(
         },
         ExpressionAttributeNames: {
           "#status": "Status",
+          "#name": "Name",
         },
         ProjectionExpression:
-          "FormID,SubmissionID,#status,Retrieved,SecurityAttribute,ConfirmationCode,ResponseID,CreatedAt",
+          "FormID,SubmissionID,#status,Retrieved,SecurityAttribute,ConfirmationCode,#name,CreatedAt",
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
@@ -109,7 +110,7 @@ export async function listAllSubmissions(
               SecurityAttribute: securityAttribute,
               Status: status,
               ConfirmationCode: confirmationCode,
-              ResponseID: responseID,
+              Name: name,
               CreatedAt: createdAt,
               Retrieved: retrieved,
             }) => ({
@@ -118,7 +119,7 @@ export async function listAllSubmissions(
               status: status ?? null,
               securityAttribute,
               confirmationCode,
-              responseID: responseID ?? null,
+              name: name ?? null,
               createdAt,
               retrieved,
             })
