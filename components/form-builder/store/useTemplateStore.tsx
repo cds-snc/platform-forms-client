@@ -15,7 +15,13 @@ import {
 import { Language } from "../types";
 import update from "lodash.set";
 import unset from "lodash.unset";
-import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
+import {
+  FormElement,
+  FormProperties,
+  FormElementTypes,
+  DeliveryOption,
+  ElementProperties,
+} from "@lib/types";
 import { logMessage } from "@lib/logger";
 
 const defaultField: FormElement = {
@@ -101,7 +107,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   resetSubChoices: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
-  updateField: (path: string, value: string | boolean) => void;
+  updateField: (path: string, value: string | boolean | ElementProperties) => void;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
   bulkAddChoices: (elIndex: number, bulkChoices: string) => void;
