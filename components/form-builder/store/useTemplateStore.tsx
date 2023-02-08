@@ -28,6 +28,7 @@ const defaultField: FormElement = {
   id: 0,
   type: FormElementTypes.textField,
   properties: {
+    subElements: [],
     choices: [{ en: "", fr: "" }],
     titleEn: "",
     titleFr: "",
@@ -220,20 +221,22 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             }),
           add: (elIndex = 0, type = FormElementTypes.radio) =>
             set((state) => {
-              const subElements = type === "dynamicRow" ? { subElements: [] } : {};
-              const defaultProperties = { ...defaultField.properties, ...subElements };
-              const defaultValues = defaultField;
-              defaultValues.properties = defaultProperties;
               state.form.elements.splice(elIndex + 1, 0, {
-                ...defaultValues,
+                ...defaultField,
                 id: incrementElementId(state.form.elements),
                 type,
               });
             }),
           addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio) =>
             set((state) => {
+              // remove subElements array property given we're adding a sub item
+              const subDefaultField = { ...defaultField };
+              // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+              const { subElements, ...rest } = subDefaultField.properties;
+              subDefaultField.properties = rest;
+
               state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
-                ...defaultField,
+                ...subDefaultField,
                 id: incrementSubElementId(
                   state.form.elements[elIndex].properties.subElements || [],
                   state.form.elements[elIndex].id
