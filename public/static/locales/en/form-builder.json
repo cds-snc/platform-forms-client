@@ -334,5 +334,7 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "dyanamicRow": "Repeating question set",
+  "addToSet": "Add to set",
+  "removeFromSet": "Remove from set",
   "untitledForm": "Unnamed form file"
 }

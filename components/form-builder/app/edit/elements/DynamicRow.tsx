@@ -144,6 +144,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     return (
       <div className="mt-10">
         <AddElementButton
+          text={t("addToSet")}
           position={-1}
           handleAdd={handleAddElement}
           filterElements={elementFilter}
@@ -171,6 +172,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
             />
             <div className="mt-5">
               <AddElementButton
+                text={t("addToSet")}
                 position={subIndex}
                 handleAdd={handleAddElement}
                 filterElements={elementFilter}
@@ -180,7 +182,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                 className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
                 onClick={() => removeSubItem(elIndex, item.id)}
               >
-                {t("remove")}
+                {t("removeFromSet")}
               </Button>
               {/* 
                 

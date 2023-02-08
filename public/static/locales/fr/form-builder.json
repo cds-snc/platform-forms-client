@@ -334,5 +334,7 @@
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "dyanamicRow": "[FR] Repeating question set",
+  "addToSet": "[FR] Add to set",
+  "removeFromSet": "[FR] Remove from set",
   "untitledForm": "[FR] Unnamed form file"
 }

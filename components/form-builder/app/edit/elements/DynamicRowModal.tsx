@@ -55,13 +55,13 @@ export const DynamicRowModal = ({
         <Button
           theme="secondary"
           className="btn inline-block ml-5 !border-1.5 leading-6 text-sm"
-          iconWrapperClassName="!w-7 !mr-0"
+          iconWrapperClassName="!w-7 !mr-0 absolute"
           icon={<ThreeDotsIcon className={`${iconClasses}`} />}
           onClick={() => {
             updateModalProperties(item.index, item.properties);
           }}
         >
-          <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
+          <span className="text-sm ml-5 mr-2 xl:mx-0">{t("more")}</span>
         </Button>
       }
       saveButton={
