@@ -13,43 +13,43 @@
     "exampleElement": "example element",
     "richText": {
       "title": "Large text",
-      "description": "Small text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
+      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
     },
     "radio": {
-      "title": "Radio title",
-      "description": "Radio desc"
+      "title": "Radio buttons",
+      "description": "Radio buttons description"
     },
     "checkbox": {
-      "title": "Multiple Choice title",
-      "description": "Description"
+      "title": "Multiple choice",
+      "description": "Multiple choice description"
     },
     "dropdown": {
       "title": "Dropdown",
-      "description": "Description"
+      "description": "Dropdown description"
     },
     "textField": {
-      "title": "Question",
-      "description": "Description"
+      "title": "Short answer question",
+      "description": "Short answer question description"
     },
     "textArea": {
-      "title": "Question",
-      "description": "Description"
+      "title": "Long answer question",
+      "description": "Long answer question description"
     },
     "phone": {
       "title": "Mobile phone",
-      "description": "Description"
+      "description": "Mobile phone description"
     },
     "email": {
       "title": "Email address",
-      "description": "Description"
+      "description": "Email address description"
     },
     "date": {
       "title": "Date",
-      "description": "Description"
+      "description": "Date description"
     },
     "number": {
       "title": "Number",
-      "description": "Description"
+      "description": "Number description"
     }
   },
   "addMultiple": "Add multiple options",
@@ -259,7 +259,7 @@
   "settingsResponseTitle": "Response delivery destination",
   "share": {
     "copy": "Copy",
-    "email": "Share with email",
+    "email": "Share by email",
     "emailLabel": "Enter email address",
     "enLink": "English link",
     "frLink": "French link",
@@ -267,13 +267,14 @@
     "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
     "open": "Open",
     "seePreview": "See a preview of the email message",
-    "someoneHasShared": "{{name}} has shared a GC Form with you",
+    "someone": "Someone",
+    "someoneHasShared": "{{name}} has shared a form with you on GC Forms",
     "stepOne": "Step 1:",
     "stepOneDetails": "Save the attached JSON form file to your computer",
     "stepThree": "Step 3:",
     "stepThreeDetails": "Select open a form file.",
     "stepTwo": "Step 2:",
-    "stepTwoDetails": "Go to GC Forms. No account needed.",
+    "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
     "title": "Share",
     "toPreview": "To preview this form:",
     "messageSent": "The message has been sent",
@@ -328,5 +329,5 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "untitledForm": "Untitled form"
+  "untitledForm": "Unnamed form file"
 }
