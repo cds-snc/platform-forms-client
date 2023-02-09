@@ -198,7 +198,7 @@ const QuestionColumns = ({
       return (
         <div key={"col" + index + lang}>
           <dt className="w-full py-4 font-bold border-b-2 border-grey-default">{question}</dt>
-          <dd className="w-full py-4">
+          <dd className="w-full py-4 pl-4">
             <dl className="ml-8">
               {dynamicRow.map((item, subindex) => {
                 return formatColumnAnswers(
@@ -237,16 +237,18 @@ export const Table = (props: TableProps): React.ReactElement => {
           className="border-b-2 border-t-2 border-grey-default"
         >
           <div className="flex border-b border-grey-default">
-            <dt className="font-bold py-4" style={{ width: "30rem" }}>
+            <dt className="font-bold py-4" style={{ width: "25rem" }}>
               {t("responseTemplate.responseNumber", { lng: lang })}
             </dt>
-            <dd className="max-w-[50rem] py-4">{responseID}</dd>
+            <dd className="py-4 pl-8" style={{ maxWidth: "55rem" }}>
+              {responseID}
+            </dd>
           </div>
           <div className="flex border-b border-grey-default">
-            <dt className="font-bold py-4" style={{ width: "30rem" }}>
+            <dt className="font-bold py-4" style={{ width: "25rem" }}>
               {t("responseTemplate.submissionDate", { lng: lang })}
             </dt>
-            <dd className="max-w-[50rem] py-4">
+            <dd className="py-4 pl-8" style={{ maxWidth: "55rem" }}>
               {new Date(submissionDate).toLocaleString(`${lang + "-CA"}`, {
                 timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
               })}
