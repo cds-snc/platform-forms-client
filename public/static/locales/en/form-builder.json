@@ -278,7 +278,8 @@
     "title": "Share",
     "toPreview": "To preview this form:",
     "messageSent": "The message has been sent",
-    "startOver": "Start over"
+    "startOver": "Start over",
+    "unpublished": "Links unavailable for unpublished forms"
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer text",

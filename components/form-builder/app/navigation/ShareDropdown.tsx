@@ -71,15 +71,13 @@ export const ShareDropdown = () => {
                 <DropdownMenuPrimitive.Portal>
                   <DropdownMenuPrimitive.SubContent
                     className={
-                      "border-1 border-black origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white"
+                      "border-1 border-black origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white ml-1"
                     }
                   >
                     {isPublished ? (
                       <LinksSubMenu />
                     ) : (
-                      <div className="px-2 py-2 select-none">
-                        Links unavailable for unpublished forms
-                      </div>
+                      <div className="px-2 py-2 select-none">{t("share.unpublished")}</div>
                     )}
                   </DropdownMenuPrimitive.SubContent>
                 </DropdownMenuPrimitive.Portal>
