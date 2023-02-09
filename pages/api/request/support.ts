@@ -21,13 +21,23 @@ const requestSupport = async (req: NextApiRequest, res: NextApiResponse) => {
       ? "Contact request / Demande de soutien"
       : "Support request / Demande de soutien";
 
+  // Request may be a list of strings (checkbox), format it a bit if so, or just a string (radio)
+  const requestParsed =
+    request.toString().split(",").length > 1
+      ? request
+          .toString()
+          .split(",")
+          .map((item: string) => `-${item}`)
+          .join("\n")
+      : request;
+
   let emailBody = "";
   if (supportType === "contactus") {
     emailBody = `
 ${name} (${email}) has requested we contact them for the form-builder.
 
 Contact request:
-${request}
+${requestParsed}
 
 Additional details:
 ${description}
@@ -36,7 +46,7 @@ ${description}
 ${name} (${email}) a demandé que nous les contactions pour le générateur de formulaires..
 
 Demande de contact soutien:
-${request}
+${requestParsed}
 
 Détails supplémentaires:
 ${description}
@@ -46,7 +56,7 @@ ${description}
 ${name} (${email}) has requested support for the form-builder.
 
 Support request:
-${request}
+${requestParsed}
 
 Additional details:
 ${description}
@@ -55,7 +65,7 @@ ${description}
 ${name} (${email}) a demandé de soutien des form-builder.
 
 Demande de soutien:
-${request}
+${requestParsed}
 
 Détails supplémentaires:
 ${description}
