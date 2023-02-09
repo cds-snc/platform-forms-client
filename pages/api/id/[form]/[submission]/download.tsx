@@ -3,11 +3,17 @@ import { NextApiRequest, NextApiResponse, NextComponentType, NextPageContext } f
 import { logMessage } from "@lib/logger";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import {
+  DynamoDBDocumentClient,
+  QueryCommand,
+  QueryCommandInput,
+  UpdateCommand,
+  UpdateCommandInput,
+} from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, WithRequired, Responses } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
-import { renderToPipeableStream } from "react-dom/server";
+import { renderToStaticNodeStream } from "react-dom/server";
 import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
@@ -27,7 +33,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-  if (Array.isArray(formID) || !formID) return res.status(400).json({ error: "Bad Request" });
+  const userEmail = session.user.email;
+  if (userEmail === null)
+    throw new Error(
+      `User does not have an associated email address: ${JSON.stringify(session.user)} `
+    );
+
+  if (!formID || Array.isArray(formID) || !submissionID || Array.isArray(submissionID))
+    return res.status(400).json({ error: "Bad Request" });
 
   try {
     const fullFormTemplate = await getFullTemplateByID(
@@ -118,9 +131,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     res.setHeader("Content-Disposition", `attachment; filename=${responseID}.html`);
 
-    let didError = false;
-
-    const stream = renderToPipeableStream(
+    const stream = renderToStaticNodeStream(
       <>
         <html lang="en">
           {/* eslint-disable-next-line @next/next/no-head-element */}
@@ -138,32 +149,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
             />
           </body>
         </html>
-      </>,
-      {
-        onShellReady() {
-          // The content above all Suspense boundaries is ready.
-          // If something errored before we started streaming, we set the error code appropriately.
-          res.statusCode = didError ? 500 : 200;
-          res.setHeader("Content-type", "text/html");
-          stream.pipe(res);
-        },
-        onShellError() {
-          // Something errored before we could complete the shell so we emit an alternative shell.
-          res.statusCode = 500;
-          res.send("<!doctype html><p>Oh Oh...</p>");
-        },
-        onError(err) {
-          didError = true;
-          logMessage.error(err);
-        },
-      }
+      </>
     );
+
+    await renderPageToClient(res, stream).catch((err) => {
+      logMessage.error(err);
+      throw new Error(`Download Form Response submissionID ${submissionID} could not be rendered`);
+    });
 
     logMessage.info(
       `user:${session?.user.email} retrieved form responses ${submissionID} from form ID:${formID}}`
     );
 
-    // return res.status(200).send(htmlFile);
+    // Setting last downloaded by on Vault Submission
+
+    await updateLastDownloadedBy(submissionID, formID, userEmail);
   } catch (error) {
     if (error instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     logMessage.error(error as Error);
@@ -183,6 +183,48 @@ function connectToDynamo(): DynamoDBDocumentClient {
   });
 
   return DynamoDBDocumentClient.from(db);
+}
+
+/**
+ * Sets who last downloaded the Form Submission on the Vault Submission record
+ * @param submissionID Submission ID of the form response
+ * @param formID Form ID the Submission is for
+ * @param email Email address of the user downloading the Submission
+ */
+async function updateLastDownloadedBy(submissionID: string, formID: string, email: string) {
+  const documentClient = connectToDynamo();
+
+  const updateCommandInput: UpdateCommandInput = {
+    TableName: "Vault",
+    Key: {
+      FormID: formID,
+      SubmissionID: submissionID,
+    },
+    UpdateExpression: "SET LastDownloadedBy = :email",
+    ExpressionAttributeValues: {
+      ":email": email,
+    },
+    ReturnValues: "NONE",
+  };
+  return await documentClient.send(new UpdateCommand(updateCommandInput));
+}
+
+/**
+ * Fuction that renders and sends the stream html output to the client.
+ * @param res NextJS response
+ * @param stream NodeJS Readable stream
+ *
+ */
+async function renderPageToClient(res: NextApiResponse, stream: NodeJS.ReadableStream) {
+  return new Promise<void>((resolve, reject) => {
+    stream
+      .pipe(res)
+      .on("finish", () => {
+        logMessage.debug("Sucessfully rendered html and streamed html to client");
+        resolve();
+      })
+      .on("error", (err) => reject(err));
+  });
 }
 
 // Note: any CSS updates will require the below copy+past from the build output manually
