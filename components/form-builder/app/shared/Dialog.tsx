@@ -59,12 +59,12 @@ export const Dialog = ({
       aria-labelledby="modal-title"
       ref={dialogRef}
     >
-      <div className="w-[750px] mx-auto mt-24 bg-white border-2 border-black rounded-xl">
+      <div className="w-[800px] mx-auto mt-24 bg-white border-2 border-black rounded-xl">
         <div className="relative">
-          {title && <h2 className="pb-4 inline-block mt-4 ml-8">{title}</h2>}
+          {title && <h2 className="pb-4 inline-block mt-8 ml-8">{title}</h2>}
           <Button
             theme="link"
-            className="group absolute right-0 top-0 mr-8 mt-4 z-[1000]"
+            className="group absolute right-0 top-0 mr-8 mt-8 z-[1000]"
             aria-label={t("close")}
             onClick={close}
           >
