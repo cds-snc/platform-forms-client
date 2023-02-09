@@ -97,12 +97,12 @@ export const ShareModal = ({
   return (
     <div className="form-builder">
       <Dialog
+        title={t("share.title")}
         dialogRef={dialog}
         handleClose={handleClose}
         actions={status === "ready" ? actions : doneActions}
       >
-        <div className="p-4">
-          <h3 className="mb-5">{t("share.title")}</h3>
+        <div className="py-4">
           {status === "sent" && (
             <>
               <p>{t("share.messageSent")}</p>
