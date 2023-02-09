@@ -17,7 +17,7 @@ export const ListBox = ({
   const [focusIndex, setFocusIndex] = useState(0);
   const [activeId, setActiveId] = useState("");
   const handleFocus = useCallback(
-    (evt: KeyboardEvent<HTMLInputElement>) => {
+    (evt: KeyboardEvent<HTMLElement>) => {
       const { key } = evt;
       if (key === "ArrowUp") {
         evt.preventDefault();
@@ -45,40 +45,42 @@ export const ListBox = ({
       data-testid="listbox"
       ref={listBoxRef}
       role="listbox"
-      className="w-42 list-box"
+      className="list-box"
       tabIndex={0}
       onKeyDown={handleFocus}
       aria-activedescendant={activeId ? activeId : options[0]?.id}
     >
-      {options.map(
-        (
-          { id, value, className }: { id: string; value: string; className: string },
-          index: number
-        ) => {
-          const focussed = focusIndex === index;
-          return (
-            /* eslint-disable jsx-a11y/click-events-have-key-events */
-            <div
-              id={`row-${id}`}
-              ref={(el) => {
-                if (el && rowsRef.current) {
-                  rowsRef.current[`row-${index}` as unknown as number] = el;
-                }
-              }}
-              className={`${
-                focussed ? "font-bold" : "font-normal"
-              } ${className} group xl:text-center no-underline xl:w-36 xl:pb-0 xl:pt-2 xl:mb-3 pl-1 pr-2 pb-2 mb-2 md:pr-0 text-black-default hover:text-blue-hover visited:text-black-default focus:text-blue-hover focus:active:no-underline`}
-              key={id}
-              tabIndex={-1}
-              role="option"
-              onClick={() => setFocusIndex(index)}
-              aria-selected={focussed}
-            >
-              {value}
-            </div>
-          );
-        }
-      )}
+      <ul role="group" className="list-none pl-0">
+        {options.map(
+          (
+            { id, value, className }: { id: string; value: string; className: string },
+            index: number
+          ) => {
+            const focussed = focusIndex === index;
+            return (
+              /* eslint-disable jsx-a11y/click-events-have-key-events */
+              <li
+                id={`row-${id}`}
+                ref={(el) => {
+                  if (el && rowsRef.current) {
+                    rowsRef.current[`row-${index}` as unknown as number] = el;
+                  }
+                }}
+                className={`${
+                  focussed ? "font-bold" : "font-normal"
+                } ${className} group xl:pb-0 xl:pt-2 xl:mb-3 pl-1 pr-2 pb-2 mb-2 md:pr-0 text-black hover:text-blue-hover focus:text-blue-hover cursor-pointer`}
+                key={id}
+                tabIndex={-1}
+                role="option"
+                onClick={() => setFocusIndex(index)}
+                aria-selected={focussed}
+              >
+                {value}
+              </li>
+            );
+          }
+        )}
+      </ul>
     </div>
   );
 };
