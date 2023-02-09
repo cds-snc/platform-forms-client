@@ -54,14 +54,17 @@ export const Dialog = ({
   }, [close]);
 
   return (
-    <dialog className="modal-dialog" aria-labelledby="modal-title" ref={dialogRef}>
-      <div className="modal-content">
-        <div className="modal-header inline-flex justify-between">
-          {title && <h2 className="modal-title">{title}</h2>}
-          {!title && <div />}
+    <dialog
+      className="p-0 m-0 bg-clip-padding w-full h-full bg-transparent"
+      aria-labelledby="modal-title"
+      ref={dialogRef}
+    >
+      <div className="w-[800px] mx-auto mt-24 bg-white border-2 border-black rounded-xl">
+        <div className="relative">
+          {title && <h2 className="pb-4 inline-block mt-4 ml-4">{title}</h2>}
           <Button
             theme="link"
-            className="group justify-self-end block pl-2 pr-2"
+            className="group absolute right-0 top-0 mr-4 mt-4 z-[1000]"
             aria-label={t("close")}
             onClick={close}
           >
@@ -71,8 +74,8 @@ export const Dialog = ({
             </span>
           </Button>
         </div>
-        <div className="modal-body">{children}</div>
-        {actions && <div className="modal-footer">{actions}</div>}
+        <div className="px-4">{children}</div>
+        {actions && <div className="py-4 border-t-1 border-gray-400">{actions}</div>}
       </div>
     </dialog>
   );
