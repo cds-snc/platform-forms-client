@@ -30,7 +30,7 @@ export const LinksSubMenu = () => {
     },
   ];
 
-  const handleCopyToClipboard = async (link) => {
+  const handleCopyToClipboard = async (link: string) => {
     if ("clipboard" in navigator) {
       await navigator.clipboard.writeText(link);
     }
