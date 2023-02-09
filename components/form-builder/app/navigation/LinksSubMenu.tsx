@@ -63,7 +63,12 @@ export const LinksSubMenu = () => {
 
           {/* open link */}
           <DropdownMenuPrimitive.Item asChild>
-            <a href={url} className="inline-block mr-1 flex text-sm no-underline">
+            <a
+              href={url}
+              target="_blank"
+              className="inline-block mr-1 flex text-sm no-underline"
+              rel="noreferrer"
+            >
               <ShareExternalLinkIcon className="scale-[70%]" />
               <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 underline underline-offset-4 text-blue">
                 {t("share.open")}
