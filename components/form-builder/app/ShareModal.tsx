@@ -102,7 +102,7 @@ export const ShareModal = ({
         handleClose={handleClose}
         actions={status === "ready" ? actions : doneActions}
       >
-        <div className="p-4">
+        <div className="py-4">
           {status === "sent" && (
             <>
               <p>{t("share.messageSent")}</p>

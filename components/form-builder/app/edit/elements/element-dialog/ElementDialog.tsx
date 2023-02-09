@@ -40,7 +40,7 @@ export const ElementDialog = ({
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
       <div className="flex">
-        <div className="w-1/3 px-4 py-8 overflow-y-auto max-h-[600px]">
+        <div className="w-1/3 pr-2 py-4 overflow-y-auto max-h-[600px]">
           <h4 className="mb-5 text-2xl font-normal">{t("addElementDialog.questionElement")}</h4>
           <ListBox
             ariaLabel={t("addElementDialog.questionElement")}
@@ -48,7 +48,7 @@ export const ElementDialog = ({
             handleChange={handleChange}
           />
         </div>
-        <div className="border-l-1 border-black px-4 py-8 w-2/3 max-h-[600px]">
+        <div className="border-l-1 border-black pl-4 py-4 w-2/3 max-h-[600px]">
           <ElementDescription
             id={id}
             title={`${value} ${t("addElementDialog.example")}`}
