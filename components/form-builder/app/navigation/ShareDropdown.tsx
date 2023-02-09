@@ -38,7 +38,9 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={"w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white"}
+            className={
+              "w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white border-1 border-black"
+            }
           >
             {/* share.email */}
             <DropdownMenuPrimitive.Item
@@ -69,7 +71,7 @@ export const ShareDropdown = () => {
                 <DropdownMenuPrimitive.Portal>
                   <DropdownMenuPrimitive.SubContent
                     className={
-                      "origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white"
+                      "border-1 border-black origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white"
                     }
                   >
                     {isPublished ? (
