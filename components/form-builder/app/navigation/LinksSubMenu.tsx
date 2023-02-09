@@ -30,10 +30,9 @@ export const LinksSubMenu = () => {
     },
   ];
 
-  const handleCopyToClipboard = async () => {
+  const handleCopyToClipboard = async (link: string) => {
     if ("clipboard" in navigator) {
-      const stringified = getSchema();
-      await navigator.clipboard.writeText(stringified);
+      await navigator.clipboard.writeText(link);
     }
   };
 
@@ -50,7 +49,7 @@ export const LinksSubMenu = () => {
             <button
               className="inline-block mr-2 flex"
               onClick={() => {
-                handleCopyToClipboard();
+                handleCopyToClipboard(url);
               }}
             >
               <CopyIcon className="scale-[80%]" />
