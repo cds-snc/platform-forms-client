@@ -27,7 +27,7 @@ export const ShareDropdown = () => {
       <DropdownMenuPrimitive.Root>
         {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className="flex border-black rounded border-2 py-1 px-3 hover:text-white-default hover:bg-gray-600 focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
+          <button className="flex border-black rounded border-1 py-1 px-3 hover:text-white-default hover:bg-gray-600 focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
             <span className="inline-block mr-1">{t("share.title")}</span>
             <ChevronDown className="mt-[2px]" />
           </button>

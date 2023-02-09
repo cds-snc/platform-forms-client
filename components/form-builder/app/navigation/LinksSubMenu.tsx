@@ -40,7 +40,7 @@ export const LinksSubMenu = () => {
   const menu = links.map(({ name, url }, i) => (
     <DropdownMenuPrimitive.Item
       key={`${name}-${i}`}
-      className="flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm"
+      className="outline-none flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white [&_span]:hover:text-white-default [&_span]:focus:text-white-default"
     >
       <div className="flex justify-between">
         <div className="inline-block mr-3 w-[90px]">{name}:</div>
