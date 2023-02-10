@@ -7,7 +7,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import download from "@pages/api/id/[form]/[submission]/download";
 import { Session } from "next-auth";
 import { Base, getUserPrivileges } from "__utils__/permissions";
-import { prismaMock, checkLogs } from "@jestUtils";
+import { prismaMock } from "@jestUtils";
 import Redis from "ioredis-mock";
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { mockClient } from "aws-sdk-client-mock";
