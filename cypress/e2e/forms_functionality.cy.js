@@ -38,7 +38,7 @@ describe("Forms Functionality", () => {
       cy.get("[role='alert']").should("be.visible");
       cy.get("[role='alert']").contains("Button can not be used");
       cy.tick(6000);
-      cy.get("[role='alert']").contains("The button's ready.");
+      cy.get("[role='alert']").contains("The button is ready.");
     });
     it("should submit the button after the proper delay", () => {
       cy.clock();

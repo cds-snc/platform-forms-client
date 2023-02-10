@@ -17,6 +17,6 @@ describe("Logout Page test", () => {
   it("Go to login page", () => {
     cy.get("div[id=login-menu]>a").click();
     cy.url().should("contain", "/en/auth/login");
-    cy.get("h1").should("contain", "Sign In");
+    cy.get("h1").should("contain", "Sign in");
   });
 });

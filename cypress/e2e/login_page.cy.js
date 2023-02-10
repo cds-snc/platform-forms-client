@@ -5,7 +5,7 @@ describe("Login Page", () => {
     });
 
     it("EN page renders", () => {
-      cy.get("h1").should("contain", "Sign In to GC Forms");
+      cy.get("h1").should("contain", "Sign in to GC Forms");
       cy.get("input[id='username']");
       cy.get("input[id='password']");
     });
