@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useFocusWithin } from "react-aria";
 
 import { useTemplateStore } from "../../../store";
 import { PanelBodySub } from "../PanelBodySub";
@@ -12,6 +13,11 @@ import { DynamicRowModal } from "./DynamicRowModal";
 
 export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
   const { t } = useTranslation("form-builder");
+  const [isFocusWithin, setFocusWithin] = React.useState(false);
+
+  const { focusWithinProps } = useFocusWithin({
+    onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
+  });
 
   const {
     addSubItem,
@@ -153,54 +159,60 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     );
 
   return (
-    <div {...props} className="mt-3 mb-3">
-      {subElements.map((element, subIndex: number) => {
-        const item = { ...element, index: subIndex };
-        return (
-          <div key={`sub-element-${item.id}-${subIndex}`}>
-            <PanelBodySub
-              elements={subElements}
-              elIndex={elIndex}
-              item={item}
-              onQuestionChange={onQuestionChange}
-              onElementChange={(id, subIndex) => {
-                onElementChange(id, elIndex, subIndex);
-              }}
-              onRequiredChange={(subIndex, checked) => {
-                onRequiredChange(elIndex, subIndex, checked);
-              }}
-            />
-            <div className="mt-5 flex justify-end relative">
-              <div className="-z-20 absolute w-[100%] border-b-2 border-dotted border-gray-400 pt-6"></div>
-              <AddElementButton
-                text={t("addToSet")}
-                position={subIndex}
-                handleAdd={handleAddElement}
-                filterElements={elementFilter}
+    <div
+      {...focusWithinProps}
+      className="px-5 py-1"
+      style={isFocusWithin ? { backgroundColor: "#f4f1f8" } : {}}
+    >
+      <div {...props} className="mt-3 mb-3">
+        {subElements.map((element, subIndex: number) => {
+          const item = { ...element, index: subIndex };
+          return (
+            <div key={`sub-element-${item.id}-${subIndex}`}>
+              <PanelBodySub
+                elements={subElements}
+                elIndex={elIndex}
+                item={item}
+                onQuestionChange={onQuestionChange}
+                onElementChange={(id, subIndex) => {
+                  onElementChange(id, elIndex, subIndex);
+                }}
+                onRequiredChange={(subIndex, checked) => {
+                  onRequiredChange(elIndex, subIndex, checked);
+                }}
               />
-              {/* 
+              <div className="mt-5 flex justify-end relative">
+                <div className="-z-20 absolute w-[100%] border-b-2 border-dotted border-gray-400 pt-6"></div>
+                <AddElementButton
+                  text={t("addToSet")}
+                  position={subIndex}
+                  handleAdd={handleAddElement}
+                  filterElements={elementFilter}
+                />
+                {/* 
                 Note: we modify the item index for the modal / state 
                 The "actual" item index remains untouched
   
                 By doing this to avoid conflicting indexes with the top level element
                 */}
-              <DynamicRowModal
-                elIndex={elIndex}
-                subIndex={subIndex}
-                item={{ ...item, index: item.id }}
-              />
+                <DynamicRowModal
+                  elIndex={elIndex}
+                  subIndex={subIndex}
+                  item={{ ...item, index: item.id }}
+                />
 
-              <Button
-                theme="secondary"
-                className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
-                onClick={() => removeSubItem(elIndex, item.id)}
-              >
-                {t("removeFromSet")}
-              </Button>
+                <Button
+                  theme="secondary"
+                  className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
+                  onClick={() => removeSubItem(elIndex, item.id)}
+                >
+                  {t("removeFromSet")}
+                </Button>
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };
