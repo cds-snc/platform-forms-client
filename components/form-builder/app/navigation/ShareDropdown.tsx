@@ -27,7 +27,7 @@ export const ShareDropdown = () => {
       <DropdownMenuPrimitive.Root>
         {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className="flex border-black rounded border-2 py-1 px-3">
+          <button className="flex border-black rounded border-1 py-1 px-3 hover:text-white-default hover:bg-gray-600 focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
             <span className="inline-block mr-1">{t("share.title")}</span>
             <ChevronDown className="mt-[2px]" />
           </button>
@@ -38,7 +38,9 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={"w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white"}
+            className={
+              "w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white border-1 border-black"
+            }
           >
             {/* share.email */}
             <DropdownMenuPrimitive.Item
@@ -46,7 +48,7 @@ export const ShareDropdown = () => {
                 showShareModal(true);
               }}
               className={
-                "flex cursor-default items-center rounded-md px-2 py-2 text-sm outline-none focus:bg-gray-100"
+                "flex cursor-default items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
               }
             >
               <ShareIcon className="" />
@@ -58,7 +60,7 @@ export const ShareDropdown = () => {
               <DropdownMenuPrimitive.Sub>
                 <DropdownMenuPrimitive.SubTrigger
                   className={
-                    "flex w-full cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none focus:bg-gray-50 focus:bg-gray-100"
+                    "flex w-full cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white [&_svg]:fill-black-default"
                   }
                 >
                   <LinkIcon className="scale-125 mr-3" />
@@ -69,15 +71,13 @@ export const ShareDropdown = () => {
                 <DropdownMenuPrimitive.Portal>
                   <DropdownMenuPrimitive.SubContent
                     className={
-                      "origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white"
+                      "border-1 border-black origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white ml-1"
                     }
                   >
                     {isPublished ? (
                       <LinksSubMenu />
                     ) : (
-                      <div className="px-2 py-2 select-none">
-                        Links unavailable for unpublished forms
-                      </div>
+                      <div className="px-2 py-2 select-none">{t("share.unpublished")}</div>
                     )}
                   </DropdownMenuPrimitive.SubContent>
                 </DropdownMenuPrimitive.Portal>
