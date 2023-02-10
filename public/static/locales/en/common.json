@@ -6,7 +6,7 @@
     },
     "sla": {
       "link": "/en/sla",
-      "desc": "Service level agreement"
+      "desc": "Service-level agreement"
     },
     "support": {
       "link": "/en/form-builder/support",
@@ -18,13 +18,13 @@
   "fip": {
     "link": "http://canada.ca/en.html",
     "text": "Symbol of the Government of Canada",
-    "label": "Government of Canada Home page"
+    "label": "Government of Canada homepage"
   },
   "preview": {
-    "title": "Preview a Form from JSON config",
+    "title": "Preview a form from JSON config",
     "button": "Preview"
   },
-  "lang-toggle": "Language Selection",
+  "lang-toggle": "Language selection",
   "submitButton": "Submit",
   "input-validation": {
     "heading": "Please correct the errors on the page.",
@@ -44,7 +44,7 @@
   },
   "required": "required",
   "all-required": "all checkboxes required",
-  "required-field": "Required Field",
+  "required-field": "Required field",
   "file-upload-button-text": "Upload a file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
@@ -58,7 +58,7 @@
     "error-part-2": "seconds.",
     "prompt-part-1": "Try again in",
     "prompt-part-2": "seconds.",
-    "success-message": "The button's ready.",
+    "success-message": "The button is ready.",
     "success-prompt": "You can try this button again now."
   },
   "adminNav": {
@@ -66,7 +66,7 @@
     "formbuilder": "Form builder",
     "vault": "Vault",
     "users": "Users",
-    "upload": "Template Upload",
+    "upload": "Template upload",
     "templates": "Templates",
     "features": "Options",
     "login": "Login",
