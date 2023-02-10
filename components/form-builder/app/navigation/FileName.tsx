@@ -10,16 +10,23 @@ export const FileNameInput = () => {
     updateField: s.updateField,
   }));
 
-  const [content, setContent] = useState("");
+  const fileName = getName();
+
+  const [content, setContent] = useState(fileName);
+  const [isEditing, setIsEditing] = useState(false);
+  const [width, setWidth] = useState(0);
+  const span = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // check if the fileName has changed from outside the component
+    if (!isEditing && content === "" && fileName !== content) {
+      setContent(fileName);
+    }
+
     if (span?.current) {
       setWidth(span.current?.offsetWidth + 50);
     }
-  }, [content]);
-
-  const [width, setWidth] = useState(0);
-  const span = useRef<HTMLElement>(null);
+  }, [content, fileName, isEditing]);
 
   const widthStyle = width ? { width: `${width}px` } : {};
 
@@ -33,13 +40,15 @@ export const FileNameInput = () => {
         className="px-2 min-w-[200px] max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default"
         name="filename"
         placeholder={t("untitledForm", { ns: "form-builder" })}
-        value={content ? content : getName()}
+        value={content}
+        onFocus={() => setIsEditing(true)}
         onBlur={() => {
-          updateField(`name`, content);
+          if (content !== getName()) {
+            updateField(`name`, content);
+          }
+          setIsEditing(false);
         }}
-        onChange={(e) => {
-          setContent(e.target.value);
-        }}
+        onChange={(e) => setContent(e.target.value)}
       />
     </div>
   );

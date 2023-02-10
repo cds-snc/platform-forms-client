@@ -86,11 +86,11 @@
     "name": "Votre nom",
     "needSupport": "Besoin d'aide?",
     "request": {
-      "option1": "Poser une question",
-      "option2": "Donner votre avis",
-      "option3": "Organiser une démo pour en savoir plus sur Formulaires GC ",
+      "option1": "Demandez une démonstration du produit",
+      "option2": "Inscrivez-vous à notre liste de diffusion",
+      "option3": "Donnez votre avis",
       "option4": "Autre",
-      "title": "Quel est votre besoin?"
+      "title": "Raison pour laquelle vous nous contactez"
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Contactez-nous",
