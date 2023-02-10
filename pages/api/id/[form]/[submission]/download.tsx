@@ -163,7 +163,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     });
 
     logMessage.info(
-      `user:${session?.user.email} retrieved form responses ${submissionID} from form ID:${formID}}`
+      `user:${session?.user.email} retrieved form responses ${submissionID} from form ID:${formID}`
     );
 
     // Setting last downloaded by on Vault Submission
@@ -223,6 +223,7 @@ async function updateLastDownloadedBy(submissionID: string, formID: string, emai
 async function renderPageToClient(res: NextApiResponse, stream: NodeJS.ReadableStream) {
   return new Promise<void>((resolve, reject) => {
     stream
+      .on("error", (err) => reject(err))
       .pipe(res)
       .on("finish", () => {
         logMessage.debug("Sucessfully rendered html and streamed html to client");
