@@ -50,6 +50,10 @@
     "number": {
       "title": "Number",
       "description": "Number description"
+    },
+    "dynamicRow": {
+      "title": "Repeating question",
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
   "addMultiple": "Add multiple options",
@@ -330,5 +334,8 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
+  "dyanamicRow": "Repeating question",
+  "addToSet": "Add to set",
+  "removeFromSet": "Remove from set",
   "untitledForm": "Unnamed form file"
 }
