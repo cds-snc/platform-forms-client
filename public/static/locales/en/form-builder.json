@@ -66,7 +66,7 @@
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
   "checkboxes": "Multiple choice",
   "close": "Close",
-  "closeModal": "Close Modal",
+  "closeModal": "Close modal",
   "completed": "Completed",
   "confirmationDescriptionItem1": "details of what happens next and when",
   "confirmationDescriptionItem2": "contact details for the service",
@@ -82,13 +82,13 @@
       "description": "Provide more context.",
       "title": "Additional information"
     },
-    "email": "Your Email",
+    "email": "Your email",
     "gcFormsTeamLink": "Canada.ca Contact us",
     "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to",
     "gcFormsTeamPart2": "to find the department or agency that can help you.",
     "ifYouExperience": "If you experience technical issues, please fill out the",
-    "name": "Your Name",
-    "needSupport": "Need Support?",
+    "name": "Your name",
+    "needSupport": "Need support?",
     "request": {
       "option1": "Request a product demo",
       "option2": "Join our mailing list",
@@ -96,8 +96,8 @@
       "option4": "Other",
       "title": "Reason for reaching out"
     },
-    "supportFormLink": "Support Form",
-    "title": "Contact Us",
+    "supportFormLink": "Support form",
+    "title": "Contact us",
     "useThisForm": "Use this form to learn more about GC Forms and how it can work in your department."
   },
   "copyButton": "Copy to clipboard",
@@ -110,7 +110,7 @@
     "phone": "Enter a phone number like, 111-222-3333"
   },
   "description": "Description",
-  "descriptionDescription": "The description appears below the label, and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
+  "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
   "didYouFindThisToolHelpful": "Did you find this tool helpful? <a href=\"/en/form-builder/contactus\" target=\"_blank\">Provide feedback</a>",
   "downloadCSV": "Export as a spreadsheet",
   "dropdown": "Dropdown list",
@@ -138,7 +138,7 @@
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the internet.",
+      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the Internet.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
       "message3": "The URL of your form will change if you upload your form again."
     },
@@ -207,7 +207,7 @@
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form Title",
   "previewingIn": "Previewing in",
-  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on Privacy Practices</a>.",
+  "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.",
   "privacyStatement": "Privacy statement",
   "provideFeedback": "Provide feedback",
   "publish": "Publish",
@@ -229,7 +229,7 @@
   "remove": "Remove",
   "removeOption": "Remove option:",
   "requestSuccess": {
-    "backToForms": "Back To Forms",
+    "backToForms": "Back to forms",
     "forOtherEnquiriesLink": "Canada.ca Contact us",
     "forOtherEnquiriesPart1": "For other enquiries, go to",
     "forOtherEnquiriesPart2": "to find the department or agency that can support you.",
@@ -247,7 +247,7 @@
   "save": "Save",
   "saveAndRequest": "Save form and request publishing ability",
   "saveDraft": "Save draft",
-  "selectElement": "Select an Element type",
+  "selectElement": "Select an element type",
   "send": "Send",
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",

@@ -1,5 +1,5 @@
 {
-  "title": "My Forms",
+  "title": "My forms",
   "nav": {
     "drafts": "Drafts",
     "published": "Published",
@@ -32,7 +32,7 @@
       "edit": "Edit",
       "settings": "Settings",
       "delete": "Delete form",
-      "coppiedToClipboard": "Coppied to clipboard",
+      "coppiedToClipboard": "Copied to clipboard",
       "somethingWentWrong": "Something went wrong"
     }
   }
