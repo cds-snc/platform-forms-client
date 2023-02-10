@@ -171,7 +171,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
               }}
             />
             <div className="mt-5 flex justify-end relative">
-              <div className="absolute w-[100%] border-b-2 border-dotted border-gray-400 pt-6"></div>
+              <div className="-z-2 absolute w-[100%] border-b-2 border-dotted border-gray-400 pt-6"></div>
               <AddElementButton
                 text={t("addToSet")}
                 position={subIndex}
