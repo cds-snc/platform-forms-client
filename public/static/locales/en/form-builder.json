@@ -52,8 +52,8 @@
       "description": "Number description"
     },
     "dynamicRow": {
-      "title": "Repeating question sets",
-      "description": "Repeating question sets allows form fillers to add more than one answer to the same set of questions, they can be used to gather things like work histories or addresses where the number of answers is unknown."
+      "title": "Repeating question",
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
   "addMultiple": "Add multiple options",
@@ -334,7 +334,7 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "dyanamicRow": "Repeating question set",
+  "dyanamicRow": "Repeating question",
   "addToSet": "Add to set",
   "removeFromSet": "Remove from set",
   "untitledForm": "Unnamed form file"

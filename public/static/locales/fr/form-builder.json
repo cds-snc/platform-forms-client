@@ -52,8 +52,8 @@
       "description": "Description du numéro"
     },
     "dynamicRow": {
-      "title": "[FR] Repeating question sets",
-      "description": "[FR] Repeating question sets allows form fillers to add more than one answer to the same set of questions, they can be used to gather things like work histories or addresses where the number of answers is unknown."
+      "title": "[FR] Repeating question",
+      "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
   "addMultiple": "Ajouter plusieurs options",
