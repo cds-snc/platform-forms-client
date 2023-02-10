@@ -282,7 +282,8 @@
     "title": "Partager",
     "toPreview": "Pour prévisualiser ce formulaire :",
     "messageSent": "Le message a été envoyé",
-    "startOver": "Recommencer"
+    "startOver": "Recommencer",
+    "unpublished": "[FR] Links unavailable for unpublished forms"
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
