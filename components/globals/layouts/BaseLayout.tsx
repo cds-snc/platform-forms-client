@@ -24,7 +24,6 @@ const Base = ({ children, showLanguageToggle, showLogin }: BaseProps) => {
       <header>
         <Fip {...{ showLanguageToggle, showLogin }} />
       </header>
-
       <div id="page-container">
         <main id="content">{children}</main>
       </div>
