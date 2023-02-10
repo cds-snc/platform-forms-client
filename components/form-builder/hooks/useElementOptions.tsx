@@ -10,6 +10,7 @@ import {
   RadioIcon,
   SelectMenuIcon,
   ShortAnswerIcon,
+  AddIcon,
 } from "../icons";
 
 import {
@@ -23,11 +24,14 @@ import {
   Email,
   Date,
   Number,
+  RepeatableQuestionSet,
 } from "../app/edit/elements/element-dialog";
 
-export const useElementOptions = () => {
+import { ElementOptionsFilter, ElementOption } from "../types";
+
+export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const elementOptions = [
+  const elementOptions: ElementOption[] = [
     {
       id: "richText",
       value: t("richText"),
@@ -100,5 +104,19 @@ export const useElementOptions = () => {
     },
   ];
 
-  return elementOptions;
+  /* 
+  As this is experimental, 
+  we only want to show this option in development mode for now
+  */
+  if (process.env.NODE_ENV === "development") {
+    elementOptions.push({
+      id: "dynamicRow",
+      value: t("dyanamicRow"),
+      icon: <AddIcon />,
+      description: RepeatableQuestionSet,
+      className: "",
+    });
+  }
+
+  return filterElements ? filterElements(elementOptions) : elementOptions;
 };
