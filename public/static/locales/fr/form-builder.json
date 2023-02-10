@@ -50,6 +50,10 @@
     "number": {
       "title": "Numéro",
       "description": "Description du numéro"
+    },
+    "dynamicRow": {
+      "title": "[FR] Repeating question",
+      "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
   "addMultiple": "Ajouter plusieurs options",
@@ -330,5 +334,8 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
+  "dyanamicRow": "[FR] Repeating question set",
+  "addToSet": "[FR] Add to set",
+  "removeFromSet": "[FR] Remove from set",
   "untitledForm": "Formulaire sans titre"
 }
