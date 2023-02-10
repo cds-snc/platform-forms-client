@@ -9,5 +9,6 @@ export { PrivacyDescription } from "./PrivacyDescription";
 export { SelectedElement, useGetSelectedOption } from "./SelectedElement";
 export { PanelBody } from "./PanelBody";
 export { PanelBodyRoot } from "./PanelBodyRoot";
+export { PanelBodySub } from "./PanelBodySub";
 export { ElementDropDown } from "./ElementDropDown";
 export { ElementRequired } from "./ElementRequired";

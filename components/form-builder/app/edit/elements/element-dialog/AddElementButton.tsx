@@ -5,13 +5,18 @@ import { useFlag } from "@lib/hooks";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "../../../shared/Button";
 import { ElementDialog } from "./ElementDialog";
+import { ElementOptionsFilter } from "../../../../types";
 
 export const AddElementButton = ({
+  filterElements,
   handleAdd,
   position, // the postion where we want to insert the new element
+  text,
 }: {
+  filterElements?: ElementOptionsFilter | undefined;
   handleAdd?: (index: number, type?: FormElementTypes) => void;
   position: number;
+  text?: string;
 }) => {
   const { status: dialogEnabled } = useFlag("formBuilderAddElementDialog");
 
@@ -38,10 +43,11 @@ export const AddElementButton = ({
         className="!border-1.5 !py-2 !px-4 leading-6 text-sm"
         dataTestId="add-element"
       >
-        {t("addElement")}
+        {text ? text : t("addElement")}
       </Button>
       {elementDialog && (
         <ElementDialog
+          filterElements={filterElements}
           handleAddType={(type) => {
             handleAdd && handleAdd(position, type);
           }}

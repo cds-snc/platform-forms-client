@@ -7,6 +7,7 @@ import {
   removeElementById,
   newlineToOptions,
   isValidatedTextType,
+  incrementSubElementId,
 } from "../util";
 
 describe("Util", () => {
@@ -41,6 +42,13 @@ describe("Util", () => {
     expect(incrementElementId([{ id: 3 }])).toBe(4);
     expect(incrementElementId([{ id: 1 }, { id: 3 }, { id: 2 }])).toBe(4);
     expect(incrementElementId([{ id: 6 }, { id: 8 }, { id: 4 }])).toBe(9);
+  });
+
+  it("increments subElement id", () => {
+    expect(incrementSubElementId([], 4)).toBe(401);
+    expect(incrementSubElementId([], 5)).toBe(501);
+    expect(incrementSubElementId([{ id: 301 }], 3)).toBe(302);
+    expect(incrementSubElementId([{ id: 101 }, { id: 102 }, { id: 111 }], 1)).toBe(112);
   });
 
   it("swaps array indexes", () => {
