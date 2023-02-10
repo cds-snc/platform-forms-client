@@ -36,7 +36,7 @@ export default function Contactus() {
   const handleRequest = async (
     name: string,
     email: string,
-    request: string,
+    request: [string] | string,
     description: string
   ) => {
     const token: string = (await getCsrfToken()) || "";
@@ -61,7 +61,12 @@ export default function Contactus() {
     email: Yup.string()
       .required(t("input-validation.required", { ns: "common" }))
       .email(t("input-validation.email", { ns: "common" })),
-    request: Yup.string().required(t("input-validation.required", { ns: "common" })),
+    request:
+      supportType === "contactus"
+        ? Yup.array()
+            .min(1)
+            .of(Yup.string().required(t("input-validation.required", { ns: "common" })))
+        : Yup.string().required(t("input-validation.required", { ns: "common" })),
     description: Yup.string().required(t("input-validation.required", { ns: "common" })),
   });
 
@@ -115,7 +120,7 @@ export default function Contactus() {
           </legend>
           <MultipleChoiceGroup
             name="request"
-            type="radio"
+            type="checkbox"
             choicesProps={[
               {
                 id: "request-question",
