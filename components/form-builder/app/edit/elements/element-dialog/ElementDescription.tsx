@@ -6,22 +6,23 @@ import { Button } from "../../../shared";
 
 export const ElementDescription = ({
   id,
+  title,
+  children,
   handleAdd,
 }: {
   id: FormElementTypes;
+  title: string;
+  children: React.ReactNode;
   handleAdd?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   return (
-    <div className="ml-10 border-l-1 border-black grid grid-rows-w">
-      <div className="h-full flex content-center items-center justify-center">
-        <div data-testid="element-description-content">
-          <h3>{t(`addElementDialog.${id}.title`)}</h3>
-          <p>{t(`addElementDialog.${id}.description`)}</p>
-        </div>
+    <div role="region" aria-label={title} id={id} className="h-full relative">
+      <div className="h-full flex select-none pointer-events-none">
+        <div data-testid="element-description-content">{children}</div>
       </div>
       {handleAdd && (
-        <div className="self-end justify-self-end">
+        <div className="absolute right-0 bottom-0">
           <Button
             dataTestId="element-description-add-element"
             onClick={handleAdd}

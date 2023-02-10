@@ -1,11 +1,12 @@
 {
   "title": "Administration de formulaires",
-  "sub-title": "Acceder avec votre compte CDS-SNC de Google",
-  "logged-in": "Acceder comme",
+  "sub-title": "Accéder avec votre compte CDS-SNC de Google",
+  "logged-in": "Accéder comme",
   "button": {
-    "login": "Acceder",
+    "login": "Accéder",
     "logout": "Disconnexion"
   },
+  "formResponses": "Réponses stockées des formulaires",
   "unauthorized": {
     "title": "Privilèges administratifs requis",
     "detail": "La page à laquelle vous essayez d'accéder nécessite des privilèges d'administrateur d'application"

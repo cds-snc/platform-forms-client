@@ -35,31 +35,31 @@
       "description": "Wait a specific amount of time before being allowed to submit the form"
     },
     "accountRegistration": {
-      "title": "Account Registration",
+      "title": "Account registration",
       "description": "Allow users to register for an account"
     },
     "passwordReset": {
-      "title": "Allow Password Resets",
+      "title": "Allow password resets",
       "description": "Allow users to reset their passwords"
     },
     "supportForms": {
-      "title": "Support Forms",
+      "title": "Support forms",
       "description": "Whether or not support forms are enabled"
     },
     "formBuilderDebug": {
-      "title": "Form Builder Debug",
+      "title": "Form builder debug",
       "description": "Enable the form builder debug mode"
     },
     "formBuilderAddElementDialog": {
-      "title": "Form Builder Add Element Dialog",
+      "title": "Form builder add element dialog",
       "description": "Enable dialog when adding elements to the form builder"
     },
     "shareMenu": {
-      "title": "Form Builder Share Menu",
+      "title": "Form builder share menu",
       "description": "Enable share menu dropdown"
     },
     "editableFilename": {
-      "title": "Form Builder Editable Filename",
+      "title": "Form builder editable filename",
       "description": "Updates header to include editable filename"
     }
   }

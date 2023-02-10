@@ -1,64 +1,33 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
 
-import {
-  ChevronDown,
-  ChevronRight,
-  ShareIcon,
-  LinkIcon,
-  ShareExternalLinkIcon,
-  CopyIcon,
-} from "../../icons";
+import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 
 import { useTemplateStore } from "../../store/useTemplateStore";
-
-interface LinkItem {
-  name: string;
-  url: string;
-}
-
-const getHost = () => {
-  if (typeof window === "undefined") return "";
-  return `${window.location.protocol}//${window.location.host}`;
-};
+import { ShareModal } from "../ShareModal";
+import { LinksSubMenu } from "./LinksSubMenu";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");
 
-  const { getSchema, id: formId } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
+  const [shareModal, showShareModal] = useState(false);
+
+  const handleCloseDialog = useCallback(() => {
+    showShareModal(false);
+  }, []);
+
+  const { isPublished, id: formId } = useTemplateStore((s) => ({
     id: s.id,
+    isPublished: s.isPublished,
   }));
-
-  const linkEn = `${getHost()}/en/id/${formId}`;
-  const linkFr = `${getHost()}/fr/id/${formId}`;
-
-  const handleCopyToClipboard = async () => {
-    if ("clipboard" in navigator) {
-      const stringified = getSchema();
-      await navigator.clipboard.writeText(stringified);
-    }
-  };
-
-  const links: LinkItem[] = [
-    {
-      name: t("share.enLink"),
-      url: linkEn,
-    },
-    {
-      name: t("share.frLink"),
-      url: linkFr,
-    },
-  ];
 
   return (
     <div className="relative inline-block text-left">
       <DropdownMenuPrimitive.Root>
         {/* main share button */}
         <DropdownMenuPrimitive.Trigger asChild>
-          <button className="flex border-black rounded border-2 py-1 px-3 -mt-10">
+          <button className="flex border-black rounded border-1 py-1 px-3 hover:text-white-default hover:bg-gray-600 focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white">
             <span className="inline-block mr-1">{t("share.title")}</span>
             <ChevronDown className="mt-[2px]" />
           </button>
@@ -69,15 +38,17 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={"w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white"}
+            className={
+              "w-48 rounded-lg px-1.5 py-1 shadow-md md:w-56 bg-white border-1 border-black"
+            }
           >
             {/* share.email */}
             <DropdownMenuPrimitive.Item
               onClick={() => {
-                alert("share.email");
+                showShareModal(true);
               }}
               className={
-                "flex cursor-default items-center rounded-md px-2 py-2 text-sm outline-none focus:bg-gray-100"
+                "flex cursor-default items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
               }
             >
               <ShareIcon className="" />
@@ -89,7 +60,7 @@ export const ShareDropdown = () => {
               <DropdownMenuPrimitive.Sub>
                 <DropdownMenuPrimitive.SubTrigger
                   className={
-                    "flex w-full cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none focus:bg-gray-50 focus:bg-gray-100"
+                    "flex w-full cursor-default select-none items-center rounded-md px-2 py-2 text-sm outline-none hover:text-white-default hover:bg-gray-600 focus:text-white-default focus:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus:fill-white [&_svg]:fill-black-default"
                   }
                 >
                   <LinkIcon className="scale-125 mr-3" />
@@ -100,52 +71,14 @@ export const ShareDropdown = () => {
                 <DropdownMenuPrimitive.Portal>
                   <DropdownMenuPrimitive.SubContent
                     className={
-                      "origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white"
+                      "border-1 border-black origin-radix-dropdown-menu w-full rounded-md px-1 py-1 text-sm shadow-md bg-white ml-1"
                     }
                   >
-                    {links.map(({ name, url }, i) => (
-                      <DropdownMenuPrimitive.Item
-                        key={`${name}-${i}`}
-                        className="flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm"
-                      >
-                        <div className="flex justify-between">
-                          <div className="inline-block mr-3 w-[90px]">{name}:</div>
-                          <div className="flex">
-                            {/* copy link */}
-                            <DropdownMenuPrimitive.Item asChild>
-                              <button
-                                className="inline-block mr-2 flex"
-                                onClick={() => {
-                                  handleCopyToClipboard();
-                                }}
-                              >
-                                <CopyIcon className="scale-[80%]" />
-                                <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 text-sm underline underline-offset-4 text-blue">
-                                  {t("share.copy")}
-                                </span>
-                              </button>
-                            </DropdownMenuPrimitive.Item>
-                            {/* end copy link */}
-
-                            {/* open link */}
-                            <DropdownMenuPrimitive.Item asChild>
-                              <Link href={url}>
-                                <a
-                                  href={url}
-                                  className="inline-block mr-1 flex text-sm no-underline"
-                                >
-                                  <ShareExternalLinkIcon className="scale-[70%]" />
-                                  <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 underline underline-offset-4 text-blue">
-                                    {t("share.open")}
-                                  </span>
-                                </a>
-                              </Link>
-                            </DropdownMenuPrimitive.Item>
-                            {/* end open link */}
-                          </div>
-                        </div>
-                      </DropdownMenuPrimitive.Item>
-                    ))}
+                    {isPublished ? (
+                      <LinksSubMenu />
+                    ) : (
+                      <div className="px-2 py-2 select-none">{t("share.unpublished")}</div>
+                    )}
                   </DropdownMenuPrimitive.SubContent>
                 </DropdownMenuPrimitive.Portal>
               </DropdownMenuPrimitive.Sub>
@@ -154,6 +87,7 @@ export const ShareDropdown = () => {
           </DropdownMenuPrimitive.Content>
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
+      {shareModal && <ShareModal handleClose={handleCloseDialog} />}
     </div>
   );
 };

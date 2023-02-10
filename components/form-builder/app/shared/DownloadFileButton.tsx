@@ -15,11 +15,11 @@ const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const getDate = () => {
+const getDate = (withTime = false) => {
   let date = new Date();
   const offset = date.getTimezoneOffset();
   date = new Date(date.getTime() - offset * 60 * 1000);
-  return date.toISOString().split("T")[0];
+  return withTime ? date.toISOString() : date.toISOString().split("T")[0];
 };
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
@@ -107,6 +107,17 @@ export const DownloadFileButton = ({
     showDownloadDialog(false);
   }, []);
 
+  const downloadFileEvent = () => {
+    const formTitle = slugify(form.titleEn);
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "form_download",
+      formTitle,
+      submitTime: getDate(true),
+    });
+  };
+
   return (
     <div>
       <Button
@@ -114,6 +125,7 @@ export const DownloadFileButton = ({
         theme="secondary"
         onClick={() => {
           downloadfile();
+          downloadFileEvent();
           onClick && onClick();
         }}
       >

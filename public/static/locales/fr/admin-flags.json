@@ -47,20 +47,20 @@
       "description": "Activation ou désactivation des formulaires de support"
     },
     "formBuilderDebug": {
-      "title": "Form Builder Debug",
-      "description": "Enable the form builder debug mode"
+      "title": "Débogage du générateur de formulaires",
+      "description": "Activer le mode de débogage du générateur de formulaires"
     },
     "formBuilderAddElementDialog": {
-      "title": "[FR] Form Builder Add Element Dialog",
-      "description": "[FR] Enable dialog when adding elements to the form builder"
+      "title": "Dialogue de l'ajout d'élément du générateur de formulaires",
+      "description": "Activer le dialogue lors de l'ajout d'éléments au générateur de formulaires"
     },
     "shareMenu": {
-      "title": "[FR] Share Menu",
-      "description": "[FR] Enable share menu dropdown"
+      "title": "Menu de partage du générateur de formulaires",
+      "description": "Activer le menu déroulant de partage"
     },
     "editableFilename": {
-      "title": "[FR] Form Builder Editable Filename",
-      "description": "[FR] Updates header to include editable filename"
+      "title": "Nom de fichier modifiable du générateur de formulaires",
+      "description": "Modifie l'en-tête pour inclure le nom de fichier modifiable"
     }
   }
 }

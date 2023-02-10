@@ -1,11 +1,11 @@
 {
   "unlockPublishing": {
     "title": "Déverrouiller la publication de formulaires",
-    "paragraph1": "Avant de publier votre premier formulaire, fournissez les coordonnées de votre gestionnaire ou de la personne a qui vous relevez. Les formulaires GC n'afficheront pas leurs coordonnées publiquement.",
+    "paragraph1": "Avant de publier votre premier formulaire, fournissez les coordonnées de votre gestionnaire ou de la personne a qui vous relevez. Les Formulaires GC n'afficheront pas leurs coordonnées publiquement.",
     "form": {
       "field1": {
         "title": "Fournissez l’adresse courriel de votre gestionnaire ou de votre supérieur·e direct·e (obligatoire)",
-        "description": "Nous les informerons de votre capacité de publication dans les formulaires GC et de notre accord de niveau de service."
+        "description": "Nous les informerons de votre capacité de publication dans les Formulaires GC et de notre accord de niveau de service."
       },
       "field2": {
         "title": "Dans quel ministère ou organisme travaillez-vous? (obligatoire)"
