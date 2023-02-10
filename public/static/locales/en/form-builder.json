@@ -86,11 +86,11 @@
     "name": "Your name",
     "needSupport": "Need support?",
     "request": {
-      "option1": "Ask a question about the product and how it can work in your department",
-      "option2": "Give feedback",
-      "option3": "Set up a demo to learn more about GC Forms",
+      "option1": "Request a product demo",
+      "option2": "Join our mailing list",
+      "option3": "Give feedback",
       "option4": "Other",
-      "title": "How can we help?"
+      "title": "Reason for reaching out"
     },
     "supportFormLink": "Support form",
     "title": "Contact us",
@@ -329,5 +329,5 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "untitledForm": "Untitled form"
+  "untitledForm": "Unnamed form file"
 }
