@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useFocusWithin } from "react-aria";
 
 import { useTemplateStore } from "../../../store";
 import { PanelBodySub } from "../PanelBodySub";
@@ -10,14 +9,10 @@ import { AddElementButton } from "../elements/element-dialog/AddElementButton";
 import { Button } from "../../shared/Button";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../types";
 import { DynamicRowModal } from "./DynamicRowModal";
+import { PanelHightLight } from "./PanelHightlight";
 
 export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
   const { t } = useTranslation("form-builder");
-  const [isFocusWithin, setFocusWithin] = React.useState(false);
-
-  const { focusWithinProps } = useFocusWithin({
-    onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
-  });
 
   const {
     addSubItem,
@@ -159,11 +154,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     );
 
   return (
-    <div
-      {...focusWithinProps}
-      className="px-5 py-1"
-      style={isFocusWithin ? { backgroundColor: "#f4f1f8" } : {}}
-    >
+    <PanelHightLight>
       <div {...props} className="mt-3 mb-3">
         {subElements.map((element, subIndex: number) => {
           const item = { ...element, index: subIndex };
@@ -213,6 +204,6 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
           );
         })}
       </div>
-    </div>
+    </PanelHightLight>
   );
 };
