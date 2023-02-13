@@ -34,7 +34,7 @@ export const PanelBody = ({
   };
 
   return (
-    <div className={isRichText ? "mt-7" : "mx-7 my-7"}>
+    <div className={isRichText ? "mt-7" : "mx-7 py-7"}>
       <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base !text-sm">
         <div
           style={isRichText || isDynamicRow ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}

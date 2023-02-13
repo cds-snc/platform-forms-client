@@ -129,131 +129,135 @@ export const PanelActions = ({
   );
 
   const buttonClasses =
-    "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
+    "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 xl:focus:!bg-blue-hover disabled:!bg-transparent";
   const iconClasses =
     "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
   return (
-    <div className="relative">
-      <div
-        className={`bg-gray-200 px-6 lg:px-0 py-4 lg:py-0 flex flex-wrap sm:flex-col ${lang}`}
-        role="toolbar"
-        aria-label={t("elementActions")}
-        onKeyDown={handleNav}
-        data-testid="panel-actions"
-      >
-        <Button
-          theme="secondary"
-          className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<ChevronUp className={`${iconClasses}`} />}
-          disabled={isFirstItem}
-          onClick={() => moveUp(item.index)}
-          tabIndex={getTabIndex("moveUp")}
-          buttonRef={(el: HTMLButtonElement) => {
-            const index = "button-0" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="move-up"
+    <div className="">
+      <div className="absolute invisible group-hover:visible xl:visible xl:relative right-0 top-0 -mr-[185px] xl:mr-0">
+        <div
+          className={`bg-violet-100 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`}
+          role="toolbar"
+          aria-label={t("elementActions")}
+          onKeyDown={handleNav}
+          data-testid="panel-actions"
         >
-          <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
-        </Button>
-        <Button
-          theme="secondary"
-          className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<ChevronDown className={`${iconClasses}`} />}
-          disabled={isLastItem}
-          onClick={() => moveDown(item.index)}
-          tabIndex={getTabIndex("moveDown")}
-          buttonRef={(el) => {
-            const index = "button-1" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="move-down"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
-        </Button>
-
-        <Button
-          theme="secondary"
-          className={`${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<Duplicate className={`${iconClasses}`} />}
-          onClick={() => {
-            setFocusInput(true);
-            duplicateElement(item.index);
-          }}
-          tabIndex={getTabIndex("duplicate")}
-          buttonRef={(el) => {
-            const index = "button-2" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="duplicate"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
-        </Button>
-
-        <Button
-          theme="secondary"
-          className={`${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<Close className={`${iconClasses}`} />}
-          onClick={() => {
-            // if index is 0, then highlight the form title
-            const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
-
-            remove(item.id);
-            document.getElementById(labelId)?.focus();
-          }}
-          tabIndex={getTabIndex("remove")}
-          buttonRef={(el) => {
-            const index = "button-3" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="remove"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
-        </Button>
-
-        {!isRichText && (
-          <Modal
-            title={t("moreOptions")}
-            openButton={
-              <Button
-                theme="secondary"
-                className={`${buttonClasses}`}
-                iconWrapperClassName="!w-7 !mr-0"
-                icon={<ThreeDotsIcon className={`${iconClasses}`} />}
-                onClick={() => null}
-                tabIndex={getTabIndex("more")}
-                buttonRef={(el) => {
-                  const index = "button-4" as unknown as number;
-                  if (el && itemsRef.current) {
-                    itemsRef.current[index] = el;
-                  }
-                }}
-                dataTestId="more"
-              >
-                <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
-              </Button>
-            }
-            saveButton={renderSaveButton()}
+          <Button
+            theme="secondary"
+            className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
+            iconWrapperClassName="!w-7 !mr-0"
+            icon={<ChevronUp className={`${iconClasses}`} />}
+            disabled={isFirstItem}
+            onClick={() => moveUp(item.index)}
+            tabIndex={getTabIndex("moveUp")}
+            buttonRef={(el: HTMLButtonElement) => {
+              const index = "button-0" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
+            dataTestId="move-up"
           >
-            {children}
-          </Modal>
-        )}
+            <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
+          </Button>
+          <Button
+            theme="secondary"
+            className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
+            iconWrapperClassName="!w-7 !mr-0"
+            icon={<ChevronDown className={`${iconClasses}`} />}
+            disabled={isLastItem}
+            onClick={() => moveDown(item.index)}
+            tabIndex={getTabIndex("moveDown")}
+            buttonRef={(el) => {
+              const index = "button-1" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
+            dataTestId="move-down"
+          >
+            <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
+          </Button>
+
+          <Button
+            theme="secondary"
+            className={`${buttonClasses}`}
+            iconWrapperClassName="!w-7 !mr-0"
+            icon={<Duplicate className={`${iconClasses}`} />}
+            onClick={() => {
+              setFocusInput(true);
+              duplicateElement(item.index);
+            }}
+            tabIndex={getTabIndex("duplicate")}
+            buttonRef={(el) => {
+              const index = "button-2" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
+            dataTestId="duplicate"
+          >
+            <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
+          </Button>
+
+          <Button
+            theme="secondary"
+            className={`${buttonClasses}`}
+            iconWrapperClassName="!w-7 !mr-0"
+            icon={<Close className={`${iconClasses}`} />}
+            onClick={() => {
+              // if index is 0, then highlight the form title
+              const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+
+              remove(item.id);
+              document.getElementById(labelId)?.focus();
+            }}
+            tabIndex={getTabIndex("remove")}
+            buttonRef={(el) => {
+              const index = "button-3" as unknown as number;
+              if (el && itemsRef.current) {
+                itemsRef.current[index] = el;
+              }
+            }}
+            dataTestId="remove"
+          >
+            <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
+          </Button>
+
+          {!isRichText && (
+            <Modal
+              title={t("moreOptions")}
+              openButton={
+                <Button
+                  theme="secondary"
+                  className={`${buttonClasses}`}
+                  iconWrapperClassName="!w-7 !mr-0"
+                  icon={<ThreeDotsIcon className={`${iconClasses}`} />}
+                  onClick={() => null}
+                  tabIndex={getTabIndex("more")}
+                  buttonRef={(el) => {
+                    const index = "button-4" as unknown as number;
+                    if (el && itemsRef.current) {
+                      itemsRef.current[index] = el;
+                    }
+                  }}
+                  dataTestId="more"
+                >
+                  <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
+                </Button>
+              }
+              saveButton={renderSaveButton()}
+            >
+              {children}
+            </Modal>
+          )}
+        </div>
       </div>
-      <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <AddElementButton position={item.index} handleAdd={handleAddElement} />
+      <div className="flex">
+        <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
+          <AddElementButton position={item.index} handleAdd={handleAddElement} />
+        </div>
       </div>
     </div>
   );
