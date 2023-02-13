@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
@@ -7,6 +7,8 @@ import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { Modal } from "./Modal";
 import { FormElementWithIndex } from "@components/form-builder/types";
 import { useTemplateStore } from "@components/form-builder/store";
+import { usePanelActions } from "@components/form-builder/hooks/usePanelActions";
+
 import {
   ChevronDown,
   ChevronUp,
@@ -48,21 +50,21 @@ export const PanelActions = ({
     elements: s.form.elements,
     setFocusInput: s.setFocusInput,
   }));
-  const isLastItem = item.index === elements.length - 1;
-  const isFirstItem = item.index === 0;
-  const isRichText = item.type == "richText";
 
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
+  const {
+    buttonClasses,
+    iconClasses,
+    setRef,
+    currentFocusIndex,
+    isFirstItem,
+    isLastItem,
+    isRichText,
+    itemsRef,
+    getTabIndex,
+    handleNav,
+  } = usePanelActions(item, elements);
+
   const isInit = useRef(false);
-
-  const itemsRef = useRef<[HTMLButtonElement] | []>([]);
-  const [items] = useState([
-    { id: 1, txt: "moveUp" },
-    { id: 2, txt: "moveDown" },
-    { id: 3, txt: "duplicate" },
-    { id: 4, txt: "remove" },
-    { id: 5, txt: "more" },
-  ]);
 
   useEffect(() => {
     if (!isInit.current) {
@@ -74,46 +76,7 @@ export const PanelActions = ({
     if (el) {
       el.focus();
     }
-  }, [currentFocusIndex, isInit]);
-
-  const handleNav = useCallback(
-    (evt: KeyboardEvent<HTMLInputElement>) => {
-      const { key } = evt;
-      let step = 1;
-
-      if (key === "ArrowLeft") {
-        evt.preventDefault();
-        if (isFirstItem && currentFocusIndex === 1) {
-          return;
-        }
-        if (isLastItem && currentFocusIndex === 2) {
-          step = 2;
-        }
-        setCurrentFocusIndex((index) => Math.max(0, index - step));
-      }
-
-      if (key === "ArrowRight") {
-        evt.preventDefault();
-        if (isLastItem && currentFocusIndex === 0) {
-          step = 2;
-        }
-        setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
-      }
-    },
-    [items, setCurrentFocusIndex, currentFocusIndex, isFirstItem, isLastItem]
-  );
-
-  const getTabIndex = (item: string) => {
-    if (elements.length === 1 && item === "duplicate") return 0;
-
-    if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
-
-    if (currentFocusIndex === 0) {
-      if (isFirstItem && item === "moveDown") return 0;
-    }
-
-    return -1;
-  };
+  }, [currentFocusIndex, isInit, itemsRef]);
 
   /* Note this callback is also in PanelActions */
   const handleAddElement = useCallback(
@@ -127,11 +90,6 @@ export const PanelActions = ({
     },
     [add, setFocusInput, updateField]
   );
-
-  const buttonClasses =
-    "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
-  const iconClasses =
-    "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
   return (
     <div className="relative">
@@ -150,12 +108,7 @@ export const PanelActions = ({
           disabled={isFirstItem}
           onClick={() => moveUp(item.index)}
           tabIndex={getTabIndex("moveUp")}
-          buttonRef={(el: HTMLButtonElement) => {
-            const index = "button-0" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
+          buttonRef={setRef("button-0")}
           dataTestId="move-up"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
@@ -168,12 +121,7 @@ export const PanelActions = ({
           disabled={isLastItem}
           onClick={() => moveDown(item.index)}
           tabIndex={getTabIndex("moveDown")}
-          buttonRef={(el) => {
-            const index = "button-1" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
+          buttonRef={setRef("button-1")}
           dataTestId="move-down"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
@@ -189,12 +137,7 @@ export const PanelActions = ({
             duplicateElement(item.index);
           }}
           tabIndex={getTabIndex("duplicate")}
-          buttonRef={(el) => {
-            const index = "button-2" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
+          buttonRef={setRef("button-2")}
           dataTestId="duplicate"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
@@ -213,12 +156,7 @@ export const PanelActions = ({
             document.getElementById(labelId)?.focus();
           }}
           tabIndex={getTabIndex("remove")}
-          buttonRef={(el) => {
-            const index = "button-3" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
+          buttonRef={setRef("button-3")}
           dataTestId="remove"
         >
           <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
@@ -235,12 +173,7 @@ export const PanelActions = ({
                 icon={<ThreeDotsIcon className={`${iconClasses}`} />}
                 onClick={() => null}
                 tabIndex={getTabIndex("more")}
-                buttonRef={(el) => {
-                  const index = "button-4" as unknown as number;
-                  if (el && itemsRef.current) {
-                    itemsRef.current[index] = el;
-                  }
-                }}
+                buttonRef={setRef("button-4")}
                 dataTestId="more"
               >
                 <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
