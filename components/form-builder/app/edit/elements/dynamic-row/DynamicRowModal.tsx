@@ -2,11 +2,11 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 
 import { ElementProperties } from "@lib/types";
-import { ModalForm, ModalButton } from "../index";
-import { FormElementWithIndex } from "../../../types";
-import { useModalStore, useTemplateStore } from "../../../store";
-import { Button } from "../../shared";
-import { Modal } from "../Modal";
+import { ModalForm, ModalButton } from "../../index";
+import { FormElementWithIndex } from "../../../../types";
+import { useModalStore, useTemplateStore } from "../../../../store";
+import { Button } from "../../../shared";
+import { Modal } from "../../Modal";
 
 import { ThreeDotsIcon } from "@components/form-builder/icons";
 
