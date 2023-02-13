@@ -279,6 +279,7 @@
     "stepThreeDetails": "Select open a form file.",
     "stepTwo": "Step 2:",
     "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
+    "stepTwoDetailsNoHTML": "Go to GC Forms (https://forms-formulaires.alpha.canada.ca/). No account needed.",
     "title": "Share",
     "toPreview": "To preview this form:",
     "messageSent": "The message has been sent",
