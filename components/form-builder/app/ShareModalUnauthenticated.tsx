@@ -5,7 +5,6 @@ import { FormElementTypes } from "@lib/types";
 import { useDialogRef, Dialog, Button } from "./shared";
 import { useTemplateStore } from "../store";
 import { AddIcon, RemoveIcon } from "../icons";
-import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModalUnauthenticated = ({
@@ -84,7 +83,7 @@ export const ShareModalUnauthenticated = ({
 
           <section className="my-8">
             <h3>{t("share.unauthenticated.step1")}</h3>
-            <p>{t("share.unauthenticated.step1details")}</p>
+            <p>{t("share.unauthenticated.step1Details")}</p>
             <Button
               theme="secondary"
               className="mt-4"
@@ -98,7 +97,7 @@ export const ShareModalUnauthenticated = ({
 
           <section className="my-8">
             <h3>{t("share.unauthenticated.step2")}</h3>
-            <p>{t("share.unauthenticated.step2details")}</p>
+            <p>{t("share.unauthenticated.step2Details")}</p>
             <Button
               theme="secondary"
               className="mt-4"
