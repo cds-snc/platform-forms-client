@@ -1,6 +1,9 @@
 {
   "addElement": "Ajouter un élément",
   "addElementDialog": {
+    "layoutBlocks": "[FR] Layout blocks",
+    "inputBlocks": "[FR] Input blocks",
+    "advancedBlocks": "[FR] Advanced blocks",
     "addButton": "Sélectionner un élément",
     "questionElement": "Élément de question",
     "listItem": "Élément de liste ",
