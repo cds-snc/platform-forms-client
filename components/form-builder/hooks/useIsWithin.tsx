@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFocusWithin } from "react-aria";
 
 import { useHover } from "@formbuilder/hooks/useHover";
 
-export const PanelHightLight = ({ children }: { children: JSX.Element }) => {
+export const useIsWithin = () => {
   const [isFocusWithin, setFocusWithin] = useState(false);
 
   const [ref, isHovered] = useHover();
@@ -12,11 +12,7 @@ export const PanelHightLight = ({ children }: { children: JSX.Element }) => {
     onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
   });
 
-  const hightLight = isFocusWithin || isHovered ? "bg-purple-100" : "";
+  const isWithin = isFocusWithin || isHovered ? true : false;
 
-  return (
-    <div {...focusWithinProps} className={`px-5 py-1 ${hightLight} `} ref={ref}>
-      {children}
-    </div>
-  );
+  return { ref, focusWithinProps, isWithin };
 };
