@@ -36,7 +36,7 @@ export const ShareModalUnauthenticated = ({
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "form.json"; // slugify(`${form.titleEn}-${getDate()}`);
+        a.download = "form.json";
         a.click();
         URL.revokeObjectURL(url);
       } catch (e) {
