@@ -74,19 +74,17 @@ export const ShareModalUnauthenticated = ({
         <div className="my-8">
           <section>
             <p>
-              You cannot share a form directly from GC Forms without an account. Sign in or Sign up
-              today to get access to this feature and more.
+              <Markdown options={{ forceBlock: true }}>
+                {t("share.unauthenticated.description")}
+              </Markdown>
             </p>
 
-            <p>
-              You can download a copy of this form file to your computer and share it through your
-              email.
-            </p>
+            <p className="mt-8">{t("share.unauthenticated.instructions")}</p>
           </section>
 
-          <section className="my-8 mx-4">
-            <h3>Step 1</h3>
-            <p>Download a copy of your form as a JSON form file to your computer</p>
+          <section className="my-8">
+            <h3>{t("share.unauthenticated.step1")}</h3>
+            <p>{t("share.unauthenticated.step1details")}</p>
             <Button
               theme="secondary"
               className="mt-4"
@@ -94,13 +92,13 @@ export const ShareModalUnauthenticated = ({
                 handleDownloadJson();
               }}
             >
-              Download form file
+              {t("share.unauthenticated.downloadFormFile")}
             </Button>
           </section>
 
-          <section className="my-8 mx-4">
-            <h3>Step 2</h3>
-            <p>Copy and paste the email instructions into an email and attach the form file</p>
+          <section className="my-8">
+            <h3>{t("share.unauthenticated.step2")}</h3>
+            <p>{t("share.unauthenticated.step2details")}</p>
             <Button
               theme="secondary"
               className="mt-4"
@@ -108,7 +106,7 @@ export const ShareModalUnauthenticated = ({
                 handleCopyToClipboard();
               }}
             >
-              Copy instructions
+              {t("share.unauthenticated.copyInstructions")}
             </Button>
           </section>
 
