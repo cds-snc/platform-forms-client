@@ -5,11 +5,13 @@ import { LeftNavLink } from "./LeftNavLink";
 import { SaveButton } from "../shared/SaveButton";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useSession } from "next-auth/react";
+import { useFlag } from "@lib/hooks";
 
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
   const { status } = useSession();
+  const { status: vault } = useFlag("vault");
 
   const iconClassname =
     "inline-block w-6 h-6 xl:block xl:mx-auto group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
@@ -41,12 +43,14 @@ export const LeftNavigation = () => {
         </LeftNavLink>
       )}
 
-      <LeftNavLink href={`/form-builder/responses/${id}`}>
-        <>
-          <GearIcon className={iconClassname} />
-          {t("responses.navLabel")}
-        </>
-      </LeftNavLink>
+      {vault && (
+        <LeftNavLink href={`/form-builder/responses/${id}`}>
+          <>
+            <GearIcon className={iconClassname} />
+            {t("responses.navLabel")}
+          </>
+        </LeftNavLink>
+      )}
 
       <LeftNavLink href={`/form-builder/settings/${id}`}>
         <>

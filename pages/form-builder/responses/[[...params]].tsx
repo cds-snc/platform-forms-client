@@ -7,13 +7,15 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
+import { Button, useDialogRef, Dialog, TagInput } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
 import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
+import { checkOne } from "@lib/cache/flags";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -21,8 +23,14 @@ interface ResponsesProps {
 
 const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: ResponsesProps) => {
   const { t } = useTranslation("form-builder");
-
   const { status } = useSession();
+
+  //TODO
+  // const [codes, setCodes] = useState<string[]>([]);
+  // const validateCodes = (code:string) => {
+  //   return true;
+  // }
+
   const secondaryButtonClass =
     "whitespace-nowrap relative py-0 px-2 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500  bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500";
 
@@ -32,9 +40,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     setIsShowConfirmReceiptDialog(false);
     dialogConfirmReceipt.current?.close();
   };
-  const buttonActionsConfirmReceipt = (
-    <Button onClick={dialogConfirmReceiptHandleClose}>{t("responses.confirmReceipt")}</Button>
-  );
 
   const dialogReportProblems = useDialogRef();
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
@@ -46,8 +51,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
   );
 
+  // const handleConfirmReceiptSubmit = () => {
+  //TODO
+  // }
+
   return (
     <>
+      <Head>
+        <title>{t("responses.title")}</title>
+      </Head>
       <PageTemplate title={t("responses.title")}>
         <div className="flex justify-between items-baseline">
           <h1 className="text-2xl border-none font-normal">{t("responses.title")}</h1>
@@ -132,10 +144,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
         <Dialog
           title="Confirm receipt of responses"
           dialogRef={dialogConfirmReceipt}
-          actions={buttonActionsConfirmReceipt}
           handleClose={dialogConfirmReceiptHandleClose}
         >
-          <h2>TODO Confirm Receipt</h2>
+          <>
+            <p>TODO</p>
+          </>
         </Dialog>
       )}
 
@@ -164,6 +177,16 @@ export const getServerSideProps: GetServerSideProps = async ({
   res,
 }) => {
   const [formID = null] = params || [];
+  const vault = await checkOne("vault");
+
+  if (!vault) {
+    return {
+      redirect: {
+        destination: `/${locale}/404`,
+        permanent: false,
+      },
+    };
+  }
 
   const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
     initialForm: null,
