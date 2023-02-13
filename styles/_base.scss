@@ -117,27 +117,39 @@ body {
   line-height: 1.65;
 }
 
+// gc-h# 
+// Allow styling an h1 like an h2 or h3 or an h3 like an etc. similar to how bootstrap does it
+// e.g. Make this h2 look like an h1 `<h2 className="gc-h1">...`
+
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.gc-h1,
+.gc-h2,
+.gc-h3 {
   font-family: "Lato", sans-serif;
   line-height: 1.33;
   font-weight: 600;
 }
 
-h1 {
+h1, .gc-h1 {
   @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
 }
 
-h2 {
+h2, .gc-h2  {
   @apply md:text-small_h2 font-bold text-h2 pb-6;
 }
 
-h3 {
+h3, .gc-h3 {
   @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
+}
+
+.gc-h2 {
+  margin-bottom: 0;
+  border: 0;
 }
 
 .outer-container {
