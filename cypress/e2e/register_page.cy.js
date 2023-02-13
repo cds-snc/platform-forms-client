@@ -6,7 +6,7 @@ describe("Register Page", () => {
   // TODO test French translation when signup form more final
 
   it("En page renders", () => {
-    cy.get("h1").should("contain", "Sign Up to GC Forms");
+    cy.get("h1").should("contain", "Sign up to GC Forms");
   });
 
   describe("Name validation errors when submitting a form.", () => {

@@ -30,10 +30,33 @@
       "copyLink": "Copier le lien",
       "preview": "Prévisualiser",
       "edit": "Modifier",
-      "settings": "Réglages",
+      "settings": "Paramètres",
       "delete": "Supprimer le formulaire",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
     }
+  },
+  "responseTemplate": {
+    "responseNumber": "Response Number [fr]",
+    "submissionDate": "Submission Date [fr]",
+    "errorNoQuestionsAnswers": "Error no questions and answers were found. [fr]",
+    "jumpTo": "Jump To: [fr]",
+    "columnTable": "Column table [fr]",
+    "rowTable": "Row table [fr]",
+    "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet. [fr]",
+    "confirmReceiptResponse": "Confirm receipt of response [fr]",
+    "confirmReceipt": "Confirm receipt [fr]",
+    "confirmReceiptInfo": "Copy the code below and paste it into the Confirm Receipt of Responses page in the website. [fr]",
+    "copyCode": "Copy code [fr]",
+    "copyCodeClipboard": "Copy code to clipboard [fr]",
+    "copiedToCipboard": "Copied to clipboard [fr]",
+    "errorrCopyingToClipboard": "Error copying to clipboard [fr]",
+    "submissionID": "[FR] Submission ID",
+    "copyResponse": "Copy answer row to clipboard [fr]"
+  },
+  "protectedBWarning": {
+    "officialRecord": "[Fr] This is an official record [/Fr]",
+    "retainCopy": "[Fr] Retain this copy in accordance to your retention policy. [/Fr]",
+    "protectedB": "PROTÉGÉ B"
   }
 }

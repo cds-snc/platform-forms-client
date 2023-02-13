@@ -4,7 +4,7 @@ import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { LocalizedElementProperties } from "../../../types";
 import { useTranslation } from "next-i18next";
 
-export const RichText = ({ parentIndex }: { parentIndex: number }) => {
+export const RichText = ({ elIndex, subIndex = -1 }: { elIndex: number; subIndex?: number }) => {
   const { t } = useTranslation("form-builder");
   const { translationLanguagePriority, localizeField, form } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -18,9 +18,14 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
     translationLanguagePriority
   );
 
-  const path = `form.elements[${parentIndex}].properties[${localizedField}]`;
+  let path = `form.elements[${elIndex}].properties[${localizedField}]`;
+  let content = form.elements[elIndex].properties[localizedField];
 
-  const content = form.elements[parentIndex].properties[localizedField];
+  if (subIndex !== -1) {
+    path = `form.elements[${elIndex}].properties.subElements[${subIndex}].properties[${localizedField}]`;
+    content =
+      form.elements[elIndex].properties.subElements?.[subIndex].properties[localizedField] || "";
+  }
 
   return (
     <div
@@ -33,7 +38,7 @@ export const RichText = ({ parentIndex }: { parentIndex: number }) => {
         content={content || ""}
         lang={translationLanguagePriority}
         autoFocusEditor={false}
-        ariaLabel={t("pageText") + " " + (parentIndex + 1).toString()}
+        ariaLabel={t("pageText") + " " + (elIndex + 1).toString()}
       />
     </div>
   );

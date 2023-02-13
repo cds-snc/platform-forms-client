@@ -18,11 +18,11 @@
     }
   },
   "signUpRegistration": {
-    "title": "Sign Up to GC Forms",
+    "title": "Sign up to GC Forms",
     "alreadyHaveAnAccount": "If you already have an account,",
     "alreadyHaveAnAccountLink": "sign in instead.",
     "slaAgreement": "By creating an account you agree to the",
-    "slaAgreementLink": "Service Level Agreement.",
+    "slaAgreementLink": "Service-level agreement.",
     "signUpButton": "Continue",
     "fields": {
       "username": {
@@ -34,7 +34,7 @@
       },
       "password": {
         "label": "Password",
-        "hint": "Must be at least 8 characters with a capital, number and symbol",
+        "hint": "Must be at least 8 characters with a capital, number, and symbol",
         "error": {
           "minLength": "The minimum length of the value must be 8 characters.",
           "maxLength": "The field must be no longer than 50 characters.",
@@ -70,7 +70,7 @@
     },
     "notIncluded": {
       "title": "What's not included",
-      "paragraph1": "You cannot publish forms to the internet yet."
+      "paragraph1": "You cannot publish forms to the Internet yet."
     },
     "unlockPublishing": {
       "title": "Unlock form publishing",

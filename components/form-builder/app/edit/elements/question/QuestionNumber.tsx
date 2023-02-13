@@ -6,9 +6,11 @@ import { FormProperties } from "@lib/types";
 export const QuestionNumber = ({
   elements,
   item,
+  elIndex,
 }: {
   item: FormElementWithIndex;
   elements: FormProperties["elements"];
+  elIndex?: number;
 }) => {
   const itemIndex = item.index;
   const isRichText = item.type === "richText";
@@ -17,6 +19,8 @@ export const QuestionNumber = ({
   const questionNumber =
     elements.filter(() => !isRichText).findIndex((object) => object.id === item.id) + 1;
 
+  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
   return (
     <>
       <span
@@ -24,7 +28,8 @@ export const QuestionNumber = ({
           itemIndex < 9 ? "px-1.5" : "pl-0.5 pr-1 tracking-tighter"
         }`}
       >
-        {questionNumber}
+        {elIndex === -1 && questionNumber}
+        {elIndex !== -1 && alphabet[itemIndex]}
       </span>
       <label
         className="mb-1 sr-only block font-[700] absolute w-px h-px p-0 -m-px overflow-hidden whitespace-no-wrap border-0"
