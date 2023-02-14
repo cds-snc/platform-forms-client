@@ -358,3 +358,20 @@ export const isSymbol = (field: string): boolean => {
 // Helpful to check whether a referer is local vs. an external URL
 // Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
 export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
+
+/**
+ * This function tests whether a string contains a UUID
+ * @param field A string containing a UUID
+ * @returns {boolean} The validation result
+ */
+export const isUUID = (field: string): boolean => {
+  // Regex from: https://github.com/microsoft/uuid-validate/blob/06554db1b093aa6bb429156fa8964e1cde2b750c/index.js#L2
+  const reg = new RegExp(
+    "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$",
+    "i"
+  );
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};

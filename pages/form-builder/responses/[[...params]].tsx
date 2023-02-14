@@ -7,7 +7,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
+import { Button, useDialogRef, Dialog, TagInput } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
+import { isUUID } from "@lib/validation";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -27,6 +28,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
 
+  const [codes, setCodes] = useState<string[]>([]);
+  const validateCodes = (code: string) => {
+    return isUUID(code);
+  };
+
+  const [formNumbers, setFormNumbers] = useState<string[]>([]);
+  const validateFormNumber = () => {
+    // TODO
+    return true;
+  };
+
   const secondaryButtonClass =
     "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
 
@@ -36,6 +48,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     setIsShowConfirmReceiptDialog(false);
     dialogConfirmReceipt.current?.close();
   };
+  const handleConfirmReceiptSubmit = () => {
+    //TODO
+  };
 
   const dialogReportProblems = useDialogRef();
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
@@ -43,9 +58,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     setIsShowReportProblemsDialog(false);
     dialogReportProblems.current?.close();
   };
-  const buttonActionsReportProblems = (
-    <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
-  );
+  const handleReportProblemSubmit = () => {
+    //TODO
+  };
 
   return (
     <>
@@ -161,24 +176,61 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
       {isShowConfirmReceiptDialog && (
         <Dialog
-          title="Confirm receipt of responses"
+          title={t("responses.confirmReceiptDialog.title")}
           dialogRef={dialogConfirmReceipt}
           handleClose={dialogConfirmReceiptHandleClose}
+          headerStyle="inline-block ml-12 mt-12"
         >
-          <>
-            <p>TODO</p>
-          </>
+          <div className="px-10 py-4">
+            <p className="mb-8">{t("responses.confirmReceiptDialog.findCode")}</p>
+            <p className="mt-12 mb-2 font-bold">{t("responses.confirmReceiptDialog.copyCode")}</p>
+            <TagInput
+              tags={codes}
+              setTags={setCodes}
+              validateTag={validateCodes}
+              spellCheck={false}
+            ></TagInput>
+            <p className="mt-10">{t("responses.confirmReceiptDialog.responsesAvailableFor")}</p>
+            <div className="flex mt-8 mb-8">
+              <Button className="mr-4" onClick={handleConfirmReceiptSubmit}>
+                {t("responses.confirmReceipt")}
+              </Button>
+              <Button theme="secondary" onClick={dialogConfirmReceiptHandleClose}>
+                {t("cancel")}
+              </Button>
+            </div>
+          </div>
         </Dialog>
       )}
 
       {isShowReportProblemsDialog && (
         <Dialog
-          title="Report problems with responses"
+          title={t("responses.reportProblemsDialog.title")}
           dialogRef={dialogReportProblems}
-          actions={buttonActionsReportProblems}
           handleClose={dialogReportProblemsHandleClose}
+          headerStyle="inline-block ml-12 mt-12"
         >
-          <h2>TODO Report Problems</h2>
+          <div className="px-10 py-4">
+            <p className="mb-8">{t("responses.reportProblemsDialog.findForm")}</p>
+            <p className="mt-12 mb-2 font-bold">
+              {t("responses.reportProblemsDialog.enterFormNumbers")}
+            </p>
+            <TagInput
+              tags={formNumbers}
+              setTags={setFormNumbers}
+              validateTag={validateFormNumber}
+              spellCheck={false}
+            ></TagInput>
+            <p className="mt-10">{t("responses.reportProblemsDialog.problemReported")}</p>
+            <div className="flex mt-8 mb-8">
+              <Button className="mr-4" onClick={handleReportProblemSubmit}>
+                {t("responses.reportProblemsDialog.reportProblems")}
+              </Button>
+              <Button theme="secondary" onClick={dialogReportProblemsHandleClose}>
+                {t("cancel")}
+              </Button>
+            </div>
+          </div>
         </Dialog>
       )}
     </>

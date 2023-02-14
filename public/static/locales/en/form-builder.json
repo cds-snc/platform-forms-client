@@ -347,10 +347,24 @@
       "toAccessPagePart2": "to your GC Forms account.",
       "noAccount": "If you do not have a GC Forms account,",
       "createOne": "create one"
+    },
+    "confirmReceiptDialog": {
+      "title": "Confirm receipt of responses",
+      "findCode": "Find the confirmation code on the bottom of the downloaded form response. They look like, c0c42c90-b816-49da-a69a-80bfd8ba15db.",
+      "copyCode": "Copy and paste confirmation codes, one per line.",
+      "responsesAvailableFor": "After you confirm, responses are available for 7 days then automatically removed from our database."
+    },
+    "reportProblemsDialog": {
+      "title": "Report problems with responses",
+      "findForm": "Find the form number in the form list for any responses that won’t download or open. They look like, 31-12-XCRV.",
+      "enterFormNumbers": "Enter form numbers, one per line.",
+      "problemReported": "The problem will be reported, and someone will contact you with help.",
+      "reportProblems": "Report problems"
     }
   },
   "dyanamicRow": "Repeating question",
   "addToSet": "Add to set",
   "removeFromSet": "Remove from set",
-  "untitledForm": "Unnamed form file"
+  "untitledForm": "Unnamed form file",
+  "genericDialogTitle": "Form-Builder Dialog"
 }

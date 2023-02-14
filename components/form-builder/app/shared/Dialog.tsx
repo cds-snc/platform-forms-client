@@ -15,12 +15,14 @@ export const Dialog = ({
   title,
   actions,
   handleClose,
+  headerStyle,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
   title?: string;
   actions?: React.ReactElement;
   handleClose?: () => void;
+  headerStyle?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
@@ -29,6 +31,7 @@ export const Dialog = ({
     handleClose && handleClose();
     changeOpen(false);
   }, [dialogRef, handleClose]);
+  const dialogTitleId = "dialog-" + Math.random().toString(36).substr(2, 9);
 
   useEffect(() => {
     const dialog = dialogRef?.current;
@@ -56,12 +59,24 @@ export const Dialog = ({
   return (
     <dialog
       className="p-0 m-0 bg-clip-padding w-full h-full bg-transparent"
-      aria-labelledby="modal-title"
+      aria-labelledby={dialogTitleId}
       ref={dialogRef}
     >
       <div className="w-[800px] mx-auto mt-24 bg-white border-2 border-black rounded-xl">
         <div className="relative">
-          {title && <h2 className="pb-4 inline-block mt-4 ml-4">{title}</h2>}
+          {title && (
+            <h2
+              id={dialogTitleId}
+              className={headerStyle ? headerStyle : "pb-4 inline-block mt-4 ml-4"}
+            >
+              {title}
+            </h2>
+          )}
+          {!title && (
+            <h2 className="sr-only" id={dialogTitleId}>
+              {t("genericDialogTitle")}
+            </h2>
+          )}
           <Button
             theme="link"
             className="group absolute right-0 top-0 mr-4 mt-4 z-[1000]"
