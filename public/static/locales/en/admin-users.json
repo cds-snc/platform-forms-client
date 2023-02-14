@@ -1,7 +1,7 @@
 {
-  "title": "Manage Users",
-  "username": "User Name",
-  "email": "Email Address",
+  "title": "Manage users",
+  "username": "User name",
+  "email": "Email address",
   "admin": "Administrator",
   "true": "True",
   "false": "False",
@@ -12,8 +12,8 @@
   "a11y-diable-desc": "administrative privileges for",
   "cancel": "Cancel",
   "save": "Save",
-  "managePermissions": "Manage Permissions",
-  "viewPermissions": "View Permissions",
+  "managePermissions": "Manage permissions",
+  "viewPermissions": "View permissions",
   "managePermissionsFor": "Managing permissions of",
   "assignUsersToTemplate": "Assign users to template"
 }

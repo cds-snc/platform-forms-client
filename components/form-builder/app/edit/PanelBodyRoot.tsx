@@ -7,13 +7,15 @@ import { useTemplateStore } from "../../store";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField, updateField, unsetField, resetChoices } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    elements: s.form.elements,
-    updateField: s.updateField,
-    unsetField: s.unsetField,
-    resetChoices: s.resetChoices,
-  }));
+  const { localizeField, updateField, unsetField, resetChoices, elements } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      elements: s.form.elements,
+      updateField: s.updateField,
+      unsetField: s.unsetField,
+      resetChoices: s.resetChoices,
+    })
+  );
 
   // all element state updaters should be setup at this level
   // we should be able to pass and `item` + `updaters`to build up each element panel
@@ -95,6 +97,7 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <PanelBody
+      elements={elements}
       item={item}
       onElementChange={onElementChange}
       onQuestionChange={onQuestionChange}

@@ -14,9 +14,8 @@ interface LinkItem {
 export const LinksSubMenu = () => {
   const { t } = useTranslation("form-builder");
 
-  const { getSchema, id: formId } = useTemplateStore((s) => ({
+  const { id: formId } = useTemplateStore((s) => ({
     id: s.id,
-    getSchema: s.getSchema,
   }));
 
   const links: LinkItem[] = [
@@ -30,17 +29,16 @@ export const LinksSubMenu = () => {
     },
   ];
 
-  const handleCopyToClipboard = async () => {
+  const handleCopyToClipboard = async (link: string) => {
     if ("clipboard" in navigator) {
-      const stringified = getSchema();
-      await navigator.clipboard.writeText(stringified);
+      await navigator.clipboard.writeText(link);
     }
   };
 
   const menu = links.map(({ name, url }, i) => (
     <DropdownMenuPrimitive.Item
       key={`${name}-${i}`}
-      className="flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm"
+      className="outline-none flex cursor-default select-none items-center rounded-md px-2 py-2 text-sm hover:text-white-default hover:bg-gray-600 focus-within:text-white-default focus-within:bg-gray-600 [&_svg]:hover:fill-white [&_svg]:focus-within:fill-white [&_span]:hover:text-white-default [&_span]:focus-within:text-white-default"
     >
       <div className="flex justify-between">
         <div className="inline-block mr-3 w-[90px]">{name}:</div>
@@ -48,13 +46,13 @@ export const LinksSubMenu = () => {
           {/* copy link */}
           <DropdownMenuPrimitive.Item asChild>
             <button
-              className="inline-block mr-2 flex"
+              className="[&_span]:focus-within:no-underline text-blue focus:outline focus:outline-white-default focus:outline-offset-2 inline-block mr-2 flex"
               onClick={() => {
-                handleCopyToClipboard();
+                handleCopyToClipboard(url);
               }}
             >
               <CopyIcon className="scale-[80%]" />
-              <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 text-sm underline underline-offset-4 text-blue">
+              <span className="hover:no-underline underline underline-offset-4 inline-block mr-1 ml-1 text-sm text-blue">
                 {t("share.copy")}
               </span>
             </button>
@@ -63,9 +61,14 @@ export const LinksSubMenu = () => {
 
           {/* open link */}
           <DropdownMenuPrimitive.Item asChild>
-            <a href={url} className="inline-block mr-1 flex text-sm no-underline">
+            <a
+              href={url}
+              target="_blank"
+              className="focus:outline focus:outline-white-default focus:outline-offset-2 inline-block mr-1 flex text-sm no-underline focus:bg-transparent active:bg-transparent active:shadow-none focus:shadow-none focus:outline-offset-2"
+              rel="noreferrer"
+            >
               <ShareExternalLinkIcon className="scale-[70%]" />
-              <span className="focus:no-underline hover:no-underline inline-block mr-1 ml-1 underline underline-offset-4 text-blue">
+              <span className="hover:no-underline underline underline-offset-4 inline-block mr-1 ml-1">
                 {t("share.open")}
               </span>
             </a>
