@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
@@ -15,7 +15,14 @@ import {
   ThreeDotsIcon,
 } from "@components/form-builder/icons";
 
+import { usePanelActions } from "@components/form-builder/hooks";
+
 import { isValidatedTextType } from "../../util";
+
+const buttonClasses =
+  "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
+const iconClasses =
+  "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
 export const PanelActions = ({
   item,
@@ -48,12 +55,11 @@ export const PanelActions = ({
     elements: s.form.elements,
     setFocusInput: s.setFocusInput,
   }));
+
+  const isInit = useRef(false);
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
-
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
-  const isInit = useRef(false);
 
   const getPanelButtons = (item: FormElementWithIndex) => {
     return [
@@ -102,8 +108,13 @@ export const PanelActions = ({
   };
 
   const panelButtons = getPanelButtons(item);
-  const itemsRef = useRef<[HTMLButtonElement] | []>([]);
-  const [items] = useState(panelButtons.map(({ id, txt }) => ({ id, txt })));
+
+  const { handleNav, getTabIndex, currentFocusIndex, itemsRef, setRef } = usePanelActions({
+    panelButtons,
+    isFirstItem,
+    isLastItem,
+    elementsLength: elements.length,
+  });
 
   useEffect(() => {
     if (!isInit.current) {
@@ -115,46 +126,7 @@ export const PanelActions = ({
     if (el) {
       el.focus();
     }
-  }, [currentFocusIndex, isInit]);
-
-  const handleNav = useCallback(
-    (evt: KeyboardEvent<HTMLInputElement>) => {
-      const { key } = evt;
-      let step = 1;
-
-      if (key === "ArrowLeft") {
-        evt.preventDefault();
-        if (isFirstItem && currentFocusIndex === 1) {
-          return;
-        }
-        if (isLastItem && currentFocusIndex === 2) {
-          step = 2;
-        }
-        setCurrentFocusIndex((index) => Math.max(0, index - step));
-      }
-
-      if (key === "ArrowRight") {
-        evt.preventDefault();
-        if (isLastItem && currentFocusIndex === 0) {
-          step = 2;
-        }
-        setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
-      }
-    },
-    [items, setCurrentFocusIndex, currentFocusIndex, isFirstItem, isLastItem]
-  );
-
-  const getTabIndex = (item: string) => {
-    if (elements.length === 1 && item === "duplicate") return 0;
-
-    if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
-
-    if (currentFocusIndex === 0) {
-      if (isFirstItem && item === "moveDown") return 0;
-    }
-
-    return -1;
-  };
+  }, [currentFocusIndex, isInit, itemsRef]);
 
   /* Note this callback is also in PanelActions */
   const handleAddElement = useCallback(
@@ -169,11 +141,6 @@ export const PanelActions = ({
     [add, setFocusInput, updateField]
   );
 
-  const buttonClasses =
-    "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
-  const iconClasses =
-    "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
-
   const actions = panelButtons.map((button, loopIndex) => {
     const Icon = button.icon;
     return (
@@ -186,12 +153,7 @@ export const PanelActions = ({
         icon={<Icon className={`${iconClasses}`} />}
         onClick={button.onClick}
         tabIndex={getTabIndex(button.txt)}
-        buttonRef={(el: HTMLButtonElement) => {
-          const index = `button-${loopIndex}` as unknown as number;
-          if (el && itemsRef.current) {
-            itemsRef.current[index] = el;
-          }
-        }}
+        buttonRef={setRef(`button-${loopIndex}`)}
         dataTestId={button.txt}
       >
         <span className="text-sm mx-3 xl:mx-0">{t(button.txt)}</span>
