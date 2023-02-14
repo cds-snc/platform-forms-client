@@ -345,6 +345,21 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
+  "responses": {
+    "title": "Download Responses",
+    "navLabel": "Responses",
+    "confirmReceipt": "Confirm Receipt",
+    "reportProblems": "Report Problems",
+    "changeSetup": "Change Setup",
+    "unauthenticated": {
+      "title": "Sign in to access responses",
+      "toAccessPagePart1": "To access this page,",
+      "signIn": "sign in",
+      "toAccessPagePart2": "to your GC Forms account.",
+      "noAccount": "If you do not have a GC Forms account,",
+      "createOne": "create one"
+    }
+  },
   "dyanamicRow": "Repeating question",
   "addToSet": "Add to set",
   "removeFromSet": "Remove from set",

@@ -345,6 +345,21 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
+  "responses": {
+    "title": "Download Responses [fr]",
+    "navLabel": "Responses [fr]",
+    "confirmReceipt": "Confirm Receipt [fr]",
+    "reportProblems": "Report Problems [fr]",
+    "changeSetup": "Change Setup [fr]",
+    "unauthenticated": {
+      "title": "Sign in to access responses[fr]",
+      "toAccessPagePart1": "To access this page,[fr]",
+      "signIn": "sign in[fr]",
+      "toAccessPagePart2": "to your GC Forms account.[fr]",
+      "noAccount": "If you do not have a GC Forms account,[fr]",
+      "createOne": "create one[fr]"
+    }
+  },
   "dyanamicRow": "[FR] Repeating question set",
   "addToSet": "[FR] Add to set",
   "removeFromSet": "[FR] Remove from set",
