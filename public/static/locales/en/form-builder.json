@@ -279,10 +279,21 @@
     "stepThreeDetails": "Select open a form file.",
     "stepTwo": "Step 2:",
     "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
+    "stepTwoDetailsNoHTML": "Go to GC Forms (https://forms-formulaires.alpha.canada.ca/). No account needed.",
     "title": "Share",
     "toPreview": "To preview this form:",
     "messageSent": "The message has been sent",
     "startOver": "Start over",
+    "unauthenticated": {
+      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">Sign up</a> today to get access to this feature and more.",
+      "instructions": "You can download a copy of this form file to your computer and share it through your email.",
+      "step1": "Step 1",
+      "step1Details": "Download a copy of your form as a JSON form file to your computer",
+      "step2": "Step 2",
+      "step2Details": "Copy and paste the email instructions into an email and attach the form file",
+      "copyInstructions": "Copy instructions",
+      "downloadFormFile": "Download form file"
+    },
     "unpublished": "Links unavailable for unpublished forms"
   },
   "shortAnswer": "Short answer",
