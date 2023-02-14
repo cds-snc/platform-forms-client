@@ -24,7 +24,7 @@ import {
   Email,
   Date,
   Number,
-  RepeatableQuestionSet,
+  QuestionSet,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -130,7 +130,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
-      description: RepeatableQuestionSet,
+      description: QuestionSet,
       className: "",
       group: group.advanced,
     });

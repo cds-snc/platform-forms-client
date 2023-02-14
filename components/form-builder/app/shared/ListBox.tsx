@@ -37,6 +37,9 @@ export const ListBox = ({
     if (el && rowsRef.current) {
       setActiveId(el.id);
       handleChange(focusIndex);
+      if (el && el.scrollIntoView) {
+        el.scrollIntoView({ block: "center" });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusIndex]);

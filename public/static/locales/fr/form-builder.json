@@ -4,7 +4,7 @@
     "layoutBlocks": "[FR] Layout blocks",
     "inputBlocks": "[FR] Input blocks",
     "advancedBlocks": "[FR] Advanced blocks",
-    "addButton": "Sélectionner un élément",
+    "addButton": "[FR] Select block",
     "questionElement": "[FR] Blocks",
     "listItem": "Élément de liste ",
     "checkboxItem": "Élément de case à cocher",
@@ -13,7 +13,7 @@
     "yes": "Oui",
     "no": "Non",
     "sometimes": "Parfois",
-    "exampleElement": "élément d'exemple",
+    "exampleElement": "[FR] example block",
     "richText": {
       "title": "Texte en grand format",
       "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."
@@ -337,7 +337,7 @@
   "translateTitle": "Saisir la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "dyanamicRow": "[FR] Repeating question set",
+  "dyanamicRow": "[FR] Repeating set",
   "addToSet": "[FR] Add to set",
   "removeFromSet": "[FR] Remove from set",
   "untitledForm": "Formulaire sans titre"

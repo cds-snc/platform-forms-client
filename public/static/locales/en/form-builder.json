@@ -4,7 +4,7 @@
     "layoutBlocks": "Layout blocks",
     "inputBlocks": "Input blocks",
     "advancedBlocks": "Advanced blocks",
-    "addButton": "Select element",
+    "addButton": "Select block",
     "questionElement": "Blocks",
     "listItem": "List item ",
     "checkboxItem": "Checkbox item",
@@ -13,7 +13,7 @@
     "no": "No",
     "answer": "Answer...",
     "sometimes": "Sometimes",
-    "exampleElement": "example element",
+    "exampleElement": "example block",
     "richText": {
       "title": "Large text",
       "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
@@ -337,7 +337,7 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "dyanamicRow": "Repeating question",
+  "dyanamicRow": "Repeating set",
   "addToSet": "Add to set",
   "removeFromSet": "Remove from set",
   "untitledForm": "Unnamed form file"
