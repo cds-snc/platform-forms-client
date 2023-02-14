@@ -7,7 +7,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, useDialogRef, Dialog, TagInput } from "@components/form-builder/app/shared";
+import { Button, useDialogRef, Dialog } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
