@@ -60,7 +60,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
           aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
         >
           <ul className="flex text-base list-none">
-            {status === "authenticated" && isFormBuilder && !isLoading && shareEnabled && (
+            {isFormBuilder && !isLoading && shareEnabled && (
               <li className="md:text-small_base text-base font-normal not-italic mr-4">
                 <ShareDropdown />
               </li>
