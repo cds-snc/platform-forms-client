@@ -340,5 +340,23 @@
   "dyanamicRow": "Série répétitive de questions",
   "addToSet": "Ajouter à la série",
   "removeFromSet": "Enlever de la série",
+  "responses": {
+    "title": "Télécharger les réponses",
+    "navLabel": "Réponses",
+    "confirmReceipt": "Confirmer la réception",
+    "reportProblems": "Signaler des problèmes",
+    "changeSetup": "Changer la configuration",
+    "unauthenticated": {
+      "title": "Se connecter pour accéder aux réponses",
+      "toAccessPagePart1": "Pour accéder à cette page,",
+      "signIn": "connectez-vous",
+      "toAccessPagePart2": "à votre compte Formulaires GC",
+      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
+      "createOne": "créez-en un"
+    }
+  },
+  "dyanamicRow": "Série répétitive de questions",
+  "addToSet": "Ajouter à la série",
+  "removeFromSet": "Enlever de la série",
   "untitledForm": "Formulaire sans titre"
 }
