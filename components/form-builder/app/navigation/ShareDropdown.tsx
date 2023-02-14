@@ -7,9 +7,12 @@ import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "../../icons";
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { ShareModal } from "../ShareModal";
 import { LinksSubMenu } from "./LinksSubMenu";
+import { useSession } from "next-auth/react";
+import { ShareModalUnauthenticated } from "..";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");
+  const { status } = useSession();
 
   const [shareModal, showShareModal] = useState(false);
 
@@ -87,7 +90,10 @@ export const ShareDropdown = () => {
           </DropdownMenuPrimitive.Content>
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
-      {shareModal && <ShareModal handleClose={handleCloseDialog} />}
+      {shareModal && status === "authenticated" && <ShareModal handleClose={handleCloseDialog} />}
+      {shareModal && status !== "authenticated" && (
+        <ShareModalUnauthenticated handleClose={handleCloseDialog} />
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
-import { BetterOmit } from ".";
+import { TypeOmit } from ".";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -135,4 +135,4 @@ export type FormRecord = {
 };
 
 // defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = BetterOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;
