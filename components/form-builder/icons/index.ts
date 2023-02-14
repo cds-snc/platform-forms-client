@@ -50,3 +50,4 @@ export { CopyIcon } from "./CopyIcon";
 export { ChevronRight } from "./ChevronRight";
 export { AddIcon } from "./AddIcon";
 export { RemoveIcon } from "./RemoveIcon";
+export { MessageIcon } from "./Message";
