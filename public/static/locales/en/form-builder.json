@@ -5,7 +5,7 @@
     "inputBlocks": "Input blocks",
     "advancedBlocks": "Advanced blocks",
     "addButton": "Select element",
-    "questionElement": "Question element",
+    "questionElement": "Blocks",
     "listItem": "List item ",
     "checkboxItem": "Checkbox item",
     "example": "example",
@@ -55,7 +55,7 @@
       "description": "Number description"
     },
     "dynamicRow": {
-      "title": "Repeating question",
+      "title": "Repeating set",
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },

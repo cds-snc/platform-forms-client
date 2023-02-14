@@ -1,5 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "react";
 
+import { ChevronRight } from "@components/form-builder/icons";
+
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox
 
@@ -93,15 +95,20 @@ export const ListBox = ({
                     }
                   }}
                   className={`${
-                    focussed ? "font-bold" : "font-normal"
-                  } group xl:pb-0 xl:pt-2 xl:mb-3 pl-1 pr-2 pb-2 mb-2 md:pr-0 text-black hover:text-blue-hover focus:text-blue-hover cursor-pointer`}
+                    focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
+                  } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
                   key={id}
                   tabIndex={-1}
                   role="option"
                   onClick={() => setFocusIndex(index)}
                   aria-selected={focussed}
                 >
-                  {value}
+                  <span className="flex justify-between items-center">
+                    {value}
+                    {focussed && (
+                      <ChevronRight className="fill-black inline-block ml-10 mr-1 scale-150" />
+                    )}
+                  </span>
                 </li>
               </>
             );

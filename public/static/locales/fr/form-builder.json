@@ -5,7 +5,7 @@
     "inputBlocks": "[FR] Input blocks",
     "advancedBlocks": "[FR] Advanced blocks",
     "addButton": "Sélectionner un élément",
-    "questionElement": "Élément de question",
+    "questionElement": "[FR] Blocks",
     "listItem": "Élément de liste ",
     "checkboxItem": "Élément de case à cocher",
     "example": "exemple",
@@ -55,7 +55,7 @@
       "description": "Description du numéro"
     },
     "dynamicRow": {
-      "title": "[FR] Repeating question",
+      "title": "[FR] Repeating set",
       "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
