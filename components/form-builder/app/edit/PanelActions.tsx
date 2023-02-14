@@ -55,14 +55,55 @@ export const PanelActions = ({
   const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
   const isInit = useRef(false);
 
+  const getPanelButtons = (item: FormElementWithIndex) => {
+    return [
+      {
+        id: 1,
+        txt: "moveUp",
+        icon: ChevronUp,
+        onClick: () => moveUp(item.index),
+        disabled: isFirstItem,
+      },
+      {
+        id: 2,
+        txt: "moveDown",
+        icon: ChevronDown,
+        onClick: () => moveDown(item.index),
+        disabled: isLastItem,
+      },
+      {
+        id: 3,
+        txt: "duplicate",
+        icon: Duplicate,
+        onClick: () => {
+          setFocusInput(true);
+          duplicateElement(item.index);
+        },
+      },
+      {
+        id: 4,
+        txt: "remove",
+        icon: Close,
+        onClick: () => {
+          // if index is 0, then highlight the form title
+          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+
+          remove(item.id);
+          document.getElementById(labelId)?.focus();
+        },
+      },
+      {
+        id: 5,
+        txt: "more",
+        icon: ThreeDotsIcon,
+        onClick: () => null,
+      },
+    ];
+  };
+
+  const panelButtons = getPanelButtons(item);
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
-  const [items] = useState([
-    { id: 1, txt: "moveUp" },
-    { id: 2, txt: "moveDown" },
-    { id: 3, txt: "duplicate" },
-    { id: 4, txt: "remove" },
-    { id: 5, txt: "more" },
-  ]);
+  const [items] = useState(panelButtons.map(({ id, txt }) => ({ id, txt })));
 
   useEffect(() => {
     if (!isInit.current) {
@@ -133,6 +174,33 @@ export const PanelActions = ({
   const iconClasses =
     "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
+  const actions = panelButtons.map((button, loopIndex) => {
+    const Icon = button.icon;
+    return (
+      <Button
+        key={button.txt}
+        className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
+        disabled={button.disabled && button.disabled}
+        theme="secondary"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={<Icon className={`${iconClasses}`} />}
+        onClick={button.onClick}
+        tabIndex={getTabIndex(button.txt)}
+        buttonRef={(el: HTMLButtonElement) => {
+          const index = `button-${loopIndex}` as unknown as number;
+          if (el && itemsRef.current) {
+            itemsRef.current[index] = el;
+          }
+        }}
+        dataTestId={button.txt}
+      >
+        <span className="text-sm mx-3 xl:mx-0">{t(button.txt)}</span>
+      </Button>
+    );
+  });
+
+  const moreButton = actions.pop();
+
   return (
     <div className="relative">
       <div
@@ -142,112 +210,9 @@ export const PanelActions = ({
         onKeyDown={handleNav}
         data-testid="panel-actions"
       >
-        <Button
-          theme="secondary"
-          className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<ChevronUp className={`${iconClasses}`} />}
-          disabled={isFirstItem}
-          onClick={() => moveUp(item.index)}
-          tabIndex={getTabIndex("moveUp")}
-          buttonRef={(el: HTMLButtonElement) => {
-            const index = "button-0" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="move-up"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
-        </Button>
-        <Button
-          theme="secondary"
-          className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<ChevronDown className={`${iconClasses}`} />}
-          disabled={isLastItem}
-          onClick={() => moveDown(item.index)}
-          tabIndex={getTabIndex("moveDown")}
-          buttonRef={(el) => {
-            const index = "button-1" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="move-down"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
-        </Button>
-
-        <Button
-          theme="secondary"
-          className={`${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<Duplicate className={`${iconClasses}`} />}
-          onClick={() => {
-            setFocusInput(true);
-            duplicateElement(item.index);
-          }}
-          tabIndex={getTabIndex("duplicate")}
-          buttonRef={(el) => {
-            const index = "button-2" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="duplicate"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
-        </Button>
-
-        <Button
-          theme="secondary"
-          className={`${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<Close className={`${iconClasses}`} />}
-          onClick={() => {
-            // if index is 0, then highlight the form title
-            const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
-
-            remove(item.id);
-            document.getElementById(labelId)?.focus();
-          }}
-          tabIndex={getTabIndex("remove")}
-          buttonRef={(el) => {
-            const index = "button-3" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="remove"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
-        </Button>
-
+        {actions}
         {!isRichText && (
-          <Modal
-            title={t("moreOptions")}
-            openButton={
-              <Button
-                theme="secondary"
-                className={`${buttonClasses}`}
-                iconWrapperClassName="!w-7 !mr-0"
-                icon={<ThreeDotsIcon className={`${iconClasses}`} />}
-                onClick={() => null}
-                tabIndex={getTabIndex("more")}
-                buttonRef={(el) => {
-                  const index = "button-4" as unknown as number;
-                  if (el && itemsRef.current) {
-                    itemsRef.current[index] = el;
-                  }
-                }}
-                dataTestId="more"
-              >
-                <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
-              </Button>
-            }
-            saveButton={renderSaveButton()}
-          >
+          <Modal title={t("moreOptions")} openButton={moreButton} saveButton={renderSaveButton()}>
             {children}
           </Modal>
         )}
