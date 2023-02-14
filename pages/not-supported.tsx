@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element  */
 import React, { ReactElement } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
@@ -7,7 +7,6 @@ import { getPublicTemplateByID } from "@lib/templates";
 import { PublicFormRecord } from "@lib/types";
 import LanguageToggle from "@components/globals/LanguageToggle";
 import { useRouter } from "next/router";
-import Footer from "@components/globals/Footer";
 
 const NotSupported = ({
   formInfo,
@@ -76,7 +75,6 @@ const NotSupported = ({
           </div>
         </div>
       </main>
-      <Footer brand={formInfo?.form.brand} lang={lang} />
     </>
   );
 };

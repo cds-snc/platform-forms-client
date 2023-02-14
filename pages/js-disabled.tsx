@@ -1,16 +1,8 @@
 /* eslint-disable @next/next/no-img-element  */
 //Component will be rendered if it's inside <noscript> tag when next/image is used.
 import React, { ReactElement } from "react";
-import { BrandProperties } from "@lib/types";
-import Footer from "@components/globals/Footer";
 
-const JSDisabled = ({
-  brand,
-  lang,
-}: {
-  brand: BrandProperties;
-  lang: string | undefined;
-}): React.ReactElement => {
+const JSDisabled = ({ lang }: { lang: string | undefined }): React.ReactElement => {
   return (
     <>
       <title>
@@ -29,9 +21,7 @@ const JSDisabled = ({
           >
             <div id="en">
               <div className="flex justify-between items-center my-10">
-                <div className="xxs:w-flag-fold xs:w-flag-5s md:w-44 w-flag-desktop">
-                  {brand ? <img src={brand?.logoEn} alt={brand?.logoTitleEn} /> : <></>}
-                </div>
+                <div className="xxs:w-flag-fold xs:w-flag-5s md:w-44 w-flag-desktop"></div>
                 <a href="#fr">Francais</a>
               </div>
               <h1 className="md:text-small_h1 text-h1 mb-10">
@@ -48,9 +38,7 @@ const JSDisabled = ({
             <span className="border-b-2 border-black"></span>
             <div id="fr">
               <div className="flex justify-between items-center my-10">
-                <div className="xxs:w-flag-fold xs:w-flag-5s md:w-44 w-flag-desktop">
-                  {brand ? <img src={brand?.logoFr} alt={brand?.logoTitleFr} /> : <></>}
-                </div>
+                <div className="xxs:w-flag-fold xs:w-flag-5s md:w-44 w-flag-desktop"></div>
                 <a href="#en">English</a>
               </div>
               <h1 className="md:text-small_h1 text-h1 mb-10">
@@ -69,7 +57,6 @@ const JSDisabled = ({
           </div>
         </div>
       </main>
-      <Footer brand={brand} lang={lang} />
     </>
   );
 };
