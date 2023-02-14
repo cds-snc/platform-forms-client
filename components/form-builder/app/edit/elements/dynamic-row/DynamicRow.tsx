@@ -18,6 +18,9 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     resetSubChoices,
     unsetField,
     updateField,
+    subMoveUp,
+    subMoveDown,
+    subDuplicateElement,
     removeSubItem,
     subElements,
     localizeField,
@@ -25,6 +28,9 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     lang: s.lang,
     addSubItem: s.addSubItem,
     updateField: s.updateField,
+    subMoveUp: s.subMoveUp,
+    subMoveDown: s.subMoveDown,
+    subDuplicateElement: s.subDuplicateElement,
     unsetField: s.unsetField,
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
@@ -166,6 +172,9 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                 subIndex={subIndex}
                 handleAdd={handleAddElement}
                 handleRemove={removeSubItem}
+                handleMoveUp={subMoveUp}
+                handleMoveDown={subMoveDown}
+                handleDuplicate={subDuplicateElement}
                 filterElements={elementFilter}
               />
             }
