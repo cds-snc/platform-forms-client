@@ -217,10 +217,10 @@ class MyDocument extends Document {
           <script async type="text/javascript" src="/static/scripts/form-polyfills.js"></script>
           {GoogleTagScript}
         </CustomHead>
-
-        <style type="text/css">{`#__next {display:none;}`}</style>
-        <JSDisabled lang={this.props.__NEXT_DATA__.locale} />
-
+        <noscript>
+          <style type="text/css">{`#__next {display:none;}`}</style>
+          <JSDisabled lang={this.props.__NEXT_DATA__.locale} />
+        </noscript>
         <body>
           {/* Will only run if Browser does not have JS enabled */}
           <noscript>
