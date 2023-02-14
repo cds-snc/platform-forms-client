@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, PublishIcon, GearIcon } from "../../icons";
+import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../icons";
 import { LeftNavLink } from "./LeftNavLink";
 import { SaveButton } from "../shared/SaveButton";
 import { useTemplateStore } from "../../store/useTemplateStore";
@@ -46,7 +46,7 @@ export const LeftNavigation = () => {
       {vault && (
         <LeftNavLink href={`/form-builder/responses/${id}`}>
           <>
-            <GearIcon className={iconClassname} />
+            <MessageIcon className={iconClassname} />
             {t("responses.navLabel")}
           </>
         </LeftNavLink>
