@@ -18,7 +18,7 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions item={item} renderMoreButton={({ moreButton }) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -95,7 +95,7 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions item={item} renderMoreButton={({ moreButton }) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -159,7 +159,7 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions item={item} renderMoreButton={({ moreButton }) => <div>{moreButton}</div>} />
       </Providers>
     );
 

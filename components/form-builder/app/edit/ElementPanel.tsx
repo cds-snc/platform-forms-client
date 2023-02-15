@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "next-i18next";
 
 import { FormElementWithIndex } from "../../types";
-import { useTemplateStore, useModalStore } from "../../store";
-import { PanelActions, ModalButton, ModalForm, PanelBodyRoot } from "./index";
-import { Button } from "../shared";
+import { useTemplateStore } from "../../store";
+import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { t } = useTranslation("form-builder");
-  const isRichText = item.type == "richText";
-  const { lang, elements, getFocusInput, updateField } = useTemplateStore((s) => ({
+  const { lang, getFocusInput } = useTemplateStore((s) => ({
     lang: s.lang,
-    updateField: s.updateField,
     elements: s.form.elements,
     getFocusInput: s.getFocusInput,
   }));
-
-  const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
@@ -40,21 +33,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     setTimeout(() => setClassName(""), 2100);
   }, [className]);
 
-  useEffect(() => {
-    if (item.type != "richText") {
-      updateModalProperties(item.index, elements[item.index].properties);
-    }
-  }, [item, isOpen, isRichText, elements, updateModalProperties]);
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
-    return (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      // replace all of "properties" with the new properties set in the ModalForm
-      updateField(`form.elements[${item.index}].properties`, properties);
-    };
-  };
-
   return (
     <div
       key={lang}
@@ -63,28 +41,14 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         item={item}
-        renderSaveButton={() => (
-          <ModalButton isOpenButton={false}>
-            {modals[item.index] && (
-              <Button
-                className="mr-4"
-                onClick={handleSubmit({ item, properties: modals[item.index] })}
-              >
-                {t("save")}
-              </Button>
-            )}
-          </ModalButton>
-        )}
-      >
-        {!isRichText && modals[item.index] && (
-          <ModalForm
-            item={item}
-            properties={modals[item.index]}
-            updateModalProperties={updateModalProperties}
-            unsetModalField={unsetModalField}
-          />
-        )}
-      </PanelActions>
+        renderMoreButton={({
+          item,
+          moreButton,
+        }: {
+          item: FormElementWithIndex;
+          moreButton: JSX.Element | undefined;
+        }) => <MoreModal item={item} moreButton={moreButton} />}
+      />
     </div>
   );
 };

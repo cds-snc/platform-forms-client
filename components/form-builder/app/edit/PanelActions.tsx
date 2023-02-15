@@ -4,7 +4,6 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "../shared";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { Modal } from "./Modal";
 import { FormElementWithIndex } from "@components/form-builder/types";
 import { useTemplateStore } from "@components/form-builder/store";
 import {
@@ -24,14 +23,19 @@ const buttonClasses =
 const iconClasses =
   "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
+interface RenderMoreFunc {
+  ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
+    | React.ReactElement
+    | string
+    | undefined;
+}
+
 export const PanelActions = ({
   item,
-  renderSaveButton,
-  children,
+  renderMoreButton,
 }: {
   item: FormElementWithIndex;
-  renderSaveButton: () => React.ReactElement | string | undefined;
-  children?: React.ReactNode;
+  renderMoreButton: RenderMoreFunc;
 }) => {
   const { t } = useTranslation("form-builder");
   const {
@@ -93,6 +97,7 @@ export const PanelActions = ({
         onClick: () => {
           // if index is 0, then highlight the form title
           const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+
           remove(item.id);
           document.getElementById(labelId)?.focus();
         },
@@ -172,11 +177,7 @@ export const PanelActions = ({
         data-testid="panel-actions"
       >
         {actions}
-        {!isRichText && (
-          <Modal title={t("moreOptions")} openButton={moreButton} saveButton={renderSaveButton()}>
-            {children}
-          </Modal>
-        )}
+        {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
       </div>
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
         <AddElementButton position={item.index} handleAdd={handleAddElement} />
