@@ -84,7 +84,9 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number) => void;
+  subMoveUp: (elIndex: number, subIndex?: number) => void;
   moveDown: (index: number) => void;
+  subMoveDown: (elIndex: number, subIndex?: number) => void;
   localizeField: {
     <LocalizedProperty extends string>(
       arg: LocalizedProperty,
@@ -111,6 +113,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   updateField: (path: string, value: string | boolean | ElementProperties) => void;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
+  subDuplicateElement: (elIndex: number, subIndex: number) => void;
   bulkAddChoices: (elIndex: number, bulkChoices: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
@@ -215,9 +218,23 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             set((state) => {
               state.form.elements = moveUp(state.form.elements, elIndex);
             }),
+          subMoveUp: (elIndex, subIndex = 0) =>
+            set((state) => {
+              const elements = state.form.elements[elIndex].properties.subElements;
+              if (elements) {
+                state.form.elements[elIndex].properties.subElements = moveUp(elements, subIndex);
+              }
+            }),
           moveDown: (elIndex) =>
             set((state) => {
               state.form.elements = moveDown(state.form.elements, elIndex);
+            }),
+          subMoveDown: (elIndex, subIndex = 0) =>
+            set((state) => {
+              const elements = state.form.elements[elIndex].properties.subElements;
+              if (elements) {
+                state.form.elements[elIndex].properties.subElements = moveDown(elements, subIndex);
+              }
             }),
           add: (elIndex = 0, type = FormElementTypes.radio) =>
             set((state) => {
@@ -302,6 +319,25 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 element.properties[state.localizeField("title")]
               } copy`;
               state.form.elements.splice(elIndex + 1, 0, element);
+            });
+          },
+          subDuplicateElement: (elIndex, subIndex) => {
+            set((state) => {
+              // deep copy the element
+              const subElements = state.form.elements[elIndex].properties.subElements;
+              if (subElements) {
+                const element = JSON.parse(JSON.stringify(subElements[subIndex]));
+                element.id = incrementElementId(subElements);
+                element.properties[state.localizeField("title")] = `${
+                  element.properties[state.localizeField("title")]
+                } copy`;
+
+                state.form.elements[elIndex].properties.subElements?.splice(
+                  subIndex + 1,
+                  0,
+                  element
+                );
+              }
             });
           },
           bulkAddChoices: (elIndex, bulkChoices) => {
