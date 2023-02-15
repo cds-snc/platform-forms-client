@@ -1,14 +1,14 @@
 {
-  "title": "Administration de formulaires",
-  "sub-title": "Accéder avec votre compte CDS-SNC de Google",
-  "logged-in": "Accéder comme",
+  "title": "Administration de Formulaires GC",
+  "sub-title": "Connectez-vous avec votre compte Google du SNC",
+  "logged-in": "Connecté en tant que",
   "button": {
-    "login": "Accéder",
-    "logout": "Disconnexion"
+    "login": "Se connecter",
+    "logout": "Se déconnecter"
   },
   "formResponses": "Réponses stockées des formulaires",
   "unauthorized": {
-    "title": "Privilèges administratifs requis",
-    "detail": "La page à laquelle vous essayez d'accéder nécessite des privilèges d'administrateur d'application"
+    "title": "Des privilèges administratifs sont requis",
+    "detail": "La page à laquelle vous essayez d'accéder nécessite des privilèges administratifs de Formulaires GC."
   }
 }
