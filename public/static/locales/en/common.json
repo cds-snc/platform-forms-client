@@ -54,7 +54,7 @@
   "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
   "spam-error": {
-    "error-part-1": "Button can not be used in less than",
+    "error-part-1": "Button cannot be used in less than",
     "error-part-2": "seconds.",
     "prompt-part-1": "Try again in",
     "prompt-part-2": "seconds.",
@@ -69,10 +69,10 @@
     "upload": "Template upload",
     "templates": "Templates",
     "features": "Options",
-    "login": "Login",
-    "logout": "Logout",
+    "login": "Sign in",
+    "logout": "Sign out",
     "privileges": "Privileges",
-    "myForms": "My Forms"
+    "myForms": "My forms"
   },
   "formElements": {
     "characterCount": {
