@@ -63,7 +63,7 @@
   "at": "à",
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
-  "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateurs peuvent saisir.",
+  "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateurs peuvent entrer.",
   "checkboxes": "Case à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
@@ -342,7 +342,7 @@
   "tooltipInsertLink": "Insérer un lien",
   "translate": "Traduire",
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
-  "translateTitle": "Saisir la traduction",
+  "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "responses": {
