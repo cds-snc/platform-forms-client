@@ -23,13 +23,13 @@ describe("Accessibility (A11Y) Check", () => {
   });
   describe("Unauthenticated Pages", () => {
     it.each([
-      { title: "Language Selection", path: "/" },
+      { title: "Language selection", path: "/" },
       { title: "Form Builder Landing", path: "/form-builder" },
       { title: "Form Builder Edit", path: "/form-builder/edit" },
       { title: "Form Builder Translation", path: "/form-builder/edit/translate" },
       { title: "FormBuilder Settings", path: "/form-builder/settings" },
       { title: "Terms and Conditions", path: "/terms-avis" },
-      { title: "Service Level Agreement", path: "/sla" },
+      { title: "Service-level agreement", path: "/sla" },
       { title: "Registration", path: "/signup/register" },
       { title: "Login", path: "/auth/login" },
       { title: "Logout", path: "/auth/logout" },
