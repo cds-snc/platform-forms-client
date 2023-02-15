@@ -24,7 +24,7 @@
     },
     "submitToReliabilityQueue": {
       "title": "Soumettre à la file d'attente de fiabilité",
-      "description": "Soumettez les réponses du formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
+      "description": "Veuillez soumettre les réponses du formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
     },
     "reCatpcha": {
       "title": "Je ne suis pas un robot",
