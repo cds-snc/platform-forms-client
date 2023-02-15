@@ -86,9 +86,10 @@ export async function listAllSubmissions(
         // Limit the amount of response to 500.  This can be changed in the future once we have pagination.
         Limit: 500 - accumulatedResponses.length,
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-        KeyConditionExpression: "FormID = :formID",
+        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
         ExpressionAttributeValues: {
           ":formID": formID,
+          ":namePrefix": "NAME#",
         },
         ExpressionAttributeNames: {
           "#status": "Status",
@@ -116,7 +117,7 @@ export async function listAllSubmissions(
               securityAttribute,
               name,
               createdAt,
-              lastDownloadedBy,
+              lastDownloadedBy: lastDownloadedBy ?? null,
             })
           )
         );
