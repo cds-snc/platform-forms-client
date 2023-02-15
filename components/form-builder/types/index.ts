@@ -32,6 +32,7 @@ export enum LocalizedFormProperties {
 export enum LocalizedElementProperties {
   TITLE = "title",
   DESCRIPTION = "description",
+  PLACEHOLDER = "placeholder",
 }
 
 export interface LocalizedProperty {
