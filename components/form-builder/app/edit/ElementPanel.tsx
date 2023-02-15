@@ -1,14 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+import { isValidatedTextType } from "../../util";
+import { FormElementTypes } from "@lib/types";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { lang, getFocusInput } = useTemplateStore((s) => ({
+  const {
+    lang,
+    getFocusInput,
+    setFocusInput,
+    add,
+    updateField,
+    remove,
+    moveUp,
+    moveDown,
+    duplicateElement,
+  } = useTemplateStore((s) => ({
     lang: s.lang,
-    elements: s.form.elements,
     getFocusInput: s.getFocusInput,
+    setFocusInput: s.setFocusInput,
+    add: s.add,
+    updateField: s.updateField,
+    remove: s.remove,
+    moveUp: s.moveUp,
+    moveDown: s.moveDown,
+    duplicateElement: s.duplicateElement,
+    elements: s.form.elements,
   }));
 
   const [className, setClassName] = useState<string>("");
@@ -33,6 +52,19 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     setTimeout(() => setClassName(""), 2100);
   }, [className]);
 
+  /* Note this callback is also in PanelActions */
+  const handleAddElement = useCallback(
+    (index: number, type?: FormElementTypes) => {
+      setFocusInput(true);
+      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
+      if (isValidatedTextType(type)) {
+        // add 1 to index because it's a new element
+        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
+      }
+    },
+    [add, setFocusInput, updateField]
+  );
+
   return (
     <div
       key={lang}
@@ -41,13 +73,26 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         item={item}
-        renderMoreButton={({
-          item,
-          moreButton,
-        }: {
-          item: FormElementWithIndex;
-          moreButton: JSX.Element | undefined;
-        }) => <MoreModal item={item} moreButton={moreButton} />}
+        handleAdd={handleAddElement}
+        handleRemove={() => {
+          // if index is 0, then highlight the form title
+          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+          remove(item.id);
+          document.getElementById(labelId)?.focus();
+        }}
+        handleMoveUp={() => {
+          moveUp(item.index);
+        }}
+        handleMoveDown={() => {
+          moveDown(item.index);
+        }}
+        handleDuplicate={() => {
+          setFocusInput(true);
+          duplicateElement(item.index);
+        }}
+        renderMoreButton={({ item, moreButton }) => (
+          <MoreModal item={item} moreButton={moreButton} />
+        )}
       />
     </div>
   );

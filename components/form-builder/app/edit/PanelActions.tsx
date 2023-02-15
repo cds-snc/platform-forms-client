@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
@@ -16,14 +16,12 @@ import {
 
 import { usePanelActions } from "@components/form-builder/hooks";
 
-import { isValidatedTextType } from "../../util";
-
 const buttonClasses =
   "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
 const iconClasses =
   "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
 
-interface RenderMoreFunc {
+export interface RenderMoreFunc {
   ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
     | React.ReactElement
     | string
@@ -33,31 +31,24 @@ interface RenderMoreFunc {
 export const PanelActions = ({
   item,
   renderMoreButton,
+  handleAdd,
+  handleRemove,
+  handleMoveUp,
+  handleMoveDown,
+  handleDuplicate,
 }: {
   item: FormElementWithIndex;
   renderMoreButton: RenderMoreFunc;
+  handleAdd: (index: number, type?: FormElementTypes) => void;
+  handleRemove: () => void;
+  handleMoveUp: () => void;
+  handleMoveDown: () => void;
+  handleDuplicate?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const {
-    lang,
-    add,
-    updateField,
-    remove,
-    moveUp,
-    moveDown,
-    duplicateElement,
-    elements,
-    setFocusInput,
-  } = useTemplateStore((s) => ({
+  const { lang, elements } = useTemplateStore((s) => ({
     lang: s.lang,
-    add: s.add,
-    updateField: s.updateField,
-    remove: s.remove,
-    moveUp: s.moveUp,
-    moveDown: s.moveDown,
-    duplicateElement: s.duplicateElement,
     elements: s.form.elements,
-    setFocusInput: s.setFocusInput,
   }));
 
   const isInit = useRef(false);
@@ -65,42 +56,33 @@ export const PanelActions = ({
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
 
-  const getPanelButtons = (item: FormElementWithIndex) => {
+  const getPanelButtons = () => {
     return [
       {
         id: 1,
         txt: "moveUp",
         icon: ChevronUp,
-        onClick: () => moveUp(item.index),
+        onClick: handleMoveUp,
         disabled: isFirstItem,
       },
       {
         id: 2,
         txt: "moveDown",
         icon: ChevronDown,
-        onClick: () => moveDown(item.index),
+        onClick: handleMoveDown,
         disabled: isLastItem,
       },
       {
         id: 3,
         txt: "duplicate",
         icon: Duplicate,
-        onClick: () => {
-          setFocusInput(true);
-          duplicateElement(item.index);
-        },
+        onClick: handleDuplicate,
       },
       {
         id: 4,
         txt: "remove",
         icon: Close,
-        onClick: () => {
-          // if index is 0, then highlight the form title
-          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
-
-          remove(item.id);
-          document.getElementById(labelId)?.focus();
-        },
+        onClick: handleRemove,
       },
       {
         id: 5,
@@ -111,7 +93,7 @@ export const PanelActions = ({
     ];
   };
 
-  const panelButtons = getPanelButtons(item);
+  const panelButtons = getPanelButtons();
 
   const { handleNav, getTabIndex, currentFocusIndex, itemsRef, setRef } = usePanelActions({
     panelButtons,
@@ -131,19 +113,6 @@ export const PanelActions = ({
       el.focus();
     }
   }, [currentFocusIndex, isInit, itemsRef]);
-
-  /* Note this callback is also in PanelActions */
-  const handleAddElement = useCallback(
-    (index: number, type?: FormElementTypes) => {
-      setFocusInput(true);
-      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
-      if (isValidatedTextType(type)) {
-        // add 1 to index because it's a new element
-        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
-      }
-    },
-    [add, setFocusInput, updateField]
-  );
 
   const actions = panelButtons.map((button, loopIndex) => {
     const Icon = button.icon;
@@ -180,7 +149,7 @@ export const PanelActions = ({
         {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
       </div>
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <AddElementButton position={item.index} handleAdd={handleAddElement} />
+        <AddElementButton position={item.index} handleAdd={handleAdd} />
       </div>
     </div>
   );
