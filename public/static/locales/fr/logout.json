@@ -1,6 +1,6 @@
 {
   "title": "Vous êtes déconnecté",
-  "messageContent": "Vous avez fermé votre session.",
+  "messageContent": "Vous êtes déconnecté",
   "goToSignInLabel": "Se connecter",
   "logoutDate": "Votre dernière session s'est terminée à"
 }

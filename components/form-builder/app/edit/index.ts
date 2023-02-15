@@ -5,6 +5,7 @@ export { PanelActionsLocked } from "./PanelActionsLocked";
 export { ConfirmationDescription } from "./ConfirmationDescription";
 export { Modal, ModalButton } from "./Modal";
 export { ModalForm } from "./ModalForm";
+export { MoreModal } from "./MoreModal";
 export { PrivacyDescription } from "./PrivacyDescription";
 export { SelectedElement, useGetSelectedOption } from "./SelectedElement";
 export { PanelBody } from "./PanelBody";
