@@ -45,7 +45,7 @@ export const PanelActions = ({
   handleMoveUp: () => void;
   handleMoveDown: () => void;
   handleDuplicate: () => void;
-  filterElements: ElementOptionsFilter;
+  filterElements?: ElementOptionsFilter;
 }) => {
   const { t } = useTranslation("form-builder");
   const { lang, elements } = useTemplateStore((s) => ({
