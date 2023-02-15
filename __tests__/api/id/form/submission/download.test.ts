@@ -217,7 +217,7 @@ describe("/api/id/[form]/[submission]/download", () => {
 
       expect(res.statusCode).toBe(200);
       expect(spiedLogMessage).toHaveBeenCalledWith(
-        "user:forms@cds.ca retrieved form responses 12 from form ID:formtestID"
+        "user:forms@cds.ca retrieved form responses for response name: 123-test, submissionID: 12, form ID: formtestID"
       );
       expect(res._getHeaders()).toMatchObject({
         "content-disposition": "attachment; filename=123-test.html",

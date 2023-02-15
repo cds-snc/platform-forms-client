@@ -34,7 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   if (!vaultActive) return res.status(404).json({ error: "Vault not active" });
 
   const formID = req.query.form;
-  const submissionID = req.query.submission;
+  const submissionName = req.query.submission;
 
   const { session } = props as WithRequired<MiddlewareProps, "session">;
 
@@ -44,7 +44,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       `User does not have an associated email address: ${JSON.stringify(session.user)} `
     );
 
-  if (!formID || Array.isArray(formID) || !submissionID || Array.isArray(submissionID))
+  if (!formID || Array.isArray(formID) || !submissionName || Array.isArray(submissionName))
     return res.status(400).json({ error: "Bad Request" });
 
   try {
@@ -62,14 +62,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
       ExpressionAttributeValues: {
         ":formID": formID,
-        ":submissionID": submissionID,
+        ":submission": `NAME#${submissionName}`,
       },
       ExpressionAttributeNames: {
         "#Name": "Name",
       },
-      KeyConditionExpression: "FormID = :formID AND SubmissionID = :submissionID",
-      ProjectionExpression:
-        "FormID,SubmissionID,FormSubmission,Retrieved,SecurityAttribute,ConfirmationCode,#Name,CreatedAt",
+      KeyConditionExpression: "FormID = :formID AND NAME_OR_CONF = :submission",
+      ProjectionExpression: "SubmissionID,FormSubmission,ConfirmationCode,#Name,CreatedAt",
     };
     const queryCommand = new QueryCommand(getItemsDbParams);
 
@@ -82,21 +81,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     // If there is more then one submission returned something is seriously wrong
     if (response.Items.length > 1) return res.status(500).json({ error: "Internal Server Error" });
 
-    const { formResponse, createdAt, confirmReceiptCode, responseID } = ((
+    const { formResponse, createdAt, confirmReceiptCode, responseID, submissionID } = ((
       vaultResult
     ): {
       formResponse: Responses;
       createdAt: number;
       confirmReceiptCode: string;
       responseID: string;
+      submissionID: string;
     } => {
       return {
         formResponse: JSON.parse(vaultResult.FormSubmission),
         createdAt: vaultResult.CreatedAt,
         confirmReceiptCode: vaultResult.ConfirmationCode,
-        // Note: "name" is not a reserved word in JS, encase anyone else was worried
+        // Note: "name" is not a reserved word in JS, incase anyone else was worried
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#reserved_words
         responseID: vaultResult.Name,
+        submissionID: vaultResult.SubmissionID,
       };
     })(response.Items[0]);
 
@@ -159,16 +160,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     await renderPageToClient(res, stream).catch((err) => {
       logMessage.error(err);
-      throw new Error(`Download Form Response submissionID ${submissionID} could not be rendered`);
+      throw new Error(
+        `Download Form Response could not be rendered for response name: ${responseID},submissionID: ${submissionID}, formID:${formID}`
+      );
     });
 
     logMessage.info(
-      `user:${session?.user.email} retrieved form responses ${submissionID} from form ID:${formID}`
+      `user:${session?.user.email} retrieved form responses for response name: ${responseID}, submissionID: ${submissionID}, form ID: ${formID}`
     );
 
     // Setting last downloaded by on Vault Submission
 
-    await updateLastDownloadedBy(submissionID, formID, userEmail);
+    await updateLastDownloadedBy(responseID, formID, userEmail);
   } catch (error) {
     if (error instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
     logMessage.error(error as Error);
@@ -196,14 +199,14 @@ function connectToDynamo(): DynamoDBDocumentClient {
  * @param formID Form ID the Submission is for
  * @param email Email address of the user downloading the Submission
  */
-async function updateLastDownloadedBy(submissionID: string, formID: string, email: string) {
+async function updateLastDownloadedBy(responseID: string, formID: string, email: string) {
   const documentClient = connectToDynamo();
 
   const updateCommandInput: UpdateCommandInput = {
     TableName: "Vault",
     Key: {
       FormID: formID,
-      SubmissionID: submissionID,
+      NAME_OR_CONF: `NAME#${responseID}`,
     },
     UpdateExpression: "SET LastDownloadedBy = :email",
     ExpressionAttributeValues: {

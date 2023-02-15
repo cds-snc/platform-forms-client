@@ -24,7 +24,11 @@ export type VaultSubmission = {
   status: string;
   confirmationCode: string;
   name: string;
-  retrieved: number;
+  lastDownloadedBy: string;
+  formSubmssionLanguage?: string;
 };
 
-export type VaultSubmissionList = TypeOmit<VaultSubmission, "formSubmission">;
+export type VaultSubmissionList = TypeOmit<
+  VaultSubmission,
+  "formSubmission" | "submissionID" | "confirmationCode"
+>;
