@@ -13,13 +13,19 @@ export const Menu = ({
   subIndex,
   handleAdd,
   handleRemove,
+  handleMoveUp,
+  handleMoveDown,
+  handleDuplicate,
   filterElements,
 }: {
   item: FormElementWithIndex;
   elIndex: number;
   subIndex: number;
   handleAdd: (subIndex: number, type?: FormElementTypes) => void;
-  handleRemove: (elIndex: number, subIndex: number) => void;
+  handleRemove: () => void;
+  handleMoveUp: () => void;
+  handleMoveDown: () => void;
+  handleDuplicate?: () => void;
   filterElements: ElementOptionsFilter;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -41,9 +47,33 @@ export const Menu = ({
       <Button
         theme="secondary"
         className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
-        onClick={() => handleRemove(elIndex, item.id)}
+        onClick={handleRemove}
       >
         {t("removeFromSet")}
+      </Button>
+
+      <Button
+        theme="secondary"
+        className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
+        onClick={handleMoveUp}
+      >
+        {t("moveUp")}
+      </Button>
+
+      <Button
+        theme="secondary"
+        className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
+        onClick={handleMoveDown}
+      >
+        {t("moveDown")}
+      </Button>
+
+      <Button
+        theme="secondary"
+        className="btn btn-danger inline-block ml-5 !border-1.5 !py-2 !px-4 leading-6 text-sm"
+        onClick={() => handleDuplicate && handleDuplicate()}
+      >
+        {t("duplicate")}
       </Button>
     </div>
   );
