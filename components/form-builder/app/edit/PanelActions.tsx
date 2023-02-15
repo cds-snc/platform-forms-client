@@ -93,7 +93,6 @@ export const PanelActions = ({
         onClick: () => {
           // if index is 0, then highlight the form title
           const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
-
           remove(item.id);
           document.getElementById(labelId)?.focus();
         },
@@ -154,6 +153,33 @@ export const PanelActions = ({
         onClick={button.onClick}
         tabIndex={getTabIndex(button.txt)}
         buttonRef={setRef(`button-${loopIndex}`)}
+        dataTestId={button.txt}
+      >
+        <span className="text-sm mx-3 xl:mx-0">{t(button.txt)}</span>
+      </Button>
+    );
+  });
+
+  const moreButton = actions.pop();
+
+  const actions = panelButtons.map((button, loopIndex) => {
+    const Icon = button.icon;
+    return (
+      <Button
+        key={button.txt}
+        className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
+        disabled={button.disabled && button.disabled}
+        theme="secondary"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={<Icon className={`${iconClasses}`} />}
+        onClick={button.onClick}
+        tabIndex={getTabIndex(button.txt)}
+        buttonRef={(el: HTMLButtonElement) => {
+          const index = `button-${loopIndex}` as unknown as number;
+          if (el && itemsRef.current) {
+            itemsRef.current[index] = el;
+          }
+        }}
         dataTestId={button.txt}
       >
         <span className="text-sm mx-3 xl:mx-0">{t(button.txt)}</span>
