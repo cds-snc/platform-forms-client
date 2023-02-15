@@ -26,7 +26,7 @@ describe("Forms Functionality", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button can not be used");
+      cy.get("[role='alert']").contains("Button cannot be used");
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
       cy.clock();
@@ -36,7 +36,7 @@ describe("Forms Functionality", () => {
       cy.tick(1000);
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button can not be used");
+      cy.get("[role='alert']").contains("Button cannot be used");
       cy.tick(6000);
       cy.get("[role='alert']").contains("The button is ready.");
     });

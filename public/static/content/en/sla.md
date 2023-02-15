@@ -1,4 +1,4 @@
-# GC Forms Service-Level Agreement
+# GC Forms Service-level agreement
 
 Version 1.5
 
