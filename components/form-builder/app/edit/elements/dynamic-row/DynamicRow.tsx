@@ -7,8 +7,9 @@ import { isValidatedTextType } from "../../../../util";
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
-import { Menu } from "./Menu";
+import { DynamicRowModal } from "./DynamicRowModal";
 import { PanelHightLight } from "./PanelHightlight";
+import { PanelActions } from "../../PanelActions";
 
 export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -24,6 +25,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     removeSubItem,
     subElements,
     localizeField,
+    lang,
   } = useTemplateStore((s) => ({
     lang: s.lang,
     addSubItem: s.addSubItem,
@@ -166,10 +168,10 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
           <PanelHightLight
             key={`sub-element-${item.id}-${subIndex}`}
             conditionalChildren={
-              <Menu
+              <PanelActions
+                elements={subElements}
+                lang={lang}
                 item={item}
-                elIndex={elIndex}
-                subIndex={subIndex}
                 handleAdd={(subIndex: number, type?: FormElementTypes) => {
                   handleAddElement(subIndex, type);
                 }}
@@ -184,6 +186,16 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                 }}
                 handleDuplicate={() => {
                   subDuplicateElement(elIndex, subIndex);
+                }}
+                renderMoreButton={({ item, moreButton }) => {
+                  return (
+                    <DynamicRowModal
+                      elIndex={elIndex}
+                      subIndex={subIndex}
+                      item={{ ...item, index: item.id }}
+                      moreButton={moreButton}
+                    />
+                  );
                 }}
                 filterElements={elementFilter}
               />
