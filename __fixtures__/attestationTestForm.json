@@ -14,7 +14,7 @@
       "type": "checkbox",
       "properties": {
         "titleEn": "Do you attest that the information you are providing is true and correct to your knowledge?",
-        "titleFr": "Attestez-vous que les informations que vous fournissez sont, à votre connaissance, vraies et correctes ?",
+        "titleFr": "Attestez-vous que les informations que vous fournissez sont, à votre connaissance, vraies et correctes?",
         "choices": [
           {
             "en": "I prefer lemons to oranges.",
