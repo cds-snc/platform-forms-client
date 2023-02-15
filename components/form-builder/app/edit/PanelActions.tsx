@@ -43,7 +43,7 @@ export const PanelActions = ({
   handleRemove: () => void;
   handleMoveUp: () => void;
   handleMoveDown: () => void;
-  handleDuplicate?: () => void;
+  handleDuplicate: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const { lang, elements } = useTemplateStore((s) => ({

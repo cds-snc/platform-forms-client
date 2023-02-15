@@ -3,7 +3,7 @@ interface PanelButton {
   id: number;
   txt: string;
   icon: ({ className, title }: { className: string; title: string }) => JSX.Element;
-  onClick: () => void | undefined;
+  onClick: () => void;
   disabled?: boolean;
 }
 
