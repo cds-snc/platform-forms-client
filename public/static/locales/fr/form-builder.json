@@ -110,7 +110,7 @@
     "phone": "Entrez un numéro de téléphone comme 111-222-3333"
   },
   "description": "La description ",
-  "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de formatage.",
+  "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Télécharger le fichier CSV",
   "dropdown": "Liste déroulante",
@@ -131,7 +131,7 @@
   "formatNumberedList": "Format liste numérotée",
   "formConfirmationMessage": "Message de confirmation du formulaire",
   "formDelete": {
-    "downloadButtonText": "Téléchargez une copie",
+    "downloadButtonText": "Télécharger une copie",
     "draft": {
       "message1": "La suppression ne peut être annulée. Votre formulaire sera définitivement supprimé de votre liste de formulaires.",
       "message2": "Téléchargez une copie de ce formulaire pour vos archives. Le fichier de formulaire JSON ainsi sauvegardé pourra être ouvert à nouveau dans Formulaires GC pour recréer le formulaire ultérieurement."
@@ -331,7 +331,7 @@
     "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC."
   },
   "test": "Tester",
-  "textFormatting": "Formatage du texte  ",
+  "textFormatting": "Mise en forme du texte ",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "tooltipFormatBold": "En gras (⌘B)",
   "tooltipFormatBulletList": "Liste à puces",
