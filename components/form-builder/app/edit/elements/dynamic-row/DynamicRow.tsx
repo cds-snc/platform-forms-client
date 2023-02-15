@@ -170,11 +170,21 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                 item={item}
                 elIndex={elIndex}
                 subIndex={subIndex}
-                handleAdd={handleAddElement}
-                handleRemove={removeSubItem}
-                handleMoveUp={subMoveUp}
-                handleMoveDown={subMoveDown}
-                handleDuplicate={subDuplicateElement}
+                handleAdd={(subIndex: number, type?: FormElementTypes) => {
+                  handleAddElement(subIndex, type);
+                }}
+                handleRemove={() => {
+                  removeSubItem(elIndex, item.id);
+                }}
+                handleMoveUp={() => {
+                  subMoveUp(elIndex, subIndex);
+                }}
+                handleMoveDown={() => {
+                  subMoveDown(elIndex, subIndex);
+                }}
+                handleDuplicate={() => {
+                  subDuplicateElement(elIndex, subIndex);
+                }}
                 filterElements={elementFilter}
               />
             }

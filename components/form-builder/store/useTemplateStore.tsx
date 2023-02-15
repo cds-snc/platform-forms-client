@@ -86,7 +86,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   moveUp: (index: number) => void;
   subMoveUp: (elIndex: number, subIndex?: number) => void;
   moveDown: (index: number) => void;
-  subMoveDown: (index: number) => void;
+  subMoveDown: (elIndex: number, subIndex?: number) => void;
   localizeField: {
     <LocalizedProperty extends string>(
       arg: LocalizedProperty,
