@@ -18,7 +18,7 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions item={item} renderMoreButton={({ moreButton }) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -29,8 +29,8 @@ describe("PanelActions roving index", () => {
     });
 
     const toolbar = screen.getByTestId("panel-actions");
-    const moveUpButton = screen.getByTestId("move-up");
-    const moveDownButton = screen.getByTestId("move-down");
+    const moveUpButton = screen.getByTestId("moveUp");
+    const moveDownButton = screen.getByTestId("moveDown");
     const duplicateButton = screen.getByTestId("duplicate");
     const removeButton = screen.getByTestId("remove");
     const moreButton = screen.getByTestId("more");
@@ -95,7 +95,7 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions item={item} renderMoreButton={({ moreButton }) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -106,8 +106,8 @@ describe("PanelActions roving index", () => {
     });
 
     const toolbar = screen.getByTestId("panel-actions");
-    const moveUpButton = screen.getByTestId("move-up");
-    const moveDownButton = screen.getByTestId("move-down");
+    const moveUpButton = screen.getByTestId("moveUp");
+    const moveDownButton = screen.getByTestId("moveDown");
     const duplicateButton = screen.getByTestId("duplicate");
     const removeButton = screen.getByTestId("remove");
     const moreButton = screen.getByTestId("more");
@@ -159,7 +159,7 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions item={item} renderMoreButton={({ moreButton }) => <div>{moreButton}</div>} />
       </Providers>
     );
 
@@ -170,8 +170,8 @@ describe("PanelActions roving index", () => {
     });
 
     const toolbar = screen.getByTestId("panel-actions");
-    const moveUpButton = screen.getByTestId("move-up");
-    const moveDownButton = screen.getByTestId("move-down");
+    const moveUpButton = screen.getByTestId("moveUp");
+    const moveDownButton = screen.getByTestId("moveDown");
     const duplicateButton = screen.getByTestId("duplicate");
     const removeButton = screen.getByTestId("remove");
     const moreButton = screen.getByTestId("more");
