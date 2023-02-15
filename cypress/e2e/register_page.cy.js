@@ -14,7 +14,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagename']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("No error on submitting a form with a name", () => {
@@ -29,7 +29,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Error on submitting a form with an invalid email", () => {
@@ -57,7 +57,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Error on submitting a form with a short password", () => {
@@ -122,7 +122,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepasswordConfirmation']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Error on submitting a form with a non matching password confirmation field", () => {

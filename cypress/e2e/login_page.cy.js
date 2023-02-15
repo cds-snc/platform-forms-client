@@ -25,7 +25,7 @@ describe("Login Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Displays an error message when submitting an invalid email", () => {
@@ -43,7 +43,7 @@ describe("Login Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
 
