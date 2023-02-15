@@ -1,30 +1,30 @@
 {
   "unlockPublishing": {
     "title": "Déverrouiller la publication de formulaires",
-    "paragraph1": "Avant de publier votre premier formulaire, fournissez les coordonnées de votre gestionnaire ou de la personne a qui vous relevez. Les Formulaires GC n'afficheront pas leurs coordonnées publiquement.",
+    "paragraph1": "Avant de publier votre premier formulaire, veuillez fournir les coordonnées de votre gestionnaire ou de la personne a qui vous relevez. Formulaires GC n'affichera pas leurs coordonnées publiquement.",
     "form": {
       "field1": {
-        "title": "Fournissez l’adresse courriel de votre gestionnaire ou de votre supérieur·e direct·e (obligatoire)",
-        "description": "Nous les informerons de votre capacité de publication dans les Formulaires GC et de notre accord de niveau de service."
+        "title": "Fournissez l’adresse courriel de votre gestionnaire ou de votre supérieur·e direct·e",
+        "description": "Nous les informerons de votre capacité de publication dans Formulaires GC et de notre accord sur les niveaux de service."
       },
       "field2": {
-        "title": "Dans quel ministère ou organisme travaillez-vous? (obligatoire)"
+        "title": "Dans quel ministère ou organisme travaillez-vous?"
       },
       "field3": {
-        "title": "Quels sont les objectifs de votre programme ou service? (obligatoire)"
+        "title": "Quels sont les objectifs de votre programme ou service?"
       }
     },
-    "skipStepButton": "Pas maintenant"
+    "skipStepButton": "Sauter cette étape pour l'instant"
   },
   "unlockPublishingSubmitted": {
-    "title": "Déverrouiller la publication de formulaires",
+    "title": "Demande de déverrouillage soumise pour la publication de formulaires",
     "whatNext": {
       "title": "Quelle est la suite?",
-      "paragraph1": "Quelqu’un traitera votre demande et informera votre gestionnaire de l’état de votre publication.",
-      "paragraph2": "Rappelons qu’il peut s’écouler jusqu’à 24 heures avant de pouvoir publier. ",
-      "paragraph3": "Vous recevrez une notification par courriel lorsqu’on aura autorisé votre publication.",
-      "paragraph4": "Entre-temps, vous pouvez tout de même consulter et rédiger des formulaires."
+      "paragraph1": "Nous traiterons votre demande et informerons votre gestionnaire de l’état de votre capacité de publication dans Formulaires GC et de notre accord sur les niveaux de service.",
+      "paragraph2": "Cela pourrait prendre jusqu'à 2 jours ouvrables avant que vous puissiez publier. ",
+      "paragraph3": "Vous recevrez une notification par courriel lorsque nous aurons dévérouillé la publication.",
+      "paragraph4": "Entre-temps, vous pouvez continuer à explorer et rédiger des formulaires."
     }
   },
-  "submissionError": "Il y avait une erreur. Veuillez réessayer"
+  "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
 }
