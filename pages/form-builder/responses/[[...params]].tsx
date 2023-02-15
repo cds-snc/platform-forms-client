@@ -7,7 +7,7 @@ import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { NextPageWithLayout } from "@pages/_app";
 import { PageTemplate, Template } from "@components/form-builder/app";
-import { Button, useDialogRef, Dialog, TagInput } from "@components/form-builder/app/shared";
+import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
 import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
@@ -28,21 +28,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const { status } = useSession();
   const isAuthenticated = status === "authenticated";
 
+  const secondaryButtonClass =
+    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
+
+  // Dialog: Confirm Code vars
   const [codes, setCodes] = useState<string[]>([]);
   const validateCodes = (code: string) => {
     return isUUID(code);
   };
-
-  const [formNumbers, setFormNumbers] = useState<string[]>([]);
-  const validateFormNumber = () => {
-    // TODO
-    return true;
-  };
-
-  const secondaryButtonClass =
-    "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
-
   const dialogConfirmReceipt = useDialogRef();
+  const dialogConfirmReceiptInstructionId =
+    "dialog-confirm-receipt-instruction-" + Math.random().toString(36).substr(2, 9);
   const [isShowConfirmReceiptDialog, setIsShowConfirmReceiptDialog] = useState(false);
   const dialogConfirmReceiptHandleClose = () => {
     setIsShowConfirmReceiptDialog(false);
@@ -52,7 +48,15 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     //TODO
   };
 
+  // Dialog: Report Problems vars
+  const [formNumbers, setFormNumbers] = useState<string[]>([]);
+  const validateFormNumber = () => {
+    // TODO
+    return true;
+  };
   const dialogReportProblems = useDialogRef();
+  const dialogReportProblemsInstructionId =
+    "dialog-report-problems-instruction-" + Math.random().toString(36).substr(2, 9);
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const dialogReportProblemsHandleClose = () => {
     setIsShowReportProblemsDialog(false);
@@ -183,14 +187,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
         >
           <div className="px-10 py-4">
             <p className="mb-8">{t("responses.confirmReceiptDialog.findCode")}</p>
-            <p className="mt-12 mb-2 font-bold">{t("responses.confirmReceiptDialog.copyCode")}</p>
-            <TagInput
-              tags={codes}
-              setTags={setCodes}
-              validateTag={validateCodes}
+            <p className="mt-20 mb-2 font-bold" id={dialogConfirmReceiptInstructionId}>
+              {t("responses.confirmReceiptDialog.copyCode")}
+            </p>
+            <LineItemEntries
+              inputs={codes}
+              setInputs={setCodes}
+              validateInput={validateCodes}
               spellCheck={false}
-            ></TagInput>
-            <p className="mt-10">{t("responses.confirmReceiptDialog.responsesAvailableFor")}</p>
+              inputLabelId={dialogConfirmReceiptInstructionId}
+            ></LineItemEntries>
+            <p className="mt-8">{t("responses.confirmReceiptDialog.responsesAvailableFor")}</p>
             <div className="flex mt-8 mb-8">
               <Button className="mr-4" onClick={handleConfirmReceiptSubmit}>
                 {t("responses.confirmReceipt")}
@@ -212,16 +219,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
         >
           <div className="px-10 py-4">
             <p className="mb-8">{t("responses.reportProblemsDialog.findForm")}</p>
-            <p className="mt-12 mb-2 font-bold">
+            <p id={dialogReportProblemsInstructionId} className="mt-20 mb-2 font-bold">
               {t("responses.reportProblemsDialog.enterFormNumbers")}
             </p>
-            <TagInput
-              tags={formNumbers}
-              setTags={setFormNumbers}
-              validateTag={validateFormNumber}
+            <LineItemEntries
+              inputs={formNumbers}
+              setInputs={setFormNumbers}
+              validateInput={validateFormNumber}
               spellCheck={false}
-            ></TagInput>
-            <p className="mt-10">{t("responses.reportProblemsDialog.problemReported")}</p>
+              inputLabelId={dialogReportProblemsInstructionId}
+            ></LineItemEntries>
+            <p className="mt-8">{t("responses.reportProblemsDialog.problemReported")}</p>
             <div className="flex mt-8 mb-8">
               <Button className="mr-4" onClick={handleReportProblemSubmit}>
                 {t("responses.reportProblemsDialog.reportProblems")}

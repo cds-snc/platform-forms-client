@@ -10,3 +10,4 @@ export { ResumeEditingForm } from "./ResumeEditingForm";
 export { DownloadFileButton } from "./DownloadFileButton";
 export { ListBox } from "./ListBox";
 export { TagInput } from "./tag-input";
+export { LineItemEntries } from "./line-item-entries";
