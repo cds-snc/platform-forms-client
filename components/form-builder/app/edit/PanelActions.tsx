@@ -29,8 +29,7 @@ export interface RenderMoreFunc {
 
 export const PanelActions = ({
   item,
-  lang,
-  elements,
+  subIndex,
   renderMoreButton,
   handleAdd,
   handleRemove,
@@ -38,10 +37,11 @@ export const PanelActions = ({
   handleMoveDown,
   handleDuplicate,
   filterElements,
+  elements,
+  lang,
 }: {
   item: FormElementWithIndex;
-  lang: string;
-  elements: FormElement[];
+  subIndex?: number;
   renderMoreButton: RenderMoreFunc;
   handleAdd: (index: number, type?: FormElementTypes) => void;
   handleRemove: () => void;
@@ -49,6 +49,8 @@ export const PanelActions = ({
   handleMoveDown: () => void;
   handleDuplicate: () => void;
   filterElements?: ElementOptionsFilter;
+  elements: FormElement[];
+  lang: string;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -139,7 +141,11 @@ export const PanelActions = ({
 
   return (
     <div>
-      <div className="absolute invisible group-hover:visible xl:visible xl:relative right-0 top-0 -mr-[185px] xl:mr-0">
+      <div
+        className={`absolute invisible group-hover/${
+          subIndex === -1 ? "element" : "subElement"
+        }:visible xl:visible xl:relative right-0 top-0 -mr-[185px] xl:mr-0`}
+      >
         <div
           className={`bg-violet-100 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`}
           role="toolbar"

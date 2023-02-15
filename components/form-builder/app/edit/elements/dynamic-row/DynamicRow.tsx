@@ -169,9 +169,8 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
             key={`sub-element-${item.id}-${subIndex}`}
             conditionalChildren={
               <PanelActions
-                elements={subElements}
-                lang={lang}
                 item={item}
+                subIndex={subIndex}
                 handleAdd={(subIndex: number, type?: FormElementTypes) => {
                   handleAddElement(subIndex, type);
                 }}
@@ -198,6 +197,8 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
                   );
                 }}
                 filterElements={elementFilter}
+                elements={subElements}
+                lang={lang}
               />
             }
           >
