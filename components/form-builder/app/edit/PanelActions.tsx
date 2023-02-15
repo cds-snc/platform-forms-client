@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import { Button } from "../shared";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { FormElementWithIndex } from "@components/form-builder/types";
+import { ElementOptionsFilter, FormElementWithIndex } from "@components/form-builder/types";
 import { useTemplateStore } from "@components/form-builder/store";
 import {
   ChevronDown,
@@ -36,6 +36,7 @@ export const PanelActions = ({
   handleMoveUp,
   handleMoveDown,
   handleDuplicate,
+  filterElements,
 }: {
   item: FormElementWithIndex;
   renderMoreButton: RenderMoreFunc;
@@ -44,6 +45,7 @@ export const PanelActions = ({
   handleMoveUp: () => void;
   handleMoveDown: () => void;
   handleDuplicate: () => void;
+  filterElements: ElementOptionsFilter;
 }) => {
   const { t } = useTranslation("form-builder");
   const { lang, elements } = useTemplateStore((s) => ({
@@ -149,7 +151,11 @@ export const PanelActions = ({
         {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
       </div>
       <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <AddElementButton position={item.index} handleAdd={handleAdd} />
+        <AddElementButton
+          position={item.index}
+          handleAdd={handleAdd}
+          filterElements={filterElements}
+        />
       </div>
     </div>
   );
