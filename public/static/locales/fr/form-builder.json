@@ -142,7 +142,7 @@
       "message2": "Téléchargez une copie de ce formulaire pour vos archives. Le fichier de formulaire JSON ainsi sauvegardé pourra être ouvert à nouveau dans Formulaires GC pour recréer le formulaire ultérieurement.",
       "message3": "Le lien URL de votre formulaire changera si vous récreez votre formulaire."
     },
-    "title": "Supprimer cet formulaire ?"
+    "title": "Supprimer cet formulaire?"
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
@@ -151,7 +151,7 @@
   "formDeletedDialogTitle": "Succés",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
-    "btnText": "Que puis-je faire avec un fichier de formulaire ?",
+    "btnText": "Que puis-je faire avec un fichier de formulaire?",
     "description": "Conservez une version du formulaire sur votre ordinateur",
     "dialog": {
       "downloadButtonText": "Téléchargez une copie",

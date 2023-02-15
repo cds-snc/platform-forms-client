@@ -11,7 +11,7 @@
         "title": "Dans quel ministère ou organisme travaillez-vous? (obligatoire)"
       },
       "field3": {
-        "title": "Quels sont les objectifs de votre programme ou service ? (obligatoire)"
+        "title": "Quels sont les objectifs de votre programme ou service? (obligatoire)"
       }
     },
     "skipStepButton": "Pas maintenant"
