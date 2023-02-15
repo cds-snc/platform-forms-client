@@ -17,7 +17,7 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
-import { isUUID } from "@lib/validation";
+import { isUUID, isFormId } from "@lib/validation";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -50,9 +50,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
   // Dialog: Report Problems vars
   const [formNumbers, setFormNumbers] = useState<string[]>([]);
-  const validateFormNumber = () => {
-    // TODO
-    return true;
+  const validateFormNumber = (formId: string) => {
+    return isFormId(formId);
   };
   const dialogReportProblems = useDialogRef();
   const dialogReportProblemsInstructionId =

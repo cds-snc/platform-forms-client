@@ -17,14 +17,13 @@ export const RoundThinXCloseIcon = ({
     role={title ? "img" : "presentation"}
   >
     {title && <title>{title}</title>}
-    <circle cx="18" cy="18.5" r="18" fill="#E2E8EF" />
+    <circle cx="18" cy="18.5" r="18" />
     <rect
       x="24.7463"
       y="11.5"
       width="1.3884"
       height="19.4377"
       transform="rotate(45 24.7463 11.5)"
-      fill="black"
     />
     <rect
       x="25.7263"
@@ -32,7 +31,6 @@ export const RoundThinXCloseIcon = ({
       width="1.3884"
       height="19.4377"
       transform="rotate(135 25.7263 25.2446)"
-      fill="black"
     />
   </svg>
 );

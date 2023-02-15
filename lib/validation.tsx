@@ -375,3 +375,16 @@ export const isUUID = (field: string): boolean => {
   }
   return true;
 };
+
+/**
+ * This function tests whether a string contains a Form ID (used in the UI)
+ * @param field A string containing a Form ID (used in the UI)
+ * @returns {boolean} The validation result
+ */
+export const isFormId = (field: string): boolean => {
+  const reg = new RegExp("^[0-9]{2}-[0-9]{2}-[0-9a-z]{4}$", "i");
+  if (!field || !reg.test(field)) {
+    return false;
+  }
+  return true;
+};
