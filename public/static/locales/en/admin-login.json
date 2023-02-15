@@ -1,14 +1,14 @@
 {
-  "title": "Forms administration",
-  "sub-title": "Login with your CDS-SNC Google account",
+  "title": "GC Forms administration",
+  "sub-title": "Sign in with your CDS Google account",
   "logged-in": "Signed in as",
   "button": {
-    "login": "Login",
-    "logout": "Logout"
+    "login": "Sign in",
+    "logout": "Sign out"
   },
   "formResponses": "Stored responses from forms",
   "unauthorized": {
     "title": "Administrative privileges required",
-    "detail": "The page you are trying to access requires application administrative privileges"
+    "detail": "The page you are trying to access requires GC Forms administrative privileges"
   }
 }

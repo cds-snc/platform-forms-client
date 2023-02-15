@@ -1,22 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "next-i18next";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { FormElementWithIndex } from "../../types";
-import { useTemplateStore, useModalStore } from "../../store";
-import { PanelActions, ModalButton, ModalForm, PanelBodyRoot } from "./index";
-import { Button } from "../shared";
+import { useTemplateStore } from "../../store";
+import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+import { isValidatedTextType } from "../../util";
+import { FormElementTypes } from "@lib/types";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
-  const { t } = useTranslation("form-builder");
-  const isRichText = item.type == "richText";
-  const { lang, elements, getFocusInput, updateField } = useTemplateStore((s) => ({
+  const {
+    lang,
+    getFocusInput,
+    setFocusInput,
+    add,
+    updateField,
+    remove,
+    moveUp,
+    moveDown,
+    duplicateElement,
+  } = useTemplateStore((s) => ({
     lang: s.lang,
-    updateField: s.updateField,
-    elements: s.form.elements,
     getFocusInput: s.getFocusInput,
+    setFocusInput: s.setFocusInput,
+    add: s.add,
+    updateField: s.updateField,
+    remove: s.remove,
+    moveUp: s.moveUp,
+    moveDown: s.moveDown,
+    duplicateElement: s.duplicateElement,
+    elements: s.form.elements,
   }));
-
-  const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
@@ -40,20 +52,18 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     setTimeout(() => setClassName(""), 2100);
   }, [className]);
 
-  useEffect(() => {
-    if (item.type != "richText") {
-      updateModalProperties(item.index, elements[item.index].properties);
-    }
-  }, [item, isOpen, isRichText, elements, updateModalProperties]);
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
-    return (e: React.MouseEvent<HTMLElement>) => {
-      e.preventDefault();
-      // replace all of "properties" with the new properties set in the ModalForm
-      updateField(`form.elements[${item.index}].properties`, properties);
-    };
-  };
+  /* Note this callback is also in PanelActions */
+  const handleAddElement = useCallback(
+    (index: number, type?: FormElementTypes) => {
+      setFocusInput(true);
+      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
+      if (isValidatedTextType(type)) {
+        // add 1 to index because it's a new element
+        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
+      }
+    },
+    [add, setFocusInput, updateField]
+  );
 
   return (
     <div
@@ -63,28 +73,27 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       <PanelBodyRoot item={item} />
       <PanelActions
         item={item}
-        renderSaveButton={() => (
-          <ModalButton isOpenButton={false}>
-            {modals[item.index] && (
-              <Button
-                className="mr-4"
-                onClick={handleSubmit({ item, properties: modals[item.index] })}
-              >
-                {t("save")}
-              </Button>
-            )}
-          </ModalButton>
+        handleAdd={handleAddElement}
+        handleRemove={() => {
+          // if index is 0, then highlight the form title
+          const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
+          remove(item.id);
+          document.getElementById(labelId)?.focus();
+        }}
+        handleMoveUp={() => {
+          moveUp(item.index);
+        }}
+        handleMoveDown={() => {
+          moveDown(item.index);
+        }}
+        handleDuplicate={() => {
+          setFocusInput(true);
+          duplicateElement(item.index);
+        }}
+        renderMoreButton={({ item, moreButton }) => (
+          <MoreModal item={item} moreButton={moreButton} />
         )}
-      >
-        {!isRichText && modals[item.index] && (
-          <ModalForm
-            item={item}
-            properties={modals[item.index]}
-            updateModalProperties={updateModalProperties}
-            unsetModalField={unsetModalField}
-          />
-        )}
-      </PanelActions>
+      />
     </div>
   );
 };
