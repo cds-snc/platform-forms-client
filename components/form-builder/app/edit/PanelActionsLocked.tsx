@@ -30,13 +30,17 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   );
 
   return (
-    <div className="z-index-[999] pl-8 pt-2 pb-2 relative flex items-center a bg-gray-200 h-[62px] last-of-type:rounded-b-md">
-      <label className="flex  text-sm line-height-[38px]" data-testid="locked-item">
-        <LockIcon className="inline-block mr-2 !w-7" /> {t("lockedElement")}
-      </label>
+    <div className="relative z-10 pb-2 bg-gray-200 h-[62px] last-of-type:rounded-b-md">
+      <div className="absolute left-0 ml-8 text-sm line-height-[60px]" data-testid="locked-item">
+        <div className="flex py-4">
+          <LockIcon className="mr-2" /> <span className="py-1">{t("lockedElement")}</span>
+        </div>
+      </div>
       {addElement && (
-        <div className="absolute top-[35px] right-[30px]">
-          <AddElementButton position={-1} handleAdd={handleAddElement} />
+        <div className="flex">
+          <div className="z-10 mt-10 mx-auto">
+            <AddElementButton position={-1} handleAdd={handleAddElement} />
+          </div>
         </div>
       )}
     </div>
