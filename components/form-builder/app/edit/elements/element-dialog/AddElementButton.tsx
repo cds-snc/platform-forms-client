@@ -6,6 +6,7 @@ import { FormElementTypes } from "@lib/types";
 import { Button } from "../../../shared/Button";
 import { ElementDialog } from "./ElementDialog";
 import { ElementOptionsFilter } from "../../../../types";
+import { AddIcon } from "@components/form-builder/icons";
 
 export const AddElementButton = ({
   filterElements,
@@ -40,10 +41,12 @@ export const AddElementButton = ({
           !dialogEnabled && handleAdd && handleAdd(position);
         }}
         theme="secondary"
-        className="!border-1.5 !py-2 !px-4 leading-6 text-sm"
+        className="!border-1.5 !py-2 !px-4 leading-6 text-sm bg-gray-200"
         dataTestId="add-element"
       >
-        {text ? text : t("addElement")}
+        <>
+          <AddIcon className="rounded-full border-1 border-black mr-2" /> {text ? text : t("addElement")}
+        </>
       </Button>
       {elementDialog && (
         <ElementDialog
