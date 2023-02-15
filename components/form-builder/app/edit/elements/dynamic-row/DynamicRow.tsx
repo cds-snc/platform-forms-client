@@ -25,6 +25,7 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     removeSubItem,
     subElements,
     localizeField,
+    lang,
   } = useTemplateStore((s) => ({
     lang: s.lang,
     addSubItem: s.addSubItem,
@@ -168,6 +169,8 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
             key={`sub-element-${item.id}-${subIndex}`}
             conditionalChildren={
               <PanelActions
+                elements={subElements}
+                lang={lang}
                 item={item}
                 handleAdd={(subIndex: number, type?: FormElementTypes) => {
                   handleAddElement(subIndex, type);

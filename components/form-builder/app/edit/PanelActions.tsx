@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { useTranslation } from "next-i18next";
 
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 import { Button } from "../shared";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { ElementOptionsFilter, FormElementWithIndex } from "@components/form-builder/types";
-import { useTemplateStore } from "@components/form-builder/store";
 import {
   ChevronDown,
   ChevronUp,
@@ -30,6 +29,8 @@ export interface RenderMoreFunc {
 
 export const PanelActions = ({
   item,
+  lang,
+  elements,
   renderMoreButton,
   handleAdd,
   handleRemove,
@@ -39,6 +40,8 @@ export const PanelActions = ({
   filterElements,
 }: {
   item: FormElementWithIndex;
+  lang: string;
+  elements: FormElement[];
   renderMoreButton: RenderMoreFunc;
   handleAdd: (index: number, type?: FormElementTypes) => void;
   handleRemove: () => void;
@@ -48,10 +51,6 @@ export const PanelActions = ({
   filterElements?: ElementOptionsFilter;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { lang, elements } = useTemplateStore((s) => ({
-    lang: s.lang,
-    elements: s.form.elements,
-  }));
 
   const isInit = useRef(false);
   const isLastItem = item.index === elements.length - 1;

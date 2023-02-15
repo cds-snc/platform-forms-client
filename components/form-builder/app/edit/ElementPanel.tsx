@@ -17,6 +17,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     moveUp,
     moveDown,
     duplicateElement,
+    elements,
   } = useTemplateStore((s) => ({
     lang: s.lang,
     getFocusInput: s.getFocusInput,
@@ -72,6 +73,8 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     >
       <PanelBodyRoot item={item} />
       <PanelActions
+        elements={elements}
+        lang={lang}
         item={item}
         handleAdd={handleAddElement}
         handleRemove={() => {
