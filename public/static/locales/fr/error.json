@@ -6,8 +6,8 @@
     "desc": "Retourner à la page d'accueil"
   },
   "404": {
-    "title": "Nous ne trouvons pas cette page Web",
-    "body": "Nous sommes désolés que vous ayez atterri sur cette page. Il se peut que la page soit déplacée ou supprimée."
+    "title": "Nous ne pouvons pas trouver cette page Web",
+    "body": "Nous sommes désolés que vous ayez atterri ici. Il se peut que la page soit déplacée ou supprimée."
   },
   "500": {
     "title": "Erreur inattendue",
