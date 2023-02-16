@@ -31,7 +31,6 @@ export const Dialog = ({
     handleClose && handleClose();
     changeOpen(false);
   }, [dialogRef, handleClose]);
-  const dialogTitleId = "dialog-" + Math.random().toString(36).substr(2, 9);
 
   useEffect(() => {
     const dialog = dialogRef?.current;
@@ -57,25 +56,11 @@ export const Dialog = ({
   }, [close]);
 
   return (
-    <dialog
-      className="p-0 m-0 bg-clip-padding w-full h-full bg-transparent"
-      aria-labelledby={dialogTitleId}
-      ref={dialogRef}
-    >
+    <dialog className="p-0 m-0 bg-clip-padding w-full h-full bg-transparent" ref={dialogRef}>
       <div className="w-[800px] mx-auto mt-24 bg-white border-2 border-black rounded-xl">
         <div className="relative">
           {title && (
-            <h2
-              id={dialogTitleId}
-              className={headerStyle ? headerStyle : "pb-4 inline-block mt-4 ml-4"}
-            >
-              {title}
-            </h2>
-          )}
-          {!title && (
-            <h2 className="sr-only" id={dialogTitleId}>
-              {t("genericDialogTitle")}
-            </h2>
+            <h2 className={headerStyle ? headerStyle : "pb-4 inline-block mt-4 ml-4"}>{title}</h2>
           )}
           <Button
             theme="link"
