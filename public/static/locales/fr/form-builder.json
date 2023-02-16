@@ -366,7 +366,7 @@
   "untitledForm": "Formulaire sans titre",
   "questionSet": {
     "addAnother": {
-      "title": "[FR] Button",
+      "title": "Bouton",
       "placeholder": "[FR] Add another",
       "description": "[FR] Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
     }
