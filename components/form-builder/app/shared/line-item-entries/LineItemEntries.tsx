@@ -1,6 +1,6 @@
 import React from "react";
 
-import { LineItems } from "./LineItem";
+import { LineItems } from "./LineItems";
 import { LineInput } from "./LineInput";
 
 export const LineItemEntries = ({
@@ -49,9 +49,9 @@ export const LineItemEntries = ({
     }
   };
 
-  // TODO: accessibility - look into why removals not being announced in VoiceOver..
+  // TODO: accessibility - look into why removals are not being announced in VoiceOver..
   return (
-    <div
+    <ol
       className="rounded-md box-border border-black-default border-2 py-3"
       data-testid="values"
       aria-live="polite"
@@ -65,6 +65,6 @@ export const LineItemEntries = ({
         spellCheck={spellCheck}
         inputLabelId={inputLabelId}
       />
-    </div>
+    </ol>
   );
 };
