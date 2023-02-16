@@ -110,7 +110,7 @@ export const ShareModalUnauthenticated = ({
           </section>
 
           <details className="group mt-5">
-            <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer">
+            <summary className="inline-block p-2 list-none [&::-webkit-details-marker]:hidden cursor-pointer hover:text-white-default hover:bg-gray-600 focus:bg-blue-focus focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 border-white-default hover:border-black-default border-2 rounded-lg">
               {t("share.seePreview")}
               <span className="inline group-open:hidden">
                 <AddIcon className="inline" />
@@ -146,7 +146,7 @@ export const ShareModalUnauthenticated = ({
         </div>
       </Dialog>
       <div className="hidden" ref={instructions}>
-        {t("share.someoneHasShared", { name: "{Name}" })}
+        {t("share.someoneHasShared", { name: t("share.formUser") })}
         {"\n\n"}
         {t("share.toPreview")}
         {"\n"}- {t("share.stepOne")}
