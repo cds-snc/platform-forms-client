@@ -69,7 +69,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   return (
     <div
       key={lang}
-      className={`element-${item.index} ${className} group/element hover:bg-violet-100 focus:bg-violet-100 border border-t-0 border-black max-w-[800px] h-auto -mt-1 relative`}
+      className={`element-${item.index} ${className} group hover:bg-violet-100 focus:bg-violet-100 border border-t-0 border-black max-w-[800px] h-auto -mt-1 relative`}
     >
       <PanelBodyRoot item={item} />
       <PanelActions

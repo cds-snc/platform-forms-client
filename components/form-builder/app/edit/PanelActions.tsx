@@ -18,7 +18,7 @@ import { usePanelActions } from "@components/form-builder/hooks";
 const buttonClasses =
   "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 xl:focus:!bg-blue-hover disabled:!bg-transparent";
 const iconClasses =
-  "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
+  "group-hover:group-enabled:fill-black group-disabled:fill-gray-500 group-focus:fill-black transition duration-100";
 
 export interface RenderMoreFunc {
   ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
@@ -58,6 +58,7 @@ export const PanelActions = ({
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
+  const isSubElement = subIndex !== -1 && subIndex !== undefined;
 
   const getPanelButtons = () => {
     return [
@@ -83,7 +84,7 @@ export const PanelActions = ({
       },
       {
         id: 4,
-        txt: "remove",
+        txt: isSubElement ? "removeFromSet" : "remove",
         icon: Close,
         onClick: handleRemove,
       },
@@ -124,7 +125,7 @@ export const PanelActions = ({
         key={button.txt}
         className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
         disabled={button.disabled && button.disabled}
-        theme="secondary"
+        theme="panelActions"
         iconWrapperClassName="!w-7 !mr-0"
         icon={<Icon className={`${iconClasses}`} />}
         onClick={button.onClick}
@@ -132,22 +133,26 @@ export const PanelActions = ({
         buttonRef={setRef(`button-${loopIndex}`)}
         dataTestId={button.txt}
       >
-        <span className="text-sm mx-3 xl:mx-0">{t(button.txt)}</span>
+        <span className="text-sm">{t(button.txt)}</span>
       </Button>
     );
   });
 
   const moreButton = actions.pop();
 
+  const outerPanelClasses = isSubElement
+    ? ``
+    : `absolute invisible group-hover:visible xl:visible xl:relative right-0 top-0 -mr-[155px] xl:mr-0`;
+
+  const innerPanelClasses = isSubElement
+    ? `flex flex-wrap flex-row ${lang}`
+    : `bg-violet-100 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`;
+
   return (
     <div>
-      <div
-        className={`absolute invisible group-hover/${
-          subIndex === -1 ? "element" : "subElement"
-        }:visible xl:visible xl:relative right-0 top-0 -mr-[185px] xl:mr-0`}
-      >
+      <div className={outerPanelClasses}>
         <div
-          className={`bg-violet-100 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`}
+          className={innerPanelClasses}
           role="toolbar"
           aria-label={t("elementActions")}
           onKeyDown={handleNav}
@@ -163,6 +168,7 @@ export const PanelActions = ({
             position={item.index}
             handleAdd={handleAdd}
             filterElements={filterElements}
+            text={isSubElement ? t("addToSet") : t("addElement")}
           />
         </div>
       </div>
