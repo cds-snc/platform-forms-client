@@ -31,7 +31,7 @@ describe("Login Page", () => {
     it("Displays an error message when submitting an invalid email", () => {
       cy.get("input[id='username']").type("myemail@cds-snc");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessageusername']").should("contain", "Please enter a valid email");
+      cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
     it("Displays no error message when submitting a valid email", () => {
       cy.get("input[id='username']").type("test@cds-snc.ca");

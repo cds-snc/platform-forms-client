@@ -32,7 +32,7 @@
     "alphanumeric": "Enter letters and numbers only.",
     "text": "",
     "number": "Enter a number.",
-    "email": "Enter a valid email.",
+    "email": "Enter a valid email address.",
     "date": "Enter a valid date in mm/dd/yyyy format.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
@@ -40,7 +40,7 @@
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "Enter a valid government email."
+    "validGovEmail": "Enter a valid government email address."
   },
   "required": "required",
   "all-required": "all checkboxes required",

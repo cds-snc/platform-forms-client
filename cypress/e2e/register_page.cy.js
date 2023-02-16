@@ -35,7 +35,7 @@ describe("Register Page", () => {
     it("Error on submitting a form with an invalid email", () => {
       cy.get("input[id='username']").type("myemail@email");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessageusername']").should("contain", "Please enter a valid email");
+      cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
     it("Error on submitting a form with a non government email", () => {
       cy.get("input[id='username']").type("myemail@email.com");
