@@ -45,7 +45,8 @@ export const AddElementButton = ({
         dataTestId="add-element"
       >
         <>
-          <AddIcon className="rounded-full border-1 border-black mr-2" /> {text ? text : t("addElement")}
+          <AddIcon className="rounded-full border-1 border-black mr-2" />
+          {text ? text : t("addElement")}
         </>
       </Button>
       {elementDialog && (
