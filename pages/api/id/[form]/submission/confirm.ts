@@ -125,24 +125,17 @@ async function getSubmissionsFromConfirmationCodes(
       const submission = accumulatedSubmissions[currentConfirmationCode];
 
       if (!submission) {
-        return {
-          ...acc,
-          confirmationCodesNotFound: acc.confirmationCodesNotFound.concat(currentConfirmationCode),
-        };
+        acc.confirmationCodesNotFound.push(currentConfirmationCode);
+        return acc;
       } else if (submission.removalDate) {
-        return {
-          ...acc,
-          confirmationCodesAlreadyUsed:
-            acc.confirmationCodesAlreadyUsed.concat(currentConfirmationCode),
-        };
+        acc.confirmationCodesAlreadyUsed.push(currentConfirmationCode);
+        return acc;
       } else {
-        return {
-          ...acc,
-          submissionsToConfirm: acc.submissionsToConfirm.concat({
-            name: submission.name,
-            confirmationCode: currentConfirmationCode,
-          }),
-        };
+        acc.submissionsToConfirm.push({
+          name: submission.name,
+          confirmationCode: currentConfirmationCode,
+        });
+        return acc;
       }
     },
     {
