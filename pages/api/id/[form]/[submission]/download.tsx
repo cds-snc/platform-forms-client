@@ -5,8 +5,8 @@ import { middleware, cors, sessionExists } from "@lib/middleware";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,
-  QueryCommand,
-  QueryCommandInput,
+  GetCommand,
+  GetCommandInput,
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
@@ -57,29 +57,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
     const documentClient = connectToDynamo();
 
-    const getItemsDbParams: QueryCommandInput = {
+    const getItemsDbParams: GetCommandInput = {
       TableName: "Vault",
-
-      ExpressionAttributeValues: {
-        ":formID": formID,
-        ":submission": `NAME#${submissionName}`,
+      Key: {
+        FormID: formID,
+        NAME_OR_CONF: `NAME#${submissionName}`,
       },
       ExpressionAttributeNames: {
         "#Name": "Name",
       },
-      KeyConditionExpression: "FormID = :formID AND NAME_OR_CONF = :submission",
       ProjectionExpression: "SubmissionID,FormSubmission,ConfirmationCode,#Name,CreatedAt",
     };
-    const queryCommand = new QueryCommand(getItemsDbParams);
+    const queryCommand = new GetCommand(getItemsDbParams);
 
     const response = await documentClient.send(queryCommand);
 
     // If the SubmissionID does not exist return a 404
-    if (response.Items === undefined || response.Items.length === 0)
-      return res.status(404).json({ error: "Submission not Found" });
-
-    // If there is more then one submission returned something is seriously wrong
-    if (response.Items.length > 1) return res.status(500).json({ error: "Internal Server Error" });
+    if (response.Item === undefined) return res.status(404).json({ error: "Submission not Found" });
 
     const { formResponse, createdAt, confirmReceiptCode, responseID, submissionID } = ((
       vaultResult
@@ -99,7 +93,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         responseID: vaultResult.Name,
         submissionID: vaultResult.SubmissionID,
       };
-    })(response.Items[0]);
+    })(response.Item);
 
     const pageProps = {
       formResponse,

@@ -9,7 +9,7 @@ import { Session } from "next-auth";
 import { Base, getUserPrivileges } from "__utils__/permissions";
 import { prismaMock } from "@jestUtils";
 import Redis from "ioredis-mock";
-import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
@@ -181,18 +181,16 @@ describe("/api/id/[form]/[submission]/download", () => {
         users: [{ id: "1" }],
       });
 
-      const dynamodbExpectedReponses = {
-        Items: [
-          {
-            FormID: "formTestID",
-            Name: "123-test",
-            SubmissionID: "12",
-            FormSubmission: testFormResponse,
-            SecurityAttribute: "Protected B",
-          },
-        ],
+      const dynamodbExpectedResponse = {
+        Item: {
+          FormID: "formTestID",
+          Name: "123-test",
+          SubmissionID: "12",
+          FormSubmission: testFormResponse,
+          SecurityAttribute: "Protected B",
+        },
       };
-      ddbMock.on(QueryCommand).resolves(dynamodbExpectedReponses);
+      ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
 
       const spiedLogMessage = jest.spyOn(logMessage, "info");
