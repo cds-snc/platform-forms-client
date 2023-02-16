@@ -110,8 +110,8 @@ async function getSubmissionsFromConfirmationCodes(
       });
     }
 
-    if (response.UnprocessedKeys && response.UnprocessedKeys["Vault"]) {
-      requestedKeys = (response.UnprocessedKeys["Vault"].Keys ?? []) as {
+    if (response.UnprocessedKeys?.Vault?.Keys) {
+      requestedKeys = response.UnprocessedKeys.Vault.Keys as {
         FormID: string;
         NAME_OR_CONF: string;
       }[];
