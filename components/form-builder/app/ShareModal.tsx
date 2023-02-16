@@ -101,6 +101,7 @@ export const ShareModal = ({
         dialogRef={dialog}
         handleClose={handleClose}
         actions={status === "ready" ? actions : doneActions}
+        className="overflow-y-scroll max-h-[80%]"
       >
         <div className="py-4">
           {status === "sent" && (

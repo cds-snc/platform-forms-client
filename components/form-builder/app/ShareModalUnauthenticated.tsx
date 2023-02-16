@@ -69,6 +69,7 @@ export const ShareModalUnauthenticated = ({
         dialogRef={dialog}
         handleClose={handleClose}
         actions={actions}
+        className="overflow-y-scroll max-h-[80%]"
       >
         <div className="my-8">
           <section>
