@@ -262,6 +262,7 @@
   "settingsResponseNotePublished": "Pour modifier la destination de la livraison des réponses.",
   "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
   "share": {
+    "formUser": "[FR] A GC Forms user",
     "copy": "Copier",
     "email": "Partager par courriel",
     "emailLabel": "Entrer l'adresse courriel",

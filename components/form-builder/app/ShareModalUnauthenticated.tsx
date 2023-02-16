@@ -120,7 +120,7 @@ export const ShareModalUnauthenticated = ({
               </span>
             </summary>
             <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
-              <h4>{t("share.someoneHasShared", { name: "{Name}" })}</h4>
+              <h4>{t("share.someoneHasShared", { name: t("share.formUser") })}</h4>
               <div className="mt-4">
                 {t("share.toPreview")}
                 <ul>
