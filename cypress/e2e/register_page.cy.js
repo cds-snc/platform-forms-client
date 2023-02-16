@@ -42,7 +42,7 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
-        "This field must be a valid government email"
+        "This field must be a valid federal government email"
       );
     });
     it("No error on submitting a form with a valid government email", () => {
@@ -63,17 +63,14 @@ describe("Register Page", () => {
     it("Error on submitting a form with a short password", () => {
       cy.get("input[id='password']").type("pass");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessagepassword']").should("contain", "must be 8 characters");
+      cy.get("[id='errorMessagepassword']").should("contain", "must be at least 8 characters");
     });
     it("Error on submitting a form with a long password", () => {
       cy.get("input[id='password']").type(
         "passpasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspasspass"
       );
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessagepassword']").should(
-        "contain",
-        "must be no longer than 50 characters"
-      );
+      cy.get("[id='errorMessagepassword']").should("contain", "must not exceed 50 characters");
     });
     it("Error on submitting a form with no lowercase", () => {
       cy.get("input[id='password']").type("PASSWORD");
@@ -96,16 +93,13 @@ describe("Register Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "Password must contain at least 1 number."
+        "Password must contain at least 1 number"
       );
     });
     it("Error on submitting a form with no symbol", () => {
       cy.get("input[id='password']").type("Password1");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessagepassword']").should(
-        "contain",
-        "Password must contain at least 1 symbol."
-      );
+      cy.get("[id='errorMessagepassword']").should("contain", "must contain at least 1 symbol.");
     });
     it("No error on submitting a form with a valid password", () => {
       cy.get("input[id='password']").type("Password1!");
