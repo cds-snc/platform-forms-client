@@ -61,6 +61,36 @@ export const PanelActions = ({
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
 
   const getPanelButtons = () => {
+    if (isSubElement) {
+      return [
+        {
+          id: 1,
+          txt: "moveUp",
+          icon: ChevronUp,
+          onClick: handleMoveUp,
+          disabled: isFirstItem,
+        },
+        {
+          id: 2,
+          txt: "moveDown",
+          icon: ChevronDown,
+          onClick: handleMoveDown,
+          disabled: isLastItem,
+        },
+        {
+          id: 3,
+          txt: "removeFromSet",
+          icon: Close,
+          onClick: handleRemove,
+        },
+        {
+          id: 4,
+          txt: "more",
+          icon: ThreeDotsIcon,
+          onClick: () => null,
+        },
+      ];
+    }
     return [
       {
         id: 1,
@@ -84,7 +114,7 @@ export const PanelActions = ({
       },
       {
         id: 4,
-        txt: isSubElement ? "removeFromSet" : "remove",
+        txt: "remove",
         icon: Close,
         onClick: handleRemove,
       },
@@ -146,7 +176,7 @@ export const PanelActions = ({
 
   const innerPanelClasses = isSubElement
     ? `flex flex-wrap flex-row ${lang}`
-    : `bg-violet-100 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`;
+    : `bg-violet-50 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`;
 
   return (
     <div>
@@ -160,18 +190,29 @@ export const PanelActions = ({
         >
           {actions}
           {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
+          {isSubElement && (
+            <AddElementButton
+              position={item.index}
+              handleAdd={handleAdd}
+              theme="link"
+              filterElements={filterElements}
+              text={isSubElement ? t("addToSet") : t("addElement")}
+            />
+          )}
         </div>
       </div>
-      <div className="flex">
-        <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
-          <AddElementButton
-            position={item.index}
-            handleAdd={handleAdd}
-            filterElements={filterElements}
-            text={isSubElement ? t("addToSet") : t("addElement")}
-          />
+      {!isSubElement && (
+        <div className="flex">
+          <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
+            <AddElementButton
+              position={item.index}
+              handleAdd={handleAdd}
+              filterElements={filterElements}
+              text={isSubElement ? t("addToSet") : t("addElement")}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
