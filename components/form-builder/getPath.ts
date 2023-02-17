@@ -9,7 +9,15 @@ export const parseId = (id: number) => {
 export const getPath = (elements: any, id: number) => {
   const elId = parseId(id);
   const parentIndex = elements.findIndex((el: any) => el.id === elId);
-  return parentIndex > -1 ? parentIndex : null;
 
-  // @todo get subIndex
+  if (parentIndex === -1) return null;
+
+  if (elements[parentIndex] && elements[parentIndex].properties.subElements) {
+    const subIndex = elements[parentIndex].properties.subElements.findIndex(
+      (el: any) => el.id === id
+    );
+    return subIndex > -1 ? [parentIndex, subIndex] : null;
+  }
+
+  return [parentIndex, null];
 };
