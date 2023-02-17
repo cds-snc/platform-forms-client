@@ -1,5 +1,5 @@
 export const parseRootId = (id: number) => {
-  // split 3 or 4 digit id parent id
+  // split 3 or 4 digit id into first 1 or 2 digits
   const idStr = id.toString();
   const sliceAt = idStr.length == 3 ? 1 : 2;
   const idArr = idStr.split("");
