@@ -126,17 +126,15 @@ async function getSubmissionsFromConfirmationCodes(
 
       if (!submission) {
         acc.confirmationCodesNotFound.push(currentConfirmationCode);
-        return acc;
       } else if (submission.removalDate) {
         acc.confirmationCodesAlreadyUsed.push(currentConfirmationCode);
-        return acc;
       } else {
         acc.submissionsToConfirm.push({
           name: submission.name,
           confirmationCode: currentConfirmationCode,
         });
-        return acc;
       }
+      return acc;
     },
     {
       submissionsToConfirm: Array<{ name: string; confirmationCode: string }>(),

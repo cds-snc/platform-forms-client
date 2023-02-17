@@ -144,17 +144,15 @@ async function getSubmissionsFromSubmissionNames(
 
       if (!submission) {
         acc.submissionNamesNotFound.push(currentSubmissionName);
-        return acc;
       } else if (submission.status === "Problem") {
         acc.submissionNamesAlreadyUsed.push(currentSubmissionName);
-        return acc;
       } else {
         acc.submissionsToReport.push({
           name: currentSubmissionName,
           confirmationCode: submission.confirmationCode,
         });
-        return acc;
       }
+      return acc;
     },
     {
       submissionsToReport: Array<{ name: string; confirmationCode: string }>(),
