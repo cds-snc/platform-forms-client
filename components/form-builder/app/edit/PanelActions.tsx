@@ -172,7 +172,7 @@ export const PanelActions = ({
 
   const outerPanelClasses = isSubElement
     ? ``
-    : `absolute invisible group-hover:visible xl:visible xl:relative right-0 top-0 -mr-[155px] xl:mr-0`;
+    : `absolute invisible group-[.active]:visible xl:visible xl:relative right-0 top-0 -mr-[155px] xl:mr-0`;
 
   const innerPanelClasses = isSubElement
     ? `flex flex-wrap flex-row ${lang}`
