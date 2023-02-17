@@ -70,12 +70,25 @@ describe("Get paths by id", () => {
 });
 
 describe("Get path string by id", () => {
-  const elements = [
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
-  ];
-  const path = getPathString(1202, elements);
-  expect(path).toEqual("form.elements[3].properties?.subElements?.[1]");
+  it("gets element path", async () => {
+    const elements = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+    ];
+    const path = getPathString(2, elements);
+    expect(path).toEqual("form.elements[1]");
+  });
+
+  it("gets subPath", async () => {
+    const elements = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+    ];
+    const path = getPathString(1202, elements);
+    expect(path).toEqual("form.elements[3].properties?.subElements?.[1]");
+  });
 });
