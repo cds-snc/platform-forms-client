@@ -367,8 +367,8 @@
   "questionSet": {
     "addAnother": {
       "title": "Bouton",
-      "placeholder": "[FR] Add another",
-      "description": "[FR] Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
+      "placeholder": "Ajouter un.e autre",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses »."
     }
   }
 }
