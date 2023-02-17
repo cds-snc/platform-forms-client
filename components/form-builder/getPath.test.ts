@@ -14,22 +14,21 @@ describe("Parse element ID", () => {
 });
 
 describe("Get path by ID", () => {
-  const elements = [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-    {
-      id: 3,
-    },
-    {
-      id: 12,
-    },
-  ];
+  it("parses elIndex", () => {
+    const elements = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 12 }];
+    expect(getPath(elements, 1210)).toEqual([3, null]);
+  });
 
-  it("parses root id", () => {
-    expect(getPath(elements, 1210)).toEqual(3);
+  it("parses elIndex and subIndex", () => {
+    const elements = [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+    ];
+    const [elIndex, subIndex] = getPath(elements, 1210);
+    expect(elIndex).toEqual(3);
+    expect(subIndex).toEqual(2);
+    expect;
   });
 });
