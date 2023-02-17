@@ -101,8 +101,8 @@ async function getSubmissionsFromConfirmationCodes(
     // eslint-disable-next-line no-await-in-loop
     const response = await dynamoDbClient.send(request);
 
-    if (response.Responses && response.Responses["Vault"]) {
-      response.Responses["Vault"].forEach((record) => {
+    if (response.Responses?.Vault) {
+      response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["ConfirmationCode"]] = {
           name: record["Name"],
           removalDate: record["RemovalDate"],

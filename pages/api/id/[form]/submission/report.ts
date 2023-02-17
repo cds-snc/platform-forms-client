@@ -119,8 +119,8 @@ async function getSubmissionsFromSubmissionNames(
     // eslint-disable-next-line no-await-in-loop
     const response = await dynamoDbClient.send(request);
 
-    if (response.Responses && response.Responses["Vault"]) {
-      response.Responses["Vault"].forEach((record) => {
+    if (response.Responses?.Vault) {
+      response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["Name"]] = {
           status: record["Status"],
           confirmationCode: record["ConfirmationCode"],
@@ -128,8 +128,8 @@ async function getSubmissionsFromSubmissionNames(
       });
     }
 
-    if (response.UnprocessedKeys && response.UnprocessedKeys["Vault"]) {
-      requestedKeys = (response.UnprocessedKeys["Vault"].Keys ?? []) as {
+    if (response.UnprocessedKeys?.Vault?.Keys) {
+      requestedKeys = response.UnprocessedKeys.Vault.Keys as {
         FormID: string;
         NAME_OR_CONF: string;
       }[];
@@ -143,23 +143,17 @@ async function getSubmissionsFromSubmissionNames(
       const submission = accumulatedSubmissions[currentSubmissionName];
 
       if (!submission) {
-        return {
-          ...acc,
-          submissionNamesNotFound: acc.submissionNamesNotFound.concat(currentSubmissionName),
-        };
+        acc.submissionNamesNotFound.push(currentSubmissionName);
+        return acc;
       } else if (submission.status === "Problem") {
-        return {
-          ...acc,
-          submissionNamesAlreadyUsed: acc.submissionNamesAlreadyUsed.concat(currentSubmissionName),
-        };
+        acc.submissionNamesAlreadyUsed.push(currentSubmissionName);
+        return acc;
       } else {
-        return {
-          ...acc,
-          submissionsToReport: acc.submissionsToReport.concat({
-            name: currentSubmissionName,
-            confirmationCode: submission.confirmationCode,
-          }),
-        };
+        acc.submissionsToReport.push({
+          name: currentSubmissionName,
+          confirmationCode: submission.confirmationCode,
+        });
+        return acc;
       }
     },
     {
