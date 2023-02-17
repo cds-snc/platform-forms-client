@@ -33,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   if (Array.isArray(formId) || !formId) return res.status(400).json({ error: "Bad request" });
 
-  const submissionNames = req.body as string[];
+  const submissionNames: string[] = req.body;
 
   if (submissionNames.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
     return res.status(400).json({

@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
 
   if (Array.isArray(formId) || !formId) return res.status(400).json({ error: "Bad request" });
 
-  const confirmationCodes = req.body as string[];
+  const confirmationCodes: string[] = req.body;
 
   if (confirmationCodes.length > MAXIMUM_CONFIRMATION_CODES_PER_REQUEST) {
     return res.status(400).json({
