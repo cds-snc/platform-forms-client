@@ -63,7 +63,7 @@
   "at": "à",
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
-  "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateurs peuvent saisir.",
+  "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateurs peuvent entrer.",
   "checkboxes": "Case à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
@@ -98,7 +98,7 @@
     },
     "supportFormLink": "formulaire de soutien",
     "title": "Contactez-nous",
-    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur les Formulaires GC et sur la façon dont ce service peut être utile à votre département."
+    "useThisForm": "Utilisez ce formulaire pour en savoir plus sur Formulaires GC et sur la façon dont ce service peut être utile à votre département."
   },
   "copyButton": "Copié dans le presse-papiers",
   "copyMessage": "Le formulaire a été téléchargé avec succès.",
@@ -110,7 +110,7 @@
     "phone": "Entrez un numéro de téléphone comme 111-222-3333"
   },
   "description": "La description ",
-  "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de formatage.",
+  "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
   "downloadCSV": "Télécharger le fichier CSV",
   "dropdown": "Liste déroulante",
@@ -131,7 +131,7 @@
   "formatNumberedList": "Format liste numérotée",
   "formConfirmationMessage": "Message de confirmation du formulaire",
   "formDelete": {
-    "downloadButtonText": "Téléchargez une copie",
+    "downloadButtonText": "Télécharger une copie",
     "draft": {
       "message1": "La suppression ne peut être annulée. Votre formulaire sera définitivement supprimé de votre liste de formulaires.",
       "message2": "Téléchargez une copie de ce formulaire pour vos archives. Le fichier de formulaire JSON ainsi sauvegardé pourra être ouvert à nouveau dans Formulaires GC pour recréer le formulaire ultérieurement."
@@ -142,7 +142,7 @@
       "message2": "Téléchargez une copie de ce formulaire pour vos archives. Le fichier de formulaire JSON ainsi sauvegardé pourra être ouvert à nouveau dans Formulaires GC pour recréer le formulaire ultérieurement.",
       "message3": "Le lien URL de votre formulaire changera si vous récreez votre formulaire."
     },
-    "title": "Supprimer cet formulaire ?"
+    "title": "Supprimer cet formulaire?"
   },
   "formDeletedDialogMessage": "Formulaire supprimé",
   "formDeletedDialogMessageFailed": "Échec de la suppression du formulaire",
@@ -151,7 +151,7 @@
   "formDeletedDialogTitle": "Succés",
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
-    "btnText": "Que puis-je faire avec un fichier de formulaire ?",
+    "btnText": "Que puis-je faire avec un fichier de formulaire?",
     "description": "Conservez une version du formulaire sur votre ordinateur",
     "dialog": {
       "downloadButtonText": "Téléchargez une copie",
@@ -227,7 +227,7 @@
   "questions": "Des questions",
   "questionTitle": "Titre de question",
   "remove": "Supprimer",
-  "removeOption": "Supprimer l'option:  ",
+  "removeOption": "Supprimer l'option :  ",
   "requestSuccess": {
     "backToForms": "Retourner au Formulaires GC",
     "forOtherEnquiriesLink": "Canada.ca Contactez-nous",
@@ -331,7 +331,7 @@
     "useThisForm": "Utilisez ce formulaire pour obtenir du soutien technique ou signaler tout problème technique avec Formulaires GC."
   },
   "test": "Tester",
-  "textFormatting": "Formatage du texte  ",
+  "textFormatting": "Mise en forme du texte ",
   "thereWasAnErrorPublishing": "Une erreur s'est produite lors de la publication de votre formulaire",
   "tooltipFormatBold": "En gras (⌘B)",
   "tooltipFormatBulletList": "Liste à puces",
@@ -342,7 +342,7 @@
   "tooltipInsertLink": "Insérer un lien",
   "translate": "Traduire",
   "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
-  "translateTitle": "Saisir la traduction",
+  "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "responses": {
