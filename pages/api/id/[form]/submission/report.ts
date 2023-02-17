@@ -12,6 +12,8 @@ import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { NotifyClient } from "notifications-node-client";
 import { checkOne } from "@lib/cache/flags";
 
+const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
+
 class FailedToSendEmailThroughGCNotify extends Error {}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
@@ -32,6 +34,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   if (Array.isArray(formId) || !formId) return res.status(400).json({ error: "Bad request" });
 
   const submissionNames = req.body as string[];
+
+  if (submissionNames.length > MAXIMUM_SUBMISSION_NAMES_PER_REQUEST) {
+    return res.status(400).json({
+      error: `Too many submission names. Limit is ${MAXIMUM_SUBMISSION_NAMES_PER_REQUEST}.`,
+    });
+  }
 
   try {
     const dynamoDbClient = connectToDynamo();

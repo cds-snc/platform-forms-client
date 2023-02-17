@@ -11,6 +11,8 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { checkOne } from "@lib/cache/flags";
 
+const MAXIMUM_CONFIRMATION_CODES_PER_REQUEST = 20;
+
 const handler = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   // Is this feature / endpoint active
   const vaultActive = await checkOne("vault");
@@ -29,6 +31,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   if (Array.isArray(formId) || !formId) return res.status(400).json({ error: "Bad request" });
 
   const confirmationCodes = req.body as string[];
+
+  if (confirmationCodes.length > MAXIMUM_CONFIRMATION_CODES_PER_REQUEST) {
+    return res.status(400).json({
+      error: `Too many confirmation codes. Limit is ${MAXIMUM_CONFIRMATION_CODES_PER_REQUEST}.`,
+    });
+  }
 
   try {
     const dynamoDbClient = connectToDynamo();

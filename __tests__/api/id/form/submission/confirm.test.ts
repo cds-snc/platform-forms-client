@@ -142,6 +142,25 @@ describe("Confirm form submissions (with active session)", () => {
     expect(JSON.parse(res._getData()).error).toContain("does not match pattern");
   });
 
+  it("API should reject request if payload contains more than 20 confirmation codes", async () => {
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      query: {
+        form: 8,
+      },
+      body: Array(21).map(() => "2515ed36-0755-44e2-9e5c-927bc57f0570"),
+    });
+
+    await confirm(req, res);
+
+    expect(res.statusCode).toEqual(400);
+    expect(JSON.parse(res._getData()).error).toContain("Too many confirmation codes. Limit is 20.");
+  });
+
   it("API should accept request if payload is valid", async () => {
     const { req, res } = createMocks({
       method: "PUT",
