@@ -7,14 +7,16 @@ export const parseRootId = (id: number) => {
   return Number(first);
 };
 
-export interface Element {
+interface Element {
   id: number;
   properties?: {
     subElements?: Element[];
   };
 }
 
-export const getElementIndexes = <T extends Element>(elements: T[], id: number) => {
+type Indexes = [] | [elIndex: number | null, subIndex: number | null];
+
+export const getElementIndexes = <T extends Element>(id: number, elements: T[]): Indexes => {
   const elId = parseRootId(id);
   const elIndex = elements.findIndex((el: T) => el.id === elId);
 
@@ -28,4 +30,34 @@ export const getElementIndexes = <T extends Element>(elements: T[], id: number) 
   }
 
   return [elIndex, null];
+};
+
+export const indexesToPath = (indexes: Indexes, elements: Element[]) => {
+  const [elIndex, subIndex] = indexes;
+
+  if (elIndex === null) return [];
+
+  const path = elements[Number(elIndex)];
+
+  if (subIndex === null) return [path];
+
+  const subPath = path.properties?.subElements?.[Number(subIndex)];
+
+  return subPath ? [path, subPath] : [path];
+};
+
+export const getPath = (id: number, elements: Element[]) => {
+  const indexes = getElementIndexes(id, elements);
+  return indexesToPath(indexes, elements);
+};
+
+export const getPathString = (id: number, elements: Element[]) => {
+  const indexes = getElementIndexes(id, elements);
+  const [elIndex, subIndex] = indexes;
+
+  if (elIndex === null) return "";
+
+  if (subIndex === null) return `form.elements[${elIndex}]`;
+
+  return `form.elements[${elIndex}].properties?.subElements?.[${subIndex}]`;
 };

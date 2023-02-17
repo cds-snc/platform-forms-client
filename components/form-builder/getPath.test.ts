@@ -1,4 +1,4 @@
-import { getElementIndexes, parseRootId } from "./getPath";
+import { parseRootId, getElementIndexes, indexesToPath, getPath, getPathString } from "./getPath";
 
 describe("Parse root ID", () => {
   it("parses root id", () => {
@@ -16,7 +16,7 @@ describe("Parse root ID", () => {
 describe("Get array indexes for path by element ID", () => {
   it("parses elIndex", () => {
     const elements = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 12 }];
-    expect(getElementIndexes(elements, 1210)).toEqual([3, null]);
+    expect(getElementIndexes(1210, elements)).toEqual([3, null]);
   });
 
   it("parses 3 digit elIndex and subIndex", () => {
@@ -26,7 +26,7 @@ describe("Get array indexes for path by element ID", () => {
       { id: 3 },
       { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
     ];
-    const [elIndex, subIndex] = getElementIndexes(elements, 201);
+    const [elIndex, subIndex] = getElementIndexes(201, elements);
     expect(elIndex).toEqual(1);
     expect(subIndex).toEqual(0);
   });
@@ -38,9 +38,44 @@ describe("Get array indexes for path by element ID", () => {
       { id: 3 },
       { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
     ];
-    const [elIndex, subIndex] = getElementIndexes(elements, 1210);
+    const [elIndex, subIndex] = getElementIndexes(1210, elements);
     expect(elIndex).toEqual(3);
     expect(subIndex).toEqual(2);
     expect;
   });
+});
+
+describe("Get paths by indexes", () => {
+  const elements = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+  ];
+  const [elPath, subPath] = indexesToPath([3, 2], elements);
+  expect(elPath).toEqual(elements[3]);
+  expect(subPath).toEqual(elements[3].properties?.subElements?.[2]);
+});
+
+describe("Get paths by id", () => {
+  const elements = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+  ];
+  const [elPath, subPath] = getPath(1202, elements);
+  expect(elPath).toEqual(elements[3]);
+  expect(subPath).toEqual(elements[3].properties?.subElements?.[1]);
+});
+
+describe("Get path string by id", () => {
+  const elements = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 12, properties: { subElements: [{ id: 1201 }, { id: 1202 }, { id: 1210 }] } },
+  ];
+  const path = getPathString(1202, elements);
+  expect(path).toEqual("form.elements[3].properties?.subElements?.[1]");
 });
