@@ -17,8 +17,13 @@ export const RichText = ({
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
-  const localizeField = useTemplateStore((s) => s.localizeField);
+  const { localizeField } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    // getPropertyPath: s.getPropertyPath,
+  }));
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+
+  // console.log(getPropertyPath(element.id, LocalizedElementProperties.DESCRIPTION, primaryLanguage));
 
   return (
     <>
