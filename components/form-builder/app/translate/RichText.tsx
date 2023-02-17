@@ -17,18 +17,17 @@ export const RichText = ({
   primaryLanguage: Language;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField } = useTemplateStore((s) => ({
+  const { localizeField, propertyPath } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
-    // getPropertyPath: s.getPropertyPath,
+    propertyPath: s.propertyPath,
   }));
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
-
-  // console.log(getPropertyPath(element.id, LocalizedElementProperties.DESCRIPTION, primaryLanguage));
-
+  const field = LocalizedElementProperties.DESCRIPTION;
   return (
     <>
       <div className="text-entry">
         <FieldsetLegend>
+          !!
           {t(element.type)}: {t("inputDescription")}
         </FieldsetLegend>
         <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
@@ -41,10 +40,7 @@ export const RichText = ({
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
-              path={`form.elements[${index}].properties.${localizeField(
-                LocalizedElementProperties.DESCRIPTION,
-                primaryLanguage
-              )}`}
+              path={propertyPath(element.id, field, primaryLanguage)}
               content={
                 element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")] ??
                 ""
@@ -63,10 +59,7 @@ export const RichText = ({
             </LanguageLabel>
             <RichTextEditor
               autoFocusEditor={false}
-              path={`form.elements[${index}].properties.${localizeField(
-                LocalizedElementProperties.DESCRIPTION,
-                secondaryLanguage
-              )}`}
+              path={propertyPath(element.id, field, secondaryLanguage)}
               content={
                 element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")] ??
                 ""

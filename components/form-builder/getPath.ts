@@ -32,32 +32,32 @@ export const getElementIndexes = <T extends Element>(id: number, elements: T[]):
   return [elIndex, null];
 };
 
-export const indexesToPath = (indexes: Indexes, elements: Element[]) => {
+export const indexesToPath = <T extends Element>(indexes: Indexes, elements: T[]) => {
   const [elIndex, subIndex] = indexes;
 
-  if (elIndex === null) return [];
+  if (elIndex === null) return [null, null];
 
   const path = elements[Number(elIndex)];
 
-  if (subIndex === null) return [path];
+  if (subIndex === null) return [path, null];
 
   const subPath = path.properties?.subElements?.[Number(subIndex)];
 
-  return subPath ? [path, subPath] : [path];
+  return subPath ? [path, subPath] : [path, null];
 };
 
-export const getPath = (id: number, elements: Element[]) => {
+export const getPath = <T extends Element>(id: number, elements: T[]) => {
   const indexes = getElementIndexes(id, elements);
   return indexesToPath(indexes, elements);
 };
 
-export const getPathString = (id: number, elements: Element[]) => {
+export const getPathString = <T extends Element>(id: number, elements: T[]) => {
   const indexes = getElementIndexes(id, elements);
   const [elIndex, subIndex] = indexes;
 
   if (elIndex === null) return "";
 
-  if (subIndex === null) return `form.elements[${elIndex}]`;
+  if (subIndex === null) return `form.elements[${elIndex}].properties`;
 
   return `form.elements[${elIndex}].properties?.subElements?.[${subIndex}]`;
 };
