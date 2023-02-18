@@ -23,6 +23,7 @@ export const Options = ({
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
   const path = propertyPath(element.id, "choices");
+
   return (
     <>
       <div>
@@ -53,7 +54,7 @@ export const Options = ({
                     type="text"
                     value={choice[primaryLanguage]}
                     onChange={(e) => {
-                      updateField(`${path}.[${choiceIndex}].${primaryLanguage}`, e.target.value);
+                      updateField(`${path}[${choiceIndex}].${primaryLanguage}`, e.target.value);
                     }}
                   />
                 </div>
@@ -77,7 +78,7 @@ export const Options = ({
                     type="text"
                     value={choice[secondaryLanguage]}
                     onChange={(e) => {
-                      updateField(`${path}.[${choiceIndex}].${secondaryLanguage}`, e.target.value);
+                      updateField(`${path}[${choiceIndex}].${secondaryLanguage}`, e.target.value);
                     }}
                   />
                 </div>

@@ -5,12 +5,75 @@ import { RichText } from "./RichText";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
-import { LocalizedElementProperties, LocalizedFormProperties } from "../../types";
+import { LocalizedElementProperties, LocalizedFormProperties, Language } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { formatEmailSubject } from "../edit/Edit";
+
+import { FormElement } from "@lib/types";
+
+const Elements = ({
+  element,
+  index,
+  questionsIndex,
+  primaryLanguage,
+}: {
+  element: FormElement;
+  index: number;
+  questionsIndex: number;
+  primaryLanguage: Language;
+}) => {
+  const { t } = useTranslation("form-builder");
+  let subElements;
+  if (element.type === "dynamicRow") {
+    subElements = element.properties.subElements?.map((subElement) => {
+      return (
+        <Elements
+          key={subElement.id}
+          element={subElement}
+          index={subElement.id}
+          questionsIndex={questionsIndex}
+          primaryLanguage={primaryLanguage}
+        />
+      );
+    });
+  }
+  return (
+    <div className="section" id={`section-${index}`}>
+      <SectionTitle>
+        {element.type === "richText" && <>{t("pageText")}</>}
+        {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
+      </SectionTitle>
+
+      {element.type === "richText" && (
+        <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
+      )}
+
+      {["radio", "checkbox", "dropdown"].includes(element.type) && (
+        <>
+          <Title primaryLanguage={primaryLanguage} element={element} />
+          {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+            <Description primaryLanguage={primaryLanguage} element={element} />
+          )}
+          <Options primaryLanguage={primaryLanguage} element={element} index={index} />
+        </>
+      )}
+
+      {["textField", "textArea"].includes(element.type) && (
+        <>
+          <Title primaryLanguage={primaryLanguage} element={element} />
+          {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+            <Description primaryLanguage={primaryLanguage} element={element} />
+          )}
+        </>
+      )}
+
+      {subElements && <>{subElements}</>}
+    </div>
+  );
+};
 
 export const Translate = () => {
   const { updateField, form, localizeField, getLocalizationAttribute } = useTemplateStore((s) => ({
@@ -25,7 +88,7 @@ export const Translate = () => {
   const primaryLanguage = "en";
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
-  let questionsIndex = 1;
+  const questionsIndex = 1;
 
   return (
     <>
@@ -167,35 +230,13 @@ export const Translate = () => {
         <section>
           {form.elements.map((element, index) => {
             return (
-              <div className="section" key={`section-${index}`} id={`section-${index}`}>
-                <SectionTitle>
-                  {element.type === "richText" && <>{t("pageText")}</>}
-                  {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
-                </SectionTitle>
-
-                {element.type === "richText" && (
-                  <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
-                )}
-
-                {["radio", "checkbox", "dropdown"].includes(element.type) && (
-                  <>
-                    <Title primaryLanguage={primaryLanguage} element={element} />
-                    {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                      <Description primaryLanguage={primaryLanguage} element={element} />
-                    )}
-                    <Options primaryLanguage={primaryLanguage} element={element} index={index} />
-                  </>
-                )}
-
-                {["textField", "textArea"].includes(element.type) && (
-                  <>
-                    <Title primaryLanguage={primaryLanguage} element={element} />
-                    {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                      <Description primaryLanguage={primaryLanguage} element={element} />
-                    )}
-                  </>
-                )}
-              </div>
+              <Elements
+                key={element.id}
+                index={index}
+                questionsIndex={questionsIndex}
+                element={element}
+                primaryLanguage={primaryLanguage}
+              />
             );
           })}
         </section>
