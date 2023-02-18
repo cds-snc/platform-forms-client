@@ -2,7 +2,7 @@ import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
-import { getPathString, getPath } from "../getPath";
+import { getPathString } from "../getPath";
 
 import {
   moveDown,
@@ -112,8 +112,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
   updateField: (path: string, value: string | boolean | ElementProperties) => void;
-  propertyPath: (id: number, field: string, lang: Language) => string;
-  getProperty: (id: number, field: string, lang: Language) => ElementProperties;
+  propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
@@ -213,15 +212,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             set((state) => {
               update(state, path, value);
             }),
-          propertyPath: (id: number, field: string, lang: Language) => {
+          propertyPath: (id: number, field: string, lang?: Language) => {
             const path = getPathString(id, get().form.elements);
-            return `${path}.${get().localizeField(field, lang)}` ?? "";
-          },
-          getProperty: (id: number, field: string, lang: Language) => {
-            const path = getPath(id, get().form);
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            return path.properties[get().localizeField(field, lang)] ?? "";
+            if (lang) {
+              return `${path}.${get().localizeField(field, lang)}` ?? "";
+            }
+            return `${path}.${field}` ?? "";
           },
           unsetField: (path) =>
             set((state) => {

@@ -179,13 +179,9 @@ export const Translate = () => {
 
                 {["radio", "checkbox", "dropdown"].includes(element.type) && (
                   <>
-                    <Title primaryLanguage={primaryLanguage} element={element} index={index} />
+                    <Title primaryLanguage={primaryLanguage} element={element} />
                     {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                      <Description
-                        primaryLanguage={primaryLanguage}
-                        element={element}
-                        index={index}
-                      />
+                      <Description primaryLanguage={primaryLanguage} element={element} />
                     )}
                     <Options primaryLanguage={primaryLanguage} element={element} index={index} />
                   </>
@@ -193,13 +189,9 @@ export const Translate = () => {
 
                 {["textField", "textArea"].includes(element.type) && (
                   <>
-                    <Title primaryLanguage={primaryLanguage} element={element} index={index} />
+                    <Title primaryLanguage={primaryLanguage} element={element} />
                     {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                      <Description
-                        primaryLanguage={primaryLanguage}
-                        element={element}
-                        index={index}
-                      />
+                      <Description primaryLanguage={primaryLanguage} element={element} />
                     )}
                   </>
                 )}
