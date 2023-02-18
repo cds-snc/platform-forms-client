@@ -7,6 +7,10 @@ export const parseRootId = (id: number) => {
   return Number(first);
 };
 
+interface Form {
+  elements: Element[];
+}
+
 interface Element {
   id: number;
   properties?: {
@@ -32,12 +36,12 @@ export const getElementIndexes = <T extends Element>(id: number, elements: T[]):
   return [elIndex, null];
 };
 
-export const indexesToPath = <T extends Element>(indexes: Indexes, elements: T[]) => {
+export const indexesToPath = <T extends Form>(indexes: Indexes, form: T) => {
   const [elIndex, subIndex] = indexes;
 
   if (elIndex === null) return [null, null];
 
-  const path = elements[Number(elIndex)];
+  const path = form.elements[Number(elIndex)];
 
   if (subIndex === null) return [path, null];
 
@@ -46,9 +50,15 @@ export const indexesToPath = <T extends Element>(indexes: Indexes, elements: T[]
   return subPath ? [path, subPath] : [path, null];
 };
 
-export const getPath = <T extends Element>(id: number, elements: T[]) => {
-  const indexes = getElementIndexes(id, elements);
-  return indexesToPath(indexes, elements);
+export const getPath = <T extends Form>(id: number, form: T) => {
+  const indexes = getElementIndexes(id, form.elements);
+  const [elIndex, subIndex] = indexesToPath(indexes, form);
+
+  if (subIndex) {
+    return subIndex;
+  }
+
+  return elIndex;
 };
 
 export const getPathString = <T extends Element>(id: number, elements: T[]) => {
