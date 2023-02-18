@@ -15,6 +15,10 @@ interface Element {
   id: number;
   properties?: {
     subElements?: Element[];
+    titleEn?: string;
+    titleFr?: string;
+    descriptionEn?: string;
+    descriptionFr?: string;
   };
 }
 

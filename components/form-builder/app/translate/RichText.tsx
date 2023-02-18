@@ -23,6 +23,8 @@ export const RichText = ({
   }));
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
   const field = LocalizedElementProperties.DESCRIPTION;
+  const fieldEn = localizeField(field, "en");
+  const fieldFr = localizeField(field, "en");
   return (
     <>
       <div className="text-entry">
@@ -41,10 +43,7 @@ export const RichText = ({
             <RichTextEditor
               autoFocusEditor={false}
               path={propertyPath(element.id, field, primaryLanguage)}
-              content={
-                element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "en")] ??
-                ""
-              }
+              content={element.properties[fieldEn] ?? ""}
               lang={primaryLanguage}
               ariaLabel={t("pageText") + " " + t(primaryLanguage)}
               ariaDescribedBy={`elements-${index}-description-${primaryLanguage}-language`}
@@ -60,10 +59,7 @@ export const RichText = ({
             <RichTextEditor
               autoFocusEditor={false}
               path={propertyPath(element.id, field, secondaryLanguage)}
-              content={
-                element.properties[localizeField(LocalizedElementProperties.DESCRIPTION, "fr")] ??
-                ""
-              }
+              content={element.properties[fieldFr] ?? ""}
               lang={secondaryLanguage}
               ariaLabel={t("pageText") + " " + t(secondaryLanguage)}
               ariaDescribedBy={`elements-${index}-description-${secondaryLanguage}-language`}

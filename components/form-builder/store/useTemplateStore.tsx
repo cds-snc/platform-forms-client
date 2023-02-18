@@ -2,7 +2,7 @@ import { createStore, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist, StateStorage, createJSONStorage } from "zustand/middleware";
 import React, { createContext, useRef, useContext } from "react";
-import { getPathString } from "../getPath";
+import { getPathString, getPath } from "../getPath";
 
 import {
   moveDown,
@@ -113,6 +113,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
   updateField: (path: string, value: string | boolean | ElementProperties) => void;
   propertyPath: (id: number, field: string, lang: Language) => string;
+  getProperty: (id: number, field: string, lang: Language) => ElementProperties;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
@@ -213,9 +214,14 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               update(state, path, value);
             }),
           propertyPath: (id: number, field: string, lang: Language) => {
-            const path = getPathString<FormElement>(id, get().form.elements);
-            if (!path) return "";
-            return `${path}.${get().localizeField(field, lang)}`;
+            const path = getPathString(id, get().form.elements);
+            return `${path}.${get().localizeField(field, lang)}` ?? "";
+          },
+          getProperty: (id: number, field: string, lang: Language) => {
+            const path = getPath(id, get().form);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            return path.properties[get().localizeField(field, lang)] ?? "";
           },
           unsetField: (path) =>
             set((state) => {
