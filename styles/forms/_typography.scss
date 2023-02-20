@@ -1,0 +1,48 @@
+// Partial: Typography
+
+.gc-p {
+  @apply md:text-small_p text-p mb-10 w-full;
+}
+
+.gc-description {
+  @apply md:text-small_sm mb-3 text-sm w-3/4 xl:w-full;
+}
+
+.gc-richText {
+  p {
+    @extend .gc-p;
+  }
+
+  // Why only h4?
+  h4 {
+    @extend .gc-section-header;
+  }
+
+  ul,
+  ol {
+    @apply mb-10;
+  }
+
+  ol {
+    @apply list-inside;
+  }
+
+  a:visited {
+    @apply text-purple-default;
+  }
+
+  a {
+    @apply underline text-blue-dark hover:text-blue-hover;
+  }
+
+  a:focus {
+    outline: none;
+    box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
+    @apply bg-blue-focus text-white-default;
+  }
+
+  a:active {
+    box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+    @apply underline bg-blue-active text-white-default;
+  }
+}

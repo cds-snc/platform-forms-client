@@ -1,0 +1,82 @@
+// Partial: States
+
+.gc-error-message {
+  @apply md:text-small_base text-base py-3 px-4 w-full mb-2 bg-red-100 border-l-md border-red-700;
+}
+
+.gc-error-message + .gc-input-text,
+.gc-error-message + .gc-textarea,
+.gc-error-message + .gc-dropdown {
+  @apply border-red-700;
+}
+
+.gc-alert {
+  @apply md:text-small_base text-base px-4 py-3 mb-14 w-5/6 xl:w-full;
+  &.gc-alert--validation {
+    @apply p-9 border-xl border-red-500 text-black-default bg-white;
+
+    &:focus,
+    &:focus-within {
+      @apply outline-blue-focus outline outline-offset-2 outline-[3px] text-blue-focus;
+    }
+    .gc-alert__body h2 {
+      @apply text-h2 mb-5;
+    }
+  }
+
+  &.gc-alert--error:not(.gc-alert--validation) {
+    background-color: var(--gcds-alert-danger-background);
+    @apply border-l-xl border-red-500;
+  }
+
+  &.gc-alert--success {
+    background-color: var(--gcds-alert-success-background);
+    @apply border-l-xl border-green-500;
+  }
+
+  &.gc-alert--warning {
+    background-color: var(--gcds-alert-warning-background);
+    @apply border-l-xl border-yellow-500;
+  }
+
+  &.gc-alert--info {
+    background-color: var(--gcds-alert-info-background);
+    @apply border-l-xl border-blue-500;
+  }
+
+  .gc-alert__body {
+    // H3 never happens in this component
+    // ~~h3 {~~
+    h2 {
+      @apply text-h5 p-0 m-0;
+    }
+
+    ol {
+      @apply pl-6;
+      li {
+        @apply mb-3;
+        > * {
+          @apply box-decoration-clone;
+        }
+      }
+    }
+  }
+}
+
+.gc-ordered-list {
+  @apply ml-0 font-normal;
+
+  .gc-error-link {
+    @apply ml-2 text-red-700;
+
+    &:focus {
+      box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
+      @apply bg-blue-focus text-white-default no-underline;
+    }
+
+    &:active {
+      box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+      @apply underline bg-blue-active text-white-default no-underline;
+    }
+  }
+}

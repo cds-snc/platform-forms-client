@@ -15,10 +15,10 @@
   @font-face {
     font-family: "Lato";
     font-style: normal;
-    font-weight: 400;
-    src: local("Lato"), url("../public/static/fonts/Lato-Regular.woff2") format("woff2"),
-      url("../public/static/fonts/Lato-Regular.woff") format("woff")
-        url("../public/static/fonts/Lato-Regular.ttf") format("truetype");
+    font-weight: 700;
+    src: local("Lato"), url("../public/static/fonts/LatoLatin-Bold.woff2") format("woff2"),
+      url("../public/static/fonts/LatoLatin-Bold.woff") format("woff")
+        url("../public/static/fonts/LatoLatin-Bold.ttf") format("truetype");
   }
 
   /* latin */

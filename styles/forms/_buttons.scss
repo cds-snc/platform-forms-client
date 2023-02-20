@@ -1,0 +1,69 @@
+// Partial: Buttons
+
+.gc-button {
+  background-color: var(--gcds-button-primary-default-background);
+  color: var(--gcds-button-primary-default-text);
+  @apply md:w-full md:text-small_base cursor-pointer p-3 mr-2 m-0 text-base no-underline outline-none rounded-md;
+
+  &:hover {
+    background-color: var(--gcds-button-primary-hover-background);
+  }
+
+  &:focus {
+    color: var(--gcds-focus-text);
+    @apply bg-blue-focus outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+  }
+
+  &:active {
+    background-color: var(--gcds-active-background);
+    color: var(--gcds-active-text);
+    @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+  }
+}
+
+.gc-button--icon {
+  @apply md:text-base text-h3 md:w-10 md:h-10 w-12 h-12 p-0;
+}
+
+.gc-button--secondary {
+  background-color: var(--gcds-button-secondary-default-background);
+  color: var(--gcds-button-secondary-default-text);
+  //Fix: text blue because the tokens is using shade 700.
+  @apply border-blue-800 text-blue-800 border-md;
+
+  &:hover {
+    background-color: var(--gcds-button-secondary-hover-background);
+    @apply text-blue-800;
+  }
+}
+
+// .gc-button--blue {
+// // This is the primary button. Created to overwrite the previosgreen button
+
+//   @apply h-16 rounded-lg py-3 px-6 text-white-default mx-auto bg-blue-800 shadow-default;
+
+//   &:hover {
+//     @apply bg-blue-light;
+//   }
+
+//   &:focus {
+//     @apply outline-[3px] outline-blue-focus outline outline-offset-2 bg-blue-focus;
+//   }
+
+//   &:active {
+//     @apply text-white-default top-0.5;
+//   }
+
+//   &:visited {
+//     @apply text-white-default top-0.5;
+//   }
+// }
+
+.gc-button--destructive {
+  background-color: var(--gcds-button-danger-default-background);
+  color: var(--gcds-button-danger-default-text);
+
+  &:hover {
+    background-color: var(--gcds-button-danger-hover-background);
+  }
+}
