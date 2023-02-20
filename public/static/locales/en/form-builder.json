@@ -265,6 +265,7 @@
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
   "share": {
+    "formUser": "A GC Forms user",
     "copy": "Copy",
     "email": "Share by email",
     "emailLabel": "Enter email address",

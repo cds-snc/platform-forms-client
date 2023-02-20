@@ -262,9 +262,10 @@
   "settingsResponseHint1": "Fournissez une adresse électronique du gouvernement du Canada où envoyer les réponses aux questions du formulaire. Vous devez indiquer une adresse pour publier un formulaire.",
   "settingsResponseHint2": "Indiquer l’adresse courriel pour la réception des réponses",
   "settingsResponseNote": " Définissez les parametres de la livraison des réponses avant de tester la livraison et de publier.",
-  "settingsResponseNotePublished": "Pour modifier la destination de la livraison des réponses.",
-  "settingsResponseTitle": "Adresse courriel pour la réception des réponses",
+  "settingsResponseNotePublished": "Pour modifier la destination de livraison des réponses.",
+  "settingsResponseTitle": "Destination de livraison des réponses.",
   "share": {
+    "formUser": "Un·e utilisateur·rice de Formulaires GC",
     "copy": "Copier",
     "email": "Partager par courriel",
     "emailLabel": "Entrer l'adresse courriel",

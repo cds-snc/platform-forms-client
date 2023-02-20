@@ -14,12 +14,14 @@ export const Dialog = ({
   children,
   title,
   actions,
+  className,
   handleClose,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
   title?: string;
   actions?: React.ReactElement;
+  className?: string;
   handleClose?: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -59,7 +61,9 @@ export const Dialog = ({
       aria-labelledby="modal-title"
       ref={dialogRef}
     >
-      <div className="w-[800px] mx-auto mt-24 bg-white border-2 border-black rounded-xl">
+      <div
+        className={`w-[800px] mx-auto mt-24 bg-white border-2 border-black rounded-xl ${className}`}
+      >
         <div className="relative">
           {title && <h2 className="pb-4 inline-block mt-4 ml-4">{title}</h2>}
           <Button
