@@ -24,6 +24,10 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" sizes="32x32" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/cds-snc/gcds-tokens/build/web/variables.css"
+        />
       </Head>
 
       <SkipLink />
