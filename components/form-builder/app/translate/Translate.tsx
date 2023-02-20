@@ -18,19 +18,27 @@ const Element = ({
   element,
   index,
   primaryLanguage,
+  subIndex,
 }: {
   element: FormElement;
   index: number;
   primaryLanguage: Language;
+  subIndex?: string;
 }) => {
   let subElements;
+
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
   if (element.type === "dynamicRow") {
+    let subElementIndex = -1;
     subElements = element.properties.subElements?.map((subElement) => {
+      subElementIndex++;
       return (
         <Element
           key={subElement.id}
           element={subElement}
           index={subElement.id}
+          subIndex={alphabet[subElementIndex]}
           primaryLanguage={primaryLanguage}
         />
       );
@@ -38,6 +46,8 @@ const Element = ({
   }
   return (
     <>
+      {subIndex && <SectionTitle>{subIndex}</SectionTitle>}
+
       {element.type === "richText" && (
         <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
       )}
