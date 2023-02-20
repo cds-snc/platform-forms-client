@@ -38,6 +38,8 @@ describe("Accessibility (A11Y) Check", () => {
       ({ path }) => {
         cy.visit(path);
         cy.injectAxe();
+        // Ensure page has fully loaded
+        cy.get("h1").should("exist");
         cy.checkA11y(null, A11Y_OPTIONS);
       }
     );
