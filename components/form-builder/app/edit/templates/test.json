@@ -1,0 +1,35 @@
+[
+  {
+    "type": "radio",
+    "properties": {
+      "choices": [
+        {
+          "en": "English",
+          "fr": "Anglais"
+        },
+        {
+          "en": "French",
+          "fr": "Français"
+        }
+      ],
+      "titleEn": "What is your preferred language for communications?",
+      "titleFr": "Quelle est votre langue de communication préférée ?",
+      "validation": {
+        "required": true
+      },
+      "descriptionEn": "",
+      "descriptionFr": ""
+    }
+  },
+  {
+    "type": "richText",
+    "properties": {
+      "charLimit": 5000,
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "**Note:** We are not collecting email addresses or phone numbers through this test form to preserve your privacy\n\n\n## Project Information",
+      "descriptionFr": "**Remarque:** Nous ne collectons pas d'adresses électroniques ni de numéros de téléphone par le biais de ce formulaire de test afin de préserver votre vie privée. \n\r ##Informations sur le projet"
+    }
+  }
+]
