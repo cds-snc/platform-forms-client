@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { isUUID } from "@lib/validation";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
+import { randomId } from "@lib/uiUtils";
 
 export const DialogConfirmReceipt = ({
   isShowDialog,
@@ -12,17 +13,16 @@ export const DialogConfirmReceipt = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [codes, setCodes] = useState<string[]>([]);
-  const validateCodes = (code: string) => {
-    return isUUID(code);
-  };
-  const dialogConfirmReceipt = useDialogRef();
-  const dialogConfirmReceiptInstructionId =
-    "dialog-confirm-receipt-instruction-" + Math.random().toString(36).substr(2, 9);
-  const dialogConfirmReceiptHandleClose = () => {
+  const dialogRef = useDialogRef();
+  const maxEntries = 20;
+  const confirmInstructionId = `dialog-confirm-receipt-instruction-${randomId()}`;
+
+  const handleClose = () => {
     setIsShowDialog(false);
-    dialogConfirmReceipt.current?.close();
+    dialogRef.current?.close();
   };
-  const handleConfirmReceiptSubmit = () => {
+
+  const handleSubmit = () => {
     //TODO
   };
 
@@ -31,28 +31,29 @@ export const DialogConfirmReceipt = ({
       {isShowDialog && (
         <Dialog
           title={t("responses.confirmReceiptDialog.title")}
-          dialogRef={dialogConfirmReceipt}
-          handleClose={dialogConfirmReceiptHandleClose}
+          dialogRef={dialogRef}
+          handleClose={handleClose}
           headerStyle="inline-block ml-12 mt-12"
         >
           <div className="px-10 py-4">
             <p className="mb-8">{t("responses.confirmReceiptDialog.findCode")}</p>
-            <p className="mt-20 mb-2 font-bold" id={dialogConfirmReceiptInstructionId}>
-              {t("responses.confirmReceiptDialog.copyCode")}
+            <p className="mt-20 mb-2 font-bold" id={confirmInstructionId}>
+              {t("responses.confirmReceiptDialog.copyCode", { max: maxEntries })}
             </p>
             <LineItemEntries
               inputs={codes}
               setInputs={setCodes}
-              validateInput={validateCodes}
+              validateInput={isUUID}
               spellCheck={false}
-              inputLabelId={dialogConfirmReceiptInstructionId}
+              inputLabelId={confirmInstructionId}
+              maxEntries={maxEntries}
             ></LineItemEntries>
             <p className="mt-8">{t("responses.confirmReceiptDialog.responsesAvailableFor")}</p>
             <div className="flex mt-8 mb-8">
-              <Button className="mr-4" onClick={handleConfirmReceiptSubmit}>
+              <Button className="mr-4" onClick={handleSubmit}>
                 {t("responses.confirmReceipt")}
               </Button>
-              <Button theme="secondary" onClick={dialogConfirmReceiptHandleClose}>
+              <Button theme="secondary" onClick={handleClose}>
                 {t("cancel")}
               </Button>
             </div>

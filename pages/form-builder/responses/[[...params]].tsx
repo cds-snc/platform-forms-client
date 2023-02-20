@@ -17,8 +17,8 @@ import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
-import { DialogConfirmReceipt } from "./DialogConfirmReceipt";
-import { DialogReportProblems } from "./DialogReportProblems";
+import { DialogConfirmReceipt } from "../../../components/form-builder/app/DialogConfirmReceipt";
+import { DialogReportProblems } from "../../../components/form-builder/app/DialogReportProblems";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import { isFormId } from "@lib/validation";
 import { Button, useDialogRef, Dialog, LineItemEntries } from "@components/form-builder/app/shared";
+import { randomId } from "@lib/uiUtils";
 
 export const DialogReportProblems = ({
   isShowDialog,
@@ -12,17 +13,16 @@ export const DialogReportProblems = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [formNumbers, setFormNumbers] = useState<string[]>([]);
-  const validateFormNumber = (formId: string) => {
-    return isFormId(formId);
-  };
-  const dialogReportProblems = useDialogRef();
-  const dialogReportProblemsInstructionId =
-    "dialog-report-problems-instruction-" + Math.random().toString(36).substr(2, 9);
-  const dialogReportProblemsHandleClose = () => {
+  const dialogRef = useDialogRef();
+  const maxEntries = 20;
+  const problemsInstructionId = `dialog-report-problems-instruction-${randomId()}`;
+
+  const handleClose = () => {
     setIsShowDialog(false);
-    dialogReportProblems.current?.close();
+    dialogRef.current?.close();
   };
-  const handleReportProblemSubmit = () => {
+
+  const handleSubmit = () => {
     //TODO
   };
 
@@ -31,28 +31,29 @@ export const DialogReportProblems = ({
       {isShowDialog && (
         <Dialog
           title={t("responses.reportProblemsDialog.title")}
-          dialogRef={dialogReportProblems}
-          handleClose={dialogReportProblemsHandleClose}
+          dialogRef={dialogRef}
+          handleClose={handleClose}
           headerStyle="inline-block ml-12 mt-12"
         >
           <div className="px-10 py-4">
             <p className="mb-8">{t("responses.reportProblemsDialog.findForm")}</p>
-            <p id={dialogReportProblemsInstructionId} className="mt-20 mb-2 font-bold">
-              {t("responses.reportProblemsDialog.enterFormNumbers")}
+            <p id={problemsInstructionId} className="mt-20 mb-2 font-bold">
+              {t("responses.reportProblemsDialog.enterFormNumbers", { max: maxEntries })}
             </p>
             <LineItemEntries
               inputs={formNumbers}
               setInputs={setFormNumbers}
-              validateInput={validateFormNumber}
+              validateInput={isFormId}
               spellCheck={false}
-              inputLabelId={dialogReportProblemsInstructionId}
+              inputLabelId={problemsInstructionId}
+              maxEntries={maxEntries}
             ></LineItemEntries>
             <p className="mt-8">{t("responses.reportProblemsDialog.problemReported")}</p>
             <div className="flex mt-8 mb-8">
-              <Button className="mr-4" onClick={handleReportProblemSubmit}>
+              <Button className="mr-4" onClick={handleSubmit}>
                 {t("responses.reportProblemsDialog.reportProblems")}
               </Button>
-              <Button theme="secondary" onClick={dialogReportProblemsHandleClose}>
+              <Button theme="secondary" onClick={handleClose}>
                 {t("cancel")}
               </Button>
             </div>

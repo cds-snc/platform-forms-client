@@ -1,21 +1,25 @@
-import React from "react";
-
+import React, { useEffect, useRef } from "react";
 import { LineItems } from "./LineItems";
-import { LineInput } from "./LineInput";
+import { scrollToBottom } from "@lib/uiUtils";
+import { useTranslation } from "react-i18next";
 
 export const LineItemEntries = ({
   inputs,
   setInputs,
   validateInput,
-  spellCheck = true,
   inputLabelId,
+  maxEntries = 20,
 }: {
   inputs: string[];
   setInputs: (tag: string[]) => void;
   validateInput?: (tag: string) => boolean;
   spellCheck?: boolean;
   inputLabelId: string;
+  maxEntries?: number;
 }) => {
+  const { t } = useTranslation("form-builder");
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const onRemove = (text: string) => {
     setInputs(inputs.filter((input) => input !== text));
   };
@@ -31,8 +35,9 @@ export const LineItemEntries = ({
 
     if (text && ["Enter", " ", ","].includes(e.key)) {
       e.preventDefault();
-      if (validateInput && !validateInput(text)) return;
-
+      if ((validateInput && !validateInput(text)) || inputs.length >= maxEntries) {
+        return;
+      }
       setInputs([...new Set([...inputs, text])]);
       (e.target as HTMLInputElement).value = "";
     }
@@ -40,31 +45,48 @@ export const LineItemEntries = ({
 
   const onBlur = (e: { target: HTMLInputElement }) => {
     const text = (e.target as HTMLInputElement).value.trim().replace(",", "");
-
-    if (validateInput && !validateInput(text)) return;
-
+    if ((validateInput && !validateInput(text)) || inputs.length >= maxEntries) {
+      return;
+    }
     if (text) {
       setInputs([...new Set([...inputs, text])]);
       (e.target as HTMLInputElement).value = "";
     }
   };
 
-  // TODO: accessibility - look into why removals are not being announced in VoiceOver..
+  useEffect(() => {
+    scrollToBottom(containerRef?.current as HTMLElement);
+  }, [inputs]);
+
   return (
-    <ol
-      className="rounded-md box-border border-black-default border-2 py-3"
-      data-testid="values"
-      aria-live="polite"
-      aria-atomic="false"
-      aria-relevant="text removals"
+    <div
+      ref={containerRef}
+      className="max-h-60 overflow-y-auto box-border border-black-default border-2 rounded-md"
     >
-      <LineItems values={inputs} onRemove={onRemove} />
-      <LineInput
-        onKeyUp={onKeyUp}
-        onBlur={onBlur}
-        spellCheck={spellCheck}
-        inputLabelId={inputLabelId}
-      />
-    </ol>
+      <ol data-testid="values" aria-live="polite" aria-atomic="false" aria-relevant="text removals">
+        <LineItems values={inputs} onRemove={onRemove} />
+      </ol>
+      <div className="grow p-4">
+        <input
+          data-testid="value-input"
+          className="w-full border-none p-1 outline-none"
+          type="text"
+          name="value-input"
+          onKeyUp={onKeyUp}
+          onBlur={onBlur}
+          spellCheck="false"
+          autoComplete="false"
+          aria-labelledby={inputLabelId}
+        />
+      </div>
+      {inputs.length >= maxEntries && (
+        <div role="alert" className="px-4 py-2 m-2 bg-[#dcd6fe]">
+          <p className="font-bold">
+            {t("responses.dialogMessages.onlyMaxResponses", { max: maxEntries })}
+          </p>
+          <p>{t("responses.dialogMessages.reportTheseForm")}</p>
+        </div>
+      )}
+    </div>
   );
 };
