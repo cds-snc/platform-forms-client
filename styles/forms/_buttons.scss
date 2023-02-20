@@ -1,6 +1,8 @@
 // Partial: Buttons
 
+// Button variants
 .gc-button {
+  // Default dark blue variant
   background-color: var(--gcds-button-primary-default-background);
   color: var(--gcds-button-primary-default-text);
   @apply md:w-full md:text-small_base cursor-pointer p-3 mr-2 m-0 text-base no-underline outline-none rounded-md;
@@ -34,6 +36,8 @@
   }
 }
 
+// Common styles
+// Declare at the end to respect focus and active states accross vatiants.
 .gc-button {
   &:active {
     background-color: var(--gcds-active-background);

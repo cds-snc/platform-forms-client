@@ -84,11 +84,6 @@
 .gc-radio-label,
 .gc-checkbox-label {
   @apply md:text-small_base font-normal text-base flex items-center;
-
-  .checkbox-label-text,
-  .radio-label-text {
-    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop;
-  }
 }
 
 .gc-input-checkbox {
