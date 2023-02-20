@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "next-i18next";
+import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes, FormElement } from "@lib/types";
 import { Button } from "../shared";
@@ -90,17 +91,17 @@ export const PanelActions = ({
         },
         {
           id: 4,
-          txt: "more",
-          icon: ThreeDotsIcon,
-          onClick: () => null,
-        },
-        {
-          id: 5,
-          txt: "add to set",
+          txt: "addToSet",
           icon: AddIcon,
           onClick: () => {
             dialogEnabled && handleOpenDialog();
           },
+        },
+        {
+          id: 5,
+          txt: "more",
+          icon: ThreeDotsIcon,
+          onClick: () => null,
         },
       ];
     }
@@ -141,6 +142,7 @@ export const PanelActions = ({
   };
 
   const panelButtons = getPanelButtons();
+  const isXl = useMediaQuery("(max-width: 992px)");
 
   const [elementDialog, showElementDialog] = useState(false);
 
@@ -157,6 +159,7 @@ export const PanelActions = ({
     isFirstItem,
     isLastItem,
     elementsLength: elements.length,
+    orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
   });
 
   useEffect(() => {
