@@ -133,12 +133,12 @@
   "formDelete": {
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list.",
+      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the Internet.",
+      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list and the Internet.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
       "message3": "The URL of your form will change if you upload your form again."
     },
