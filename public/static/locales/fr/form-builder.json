@@ -302,7 +302,7 @@
   "singleChoice": "Choix unique",
   "start": "Commencer",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
-  "startFormIntro": "Ajoutez une description à votre formulaire pour définir les attentes de ceux qui le remplissent.",
+  "startFormIntro": "Ajoutez une description à votre formulaire pour définir les attentes des personnes qui le remplissent.",
   "startH2": "Créer un formulaire",
   "startH3": "Ouvrir un formulaire",
   "startP1": "Commencez à créer un formulaire à partir de zéro.",
