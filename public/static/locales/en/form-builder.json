@@ -305,8 +305,8 @@
   "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
   "startH2": "Design a form",
   "startH3": "Open a form file",
-  "startP1": "Start with a blank form",
-  "startP2": "See and edit a form by opening it from your computer",
+  "startP1": "Start with a blank form.",
+  "startP2": "View and edit a form by uploading it from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "support": {

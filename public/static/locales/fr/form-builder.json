@@ -305,8 +305,8 @@
   "startFormIntro": "Ajoutez une description à votre formulaire pour définir les attentes de ceux qui le remplissent.",
   "startH2": "Créer un formulaire",
   "startH3": "Ouvrir un formulaire",
-  "startP1": "Créez un formulaire à partir d’un exemplaire vierge.",
-  "startP2": "Consultez et modifiez un formulaire en l’ouvrant depuis votre ordinateur.",
+  "startP1": "Commencez à créer un formulaire à partir de zéro.",
+  "startP2": "Affichez et modifiez un formulaire en téléversant un fichier de votre ordinateur.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
   "support": {
