@@ -8,17 +8,6 @@
   &:hover {
     background-color: var(--gcds-button-primary-hover-background);
   }
-
-  &:focus {
-    color: var(--gcds-focus-text);
-    @apply bg-blue-focus outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
-  }
-
-  &:active {
-    background-color: var(--gcds-active-background);
-    color: var(--gcds-active-text);
-    @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
-  }
 }
 
 .gc-button--icon {
@@ -29,11 +18,31 @@
   background-color: var(--gcds-button-secondary-default-background);
   color: var(--gcds-button-secondary-default-text);
   //Fix: text blue because the tokens is using shade 700.
-  @apply border-blue-800 text-blue-800 border-md;
+  @apply border-current border-md;
 
   &:hover {
     background-color: var(--gcds-button-secondary-hover-background);
     @apply text-blue-800;
+  }
+}
+.gc-button--destructive {
+  background-color: var(--gcds-button-danger-default-background);
+  color: var(--gcds-button-danger-default-text);
+
+  &:hover {
+    background-color: var(--gcds-button-danger-hover-background);
+  }
+}
+
+.gc-button {
+  &:active {
+    background-color: var(--gcds-active-background);
+    color: var(--gcds-active-text);
+  }
+
+  &:focus {
+    color: var(--gcds-focus-text);
+    @apply bg-blue-focus outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
   }
 }
 
@@ -58,12 +67,3 @@
 //     @apply text-white-default top-0.5;
 //   }
 // }
-
-.gc-button--destructive {
-  background-color: var(--gcds-button-danger-default-background);
-  color: var(--gcds-button-danger-default-text);
-
-  &:hover {
-    background-color: var(--gcds-button-danger-hover-background);
-  }
-}
