@@ -34,10 +34,8 @@ export const PanelBody = ({
     return elements.filter((element) => element.id !== "dynamicRow");
   };
 
-  /* eslint-disable jsx-a11y/no-static-element-interactions */
-  /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
-    <div className="mx-7 py-7 ">
+    <div className="mx-7 py-7">
       <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base !text-sm">
         <div
           style={isRichText || isDynamicRow ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}
