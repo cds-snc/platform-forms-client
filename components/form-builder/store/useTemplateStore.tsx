@@ -105,6 +105,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
   add: (elIndex?: number, type?: FormElementTypes) => void;
   addSubItem: (elIndex: number, subIndex?: number, type?: FormElementTypes) => void;
+  addTemplate: (elementId: number) => void;
   remove: (id: number) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
@@ -271,6 +272,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 ),
                 type,
               });
+            }),
+          addTemplate: (elementId: number) =>
+            set((state) => {
+              //
             }),
           remove: (elementId) =>
             set((state) => {
