@@ -6,7 +6,8 @@ import { useHover } from "@formbuilder/hooks/useHover";
 export const useIsWithin = () => {
   const [isFocusWithin, setFocusWithin] = useState(false);
 
-  const [ref, isHovered] = useHover();
+  // const [ref, isHovered] = useHover();
+  const [ref] = useHover();
 
   const { focusWithinProps } = useFocusWithin({
     onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
