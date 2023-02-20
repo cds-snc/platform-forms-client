@@ -20,7 +20,10 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@dc323e67f16fb5f7663d20ff7941f27f5809e9b6 # v2.6.0 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-
+      - name: Node.JS 16
+        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # v2.5.1
+        with:
+          node-version: 16
       - name: Install 🔧 # This example project is built using yarn and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: yarn install
 
