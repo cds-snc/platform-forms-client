@@ -2,6 +2,9 @@
   "name": "gcforms",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "16"
+  },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seeds/seed.ts --environment=development"
   },
