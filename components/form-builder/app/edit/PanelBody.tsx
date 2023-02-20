@@ -38,10 +38,10 @@ export const PanelBody = ({
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
     <div
-      className="mx-7 py-7 "
+      className="mx-7 py-7"
       onClick={() => {
         if (questionInputRef.current) {
-          questionInputRef.current.focus();
+          // questionInputRef.current.focus();
         }
       }}
     >
