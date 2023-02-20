@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "next-i18next";
 
 import { FormElementTypes, FormElement } from "@lib/types";
@@ -11,9 +11,12 @@ import {
   Close,
   Duplicate,
   ThreeDotsIcon,
+  AddIcon,
 } from "@components/form-builder/icons";
 
 import { usePanelActions } from "@components/form-builder/hooks";
+import { ElementDialog } from "./elements/element-dialog/ElementDialog";
+import { useFlag } from "@lib/hooks";
 
 const buttonClasses =
   "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 xl:focus:!bg-blue-hover disabled:!bg-transparent";
@@ -60,6 +63,8 @@ export const PanelActions = ({
   const isRichText = item.type == "richText";
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
 
+  const { status: dialogEnabled } = useFlag("formBuilderAddElementDialog");
+
   const getPanelButtons = () => {
     if (isSubElement) {
       return [
@@ -88,6 +93,14 @@ export const PanelActions = ({
           txt: "more",
           icon: ThreeDotsIcon,
           onClick: () => null,
+        },
+        {
+          id: 5,
+          txt: "add to set",
+          icon: AddIcon,
+          onClick: () => {
+            dialogEnabled && handleOpenDialog();
+          },
         },
       ];
     }
@@ -128,6 +141,16 @@ export const PanelActions = ({
   };
 
   const panelButtons = getPanelButtons();
+
+  const [elementDialog, showElementDialog] = useState(false);
+
+  const handleOpenDialog = useCallback(() => {
+    showElementDialog(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    showElementDialog(false);
+  }, []);
 
   const { handleNav, getTabIndex, currentFocusIndex, itemsRef, setRef } = usePanelActions({
     panelButtons,
@@ -190,16 +213,17 @@ export const PanelActions = ({
         >
           {actions}
           {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
-          {isSubElement && (
-            <AddElementButton
-              position={item.index}
-              handleAdd={handleAdd}
-              theme="link"
-              filterElements={filterElements}
-              text={isSubElement ? t("addToSet") : t("addElement")}
-            />
-          )}
         </div>
+
+        {elementDialog && (
+          <ElementDialog
+            filterElements={filterElements}
+            handleAddType={(type) => {
+              handleAdd && handleAdd(item.index, type);
+            }}
+            handleClose={handleCloseDialog}
+          />
+        )}
       </div>
       {!isSubElement && (
         <div className="flex">
