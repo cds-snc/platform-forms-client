@@ -66,7 +66,7 @@ export const usePanelActions = ({
   );
 
   const getTabIndex = (item: string) => {
-    if (elementsLength === 1 && item === "duplicate") return 0;
+    if (elementsLength === 1 && (item === "duplicate" || item === "removeFromSet")) return 0;
 
     if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
 

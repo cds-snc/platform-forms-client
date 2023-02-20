@@ -12,7 +12,7 @@ export const useIsWithin = () => {
     onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
   });
 
-  const isWithin = isFocusWithin || isHovered ? true : false;
+  const isWithin = isFocusWithin ? true : false;
 
   return { ref, focusWithinProps, isWithin };
 };

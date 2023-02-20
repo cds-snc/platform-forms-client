@@ -36,7 +36,7 @@ describe("Test FormBuilder", () => {
     cy.get("#formTitle").type("Cypress Test Form");
     cy.get("a").contains("Edit").should("have.class", "font-bold");
     cy.get(`[aria-label="Form introduction"]`).type("form intro");
-    cy.get("button").contains("Add element").click();
+    cy.get("button").contains("Add block").click();
     cy.get("#item0").type("Question 1");
     cy.get("#option--0--1").type("option 1");
     cy.get("button").contains("Add an option").click();
