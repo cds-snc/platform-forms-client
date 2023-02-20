@@ -1,8 +1,11 @@
 {
   "addElement": "Ajouter un élément",
   "addElementDialog": {
-    "addButton": "Sélectionner un élément",
-    "questionElement": "Élément de question",
+    "layoutBlocks": "Blocs de mise en page",
+    "inputBlocks": "Blocs de saisie",
+    "advancedBlocks": "Blocs avancés",
+    "addButton": "Sélectionner un bloc",
+    "questionElement": "Blocs",
     "listItem": "Élément de liste ",
     "checkboxItem": "Élément de case à cocher",
     "example": "exemple",
@@ -10,7 +13,7 @@
     "yes": "Oui",
     "no": "Non",
     "sometimes": "Parfois",
-    "exampleElement": "élément d'exemple",
+    "exampleElement": "exemple d'un bloc",
     "richText": {
       "title": "Texte en grand format",
       "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."
@@ -52,7 +55,7 @@
       "description": "Description du numéro"
     },
     "dynamicRow": {
-      "title": "[FR] Repeating question",
+      "title": "Série répétitive de questions",
       "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
@@ -346,23 +349,26 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
+  "dyanamicRow": "Série répétitive de questions",
+  "addToSet": "Ajouter à la série",
+  "removeFromSet": "Enlever de la série",
   "responses": {
-    "title": "Download Responses [fr]",
-    "navLabel": "Responses [fr]",
-    "confirmReceipt": "Confirm Receipt [fr]",
-    "reportProblems": "Report Problems [fr]",
-    "changeSetup": "Change Setup [fr]",
+    "title": "Télécharger les réponses",
+    "navLabel": "Réponses",
+    "confirmReceipt": "Confirmer la réception",
+    "reportProblems": "Signaler des problèmes",
+    "changeSetup": "Changer la configuration",
     "unauthenticated": {
-      "title": "Sign in to access responses[fr]",
-      "toAccessPagePart1": "To access this page,[fr]",
-      "signIn": "sign in[fr]",
-      "toAccessPagePart2": "to your GC Forms account.[fr]",
-      "noAccount": "If you do not have a GC Forms account,[fr]",
-      "createOne": "create one[fr]"
+      "title": "Se connecter pour accéder aux réponses",
+      "toAccessPagePart1": "Pour accéder à cette page,",
+      "signIn": "connectez-vous",
+      "toAccessPagePart2": "à votre compte Formulaires GC",
+      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
+      "createOne": "créez-en un"
     }
   },
-  "dyanamicRow": "[FR] Repeating question set",
-  "addToSet": "[FR] Add to set",
-  "removeFromSet": "[FR] Remove from set",
+  "dyanamicRow": "Série répétitive de questions",
+  "addToSet": "Ajouter à la série",
+  "removeFromSet": "Enlever de la série",
   "untitledForm": "Formulaire sans titre"
 }
