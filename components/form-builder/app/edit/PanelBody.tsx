@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, Language, ElementOptionsFilter } from "../../types";
@@ -27,20 +27,31 @@ export const PanelBody = ({
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
   const [selectedItem, setSelectedItem] = useState<ElementOption>(useGetSelectedOption(item));
+  const questionInputRef = useRef<HTMLInputElement>(null);
 
   // Filter out the dynamicRow element from the dropdown if we're in a sub panel
   const elementFilter: ElementOptionsFilter = (elements) => {
     return elements.filter((element) => element.id !== "dynamicRow");
   };
 
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
+  /* eslint-disable jsx-a11y/click-events-have-key-events */
   return (
-    <div className="mx-7 py-7 ">
+    <div
+      className="mx-7 py-7 "
+      onClick={() => {
+        if (questionInputRef.current) {
+          questionInputRef.current.focus();
+        }
+      }}
+    >
       <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base !text-sm">
         <div
           style={isRichText || isDynamicRow ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}
           className={isRichText || isDynamicRow ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}
         >
           <Question
+            questionInputRef={questionInputRef}
             elements={elements}
             elIndex={elIndex}
             item={item}
