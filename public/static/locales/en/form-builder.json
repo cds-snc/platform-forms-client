@@ -348,9 +348,9 @@
   "responses": {
     "title": "Download Responses",
     "navLabel": "Responses",
-    "confirmReceipt": "Confirm Receipt",
-    "reportProblems": "Report Problems",
-    "changeSetup": "Change Setup",
+    "confirmReceipt": "Confirm receipt",
+    "reportProblems": "Report problems",
+    "changeSetup": "Change setup",
     "unauthenticated": {
       "title": "Sign in to access responses",
       "toAccessPagePart1": "To access this page,",
