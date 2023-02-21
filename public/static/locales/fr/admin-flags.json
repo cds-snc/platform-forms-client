@@ -63,8 +63,8 @@
       "description": "Modifie l'en-tête pour inclure le nom de fichier modifiable"
     },
     "formBuilderExperimentalBlocks": {
-      "title": "[FR] Form builder blocks",
-      "description": "[FR] Enable experimental blocks"
+      "title": "Blocs du Générateur de formulaires",
+      "description": "Activer les blocs expérimentaux"
     }
   }
 }
