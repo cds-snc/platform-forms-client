@@ -268,7 +268,7 @@
     "formUser": "A GC Forms user",
     "copy": "Copy",
     "email": "Share by email",
-    "emailLabel": "Enter email address",
+    "emailLabel": "Email address",
     "enLink": "English link",
     "frLink": "French link",
     "link": "Get the link",
@@ -298,7 +298,7 @@
       "copyInstructions": "Copy instructions",
       "downloadFormFile": "Download form file"
     },
-    "unpublished": "Links unavailable for unpublished forms"
+    "unpublished": "Not available for unpublished forms"
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer text",
