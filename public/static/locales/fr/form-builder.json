@@ -367,5 +367,15 @@
       "createOne": "créez-en un"
     }
   },
-  "untitledForm": "Formulaire sans titre"
+  "dyanamicRow": "Série répétitive de questions",
+  "addToSet": "Ajouter à la série",
+  "removeFromSet": "Enlever de la série",
+  "untitledForm": "Ficher de formulaire sans nom",
+  "questionSet": {
+    "addAnother": {
+      "title": "Bouton",
+      "placeholder": "Ajouter",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses »."
+    }
+  }
 }

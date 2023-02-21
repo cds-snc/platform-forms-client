@@ -4,14 +4,16 @@ import { useTranslation } from "react-i18next";
 import { useTemplateStore } from "../../../../store";
 import { PanelBodySub } from "../../PanelBodySub";
 import { isValidatedTextType } from "../../../../util";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
 import { DynamicRowModal } from "./DynamicRowModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
+import { PanelActionsLocked } from "../../PanelActionsLocked";
+import { Input } from "@formbuilder/app/shared";
 
-export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
+export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
 
   const {
@@ -26,6 +28,8 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     subElements,
     localizeField,
     lang,
+    translationLanguagePriority,
+    getLocalizationAttribute,
   } = useTemplateStore((s) => ({
     lang: s.lang,
     addSubItem: s.addSubItem,
@@ -38,6 +42,8 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
     subElements: s.form.elements[elIndex].properties.subElements,
     resetSubChoices: s.resetSubChoices,
     localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
   const handleAddElement = useCallback(
@@ -54,6 +60,17 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
       }
     },
     [addSubItem, updateField, elIndex]
+  );
+
+  const handlePlaceHolderText = useCallback(
+    (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
+      const placeHolder = localizeField(
+        LocalizedElementProperties.PLACEHOLDER,
+        translationLanguagePriority
+      );
+      updateField(`form.elements[${elIndex}].properties.${placeHolder}`, e.target.value);
+    },
+    [updateField, localizeField, translationLanguagePriority]
   );
 
   const onQuestionChange = (elIndex: number, subIndex: number, val: string, lang: Language) => {
@@ -165,57 +182,80 @@ export const DynamicRow = ({ elIndex, ...props }: { elIndex: number }) => {
       {subElements.map((element, subIndex: number) => {
         const item = { ...element, index: subIndex };
         return (
-          <PanelHightLight
-            key={`sub-element-${item.id}-${subIndex}`}
-            conditionalChildren={
-              <PanelActions
+          <div key={`sub-element-${item.id}-${subIndex}`}>
+            <PanelHightLight
+              conditionalChildren={
+                <PanelActions
+                  elements={subElements}
+                  lang={lang}
+                  item={item}
+                  handleAdd={(subIndex: number, type?: FormElementTypes) => {
+                    handleAddElement(subIndex, type);
+                  }}
+                  handleRemove={() => {
+                    removeSubItem(elIndex, item.id);
+                  }}
+                  handleMoveUp={() => {
+                    subMoveUp(elIndex, subIndex);
+                  }}
+                  handleMoveDown={() => {
+                    subMoveDown(elIndex, subIndex);
+                  }}
+                  handleDuplicate={() => {
+                    subDuplicateElement(elIndex, subIndex);
+                  }}
+                  renderMoreButton={({ item, moreButton }) => {
+                    return (
+                      <DynamicRowModal
+                        elIndex={elIndex}
+                        subIndex={subIndex}
+                        item={{ ...item, index: item.id }}
+                        moreButton={moreButton}
+                      />
+                    );
+                  }}
+                  filterElements={elementFilter}
+                />
+              }
+            >
+              <PanelBodySub
                 elements={subElements}
-                lang={lang}
+                elIndex={elIndex}
                 item={item}
-                handleAdd={(subIndex: number, type?: FormElementTypes) => {
-                  handleAddElement(subIndex, type);
+                onQuestionChange={onQuestionChange}
+                onElementChange={(id, subIndex) => {
+                  onElementChange(id, elIndex, subIndex);
                 }}
-                handleRemove={() => {
-                  removeSubItem(elIndex, item.id);
+                onRequiredChange={(subIndex, checked) => {
+                  onRequiredChange(elIndex, subIndex, checked);
                 }}
-                handleMoveUp={() => {
-                  subMoveUp(elIndex, subIndex);
-                }}
-                handleMoveDown={() => {
-                  subMoveDown(elIndex, subIndex);
-                }}
-                handleDuplicate={() => {
-                  subDuplicateElement(elIndex, subIndex);
-                }}
-                renderMoreButton={({ item, moreButton }) => {
-                  return (
-                    <DynamicRowModal
-                      elIndex={elIndex}
-                      subIndex={subIndex}
-                      item={{ ...item, index: item.id }}
-                      moreButton={moreButton}
-                    />
-                  );
-                }}
-                filterElements={elementFilter}
               />
-            }
-          >
-            <PanelBodySub
-              elements={subElements}
-              elIndex={elIndex}
-              item={item}
-              onQuestionChange={onQuestionChange}
-              onElementChange={(id, subIndex) => {
-                onElementChange(id, elIndex, subIndex);
-              }}
-              onRequiredChange={(subIndex, checked) => {
-                onRequiredChange(elIndex, subIndex, checked);
-              }}
-            />
-          </PanelHightLight>
+            </PanelHightLight>
+          </div>
         );
       })}
+      <div className="max-w-[800px] border-1 border-black h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
+        <div className="mx-7 mt-5 mb-7">
+          <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>
+          <p className="mb-8 text-[1rem]">{t("questionSet.addAnother.description")}</p>
+          <Input
+            id={`repeatable-button-${elIndex}`}
+            {...getLocalizationAttribute()}
+            key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
+            value={
+              item.properties[
+                localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
+              ] || ""
+            }
+            className="w-full"
+            placeholder={t("questionSet.addAnother.placeholder")}
+            onChange={(e) => {
+              handlePlaceHolderText(elIndex, e);
+            }}
+          />
+        </div>
+        <PanelActionsLocked addElement={false} />
+      </div>
     </div>
   );
 };
