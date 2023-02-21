@@ -38,7 +38,7 @@ describe("Test FormBuilder", () => {
     cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add block").click();
 
-    cy.get("li").contains("Single choice").click();
+    cy.get("div").contains("Single choice").click();
     cy.get("button").contains("Select block").click();
 
     cy.get("#item0").type("Question 1");
