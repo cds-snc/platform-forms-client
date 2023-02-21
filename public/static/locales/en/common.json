@@ -72,7 +72,7 @@
     "login": "Sign in",
     "logout": "Sign out",
     "privileges": "Privileges",
-    "myForms": "My forms"
+    "myForms": "Your forms"
   },
   "formElements": {
     "characterCount": {
