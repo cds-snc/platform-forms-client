@@ -298,7 +298,7 @@
       "copyInstructions": "[FR] Copy instructions",
       "downloadFormFile": "[FR] Download form file"
     },
-    "unpublished": "[FR] Links unavailable for unpublished forms"
+    "unpublished": "Lien n'est pas disponible pour les formulaires non publiés"
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
