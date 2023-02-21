@@ -3,6 +3,7 @@ import { useTemplateStore } from "../../../store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { PanelActionsLocked } from "../PanelActionsLocked";
 import { LocalizedElementProperties } from "../../../types";
+import { LockedBadge } from "../../shared/LockedBadge";
 
 export const RichTextLocked = ({
   beforeContent = null,
@@ -35,6 +36,7 @@ export const RichTextLocked = ({
   return (
     <div className="max-w-[800px] border-1 border-black h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
       <div className="mx-7 mt-5 mb-7">
+        <LockedBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
         <div key={translationLanguagePriority} className="flex border-2 rounded">
