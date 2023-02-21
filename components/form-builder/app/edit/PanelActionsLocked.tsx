@@ -28,8 +28,8 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   if (!addElement) return null;
 
   return (
-    <div className="z-index-[999] pl-8 pt-2 pb-2 relative flex items-center h-[62px] last-of-type:rounded-b-md">
-      <div className="absolute top-[35px] right-[30px]">
+    <div className="flex last-of-type:rounded-b-md">
+      <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
         <AddElementButton position={-1} handleAdd={handleAddElement} />
       </div>
     </div>
