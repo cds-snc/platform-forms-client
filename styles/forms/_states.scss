@@ -12,6 +12,8 @@
 
 .gc-alert {
   @apply md:text-small_base text-base px-4 py-3 mb-14 w-5/6 xl:w-full;
+
+  // Variants:
   &.gc-alert--validation {
     @apply p-9 border-xl border-red-500 text-black-default bg-white;
 
@@ -20,7 +22,7 @@
       @apply outline-blue-focus outline outline-offset-2 outline-[3px] text-blue-focus;
     }
     .gc-alert__body h2 {
-      @apply text-h2 mb-5;
+      @apply text-h2;
     }
   }
 
@@ -59,6 +61,12 @@
           @apply box-decoration-clone;
         }
       }
+    }
+    > * + * {
+      @apply mt-2;
+    }
+    + * {
+      @apply mt-4;
     }
   }
 }
