@@ -5,12 +5,84 @@ import { RichText } from "./RichText";
 import { Title } from "./Title";
 import { Description } from "./Description";
 import { Options } from "./Options";
-import { LocalizedElementProperties, LocalizedFormProperties } from "../../types";
+import { LocalizedElementProperties, LocalizedFormProperties, Language } from "../../types";
 import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { formatEmailSubject } from "../edit/Edit";
+
+import { FormElement } from "@lib/types";
+
+const Element = ({
+  element,
+  index,
+  primaryLanguage,
+  subIndex,
+}: {
+  element: FormElement;
+  index: number;
+  primaryLanguage: Language;
+  subIndex?: string;
+}) => {
+  let subElements;
+
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  if (element.type === "dynamicRow") {
+    let subElementIndex = -1;
+    subElements = element.properties.subElements?.map((subElement) => {
+      subElementIndex++;
+      return (
+        <Element
+          key={subElement.id}
+          element={subElement}
+          index={subElement.id}
+          subIndex={alphabet[subElementIndex]}
+          primaryLanguage={primaryLanguage}
+        />
+      );
+    });
+  }
+  return (
+    <>
+      {subIndex && <SectionTitle>{subIndex}</SectionTitle>}
+
+      {element.type === "richText" && (
+        <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
+      )}
+
+      {["radio", "checkbox", "dropdown"].includes(element.type) && (
+        <>
+          <Title primaryLanguage={primaryLanguage} element={element} />
+          {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+            <Description primaryLanguage={primaryLanguage} element={element} />
+          )}
+          <Options primaryLanguage={primaryLanguage} element={element} index={index} />
+        </>
+      )}
+
+      {["textField", "textArea"].includes(element.type) && (
+        <>
+          <Title primaryLanguage={primaryLanguage} element={element} />
+          {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+            <Description primaryLanguage={primaryLanguage} element={element} />
+          )}
+        </>
+      )}
+
+      {subElements && (
+        <>
+          <Title primaryLanguage={primaryLanguage} element={element} />
+          {(element.properties.descriptionEn || element.properties.descriptionFr) && (
+            <Description primaryLanguage={primaryLanguage} element={element} />
+          )}
+          {subElements}
+        </>
+      )}
+    </>
+  );
+};
 
 export const Translate = () => {
   const { updateField, form, localizeField, getLocalizationAttribute } = useTemplateStore((s) => ({
@@ -40,12 +112,11 @@ export const Translate = () => {
 
         <section>
           <SectionTitle>{t("start")}</SectionTitle>
-
+          {/* FORM TITLE */}
           <fieldset>
             <FieldsetLegend>
               {t("formIntroduction")}: {t("title")}
             </FieldsetLegend>
-
             <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
                 {t(`${primaryLanguage}-text`)}
@@ -109,7 +180,9 @@ export const Translate = () => {
               </div>
             </div>
           </fieldset>
+          {/* END FORM TITLE */}
 
+          {/* INTRO */}
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
               <FieldsetLegend>
@@ -162,52 +235,26 @@ export const Translate = () => {
               </div>
             </fieldset>
           )}
+          {/* END INTRO */}
         </section>
 
+        {/* ELEMENTS */}
         <section>
           {form.elements.map((element, index) => {
             return (
-              <div className="section" key={`section-${index}`} id={`section-${index}`}>
+              <div className="section" id={`section-${index}`} key={element.id}>
                 <SectionTitle>
                   {element.type === "richText" && <>{t("pageText")}</>}
                   {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
                 </SectionTitle>
-
-                {element.type === "richText" && (
-                  <RichText primaryLanguage={primaryLanguage} element={element} index={index} />
-                )}
-
-                {["radio", "checkbox", "dropdown"].includes(element.type) && (
-                  <>
-                    <Title primaryLanguage={primaryLanguage} element={element} index={index} />
-                    {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                      <Description
-                        primaryLanguage={primaryLanguage}
-                        element={element}
-                        index={index}
-                      />
-                    )}
-                    <Options primaryLanguage={primaryLanguage} element={element} index={index} />
-                  </>
-                )}
-
-                {["textField", "textArea"].includes(element.type) && (
-                  <>
-                    <Title primaryLanguage={primaryLanguage} element={element} index={index} />
-                    {(element.properties.descriptionEn || element.properties.descriptionFr) && (
-                      <Description
-                        primaryLanguage={primaryLanguage}
-                        element={element}
-                        index={index}
-                      />
-                    )}
-                  </>
-                )}
+                <Element index={index} element={element} primaryLanguage={primaryLanguage} />
               </div>
             );
           })}
         </section>
+        {/* END ELEMENTS */}
 
+        {/* PRIVACY */}
         <section>
           <SectionTitle>{t("privacyStatement")}</SectionTitle>
           <fieldset>
@@ -268,7 +315,9 @@ export const Translate = () => {
             </div>
           </fieldset>
         </section>
+        {/* END PRIVACY */}
 
+        {/* CONFIRMATION */}
         <section>
           <SectionTitle>{t("confirmationMessage")}</SectionTitle>
           <fieldset>
@@ -328,6 +377,7 @@ export const Translate = () => {
             </div>
           </fieldset>
         </section>
+        {/* END CONFIRMATION */}
       </div>
     </>
   );

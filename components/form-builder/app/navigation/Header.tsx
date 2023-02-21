@@ -24,6 +24,8 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const padLogo = editableFilename ? "pt-0" : "pt-4";
+
   return (
     <header className="border-b-1 border-gray-500 mb-12 lg:px-4 xl:px-8 px-32">
       <div className="flex justify-between">
@@ -32,8 +34,8 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className={`pt-4 ${
-                editableFilename && "pt-0 border-r-1"
+              className={`${padLogo}${
+                editableFilename && " border-r-1"
               } flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
             >
               {editableFilename ? (

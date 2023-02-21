@@ -15,9 +15,14 @@ export const Options = ({
   index: number;
   primaryLanguage: Language;
 }) => {
-  const updateField = useTemplateStore((s) => s.updateField);
+  const { updateField, propertyPath } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    propertyPath: s.propertyPath,
+  }));
   const { t } = useTranslation("form-builder");
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+
+  const path = propertyPath(element.id, "choices");
 
   return (
     <>
@@ -49,10 +54,7 @@ export const Options = ({
                     type="text"
                     value={choice[primaryLanguage]}
                     onChange={(e) => {
-                      updateField(
-                        `form.elements[${index}].properties.choices[${choiceIndex}].${primaryLanguage}`,
-                        e.target.value
-                      );
+                      updateField(`${path}[${choiceIndex}].${primaryLanguage}`, e.target.value);
                     }}
                   />
                 </div>
@@ -76,10 +78,7 @@ export const Options = ({
                     type="text"
                     value={choice[secondaryLanguage]}
                     onChange={(e) => {
-                      updateField(
-                        `form.elements[${index}].properties.choices[${choiceIndex}].${secondaryLanguage}`,
-                        e.target.value
-                      );
+                      updateField(`${path}[${choiceIndex}].${secondaryLanguage}`, e.target.value);
                     }}
                   />
                 </div>

@@ -24,7 +24,7 @@ describe("Form builder description text", () => {
   });
 
   it("Renders email element with example text", () => {
-    cy.get("button").contains("Add element").click();
+    cy.get("button").contains("Add block").click();
     cy.get(".builder-element-dropdown").click();
     cy.get('[data-testid="email"]').click();
     cy.get(".description-text")
@@ -34,7 +34,7 @@ describe("Form builder description text", () => {
   });
 
   it("Renders date element with example text", () => {
-    cy.get("button").contains("Add element").click();
+    cy.get("button").contains("Add block").click();
     cy.get(".builder-element-dropdown").click();
     cy.get('[data-testid="date"]').click();
     cy.get(".description-text").should("exist").contains("Enter a date like, mm/dd/yyyy");
@@ -42,7 +42,7 @@ describe("Form builder description text", () => {
   });
 
   it("Renders numeric element with example text", () => {
-    cy.get("button").contains("Add element").click();
+    cy.get("button").contains("Add block").click();
     cy.get(".builder-element-dropdown").click();
     cy.get('[data-testid="number"]').click();
     cy.get(".description-text").should("exist").contains("Only enter numbers");
@@ -50,7 +50,7 @@ describe("Form builder description text", () => {
   });
 
   it("Renders phone element with example text + toggles to FR", () => {
-    cy.get("button").contains("Add element").click();
+    cy.get("button").contains("Add block").click();
     cy.get(".builder-element-dropdown").click();
     cy.get('[data-testid="phone"]').click();
     cy.get(".description-text").should("exist").contains("Enter a phone number like, 111-222-3333");

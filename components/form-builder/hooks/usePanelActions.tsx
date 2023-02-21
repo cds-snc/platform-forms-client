@@ -12,11 +12,13 @@ export const usePanelActions = ({
   isFirstItem,
   isLastItem,
   elementsLength,
+  orientation,
 }: {
   panelButtons: PanelButton[];
   isFirstItem: boolean;
   isLastItem: boolean;
   elementsLength: number;
+  orientation: "horizontal" | "vertical";
 }) => {
   const itemsRef = useRef<[HTMLButtonElement] | []>([]);
 
@@ -38,7 +40,10 @@ export const usePanelActions = ({
       const { key } = evt;
       let step = 1;
 
-      if (key === "ArrowLeft") {
+      const back = orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
+      const forward = orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+
+      if (key === back) {
         evt.preventDefault();
         if (isFirstItem && currentFocusIndex === 1) {
           return;
@@ -49,7 +54,7 @@ export const usePanelActions = ({
         setCurrentFocusIndex((index) => Math.max(0, index - step));
       }
 
-      if (key === "ArrowRight") {
+      if (key === forward) {
         evt.preventDefault();
         if (isLastItem && currentFocusIndex === 0) {
           step = 2;
@@ -57,11 +62,11 @@ export const usePanelActions = ({
         setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
       }
     },
-    [items, setCurrentFocusIndex, currentFocusIndex, isFirstItem, isLastItem]
+    [orientation, isFirstItem, currentFocusIndex, isLastItem, items.length]
   );
 
   const getTabIndex = (item: string) => {
-    if (elementsLength === 1 && item === "duplicate") return 0;
+    if (elementsLength === 1 && (item === "duplicate" || item === "removeFromSet")) return 0;
 
     if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
 
