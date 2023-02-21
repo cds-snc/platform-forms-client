@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "next-i18next";
 import { LockIcon } from "../../icons";
 
-export const LockedBadge = ({ className }: { className: string }) => {
+export const LockedBadge = ({ className }: { className?: string }) => {
   const { t } = useTranslation("form-builder");
   const badgeClass = className ? className : "absolute right-0 top-[-10px]";
   return (
