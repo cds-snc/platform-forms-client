@@ -1,8 +1,11 @@
 {
   "addElement": "Add element",
   "addElementDialog": {
-    "addButton": "Select element",
-    "questionElement": "Question element",
+    "layoutBlocks": "Layout blocks",
+    "inputBlocks": "Input blocks",
+    "advancedBlocks": "Advanced blocks",
+    "addButton": "Select block",
+    "questionElement": "Blocks",
     "listItem": "List item ",
     "checkboxItem": "Checkbox item",
     "example": "example",
@@ -10,7 +13,7 @@
     "no": "No",
     "answer": "Answer...",
     "sometimes": "Sometimes",
-    "exampleElement": "example element",
+    "exampleElement": "example block",
     "richText": {
       "title": "Large text",
       "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
@@ -52,7 +55,7 @@
       "description": "Number description"
     },
     "dynamicRow": {
-      "title": "Repeating question",
+      "title": "Repeating set",
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
@@ -262,6 +265,7 @@
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
   "share": {
+    "formUser": "A GC Forms user",
     "copy": "Copy",
     "email": "Share by email",
     "emailLabel": "Enter email address",
@@ -346,7 +350,7 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "responses": {
-    "title": "Download Responses",
+    "title": "Download responses",
     "navLabel": "Responses",
     "confirmReceipt": "Confirm receipt",
     "reportProblems": "Report problems",
