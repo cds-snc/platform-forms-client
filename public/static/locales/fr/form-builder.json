@@ -367,5 +367,12 @@
       "createOne": "créez-en un"
     }
   },
-  "unnamedForm": "Formulaire sans titre"
+  "unnamedForm": "Formulaire sans titre",
+  "questionSet": {
+    "addAnother": {
+      "title": "Bouton",
+      "placeholder": "Ajouter",
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses »."
+    }
+  }
 }
