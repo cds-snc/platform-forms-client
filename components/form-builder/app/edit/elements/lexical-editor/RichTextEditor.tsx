@@ -54,7 +54,7 @@ export const RichTextEditor = ({
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-white">
       <Editor
         autoFocusEditor={autoFocusEditor}
         content={value}

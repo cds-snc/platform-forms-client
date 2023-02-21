@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import debounce from "lodash.debounce";
 
@@ -11,11 +11,13 @@ export const QuestionInput = ({
   hasDescription,
   initialValue,
   onQuestionChange,
+  questionInputRef,
 }: {
   index: number;
   hasDescription: string | undefined;
   initialValue: string;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
+  questionInputRef: React.RefObject<HTMLInputElement>;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
@@ -27,15 +29,13 @@ export const QuestionInput = ({
       getLocalizationAttribute: s.getLocalizationAttribute,
     }));
 
-  const input = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     // see: https://github.com/cds-snc/platform-forms-client/pull/1194/commits/cf2d08676cb9dfa7bb500f713cc16cdf653c3e93
-    if (input.current && getFocusInput()) {
-      input.current.focus();
+    if (questionInputRef && questionInputRef.current && getFocusInput()) {
+      questionInputRef.current.focus();
       setFocusInput(false);
     }
-  }, [getFocusInput, setFocusInput]);
+  }, [getFocusInput, setFocusInput, questionInputRef]);
 
   useEffect(() => {
     setValue(initialValue);
@@ -63,7 +63,7 @@ export const QuestionInput = ({
 
   return (
     <Input
-      ref={input}
+      ref={questionInputRef}
       type="text"
       id={`item${index}`}
       name={`item${index}`}
