@@ -7,7 +7,7 @@
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
-    "createNewForm": "Créer un nouveau formulaire +"
+    "createNewForm": "Créer un nouveau formulaire"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire enregistré.",
