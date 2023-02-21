@@ -374,7 +374,9 @@
     },
     "dialogMessages": {
       "onlyMaxResponses": "Only {{max}} responses can be reported at a time.[fr]",
-      "reportTheseForm":"Report these form numbers before entering more.[fr]"
+      "reportTheseForm":"Report these form numbers before entering more.[fr]",
+      "removed": "Removed[fr]",
+      "added": "Added[fr]"
     }
   },
   "dyanamicRow": "[FR] Repeating question set",

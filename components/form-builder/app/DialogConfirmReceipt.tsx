@@ -20,10 +20,12 @@ export const DialogConfirmReceipt = ({
   const handleClose = () => {
     setIsShowDialog(false);
     dialogRef.current?.close();
+    setCodes([]);
   };
 
   const handleSubmit = () => {
     //TODO
+    // -confirmation will probably be a notification. something like https://www.npmjs.com/package/react-toastify
   };
 
   return (

@@ -20,10 +20,12 @@ export const DialogReportProblems = ({
   const handleClose = () => {
     setIsShowDialog(false);
     dialogRef.current?.close();
+    setFormNumbers([]);
   };
 
   const handleSubmit = () => {
-    //TODO
+    // TODO
+    // -confirmation will probably be a notification. something like https://www.npmjs.com/package/react-toastify
   };
 
   return (
