@@ -1,5 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "react";
 
+import { ChevronRight } from "@components/form-builder/icons";
+
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox
 
@@ -8,7 +10,7 @@ export const ListBox = ({
   handleChange,
   ariaLabel,
 }: {
-  options: { id: string; value: string; className: string }[];
+  options: { id: string; value: string; group: { id: string; value: string } }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
 }) => {
@@ -35,9 +37,14 @@ export const ListBox = ({
     if (el && rowsRef.current) {
       setActiveId(el.id);
       handleChange(focusIndex);
+      if (el && el.scrollIntoView) {
+        el.scrollIntoView({ block: "center" });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusIndex]);
+
+  let listGroup = "";
 
   return (
     <div
@@ -53,30 +60,60 @@ export const ListBox = ({
       <ul role="group" className="list-none pl-0">
         {options.map(
           (
-            { id, value, className }: { id: string; value: string; className: string },
+            {
+              id,
+              value,
+              group,
+            }: {
+              id: string;
+              value: string;
+              group: { id: string; value: string };
+            },
             index: number
           ) => {
             const focussed = focusIndex === index;
+            let groupOption = null;
+
+            if (group && listGroup != group.value) {
+              groupOption = (
+                <li
+                  role="presentation"
+                  className="pl-1 mb-2 text-gray-600 font-bold uppercase text-[1.1rem]"
+                >
+                  {group.value}
+                </li>
+              );
+              listGroup = group.value;
+            }
+
             return (
               /* eslint-disable jsx-a11y/click-events-have-key-events */
-              <li
-                id={`row-${id}`}
-                ref={(el) => {
-                  if (el && rowsRef.current) {
-                    rowsRef.current[`row-${index}` as unknown as number] = el;
-                  }
-                }}
-                className={`${
-                  focussed ? "font-bold" : "font-normal"
-                } ${className} group xl:pb-0 xl:pt-2 xl:mb-3 pl-1 pr-2 pb-2 mb-2 md:pr-0 text-black hover:text-blue-hover focus:text-blue-hover cursor-pointer`}
-                key={id}
-                tabIndex={-1}
-                role="option"
-                onClick={() => setFocusIndex(index)}
-                aria-selected={focussed}
-              >
-                {value}
-              </li>
+              <>
+                {groupOption}
+                <li
+                  id={`row-${id}`}
+                  ref={(el) => {
+                    if (el && rowsRef.current) {
+                      rowsRef.current[`row-${index}` as unknown as number] = el;
+                    }
+                  }}
+                  className={`${
+                    focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
+                  } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
+                  key={id}
+                  tabIndex={-1}
+                  role="option"
+                  onClick={() => setFocusIndex(index)}
+                  aria-selected={focussed}
+                >
+                  <span className="flex justify-between items-center">
+                    {value}
+                    {focussed && (
+                      <ChevronRight className="fill-black inline-block ml-10 mr-1 scale-150" />
+                    )}
+                  </span>
+                </li>
+              </>
             );
           }
         )}

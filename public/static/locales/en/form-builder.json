@@ -1,8 +1,11 @@
 {
   "addElement": "Add element",
   "addElementDialog": {
-    "addButton": "Select element",
-    "questionElement": "Question element",
+    "layoutBlocks": "Layout blocks",
+    "inputBlocks": "Input blocks",
+    "advancedBlocks": "Advanced blocks",
+    "addButton": "Select block",
+    "questionElement": "Blocks",
     "listItem": "List item ",
     "checkboxItem": "Checkbox item",
     "example": "example",
@@ -10,7 +13,7 @@
     "no": "No",
     "answer": "Answer...",
     "sometimes": "Sometimes",
-    "exampleElement": "example element",
+    "exampleElement": "example block",
     "richText": {
       "title": "Large text",
       "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
@@ -52,7 +55,7 @@
       "description": "Number description"
     },
     "dynamicRow": {
-      "title": "Repeating question",
+      "title": "Repeating set",
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     }
   },
@@ -124,21 +127,21 @@
   "errorSaving": "There was an error saving the form. Try again or <a href=\"/en/form-builder/support\" target=\"_blank\">contact support</a>.",
   "failedToReadFormFile": "Failed to read form file",
   "formatBold": "Format bold",
-  "formatBulletList": "Format bullet list",
-  "formatH2": "Format H2",
-  "formatH3": "Format H3",
+  "formatBulletList": "Format bulleted list",
+  "formatH2": "Format Heading 2",
+  "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
   "formConfirmationMessage": "Form confirmation message",
   "formDelete": {
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list.",
+      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form can not be undone. Your form will be removed from your forms list and the Internet.",
+      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list and the Internet.",
       "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
       "message3": "The URL of your form will change if you upload your form again."
     },
@@ -205,7 +208,7 @@
   "pageText": "Page text",
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
-  "placeHolderFormTitle": "Form Title",
+  "placeHolderFormTitle": "Form title",
   "previewingIn": "Previewing in",
   "privacyNoticeDescription": "You are responsible for drafting privacy notices that follow the requirements of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.",
   "privacyStatement": "Privacy statement",
@@ -214,7 +217,7 @@
   "published": "Published",
   "publishedBack": "Back to My forms",
   "publishedErrors": "Published form errors",
-  "publishedTitle": "Your form is published!",
+  "publishedTitle": "Your form is published.",
   "publishedViewLinks": "View and share your published form with these links:",
   "publishingDisablesEditing": "Publishing disables editing.",
   "publishingDisablesEditingDescription": "Once you publish, you cannot make changes to this form. If changes are needed after publishing, use the form file to create and publish a new form.",
@@ -262,6 +265,7 @@
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
   "share": {
+    "formUser": "A GC Forms user",
     "copy": "Copy",
     "email": "Share by email",
     "emailLabel": "Enter email address",
@@ -276,7 +280,7 @@
     "stepOne": "Step 1:",
     "stepOneDetails": "Save the attached JSON form file to your computer",
     "stepThree": "Step 3:",
-    "stepThreeDetails": "Select open a form file.",
+    "stepThreeDetails": "Select 'Open a form file'.",
     "stepTwo": "Step 2:",
     "stepTwoDetails": "Go to <a href=\"/\" target=\"_blank\">GC Forms</a>. No account needed.",
     "stepTwoDetailsNoHTML": "Go to GC Forms (https://forms-formulaires.alpha.canada.ca/). No account needed.",
@@ -305,8 +309,8 @@
   "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
   "startH2": "Design a form",
   "startH3": "Open a form file",
-  "startP1": "Start with a blank form",
-  "startP2": "See and edit a form by opening it from your computer",
+  "startP1": "Start with a blank form.",
+  "startP2": "View and edit a form by uploading it from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "support": {
@@ -334,7 +338,7 @@
   "textFormatting": "Text formatting",
   "thereWasAnErrorPublishing": "There was an error publishing the form",
   "tooltipFormatBold": "Bold (⌘B)",
-  "tooltipFormatBulletList": "Bullet list",
+  "tooltipFormatBulletList": "Bulleted list",
   "tooltipFormatH2": "Heading 2",
   "tooltipFormatH3": "Heading 3",
   "tooltipFormatItalic": "Italic (⌘I)",
@@ -346,11 +350,11 @@
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "responses": {
-    "title": "Download Responses",
+    "title": "Download responses",
     "navLabel": "Responses",
-    "confirmReceipt": "Confirm Receipt",
-    "reportProblems": "Report Problems",
-    "changeSetup": "Change Setup",
+    "confirmReceipt": "Confirm receipt",
+    "reportProblems": "Report problems",
+    "changeSetup": "Change setup",
     "unauthenticated": {
       "title": "Sign in to access responses",
       "toAccessPagePart1": "To access this page,",
