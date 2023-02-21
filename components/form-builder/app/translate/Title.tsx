@@ -8,19 +8,19 @@ import { FieldsetLegend } from ".";
 
 export const Title = ({
   element,
-  index,
   primaryLanguage,
 }: {
   element: FormElement;
-  index: number;
   primaryLanguage: Language;
 }) => {
-  const { updateField, localizeField } = useTemplateStore((s) => ({
+  const { updateField, localizeField, propertyPath } = useTemplateStore((s) => ({
     updateField: s.updateField,
     localizeField: s.localizeField,
+    propertyPath: s.propertyPath,
   }));
   const { t } = useTranslation("form-builder");
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+  const field = LocalizedElementProperties.TITLE;
 
   return (
     <>
@@ -43,17 +43,9 @@ export const Title = ({
               className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-title-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-title-${primaryLanguage}-language`}
-              value={
-                element.properties[localizeField(LocalizedElementProperties.TITLE, primaryLanguage)]
-              }
+              value={element.properties[localizeField(field, primaryLanguage)]}
               onChange={(e) => {
-                updateField(
-                  `form.elements[${index}].properties.${localizeField(
-                    LocalizedElementProperties.TITLE,
-                    primaryLanguage
-                  )}`,
-                  e.target.value
-                );
+                updateField(propertyPath(element.id, field, primaryLanguage), e.target.value);
               }}
             />
           </div>
@@ -71,19 +63,9 @@ export const Title = ({
               className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-title-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-title-${secondaryLanguage}-language`}
-              value={
-                element.properties[
-                  localizeField(LocalizedElementProperties.TITLE, secondaryLanguage)
-                ]
-              }
+              value={element.properties[localizeField(field, secondaryLanguage)]}
               onChange={(e) => {
-                updateField(
-                  `form.elements[${index}].properties.${localizeField(
-                    LocalizedElementProperties.TITLE,
-                    secondaryLanguage
-                  )}`,
-                  e.target.value
-                );
+                updateField(propertyPath(element.id, field, secondaryLanguage), e.target.value);
               }}
             />
           </div>
