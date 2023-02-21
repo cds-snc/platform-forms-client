@@ -21,6 +21,20 @@ jest.mock("next-i18next", () => ({
   },
 }));
 
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 describe("Element Panel", () => {
   afterEach(cleanup);
   it("renders element radio element and updates when clicking element select", async () => {
