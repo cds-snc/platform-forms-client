@@ -13,7 +13,7 @@
     "yes": "Oui",
     "no": "Non",
     "sometimes": "Parfois",
-    "exampleElement": "exemple d'un bloc",
+    "exampleElement": "exemple du bloc",
     "richText": {
       "title": "Texte en grand format",
       "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."

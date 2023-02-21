@@ -13,7 +13,7 @@
     "no": "No",
     "answer": "Answer...",
     "sometimes": "Sometimes",
-    "exampleElement": "example block",
+    "exampleElement": "block example",
     "richText": {
       "title": "Large text",
       "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
