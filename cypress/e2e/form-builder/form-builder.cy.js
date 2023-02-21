@@ -39,7 +39,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add block").click();
 
     cy.get("div").contains("Single choice").click();
-    // cy.get("button").contains("Select block").click();
+    cy.get("div[data-testid='radio']").click();
 
     cy.get("#item0").type("Question 1");
     cy.get("#option--0--1").type("option 1");
