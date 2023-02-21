@@ -10,8 +10,8 @@ const JSDisabled = ({ lang }: { lang: string | undefined }): React.ReactElement 
           ? "You need JavaScript to use this website."
           : "JavaScript est requis pour consulter ce site Web."}
       </title>
-      <main role="main">
-        <div className="block xs:mx-4 sm:mx-4 lg:mx-16 xl:mx-32 xxl:mx-48">
+      <main role="main" className="md:max-w-lg">
+        <div className="block xs:mx-4 sm:mx-4 lg:mx-16 xl:mx-32 xxl:mx-48 m-24">
           <div
             className="flex justify-around md:h-auto"
             style={{
