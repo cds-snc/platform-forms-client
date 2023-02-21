@@ -1,15 +1,11 @@
 import React, { useCallback } from "react";
-import { useTranslation } from "next-i18next";
 
 import { FormElementTypes } from "@lib/types";
-import { LockIcon } from "../../icons";
 import { isValidatedTextType } from "../../util";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
-  const { t } = useTranslation("form-builder");
-
   const { add, setFocusInput, updateField } = useTemplateStore((s) => ({
     add: s.add,
     updateField: s.updateField,
@@ -29,20 +25,13 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
     [add, setFocusInput, updateField]
   );
 
+  if (!addElement) return null;
+
   return (
-    <div className="relative z-10 pb-2 bg-gray-200 h-[62px] last-of-type:rounded-b-md">
-      <div className="absolute left-0 ml-8 text-sm line-height-[60px]" data-testid="locked-item">
-        <div className="flex py-4">
-          <LockIcon className="mr-2" /> <span className="py-1">{t("lockedElement")}</span>
-        </div>
+    <div className="flex last-of-type:rounded-b-md">
+      <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
+        <AddElementButton position={-1} handleAdd={handleAddElement} />
       </div>
-      {addElement && (
-        <div className="flex">
-          <div className="z-10 mt-10 mx-auto">
-            <AddElementButton position={-1} handleAdd={handleAddElement} />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

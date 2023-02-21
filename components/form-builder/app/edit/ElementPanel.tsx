@@ -75,7 +75,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       ref={ref}
       className={`element-${item.index} ${className} group ${
         isWithin ? "active" : ""
-      } hover:bg-violet-50 focus:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto -mt-1 relative`}
+      } hover:bg-violet-50 focus:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
     >
       <PanelBodyRoot item={item} />
       <PanelActions
