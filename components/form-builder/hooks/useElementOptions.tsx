@@ -1,4 +1,5 @@
 import React from "react";
+import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import {
   CalendarIcon,
@@ -31,6 +32,7 @@ import { ElementOptionsFilter, ElementOption } from "../types";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
+  const { status: experimentalBlocks } = useFlag("formBuilderExperimentalBlocks");
 
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
@@ -121,11 +123,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     },
   ];
 
-  /* 
-  As this is experimental, 
-  we only want to show this option in development mode for now
-  */
-  if (process.env.NODE_ENV === "development") {
+  if (experimentalBlocks) {
     elementOptions.push({
       id: "dynamicRow",
       value: t("dyanamicRow"),
