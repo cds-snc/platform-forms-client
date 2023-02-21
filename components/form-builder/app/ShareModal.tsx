@@ -101,6 +101,7 @@ export const ShareModal = ({
         dialogRef={dialog}
         handleClose={handleClose}
         actions={status === "ready" ? actions : doneActions}
+        className="overflow-y-scroll max-h-[80%]"
       >
         <div className="py-4">
           {status === "sent" && (
@@ -118,7 +119,7 @@ export const ShareModal = ({
                 <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
               </div>
               <details className="group mt-5">
-                <summary className="list-none [&::-webkit-details-marker]:hidden cursor-pointer">
+                <summary className="inline-block p-2 list-none [&::-webkit-details-marker]:hidden cursor-pointer hover:text-white-default hover:bg-gray-600 focus:bg-blue-focus focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 border-white-default hover:border-black-default border-2 rounded-lg">
                   {t("share.seePreview")}
                   <span className="inline group-open:hidden">
                     <AddIcon className="inline" />

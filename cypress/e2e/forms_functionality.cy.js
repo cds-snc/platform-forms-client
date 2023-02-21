@@ -7,10 +7,10 @@ describe("Forms Functionality", () => {
     it("the form displays an error when it is submitted and a field is required", () => {
       cy.get("[type='submit']").click();
       cy.get("h2").contains("Please correct the errors on the page");
-      cy.get("div.gc-alert__body a").contains("Please complete the required field to continue");
+      cy.get("div.gc-alert__body a").contains("Complete the required field to continue.");
       cy.get("div.gc-alert__body a").click();
       cy.get("input[id='2']").should("have.focus");
-      cy.get(".gc-error-message").contains("Please complete the required field to continue");
+      cy.get(".gc-error-message").contains("Complete the required field to continue.");
     });
     it("fills the text field successfully and submits the form", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");

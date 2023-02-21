@@ -269,7 +269,7 @@
                   "validation": {
                     "required": true,
                     "type": "email",
-                    "descriptionEN": "Please enter a valid email address.",
+                    "descriptionEN": "Enter a valid email address.",
                     "descriptionFR": "Veuillez entrer une adresse courriel valide."
                   }
                 },

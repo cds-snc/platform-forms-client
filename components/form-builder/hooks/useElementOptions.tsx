@@ -25,7 +25,7 @@ import {
   Email,
   Date,
   Number,
-  RepeatableQuestionSet,
+  QuestionSet,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -33,6 +33,13 @@ import { ElementOptionsFilter, ElementOption } from "../types";
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
   const { status: experimentalBlocks } = useFlag("formBuilderExperimentalBlocks");
+
+  const group = {
+    layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
+    input: { id: "input", value: t("addElementDialog.inputBlocks") },
+    advanced: { id: "advanced", value: t("addElementDialog.advancedBlocks") },
+  };
+
   const elementOptions: ElementOption[] = [
     {
       id: "richText",
@@ -40,6 +47,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <ParagraphIcon />,
       description: RichText,
       className: "separator",
+      group: group.layout,
     },
     {
       id: "radio",
@@ -47,6 +55,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <RadioIcon />,
       description: Radio,
       className: "",
+      group: group.input,
     },
     {
       id: "checkbox",
@@ -54,6 +63,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <CheckIcon />,
       description: CheckBox,
       className: "",
+      group: group.input,
     },
     {
       id: "dropdown",
@@ -61,6 +71,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <SelectMenuIcon />,
       description: DropDown,
       className: "separator",
+      group: group.input,
     },
     {
       id: "textField",
@@ -68,6 +79,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <ShortAnswerIcon />,
       description: TextField,
       className: "",
+      group: group.input,
     },
     {
       id: "textArea",
@@ -75,6 +87,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <ParagraphIcon />,
       description: TextArea,
       className: "separator",
+      group: group.input,
     },
     {
       id: "phone",
@@ -82,6 +95,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <PhoneIcon />,
       description: Phone,
       className: "",
+      group: group.input,
     },
     {
       id: "email",
@@ -89,6 +103,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <EmailIcon />,
       description: Email,
       className: "",
+      group: group.input,
     },
     {
       id: "date",
@@ -96,6 +111,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <CalendarIcon />,
       description: Date,
       className: "",
+      group: group.input,
     },
     {
       id: "number",
@@ -103,6 +119,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <NumericFieldIcon />,
       description: Number,
       className: "",
+      group: group.input,
     },
   ];
 
@@ -111,8 +128,9 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
-      description: RepeatableQuestionSet,
+      description: QuestionSet,
       className: "",
+      group: group.advanced,
     });
   }
 
