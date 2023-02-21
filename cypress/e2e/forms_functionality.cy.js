@@ -7,10 +7,10 @@ describe("Forms Functionality", () => {
     it("the form displays an error when it is submitted and a field is required", () => {
       cy.get("[type='submit']").click();
       cy.get("h2").contains("Please correct the errors on the page");
-      cy.get("div.gc-alert__body a").contains("Please complete the required field to continue");
+      cy.get("div.gc-alert__body a").contains("Complete the required field to continue.");
       cy.get("div.gc-alert__body a").click();
       cy.get("input[id='2']").should("have.focus");
-      cy.get(".gc-error-message").contains("Please complete the required field to continue");
+      cy.get(".gc-error-message").contains("Complete the required field to continue.");
     });
     it("fills the text field successfully and submits the form", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
@@ -26,7 +26,7 @@ describe("Forms Functionality", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button can not be used");
+      cy.get("[role='alert']").contains("Button cannot be used");
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
       cy.clock();
@@ -36,7 +36,7 @@ describe("Forms Functionality", () => {
       cy.tick(1000);
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button can not be used");
+      cy.get("[role='alert']").contains("Button cannot be used");
       cy.tick(6000);
       cy.get("[role='alert']").contains("The button is ready.");
     });

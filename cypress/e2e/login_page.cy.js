@@ -5,7 +5,7 @@ describe("Login Page", () => {
     });
 
     it("EN page renders", () => {
-      cy.get("h1").should("contain", "Sign in to GC Forms");
+      cy.get("h1").should("contain", "Sign in");
       cy.get("input[id='username']");
       cy.get("input[id='password']");
     });
@@ -25,13 +25,13 @@ describe("Login Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
     it("Displays an error message when submitting an invalid email", () => {
       cy.get("input[id='username']").type("myemail@cds-snc");
       cy.get("[type='submit']").click();
-      cy.get("[id='errorMessageusername']").should("contain", "Please enter a valid email");
+      cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
     it("Displays no error message when submitting a valid email", () => {
       cy.get("input[id='username']").type("test@cds-snc.ca");
@@ -43,7 +43,7 @@ describe("Login Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "Please complete the required field to continue"
+        "Complete the required field to continue."
       );
     });
 
@@ -52,7 +52,7 @@ describe("Login Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
         "contain",
-        "This field must be no longer than 50 characters"
+        "Password cannot exceed 50 characters."
       );
     });
 

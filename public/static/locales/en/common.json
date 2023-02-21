@@ -28,19 +28,19 @@
   "submitButton": "Submit",
   "input-validation": {
     "heading": "Please correct the errors on the page.",
-    "required": "Please complete the required field to continue.",
-    "alphanumeric": "Please enter letters and numbers only.",
+    "required": "Complete the required field to continue.",
+    "alphanumeric": "Enter letters and numbers only.",
     "text": "",
-    "number": "Please enter a numeric value.",
-    "email": "Please enter a valid email.",
-    "date": "Please enter a valid date in mm/dd/yyyy format.",
-    "phone": "Please enter a valid telephone number.",
-    "regex": "Please enter the correct format.",
-    "file-size-too-large": "Please select a smaller file.",
-    "file-type-invalid": "Please select a different file type.",
-    "too-many-characters": "Please shorten your response.",
+    "number": "Enter a number.",
+    "email": "Enter a valid email address.",
+    "date": "Enter a valid date in mm/dd/yyyy format.",
+    "phone": "Enter a valid telephone number.",
+    "regex": "Enter the correct format.",
+    "file-size-too-large": "Select a smaller file.",
+    "file-type-invalid": "Select a different file type.",
+    "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
-    "validGovEmail": "This field must be a valid government email."
+    "validGovEmail": "Enter a valid government email address."
   },
   "required": "required",
   "all-required": "all checkboxes required",
@@ -54,7 +54,7 @@
   "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
   "spam-error": {
-    "error-part-1": "Button can not be used in less than",
+    "error-part-1": "Button cannot be used in less than",
     "error-part-2": "seconds.",
     "prompt-part-1": "Try again in",
     "prompt-part-2": "seconds.",
@@ -69,10 +69,10 @@
     "upload": "Template upload",
     "templates": "Templates",
     "features": "Options",
-    "login": "Login",
-    "logout": "Logout",
+    "login": "Sign in",
+    "logout": "Sign out",
     "privileges": "Privileges",
-    "myForms": "My Forms"
+    "myForms": "My forms"
   },
   "formElements": {
     "characterCount": {

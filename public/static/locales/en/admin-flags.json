@@ -1,6 +1,6 @@
 {
-  "title": "Feature Flags",
-  "subTitle": "Feature Flags allow you to control the various enabled features in the application",
+  "title": "Feature flags",
+  "subTitle": "Feature flags allow you to control the various enabled features in the application",
   "loading": "Loading feature flags",
   "enabled": "On",
   "disabled": "Off",
@@ -8,22 +8,22 @@
   "disable": "Turn Off",
   "featureTitle": "Feature",
   "featureStatus": "Status",
-  "featureSwitch": "Enable/Disable",
+  "featureSwitch": "On/Off",
   "features": {
     "sandbox": {
       "title": "Sandbox Page",
       "description": "A page that displays a list of all non-published forms"
     },
     "vault": {
-      "title": "Submission Vault",
-      "description": "A page that displays a list of submissions stored in the Vault for Forms enabled with that feature"
+      "title": "Submission vault",
+      "description": "A page that displays a list of submissions stored in the Vault for forms enabled with that feature"
     },
     "unpublishedForms": {
-      "title": "Unpublished Forms",
+      "title": "Unpublished forms",
       "description": "Allow the access to and completion of forms that do not have a published status"
     },
     "submitToReliabilityQueue": {
-      "title": "Submit to Reliability Queue",
+      "title": "Submit to reliability queue",
       "description": "Submit form responses to the Reliability Queue. If disabled no form submissions will be submitted.  Usually used for testing."
     },
     "reCaptcha": {
@@ -31,11 +31,11 @@
       "description": "Enable protected by reCaptcha on forms before submission"
     },
     "formTimer": {
-      "title": "Form Timer",
+      "title": "Form timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
     },
     "accountRegistration": {
-      "title": "Account registration",
+      "title": "Account creation",
       "description": "Allow users to register for an account"
     },
     "passwordReset": {
@@ -52,7 +52,7 @@
     },
     "formBuilderAddElementDialog": {
       "title": "Form builder add element dialog",
-      "description": "Enable dialog when adding elements to the form builder"
+      "description": "Enable dialog when adding elements to the Form builder"
     },
     "shareMenu": {
       "title": "Form builder share menu",
@@ -61,6 +61,10 @@
     "editableFilename": {
       "title": "Form builder editable filename",
       "description": "Updates header to include editable filename"
+    },
+    "formBuilderExperimentalBlocks": {
+      "title": "Form builder blocks",
+      "description": "Enable experimental blocks"
     }
   }
 }
