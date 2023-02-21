@@ -81,7 +81,7 @@ const formRecord = {
         type: "textField",
         properties: {
           titleEn: "What is your email address?",
-          titleFr: "Quelle est votre adresse électronique?",
+          titleFr: "Quelle est votre adresse courriel?",
           validation: {
             required: false,
           },

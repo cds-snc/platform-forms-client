@@ -61,6 +61,10 @@
     "editableFilename": {
       "title": "Nom de fichier modifiable du Générateur de formulaires",
       "description": "Modifie l'en-tête pour inclure le nom de fichier modifiable"
+    },
+    "formBuilderExperimentalBlocks": {
+      "title": "Blocs du Générateur de formulaires",
+      "description": "Activer les blocs expérimentaux"
     }
   }
 }
