@@ -27,7 +27,7 @@
     "menu": {
       "more": "More",
       "save": "Save to computer",
-      "copyLink": "Copy Link",
+      "copyLink": "Copy link",
       "preview": "Preview",
       "edit": "Edit",
       "settings": "Settings",
@@ -40,7 +40,7 @@
     "responseNumber": "Response Number",
     "submissionDate": "Submission Date",
     "errorNoQuestionsAnswers": "Error no questions and answers were found.",
-    "jumpTo": "Jump To:",
+    "jumpTo": "Jump to:",
     "columnTable": "Column table",
     "rowTable": "Row table",
     "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet.",
