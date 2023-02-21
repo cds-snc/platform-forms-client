@@ -47,7 +47,7 @@ export const AddElementButton = ({
         dataTestId="add-element"
       >
         <>
-          <AddIcon className="rounded-full border-1 border-black group-hover/button:border-white fill-black group-hover/button:fill-white mr-2" />
+          <AddIcon className="rounded-full border-1 border-black group-focus/button:border-white group-hover/button:border-white fill-black group-hover/button:fill-white group-focus/button:fill-white mr-2" />
           {text ? text : t("addElement")}
         </>
       </Button>
