@@ -367,10 +367,7 @@
       "createOne": "créez-en un"
     }
   },
-  "dyanamicRow": "Série répétitive de questions",
-  "addToSet": "Ajouter à la série",
-  "removeFromSet": "Enlever de la série",
-  "untitledForm": "Ficher de formulaire sans nom",
+  "unnamedForm": "Formulaire sans titre",
   "questionSet": {
     "addAnother": {
       "title": "Bouton",
