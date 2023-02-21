@@ -1,0 +1,72 @@
+// Partial: Layout
+
+.gc-item-row {
+  @apply border-t-2 pt-16 pb-3 px-0 bg-white-default mt-0 border-black-form;
+
+  // Where are the h3 in rows?
+  // h3 {
+  //   @apply md:text-small_h3 font-bold text-h3 pb-0 mb-10;
+  // }
+}
+
+// why size h2?
+.gc-section-header {
+  @apply md:text-small_h2 font-bold text-h2 mb-16 mt-12 p-6 bg-gray-background;
+}
+
+.page-preview-form,
+.page-en-preview-form,
+.page-fr-preview-form {
+  h1::before {
+    content: "[Preview/Prévisualisation]";
+    @apply mb-10 block font-bold text-green-700;
+  }
+  .gc-button[type="submit"] {
+    display: none;
+  }
+}
+
+// What is this?
+.gc-form-confirmation {
+  p {
+    @apply text-base md:text-small_p;
+  }
+}
+
+.confirmation-content {
+  @apply relative;
+}
+
+.confirmation-list {
+  @apply list-inside mb-10;
+}
+
+.gc-confirmation-banner {
+  @apply bg-gray-200 py-16 px-20 mb-10 w-5/6 xl:w-full md:py-10 md:px-10;
+
+  h2 {
+    @apply text-h2 mb-6 md:text-small_h2;
+  }
+
+  p:first-of-type {
+    @apply mb-5 md:text-small_p;
+  }
+
+  p:last-of-type {
+    @apply font-bold md:text-small_p;
+  }
+}
+
+// Belongs here?
+.gc-last-logout-time {
+  @apply text-sm not-italic font-sans items-center font-normal pb-10 pt-3;
+  line-height: 125%;
+}
+
+.gc-go-to-login-btn {
+  a {
+    @apply bg-blue-500 hover:bg-blue-700 text-white-default font-bold py-2 px-4 rounded;
+    text-decoration: none !important;
+    background-color: #26374a;
+  }
+}
