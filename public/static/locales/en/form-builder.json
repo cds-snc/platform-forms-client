@@ -367,5 +367,12 @@
   "dyanamicRow": "Repeating question",
   "addToSet": "Add to set",
   "removeFromSet": "Remove from set",
-  "untitledForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "questionSet": {
+    "addAnother": {
+      "title": "Button",
+      "placeholder": "Add",
+      "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
+    }
+  }
 }
