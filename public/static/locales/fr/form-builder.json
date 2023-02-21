@@ -188,7 +188,7 @@
   "insertLink": "Insérer un lien  ",
   "lastSaved": "Dernier enregistrement :",
   "linkUrl": "URL du lien",
-  "lockedElement": "Élément verrouillé ",
+  "lockedBlock": "Bloc verouillé",
   "longAnswerText": "Réponse longue",
   "mainNavAriaLabel": "Navigation principale",
   "maxCharacterLength": "Longueur maximale des caractères :",
