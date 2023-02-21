@@ -367,8 +367,5 @@
       "createOne": "créez-en un"
     }
   },
-  "dyanamicRow": "Série répétitive de questions",
-  "addToSet": "Ajouter à la série",
-  "removeFromSet": "Enlever de la série",
-  "untitledForm": "Formulaire sans titre"
+  "unnamedForm": "Formulaire sans titre"
 }
