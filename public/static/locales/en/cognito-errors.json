@@ -1,6 +1,6 @@
 {
   "CodeMismatchException": "The security code provided does not match our records.",
-  "InternalServiceException": "We've encountered an error with your request. Please try again later",
+  "InternalServiceException": "We've encountered an error with your request. Please try again later.",
   "TooManyRequestsException": "Too many requests. Try again later.",
   "UsernameExistsException": "This account already exists.",
   "ExpiredCodeException": "The confirmation code has expired. Please request a new one.",
