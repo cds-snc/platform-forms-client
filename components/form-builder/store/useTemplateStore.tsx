@@ -37,6 +37,8 @@ const defaultField: FormElement = {
     },
     descriptionEn: "",
     descriptionFr: "",
+    placeholderEn: "",
+    placeholderFr: "",
   },
 };
 
