@@ -1,8 +1,8 @@
 {
   "title": "Vos formulaires ",
   "nav": {
-    "drafts": "Ébauches de formulaires",
-    "published": "Publié",
+    "drafts": "Ébauches",
+    "published": "Publiés",
     "all": "Tous"
   },
   "actions": {
@@ -31,7 +31,7 @@
       "preview": "Prévisualiser",
       "edit": "Modifier",
       "settings": "Paramètres",
-      "delete": "Supprimer le formulaire",
+      "delete": "Supprimer",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
     }
