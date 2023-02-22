@@ -91,7 +91,7 @@
 // common fieldset options styles
 .gc-input-radio,
 .gc-input-checkbox {
-  @apply flex pt-3 pb-1 px-0 items-center;
+  @apply flex pt-3 pb-1 px-0 items-start;
 }
 
 .gc-radio-label,
@@ -140,7 +140,8 @@
       background-repeat: no-repeat;
       content: "";
       background-image: url("../public/img/checkmark.svg");
-      @apply absolute w-6 h-6 left-2;
+      background-position: center;
+      @apply absolute w-10 h-10 p-2;
     }
 
     &:focus + .gc-checkbox-label:after {
@@ -180,7 +181,7 @@
     &:checked + .gc-radio-label:after {
       content: "";
       background-image: url("../public/img/black-circle.svg");
-      @apply absolute w-5 h-5 left-10px;
+      @apply absolute w-5 h-5 m-[10px];
     }
 
     &:focus + .gc-radio-label:after {
