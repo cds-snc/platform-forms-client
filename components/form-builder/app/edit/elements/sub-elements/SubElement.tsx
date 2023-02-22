@@ -7,12 +7,12 @@ import { isValidatedTextType } from "../../../../util";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
-import { DynamicRowModal } from "./DynamicRowModal";
+import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
 
-export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
+export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
 
   const {
@@ -204,7 +204,7 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
                   }}
                   renderMoreButton={({ item, moreButton }) => {
                     return (
-                      <DynamicRowModal
+                      <SubElementModal
                         elIndex={elIndex}
                         subIndex={subIndex}
                         item={{ ...item, index: item.id }}
@@ -234,28 +234,31 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
           </div>
         );
       })}
-      <div className="max-w-[800px] border-1 border-gray-300 h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
-        <LockedBadge className="absolute right-7 top-[15px]" />
-        <div className="mx-7 mt-5 mb-7">
-          <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>
-          <p className="mb-8 text-[1rem] pt-5">{t("questionSet.addAnother.description")}</p>
-          <Input
-            id={`repeatable-button-${elIndex}`}
-            {...getLocalizationAttribute()}
-            key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
-            value={
-              item.properties[
-                localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
-              ] || ""
-            }
-            className="w-full"
-            placeholder={t("questionSet.addAnother.placeholder")}
-            onChange={(e) => {
-              handlePlaceHolderText(elIndex, e);
-            }}
-          />
+
+      {item.type === "dynamicRow" && (
+        <div className="max-w-[800px] border-1 border-gray-300 h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
+          <LockedBadge className="absolute right-7 top-[15px]" />
+          <div className="mx-7 mt-5 mb-7">
+            <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>
+            <p className="mb-8 text-[1rem] pt-5">{t("questionSet.addAnother.description")}</p>
+            <Input
+              id={`repeatable-button-${elIndex}`}
+              {...getLocalizationAttribute()}
+              key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
+              value={
+                item.properties[
+                  localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
+                ] || ""
+              }
+              className="w-full"
+              placeholder={t("questionSet.addAnother.placeholder")}
+              onChange={(e) => {
+                handlePlaceHolderText(elIndex, e);
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -88,7 +88,7 @@ export const ListBox = ({
 
             return (
               /* eslint-disable jsx-a11y/click-events-have-key-events */
-              <>
+              <React.Fragment key={id}>
                 {groupOption}
                 <li
                   id={`row-${id}`}
@@ -100,7 +100,6 @@ export const ListBox = ({
                   className={`${
                     focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
                   } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
-                  key={id}
                   tabIndex={-1}
                   role="option"
                   onClick={() => setFocusIndex(index)}
@@ -113,7 +112,7 @@ export const ListBox = ({
                     )}
                   </span>
                 </li>
-              </>
+              </React.Fragment>
             );
           }
         )}
