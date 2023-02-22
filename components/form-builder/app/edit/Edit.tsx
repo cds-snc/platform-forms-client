@@ -66,9 +66,16 @@ export const Edit = () => {
     }
   }, [value, getName, updateField]);
 
+  const load = useCallback(async () => {
+    const fetcher = (url: string) => fetch(url).then((res) => res.json());
+    await fetcher("/api/staticdata/");
+  }, []);
+
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
+
+      <button onClick={load}>Add template</button>
       <RichTextLocked
         beforeContent={
           <>
