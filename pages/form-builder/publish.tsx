@@ -32,14 +32,6 @@ const Page: NextPageWithLayout<PageProps> = () => {
     );
   }
 
-  if (isPublished) {
-    return (
-      <PageTemplate title={title}>
-        <div />
-      </PageTemplate>
-    );
-  }
-
   return (
     <PageTemplate title={title}>
       <Publish />
