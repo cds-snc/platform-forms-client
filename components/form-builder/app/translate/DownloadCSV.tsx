@@ -27,7 +27,7 @@ export const DownloadCSV = () => {
 
   let elementIndex = 0;
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
-  const data = [["description", "english", "french"]];
+  let data = [];
 
   const parseElement = (element: FormElement, index: string | number) => {
     const description = element.type === "richText" ? "Page text" : `Question ${index}`;
@@ -73,6 +73,7 @@ export const DownloadCSV = () => {
   };
 
   const generateCSV = async () => {
+    data = [["description", "english", "french"]];
     data.push(["Form introduction - Title", formatText(form.titleEn), formatText(form.titleFr)]);
     data.push([
       "Form introduction - Description",
