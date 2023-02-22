@@ -121,17 +121,19 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: group.input,
     },
-  ];
-
-  if (experimentalBlocks) {
-    elementOptions.push({
+    {
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
       description: QuestionSet,
       className: "",
       group: group.advanced,
-    });
+    },
+  ];
+
+  if (experimentalBlocks) {
+    // add experimental blocks here:
+    // elementOptions.push();
   }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
