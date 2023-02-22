@@ -1,16 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { logMessage } from "@lib/logger";
 import { middleware, cors, validTemporaryToken, jsonValidator } from "@lib/middleware";
-import retrievalSchema from "@lib/middleware/schemas/retrieval.schema.json";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  QueryCommand,
-  QueryCommandInput,
-  UpdateCommand,
-} from "@aws-sdk/lib-dynamodb";
+import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
+import { QueryCommand, QueryCommandInput, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps } from "@lib/types";
 import { getFileAttachments } from "@lib/fileAttachments";
+import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -32,20 +27,6 @@ const handler = async (
     await getFormResponses(res, formID, email, temporaryToken);
   }
 };
-
-/**
- * Helper function to instantiate DynamoDB and Document client.
- * https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-document-client.html
- */
-function connectToDynamo(): DynamoDBDocumentClient {
-  //Create dynamodb client
-  const db = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "ca-central-1",
-    endpoint: process.env.LOCAL_AWS_ENDPOINT,
-  });
-
-  return DynamoDBDocumentClient.from(db);
-}
 
 /**
  * Request type: GET
@@ -206,6 +187,6 @@ async function deleteFormResponses(
 // Removing access for all Methods until this API is ready for use.
 // Needs Refactoring... DynamoDB Vault Table structure has changed
 export default middleware(
-  [cors({ allowedMethods: [] }), validTemporaryToken(), jsonValidator(retrievalSchema)],
+  [cors({ allowedMethods: [] }), validTemporaryToken(), jsonValidator(uuidArraySchema)],
   handler
 );
