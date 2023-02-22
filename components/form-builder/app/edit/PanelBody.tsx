@@ -40,12 +40,12 @@ export const PanelBody = ({
         className={
           "" +
           (isRichText || isDynamicRow
-            ? ""
-            : "flex flex-row-reverse xxl:flex-col justify-between relative text-base !text-sm ")
+            ? "relative "
+            : "flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm ")
         }
       >
         {!isRichText && !isDynamicRow && (
-          <div className="xxl:mt-4">
+          <div className="xxl:mt-4 w-2/5 xxl:w-full">
             <ElementDropDown
               filterElements={elIndex === -1 ? undefined : elementFilter}
               item={item}
@@ -55,7 +55,7 @@ export const PanelBody = ({
             />
           </div>
         )}
-        <div className={isRichText || isDynamicRow ? undefined : "xxl:mt-4"}>
+        <div className={isRichText || isDynamicRow ? undefined : "xxl:mt-4 w-3/5 xxl:w-full"}>
           <Question
             questionInputRef={questionInputRef}
             elements={elements}
