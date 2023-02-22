@@ -5,6 +5,7 @@ import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { isValidatedTextType } from "../../util";
 import { FormElementTypes } from "@lib/types";
+import { useIsWithin } from "@components/form-builder/hooks/useIsWithin";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const {
@@ -66,13 +67,19 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     [add, setFocusInput, updateField]
   );
 
+  const { ref, focusWithinProps, isWithin } = useIsWithin();
+
   return (
     <div
-      key={lang}
-      className={`element-${item.index} ${className} border border-black max-w-[800px] h-auto -mt-1`}
+      {...focusWithinProps}
+      ref={ref}
+      className={`element-${item.index} ${className} group ${
+        isWithin ? "active" : ""
+      } hover:bg-violet-50 focus:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
     >
       <PanelBodyRoot item={item} />
       <PanelActions
+        subIndex={-1}
         elements={elements}
         lang={lang}
         item={item}

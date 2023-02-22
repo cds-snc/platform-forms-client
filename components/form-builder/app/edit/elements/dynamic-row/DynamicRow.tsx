@@ -4,14 +4,13 @@ import { useTranslation } from "react-i18next";
 import { useTemplateStore } from "../../../../store";
 import { PanelBodySub } from "../../PanelBodySub";
 import { isValidatedTextType } from "../../../../util";
-import { FormElementTypes, FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
 import { DynamicRowModal } from "./DynamicRowModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
-import { PanelActionsLocked } from "../../PanelActionsLocked";
-import { Input } from "@formbuilder/app/shared";
+import { Input, LockedBadge } from "@formbuilder/app/shared";
 
 export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -186,9 +185,8 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
-                  elements={subElements}
-                  lang={lang}
                   item={item}
+                  subIndex={subIndex}
                   handleAdd={(subIndex: number, type?: FormElementTypes) => {
                     handleAddElement(subIndex, type);
                   }}
@@ -215,6 +213,8 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
                     );
                   }}
                   filterElements={elementFilter}
+                  elements={subElements}
+                  lang={lang}
                 />
               }
             >
@@ -234,10 +234,11 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
           </div>
         );
       })}
-      <div className="max-w-[800px] border-1 border-black h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
+      <div className="max-w-[800px] border-1 border-gray-300 h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
+        <LockedBadge className="absolute right-7 top-[15px]" />
         <div className="mx-7 mt-5 mb-7">
           <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>
-          <p className="mb-8 text-[1rem]">{t("questionSet.addAnother.description")}</p>
+          <p className="mb-8 text-[1rem] pt-5">{t("questionSet.addAnother.description")}</p>
           <Input
             id={`repeatable-button-${elIndex}`}
             {...getLocalizationAttribute()}
@@ -254,7 +255,6 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
             }}
           />
         </div>
-        <PanelActionsLocked addElement={false} />
       </div>
     </div>
   );

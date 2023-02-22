@@ -62,6 +62,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       onBlur={onBlur && onBlur}
       ref={ref}
       {...(lang && { lang: lang })}
+      autoComplete="off"
     />
   );
 });
