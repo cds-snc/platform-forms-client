@@ -18,7 +18,7 @@
 }
 
 .gc-form-group {
-  @apply mb-0;
+  @apply mb-14;
 
   // This receives focus. Need to create styles.
 
@@ -37,7 +37,7 @@
 // }
 
 .gc-label {
-  @apply md:text-small_base block mb-2 text-base w-3/4 xl:w-full;
+  @apply md:text-small_base block text-base w-3/4 xl:w-full;
   // &.required > span {
   //   @apply text-red-700;
   //   // content: " *";
@@ -50,7 +50,7 @@
 // }
 
 .focus-group {
-  @apply mb-14;
+  @apply mb-14 space-y-2;
 }
 
 .focus-group:focus-within {
@@ -65,7 +65,7 @@
 .gc-input-text,
 .gc-dropdown {
   border-radius: var(--gcds-input-border-radius);
-  @apply py-3 px-2 mt-2 md:text-small_base text-base border-solid border-2 border-black-form;
+  @apply py-3 px-2 md:text-small_base text-base border-solid border-2 border-black-form;
 
   &:focus {
     @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
@@ -96,7 +96,12 @@
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-small_base font-normal text-base inline-flex items-center;
+  @apply md:text-small_base font-normal text-base inline-flex items-start;
+
+  .checkbox-label-text,
+  .radio-label-text {
+    @apply max-w-[40ch] mt-2;
+  }
 }
 
 .gc-input-checkbox {
@@ -185,7 +190,7 @@
 }
 
 .gc-file-input {
-  @apply w-full md:text-small_base text-base py-3 pr-2 mt-2 mb-14;
+  @apply w-full md:text-small_base text-base py-3 pr-2 mt-2;
 
   &:focus {
     @apply outline-none border-blue-focus shadow-input;

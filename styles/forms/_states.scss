@@ -1,7 +1,7 @@
 // Partial: States
 
 .gc-error-message {
-  @apply md:text-small_base text-base py-3 px-4 w-full mb-2 bg-red-100 border-l-md border-red-700;
+  @apply md:text-small_base text-base py-3 px-4 w-full max-w-prose bg-red-100 border-l-md border-red-700;
 }
 
 .gc-error-message + .gc-input-text,

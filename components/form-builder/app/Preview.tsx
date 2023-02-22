@@ -11,6 +11,7 @@ import Markdown from "markdown-to-jsx";
 import { useTemplateApi } from "../hooks";
 import { BackArrowIcon } from "../icons";
 import { PublicFormRecord } from "@lib/types";
+import "@cdssnc/gcds-tokens/build/web/variables.css";
 
 export const Preview = () => {
   const { status } = useSession();
