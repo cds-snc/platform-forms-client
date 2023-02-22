@@ -4,7 +4,7 @@ export { ShortAnswer } from "./ShortAnswer";
 export { Option } from "./Option";
 export { SubOption } from "./SubOption";
 export { DropDown } from "./DropDown";
-export { DynamicRow } from "./dynamic-row/DynamicRow";
+export { SubElement } from "./sub-elements/SubElement";
 export { RichText } from "./RichText";
 export { RichTextLocked } from "./RichTextLocked";
 export { Question } from "./question/Question";
