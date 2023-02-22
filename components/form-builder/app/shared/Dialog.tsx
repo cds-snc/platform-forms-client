@@ -64,7 +64,9 @@ export const Dialog = ({
       >
         <div className="relative">
           {title && (
-            <h2 className={headerStyle ? headerStyle : "pb-4 inline-block mt-4 ml-4"}>{title}</h2>
+            <h2 className={headerStyle ? headerStyle : "pb-4 inline-block mt-4 ml-4"} tabIndex={-1}>
+              {title}
+            </h2>
           )}
           <Button
             theme="link"
