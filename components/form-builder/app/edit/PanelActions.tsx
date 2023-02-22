@@ -1,68 +1,166 @@
-import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useTranslation } from "next-i18next";
+import { useMediaQuery } from "usehooks-ts";
 
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, FormElement } from "@lib/types";
 import { Button } from "../shared";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { Modal } from "./Modal";
-import { FormElementWithIndex } from "@components/form-builder/types";
-import { useTemplateStore } from "@components/form-builder/store";
+import { ElementOptionsFilter, FormElementWithIndex } from "@components/form-builder/types";
 import {
   ChevronDown,
   ChevronUp,
   Close,
   Duplicate,
   ThreeDotsIcon,
+  AddIcon,
 } from "@components/form-builder/icons";
 
-import { isValidatedTextType } from "../../util";
+import { usePanelActions } from "@components/form-builder/hooks";
+import { ElementDialog } from "./elements/element-dialog/ElementDialog";
+import { useFlag } from "@lib/hooks";
+
+const buttonClasses =
+  "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 focus:!bg-blue-hover focus:text-black xl:focus:text-white disabled:!bg-transparent";
+const iconClasses =
+  "group-hover:group-enabled:fill-black group-disabled:fill-gray-500 group-focus:fill-white transition duration-100";
+
+export interface RenderMoreFunc {
+  ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
+    | React.ReactElement
+    | string
+    | undefined;
+}
 
 export const PanelActions = ({
   item,
-  renderSaveButton,
-  children,
+  subIndex,
+  renderMoreButton,
+  handleAdd,
+  handleRemove,
+  handleMoveUp,
+  handleMoveDown,
+  handleDuplicate,
+  filterElements,
+  elements,
+  lang,
 }: {
   item: FormElementWithIndex;
-  renderSaveButton: () => React.ReactElement | string | undefined;
-  children?: React.ReactNode;
+  subIndex?: number;
+  renderMoreButton: RenderMoreFunc;
+  handleAdd: (index: number, type?: FormElementTypes) => void;
+  handleRemove: () => void;
+  handleMoveUp: () => void;
+  handleMoveDown: () => void;
+  handleDuplicate: () => void;
+  filterElements?: ElementOptionsFilter;
+  elements: FormElement[];
+  lang: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const {
-    lang,
-    add,
-    updateField,
-    remove,
-    moveUp,
-    moveDown,
-    duplicateElement,
-    elements,
-    setFocusInput,
-  } = useTemplateStore((s) => ({
-    lang: s.lang,
-    add: s.add,
-    updateField: s.updateField,
-    remove: s.remove,
-    moveUp: s.moveUp,
-    moveDown: s.moveDown,
-    duplicateElement: s.duplicateElement,
-    elements: s.form.elements,
-    setFocusInput: s.setFocusInput,
-  }));
+
+  const isInit = useRef(false);
   const isLastItem = item.index === elements.length - 1;
   const isFirstItem = item.index === 0;
   const isRichText = item.type == "richText";
+  const isSubElement = subIndex !== -1 && subIndex !== undefined;
 
-  const [currentFocusIndex, setCurrentFocusIndex] = useState(isFirstItem ? 1 : 0);
-  const isInit = useRef(false);
+  const { status: dialogEnabled } = useFlag("formBuilderAddElementDialog");
 
-  const itemsRef = useRef<[HTMLButtonElement] | []>([]);
-  const [items] = useState([
-    { id: 1, txt: "moveUp" },
-    { id: 2, txt: "moveDown" },
-    { id: 3, txt: "duplicate" },
-    { id: 4, txt: "remove" },
-    { id: 5, txt: "more" },
-  ]);
+  const getPanelButtons = () => {
+    if (isSubElement) {
+      return [
+        {
+          id: 1,
+          txt: "moveUp",
+          icon: ChevronUp,
+          onClick: handleMoveUp,
+          disabled: isFirstItem,
+        },
+        {
+          id: 2,
+          txt: "moveDown",
+          icon: ChevronDown,
+          onClick: handleMoveDown,
+          disabled: isLastItem,
+        },
+        {
+          id: 3,
+          txt: "removeFromSet",
+          icon: Close,
+          onClick: handleRemove,
+        },
+        {
+          id: 4,
+          txt: "addToSet",
+          icon: AddIcon,
+          onClick: () => {
+            dialogEnabled && handleOpenDialog();
+          },
+        },
+        {
+          id: 5,
+          txt: "more",
+          icon: ThreeDotsIcon,
+          onClick: () => null,
+        },
+      ];
+    }
+    return [
+      {
+        id: 1,
+        txt: "moveUp",
+        icon: ChevronUp,
+        onClick: handleMoveUp,
+        disabled: isFirstItem,
+      },
+      {
+        id: 2,
+        txt: "moveDown",
+        icon: ChevronDown,
+        onClick: handleMoveDown,
+        disabled: isLastItem,
+      },
+      {
+        id: 3,
+        txt: "duplicate",
+        icon: Duplicate,
+        onClick: handleDuplicate,
+      },
+      {
+        id: 4,
+        txt: "remove",
+        icon: Close,
+        onClick: handleRemove,
+      },
+      {
+        id: 5,
+        txt: "more",
+        icon: ThreeDotsIcon,
+        onClick: () => null,
+      },
+    ];
+  };
+
+  const panelButtons = getPanelButtons();
+  const isXl = useMediaQuery("(max-width: 992px)");
+
+  const [elementDialog, showElementDialog] = useState(false);
+
+  const handleOpenDialog = useCallback(() => {
+    showElementDialog(true);
+  }, []);
+
+  const handleCloseDialog = useCallback(() => {
+    showElementDialog(false);
+  }, []);
+
+  const { handleNav, getTabIndex, currentFocusIndex, itemsRef, setRef } = usePanelActions({
+    panelButtons,
+    isFirstItem,
+    isLastItem,
+    elementsLength: elements.length,
+    orientation: isSubElement ? "horizontal" : isXl ? "horizontal" : "vertical",
+  });
 
   useEffect(() => {
     if (!isInit.current) {
@@ -74,187 +172,74 @@ export const PanelActions = ({
     if (el) {
       el.focus();
     }
-  }, [currentFocusIndex, isInit]);
+  }, [currentFocusIndex, isInit, itemsRef]);
 
-  const handleNav = useCallback(
-    (evt: KeyboardEvent<HTMLInputElement>) => {
-      const { key } = evt;
-      let step = 1;
+  const actions = panelButtons.map((button, loopIndex) => {
+    const Icon = button.icon;
+    return (
+      <Button
+        key={button.txt}
+        className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
+        disabled={button.disabled && button.disabled}
+        theme="panelActions"
+        iconWrapperClassName="!w-7 !mr-0"
+        icon={<Icon className={`${iconClasses}`} />}
+        onClick={button.onClick}
+        tabIndex={getTabIndex(button.txt)}
+        buttonRef={setRef(`button-${loopIndex}`)}
+        dataTestId={button.txt}
+      >
+        <span className="text-sm">{t(button.txt)}</span>
+      </Button>
+    );
+  });
 
-      if (key === "ArrowLeft") {
-        evt.preventDefault();
-        if (isFirstItem && currentFocusIndex === 1) {
-          return;
-        }
-        if (isLastItem && currentFocusIndex === 2) {
-          step = 2;
-        }
-        setCurrentFocusIndex((index) => Math.max(0, index - step));
-      }
+  const moreButton = actions.pop();
 
-      if (key === "ArrowRight") {
-        evt.preventDefault();
-        if (isLastItem && currentFocusIndex === 0) {
-          step = 2;
-        }
-        setCurrentFocusIndex((index) => Math.min(items.length - 1, index + step));
-      }
-    },
-    [items, setCurrentFocusIndex, currentFocusIndex, isFirstItem, isLastItem]
-  );
+  const outerPanelClasses = isSubElement
+    ? ``
+    : `absolute invisible group-[.active]:visible xl:visible xl:relative right-0 top-0 -mr-[155px] xl:mr-0`;
 
-  const getTabIndex = (item: string) => {
-    if (elements.length === 1 && item === "duplicate") return 0;
-
-    if (currentFocusIndex === items.findIndex((i) => i.txt === item)) return 0;
-
-    if (currentFocusIndex === 0) {
-      if (isFirstItem && item === "moveDown") return 0;
-    }
-
-    return -1;
-  };
-
-  /* Note this callback is also in PanelActions */
-  const handleAddElement = useCallback(
-    (index: number, type?: FormElementTypes) => {
-      setFocusInput(true);
-      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
-      if (isValidatedTextType(type)) {
-        // add 1 to index because it's a new element
-        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
-      }
-    },
-    [add, setFocusInput, updateField]
-  );
-
-  const buttonClasses =
-    "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent hover:!bg-gray-600 focus:!bg-blue-hover disabled:!bg-transparent";
-  const iconClasses =
-    "group-hover:group-enabled:fill-white-default group-disabled:fill-gray-500 group-focus:fill-white-default transition duration-100";
+  const innerPanelClasses = isSubElement
+    ? `flex flex-wrap flex-row ${lang}`
+    : `bg-violet-50 rounded-lg xl:rounded-none border-violet-400 border xl:border-0 xl:bg-gray-200 ml-10 xl:ml-0 xl:px-6 xl:px-0 py-4 lg:py-0 flex flex-wrap flex-col xl:flex-row ${lang}`;
 
   return (
-    <div className="relative">
-      <div
-        className={`bg-gray-200 px-6 lg:px-0 py-4 lg:py-0 flex flex-wrap sm:flex-col ${lang}`}
-        role="toolbar"
-        aria-label={t("elementActions")}
-        onKeyDown={handleNav}
-        data-testid="panel-actions"
-      >
-        <Button
-          theme="secondary"
-          className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<ChevronUp className={`${iconClasses}`} />}
-          disabled={isFirstItem}
-          onClick={() => moveUp(item.index)}
-          tabIndex={getTabIndex("moveUp")}
-          buttonRef={(el: HTMLButtonElement) => {
-            const index = "button-0" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="move-up"
+    <div>
+      <div className={outerPanelClasses}>
+        <div
+          className={innerPanelClasses}
+          role="toolbar"
+          aria-label={t("elementActions")}
+          onKeyDown={handleNav}
+          data-testid="panel-actions"
         >
-          <span className="text-sm mx-3 xl:mx-0">{t("moveUp")}</span>
-        </Button>
-        <Button
-          theme="secondary"
-          className={`${isFirstItem ? "disabled" : ""} ${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<ChevronDown className={`${iconClasses}`} />}
-          disabled={isLastItem}
-          onClick={() => moveDown(item.index)}
-          tabIndex={getTabIndex("moveDown")}
-          buttonRef={(el) => {
-            const index = "button-1" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="move-down"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("moveDown")}</span>
-        </Button>
+          {actions}
+          {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
+        </div>
 
-        <Button
-          theme="secondary"
-          className={`${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<Duplicate className={`${iconClasses}`} />}
-          onClick={() => {
-            setFocusInput(true);
-            duplicateElement(item.index);
-          }}
-          tabIndex={getTabIndex("duplicate")}
-          buttonRef={(el) => {
-            const index = "button-2" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="duplicate"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("duplicate")}</span>
-        </Button>
-
-        <Button
-          theme="secondary"
-          className={`${buttonClasses}`}
-          iconWrapperClassName="!w-7 !mr-0"
-          icon={<Close className={`${iconClasses}`} />}
-          onClick={() => {
-            // if index is 0, then highlight the form title
-            const labelId = item.index === 0 ? "formTitle" : `item${item.index - 1}`;
-
-            remove(item.id);
-            document.getElementById(labelId)?.focus();
-          }}
-          tabIndex={getTabIndex("remove")}
-          buttonRef={(el) => {
-            const index = "button-3" as unknown as number;
-            if (el && itemsRef.current) {
-              itemsRef.current[index] = el;
-            }
-          }}
-          dataTestId="remove"
-        >
-          <span className="text-sm mx-3 xl:mx-0">{t("remove")}</span>
-        </Button>
-
-        {!isRichText && (
-          <Modal
-            title={t("moreOptions")}
-            openButton={
-              <Button
-                theme="secondary"
-                className={`${buttonClasses}`}
-                iconWrapperClassName="!w-7 !mr-0"
-                icon={<ThreeDotsIcon className={`${iconClasses}`} />}
-                onClick={() => null}
-                tabIndex={getTabIndex("more")}
-                buttonRef={(el) => {
-                  const index = "button-4" as unknown as number;
-                  if (el && itemsRef.current) {
-                    itemsRef.current[index] = el;
-                  }
-                }}
-                dataTestId="more"
-              >
-                <span className="text-sm mx-3 xl:mx-0">{t("more")}</span>
-              </Button>
-            }
-            saveButton={renderSaveButton()}
-          >
-            {children}
-          </Modal>
+        {elementDialog && (
+          <ElementDialog
+            filterElements={filterElements}
+            handleAddType={(type) => {
+              handleAdd && handleAdd(item.index, type);
+            }}
+            handleClose={handleCloseDialog}
+          />
         )}
       </div>
-      <div className="absolute right-0 bottom-0 -mb-5 mr-8 xl:mr-2">
-        <AddElementButton position={item.index} handleAdd={handleAddElement} />
-      </div>
+      {!isSubElement && (
+        <div className="flex">
+          <div className="mx-auto bottom-0 -mb-5 xl:mr-2 z-10">
+            <AddElementButton
+              position={item.index}
+              handleAdd={handleAdd}
+              filterElements={filterElements}
+              text={isSubElement ? t("addToSet") : t("addElement")}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

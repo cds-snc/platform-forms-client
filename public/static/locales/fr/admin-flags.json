@@ -4,9 +4,9 @@
   "loading": "Chargement des indicateurs de fonctionnalité",
   "enabled": "Activé",
   "disabled": "Déactivé",
-  "enable": "Allumer",
-  "disable": "Éteindre",
-  "featureTitle": "Indicateur",
+  "enable": "Activer",
+  "disable": "Désactiver",
+  "featureTitle": "Fonctionnalité",
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Déactivé",
   "features": {
@@ -15,8 +15,8 @@
       "description": "Une page qui affiche une liste de tous les formulaires non publiés"
     },
     "vault": {
-      "title": "Coffre de soumission",
-      "description": "Une page qui affiche une liste des soumissions stockées dans le coffre-fort pour les formulaires activé avec cette fonctionnalité"
+      "title": "Coffre-fort de soumission",
+      "description": "Une page qui affiche une liste des soumissions stockées dans le coffre-fort pour les formulaires activés avec cette fonctionnalité"
     },
     "unpublishedForms": {
       "title": "Formulaires non publiés",
@@ -24,43 +24,47 @@
     },
     "submitToReliabilityQueue": {
       "title": "Soumettre à la file d'attente de fiabilité",
-      "description": "Veuillez soumettre les réponses du formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
+      "description": "Soumet les réponses de formulaire à la file d'attente de fiabilité. Si cette option est désactivée, aucune soumission de formulaire ne sera soumise. Généralement utilisé pour les tests."
     },
     "reCatpcha": {
       "title": "Je ne suis pas un robot",
-      "description": "Active la protection Je ne suis pas un robot pour tous les formulaires avant leur soumission"
+      "description": "Active la protection « Je ne suis pas un robot » pour les formulaires avant leur soumission"
     },
     "formTimer": {
       "title": "Minuteur de formulaire",
       "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
     },
     "accountRegistration": {
-      "title": "Enregistrement du compte",
-      "description": "Permettre aux utilisateurs de s'inscrire pour obtenir un compte"
+      "title": "Création de compte",
+      "description": "Permet aux utilisateurs de créer un compte"
     },
     "passwordReset": {
       "title": "Autoriser les réinitialisations de mot de passe",
-      "description": "Autoriser les utilisateurs à réinitialiser leur mot de passe"
+      "description": "Permet aux utilisateurs de réinitialiser leurs mots de passe"
     },
     "supportForms": {
       "title": "Formulaires de support",
       "description": "Activation ou désactivation des formulaires de support"
     },
     "formBuilderDebug": {
-      "title": "Débogage du générateur de formulaires",
-      "description": "Activer le mode de débogage du générateur de formulaires"
+      "title": "Débogage du Générateur de formulaires",
+      "description": "Activer le mode de débogage du Générateur de formulaires"
     },
     "formBuilderAddElementDialog": {
-      "title": "Dialogue de l'ajout d'élément du générateur de formulaires",
-      "description": "Activer le dialogue lors de l'ajout d'éléments au générateur de formulaires"
+      "title": "Dialogue de l'ajout d'élément du Générateur de formulaires",
+      "description": "Activer le dialogue lors de l'ajout d'éléments au Générateur de formulaires"
     },
     "shareMenu": {
-      "title": "Menu de partage du générateur de formulaires",
+      "title": "Menu de partage du Générateur de formulaires",
       "description": "Activer le menu déroulant de partage"
     },
     "editableFilename": {
-      "title": "Nom de fichier modifiable du générateur de formulaires",
+      "title": "Nom de fichier modifiable du Générateur de formulaires",
       "description": "Modifie l'en-tête pour inclure le nom de fichier modifiable"
+    },
+    "formBuilderExperimentalBlocks": {
+      "title": "Blocs du Générateur de formulaires",
+      "description": "Activer les blocs expérimentaux"
     }
   }
 }

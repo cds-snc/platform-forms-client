@@ -21,10 +21,8 @@ describe("CDS Platform Intake Form functionality", () => {
 
     cy.get("[type='submit']").click();
     cy.url().should("include", `/confirmation`);
-    cy.get("h1").contains("Your submission has been received");
+    cy.get("h1").contains("Your request has been submitted");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/sig-blk-en.svg");
-    cy.get("#content").contains(
-      "Thank you, your request has been submitted. A team member will email you shortly."
-    );
+    cy.get("#content").contains("Thank you. Our team will contact you by email shortly.");
   });
 });

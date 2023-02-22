@@ -13,12 +13,31 @@ describe("PanelActions roving index", () => {
   });
 
   it("can keyboard navigate panel actions", async () => {
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // deprecated
+        removeListener: jest.fn(), // deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })),
+    });
+
     // note: there are by default 3 elements in the form in this case we are rendering the middle one
     const item = { id: 1, index: 1, ...store.elements[0] };
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions
+          lang="en"
+          elements={store.elements}
+          item={item}
+          renderMoreButton={({ moreButton }) => <div>{moreButton}</div>}
+        />
       </Providers>
     );
 
@@ -29,8 +48,8 @@ describe("PanelActions roving index", () => {
     });
 
     const toolbar = screen.getByTestId("panel-actions");
-    const moveUpButton = screen.getByTestId("move-up");
-    const moveDownButton = screen.getByTestId("move-down");
+    const moveUpButton = screen.getByTestId("moveUp");
+    const moveDownButton = screen.getByTestId("moveDown");
     const duplicateButton = screen.getByTestId("duplicate");
     const removeButton = screen.getByTestId("remove");
     const moreButton = screen.getByTestId("more");
@@ -61,23 +80,23 @@ describe("PanelActions roving index", () => {
     // Arrow Key navigation
 
     // leftmost item keeps focus
-    fireEvent.keyDown(toolbar, { key: "arrowLeft" });
+    fireEvent.keyDown(toolbar, { key: "ArrowUp" });
     expect(moveUpButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moveDownButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(duplicateButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(removeButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moreButton).toHaveFocus();
 
     // rightmost item keeps focus
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moreButton).toHaveFocus();
 
     // tab out of the toolbar
@@ -95,7 +114,12 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions
+          lang="en"
+          elements={store.elements}
+          item={item}
+          renderMoreButton={({ moreButton }) => <div>{moreButton}</div>}
+        />
       </Providers>
     );
 
@@ -106,8 +130,8 @@ describe("PanelActions roving index", () => {
     });
 
     const toolbar = screen.getByTestId("panel-actions");
-    const moveUpButton = screen.getByTestId("move-up");
-    const moveDownButton = screen.getByTestId("move-down");
+    const moveUpButton = screen.getByTestId("moveUp");
+    const moveDownButton = screen.getByTestId("moveDown");
     const duplicateButton = screen.getByTestId("duplicate");
     const removeButton = screen.getByTestId("remove");
     const moreButton = screen.getByTestId("more");
@@ -128,20 +152,20 @@ describe("PanelActions roving index", () => {
     expect(moveDownButton).toHaveFocus();
 
     // leftmost item keeps focus
-    fireEvent.keyDown(toolbar, { key: "arrowLeft" });
+    fireEvent.keyDown(toolbar, { key: "ArrowUp" });
     expect(moveDownButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(duplicateButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(removeButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moreButton).toHaveFocus();
 
     // rightmost item keeps focus
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moreButton).toHaveFocus();
 
     // tab out of the toolbar
@@ -159,7 +183,12 @@ describe("PanelActions roving index", () => {
 
     render(
       <Providers form={store}>
-        <PanelActions item={item} renderSaveButton={() => null} />
+        <PanelActions
+          lang="en"
+          elements={store.elements}
+          item={item}
+          renderMoreButton={({ moreButton }) => <div>{moreButton}</div>}
+        />
       </Providers>
     );
 
@@ -170,8 +199,8 @@ describe("PanelActions roving index", () => {
     });
 
     const toolbar = screen.getByTestId("panel-actions");
-    const moveUpButton = screen.getByTestId("move-up");
-    const moveDownButton = screen.getByTestId("move-down");
+    const moveUpButton = screen.getByTestId("moveUp");
+    const moveDownButton = screen.getByTestId("moveDown");
     const duplicateButton = screen.getByTestId("duplicate");
     const removeButton = screen.getByTestId("remove");
     const moreButton = screen.getByTestId("more");
@@ -192,29 +221,29 @@ describe("PanelActions roving index", () => {
     expect(moveUpButton).toHaveFocus();
 
     // leftmost item keeps focus
-    fireEvent.keyDown(toolbar, { key: "arrowLeft" });
+    fireEvent.keyDown(toolbar, { key: "ArrowUp" });
     expect(moveUpButton).toHaveFocus();
 
     // skips moveDownButton
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(duplicateButton).toHaveFocus();
 
     // skips moveDownButton
-    fireEvent.keyDown(toolbar, { key: "ArrowLeft" });
+    fireEvent.keyDown(toolbar, { key: "ArrowUp" });
     expect(moveUpButton).toHaveFocus();
 
     // skips moveDownButton
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(duplicateButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(removeButton).toHaveFocus();
 
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moreButton).toHaveFocus();
 
     // rightmost item keeps focus
-    fireEvent.keyDown(toolbar, { key: "ArrowRight" });
+    fireEvent.keyDown(toolbar, { key: "ArrowDown" });
     expect(moreButton).toHaveFocus();
 
     // tab out of the toolbar

@@ -1,17 +1,17 @@
 {
   "upload": {
-    "title": "Upload a form Configuration file",
-    "edit-title": "Edit a form Configuration file",
+    "title": "Upload a form configuration file",
+    "edit-title": "Edit a form configuration file",
     "submit": "Upload",
     "success": "JSON successfully uploaded.",
-    "jsonConfigAriaLabel": "Form Configuration"
+    "jsonConfigAriaLabel": "Form configuration"
   },
   "view": {
-    "title": "View Form Templates",
+    "title": "View form templates",
     "update": "Edit",
     "formID": "Form ID:",
     "view": "View",
-    "formTitle": "Form Title",
+    "formTitle": "Form title",
     "status": "Status",
     "published": "Published",
     "draft": "Draft",
@@ -21,21 +21,21 @@
     "assign": "Assign"
   },
   "settings": {
-    "title": "Form Settings",
-    "delete": "Delete Form",
+    "title": "Form settings",
+    "delete": "Delete form",
     "delete-check": "Are you sure you want to delete this form?",
-    "confirm-delete": "Confirm Delete",
-    "new": "The Form was successfully created",
+    "confirm-delete": "Confirm delete",
+    "new": "The form was successfully created",
     "formID": "Form ID:",
-    "edit": "Edit Form Config File:",
+    "edit": "Edit form config file:",
     "tabLabels": {
-      "jsonUpload": "JSON Upload",
-      "bearerToken": "Bearer Token",
-      "formAccess": "Form Access"
+      "jsonUpload": "JSON upload",
+      "bearerToken": "Bearer token",
+      "formAccess": "Form access"
     },
     "bearerToken": {
-      "current": "Current Token:",
-      "refreshButton": "Refresh Token",
+      "current": "Current token:",
+      "refreshButton": "Refresh token",
       "refreshError": "Unable to refresh bearer token.",
       "currentAriaLabel": "Current token"
     },
@@ -43,7 +43,7 @@
       "formOwnersError": "Unable to retrieve form owners.",
       "invalidEmailError": "The email is not a valid Government of Canada email.",
       "updateError": "Unable to update the access for the selected email.",
-      "addEmailButton": "Add Email",
+      "addEmailButton": "Add email",
       "addEmailAriaLabel": "Email"
     }
   }

@@ -32,6 +32,7 @@ export enum LocalizedFormProperties {
 export enum LocalizedElementProperties {
   TITLE = "title",
   DESCRIPTION = "description",
+  PLACEHOLDER = "placeholder",
 }
 
 export interface LocalizedProperty {
@@ -59,6 +60,7 @@ export interface ElementOption {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   description?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;
   className?: string;
+  group: { id: string; value: string };
 }
 
 export type ElementOptionsFilter = (elements: ElementOption[]) => ElementOption[];

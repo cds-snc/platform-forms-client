@@ -44,13 +44,15 @@ export const ElementDialog = ({
     <Dialog dialogRef={dialog} handleClose={handleClose}>
       <div className="flex">
         <div className="w-1/3 pr-2 py-4 overflow-y-auto max-h-[600px]">
-          <h4 className="mb-5 text-2xl font-normal">{t("addElementDialog.questionElement")}</h4>
+          <h4 className="mb-5 text-2xl font-bold bg-white-default">
+            {t("addElementDialog.questionElement")}
+          </h4>
           <ListBox
             ariaLabel={t("addElementDialog.questionElement")}
-            options={elementOptions.map(({ id, value, className = "" }) => ({
+            options={elementOptions.map(({ id, value, group }) => ({
               id: id as string,
               value,
-              className,
+              group,
             }))}
             handleChange={handleChange}
           />
