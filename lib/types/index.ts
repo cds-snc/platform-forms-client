@@ -56,6 +56,7 @@ export type {
   AnyObject,
   ForcedSubjectType,
 } from "./privileges-types";
+export type { AuditLogEvent, AuditLogEventStrings, AuditSubject } from "./auditLog-types";
 
 // Utility type creator
 export type TypeOmit<T, K extends PropertyKey> = { [P in keyof T as Exclude<P, K>]: T[P] };
