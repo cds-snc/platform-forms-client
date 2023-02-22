@@ -3,7 +3,7 @@ import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
-import { ShortAnswer, Options, SubOptions, RichText, DynamicRow } from "./elements";
+import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
 
@@ -74,7 +74,7 @@ export const SelectedElement = ({
       element = <ShortAnswer>0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
-      element = <DynamicRow item={item} elIndex={item.index} />;
+      element = <SubElement item={item} elIndex={item.index} />;
       break;
     default:
       element = null;
