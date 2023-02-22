@@ -8,19 +8,19 @@ import { FieldsetLegend } from "./FieldsetLegend";
 
 export const Description = ({
   element,
-  index,
   primaryLanguage,
 }: {
   element: FormElement;
-  index: number;
   primaryLanguage: Language;
 }) => {
-  const { updateField, localizeField } = useTemplateStore((s) => ({
+  const { updateField, localizeField, propertyPath } = useTemplateStore((s) => ({
     updateField: s.updateField,
     localizeField: s.localizeField,
+    propertyPath: s.propertyPath,
   }));
   const { t } = useTranslation("form-builder");
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
+  const field = LocalizedElementProperties.DESCRIPTION;
 
   return (
     <>
@@ -46,19 +46,9 @@ export const Description = ({
               className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-description-${primaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${primaryLanguage}-language`}
-              value={
-                element.properties[
-                  localizeField(LocalizedElementProperties.DESCRIPTION, primaryLanguage)
-                ]
-              }
+              value={element.properties[localizeField(field, primaryLanguage)]}
               onChange={(e) => {
-                updateField(
-                  `form.elements[${index}].properties.${localizeField(
-                    LocalizedElementProperties.DESCRIPTION,
-                    primaryLanguage
-                  )}`,
-                  e.target.value
-                );
+                updateField(propertyPath(element.id, field, primaryLanguage), e.target.value);
               }}
             ></textarea>
           </div>
@@ -79,19 +69,9 @@ export const Description = ({
               className="w-full p-4 h-full focus:outline-blue-focus"
               id={`element-${element.id}-description-${secondaryLanguage}`}
               aria-describedby={`element-${element.id}-description-${secondaryLanguage}-language`}
-              value={
-                element.properties[
-                  localizeField(LocalizedElementProperties.DESCRIPTION, secondaryLanguage)
-                ]
-              }
+              value={element.properties[localizeField(field, secondaryLanguage)]}
               onChange={(e) => {
-                updateField(
-                  `form.elements[${index}].properties.${localizeField(
-                    LocalizedElementProperties.DESCRIPTION,
-                    secondaryLanguage
-                  )}`,
-                  e.target.value
-                );
+                updateField(propertyPath(element.id, field, secondaryLanguage), e.target.value);
               }}
             ></textarea>
           </div>
