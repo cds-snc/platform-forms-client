@@ -74,7 +74,7 @@ export const SelectedElement = ({
       element = <ShortAnswer>0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
-      element = <DynamicRow elIndex={item.index} />;
+      element = <DynamicRow item={item} elIndex={item.index} />;
       break;
     default:
       element = null;
