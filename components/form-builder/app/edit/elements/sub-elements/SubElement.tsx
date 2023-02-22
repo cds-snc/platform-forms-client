@@ -7,12 +7,12 @@ import { isValidatedTextType } from "../../../../util";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
-import { DynamicRowModal } from "./DynamicRowModal";
+import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
 
-export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
+export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
 
   const {
@@ -204,7 +204,7 @@ export const DynamicRow = ({ item, elIndex, ...props }: { item: FormElement; elI
                   }}
                   renderMoreButton={({ item, moreButton }) => {
                     return (
-                      <DynamicRowModal
+                      <SubElementModal
                         elIndex={elIndex}
                         subIndex={subIndex}
                         item={{ ...item, index: item.id }}
