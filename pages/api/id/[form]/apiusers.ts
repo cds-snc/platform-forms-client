@@ -4,7 +4,7 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
 import { Session } from "next-auth";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
@@ -143,7 +143,7 @@ export async function activateOrDeactivateFormOwners(
     });
 
     if (session && session.user.id) {
-      await logAdminActivity(
+      await logActivity(
         session.user.id,
         AdminLogAction.Update,
         active ? AdminLogEvent.GrantFormAccess : AdminLogEvent.RevokeFormAccess,
@@ -222,7 +222,7 @@ export async function addEmailToForm(
     });
 
     if (session && session.user.id) {
-      await logAdminActivity(
+      await logActivity(
         session.user.id,
         AdminLogAction.Create,
         AdminLogEvent.GrantInitialFormAccess,

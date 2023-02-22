@@ -11,7 +11,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import validFormTemplate from "../../__fixtures__/validFormTemplate.json";
 import validFormTemplateWithHTMLInDynamicRow from "../../__fixtures__/validFormTemplateWithHTMLInDynamicRow.json";
 import brokenFormTemplate from "../../__fixtures__/brokenFormTemplate.json";
-import { logAdminActivity } from "@lib/adminLogs";
+import { logActivity } from "@lib/auditLogs";
 import { prismaMock } from "@jestUtils";
 import { Session } from "next-auth";
 import { Base, getUserPrivileges, ManageForms, PublishForms } from "__utils__/permissions";
@@ -101,7 +101,7 @@ describe("Test templates API functions", () => {
       await templatesRoot(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
+      expect(logActivity).toHaveBeenCalledWith(
         "1",
         "Create",
         "UploadForm",
@@ -197,7 +197,7 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
+      expect(logActivity).toHaveBeenCalledWith(
         "1",
         "Update",
         "UpdateForm",
@@ -324,7 +324,7 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
+      expect(logActivity).toHaveBeenCalledWith(
         "1",
         "Update",
         "UpdateForm",
@@ -379,7 +379,7 @@ describe("Test templates API functions", () => {
       await templates(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).toHaveBeenCalledWith(
+      expect(logActivity).toHaveBeenCalledWith(
         "1",
         "Delete",
         "DeleteForm",

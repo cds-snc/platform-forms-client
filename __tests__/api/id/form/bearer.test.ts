@@ -8,7 +8,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
 import { Base, ManageForms, getUserPrivileges } from "__utils__/permissions";
 import jwt from "jsonwebtoken";
-import { logAdminActivity } from "@lib/adminLogs";
+import { logActivity } from "@lib/auditLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
@@ -321,7 +321,7 @@ describe("/id/[form]/bearer", () => {
       await retrieve(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(logAdminActivity).lastCalledWith(
+      expect(logActivity).lastCalledWith(
         "1",
         "Update",
         "RefreshBearerToken",

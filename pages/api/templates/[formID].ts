@@ -12,7 +12,7 @@ import {
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import {
   layoutIDValidator,
   subElementsIDValidator,
@@ -46,7 +46,7 @@ const templates = async (
 
     if (session && session.user.id && ["PUT", "DELETE"].includes(req.method as string)) {
       if (req.method === "PUT") {
-        await logAdminActivity(
+        await logActivity(
           session.user.id,
           AdminLogAction.Update,
           AdminLogEvent.UpdateForm,
@@ -56,7 +56,7 @@ const templates = async (
         );
       }
       if (req.method === "DELETE") {
-        await logAdminActivity(
+        await logActivity(
           session.user.id,
           AdminLogAction.Delete,
           AdminLogEvent.DeleteForm,

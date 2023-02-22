@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { disableFlag, checkAll } from "@lib/cache/flags";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 
@@ -23,7 +23,7 @@ const handler = async (
     const flags = await checkAll(ability);
 
     if (session.user.id) {
-      await logAdminActivity(
+      await logActivity(
         session.user.id,
         AdminLogAction.Update,
         AdminLogEvent.DisableFeature,

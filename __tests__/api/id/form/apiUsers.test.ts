@@ -7,7 +7,7 @@
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import apiUsers from "@pages/api/id/[form]/apiusers";
-import { logAdminActivity } from "@lib/adminLogs";
+import { logActivity } from "@lib/auditLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
@@ -554,7 +554,7 @@ describe("/id/[forms]/owners", () => {
           await apiUsers(req, res);
           expect(res.statusCode).toBe(200);
           expect(JSON.parse(res._getData())).toMatchObject({ id: elem, active: true });
-          expect(logAdminActivity).toHaveBeenCalledWith(
+          expect(logActivity).toHaveBeenCalledWith(
             "1",
             "Update",
             "GrantFormAccess",
@@ -742,7 +742,7 @@ describe("/id/[forms]/owners", () => {
           await apiUsers(req, res);
           expect(res.statusCode).toBe(200);
           expect(JSON.parse(res._getData())).toMatchObject({ id: elem, active: true });
-          expect(logAdminActivity).toHaveBeenCalledWith(
+          expect(logActivity).toHaveBeenCalledWith(
             "1",
             "Update",
             "GrantFormAccess",
@@ -783,7 +783,7 @@ describe("/id/[forms]/owners", () => {
           await apiUsers(req, res);
           expect(res.statusCode).toBe(200);
           expect(JSON.parse(res._getData())).toMatchObject({ id: elem, active: true });
-          expect(logAdminActivity).toHaveBeenCalledWith(
+          expect(logActivity).toHaveBeenCalledWith(
             "1",
             "Update",
             "GrantFormAccess",
@@ -995,7 +995,7 @@ describe("/id/[forms]/owners", () => {
         await apiUsers(req, res);
 
         expect(res.statusCode).toBe(200);
-        expect(logAdminActivity).toHaveBeenCalledWith(
+        expect(logActivity).toHaveBeenCalledWith(
           "1",
           "Create",
           "GrantInitialFormAccess",
@@ -1206,7 +1206,7 @@ describe("/id/[forms]/owners", () => {
         await apiUsers(req, res);
 
         expect(res.statusCode).toBe(200);
-        expect(logAdminActivity).toHaveBeenCalledWith(
+        expect(logActivity).toHaveBeenCalledWith(
           "1",
           "Create",
           "GrantInitialFormAccess",

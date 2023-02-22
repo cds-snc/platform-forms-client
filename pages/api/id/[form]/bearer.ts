@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
-import { logAdminActivity, AdminLogAction, AdminLogEvent } from "@lib/adminLogs";
+import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createAbility, checkPrivileges, AccessControlError } from "@lib/privileges";
 import { Session } from "next-auth";
@@ -106,7 +106,7 @@ export async function createToken(
 
   // return the record with the id and the updated bearer token. Log the success
   if (session && session.user.id) {
-    await logAdminActivity(
+    await logActivity(
       session.user.id,
       AdminLogAction.Update,
       AdminLogEvent.RefreshBearerToken,

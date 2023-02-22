@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers } from "@lib/users";
 
-import { AdminLogAction } from "@lib/adminLogs";
+import { AdminLogAction } from "@lib/auditLogs";
 import { Session } from "next-auth";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { logMessage } from "@lib/logger";

@@ -11,7 +11,7 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { AdminLogAction, AdminLogEvent, logAdminActivity } from "@lib/adminLogs";
+import { AdminLogAction, AdminLogEvent, logActivity } from "@lib/auditLogs";
 
 const allowedMethods = ["GET", "POST"];
 const authenticatedMethods = ["POST"];
@@ -32,7 +32,7 @@ const templates = async (
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
 
     if (req.method === "POST") {
-      await logAdminActivity(
+      await logActivity(
         session.user.id,
         AdminLogAction.Create,
         AdminLogEvent.UploadForm,
