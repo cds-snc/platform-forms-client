@@ -76,6 +76,9 @@ export const SelectedElement = ({
     case "dynamicRow":
       element = <SubElement item={item} elIndex={item.index} />;
       break;
+    case "attestation":
+      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+      break;
     default:
       element = null;
   }

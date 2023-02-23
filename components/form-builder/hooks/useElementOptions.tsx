@@ -26,6 +26,7 @@ import {
   Date,
   Number,
   QuestionSet,
+  Attestation,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -133,7 +134,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   if (experimentalBlocks) {
     // add experimental blocks here:
-    // elementOptions.push();
+    elementOptions.push({
+      id: "attestation",
+      value: t("attestation"),
+      icon: <AddIcon />,
+      description: Attestation,
+      className: "",
+      group: group.advanced,
+    });
   }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;

@@ -57,6 +57,10 @@
     "dynamicRow": {
       "title": "Repeating set",
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
+    },
+    "attestation": {
+      "title": "Attestation checkbox",
+      "description": "Attestation checkbox description"
     }
   },
   "addMultiple": "Add multiple options",
@@ -374,5 +378,6 @@
       "placeholder": "Add",
       "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
     }
-  }
+  },
+  "attestation": "Attestation"
 }
