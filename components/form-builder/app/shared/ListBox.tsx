@@ -78,7 +78,7 @@ export const ListBox = ({
               groupOption = (
                 <li
                   role="presentation"
-                  className="pl-1 mb-2 text-gray-600 font-bold uppercase text-[1.1rem]"
+                  className="pl-1 mb-2 text-[#6A6D7B] font-bold uppercase text-[1.1rem]"
                 >
                   {group.value}
                 </li>
