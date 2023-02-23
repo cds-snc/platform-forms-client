@@ -8,7 +8,7 @@ import { useModalStore, useTemplateStore } from "../../../../store";
 import { Button } from "../../../shared";
 import { Modal } from "../../Modal";
 
-export const DynamicRowModal = ({
+export const SubElementModal = ({
   item,
   elIndex,
   subIndex,
