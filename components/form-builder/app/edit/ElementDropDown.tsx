@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import { ElementOption, FormElementWithIndex, ElementOptionsFilter } from "../../types";
 import { DropDown } from "./elements";
 import { useElementOptions } from "../../hooks";
+import { FormElementTypes } from "@lib/types";
 
 export const ElementDropDown = ({
   item,
@@ -33,6 +34,17 @@ export const ElementDropDown = ({
     },
     [setSelectedItem, onElementChange, itemIndex]
   );
+
+  // @todo move this up
+
+  /* check to see if the element is an attestation checkbox */
+  let selectedType = item.type;
+
+  if (item.properties.validation?.all) {
+    selectedType = FormElementTypes.attestation;
+  }
+
+  selectedItem = elementOptions.filter((item) => item.id === selectedType)[0];
 
   return (
     <DropDown

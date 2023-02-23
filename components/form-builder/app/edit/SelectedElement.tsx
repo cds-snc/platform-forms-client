@@ -107,6 +107,11 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
     selectedType = validationType && validationType !== "text" ? validationType : type;
   }
 
+  if (item.properties.validation?.all) {
+    selectedType = FormElementTypes.attestation;
+  }
+
   const selected = elementOptions.filter((item) => item.id === selectedType);
+
   return selected && selected.length ? selected[0] : elementOptions[2];
 };
