@@ -78,8 +78,8 @@
     "characterCount": {
       "part1": "Il vous reste",
       "part2": "caractères.",
-      "part1-error": "Vous avez",
-      "part2-error": "caractères de trop."
+      "part1-error": "Vous avez dépassé la limite de",
+      "part2-error": "caractères."
     }
   },
   "dynamicRow": {
