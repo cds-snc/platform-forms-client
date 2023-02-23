@@ -57,8 +57,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   /* Note this callback is also in PanelActionsLocked */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
-      // console.log("add item:", index, type);
-
       setFocusInput(true);
       add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
       if (isValidatedTextType(type)) {

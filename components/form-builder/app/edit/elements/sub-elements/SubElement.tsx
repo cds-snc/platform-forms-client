@@ -47,8 +47,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
-      // console.log("add sub element:", elIndex, subIndex, type);
-
       addSubItem(elIndex, subIndex, isValidatedTextType(type) ? FormElementTypes.textField : type);
       if (isValidatedTextType(type)) {
         // add 1 to index because it's a new element
