@@ -8,6 +8,8 @@ import { RichTextLocked } from "./elements";
 import { Input } from "../shared";
 import { useTemplateStore } from "../../store";
 
+import { FormElement } from "@lib/types";
+
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
   const {
@@ -18,6 +20,7 @@ export const Edit = () => {
     translationLanguagePriority,
     getLocalizationAttribute,
     getName,
+    add,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -27,6 +30,7 @@ export const Edit = () => {
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     getName: s.getName,
+    add: s.add,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -68,8 +72,11 @@ export const Edit = () => {
 
   const load = useCallback(async () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
-    await fetcher("/api/staticdata/");
-  }, []);
+    const result = await fetcher("/api/staticdata/");
+    result.forEach((element: FormElement) => {
+      add(0, element.type, element);
+    });
+  }, [add]);
 
   return (
     <>
