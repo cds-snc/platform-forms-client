@@ -30,6 +30,7 @@ const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
     <Dialog
       dialogRef={dialog}
       handleClose={handleClose}
+      className="overflow-y-scroll max-h-[80%]"
       actions={
         <DownloadFileButton
           showInfo={false}

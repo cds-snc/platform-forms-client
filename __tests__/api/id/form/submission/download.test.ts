@@ -9,7 +9,7 @@ import { Session } from "next-auth";
 import { Base, getUserPrivileges } from "__utils__/permissions";
 import { prismaMock } from "@jestUtils";
 import Redis from "ioredis-mock";
-import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
@@ -181,18 +181,16 @@ describe("/api/id/[form]/[submission]/download", () => {
         users: [{ id: "1" }],
       });
 
-      const dynamodbExpectedReponses = {
-        Items: [
-          {
-            FormID: "formTestID",
-            Name: "123-test",
-            SubmissionID: "12",
-            FormSubmission: testFormResponse,
-            SecurityAttribute: "Protected B",
-          },
-        ],
+      const dynamodbExpectedResponse = {
+        Item: {
+          FormID: "formTestID",
+          Name: "123-test",
+          SubmissionID: "12",
+          FormSubmission: testFormResponse,
+          SecurityAttribute: "Protected B",
+        },
       };
-      ddbMock.on(QueryCommand).resolves(dynamodbExpectedReponses);
+      ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
 
       const spiedLogMessage = jest.spyOn(logMessage, "info");
@@ -217,7 +215,7 @@ describe("/api/id/[form]/[submission]/download", () => {
 
       expect(res.statusCode).toBe(200);
       expect(spiedLogMessage).toHaveBeenCalledWith(
-        "user:forms@cds.ca retrieved form responses 12 from form ID:formtestID"
+        "user:forms@cds.ca retrieved form responses for response name: 123-test, submissionID: 12, form ID: formtestID"
       );
       expect(res._getHeaders()).toMatchObject({
         "content-disposition": "attachment; filename=123-test.html",
