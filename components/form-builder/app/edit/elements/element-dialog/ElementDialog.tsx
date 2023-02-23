@@ -43,7 +43,7 @@ export const ElementDialog = ({
   return (
     <Dialog dialogRef={dialog} handleClose={handleClose}>
       <div className="flex">
-        <div className="w-1/3 pr-2 py-4 overflow-y-auto max-h-[600px]">
+        <div className="w-1/3 pr-2 py-4 overflow-y-auto max-h-[620px]">
           <h4 className="mb-5 text-2xl font-bold bg-white-default">
             {t("addElementDialog.questionElement")}
           </h4>
@@ -57,13 +57,13 @@ export const ElementDialog = ({
             handleChange={handleChange}
           />
         </div>
-        <div className="border-l-1 border-black pl-4 py-4 w-2/3 max-h-[600px]">
+        <div className="border-l-1 border-black pl-4 py-4 w-2/3 max-h-[620px]">
           <ElementDescription
             id={id}
             title={`${value} ${t("addElementDialog.example")}`}
             handleAdd={handleAdd}
           >
-            <div className="mb-10 rounded border-1 border-gray-900 px-4 py-1 -mt-2 inline-block bg-gray-background">
+            <div className="mb-5 rounded border-1 border-gray-900 px-4 py-1 -mt-2 inline-block bg-gray-background">
               {t("addElementDialog.exampleElement")}
             </div>
             <Description

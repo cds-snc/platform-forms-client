@@ -78,7 +78,7 @@ export const ListBox = ({
               groupOption = (
                 <li
                   role="presentation"
-                  className="pl-1 mb-2 text-gray-600 font-bold uppercase text-[1.1rem]"
+                  className="pl-1 mb-2 text-[#6A6D7B] font-bold uppercase text-[1.1rem]"
                 >
                   {group.value}
                 </li>
@@ -108,7 +108,7 @@ export const ListBox = ({
                   <span className="flex justify-between items-center">
                     {value}
                     {focussed && (
-                      <ChevronRight className="fill-black inline-block ml-10 mr-1 scale-150" />
+                      <ChevronRight className="fill-black inline-block mr-1 scale-150" />
                     )}
                   </span>
                 </li>
