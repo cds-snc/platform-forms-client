@@ -1,23 +1,10 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, QueryCommandInput } from "@aws-sdk/lib-dynamodb";
 import { MongoAbility } from "@casl/ability";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { VaultSubmissionList } from "@lib/types";
+import { connectToDynamo } from "./integration/dynamodbConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
-
-/**
- * Helper function to instantiate DynamoDB and Document client.
- */
-function connectToDynamo(): DynamoDBDocumentClient {
-  //Create dynamodb client
-  const db = new DynamoDBClient({
-    region: process.env.AWS_REGION ?? "ca-central-1",
-    endpoint: process.env.LOCAL_AWS_ENDPOINT,
-  });
-
-  return DynamoDBDocumentClient.from(db);
-}
 
 /**
  * Returns the users associated with a Template
@@ -86,16 +73,16 @@ export async function listAllSubmissions(
         // Limit the amount of response to 500.  This can be changed in the future once we have pagination.
         Limit: 500 - accumulatedResponses.length,
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-        KeyConditionExpression: "FormID = :formID",
+        KeyConditionExpression: "FormID = :formID and begins_with(NAME_OR_CONF, :namePrefix)",
         ExpressionAttributeValues: {
           ":formID": formID,
+          ":namePrefix": "NAME#",
         },
         ExpressionAttributeNames: {
           "#status": "Status",
           "#name": "Name",
         },
-        ProjectionExpression:
-          "FormID,SubmissionID,#status,Retrieved,SecurityAttribute,ConfirmationCode,#name,CreatedAt",
+        ProjectionExpression: "FormID,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy",
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
@@ -106,22 +93,18 @@ export async function listAllSubmissions(
           response.Items.map(
             ({
               FormID: formID,
-              SubmissionID: submissionID,
               SecurityAttribute: securityAttribute,
               Status: status,
-              ConfirmationCode: confirmationCode,
-              Name: name,
               CreatedAt: createdAt,
-              Retrieved: retrieved,
+              LastDownloadedBy: lastDownloadedBy,
+              Name: name,
             }) => ({
               formID,
-              submissionID,
-              status: status ?? null,
+              status,
               securityAttribute,
-              confirmationCode,
-              name: name ?? null,
+              name,
               createdAt,
-              retrieved,
+              lastDownloadedBy: lastDownloadedBy ?? null,
             })
           )
         );
