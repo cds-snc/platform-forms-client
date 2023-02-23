@@ -1,6 +1,6 @@
 [
   {
-    "type": "attestation",
+    "type": "checkbox",
     "properties": {
       "subElements": [],
       "choices": [
@@ -20,7 +20,8 @@
       "titleEn": "I attest that:",
       "titleFr": "",
       "validation": {
-        "required": true
+        "required": true,
+        "all": true
       },
       "descriptionEn": "",
       "descriptionFr": "",
