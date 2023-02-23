@@ -80,8 +80,8 @@ export const Dialog = ({
             </span>
           </Button>
         </div>
-        <div className="px-4">{children}</div>
-        {actions && <div className="py-4 border-t-1 border-gray-400">{actions}</div>}
+        <div className={`px-4 ${title ? "" : "mt-10"}`}>{children}</div>
+        {actions && <div className="py-4 px-4 border-t-1 border-gray-400 flex">{actions}</div>}
       </div>
     </dialog>
   );
