@@ -108,7 +108,7 @@ export const ListBox = ({
                   <span className="flex justify-between items-center">
                     {value}
                     {focussed && (
-                      <ChevronRight className="fill-black inline-block ml-10 mr-1 scale-150" />
+                      <ChevronRight className="fill-black inline-block mr-1 scale-150" />
                     )}
                   </span>
                 </li>
