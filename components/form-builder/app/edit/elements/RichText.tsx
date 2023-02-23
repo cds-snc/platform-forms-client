@@ -28,11 +28,7 @@ export const RichText = ({ elIndex, subIndex = -1 }: { elIndex: number; subIndex
   }
 
   return (
-    <div
-      key={translationLanguagePriority}
-      className="flex mx-7 mt-5 mb-7 border-2 rounded"
-      data-testid="richText"
-    >
+    <div key={translationLanguagePriority} className="flex border-2 rounded" data-testid="richText">
       <RichTextEditor
         path={path}
         content={content || ""}

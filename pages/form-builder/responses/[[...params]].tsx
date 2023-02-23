@@ -112,7 +112,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                           <td>{submission.status}</td>
                           <td></td>
                           <td></td>
-                          <td>{submission.retrieved ? "Confirmed" : "Confirm By XXXX"}</td>
+                          <td>
+                            {submission.status === "Confirmed" ? "Confirmed" : "Confirm By XXXX"}
+                          </td>
                           <td>Not Set</td>
                         </tr>
                       ))
