@@ -6,7 +6,6 @@ import SkipLink from "@components/globals/SkipLink";
 import Fip from "@components/globals/Fip";
 import { PublicFormRecord } from "@lib/types";
 import { useTranslation } from "next-i18next";
-import "@cdssnc/gcds-tokens/build/web/variables.css";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;

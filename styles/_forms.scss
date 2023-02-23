@@ -1,5 +1,4 @@
 @import "forms/buttons";
-@import "forms/inputs";
 @import "forms/layout";
 @import "forms/states";
 @import "forms/typography";
@@ -20,7 +19,7 @@
 .gc-form-group {
   @apply mb-14;
 
-  // This receives focus. Need to create styles.
+  // TODO: This receives focus. Need to create styles or remove tabIndex attr.
 
   .gc-input-radio:last-of-type,
   .gc-input-checkbox:last-of-type {
@@ -32,22 +31,9 @@
   @include visuallyHidden();
 }
 
-// .gc-legend {
-//   @apply md:text-small_h2 text-h2 mb-14 font-bold;
-// }
-
 .gc-label {
   @apply md:text-small_base block text-base w-3/4 xl:w-full;
-  // &.required > span {
-  //   @apply text-red-700;
-  //   // content: " *";
-  // }
 }
-
-// What is the purpose? Is this just a p tag?
-// .gc-plain-text {
-//   @apply w-full my-5;
-// }
 
 .focus-group {
   @apply mb-14 space-y-2;
@@ -60,7 +46,7 @@
   }
 }
 
-// common text box styles
+// common text box input styles
 .gc-textarea,
 .gc-input-text,
 .gc-dropdown {
@@ -105,8 +91,6 @@
 }
 
 .gc-input-checkbox {
-  @apply block;
-
   .gc-input-checkbox__input {
     background-repeat: round;
     @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;

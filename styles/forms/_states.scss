@@ -47,8 +47,6 @@
   }
 
   .gc-alert__body {
-    // H3 never happens in this component
-    // ~~h3 {~~
     h2 {
       @apply text-h5 p-0 m-0;
     }
