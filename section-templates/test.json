@@ -5,22 +5,22 @@
       "subElements": [],
       "choices": [
         {
-          "en": "Yes to a",
+          "en": "I love ice cream",
           "fr": ""
         },
         {
-          "en": "Yes to b",
+          "en": "I eat it all the time",
           "fr": ""
         },
         {
-          "en": "Yes to c",
+          "en": "I am aware that I shouldn’t",
           "fr": ""
         }
       ],
-      "titleEn": "I attest",
+      "titleEn": "I attest that:",
       "titleFr": "",
       "validation": {
-        "required": false
+        "required": true
       },
       "descriptionEn": "",
       "descriptionFr": "",
