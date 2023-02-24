@@ -1,4 +1,6 @@
-Your responsibilities while using GC Forms are detailed in the [Service-level agreement](#). As a reminder, here are the highlights:
+Your responsibilities while using GC Forms are detailed in the [Service-level agreement](#). 
+
+As a reminder, here are the highlights:
 
 - Have the necessary approval to use the GC Forms system.
 - Have the appropriate authorities to collect personal information.
