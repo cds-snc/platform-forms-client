@@ -123,6 +123,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
+      id: "attestation",
+      value: t("attestation"),
+      icon: <AddIcon />,
+      description: Attestation,
+      className: "",
+      group: group.input,
+    },
+    {
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
@@ -134,14 +142,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   if (experimentalBlocks) {
     // add experimental blocks here:
-    elementOptions.push({
-      id: "attestation",
-      value: t("attestation"),
-      icon: <AddIcon />,
-      description: Attestation,
-      className: "",
-      group: group.advanced,
-    });
+    // elementOptions.push();
   }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;

@@ -14,6 +14,11 @@
     "no": "Non",
     "sometimes": "Parfois",
     "exampleElement": "exemple d'un bloc",
+    "condition1": "[FR] Condition 1",
+    "condition2": "[FR] Condition 2",
+    "condition3": "[FR] Condition 3",
+    "attest": "[FR] I attest that:",
+    "allRequired": "[FR] all required",
     "richText": {
       "title": "Texte en grand format",
       "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."
@@ -59,8 +64,8 @@
       "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     },
     "attestation": {
-      "title": "Attestation checkbox",
-      "description": "Attestation checkbox description"
+      "title": "[FR] Legal attestation",
+      "description": "[FR] Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes."
     }
   },
   "addMultiple": "Ajouter plusieurs options",
@@ -379,5 +384,5 @@
       "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses »."
     }
   },
-  "attestation": "[FR] Attestation checkbox"
+  "attestation": "[FR] Legal attestation"
 }

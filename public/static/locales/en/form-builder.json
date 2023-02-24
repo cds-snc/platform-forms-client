@@ -14,6 +14,11 @@
     "answer": "Answer...",
     "sometimes": "Sometimes",
     "exampleElement": "example block",
+    "condition1": "Condition 1",
+    "condition2": "Condition 2",
+    "condition3": "Condition 3",
+    "attest": "I attest that:",
+    "allRequired": "all required",
     "richText": {
       "title": "Large text",
       "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
@@ -59,8 +64,8 @@
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
     },
     "attestation": {
-      "title": "Attestation checkbox",
-      "description": "Attestation checkbox description"
+      "title": "Legal attestation",
+      "description": "Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes."
     }
   },
   "addMultiple": "Add multiple options",
@@ -379,5 +384,5 @@
       "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
     }
   },
-  "attestation": "Attestation checkbox"
+  "attestation": "Legal attestation"
 }
