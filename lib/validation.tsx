@@ -6,6 +6,7 @@ import {
   Responses,
   PublicFormRecord,
 } from "@lib/types";
+import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
@@ -365,11 +366,7 @@ export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
  * @returns {boolean} The validation result
  */
 export const isUUID = (field: string): boolean => {
-  // Regex from: https://github.com/microsoft/uuid-validate/blob/06554db1b093aa6bb429156fa8964e1cde2b750c/index.js#L2
-  const reg = new RegExp(
-    "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$",
-    "i"
-  );
+  const reg = new RegExp(uuidArraySchema.items.pattern, "i");
   if (!field || !reg.test(field)) {
     return false;
   }
