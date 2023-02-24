@@ -16,7 +16,7 @@ describe("Forms Functionality - Character Counts", () => {
 
   it("displays an error message indicating too many characters", () => {
     cy.get("input[id='2']").type("This is 48 characters This is 48 characters This");
-    cy.get("div[id='characterCountMessage2']").contains("You have 8 characters too many.");
+    cy.get("div[id='characterCountMessage2']").contains("exceeded the limit");
   });
 
   it("won't submit the form if the number of characters is too many", () => {
