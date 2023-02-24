@@ -1,8 +1,9 @@
 import path from "path";
 import { promises as fs } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
+import { middleware, cors } from "@lib/middleware";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function getJsonFile(req: NextApiRequest, res: NextApiResponse) {
   const { elementType } = req.body;
 
   const allowedTypes = ["attestation"];
@@ -19,3 +20,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   //Return the content of the data file in json format
   res.status(200).json(JSON.parse(fileContents));
 }
+
+export default middleware([cors({ allowedMethods: ["POST"] })], getJsonFile);
