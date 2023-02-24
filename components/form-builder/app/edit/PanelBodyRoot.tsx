@@ -64,6 +64,12 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
         break;
     }
 
+    if (id === "attestation") {
+      updateField(`form.elements[${itemIndex}].properties.validation.all`, true);
+    } else {
+      unsetField(`form.elements[${itemIndex}].properties.validation.all`);
+    }
+
     _setDefaultDescription(id, itemIndex);
   };
 

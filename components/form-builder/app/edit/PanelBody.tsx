@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 import { ElementOption, FormElementWithIndex, Language, ElementOptionsFilter } from "../../types";
@@ -26,8 +26,15 @@ export const PanelBody = ({
   const isDynamicRow = item.type === "dynamicRow";
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
-  const [selectedItem, setSelectedItem] = useState<ElementOption>(useGetSelectedOption(item));
+  const initialSelected = useGetSelectedOption(item);
+  const [selectedItem, setSelectedItem] = useState<ElementOption>();
   const questionInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (selectedItem?.id !== initialSelected.id) {
+      setSelectedItem(initialSelected);
+    }
+  }, [initialSelected, selectedItem?.id]);
 
   // Filter out the dynamicRow element from the dropdown if we're in a sub panel
   const elementFilter: ElementOptionsFilter = (elements) => {
@@ -44,7 +51,7 @@ export const PanelBody = ({
             : "flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm ")
         }
       >
-        {!isRichText && !isDynamicRow && (
+        {!isRichText && !isDynamicRow && selectedItem?.id && (
           <div className="xxl:mt-4 w-2/5 xxl:w-full">
             <ElementDropDown
               filterElements={elIndex === -1 ? undefined : elementFilter}
@@ -63,7 +70,9 @@ export const PanelBody = ({
             item={item}
             onQuestionChange={onQuestionChange}
           />
-          <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
+          {selectedItem?.id && (
+            <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
+          )}
           {maxLength && (
             <div className="disabled">
               {t("maxCharacterLength")}

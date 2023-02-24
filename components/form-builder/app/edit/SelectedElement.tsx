@@ -86,6 +86,22 @@ export const SelectedElement = ({
   return element;
 };
 
+export const filterSelected = (
+  item: FormElementWithIndex,
+  currentSelectedItem: ElementOption,
+  elementOptions: ElementOption[]
+) => {
+  /**
+   * Attestation is a special case. It is a checkbox, but it has a special validation type.
+   * We want to check for that validation type and return the attestation type if it exists.
+   */
+  if (item.properties.validation?.all) {
+    const selected = elementOptions.filter((item) => item.id === FormElementTypes.attestation);
+    return selected && selected.length ? selected[0] : currentSelectedItem;
+  }
+  return currentSelectedItem;
+};
+
 export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
 
@@ -107,11 +123,11 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
     selectedType = validationType && validationType !== "text" ? validationType : type;
   }
 
-  if (item.properties.validation?.all) {
-    selectedType = FormElementTypes.attestation;
-  }
-
   const selected = elementOptions.filter((item) => item.id === selectedType);
 
-  return selected && selected.length ? selected[0] : elementOptions[2];
+  return filterSelected(
+    item,
+    selected && selected.length ? selected[0] : elementOptions[2],
+    elementOptions
+  );
 };
