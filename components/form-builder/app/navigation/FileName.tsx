@@ -37,9 +37,9 @@ export const FileNameInput = () => {
       </span>
       <input
         style={widthStyle}
-        className="px-2 min-w-[200px] max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default"
+        className="px-2 min-w-[250px] max-w-[500px] border-2 border-white text-base font-bold placeholder-black hover:border-2 hover:border-gray-default"
         name="filename"
-        placeholder={t("untitledForm", { ns: "form-builder" })}
+        placeholder={t("unnamedForm", { ns: "form-builder" })}
         value={content}
         onFocus={() => setIsEditing(true)}
         onBlur={() => {
