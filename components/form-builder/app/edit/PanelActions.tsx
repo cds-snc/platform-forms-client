@@ -20,9 +20,9 @@ import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { useFlag } from "@lib/hooks";
 
 const buttonClasses =
-  "group border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 focus:!bg-blue-hover focus:text-black xl:focus:text-white disabled:!bg-transparent";
+  "group/button border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 xl:hover:!text-white focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent";
 const iconClasses =
-  "group-hover:group-enabled:fill-black group-disabled:fill-gray-500 group-focus:fill-white transition duration-100";
+  "group-hover/button:fill-black group-disabled/button:!fill-gray-500 group-active/button:!fill-white group-focus/button:!fill-white xl:!fill-black xl:group-hover/button:!fill-white transition duration-100";
 
 export interface RenderMoreFunc {
   ({ item, moreButton }: { item: FormElementWithIndex; moreButton: JSX.Element | undefined }):
