@@ -1,7 +1,15 @@
 import { FormElement } from "@lib/types";
 import axios from "axios";
 
-export const loader = async (type: string, onData: (data: FormElement) => void) => {
+export type LoaderType = "attestation";
+
+export const loader = async (type: LoaderType, onData: (data: FormElement) => void) => {
+  const allowedTypes = ["attestation"];
+
+  if (!allowedTypes.includes(type)) {
+    return;
+  }
+
   const result = await axios({
     url: "/api/form-builder/template",
     method: "POST",
