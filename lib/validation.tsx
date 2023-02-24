@@ -7,6 +7,7 @@ import {
   PublicFormRecord,
 } from "@lib/types";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
+import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { FormikProps } from "formik";
 import { TFunction } from "next-i18next";
 import { acceptedFileMimeTypes } from "@lib/tsUtils";
@@ -379,7 +380,7 @@ export const isUUID = (field: string): boolean => {
  * @returns {boolean} The validation result
  */
 export const isFormId = (field: string): boolean => {
-  const reg = new RegExp("^[0-9]{2}-[0-9]{2}-[0-9a-z]{4}$", "i");
+  const reg = new RegExp(formNameArraySchema.items.pattern, "i");
   if (!field || !reg.test(field)) {
     return false;
   }
