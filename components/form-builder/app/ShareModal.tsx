@@ -48,7 +48,6 @@ export const ShareModal = ({
   const actions = (
     <>
       <Button
-        className="ml-5"
         theme="primary"
         onClick={() => {
           handleSend();
@@ -58,7 +57,7 @@ export const ShareModal = ({
         {t("send")}
       </Button>
       <Button
-        className="ml-5"
+        className="ml-4"
         theme="secondary"
         onClick={() => {
           dialog.current?.close();
@@ -73,7 +72,6 @@ export const ShareModal = ({
   const doneActions = (
     <>
       <Button
-        className="ml-5"
         theme="primary"
         onClick={() => {
           dialog.current?.close();
@@ -83,7 +81,7 @@ export const ShareModal = ({
         {t("close")}
       </Button>
       <Button
-        className="ml-5"
+        className="ml-4"
         theme="secondary"
         onClick={() => {
           setStatus("ready");
