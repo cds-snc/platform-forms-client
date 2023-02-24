@@ -36,11 +36,26 @@ export const PanelBody = ({
 
   return (
     <div className="mx-7 py-7">
-      <div className="element-panel flex xxl:flex-col-reverse flex-row justify-between relative text-base !text-sm">
-        <div
-          style={isRichText || isDynamicRow ? { width: "100%", margin: 0, fontSize: "1.25em" } : {}}
-          className={isRichText || isDynamicRow ? undefined : "basis-[460px] xxl:basis-[10px] mr-5"}
-        >
+      <div
+        className={
+          "" +
+          (isRichText || isDynamicRow
+            ? "relative "
+            : "flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm ")
+        }
+      >
+        {!isRichText && !isDynamicRow && (
+          <div className="xxl:mt-4 w-2/5 xxl:w-full">
+            <ElementDropDown
+              filterElements={elIndex === -1 ? undefined : elementFilter}
+              item={item}
+              onElementChange={onElementChange}
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
+            />
+          </div>
+        )}
+        <div className={isRichText || isDynamicRow ? undefined : "xxl:mt-4 w-3/5 xxl:w-full"}>
           <Question
             questionInputRef={questionInputRef}
             elements={elements}
@@ -55,19 +70,10 @@ export const PanelBody = ({
               {maxLength}
             </div>
           )}
+          {!isDynamicRow && !isRichText && (
+            <ElementRequired onRequiredChange={onRequiredChange} item={item} />
+          )}
         </div>
-        {!isRichText && !isDynamicRow && (
-          <div>
-            <ElementDropDown
-              filterElements={elIndex === -1 ? undefined : elementFilter}
-              item={item}
-              onElementChange={onElementChange}
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-            />
-            {!isDynamicRow && <ElementRequired onRequiredChange={onRequiredChange} item={item} />}
-          </div>
-        )}
       </div>
     </div>
   );
