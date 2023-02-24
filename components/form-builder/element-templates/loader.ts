@@ -1,4 +1,5 @@
 import { FormElement, FormElementTypes } from "@lib/types";
+import axios from "axios";
 
 export const loader = async ({
   type,
@@ -7,15 +8,16 @@ export const loader = async ({
   type: string;
   handleAddElement: (index: number, type: FormElementTypes, data: FormElement) => void;
 }) => {
-  const fetcher = (url: string) =>
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        elementType: type,
-      }),
-    }).then((res) => res.json());
-  const result = await fetcher("/api/staticdata/");
-  result.forEach((el: FormElement) => {
+  const result = await axios({
+    url: "/api/form-builder/template",
+    method: "POST",
+    data: {
+      elementType: type,
+    },
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+  });
+
+  result.data.forEach((el: FormElement) => {
     handleAddElement(0, el.type, el);
   });
 };
