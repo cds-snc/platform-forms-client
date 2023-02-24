@@ -16,7 +16,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   /* Note this callback is also in PanelActions */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
-      if (type === "attestation") {
+      if (type === FormElementTypes.attestation) {
         loader(type, (data) => add(index, type, data));
         return;
       }

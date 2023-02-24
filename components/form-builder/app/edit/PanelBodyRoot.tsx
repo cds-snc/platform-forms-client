@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { PanelBody } from "./";
 import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { useTemplateStore } from "../../store";
+import { FormElementTypes } from "@lib/types";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
@@ -64,7 +65,7 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
         break;
     }
 
-    if (id === "attestation") {
+    if (id === FormElementTypes.attestation) {
       updateField(`form.elements[${itemIndex}].properties.validation.all`, true);
     } else {
       unsetField(`form.elements[${itemIndex}].properties.validation.all`);
