@@ -13,7 +13,7 @@
     "no": "No",
     "answer": "Answer...",
     "sometimes": "Sometimes",
-    "exampleElement": "example block",
+    "exampleElement": "block example",
     "richText": {
       "title": "Large text",
       "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
@@ -71,10 +71,10 @@
   "close": "Close",
   "closeModal": "Close modal",
   "completed": "Completed",
-  "confirmationDescriptionItem1": "details of what happens next and when",
-  "confirmationDescriptionItem2": "contact details for the service",
-  "confirmationDescriptionItem3": "links to information or services that users are likely to need next",
-  "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form)",
+  "confirmationDescriptionItem1": "details of what happens next and when.",
+  "confirmationDescriptionItem2": "contact details for the service.",
+  "confirmationDescriptionItem3": "links to information or services that users are likely to need next.",
+  "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form).",
   "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to your confirmation page are:",
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
@@ -215,7 +215,7 @@
   "provideFeedback": "Provide feedback",
   "publish": "Publish",
   "published": "Published",
-  "publishedBack": "Back to My forms",
+  "publishedBack": "Back to Your forms",
   "publishedErrors": "Published form errors",
   "publishedTitle": "Your form is published.",
   "publishedViewLinks": "View and share your published form with these links:",
@@ -268,7 +268,7 @@
     "formUser": "A GC Forms user",
     "copy": "Copy",
     "email": "Share by email",
-    "emailLabel": "Enter email address",
+    "emailLabel": "Email address",
     "enLink": "English link",
     "frLink": "French link",
     "link": "Get the link",
@@ -298,7 +298,7 @@
       "copyInstructions": "Copy instructions",
       "downloadFormFile": "Download form file"
     },
-    "unpublished": "Links unavailable for unpublished forms"
+    "unpublished": "Not available for unpublished forms"
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer text",

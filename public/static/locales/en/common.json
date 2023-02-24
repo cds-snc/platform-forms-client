@@ -72,14 +72,14 @@
     "login": "Sign in",
     "logout": "Sign out",
     "privileges": "Privileges",
-    "myForms": "My forms"
+    "myForms": "Your forms"
   },
   "formElements": {
     "characterCount": {
       "part1": "You have",
       "part2": "characters left.",
-      "part1-error": "You have",
-      "part2-error": "characters too many."
+      "part1-error": "You've exceeded the limit by",
+      "part2-error": "characters."
     }
   },
   "dynamicRow": {
