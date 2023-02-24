@@ -6,6 +6,7 @@ import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { isValidatedTextType } from "../../util";
 import { FormElementTypes } from "@lib/types";
 import { useIsWithin } from "@components/form-builder/hooks/useIsWithin";
+import { loader } from "../../element-templates/loader";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const {
@@ -57,6 +58,11 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   /* Note this callback is also in PanelActionsLocked */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
+      if (type === "attestation") {
+        loader(type, (data) => add(index, type, data));
+        return;
+      }
+
       setFocusInput(true);
       add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
       if (isValidatedTextType(type)) {

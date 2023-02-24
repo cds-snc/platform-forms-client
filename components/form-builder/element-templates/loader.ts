@@ -1,13 +1,7 @@
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement } from "@lib/types";
 import axios from "axios";
 
-export const loader = async ({
-  type,
-  handleAddElement,
-}: {
-  type: string;
-  handleAddElement: (index: number, type: FormElementTypes, data: FormElement) => void;
-}) => {
+export const loader = async (type: string, onData: (data: FormElement) => void) => {
   const result = await axios({
     url: "/api/form-builder/template",
     method: "POST",
@@ -17,7 +11,7 @@ export const loader = async ({
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   });
 
-  result.data.forEach((el: FormElement) => {
-    handleAddElement(0, el.type, el);
+  result.data.forEach((data: FormElement) => {
+    onData(data);
   });
 };
