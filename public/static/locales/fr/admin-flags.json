@@ -58,10 +58,6 @@
       "title": "Menu de partage du Générateur de formulaires",
       "description": "Activer le menu déroulant de partage"
     },
-    "editableFilename": {
-      "title": "Nom de fichier modifiable du Générateur de formulaires",
-      "description": "Modifie l'en-tête pour inclure le nom de fichier modifiable"
-    },
     "formBuilderExperimentalBlocks": {
       "title": "Blocs du Générateur de formulaires",
       "description": "Activer les blocs expérimentaux"
