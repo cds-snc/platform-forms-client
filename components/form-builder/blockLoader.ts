@@ -3,7 +3,7 @@ import axios from "axios";
 
 export type LoaderType = "attestation";
 
-export const loader = async (type: LoaderType, onData: (data: FormElement) => void) => {
+export const blockLoader = async (type: LoaderType, onData: (data: FormElement) => void) => {
   const allowedTypes = ["attestation"];
 
   if (!allowedTypes.includes(type)) {

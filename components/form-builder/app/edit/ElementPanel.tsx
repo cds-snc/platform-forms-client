@@ -6,7 +6,7 @@ import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { isValidatedTextType } from "../../util";
 import { FormElementTypes } from "@lib/types";
 import { useIsWithin } from "@components/form-builder/hooks/useIsWithin";
-import { loader } from "../../element-templates/loader";
+import { blockLoader } from "../../blockLoader";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const {
@@ -59,7 +59,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       if (type === FormElementTypes.attestation) {
-        loader(type, (data) => add(index, type, data));
+        blockLoader(type, (data) => add(index, type, data));
         return;
       }
 

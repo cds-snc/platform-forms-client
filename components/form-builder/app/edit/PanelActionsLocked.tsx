@@ -4,7 +4,7 @@ import { FormElementTypes } from "@lib/types";
 import { isValidatedTextType } from "../../util";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
-import { loader } from "../../element-templates/loader";
+import { blockLoader } from "../../blockLoader";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const { add, setFocusInput, updateField } = useTemplateStore((s) => ({
@@ -17,7 +17,7 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       if (type === FormElementTypes.attestation) {
-        loader(type, (data) => add(index, type, data));
+        blockLoader(type, (data) => add(index, type, data));
         return;
       }
 
