@@ -5,20 +5,20 @@
       "subElements": [],
       "choices": [
         {
-          "en": "I love ice cream",
-          "fr": ""
+          "en": "Condition 1",
+          "fr": "[FR] Condition 1"
         },
         {
-          "en": "I eat it all the time",
-          "fr": ""
+          "en": "Condition 2",
+          "fr": "[FR] Condition 2"
         },
         {
-          "en": "I am aware that I shouldn’t",
-          "fr": ""
+          "en": "Condition 3",
+          "fr": "[FR] Condition 2"
         }
       ],
-      "titleEn": "I attest that:",
-      "titleFr": "",
+      "titleEn": "I agree to:",
+      "titleFr": "[FR] I agree to:",
       "validation": {
         "required": true,
         "all": true
