@@ -35,6 +35,6 @@ describe("Element dialog", () => {
     fireEvent.keyDown(listBox, { key: "ArrowDown" });
     await user.click(button);
     expect(mockAddCallback.mock.calls.length).toBe(2);
-    expect(mockAddCallback.mock.calls[1][0]).toBe("checkbox");
+    expect(mockAddCallback.mock.calls[1][0]).toBe("textArea");
   });
 });
