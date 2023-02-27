@@ -3,7 +3,7 @@ import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
 import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
-import { ShortAnswer, Options, SubOptions, RichText, DynamicRow } from "./elements";
+import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
 
@@ -74,13 +74,32 @@ export const SelectedElement = ({
       element = <ShortAnswer>0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
-      element = <DynamicRow item={item} elIndex={item.index} />;
+      element = <SubElement item={item} elIndex={item.index} />;
+      break;
+    case "attestation":
+      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
       break;
     default:
       element = null;
   }
 
   return element;
+};
+
+export const filterSelected = (
+  item: FormElementWithIndex,
+  currentSelectedItem: ElementOption,
+  elementOptions: ElementOption[]
+) => {
+  /**
+   * Attestation is a special case. It is a checkbox, but it has a special validation type.
+   * We want to check for that validation type and return the attestation type if it exists.
+   */
+  if (item.properties.validation?.all) {
+    const selected = elementOptions.filter((item) => item.id === FormElementTypes.attestation);
+    return selected && selected.length ? selected[0] : currentSelectedItem;
+  }
+  return currentSelectedItem;
 };
 
 export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
@@ -105,5 +124,10 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
   }
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
-  return selected && selected.length ? selected[0] : elementOptions[2];
+
+  return filterSelected(
+    item,
+    selected && selected.length ? selected[0] : elementOptions[2],
+    elementOptions
+  );
 };

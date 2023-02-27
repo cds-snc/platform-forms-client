@@ -185,7 +185,8 @@
             "checkbox",
             "fileInput",
             "dynamicRow",
-            "richText"
+            "richText",
+            "attestation"
           ]
         },
         "properties": {

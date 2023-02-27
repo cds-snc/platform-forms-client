@@ -10,7 +10,12 @@ export const ListBox = ({
   handleChange,
   ariaLabel,
 }: {
-  options: { id: string; value: string; group: { id: string; value: string } }[];
+  options: {
+    id: string;
+    value: string;
+    group: { id: string; value: string };
+    className?: string;
+  }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
 }) => {
@@ -64,10 +69,12 @@ export const ListBox = ({
               id,
               value,
               group,
+              className,
             }: {
               id: string;
               value: string;
               group: { id: string; value: string };
+              className?: string;
             },
             index: number
           ) => {
@@ -78,7 +85,7 @@ export const ListBox = ({
               groupOption = (
                 <li
                   role="presentation"
-                  className="pl-1 mb-2 text-gray-600 font-bold uppercase text-[1.1rem]"
+                  className="pl-1 mb-2 text-[#6A6D7B] font-bold uppercase text-[1.1rem]"
                 >
                   {group.value}
                 </li>
@@ -97,7 +104,7 @@ export const ListBox = ({
                       rowsRef.current[`row-${index}` as unknown as number] = el;
                     }
                   }}
-                  className={`${
+                  className={`${className} ${
                     focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
                   } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
                   tabIndex={-1}
@@ -108,7 +115,7 @@ export const ListBox = ({
                   <span className="flex justify-between items-center">
                     {value}
                     {focussed && (
-                      <ChevronRight className="fill-black inline-block ml-10 mr-1 scale-150" />
+                      <ChevronRight className="fill-black inline-block mr-1 scale-150" />
                     )}
                   </span>
                 </li>

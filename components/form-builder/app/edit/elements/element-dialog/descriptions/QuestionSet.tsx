@@ -5,13 +5,13 @@ export const QuestionSet = ({ title, description }: { title: string; description
   return (
     <div>
       <div className="font-bold text-[1.5rem]">{title}</div>
-      <p className="mb-10">{description}</p>
+      <p className="mb-2">{description}</p>
       <Image
         layout="responsive"
         width={"558"}
         height={"313"}
         alt=""
-        className="block w-full mb-10"
+        className="block w-full"
         src="/img/form-builder-dynamic-row.svg"
       />
     </div>

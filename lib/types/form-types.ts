@@ -64,6 +64,7 @@ export enum FormElementTypes {
   fileInput = "fileInput",
   richText = "richText",
   dynamicRow = "dynamicRow",
+  attestation = "attestation",
 }
 // used to define attributes for a form element or field
 export interface FormElement {
