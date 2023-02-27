@@ -19,6 +19,7 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { DialogConfirmReceipt } from "../../../components/form-builder/app/DialogConfirmReceipt";
 import { DialogReportProblems } from "../../../components/form-builder/app/DialogReportProblems";
+import { Card } from "@components/globals/card/Card";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -78,58 +79,51 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
         {isAuthenticated && (
           <>
-            <div className="border-2 border-solid border-black">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Response ID</th>
-                    <th>Status</th>
-                    <th>Download Response</th>
-                    <th>Last Downloaded By</th>
-                    <th>Confirm Receipt</th>
-                    <th>Removal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <>
-                    {vaultSubmissions?.length > 0 ? (
-                      vaultSubmissions.map((submission, index) => (
-                        <tr key={index}>
-                          <td>{submission.name}</td>
-                          <td>{submission.status}</td>
-                          <td></td>
-                          <td></td>
-                          <td>
-                            {submission.status === "Confirmed" ? "Confirmed" : "Confirm By XXXX"}
-                          </td>
-                          <td>Not Set</td>
-                        </tr>
-                      ))
-                    ) : (
+            <div>
+              {vaultSubmissions?.length > 0 && (
+                <>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Response ID</th>
+                        <th>Status</th>
+                        <th>Download Response</th>
+                        <th>Last Downloaded By</th>
+                        <th>Confirm Receipt</th>
+                        <th>Removal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                       <>
-                        <tr key="1">
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>Not Set</td>
-                        </tr>
-                        <tr key="2">
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>Not Set</td>
-                        </tr>
+                        {vaultSubmissions.map((submission, index) => (
+                          <tr key={index}>
+                            <td>{submission.name}</td>
+                            <td>{submission.status}</td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                              {submission.status === "Confirmed" ? "Confirmed" : "Confirm By XXXX"}
+                            </td>
+                            <td>Not Set</td>
+                          </tr>
+                        ))}
                       </>
-                    )}
-                  </>
-                </tbody>
-              </table>
+                    </tbody>
+                  </table>
+                  <div>TODO download button here</div>
+                </>
+              )}
+
+              <Card
+                icon={
+                  <picture>
+                    <img src="/img/mailbox.png" width="193" height="200" alt="" />
+                  </picture>
+                }
+                title={"You have no responses"}
+                content={"There are no responses available to download."}
+              ></Card>
             </div>
-            <div>TODO download button here</div>
           </>
         )}
 
