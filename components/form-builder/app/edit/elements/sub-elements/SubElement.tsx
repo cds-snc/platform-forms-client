@@ -161,7 +161,8 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   };
 
   const elementFilter: ElementOptionsFilter = (elements) => {
-    return elements.filter((element) => element.id !== "dynamicRow");
+    const notAllowed = ["dynamicRow", "attestation"];
+    return elements.filter((element) => !notAllowed.includes(element.id));
   };
 
   if (!subElements || subElements.length < 1)

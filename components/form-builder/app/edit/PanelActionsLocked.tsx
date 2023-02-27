@@ -4,6 +4,7 @@ import { FormElementTypes } from "@lib/types";
 import { isValidatedTextType } from "../../util";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
+import { blockLoader } from "../../blockLoader";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const { add, setFocusInput, updateField } = useTemplateStore((s) => ({
@@ -12,9 +13,14 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
     setFocusInput: s.setFocusInput,
   }));
 
-  /* Note this callback is also in PanelActionsLocked */
+  /* Note this callback is also in PanelActions */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
+      if (type === FormElementTypes.attestation) {
+        blockLoader(type, (data) => add(index, FormElementTypes.checkbox, data));
+        return;
+      }
+
       setFocusInput(true);
       add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
       if (isValidatedTextType(type)) {

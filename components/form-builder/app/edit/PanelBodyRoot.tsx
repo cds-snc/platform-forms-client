@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 import { PanelBody } from "./";
 import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { useTemplateStore } from "../../store";
+import { FormElementTypes } from "@lib/types";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
@@ -58,10 +59,19 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
         resetChoices(itemIndex);
       // no break here (we want default to happen)
       default: // eslint-disable-line no-fallthrough
+        if (id === FormElementTypes.attestation) {
+          id = FormElementTypes.checkbox;
+        }
         updateField(`form.elements[${itemIndex}].type`, id);
         unsetField(`form.elements[${itemIndex}].properties.validation.type`);
         unsetField(`form.elements[${itemIndex}].properties.validation.maxLength`);
         break;
+    }
+
+    if (id === FormElementTypes.attestation) {
+      updateField(`form.elements[${itemIndex}].properties.validation.all`, true);
+    } else {
+      unsetField(`form.elements[${itemIndex}].properties.validation.all`);
     }
 
     _setDefaultDescription(id, itemIndex);
