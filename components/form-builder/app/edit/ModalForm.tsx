@@ -6,6 +6,7 @@ import { FormElementTypes, ElementProperties } from "@lib/types";
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { Checkbox, Input, TextArea } from "../shared";
 import { useTemplateStore } from "../../store";
+import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="block mb-50 font-[700]">
@@ -92,6 +93,16 @@ export const ModalForm = ({
           label={t("required")}
         ></Checkbox>
       </div>
+      {item.type === FormElementTypes.textField && (
+        <div className="mb-2">
+          <ModalLabel htmlFor="">Select an autocomplete attribute</ModalLabel>
+          <Hint>
+            This option is great when the form filler is providing personal information like their
+            address, email or phone number.
+          </Hint>
+          <AutocompleteDropdown />
+        </div>
+      )}
       {item.type === FormElementTypes.textField &&
         (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
           <div className="mb-2">

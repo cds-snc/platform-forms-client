@@ -384,5 +384,29 @@
       "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
     }
   },
-  "attestation": "Legal attestation"
+  "attestation": "Legal attestation",
+  "autocompleteOptions": {
+    "name": "Full name (includes first, middle and last names)",
+    "given-name": "First name",
+    "additional-name": "Middle name",
+    "family-name": "Last name",
+    "honorific-prefix": "Name prefix, Mr, Mrs, Dr",
+    "honorific-suffix": "Name suffix, Jr, B.Sc,",
+    "organization-title": "Job title",
+    "street-address": "Full street address (includes address lines 1-3)",
+    "address-line1": "Address line 1 (civic number and street name)",
+    "address-line2": "Address line 2 (apartment or suite)",
+    "address-line3": "Address line 3 (other address details)",
+    "address-level2": "City, town, community",
+    "address-level1": "Province, State",
+    "country": "Country code (2 letter country identifier)",
+    "country-name": "Country",
+    "postal-code": "Postal or zip code",
+    "language": "Language",
+    "bday" : "Birthdate",
+    "bday-day": "Day of birthday",
+    "bday-month": "Birth month",
+    "bday-year": "Birth year",
+    "url": "Website address"
+  }
 }
