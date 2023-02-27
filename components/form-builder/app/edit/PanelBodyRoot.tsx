@@ -59,6 +59,9 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
         resetChoices(itemIndex);
       // no break here (we want default to happen)
       default: // eslint-disable-line no-fallthrough
+        if (id === FormElementTypes.attestation) {
+          id = FormElementTypes.checkbox;
+        }
         updateField(`form.elements[${itemIndex}].type`, id);
         unsetField(`form.elements[${itemIndex}].properties.validation.type`);
         unsetField(`form.elements[${itemIndex}].properties.validation.maxLength`);

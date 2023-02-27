@@ -317,9 +317,6 @@ const _getFormInitialValues = (formRecord: PublicFormRecord, language: string): 
   formRecord.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
-      if (element.type === FormElementTypes.attestation) {
-        element.type = FormElementTypes.checkbox;
-      }
       initialValues[element.id] = _getElementInitialValue(element, language);
     });
 
