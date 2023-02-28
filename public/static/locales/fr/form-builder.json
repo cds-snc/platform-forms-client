@@ -384,5 +384,34 @@
       "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses »."
     }
   },
-  "attestation": "[FR] Legal attestation"
+  "attestation": "[FR] Legal attestation",
+  "autocompleteOptions": {
+    "name": "[FR] Full name (includes first, middle and last names)",
+    "given-name": "[FR] First name",
+    "additional-name": "[FR] Middle name",
+    "family-name": "[FR] Last name",
+    "honorific-prefix": "[FR] Name prefix, Mr, Mrs, Dr",
+    "honorific-suffix": "[FR] Name suffix, Jr, B.Sc,",
+    "organization-title": "[FR] Job title",
+    "street-address": "[FR] Full street address (includes address lines 1-3)",
+    "address-line1": "[FR] Address line 1 (civic number and street name)",
+    "address-line2": "[FR] Address line 2 (apartment or suite)",
+    "address-line3": "[FR] Address line 3 (other address details)",
+    "address-level2": "[FR] City, town, community",
+    "address-level1": "[FR] Province, State",
+    "country": "[FR] Country code (2 letter country identifier)",
+    "country-name": "[FR] Country",
+    "postal-code": "[FR] Postal or zip code",
+    "language": "[FR] Language",
+    "bday" : "[FR] Birthdate",
+    "bday-day": "[FR] Day of birthday",
+    "bday-month": "[FR] Birth month",
+    "bday-year": "[FR] Birth year",
+    "url": "[FR] Website address",
+    "email": "[FR] Email address",
+    "phone": "[FR] Phone number"
+  },
+  "selectAutocomplete": "[FR] Select an autocomplete attribute",
+  "selectAutocompleteHint": "[FR] This option is great when the form filler is providing personal information like their address, email or phone number.",
+  "autocompleteWhenNotToUse": "[FR] When not to use autocomplete"
 }
