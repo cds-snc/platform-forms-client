@@ -180,10 +180,16 @@ export const autoCompleteFields = [
   "url",
   "email",
   "phone",
-];
+] as const;
+
+export type AutoCompleteField = (typeof autoCompleteFields)[number];
 
 // check if the type is being passed is a "text field" input but has a ƒspecific type
 export const isValidatedTextType = (type: FormElementTypes | undefined) => {
+  return type && ["email", "phone", "date", "number"].includes(type);
+};
+
+export const isAutoCompleteField = (type: AutoCompleteField | undefined) => {
   return type && autoCompleteFields.includes(type);
 };
 
