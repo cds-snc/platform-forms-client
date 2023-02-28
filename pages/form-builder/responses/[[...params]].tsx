@@ -19,6 +19,7 @@ import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -27,6 +28,11 @@ interface ResponsesProps {
 const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: ResponsesProps) => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
+  const router = useRouter();
+  const { params } = router.query;
+  const [isSubmitting, setIsSubmitting] = useState(false); // TODO
+  const [errorMessage, setErrorMessage] = useState(""); // TODO
+  const formId = params && params.length && params[0];
   const isAuthenticated = status === "authenticated";
 
   const secondaryButtonClass =
@@ -53,7 +59,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     vaultSubmissions.map((submission) => [
       submission.name,
       {
-        // "formId": submission.formID,
+        // formId: submission.formID,
+        name: submission.name,
         checked: false,
       },
     ])
@@ -62,19 +69,19 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
   const handleChecked = (e) => {
     const id = e.target.id;
-    const checked = e.target.checked;
+    const checked: boolean = e.target.checked;
     // Note: Need to clone and set so React change detection notices a change in the Map
     setCheckedItems(
       new Map(
         checkedItems.set(id, {
           checked: checked,
-          // "formId": checkedItems.get(id)?.formId
+          name: checkedItems.get(id)?.name ?? "",
         })
       )
     );
   };
 
-  const getChecked = () => {
+  const getCheckedItemsList = () => {
     const checked = [];
     checkedItems.forEach((item) => {
       if (item?.checked) checked.push(item);
@@ -82,26 +89,51 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     return checked;
   };
 
-  const handleDownload = async () => {
-    // const checkedList = getChecked();
-    const downloadUrl = `/api/id/formId/submissionId/download`;
+  // Note: A hack to enable an ajax file download through axios. Oddly setting the responseType
+  // is not enough. Come back to this, suspect there is a better way..
+  const forceFileDownload = (response: any, fileName: string) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+  };
 
-    // try {
-    //   setSubmitting(true);
-    //   setErrorState({ message: "" });
-    await axios({
-      url: downloadUrl,
+  const downloadFile = async (url: string, submissionName: string) => {
+    return await axios({
+      url: url,
       method: "GET",
+      responseType: "blob",
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-      // data: {
-      // },
+    }).then((response) => {
+      forceFileDownload(response, `${submissionName}.html`);
+      // return submissionName;
     });
-    // } catch (err) {
-    //   logMessage.error(err as Error);
-    //   setErrorState({ message: "Unable to add user to form." });
-    // } finally {
-    //   setSubmitting(false);
-    // }
+  };
+
+  // TODO: User will need to click "allow" for the multiple file download dialog, maybe want to add
+  // a note in the UI
+  const handleDownload = async () => {
+    setErrorMessage("");
+    setIsSubmitting(true);
+
+    const downloads = getCheckedItemsList().map((item) => {
+      const url = `/api/id/${formId}/${item.name}/download`;
+      const fileName = item.name;
+      return downloadFile(url, fileName);
+    });
+
+    await Promise.all(downloads)
+      .catch((err) => {
+        logMessage.error(err as Error);
+        setErrorMessage("TODO Error downloading selected files.");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setErrorMessage("");
+        // TODO: update Download Response Table with updated download responses
+      });
   };
 
   return (
@@ -170,6 +202,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                             <td>
                               <input
                                 id={submission.name}
+                                className="gc-input-checkbox__input"
                                 name="responses"
                                 type="checkbox"
                                 checked={checkedItems.get(submission.name)?.checked}
@@ -193,9 +226,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                   </table>
                   <div>
                     <button className="gc-button" type="button" onClick={handleDownload}>
-                      Download {getChecked().length} selected responses
+                      Download {getCheckedItemsList().length} selected responses
                     </button>
                   </div>
+                  {isSubmitting && <h2>TODO Downloading</h2>}
+                  {errorMessage && <h2>TODO {errorMessage}</h2>}
                 </>
               )}
 
