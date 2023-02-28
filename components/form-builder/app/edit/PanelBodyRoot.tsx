@@ -1,22 +1,19 @@
 import React from "react";
-import { useTranslation } from "next-i18next";
 
 import { PanelBody } from "./";
 import { FormElementWithIndex, Language, LocalizedElementProperties } from "../../types";
 import { useTemplateStore } from "../../store";
-import { FormElementTypes } from "@lib/types";
+import { useUpdateElement } from "../../hooks";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
-  const { t } = useTranslation("form-builder");
-  const { localizeField, updateField, unsetField, resetChoices, elements } = useTemplateStore(
-    (s) => ({
-      localizeField: s.localizeField,
-      elements: s.form.elements,
-      updateField: s.updateField,
-      unsetField: s.unsetField,
-      resetChoices: s.resetChoices,
-    })
-  );
+  const { updateElement, updateTextElement } = useUpdateElement();
+  const { localizeField, updateField, resetChoices, elements } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    elements: s.form.elements,
+    updateField: s.updateField,
+    unsetField: s.unsetField,
+    resetChoices: s.resetChoices,
+  }));
 
   // all element state updaters should be setup at this level
   // we should be able to pass and `item` + `updaters`to build up each element panel
@@ -39,69 +36,14 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
     updateField(`form.elements[${itemIndex}].properties.validation.required`, checked);
   };
 
-  const onElementChange = (id: string, itemIndex: number) => {
-    switch (id) {
-      case "text":
-      case "textField":
-      case "email":
-      case "phone":
-      case "date":
-      case "number":
-        updateField(`form.elements[${itemIndex}].type`, "textField");
-        if (id === "textField" || id === "text") {
-          unsetField(`form.elements[${itemIndex}].properties.validation.type`);
-        } else {
-          updateField(`form.elements[${itemIndex}].properties.validation.type`, id);
-          unsetField(`form.elements[${itemIndex}].properties.validation.maxLength`);
-        }
-        break;
-      case "richText":
+  const onElementChange = (type: string, itemIndex: number) => {
+    const path = `form.elements[${itemIndex}]`;
+
+    if (!updateTextElement(type, path)) {
+      updateElement(type, path);
+      if (type === "richText") {
         resetChoices(itemIndex);
-      // no break here (we want default to happen)
-      default: // eslint-disable-line no-fallthrough
-        if (id === FormElementTypes.attestation) {
-          id = FormElementTypes.checkbox;
-        }
-        updateField(`form.elements[${itemIndex}].type`, id);
-        unsetField(`form.elements[${itemIndex}].properties.validation.type`);
-        unsetField(`form.elements[${itemIndex}].properties.validation.maxLength`);
-        break;
-    }
-
-    if (id === FormElementTypes.attestation) {
-      updateField(`form.elements[${itemIndex}].properties.validation.all`, true);
-    } else {
-      unsetField(`form.elements[${itemIndex}].properties.validation.all`);
-    }
-
-    _setDefaultDescription(id, itemIndex);
-  };
-
-  const _setDefaultDescription = (id: string, itemIndex: number) => {
-    switch (id) {
-      case "email":
-      case "phone":
-      case "date":
-      case "number":
-        // update default description en
-        updateField(
-          `form.elements[${itemIndex}].properties[${localizeField(
-            LocalizedElementProperties.DESCRIPTION,
-            "en"
-          )}]`,
-          t(`defaultElementDescription.${id}`, { lng: "en" })
-        );
-        // update default description fr
-        updateField(
-          `form.elements[${itemIndex}].properties[${localizeField(
-            LocalizedElementProperties.DESCRIPTION,
-            "fr"
-          )}]`,
-          t(`defaultElementDescription.${id}`, { lng: "fr" })
-        );
-        break;
-      default:
-        break;
+      }
     }
   };
 
