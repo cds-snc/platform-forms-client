@@ -5,7 +5,7 @@ import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { isValidatedTextType } from "../../util";
 import { FormElementTypes } from "@lib/types";
-import { useIsWithin } from "@components/form-builder/hooks/useIsWithin";
+import { useIsWithin, useUpdateElement } from "@components/form-builder/hooks";
 import { blockLoader } from "../../blockLoader";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
@@ -35,6 +35,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
+  const { setDefaultDescription } = useUpdateElement();
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -67,10 +68,12 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
       if (isValidatedTextType(type)) {
         // add 1 to index because it's a new element
-        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
+        const path = `form.elements[${index + 1}]`;
+        updateField(`${path}.properties.validation.type`, type as string);
+        setDefaultDescription(type as FormElementTypes, path);
       }
     },
-    [add, setFocusInput, updateField]
+    [add, setFocusInput, updateField, setDefaultDescription]
   );
 
   const { ref, focusWithinProps, isWithin } = useIsWithin();
