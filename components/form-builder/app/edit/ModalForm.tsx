@@ -97,11 +97,8 @@ export const ModalForm = ({
       </div>
       {item.type === FormElementTypes.textField && (
         <div className="mt-8 mb-2">
-          <ModalLabel htmlFor="">Select an autocomplete attribute</ModalLabel>
-          <Hint>
-            This option is great when the form filler is providing personal information like their
-            address, email or phone number.
-          </Hint>
+          <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
+          <Hint>{t("selectAutocompleteHint")}</Hint>
           <AutocompleteDropdown
             handleChange={(e) => {
               const autoComplete = e.target.value;
