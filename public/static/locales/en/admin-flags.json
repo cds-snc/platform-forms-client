@@ -58,10 +58,6 @@
       "title": "Form builder share menu",
       "description": "Enable share menu dropdown"
     },
-    "editableFilename": {
-      "title": "Form builder editable filename",
-      "description": "Updates header to include editable filename"
-    },
     "formBuilderExperimentalBlocks": {
       "title": "Form builder blocks",
       "description": "Enable experimental blocks"

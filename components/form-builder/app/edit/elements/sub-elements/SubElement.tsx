@@ -161,7 +161,8 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   };
 
   const elementFilter: ElementOptionsFilter = (elements) => {
-    return elements.filter((element) => element.id !== "dynamicRow");
+    const notAllowed = ["dynamicRow", "attestation"];
+    return elements.filter((element) => !notAllowed.includes(element.id));
   };
 
   if (!subElements || subElements.length < 1)
@@ -236,7 +237,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       })}
 
       {item.type === "dynamicRow" && (
-        <div className="max-w-[800px] border-1 border-gray-300 h-auto -mt-px first-of-type:rounded-t-md last-of-type:rounded-b-md">
+        <div className="max-w-[800px] border-1 border-gray-300 h-auto mt-4 first-of-type:rounded-t-md last-of-type:rounded-b-md">
           <LockedBadge className="absolute right-7 top-[15px]" />
           <div className="mx-7 mt-5 mb-7">
             <h2 className="text-h3 pb-3">{t("questionSet.addAnother.title")}</h2>

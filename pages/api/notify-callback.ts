@@ -4,8 +4,8 @@ import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/clie
 import { cors, middleware } from "@lib/middleware";
 import { extractBearerTokenFromReq } from "@lib/middleware/validTemporaryToken";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
+import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
 /**
@@ -75,12 +75,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
  * @returns void
  */
 async function removeProcessedMark(submissionID: string) {
-  const documentClient = DynamoDBDocumentClient.from(
-    new DynamoDBClient({
-      region: process.env.AWS_REGION ?? "ca-central-1",
-      endpoint: process.env.LOCAL_AWS_ENDPOINT,
-    })
-  );
+  const documentClient = connectToDynamo();
 
   const updateItem = {
     TableName: "ReliabilityQueue",

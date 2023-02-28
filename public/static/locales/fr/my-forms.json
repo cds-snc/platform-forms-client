@@ -1,13 +1,13 @@
 {
-  "title": "Mes formulaires ",
+  "title": "Vos formulaires ",
   "nav": {
-    "drafts": "Ébauches de formulaires",
-    "published": "Publié",
+    "drafts": "Ébauches",
+    "published": "Publiés",
     "all": "Tous"
   },
   "actions": {
     "resumeForm": "Reprendre la rédaction de formulaire en cours",
-    "createNewForm": "Créer un nouveau formulaire +"
+    "createNewForm": "Créer un nouveau formulaire"
   },
   "cards": {
     "noForms": "Vous n’avez aucun formulaire enregistré.",
@@ -31,7 +31,7 @@
       "preview": "Prévisualiser",
       "edit": "Modifier",
       "settings": "Paramètres",
-      "delete": "Supprimer le formulaire",
+      "delete": "Supprimer",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
     }
