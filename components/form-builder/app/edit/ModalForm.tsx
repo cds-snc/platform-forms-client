@@ -112,7 +112,7 @@ export const ModalForm = ({
               selectedValue={autocompleteSelectedValue as string}
             />{" "}
             <span>
-              <InfoIcon className="inline-block w-7" /> When not to use autocomplete
+              <InfoIcon className="inline-block w-7" /> {t("autocompleteWhenNotToUse")}
             </span>
           </div>
         </div>

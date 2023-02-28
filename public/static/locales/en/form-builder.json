@@ -412,5 +412,6 @@
     "phone": "Phone number"
   },
   "selectAutocomplete": "Select an autocomplete attribute",
-  "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number."
+  "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
+  "autocompleteWhenNotToUse": "When not to use autocomplete"
 }
