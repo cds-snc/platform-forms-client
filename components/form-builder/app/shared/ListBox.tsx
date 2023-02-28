@@ -10,7 +10,12 @@ export const ListBox = ({
   handleChange,
   ariaLabel,
 }: {
-  options: { id: string; value: string; group: { id: string; value: string } }[];
+  options: {
+    id: string;
+    value: string;
+    group: { id: string; value: string };
+    className?: string;
+  }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
 }) => {
@@ -64,10 +69,12 @@ export const ListBox = ({
               id,
               value,
               group,
+              className,
             }: {
               id: string;
               value: string;
               group: { id: string; value: string };
+              className?: string;
             },
             index: number
           ) => {
@@ -97,7 +104,7 @@ export const ListBox = ({
                       rowsRef.current[`row-${index}` as unknown as number] = el;
                     }
                   }}
-                  className={`${
+                  className={`${className} ${
                     focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
                   } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
                   tabIndex={-1}

@@ -39,7 +39,7 @@ export const Preview = () => {
 
   const router = useRouter();
 
-  const { t } = useTranslation(["form-builder", "common"]);
+  const { t } = useTranslation(["common", "form-builder"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language, t);
   const { saveForm } = useTemplateApi();
@@ -83,25 +83,27 @@ export const Preview = () => {
       >
         {status !== "authenticated" ? (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+            <Markdown options={{ forceBlock: true }}>
+              {t("signInToTest", { ns: "form-builder" })}
+            </Markdown>
           </div>
         ) : (
           <div className="bg-purple-200 p-2 inline-block mb-1">
-            {t("submittedResponsesText", { email })}
+            {t("submittedResponsesText", { ns: "form-builder", email })}
           </div>
         )}
 
         {sent && (
           <>
             <button className="mt-4 clear-both block" onClick={() => clearSent()}>
-              <BackArrowIcon className="inline-block" /> {t("backToForm")}
+              <BackArrowIcon className="inline-block" /> {t("backToForm", { ns: "form-builder" })}
             </button>
           </>
         )}
 
         <h1 className="md:text-h1 mt-4">
           {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-            t("pagePreview")}
+            t("pagePreview", { ns: "form-builder" })}
         </h1>
 
         {sent ? (
@@ -141,7 +143,9 @@ export const Preview = () => {
                     className="inline-block py-1 px-4 bg-purple-200"
                     {...getLocalizationAttribute()}
                   >
-                    <Markdown options={{ forceBlock: true }}>{t("signInToTest")}</Markdown>
+                    <Markdown options={{ forceBlock: true }}>
+                      {t("signInToTest", { ns: "form-builder" })}
+                    </Markdown>
                   </div>
                 )}
               </div>
@@ -154,7 +158,9 @@ export const Preview = () => {
 
       {status !== "authenticated" && (
         <>
-          <span className="bg-slate-200 p-2 inline-block mb-1">{t("confirmationPage")}</span>
+          <span className="bg-slate-200 p-2 inline-block mb-1">
+            {t("confirmationPage", { ns: "form-builder" })}
+          </span>
           <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
