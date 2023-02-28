@@ -5,6 +5,7 @@ import { isValidatedTextType } from "../../util";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
 import { blockLoader } from "../../blockLoader";
+import { useUpdateElement } from "@components/form-builder/hooks";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const { add, setFocusInput, updateField } = useTemplateStore((s) => ({
@@ -12,6 +13,8 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
     updateField: s.updateField,
     setFocusInput: s.setFocusInput,
   }));
+
+  const { setDefaultDescription } = useUpdateElement();
 
   /* Note this callback is also in PanelActions */
   const handleAddElement = useCallback(
@@ -25,10 +28,12 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
       add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
       if (isValidatedTextType(type)) {
         // add 1 to index because it's a new element
-        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
+        const path = `form.elements[${index + 1}]`;
+        updateField(`${path}.properties.validation.type`, type as string);
+        setDefaultDescription(type as FormElementTypes, path);
       }
     },
-    [add, setFocusInput, updateField]
+    [add, setFocusInput, updateField, setDefaultDescription]
   );
 
   if (!addElement) return null;
