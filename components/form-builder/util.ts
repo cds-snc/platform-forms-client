@@ -156,10 +156,6 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
 };
 
 export const autoCompleteFields = [
-  "email",
-  "phone",
-  "date",
-  "number",
   "name",
   "given-name",
   "additional-name",
@@ -182,6 +178,8 @@ export const autoCompleteFields = [
   "bday-month",
   "bday-year",
   "url",
+  "email",
+  "phone",
 ];
 
 // check if the type is being passed is a "text field" input but has a ƒspecific type

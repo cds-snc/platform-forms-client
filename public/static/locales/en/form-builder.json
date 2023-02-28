@@ -407,6 +407,8 @@
     "bday-day": "Day of birthday",
     "bday-month": "Birth month",
     "bday-year": "Birth year",
-    "url": "Website address"
+    "url": "Website address",
+    "email": "Email address",
+    "phone": "Phone number"
   }
 }
