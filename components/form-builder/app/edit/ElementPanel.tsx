@@ -76,12 +76,11 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     [add, setFocusInput, updateField, setDefaultDescription]
   );
 
-  const { ref, focusWithinProps, isWithin } = useIsWithin();
+  const { focusWithinProps, isWithin } = useIsWithin();
 
   return (
     <div
       {...focusWithinProps}
-      ref={ref}
       className={`element-${item.index} ${className} group ${
         isWithin ? "active" : ""
       } hover:bg-violet-50 focus:bg-violet-50 border border-t-0 border-black max-w-[800px] h-auto relative`}
