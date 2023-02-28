@@ -48,7 +48,9 @@ export const PanelBody = ({
           "" +
           (isRichText || isDynamicRow
             ? "relative "
-            : "flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm ")
+            : `flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm ${
+                item.properties.autoComplete && "pb-14"
+              }`)
         }
       >
         {!isRichText && !isDynamicRow && selectedItem?.id && (
@@ -79,9 +81,17 @@ export const PanelBody = ({
               {maxLength}
             </div>
           )}
-          {!isDynamicRow && !isRichText && (
-            <ElementRequired onRequiredChange={onRequiredChange} item={item} />
-          )}
+          <div className="absolute xxl:relative xxl:right-auto xxl:top-auto w-2/5 xxl:w-auto pl-2 right-0 top-12">
+            {!isDynamicRow && !isRichText && (
+              <ElementRequired onRequiredChange={onRequiredChange} item={item} />
+            )}
+            {item.properties.autoComplete && (
+              <div className="mt-5">
+                <strong>Autcomplete is set to:</strong>{" "}
+                {t(`autocompleteOptions.${item.properties.autoComplete}`)}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
