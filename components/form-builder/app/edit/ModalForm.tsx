@@ -34,6 +34,12 @@ export const ModalForm = ({
   const { t } = useTranslation("form-builder");
   const localizeField = useTemplateStore((s) => s.localizeField);
 
+  const handleAutocompleteChange = (value: string) => {
+    //
+  };
+
+  const selectedValue = "";
+
   return (
     <form
       className="modal-form"
@@ -100,7 +106,10 @@ export const ModalForm = ({
             This option is great when the form filler is providing personal information like their
             address, email or phone number.
           </Hint>
-          <AutocompleteDropdown />
+          <AutocompleteDropdown
+            handleChange={handleAutocompleteChange}
+            selectedValue={selectedValue}
+          />
         </div>
       )}
       {item.type === FormElementTypes.textField &&
