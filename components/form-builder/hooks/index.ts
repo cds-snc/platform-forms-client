@@ -5,4 +5,6 @@ export { usePublish } from "./usePublish";
 export { useActivePathname } from "./useActivePathname";
 export { useTemplateStatus } from "./useTemplateStatus";
 export { TemplateApiProvider, useTemplateApi } from "./useTemplateApi";
+export { useIsWithin } from "./useIsWithin";
 export { usePanelActions } from "./usePanelActions";
+export { useUpdateElement } from "./useUpdateElement";
