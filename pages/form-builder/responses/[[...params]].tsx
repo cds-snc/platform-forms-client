@@ -18,6 +18,7 @@ import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
 import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
+import axios from "axios";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -47,6 +48,61 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const buttonActionsReportProblems = (
     <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
   );
+
+  const submissionNames = new Map(
+    vaultSubmissions.map((submission) => [
+      submission.name,
+      {
+        // "formId": submission.formID,
+        checked: false,
+      },
+    ])
+  );
+  const [checkedItems, setCheckedItems] = useState(submissionNames);
+
+  const handleChecked = (e) => {
+    const id = e.target.id;
+    const checked = e.target.checked;
+    // Note: Need to clone and set so React change detection notices a change in the Map
+    setCheckedItems(
+      new Map(
+        checkedItems.set(id, {
+          checked: checked,
+          // "formId": checkedItems.get(id)?.formId
+        })
+      )
+    );
+  };
+
+  const getChecked = () => {
+    const checked = [];
+    checkedItems.forEach((item) => {
+      if (item?.checked) checked.push(item);
+    });
+    return checked;
+  };
+
+  const handleDownload = async () => {
+    // const checkedList = getChecked();
+    const downloadUrl = `/api/id/formId/submissionId/download`;
+
+    // try {
+    //   setSubmitting(true);
+    //   setErrorState({ message: "" });
+    await axios({
+      url: downloadUrl,
+      method: "GET",
+      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      // data: {
+      // },
+    });
+    // } catch (err) {
+    //   logMessage.error(err as Error);
+    //   setErrorState({ message: "Unable to add user to form." });
+    // } finally {
+    //   setSubmitting(false);
+    // }
+  };
 
   return (
     <>
@@ -98,6 +154,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                   <table>
                     <thead>
                       <tr>
+                        <th>Select</th>
                         <th>Response ID</th>
                         <th>Status</th>
                         <th>Download Response</th>
@@ -110,7 +167,18 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       <>
                         {vaultSubmissions.map((submission, index) => (
                           <tr key={index}>
-                            <td>{submission.name}</td>
+                            <td>
+                              <input
+                                id={submission.name}
+                                name="responses"
+                                type="checkbox"
+                                checked={checkedItems.get(submission.name)?.checked}
+                                onChange={handleChecked}
+                              />
+                            </td>
+                            <td>
+                              <label htmlFor={submission.name}>{submission.name}</label>
+                            </td>
                             <td>{submission.status}</td>
                             <td></td>
                             <td></td>
@@ -123,19 +191,25 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       </>
                     </tbody>
                   </table>
-                  <div>TODO download button here</div>
+                  <div>
+                    <button className="gc-button" type="button" onClick={handleDownload}>
+                      Download {getChecked().length} selected responses
+                    </button>
+                  </div>
                 </>
               )}
 
-              <Card
-                icon={
-                  <picture>
-                    <img src="/img/mailbox.png" width="193" height="200" alt="" />
-                  </picture>
-                }
-                title={"You have no responses"}
-                content={"There are no responses available to download."}
-              ></Card>
+              {vaultSubmissions?.length <= 0 && (
+                <Card
+                  icon={
+                    <picture>
+                      <img src="/img/mailbox.png" width="193" height="200" alt="" />
+                    </picture>
+                  }
+                  title={"You have no responses"}
+                  content={"There are no responses available to download."}
+                ></Card>
+              )}
             </div>
           </>
         )}
