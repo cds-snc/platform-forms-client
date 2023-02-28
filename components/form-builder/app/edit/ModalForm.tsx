@@ -34,11 +34,7 @@ export const ModalForm = ({
   const { t } = useTranslation("form-builder");
   const localizeField = useTemplateStore((s) => s.localizeField);
 
-  const handleAutocompleteChange = (value: string) => {
-    //
-  };
-
-  const selectedValue = "";
+  const autocompleteSelectedValue = properties.autoComplete || "";
 
   return (
     <form
@@ -100,15 +96,21 @@ export const ModalForm = ({
         ></Checkbox>
       </div>
       {item.type === FormElementTypes.textField && (
-        <div className="mb-2">
+        <div className="mt-8 mb-2">
           <ModalLabel htmlFor="">Select an autocomplete attribute</ModalLabel>
           <Hint>
             This option is great when the form filler is providing personal information like their
             address, email or phone number.
           </Hint>
           <AutocompleteDropdown
-            handleChange={handleAutocompleteChange}
-            selectedValue={selectedValue}
+            handleChange={(e) => {
+              const autoComplete = e.target.value;
+              updateModalProperties(item.index, {
+                ...properties,
+                ...{ autoComplete },
+              });
+            }}
+            selectedValue={autocompleteSelectedValue as string}
           />
         </div>
       )}

@@ -1,5 +1,5 @@
 import { useAutocompleteOptions } from "@components/form-builder/hooks/useAutocompleteOptions";
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 interface DropdownOptionProps {
   label: string;
@@ -8,18 +8,14 @@ interface DropdownOptionProps {
 }
 
 const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
-  return (
-    <option value={props.value} selected={props.selected ?? false}>
-      {props.label}
-    </option>
-  );
+  return <option value={props.value}>{props.label}</option>;
 };
 
 export const AutocompleteDropdown = ({
   handleChange,
   selectedValue,
 }: {
-  handleChange: (value: string) => void;
+  handleChange: (evt: ChangeEvent<HTMLSelectElement>) => void;
   selectedValue: string;
 }) => {
   const autocompleteOptions = useAutocompleteOptions();
@@ -36,7 +32,7 @@ export const AutocompleteDropdown = ({
   });
 
   return (
-    <select className="gc-dropdown" onChange={handleChange}>
+    <select className="gc-dropdown" onChange={handleChange} value={selectedValue}>
       <option value="">Select an autocomplete attribute</option>
       {options}
     </select>
