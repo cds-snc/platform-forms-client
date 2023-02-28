@@ -1,4 +1,5 @@
 import { useAutocompleteOptions } from "@components/form-builder/hooks/useAutocompleteOptions";
+import { t } from "i18next";
 import React, { ChangeEvent } from "react";
 
 interface DropdownOptionProps {
@@ -33,7 +34,7 @@ export const AutocompleteDropdown = ({
 
   return (
     <select className="gc-dropdown" onChange={handleChange} value={selectedValue}>
-      <option value="">Select an autocomplete attribute</option>
+      <option value="">{t("selectAutocomplete")}</option>
       {options}
     </select>
   );

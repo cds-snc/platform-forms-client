@@ -49,7 +49,7 @@ export const PanelBody = ({
           (isRichText || isDynamicRow
             ? "relative "
             : `flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm ${
-                item.properties.autoComplete && "pb-10"
+                item.properties.autoComplete && "pb-14"
               }`)
         }
       >
