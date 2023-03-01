@@ -32,7 +32,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { addElement: updateElement, isTextField } = useUpdateElement();
+  const { addElement, isTextField } = useUpdateElement();
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -63,9 +63,9 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
       setFocusInput(true);
       add(index, isTextField(type as string) ? FormElementTypes.textField : type);
-      updateElement(type as string, `form.elements[${index + 1}]`);
+      addElement(type as string, `form.elements[${index + 1}]`);
     },
-    [add, setFocusInput, updateElement, isTextField]
+    [add, setFocusInput, addElement, isTextField]
   );
 
   const { focusWithinProps, isWithin } = useIsWithin();
