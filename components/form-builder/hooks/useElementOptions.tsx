@@ -1,5 +1,4 @@
 import React from "react";
-import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import {
   CalendarIcon,
@@ -34,7 +33,6 @@ import { ElementOptionsFilter, ElementOption } from "../types";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const { status: experimentalBlocks } = useFlag("formBuilderExperimentalBlocks");
 
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
@@ -148,11 +146,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.advanced,
     },
   ];
-
-  if (experimentalBlocks) {
-    // add experimental blocks here:
-    // elementOptions.push();
-  }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
 };

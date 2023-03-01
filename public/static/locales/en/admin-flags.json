@@ -57,10 +57,6 @@
     "shareMenu": {
       "title": "Form builder share menu",
       "description": "Enable share menu dropdown"
-    },
-    "formBuilderExperimentalBlocks": {
-      "title": "Form builder blocks",
-      "description": "Enable experimental blocks"
     }
   }
 }
