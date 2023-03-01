@@ -153,7 +153,8 @@
     "date": "Entrez une date comme mm/dd/yyyy",
     "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
-    "phone": "Entrez un numéro de téléphone comme 111-222-3333"
+    "phone": "Entrez un numéro de téléphone comme 111-222-3333",
+    "postal-code": ""
   },
   "description": "La description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
