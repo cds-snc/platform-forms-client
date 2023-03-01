@@ -28,6 +28,22 @@ export const useUpdateElement = () => {
     );
   };
 
+  const setDefaultTitle = (type: string, path: string) => {
+    const titleEn = localizeField(LocalizedElementProperties.TITLE, "en");
+    const titleFr = localizeField(LocalizedElementProperties.TITLE, "fr");
+
+    // update default description en
+    updateField(
+      `${path}.properties[${titleEn}]`,
+      t(`addElementDialog.${type}.label`, { lng: "en" })
+    );
+    // update default description fr
+    updateField(
+      `${path}.properties[${titleFr}]`,
+      t(`addElementDialog.${type}.label`, { lng: "fr" })
+    );
+  };
+
   const updateTextElement = (type: string, path: string) => {
     if (type === "text" || type === "textField") {
       unsetField(`${path}.properties.validation.type`);
@@ -44,6 +60,7 @@ export const useUpdateElement = () => {
       updateField(`${path}.properties.validation.type`, type);
       unsetField(`${path}.properties.autoComplete`);
       unsetField(`${path}.properties.validation.maxLength`);
+      setDefaultTitle(type, path);
       return true;
     }
 
@@ -77,6 +94,7 @@ export const useUpdateElement = () => {
 
     if (isAutoCompleteField(type as string)) {
       updateField(`${path}.properties.autoComplete`, type as string);
+      setDefaultTitle(type, path);
       setDefaultDescription(type as FormElementTypes, path);
     }
   };
