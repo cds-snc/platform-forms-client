@@ -8,6 +8,20 @@ import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
+const sqsClient = new SQSClient({
+  region: process.env.AWS_REGION ?? "ca-central-1",
+  endpoint: process.env.LOCAL_AWS_ENDPOINT,
+});
+
+const getQueueURL = () =>
+  sqsClient
+    .send(
+      new GetQueueUrlCommand({
+        QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
+      })
+    )
+    .then((data) => data.QueueUrl);
+
 /**
  * @description
  * Request type: POST
@@ -35,26 +49,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void>
     return res.status(200).json({ status: "submission will not be reprocessed" });
   }
 
-  const sqsClient = new SQSClient({
-    region: process.env.AWS_REGION ?? "ca-central-1",
-    endpoint: process.env.LOCAL_AWS_ENDPOINT,
-  });
-
   try {
     // Remove previous process completion identifier
     await removeProcessedMark(submissionID);
 
-    const getQueueURLCommand = new GetQueueUrlCommand({
-      QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
-    });
-
-    const getQueueURLCommandOutput = await sqsClient.send(getQueueURLCommand);
+    const reprocessQueueURL = process.env.REPROCESS_SUBMISSION_QUEUE_URL ?? (await getQueueURL());
 
     const sendMessageCommand = new SendMessageCommand({
       MessageBody: JSON.stringify({ submissionID: submissionID }),
       MessageDeduplicationId: submissionID,
       MessageGroupId: "Group-" + submissionID,
-      QueueUrl: getQueueURLCommandOutput.QueueUrl,
+      QueueUrl: reprocessQueueURL,
     });
 
     await sqsClient.send(sendMessageCommand);
