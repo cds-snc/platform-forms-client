@@ -45,11 +45,12 @@ export const useUpdateElement = () => {
   };
 
   const updateTextElement = (type: string, path: string) => {
-    updateField(`${path}.type`, "textField");
-
     if (type === "textArea" || type === "textField") {
+      updateField(`${path}.type`, type);
       return;
     }
+
+    updateField(`${path}.type`, "textField");
 
     if (isValidatedTextType(type as FormElementTypes)) {
       updateField(`${path}.properties.validation.type`, type);

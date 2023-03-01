@@ -43,7 +43,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
-  const { addElement: updateElement, updateTextElement, isTextField } = useUpdateElement();
+  const { addElement, updateElement, isTextField } = useUpdateElement();
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
@@ -54,9 +54,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       );
       // add 1 to index because it's a new element
       const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
-      updateElement(type as string, path);
+      addElement(type as string, path);
     },
-    [addSubItem, elIndex, isTextField, updateElement]
+    [addSubItem, elIndex, isTextField, addElement]
   );
 
   const handlePlaceHolderText = useCallback(
@@ -82,12 +82,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
   const onElementChange = (type: string, elIndex: number, subIndex: number) => {
     const path = `form.elements[${elIndex}].properties.subElements[${subIndex}]`;
-
-    if (!updateTextElement(type, path)) {
-      updateElement(type, path);
-      if (type === "richText") {
-        resetSubChoices(elIndex, subIndex);
-      }
+    updateElement(type, path);
+    if (type === "richText") {
+      resetSubChoices(elIndex, subIndex);
     }
   };
 
