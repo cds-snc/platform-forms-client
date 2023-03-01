@@ -19,12 +19,12 @@ export const useUpdateElement = () => {
     // update default description en
     updateField(
       `${path}.properties[${descriptionEn}]`,
-      t(`defaultElementDescription.${type}`, { lng: "en" })
+      t([`defaultElementDescription.${type}`, ""], { lng: "en" })
     );
     // update default description fr
     updateField(
       `${path}.properties[${descriptionFr}]`,
-      t(`defaultElementDescription.${type}`, { lng: "fr" })
+      t([`defaultElementDescription.${type}`, ""], { lng: "fr" })
     );
   };
 
@@ -35,29 +35,24 @@ export const useUpdateElement = () => {
     // update default title en
     updateField(
       `${path}.properties[${titleEn}]`,
-      t(`addElementDialog.${type}.label`, { lng: "en" })
+      t([`addElementDialog.${type}.label`, ""], { lng: "en" })
     );
     // update default title fr
     updateField(
       `${path}.properties[${titleFr}]`,
-      t(`addElementDialog.${type}.label`, { lng: "fr" })
+      t([`addElementDialog.${type}.label`, ""], { lng: "fr" })
     );
   };
 
   const updateTextElement = (type: string, path: string) => {
-    if (type === "textArea" || type === "textField") {
-      unsetField(`${path}.properties.validation.type`);
-      unsetField(`${path}.properties.autoComplete`);
-      return true;
-    }
-
     updateField(`${path}.type`, "textField");
-    setDefaultDescription(type, path);
+
+    if (type === "textArea" || type === "textField") {
+      return;
+    }
 
     if (isValidatedTextType(type as FormElementTypes)) {
       updateField(`${path}.properties.validation.type`, type);
-      unsetField(`${path}.properties.autoComplete`);
-      unsetField(`${path}.properties.validation.maxLength`);
       setDefaultTitle(type, path);
     }
 
@@ -65,25 +60,30 @@ export const useUpdateElement = () => {
       updateField(`${path}.properties.autoComplete`, type);
       setDefaultDescription(type as FormElementTypes, path);
     }
-
-    return true;
   };
 
   const updateElement = (type: string, path: string) => {
+    unsetField(`${path}.properties.validation.all`);
+    unsetField(`${path}.properties.validation.type`);
+    unsetField(`${path}.properties.autoComplete`);
+    setDefaultDescription(type, path);
+    setDefaultTitle(type, path);
+
     if (isTextField(type as FormElementTypes)) {
       return updateTextElement(type, path);
     }
 
     if (type === FormElementTypes.attestation) {
+      // Need to swap type because incoming `attestation` is a checkbox type
       type = FormElementTypes.checkbox;
       updateField(`${path}.properties.validation.all`, true);
-    } else {
-      unsetField(`${path}.properties.validation.all`);
+    }
+
+    if (!isTextField(type as FormElementTypes)) {
+      unsetField(`${path}.properties.validation.maxLength`);
     }
 
     updateField(`${path}.type`, type);
-    unsetField(`${path}.properties.validation.type`);
-    unsetField(`${path}.properties.validation.maxLength`);
   };
 
   const addElement = (type: string, path: string) => {
