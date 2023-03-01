@@ -61,14 +61,14 @@ const handler = async (
 ): Promise<void> => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     switch (req.method) {
       case "GET":
         await getUserList(ability, res);
         break;
       case "PUT":
-        await updatePrivilegeOnUser(ability, req, res, session);
+        await updatePrivilegeOnUser(ability, req, res);
         break;
     }
   } catch (error) {

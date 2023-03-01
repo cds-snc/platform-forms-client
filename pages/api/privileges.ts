@@ -87,7 +87,7 @@ const handler = async (
 ): Promise<void> => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     switch (req.method) {
       case "POST":

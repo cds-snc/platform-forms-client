@@ -230,7 +230,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   if (formID && session) {
     try {
-      const ability = createAbility(session.user.privileges);
+      const ability = createAbility(session);
       const [initialForm, submissions] = await Promise.all([
         getFullTemplateByID(ability, formID),
         listAllSubmissions(ability, formID),

@@ -17,7 +17,7 @@ const handler = async (
     const key = req.query.key as string;
     if (Array.isArray(key) || !key)
       return res.status(400).json({ error: "Malformed API Request Flag Key is not defined" });
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     await disableFlag(ability, key);
     const flags = await checkAll(ability);

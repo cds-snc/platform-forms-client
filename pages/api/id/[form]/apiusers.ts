@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
 import { Session } from "next-auth";
 import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
-import { MiddlewareProps, WithRequired } from "@lib/types";
+import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
 
@@ -16,7 +16,7 @@ const handler = async (
 ): Promise<void> => {
   const { session } = props as WithRequired<MiddlewareProps, "session">;
   try {
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
     switch (req.method) {
       case "GET":
         return await getEmailListByFormID(ability, req, res);

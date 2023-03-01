@@ -23,7 +23,7 @@ const templates = async (
   try {
     if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
     const user = session.user;
 
     const response = await route({ ability: ability, user: user, method: req.method, ...req.body });

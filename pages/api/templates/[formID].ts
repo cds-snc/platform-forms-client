@@ -32,7 +32,7 @@ const templates = async (
   try {
     if (!session) return res.status(401).json({ error: "Unauthorized" });
 
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     const response = await templateCRUD({
       ability: ability,

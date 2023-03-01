@@ -46,11 +46,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
   if (!formID || Array.isArray(formID) || !submissionName || Array.isArray(submissionName))
     return res.status(400).json({ error: "Bad Request" });
 
+  const ability = createAbility(session);
+
   try {
-    const fullFormTemplate = await getFullTemplateByID(
-      createAbility(session.user.privileges),
-      formID
-    );
+    const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) return res.status(404).json({ error: "Form Not Found" });
 
