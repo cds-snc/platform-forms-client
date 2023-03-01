@@ -27,7 +27,7 @@ const FormDisplayLayout = ({ children, formRecord, embedded }: FormDisplayLayout
       </Head>
 
       <SkipLink />
-      <div className={classes}>
+      <div className={classes} data-theme="gcds">
         {!embedded && (
           <header>
             <Fip formRecord={formRecord} showLogin={false} showLanguageToggle={true} />

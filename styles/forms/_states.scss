@@ -27,22 +27,30 @@
   }
 
   &.gc-alert--error:not(.gc-alert--validation) {
-    background-color: var(--gcds-alert-danger-background);
+    [data-theme="gcds"] & {
+      background-color: var(--gcds-alert-danger-background);
+    }
     @apply border-l-xl border-red-500;
   }
 
   &.gc-alert--success {
-    background-color: var(--gcds-alert-success-background);
+    [data-theme="gcds"] & {
+      background-color: var(--gcds-alert-success-background);
+    }
     @apply border-l-xl border-green-500;
   }
 
   &.gc-alert--warning {
-    background-color: var(--gcds-alert-warning-background);
+    [data-theme="gcds"] & {
+      background-color: var(--gcds-alert-warning-background);
+    }
     @apply border-l-xl border-yellow-500;
   }
 
   &.gc-alert--info {
-    background-color: var(--gcds-alert-info-background);
+    [data-theme="gcds"] & {
+      background-color: var(--gcds-alert-info-background);
+    }
     @apply border-l-xl border-blue-500;
   }
 

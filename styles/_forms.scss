@@ -1,3 +1,4 @@
+@import "forms/tokens";
 @import "forms/buttons";
 @import "forms/layout";
 @import "forms/states";
@@ -50,7 +51,9 @@
 .gc-textarea,
 .gc-input-text,
 .gc-dropdown {
-  border-radius: var(--gcds-input-border-radius);
+  [data-theme="gcds"] & {
+    border-radius: var(--gcds-input-border-radius);
+  }
   @apply py-3 px-2 md:text-small_base text-base border-solid border-2 border-black-form;
 
   &:focus {
@@ -114,8 +117,10 @@
 
     // Box.
     & + .gc-checkbox-label:before {
+      [data-theme="gcds"] & {
+        border-radius: var(--gcds-input-border-radius);
+      }
       content: "";
-      border-radius: var(--gcds-input-border-radius);
       @apply md:mr-3 mr-3 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
     }
 

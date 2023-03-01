@@ -3,12 +3,10 @@
 // Button variants
 .gc-button {
   // Default dark blue variant
-  background-color: var(--gcds-button-primary-default-background);
-  color: var(--gcds-button-primary-default-text);
-  @apply md:w-full md:text-small_base cursor-pointer p-3 mr-2 m-0 text-base no-underline outline-none rounded-md;
+  @apply bg-blue-900 text-white md:w-full md:text-small_base cursor-pointer p-3 mr-2 m-0 text-base no-underline outline-none rounded-md border-md border-transparent;
 
   &:hover {
-    background-color: var(--gcds-button-primary-hover-background);
+    @apply bg-blue-700;
   }
 }
 
@@ -17,22 +15,17 @@
 }
 
 .gc-button--secondary {
-  background-color: var(--gcds-button-secondary-default-background);
-  color: var(--gcds-button-secondary-default-text);
-  //Fix: text blue because the tokens is using shade 700.
-  @apply border-current border-md;
+  @apply text-blue-700 bg-white border-current;
 
   &:hover {
-    background-color: var(--gcds-button-secondary-hover-background);
-    @apply text-blue-800;
+    @apply bg-blue-100 text-blue-800;
   }
 }
 .gc-button--destructive {
-  background-color: var(--gcds-button-danger-default-background);
-  color: var(--gcds-button-danger-default-text);
+  @apply bg-red-destructive text-white;
 
   &:hover {
-    background-color: var(--gcds-button-danger-hover-background);
+    @apply bg-red-hover;
   }
 }
 
@@ -40,12 +33,10 @@
 // Declare at the end to respect focus and active states accross vatiants.
 .gc-button {
   &:active {
-    background-color: var(--gcds-active-background);
-    color: var(--gcds-active-text);
+    @apply bg-black text-white;
   }
 
   &:focus {
-    color: var(--gcds-focus-text);
-    @apply bg-blue-focus outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+    @apply text-white bg-blue-focus outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
   }
 }

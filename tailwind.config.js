@@ -46,7 +46,7 @@ module.exports = {
           DEFAULT: "var(--gcds-color-red-700, #b10e1e)",
           default: "var(--gcds-color-red-700, #b10e1e)",
           100: "var(--gcds-color-red-100, #f3e9e8)",
-          destructive: "var(--gcds-color-danger, #892406)",
+          destructive: "var(--gcds-danger-text, #892406)",
           hover: "var(--gcds-color-red-900, #4E1504)",
         },
         purple: {
@@ -61,7 +61,7 @@ module.exports = {
         blue: {
           DEFAULT: "var(--gcds-color-blue-800, #26374A)",
           default: "var(--gcds-color-blue-800, #26374A)",
-          focus: "var(--gcds-color-blue-focus, #303FC3)",
+          focus: "var(--gcds-focus-background, #303FC3)",
           100: "var(--gcds-color-blue-100, #B2E3FF)",
           hover: "var(--gcds-link-hover, #0535D2)",
           500: "var(--gcds-color-blue-500, #75b9e0)",
@@ -70,6 +70,7 @@ module.exports = {
           dark: "var(--gcds-color-blue-800, #26374A)",
           800: "var(--gcds-color-blue-800, #26374a)",
           active: "var(--gcds-color-blue-900, #1B2736)",
+          900: "var(--gcds-color-blue-900, #1B2736)",
         },
         gray: {
           DEFAULT: "var(--gcds-color-grayscale-50, #EEE)",
@@ -78,7 +79,7 @@ module.exports = {
           selected: "var(--gcds-color-grayscale-100, #e1e4e7",
           500: "var(--gcds-color-grayscale-300, #a0aec0)",
           600: "var(--gcds-color-grayscale-500, #718096)",
-          text: "var(--gcds-color-grayscale-700, #585858)",
+          text: "var(--gcds-text-secondary, #585858)",
           700: "var(--gcds-color-grayscale-700, #4a5568)",
           800: "var(--gcds-color-grayscale-900, #2d3748)",
         },

@@ -21,7 +21,6 @@ import {
   Response,
 } from "@lib/types";
 import { TFunction } from "next-i18next";
-import "@cdssnc/gcds-tokens/build/web/variables.css";
 
 // This function is used for the i18n change of form labels
 export function getProperty(field: string, lang: string): string {
