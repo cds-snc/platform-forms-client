@@ -3,7 +3,7 @@
  */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import download from "@pages/api/id/[form]/[submission]/download";
 import { Session } from "next-auth";
 import { Base, getUserPrivileges } from "__utils__/permissions";
@@ -46,7 +46,7 @@ jest.mock("@lib/cache/flags", () => {
 });
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 const testFormTemplate = {
   id: "testForm",
   form: testFormConfig,

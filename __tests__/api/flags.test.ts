@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { createMocks } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import enable from "@pages/api/flags/[key]/enable";
 import disable from "@pages/api/flags/[key]/disable";
 import check from "@pages/api/flags/[key]/check";
@@ -18,7 +18,7 @@ jest.mock("@lib/integration/redisConnector", () => ({
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("Flags API endpoint", () => {
   beforeAll(() => {

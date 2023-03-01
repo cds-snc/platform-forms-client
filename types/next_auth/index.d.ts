@@ -3,7 +3,7 @@ import { RawRuleOf, MongoAbility } from "@casl/ability";
 
 declare module "next-auth" {
   /**
-   * Returned by `useSession`, `getSession`, `unstable_getServerSession` and received as a prop on the `SessionProvider` React Context
+   * Returned by `useSession`, `getSession`, `getServerSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
     user: {

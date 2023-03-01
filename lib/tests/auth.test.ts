@@ -5,7 +5,7 @@
 import { isAuthenticated, validateTemporaryToken, requireAuthentication } from "@lib/auth";
 import { Base, getUserPrivileges } from "__utils__/permissions";
 import { createMocks } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import jwt, { Secret } from "jsonwebtoken";
 import { prismaMock } from "@jestUtils";
 import { checkPrivileges } from "@lib/privileges";
@@ -14,7 +14,7 @@ import { Prisma } from "@prisma/client";
 jest.mock("next-auth/next");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("Test Auth lib", () => {
   describe("requireAuthentication", () => {

@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import { Session, User } from "next-auth";
 import {
   GetServerSidePropsResult,
@@ -45,7 +45,7 @@ export function requireAuthentication(
     context: GetServerSidePropsContext
   ): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
     try {
-      const session = await unstable_getServerSession(context.req, context.res, authOptions);
+      const session = await getServerSession(context.req, context.res, authOptions);
 
       if (!session) {
         // If no user, redirect to login
@@ -111,7 +111,7 @@ export const isAuthenticated = async ({
   req: NextApiRequest;
   res: NextApiResponse;
 }): Promise<Session | null> => {
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
   return session;
 };
 

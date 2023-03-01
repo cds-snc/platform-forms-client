@@ -4,7 +4,7 @@
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
 import { Base, ManageForms, getUserPrivileges } from "__utils__/permissions";
 import jwt from "jsonwebtoken";
@@ -17,7 +17,7 @@ jest.mock("next-auth/next");
 jest.mock("@lib/adminLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 jest.mock("@lib/logger");
 

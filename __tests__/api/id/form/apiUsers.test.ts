@@ -5,7 +5,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 import apiUsers from "@pages/api/id/[form]/apiusers";
 import { logActivity } from "@lib/auditLogs";
 import { prismaMock } from "@jestUtils";
@@ -17,7 +17,7 @@ jest.mock("next-auth/next");
 jest.mock("@lib/adminLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
-const mockGetSession = jest.mocked(unstable_getServerSession, { shallow: true });
+const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 
 describe("/id/[forms]/owners", () => {
   describe("Requires a valid session to access API", () => {
