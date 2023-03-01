@@ -6,6 +6,8 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
+import { logEvent } from "@lib/auditLogs";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
 const forgotpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
@@ -30,6 +32,7 @@ const forgotpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // send command to cognito
     const response = await cognitoClient.send(forgotPasswordCommand);
+    logPasswordReset(req.body.username);
     return res.status(response["$metadata"].httpStatusCode as number).send("");
   } catch (err) {
     const cognitoError = err as CognitoIdentityProviderServiceException;
@@ -37,6 +40,23 @@ const forgotpassword = async (req: NextApiRequest, res: NextApiResponse) => {
       message: cognitoError.toString(),
     });
   }
+};
+
+const logPasswordReset = async (email: string) => {
+  const user = await prisma.user
+    .findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        privileges: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+  logEvent(user?.id ?? "unknown", { type: "User", id: user?.id ?? "unknown" }, "UserPasswordReset");
 };
 
 export default middleware(

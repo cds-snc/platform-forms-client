@@ -11,6 +11,9 @@ import { MiddlewareProps, WithRequired } from "@lib/types";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
 import { NotifyClient } from "notifications-node-client";
 import { checkOne } from "@lib/cache/flags";
+import { createAbility, AccessControlError } from "@lib/privileges";
+import { checkUserHasTemplateOwnership } from "@lib/templates";
+import { logEvent } from "@lib/auditLogs";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 
@@ -43,6 +46,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
     });
   }
 
+  const ability = createAbility(session);
+
+  // Ensure the user has owernship of this form
+  try {
+    await checkUserHasTemplateOwnership(ability, formId);
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Response" },
+        "AccessDenied",
+        `Attempted to identify response problem without form ownership`
+      );
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    logMessage.error(e as Error);
+    return res.status(500).json({ error: "Error on server side" });
+  }
+
   try {
     const dynamoDbClient = connectToDynamo();
 
@@ -59,13 +81,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
         submissionsFromSubmissionNames.submissionsToReport.map((submission) => submission.name),
         userEmail
       );
+      submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
+        logEvent(
+          ability.userID,
+          { type: "Response", id: problem.name },
+          "IdentifyProblemResponse",
+          `Identified problem response for form ${formId}`
+        )
+      );
     }
-
-    logMessage.info(
-      `user:${userEmail} reported a problem with form submissions [${submissionsFromSubmissionNames.submissionsToReport.map(
-        (submission) => submission.name
-      )}] for form ID:${formId} at:${Date.now()}`
-    );
 
     return res.status(200).json({
       ...(submissionsFromSubmissionNames.submissionsToReport.length > 0 && {

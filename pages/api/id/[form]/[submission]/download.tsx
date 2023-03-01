@@ -18,6 +18,7 @@ import BaseApp from "@pages/_app";
 import { Router } from "next/router";
 import { checkOne } from "@lib/cache/flags";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
+import { logEvent } from "@lib/auditLogs";
 
 /**
  * Handler for the retrieval API route. This function simply calls the relevant function depending on the HTTP method
@@ -157,15 +158,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       );
     });
 
-    logMessage.info(
-      `user:${session?.user.email} retrieved form responses for response name: ${responseID}, submissionID: ${submissionID}, form ID: ${formID}`
+    logEvent(
+      ability.userID,
+      { type: "Response", id: responseID },
+      "DownloadResponse",
+      `Downloaded form response for submission ID ${submissionID}`
     );
 
     // Setting last downloaded by on Vault Submission
 
     await updateLastDownloadedBy(responseID, formID, userEmail);
   } catch (error) {
-    if (error instanceof AccessControlError) return res.status(403).json({ error: "Forbidden" });
+    if (error instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Response" },
+        "AccessDenied",
+        `Attemped to download response for submissionID ${submissionName}`
+      );
+      return res.status(403).json({ error: "Forbidden" });
+    }
     logMessage.error(error as Error);
     res.status(500).json({ error: "Error on Server Side when fetching form's responses" });
   }

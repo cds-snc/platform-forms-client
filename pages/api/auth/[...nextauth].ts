@@ -13,6 +13,7 @@ import { getOrCreateUser } from "@lib/users";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
+import { logEvent } from "@lib/auditLogs";
 
 if (
   (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
@@ -100,9 +101,13 @@ export const authOptions: NextAuthOptions = {
             e.name === "NotAuthorizedException" &&
             e.message === "Password attempts exceeded"
           )
-            logMessage.warn(
-              `Cognito Lockout: Password attempts exceeded for ${credentials.username}`
+            logEvent(
+              prismaUser?.accounts[0].id ?? "unknown",
+              { type: "User", id: prismaUser?.accounts[0].id ?? "unknown" },
+              "UserTooManyFailedAttempts",
+              `Password attempts exceeded for ${credentials.username}`
             );
+
           // throw new Error with cognito error converted to string so as to include the exception name
           throw new Error((e as CognitoIdentityProviderServiceException).toString());
         }
@@ -128,6 +133,17 @@ export const authOptions: NextAuthOptions = {
   },
 
   adapter: PrismaAdapter(prisma),
+  events: {
+    async signIn({ user }) {
+      logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
+    },
+    async signOut({ token }) {
+      logEvent((token as JWT).userId, { type: "User", id: token.userId }, "UserSignOut");
+    },
+    async createUser({ user }) {
+      logEvent(user.id, { type: "User", id: user.id }, "UserRegistration");
+    },
+  },
 
   callbacks: {
     async signIn({ account, profile }) {
@@ -182,6 +198,7 @@ export const authOptions: NextAuthOptions = {
       session.user.name = token.name ?? null;
       session.user.image = session.user?.image ?? null;
       session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
+
       return session;
     },
   },
