@@ -39,11 +39,9 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const onElementChange = (type: string, itemIndex: number) => {
     const path = `form.elements[${itemIndex}]`;
 
-    if (!updateTextElement(type, path)) {
-      updateElement(type, path);
-      if (type === "richText") {
-        resetChoices(itemIndex);
-      }
+    updateElement(type, path);
+    if (type === "richText") {
+      resetChoices(itemIndex);
     }
   };
 

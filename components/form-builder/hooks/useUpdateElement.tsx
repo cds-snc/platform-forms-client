@@ -45,7 +45,7 @@ export const useUpdateElement = () => {
   };
 
   const updateTextElement = (type: string, path: string) => {
-    if (type === "text" || type === "textField") {
+    if (type === "textArea" || type === "textField") {
       unsetField(`${path}.properties.validation.type`);
       unsetField(`${path}.properties.autoComplete`);
       return true;
@@ -54,14 +54,11 @@ export const useUpdateElement = () => {
     updateField(`${path}.type`, "textField");
     setDefaultDescription(type, path);
 
-    if (!isValidatedTextType(type as FormElementTypes)) return false;
-
     if (isValidatedTextType(type as FormElementTypes)) {
       updateField(`${path}.properties.validation.type`, type);
       unsetField(`${path}.properties.autoComplete`);
       unsetField(`${path}.properties.validation.maxLength`);
       setDefaultTitle(type, path);
-      return true;
     }
 
     if (isAutoCompleteField(type)) {
@@ -73,6 +70,10 @@ export const useUpdateElement = () => {
   };
 
   const updateElement = (type: string, path: string) => {
+    if (isTextField(type as FormElementTypes)) {
+      return updateTextElement(type, path);
+    }
+
     if (type === FormElementTypes.attestation) {
       type = FormElementTypes.checkbox;
       updateField(`${path}.properties.validation.all`, true);
@@ -100,7 +101,11 @@ export const useUpdateElement = () => {
   };
 
   const isTextField = (type: string) => {
-    return isValidatedTextType(type as FormElementTypes) || isAutoCompleteField(type);
+    return (
+      ["textArea", "textField"].includes(type) ||
+      isValidatedTextType(type as FormElementTypes) ||
+      isAutoCompleteField(type as string)
+    );
   };
 
   return { isTextField, addElement, updateElement, updateTextElement, setDefaultDescription };
