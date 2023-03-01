@@ -104,7 +104,7 @@ export const ListBox = ({
                       rowsRef.current[`row-${index}` as unknown as number] = el;
                     }
                   }}
-                  className={`${className} ${
+                  className={`${
                     focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
                   } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
                   tabIndex={-1}
@@ -119,6 +119,9 @@ export const ListBox = ({
                     )}
                   </span>
                 </li>
+                {className && className === "separator" ? (
+                  <li role="separator" className="border-b border-1 border-grey-default mb-2" />
+                ) : null}
               </React.Fragment>
             );
           }

@@ -6,7 +6,7 @@ import { useTemplateStore } from "../../store";
 import { useUpdateElement } from "../../hooks";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
-  const { updateElement, updateTextElement } = useUpdateElement();
+  const { updateElement } = useUpdateElement();
   const { localizeField, updateField, resetChoices, elements } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     elements: s.form.elements,
@@ -39,11 +39,9 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   const onElementChange = (type: string, itemIndex: number) => {
     const path = `form.elements[${itemIndex}]`;
 
-    if (!updateTextElement(type, path)) {
-      updateElement(type, path);
-      if (type === "richText") {
-        resetChoices(itemIndex);
-      }
+    updateElement(type, path);
+    if (type === "richText") {
+      resetChoices(itemIndex);
     }
   };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import {
   CalendarIcon,
@@ -27,13 +26,13 @@ import {
   Number,
   QuestionSet,
   Attestation,
+  PostalCode,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const { status: experimentalBlocks } = useFlag("formBuilderExperimentalBlocks");
 
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
@@ -131,6 +130,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
+      id: "postal-code",
+      value: t("addElementDialog.postal-code.label"),
+      icon: <ShortAnswerIcon />,
+      description: PostalCode,
+      className: "",
+      group: group.input,
+    },
+    {
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
@@ -139,11 +146,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.advanced,
     },
   ];
-
-  if (experimentalBlocks) {
-    // add experimental blocks here:
-    // elementOptions.push();
-  }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
 };

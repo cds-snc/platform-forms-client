@@ -66,6 +66,11 @@
       "description": "Short answer question description",
       "title": "Short answer question"
     },
+    "postal-code": {
+      "label": "Postal code",
+      "description": "Postal code description",
+      "title": "Postal code title"
+    },
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
@@ -148,7 +153,8 @@
     "date": "Enter a date like, mm/dd/yyyy",
     "email": "Enter an email address like, name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333"
+    "phone": "Enter a phone number like, 111-222-3333",
+    "postal-code": ""
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",

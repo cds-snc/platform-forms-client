@@ -96,6 +96,7 @@ export const Edit = () => {
         const item = { ...element, index };
         return <ElementPanel item={item} key={item.id} />;
       })}
+
       {elements?.length >= 1 && (
         <>
           <RichTextLocked
