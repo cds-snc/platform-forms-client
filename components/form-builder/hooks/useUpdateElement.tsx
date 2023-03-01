@@ -64,8 +64,8 @@ export const useUpdateElement = () => {
       return true;
     }
 
-    if (isAutoCompleteField(type as string)) {
-      updateField(`${path}.properties.autoComplete`, type as string);
+    if (isAutoCompleteField(type)) {
+      updateField(`${path}.properties.autoComplete`, type);
       setDefaultDescription(type as FormElementTypes, path);
     }
 
@@ -87,20 +87,20 @@ export const useUpdateElement = () => {
 
   const addElement = (type: string, path: string) => {
     if (isValidatedTextType(type as FormElementTypes)) {
-      updateField(`${path}.properties.validation.type`, type as string);
+      updateField(`${path}.properties.validation.type`, type);
       setDefaultDescription(type as FormElementTypes, path);
       return;
     }
 
     if (isAutoCompleteField(type as string)) {
-      updateField(`${path}.properties.autoComplete`, type as string);
+      updateField(`${path}.properties.autoComplete`, type);
       setDefaultTitle(type, path);
       setDefaultDescription(type as FormElementTypes, path);
     }
   };
 
   const isTextField = (type: string) => {
-    return isValidatedTextType(type as FormElementTypes) || isAutoCompleteField(type as string);
+    return isValidatedTextType(type as FormElementTypes) || isAutoCompleteField(type);
   };
 
   return { isTextField, addElement, updateElement, updateTextElement, setDefaultDescription };
