@@ -57,24 +57,18 @@ export const useUpdateElement = () => {
     if (isValidatedTextType(type as FormElementTypes) && isAutoCompleteField(type)) {
       updateField(`${path}.properties.validation.type`, type);
       updateField(`${path}.properties.autoComplete`, type);
-      setDefaultTitle(type, path);
-      setDefaultDescription(type as FormElementTypes, path);
       return;
     }
 
     if (isAutoCompleteField(type)) {
       unsetField(`${path}.properties.validation.type`);
       updateField(`${path}.properties.autoComplete`, type);
-      setDefaultTitle(type, path);
-      setDefaultDescription(type as FormElementTypes, path);
       return;
     }
 
     if (isValidatedTextType(type as FormElementTypes)) {
       updateField(`${path}.properties.validation.type`, type);
       unsetField(`${path}.properties.autoComplete`);
-      setDefaultTitle(type, path);
-      setDefaultDescription(type as FormElementTypes, path);
       return;
     }
   };
