@@ -8,7 +8,6 @@ import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
 
 const handler = async (
   req: NextApiRequest,
@@ -35,7 +34,7 @@ const handler = async (
 };
 
 export async function getEmailListByFormID(
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
@@ -88,7 +87,7 @@ export async function getEmailListByFormID(
  * @param res
  */
 export async function activateOrDeactivateFormOwners(
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session: Session
@@ -176,7 +175,7 @@ export async function activateOrDeactivateFormOwners(
  * @param res The response object
  */
 export async function addEmailToForm(
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
   res: NextApiResponse,
   session?: Session

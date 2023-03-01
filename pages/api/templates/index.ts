@@ -1,9 +1,8 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, cors, sessionExists, jsonValidator } from "@lib/middleware";
 import { createTemplate, getAllTemplates, onlyIncludePublicProperties } from "@lib/templates";
-import { DeliveryOption, FormProperties, FormRecord, MiddlewareProps } from "@lib/types";
+import { DeliveryOption, FormProperties, MiddlewareProps, UserAbility } from "@lib/types";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MongoAbility } from "@casl/ability";
 import { Session } from "next-auth";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import {
@@ -62,7 +61,7 @@ const route = async ({
   formConfig,
   deliveryOption,
 }: {
-  ability: MongoAbility;
+  ability: UserAbility;
   user: Session["user"];
   method: string;
   name?: string;

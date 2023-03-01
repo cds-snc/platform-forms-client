@@ -9,17 +9,17 @@ import {
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import jwt from "jsonwebtoken";
 import { hasOwnProperty } from "./tsUtils";
-import { TemporaryTokenPayload } from "./types";
+import { TemporaryTokenPayload, UserAbility } from "./types";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { AccessControlError, createAbility } from "./privileges";
-import { MongoAbility } from "@casl/ability";
+
 import { localPathRegEx } from "@lib/validation";
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
   user: AuthContextUser;
 }
 interface AuthContextUser extends User {
-  ability: MongoAbility;
+  ability: UserAbility;
 }
 
 /**
@@ -72,7 +72,7 @@ export function requireAuthentication(
       }
 
       const innerFunctionProps = await innerFunction({
-        user: { ...session.user, ability: createAbility(session.user.privileges) },
+        user: { ...session.user, ability: createAbility(session) },
         ...context,
       }); // Continue on to call `getServerSideProps` logic
       if (hasOwnProperty(innerFunctionProps, "props")) {

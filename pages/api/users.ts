@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers } from "@lib/users";
+import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 
 import { AdminLogAction } from "@lib/auditLogs";
 import { Session } from "next-auth";
@@ -11,7 +12,7 @@ import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "PUT"];
 
-const getUserList = async (ability: MongoAbility, res: NextApiResponse) => {
+const getUserList = async (ability: UserAbility, res: NextApiResponse) => {
   const users = await getUsers(ability);
   if (users.length === 0) {
     res.status(500).json({ error: "Could not process request" });

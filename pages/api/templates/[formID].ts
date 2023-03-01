@@ -18,9 +18,8 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { MiddlewareProps, FormProperties, DeliveryOption } from "@lib/types";
+import { MiddlewareProps, FormProperties, DeliveryOption, UserAbility } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
 const authenticatedMethods = ["POST", "PUT", "DELETE"];
@@ -93,7 +92,7 @@ const templateCRUD = async ({
   users,
   sendResponsesToVault,
 }: {
-  ability: MongoAbility;
+  ability: UserAbility;
   method: string;
   request: NextApiRequest;
   name?: string;

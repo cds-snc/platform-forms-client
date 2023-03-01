@@ -9,11 +9,20 @@ import {
 import {
   createMongoAbility,
   MongoAbility,
-  RawRuleOf,
   MongoQuery,
   subject as setSubjectType,
 } from "@casl/ability";
-import { Abilities, Privilege, Action, Subject, ForcedSubjectType, AnyObject } from "@lib/types";
+import {
+  Abilities,
+  Privilege,
+  Action,
+  Subject,
+  ForcedSubjectType,
+  AnyObject,
+  UserAbility,
+} from "@lib/types/privileges-types";
+
+import { Session } from "next-auth";
 
 import get from "lodash/get";
 
@@ -24,8 +33,13 @@ This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures
  */
 
-export const createAbility = (rules: RawRuleOf<MongoAbility<Abilities>>[]) =>
-  createMongoAbility<MongoAbility<Abilities>>(rules);
+export const createAbility = (session: Session): UserAbility => {
+  const ability = createMongoAbility<MongoAbility<Abilities>>(
+    session.user.privileges
+  ) as UserAbility;
+  ability.userID = session.user.id;
+  return ability;
+};
 
 // Creates a new custom Error Class
 export class AccessControlError extends Error {}
@@ -115,7 +129,7 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
  * @returns
  */
 export const updatePrivilegesForUser = async (
-  ability: MongoAbility,
+  ability: UserAbility,
   userID: string,
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
@@ -161,7 +175,7 @@ export const updatePrivilegesForUser = async (
  * Get all privileges availabe in the application
  * @returns an array of privealges
  */
-export const getAllPrivileges = async (ability: MongoAbility) => {
+export const getAllPrivileges = async (ability: UserAbility) => {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
     return await prisma.privilege.findMany({
@@ -183,7 +197,7 @@ export const getAllPrivileges = async (ability: MongoAbility) => {
   }
 };
 
-export const updatePrivilege = async (ability: MongoAbility, privilege: Privilege) => {
+export const updatePrivilege = async (ability: UserAbility, privilege: Privilege) => {
   try {
     checkPrivileges(ability, [{ action: "update", subject: "Privilege" }]);
 
@@ -210,7 +224,7 @@ export const updatePrivilege = async (ability: MongoAbility, privilege: Privileg
   }
 };
 
-export const createPrivilege = async (ability: MongoAbility, privilege: Privilege) => {
+export const createPrivilege = async (ability: UserAbility, privilege: Privilege) => {
   try {
     checkPrivileges(ability, [{ action: "create", subject: "Privilege" }]);
 
@@ -253,7 +267,7 @@ function _isForceTyping(subject: Subject | ForcedSubjectType): subject is Forced
  * @param logic Use an AND or OR logic comparison
  */
 export const checkPrivileges = (
-  ability: MongoAbility,
+  ability: UserAbility,
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;

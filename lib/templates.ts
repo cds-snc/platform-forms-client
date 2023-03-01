@@ -1,7 +1,13 @@
 import { logger } from "@lib/logger";
 import { formCache } from "./cache/formCache";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { PublicFormRecord, FormRecord, FormProperties, DeliveryOption } from "@lib/types";
+import {
+  PublicFormRecord,
+  FormRecord,
+  FormProperties,
+  DeliveryOption,
+  UserAbility,
+} from "@lib/types";
 import { Prisma } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
