@@ -178,7 +178,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error(`Could not get or create user with email: ${token.email}`);
 
         token.userId = user.id;
-        token.authorizedForm = null;
         token.lastLoginTime = new Date();
         token.acceptableUse = false;
       }
