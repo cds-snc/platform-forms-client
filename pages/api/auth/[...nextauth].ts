@@ -1,4 +1,4 @@
-import NextAuth, { Session, JWT, NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
@@ -53,7 +53,7 @@ export const authOptions: NextAuthOptions = {
           },
         };
 
-        // signIn callback cannot be used. It has to be included in here as the url field
+        // NextAuth signIn callback cannot be used to check . The check has to be included in here as the url field
         // of the response of the sign in callback is not populated
         const prismaUser = await prisma.user
           .findUnique({
@@ -64,9 +64,7 @@ export const authOptions: NextAuthOptions = {
               accounts: true,
             },
           })
-          .catch((e) => {
-            prismaErrors(e, undefined);
-          });
+          .catch((e) => prismaErrors(e, null));
 
         if (
           prismaUser &&
@@ -134,19 +132,17 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ account, profile }) {
       // redirect google login if there is an existing cognito account
-      if (account.provider === "google") {
+      if (account?.provider === "google") {
         const prismaUser = await prisma.user
           .findUnique({
             where: {
-              email: profile.email,
+              email: profile?.email,
             },
             select: {
               accounts: true,
             },
           })
-          .catch((e) => {
-            prismaErrors(e, undefined);
-          });
+          .catch((e) => prismaErrors(e, null));
 
         // in this case we know there is an existing cognito account
         if (prismaUser?.accounts.length === 0) {
@@ -178,10 +174,9 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
+    async session({ session, token }) {
       // Add info like 'role' to session object
-      session.user.id = token.userId as string;
-      session.user.authorizedForm = token.authorizedForm;
+      session.user.id = token.userId;
       session.user.lastLoginTime = token.lastLoginTime;
       session.user.acceptableUse = token.acceptableUse;
       session.user.name = token.name ?? null;
