@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { enableFlag, checkAll } from "@lib/cache/flags";
 import { middleware, cors, sessionExists } from "@lib/middleware";
-import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 
@@ -20,15 +19,6 @@ const handler = async (
     const ability = createAbility(session);
     await enableFlag(ability, key);
     const flags = await checkAll(ability);
-
-    if (session.user.id) {
-      await logActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        AdminLogEvent.EnableFeature,
-        `Feature: ${key} has been enabled`
-      );
-    }
 
     res.status(200).json(flags);
   } catch (e) {

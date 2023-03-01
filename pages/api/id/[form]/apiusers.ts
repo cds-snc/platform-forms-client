@@ -4,7 +4,6 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
 import { Session } from "next-auth";
-import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
@@ -141,17 +140,6 @@ export async function activateOrDeactivateFormOwners(
       },
     });
 
-    if (session && session.user.id) {
-      await logActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        active ? AdminLogEvent.GrantFormAccess : AdminLogEvent.RevokeFormAccess,
-        `Access to form id: ${formID} has been ${
-          active ? "granted" : "revoked"
-        } for email: ${email}`
-      );
-    }
-
     //A record was updated and returns the id { "id": 1, active: false } etc.
     return res.status(200).json(updatedRecord);
   } catch (e) {
@@ -219,15 +207,6 @@ export async function addEmailToForm(
         id: true,
       },
     });
-
-    if (session && session.user.id) {
-      await logActivity(
-        session.user.id,
-        AdminLogAction.Create,
-        AdminLogEvent.GrantInitialFormAccess,
-        `Email: ${email} has been given access to form id: ${formID}`
-      );
-    }
 
     return res.status(200).json({ success: formUserID });
   } catch (error) {

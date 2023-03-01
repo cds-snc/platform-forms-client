@@ -12,7 +12,6 @@ import { StyledLink } from "@components/globals/StyledLink/StyledLink";
 import { GetServerSideProps } from "next";
 import { FormRecord, VaultSubmissionList } from "@lib/types";
 import { listAllSubmissions } from "@lib/vault";
-import { logMessage } from "@lib/logger";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { checkOne } from "@lib/cache/flags";
@@ -239,9 +238,6 @@ export const getServerSideProps: GetServerSideProps = async ({
       vaultSubmissions.push(...submissions);
     } catch (e) {
       if (e instanceof AccessControlError) {
-        logMessage.info(
-          `NOT AUTHORIZED: User ${session.user.id} attempted to access form responses for form ID ${formID}`
-        );
         return {
           redirect: {
             destination: `/${locale}/admin/unauthorized`,

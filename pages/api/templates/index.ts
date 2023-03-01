@@ -10,7 +10,6 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import { AdminLogAction, AdminLogEvent, logActivity } from "@lib/auditLogs";
 
 const allowedMethods = ["GET", "POST"];
 const authenticatedMethods = ["POST"];
@@ -29,15 +28,6 @@ const templates = async (
     const response = await route({ ability: ability, user: user, method: req.method, ...req.body });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
-
-    if (req.method === "POST") {
-      await logActivity(
-        session.user.id,
-        AdminLogAction.Create,
-        AdminLogEvent.UploadForm,
-        `Form id: ${(response as FormRecord).id} has been uploaded`
-      );
-    }
 
     if (req.method === "GET") {
       if (Array.isArray(response)) {

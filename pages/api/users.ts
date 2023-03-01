@@ -3,12 +3,7 @@ import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getUsers } from "@lib/users";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 
-import { AdminLogAction } from "@lib/auditLogs";
-import { Session } from "next-auth";
-import { MiddlewareProps, WithRequired } from "@lib/types";
-import { logMessage } from "@lib/logger";
 import { createAbility, updatePrivilegesForUser, AccessControlError } from "@lib/privileges";
-import { MongoAbility } from "@casl/ability";
 
 const allowedMethods = ["GET", "PUT"];
 
@@ -22,10 +17,9 @@ const getUserList = async (ability: UserAbility, res: NextApiResponse) => {
 };
 
 const updatePrivilegeOnUser = async (
-  ability: MongoAbility,
+  ability: UserAbility,
   req: NextApiRequest,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ) => {
   const { userID, privileges } = req.body;
   if (
@@ -37,17 +31,8 @@ const updatePrivilegeOnUser = async (
   }
 
   const result = await updatePrivilegesForUser(ability, userID, privileges);
-  logMessage.info(AdminLogAction.Update);
-  if (result && session && session.user.id) {
-    /*
-      await logAdminActivity(
-        session.user.id,
-        AdminLogAction.Update,
-        isAdmin ? AdminLogEvent.GrantAdminRole : AdminLogEvent.RevokeAdminRole,
-        `Admin role has been ${isAdmin ? "granted" : "revoked"} for user id: ${userId}`
-      );
-      */
 
+  if (result) {
     return res.status(200).send("Success");
   } else {
     return res.status(404).json({ error: "User not found" });

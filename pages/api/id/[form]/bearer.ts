@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { logMessage } from "@lib/logger";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
-import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, checkPrivileges, AccessControlError } from "@lib/privileges";
 import { Session } from "next-auth";
@@ -22,7 +21,7 @@ const handler = async (
         .json({ error: "form ID parameter was not provided in the resource path" });
 
     if (!session) return res.status(401).json({ error: "Unauthorized" });
-    const ability = createAbility(session.user.privileges);
+    const ability = createAbility(session);
 
     switch (req.method) {
       case "GET":
@@ -50,8 +49,7 @@ const handler = async (
 export async function createToken(
   ability: UserAbility,
   formID: string,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ): Promise<void> {
   // Verify if use can update the bearer token on this form
   const targetFormRecord = await prisma.template
@@ -103,15 +101,6 @@ export async function createToken(
     })
     .catch((e) => prismaErrors(e, null));
 
-  // return the record with the id and the updated bearer token. Log the success
-  if (session && session.user.id) {
-    await logActivity(
-      session.user.id,
-      AdminLogAction.Update,
-      AdminLogEvent.RefreshBearerToken,
-      `Bearer token for form id: ${formID} has been refreshed`
-    );
-  }
   return res.status(200).json(updatedBearerToken);
 }
 

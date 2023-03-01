@@ -12,7 +12,6 @@ import {
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
 import { NextApiRequest, NextApiResponse } from "next";
-import { logActivity, AdminLogAction, AdminLogEvent } from "@lib/auditLogs";
 import {
   layoutIDValidator,
   subElementsIDValidator,
@@ -42,27 +41,6 @@ const templates = async (
     });
 
     if (!response) return res.status(500).json({ error: "Error on Server Side" });
-
-    if (session && session.user.id && ["PUT", "DELETE"].includes(req.method as string)) {
-      if (req.method === "PUT") {
-        await logActivity(
-          session.user.id,
-          AdminLogAction.Update,
-          AdminLogEvent.UpdateForm,
-          req.body.isPublished !== undefined
-            ? `Form id: ${req.query.formID} 'isPublished' value has been updated`
-            : `Form id: ${req.query.formID} has been updated`
-        );
-      }
-      if (req.method === "DELETE") {
-        await logActivity(
-          session.user.id,
-          AdminLogAction.Delete,
-          AdminLogEvent.DeleteForm,
-          `Form id: ${req.query.formID} has been deleted`
-        );
-      }
-    }
 
     if (req.method === "GET") {
       if (Array.isArray(response)) {

@@ -35,7 +35,7 @@ const createPrivilege = async (
   privilege.permissions = JSON.parse(privilege.permissions);
 
   const result = await prismaCreatePrivilege(ability, privilege);
-  logMessage.info(AdminLogAction.Update);
+
   if (result) {
     if (session && session.user.id) {
       /*
@@ -65,7 +65,6 @@ const updatePrivilege = async (
 
   const result = await prismaUpdatePrivilege(ability, privilege);
 
-  logMessage.info(AdminLogAction.Update);
   if (result) {
     if (session && session.user.id) {
       /*
