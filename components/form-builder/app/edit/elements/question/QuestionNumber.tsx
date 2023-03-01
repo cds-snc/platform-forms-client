@@ -24,7 +24,7 @@ export const QuestionNumber = ({
   return (
     <>
       <span
-        className={`absolute left-0 bg-gray-default py-2.5 rounded-r -ml-7 ${
+        className={`absolute left-0 bg-gray-default py-2.5 rounded-r ${
           itemIndex < 9 ? "px-1.5" : "pl-0.5 pr-1 tracking-tighter"
         }`}
       >

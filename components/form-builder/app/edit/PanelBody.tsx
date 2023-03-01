@@ -48,27 +48,9 @@ export const PanelBody = ({
   };
 
   return (
-    <div className="mx-7 py-7">
-      <div
-        className={
-          "" +
-          (isRichText || isDynamicRow
-            ? "relative "
-            : "flex flex-row-reverse gap-x-4 xxl:flex-col justify-between relative text-base !text-sm")
-        }
-      >
-        {!isRichText && !isDynamicRow && selectedItem?.id && (
-          <div className="xxl:mt-4 w-2/5 xxl:w-full">
-            <ElementDropDown
-              filterElements={elIndex === -1 ? attestationFilter : elementFilter}
-              item={item}
-              onElementChange={onElementChange}
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-            />
-          </div>
-        )}
-        <div className={isRichText || isDynamicRow ? undefined : "xxl:mt-4 w-3/5 xxl:w-full"}>
+    <>
+      {isRichText || isDynamicRow ? (
+        <>
           <Question
             questionInputRef={questionInputRef}
             elements={elements}
@@ -76,34 +58,60 @@ export const PanelBody = ({
             item={item}
             onQuestionChange={onQuestionChange}
           />
-        </div>
-      </div>
-      <div className="flex gap-x-4 xxl:flex-col justify-between relative text-base !text-sm">
-        <div className="w-3/5">
-          {!isRichText && <QuestionDescription item={item} itemIndex={elIndex} />}
-
           {selectedItem?.id && (
             <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
           )}
-          {maxLength && (
-            <div className="disabled">
-              {t("maxCharacterLength")}
-              {maxLength}
+        </>
+      ) : (
+        <>
+          <div className="flex flex-row-reverse gap-x-4 xxl:flex-col justify-between text-sm">
+            {selectedItem?.id && (
+              <div className="xxl:mt-4 w-2/5 xxl:w-full">
+                <ElementDropDown
+                  filterElements={elIndex === -1 ? attestationFilter : elementFilter}
+                  item={item}
+                  onElementChange={onElementChange}
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
+                />
+              </div>
+            )}
+            <div className="xxl:mt-4 w-3/5 xxl:w-full">
+              <Question
+                questionInputRef={questionInputRef}
+                elements={elements}
+                elIndex={elIndex}
+                item={item}
+                onQuestionChange={onQuestionChange}
+              />
             </div>
-          )}
-        </div>
-        <div className="w-2/5">
-          {!isDynamicRow && !isRichText && (
-            <ElementRequired onRequiredChange={onRequiredChange} item={item} />
-          )}
-          {item.properties.autoComplete && (
-            <div className="mt-5">
-              <strong>Autcomplete is set to:</strong>{" "}
-              {t(`autocompleteOptions.${item.properties.autoComplete}`)}
+          </div>
+          <div className="flex gap-x-4 xxl:flex-col justify-between text-sm">
+            <div className="w-3/5 xxl:w-full">
+              <QuestionDescription item={item} itemIndex={elIndex} />
+
+              {selectedItem?.id && (
+                <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
+              )}
+              {maxLength && (
+                <div className="disabled">
+                  {t("maxCharacterLength")}
+                  {maxLength}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
-    </div>
+            <div className="w-2/5 xxl:w-full">
+              <ElementRequired onRequiredChange={onRequiredChange} item={item} />
+              {item.properties.autoComplete && (
+                <div className="mt-5">
+                  <strong>Autcomplete is set to:</strong>{" "}
+                  {t(`autocompleteOptions.${item.properties.autoComplete}`)}
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
