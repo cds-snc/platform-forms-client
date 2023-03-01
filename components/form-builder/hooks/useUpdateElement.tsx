@@ -32,12 +32,12 @@ export const useUpdateElement = () => {
     const titleEn = localizeField(LocalizedElementProperties.TITLE, "en");
     const titleFr = localizeField(LocalizedElementProperties.TITLE, "fr");
 
-    // update default description en
+    // update default title en
     updateField(
       `${path}.properties[${titleEn}]`,
       t(`addElementDialog.${type}.label`, { lng: "en" })
     );
-    // update default description fr
+    // update default title fr
     updateField(
       `${path}.properties[${titleFr}]`,
       t(`addElementDialog.${type}.label`, { lng: "fr" })
