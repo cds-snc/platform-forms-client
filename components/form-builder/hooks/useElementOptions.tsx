@@ -27,6 +27,7 @@ import {
   Number,
   QuestionSet,
   Attestation,
+  PostalCode,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -111,6 +112,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("attestation"),
       icon: <AddIcon />,
       description: Attestation,
+      className: "separator",
+      group: group.input,
+    },
+    {
+      id: "postal-code",
+      value: t("addElementDialog.postal-code.label"),
+      icon: <ShortAnswerIcon />,
+      description: PostalCode,
       className: "separator",
       group: group.input,
     },

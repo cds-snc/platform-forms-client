@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 
 import { useTemplateStore } from "../../../../store";
 import { PanelBodySub } from "../../PanelBodySub";
-import { isValidatedTextType } from "../../../../util";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
@@ -44,20 +43,20 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
-  const { updateElement, updateTextElement, setDefaultDescription } = useUpdateElement();
+  const { addElement: updateElement, updateTextElement, isTextField } = useUpdateElement();
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
-      addSubItem(elIndex, subIndex, isValidatedTextType(type) ? FormElementTypes.textField : type);
-      if (isValidatedTextType(type)) {
-        // add 1 to index because it's a new element
-        const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
-        updateField(`${path}.properties.validation.type`, type as string);
-
-        setDefaultDescription(type as FormElementTypes, path);
-      }
+      addSubItem(
+        elIndex,
+        subIndex,
+        isTextField(type as string) ? FormElementTypes.textField : type
+      );
+      // add 1 to index because it's a new element
+      const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
+      updateElement(type as string, path);
     },
-    [addSubItem, updateField, elIndex, setDefaultDescription]
+    [addSubItem, elIndex, isTextField, updateElement]
   );
 
   const handlePlaceHolderText = useCallback(

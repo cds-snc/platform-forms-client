@@ -2,7 +2,7 @@ import { useTemplateStore } from "../store";
 import { LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
-import { isValidatedTextType } from "@components/form-builder/util";
+import { isValidatedTextType, isAutoCompleteField } from "@components/form-builder/util";
 
 export const useUpdateElement = () => {
   const { t } = useTranslation("form-builder");
@@ -31,15 +31,26 @@ export const useUpdateElement = () => {
   const updateTextElement = (type: string, path: string) => {
     if (type === "text" || type === "textField") {
       unsetField(`${path}.properties.validation.type`);
+      unsetField(`${path}.properties.autoComplete`);
       return true;
     }
 
+    updateField(`${path}.type`, "textField");
+    setDefaultDescription(type, path);
+
     if (!isValidatedTextType(type as FormElementTypes)) return false;
 
-    updateField(`${path}.type`, "textField");
-    updateField(`${path}.properties.validation.type`, type);
-    unsetField(`${path}.properties.validation.maxLength`);
-    setDefaultDescription(type, path);
+    if (isValidatedTextType(type as FormElementTypes)) {
+      updateField(`${path}.properties.validation.type`, type);
+      unsetField(`${path}.properties.autoComplete`);
+      unsetField(`${path}.properties.validation.maxLength`);
+      return true;
+    }
+
+    if (isAutoCompleteField(type as string)) {
+      updateField(`${path}.properties.autoComplete`, type as string);
+      setDefaultDescription(type as FormElementTypes, path);
+    }
 
     return true;
   };
@@ -57,5 +68,22 @@ export const useUpdateElement = () => {
     unsetField(`${path}.properties.validation.maxLength`);
   };
 
-  return { updateElement, updateTextElement, setDefaultDescription };
+  const addElement = (type: string, path: string) => {
+    if (isValidatedTextType(type as FormElementTypes)) {
+      updateField(`${path}.properties.validation.type`, type as string);
+      setDefaultDescription(type as FormElementTypes, path);
+      return;
+    }
+
+    if (isAutoCompleteField(type as string)) {
+      updateField(`${path}.properties.autoComplete`, type as string);
+      setDefaultDescription(type as FormElementTypes, path);
+    }
+  };
+
+  const isTextField = (type: string) => {
+    return isValidatedTextType(type as FormElementTypes) || isAutoCompleteField(type as string);
+  };
+
+  return { isTextField, addElement, updateElement, updateTextElement, setDefaultDescription };
 };

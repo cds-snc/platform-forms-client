@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
-import { isValidatedTextType } from "../../util";
 import { FormElementTypes } from "@lib/types";
 import { useIsWithin, useUpdateElement } from "@components/form-builder/hooks";
 import { blockLoader } from "../../blockLoader";
@@ -14,7 +13,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     getFocusInput,
     setFocusInput,
     add,
-    updateField,
     remove,
     moveUp,
     moveDown,
@@ -25,7 +23,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     getFocusInput: s.getFocusInput,
     setFocusInput: s.setFocusInput,
     add: s.add,
-    updateField: s.updateField,
     remove: s.remove,
     moveUp: s.moveUp,
     moveDown: s.moveDown,
@@ -35,7 +32,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { setDefaultDescription } = useUpdateElement();
+  const { addElement: updateElement, isTextField } = useUpdateElement();
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -65,15 +62,10 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       }
 
       setFocusInput(true);
-      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
-      if (isValidatedTextType(type)) {
-        // add 1 to index because it's a new element
-        const path = `form.elements[${index + 1}]`;
-        updateField(`${path}.properties.validation.type`, type as string);
-        setDefaultDescription(type as FormElementTypes, path);
-      }
+      add(index, isTextField(type as string) ? FormElementTypes.textField : type);
+      updateElement(type as string, `form.elements[${index + 1}]`);
     },
-    [add, setFocusInput, updateField, setDefaultDescription]
+    [add, setFocusInput, updateElement, isTextField]
   );
 
   const { focusWithinProps, isWithin } = useIsWithin();
