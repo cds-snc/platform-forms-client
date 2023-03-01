@@ -3,6 +3,7 @@ import { FormElementWithIndex, LocalizedElementProperties, Language } from "@for
 import { useTemplateStore } from "@formbuilder/store";
 import { QuestionInput, QuestionNumber } from "../";
 import { FormElement } from "@lib/types";
+import { QuestionDescription } from "./QuestionDescription";
 
 export const Question = ({
   item,
@@ -42,15 +43,7 @@ export const Question = ({
         onQuestionChange={onQuestionChange}
       />
 
-      {description && !isRichText && (
-        <div
-          data-testid="description-text"
-          className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-gray-600"
-          id={`item${itemIndex}-describedby`}
-        >
-          {description}
-        </div>
-      )}
+      {!isRichText && <QuestionDescription description={description} itemIndex={itemIndex} />}
     </>
   );
 };
