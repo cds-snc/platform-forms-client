@@ -43,7 +43,7 @@ export const Question = ({
         onQuestionChange={onQuestionChange}
       />
 
-      {!isRichText && <QuestionDescription description={description} itemIndex={itemIndex} />}
+      {!isRichText && <QuestionDescription item={item} itemIndex={itemIndex} />}
     </>
   );
 };

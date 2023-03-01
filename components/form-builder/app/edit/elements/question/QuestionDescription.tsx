@@ -1,12 +1,23 @@
+import { useTemplateStore } from "@components/form-builder/store";
+import { FormElementWithIndex, LocalizedElementProperties } from "@components/form-builder/types";
 import React from "react";
 
 export const QuestionDescription = ({
-  description,
+  item,
   itemIndex,
 }: {
-  description: string | undefined;
+  item: FormElementWithIndex;
   itemIndex: number;
 }) => {
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const properties = item.properties;
+  const description =
+    properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
+
   return (
     <>
       {description && (
