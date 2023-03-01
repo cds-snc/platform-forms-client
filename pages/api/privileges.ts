@@ -3,7 +3,6 @@ import { middleware, cors, sessionExists } from "@lib/middleware";
 import { getAllPrivileges } from "@lib/privileges";
 import { Session } from "next-auth";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
-import { logMessage } from "@lib/logger";
 import {
   createAbility,
   updatePrivilege as prismaUpdatePrivilege,

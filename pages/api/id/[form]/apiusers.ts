@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { Prisma } from "@prisma/client";
 import { isValidGovEmail } from "@lib/validation";
-import { Session } from "next-auth";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkPrivileges } from "@lib/privileges";
@@ -20,9 +19,9 @@ const handler = async (
       case "GET":
         return await getEmailListByFormID(ability, req, res);
       case "PUT":
-        return await activateOrDeactivateFormOwners(ability, req, res, session);
+        return await activateOrDeactivateFormOwners(ability, req, res);
       case "POST":
-        return await addEmailToForm(ability, req, res, session);
+        return await addEmailToForm(ability, req, res);
       default:
         return res.status(400).json({ error: "Bad Request" });
     }
@@ -88,8 +87,7 @@ export async function getEmailListByFormID(
 export async function activateOrDeactivateFormOwners(
   ability: UserAbility,
   req: NextApiRequest,
-  res: NextApiResponse,
-  session: Session
+  res: NextApiResponse
 ): Promise<void> {
   try {
     //Extracting req body
@@ -165,8 +163,7 @@ export async function activateOrDeactivateFormOwners(
 export async function addEmailToForm(
   ability: UserAbility,
   req: NextApiRequest,
-  res: NextApiResponse,
-  session?: Session
+  res: NextApiResponse
 ): Promise<void> {
   //Checking the payload's content
   const { email } = req.body;

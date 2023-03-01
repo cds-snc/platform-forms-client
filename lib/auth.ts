@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth/next";
-import { Session, User } from "next-auth";
+import { Session } from "next-auth";
 import {
   GetServerSidePropsResult,
   GetServerSidePropsContext,
@@ -16,10 +16,7 @@ import { AccessControlError, createAbility } from "./privileges";
 import { localPathRegEx } from "@lib/validation";
 
 interface ServerSidePropsAuthContext extends GetServerSidePropsContext {
-  user: AuthContextUser;
-}
-interface AuthContextUser extends User {
-  ability: UserAbility;
+  user: Session["user"] & { ability: UserAbility };
 }
 
 /**

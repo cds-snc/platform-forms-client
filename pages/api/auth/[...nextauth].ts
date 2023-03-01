@@ -138,7 +138,7 @@ export const authOptions: NextAuthOptions = {
       logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
     },
     async signOut({ token }) {
-      logEvent((token as JWT).userId, { type: "User", id: token.userId }, "UserSignOut");
+      logEvent(token.userId, { type: "User", id: token.userId }, "UserSignOut");
     },
     async createUser({ user }) {
       logEvent(user.id, { type: "User", id: user.id }, "UserRegistration");

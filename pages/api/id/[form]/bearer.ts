@@ -5,7 +5,6 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { cors, sessionExists, middleware } from "@lib/middleware";
 import { MiddlewareProps, WithRequired, UserAbility } from "@lib/types";
 import { createAbility, checkPrivileges, AccessControlError } from "@lib/privileges";
-import { Session } from "next-auth";
 
 const handler = async (
   req: NextApiRequest,
@@ -27,7 +26,7 @@ const handler = async (
       case "GET":
         return await getToken(ability, formID, res);
       case "POST":
-        return await createToken(ability, formID, res, session);
+        return await createToken(ability, formID, res);
 
       default:
         return res.status(500).json({ error: "Method not supported" });
