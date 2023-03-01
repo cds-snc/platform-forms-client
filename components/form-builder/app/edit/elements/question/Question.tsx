@@ -3,7 +3,6 @@ import { FormElementWithIndex, LocalizedElementProperties, Language } from "@for
 import { useTemplateStore } from "@formbuilder/store";
 import { QuestionInput, QuestionNumber } from "../";
 import { FormElement } from "@lib/types";
-import { QuestionDescription } from "./QuestionDescription";
 
 export const Question = ({
   item,
@@ -42,8 +41,6 @@ export const Question = ({
         hasDescription={description}
         onQuestionChange={onQuestionChange}
       />
-
-      {!isRichText && <QuestionDescription item={item} itemIndex={itemIndex} />}
     </>
   );
 };

@@ -5,6 +5,7 @@ import { ElementOption, FormElementWithIndex, Language, ElementOptionsFilter } f
 import { SelectedElement, ElementDropDown, ElementRequired, useGetSelectedOption } from ".";
 import { Question } from "./elements";
 import { FormElement } from "@lib/types";
+import { QuestionDescription } from "./elements/question/QuestionDescription";
 
 export const PanelBody = ({
   item,
@@ -75,6 +76,9 @@ export const PanelBody = ({
             item={item}
             onQuestionChange={onQuestionChange}
           />
+
+          {!isRichText && <QuestionDescription item={item} itemIndex={elIndex} />}
+
           {selectedItem?.id && (
             <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
           )}
