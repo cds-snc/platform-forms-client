@@ -21,6 +21,10 @@ import { Card } from "@components/globals/card/Card";
 import axios from "axios";
 import { useRouter } from "next/router";
 
+// TODO: performance test.
+// -computations may be a problem so do inline per row (user will at least some row by row even if lag)
+// -could try a "spinner" while rendering if lagging
+
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
 }
@@ -81,6 +85,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     );
   };
 
+  // TODO refactor/cleanup this function up
   const getCheckedItemsList = () => {
     const checked = [];
     checkedItems.forEach((item) => {
@@ -112,6 +117,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     });
   };
 
+  // TODO: browsers have different limits for simultaneous downloads. May need to look into
+  // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   // TODO: User will need to click "allow" for the multiple file download dialog, maybe want to add
   // a note in the UI
   const handleDownload = async () => {
@@ -125,23 +132,102 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     });
 
     await Promise.all(downloads)
+      .then(() => {
+        // setErrorMessage("");
+        // TODO: update Download Response Table with updated download responses. Or just reload the page?
+      })
       .catch((err) => {
         logMessage.error(err as Error);
         setErrorMessage("TODO Error downloading selected files.");
       })
       .finally(() => {
         setIsSubmitting(false);
-        setErrorMessage("");
-        // TODO: update Download Response Table with updated download responses
       });
   };
+
+  /*
+    TEMP example JSON
+    {
+      "formID":"cldx7r73j0034wdkgkyq2wgrv",
+      "status":"New",
+      "securityAttribute":"Unclassified",
+      "name":"27-02-3689",
+      "createdAt":1677530856944,
+      "lastDownloadedBy":"peter.thiessen@cds-snc.ca"}
+  */
+
+  function formatStatus(vaultStatus: string) {
+    switch (vaultStatus) {
+      case "New":
+        return <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">{vaultStatus}</span>;
+      case "Downloaded":
+        return <span className="p-2 bg-[#dcd6fe]">{vaultStatus}</span>;
+      case "Confirmed":
+        return <span className="p-2 bg-[#e2e8ef]">{vaultStatus}</span>;
+      case "Problem":
+        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">{vaultStatus}</span>;
+      default:
+        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">Unknown</span>;
+    }
+  }
+
+  // TODO check this
+  const DOWNLOAD_OVERDUE_FROM_DAY = 30;
+
+  // TODO: need downloaded date from Vault?
+  function formatDownloadResponse(vaultStatus: string, downloadDate?: Date) {
+    if (vaultStatus === "New") {
+      // TODO
+      return "TODO"; // Within X Days OR Overdue
+    }
+    if (downloadDate) {
+      //TODO
+      // Note: "Download response" DAYS_TO_DOWNLOAD - calculated by created_at
+      return downloadDate;
+    }
+    return "Unknown";
+  }
+
+  // TODO check this
+  const CONFIRM_OVERDUE_FROM_DAY = 15;
+
+  function formatConfirmReceipt(vaultStatus: string) {
+    switch (vaultStatus) {
+      case "New":
+        return "Unconfirmed";
+      case "Confirmed":
+        return "Done";
+      case "Problem":
+        return "Problem";
+      case "Downloaded":
+        //TODO
+        return "TODO"; // Within X days OR Overdue
+      default:
+        return "Unknown";
+    }
+  }
+
+  function formatRemoval(vaultStatus: string) {
+    switch (vaultStatus) {
+      case "Problem":
+        return "Won't Remove";
+      case "New":
+      case "Downloaded":
+        return "Not set";
+      case "Confirmed":
+        // TODO
+        return "TODO In X Days";
+      default:
+        return "Unknown";
+    }
+  }
 
   return (
     <>
       <Head>
         <title>{t("responses.title")}</title>
       </Head>
-      <PageTemplate title={t("responses.title")}>
+      <PageTemplate title={t("responses.title")} autoWidth={true}>
         <div className="flex justify-between items-baseline">
           <h1 className="text-2xl border-none font-normal">
             {isAuthenticated ? t("responses.title") : t("responses.unauthenticated.title")}
@@ -183,49 +269,69 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
             <div>
               {vaultSubmissions?.length > 0 && (
                 <>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Select</th>
-                        <th>Response ID</th>
-                        <th>Status</th>
-                        <th>Download Response</th>
-                        <th>Last Downloaded By</th>
-                        <th>Confirm Receipt</th>
-                        <th>Removal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <>
-                        {vaultSubmissions.map((submission, index) => (
-                          <tr key={index}>
-                            <td>
-                              <input
-                                id={submission.name}
-                                className="gc-input-checkbox__input"
-                                name="responses"
-                                type="checkbox"
-                                checked={checkedItems.get(submission.name)?.checked}
-                                onChange={handleChecked}
-                              />
-                            </td>
-                            <td>
-                              <label htmlFor={submission.name}>{submission.name}</label>
-                            </td>
-                            <td>{submission.status}</td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                              {submission.status === "Confirmed" ? "Confirmed" : "Confirm By XXXX"}
-                            </td>
-                            <td>Not Set</td>
-                          </tr>
-                        ))}
-                      </>
-                    </tbody>
-                  </table>
                   <div>
-                    <button className="gc-button" type="button" onClick={handleDownload}>
+                    <table>
+                      <thead className="border-b-2 border-[#6a6d7b]">
+                        <tr>
+                          <th className="p-4  text-center">Select</th>
+                          <th className="p-4 text-left">Number</th>
+                          <th className="p-4 text-left">Status</th>
+                          <th className="p-4 text-left whitespace-nowrap">Download Response</th>
+                          <th className="p-4 text-left whitespace-nowrap">Last Downloaded By</th>
+                          <th className="p-4 text-left whitespace-nowrap">Confirm Receipt</th>
+                          <th className="p-4 text-left">Removal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <>
+                          {vaultSubmissions.map((submission, index) => (
+                            <tr
+                              key={index}
+                              className={
+                                "border-b-2 border-grey" +
+                                (checkedItems.get(submission.name)?.checked ? " bg-[#fffbf3]" : "")
+                              }
+                            >
+                              <td className="p-4 flex">
+                                {/* TODO 
+                                    Replace below with Design System checkbox 
+                                */}
+                                <div className="form-builder">
+                                  <div className="multiple-choice-wrapper">
+                                    <input
+                                      id={submission.name}
+                                      className="multiple-choice-wrapper"
+                                      name="responses"
+                                      type="checkbox"
+                                      checked={checkedItems.get(submission.name)?.checked}
+                                      onChange={handleChecked}
+                                    />
+                                    <label htmlFor={submission.name}>
+                                      <span className="sr-only">{submission.name}</span>
+                                    </label>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="p-4 whitespace-nowrap">{submission.name}</td>
+                              <td className="p-4 ">{formatStatus(submission.status)}</td>
+                              <td className="p-4 ">{formatDownloadResponse(submission.status)}</td>
+                              <td className="p-4">
+                                <div className="truncate w-48">{submission.lastDownloadedBy}</div>
+                              </td>
+                              <td className="p-4 ">{formatConfirmReceipt(submission.status)}</td>
+                              <td className="p-4 ">{formatRemoval(submission.status)}</td>
+                            </tr>
+                          ))}
+                        </>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-8">
+                    <button
+                      className="gc-button whitespace-nowrap w-auto"
+                      type="button"
+                      onClick={handleDownload}
+                    >
                       Download {getCheckedItemsList().length} selected responses
                     </button>
                   </div>
