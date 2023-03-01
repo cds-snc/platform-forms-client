@@ -46,27 +46,41 @@ export const useUpdateElement = () => {
 
   const updateTextElement = (type: string, path: string) => {
     if (type === "textArea" || type === "textField") {
+      unsetField(`${path}.properties.validation.type`);
+      unsetField(`${path}.properties.autoComplete`);
       updateField(`${path}.type`, type);
       return;
     }
 
     updateField(`${path}.type`, "textField");
 
-    if (isValidatedTextType(type as FormElementTypes)) {
+    if (isValidatedTextType(type as FormElementTypes) && isAutoCompleteField(type)) {
       updateField(`${path}.properties.validation.type`, type);
+      updateField(`${path}.properties.autoComplete`, type);
       setDefaultTitle(type, path);
+      setDefaultDescription(type as FormElementTypes, path);
+      return;
     }
 
     if (isAutoCompleteField(type)) {
+      unsetField(`${path}.properties.validation.type`);
       updateField(`${path}.properties.autoComplete`, type);
+      setDefaultTitle(type, path);
       setDefaultDescription(type as FormElementTypes, path);
+      return;
+    }
+
+    if (isValidatedTextType(type as FormElementTypes)) {
+      updateField(`${path}.properties.validation.type`, type);
+      unsetField(`${path}.properties.autoComplete`);
+      setDefaultTitle(type, path);
+      setDefaultDescription(type as FormElementTypes, path);
+      return;
     }
   };
 
   const updateElement = (type: string, path: string) => {
     unsetField(`${path}.properties.validation.all`);
-    unsetField(`${path}.properties.validation.type`);
-    unsetField(`${path}.properties.autoComplete`);
     setDefaultDescription(type, path);
     setDefaultTitle(type, path);
 
@@ -78,6 +92,8 @@ export const useUpdateElement = () => {
       // Need to swap type because incoming `attestation` is a checkbox type
       type = FormElementTypes.checkbox;
       updateField(`${path}.properties.validation.all`, true);
+      unsetField(`${path}.properties.validation.type`);
+      unsetField(`${path}.properties.autoComplete`);
     }
 
     if (!isTextField(type as FormElementTypes)) {
