@@ -76,7 +76,10 @@ export const PanelBody = ({
             item={item}
             onQuestionChange={onQuestionChange}
           />
-
+        </div>
+      </div>
+      <div className="flex gap-x-4 xxl:flex-col justify-between relative text-base !text-sm">
+        <div className="w-3/5">
           {!isRichText && <QuestionDescription item={item} itemIndex={elIndex} />}
 
           {selectedItem?.id && (
@@ -88,17 +91,17 @@ export const PanelBody = ({
               {maxLength}
             </div>
           )}
-          <div className="absolute xxl:relative xxl:right-auto xxl:top-auto w-2/5 xxl:w-auto pl-2 right-0 top-12">
-            {!isDynamicRow && !isRichText && (
-              <ElementRequired onRequiredChange={onRequiredChange} item={item} />
-            )}
-            {item.properties.autoComplete && (
-              <div className="mt-5">
-                <strong>Autcomplete is set to:</strong>{" "}
-                {t(`autocompleteOptions.${item.properties.autoComplete}`)}
-              </div>
-            )}
-          </div>
+        </div>
+        <div className="w-2/5">
+          {!isDynamicRow && !isRichText && (
+            <ElementRequired onRequiredChange={onRequiredChange} item={item} />
+          )}
+          {item.properties.autoComplete && (
+            <div className="mt-5">
+              <strong>Autcomplete is set to:</strong>{" "}
+              {t(`autocompleteOptions.${item.properties.autoComplete}`)}
+            </div>
+          )}
         </div>
       </div>
     </div>
