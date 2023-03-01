@@ -57,10 +57,6 @@
     "shareMenu": {
       "title": "Menu de partage du Générateur de formulaires",
       "description": "Activer le menu déroulant de partage"
-    },
-    "formBuilderExperimentalBlocks": {
-      "title": "Blocs du Générateur de formulaires",
-      "description": "Activer les blocs expérimentaux"
     }
   }
 }

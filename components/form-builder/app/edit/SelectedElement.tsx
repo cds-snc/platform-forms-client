@@ -99,6 +99,15 @@ export const filterSelected = (
     const selected = elementOptions.filter((item) => item.id === FormElementTypes.attestation);
     return selected && selected.length ? selected[0] : currentSelectedItem;
   }
+
+  /**
+   * If the item has an autoComplete property, set selected item to its corresponding pseudo-type
+   */
+  if (item.properties.autoComplete) {
+    const autoCompleteValue = item.properties.autoComplete;
+    const selected = elementOptions.filter((item) => item.id === autoCompleteValue);
+    return selected && selected.length ? selected[0] : currentSelectedItem;
+  }
   return currentSelectedItem;
 };
 

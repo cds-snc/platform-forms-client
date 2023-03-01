@@ -120,7 +120,7 @@ export const ListBox = ({
                   </span>
                 </li>
                 {className && className === "separator" ? (
-                  <li role="separator" className="border-b border-1 border-grey-default" />
+                  <li role="separator" className="border-b border-1 border-grey-default mb-2" />
                 ) : null}
               </React.Fragment>
             );

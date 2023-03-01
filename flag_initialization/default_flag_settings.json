@@ -9,6 +9,5 @@
   "supportForms": false,
   "formBuilderDebug": false,
   "formBuilderAddElementDialog": false,
-  "shareMenu": false,
-  "formBuilderExperimentalBlocks": false
+  "shareMenu": false
 }
