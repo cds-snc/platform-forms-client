@@ -41,6 +41,11 @@ export const PanelBody = ({
     return elements.filter((element) => element.id !== "dynamicRow");
   };
 
+  // don't allow swapping to attestation
+  const attestationFilter: ElementOptionsFilter = (elements) => {
+    return elements.filter((element) => element.id !== "attestation");
+  };
+
   return (
     <div className="mx-7 py-7">
       <div
@@ -56,7 +61,7 @@ export const PanelBody = ({
         {!isRichText && !isDynamicRow && selectedItem?.id && (
           <div className="xxl:mt-4 w-2/5 xxl:w-full">
             <ElementDropDown
-              filterElements={elIndex === -1 ? undefined : elementFilter}
+              filterElements={elIndex === -1 ? attestationFilter : elementFilter}
               item={item}
               onElementChange={onElementChange}
               selectedItem={selectedItem}
