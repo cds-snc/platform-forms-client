@@ -6,7 +6,7 @@ import { useTemplateStore } from "../../store";
 import { useUpdateElement } from "../../hooks";
 
 export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
-  const { updateElement, updateTextElement } = useUpdateElement();
+  const { updateElement } = useUpdateElement();
   const { localizeField, updateField, resetChoices, elements } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     elements: s.form.elements,
