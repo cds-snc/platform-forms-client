@@ -27,31 +27,19 @@
   }
 
   &.gc-alert--error:not(.gc-alert--validation) {
-    [data-theme="gcds"] & {
-      background-color: var(--gcds-alert-danger-background);
-    }
-    @apply border-l-xl border-red-500;
+    @apply border-l-xl bg-red-100 border-red-500;
   }
 
   &.gc-alert--success {
-    [data-theme="gcds"] & {
-      background-color: var(--gcds-alert-success-background);
-    }
-    @apply border-l-xl border-green-500;
+    @apply border-l-xl bg-green-100 border-green-500;
   }
 
   &.gc-alert--warning {
-    [data-theme="gcds"] & {
-      background-color: var(--gcds-alert-warning-background);
-    }
-    @apply border-l-xl border-yellow-500;
+    @apply border-l-xl bg-yellow-100 border-yellow-500;
   }
 
   &.gc-alert--info {
-    [data-theme="gcds"] & {
-      background-color: var(--gcds-alert-info-background);
-    }
-    @apply border-l-xl border-blue-500;
+    @apply border-l-xl bg-blue-100 border-blue-500;
   }
 
   .gc-alert__body {

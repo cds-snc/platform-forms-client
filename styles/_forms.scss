@@ -51,10 +51,7 @@
 .gc-textarea,
 .gc-input-text,
 .gc-dropdown {
-  [data-theme="gcds"] & {
-    border-radius: var(--gcds-input-border-radius);
-  }
-  @apply py-3 px-2 md:text-small_base text-base border-solid border-2 border-black-form;
+  @apply py-3 px-2 md:text-small_base text-base border-solid border-2 border-black-form rounded-sm;
 
   &:focus {
     @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
@@ -117,11 +114,8 @@
 
     // Box.
     & + .gc-checkbox-label:before {
-      [data-theme="gcds"] & {
-        border-radius: var(--gcds-input-border-radius);
-      }
       content: "";
-      @apply md:mr-3 mr-3 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
+      @apply md:mr-3 mr-3 inline-block w-10 h-10 bg-white-default rounded-sm border-2 border-black-form;
     }
 
     // Checkmark. Could be replaced with an image
