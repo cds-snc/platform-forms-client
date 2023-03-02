@@ -20,10 +20,34 @@ import Link from "next/link";
 import { Card } from "@components/globals/card/Card";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { ExclamationIcon } from "@components/form-builder/icons";
 
-// TODO: performance test.
+/*
+  TEMP example JSON response
+  {
+    "formID":"cldx7r73j0034wdkgkyq2wgrv",
+    "status":"New",
+    "securityAttribute":"Unclassified",
+    "name":"27-02-3689",
+    "createdAt":1677530856944,
+    "lastDownloadedBy":"peter.thiessen@cds-snc.ca"
+  }
+  Missing
+  -Removal column, "In X days", how compute this? From confirmTimestamp
+  -download date ("Download Response column" DD/MM/YYYY)
+  -Status for "Downloaded" ("Status" column, vault JSON not updating after downloading a file and reloading)
+*/
+
+// TODO: User will need to click "allow" for the multiple file download dialog, maybe want to add
+// a note in the UI
+
+// TODO: performance test
 // -computations may be a problem so do inline per row (user will at least some row by row even if lag)
 // -could try a "spinner" while rendering if lagging
+
+// NOTE: browsers have different limits for simultaneous downloads. May need to look into
+// batching file downloads (e.g. 4 at a time) if edge cases/* come up.
+// e.g. Max simultaneous downloade: Chrome 5-6, Safari 4, Edge no limit (10k?), FF 5-7
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -38,6 +62,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const [errorMessage, setErrorMessage] = useState(""); // TODO
   const formId = params && params.length && params[0];
   const isAuthenticated = status === "authenticated";
+
+  // const DONWLOAD_BY = 30;
+  const DOWNLOAD_OVERDUE = 15; // NOTE: limit based on createdDate
+  // const CONFIRM_BY = 30;
+  const CONFIRM_OVERDUE = 15; // NOTE: limit based on ?createdDate?, or confirmedDate when have?
 
   const secondaryButtonClass =
     "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
@@ -59,6 +88,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
   );
 
+  // Note: Map chosen for get/set performance, though with the cloning "gymnastics" below a simple
+  // object hash may be faster. Come back to if performance is ever an issue.
   const submissionNames = new Map(
     vaultSubmissions.map((submission) => [
       submission.name,
@@ -74,7 +105,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const handleChecked = (e) => {
     const id = e.target.id;
     const checked: boolean = e.target.checked;
-    // Note: Need to clone and set so React change detection notices a change in the Map
+    // Note: Needed to clone and set so React change detection notices a change in the Map
     setCheckedItems(
       new Map(
         checkedItems.set(id, {
@@ -85,7 +116,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     );
   };
 
-  // TODO refactor/cleanup this function up
+  // TODO refactor/cleanup this function up, kind of smells..
   const getCheckedItemsList = () => {
     const checked = [];
     checkedItems.forEach((item) => {
@@ -117,10 +148,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     });
   };
 
-  // TODO: browsers have different limits for simultaneous downloads. May need to look into
-  // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  // TODO: User will need to click "allow" for the multiple file download dialog, maybe want to add
-  // a note in the UI
   const handleDownload = async () => {
     setErrorMessage("");
     setIsSubmitting(true);
@@ -134,7 +161,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     await Promise.all(downloads)
       .then(() => {
         // setErrorMessage("");
-        // TODO: update Download Response Table with updated download responses. Or just reload the page?
+        // TODO: API call to update Download Response Table with updated download responses. Or just reload the page?
       })
       .catch((err) => {
         logMessage.error(err as Error);
@@ -145,16 +172,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       });
   };
 
-  /*
-    TEMP example JSON
-    {
-      "formID":"cldx7r73j0034wdkgkyq2wgrv",
-      "status":"New",
-      "securityAttribute":"Unclassified",
-      "name":"27-02-3689",
-      "createdAt":1677530856944,
-      "lastDownloadedBy":"peter.thiessen@cds-snc.ca"}
-  */
+  function getDaysPassed(startDate: Date): number {
+    const dateCreated = new Date(startDate);
+    const dateToday = new Date();
+    const dateDiff = Math.abs(Number(dateToday) - Number(dateCreated));
+    const daysPassed = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));
+    return daysPassed;
+  }
 
   function formatStatus(vaultStatus: string) {
     switch (vaultStatus) {
@@ -171,37 +195,65 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     }
   }
 
-  // TODO check this
-  const DOWNLOAD_OVERDUE_FROM_DAY = 30;
-
   // TODO: need downloaded date from Vault?
-  function formatDownloadResponse(vaultStatus: string, downloadDate?: Date) {
-    if (vaultStatus === "New") {
-      // TODO
-      return "TODO"; // Within X Days OR Overdue
-    }
+  function formatDownloadResponse({
+    vaultStatus,
+    createdAtDate,
+    downloadDate,
+  }: {
+    vaultStatus: string;
+    createdAtDate: Date;
+    downloadDate?: Date;
+  }) {
     if (downloadDate) {
-      //TODO
-      // Note: "Download response" DAYS_TO_DOWNLOAD - calculated by created_at
+      //TODO format
       return downloadDate;
     }
+
+    if (vaultStatus === "New") {
+      const daysPassed = getDaysPassed(createdAtDate);
+      const daysLeft = DOWNLOAD_OVERDUE - daysPassed;
+      if (daysLeft > 0) {
+        return `Within ${daysLeft} days`;
+      }
+      return (
+        <div className="flex items-center">
+          <ExclamationIcon className="mr-1" />
+          <span className="font-bold text-[#bc3332]">Overdue</span>
+        </div>
+      );
+    }
+
     return "Unknown";
   }
 
-  // TODO check this
-  const CONFIRM_OVERDUE_FROM_DAY = 15;
-
-  function formatConfirmReceipt(vaultStatus: string) {
+  function formatConfirmReceipt({
+    vaultStatus,
+    createdAtDate,
+  }: {
+    vaultStatus: string;
+    createdAtDate: Date;
+  }) {
     switch (vaultStatus) {
       case "New":
         return "Unconfirmed";
       case "Confirmed":
         return "Done";
       case "Problem":
-        return "Problem";
-      case "Downloaded":
-        //TODO
-        return "TODO"; // Within X days OR Overdue
+        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332] font-bold">Problem</span>;
+      case "Downloaded": {
+        const daysPassed = getDaysPassed(createdAtDate);
+        const daysLeft = CONFIRM_OVERDUE - daysPassed;
+        if (daysLeft > 0) {
+          return `Within ${daysLeft} days`;
+        }
+        return (
+          <div className="flex items-center">
+            <ExclamationIcon className="mr-1" />
+            <span className="font-bold text-[#bc3332]">Overdue</span>
+          </div>
+        );
+      }
       default:
         return "Unknown";
     }
@@ -270,6 +322,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
               {vaultSubmissions?.length > 0 && (
                 <>
                   <div>
+                    {/* {JSON.stringify(vaultSubmissions)} */}
                     <table>
                       <thead className="border-b-2 border-[#6a6d7b]">
                         <tr>
@@ -314,11 +367,23 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                               </td>
                               <td className="p-4 whitespace-nowrap">{submission.name}</td>
                               <td className="p-4 ">{formatStatus(submission.status)}</td>
-                              <td className="p-4 ">{formatDownloadResponse(submission.status)}</td>
-                              <td className="p-4">
-                                <div className="truncate w-48">{submission.lastDownloadedBy}</div>
+                              <td className="p-4 ">
+                                {formatDownloadResponse({
+                                  vaultStatus: submission.status,
+                                  createdAtDate: submission.createdAt,
+                                })}
                               </td>
-                              <td className="p-4 ">{formatConfirmReceipt(submission.status)}</td>
+                              <td className="p-4">
+                                <div className="truncate w-48">
+                                  {submission.lastDownloadedBy || "Not downloaded"}
+                                </div>
+                              </td>
+                              <td className="p-4 ">
+                                {formatConfirmReceipt({
+                                  vaultStatus: submission.status,
+                                  createdAtDate: submission.createdAt,
+                                })}
+                              </td>
                               <td className="p-4 ">{formatRemoval(submission.status)}</td>
                             </tr>
                           ))}
@@ -446,6 +511,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       ]);
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...submissions);
+      logMessage.info("------------" + JSON.stringify(vaultSubmissions));
     } catch (e) {
       if (e instanceof AccessControlError) {
         logMessage.info(

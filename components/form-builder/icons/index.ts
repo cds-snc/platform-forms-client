@@ -51,3 +51,4 @@ export { ChevronRight } from "./ChevronRight";
 export { AddIcon } from "./AddIcon";
 export { RemoveIcon } from "./RemoveIcon";
 export { MessageIcon } from "./Message";
+export { ExclamationIcon } from "./ExclamationIcon";
