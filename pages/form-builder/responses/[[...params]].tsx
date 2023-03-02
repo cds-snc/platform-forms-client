@@ -199,15 +199,20 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   function formatDownloadResponse({
     vaultStatus,
     createdAtDate,
-    downloadDate,
+    downloadedAt,
   }: {
     vaultStatus: string;
     createdAtDate: Date;
-    downloadDate?: Date;
+    downloadedAt?: Date;
   }) {
-    if (downloadDate) {
-      //TODO format
-      return downloadDate;
+    if (vaultStatus === "Downloaded" && downloadedAt) {
+      // Format date for: DD/MM/YYYY
+      const date = new Date(downloadedAt);
+      const day = String(date.getDate()).length <= 2 ? `0${date.getDate()}` : date.getDate();
+      const month =
+        String(date.getMonth()).length <= 2 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     }
 
     if (vaultStatus === "New") {
@@ -323,7 +328,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                 <>
                   <div>
                     {/* {JSON.stringify(vaultSubmissions)} */}
-                    <table>
+                    <table className="text-sm">
                       <thead className="border-b-2 border-[#6a6d7b]">
                         <tr>
                           <th className="p-4  text-center">Select</th>
@@ -370,7 +375,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                               <td className="p-4 ">
                                 {formatDownloadResponse({
                                   vaultStatus: submission.status,
-                                  createdAtDate: submission.createdAt,
+                                  downloadedAt: submission.downloadedAt,
                                 })}
                               </td>
                               <td className="p-4">
