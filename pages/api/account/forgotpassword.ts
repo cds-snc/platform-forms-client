@@ -50,9 +50,6 @@ const logPasswordReset = async (email: string) => {
       },
       select: {
         id: true,
-        name: true,
-        email: true,
-        privileges: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
