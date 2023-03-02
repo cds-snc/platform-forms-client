@@ -66,7 +66,9 @@ export const SubOptions = ({
   const subIndex = item.index;
   // get choices from the parent element
   const subElements = elements[elIndex].properties.subElements ?? [];
-  const choices = subElements[subIndex]?.properties.choices ?? [];
+  const choices = subElements[subIndex]?.properties.choices?.length
+    ? subElements[subIndex]?.properties.choices
+    : [{ en: "", fr: "" }];
 
   if (!choices) {
     return <AddOptions elIndex={elIndex} subIndex={subIndex} />;

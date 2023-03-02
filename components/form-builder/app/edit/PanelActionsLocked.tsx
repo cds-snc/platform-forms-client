@@ -1,19 +1,20 @@
 import React, { useCallback } from "react";
 
 import { FormElementTypes } from "@lib/types";
-import { isValidatedTextType } from "../../util";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
 import { blockLoader } from "../../blockLoader";
+import { useUpdateElement } from "@components/form-builder/hooks";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
-  const { add, setFocusInput, updateField } = useTemplateStore((s) => ({
+  const { add, setFocusInput } = useTemplateStore((s) => ({
     add: s.add,
-    updateField: s.updateField,
     setFocusInput: s.setFocusInput,
   }));
 
-  /* Note this callback is also in PanelActions */
+  const { addElement: updateElement, isTextField } = useUpdateElement();
+
+  /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       if (type === FormElementTypes.attestation) {
@@ -22,13 +23,11 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
       }
 
       setFocusInput(true);
-      add(index, isValidatedTextType(type) ? FormElementTypes.textField : type);
-      if (isValidatedTextType(type)) {
-        // add 1 to index because it's a new element
-        updateField(`form.elements[${index + 1}].properties.validation.type`, type as string);
-      }
+      add(index, isTextField(type as string) ? FormElementTypes.textField : type);
+      // add 1 to index because it's a new element
+      updateElement(type as string, `form.elements[${index + 1}]`);
     },
-    [add, setFocusInput, updateField]
+    [add, setFocusInput, updateElement, isTextField]
   );
 
   if (!addElement) return null;

@@ -1,78 +1,112 @@
 {
   "addElement": "Ajouter un bloc",
   "addElementDialog": {
-    "layoutBlocks": "Blocs de mise en page",
-    "inputBlocks": "Blocs de saisie",
-    "advancedBlocks": "Blocs avancés",
     "addButton": "Sélectionner ce bloc",
-    "questionElement": "Blocs",
-    "listItem": "Élément de liste ",
-    "checkboxItem": "Case à cocher",
-    "example": "exemple",
+    "advancedBlocks": "Blocs avancés",
+    "allRequired": "[FR] all required",
     "answer": "Réponse...",
-    "yes": "Oui",
-    "no": "Non",
-    "sometimes": "Parfois",
-    "exampleElement": "exemple du bloc",
+    "attest": "[FR] I agree to:",
+    "attestation": {
+      "description": "[FR] Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes.",
+      "title": "[FR] Legal attestation"
+    },
+    "checkbox": {
+      "description": "Description des choix multiples",
+      "title": "Choix multiples"
+    },
+    "checkboxItem": "Case à cocher",
     "condition1": "[FR] Condition 1",
     "condition2": "[FR] Condition 2",
     "condition3": "[FR] Condition 3",
-    "attest": "[FR] I agree to:",
-    "allRequired": "[FR] all required",
-    "richText": {
-      "title": "Texte en grand format",
-      "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes."
-    },
-    "radio": {
-      "title": "Boutons radio",
-      "description": "Description des boutons radio"
-    },
-    "checkbox": {
-      "title": "Choix multiples",
-      "description": "Description des choix multiples"
+    "date": {
+      "description": "Description de la date",
+      "title": "Date"
     },
     "dropdown": {
-      "title": "Liste déroulante",
-      "description": "Description de la liste déroulante"
-    },
-    "textField": {
-      "title": "Question à réponse courte",
-      "description": "Description de la question à réponse courte"
-    },
-    "textArea": {
-      "title": "Question à réponse longue",
-      "description": "Description de la question à réponse longue"
-    },
-    "phone": {
-      "title": "Téléphone mobile",
-      "description": "Description du téléphone mobile"
-    },
-    "email": {
-      "title": "Adresse courriel",
-      "description": "Description de l'adresse courriel"
-    },
-    "date": {
-      "title": "Date",
-      "description": "Description de la date"
-    },
-    "number": {
-      "title": "Numéro",
-      "description": "Description du numéro"
+      "description": "Description de la liste déroulante",
+      "title": "Liste déroulante"
     },
     "dynamicRow": {
-      "title": "Série répétitive de questions",
-      "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
+      "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
+      "title": "Série répétitive de questions"
     },
-    "attestation": {
-      "title": "[FR] Legal attestation",
-      "description": "[FR] Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes."
-    }
+    "email": {
+      "description": "Description de l'adresse courriel",
+      "title": "Adresse courriel"
+    },
+    "example": "exemple",
+    "exampleElement": "exemple du bloc",
+    "inputBlocks": "Blocs de saisie",
+    "layoutBlocks": "Blocs de mise en page",
+    "listItem": "Élément de liste ",
+    "no": "Non",
+    "number": {
+      "description": "Description du numéro",
+      "title": "Numéro"
+    },
+    "phone": {
+      "description": "Description du téléphone mobile",
+      "title": "Téléphone mobile"
+    },
+    "questionElement": "Blocs",
+    "radio": {
+      "description": "Description des boutons radio",
+      "title": "Boutons radio"
+    },
+    "richText": {
+      "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
+      "title": "Texte en grand format"
+    },
+    "sometimes": "Parfois",
+    "textArea": {
+      "description": "Description de la question à réponse longue",
+      "title": "Question à réponse longue"
+    },
+    "textField": {
+      "description": "Description de la question à réponse courte",
+      "title": "Question à réponse courte"
+    },
+    "postal-code": {
+      "label": "[FR] Postal code",
+      "description": "[FR] Postal code description",
+      "title": "[FR] Postal code title"
+    },
+    "yes": "Oui"
   },
   "addMultiple": "Ajouter plusieurs options",
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter ou modifier une liste",
   "addRules": "Ajouter des règles",
+  "addToSet": "Ajouter à la série",
   "at": "à",
+  "attestation": "[FR] Legal attestation",
+  "autocompleteOptions": {
+    "additional-name": "[FR] Middle name",
+    "address-level1": "[FR] Province, State",
+    "address-level2": "[FR] City, town, community",
+    "address-line1": "[FR] Address line 1 (civic number and street name)",
+    "address-line2": "[FR] Address line 2 (apartment or suite)",
+    "address-line3": "[FR] Address line 3 (other address details)",
+    "bday": "[FR] Birthdate",
+    "bday-day": "[FR] Day of birthday",
+    "bday-month": "[FR] Birth month",
+    "bday-year": "[FR] Birth year",
+    "country": "[FR] Country code (2 letter country identifier)",
+    "country-name": "[FR] Country",
+    "email": "[FR] Email address",
+    "family-name": "[FR] Last name",
+    "given-name": "[FR] First name",
+    "honorific-prefix": "[FR] Name prefix, Mr, Mrs, Dr",
+    "honorific-suffix": "[FR] Name suffix, Jr, B.Sc,",
+    "language": "[FR] Language",
+    "name": "[FR] Full name (includes first, middle and last names)",
+    "organization-title": "[FR] Job title",
+    "phone": "[FR] Phone number",
+    "postal-code": "[FR] Postal or zip code",
+    "street-address": "[FR] Full street address (includes address lines 1-3)",
+    "url": "[FR] Website address"
+  },
+  "autocompleteWhenNotToUse": "[FR] When not to use autocomplete",
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
@@ -119,7 +153,8 @@
     "date": "Entrez une date comme mm/dd/yyyy",
     "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
-    "phone": "Entrez un numéro de téléphone comme 111-222-3333"
+    "phone": "Entrez un numéro de téléphone comme 111-222-3333",
+    "postal-code": ""
   },
   "description": "La description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
@@ -127,6 +162,7 @@
   "downloadCSV": "Télécharger le fichier CSV",
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
+  "dyanamicRow": "Série répétitive de questions",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -237,8 +273,16 @@
   "publishYourFormInstructions": "Vous devez franchir les étapes suivantes avant de publier votre formulaire. ",
   "question": "Question",
   "questions": "Questions",
+  "questionSet": {
+    "addAnother": {
+      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses ».",
+      "placeholder": "Ajouter",
+      "title": "Bouton"
+    }
+  },
   "questionTitle": "Titre de question",
   "remove": "Supprimer",
+  "removeFromSet": "Enlever de la série",
   "removeOption": "Supprimer l'option :  ",
   "requestSuccess": {
     "backToForms": "Retourner à Formulaires GC",
@@ -251,6 +295,21 @@
   },
   "required": "Obligatoire",
   "responseDelivery": "Tester la réception des réponses",
+  "responses": {
+    "changeSetup": "Changer la configuration",
+    "confirmReceipt": "Confirmer la réception",
+    "navLabel": "Réponses",
+    "reportProblems": "Signaler des problèmes",
+    "title": "Télécharger les réponses",
+    "unauthenticated": {
+      "createOne": "créez-en un",
+      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
+      "signIn": "connectez-vous",
+      "title": "Se connecter pour accéder aux réponses",
+      "toAccessPagePart1": "Pour accéder à cette page,",
+      "toAccessPagePart2": "à votre compte Formulaires GC"
+    }
+  },
   "richText": "Section texte",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
@@ -259,6 +318,8 @@
   "save": "Enregistrer",
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
   "saveDraft": "Enregistrer l’ébauche",
+  "selectAutocomplete": "[FR] Select an autocomplete attribute",
+  "selectAutocompleteHint": "[FR] This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
   "settingsDeleteButton": "Supprimer le formulaire",
@@ -274,18 +335,20 @@
   "settingsResponseNotePublished": "Pour modifier la destination de livraison des réponses.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
   "share": {
-    "formUser": "Un·e utilisateur·rice de Formulaires GC",
     "copy": "Copier",
     "email": "Partager par courriel",
     "emailLabel": "Adresse courriel",
     "enLink": "Lien en anglais",
+    "formUser": "Un·e utilisateur·rice de Formulaires GC",
     "frLink": "Lien en français",
     "link": "Obtenir le lien",
     "message": "Les personnes avec qui vous partagez recevront un courriel avec un fichier JSON joint. Elles peuvent afficher le fichier JSON à l'aide de Formulaires GC, sans compte requis.",
+    "messageSent": "Le message a été envoyé",
     "open": "Ouvrir",
     "seePreview": "Voir un aperçu du message courriel",
     "someone": "Quelqu'un",
     "someoneHasShared": "{{name}} a partagé un formulaire avec vous sur Formulaires GC",
+    "startOver": "Recommencer",
     "stepOne": "Étape 1 :",
     "stepOneDetails": "Enregistrer le fichier JSON du formulaire ci-joint sur votre ordinateur",
     "stepThree": "Étape 3 :",
@@ -295,17 +358,15 @@
     "stepTwoDetailsNoHTML": "Allez sur Formulaires GC (https://forms-formulaires.alpha.canada.ca/). Aucun compte n'est nécessaire.",
     "title": "Partager",
     "toPreview": "Pour prévisualiser ce formulaire :",
-    "messageSent": "Le message a été envoyé",
-    "startOver": "Recommencer",
     "unauthenticated": {
+      "copyInstructions": "[FR] Copy instructions",
       "description": "[FR] You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">Sign up</a> today to get access to this feature and more.",
+      "downloadFormFile": "[FR] Download form file",
       "instructions": "[FR] You can download a copy of this form file to your computer and share it through your email.",
       "step1": "[FR] Step 1",
       "step1Details": "[FR] Download a copy of your form as a JSON form file to your computer",
       "step2": "[FR] Step 2",
-      "step2Details": "[FR] Copy and paste the email instructions into an email and attach the form file",
-      "copyInstructions": "[FR] Copy instructions",
-      "downloadFormFile": "[FR] Download form file"
+      "step2Details": "[FR] Copy and paste the email instructions into an email and attach the form file"
     },
     "unpublished": "Lien n'est pas disponible pour les formulaires non publiés"
   },
@@ -358,31 +419,5 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "dyanamicRow": "Série répétitive de questions",
-  "addToSet": "Ajouter à la série",
-  "removeFromSet": "Enlever de la série",
-  "responses": {
-    "title": "Télécharger les réponses",
-    "navLabel": "Réponses",
-    "confirmReceipt": "Confirmer la réception",
-    "reportProblems": "Signaler des problèmes",
-    "changeSetup": "Changer la configuration",
-    "unauthenticated": {
-      "title": "Se connecter pour accéder aux réponses",
-      "toAccessPagePart1": "Pour accéder à cette page,",
-      "signIn": "connectez-vous",
-      "toAccessPagePart2": "à votre compte Formulaires GC",
-      "noAccount": "Si vous n'avez pas de compte Formulaires GC,",
-      "createOne": "créez-en un"
-    }
-  },
-  "unnamedForm": "Formulaire sans titre",
-  "questionSet": {
-    "addAnother": {
-      "title": "Bouton",
-      "placeholder": "Ajouter",
-      "description": "Créez une étiquette descriptive pour le bouton afin d'indiquer aux personnes remplissant le formulaire qu'elles peuvent ajouter un autre ensemble de réponses. Par exemple, ajouter « une autre adresses »."
-    }
-  },
-  "attestation": "[FR] Legal attestation"
+  "unnamedForm": "Formulaire sans titre"
 }

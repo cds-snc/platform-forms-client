@@ -155,9 +155,40 @@ export const formatDateTimeLong = (updatedAt: number | undefined, locale = "en-C
   return date.toLocaleDateString(locale, options);
 };
 
+export const autoCompleteFields = [
+  "name",
+  "given-name",
+  "additional-name",
+  "family-name",
+  "honorific-prefix",
+  "honorific-suffix",
+  "organization-title",
+  "street-address",
+  "address-line1",
+  "address-line2",
+  "address-line3",
+  "address-level2",
+  "address-level1",
+  "country",
+  "country-name",
+  "postal-code",
+  "language",
+  "bday",
+  "bday-day",
+  "bday-month",
+  "bday-year",
+  "url",
+  "email",
+  "phone",
+];
+
 // check if the type is being passed is a "text field" input but has a ƒspecific type
 export const isValidatedTextType = (type: FormElementTypes | undefined) => {
   return type && ["email", "phone", "date", "number"].includes(type);
+};
+
+export const isAutoCompleteField = (type: string) => {
+  return type && autoCompleteFields.includes(type);
 };
 
 export const getHost = () => {
