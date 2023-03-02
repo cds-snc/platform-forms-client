@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 
 import { useTemplateStore } from "../../../../store";
 import { PanelBodySub } from "../../PanelBodySub";
-import { isValidatedTextType } from "../../../../util";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { AddElementButton } from "../element-dialog/AddElementButton";
 import { LocalizedElementProperties, Language, ElementOptionsFilter } from "../../../../types";
@@ -11,6 +10,7 @@ import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
+import { useUpdateElement } from "../../../../hooks";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -18,7 +18,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   const {
     addSubItem,
     resetSubChoices,
-    unsetField,
     updateField,
     subMoveUp,
     subMoveDown,
@@ -36,7 +35,6 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     subMoveUp: s.subMoveUp,
     subMoveDown: s.subMoveDown,
     subDuplicateElement: s.subDuplicateElement,
-    unsetField: s.unsetField,
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
     resetSubChoices: s.resetSubChoices,
@@ -45,20 +43,20 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
 
+  const { addElement, updateElement, isTextField } = useUpdateElement();
+
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
-      addSubItem(elIndex, subIndex, isValidatedTextType(type) ? FormElementTypes.textField : type);
-      if (isValidatedTextType(type)) {
-        // add 1 to index because it's a new element
-        updateField(
-          `form.elements[${elIndex}].properties.subElements[${
-            subIndex + 1
-          }].properties.validation.type`,
-          type as string
-        );
-      }
+      addSubItem(
+        elIndex,
+        subIndex,
+        isTextField(type as string) ? FormElementTypes.textField : type
+      );
+      // add 1 to index because it's a new element
+      const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
+      addElement(type as string, path);
     },
-    [addSubItem, updateField, elIndex]
+    [addSubItem, elIndex, isTextField, addElement]
   );
 
   const handlePlaceHolderText = useCallback(
@@ -82,74 +80,11 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
     );
   };
 
-  const onElementChange = (id: string, elIndex: number, subIndex: number) => {
-    switch (id) {
-      case "text":
-      case "textField":
-      case "email":
-      case "phone":
-      case "date":
-      case "number":
-        updateField(
-          `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.type`,
-          "textField"
-        );
-        if (id === "textField" || id === "text") {
-          unsetField(
-            `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.type`
-          );
-        } else {
-          updateField(
-            `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.type`,
-            id
-          );
-          unsetField(
-            `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.maxLength`
-          );
-        }
-        break;
-      case "richText":
-        resetSubChoices(elIndex, subIndex);
-      // no break here (we want default to happen)
-      default: // eslint-disable-line no-fallthrough
-        updateField(`form.elements[${elIndex}].properties.subElements[${subIndex}].type`, id);
-        unsetField(
-          `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.type`
-        );
-        unsetField(
-          `form.elements[${elIndex}].properties.subElements[${subIndex}].properties.validation.maxLength`
-        );
-        break;
-    }
-
-    _setDefaultDescription(id, elIndex, subIndex);
-  };
-
-  const _setDefaultDescription = (id: string, elIndex: number, subIndex: number) => {
-    switch (id) {
-      case "email":
-      case "phone":
-      case "date":
-      case "number":
-        // update default description en
-        updateField(
-          `form.elements[${elIndex}].properties.subElements[${subIndex}].properties[${localizeField(
-            LocalizedElementProperties.DESCRIPTION,
-            "en"
-          )}]`,
-          t(`defaultElementDescription.${id}`, { lng: "en" })
-        );
-        // update default description fr
-        updateField(
-          `form.elements[${elIndex}].properties.subElements[${subIndex}].properties[${localizeField(
-            LocalizedElementProperties.DESCRIPTION,
-            "fr"
-          )}]`,
-          t(`defaultElementDescription.${id}`, { lng: "fr" })
-        );
-        break;
-      default:
-        break;
+  const onElementChange = (type: string, elIndex: number, subIndex: number) => {
+    const path = `form.elements[${elIndex}].properties.subElements[${subIndex}]`;
+    updateElement(type, path);
+    if (type === "richText") {
+      resetSubChoices(elIndex, subIndex);
     }
   };
 

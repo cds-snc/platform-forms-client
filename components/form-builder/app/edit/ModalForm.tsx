@@ -6,6 +6,8 @@ import { FormElementTypes, ElementProperties } from "@lib/types";
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
 import { Checkbox, Input, TextArea } from "../shared";
 import { useTemplateStore } from "../../store";
+import { AutocompleteDropdown } from "./AutocompleteDropdown";
+import { InfoIcon } from "@components/form-builder/icons";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="block mb-50 font-[700]">
@@ -32,6 +34,8 @@ export const ModalForm = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const localizeField = useTemplateStore((s) => s.localizeField);
+
+  const autocompleteSelectedValue = properties.autoComplete || "";
 
   return (
     <form
@@ -92,6 +96,27 @@ export const ModalForm = ({
           label={t("required")}
         ></Checkbox>
       </div>
+      {item.type === FormElementTypes.textField && (
+        <div className="mt-8 mb-2">
+          <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
+          <Hint>{t("selectAutocompleteHint")}</Hint>
+          <div>
+            <AutocompleteDropdown
+              handleChange={(e) => {
+                const autoComplete = e.target.value;
+                updateModalProperties(item.index, {
+                  ...properties,
+                  ...{ autoComplete },
+                });
+              }}
+              selectedValue={autocompleteSelectedValue as string}
+            />{" "}
+            <span>
+              <InfoIcon className="inline-block w-7" /> {t("autocompleteWhenNotToUse")}
+            </span>
+          </div>
+        </div>
+      )}
       {item.type === FormElementTypes.textField &&
         (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
           <div className="mb-2">
