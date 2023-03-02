@@ -9,6 +9,7 @@ import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
+import { Session } from "next-auth";
 
 describe("User query tests should fail gracefully", () => {
   it("getOrCreateUser should fail gracefully - create", async () => {
@@ -35,7 +36,10 @@ describe("User query tests should fail gracefully", () => {
   });
 
   it("getUsers should fail silenty", async () => {
-    const ability = createAbility(ManageUsers);
+    const fakeSession = {
+      user: { id: "1", privileges: ManageUsers },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     prismaMock.user.findMany.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", "P2024", "4.3.2")
@@ -104,8 +108,10 @@ describe("getOrCreateUser", () => {
 
 describe("getUsers", () => {
   it.each([[ViewUserPrivileges], [ManageUsers]])("Returns a list of users", async (privileges) => {
-    const ability = createAbility(privileges);
-
+    const fakeSession = {
+      user: { id: "1", privileges },
+    };
+    const ability = createAbility(fakeSession as Session);
     const returnedUsers = [
       {
         id: "3",
@@ -130,7 +136,10 @@ describe("getUsers", () => {
 
 describe("Users CRUD functions should throw an error if user does not have any permissions", () => {
   it("User with no permission should not be able to use CRUD functions", async () => {
-    const ability = createAbility([]);
+    const fakeSession = {
+      user: { id: "1", privileges: Base },
+    };
+    const ability = createAbility(fakeSession as Session);
 
     await expect(async () => {
       await getUsers(ability);

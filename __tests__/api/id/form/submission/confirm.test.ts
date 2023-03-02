@@ -7,7 +7,7 @@ import confirm from "@pages/api/id/[form]/submission/confirm";
 import { getServerSession } from "next-auth/next";
 import { Session } from "next-auth";
 import { mockClient } from "aws-sdk-client-mock";
-import { logMessage } from "@lib/logger";
+import { logEvent } from "@lib/auditLogs";
 import {
   BatchGetCommand,
   DynamoDBDocumentClient,
@@ -15,7 +15,9 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import Redis from "ioredis-mock";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
+import { prismaMock } from "@jestUtils";
 
+import { Base, getUserPrivileges } from "__utils__/permissions";
 jest.mock("next-auth/next");
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
@@ -38,10 +40,9 @@ jest.mock("@lib/cache/flags", () => {
   };
 });
 
-jest.mock("@lib/logger");
-const mockLogMessage = jest.mocked(logMessage, { shallow: true });
-mockLogMessage.info.mockImplementation(jest.fn());
-mockLogMessage.error.mockImplementation(jest.fn());
+jest.mock("@lib/auditLogs");
+
+const mockLogEvent = jest.mocked(logEvent, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
@@ -63,6 +64,46 @@ describe("Confirm form submissions (without active session)", () => {
 
     expect(res.statusCode).toEqual(401);
   });
+  it("Should not be able to use the API if user does not own form", async () => {
+    const mockSession: Session = {
+      expires: "1",
+      user: {
+        id: "1",
+        email: "a@b.com",
+        name: "Testing Forms",
+        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        acceptableUse: true,
+      },
+    };
+
+    mockGetSession.mockResolvedValue(mockSession);
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      users: [
+        {
+          id: "2",
+          name: "test",
+        },
+      ],
+    });
+
+    const { req, res } = createMocks({
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      query: {
+        form: 8,
+      },
+      body: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
+    });
+
+    await confirm(req, res);
+
+    mockGetSession.mockResolvedValue(mockSession);
+    expect(res.statusCode).toEqual(403);
+  });
 });
 
 describe("Confirm form submissions (with active session)", () => {
@@ -73,7 +114,8 @@ describe("Confirm form submissions (with active session)", () => {
         id: "1",
         email: "a@b.com",
         name: "Testing Forms",
-        privileges: [],
+        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        acceptableUse: true,
       },
     };
 
@@ -173,6 +215,14 @@ describe("Confirm form submissions (with active session)", () => {
       },
       body: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      users: [
+        {
+          id: "1",
+          name: "test",
+        },
+      ],
+    });
 
     ddbMock.on(BatchGetCommand).resolves({
       Responses: {
@@ -191,10 +241,13 @@ describe("Confirm form submissions (with active session)", () => {
     expect(JSON.parse(res._getData())).toEqual({
       confirmedSubmissions: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
-    expect(mockLogMessage.info.mock.calls.length).toBe(1);
-    expect(mockLogMessage.info.mock.calls[0][0]).toContain(
-      "user:a@b.com confirmed form submissions [12-05-2000] for form ID:8"
-    );
+    expect(mockLogEvent.mock.calls.length).toBe(1);
+    expect(mockLogEvent.mock.calls[0]).toEqual([
+      "1",
+      { id: "12-05-2000", type: "Response" },
+      "ConfirmResponse",
+      "Confirmed response for form 8",
+    ]);
   });
 
   it("API should skip confirmation codes corresponding to submissions that have already been confirmed", async () => {
@@ -208,6 +261,15 @@ describe("Confirm form submissions (with active session)", () => {
         form: 8,
       },
       body: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
+    });
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      users: [
+        {
+          id: "1",
+          name: "test",
+        },
+      ],
     });
 
     ddbMock.on(BatchGetCommand).resolves({
@@ -229,10 +291,7 @@ describe("Confirm form submissions (with active session)", () => {
       confirmationCodesAlreadyUsed: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
-    expect(mockLogMessage.info.mock.calls.length).toBe(1);
-    expect(mockLogMessage.info.mock.calls[0][0]).toContain(
-      "user:a@b.com confirmed form submissions [] for form ID:8"
-    );
+    expect(mockLogEvent.mock.calls.length).toBe(0);
   });
 
   it("API should skip confirmation codes that are not associated to any submission", async () => {
@@ -248,6 +307,15 @@ describe("Confirm form submissions (with active session)", () => {
       body: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
 
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      users: [
+        {
+          id: "1",
+          name: "test",
+        },
+      ],
+    });
+
     ddbMock.on(BatchGetCommand).resolves({
       Responses: {
         Vault: [],
@@ -261,10 +329,7 @@ describe("Confirm form submissions (with active session)", () => {
       invalidConfirmationCodes: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
-    expect(mockLogMessage.info.mock.calls.length).toBe(1);
-    expect(mockLogMessage.info.mock.calls[0][0]).toContain(
-      "user:a@b.com confirmed form submissions [] for form ID:8"
-    );
+    expect(mockLogEvent.mock.calls.length).toBe(0);
   });
 
   it("API request should fail if update/delete process did not succeed", async () => {
@@ -278,6 +343,15 @@ describe("Confirm form submissions (with active session)", () => {
         form: 8,
       },
       body: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
+    });
+
+    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+      users: [
+        {
+          id: "1",
+          name: "test",
+        },
+      ],
     });
 
     ddbMock.on(BatchGetCommand).resolves({

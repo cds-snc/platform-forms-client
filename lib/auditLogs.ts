@@ -56,7 +56,7 @@ function getSQSClient() {
 
 const getQueueURL = async () => {
   // If queueURL is already populated by an env var do not overwrite
-  if (!queueUrl) {
+  if (!queueUrl && process.env.NODE_ENV !== "test") {
     const client = getSQSClient();
     const data = await client.send(
       new GetQueueUrlCommand({
@@ -108,11 +108,3 @@ export const logEvent = async (
     logMessage.warn(`AuditLog:${auditLog}`);
   }
 };
-
-/*
-
-
-
-
-
-    */

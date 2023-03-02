@@ -6,6 +6,7 @@
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { getCsrfToken } from "next-auth/react";
 import { mocked } from "jest-mock";
+import { prismaMock } from "@jestUtils";
 import {
   CognitoIdentityProviderClient,
   ForgotPasswordCommand,
@@ -108,6 +109,10 @@ describe("/account/confirmpassword", () => {
       mockedCognitoIdentityProviderClient.mockImplementationOnce(() => ({
         send: sendFunctionMock,
       }));
+
+      (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "asefeasdf",
+      });
 
       const { req, res } = createMocks({
         method: "POST",

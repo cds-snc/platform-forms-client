@@ -14,9 +14,10 @@ import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
-import { logMessage } from "@lib/logger";
+import * as auditLogModule from "@lib/auditLogs";
 
 jest.mock("next-auth/next");
+jest.mock("@lib/auditLogs");
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
@@ -119,6 +120,7 @@ describe("/api/id/[form]/[submission]/download", () => {
           email: "forms@cds.ca",
           name: "forms user",
           privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          acceptableUse: true,
         },
       };
 
@@ -174,6 +176,7 @@ describe("/api/id/[form]/[submission]/download", () => {
       expect(res.statusCode).toBe(403);
     });
     test("Renders a HTML file", async () => {
+      const auditLog = jest.spyOn(auditLogModule, "logEvent");
       // Data mocks
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         id: "formTestID",
@@ -192,8 +195,6 @@ describe("/api/id/[form]/[submission]/download", () => {
       };
       ddbMock.on(GetCommand).resolves(dynamodbExpectedResponse);
       ddbMock.on(UpdateCommand).resolves;
-
-      const spiedLogMessage = jest.spyOn(logMessage, "info");
 
       const { req, res } = createMocks(
         {
@@ -214,9 +215,15 @@ describe("/api/id/[form]/[submission]/download", () => {
       await download(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(spiedLogMessage).toHaveBeenCalledWith(
-        "user:forms@cds.ca retrieved form responses for response name: 123-test, submissionID: 12, form ID: formtestID"
-      );
+      expect(auditLog.mock.calls).toEqual([
+        ["1", { id: "formtestID", type: "Form" }, "ReadForm"],
+        [
+          "1",
+          { id: "123-test", type: "Response" },
+          "DownloadResponse",
+          "Downloaded form response for submission ID 12",
+        ],
+      ]);
       expect(res._getHeaders()).toMatchObject({
         "content-disposition": "attachment; filename=123-test.html",
       });

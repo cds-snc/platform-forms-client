@@ -13,7 +13,6 @@ import { Session } from "next-auth";
 import { getUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
 
 jest.mock("next-auth/next");
-jest.mock("@lib/adminLogs");
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
