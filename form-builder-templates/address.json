@@ -1,0 +1,114 @@
+[
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Apartment or Suite",
+      "titleFr": "[FR] Apartment or Suite",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "address-line2"
+    }
+  },
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Address details",
+      "titleFr": "[FR] Address details",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "address-line3"
+    }
+  },
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "City (town)",
+      "titleFr": "[FR] City (town)",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "address-level2"
+    }
+  },
+  {
+    "id": 6,
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Postal Code",
+      "titleFr": "[FR] Postal Code",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "postal-code"
+    }
+  },
+  {
+    "id": 7,
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Country",
+      "titleFr": "[FR] Country",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "country-name"
+    }
+  }
+]

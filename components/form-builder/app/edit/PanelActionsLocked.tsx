@@ -22,6 +22,11 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
         return;
       }
 
+      if (type === FormElementTypes.address) {
+        blockLoader(type, (data) => add(index, FormElementTypes.textField, data));
+        return;
+      }
+
       setFocusInput(true);
       add(index, isTextField(type as string) ? FormElementTypes.textField : type);
       // add 1 to index because it's a new element

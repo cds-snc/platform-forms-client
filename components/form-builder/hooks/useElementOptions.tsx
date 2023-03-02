@@ -145,6 +145,13 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: group.advanced,
     },
+    {
+      id: "address",
+      value: "Address",
+      icon: <AddIcon />,
+      description: Attestation,
+      group: group.advanced,
+    },
   ];
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
