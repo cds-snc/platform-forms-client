@@ -14,6 +14,7 @@ import {
   incrementSubElementId,
 } from "../util";
 import { Language } from "../types";
+import _get from "lodash.get";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import {
@@ -22,7 +23,9 @@ import {
   FormElementTypes,
   DeliveryOption,
   ElementProperties,
+  BrandProperties,
 } from "@lib/types";
+
 import { logMessage } from "@lib/logger";
 
 const defaultField: FormElement = {
@@ -115,6 +118,16 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
   updateField: (path: string, value: string | boolean | ElementProperties) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
+  getPropertiesByPath: (
+    path: string
+  ) =>
+    | string
+    | number
+    | boolean
+    | Record<string, string>
+    | (string | number | FormElement)[]
+    | BrandProperties
+    | undefined;
   unsetField: (path: string) => void;
   duplicateElement: (elIndex: number) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
@@ -220,6 +233,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               return `${path}.${get().localizeField(field, lang)}` ?? "";
             }
             return `${path}.${field}` ?? "";
+          },
+          getPropertiesByPath: (path: string) => {
+            const pathArray = path.split(".");
+            pathArray.shift();
+            return _get(get().form, pathArray.join("."));
           },
           unsetField: (path) =>
             set((state) => {

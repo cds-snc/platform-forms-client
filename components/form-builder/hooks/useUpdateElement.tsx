@@ -1,15 +1,16 @@
 import { useTemplateStore } from "../store";
 import { LocalizedElementProperties } from "../types";
 import { useTranslation } from "next-i18next";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, ElementProperties } from "@lib/types";
 import { isValidatedTextType, isAutoCompleteField } from "@components/form-builder/util";
 
 export const useUpdateElement = () => {
   const { t } = useTranslation("form-builder");
-  const { localizeField, updateField, unsetField } = useTemplateStore((s) => ({
+  const { localizeField, updateField, unsetField, getPropertiesByPath } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     updateField: s.updateField,
     unsetField: s.unsetField,
+    getPropertiesByPath: s.getPropertiesByPath,
   }));
 
   const setDefaultDescription = (type: string, path: string) => {
@@ -73,7 +74,40 @@ export const useUpdateElement = () => {
     }
   };
 
+  const getDefaultDescription = (type: string) => {
+    return {
+      descriptionEn: t([`defaultElementDescription.${type}`, ""], { lng: "en" }),
+      descriptionFr: t([`defaultElementDescription.${type}`, ""], { lng: "fr" }),
+    };
+  };
+
+  const getDefaultTitle = (type: string) => {
+    return {
+      titleEn: t([`addElementDialog.${type}.label`, ""], { lng: "en" }),
+      titleFr: t([`addElementDialog.${type}.label`, ""], { lng: "fr" }),
+    };
+  };
+
+  const getPropertyObject = (type: string, path: string) => {
+    try {
+      const {
+        validation: required,
+        // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+        autoComplete,
+        ...rest
+      } = getPropertiesByPath(`${path}.properties`) as ElementProperties;
+      const titles = getDefaultTitle(type);
+      const descriptions = getDefaultDescription(type);
+      const properties = { ...rest, validation: required, ...titles, ...descriptions };
+      return properties;
+    } catch (e) {
+      // console.log(e);
+    }
+  };
+
   const updateElement = (type: string, path: string) => {
+    getPropertyObject(type, path);
+
     unsetField(`${path}.properties.validation.all`);
     setDefaultDescription(type, path);
     setDefaultTitle(type, path);
