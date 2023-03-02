@@ -8,7 +8,7 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
-import { MiddlewareProps, WithRequired, Responses } from "@lib/types";
+import { MiddlewareProps, WithRequired, Responses, AnyObject } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToStaticNodeStream } from "react-dom/server";
@@ -94,7 +94,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       };
     })(response.Item);
 
-    const pageProps = {
+    const pageProps: AnyObject = {
       formResponse,
       formTemplate: fullFormTemplate.form,
       confirmReceiptCode,
