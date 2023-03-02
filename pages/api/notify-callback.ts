@@ -13,14 +13,14 @@ const sqsClient = new SQSClient({
   endpoint: process.env.LOCAL_AWS_ENDPOINT,
 });
 
-const getQueueURL = () =>
-  sqsClient
-    .send(
-      new GetQueueUrlCommand({
-        QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
-      })
-    )
-    .then((data) => data.QueueUrl);
+const getQueueURL = async () => {
+  const data = await sqsClient.send(
+    new GetQueueUrlCommand({
+      QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
+    })
+  );
+  return data.QueueUrl;
+};
 
 /**
  * @description
