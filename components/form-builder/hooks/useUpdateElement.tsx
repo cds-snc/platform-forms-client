@@ -45,6 +45,35 @@ export const useUpdateElement = () => {
     );
   };
 
+  const getTextElementProperties = (type: string) => {
+    const obj: { type?: string; autoComplete?: string; validation: { type?: string } } = {
+      validation: {},
+    };
+
+    if (type === "textArea" || type === "textField") {
+      obj.type = type;
+      return obj;
+    }
+
+    obj.type = "textField";
+
+    if (isValidatedTextType(type as FormElementTypes) && isAutoCompleteField(type)) {
+      obj.validation.type = type;
+      obj.autoComplete = type;
+      return obj;
+    }
+
+    if (isAutoCompleteField(type)) {
+      obj.autoComplete = type;
+      return obj;
+    }
+
+    if (isValidatedTextType(type as FormElementTypes)) {
+      obj.validation.type = type;
+      return obj;
+    }
+  };
+
   const updateTextElement = (type: string, path: string) => {
     if (type === "textArea" || type === "textField") {
       unsetField(`${path}.properties.validation.type`);
@@ -91,14 +120,38 @@ export const useUpdateElement = () => {
   const getPropertyObject = (type: string, path: string) => {
     try {
       const {
-        validation: required,
+        validation,
         // eslint-disable-next-line  @typescript-eslint/no-unused-vars
         autoComplete,
         ...rest
       } = getPropertiesByPath(`${path}.properties`) as ElementProperties;
+
       const titles = getDefaultTitle(type);
       const descriptions = getDefaultDescription(type);
-      const properties = { ...rest, validation: required, ...titles, ...descriptions };
+      const textProps = getTextElementProperties(type);
+      const textValidation = textProps?.validation ?? {};
+      const textAutoComplete = textProps?.autoComplete
+        ? { autoComplete: textProps?.autoComplete }
+        : { type: "" };
+      const textType = textProps?.type ? { type: textProps?.type } : {};
+
+      const attestation: { all?: boolean } = {};
+
+      if (type === FormElementTypes.attestation) {
+        attestation.all = true;
+      }
+
+      const validationObj = { required: validation?.required, ...textValidation, ...attestation };
+
+      const properties = {
+        ...rest,
+        ...titles,
+        ...descriptions,
+        ...textType,
+        validation: { ...validationObj },
+        ...textAutoComplete,
+      };
+
       return properties;
     } catch (e) {
       // console.log(e);
@@ -106,8 +159,7 @@ export const useUpdateElement = () => {
   };
 
   const updateElement = (type: string, path: string) => {
-    getPropertyObject(type, path);
-
+    // const properties = getPropertyObject(type, path);
     unsetField(`${path}.properties.validation.all`);
     setDefaultDescription(type, path);
     setDefaultTitle(type, path);
