@@ -139,4 +139,5 @@ export async function getToken(
   return res.status(200).json({ bearerToken: result.bearerToken });
 }
 
-export default middleware([cors({ allowedMethods: ["GET", "POST"] }), sessionExists()], handler);
+// Removing access for all Methods until this API is ready for use.
+export default middleware([cors({ allowedMethods: [] }), sessionExists()], handler);

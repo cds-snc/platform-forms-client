@@ -72,8 +72,6 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       <Tabs>
         <TabList>
           <Tab>{t("settings.tabLabels.jsonUpload")}</Tab>
-          <Tab>{t("settings.tabLabels.bearerToken")}</Tab>
-          <Tab>{t("settings.tabLabels.formAccess")}</Tab>
         </TabList>
 
         <TabPanel>
@@ -88,12 +86,6 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
               redirect={`/admin/view-templates`}
             />
           </div>
-        </TabPanel>
-        <TabPanel>
-          <BearerRefresh formID={formRecord.id} />
-        </TabPanel>
-        <TabPanel>
-          <FormAccess formID={formRecord.id} />
         </TabPanel>
       </Tabs>
     </>
