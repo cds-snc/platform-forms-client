@@ -59,7 +59,7 @@ describe("Test FormBuilder", () => {
 
     // re-check form editor
     cy.get("#item0").scrollIntoView().should("have.value", "Question 1-1");
-    cy.get("#item0-describedby").should("contain", "Question 1 description");
+    cy.get("#item1-describedby").should("contain", "Question 1 description");
     cy.get("#required-0-id").should("be.checked");
 
     // preview form
