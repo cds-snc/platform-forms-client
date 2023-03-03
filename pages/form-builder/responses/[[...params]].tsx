@@ -62,11 +62,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const [errorMessage, setErrorMessage] = useState(""); // TODO
   const formId = params && params.length && params[0];
   const isAuthenticated = status === "authenticated";
-
-  // const DONWLOAD_BY = 30;
-  const DOWNLOAD_OVERDUE = 15; // NOTE: limit based on createdDate
-  // const CONFIRM_BY = 30;
-  const CONFIRM_OVERDUE = 15; // NOTE: limit based on ?createdDate?, or confirmedDate when have?
+  const MAX_FILE_DOWNLOADS = 20;
+  const DOWNLOAD_OVERDUE = 15;
+  const CONFIRM_OVERDUE = 15;
 
   const secondaryButtonClass =
     "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
@@ -153,6 +151,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   };
 
   const handleDownload = async () => {
+    if (getCheckedItemsList().length > MAX_FILE_DOWNLOADS) {
+      return;
+    }
+
     setErrorMessage("");
     setIsSubmitting(true);
 
@@ -201,13 +203,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   function formatStatus(vaultStatus: string) {
     switch (vaultStatus) {
       case "New":
-        return <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">{vaultStatus}</span>;
+        return <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">New</span>;
       case "Downloaded":
-        return <span className="p-2 bg-[#dcd6fe]">{vaultStatus}</span>;
+        return <span className="p-2 bg-[#dcd6fe]">Downloaded</span>;
       case "Confirmed":
-        return <span className="p-2 bg-[#e2e8ef]">{vaultStatus}</span>;
+        return <span className="p-2 bg-[#e2e8ef]">Confirmed</span>;
       case "Problem":
-        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">{vaultStatus}</span>;
+        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">Problem</span>;
       default:
         return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">Unknown</span>;
     }
@@ -279,19 +281,22 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     }
   }
 
-  function formatRemoval(vaultStatus: string) {
-    switch (vaultStatus) {
-      case "Problem":
-        return "Won't Remove";
-      case "New":
-      case "Downloaded":
-        return "Not set";
-      case "Confirmed":
-        // TODO
-        return "TODO In X Days";
-      default:
-        return "Unknown";
+  function formatRemoval({ vaultStatus, removedAt }: { vaultStatus: string; removedAt?: Date }) {
+    //TODO: if days <= 0, maybe "Removed" or something?
+    if (vaultStatus === "Confirmed" && removedAt) {
+      const days = getDaysPassed(removedAt);
+      return `Within ${days} days`;
     }
+
+    if (vaultStatus === "Problem") {
+      return "Won't Remove";
+    }
+
+    if (vaultStatus === "New" || vaultStatus === "Downloaded") {
+      return "Not set";
+    }
+
+    return "Unknown";
   }
 
   return (
@@ -342,7 +347,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
               {vaultSubmissions?.length > 0 && (
                 <>
                   <div>
-                    {/* {JSON.stringify(vaultSubmissions)} */}
                     <table className="text-sm">
                       <thead className="border-b-2 border-[#6a6d7b]">
                         <tr>
@@ -405,7 +409,12 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                                   createdAtDate: submission.createdAt,
                                 })}
                               </td>
-                              <td className="p-4 ">{formatRemoval(submission.status)}</td>
+                              <td className="p-4 ">
+                                {formatRemoval({
+                                  vaultStatus: submission.status,
+                                  removedAt: submission.removedAt,
+                                })}
+                              </td>
                             </tr>
                           ))}
                         </>
@@ -418,11 +427,18 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       type="button"
                       onClick={handleDownload}
                     >
-                      Download {getCheckedItemsList().length} selected responses
+                      Download {getCheckedItemsList().length} selected responses{" "}
+                      {getCheckedItemsList().length > MAX_FILE_DOWNLOADS
+                        ? `(Max ${MAX_FILE_DOWNLOADS})`
+                        : ""}
                     </button>
                   </div>
-                  {isSubmitting && <h2>TODO Downloading</h2>}
-                  {errorMessage && <h2>TODO {errorMessage}</h2>}
+
+                  {/* TODO Add a spinner or something */}
+                  {isSubmitting && <div>Downloading...</div>}
+
+                  {/* TODO Add a toast message or something */}
+                  {errorMessage && <div>{errorMessage}</div>}
                 </>
               )}
 
@@ -532,7 +548,6 @@ export const getServerSideProps: GetServerSideProps = async ({
       ]);
       FormbuilderParams.initialForm = initialForm;
       vaultSubmissions.push(...submissions);
-      logMessage.info("------------" + JSON.stringify(vaultSubmissions));
     } catch (e) {
       if (e instanceof AccessControlError) {
         logMessage.info(
@@ -547,6 +562,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       }
     }
   }
+
+  //TEMP
+  logMessage.info("------------\n" + JSON.stringify(vaultSubmissions));
 
   return {
     props: {
