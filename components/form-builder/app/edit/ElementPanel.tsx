@@ -57,7 +57,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
       if (type === FormElementTypes.attestation || type === FormElementTypes.address) {
-        blockLoader(type, (data) => add(index, type, data));
+        blockLoader(type, (data) => add(index, data.type, data));
         return;
       }
 

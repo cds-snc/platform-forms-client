@@ -49,7 +49,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
       if (type === FormElementTypes.address) {
-        blockLoader(type, (data: FormElement) => addSubItem(elIndex, subIndex, type, data));
+        blockLoader(type, (data: FormElement) => addSubItem(elIndex, subIndex, data.type, data));
         return;
       }
 
