@@ -106,7 +106,7 @@ export const PanelBody = ({
           </div>
           <div className="flex gap-x-4 xxl:flex-col justify-between text-sm">
             <div className="w-3/5 xxl:w-full">
-              <QuestionDescription item={item} itemIndex={elIndex} describedById={describedById} />
+              <QuestionDescription item={item} describedById={describedById} />
 
               {selectedItem?.id && (
                 <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />
