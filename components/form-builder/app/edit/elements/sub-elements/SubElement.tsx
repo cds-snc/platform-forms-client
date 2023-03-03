@@ -11,6 +11,7 @@ import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
 import { useUpdateElement } from "../../../../hooks";
+import { blockLoader } from "../../../../blockLoader";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -47,6 +48,11 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
+      if (type === FormElementTypes.address) {
+        blockLoader(type, (data: FormElement) => addSubItem(elIndex, subIndex, type, data));
+        return;
+      }
+
       addSubItem(
         elIndex,
         subIndex,
