@@ -128,12 +128,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   // Note: A hack to enable an ajax file download through axios. Oddly setting the responseType
   // is not enough. Come back to this, suspect there is a better way..
   const forceFileDownload = (response: any, fileName: string) => {
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", fileName);
-    document.body.appendChild(link);
-    link.click();
+    try {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+    } catch (e) {
+      logMessage.error(`Error: browser failed to start file downloaded for file ${fileName}`);
+    }
   };
 
   const downloadFile = async (url: string, submissionName: string) => {
@@ -160,8 +164,10 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
     await Promise.all(downloads)
       .then(() => {
-        // setErrorMessage("");
-        // TODO: API call to update Download Response Table with updated download responses. Or just reload the page?
+        // TODO: setErrorMessage("");
+
+        // Refreshes getServersideProps data without a page re-load
+        router.replace(router.asPath);
       })
       .catch((err) => {
         logMessage.error(err as Error);
@@ -172,12 +178,24 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       });
   };
 
-  function getDaysPassed(startDate: Date): number {
-    const dateCreated = new Date(startDate);
+  function getDaysPassed(date: Date): number {
+    const dateCreated = new Date(date);
     const dateToday = new Date();
     const dateDiff = Math.abs(Number(dateToday) - Number(dateCreated));
     const daysPassed = Math.ceil(dateDiff / (1000 * 60 * 60 * 24));
     return daysPassed;
+  }
+
+  // Format date for: DD/MM/YYYY
+  function formatDate(date: Date): string {
+    const dateObj = new Date(date);
+    const day = String(dateObj.getDate()).length <= 2 ? `0${dateObj.getDate()}` : dateObj.getDate();
+    const month =
+      String(dateObj.getMonth()).length <= 2
+        ? `0${dateObj.getMonth() + 1}`
+        : dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+    return `${day}/${month}/${year}`;
   }
 
   function formatStatus(vaultStatus: string) {
@@ -195,38 +213,35 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     }
   }
 
-  // TODO: need downloaded date from Vault?
   function formatDownloadResponse({
     vaultStatus,
-    createdAtDate,
+    createdAt,
     downloadedAt,
   }: {
     vaultStatus: string;
-    createdAtDate: Date;
+    createdAt?: Date;
     downloadedAt?: Date;
   }) {
-    if (vaultStatus === "Downloaded" && downloadedAt) {
-      // Format date for: DD/MM/YYYY
-      const date = new Date(downloadedAt);
-      const day = String(date.getDate()).length <= 2 ? `0${date.getDate()}` : date.getDate();
-      const month =
-        String(date.getMonth()).length <= 2 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-      const year = date.getFullYear();
-      return `${day}/${month}/${year}`;
-    }
-
-    if (vaultStatus === "New") {
-      const daysPassed = getDaysPassed(createdAtDate);
+    if (vaultStatus === "New" && createdAt) {
+      const daysPassed = getDaysPassed(createdAt);
       const daysLeft = DOWNLOAD_OVERDUE - daysPassed;
       if (daysLeft > 0) {
         return `Within ${daysLeft} days`;
       }
       return (
+        // TODO: probably move to an Exclamation component
         <div className="flex items-center">
           <ExclamationIcon className="mr-1" />
           <span className="font-bold text-[#bc3332]">Overdue</span>
         </div>
       );
+    }
+
+    if (
+      (vaultStatus === "Downloaded" || vaultStatus === "Confirmed" || vaultStatus === "Problem") &&
+      downloadedAt
+    ) {
+      return formatDate(downloadedAt);
     }
 
     return "Unknown";
@@ -375,6 +390,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                               <td className="p-4 ">
                                 {formatDownloadResponse({
                                   vaultStatus: submission.status,
+                                  createdAt: submission.createdAt,
                                   downloadedAt: submission.downloadedAt,
                                 })}
                               </td>
