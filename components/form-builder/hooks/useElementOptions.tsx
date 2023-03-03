@@ -27,6 +27,7 @@ import {
   QuestionSet,
   Attestation,
   PostalCode,
+  Address,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -149,7 +150,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       id: "address",
       value: "Address",
       icon: <AddIcon />,
-      description: Attestation,
+      description: Address,
       group: group.advanced,
     },
   ];
