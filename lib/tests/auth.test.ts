@@ -317,6 +317,7 @@ describe("Test Auth lib", () => {
         temporaryToken: "theRightTokenInTheDatabase",
         created_at: new Date(),
         updated_at: new Date(),
+        lastLogin: new Date(),
       });
       const session = await validateTemporaryToken(token);
       expect(session).toEqual(null);
@@ -337,6 +338,7 @@ describe("Test Auth lib", () => {
         temporaryToken: token,
         created_at: new Date(),
         updated_at: new Date(),
+        lastLogin: new Date(),
       });
       const session = await validateTemporaryToken(token);
       expect(session).toMatchObject({

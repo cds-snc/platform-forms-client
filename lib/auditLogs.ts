@@ -42,37 +42,29 @@ export enum AuditSubjectType {
 }
 
 let sqsClient: SQSClient | null = null;
-let queueUrl = process.env.AUDIT_LOG_QUEUE_URL;
+let queueUrl: string | null = null;
 
-function getSQSClient() {
+const getQueueURL = async (client: SQSClient) => {
+  const data = await client.send(
+    new GetQueueUrlCommand({
+      QueueName: "audit_log_queue",
+    })
+  );
+  return data.QueueUrl ?? null;
+};
+
+const getSQSClient = async () => {
   if (!sqsClient) {
     sqsClient = new SQSClient({
       region: process.env.AWS_REGION ?? "ca-central-1",
       endpoint: process.env.LOCAL_AWS_ENDPOINT,
     });
   }
-  return sqsClient;
-}
-
-const getQueueURL = async () => {
-  // If queueURL is already populated by an env var do not overwrite
-  if (!queueUrl && process.env.NODE_ENV !== "test") {
-    const client = getSQSClient();
-    const data = await client.send(
-      new GetQueueUrlCommand({
-        QueueName: "audit_log_queue",
-      })
-    );
-    queueUrl = data.QueueUrl;
+  if (!queueUrl) {
+    queueUrl = process.env.AUDIT_LOG_QUEUE_URL ?? (await getQueueURL(sqsClient));
   }
+  return sqsClient;
 };
-
-// Initialize the Queue Client
-// --------------------------------
-
-getQueueURL().catch(() => logMessage.warn("Audit Log Queue not connected"));
-
-//-----------------------------------------
 
 export const logEvent = async (
   userID: string,
@@ -88,9 +80,8 @@ export const logEvent = async (
     description,
   });
   try {
-    const client = getSQSClient();
-    if (!queueUrl) throw new Error("Audit Log Queue not connected");
-
+    const client = await getSQSClient();
+    if (!queueUrl || !sqsClient) throw new Error("Audit Log Queue not connected");
     await client.send(
       new SendMessageCommand({
         MessageBody: auditLog,
