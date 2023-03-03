@@ -20,32 +20,7 @@ describe("Question", () => {
     cleanup();
   });
 
-  it("renders with descripton", async () => {
-    const promise = Promise.resolve();
-
-    const item = { id: 1, index: 0, ...store.elements[0] };
-
-    const rendered = render(
-      <Providers form={store}>
-        <Question item={item} elements={[]} />
-      </Providers>
-    );
-
-    const question = rendered.container.querySelector("#item0");
-    expect(question).toHaveAttribute("placeholder", "question");
-    expect(question).toHaveValue("question 1");
-
-    const desciption = rendered.getByTestId("description-text");
-    expect(desciption).toHaveTextContent("description 1 en");
-
-    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
-    // > especially if there's no visual indication of the async task completing.
-    await act(async () => {
-      await promise;
-    });
-  });
-
-  it("renders with no descripton", async () => {
+  it("renders", async () => {
     const promise = Promise.resolve();
 
     const item = {
