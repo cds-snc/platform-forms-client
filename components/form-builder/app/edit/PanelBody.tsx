@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import { ElementOption, FormElementWithIndex, Language, ElementOptionsFilter } from "../../types";
+import {
+  ElementOption,
+  FormElementWithIndex,
+  Language,
+  ElementOptionsFilter,
+  LocalizedElementProperties,
+} from "../../types";
 import { SelectedElement, ElementDropDown, ElementRequired, useGetSelectedOption } from ".";
 import { Question } from "./elements";
 import { FormElement } from "@lib/types";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
+import { useTemplateStore } from "@components/form-builder/store";
 
 export const PanelBody = ({
   item,
@@ -47,6 +54,16 @@ export const PanelBody = ({
     return elements.filter((element) => element.id !== "attestation");
   };
 
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const description =
+    properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
+
+  const describedById = description ? `item${item.id}-describedby` : undefined;
+
   return (
     <>
       {isRichText || isDynamicRow ? (
@@ -83,12 +100,13 @@ export const PanelBody = ({
                 elIndex={elIndex}
                 item={item}
                 onQuestionChange={onQuestionChange}
+                describedById={describedById}
               />
             </div>
           </div>
           <div className="flex gap-x-4 xxl:flex-col justify-between text-sm">
             <div className="w-3/5 xxl:w-full">
-              <QuestionDescription item={item} itemIndex={elIndex} />
+              <QuestionDescription item={item} itemIndex={elIndex} describedById={describedById} />
 
               {selectedItem?.id && (
                 <SelectedElement item={item} selected={selectedItem} elIndex={elIndex} />

@@ -10,12 +10,14 @@ export const Question = ({
   elIndex,
   onQuestionChange,
   questionInputRef,
+  describedById,
 }: {
   item: FormElementWithIndex;
   elements: FormElement[];
   elIndex?: number;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
   questionInputRef: React.RefObject<HTMLInputElement>;
+  describedById?: string;
 }) => {
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -25,8 +27,6 @@ export const Question = ({
   const itemIndex = item.index;
   const isRichText = item.type === "richText";
   const properties = item.properties;
-  const description =
-    properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
   const title =
     properties[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)];
 
@@ -38,7 +38,7 @@ export const Question = ({
         questionInputRef={questionInputRef}
         initialValue={title}
         index={itemIndex}
-        hasDescription={description}
+        describedById={describedById}
         onQuestionChange={onQuestionChange}
       />
     </>

@@ -4,10 +4,10 @@ import React from "react";
 
 export const QuestionDescription = ({
   item,
-  itemIndex,
+  describedById,
 }: {
   item: FormElementWithIndex;
-  itemIndex: number;
+  describedById?: string;
 }) => {
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -24,7 +24,7 @@ export const QuestionDescription = ({
         <div
           data-testid="description-text"
           className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-gray-600"
-          id={`item${itemIndex}-describedby`}
+          id={describedById}
         >
           {description}
         </div>
