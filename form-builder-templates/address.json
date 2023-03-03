@@ -9,16 +9,16 @@
           "fr": ""
         }
       ],
-      "titleEn": "Apartment or Suite",
-      "titleFr": "[FR] Apartment or Suite",
+      "titleEn": "Street address",
+      "titleFr": "[FR] Street address",
       "validation": {
         "required": false
       },
-      "descriptionEn": "",
-      "descriptionFr": "",
+      "descriptionEn": "Include your civic number and street name, apartment or suite, and other address details",
+      "descriptionFr": "[FR] Include your civic number and street name, apartment or suite, and other address details",
       "placeholderEn": "",
       "placeholderFr": "",
-      "autoComplete": "address-line2"
+      "autoComplete": "street-address"
     }
   },
   {
@@ -31,30 +31,8 @@
           "fr": ""
         }
       ],
-      "titleEn": "Address details",
-      "titleFr": "[FR] Address details",
-      "validation": {
-        "required": false
-      },
-      "descriptionEn": "",
-      "descriptionFr": "",
-      "placeholderEn": "",
-      "placeholderFr": "",
-      "autoComplete": "address-line3"
-    }
-  },
-  {
-    "type": "textField",
-    "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
-      "titleEn": "City (town)",
-      "titleFr": "[FR] City (town)",
+      "titleEn": "City, town or community",
+      "titleFr": "[FR] City, town or community",
       "validation": {
         "required": false
       },
@@ -66,7 +44,27 @@
     }
   },
   {
-    "id": 6,
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Province",
+      "titleFr": "[FR] Province",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": ""
+    }
+  },
+  {
     "type": "textField",
     "properties": {
       "subElements": [],
@@ -86,29 +84,6 @@
       "placeholderEn": "",
       "placeholderFr": "",
       "autoComplete": "postal-code"
-    }
-  },
-  {
-    "id": 7,
-    "type": "textField",
-    "properties": {
-      "subElements": [],
-      "choices": [
-        {
-          "en": "",
-          "fr": ""
-        }
-      ],
-      "titleEn": "Country",
-      "titleFr": "[FR] Country",
-      "validation": {
-        "required": false
-      },
-      "descriptionEn": "",
-      "descriptionFr": "",
-      "placeholderEn": "",
-      "placeholderFr": "",
-      "autoComplete": "country-name"
     }
   }
 ]
