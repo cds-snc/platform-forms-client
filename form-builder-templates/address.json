@@ -61,7 +61,8 @@
       "descriptionEn": "",
       "descriptionFr": "",
       "placeholderEn": "",
-      "placeholderFr": ""
+      "placeholderFr": "",
+      "autoComplete": "address-level1"
     }
   },
   {
