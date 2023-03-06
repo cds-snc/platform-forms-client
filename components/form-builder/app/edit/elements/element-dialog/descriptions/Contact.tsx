@@ -28,7 +28,7 @@ export const Contact = ({ title }: { title: string }) => {
       />
 
       <h3 className="mb-0 mt-8 text-[1.5rem]">{t("addElementDialog.contact.language.label")}</h3>
-      <div className="mt-8 ml-1">
+      <div className="mt-8 ml-1 text-[1rem]">
         <div className="flex flex-col">
           <div className="flex mb-5">
             <div>
