@@ -158,7 +158,15 @@
     "address": {
       "label": "[FR] Address",
       "description": "[FR] Address description",
-      "title": "[FR] Address title"
+      "title": "[FR] What is your address?",
+      "street": {
+        "label": "[FR] Street address",
+        "description": "[FR] Include your civic number and street name, apartment or suite, and other address details"
+      },
+      "city": "[FR] City, town or community",
+      "province": "[FR] Province or state",
+      "country": "[FR] City, town or community",
+      "postal": "[FR] Postal or zip code"
     }
   },
   "description": "La description ",
