@@ -103,15 +103,21 @@
     },
     "contact": {
       "label": "[FR] Contact",
+      "title": "[FR] How can we contact you?",
       "description": "[FR] Contact description",
-      "title": "[FR] Contact title",
       "phone": {
         "label": "[FR] Phone number",
-        "description": "[FR] Phone number description"
+        "description": "[FR] Enter your phone number like, 111-222-3333"
       },
       "email": {
         "label": "[FR] Email address",
-        "description": "[FR] Email address description"
+        "description": "[FR] Enter your email number like, name@example.com"
+      },
+      "language": {
+        "label": "[FR] What is your preferred language for communication?",
+        "description": "[FR] We offer our services in both official languages, French and English",
+        "english": "Anglais",
+        "french": "Français"
       }
     },
     "yes": "Oui"

@@ -17,18 +17,9 @@ export const Name = ({ title }: { title: string }) => {
   return (
     <div>
       <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text
-        label={t("addElementDialog.name.first.label")}
-        description={t("addElementDialog.name.first.description")}
-      />
-      <Text
-        label={t("addElementDialog.name.middle.label")}
-        description={t("addElementDialog.name.middle.description")}
-      />
-      <Text
-        label={t("addElementDialog.name.last.label")}
-        description={t("addElementDialog.name.last.description")}
-      />
+      <Text label={t("addElementDialog.name.first.label")} />
+      <Text label={t("addElementDialog.name.middle.label")} />
+      <Text label={t("addElementDialog.name.last.label")} />
     </div>
   );
 };

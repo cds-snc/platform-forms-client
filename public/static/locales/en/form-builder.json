@@ -87,7 +87,7 @@
     "name": {
       "label": "Name",
       "description": "Name description",
-      "title": "Name title",
+      "title": "What is your name?",
       "first": {
         "label": "First name",
         "description": "First name description"
@@ -103,15 +103,21 @@
     },
     "contact": {
       "label": "Contact",
+      "title": "How can we contact you?",
       "description": "Contact description",
-      "title": "Contact title",
       "phone": {
         "label": "Phone number",
-        "description": "Phone number description"
+        "description": "Enter your phone number like, 111-222-3333"
       },
       "email": {
         "label": "Email address",
-        "description": "Email address description"
+        "description": "Enter your email number like, name@example.com"
+      },
+      "language": {
+        "label": "What is your preferred language for communication?",
+        "description": "We offer our services in both official languages, French and English",
+        "english": "English",
+        "french": "French"
       }
     },
     "yes": "Yes"

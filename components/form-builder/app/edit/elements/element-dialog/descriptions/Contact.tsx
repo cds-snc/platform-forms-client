@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { RadioEmptyIcon } from "@components/form-builder/icons";
 
 const Text = ({ label, description }: { label: string; description?: string }) => {
   return (
@@ -16,7 +17,7 @@ export const Contact = ({ title }: { title: string }) => {
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
+      <h3 className="font-bold text-[1.5rem] mb-2">{title}</h3>
       <Text
         label={t("addElementDialog.contact.phone.label")}
         description={t("addElementDialog.contact.phone.description")}
@@ -25,6 +26,24 @@ export const Contact = ({ title }: { title: string }) => {
         label={t("addElementDialog.contact.email.label")}
         description={t("addElementDialog.contact.email.description")}
       />
+
+      <h3 className="mb-0 mt-8 text-[1.5rem]">{t("addElementDialog.contact.language.label")}</h3>
+      <div className="mt-8 ml-1">
+        <div className="flex flex-col">
+          <div className="flex mb-5">
+            <div>
+              <RadioEmptyIcon className="scale-150" />
+            </div>
+            <div className="-mt-1 ml-5">{t("addElementDialog.contact.language.english")}</div>
+          </div>
+          <div className="flex mb-5">
+            <div>
+              <RadioEmptyIcon className="scale-150" />
+            </div>
+            <div className="-mt-1 ml-5">{t("addElementDialog.contact.language.french")}</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
