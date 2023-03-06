@@ -21,10 +21,11 @@ import { Card } from "@components/globals/card/Card";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { DownloadTable } from "@components/form-builder/app/DownloadTable";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // TODO: User will need to click "allow" for the multiple file download dialog, add to UI?
 // TODO: UI for table download delay, and maybe on render ("spinner"?)
-// TODO: UI for error messages
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -35,8 +36,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const { status } = useSession();
   const router = useRouter();
   const { params } = router.query;
-  const [isSubmitting, setIsSubmitting] = useState(false); // TODO
-  const [errorMessage, setErrorMessage] = useState(""); // TODO
   const formId = params && params.length && params[0];
   const isAuthenticated = status === "authenticated";
   const MAX_FILE_DOWNLOADS = 20;
@@ -78,16 +77,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   // Note: A hack to enable an ajax file download through axios. Oddly setting the responseType
   // is not enough. Come back to this, suspect there is a better way..
   const forceFileDownload = (response: AxiosResponse<any, any>, fileName: string) => {
-    try {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
-    } catch (e) {
-      logMessage.error(`Error: browser failed to start file downloaded for file ${fileName}`);
-    }
+    // NOTE: intentionally allowing Errors to be thrown and caught in container Promise
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
   };
 
   const downloadFile = async (url: string, submissionName: string) => {
@@ -98,7 +94,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     }).then((response) => {
       forceFileDownload(response, `${submissionName}.html`);
-      // return submissionName;
     });
   };
 
@@ -107,11 +102,24 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   // e.g. Max simultaneous downloade: Chrome 5-6, Safari 4, Edge no limit (10k?), FF 5-7
   const handleDownload = async () => {
     if (getCheckedItemsList().size > MAX_FILE_DOWNLOADS) {
+      toast.warn(
+        t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
       return;
     }
 
-    setErrorMessage("");
-    setIsSubmitting(true);
+    const toastDownloadingId = toast.info(
+      t("downloadResponsesTable.download.downloadingXFiles", {
+        fileCount: getCheckedItemsList().size,
+      }),
+      {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: false,
+      }
+    );
 
     const downloads = Array.from(getCheckedItemsList(), (item) => {
       const url = `/api/id/${formId}/${item[0]}/download`;
@@ -121,17 +129,21 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
     await Promise.all(downloads)
       .then(() => {
-        // TODO: setErrorMessage("");
+        toast.dismiss(toastDownloadingId);
+        toast.success(t("downloadResponsesTable.download.downloadComplete"), {
+          position: toast.POSITION.TOP_CENTER,
+        });
 
         // Refreshes getServersideProps data without a page re-load
         router.replace(router.asPath);
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrorMessage(t("downloadResponsesTable.errors.errorDownloadingFiles"));
-      })
-      .finally(() => {
-        setIsSubmitting(false);
+        toast.dismiss(toastDownloadingId);
+        toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: false,
+        });
       });
   };
 
@@ -193,21 +205,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       type="button"
                       onClick={handleDownload}
                     >
-                      {t("downloadResponsesTable.downloadXSelectedResponsesX", {
+                      {t("downloadResponsesTable.download.downloadXSelectedResponses", {
                         size: getCheckedItemsList().size,
-                        maxReached:
-                          getCheckedItemsList().size > MAX_FILE_DOWNLOADS
-                            ? `(Max ${MAX_FILE_DOWNLOADS})`
-                            : "",
                       })}
                     </button>
                   </div>
-
-                  {/* TODO Add a spinner or something */}
-                  {isSubmitting && <div>{t("downloadResponsesTable.downloading")}</div>}
-
-                  {/* TODO Add a toast message or something */}
-                  {errorMessage && <div>{errorMessage}</div>}
                 </>
               )}
 
@@ -263,6 +265,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
           <h2>TODO Report Problems</h2>
         </Dialog>
       )}
+
+      {/* Sticky to stop the page from scrolling the top when showing a Toast */}
+      <div className="sticky top-0">
+        <ToastContainer />
+      </div>
     </>
   );
 };
@@ -331,9 +338,6 @@ export const getServerSideProps: GetServerSideProps = async ({
       }
     }
   }
-
-  //TEMP
-  logMessage.info("------------\n" + JSON.stringify(vaultSubmissions));
 
   return {
     props: {

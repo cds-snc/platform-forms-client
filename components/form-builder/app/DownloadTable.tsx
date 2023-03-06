@@ -2,6 +2,7 @@ import React from "react";
 import { VaultSubmissionList } from "@lib/types";
 import { ExclamationIcon } from "@components/form-builder/icons";
 import { useTranslation } from "react-i18next";
+import { Loader } from "@components/globals/Loader";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -169,7 +170,7 @@ export const DownloadTable = ({
 
   return (
     <table className="text-sm">
-      <caption className="sr-only">{t("downloadResponsesTable.tableTitle")}</caption>
+      <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
       <thead className="border-b-2 border-[#6a6d7b]">
         <tr>
           <th className="p-4  text-center">{t("downloadResponsesTable.header.select")}</th>
@@ -189,6 +190,9 @@ export const DownloadTable = ({
       </thead>
       <tbody>
         <>
+          {/* TODO
+          <Loader message="so loading!"/> */}
+
           {vaultSubmissions.map((submission, index) => (
             <tr
               key={index}

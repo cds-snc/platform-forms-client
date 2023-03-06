@@ -453,11 +453,14 @@
       "noResponses": "You have no responses[fr]",
       "noResponsesToDownload": "There are no responses available to download.[fr]"
     },
-    "errors": {
+    "download": {
+      "downloading":"Downloading[fr]",
+      "downloadComplete": "Download complete[fr]",
+      "downloadingXFiles": "Downloading {{fileCount}} files[fr]",
+      "downloadXSelectedResponses": "Download {{size}} selected responses[fr]",
+      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.[fr]",
       "errorDownloadingFiles":"Error downloading selected files.[fr]"
     },
-    "downloading":"Downloading[fr]",
-    "downloadXSelectedResponsesX": "Download {{size}} selected responses {{maxReached}}[fr]",
     "unknown":"Unknown[fr]"
   }
 }

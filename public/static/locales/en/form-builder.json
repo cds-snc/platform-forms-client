@@ -453,11 +453,14 @@
       "noResponses": "You have no responses",
       "noResponsesToDownload": "There are no responses available to download."
     },
-    "errors": {
+    "download": {
+      "downloading":"Downloading",
+      "downloadComplete": "Download complete",
+      "downloadingXFiles": "Downloading {{fileCount}} files",
+      "downloadXSelectedResponses": "Download {{size}} selected responses",
+      "trySelectingLessFiles":"Max of {{max}} files can be downloadled at once. Please try selecting less files.",
       "errorDownloadingFiles":"Error downloading selected files."
     },
-    "downloading":"Downloading",
-    "downloadXSelectedResponsesX": "Download {{size}} selected responses {{maxReached}}",
     "unknown":"Unknown"
   }
 }
