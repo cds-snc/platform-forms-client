@@ -11,3 +11,4 @@ export { TextField } from "./descriptions/TextField";
 export { QuestionSet } from "./descriptions/QuestionSet";
 export { Attestation } from "./descriptions/Attestation";
 export { PostalCode } from "./descriptions/PostalCode";
+export { Address } from "./descriptions/Address";

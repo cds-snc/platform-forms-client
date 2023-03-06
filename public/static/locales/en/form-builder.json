@@ -71,6 +71,11 @@
       "description": "Postal code description",
       "title": "Postal code title"
     },
+    "address": {
+      "label": "Address",
+      "description": "Address description",
+      "title": "Address title"
+    },
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",

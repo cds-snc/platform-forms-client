@@ -6,7 +6,7 @@ import { middleware, cors } from "@lib/middleware";
 export async function getJsonFile(req: NextApiRequest, res: NextApiResponse) {
   const { elementType } = req.body;
 
-  const allowedTypes = ["attestation"];
+  const allowedTypes = ["attestation", "address"];
 
   if (!allowedTypes.includes(elementType)) {
     res.status(400).json({ error: "Invalid element type" });
