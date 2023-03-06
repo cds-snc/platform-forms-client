@@ -5,15 +5,19 @@ import { useTranslation } from "react-i18next";
 import { Loader } from "@components/globals/Loader";
 
 interface DownloadTableProps {
-  vaultSubmissions: VaultSubmissionList[];
-  checkedItems: any;
-  setCheckedItems: any;
+  submissions: VaultSubmissionList[];
+  checkedItems: Map<string, boolean>;
+  setCheckedItems: React.Dispatch<React.SetStateAction<Map<string, boolean>>>;
+  getCheckedItems: () => Map<string, boolean>;
+  handleDownload: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const DownloadTable = ({
-  vaultSubmissions,
+  submissions,
   checkedItems,
   setCheckedItems,
+  getCheckedItems,
+  handleDownload,
 }: DownloadTableProps) => {
   const { t } = useTranslation("form-builder");
   const DOWNLOAD_OVERDUE = 15;
@@ -169,88 +173,102 @@ export const DownloadTable = ({
   };
 
   return (
-    <table className="text-sm">
-      <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
-      <thead className="border-b-2 border-[#6a6d7b]">
-        <tr>
-          <th className="p-4  text-center">{t("downloadResponsesTable.header.select")}</th>
-          <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
-          <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
-          <th className="p-4 text-left whitespace-nowrap">
-            {t("downloadResponsesTable.header.downloadResponse")}
-          </th>
-          <th className="p-4 text-left whitespace-nowrap">
-            {t("downloadResponsesTable.header.lastDownloadedBy")}
-          </th>
-          <th className="p-4 text-left whitespace-nowrap">
-            {t("downloadResponsesTable.header.confirmReceipt")}
-          </th>
-          <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <>
-          {/* TODO
-          <Loader message="so loading!"/> */}
+    <>
+      <table className="text-sm">
+        <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
+        <thead className="border-b-2 border-[#6a6d7b]">
+          <tr>
+            <th className="p-4  text-center">{t("downloadResponsesTable.header.select")}</th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
+            <th className="p-4 text-left whitespace-nowrap">
+              {t("downloadResponsesTable.header.downloadResponse")}
+            </th>
+            <th className="p-4 text-left whitespace-nowrap">
+              {t("downloadResponsesTable.header.lastDownloadedBy")}
+            </th>
+            <th className="p-4 text-left whitespace-nowrap">
+              {t("downloadResponsesTable.header.confirmReceipt")}
+            </th>
+            <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <>
+            {/* TODO
+            <Loader message="so loading!"/> */}
 
-          {vaultSubmissions.map((submission, index) => (
-            <tr
-              key={index}
-              className={
-                "border-b-2 border-grey" +
-                (checkedItems.get(submission.name)?.checked ? " bg-[#fffbf3]" : "")
-              }
-            >
-              <td className="p-4 flex">
-                {/* TODO 
-                    Replace below with Design System checkbox 
-                */}
-                <div className="form-builder">
-                  <div className="multiple-choice-wrapper">
-                    <input
-                      id={submission.name}
-                      className="multiple-choice-wrapper"
-                      name="responses"
-                      type="checkbox"
-                      checked={checkedItems.get(submission.name)?.checked}
-                      onChange={handleChecked}
-                    />
-                    <label htmlFor={submission.name}>
-                      <span className="sr-only">{submission.name}</span>
-                    </label>
+            {submissions.map((submission, index) => (
+              <tr
+                key={index}
+                className={
+                  "border-b-2 border-grey" +
+                  (checkedItems.get(submission.name) ? " bg-[#fffbf3]" : "")
+                }
+              >
+                <td className="p-4 flex">
+                  {/* TODO 
+                      Replace below with Design System checkbox 
+                  */}
+                  <div className="form-builder">
+                    <div className="multiple-choice-wrapper">
+                      <input
+                        id={submission.name}
+                        className="multiple-choice-wrapper"
+                        name="responses"
+                        type="checkbox"
+                        checked={checkedItems.get(submission.name)}
+                        onChange={handleChecked}
+                      />
+                      <label htmlFor={submission.name}>
+                        <span className="sr-only">{submission.name}</span>
+                      </label>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td className="p-4 whitespace-nowrap">{submission.name}</td>
-              <td className="p-4 ">{formatStatus(submission.status)}</td>
-              <td className="p-4 ">
-                {formatDownloadResponse({
-                  vaultStatus: submission.status,
-                  createdAt: submission.createdAt,
-                  downloadedAt: submission.downloadedAt,
-                })}
-              </td>
-              <td className="p-4">
-                <div className="truncate w-48">
-                  {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
-                </div>
-              </td>
-              <td className="p-4 ">
-                {formatConfirmReceipt({
-                  vaultStatus: submission.status,
-                  createdAtDate: submission.createdAt,
-                })}
-              </td>
-              <td className="p-4 ">
-                {formatRemoval({
-                  vaultStatus: submission.status,
-                  removedAt: submission.removedAt,
-                })}
-              </td>
-            </tr>
-          ))}
-        </>
-      </tbody>
-    </table>
+                </td>
+                <td className="p-4 whitespace-nowrap">{submission.name}</td>
+                <td className="p-4 ">{formatStatus(submission.status)}</td>
+                <td className="p-4 ">
+                  {formatDownloadResponse({
+                    vaultStatus: submission.status,
+                    createdAt: submission.createdAt,
+                    downloadedAt: submission.downloadedAt,
+                  })}
+                </td>
+                <td className="p-4">
+                  <div className="truncate w-48">
+                    {submission.lastDownloadedBy ||
+                      t("downloadResponsesTable.status.notDownloaded")}
+                  </div>
+                </td>
+                <td className="p-4 ">
+                  {formatConfirmReceipt({
+                    vaultStatus: submission.status,
+                    createdAtDate: submission.createdAt,
+                  })}
+                </td>
+                <td className="p-4 ">
+                  {formatRemoval({
+                    vaultStatus: submission.status,
+                    removedAt: submission.removedAt,
+                  })}
+                </td>
+              </tr>
+            ))}
+          </>
+        </tbody>
+      </table>
+      <div className="mt-8">
+        <button
+          className="gc-button whitespace-nowrap w-auto"
+          type="button"
+          onClick={handleDownload}
+        >
+          {t("downloadResponsesTable.download.downloadXSelectedResponses", {
+            size: getCheckedItems().size,
+          })}
+        </button>
+      </div>
+    </>
   );
 };

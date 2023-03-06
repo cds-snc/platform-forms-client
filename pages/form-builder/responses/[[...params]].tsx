@@ -44,6 +44,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     new Map(vaultSubmissions.map((submission) => [submission.name, false]))
   );
 
+  const getCheckedItems = (): Map<string, boolean> => {
+    const checkedMap = new Map();
+    checkedItems.forEach((checked, name) => {
+      if (checked) {
+        checkedMap.set(name, checked);
+      }
+    });
+    return checkedMap;
+  };
+
   const secondaryButtonClass =
     "whitespace-nowrap text-sm rounded-full bg-white-default text-black-default border-black-default hover:text-white-default hover:bg-gray-600 active:text-white-default active:bg-gray-500 py-2 px-5 rounded-lg border-2 border-solid inline-flex items-center active:top-0.5 focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 focus:bg-blue-focus focus:text-white-default disabled:cursor-not-allowed disabled:text-gray-500";
 
@@ -64,19 +74,9 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     <Button onClick={dialogReportProblemsHandleClose}>{t("responses.reportProblems")}</Button>
   );
 
-  const getCheckedItemsList = () => {
-    const checkedMap = new Map();
-    checkedItems.forEach((checked, name) => {
-      if (checked) {
-        checkedMap.set(name, checked);
-      }
-    });
-    return checkedMap;
-  };
-
   // Note: A hack to enable an ajax file download through axios. Oddly setting the responseType
   // is not enough. Come back to this, suspect there is a better way..
-  const forceFileDownload = (response: AxiosResponse<any, any>, fileName: string) => {
+  const forceFileDownload = (response: AxiosResponse, fileName: string) => {
     // NOTE: intentionally allowing Errors to be thrown and caught in container Promise
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
@@ -101,7 +101,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   // e.g. Max simultaneous downloade: Chrome 5-6, Safari 4, Edge no limit (10k?), FF 5-7
   const handleDownload = async () => {
-    if (getCheckedItemsList().size > MAX_FILE_DOWNLOADS) {
+    if (getCheckedItems().size > MAX_FILE_DOWNLOADS) {
       toast.warn(
         t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
         {
@@ -113,7 +113,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
     const toastDownloadingId = toast.info(
       t("downloadResponsesTable.download.downloadingXFiles", {
-        fileCount: getCheckedItemsList().size,
+        fileCount: getCheckedItems().size,
       }),
       {
         position: toast.POSITION.TOP_CENTER,
@@ -121,7 +121,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       }
     );
 
-    const downloads = Array.from(getCheckedItemsList(), (item) => {
+    const downloads = Array.from(getCheckedItems(), (item) => {
       const url = `/api/id/${formId}/${item[0]}/download`;
       const fileName = item[0];
       return downloadFile(url, fileName);
@@ -193,24 +193,13 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
           <>
             <div>
               {vaultSubmissions?.length > 0 && (
-                <>
-                  <DownloadTable
-                    vaultSubmissions={vaultSubmissions}
-                    checkedItems={checkedItems}
-                    setCheckedItems={setCheckedItems}
-                  />
-                  <div className="mt-8">
-                    <button
-                      className="gc-button whitespace-nowrap w-auto"
-                      type="button"
-                      onClick={handleDownload}
-                    >
-                      {t("downloadResponsesTable.download.downloadXSelectedResponses", {
-                        size: getCheckedItemsList().size,
-                      })}
-                    </button>
-                  </div>
-                </>
+                <DownloadTable
+                  submissions={vaultSubmissions}
+                  checkedItems={checkedItems}
+                  setCheckedItems={setCheckedItems}
+                  getCheckedItems={getCheckedItems}
+                  handleDownload={handleDownload}
+                />
               )}
 
               {vaultSubmissions?.length <= 0 && (
