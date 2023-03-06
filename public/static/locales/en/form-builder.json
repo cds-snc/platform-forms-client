@@ -419,5 +419,40 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "downloadResponsesTable": {
+    "header": {
+      "tableTitle": "Download Responses Table",
+      "select": "Select",
+      "number": "Number",
+      "status": "Status",
+      "downloadResponse": "Download Response",
+      "lastDownloadedBy": "Last Downloaded By",
+      "confirmReceipt": "Confirm Receipt",
+      "removal": "Removal"
+    },
+    "status": {
+      "downloaded":"Downloaded",
+      "notDownloaded":"Not downloaded",
+      "new":"New",
+      "confirmed":"Confirmed",
+      "unconfirmed": "Unconfirmed",
+      "problem":"Problem",
+      "done": "Done",
+      "withinXDays": "Within {{daysLeft}} days",
+      "overdue":"Overdue",
+      "wontRemove": "Won't Remove",
+      "notSet": "Not set"
+    },
+    "card": {
+      "noResponses": "You have no responses",
+      "noResponsesToDownload": "There are no responses available to download."
+    },
+    "errors": {
+      "errorDownloadingFiles":"Error downloading selected files."
+    },
+    "downloading":"Downloading",
+    "downloadXSelectedResponsesX": "Download {{size}} selected responses {{maxReached}}",
+    "unknown":"Unknown"
+  }
 }

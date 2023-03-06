@@ -21,10 +21,10 @@ import { Card } from "@components/globals/card/Card";
 import axios, { AxiosResponse } from "axios";
 import { useRouter } from "next/router";
 import { DownloadTable } from "@components/form-builder/app/DownloadTable";
-import { HttpResponse } from "@aws-sdk/types";
 
 // TODO: User will need to click "allow" for the multiple file download dialog, add to UI?
-// TODO: could try a "spinner" while rendering, especially for lots of rows
+// TODO: UI for table download delay, and maybe on render ("spinner"?)
+// TODO: UI for error messages
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -41,8 +41,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const isAuthenticated = status === "authenticated";
   const MAX_FILE_DOWNLOADS = 20;
 
-  // Note: Map chosen for get/set performance, though with the cloning "gymnastics" below a simple
-  // object hash may be faster. Come back to if performance is ever an issue.
   const [checkedItems, setCheckedItems] = useState(
     new Map(vaultSubmissions.map((submission) => [submission.name, false]))
   );
@@ -130,7 +128,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       })
       .catch((err) => {
         logMessage.error(err as Error);
-        setErrorMessage("TODO Error downloading selected files.");
+        setErrorMessage(t("downloadResponsesTable.errors.errorDownloadingFiles"));
       })
       .finally(() => {
         setIsSubmitting(false);
@@ -195,15 +193,18 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       type="button"
                       onClick={handleDownload}
                     >
-                      Download {getCheckedItemsList().size} selected responses{" "}
-                      {getCheckedItemsList().size > MAX_FILE_DOWNLOADS
-                        ? `(Max ${MAX_FILE_DOWNLOADS})`
-                        : ""}
+                      {t("downloadResponsesTable.downloadXSelectedResponsesX", {
+                        size: getCheckedItemsList().size,
+                        maxReached:
+                          getCheckedItemsList().size > MAX_FILE_DOWNLOADS
+                            ? `(Max ${MAX_FILE_DOWNLOADS})`
+                            : "",
+                      })}
                     </button>
                   </div>
 
                   {/* TODO Add a spinner or something */}
-                  {isSubmitting && <div>Downloading...</div>}
+                  {isSubmitting && <div>{t("downloadResponsesTable.downloading")}</div>}
 
                   {/* TODO Add a toast message or something */}
                   {errorMessage && <div>{errorMessage}</div>}
@@ -217,8 +218,8 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                       <img src="/img/mailbox.png" width="193" height="200" alt="" />
                     </picture>
                   }
-                  title={"You have no responses"}
-                  content={"There are no responses available to download."}
+                  title={t("downloadResponsesTable.card.noResponses")}
+                  content={t("downloadResponsesTable.card.noResponsesToDownload")}
                 ></Card>
               )}
             </div>

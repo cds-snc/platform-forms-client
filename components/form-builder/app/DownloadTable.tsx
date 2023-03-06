@@ -1,6 +1,7 @@
 import React from "react";
 import { VaultSubmissionList } from "@lib/types";
 import { ExclamationIcon } from "@components/form-builder/icons";
+import { useTranslation } from "react-i18next";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -13,6 +14,7 @@ export const DownloadTable = ({
   checkedItems,
   setCheckedItems,
 }: DownloadTableProps) => {
+  const { t } = useTranslation("form-builder");
   const DOWNLOAD_OVERDUE = 15;
   const CONFIRM_OVERDUE = 15;
 
@@ -39,15 +41,31 @@ export const DownloadTable = ({
   function formatStatus(vaultStatus: string) {
     switch (vaultStatus) {
       case "New":
-        return <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">New</span>;
+        return (
+          <span className="p-2 bg-[#ecf3eb] text-[#0c6722]">
+            {t("downloadResponsesTable.status.new")}
+          </span>
+        );
       case "Downloaded":
-        return <span className="p-2 bg-[#dcd6fe]">Downloaded</span>;
+        return (
+          <span className="p-2 bg-[#dcd6fe]">{t("downloadResponsesTable.status.downloaded")}</span>
+        );
       case "Confirmed":
-        return <span className="p-2 bg-[#e2e8ef]">Confirmed</span>;
+        return (
+          <span className="p-2 bg-[#e2e8ef]">{t("downloadResponsesTable.status.confirmed")}</span>
+        );
       case "Problem":
-        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">Problem</span>;
+        return (
+          <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">
+            {t("downloadResponsesTable.status.problem")}
+          </span>
+        );
       default:
-        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">Unknown</span>;
+        return (
+          <span className="p-2 bg-[#f3e9e8] text-[#bc3332]">
+            {t("downloadResponsesTable.unknown")}
+          </span>
+        );
     }
   }
 
@@ -64,13 +82,15 @@ export const DownloadTable = ({
       const daysPassed = getDaysPassed(createdAt);
       const daysLeft = DOWNLOAD_OVERDUE - daysPassed;
       if (daysLeft > 0) {
-        return `Within ${daysLeft} days`;
+        return t("downloadResponsesTable.status.withinXDays", { daysLeft });
       }
       return (
         // TODO: probably move to an Exclamation component
         <div className="flex items-center">
           <ExclamationIcon className="mr-1" />
-          <span className="font-bold text-[#bc3332]">Overdue</span>
+          <span className="font-bold text-[#bc3332]">
+            {t("downloadResponsesTable.status.overdue")}
+          </span>
         </div>
       );
     }
@@ -82,7 +102,7 @@ export const DownloadTable = ({
       return formatDate(downloadedAt);
     }
 
-    return "Unknown";
+    return t("downloadResponsesTable.unknown");
   }
 
   function formatConfirmReceipt({
@@ -94,64 +114,77 @@ export const DownloadTable = ({
   }) {
     switch (vaultStatus) {
       case "New":
-        return "Unconfirmed";
+        return t("downloadResponsesTable.status.unconfirmed");
       case "Confirmed":
-        return "Done";
+        return t("downloadResponsesTable.status.one");
       case "Problem":
-        return <span className="p-2 bg-[#f3e9e8] text-[#bc3332] font-bold">Problem</span>;
+        return (
+          <span className="p-2 bg-[#f3e9e8] text-[#bc3332] font-bold">
+            {t("downloadResponsesTable.status.problem")}
+          </span>
+        );
       case "Downloaded": {
         const daysPassed = getDaysPassed(createdAtDate);
         const daysLeft = CONFIRM_OVERDUE - daysPassed;
         if (daysLeft > 0) {
-          return `Within ${daysLeft} days`;
+          return t("downloadResponsesTable.status.withinXDays", { daysLeft });
         }
         return (
           <div className="flex items-center">
             <ExclamationIcon className="mr-1" />
-            <span className="font-bold text-[#bc3332]">Overdue</span>
+            <span className="font-bold text-[#bc3332]">
+              {t("downloadResponsesTable.status.overdue")}
+            </span>
           </div>
         );
       }
       default:
-        return "Unknown";
+        return t("downloadResponsesTable.unknown");
     }
   }
 
   function formatRemoval({ vaultStatus, removedAt }: { vaultStatus: string; removedAt?: Date }) {
     if (vaultStatus === "Confirmed" && removedAt) {
-      const days = getDaysPassed(removedAt);
-      return `Within ${days} days`;
+      const daysLeft = getDaysPassed(removedAt);
+      return t("downloadResponsesTable.status.withinXDays", { daysLeft });
     }
 
     if (vaultStatus === "Problem") {
-      return "Won't Remove";
+      return t("downloadResponsesTable.status.wontRemove");
     }
 
     if (vaultStatus === "New" || vaultStatus === "Downloaded") {
-      return "Not set";
+      return t("downloadResponsesTable.status.notSet");
     }
 
-    return "Unknown";
+    return t("downloadResponsesTable.unknown");
   }
 
   const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.id;
     const checked: boolean = e.target.checked;
-    // Note: Needed to clone and set so React change detection notices a change in the Map
+    // Note: "new Map" Needed to clone and set so React change detection notices a change in the Map
     setCheckedItems(new Map(checkedItems.set(name, checked)));
   };
 
   return (
     <table className="text-sm">
+      <caption className="sr-only">{t("downloadResponsesTable.tableTitle")}</caption>
       <thead className="border-b-2 border-[#6a6d7b]">
         <tr>
-          <th className="p-4  text-center">Select</th>
-          <th className="p-4 text-left">Number</th>
-          <th className="p-4 text-left">Status</th>
-          <th className="p-4 text-left whitespace-nowrap">Download Response</th>
-          <th className="p-4 text-left whitespace-nowrap">Last Downloaded By</th>
-          <th className="p-4 text-left whitespace-nowrap">Confirm Receipt</th>
-          <th className="p-4 text-left">Removal</th>
+          <th className="p-4  text-center">{t("downloadResponsesTable.header.select")}</th>
+          <th className="p-4 text-left">{t("downloadResponsesTable.header.number")}</th>
+          <th className="p-4 text-left">{t("downloadResponsesTable.header.status")}</th>
+          <th className="p-4 text-left whitespace-nowrap">
+            {t("downloadResponsesTable.header.downloadResponse")}
+          </th>
+          <th className="p-4 text-left whitespace-nowrap">
+            {t("downloadResponsesTable.header.lastDownloadedBy")}
+          </th>
+          <th className="p-4 text-left whitespace-nowrap">
+            {t("downloadResponsesTable.header.confirmReceipt")}
+          </th>
+          <th className="p-4 text-left">{t("downloadResponsesTable.header.removal")}</th>
         </tr>
       </thead>
       <tbody>
@@ -195,7 +228,7 @@ export const DownloadTable = ({
               </td>
               <td className="p-4">
                 <div className="truncate w-48">
-                  {submission.lastDownloadedBy || "Not downloaded"}
+                  {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
                 </div>
               </td>
               <td className="p-4 ">
