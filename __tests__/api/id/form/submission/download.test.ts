@@ -14,7 +14,7 @@ import { mockClient } from "aws-sdk-client-mock";
 import { EventEmitter } from "events";
 import testFormConfig from "../../../../../__fixtures__/accessibilityTestForm.json";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
-import * as auditLogModule from "@lib/auditLogs";
+import { logEvent } from "@lib/auditLogs";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/auditLogs");
@@ -48,6 +48,7 @@ jest.mock("@lib/cache/flags", () => {
 
 //Needed in the typescript version of the test so types are inferred correclty
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
+const mockLogEvent = jest.mocked(logEvent, { shallow: true });
 const testFormTemplate = {
   id: "testForm",
   form: testFormConfig,
@@ -174,9 +175,22 @@ describe("/api/id/[form]/[submission]/download", () => {
       await download(req, res);
 
       expect(res.statusCode).toBe(403);
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        1,
+        "1",
+        { id: "formTestID", type: "Form" },
+        "AccessDenied",
+        "Attemped to read form object"
+      );
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        2,
+        "1",
+        { type: "Response" },
+        "AccessDenied",
+        "Attemped to download response for submissionID 123456789"
+      );
     });
     test("Renders a HTML file", async () => {
-      const auditLog = jest.spyOn(auditLogModule, "logEvent");
       // Data mocks
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         id: "formTestID",
@@ -215,15 +229,20 @@ describe("/api/id/[form]/[submission]/download", () => {
       await download(req, res);
 
       expect(res.statusCode).toBe(200);
-      expect(auditLog.mock.calls).toEqual([
-        ["1", { id: "formtestID", type: "Form" }, "ReadForm"],
-        [
-          "1",
-          { id: "123-test", type: "Response" },
-          "DownloadResponse",
-          "Downloaded form response for submission ID 12",
-        ],
-      ]);
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        1,
+        "1",
+        { id: "formtestID", type: "Form" },
+        "ReadForm"
+      );
+      expect(mockLogEvent).toHaveBeenNthCalledWith(
+        2,
+        "1",
+        { id: "123-test", type: "Response" },
+        "DownloadResponse",
+        "Downloaded form response for submission ID 12"
+      );
+
       expect(res._getHeaders()).toMatchObject({
         "content-disposition": "attachment; filename=123-test.html",
       });
