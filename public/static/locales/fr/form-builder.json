@@ -106,7 +106,11 @@
     "street-address": "[FR] Full street address (includes address lines 1-3)",
     "url": "[FR] Website address"
   },
-  "autocompleteWhenNotToUse": "[FR] When not to use autocomplete",
+  "autocompleteWhenNotToUse": {
+    "title": "[FR] When not to use autocomplete",
+    "text1": "[FR] Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "[FR] Usability testing is a good way to understand if the rules you set cause problems with filling in forms."
+  },
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",

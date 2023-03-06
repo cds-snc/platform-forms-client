@@ -1,22 +1,34 @@
 import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { InfoIcon } from "@components/form-builder/icons";
-import { useTranslation } from "next-i18next";
 
-export const PopOver = ({ children }: { children: React.ReactNode }) => {
-  const { t } = useTranslation("form-builder");
+import { InfoIcon } from "@components/form-builder/icons";
+
+export const InfoButton = ({ label }: { label: string }) => {
+  return (
+    <>
+      <InfoIcon className="ml-4 inline-block" />
+      <span className="ml-2 inline-block">{label}</span>
+    </>
+  );
+};
+
+export const PopOver = ({
+  buttonContent,
+  children,
+}: {
+  buttonContent?: JSX.Element;
+  children: React.ReactNode;
+}) => {
   return (
     <PopoverPrimitive.Root>
       <PopoverPrimitive.Trigger asChild>
-        <button>
-          <InfoIcon className="inline-block w-7" />
-          {t("autocompleteWhenNotToUse")}!
-        </button>
+        <button>{buttonContent}</button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
+          style={{ zIndex: 20000 }}
           align="center"
-          className="bg-gray-200 z-10000 w-48 rounded-lg p-4 shadow-md"
+          className="bg-gray-200 rounded-lg p-4 shadow-md"
         >
           <PopoverPrimitive.Arrow className="fill-current text-white dark:text-gray-200" />
           {children}
