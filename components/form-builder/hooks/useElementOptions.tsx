@@ -26,7 +26,6 @@ import {
   Number,
   QuestionSet,
   Attestation,
-  PostalCode,
   Address,
 } from "../app/edit/elements/element-dialog";
 
