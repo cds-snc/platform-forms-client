@@ -264,11 +264,9 @@ describe("Test Auth lib", () => {
   });
   describe("validateTemporaryToken", () => {
     beforeAll(() => {
-      process.env.TOKEN_SECRET = "some_secret_some_secret_some_secret_some_secret";
       process.env.TOKEN_SECRET_WRONG = "wrong_secret_wrong_secret_wrong_secret_wrong_secret";
     });
     afterAll(() => {
-      delete process.env.TOKEN_SECRET;
       delete process.env.TOKEN_SECRET_WRONG;
     });
     beforeEach(() => {

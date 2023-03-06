@@ -47,14 +47,6 @@ describe("Requires a valid session to access API", () => {
 });
 
 describe("Test templates API functions", () => {
-  beforeAll(() => {
-    process.env.TOKEN_SECRET = "testsecret";
-  });
-
-  afterAll(() => {
-    delete process.env.TOKEN_SECRET;
-  });
-
   describe.each([[Base], [ManageForms]])("POST", (privileges) => {
     beforeEach(() => {
       const mockSession: Session = {

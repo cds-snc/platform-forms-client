@@ -173,10 +173,6 @@ describe.skip("/id/[form]/bearer", () => {
     [Base, "1", "1"],
     [ManageForms, "1", "2"],
   ])("POST", (privileges, privilegedUserId, mockedUserId) => {
-    beforeAll(() => {
-      process.env.TOKEN_SECRET = "some_secret";
-    });
-
     beforeEach(() => {
       const mockSession = {
         expires: "1",
@@ -193,10 +189,6 @@ describe.skip("/id/[form]/bearer", () => {
     });
 
     afterEach(() => mockGetSession.mockReset());
-
-    afterAll(() => {
-      delete process.env.TOKEN_SECRET;
-    });
 
     it("Should return a 200 status code, the refreshed token, and the id of the form", async () => {
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
