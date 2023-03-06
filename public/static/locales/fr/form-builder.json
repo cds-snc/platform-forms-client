@@ -154,7 +154,20 @@
     "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333",
-    "postal-code": ""
+    "postal-code": "",
+    "address": {
+      "label": "[FR] Address",
+      "description": "[FR] Address description",
+      "title": "[FR] What is your address?",
+      "street": {
+        "label": "[FR] Street address",
+        "description": "[FR] Include your civic number and street name, apartment or suite, and other address details"
+      },
+      "city": "[FR] City, town or community",
+      "province": "[FR] Province or state",
+      "country": "[FR] City, town or community",
+      "postal": "[FR] Postal or zip code"
+    }
   },
   "description": "La description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",

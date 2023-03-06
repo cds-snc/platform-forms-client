@@ -18,27 +18,33 @@ const Element = ({
   element,
   index,
   primaryLanguage,
-  subIndex,
+  questionNumber,
 }: {
   element: FormElement;
   index: number;
   primaryLanguage: Language;
-  subIndex?: string;
+  questionNumber?: string;
 }) => {
   let subElements;
 
+  const { t } = useTranslation("form-builder");
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   if (element.type === "dynamicRow") {
     let subElementIndex = -1;
     subElements = element.properties.subElements?.map((subElement) => {
-      subElementIndex++;
+      let questionNumber = t("pageText");
+      if (subElement.type !== "richText") {
+        subElementIndex++;
+        questionNumber = alphabet[subElementIndex];
+      }
+
       return (
         <Element
           key={subElement.id}
           element={subElement}
           index={subElement.id}
-          subIndex={alphabet[subElementIndex]}
+          questionNumber={questionNumber}
           primaryLanguage={primaryLanguage}
         />
       );
@@ -46,7 +52,12 @@ const Element = ({
   }
   return (
     <>
-      {subIndex && <SectionTitle>{subIndex}</SectionTitle>}
+      {questionNumber && (
+        <SectionTitle>
+          {element.type === "richText" && <>{t("pageText")}</>}
+          {element.type !== "richText" && <>{"Question " + questionNumber}</>}
+        </SectionTitle>
+      )}
 
       {element.type === "richText" && (
         <RichText primaryLanguage={primaryLanguage} element={element} index={index} />

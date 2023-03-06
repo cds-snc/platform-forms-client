@@ -17,7 +17,6 @@ import {
 
 import { usePanelActions } from "@components/form-builder/hooks";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
-import { useFlag } from "@lib/hooks";
 
 const buttonClasses =
   "group/button border-none transition duration-100 h-0 !py-5 lg:!pb-3 !pl-4 !pr-2 m-1 !bg-transparent xl:hover:!bg-gray-600 xl:hover:!text-white focus:!bg-blue-hover focus:text-black xl:focus:text-white active:text-white disabled:!bg-transparent";
@@ -64,8 +63,6 @@ export const PanelActions = ({
   const isRichText = item.type == "richText";
   const isSubElement = subIndex !== -1 && subIndex !== undefined;
 
-  const { status: dialogEnabled } = useFlag("formBuilderAddElementDialog");
-
   const getPanelButtons = () => {
     if (isSubElement) {
       return [
@@ -93,9 +90,7 @@ export const PanelActions = ({
           id: 4,
           txt: "addToSet",
           icon: AddIcon,
-          onClick: () => {
-            dialogEnabled && handleOpenDialog();
-          },
+          onClick: handleOpenDialog,
         },
         {
           id: 5,

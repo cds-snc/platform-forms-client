@@ -79,6 +79,9 @@ export const SelectedElement = ({
     case "attestation":
       element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
       break;
+    case "address":
+      element = <ShortAnswer data-testid="address">Address</ShortAnswer>;
+      break;
     default:
       element = null;
   }
