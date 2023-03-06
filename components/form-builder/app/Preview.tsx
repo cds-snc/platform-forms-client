@@ -76,6 +76,7 @@ export const Preview = () => {
     <>
       <div className="h-12"></div>
       <div
+        data-theme="gcds"
         className={`border-3 border-dashed border-blue-focus p-4 mb-8 ${
           status !== "authenticated" && ""
         }`}

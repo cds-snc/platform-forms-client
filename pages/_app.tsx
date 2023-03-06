@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
 import BaseLayout from "@components/globals/layouts/BaseLayout";
+import "@cdssnc/gcds-tokens/build/web/variables.css";
 import "../styles/app.scss";
 
 /*

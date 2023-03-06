@@ -6,7 +6,22 @@
 
 // Custom base CSS files
 @import "./_base";
+
+// These will still apply to form output
 @import "./_forms";
+
+// wrappign import in :not([data-theme="gcds"]) moves the specificity really high up, and creates some side effects.
+
+[data-theme="gcds"] {
+  // Really obvious to spot the scope
+  background-color: yellow;
+
+  // Just overwriting what is needed. example.
+  input {
+    border-radius: var(--gcds-input-border-radius);
+  }
+}
+
 @import "./_form-builder";
 @import "./_header";
 
