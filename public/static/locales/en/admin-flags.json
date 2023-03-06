@@ -50,10 +50,6 @@
       "title": "Form builder debug",
       "description": "Enable the form builder debug mode"
     },
-    "formBuilderAddElementDialog": {
-      "title": "Form builder add element dialog",
-      "description": "Enable dialog when adding elements to the Form builder"
-    },
     "shareMenu": {
       "title": "Form builder share menu",
       "description": "Enable share menu dropdown"
