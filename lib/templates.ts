@@ -276,16 +276,19 @@ export async function getAllTemplates(
         },
       })
       .catch((e) => prismaErrors(e, []));
-    logEvent(
-      ability.userID,
-      { type: "Form" },
-      "ReadForm",
-      `Accessed Forms: ${
-        canUserAccessAllTemplates
-          ? "All System Forms"
-          : templates.map((template) => template.id).toString()
-      } `
-    );
+
+    // Only log the event if templates are found
+    if (templates.length > 0)
+      logEvent(
+        ability.userID,
+        { type: "Form" },
+        "ReadForm",
+        `Accessed Forms: ${
+          canUserAccessAllTemplates
+            ? "All System Forms"
+            : templates.map((template) => template.id).toString()
+        }`
+      );
 
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
@@ -626,20 +629,20 @@ export async function updateAssignedUsersForTemplate(
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    addUsers.length &&
+    addUsers.length > 0 &&
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
         "GrantFormAccess",
-        `Access granted to ${addUsers.toString()}`
+        `Access granted to ${addUsers.map((user) => user.id).toString()}`
       );
 
-    removeUsers.length &&
+    removeUsers.length > 0 &&
       logEvent(
         ability.userID,
         { type: "Form", id: formID },
         "RevokeFormAccess",
-        `Access revoked for ${addUsers.toString()}`
+        `Access revoked for ${addUsers.map((user) => user.id).toString()}`
       );
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
