@@ -1,0 +1,47 @@
+[
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Phone number",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "phone"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Email address",
+        "titleFr": "",
+        "validation": {
+          "required": false,
+          "type": "email"
+        },
+        "descriptionEn": "Enter an email address like, name@example.com",
+        "descriptionFr": "Entrez une adresse courriel comme name@example.com",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "email"
+      }
+    }
+  ]

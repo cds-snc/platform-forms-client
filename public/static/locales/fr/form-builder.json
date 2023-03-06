@@ -71,6 +71,21 @@
       "description": "[FR] Postal code description",
       "title": "[FR] Postal code title"
     },
+    "address": {
+      "label": "[FR] Address",
+      "description": "[FR] Address description",
+      "title": "[FR] Address title"
+    },
+    "name": {
+      "label": "[FR] Name",
+      "description": "[FR] Name description",
+      "title": "[FR] Name title"
+    },
+    "contact": {
+      "label": "[FR] Contact",
+      "description": "[FR] Contact description",
+      "title": "[FR] Contact title"
+    },
     "yes": "Oui"
   },
   "addMultiple": "Ajouter plusieurs options",
@@ -154,12 +169,7 @@
     "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333",
-    "postal-code": "",
-    "address": {
-      "label": "[FR] Address",
-      "description": "[FR] Address description",
-      "title": "[FR] Address title"
-    }
+    "postal-code": ""
   },
   "description": "La description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",

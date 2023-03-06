@@ -1,0 +1,68 @@
+[
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "First name",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "given-name"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Middle names (optional)",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "additional-name"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Last name",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "family-name"
+      }
+    }
+  ]

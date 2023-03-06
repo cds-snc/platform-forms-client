@@ -76,6 +76,16 @@
       "description": "Address description",
       "title": "Address title"
     },
+    "name": {
+      "label": "Name",
+      "description": "Name description",
+      "title": "Name title"
+    },
+    "contact": {
+      "label": "Contact",
+      "description": "Contact description",
+      "title": "Contact title"
+    },
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
