@@ -1,6 +1,5 @@
 [
     {
-      "id": 1,
       "type": "richText",
       "properties": {
         "subElements": [],
@@ -22,7 +21,6 @@
       }
     },
     {
-      "id": 5,
       "type": "textField",
       "properties": {
         "subElements": [],
@@ -45,7 +43,6 @@
       }
     },
     {
-      "id": 4,
       "type": "textField",
       "properties": {
         "subElements": [],
@@ -68,7 +65,6 @@
       }
     },
     {
-      "id": 3,
       "type": "textField",
       "properties": {
         "subElements": [],
