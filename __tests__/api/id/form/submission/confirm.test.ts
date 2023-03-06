@@ -241,13 +241,13 @@ describe("Confirm form submissions (with active session)", () => {
     expect(JSON.parse(res._getData())).toEqual({
       confirmedSubmissions: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
-    expect(mockLogEvent.mock.calls.length).toBe(1);
-    expect(mockLogEvent.mock.calls[0]).toEqual([
+
+    expect(mockLogEvent).toHaveBeenCalledWith(
       "1",
       { id: "12-05-2000", type: "Response" },
       "ConfirmResponse",
-      "Confirmed response for form 8",
-    ]);
+      "Confirmed response for form 8"
+    );
   });
 
   it("API should skip confirmation codes corresponding to submissions that have already been confirmed", async () => {
@@ -291,7 +291,7 @@ describe("Confirm form submissions (with active session)", () => {
       confirmationCodesAlreadyUsed: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
-    expect(mockLogEvent.mock.calls.length).toBe(0);
+    expect(mockLogEvent).not.toHaveBeenCalled();
   });
 
   it("API should skip confirmation codes that are not associated to any submission", async () => {
@@ -329,7 +329,7 @@ describe("Confirm form submissions (with active session)", () => {
       invalidConfirmationCodes: ["2515ed36-0755-44e2-9e5c-927bc57f0570"],
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
-    expect(mockLogEvent.mock.calls.length).toBe(0);
+    expect(mockLogEvent).not.toHaveBeenCalled();
   });
 
   it("API request should fail if update/delete process did not succeed", async () => {
@@ -371,5 +371,6 @@ describe("Confirm form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res._getData()).error).toContain("Error on server side");
+    expect(mockLogEvent).not.toHaveBeenCalled;
   });
 });

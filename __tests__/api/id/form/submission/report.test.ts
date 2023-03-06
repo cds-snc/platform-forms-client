@@ -16,7 +16,7 @@ import Redis from "ioredis-mock";
 import initialSettings from "../../../../../flag_initialization/default_flag_settings.json";
 import { prismaMock } from "@jestUtils";
 import { Base, getUserPrivileges } from "__utils__/permissions";
-import * as auditLogModule from "@lib/auditLogs";
+import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
 
 jest.mock("next-auth/next");
@@ -41,8 +41,6 @@ jest.mock("@lib/cache/flags", () => {
   };
 });
 
-jest.mock("@lib/auditLogs");
-
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
 let IsGCNotifyServiceAvailable = true;
@@ -60,6 +58,8 @@ const mockSendEmail = {
 jest.mock("notifications-node-client", () => ({
   NotifyClient: jest.fn(() => mockSendEmail),
 }));
+
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 describe("Report problem with form submissions (without active session)", () => {
   it("Should not be able to use the API without an active session", async () => {
@@ -179,7 +179,6 @@ describe("Report problem with form submissions (with active session)", () => {
   });
 
   it("API should accept request if payload is valid", async () => {
-    const auditLog = jest.spyOn(auditLogModule, "logEvent");
     const { req, res } = createMocks({
       method: "PUT",
       headers: {
@@ -220,13 +219,12 @@ describe("Report problem with form submissions (with active session)", () => {
       reportedSubmissions: ["06-02-a1b2"],
     });
     expect(mockSendEmail.sendEmail).toHaveBeenCalled();
-    expect(auditLog.mock.calls.length).toBe(1);
-    expect(auditLog.mock.calls[0]).toEqual([
+    expect(mockedLogEvent).toHaveBeenCalledWith(
       "1",
       { id: "06-02-a1b2", type: "Response" },
       "IdentifyProblemResponse",
-      "Identified problem response for form 8",
-    ]);
+      "Identified problem response for form 8"
+    );
   });
 
   it("API should skip submission names corresponding to submissions that have already been reported", async () => {
@@ -271,6 +269,7 @@ describe("Report problem with form submissions (with active session)", () => {
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
     expect(mockSendEmail.sendEmail).not.toHaveBeenCalled();
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
   it("API should skip submission names that are not associated to any submission", async () => {
@@ -309,6 +308,7 @@ describe("Report problem with form submissions (with active session)", () => {
     });
     expect(ddbMock.commandCalls(TransactWriteCommand)).toStrictEqual([]);
     expect(mockSendEmail.sendEmail).not.toHaveBeenCalled();
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
   it("API request should fail if update/delete process did not succeed", async () => {
@@ -351,6 +351,7 @@ describe("Report problem with form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res._getData()).error).toContain("Error on server side");
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
   it("API should return an error if GC Notify service is unavailable", async () => {
@@ -393,5 +394,6 @@ describe("Report problem with form submissions (with active session)", () => {
 
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res._getData())).toMatchObject({ error: "Error on server side" });
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 });
