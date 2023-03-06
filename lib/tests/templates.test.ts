@@ -45,9 +45,7 @@ jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(() => redis),
 }));
 
-jest.mock("@lib/auditLogs", () => ({
-  logEvent: jest.fn(),
-}));
+jest.mock("@lib/auditLogs");
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
