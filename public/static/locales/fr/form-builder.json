@@ -424,5 +424,40 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "unnamedForm": "Formulaire sans titre"
+  "unnamedForm": "Formulaire sans titre",
+  "downloadResponsesTable": {
+    "header": {
+      "tableTitle": "Download Responses Table[fr]",
+      "select": "Select[fr]",
+      "number": "Number[fr]",
+      "status": "Status[fr]",
+      "downloadResponse": "Download Response[fr]",
+      "lastDownloadedBy": "Last Downloaded By[fr]",
+      "confirmReceipt": "Confirm Receipt[fr]",
+      "removal": "Removal[fr]"
+    },
+    "status": {
+      "downloaded":"Downloaded[fr]",
+      "notDownloaded":"Not downloaded[fr]",
+      "new":"New[fr]",
+      "confirmed":"Confirmed[fr]",
+      "unconfirmed": "Unconfirmed[fr]",
+      "problem":"Problem[fr]",
+      "done": "Done[fr]",
+      "withinXDays": "Within {{daysLeft}} days[fr]",
+      "overdue":"Overdue[fr]",
+      "wontRemove": "Won't Remove[fr]",
+      "notSet": "Not set[fr]"
+    },
+    "card": {
+      "noResponses": "You have no responses[fr]",
+      "noResponsesToDownload": "There are no responses available to download.[fr]"
+    },
+    "errors": {
+      "errorDownloadingFiles":"Error downloading selected files.[fr]"
+    },
+    "downloading":"Downloading[fr]",
+    "downloadXSelectedResponsesX": "Download {{size}} selected responses {{maxReached}}[fr]",
+    "unknown":"Unknown[fr]"
+  }
 }
