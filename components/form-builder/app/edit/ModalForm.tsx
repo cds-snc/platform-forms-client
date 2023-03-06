@@ -2,13 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes, ElementProperties } from "@lib/types";
-import * as Popover from '@radix-ui/react-popover';
 
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
-import { Checkbox, Input, TextArea } from "../shared";
+import { Checkbox, Input, TextArea, PopOver } from "../shared";
 import { useTemplateStore } from "../../store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
-import { InfoIcon } from "@components/form-builder/icons";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="block mb-50 font-[700]">
@@ -112,25 +110,7 @@ export const ModalForm = ({
               }}
               selectedValue={autocompleteSelectedValue as string}
             />{" "}
-
-            <Popover.Root>
-              <Popover.Trigger asChild>
-
-                <button>
-                  <InfoIcon className="inline-block w-7" />
-                  {t("autocompleteWhenNotToUse")}!
-                </button>
-
-
-              </Popover.Trigger>
-              <Popover.Portal>
-                <Popover.Content sideOffset={5} className="bg-red-100 w-30">
-                  test
-                </Popover.Content>
-              </Popover.Portal>
-            </Popover.Root>
-
-
+            <PopOver>Test</PopOver>
           </div>
         </div>
       )}

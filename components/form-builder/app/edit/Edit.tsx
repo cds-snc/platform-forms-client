@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import { Language, LocalizedFormProperties } from "../../types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
 import { RichTextLocked } from "./elements";
-import { Input } from "../shared";
+import { Input, PopOver } from "../shared";
 import { useTemplateStore } from "../../store";
 
 export const Edit = () => {
@@ -96,6 +96,10 @@ export const Edit = () => {
         const item = { ...element, index };
         return <ElementPanel item={item} key={item.id} />;
       })}
+
+      <PopOver>
+        <p className="text-sm">{t("autocompleteWhenNotToUse")}</p>
+      </PopOver>
 
       {elements?.length >= 1 && (
         <>
