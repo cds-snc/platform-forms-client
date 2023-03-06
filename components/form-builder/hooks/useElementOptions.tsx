@@ -131,14 +131,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
-      id: "postal-code",
-      value: t("addElementDialog.postal-code.label"),
-      icon: <ShortAnswerIcon />,
-      description: PostalCode,
-      className: "",
-      group: group.input,
-    },
-    {
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,

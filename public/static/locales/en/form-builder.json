@@ -66,11 +66,6 @@
       "description": "Short answer question description",
       "title": "Short answer question"
     },
-    "postal-code": {
-      "label": "Postal code",
-      "description": "Postal code description",
-      "title": "Postal code title"
-    },
     "address": {
       "label": "Address",
       "description": "Address description",
