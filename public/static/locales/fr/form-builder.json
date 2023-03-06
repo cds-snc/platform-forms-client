@@ -87,12 +87,32 @@
     "name": {
       "label": "[FR] Name",
       "description": "[FR] Name description",
-      "title": "[FR] Name title"
+      "title": "[FR] Name title",
+      "first": {
+        "label": "[FR] First name",
+        "description": "[FR] First name description"
+      },
+      "middle": {
+        "label": "[FR] Middle name",
+        "description": "[FR] Middle name description"
+      },
+      "last": {
+        "label": "[FR] Last name",
+        "description": "[FR] Last name description"
+      }
     },
     "contact": {
       "label": "[FR] Contact",
       "description": "[FR] Contact description",
-      "title": "[FR] Contact title"
+      "title": "[FR] Contact title",
+      "phone": {
+        "label": "[FR] Phone number",
+        "description": "[FR] Phone number description"
+      },
+      "email": {
+        "label": "[FR] Email address",
+        "description": "[FR] Email address description"
+      }
     },
     "yes": "Oui"
   },

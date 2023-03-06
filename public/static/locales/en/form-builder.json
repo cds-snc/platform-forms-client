@@ -87,12 +87,32 @@
     "name": {
       "label": "Name",
       "description": "Name description",
-      "title": "Name title"
+      "title": "Name title",
+      "first": {
+        "label": "First name",
+        "description": "First name description"
+      },
+      "middle": {
+        "label": "Middle name",
+        "description": "Middle name description"
+      },
+      "last": {
+        "label": "Last name",
+        "description": "Last name description"
+      }
     },
     "contact": {
       "label": "Contact",
       "description": "Contact description",
-      "title": "Contact title"
+      "title": "Contact title",
+      "phone": {
+        "label": "Phone number",
+        "description": "Phone number description"
+      },
+      "email": {
+        "label": "Email address",
+        "description": "Email address description"
+      }
     },
     "yes": "Yes"
   },
