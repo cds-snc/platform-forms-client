@@ -55,7 +55,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   /* Note this callback is also in PanelActionsLocked */
   const handleAddElement = useCallback(
-    (index: number, type: FormElementTypes) => {
+    (index: number, type: FormElementTypes | undefined) => {
       if (
         [
           FormElementTypes.attestation,
