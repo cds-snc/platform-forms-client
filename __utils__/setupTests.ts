@@ -24,7 +24,7 @@ jest.mock("@lib/integration/redisConnector", () => ({
 }));
 
 jest.mock("@lib/hooks/useFlag", () => ({
-  useFlag: jest.fn((flag) => (initialSettings as Record<string, boolean>)[flag]),
+  useFlag: jest.fn((flag: string) => (initialSettings as Record<string, boolean>)[flag]),
 }));
 
 // Common secrets needed for functionality

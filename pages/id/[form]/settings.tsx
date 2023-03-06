@@ -14,8 +14,6 @@ import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import BearerRefresh from "@components/admin/BearerRefresh/BearerRefresh";
-import FormAccess from "@components/admin/FormAccess/FormAccess";
 import { getProperty } from "@lib/formBuilder";
 import AdminNavLayout from "@components/globals/layouts/AdminNavLayout";
 
