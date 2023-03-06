@@ -1,5 +1,26 @@
 [
   {
+    "type": "richText",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "",
+      "titleFr": "",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "### What is your address?",
+      "descriptionFr": "### [FR] What is your address?",
+      "placeholderEn": "",
+      "placeholderFr": ""
+    }
+  },
+  {
     "type": "textField",
     "properties": {
       "subElements": [],

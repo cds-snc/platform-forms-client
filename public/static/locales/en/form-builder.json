@@ -74,7 +74,15 @@
     "address": {
       "label": "Address",
       "description": "Address description",
-      "title": "Address title"
+      "title": "What is your address?",
+      "street": {
+        "label": "Street address",
+        "description": "Include your civic number and street name, apartment or suite, and other address details"
+      },
+      "city": "City, town or community",
+      "province": "Province or state",
+      "country": "City, town or community",
+      "postal": "Postal or zip code"
     },
     "name": {
       "label": "Name",
