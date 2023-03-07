@@ -232,7 +232,7 @@ export const PanelActions = ({
               position={item.index}
               handleAdd={handleAdd}
               filterElements={filterElements}
-              text={isSubElement ? t("addToSet") : t("addElement")}
+              text={t("addElement")}
             />
           </div>
         </div>
