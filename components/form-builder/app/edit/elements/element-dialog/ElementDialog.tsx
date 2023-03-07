@@ -49,10 +49,11 @@ export const ElementDialog = ({
           </h4>
           <ListBox
             ariaLabel={t("addElementDialog.questionElement")}
-            options={elementOptions.map(({ id, value, group }) => ({
+            options={elementOptions.map(({ id, value, group, className }) => ({
               id: id as string,
               value,
               group,
+              className,
             }))}
             handleChange={handleChange}
           />

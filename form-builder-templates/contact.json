@@ -1,0 +1,93 @@
+[
+    {
+      "type": "richText",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "## How can we contact you?",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Phone number",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "Enter your phone number like, 111-222-3333",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "phone"
+      }
+    },
+    {
+      "type": "textField",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Email address",
+        "titleFr": "",
+        "validation": {
+          "required": false,
+          "type": "email"
+        },
+        "descriptionEn": "Enter an email address like, name@example.com",
+        "descriptionFr": "Entrez une adresse courriel comme name@example.com",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "autoComplete": "email"
+      }
+    },
+    {
+      "type": "radio",
+      "properties": {
+        "subElements": [],
+        "choices": [
+          {
+            "en": "English",
+            "fr": ""
+          },
+          {
+            "en": "French",
+            "fr": ""
+          }
+        ],
+        "titleEn": "What is your preferred language for communication?",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "descriptionEn": "We offer our services in both official languages, French and English",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    }
+  ]

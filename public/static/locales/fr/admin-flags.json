@@ -50,21 +50,9 @@
       "title": "Débogage du Générateur de formulaires",
       "description": "Activer le mode de débogage du Générateur de formulaires"
     },
-    "formBuilderAddElementDialog": {
-      "title": "Dialogue de l'ajout d'élément du Générateur de formulaires",
-      "description": "Activer le dialogue lors de l'ajout d'éléments au Générateur de formulaires"
-    },
     "shareMenu": {
       "title": "Menu de partage du Générateur de formulaires",
       "description": "Activer le menu déroulant de partage"
-    },
-    "editableFilename": {
-      "title": "Nom de fichier modifiable du Générateur de formulaires",
-      "description": "Modifie l'en-tête pour inclure le nom de fichier modifiable"
-    },
-    "formBuilderExperimentalBlocks": {
-      "title": "Blocs du Générateur de formulaires",
-      "description": "Activer les blocs expérimentaux"
     }
   }
 }

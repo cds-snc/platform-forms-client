@@ -1,5 +1,4 @@
 import React from "react";
-import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import {
   CalendarIcon,
@@ -26,13 +25,17 @@ import {
   Date,
   Number,
   QuestionSet,
+  Attestation,
+  PostalCode,
+  Address,
+  Name,
+  Contact,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const { status: experimentalBlocks } = useFlag("formBuilderExperimentalBlocks");
 
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
@@ -46,8 +49,24 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("richText"),
       icon: <ParagraphIcon />,
       description: RichText,
-      className: "separator",
+      className: "",
       group: group.layout,
+    },
+    {
+      id: "textField",
+      value: t("shortAnswer"),
+      icon: <ShortAnswerIcon />,
+      description: TextField,
+      className: "",
+      group: group.input,
+    },
+    {
+      id: "textArea",
+      value: t("paragraph"),
+      icon: <ParagraphIcon />,
+      description: TextArea,
+      className: "separator",
+      group: group.input,
     },
     {
       id: "radio",
@@ -74,18 +93,26 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
-      id: "textField",
-      value: t("shortAnswer"),
-      icon: <ShortAnswerIcon />,
-      description: TextField,
+      id: "date",
+      value: t("date"),
+      icon: <CalendarIcon />,
+      description: Date,
       className: "",
       group: group.input,
     },
     {
-      id: "textArea",
-      value: t("paragraph"),
-      icon: <ParagraphIcon />,
-      description: TextArea,
+      id: "number",
+      value: t("numericField"),
+      icon: <NumericFieldIcon />,
+      description: Number,
+      className: "",
+      group: group.input,
+    },
+    {
+      id: "attestation",
+      value: t("attestation"),
+      icon: <AddIcon />,
+      description: Attestation,
       className: "separator",
       group: group.input,
     },
@@ -106,18 +133,10 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
-      id: "date",
-      value: t("date"),
-      icon: <CalendarIcon />,
-      description: Date,
-      className: "",
-      group: group.input,
-    },
-    {
-      id: "number",
-      value: t("numericField"),
-      icon: <NumericFieldIcon />,
-      description: Number,
+      id: "postal-code",
+      value: t("addElementDialog.postal-code.label"),
+      icon: <ShortAnswerIcon />,
+      description: PostalCode,
       className: "",
       group: group.input,
     },
@@ -129,12 +148,28 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "",
       group: group.advanced,
     },
+    {
+      id: "address",
+      value: "Address",
+      icon: <AddIcon />,
+      description: Address,
+      group: group.advanced,
+    },
+    {
+      id: "name",
+      value: "Name",
+      icon: <AddIcon />,
+      description: Name,
+      group: group.advanced,
+    },
+    {
+      id: "contact",
+      value: "Contact",
+      icon: <AddIcon />,
+      description: Contact,
+      group: group.advanced,
+    },
   ];
-
-  if (experimentalBlocks) {
-    // add experimental blocks here:
-    // elementOptions.push();
-  }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
 };

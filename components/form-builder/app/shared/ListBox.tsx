@@ -10,7 +10,12 @@ export const ListBox = ({
   handleChange,
   ariaLabel,
 }: {
-  options: { id: string; value: string; group: { id: string; value: string } }[];
+  options: {
+    id: string;
+    value: string;
+    group: { id: string; value: string };
+    className?: string;
+  }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
 }) => {
@@ -64,10 +69,12 @@ export const ListBox = ({
               id,
               value,
               group,
+              className,
             }: {
               id: string;
               value: string;
               group: { id: string; value: string };
+              className?: string;
             },
             index: number
           ) => {
@@ -91,6 +98,7 @@ export const ListBox = ({
               <React.Fragment key={id}>
                 {groupOption}
                 <li
+                  data-testid={id}
                   id={`row-${id}`}
                   ref={(el) => {
                     if (el && rowsRef.current) {
@@ -112,6 +120,9 @@ export const ListBox = ({
                     )}
                   </span>
                 </li>
+                {className && className === "separator" ? (
+                  <li role="separator" className="border-b border-1 border-grey-default mb-2" />
+                ) : null}
               </React.Fragment>
             );
           }
