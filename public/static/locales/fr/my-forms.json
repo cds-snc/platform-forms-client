@@ -10,8 +10,8 @@
     "createNewForm": "Créer un nouveau formulaire"
   },
   "cards": {
-    "noForms": "Vous n’avez aucun formulaire enregistré.",
-    "noDraftForms": "Vous n’avez aucune ébauche enregistré.",
+    "noForms": "Vous n’avez aucun formulaire.",
+    "noDraftForms": "Vous n’avez aucune ébauche enregistrée.",
     "noPublishedForms": "Vous n’avez aucun formulaire publié."
   },
   "card": {
