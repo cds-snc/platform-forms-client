@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
-import { Checkbox, Input, TextArea, PopOver, InfoButton } from "../shared";
+import { Checkbox, Input, TextArea, InfoButton, InfoDetails } from "../shared";
 import { useTemplateStore } from "../../store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
@@ -110,12 +110,12 @@ export const ModalForm = ({
               }}
               selectedValue={autocompleteSelectedValue as string}
             />{" "}
-            <PopOver buttonContent={<InfoButton label={t("autocompleteWhenNotToUse.title")} />}>
-              <div className="w-[400px]">
-                <p className="text-sm mb-4">{t("autocompleteWhenNotToUse.text1")}</p>
-                <p className="text-sm">{t("autocompleteWhenNotToUse.text2")}</p>
+            <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
+              <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
+                <p className="text-md mb-4">{t("autocompleteWhenNotToUse.text1")}</p>
+                <p className="text-md">{t("autocompleteWhenNotToUse.text2")}</p>
               </div>
-            </PopOver>
+            </InfoDetails>
           </div>
         </div>
       )}
