@@ -99,6 +99,11 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
   // e.g. Max simultaneous downloade: Chrome 5-6, Safari 4, Edge no limit (10k?), FF 5-7
   const handleDownload = async () => {
+    if (getCheckedItems().size === 0) {
+      toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
+      return;
+    }
+
     if (getCheckedItems().size > MAX_FILE_DOWNLOADS) {
       toast.warn(
         t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),

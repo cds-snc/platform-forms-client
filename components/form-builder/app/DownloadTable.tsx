@@ -1,8 +1,8 @@
 import React from "react";
 import { VaultSubmissionList } from "@lib/types";
-import { ExclamationIcon } from "@components/form-builder/icons";
 import { useTranslation } from "react-i18next";
 import { ExclamationText } from "./shared";
+import { SkipLinkReusable } from "@components/globals/SkipLinkReusable";
 
 interface DownloadTableProps {
   submissions: VaultSubmissionList[];
@@ -158,12 +158,11 @@ export const DownloadTable = ({
   };
 
   return (
-    <section className="relative">
-      <div className="skip-link-container">
-        <a href="#downloadTableButtonId" className="skip-link text-left">
-          Skip Download Table
-        </a>
-      </div>
+    <section>
+      <SkipLinkReusable
+        text={t("downloadResponsesTable.skipLink")}
+        anchor="#downloadTableButtonId"
+      />
       <table className="text-sm">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
