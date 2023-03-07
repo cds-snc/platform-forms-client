@@ -328,8 +328,6 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  logMessage.info(JSON.stringify(vaultSubmissions));
-
   return {
     props: {
       ...FormbuilderParams,
