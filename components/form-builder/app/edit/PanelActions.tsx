@@ -90,7 +90,9 @@ export const PanelActions = ({
           id: 4,
           txt: "addToSet",
           icon: AddIcon,
-          onClick: handleOpenDialog,
+          onClick: () => {
+            handleOpenDialog();
+          },
         },
         {
           id: 5,
@@ -213,7 +215,7 @@ export const PanelActions = ({
           {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
         </div>
 
-        {elementDialog && (
+        {elementDialog && isSubElement && (
           <ElementDialog
             filterElements={filterElements}
             handleAddType={(type) => {
