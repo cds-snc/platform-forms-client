@@ -57,6 +57,8 @@ export interface ElementOption {
     | "repeatableQuestionSet"
     | "attestation"
     | "postal-code"
+    | "name"
+    | "contact"
     | "address";
   value: string;
   icon?: JSX.Element;
