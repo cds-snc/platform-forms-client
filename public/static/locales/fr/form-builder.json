@@ -164,10 +164,10 @@
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
   "characterLimitWhenToUse": {
-    "text1": "Evidence that users are likely to enter more information than they need to.",
-    "text2": "A legal or technical reason that means an entry must be no more than a certain number of characters.",
-    "text3": "If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
-    "title": "Reasons for using a character limit"
+    "text1": "[FR] Evidence that users are likely to enter more information than they need to.",
+    "text2": "[FR] A legal or technical reason that means an entry must be no more than a certain number of characters.",
+    "text3": "[FR] If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
+    "title": "[FR] Reasons for using a character limit"
   },
   "checkboxes": "Choix multiple",
   "close": "Fermer",
