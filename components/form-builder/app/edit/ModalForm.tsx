@@ -4,7 +4,7 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
-import { Checkbox, Input, TextArea, InfoButton, InfoDetails } from "../shared";
+import { Checkbox, Input, TextArea, InfoDetails } from "../shared";
 import { useTemplateStore } from "../../store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
