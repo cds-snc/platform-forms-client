@@ -82,6 +82,12 @@ export const SelectedElement = ({
     case "address":
       element = <ShortAnswer data-testid="address">Address</ShortAnswer>;
       break;
+    case "name":
+      element = <ShortAnswer data-testid="name">Name</ShortAnswer>;
+      break;
+    case "contact":
+      element = <ShortAnswer data-testid="contact">Contact</ShortAnswer>;
+      break;
     default:
       element = null;
   }

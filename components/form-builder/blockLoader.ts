@@ -1,10 +1,10 @@
 import { FormElement } from "@lib/types";
 import axios from "axios";
 
-export type LoaderType = "attestation" | "address";
+export type LoaderType = "attestation" | "address" | "name" | "contact";
 
 export const blockLoader = async (type: LoaderType, onData: (data: FormElement) => void) => {
-  const allowedTypes = ["attestation", "address"];
+  const allowedTypes = ["attestation", "address", "name", "contact"];
 
   if (!allowedTypes.includes(type)) {
     return;

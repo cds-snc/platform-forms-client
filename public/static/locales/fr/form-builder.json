@@ -3,21 +3,21 @@
   "addElementDialog": {
     "addButton": "Sélectionner ce bloc",
     "advancedBlocks": "Blocs avancés",
-    "allRequired": "[FR] all required",
+    "allRequired": "Tous obligatoires",
     "answer": "Réponse...",
-    "attest": "[FR] I agree to:",
+    "attest": "J'accepte :",
     "attestation": {
-      "description": "[FR] Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes.",
-      "title": "[FR] Legal attestation"
+      "description": "Utilisez un bloc d'attestation légale lorsque les personnes qui remplissent le formulaire doivent accepter certaines conditions afin de continuer. Ce bloc permet d'ajouter une ou plusieurs cases à cocher obligatoires.",
+      "title": "Attestation légale"
     },
     "checkbox": {
       "description": "Description des choix multiples",
       "title": "Choix multiples"
     },
     "checkboxItem": "Case à cocher",
-    "condition1": "[FR] Condition 1",
-    "condition2": "[FR] Condition 2",
-    "condition3": "[FR] Condition 3",
+    "condition1": "Condition 1",
+    "condition2": "Condition 2",
+    "condition3": "Condition 3",
     "date": {
       "description": "Description de la date",
       "title": "Date"
@@ -27,7 +27,7 @@
       "title": "Liste déroulante"
     },
     "dynamicRow": {
-      "description": "[FR] The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
+      "description": "Le bloc de questions répétitives offre aux remplisseurs de formulaires la possibilité d'ajouter une autre série de réponse à la section. Ce bloc fonctionne avec une seule question ou une section de questions.",
       "title": "Série répétitive de questions"
     },
     "email": {
@@ -66,6 +66,55 @@
       "description": "Description de la question à réponse courte",
       "title": "Question à réponse courte"
     },
+    "address": {
+      "label": "Adresse",
+      "description": "Description de l'adresse",
+      "title": "Quelle est votre adresse?",
+      "street": {
+        "label": "Adresse municipale",
+        "description": "Indiquez votre numéro civique, le nom de la rue, l'appartement, et d'autres détails de l'adresse."
+      },
+      "city": "Ville ou communauté",
+      "province": "Province ou état",
+      "country": "Pays",
+      "postal": "Code postal ou zip"
+    },
+    "name": {
+      "label": "Nom",
+      "description": "Description du nom",
+      "title": "Titre du nom",
+      "first": {
+        "label": "Prénom",
+        "description": "Description du prénom"
+      },
+      "middle": {
+        "label": "Deuxième prénom",
+        "description": "Description du deuxième prénom"
+      },
+      "last": {
+        "label": "Nom de famille",
+        "description": "Description du nom de famille"
+      }
+    },
+    "contact": {
+      "label": "Contact",
+      "title": "Comment pouvons-nous vous contacter?",
+      "description": "Description du contact",
+      "phone": {
+        "label": "Numéro de téléphone",
+        "description": "Entrez votre numéro de téléphone, comme 111-222-3333"
+      },
+      "email": {
+        "label": "Adresse courriel",
+        "description": "Entrez votre adresse courriel, comme nom@exemple.com"
+      },
+      "language": {
+        "label": "Quelle est votre langue préférée de communication?",
+        "description": "Nous offrons nos services dans les deux langues officielles, le français et l'anglais.",
+        "english": "Anglais",
+        "french": "Français"
+      }
+    },
     "yes": "Oui"
   },
   "addMultiple": "Ajouter plusieurs options",
@@ -74,34 +123,34 @@
   "addRules": "Ajouter des règles",
   "addToSet": "Ajouter à la série",
   "at": "à",
-  "attestation": "[FR] Legal attestation",
+  "attestation": "Attestation légale",
   "autocompleteOptions": {
-    "additional-name": "[FR] Middle name",
-    "address-level1": "[FR] Province, State",
-    "address-level2": "[FR] City, town, community",
-    "address-line1": "[FR] Address line 1 (civic number and street name)",
-    "address-line2": "[FR] Address line 2 (apartment or suite)",
-    "address-line3": "[FR] Address line 3 (other address details)",
-    "bday": "[FR] Birthdate",
-    "bday-day": "[FR] Day of birthday",
-    "bday-month": "[FR] Birth month",
-    "bday-year": "[FR] Birth year",
-    "country": "[FR] Country code (2 letter country identifier)",
-    "country-name": "[FR] Country",
-    "email": "[FR] Email address",
-    "family-name": "[FR] Last name",
-    "given-name": "[FR] First name",
-    "honorific-prefix": "[FR] Name prefix, Mr, Mrs, Dr",
-    "honorific-suffix": "[FR] Name suffix, Jr, B.Sc,",
-    "language": "[FR] Language",
-    "name": "[FR] Full name (includes first, middle and last names)",
-    "organization-title": "[FR] Job title",
-    "phone": "[FR] Phone number",
-    "postal-code": "[FR] Postal or zip code",
-    "street-address": "[FR] Full street address (includes address lines 1-3)",
-    "url": "[FR] Website address"
+    "additional-name": "Deuxième prénom",
+    "address-level1": "Province, État",
+    "address-level2": "Ville ou communauté",
+    "address-line1": "Ligne d'adresse 1 (numéro civique et nom de la rue)",
+    "address-line2": "Ligne d'adresse 2 (appartement ou suite)",
+    "address-line3": "Ligne d'adresse 3 (autre détails de l'adresse)",
+    "bday": "Date de naissance",
+    "bday-day": "Jour de naissance",
+    "bday-month": "Mois de naissance",
+    "bday-year": "Année de naissance",
+    "country": "Code du pays (identifiant du pays à 2 lettres)",
+    "country-name": "Pays",
+    "email": "Adresse courriel",
+    "family-name": "Nom de famille",
+    "given-name": "Prénom",
+    "honorific-prefix": "Préfix du nom, M., Mme, Dr",
+    "honorific-suffix": "Suffix du nom, Jr, B.Sc,",
+    "language": "Langue",
+    "name": "Nom complet (y compris le prénom, le deuxième prénom et le nom de famille)",
+    "organization-title": "Titre du poste",
+    "phone": "Numéro de téléphone",
+    "postal-code": "Code postal ou zip",
+    "street-address": "Adresse complète (y compris les lignes 1 à 3 de l'adresse)",
+    "url": "Adresse du site Web"
   },
-  "autocompleteWhenNotToUse": "[FR] When not to use autocomplete",
+  "autocompleteWhenNotToUse": "Qnad ne pas utiliser l'autocomplétion",
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
@@ -149,12 +198,7 @@
     "email": "Entrez une adresse courriel comme name@example.com",
     "number": "N'entrez que des nombres",
     "phone": "Entrez un numéro de téléphone comme 111-222-3333",
-    "postal-code": "",
-    "address": {
-      "label": "[FR] Address",
-      "description": "[FR] Address description",
-      "title": "[FR] Address title"
-    }
+    "postal-code": ""
   },
   "description": "La description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
@@ -166,7 +210,7 @@
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
-  "elementActions": "[FR] Element actions",
+  "elementActions": "Actions des éléments",
   "email": "Courriel",
   "english": "anglais",
   "errorSaving": "Le téléchargement du fichier de formulaire a échoué. <a href=\"/fr/form-builder/support\" target=\"_blank\">Contacter l’équipe de soutien</a>.",
@@ -318,8 +362,8 @@
   "save": "Enregistrer",
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
   "saveDraft": "Enregistrer l’ébauche",
-  "selectAutocomplete": "[FR] Select an autocomplete attribute",
-  "selectAutocompleteHint": "[FR] This option is great when the form filler is providing personal information like their address, email or phone number.",
+  "selectAutocomplete": "Sélectionnez un attribut d'autocomplétion",
+  "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
   "settingsDeleteButton": "Supprimer le formulaire",
@@ -359,14 +403,14 @@
     "title": "Partager",
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
-      "copyInstructions": "[FR] Copy instructions",
-      "description": "[FR] You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">Sign up</a> today to get access to this feature and more.",
-      "downloadFormFile": "[FR] Download form file",
-      "instructions": "[FR] You can download a copy of this form file to your computer and share it through your email.",
-      "step1": "[FR] Step 1",
-      "step1Details": "[FR] Download a copy of your form as a JSON form file to your computer",
-      "step2": "[FR] Step 2",
-      "step2Details": "[FR] Copy and paste the email instructions into an email and attach the form file"
+      "copyInstructions": "Copier les instructions",
+      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/signup/register\">créez un compte</a> pour accéder a1 cette fonctionalité et d'autres.",
+      "downloadFormFile": "Télécharger le fichier du formulaire",
+      "instructions": "Vous pouvez télécharger une copie de ce fichier de formulaire sur votre ordinateur et le partager par courriel.",
+      "step1": "Étape 1",
+      "step1Details": "Téléchargez une copie de votre formulaire en tant que fichier JSON sur votre ordinateur",
+      "step2": "Étape 2",
+      "step2Details": "Copiez et collez les instructions dans un courriel et joignez le fichier du formulaire"
     },
     "unpublished": "Lien n'est pas disponible pour les formulaires non publiés"
   },

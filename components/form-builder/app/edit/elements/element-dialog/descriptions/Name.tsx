@@ -11,20 +11,15 @@ const Text = ({ label, description }: { label: string; description?: string }) =
   );
 };
 
-export const Address = ({ title }: { title: string }) => {
+export const Name = ({ title }: { title: string }) => {
   const { t } = useTranslation("form-builder");
 
   return (
     <div>
       <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text
-        label={t("addElementDialog.address.street.label")}
-        description={t("addElementDialog.address.street.description")}
-      />
-      <Text label={t("addElementDialog.address.city")} />
-      <Text label={t("addElementDialog.address.province")} />
-      <Text label={t("addElementDialog.address.country")} />
-      <Text label={t("addElementDialog.address.postal")} />
+      <Text label={t("addElementDialog.name.first.label")} />
+      <Text label={t("addElementDialog.name.middle.label")} />
+      <Text label={t("addElementDialog.name.last.label")} />
     </div>
   );
 };
