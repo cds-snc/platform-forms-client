@@ -126,13 +126,16 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
     await Promise.all(downloads)
       .then(() => {
-        toast.dismiss(toastDownloadingId);
-        toast.success(t("downloadResponsesTable.download.downloadComplete"), {
-          position: toastPosition,
-        });
+        // NOTE: setTimeout fixes an edge case where DB/* wouldn't be updated by time of request
+        setTimeout(() => {
+          // Refreshes getServerSideProps data without a full page reload
+          router.replace(router.asPath);
 
-        // Refreshes getServerSideProps data without a full page reload
-        router.replace(router.asPath);
+          toast.dismiss(toastDownloadingId);
+          toast.success(t("downloadResponsesTable.download.downloadComplete"), {
+            position: toastPosition,
+          });
+        }, 400);
       })
       .catch((err) => {
         logMessage.error(err as Error);
@@ -324,6 +327,8 @@ export const getServerSideProps: GetServerSideProps = async ({
       }
     }
   }
+
+  logMessage.info(JSON.stringify(vaultSubmissions));
 
   return {
     props: {
