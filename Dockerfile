@@ -62,6 +62,7 @@ COPY next.config.js .
 COPY next-i18next.config.js .
 COPY migrations ./migrations
 COPY prisma ./prisma
+COPY form-builder-templates ./form-builder-templates
 COPY flag_initialization ./flag_initialization
 COPY --from=1 /src/node_modules ./migrations/node_modules
 COPY --from=2 /src/node_modules ./flag_initialization/node_modules
