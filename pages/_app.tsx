@@ -8,6 +8,8 @@ import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
 import BaseLayout from "@components/globals/layouts/BaseLayout";
 import "../styles/app.scss";
+import { AnyObject } from "@lib/types";
+import { Session } from "next-auth";
 
 /*
 This component disables SSR when in testing mode.
@@ -28,7 +30,7 @@ export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
-type AppPropsWithLayout = AppProps & {
+type AppPropsWithLayout = AppProps<AnyObject & { session?: Session }> & {
   Component: NextPageWithLayout;
 };
 

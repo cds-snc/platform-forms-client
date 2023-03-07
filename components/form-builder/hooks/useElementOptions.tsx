@@ -28,6 +28,8 @@ import {
   Attestation,
   PostalCode,
   Address,
+  Name,
+  Contact,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -151,6 +153,20 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: "Address",
       icon: <AddIcon />,
       description: Address,
+      group: group.advanced,
+    },
+    {
+      id: "name",
+      value: "Name",
+      icon: <AddIcon />,
+      description: Name,
+      group: group.advanced,
+    },
+    {
+      id: "contact",
+      value: "Contact",
+      icon: <AddIcon />,
+      description: Contact,
       group: group.advanced,
     },
   ];

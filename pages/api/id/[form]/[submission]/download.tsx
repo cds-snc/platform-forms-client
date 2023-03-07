@@ -104,6 +104,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       pathname: "/",
       query: {},
       _nextI18Next: {
+        initialI18nStore: {},
         initialLocale: "en",
         ns: ["my-forms", "common"],
         userConfig: {
