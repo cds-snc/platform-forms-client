@@ -11,4 +11,4 @@ export { DownloadFileButton } from "./DownloadFileButton";
 export { ListBox } from "./ListBox";
 export { TagInput } from "./tag-input";
 export { LockedBadge } from "./LockedBadge";
-export { InfoDetails, InfoButton } from "./InfoDetails";
+export { InfoDetails } from "./InfoDetails";

@@ -6,7 +6,6 @@ import axios from "axios";
 import { useDialogRef, Dialog, TagInput, Button, InfoDetails } from "./shared";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
-import { AddIcon, RemoveIcon } from "../icons";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModal = ({
