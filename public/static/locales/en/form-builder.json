@@ -155,7 +155,11 @@
     "street-address": "Full street address (includes address lines 1-3)",
     "url": "Website address"
   },
-  "autocompleteWhenNotToUse": "When not to use autocomplete",
+  "autocompleteWhenNotToUse": {
+    "title": "When not to use autocomplete",
+    "text1": "Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "Usability testing is a good way to understand if the rules you set cause problems with filling in forms."
+  },
   "backToForm": "Back to form",
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",

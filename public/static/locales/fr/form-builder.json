@@ -155,7 +155,11 @@
     "street-address": "Adresse complète (y compris les lignes 1 à 3 de l'adresse)",
     "url": "Adresse du site Web"
   },
-  "autocompleteWhenNotToUse": "Qnad ne pas utiliser l'autocomplétion",
+  "autocompleteWhenNotToUse": {
+    "title": "[FR] When not to use autocomplete",
+    "text1": "[FR] Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "[FR] Usability testing is a good way to understand if the rules you set cause problems with filling in forms."
+  },
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
