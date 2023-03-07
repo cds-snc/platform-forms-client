@@ -77,7 +77,7 @@
       "title": "Quelle est votre adresse?",
       "street": {
         "label": "Adresse municipale",
-        "description": "Veuillez inclure votre numéro civique, le nom de la rue, l'appartement, et d'autres détails de l'adresse."
+        "description": "Indiquez votre numéro civique, le nom de la rue, l'appartement, et d'autres détails de l'adresse."
       },
       "city": "Ville ou communauté",
       "province": "Province ou état",
