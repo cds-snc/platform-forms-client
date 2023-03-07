@@ -57,14 +57,16 @@ header {
   @include visuallyHidden();
 }
 
-#skip-link-container {
+#skip-link-container,
+.skip-link-container {
   width: 100%;
   position: absolute;
   z-index: 5;
   text-align: center;
   top: 10px;
 
-  #skip-link {
+  #skip-link,
+  .skip-link {
     position: absolute;
     width: 1px;
     height: 1px;

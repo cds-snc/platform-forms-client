@@ -2,7 +2,7 @@ import React from "react";
 import { VaultSubmissionList } from "@lib/types";
 import { ExclamationIcon } from "@components/form-builder/icons";
 import { useTranslation } from "react-i18next";
-import { Loader } from "@components/globals/Loader";
+import { ExclamationText } from "./shared";
 
 interface DownloadTableProps {
   submissions: VaultSubmissionList[];
@@ -89,15 +89,7 @@ export const DownloadTable = ({
       if (daysLeft > 0) {
         return t("downloadResponsesTable.status.withinXDays", { daysLeft });
       }
-      return (
-        // TODO: probably move to an Exclamation component
-        <div className="flex items-center">
-          <ExclamationIcon className="mr-1" />
-          <span className="font-bold text-[#bc3332]">
-            {t("downloadResponsesTable.status.overdue")}
-          </span>
-        </div>
-      );
+      return <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
     }
 
     if (
@@ -134,14 +126,7 @@ export const DownloadTable = ({
         if (daysLeft > 0) {
           return t("downloadResponsesTable.status.withinXDays", { daysLeft });
         }
-        return (
-          <div className="flex items-center">
-            <ExclamationIcon className="mr-1" />
-            <span className="font-bold text-[#bc3332]">
-              {t("downloadResponsesTable.status.overdue")}
-            </span>
-          </div>
-        );
+        return <ExclamationText text={t("downloadResponsesTable.status.overdue")} />;
       }
       default:
         return t("downloadResponsesTable.unknown");
@@ -173,7 +158,12 @@ export const DownloadTable = ({
   };
 
   return (
-    <>
+    <section className="relative">
+      <div className="skip-link-container">
+        <a href="#downloadTableButtonId" className="skip-link text-left">
+          Skip Download Table
+        </a>
+      </div>
       <table className="text-sm">
         <caption className="sr-only">{t("downloadResponsesTable.header.tableTitle")}</caption>
         <thead className="border-b-2 border-[#6a6d7b]">
@@ -194,81 +184,77 @@ export const DownloadTable = ({
           </tr>
         </thead>
         <tbody>
-          <>
-            {/* TODO
-            <Loader message="so loading!"/> */}
-
-            {submissions.map((submission, index) => (
-              <tr
-                key={index}
-                className={
-                  "border-b-2 border-grey" +
-                  (checkedItems.get(submission.name) ? " bg-[#fffbf3]" : "")
-                }
-              >
-                <td className="p-4 flex">
-                  {/* TODO 
-                      Replace below with Design System checkbox 
-                  */}
-                  <div className="form-builder">
-                    <div className="multiple-choice-wrapper">
-                      <input
-                        id={submission.name}
-                        className="multiple-choice-wrapper"
-                        name="responses"
-                        type="checkbox"
-                        checked={checkedItems.get(submission.name)}
-                        onChange={handleChecked}
-                      />
-                      <label htmlFor={submission.name}>
-                        <span className="sr-only">{submission.name}</span>
-                      </label>
-                    </div>
+          {submissions.map((submission, index) => (
+            <tr
+              key={index}
+              className={
+                "border-b-2 border-grey" +
+                (checkedItems.get(submission.name) ? " bg-[#fffbf3]" : "")
+              }
+            >
+              <td className="p-4 flex">
+                {/* TODO: Replace below with Design System checkbox */}
+                <div className="form-builder">
+                  <div className="multiple-choice-wrapper">
+                    <input
+                      id={submission.name}
+                      className="multiple-choice-wrapper"
+                      name="responses"
+                      type="checkbox"
+                      checked={checkedItems.get(submission.name)}
+                      onChange={handleChecked}
+                    />
+                    <label htmlFor={submission.name}>
+                      <span className="sr-only">{submission.name}</span>
+                    </label>
                   </div>
-                </td>
-                <td className="p-4 whitespace-nowrap">{submission.name}</td>
-                <td className="p-4 ">{formatStatus(submission.status)}</td>
-                <td className="p-4 ">
-                  {formatDownloadResponse({
-                    vaultStatus: submission.status,
-                    createdAt: submission.createdAt,
-                    downloadedAt: submission.downloadedAt,
-                  })}
-                </td>
-                <td className="p-4">
-                  <div className="truncate w-48">
-                    {submission.lastDownloadedBy ||
-                      t("downloadResponsesTable.status.notDownloaded")}
-                  </div>
-                </td>
-                <td className="p-4 ">
-                  {formatConfirmReceipt({
-                    vaultStatus: submission.status,
-                    createdAtDate: submission.createdAt,
-                  })}
-                </td>
-                <td className="p-4 ">
-                  {formatRemoval({
-                    vaultStatus: submission.status,
-                    removedAt: submission.removedAt,
-                  })}
-                </td>
-              </tr>
-            ))}
-          </>
+                </div>
+              </td>
+              <td className="p-4 whitespace-nowrap">{submission.name}</td>
+              <td className="p-4">{formatStatus(submission.status)}</td>
+              <td className="p-4">
+                {formatDownloadResponse({
+                  vaultStatus: submission.status,
+                  createdAt: submission.createdAt,
+                  downloadedAt: submission.downloadedAt,
+                })}
+              </td>
+              <td className="p-4">
+                <div className="truncate w-48">
+                  {submission.lastDownloadedBy || t("downloadResponsesTable.status.notDownloaded")}
+                </div>
+              </td>
+              <td className="p-4">
+                {formatConfirmReceipt({
+                  vaultStatus: submission.status,
+                  createdAtDate: submission.createdAt,
+                })}
+              </td>
+              <td className="p-4">
+                {formatRemoval({
+                  vaultStatus: submission.status,
+                  removedAt: submission.removedAt,
+                })}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <div className="mt-8">
+        {/* NOTE: check/unchek item announcement may be enough for users and additionally announcing
+            the updated Button items checked count may be too verbose. Remove live-region if so */}
         <button
+          id="downloadTableButtonId"
           className="gc-button whitespace-nowrap w-auto"
           type="button"
           onClick={handleDownload}
+          aria-live="polite"
         >
           {t("downloadResponsesTable.download.downloadXSelectedResponses", {
             size: getCheckedItems().size,
           })}
         </button>
       </div>
-    </>
+    </section>
   );
 };

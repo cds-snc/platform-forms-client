@@ -24,9 +24,6 @@ import { DownloadTable } from "@components/form-builder/app/DownloadTable";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// TODO: User will need to click "allow" for the multiple file download dialog, add to UI?
-// TODO: UI for table download delay, and maybe on render ("spinner"?)
-
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
 }
@@ -38,6 +35,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
   const { params } = router.query;
   const formId = params && params.length && params[0];
   const isAuthenticated = status === "authenticated";
+  const toastPosition = toast.POSITION.TOP_CENTER;
   const MAX_FILE_DOWNLOADS = 20;
 
   const [checkedItems, setCheckedItems] = useState(
@@ -104,9 +102,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
     if (getCheckedItems().size > MAX_FILE_DOWNLOADS) {
       toast.warn(
         t("downloadResponsesTable.download.trySelectingLessFiles", { max: MAX_FILE_DOWNLOADS }),
-        {
-          position: toast.POSITION.TOP_CENTER,
-        }
+        { position: toastPosition }
       );
       return;
     }
@@ -115,10 +111,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       t("downloadResponsesTable.download.downloadingXFiles", {
         fileCount: getCheckedItems().size,
       }),
-      {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: false,
-      }
+      { position: toastPosition, autoClose: false }
     );
 
     const downloads = Array.from(getCheckedItems(), (item) => {
@@ -131,17 +124,17 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
       .then(() => {
         toast.dismiss(toastDownloadingId);
         toast.success(t("downloadResponsesTable.download.downloadComplete"), {
-          position: toast.POSITION.TOP_CENTER,
+          position: toastPosition,
         });
 
-        // Refreshes getServersideProps data without a page re-load
+        // Refreshes getServerSideProps data without a full page reload
         router.replace(router.asPath);
       })
       .catch((err) => {
         logMessage.error(err as Error);
         toast.dismiss(toastDownloadingId);
         toast.error(t("downloadResponsesTable.download.errorDownloadingFiles"), {
-          position: toast.POSITION.TOP_CENTER,
+          position: toastPosition,
           autoClose: false,
         });
       });
@@ -255,7 +248,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
         </Dialog>
       )}
 
-      {/* Sticky to stop the page from scrolling the top when showing a Toast */}
+      {/* Sticky to stop the page from scrolling to the top when showing a Toast */}
       <div className="sticky top-0">
         <ToastContainer />
       </div>
