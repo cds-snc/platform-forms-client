@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
-import { blockLoader } from "../../blockLoader";
+import { blockLoader, LoaderType } from "../../blockLoader";
 import { useUpdateElement } from "@components/form-builder/hooks";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
@@ -17,8 +17,15 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
-      if (type === FormElementTypes.attestation) {
-        blockLoader(type, (data) => add(index, FormElementTypes.checkbox, data));
+      if (
+        [
+          FormElementTypes.attestation,
+          FormElementTypes.address,
+          FormElementTypes.name,
+          FormElementTypes.contact,
+        ].includes(type as FormElementTypes)
+      ) {
+        blockLoader(type as LoaderType, (data) => add(index, data.type, data));
         return;
       }
 

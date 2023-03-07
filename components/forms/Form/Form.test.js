@@ -35,8 +35,6 @@ jest.mock("@lib/hooks", () => {
           return { isLoading: false, status: false };
         case "submitToReliabilityQueue":
           return { isLoading: false, status: false };
-        case "formBuilderAddElementDialog":
-          return { isLoading: false, status: false };
         case "shareMenu":
           return { isLoading: false, status: false };
         default:

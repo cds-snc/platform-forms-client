@@ -71,6 +71,55 @@
       "description": "[FR] Postal code description",
       "title": "[FR] Postal code title"
     },
+    "address": {
+      "label": "[FR] Address",
+      "description": "[FR] Address description",
+      "title": "[FR] What is your address?",
+      "street": {
+        "label": "[FR] Street address",
+        "description": "[FR] Include your civic number and street name, apartment or suite, and other address details"
+      },
+      "city": "[FR] City, town or community",
+      "province": "[FR] Province or state",
+      "country": "[FR] City, town or community",
+      "postal": "[FR] Postal or zip code"
+    },
+    "name": {
+      "label": "[FR] Name",
+      "description": "[FR] Name description",
+      "title": "[FR] Name title",
+      "first": {
+        "label": "[FR] First name",
+        "description": "[FR] First name description"
+      },
+      "middle": {
+        "label": "[FR] Middle name",
+        "description": "[FR] Middle name description"
+      },
+      "last": {
+        "label": "[FR] Last name",
+        "description": "[FR] Last name description"
+      }
+    },
+    "contact": {
+      "label": "[FR] Contact",
+      "title": "[FR] How can we contact you?",
+      "description": "[FR] Contact description",
+      "phone": {
+        "label": "[FR] Phone number",
+        "description": "[FR] Enter your phone number like, 111-222-3333"
+      },
+      "email": {
+        "label": "[FR] Email address",
+        "description": "[FR] Enter your email number like, name@example.com"
+      },
+      "language": {
+        "label": "[FR] What is your preferred language for communication?",
+        "description": "[FR] We offer our services in both official languages, French and English",
+        "english": "Anglais",
+        "french": "Français"
+      }
+    },
     "yes": "Oui"
   },
   "addMultiple": "Ajouter plusieurs options",

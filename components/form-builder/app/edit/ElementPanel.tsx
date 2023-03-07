@@ -5,7 +5,7 @@ import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { FormElementTypes } from "@lib/types";
 import { useIsWithin, useUpdateElement } from "@components/form-builder/hooks";
-import { blockLoader } from "../../blockLoader";
+import { blockLoader, LoaderType } from "../../blockLoader";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const {
@@ -55,9 +55,16 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   /* Note this callback is also in PanelActionsLocked */
   const handleAddElement = useCallback(
-    (index: number, type?: FormElementTypes) => {
-      if (type === FormElementTypes.attestation) {
-        blockLoader(type, (data) => add(index, type, data));
+    (index: number, type: FormElementTypes | undefined) => {
+      if (
+        [
+          FormElementTypes.attestation,
+          FormElementTypes.address,
+          FormElementTypes.name,
+          FormElementTypes.contact,
+        ].includes(type as FormElementTypes)
+      ) {
+        blockLoader(type as LoaderType, (data) => add(index, data.type, data));
         return;
       }
 

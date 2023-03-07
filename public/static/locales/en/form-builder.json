@@ -71,6 +71,55 @@
       "description": "Postal code description",
       "title": "Postal code title"
     },
+    "address": {
+      "label": "Address",
+      "description": "Address description",
+      "title": "What is your address?",
+      "street": {
+        "label": "Street address",
+        "description": "Include your civic number and street name, apartment or suite, and other address details"
+      },
+      "city": "City, town or community",
+      "province": "Province or state",
+      "country": "City, town or community",
+      "postal": "Postal or zip code"
+    },
+    "name": {
+      "label": "Name",
+      "description": "Name description",
+      "title": "What is your name?",
+      "first": {
+        "label": "First name",
+        "description": "First name description"
+      },
+      "middle": {
+        "label": "Middle name",
+        "description": "Middle name description"
+      },
+      "last": {
+        "label": "Last name",
+        "description": "Last name description"
+      }
+    },
+    "contact": {
+      "label": "Contact",
+      "title": "How can we contact you?",
+      "description": "Contact description",
+      "phone": {
+        "label": "Phone number",
+        "description": "Enter your phone number like, 111-222-3333"
+      },
+      "email": {
+        "label": "Email address",
+        "description": "Enter your email number like, name@example.com"
+      },
+      "language": {
+        "label": "What is your preferred language for communication?",
+        "description": "We offer our services in both official languages, French and English",
+        "english": "English",
+        "french": "French"
+      }
+    },
     "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
