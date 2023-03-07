@@ -37,9 +37,9 @@
     }
   },
   "responseTemplate": {
-    "responseNumber": "Response Number",
-    "submissionDate": "Submission Date",
-    "errorNoQuestionsAnswers": "Error no questions and answers were found.",
+    "responseNumber": "Response number",
+    "submissionDate": "Submission date",
+    "errorNoQuestionsAnswers": "No questions and answers were found.",
     "jumpTo": "Jump to:",
     "columnTable": "Column table",
     "rowTable": "Row table",
