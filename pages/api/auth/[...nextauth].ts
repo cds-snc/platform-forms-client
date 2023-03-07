@@ -141,6 +141,8 @@ export const authOptions: NextAuthOptions = {
       logEvent(token.userId, { type: "User", id: token.userId }, "UserSignOut");
     },
     async createUser({ user }) {
+      // This only fires for non-credential providers
+      // CredentialProvider user registration is triggered in getOrCreateUser
       logEvent(user.id, { type: "User", id: user.id }, "UserRegistration");
     },
   },

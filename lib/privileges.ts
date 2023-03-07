@@ -176,6 +176,14 @@ export const updatePrivilegesForUser = async (
       // Error P2025: Record to update not found.
       return null;
     }
+    if (error instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Privilege" },
+        "AccessDenied",
+        `Attempted to modify privilege on user ${userID}`
+      );
+    }
     throw error;
   }
 };

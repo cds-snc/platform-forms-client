@@ -10,6 +10,9 @@ import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 import { Session } from "next-auth";
+import { logEvent } from "@lib/auditLogs";
+jest.mock("@lib/auditLogs");
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 describe("User query tests should fail gracefully", () => {
   it("getOrCreateUser should fail gracefully - create", async () => {
@@ -21,6 +24,7 @@ describe("User query tests should fail gracefully", () => {
 
     const result = await getOrCreateUser({ email: "test-user@test.ca" });
     expect(result).toEqual(null);
+    expect(mockedLogEvent).not.toBeCalled();
   });
 
   it("getOrCreateUser should fail gracefully - lookup", async () => {
@@ -33,6 +37,7 @@ describe("User query tests should fail gracefully", () => {
     );
     const result = await getOrCreateUser({ email: "test-user@test.ca" });
     expect(result).toEqual(null);
+    expect(mockedLogEvent).not.toBeCalled();
   });
 
   it("getUsers should fail silenty", async () => {
@@ -47,6 +52,7 @@ describe("User query tests should fail gracefully", () => {
 
     const result = await getUsers(ability);
     expect(result).toHaveLength(0);
+    expect(mockedLogEvent).not.toBeCalled();
   });
 });
 
@@ -63,6 +69,7 @@ describe("getOrCreateUser", () => {
 
     const result = await getOrCreateUser({ email: "fads@asdf.ca" });
     expect(result).toMatchObject(user);
+    expect(mockedLogEvent).not.toBeCalled();
   });
 
   it("Creates a new User", async () => {
@@ -103,6 +110,11 @@ describe("getOrCreateUser", () => {
         privileges: true,
       },
     });
+    expect(mockedLogEvent).toBeCalledWith(
+      user.id,
+      { id: user.id, type: "User" },
+      "UserRegistration"
+    );
   });
 });
 
@@ -144,5 +156,11 @@ describe("Users CRUD functions should throw an error if user does not have any p
     await expect(async () => {
       await getUsers(ability);
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+    expect(mockedLogEvent).toBeCalledWith(
+      fakeSession.user.id,
+      { type: "User" },
+      "AccessDenied",
+      "Attempted to list users"
+    );
   });
 });
