@@ -506,7 +506,7 @@
       "atLeastOneFile": "At least one file must be selected to download.[fr]",
       "errorDownloadingFiles":"Error downloading selected files.[fr]"
     },
-    "skipLink": "Skip Download Table",
+    "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"
   }
 }

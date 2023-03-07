@@ -1,7 +1,7 @@
 import React from "react";
 
-// TODO: This card is intended as a generic info card. Other card components exist e.g. myforms/Card
-// Future work could be to iterate this Card and replace other Card implementations with this.
+// NOTE: This card is intended as a generic info card. Other card components exist e.g. myforms/Card
+// but are pretty specific.
 
 interface CardProps {
   children?: React.ReactNode;

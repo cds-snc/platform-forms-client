@@ -97,7 +97,6 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
 
   // NOTE: browsers have different limits for simultaneous downloads. May need to look into
   // batching file downloads (e.g. 4 at a time) if edge cases/* come up.
-  // e.g. Max simultaneous downloade: Chrome 5-6, Safari 4, Edge no limit (10k?), FF 5-7
   const handleDownload = async () => {
     if (getCheckedItems().size === 0) {
       toast.warn(t("downloadResponsesTable.download.atLeastOneFile"), { position: toastPosition });
@@ -209,7 +208,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
                   }
                   title={t("downloadResponsesTable.card.noResponses")}
                   content={t("downloadResponsesTable.card.noResponsesToDownload")}
-                ></Card>
+                />
               )}
             </div>
           </>
@@ -253,7 +252,7 @@ const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: Res
         </Dialog>
       )}
 
-      {/* Sticky to stop the page from scrolling to the top when showing a Toast */}
+      {/* Sticky position to stop the page from scrolling to the top when showing a Toast */}
       <div className="sticky top-0">
         <ToastContainer />
       </div>
