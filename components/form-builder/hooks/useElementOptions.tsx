@@ -9,6 +9,9 @@ import {
   SelectMenuIcon,
   ShortAnswerIcon,
   AddIcon,
+  ContactIcon,
+  AddressIcon,
+  NameIcon,
 } from "../icons";
 
 import {
@@ -114,21 +117,21 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "name",
       value: t("addElementDialog.name.label"),
-      icon: <AddIcon />,
+      icon: <NameIcon />,
       description: Name,
       group: group.input,
     },
     {
       id: "address",
       value: "Address",
-      icon: <AddIcon />,
+      icon: <AddressIcon />,
       description: Address,
       group: group.input,
     },
     {
       id: "contact",
       value: t("addElementDialog.contact.label"),
-      icon: <AddIcon />,
+      icon: <ContactIcon />,
       description: Contact,
       group: group.input,
     },
