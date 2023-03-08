@@ -30,7 +30,7 @@ export const DownloadCSV = () => {
   let data = [];
 
   const parseElement = (element: FormElement, index: string | number) => {
-    const description = element.type === "richText" ? "Page text" : `Question ${index}`;
+    const description = element.type === "richText" ? "Section text" : `Question ${index}`;
 
     if (element.type === "dynamicRow") {
       let subElementIndex = -1;
