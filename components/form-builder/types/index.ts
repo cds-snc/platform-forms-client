@@ -56,6 +56,7 @@ export interface ElementOption {
     | "number"
     | "repeatableQuestionSet"
     | "attestation"
+    | "firstMiddleLastName"
     | "name"
     | "contact"
     | "address";
