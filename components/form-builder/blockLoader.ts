@@ -1,12 +1,11 @@
 import { FormElement } from "@lib/types";
 import axios from "axios";
+import { allowedTemplates } from "@formbuilder/util";
 
-export type LoaderType = "attestation" | "address" | "name" | "contact";
+export type LoaderType = (typeof allowedTemplates)[number];
 
 export const blockLoader = async (type: LoaderType, onData: (data: FormElement) => void) => {
-  const allowedTypes = ["attestation", "address", "name", "contact"];
-
-  if (!allowedTypes.includes(type)) {
+  if (!allowedTemplates.includes(type)) {
     return;
   }
 
