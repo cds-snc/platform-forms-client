@@ -34,7 +34,7 @@ export const AutocompleteDropdown = ({
   });
 
   return (
-    <select className="gc-dropdown inline-block" onChange={handleChange} value={selectedValue}>
+    <select className="gc-dropdown inline-block mb-4" onChange={handleChange} value={selectedValue}>
       <option value="">{t("selectAutocomplete")}</option>
       {options}
     </select>

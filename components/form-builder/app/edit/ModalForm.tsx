@@ -4,10 +4,9 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
 import { FormElementWithIndex, LocalizedElementProperties } from "../../types";
-import { Checkbox, Input, TextArea } from "../shared";
+import { Checkbox, Input, TextArea, InfoDetails } from "../shared";
 import { useTemplateStore } from "../../store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
-import { InfoIcon } from "@components/form-builder/icons";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="block mb-50 font-[700]">
@@ -111,9 +110,12 @@ export const ModalForm = ({
               }}
               selectedValue={autocompleteSelectedValue as string}
             />{" "}
-            <span>
-              <InfoIcon className="inline-block w-7" /> {t("autocompleteWhenNotToUse")}
-            </span>
+            <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
+              <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
+                <p className="text-md mb-4">{t("autocompleteWhenNotToUse.text1")}</p>
+                <p className="text-md">{t("autocompleteWhenNotToUse.text2")}</p>
+              </div>
+            </InfoDetails>
           </div>
         </div>
       )}
