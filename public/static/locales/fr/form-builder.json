@@ -64,7 +64,7 @@
     },
     "example": "exemple",
     "exampleElement": "exemple du bloc",
-    "fullName": {
+    "name": {
       "description": "[FR] Include your first and last names. Middle names are optional",
       "label": "[FR] Full name",
       "title": "[FR] What is your name?"
@@ -72,7 +72,7 @@
     "inputBlocks": "Blocs de saisie",
     "layoutBlocks": "Blocs de mise en page",
     "listItem": "Élément de liste ",
-    "name": {
+    "firstMiddleLastName": {
       "description": "Description du nom (FR 3 fields)",
       "first": {
         "description": "Description du prénom",

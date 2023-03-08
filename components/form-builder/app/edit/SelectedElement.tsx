@@ -82,10 +82,10 @@ export const SelectedElement = ({
     case "address":
       element = <ShortAnswer data-testid="address">Address</ShortAnswer>;
       break;
-    case "fullName":
+    case "name":
       element = <ShortAnswer data-testid="name">Name</ShortAnswer>;
       break;
-    case "name":
+    case "firstMiddleLastName":
       element = <ShortAnswer data-testid="name">Name (3 fields)</ShortAnswer>;
       break;
     case "contact":

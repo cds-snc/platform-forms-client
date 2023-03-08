@@ -11,15 +11,15 @@ const Text = ({ label, description }: { label: string; description?: string }) =
   );
 };
 
-export const Name = ({ title }: { title: string }) => {
+export const Name = () => {
   const { t } = useTranslation("form-builder");
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
-      <Text label={t("addElementDialog.name.first.label")} />
-      <Text label={t("addElementDialog.name.middle.label")} />
-      <Text label={t("addElementDialog.name.last.label")} />
+      <Text
+        label={t("addElementDialog.name.label")}
+        description={t("addElementDialog.name.description")}
+      />
     </div>
   );
 };

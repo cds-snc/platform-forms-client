@@ -64,15 +64,15 @@
     },
     "example": "example",
     "exampleElement": "block example",
-    "fullName": {
+    "name": {
       "description": "Include your first and last names. Middle names are optional",
-      "label": "Full name",
+      "label": "Name",
       "title": "What is your name?"
     },
     "inputBlocks": "Input blocks",
     "layoutBlocks": "Layout blocks",
     "listItem": "List item ",
-    "name": {
+    "firstMiddleLastName": {
       "description": "Name description",
       "first": {
         "description": "First name description",
