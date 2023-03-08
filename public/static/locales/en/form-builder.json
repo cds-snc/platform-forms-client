@@ -429,7 +429,7 @@
   "startH2": "Design a form",
   "startH3": "Open a form file",
   "startP1": "Start with a blank form.",
-  "startP2": "View and edit a form by uploading it from your computer.",
+  "startP2": "Edit a form uploaded from your computer.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
   "support": {
