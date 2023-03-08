@@ -162,7 +162,7 @@ export const ModalForm = ({
             <InfoDetails summary={t("characterLimitWhenToUse.title")}>
               <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
                 <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
-                <p className="text-md">{t("characterLimitWhenToUse.text2")}</p>
+                <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>
                 <p className="text-md">{t("characterLimitWhenToUse.text3")}</p>
               </div>
             </InfoDetails>
