@@ -97,11 +97,6 @@
       "description": "Mobile phone description",
       "title": "Mobile phone"
     },
-    "postal-code": {
-      "description": "Postal code description",
-      "label": "Postal code",
-      "title": "Postal code title"
-    },
     "questionElement": "Blocks",
     "radio": {
       "description": "Radio buttons description",

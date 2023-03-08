@@ -97,11 +97,6 @@
       "description": "Description du téléphone mobile",
       "title": "Téléphone mobile"
     },
-    "postal-code": {
-      "description": "Description du code postal",
-      "label": "Code postal",
-      "title": "Titre du code postal"
-    },
     "questionElement": "Blocs",
     "radio": {
       "description": "Description des boutons radio",
