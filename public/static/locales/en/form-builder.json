@@ -65,7 +65,7 @@
     "example": "example",
     "exampleElement": "block example",
     "fullName": {
-      "description": "Full name description",
+      "description": "Include your first and last names. Middle names are optional",
       "label": "Full name",
       "title": "What is your name?"
     },

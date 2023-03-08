@@ -65,7 +65,7 @@
     "example": "exemple",
     "exampleElement": "exemple du bloc",
     "fullName": {
-      "description": "[FR] Full name description",
+      "description": "[FR] Include your first and last names. Middle names are optional",
       "label": "[FR] Full name",
       "title": "[FR] What is your name?"
     },
