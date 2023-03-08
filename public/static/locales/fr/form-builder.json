@@ -313,7 +313,7 @@
   "publishedErrors": "Erreurs du formulaire publiés",
   "publishedTitle": "Votre formulaire est publié.",
   "publishedViewLinks": "Visualisez et partagez votre formulaire publié à partir de ces liens : ",
-  "publishingDisablesEditing": "La publication désactive toute modification..",
+  "publishingDisablesEditing": "La publication désactive toute modification.",
   "publishingDisablesEditingDescription": "Une fois publié, vous ne pouvez plus apporter des modifications à ce formulaire. Si des modifications sont nécessaires après la publication, utilisez le fichier du formulaire pour créer et publier un nouveau formulaire.",
   "publishNoAuthSubTitle": "Vous pouvez publier et héberger votre formulaire avec Formulaires GC.",
   "publishNoAuthText": "Pour publier votre formulair <a href=\"{{signIn}}\"> connectez-vous</a>  à votre compte Formulaires GC. Si vous n'avez pas de compte Formulaires GC, <a href=\"{{createOne}}\">créez-en un</a>.",
