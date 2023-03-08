@@ -69,7 +69,7 @@
     "postal-code": {
       "label": "Postal code",
       "description": "Postal code description",
-      "title": "Postal code title"
+      "title": "Postal code"
     },
     "address": {
       "label": "Address",
@@ -299,7 +299,7 @@
   "optionText": "Option text",
   "pagePreview": "Preview",
   "pageSettings": "Settings",
-  "pageText": "Page text",
+  "pageText": "Text section",
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
@@ -359,7 +359,7 @@
       "toAccessPagePart2": "to your GC Forms account."
     }
   },
-  "richText": "Page text",
+  "richText": "Text section",
   "richTextConfirmationTitle": "Confirmation page and message",
   "richTextEditor": "Rich text editor",
   "richTextIntroTitle": "Form introduction",

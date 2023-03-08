@@ -54,7 +54,7 @@
       "title": "Boutons radio"
     },
     "richText": {
-      "description": "Texte plus petit pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
+      "description": "Texte pour les paragraphes, les <a tab-index=\"-1\" href=\"#\">hyperliens</a> et les listes.",
       "title": "Texte en grand format"
     },
     "sometimes": "Parfois",
@@ -299,7 +299,7 @@
   "optionText": "Texte d'option",
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
-  "pageText": "Texte de la page ",
+  "pageText": "Section texte ",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
@@ -359,7 +359,7 @@
       "toAccessPagePart2": "à votre compte Formulaires GC"
     }
   },
-  "richText": "Texte de la page ",
+  "richText": "Section texte ",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
   "richTextIntroTitle": "Introduction du formulaire ",
@@ -428,7 +428,7 @@
   "startFormIntro": "Ajoutez une description à votre formulaire pour définir les attentes des personnes qui le remplissent.",
   "startH2": "Créer un formulaire",
   "startH3": "Ouvrir un formulaire",
-  "startP1": "Commencez à créer un formulaire à partir de zéro.",
+  "startP1": "Commencez à partir de zéro.",
   "startP2": "Affichez et modifiez un formulaire en téléversant un fichier de votre ordinateur.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
