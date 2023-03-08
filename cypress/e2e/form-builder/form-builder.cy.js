@@ -31,7 +31,7 @@ describe("Test FormBuilder", () => {
     cy.get("h2").should("contain", "Ouvrir un formulaire");
   });
 
-  it("Designs a form", () => {
+  it("Design a form", () => {
     cy.visit("/form-builder/edit");
     cy.get("#formTitle").type("Cypress Test Form");
     cy.get("a").contains("Edit").should("have.class", "font-bold");
