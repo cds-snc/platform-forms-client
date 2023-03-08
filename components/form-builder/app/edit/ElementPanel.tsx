@@ -63,7 +63,12 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
       }
 
       setFocusInput(true);
-      add(index, isTextField(type as string) ? FormElementTypes.textField : type);
+      add(
+        index,
+        isTextField(type as string) && type !== FormElementTypes.textArea
+          ? FormElementTypes.textField
+          : type
+      );
       addElement(type as string, `form.elements[${index + 1}]`);
     },
     [add, setFocusInput, addElement, isTextField]

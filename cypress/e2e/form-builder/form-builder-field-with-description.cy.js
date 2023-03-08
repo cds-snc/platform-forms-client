@@ -23,17 +23,6 @@ describe("Form builder description text", () => {
     });
   });
 
-  it("Renders email element with example text", () => {
-    cy.get("button").contains("Add block").click();
-    cy.get('[data-testid="email"]').click();
-    cy.get("button").contains("Select block").click();
-
-    cy.get(".description-text")
-      .should("exist")
-      .contains("Enter an email address like, name@example.com");
-    cy.get(".example-text").should("exist").contains("name@example.com");
-  });
-
   it("Renders date element with example text", () => {
     cy.get("button").contains("Add block").click();
     cy.get('[data-testid="date"]').click();
@@ -48,18 +37,5 @@ describe("Form builder description text", () => {
     cy.get("button").contains("Select block").click();
     cy.get(".description-text").should("exist").contains("Only enter numbers");
     cy.get(".example-text").should("exist").contains("0123456789");
-  });
-
-  it("Renders phone element with example text + toggles to FR", () => {
-    cy.get("button").contains("Add block").click();
-    cy.get('[data-testid="phone"]').click();
-    cy.get("button").contains("Select block").click();
-    cy.get(".description-text").should("exist").contains("Enter a phone number like, 111-222-3333");
-    cy.get(".example-text").should("exist").contains("111-222-3333");
-
-    cy.get("#switch-english").click();
-    cy.get(".description-text")
-      .should("exist")
-      .contains("Entrez un numéro de téléphone comme 111-222-3333");
   });
 });

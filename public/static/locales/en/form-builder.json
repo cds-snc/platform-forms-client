@@ -2,6 +2,19 @@
   "addElement": "Add block",
   "addElementDialog": {
     "addButton": "Select block",
+    "address": {
+      "city": "City, town or community",
+      "country": "Country",
+      "description": "Address description",
+      "label": "Address",
+      "postal": "Postal or zip code",
+      "province": "Province or state",
+      "street": {
+        "description": "Include your civic number and street name, apartment or suite, and other address details.",
+        "label": "Street address"
+      },
+      "title": "What is your address?"
+    },
     "advancedBlocks": "Advanced blocks",
     "allRequired": "all required",
     "answer": "Answer...",
@@ -18,6 +31,25 @@
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
+    "contact": {
+      "description": "Contact description",
+      "email": {
+        "description": "Enter your email address like, name@example.com",
+        "label": "Email address"
+      },
+      "label": "Contact",
+      "language": {
+        "description": "We offer our services in both official languages, French and English",
+        "english": "English",
+        "french": "French",
+        "label": "What is your preferred language for communication?"
+      },
+      "phone": {
+        "description": "Enter your phone number like, 111-222-3333",
+        "label": "Phone number"
+      },
+      "title": "How can we contact you?"
+    },
     "date": {
       "description": "Date description",
       "title": "Date"
@@ -30,23 +62,32 @@
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
       "title": "Repeating set"
     },
-    "email": {
-      "description": "Email address description",
-      "title": "Email address"
-    },
     "example": "example",
     "exampleElement": "block example",
     "inputBlocks": "Input blocks",
     "layoutBlocks": "Layout blocks",
     "listItem": "List item ",
+    "name": {
+      "description": "Name description",
+      "first": {
+        "description": "First name description",
+        "label": "First name"
+      },
+      "label": "Name (3 fields)",
+      "last": {
+        "description": "Last name description",
+        "label": "Last name"
+      },
+      "middle": {
+        "description": "Middle name description",
+        "label": "Middle name"
+      },
+      "title": "What is your name?"
+    },
     "no": "No",
     "number": {
       "description": "Number description",
       "title": "Number"
-    },
-    "phone": {
-      "description": "Mobile phone description",
-      "title": "Mobile phone"
     },
     "questionElement": "Blocks",
     "radio": {
@@ -65,60 +106,6 @@
     "textField": {
       "description": "Short answer question description",
       "title": "Short answer question"
-    },
-    "postal-code": {
-      "label": "Postal code",
-      "description": "Postal code description",
-      "title": "Postal code"
-    },
-    "address": {
-      "label": "Address",
-      "description": "Address description",
-      "title": "What is your address?",
-      "street": {
-        "label": "Street address",
-        "description": "Include your civic number and street name, apartment or suite, and other address details."
-      },
-      "city": "City, town or community",
-      "province": "Province or state",
-      "country": "Country",
-      "postal": "Postal or zip code"
-    },
-    "name": {
-      "label": "Name",
-      "description": "Name description",
-      "title": "What is your name?",
-      "first": {
-        "label": "First name",
-        "description": "First name description"
-      },
-      "middle": {
-        "label": "Middle name",
-        "description": "Middle name description"
-      },
-      "last": {
-        "label": "Last name",
-        "description": "Last name description"
-      }
-    },
-    "contact": {
-      "label": "Contact",
-      "title": "How can we contact you?",
-      "description": "Contact description",
-      "phone": {
-        "label": "Phone number",
-        "description": "Enter your phone number like, 111-222-3333"
-      },
-      "email": {
-        "label": "Email address",
-        "description": "Enter your email address like, name@example.com"
-      },
-      "language": {
-        "label": "What is your preferred language for communication?",
-        "description": "We offer our services in both official languages, French and English",
-        "english": "English",
-        "french": "French"
-      }
     },
     "yes": "Yes"
   },
@@ -155,10 +142,20 @@
     "street-address": "Full street address (includes address lines 1-3)",
     "url": "Website address"
   },
-  "autocompleteWhenNotToUse": "When not to use autocomplete",
+  "autocompleteWhenNotToUse": {
+    "text1": "Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
+    "title": "When not to use autocomplete"
+  },
   "backToForm": "Back to form",
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
+  "characterLimitWhenToUse": {
+    "text1": "Evidence that users are likely to enter more information than they need to.",
+    "text2": "A legal or technical reason that means an entry must be no more than a certain number of characters.",
+    "text3": "If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
+    "title": "Reasons for using a character limit"
+  },
   "checkboxes": "Multiple choice",
   "close": "Close",
   "closeModal": "Close modal",
@@ -202,8 +199,7 @@
     "date": "Enter a date like, mm/dd/yyyy",
     "email": "Enter an email address like, name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333",
-    "postal-code": ""
+    "phone": "Enter a phone number like, 111-222-3333"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",

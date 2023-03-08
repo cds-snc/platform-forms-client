@@ -24,7 +24,12 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
       }
 
       setFocusInput(true);
-      add(index, isTextField(type as string) ? FormElementTypes.textField : type);
+      add(
+        index,
+        isTextField(type as string) && type !== FormElementTypes.textArea
+          ? FormElementTypes.textField
+          : type
+      );
       // add 1 to index because it's a new element
       updateElement(type as string, `form.elements[${index + 1}]`);
     },
