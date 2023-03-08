@@ -2,6 +2,19 @@
   "addElement": "Ajouter un bloc",
   "addElementDialog": {
     "addButton": "Sélectionner ce bloc",
+    "address": {
+      "city": "Ville ou communauté",
+      "country": "Pays",
+      "description": "Description de l'adresse",
+      "label": "Adresse",
+      "postal": "Code postal ou zip",
+      "province": "Province ou état",
+      "street": {
+        "description": "Indiquez votre numéro civique, le nom de la rue, l'appartement, et d'autres détails de l'adresse.",
+        "label": "Adresse municipale"
+      },
+      "title": "Quelle est votre adresse?"
+    },
     "advancedBlocks": "Blocs avancés",
     "allRequired": "Tous obligatoires",
     "answer": "Réponse...",
@@ -18,6 +31,25 @@
     "condition1": "Condition 1",
     "condition2": "Condition 2",
     "condition3": "Condition 3",
+    "contact": {
+      "description": "Description du contact",
+      "email": {
+        "description": "Entrez votre adresse courriel, comme nom@exemple.com",
+        "label": "Adresse courriel"
+      },
+      "label": "Contact",
+      "language": {
+        "description": "Nous offrons nos services dans les deux langues officielles, le français et l'anglais.",
+        "english": "Anglais",
+        "french": "Français",
+        "label": "Quelle est votre langue préférée de communication?"
+      },
+      "phone": {
+        "description": "Entrez votre numéro de téléphone, comme 111-222-3333",
+        "label": "Numéro de téléphone"
+      },
+      "title": "Comment pouvons-nous vous contacter?"
+    },
     "date": {
       "description": "Description de la date",
       "title": "Date"
@@ -39,6 +71,23 @@
     "inputBlocks": "Blocs de saisie",
     "layoutBlocks": "Blocs de mise en page",
     "listItem": "Élément de liste ",
+    "name": {
+      "description": "Description du nom",
+      "first": {
+        "description": "Description du prénom",
+        "label": "Prénom"
+      },
+      "label": "Nom",
+      "last": {
+        "description": "Description du nom de famille",
+        "label": "Nom de famille"
+      },
+      "middle": {
+        "description": "Description du deuxième prénom",
+        "label": "Deuxième prénom"
+      },
+      "title": "Titre du nom"
+    },
     "no": "Non",
     "number": {
       "description": "Description du numéro",
@@ -47,6 +96,11 @@
     "phone": {
       "description": "Description du téléphone mobile",
       "title": "Téléphone mobile"
+    },
+    "postal-code": {
+      "description": "Description du code postal",
+      "label": "Code postal",
+      "title": "Titre du code postal"
     },
     "questionElement": "Blocs",
     "radio": {
@@ -65,60 +119,6 @@
     "textField": {
       "description": "Description de la question à réponse courte",
       "title": "Question à réponse courte"
-    },
-    "postal-code": {
-      "label": "Code postal",
-      "description": "Description du code postal",
-      "title": "Titre du code postal"
-    },
-    "address": {
-      "label": "Adresse",
-      "description": "Description de l'adresse",
-      "title": "Quelle est votre adresse?",
-      "street": {
-        "label": "Adresse municipale",
-        "description": "Indiquez votre numéro civique, le nom de la rue, l'appartement, et d'autres détails de l'adresse."
-      },
-      "city": "Ville ou communauté",
-      "province": "Province ou état",
-      "country": "Pays",
-      "postal": "Code postal ou zip"
-    },
-    "name": {
-      "label": "Nom",
-      "description": "Description du nom",
-      "title": "Titre du nom",
-      "first": {
-        "label": "Prénom",
-        "description": "Description du prénom"
-      },
-      "middle": {
-        "label": "Deuxième prénom",
-        "description": "Description du deuxième prénom"
-      },
-      "last": {
-        "label": "Nom de famille",
-        "description": "Description du nom de famille"
-      }
-    },
-    "contact": {
-      "label": "Contact",
-      "title": "Comment pouvons-nous vous contacter?",
-      "description": "Description du contact",
-      "phone": {
-        "label": "Numéro de téléphone",
-        "description": "Entrez votre numéro de téléphone, comme 111-222-3333"
-      },
-      "email": {
-        "label": "Adresse courriel",
-        "description": "Entrez votre adresse courriel, comme nom@exemple.com"
-      },
-      "language": {
-        "label": "Quelle est votre langue préférée de communication?",
-        "description": "Nous offrons nos services dans les deux langues officielles, le français et l'anglais.",
-        "english": "Anglais",
-        "french": "Français"
-      }
     },
     "yes": "Oui"
   },
@@ -156,13 +156,19 @@
     "url": "Adresse du site Web"
   },
   "autocompleteWhenNotToUse": {
-    "title": "[FR] When not to use autocomplete",
     "text1": "[FR] Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
-    "text2": "[FR] Usability testing is a good way to understand if the rules you set cause problems with filling in forms."
+    "text2": "[FR] Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
+    "title": "[FR] When not to use autocomplete"
   },
   "backToForm": "Retourner au formulaire",
   "cancel": "Annuler  ",
   "characterLimitDescription": "N'utilisez une limite de caractères que lorsqu'il existe une bonne raison de limiter le nombre de caractères que les utilisateur·rice·s peuvent entrer.",
+  "characterLimitWhenToUse": {
+    "text1": "[FR] Evidence that users are likely to enter more information than they need to.",
+    "text2": "[FR] A legal or technical reason that means an entry must be no more than a certain number of characters.",
+    "text3": "[FR] If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
+    "title": "[FR] Reasons for using a character limit"
+  },
   "checkboxes": "Choix multiple",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
