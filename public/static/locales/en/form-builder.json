@@ -77,7 +77,7 @@
         "description": "First name description",
         "label": "First name"
       },
-      "label": "Name",
+      "label": "Name (3 fields)",
       "last": {
         "description": "Last name description",
         "label": "Last name"

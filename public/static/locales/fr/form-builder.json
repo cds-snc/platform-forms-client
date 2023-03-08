@@ -72,7 +72,7 @@
     "layoutBlocks": "Blocs de mise en page",
     "listItem": "Élément de liste ",
     "name": {
-      "description": "Description du nom",
+      "description": "Description du nom (FR 3 fields)",
       "first": {
         "description": "Description du prénom",
         "label": "Prénom"
