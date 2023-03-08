@@ -16,7 +16,6 @@ export const FullName = ({ title }: { title: string }) => {
 
   return (
     <div>
-      <div className="font-bold text-[1.5rem] mb-2">{title}</div>
       <Text
         label={t("addElementDialog.fullName.label")}
         description={t("addElementDialog.fullName.description")}
