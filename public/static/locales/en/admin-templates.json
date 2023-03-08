@@ -21,8 +21,8 @@
     "assign": "Assign"
   },
   "settings": {
-    "title": "Form settings",
-    "delete": "Delete form",
+    "title": "Configure",
+    "delete": "Delete",
     "delete-check": "Are you sure you want to delete this form?",
     "confirm-delete": "Confirm delete",
     "new": "The form was successfully created",

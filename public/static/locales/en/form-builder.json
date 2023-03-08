@@ -54,7 +54,7 @@
       "title": "Radio buttons"
     },
     "richText": {
-      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
+      "description": "Text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
       "title": "Large text"
     },
     "sometimes": "Sometimes",
@@ -264,7 +264,7 @@
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
-  "formSettings": "Form settings",
+  "formSettings": "Settings",
   "formSubmissionDisabledInPreview": "Form submission is disabled in preview",
   "formTitle": "Form title",
   "french": "French",
