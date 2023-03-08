@@ -38,10 +38,10 @@ describe("Test FormBuilder language switching", () => {
       .type("form intro in english")
       .contains("form intro in english");
 
-    // Enter some English "section text"
-    cy.get('[aria-label="Section text 1"]')
-      .type("section text in english")
-      .contains("section text in english");
+    // Enter some English "page text"
+    cy.get('[aria-label="Page text 1"]')
+      .type("page text in english")
+      .contains("page text in english");
 
     // Enter English Privacy Statement
     cy.get('[aria-label="Privacy statement"]')
@@ -64,10 +64,10 @@ describe("Test FormBuilder language switching", () => {
       .type("form intro in french")
       .contains("form intro in french");
 
-    // Enter some French "section text"
-    cy.get('[aria-label="Section text 1"]')
-      .type("section text in french")
-      .contains("section text in french");
+    // Enter some French "page text"
+    cy.get('[aria-label="Page text 1"]')
+      .type("page text in french")
+      .contains("page text in french");
 
     // Enter French Privacy Statement
     cy.get('[aria-label="Privacy statement"]')
@@ -83,7 +83,7 @@ describe("Test FormBuilder language switching", () => {
     cy.get('[data-testid="lang-switcher"]').click();
     cy.get("#formTitle").should("have.value", "Cypress Test Form");
     cy.get(`[aria-label="Form introduction"]`).contains("form intro in english");
-    cy.get('[aria-label="Section text 1"]').contains("section text in english");
+    cy.get('[aria-label="Page text 1"]').contains("page text in english");
     cy.get('[aria-label="Privacy statement"]').contains("privacy text in english");
     cy.get('[aria-label="Confirmation page and message"]').contains("confirmation text in english");
 
@@ -91,7 +91,7 @@ describe("Test FormBuilder language switching", () => {
     cy.get('[data-testid="lang-switcher"]').click();
     cy.get("#formTitle").should("have.value", "Formulaire de test Cypress");
     cy.get(`[aria-label="Form introduction"]`).contains("form intro in french");
-    cy.get('[aria-label="Section text 1"]').contains("section text in french");
+    cy.get('[aria-label="Page text 1"]').contains("page text in french");
     cy.get('[aria-label="Privacy statement"]').contains("privacy text in french");
     cy.get('[aria-label="Confirmation page and message"]').contains("confirmation text in french");
   });
