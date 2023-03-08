@@ -103,8 +103,13 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setTranslationLanguagePriority: (lang: Language) => void;
   setFocusInput: (isSet: boolean) => void;
   getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (elIndex?: number, type?: FormElementTypes) => void;
-  addSubItem: (elIndex: number, subIndex?: number, type?: FormElementTypes) => void;
+  add: (elIndex?: number, type?: FormElementTypes, data?: FormElement) => void;
+  addSubItem: (
+    elIndex: number,
+    subIndex?: number,
+    type?: FormElementTypes,
+    data?: FormElement
+  ) => void;
   remove: (id: number) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
@@ -247,15 +252,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.elements[elIndex].properties.subElements = moveDown(elements, subIndex);
               }
             }),
-          add: (elIndex = 0, type = FormElementTypes.radio) =>
+          add: (elIndex = 0, type = FormElementTypes.radio, data) =>
             set((state) => {
               state.form.elements.splice(elIndex + 1, 0, {
                 ...defaultField,
                 id: incrementElementId(state.form.elements),
+                ...data,
                 type,
               });
             }),
-          addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio) =>
+          addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
             set((state) => {
               // remove subElements array property given we're adding a sub item
               const subDefaultField = { ...defaultField };
@@ -269,6 +275,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   state.form.elements[elIndex].properties.subElements || [],
                   state.form.elements[elIndex].id
                 ),
+                ...data,
                 type,
               });
             }),

@@ -1,72 +1,161 @@
 {
   "addElement": "Add block",
   "addElementDialog": {
-    "layoutBlocks": "Layout blocks",
-    "inputBlocks": "Input blocks",
-    "advancedBlocks": "Advanced blocks",
     "addButton": "Select block",
-    "questionElement": "Blocks",
-    "listItem": "List item ",
-    "checkboxItem": "Checkbox item",
-    "example": "example",
-    "yes": "Yes",
-    "no": "No",
-    "answer": "Answer...",
-    "sometimes": "Sometimes",
-    "exampleElement": "block example",
-    "richText": {
-      "title": "Large text",
-      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists."
+    "address": {
+      "city": "City, town or community",
+      "country": "Country",
+      "description": "Address description",
+      "label": "Address",
+      "postal": "Postal or zip code",
+      "province": "Province or state",
+      "street": {
+        "description": "Include your civic number and street name, apartment or suite, and other address details.",
+        "label": "Street address"
+      },
+      "title": "What is your address?"
     },
-    "radio": {
-      "title": "Radio buttons",
-      "description": "Radio buttons description"
+    "advancedBlocks": "Advanced blocks",
+    "allRequired": "all required",
+    "answer": "Answer...",
+    "attest": "I agree to:",
+    "attestation": {
+      "description": "Use a legal attestation block when form fillers must agree to certain conditions to continue. This block allows you to add one or several required checkboxes.",
+      "title": "Legal attestation"
     },
     "checkbox": {
-      "title": "Multiple choice",
-      "description": "Multiple choice description"
+      "description": "Multiple choice description",
+      "title": "Multiple choice"
     },
-    "dropdown": {
-      "title": "Dropdown",
-      "description": "Dropdown description"
-    },
-    "textField": {
-      "title": "Short answer question",
-      "description": "Short answer question description"
-    },
-    "textArea": {
-      "title": "Long answer question",
-      "description": "Long answer question description"
-    },
-    "phone": {
-      "title": "Mobile phone",
-      "description": "Mobile phone description"
-    },
-    "email": {
-      "title": "Email address",
-      "description": "Email address description"
+    "checkboxItem": "Checkbox item",
+    "condition1": "Condition 1",
+    "condition2": "Condition 2",
+    "condition3": "Condition 3",
+    "contact": {
+      "description": "Contact description",
+      "email": {
+        "description": "Enter your email address like, name@example.com",
+        "label": "Email address"
+      },
+      "label": "Contact",
+      "language": {
+        "description": "We offer our services in both official languages, French and English",
+        "english": "English",
+        "french": "French",
+        "label": "What is your preferred language for communication?"
+      },
+      "phone": {
+        "description": "Enter your phone number like, 111-222-3333",
+        "label": "Phone number"
+      },
+      "title": "How can we contact you?"
     },
     "date": {
-      "title": "Date",
-      "description": "Date description"
+      "description": "Date description",
+      "title": "Date"
     },
-    "number": {
-      "title": "Number",
-      "description": "Number description"
+    "dropdown": {
+      "description": "Dropdown description",
+      "title": "Dropdown"
     },
     "dynamicRow": {
-      "title": "Repeating set",
-      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions."
-    }
+      "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
+      "title": "Repeating set"
+    },
+    "example": "example",
+    "exampleElement": "block example",
+    "inputBlocks": "Input blocks",
+    "layoutBlocks": "Layout blocks",
+    "listItem": "List item ",
+    "name": {
+      "description": "Name description",
+      "first": {
+        "description": "First name description",
+        "label": "First name"
+      },
+      "label": "Name (3 fields)",
+      "last": {
+        "description": "Last name description",
+        "label": "Last name"
+      },
+      "middle": {
+        "description": "Middle name description",
+        "label": "Middle name"
+      },
+      "title": "What is your name?"
+    },
+    "no": "No",
+    "number": {
+      "description": "Number description",
+      "title": "Number"
+    },
+    "questionElement": "Blocks",
+    "radio": {
+      "description": "Radio buttons description",
+      "title": "Radio buttons"
+    },
+    "richText": {
+      "description": "Smaller text for paragraphs, <a tab-index=\"-1\" href=\"#\">hyperlinks</a>, and lists.",
+      "title": "Large text"
+    },
+    "sometimes": "Sometimes",
+    "textArea": {
+      "description": "Long answer question description",
+      "title": "Long answer question"
+    },
+    "textField": {
+      "description": "Short answer question description",
+      "title": "Short answer question"
+    },
+    "yes": "Yes"
   },
   "addMultiple": "Add multiple options",
   "addOption": "Add an option",
   "addOptions": "Add options",
   "addRules": "Add rules",
+  "addToSet": "Add to set",
   "at": "at",
+  "attestation": "Legal attestation",
+  "autocompleteOptions": {
+    "additional-name": "Middle name",
+    "address-level1": "Province, State",
+    "address-level2": "City, town, community",
+    "address-line1": "Address line 1 (civic number and street name)",
+    "address-line2": "Address line 2 (apartment or suite)",
+    "address-line3": "Address line 3 (other address details)",
+    "bday": "Date of birth",
+    "bday-day": "Birth day",
+    "bday-month": "Birth month",
+    "bday-year": "Birth year",
+    "country": "Country code (2 letter country identifier)",
+    "country-name": "Country",
+    "email": "Email address",
+    "family-name": "Last name",
+    "given-name": "First name",
+    "honorific-prefix": "Name prefix, Mr, Mrs, Dr",
+    "honorific-suffix": "Name suffix, Jr, B.Sc,",
+    "language": "Language",
+    "name": "Full name (includes first, middle and last names)",
+    "organization-title": "Job title",
+    "phone": "Phone number",
+    "postal-code": "Postal or zip code",
+    "street-address": "Full street address (includes address lines 1-3)",
+    "url": "Website address"
+  },
+  "autocompleteWhenNotToUse": {
+    "text1": "Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
+    "title": "When not to use autocomplete"
+  },
   "backToForm": "Back to form",
   "cancel": "Cancel",
   "characterLimitDescription": "Only use a character limit when there is a good reason for limiting the number of characters users can enter.",
+  "characterLimitWhenToUse": {
+    "text1": "Evidence that users are likely to enter more information than they need to.",
+    "text2": "A legal or technical reason that means an entry must be no more than a certain number of characters.",
+    "text3": "If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
+    "title": "Reasons for using a character limit"
+  },
   "checkboxes": "Multiple choice",
   "close": "Close",
   "closeModal": "Close modal",
@@ -118,6 +207,7 @@
   "downloadCSV": "Export as a spreadsheet",
   "dropdown": "Dropdown list",
   "duplicate": "Duplicate",
+  "dyanamicRow": "Repeating set",
   "edit": "Edit",
   "editingIn": "Editing in:",
   "editLink": "Edit link",
@@ -228,8 +318,16 @@
   "publishYourFormInstructions": "You need the following items completed before you publish your form.",
   "question": "Question",
   "questions": "Questions",
+  "questionSet": {
+    "addAnother": {
+      "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”.",
+      "placeholder": "Add",
+      "title": "Button"
+    }
+  },
   "questionTitle": "Question title",
   "remove": "Remove",
+  "removeFromSet": "Remove from set",
   "removeOption": "Remove option:",
   "requestSuccess": {
     "backToForms": "Back to forms",
@@ -250,6 +348,8 @@
   "save": "Save",
   "saveAndRequest": "Save form and request publishing ability",
   "saveDraft": "Save draft",
+  "selectAutocomplete": "Select an autocomplete attribute",
+  "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Select an element type",
   "send": "Send",
   "settingsDeleteButton": "Delete",
@@ -265,18 +365,20 @@
   "settingsResponseNotePublished": "To change the response delivery destination.",
   "settingsResponseTitle": "Response delivery destination",
   "share": {
-    "formUser": "A GC Forms user",
     "copy": "Copy",
     "email": "Share by email",
     "emailLabel": "Email address",
     "enLink": "English link",
+    "formUser": "A GC Forms user",
     "frLink": "French link",
     "link": "Get the link",
     "message": "People you share to will receive an email with an attached JSON file. They can view the JSON form file using GC Forms, no account required.",
+    "messageSent": "The message has been sent",
     "open": "Open",
     "seePreview": "See a preview of the email message",
     "someone": "Someone",
     "someoneHasShared": "{{name}} has shared a form with you on GC Forms",
+    "startOver": "Start over",
     "stepOne": "Step 1:",
     "stepOneDetails": "Save the attached JSON form file to your computer",
     "stepThree": "Step 3:",
@@ -286,17 +388,15 @@
     "stepTwoDetailsNoHTML": "Go to GC Forms (https://forms-formulaires.alpha.canada.ca/). No account needed.",
     "title": "Share",
     "toPreview": "To preview this form:",
-    "messageSent": "The message has been sent",
-    "startOver": "Start over",
     "unauthenticated": {
-      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">Sign up</a> today to get access to this feature and more.",
+      "copyInstructions": "Copy instructions",
+      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/signup/register\">create an account</a> to get access to this feature and more.",
+      "downloadFormFile": "Download form file",
       "instructions": "You can download a copy of this form file to your computer and share it through your email.",
       "step1": "Step 1",
       "step1Details": "Download a copy of your form as a JSON form file to your computer",
       "step2": "Step 2",
-      "step2Details": "Copy and paste the email instructions into an email and attach the form file",
-      "copyInstructions": "Copy instructions",
-      "downloadFormFile": "Download form file"
+      "step2Details": "Copy and paste the email instructions into an email and attach the form file"
     },
     "unpublished": "Not available for unpublished forms"
   },
@@ -383,15 +483,5 @@
       "added": "Added"
     }
   },
-  "dyanamicRow": "Repeating set",
-  "addToSet": "Add to set",
-  "removeFromSet": "Remove from set",
-  "unnamedForm": "Unnamed form file",
-  "questionSet": {
-    "addAnother": {
-      "title": "Button",
-      "placeholder": "Add",
-      "description": "Create a descriptive button label to let form fillers know that they can add another set of answers. For example, Add “another address”."
-    }
-  }
+  "unnamedForm": "Unnamed form file"
 }

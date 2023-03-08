@@ -24,7 +24,7 @@ export const PanelBodySub = ({
   };
 
   return (
-    <div>
+    <div className="py-5">
       <PanelBody
         elements={elements}
         elIndex={elIndex}

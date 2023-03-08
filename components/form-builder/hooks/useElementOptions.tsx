@@ -1,17 +1,17 @@
 import React from "react";
-import { useFlag } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 import {
   CalendarIcon,
   CheckIcon,
-  EmailIcon,
   NumericFieldIcon,
   ParagraphIcon,
-  PhoneIcon,
   RadioIcon,
   SelectMenuIcon,
   ShortAnswerIcon,
   AddIcon,
+  ContactIcon,
+  AddressIcon,
+  NameIcon,
 } from "../icons";
 
 import {
@@ -21,18 +21,19 @@ import {
   DropDown,
   TextField,
   TextArea,
-  Phone,
-  Email,
   Date,
   Number,
   QuestionSet,
+  Attestation,
+  Address,
+  Name,
+  Contact,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
 
 export const useElementOptions = (filterElements?: ElementOptionsFilter | undefined) => {
   const { t } = useTranslation("form-builder");
-  const { status: experimentalBlocks } = useFlag("formBuilderExperimentalBlocks");
 
   const group = {
     layout: { id: "layout", value: t("addElementDialog.layoutBlocks") },
@@ -46,8 +47,24 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("richText"),
       icon: <ParagraphIcon />,
       description: RichText,
-      className: "separator",
+      className: "",
       group: group.layout,
+    },
+    {
+      id: "textField",
+      value: t("shortAnswer"),
+      icon: <ShortAnswerIcon />,
+      description: TextField,
+      className: "",
+      group: group.input,
+    },
+    {
+      id: "textArea",
+      value: t("paragraph"),
+      icon: <ParagraphIcon />,
+      description: TextArea,
+      className: "separator",
+      group: group.input,
     },
     {
       id: "radio",
@@ -74,38 +91,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
-      id: "textField",
-      value: t("shortAnswer"),
-      icon: <ShortAnswerIcon />,
-      description: TextField,
-      className: "",
-      group: group.input,
-    },
-    {
-      id: "textArea",
-      value: t("paragraph"),
-      icon: <ParagraphIcon />,
-      description: TextArea,
-      className: "separator",
-      group: group.input,
-    },
-    {
-      id: "phone",
-      value: t("phoneNumber"),
-      icon: <PhoneIcon />,
-      description: Phone,
-      className: "",
-      group: group.input,
-    },
-    {
-      id: "email",
-      value: t("email"),
-      icon: <EmailIcon />,
-      description: Email,
-      className: "",
-      group: group.input,
-    },
-    {
       id: "date",
       value: t("date"),
       icon: <CalendarIcon />,
@@ -122,6 +107,36 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.input,
     },
     {
+      id: "attestation",
+      value: t("attestation"),
+      icon: <AddIcon />,
+      description: Attestation,
+      className: "separator",
+      group: group.input,
+    },
+    {
+      id: "name",
+      value: t("addElementDialog.name.label"),
+      icon: <NameIcon />,
+      description: Name,
+      group: group.input,
+    },
+    {
+      id: "address",
+      value: "Address",
+      icon: <AddressIcon />,
+      description: Address,
+      group: group.input,
+    },
+    {
+      id: "contact",
+      value: t("addElementDialog.contact.label"),
+      icon: <ContactIcon />,
+      description: Contact,
+      className: "separator",
+      group: group.input,
+    },
+    {
       id: "dynamicRow",
       value: t("dyanamicRow"),
       icon: <AddIcon />,
@@ -130,11 +145,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       group: group.advanced,
     },
   ];
-
-  if (experimentalBlocks) {
-    // add experimental blocks here:
-    // elementOptions.push();
-  }
 
   return filterElements ? filterElements(elementOptions) : elementOptions;
 };

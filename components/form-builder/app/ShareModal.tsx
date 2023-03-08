@@ -3,10 +3,9 @@ import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 import axios from "axios";
 
-import { useDialogRef, Dialog, TagInput, Button } from "./shared";
+import { useDialogRef, Dialog, TagInput, Button, InfoDetails } from "./shared";
 import { useTemplateStore } from "../store";
 import { useSession } from "next-auth/react";
-import { AddIcon, RemoveIcon } from "../icons";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModal = ({
@@ -116,16 +115,7 @@ export const ShareModal = ({
                 </label>
                 <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
               </div>
-              <details className="group mt-5">
-                <summary className="inline-block p-2 list-none [&::-webkit-details-marker]:hidden cursor-pointer hover:text-white-default hover:bg-gray-600 focus:bg-blue-focus focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 border-white-default hover:border-black-default border-2 rounded-lg">
-                  {t("share.seePreview")}
-                  <span className="inline group-open:hidden">
-                    <AddIcon className="inline" />
-                  </span>
-                  <span className="hidden group-open:inline">
-                    <RemoveIcon className="inline" />
-                  </span>
-                </summary>
+              <InfoDetails summary={t("share.seePreview")}>
                 <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
                   <h4>{t("share.someoneHasShared", { name: data?.user.name })}</h4>
                   <div className="mt-4">
@@ -151,7 +141,7 @@ export const ShareModal = ({
                     </ul>
                   </div>
                 </div>
-              </details>
+              </InfoDetails>
             </>
           )}
         </div>

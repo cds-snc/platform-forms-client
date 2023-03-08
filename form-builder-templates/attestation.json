@@ -1,0 +1,32 @@
+[
+  {
+    "type": "checkbox",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "Condition 1",
+          "fr": "Condition 1"
+        },
+        {
+          "en": "Condition 2",
+          "fr": "Condition 2"
+        },
+        {
+          "en": "Condition 3",
+          "fr": "Condition 3"
+        }
+      ],
+      "titleEn": "I agree to:",
+      "titleFr": "J'accepte :",
+      "validation": {
+        "required": true,
+        "all": true
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": ""
+    }
+  }
+]

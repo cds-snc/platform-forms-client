@@ -8,16 +8,16 @@ import { useTemplateStore } from "@formbuilder/store";
 
 export const QuestionInput = ({
   index,
-  hasDescription,
   initialValue,
   onQuestionChange,
   questionInputRef,
+  describedById,
 }: {
   index: number;
-  hasDescription: string | undefined;
   initialValue: string;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
   questionInputRef: React.RefObject<HTMLInputElement>;
+  describedById?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
@@ -70,7 +70,7 @@ export const QuestionInput = ({
       placeholder={t("question")}
       className="w-full"
       value={value}
-      aria-describedby={hasDescription ? `item${index}-describedby` : undefined}
+      describedBy={describedById ?? undefined}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateValue(index, e.target.value)}
       theme="title"
       {...getLocalizationAttribute()}

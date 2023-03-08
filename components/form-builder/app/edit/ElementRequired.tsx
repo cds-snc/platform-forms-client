@@ -14,8 +14,9 @@ export const ElementRequired = ({
   const { t } = useTranslation("form-builder");
 
   return (
-    <div className="mt-5 required-checkbox absolute xxl:relative xxl:right-auto xxl:top-auto right-[128px] top-12">
+    <div className="mt-5 required-checkbox">
       <Checkbox
+        disabled={item.properties.validation?.all}
         id={`required-${item.index}-id`}
         value={`required-${item.index}-value`}
         checked={item.properties.validation?.required}

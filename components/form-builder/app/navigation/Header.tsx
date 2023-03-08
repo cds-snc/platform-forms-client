@@ -14,7 +14,6 @@ import { ShareDropdown } from "./ShareDropdown";
 export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
   const { status } = useSession();
   const { isLoading, status: shareEnabled } = useFlag("shareMenu");
-  const { status: editableFilename } = useFlag("editableFilename");
   const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
@@ -24,29 +23,19 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const padLogo = editableFilename ? "pt-0" : "pt-4";
-
   return (
-    <header className="border-b-1 border-gray-500 mb-12 lg:px-4 xl:px-8 px-32">
+    <header className="border-b-1 border-gray-500 mb-12 lg:px-4 xl:px-8 px-32 py-2">
       <div className="flex justify-between">
         <div className="flex">
           <Link href="/form-builder">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               id="logo"
-              className={`${padLogo}${
-                editableFilename && " border-r-1"
-              } flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none`}
+              className="border-r-1 flex pr-5 mr-5 text-h2 font-bold font-sans no-underline !text-black focus:bg-white !shadow-none"
             >
-              {editableFilename ? (
-                <>
-                  <div className="inline-block w-[46px] h-[45px] py-2">
-                    <SiteLogo title={t("title")} />
-                  </div>
-                </>
-              ) : (
-                <> {!isLoading ? t("title", { ns: "common" }) : null}</>
-              )}
+              <div className="inline-block w-[46px] h-[45px] py-2">
+                <SiteLogo title={t("title")} />
+              </div>
             </a>
           </Link>
 
@@ -55,12 +44,9 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
               {t("title", { ns: "common" })}
             </div>
           )}
-          {isFormBuilder && editableFilename && <FileNameInput />}
+          {isFormBuilder && <FileNameInput />}
         </div>
-        <nav
-          className={`${editableFilename && ""} py-2`}
-          aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}
-        >
+        <nav aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}>
           <ul className="flex text-base list-none">
             {isFormBuilder && !isLoading && shareEnabled && (
               <li className="md:text-small_base text-base font-normal not-italic mr-4">

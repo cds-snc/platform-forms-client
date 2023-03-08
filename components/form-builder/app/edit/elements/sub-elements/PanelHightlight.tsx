@@ -9,10 +9,10 @@ export const PanelHightLight = ({
   children: React.ReactNode;
   conditionalChildren: React.ReactNode;
 }) => {
-  const { ref, focusWithinProps, isWithin } = useIsWithin();
+  const { focusWithinProps, isWithin } = useIsWithin();
   const hightLight = isWithin ? "bg-purple-100" : "";
   return (
-    <div {...focusWithinProps} className={`px-5 py-1 ${hightLight}`} ref={ref}>
+    <div {...focusWithinProps} className={`px-5 py-1 ${hightLight}`}>
       {children}
       <div className={`${isWithin ? "" : "hidden"} xl:!block`}>{conditionalChildren}</div>
     </div>

@@ -76,11 +76,48 @@ export const SelectedElement = ({
     case "dynamicRow":
       element = <SubElement item={item} elIndex={item.index} />;
       break;
+    case "attestation":
+      element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
+      break;
+    case "address":
+      element = <ShortAnswer data-testid="address">Address</ShortAnswer>;
+      break;
+    case "name":
+      element = <ShortAnswer data-testid="name">Name</ShortAnswer>;
+      break;
+    case "contact":
+      element = <ShortAnswer data-testid="contact">Contact</ShortAnswer>;
+      break;
     default:
       element = null;
   }
 
   return element;
+};
+
+export const filterSelected = (
+  item: FormElementWithIndex,
+  currentSelectedItem: ElementOption,
+  elementOptions: ElementOption[]
+) => {
+  /**
+   * Attestation is a special case. It is a checkbox, but it has a special validation type.
+   * We want to check for that validation type and return the attestation type if it exists.
+   */
+  if (item.properties.validation?.all) {
+    const selected = elementOptions.filter((item) => item.id === FormElementTypes.attestation);
+    return selected && selected.length ? selected[0] : currentSelectedItem;
+  }
+
+  /**
+   * If the item has an autoComplete property, set selected item to its corresponding pseudo-type
+   */
+  if (item.properties.autoComplete) {
+    const autoCompleteValue = item.properties.autoComplete;
+    const selected = elementOptions.filter((item) => item.id === autoCompleteValue);
+    return selected && selected.length ? selected[0] : currentSelectedItem;
+  }
+  return currentSelectedItem;
 };
 
 export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
@@ -105,5 +142,10 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
   }
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
-  return selected && selected.length ? selected[0] : elementOptions[2];
+
+  return filterSelected(
+    item,
+    selected && selected.length ? selected[0] : elementOptions[2],
+    elementOptions
+  );
 };

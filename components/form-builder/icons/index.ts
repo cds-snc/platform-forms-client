@@ -50,5 +50,8 @@ export { CopyIcon } from "./CopyIcon";
 export { ChevronRight } from "./ChevronRight";
 export { AddIcon } from "./AddIcon";
 export { RemoveIcon } from "./RemoveIcon";
+export { AddressIcon } from "./AddressIcon";
+export { ContactIcon } from "./ContactIcon";
+export { NameIcon } from "./NameIcon";
 export { MessageIcon } from "./Message";
 export { RoundThinXCloseIcon } from "./RoundThinXCloseIcon";

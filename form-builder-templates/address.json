@@ -1,0 +1,111 @@
+[
+  {
+    "type": "richText",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "",
+      "titleFr": "",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "### What is your address?",
+      "descriptionFr": "### Quelle est votre adresse?",
+      "placeholderEn": "",
+      "placeholderFr": ""
+    }
+  },
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Street address",
+      "titleFr": "Adresse municipale",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "Include your civic number and street name, apartment or suite, and other address details",
+      "descriptionFr": "Indiquez votre numéro civique et le nom de la rue, l'appartement ou la suite, ainsi que d'autres détails de l'adresse",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "street-address"
+    }
+  },
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "City, town or community",
+      "titleFr": "Ville ou communauté",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "address-level2"
+    }
+  },
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Province",
+      "titleFr": "Province",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "address-level1"
+    }
+  },
+  {
+    "type": "textField",
+    "properties": {
+      "subElements": [],
+      "choices": [
+        {
+          "en": "",
+          "fr": ""
+        }
+      ],
+      "titleEn": "Postal code",
+      "titleFr": "Code postal",
+      "validation": {
+        "required": false
+      },
+      "descriptionEn": "",
+      "descriptionFr": "",
+      "placeholderEn": "",
+      "placeholderFr": "",
+      "autoComplete": "postal-code"
+    }
+  }
+]

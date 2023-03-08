@@ -8,8 +8,5 @@
   "passwordReset": false,
   "supportForms": false,
   "formBuilderDebug": false,
-  "formBuilderAddElementDialog": false,
-  "shareMenu": false,
-  "editableFilename": false,
-  "formBuilderExperimentalBlocks": false
+  "shareMenu": false
 }
