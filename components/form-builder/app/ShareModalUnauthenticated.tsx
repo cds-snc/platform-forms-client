@@ -4,7 +4,6 @@ import { FormElementTypes } from "@lib/types";
 
 import { useDialogRef, Dialog, Button, InfoDetails } from "./shared";
 import { useTemplateStore } from "../store";
-import { AddIcon, RemoveIcon } from "../icons";
 import Markdown from "markdown-to-jsx";
 
 export const ShareModalUnauthenticated = ({
