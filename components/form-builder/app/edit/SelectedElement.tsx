@@ -114,12 +114,22 @@ export const filterSelected = (
 export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
 
+  const validationType = item.properties?.validation?.type;
   const type = item.type;
 
-  const selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
+  let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
 
   if (!type) {
     return elementOptions[1];
+  } else if (type === "textField") {
+    /**
+     * Email, phone, and date fields are specialized text field types.
+     * That is to say, their "type" is "textField" but they have specalized validation "type"s.
+     * So if we have a "textField", we want to first check properties.validation.type to see if
+     * it is a true Short Answer, or one of the other types.
+     * The one exception to this is validationType === "text" types, for which we want to return "textField"
+     */
+    selectedType = validationType && validationType !== "text" ? validationType : type;
   }
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
