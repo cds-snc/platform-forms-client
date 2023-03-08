@@ -79,12 +79,6 @@ export const SelectedElement = ({
     case "attestation":
       element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
       break;
-    case "address":
-      element = <ShortAnswer data-testid="address">Address</ShortAnswer>;
-      break;
-    case "contact":
-      element = <ShortAnswer data-testid="contact">Contact</ShortAnswer>;
-      break;
     default:
       element = null;
   }
@@ -120,29 +114,19 @@ export const filterSelected = (
 export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
   const elementOptions = useElementOptions();
 
-  const validationType = item.properties?.validation?.type;
   const type = item.type;
 
-  let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
+  const selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
 
   if (!type) {
-    return elementOptions[2];
-  } else if (type === "textField") {
-    /**
-     * Email, phone, and date fields are specialized text field types.
-     * That is to say, their "type" is "textField" but they have specalized validation "type"s.
-     * So if we have a "textField", we want to first check properties.validation.type to see if
-     * it is a true Short Answer, or one of the other types.
-     * The one exception to this is validationType === "text" types, for which we want to return "textField"
-     */
-    selectedType = validationType && validationType !== "text" ? validationType : type;
+    return elementOptions[1];
   }
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
 
   return filterSelected(
     item,
-    selected && selected.length ? selected[0] : elementOptions[2],
+    selected && selected.length ? selected[0] : elementOptions[1],
     elementOptions
   );
 };

@@ -421,7 +421,7 @@
     "unpublished": "Not available for unpublished forms"
   },
   "shortAnswer": "Short answer",
-  "shortAnswerText": "Short answer text",
+  "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Single choice",
   "start": "Start",
