@@ -67,6 +67,7 @@ export enum FormElementTypes {
   attestation = "attestation",
   address = "address",
   name = "name",
+  fullName = "fullName",
   contact = "contact",
 }
 // used to define attributes for a form element or field

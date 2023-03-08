@@ -28,6 +28,7 @@ import {
   Address,
   Name,
   Contact,
+  FullName,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -112,6 +113,13 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: <AddIcon />,
       description: Attestation,
       className: "separator",
+      group: group.input,
+    },
+    {
+      id: "fullName",
+      value: t("addElementDialog.fullName.label"),
+      icon: <NameIcon />,
+      description: FullName,
       group: group.input,
     },
     {

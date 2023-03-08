@@ -13,3 +13,4 @@ export { Attestation } from "./descriptions/Attestation";
 export { Address } from "./descriptions/Address";
 export { Contact } from "./descriptions/Contact";
 export { Name } from "./descriptions/Name";
+export { FullName } from "./descriptions/FullName";

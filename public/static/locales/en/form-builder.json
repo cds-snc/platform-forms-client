@@ -64,6 +64,11 @@
     },
     "example": "example",
     "exampleElement": "block example",
+    "fullName": {
+      "description": "Full name description",
+      "label": "Full name",
+      "title": "What is your name?"
+    },
     "inputBlocks": "Input blocks",
     "layoutBlocks": "Layout blocks",
     "listItem": "List item ",

@@ -64,6 +64,11 @@
     },
     "example": "exemple",
     "exampleElement": "exemple du bloc",
+    "fullName": {
+      "description": "[FR] Full name description",
+      "label": "[FR] Full name",
+      "title": "[FR] What is your name?"
+    },
     "inputBlocks": "Blocs de saisie",
     "layoutBlocks": "Blocs de mise en page",
     "listItem": "Élément de liste ",
