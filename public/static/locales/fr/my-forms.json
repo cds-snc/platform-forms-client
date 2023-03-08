@@ -20,10 +20,10 @@
       "published": "Publier"
     },
     "title": {
-      "notTranslatedEn": "Traduction en anglais non fournie.",
-      "notTranslatedFr": "Traduction en français non fournie."
+      "notTranslatedEn": "Untitled form",
+      "notTranslatedFr": "Formulaire sans titre"
     },
-    "lastEdited": "Dernière modification",
+    "lastEdited": "Dernière modification ",
     "menu": {
       "more": "Plus",
       "save": "Enregistrer",

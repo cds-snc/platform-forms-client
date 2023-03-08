@@ -3,7 +3,7 @@
   "addElementDialog": {
     "addButton": "Sélectionner ce bloc",
     "advancedBlocks": "Blocs avancés",
-    "allRequired": "Tous obligatoires",
+    "allRequired": "Toutes obligatoires",
     "answer": "Réponse...",
     "attest": "J'accepte :",
     "attestation": {
@@ -69,7 +69,7 @@
     "postal-code": {
       "label": "Code postal",
       "description": "Description du code postal",
-      "title": "Titre du code postal"
+      "title": "Code postal"
     },
     "address": {
       "label": "Adresse",
@@ -168,8 +168,8 @@
   "confirmationDescriptionItem3": "des liens pour obtenir de l’information ou des liens vers des services que les utilisateur·rice·s pourraient utiliser plus tard.",
   "confirmationDescriptionItem4": "un lien vers le formulaire de rétroaction (Si vous n’en avez pas, vous pouvez en créer un à l’aide de Formulaires GC qui sera lancé même temps que votre formulaire principal).",
   "confirmationDescriptionParagraph": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis. Voici quelques éléments utiles à présenter dans votre page de confirmation :",
-  "confirmationMessage": "Message de confirmation du formulaire",
-  "confirmationPage": "Page du confirmation",
+  "confirmationMessage": "Message de confirmation",
+  "confirmationPage": "Page de confirmation",
   "contactSupport": "Contacter l’équipe de soutien",
   "contactSupportIfYouHaveQuestions": "<a href=\"/fr/form-builder/support\" target=\"_blank\">Veuillez contacter</a>  l’équipe de soutien si vous avez des questions. ",
   "contactus": {
@@ -205,10 +205,10 @@
     "phone": "Entrez un numéro de téléphone comme 111-222-3333",
     "postal-code": ""
   },
-  "description": "La description ",
+  "description": "Description ",
   "descriptionDescription": "La description apparaît sous l'étiquette, et avant le champ. Elle est utilisée pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé cet outil pertinent? <a href=\"/fr/form-builder/contactus\" target=\"_blank\">Donner votre avis</a>",
-  "downloadCSV": "Télécharger le fichier CSV",
+  "downloadCSV": "Exporter en fichier CSV",
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
   "dyanamicRow": "Série répétitive de questions",
@@ -261,7 +261,7 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
-  "formIntroduction": "Présentation du formulaire",
+  "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Disparues : {{property}}",
   "formSettings": "Paramétres du formulaire",
@@ -299,7 +299,7 @@
   "optionText": "Texte d'option",
   "pagePreview": "Prévisualiser",
   "pageSettings": "Paramètres",
-  "pageText": "Section texte",
+  "pageText": "Texte de la page ",
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
@@ -359,10 +359,10 @@
       "toAccessPagePart2": "à votre compte Formulaires GC"
     }
   },
-  "richText": "Section texte",
+  "richText": "Texte de la page ",
   "richTextConfirmationTitle": "Page et message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
-  "richTextIntroTitle": "Présentation du formulaire",
+  "richTextIntroTitle": "Introduction du formulaire ",
   "richTextPrivacyTitle": "Déclaration de confidentialité",
   "save": "Enregistrer",
   "saveAndRequest": "Enregistrer le formulaire et demander la capacité de publier",
@@ -464,7 +464,7 @@
   "tooltipFormatNumberedList": "Liste numérotée",
   "tooltipInsertLink": "Insérer un lien",
   "translate": "Traduire",
-  "translateDescription": "Inscrivez la traduction du formulaire à côté de la version originale pour permettre aux personnes de le remplir dans l’une des deux langues officielles. ",
+  "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
