@@ -62,10 +62,6 @@
       "description": "The repeating question block provides form fillers with the option to add another set of answers to the section. This block works with one question or a section of questions.",
       "title": "Repeating set"
     },
-    "email": {
-      "description": "Email address description",
-      "title": "Email address"
-    },
     "example": "example",
     "exampleElement": "block example",
     "inputBlocks": "Input blocks",
@@ -92,10 +88,6 @@
     "number": {
       "description": "Number description",
       "title": "Number"
-    },
-    "phone": {
-      "description": "Mobile phone description",
-      "title": "Mobile phone"
     },
     "questionElement": "Blocks",
     "radio": {
@@ -207,8 +199,7 @@
     "date": "Enter a date like, mm/dd/yyyy",
     "email": "Enter an email address like, name@example.com",
     "number": "Only enter numbers",
-    "phone": "Enter a phone number like, 111-222-3333",
-    "postal-code": ""
+    "phone": "Enter a phone number like, 111-222-3333"
   },
   "description": "Description",
   "descriptionDescription": "The description appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements.",
