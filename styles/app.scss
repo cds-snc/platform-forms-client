@@ -1,29 +1,18 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
+@layer tailwind-base, admin, forms, tailwind-utilities;
 
 // Custom Variables
 @import "./_mixins";
 
-// Custom base CSS files
-@import "./_base";
+@layer tailwind-base {
+  @import "tailwindcss/base";
+  @import "tailwindcss/components";
 
-// These will still apply to form output
-@import "./_forms";
+  // Custom base CSS files
+  @import "./_base";
 
-// wrappign import in :not([data-theme="gcds"]) moves the specificity really high up, and creates some side effects.
-
-[data-theme="gcds"] {
-  // Really obvious to spot the scope
-  background-color: yellow;
-
-  // Just overwriting what is needed. example.
-  input {
-    border-radius: var(--gcds-input-border-radius);
-  }
+  @import "./_form-builder";
+  @import "./_header";
 }
-
-@import "./_form-builder";
-@import "./_header";
 
 @layer base {
   /* latin */
@@ -57,5 +46,17 @@
   }
 }
 
+@layer admin {
+  @import "./_admin"; // rename forms to to admin
+}
+
+@layer forms {
+  [data-theme="gcds"] {
+    @import "./_forms"; // rename to admin
+  }
+}
+
 // Tailwind Utilities needs to be loaded last to use inline
-@import "tailwindcss/utilities";
+@layer tailwind-utilities {
+  @import "tailwindcss/utilities";
+}
