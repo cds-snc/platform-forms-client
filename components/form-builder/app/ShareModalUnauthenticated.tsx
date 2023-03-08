@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { useTranslation } from "next-i18next";
 import { FormElementTypes } from "@lib/types";
 
-import { useDialogRef, Dialog, Button } from "./shared";
+import { useDialogRef, Dialog, Button, InfoDetails } from "./shared";
 import { useTemplateStore } from "../store";
 import { AddIcon, RemoveIcon } from "../icons";
 import Markdown from "markdown-to-jsx";
@@ -110,16 +110,7 @@ export const ShareModalUnauthenticated = ({
             </Button>
           </section>
 
-          <details className="group mt-5">
-            <summary className="inline-block p-2 list-none [&::-webkit-details-marker]:hidden cursor-pointer hover:text-white-default hover:bg-gray-600 focus:bg-blue-focus focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white focus:outline-[3px] focus:outline-blue-focus focus:outline focus:outline-offset-2 border-white-default hover:border-black-default border-2 rounded-lg">
-              {t("share.seePreview")}
-              <span className="inline group-open:hidden">
-                <AddIcon className="inline" />
-              </span>
-              <span className="hidden group-open:inline">
-                <RemoveIcon className="inline" />
-              </span>
-            </summary>
+          <InfoDetails summary={t("share.seePreview")}>
             <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
               <h4>{t("share.someoneHasShared", { name: t("share.formUser") })}</h4>
               <div className="mt-4">
@@ -143,7 +134,7 @@ export const ShareModalUnauthenticated = ({
                 </ul>
               </div>
             </div>
-          </details>
+          </InfoDetails>
         </div>
       </Dialog>
       <div className="hidden" ref={instructions}>
