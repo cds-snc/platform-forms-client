@@ -13,6 +13,9 @@ import { Question } from "./elements";
 import { FormElement } from "@lib/types";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@components/form-builder/store";
+import { allowedTemplates } from "@formbuilder/util";
+
+import { LoaderType } from "../../blockLoader";
 
 export const PanelBody = ({
   item,
@@ -44,14 +47,19 @@ export const PanelBody = ({
     }
   }, [initialSelected, selectedItem?.id]);
 
-  // Filter out the dynamicRow element from the dropdown if we're in a sub panel
-  const elementFilter: ElementOptionsFilter = (elements) => {
-    return elements.filter((element) => element.id !== "dynamicRow");
+  // Filter out the dynamicRow element
+  // and "templated" blocks i.e. multi field blocks
+  // as "swappable" elements if we're in a sub panel
+  const dynamicRowFilter: ElementOptionsFilter = (elements) => {
+    return elements.filter((element) => {
+      return element.id !== "dynamicRow" && !allowedTemplates.includes(element.id as LoaderType);
+    });
   };
 
-  // don't allow swapping to attestation
-  const attestationFilter: ElementOptionsFilter = (elements) => {
-    return elements.filter((element) => element.id !== "attestation");
+  // filter out allow "templated" blocks i.e. multi field blocks
+  // as "swappable" elements
+  const elementFilter: ElementOptionsFilter = (elements) => {
+    return elements.filter((element) => !allowedTemplates.includes(element.id as LoaderType));
   };
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -85,7 +93,7 @@ export const PanelBody = ({
             {selectedItem?.id && (
               <div className="xxl:mt-4 w-2/5 xxl:w-full">
                 <ElementDropDown
-                  filterElements={elIndex === -1 ? attestationFilter : elementFilter}
+                  filterElements={elIndex === -1 ? elementFilter : dynamicRowFilter}
                   item={item}
                   onElementChange={onElementChange}
                   selectedItem={selectedItem}
