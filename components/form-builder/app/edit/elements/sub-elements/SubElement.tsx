@@ -59,7 +59,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       addSubItem(
         elIndex,
         subIndex,
-        isTextField(type as string) ? FormElementTypes.textField : type
+        isTextField(type as string) && type !== FormElementTypes.textArea
+          ? FormElementTypes.textField
+          : type
       );
       // add 1 to index because it's a new element
       const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;
