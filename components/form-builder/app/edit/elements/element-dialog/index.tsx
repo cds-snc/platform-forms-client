@@ -10,7 +10,6 @@ export { TextArea } from "./descriptions/TextArea";
 export { TextField } from "./descriptions/TextField";
 export { QuestionSet } from "./descriptions/QuestionSet";
 export { Attestation } from "./descriptions/Attestation";
-export { PostalCode } from "./descriptions/PostalCode";
 export { Address } from "./descriptions/Address";
 export { Contact } from "./descriptions/Contact";
 export { Name } from "./descriptions/Name";
