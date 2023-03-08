@@ -133,6 +133,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.contact.label"),
       icon: <ContactIcon />,
       description: Contact,
+      className: "separator",
       group: group.input,
     },
     {
