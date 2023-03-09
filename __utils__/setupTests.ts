@@ -23,7 +23,7 @@ jest.mock("@lib/integration/redisConnector", () => ({
   getRedisInstance: jest.fn(),
 }));
 
-// jest.mock("@lib/auditLogs");
+jest.mock("@lib/auditLogs");
 
 jest.mock("@lib/hooks/useFlag", () => ({
   useFlag: jest.fn((flag: string) => (initialSettings as Record<string, boolean>)[flag]),
