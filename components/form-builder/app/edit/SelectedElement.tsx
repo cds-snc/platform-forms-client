@@ -71,7 +71,7 @@ export const SelectedElement = ({
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
       break;
     case "number":
-      element = <ShortAnswer>0123456789</ShortAnswer>;
+      element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
       element = <SubElement item={item} elIndex={item.index} />;
