@@ -64,10 +64,15 @@
     },
     "example": "example",
     "exampleElement": "block example",
+    "name": {
+      "description": "Include your first and last names. Middle names are optional",
+      "label": "Name",
+      "title": "What is your name?"
+    },
     "inputBlocks": "Input blocks",
     "layoutBlocks": "Layout blocks",
     "listItem": "List item ",
-    "name": {
+    "firstMiddleLastName": {
       "description": "Name description",
       "first": {
         "description": "First name description",
@@ -416,7 +421,7 @@
     "unpublished": "Not available for unpublished forms"
   },
   "shortAnswer": "Short answer",
-  "shortAnswerText": "Short answer text",
+  "shortAnswerText": "Short answer",
   "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Single choice",
   "start": "Start",

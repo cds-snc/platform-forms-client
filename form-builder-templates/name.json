@@ -1,89 +1,25 @@
 [
     {
-      "type": "richText",
-      "properties": {
+        "id": 1,
+        "type": "textField",
+        "properties": {
         "subElements": [],
         "choices": [
-          {
+            {
             "en": "",
             "fr": ""
-          }
+            }
         ],
-        "titleEn": "",
+        "titleEn": "Full name",
         "titleFr": "",
         "validation": {
-          "required": false
+            "required": false
         },
-        "descriptionEn": "## What is your name?",
-        "descriptionFr": "",
-        "placeholderEn": "",
-        "placeholderFr": ""
-      }
-    },
-    {
-      "type": "textField",
-      "properties": {
-        "subElements": [],
-        "choices": [
-          {
-            "en": "",
-            "fr": ""
-          }
-        ],
-        "titleEn": "First name",
-        "titleFr": "",
-        "validation": {
-          "required": false
-        },
-        "descriptionEn": "",
+        "descriptionEn": "Include your first and last names. Middle names are optional",
         "descriptionFr": "",
         "placeholderEn": "",
         "placeholderFr": "",
-        "autoComplete": "given-name"
-      }
-    },
-    {
-      "type": "textField",
-      "properties": {
-        "subElements": [],
-        "choices": [
-          {
-            "en": "",
-            "fr": ""
-          }
-        ],
-        "titleEn": "Middle names (optional)",
-        "titleFr": "",
-        "validation": {
-          "required": false
-        },
-        "descriptionEn": "",
-        "descriptionFr": "",
-        "placeholderEn": "",
-        "placeholderFr": "",
-        "autoComplete": "additional-name"
-      }
-    },
-    {
-      "type": "textField",
-      "properties": {
-        "subElements": [],
-        "choices": [
-          {
-            "en": "",
-            "fr": ""
-          }
-        ],
-        "titleEn": "Last name",
-        "titleFr": "",
-        "validation": {
-          "required": false
-        },
-        "descriptionEn": "",
-        "descriptionFr": "",
-        "placeholderEn": "",
-        "placeholderFr": "",
-        "autoComplete": "family-name"
-      }
+        "autoComplete": "name"
+        }
     }
-  ]
+]

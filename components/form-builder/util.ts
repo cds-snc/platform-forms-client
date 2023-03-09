@@ -214,5 +214,6 @@ export const allowedTemplates = [
   FormElementTypes.attestation,
   FormElementTypes.address,
   FormElementTypes.name,
+  FormElementTypes.firstMiddleLastName,
   FormElementTypes.contact,
 ] as const;

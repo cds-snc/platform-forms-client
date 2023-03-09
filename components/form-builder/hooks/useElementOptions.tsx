@@ -28,6 +28,7 @@ import {
   Address,
   Name,
   Contact,
+  FirstMiddleLastName,
 } from "../app/edit/elements/element-dialog";
 
 import { ElementOptionsFilter, ElementOption } from "../types";
@@ -119,6 +120,13 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.name.label"),
       icon: <NameIcon />,
       description: Name,
+      group: group.input,
+    },
+    {
+      id: "firstMiddleLastName",
+      value: t("addElementDialog.firstMiddleLastName.label"),
+      icon: <NameIcon />,
+      description: FirstMiddleLastName,
       group: group.input,
     },
     {
