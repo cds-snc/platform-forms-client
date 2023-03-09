@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import { AccessControlProvider } from "@lib/hooks";
 import BaseLayout from "@components/globals/layouts/BaseLayout";
 import "../styles/app.scss";
+import "@cdssnc/gcds-components-react/gcds.css";
 import { AnyObject } from "@lib/types";
 import { Session } from "next-auth";
 

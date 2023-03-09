@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@components/forms";
 import { InputFieldProps, CharacterCountMessages, HTMLTextInputTypeAttribute } from "@lib/types";
+import { GcdsInput } from "@cdssnc/gcds-components-react";
 
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
@@ -29,7 +30,9 @@ export const TextInput = (
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
 
-  const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // TODO: add type for event here
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  const handleTextInputChange = (event: any) => {
     helpers.setValue(event.target.value);
     if (maxLength) {
       setRemainingCharacters(maxLength - event.target.value.length);
@@ -60,6 +63,15 @@ export const TextInput = (
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      <GcdsInput
+        inputId={id + "gcds"}
+        label="Todo - move label to this level"
+        data-testid="textInput"
+        required={required}
+        onGcdsChange={handleTextInputChange}
+        placeholder={placeholder}
+      />
+
       <input
         data-testid="textInput"
         className={classes}
