@@ -1,4 +1,4 @@
-describe("Test FormBuilder", () => {
+describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
     cy.visit("/form-builder", {
       onBeforeLoad: (win) => {
