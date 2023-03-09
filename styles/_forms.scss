@@ -1,47 +1,177 @@
-// Base
+@import "forms/buttons";
+@import "forms/states";
 
-// Components
+// Common field parts
 .focus-group {
-  width: 75ch;
-  max-width: 90%;
-  font: var(--gcds-input-font);
-  color: var(--gcds-input-default-text);
-  margin: 0;
-  padding: 0;
-  border: 0;
-  transition: color ease-in-out 0.15s;
+  @apply space-y-2 mb-14;
+}
+.focus-group:focus-within {
+  .gc-label,
+  .gc-description {
+    @apply text-blue-focus;
+  }
+}
+.gc-form-group-context {
+  @include visuallyHidden();
+}
 
-  @apply space-y-2;
+.gc-description {
+  font: var(--gcds-font-caption);
+  @apply text-black;
+}
 
-  &:focus-within {
-    color: var(--gcds-input-focus-text);
+.gc-label {
+  font: var(--gcds-font-text);
+  @apply w-auto inline-block;
+}
+
+// Input boxes
+
+.gc-textarea,
+.gc-input-text,
+.gc-dropdown {
+  @apply block text-black p-3 border-2 border-black rounded-[3px];
+
+  &:focus {
+    @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+  }
+}
+
+.gc-textarea {
+  @apply w-full md:w-3/4 max-w-prose h-40;
+  &.full-height {
+    @apply h-auto;
   }
 }
 
 .gc-input-text {
-  min-width: var(--gcds-input-min-width-and-height);
-  min-height: var(--gcds-input-min-width-and-height);
-  margin: var(--gcds-input-margin);
-  padding: var(--gcds-input-padding);
-  background-color: var(--gcds-input-default-background);
-  color: var(--gcds-input-default-text);
-  border: var(--gcds-input-border-width) solid currentColor;
-  border-radius: var(--gcds-input-border-radius);
+  @apply w-full max-w-[40ch];
+}
 
-  @apply block w-full max-w-full h-auto;
+.gc-dropdown {
+  @apply w-full max-w-[40ch] pr-10 bg-white;
+}
+
+.gc-file-input {
+  @apply w-full flex items-baseline;
 
   &:focus {
-    border-color: var(--gcds-input-focus-text);
-    outline: var(--gcds-input-outline-width) solid var(--gcds-input-focus-text);
-    outline-offset: var(--gcds-input-border-width);
+    @apply outline-none border-blue-focus shadow-input;
   }
 
-  &:disabled {
-    cursor: not-allowed;
-    background-color: var(--gcds-input-disabled-background);
-    border-color: var(--gcds-input-disabled-text);
+  &.is-disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
-.gc-error-message + .gc-input-text:not(:focus) {
-  border-color: var(--gcds-input-danger-text);
+
+.gc-file-input-upload-button {
+  @apply inline-block mr-2;
+}
+
+.gc-file-input-file-selected {
+  @apply inline-block;
+}
+
+.gc-file-input [type="file"] {
+  display: none;
+}
+
+// Common fieldset options styles
+.gc-input-radio,
+.gc-input-checkbox {
+  @apply flex pt-3 pb-1 px-0 items-start;
+}
+
+.gc-radio-label,
+.gc-checkbox-label {
+  @apply md:text-small_base font-normal text-base inline-flex items-start;
+
+  .checkbox-label-text,
+  .radio-label-text {
+    @apply w-auto max-w-[40ch] mt-2;
+  }
+}
+
+.gc-input-checkbox {
+  .gc-input-checkbox__input {
+    background-repeat: round;
+    @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
+    & + .gc-checkbox-label {
+      @apply relative cursor-pointer p-0;
+    }
+
+    &:focus {
+      @apply outline-none;
+    }
+
+    &:focus + .gc-checkbox-label {
+      span {
+        @apply text-blue-focus;
+      }
+    }
+
+    &:focus + .gc-checkbox-label:before {
+      @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+    }
+
+    // Box.
+    & + .gc-checkbox-label:before {
+      content: "";
+      @apply md:mr-3 mr-3 inline-block w-10 h-10 bg-white-default rounded-sm border-2 border-black-form;
+    }
+
+    // Checkmark. Could be replaced with an image
+    &:checked + .gc-checkbox-label:after {
+      background-repeat: no-repeat;
+      content: "";
+      background-image: url("../public/img/checkmark.svg");
+      background-position: center;
+      @apply absolute w-10 h-10 p-2 left-0;
+    }
+
+    &:focus + .gc-checkbox-label:after {
+      background-image: url("../public/img/blue-checkmark.svg");
+    }
+  }
+}
+
+.gc-input-radio {
+  .gc-radio__input {
+    @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
+    & + .gc-radio-label {
+      @apply relative cursor-pointer p-0;
+    }
+
+    &:focus {
+      @apply outline-none;
+    }
+
+    &:focus + .gc-radio-label {
+      span {
+        @apply text-blue-focus;
+      }
+    }
+
+    &:focus + .gc-radio-label:before {
+      @apply outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+    }
+
+    // Circle.
+    & + .gc-radio-label:before {
+      content: "";
+      @apply md:mr-2 mr-2 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
+    }
+
+    // Radio. Could be replaced with an image
+    &:checked + .gc-radio-label:after {
+      content: "";
+      background-image: url("../public/img/black-circle.svg");
+      @apply absolute w-5 h-5 m-[10px] left-0;
+    }
+
+    &:focus + .gc-radio-label:after {
+      background-image: url("../public/img/blue-circle.svg");
+    }
+  }
 }

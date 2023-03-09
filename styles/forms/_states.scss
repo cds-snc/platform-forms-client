@@ -1,0 +1,97 @@
+// Partial: States
+
+.gc-error-message {
+  background-color: var(--gcds-danger-background);
+  border-color: var(--gcds-danger-border);
+  @apply py-3 px-4 border-l-2 max-w-prose text-black;
+}
+
+.gc-error-message + .gc-input-text,
+.gc-error-message + .gc-textarea,
+.gc-error-message + .gc-dropdown {
+  border-color: var(--gcds-danger-border);
+}
+
+.gc-alert {
+  @apply md:text-small_base text-base px-4 py-3 mb-14 w-5/6 xl:w-full border-0;
+
+  // Variants:
+  &.gc-alert--validation {
+    border-color: var(--gcds-danger-border);
+
+    @apply p-9 border-[6px] text-black-default bg-white;
+
+    &:focus,
+    &:focus-within {
+      @apply outline-blue-focus outline outline-offset-2 outline-[3px] text-blue-focus shadow-none;
+    }
+    .gc-alert__body h2 {
+      font: var(--gcds-font-h2);
+    }
+  }
+
+  &.gc-alert--error:not(.gc-alert--validation) {
+    background-color: var(--gcds-color-red-100);
+    border-color: var(--gcds-color-red-500);
+    @apply border-l-[6px];
+  }
+
+  &.gc-alert--success {
+    background-color: var(--gcds-color-green-100);
+    border-color: var(--gcds-color-green-500);
+    @apply border-l-[6px];
+  }
+
+  &.gc-alert--warning {
+    background-color: var(--gcds-color-yellow-100);
+    border-color: var(--gcds-color-yellow-500);
+    @apply border-l-[6px];
+  }
+
+  &.gc-alert--info {
+    background-color: var(--gcds-color-blue-100);
+    border-color: var(--gcds-color-blue-500);
+    @apply border-l-[6px];
+  }
+
+  .gc-alert__body {
+    h2 {
+      font: var(--gcds-font-h5);
+      @apply p-0 m-0;
+    }
+
+    ol {
+      @apply pl-6 list-outside;
+      li {
+        @apply mb-3;
+        > * {
+          @apply box-decoration-clone;
+        }
+      }
+    }
+    > * + * {
+      @apply mt-2;
+    }
+    + * {
+      @apply mt-4;
+    }
+  }
+}
+
+.gc-ordered-list {
+  @apply ml-0 font-normal;
+
+  .gc-error-link {
+    @apply ml-2 text-red-700;
+
+    &:focus {
+      box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
+      @apply bg-blue-focus text-white-default no-underline;
+    }
+
+    &:active {
+      box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
+      @apply underline bg-blue-active text-white-default no-underline;
+    }
+  }
+}

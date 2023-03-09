@@ -1,0 +1,44 @@
+// Partial: Buttons
+
+// Button variants
+.gc-button {
+  // Default dark blue variant
+  background-color: var(--gcds-color-blue-900);
+  @apply rounded-md border-2 border-transparent text-white font-normal p-4 py-2 w-auto;
+
+  &:hover {
+    background-color: var(--gcds-color-blue-700);
+  }
+}
+
+.gc-button--secondary {
+  color: var(--gcds-color-blue-700);
+
+  @apply bg-white border-current;
+
+  &:hover {
+    color: var(--gcds-color-blue-700);
+    background-color: var(--gcds-color-blue-100);
+  }
+}
+.gc-button--destructive {
+  background-color: var(--gcds-danger-text);
+
+  @apply text-white;
+
+  &:hover {
+    background-color: var(--gcds-color-red-900);
+  }
+}
+
+// Common interactive styles
+// Declare at the end to respect focus and active states accross vatiants.
+.gc-button {
+  &:active {
+    @apply bg-black text-white;
+  }
+
+  &:focus {
+    @apply text-white bg-blue-focus outline-blue-focus outline outline-offset-2 outline-[3px] border-blue-focus;
+  }
+}
