@@ -25,9 +25,6 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Name block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("#formTitle").type("Cypress Test Form");
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
-    cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add block").click();
 
     cy.get('[data-testid="name"]').click();
@@ -41,9 +38,6 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Name (3 fields) block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("#formTitle").type("Cypress Test Form");
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
-    cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add block").click();
 
     cy.get('[data-testid="firstMiddleLastName"]').click();
@@ -67,9 +61,6 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Address block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("#formTitle").type("Cypress Test Form");
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
-    cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add block").click();
 
     cy.get('[data-testid="address"]').click();
@@ -96,9 +87,6 @@ describe("Test FormBuilder", () => {
 
   it("Adds a Contact block with autocomplete", () => {
     cy.visit("/form-builder/edit");
-    cy.get("#formTitle").type("Cypress Test Form");
-    cy.get("a").contains("Edit").should("have.class", "font-bold");
-    cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add block").click();
 
     cy.get('[data-testid="contact"]').click();
