@@ -32,6 +32,7 @@ module.exports = {
     // Remove all console.* calls
     removeConsole: true,
   },
+  transpilePackages: ["@cdssnc/gcds-components-react"],
   webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
