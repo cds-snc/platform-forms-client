@@ -11,6 +11,7 @@ import {
 import { logEvent as logEventType } from "@lib/auditLogs";
 
 jest.mock("@aws-sdk/client-sqs");
+jest.unmock("@lib/auditLogs");
 
 let createdEnv: jest.Replaced<typeof process.env> | undefined = undefined;
 
@@ -102,7 +103,7 @@ describe("Audit Log Tests", () => {
           userID: "1",
           event: "UserSignIn",
           timestamp: currentTimeStamp,
-          subject: "User#1",
+          subject: { type: "User", id: "1" },
         }),
         QueueUrl: "aws_test_url",
       });
