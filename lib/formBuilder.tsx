@@ -10,7 +10,6 @@ import {
   MultipleChoiceGroup,
   RichText,
   TextArea,
-  TextInput,
 } from "@components/forms";
 import { GcdsInput } from "@cdssnc/gcds-components-react";
 import {
@@ -111,26 +110,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           // type={textType}
           // placeholder={placeHolder.toString()}
         ></GcdsInput>
-        // <div className="focus-group">
-        //   {labelComponent}
-        //   {description && <Description id={`${id}`}>{description}</Description>}
-        //   <TextInput
-        //     type={textType}
-        //     id={`${id}`}
-        //     name={`${id}`}
-        //     required={isRequired}
-        //     ariaDescribedBy={description ? `desc-${id}` : undefined}
-        //     placeholder={placeHolder.toString()}
-        //     autoComplete={element.properties.autoComplete?.toString()}
-        //     maxLength={element.properties.validation?.maxLength}
-        //     characterCountMessages={{
-        //       part1: t("formElements.characterCount.part1"),
-        //       part2: t("formElements.characterCount.part2"),
-        //       part1Error: t("formElements.characterCount.part1-error"),
-        //       part2Error: t("formElements.characterCount.part2-error"),
-        //     }}
-        //   />
-        // </div>
       );
     case FormElementTypes.textArea:
       return (
