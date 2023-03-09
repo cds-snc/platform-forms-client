@@ -46,12 +46,14 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
   };
 
   return (
-    <PanelBody
-      elements={elements}
-      item={item}
-      onElementChange={onElementChange}
-      onQuestionChange={onQuestionChange}
-      onRequiredChange={onRequiredChange}
-    />
+    <div className="mx-7 py-7">
+      <PanelBody
+        elements={elements}
+        item={item}
+        onElementChange={onElementChange}
+        onQuestionChange={onQuestionChange}
+        onRequiredChange={onRequiredChange}
+      />
+    </div>
   );
 };

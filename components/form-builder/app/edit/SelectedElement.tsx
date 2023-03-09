@@ -120,7 +120,7 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
   let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
 
   if (!type) {
-    return elementOptions[2];
+    return elementOptions[1];
   } else if (type === "textField") {
     /**
      * Email, phone, and date fields are specialized text field types.
@@ -136,7 +136,7 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
 
   return filterSelected(
     item,
-    selected && selected.length ? selected[0] : elementOptions[2],
+    selected && selected.length ? selected[0] : elementOptions[1],
     elementOptions
   );
 };

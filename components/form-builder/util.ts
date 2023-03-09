@@ -195,3 +195,25 @@ export const getHost = () => {
   if (typeof window === "undefined") return "";
   return `${window.location.protocol}//${window.location.host}`;
 };
+
+export const getQuestionNumber = (item: FormElement, elements: FormElement[], alpha?: boolean) => {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
+  const itemIndex = elements
+    .filter((object) => object.type !== "richText")
+    .findIndex((object) => object.id === item.id);
+
+  if (alpha) {
+    return alphabet[itemIndex];
+  }
+
+  return itemIndex + 1;
+};
+
+export const allowedTemplates = [
+  FormElementTypes.attestation,
+  FormElementTypes.address,
+  FormElementTypes.name,
+  FormElementTypes.firstMiddleLastName,
+  FormElementTypes.contact,
+] as const;

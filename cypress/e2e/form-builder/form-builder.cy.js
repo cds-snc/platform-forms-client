@@ -38,8 +38,8 @@ describe("Test FormBuilder", () => {
     cy.get(`[aria-label="Form introduction"]`).type("form intro");
     cy.get("button").contains("Add block").click();
 
-    cy.get("div").contains("Single choice").click();
-    cy.get("div[data-testid='radio']").click();
+    cy.get('[data-testid="radio"]').click();
+    cy.get("button").contains("Select block").click();
 
     cy.get("#item0").type("Question 1");
     cy.get("#option--0--1").type("option 1");
@@ -59,7 +59,7 @@ describe("Test FormBuilder", () => {
 
     // re-check form editor
     cy.get("#item0").scrollIntoView().should("have.value", "Question 1-1");
-    cy.get("#item0-describedby").should("contain", "Question 1 description");
+    cy.get("#item1-describedby").should("contain", "Question 1 description");
     cy.get("#required-0-id").should("be.checked");
 
     // preview form

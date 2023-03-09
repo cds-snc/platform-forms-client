@@ -98,6 +98,7 @@ export const ListBox = ({
               <React.Fragment key={id}>
                 {groupOption}
                 <li
+                  data-testid={id}
                   id={`row-${id}`}
                   ref={(el) => {
                     if (el && rowsRef.current) {

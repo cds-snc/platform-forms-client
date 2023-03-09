@@ -5,7 +5,8 @@ import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
 import { FormElementTypes } from "@lib/types";
 import { useIsWithin, useUpdateElement } from "@components/form-builder/hooks";
-import { blockLoader } from "../../blockLoader";
+import { blockLoader, LoaderType } from "../../blockLoader";
+import { allowedTemplates } from "@formbuilder/util";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const {
@@ -55,14 +56,19 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   /* Note this callback is also in PanelActionsLocked */
   const handleAddElement = useCallback(
-    (index: number, type?: FormElementTypes) => {
-      if (type === FormElementTypes.attestation) {
-        blockLoader(type, (data) => add(index, type, data));
+    (index: number, type: FormElementTypes | undefined) => {
+      if (allowedTemplates.includes(type as LoaderType)) {
+        blockLoader(type as LoaderType, (data) => add(index, data.type, data));
         return;
       }
 
       setFocusInput(true);
-      add(index, isTextField(type as string) ? FormElementTypes.textField : type);
+      add(
+        index,
+        isTextField(type as string) && type !== FormElementTypes.textArea
+          ? FormElementTypes.textField
+          : type
+      );
       addElement(type as string, `form.elements[${index + 1}]`);
     },
     [add, setFocusInput, addElement, isTextField]

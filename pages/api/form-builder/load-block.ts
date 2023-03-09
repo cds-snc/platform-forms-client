@@ -2,13 +2,11 @@ import path from "path";
 import { promises as fs } from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors } from "@lib/middleware";
+import { allowedTemplates } from "@formbuilder/util";
 
 export async function getJsonFile(req: NextApiRequest, res: NextApiResponse) {
   const { elementType } = req.body;
-
-  const allowedTypes = ["attestation"];
-
-  if (!allowedTypes.includes(elementType)) {
+  if (!allowedTemplates.includes(elementType)) {
     res.status(400).json({ error: "Invalid element type" });
     return;
   }

@@ -56,7 +56,10 @@ export interface ElementOption {
     | "number"
     | "repeatableQuestionSet"
     | "attestation"
-    | "postal-code";
+    | "firstMiddleLastName"
+    | "name"
+    | "contact"
+    | "address";
   value: string;
   icon?: JSX.Element;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

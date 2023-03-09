@@ -37,26 +37,26 @@
     }
   },
   "responseTemplate": {
-    "responseNumber": "Response Number [fr]",
-    "submissionDate": "Submission Date [fr]",
-    "errorNoQuestionsAnswers": "Error no questions and answers were found. [fr]",
-    "jumpTo": "Jump To: [fr]",
-    "columnTable": "Column table [fr]",
-    "rowTable": "Row table [fr]",
-    "rowTableInfo": "A row table is most useful when copy and pasting into a spreadsheet. [fr]",
-    "confirmReceiptResponse": "Confirm receipt of response [fr]",
-    "confirmReceipt": "Confirm receipt [fr]",
-    "confirmReceiptInfo": "Copy the code below and paste it into the Confirm Receipt of Responses page in the website. [fr]",
-    "copyCode": "Copy code [fr]",
-    "copyCodeClipboard": "Copy code to clipboard [fr]",
-    "copiedToCipboard": "Copied to clipboard [fr]",
-    "errorrCopyingToClipboard": "Error copying to clipboard [fr]",
-    "submissionID": "[FR] Submission ID",
-    "copyResponse": "Copy answer row to clipboard [fr]"
+    "responseNumber": "Numéro de réponse",
+    "submissionDate": "Date de soumission",
+    "errorNoQuestionsAnswers": "Aucune question ou réponse n'a été trouvée.",
+    "jumpTo": "Passer à :",
+    "columnTable": "Tableau de colonnes",
+    "rowTable": "Tableau de lignes",
+    "rowTableInfo": "Un tableau de lignes est plus utile lorsqu'il s'agit de copier-coller dans une feuille de calcul.",
+    "confirmReceiptResponse": "Confirmer la réception de réponses",
+    "confirmReceipt": "Confirmer la réception",
+    "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la page Confirmation de réception des réponses du site Web.",
+    "copyCode": "Copier le code",
+    "copyCodeClipboard": "Copier le code dans le presse-papiers",
+    "copiedToCipboard": "Copié dans le presse-papiers",
+    "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
+    "submissionID": "Identifiant de la soumission",
+    "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
   },
   "protectedBWarning": {
-    "officialRecord": "[Fr] This is an official record [/Fr]",
-    "retainCopy": "[Fr] Retain this copy in accordance to your retention policy. [/Fr]",
+    "officialRecord": "Ceci est un document officiel",
+    "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",
     "protectedB": "PROTÉGÉ B"
   }
 }
