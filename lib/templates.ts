@@ -499,7 +499,9 @@ export async function updateTemplate(
         ability.userID,
         { type: "DeliveryOption", id: formID },
         "ChangeDeliveryOption",
-        `Change Delivery Option to: ${JSON.stringify(deliveryOption)}`
+        `Change Delivery Option to: ${Object.keys(deliveryOption)
+          .map((key) => `${key}: ${deliveryOption[key]}`)
+          .join(", ")}`
       );
     logEvent(ability.userID, { type: "Form", id: formID }, "UpdateForm", "Form content updated");
 
