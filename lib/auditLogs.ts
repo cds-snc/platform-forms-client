@@ -76,7 +76,7 @@ export const logEvent = async (
     userID,
     event,
     timestamp: Date.now(),
-    subject: `${subject.type}#${subject.id}`,
+    subject,
     description,
   });
   try {
