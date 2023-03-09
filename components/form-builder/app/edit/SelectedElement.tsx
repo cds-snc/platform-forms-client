@@ -71,22 +71,13 @@ export const SelectedElement = ({
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
       break;
     case "number":
-      element = <ShortAnswer>0123456789</ShortAnswer>;
+      element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
       element = <SubElement item={item} elIndex={item.index} />;
       break;
     case "attestation":
       element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
-      break;
-    case "address":
-      element = <ShortAnswer data-testid="address">Address</ShortAnswer>;
-      break;
-    case "name":
-      element = <ShortAnswer data-testid="name">Name</ShortAnswer>;
-      break;
-    case "contact":
-      element = <ShortAnswer data-testid="contact">Contact</ShortAnswer>;
       break;
     default:
       element = null;
@@ -129,7 +120,7 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
   let selectedType: FormElementTypes | HTMLTextInputTypeAttribute = type;
 
   if (!type) {
-    return elementOptions[2];
+    return elementOptions[1];
   } else if (type === "textField") {
     /**
      * Email, phone, and date fields are specialized text field types.
@@ -145,7 +136,7 @@ export const useGetSelectedOption = (item: FormElementWithIndex): ElementOption 
 
   return filterSelected(
     item,
-    selected && selected.length ? selected[0] : elementOptions[2],
+    selected && selected.length ? selected[0] : elementOptions[1],
     elementOptions
   );
 };

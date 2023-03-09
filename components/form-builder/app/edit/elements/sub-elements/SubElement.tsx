@@ -12,6 +12,7 @@ import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formbuilder/app/shared";
 import { useUpdateElement } from "../../../../hooks";
 import { blockLoader, LoaderType } from "../../../../blockLoader";
+import { allowedTemplates } from "@formbuilder/util";
 
 export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
   const { t } = useTranslation("form-builder");
@@ -48,11 +49,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
 
   const handleAddElement = useCallback(
     (subIndex: number, type?: FormElementTypes) => {
-      if (
-        [FormElementTypes.address, FormElementTypes.name, FormElementTypes.contact].includes(
-          type as FormElementTypes
-        )
-      ) {
+      if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, (data: FormElement) =>
           addSubItem(elIndex, subIndex, data.type, data)
         );
@@ -62,7 +59,9 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
       addSubItem(
         elIndex,
         subIndex,
-        isTextField(type as string) ? FormElementTypes.textField : type
+        isTextField(type as string) && type !== FormElementTypes.textArea
+          ? FormElementTypes.textField
+          : type
       );
       // add 1 to index because it's a new element
       const path = `form.elements[${elIndex}].properties.subElements[${subIndex + 1}]`;

@@ -90,7 +90,9 @@ export const PanelActions = ({
           id: 4,
           txt: "addToSet",
           icon: AddIcon,
-          onClick: handleOpenDialog,
+          onClick: () => {
+            handleOpenDialog();
+          },
         },
         {
           id: 5,
@@ -213,7 +215,7 @@ export const PanelActions = ({
           {!isRichText && renderMoreButton && renderMoreButton({ item, moreButton })}
         </div>
 
-        {elementDialog && (
+        {elementDialog && isSubElement && (
           <ElementDialog
             filterElements={filterElements}
             handleAddType={(type) => {
@@ -230,7 +232,7 @@ export const PanelActions = ({
               position={item.index}
               handleAdd={handleAdd}
               filterElements={filterElements}
-              text={isSubElement ? t("addToSet") : t("addElement")}
+              text={t("addElement")}
             />
           </div>
         </div>

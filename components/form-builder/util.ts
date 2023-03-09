@@ -209,3 +209,11 @@ export const getQuestionNumber = (item: FormElement, elements: FormElement[], al
 
   return itemIndex + 1;
 };
+
+export const allowedTemplates = [
+  FormElementTypes.attestation,
+  FormElementTypes.address,
+  FormElementTypes.name,
+  FormElementTypes.firstMiddleLastName,
+  FormElementTypes.contact,
+] as const;

@@ -5,6 +5,7 @@ import { AddElementButton } from "./elements/element-dialog/AddElementButton";
 import { useTemplateStore } from "@components/form-builder/store";
 import { blockLoader, LoaderType } from "../../blockLoader";
 import { useUpdateElement } from "@components/form-builder/hooks";
+import { allowedTemplates } from "@formbuilder/util";
 
 export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   const { add, setFocusInput } = useTemplateStore((s) => ({
@@ -17,20 +18,18 @@ export const PanelActionsLocked = ({ addElement }: { addElement: boolean }) => {
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     (index: number, type?: FormElementTypes) => {
-      if (
-        [
-          FormElementTypes.attestation,
-          FormElementTypes.address,
-          FormElementTypes.name,
-          FormElementTypes.contact,
-        ].includes(type as FormElementTypes)
-      ) {
+      if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, (data) => add(index, data.type, data));
         return;
       }
 
       setFocusInput(true);
-      add(index, isTextField(type as string) ? FormElementTypes.textField : type);
+      add(
+        index,
+        isTextField(type as string) && type !== FormElementTypes.textArea
+          ? FormElementTypes.textField
+          : type
+      );
       // add 1 to index because it's a new element
       updateElement(type as string, `form.elements[${index + 1}]`);
     },
