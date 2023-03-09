@@ -49,7 +49,7 @@ describe("Test FormBuilder language switching", () => {
       .contains("privacy text in english");
 
     // Enter English Confirmation Page
-    cy.get('[aria-label="Confirmation page"]')
+    cy.get('[aria-label="Confirmation page and message"]')
       .type("confirmation text in english")
       .contains("confirmation text in english");
 
@@ -75,7 +75,7 @@ describe("Test FormBuilder language switching", () => {
       .contains("privacy text in french");
 
     // Enter French Confirmation Page
-    cy.get('[aria-label="Confirmation page"]')
+    cy.get('[aria-label="Confirmation page and message"]')
       .type("confirmation text in french")
       .contains("confirmation text in french");
 
