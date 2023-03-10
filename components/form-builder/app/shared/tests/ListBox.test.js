@@ -33,10 +33,10 @@ describe("ListBox", () => {
     const listBox = await rendered.findByRole("listbox");
     const optionElements = await rendered.findAllByRole("option");
     expect(optionElements).toHaveLength(4);
-    expect(optionElements[0].textContent).toBe("One");
-    expect(optionElements[1].textContent).toBe("Two");
-    expect(optionElements[2].textContent).toBe("Three");
-    expect(optionElements[3].textContent).toBe("Four");
+    expect(optionElements[0].textContent.trim()).toBe("One");
+    expect(optionElements[1].textContent.trim()).toBe("Two");
+    expect(optionElements[2].textContent.trim()).toBe("Three");
+    expect(optionElements[3].textContent.trim()).toBe("Four");
     expect(optionElements[0]).toHaveAttribute("aria-selected", "true");
 
     expect(listBox).toHaveAttribute("aria-activedescendant", optionElements[0].id);

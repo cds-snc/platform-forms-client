@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "next-i18next";
 import {
   CalendarIcon,
@@ -46,7 +45,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "richText",
       value: t("richText"),
-      icon: <ParagraphIcon />,
+      icon: ParagraphIcon,
       description: RichText,
       className: "",
       group: group.layout,
@@ -54,7 +53,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "textField",
       value: t("shortAnswer"),
-      icon: <ShortAnswerIcon />,
+      icon: ShortAnswerIcon,
       description: TextField,
       className: "",
       group: group.input,
@@ -62,7 +61,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "textArea",
       value: t("paragraph"),
-      icon: <ParagraphIcon />,
+      icon: ParagraphIcon,
       description: TextArea,
       className: "separator",
       group: group.input,
@@ -70,7 +69,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "radio",
       value: t("singleChoice"),
-      icon: <RadioIcon />,
+      icon: RadioIcon,
       description: Radio,
       className: "",
       group: group.input,
@@ -78,7 +77,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "checkbox",
       value: t("checkboxes"),
-      icon: <CheckIcon />,
+      icon: CheckIcon,
       description: CheckBox,
       className: "",
       group: group.input,
@@ -86,7 +85,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "dropdown",
       value: t("dropdown"),
-      icon: <SelectMenuIcon />,
+      icon: SelectMenuIcon,
       description: DropDown,
       className: "separator",
       group: group.input,
@@ -94,7 +93,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "date",
       value: t("date"),
-      icon: <CalendarIcon />,
+      icon: CalendarIcon,
       description: Date,
       className: "",
       group: group.input,
@@ -102,7 +101,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "number",
       value: t("numericField"),
-      icon: <NumericFieldIcon />,
+      icon: NumericFieldIcon,
       description: Number,
       className: "",
       group: group.input,
@@ -110,7 +109,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "attestation",
       value: t("attestation"),
-      icon: <AddIcon />,
+      icon: AddIcon,
       description: Attestation,
       className: "separator",
       group: group.input,
@@ -118,28 +117,28 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "name",
       value: t("addElementDialog.name.label"),
-      icon: <NameIcon />,
+      icon: NameIcon,
       description: Name,
       group: group.input,
     },
     {
       id: "firstMiddleLastName",
       value: t("addElementDialog.firstMiddleLastName.label"),
-      icon: <NameIcon />,
+      icon: NameIcon,
       description: FirstMiddleLastName,
       group: group.input,
     },
     {
       id: "address",
       value: "Address",
-      icon: <AddressIcon />,
+      icon: AddressIcon,
       description: Address,
       group: group.input,
     },
     {
       id: "contact",
       value: t("addElementDialog.contact.label"),
-      icon: <ContactIcon />,
+      icon: ContactIcon,
       description: Contact,
       className: "separator",
       group: group.input,
@@ -147,7 +146,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     {
       id: "dynamicRow",
       value: t("dyanamicRow"),
-      icon: <AddIcon />,
+      icon: AddIcon,
       description: QuestionSet,
       className: "",
       group: group.advanced,
