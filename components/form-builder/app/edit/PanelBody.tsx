@@ -129,8 +129,8 @@ export const PanelBody = ({
             <div className="w-2/5 xxl:w-full">
               <ElementRequired onRequiredChange={onRequiredChange} item={item} />
               {item.properties.autoComplete && (
-                <div className="mt-5">
-                  <strong>Autcomplete is set to:</strong>{" "}
+                <div data-testid={`autocomplete-${item.id}`} className="mt-5">
+                  <strong>{t("autocompleteIsSetTo")}</strong>{" "}
                   {t(`autocompleteOptions.${item.properties.autoComplete}`)}
                 </div>
               )}
