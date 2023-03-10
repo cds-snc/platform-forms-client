@@ -15,7 +15,7 @@ export const QuestionInput = ({
   describedById,
 }: {
   index: number;
-  id: string;
+  id: number;
   initialValue: string;
   onQuestionChange: (itemIndex: number, val: string, lang: Language) => void;
   questionInputRef: React.RefObject<HTMLInputElement>;
