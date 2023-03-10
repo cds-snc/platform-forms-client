@@ -26,6 +26,7 @@ export const ListBox = ({
     value: string;
     group: { id: string; value: string };
     className?: string;
+    icon?: IconType;
   }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
@@ -81,7 +82,7 @@ export const ListBox = ({
               value,
               group,
               className,
-              icon,
+              icon: Icon,
             }: {
               id: string;
               value: string;
@@ -93,8 +94,6 @@ export const ListBox = ({
           ) => {
             const focussed = focusIndex === index;
             let groupOption = null;
-
-            const Icon = icon ?? null;
 
             if (group && listGroup != group.value) {
               groupOption = (
@@ -130,7 +129,7 @@ export const ListBox = ({
                 >
                   <span className="flex justify-between items-center">
                     <span>
-                      <Icon className="inline-block mr-2 opacity-75" /> {value}
+                      {Icon && <Icon className="inline-block mr-2" />} {value}
                     </span>
                     {focussed && (
                       <ChevronRight className="fill-black inline-block mr-1 scale-150" />
