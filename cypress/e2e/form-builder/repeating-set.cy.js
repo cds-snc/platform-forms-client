@@ -29,7 +29,7 @@ describe("Test FormBuilder Repeating set", () => {
 
     cy.get('[data-testid="dynamicRow"]').click();
     cy.get("button").contains("Select block").click();
-    cy.get("#item0").type("This is a repeating set");
+    cy.get("#item-1").type("This is a repeating set");
     cy.get('[data-testid="add-element"]').contains("Add to set").click();
     cy.get('[data-testid="textField"]').click();
     cy.get("button").contains("Select block").click();
