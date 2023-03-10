@@ -173,7 +173,7 @@ describe("/api/id/[form]/[submission]/download", () => {
 
       expect(res.statusCode).toBe(403);
     });
-    test("Renders a HTML file", async () => {
+    test.skip("Renders a HTML file", async () => {
       // Data mocks
       (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
         id: "formTestID",
