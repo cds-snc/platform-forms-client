@@ -3,7 +3,7 @@
  */
 
 import { isAuthenticated, validateTemporaryToken, requireAuthentication } from "@lib/auth";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { createMocks } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import jwt, { Secret } from "jsonwebtoken";
@@ -69,7 +69,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: false,
         },
       };
@@ -109,7 +109,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -130,7 +130,7 @@ describe("Test Auth lib", () => {
             name: "test",
             image: "null",
             id: "1",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
           },
         },
@@ -151,7 +151,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           acceptableUse: true,
         },
       };
@@ -173,7 +173,7 @@ describe("Test Auth lib", () => {
             name: "test",
             image: "null",
             id: "1",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
             acceptableUse: true,
           },
         },
@@ -195,7 +195,7 @@ describe("Test Auth lib", () => {
         name: "test",
         image: "null",
         id: "1",
-        privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+        privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: true,
       },
     };
@@ -242,7 +242,7 @@ describe("Test Auth lib", () => {
           name: "test",
           image: "null",
           id: "1",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         },
       };
       mockGetSession.mockResolvedValue(mockSession);

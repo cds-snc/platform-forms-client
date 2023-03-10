@@ -6,7 +6,7 @@ import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import download from "@pages/api/id/[form]/[submission]/download";
 import { Session } from "next-auth";
-import { Base, getUserPrivileges } from "__utils__/permissions";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { prismaMock } from "@jestUtils";
 import Redis from "ioredis-mock";
 import { DynamoDBDocumentClient, GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
@@ -118,7 +118,7 @@ describe("/api/id/[form]/[submission]/download", () => {
           id: "1",
           email: "forms@cds.ca",
           name: "forms user",
-          privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+          privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         },
       };
 

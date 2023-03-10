@@ -32,7 +32,7 @@ import { Prisma } from "@prisma/client";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import {
   Base,
-  getUserPrivileges,
+  mockUserPrivileges,
   ManageForms,
   ManageUsers,
   PublishForms,
@@ -75,7 +75,7 @@ describe("Template CRUD functions", () => {
   });
 
   it.each([[Base], [ManageForms]])("Create a Template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration)
@@ -108,7 +108,7 @@ describe("Template CRUD functions", () => {
   });
 
   it.each([[Base], [ManageForms]])("Get multiple Templates", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       buildPrismaResponse("formtestID", formConfiguration),
@@ -134,7 +134,7 @@ describe("Template CRUD functions", () => {
   });
 
   it.each([[Base], [ManageForms]])("No templates returned", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
@@ -169,7 +169,7 @@ describe("Template CRUD functions", () => {
   });
 
   it("Get templates linked to the provided user if he has the Base privileges", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(Base, { user: { id: "1" } }));
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
       buildPrismaResponse("formtestID", formConfiguration),
@@ -232,7 +232,7 @@ describe("Template CRUD functions", () => {
   });
 
   it("Get a full template", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(Base, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -310,7 +310,7 @@ describe("Template CRUD functions", () => {
 
   it("Get templates with associated users", async () => {
     const ability = createAbility(
-      getUserPrivileges(ManageForms.concat(ViewUserPrivileges), { user: { id: "1" } })
+      mockUserPrivileges(ManageForms.concat(ViewUserPrivileges), { user: { id: "1" } })
     );
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
@@ -344,7 +344,7 @@ describe("Template CRUD functions", () => {
   });
 
   it.each([[Base], [ManageForms]])("Update Template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -387,7 +387,7 @@ describe("Template CRUD functions", () => {
   });
 
   it("Update `isPublished` on a specific form", async () => {
-    const ability = createAbility(getUserPrivileges(PublishForms, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(PublishForms, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -429,7 +429,7 @@ describe("Template CRUD functions", () => {
 
   it("Update assigned users for template", async () => {
     const ability = createAbility(
-      getUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
+      mockUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
     );
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
@@ -468,7 +468,7 @@ describe("Template CRUD functions", () => {
 
   it("Updates to published forms are not allowed", async () => {
     const ability = createAbility(
-      getUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
+      mockUserPrivileges(ManageForms.concat(ManageUsers), { user: { id: "1" } })
     );
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -488,7 +488,7 @@ describe("Template CRUD functions", () => {
   });
 
   it.each([[Base], [ManageForms]])("Remove DeliveryOption from template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -533,7 +533,7 @@ describe("Template CRUD functions", () => {
   });
 
   it.each([[Base], [ManageForms]])("Delete template", async (privileges) => {
-    const ability = createAbility(getUserPrivileges(privileges, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(privileges, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -637,7 +637,7 @@ describe("Template CRUD functions", () => {
   });
 
   it("User with no relation to the template being interacted with should not be able to use get, update and delete functions", async () => {
-    const ability = createAbility(getUserPrivileges(Base, { user: { id: "1" } }));
+    const ability = createAbility(mockUserPrivileges(Base, { user: { id: "1" } }));
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),

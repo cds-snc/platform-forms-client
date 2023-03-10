@@ -55,7 +55,7 @@ export const ManageApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
   { action: "update", subject: "Flag" },
 ];
 
-export const getUserPrivileges = (
+export const mockUserPrivileges = (
   permissionSet: RawRuleOf<MongoAbility<Abilities>>[],
   values: AnyObject
 ) => {

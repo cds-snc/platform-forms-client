@@ -6,7 +6,7 @@
 import { createMocks, RequestMethod } from "node-mocks-http";
 import { unstable_getServerSession } from "next-auth/next";
 import retrieve from "@pages/api/id/[form]/bearer";
-import { Base, ManageForms, getUserPrivileges } from "__utils__/permissions";
+import { Base, ManageForms, mockUserPrivileges } from "__utils__/permissions";
 import jwt from "jsonwebtoken";
 import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
@@ -51,7 +51,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          privileges: getUserPrivileges(privileges, { user: { id: privilegedUserId } }),
+          privileges: mockUserPrivileges(privileges, { user: { id: privilegedUserId } }),
         },
       };
 
@@ -186,7 +186,7 @@ describe("/id/[form]/bearer", () => {
           email: "admin@cds.ca",
           name: "Admin user",
           image: "null",
-          privileges: getUserPrivileges(privileges, { user: { id: privilegedUserId } }),
+          privileges: mockUserPrivileges(privileges, { user: { id: privilegedUserId } }),
           id: "1",
         },
       };
@@ -390,7 +390,7 @@ describe("Bearer API functions should throw an error if user does not have permi
             id: "1",
             email: "forms@cds.ca",
             name: "forms",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
         mockGetSession.mockReturnValue(Promise.resolve(mockSession));

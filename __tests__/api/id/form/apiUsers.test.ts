@@ -11,7 +11,7 @@ import { logAdminActivity } from "@lib/adminLogs";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
-import { Base, ManageForms, getUserPrivileges } from "__utils__/permissions";
+import { Base, ManageForms, mockUserPrivileges } from "__utils__/permissions";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/adminLogs");
@@ -64,7 +64,7 @@ describe("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
 
@@ -237,7 +237,7 @@ describe("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
           },
         };
 
@@ -415,7 +415,7 @@ describe("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
 
@@ -603,7 +603,7 @@ describe("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
           },
         };
 
@@ -803,7 +803,7 @@ describe("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds-snc.ca",
             name: "forms user",
-            privileges: getUserPrivileges(Base, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
           },
         };
 
@@ -1012,7 +1012,7 @@ describe("/id/[forms]/owners", () => {
             id: "1",
             email: "forms@cds.ca",
             name: "forms user",
-            privileges: getUserPrivileges(ManageForms, { user: { id: "1" } }),
+            privileges: mockUserPrivileges(ManageForms, { user: { id: "1" } }),
           },
         };
 

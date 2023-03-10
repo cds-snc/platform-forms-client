@@ -10,7 +10,7 @@ import users from "@pages/api/users";
 import { prismaMock } from "@jestUtils";
 import { Prisma } from "@prisma/client";
 import { Session } from "next-auth";
-import { getUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
+import { mockUserPrivileges, ManageUsers, ViewUserPrivileges } from "__utils__/permissions";
 
 jest.mock("next-auth/next");
 jest.mock("@lib/adminLogs");
@@ -161,7 +161,7 @@ describe("Users API endpoint", () => {
           id: "1",
           email: "forms@cds.ca",
           name: "forms",
-          privileges: getUserPrivileges(ManageUsers, {}),
+          privileges: mockUserPrivileges(ManageUsers, {}),
         },
       };
       mockGetSession.mockReturnValue(Promise.resolve(mockSession));
