@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 import { FormElementWithIndex } from "../../types";
 import { useTemplateStore } from "../../store";
 import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
-import { FormElementTypes } from "@lib/types";
-import { useIsWithin, useUpdateElement } from "@components/form-builder/hooks";
-import { blockLoader, LoaderType } from "../../blockLoader";
-import { allowedTemplates } from "@formbuilder/util";
+import { useIsWithin, useHandleAdd } from "@components/form-builder/hooks";
 
 export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
   const {
     lang,
     getFocusInput,
     setFocusInput,
-    add,
     remove,
     moveUp,
     moveDown,
@@ -23,7 +19,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     lang: s.lang,
     getFocusInput: s.getFocusInput,
     setFocusInput: s.setFocusInput,
-    add: s.add,
     remove: s.remove,
     moveUp: s.moveUp,
     moveDown: s.moveDown,
@@ -33,7 +28,7 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
 
   const [className, setClassName] = useState<string>("");
   const [ifFocus, setIfFocus] = useState<boolean>(false);
-  const { addElement, isTextField } = useUpdateElement();
+  const { handleAddElement } = useHandleAdd();
 
   if (ifFocus === false) {
     // Only run this 1 time
@@ -53,26 +48,6 @@ export const ElementPanel = ({ item }: { item: FormElementWithIndex }) => {
     // remove the blue outline after 2.1 seconds
     setTimeout(() => setClassName(""), 2100);
   }, [className]);
-
-  /* Note this callback is also in PanelActionsLocked */
-  const handleAddElement = useCallback(
-    (index: number, type: FormElementTypes | undefined) => {
-      if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, (data) => add(index, data.type, data));
-        return;
-      }
-
-      setFocusInput(true);
-      add(
-        index,
-        isTextField(type as string) && type !== FormElementTypes.textArea
-          ? FormElementTypes.textField
-          : type
-      );
-      addElement(type as string, `form.elements[${index + 1}]`);
-    },
-    [add, setFocusInput, addElement, isTextField]
-  );
 
   const { focusWithinProps, isWithin } = useIsWithin();
 
