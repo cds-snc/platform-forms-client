@@ -42,7 +42,7 @@ export const DropDown = ({
       <ul {...getMenuProps()} style={{ display: isOpen ? "block" : "none" }}>
         {isOpen &&
           items.map((item, index) => {
-            const Icon = item.icon;
+            const Icon = item.icon ?? null;
             return (
               <li
                 className={
