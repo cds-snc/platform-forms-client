@@ -344,6 +344,7 @@
     "weWillRespond": "Nous vous répondrons dans les deux prochains jours ouvrables."
   },
   "required": "Obligatoire",
+  "allRequired": "Tous obligatoires",
   "responseDelivery": "Tester la réception des réponses",
   "responses": {
     "changeSetup": "Changer la configuration",
@@ -469,5 +470,6 @@
   "translateTitle": "Entrer la traduction",
   "unlockPublishing": "Soumettre",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
-  "unnamedForm": "Formulaire sans titre"
+  "unnamedForm": "Formulaire sans titre",
+  "autocompleteIsSetTo": "Autcomplete is set to:"
 }

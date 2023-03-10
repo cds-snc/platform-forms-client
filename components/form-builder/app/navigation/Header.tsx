@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useAccessControl } from "@lib/hooks";
 import { useTranslation } from "next-i18next";
 
-import { useFlag } from "@lib/hooks";
 import LanguageToggle from "../../../globals/LanguageToggle";
 import LoginMenu from "../../../auth/LoginMenu";
 import { SiteLogo } from "@formbuilder/icons";
@@ -13,7 +12,6 @@ import { ShareDropdown } from "./ShareDropdown";
 
 export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) => {
   const { status } = useSession();
-  const { isLoading, status: shareEnabled } = useFlag("shareMenu");
   const { ability, refreshAbility } = useAccessControl();
   const { t, i18n } = useTranslation(["common", "form-builder"]);
 
@@ -48,7 +46,7 @@ export const Header = ({ isFormBuilder = false }: { isFormBuilder: boolean }) =>
         </div>
         <nav aria-label={t("mainNavAriaLabel", { ns: "form-builder" })}>
           <ul className="flex text-base list-none">
-            {isFormBuilder && !isLoading && shareEnabled && (
+            {isFormBuilder && (
               <li className="md:text-small_base text-base font-normal not-italic mr-4">
                 <ShareDropdown />
               </li>

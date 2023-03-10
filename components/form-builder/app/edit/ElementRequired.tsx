@@ -12,7 +12,7 @@ export const ElementRequired = ({
   onRequiredChange: (itemIndex: number, checked: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-
+  const allRequired = item.properties.validation?.all;
   return (
     <div className="mt-5 required-checkbox">
       <Checkbox
@@ -27,7 +27,7 @@ export const ElementRequired = ({
 
           onRequiredChange(item.index, e.target.checked);
         }}
-        label={t("required")}
+        label={allRequired ? t("allRequired") : t("required")}
       />
     </div>
   );
