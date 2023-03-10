@@ -41,7 +41,15 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // If the temporary token is missing don't process further
+        // Application is in test mode, return test user
+        if (process.env.APP_ENV === "test") {
+          return {
+            id: "1",
+            name: "Test User",
+            email: "test.user@cds-snc.ca",
+          };
+        }
+
         if (!credentials?.username || !credentials?.password) return null;
         const params: AdminInitiateAuthCommandInput = {
           AuthFlow: "ADMIN_USER_PASSWORD_AUTH",

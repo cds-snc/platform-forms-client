@@ -8,6 +8,10 @@
     "referrerUrlFr": "https://numerique.canada.ca/"
   },
   "layout": [1, 2, 3, 4, 5, 6, 7, 8],
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "[FR] Privacy statement"
+  },
   "elements": [
     {
       "id": 1,

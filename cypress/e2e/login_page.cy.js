@@ -70,6 +70,9 @@ describe("Login Page", () => {
       cy.get("[type='submit']").click();
       cy.get("[data-testid='alert']").should("be.visible");
     });
+    it("Sucessfully signs in", () => {
+      cy.login();
+    });
   });
 
   //TODO I think this test needs to be updated with current or future work

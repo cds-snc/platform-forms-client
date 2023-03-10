@@ -7,6 +7,10 @@
     "referrerUrlEn": "",
     "referrerUrlFr": ""
   },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "[FR] Privacy statement"
+  },
   "layout": [1],
   "elements": [
     {

@@ -26,50 +26,67 @@
 
 Cypress.Commands.add("mockForm", (file) => {
   cy.fixture(file).then((mockedForm) => {
-    cy.visit("/en/id/test0form00000id000asdf11", {
-      onBeforeLoad: (win) => {
-        let nextData;
-
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            // here is our change to modify the injected parsed data
-            serverSideProps.props.pageProps.formRecord = {
-              id: "test0form00000id000asdf11",
-              form: mockedForm,
-              securityAttribute: mockedForm.securityAttribute,
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
+    cy.login();
+    cy.request({
+      method: "POST",
+      url: "/api/templates",
+      body: {
+        formConfig: mockedForm,
       },
-    });
-
-    cy.intercept("_next/data/*/en/id/test0form00000id000asdf11/confirmation.json*", (req) => {
-      // prevent the server from responding with 304
-      // without an actual object
-      delete req.headers["if-none-match"];
-      return req.continue((res) => {
-        // let's use the same test greeting
-        res.body.pageProps.formRecord = {
-          id: "test0form00000id000asdf11",
-          form: mockedForm,
-        };
-      });
+    }).then((response) => {
+      expect(response.body).to.have.property("id");
+      const formID = response.body.id;
+      cy.logout().then(() => cy.visit(`/id/${formID}`));
     });
   });
 });
 
 Cypress.Commands.add("useFlag", (flagName, value) => {
-  cy.intercept(
-    { method: "GET", url: `/api/flags/${flagName}/check` },
-    {
-      statusCode: 200,
+  cy.request({
+    method: "GET",
+    url: `/api/flags/${flagName}/${value ? "enable" : "disable"}`,
+  });
+});
+
+Cypress.Commands.add("login", () => {
+  cy.request({
+    method: "GET",
+    url: "/api/auth/csrf",
+  }).then((response) => {
+    expect(response.body).to.have.property("csrfToken");
+    const { csrfToken } = response.body;
+    cy.request({
+      method: "POST",
+      url: "/api/auth/callback/credentials",
+      form: true,
       body: {
-        status: value,
+        username: "test.user@cds-snc.ca",
+        password: "testing",
+        redirect: false,
+        csrfToken,
+        callbackUrl: "http://localhost:3000/en/auth/login",
+        json: true,
       },
-    }
-  ).as(flagName);
+    }).then(() => cy.getCookie("next-auth.session-token").should("exist"));
+  });
+});
+
+Cypress.Commands.add("logout", () => {
+  cy.request({
+    method: "GET",
+    url: "/api/auth/csrf",
+  }).then((response) => {
+    expect(response.body).to.have.property("csrfToken");
+    const { csrfToken } = response.body;
+    cy.request({
+      method: "POST",
+      url: "/api/auth/signout",
+      form: true,
+      body: {
+        csrfToken,
+        callbackUrl: "/en/auth/logout",
+        json: true,
+      },
+    }).then(() => cy.getCookie("next-auth.session-token").should("not.exist"));
+  });
 });

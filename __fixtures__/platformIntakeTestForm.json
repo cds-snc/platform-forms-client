@@ -11,6 +11,10 @@
     "referrerUrlEn": "https://digital.canada.ca/",
     "referrerUrlFr": "https://numerique.canada.ca/"
   },
+  "privacyPolicy": {
+    "descriptionEn": "Privacy statement",
+    "descriptionFr": "[FR] Privacy statement"
+  },
   "layout": [1, 2, 3, 4, 5, 6, 7],
   "elements": [
     {
