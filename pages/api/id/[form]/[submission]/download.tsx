@@ -12,6 +12,7 @@ import { MiddlewareProps, WithRequired, Responses } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import React from "react";
 import { renderToStaticNodeStream } from "react-dom/server";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getFullTemplateByID } from "@lib/templates";
 import HTMLDownloadFile from "@components/myforms/HTMLDownload";
 import BaseApp from "@pages/_app";
@@ -103,29 +104,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
       createdAt,
       pathname: "/",
       query: {},
-      _nextI18Next: {
-        initialI18nStore: {},
-        initialLocale: "en",
-        ns: ["my-forms", "common"],
-        userConfig: {
-          i18n: {
-            defaultLocale: "en",
-            locales: ["en", "fr"],
-          },
-          returnNull: false,
-          localePath: "./public/static/locales",
-          reloadOnPrerender: true,
-          default: {
-            i18n: {
-              defaultLocale: "en",
-              locales: ["en", "fr"],
-            },
-            returnNull: false,
-            localePath: "./public/static/locales",
-            reloadOnPrerender: true,
-          },
-        },
-      },
+      ...(await serverSideTranslations("en", ["my-forms", "common"], null, ["fr"])),
       isHTMLFileDownload: true,
     };
 
@@ -143,9 +122,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, props: Middlew
           <body>
             <BaseApp
               pageProps={pageProps}
-              Component={HTMLDownloadFile as unknown as NextComponentType<NextPageContext>}
+              Component={HTMLDownloadFile as NextComponentType<NextPageContext>}
               router={{} as unknown as Router}
-              __N_SSG={true}
             />
           </body>
         </html>
