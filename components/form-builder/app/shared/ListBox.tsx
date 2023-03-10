@@ -1,9 +1,20 @@
-import React, { useRef, useState, useCallback, useEffect, KeyboardEvent } from "react";
+import React, {
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  KeyboardEvent,
+  ComponentType,
+  JSXElementConstructor,
+} from "react";
 
 import { ChevronRight } from "@components/form-builder/icons";
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type IconType = JSXElementConstructor<any> | ComponentType | JSX.Element | any;
 
 export const ListBox = ({
   options,
@@ -70,16 +81,20 @@ export const ListBox = ({
               value,
               group,
               className,
+              icon,
             }: {
               id: string;
               value: string;
               group: { id: string; value: string };
               className?: string;
+              icon?: IconType;
             },
             index: number
           ) => {
             const focussed = focusIndex === index;
             let groupOption = null;
+
+            const Icon = icon ?? null;
 
             if (group && listGroup != group.value) {
               groupOption = (
@@ -114,7 +129,9 @@ export const ListBox = ({
                   aria-selected={focussed}
                 >
                   <span className="flex justify-between items-center">
-                    {value}
+                    <span>
+                      <Icon className="inline-block mr-2 opacity-75" /> {value}
+                    </span>
                     {focussed && (
                       <ChevronRight className="fill-black inline-block mr-1 scale-150" />
                     )}

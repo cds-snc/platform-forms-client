@@ -61,7 +61,8 @@ export interface ElementOption {
     | "contact"
     | "address";
   value: string;
-  icon?: JSX.Element;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon?: JSXElementConstructor<any> | ComponentType | JSX.Element;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   description?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;
   className?: string;
