@@ -470,5 +470,6 @@
   "translateTitle": "Enter your translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
-  "unnamedForm": "Unnamed form file"
+  "unnamedForm": "Unnamed form file",
+  "autocompleteIsSetTo": "Autcomplete is set to:"
 }
