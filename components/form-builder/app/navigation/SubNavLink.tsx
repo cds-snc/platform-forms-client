@@ -2,7 +2,17 @@ import Link from "next/link";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useActivePathname } from "../../hooks/useActivePathname";
 
-export const SubNavLink = ({ href, children }: { children: ReactElement; href: string }) => {
+export const SubNavLink = ({
+  href,
+  children,
+  className,
+  activeClassName,
+}: {
+  children: ReactElement;
+  href: string;
+  className: string;
+  activeClassName: string;
+}) => {
   const { asPath, isReady, activePathname } = useActivePathname();
   const [active, setActive] = useState(false);
 
@@ -21,8 +31,8 @@ export const SubNavLink = ({ href, children }: { children: ReactElement; href: s
       <a
         href={href}
         className={`${
-          active ? "font-bold" : ""
-        } no-underline !bg-white !text-black first:pl-0 pl-4 pr-4 !shadow-none`}
+          active ? `bg-[#475569] !text-white ${activeClassName}` : `${className}`
+        } no-underline !shadow-none border-black border-1 rounded-[100px] py-2 px-5 mr-3`}
       >
         {children}
       </a>
