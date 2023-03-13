@@ -510,5 +510,6 @@
     },
     "skipLink": "Skip Download Table[fr]",
     "unknown":"Unknown[fr]"
-  }
+  },
+  "autocompleteIsSetTo": "Autcomplete is set to:"
 }
