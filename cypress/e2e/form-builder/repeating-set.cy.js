@@ -42,7 +42,7 @@ describe("Test FormBuilder Repeating set", () => {
     cy.get("button").contains("Select block").click();
 
     cy.get("#item-102").type("This is a single choice question");
-    cy.get("#option--1--1").type("This is an option");
+    cy.get("#option--102--1").type("This is an option");
 
     cy.visit("/form-builder/preview");
     cy.get('[id="1.0.0"]').type("An answer");
@@ -98,5 +98,43 @@ describe("Test FormBuilder Repeating set", () => {
 
     cy.get("button").contains("Delete 2").click();
     cy.get("button").contains("Add").should("exist");
+  });
+
+  it("Adds multiple Repeating sets", () => {
+    cy.visit("/form-builder/edit");
+    cy.get("button").contains("Add block").click();
+
+    cy.get('[data-testid="dynamicRow"]').click();
+    cy.get("button").contains("Select block").click();
+    cy.get("#item-1").type("This is a repeating set");
+
+    cy.get('[data-testid="add-element"]').contains("Add to set").click();
+    cy.get('[data-testid="textField"]').click();
+    cy.get("button").contains("Select block").click();
+    cy.get("#item-101").type("This is a short answer question");
+
+    cy.get(".element-0").find("button").contains("Add block").click();
+
+    cy.get('[data-testid="dynamicRow"]').click();
+    cy.get("button").contains("Select block").click();
+    cy.get("#item-2").type("This is another repeating set");
+
+    cy.get(".element-1").find("button").contains("Add to set").click();
+    cy.get('[data-testid="textField"]').click();
+    cy.get("button").contains("Select block").click();
+    cy.get("#item-201").type("This is a short answer question");
+
+    cy.get(".element-1").find("button").contains("Add to set").click();
+    cy.get('[data-testid="radio"]').click();
+    cy.get("button").contains("Select block").click();
+
+    cy.get("#item-202").type("Single choice question");
+    cy.get("#option--202--1").type("Option");
+
+    cy.visit("/form-builder/preview");
+    cy.get('[id="1.0.0"]').type("An answer");
+    cy.get('[id="2.0.0"]').type("Another answer");
+    // Can't select/click the input directly because it's covered by the label
+    cy.get('label[for="2.0.1.0"]').click();
   });
 });
