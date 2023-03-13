@@ -161,7 +161,7 @@
     "text3": "[FR] If your users keep hitting the character limit imposed by the backend of your service then try to increase the limit rather than use a character count.",
     "title": "[FR] Reasons for using a character limit"
   },
-  "checkboxes": "Choix multiple",
+  "checkboxes": "Choix multiples",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
   "completed": "Complétée",
