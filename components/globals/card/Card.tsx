@@ -1,8 +1,5 @@
 import React from "react";
 
-// NOTE: This card is intended as a generic info card. Other card components exist e.g. myforms/Card
-// but are pretty specific.
-
 interface CardProps {
   children?: React.ReactNode;
   icon?: any;
