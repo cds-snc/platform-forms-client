@@ -95,6 +95,42 @@ export const ModalForm = ({
           label={t("required")}
         ></Checkbox>
       </div>
+      {item.type === FormElementTypes.dynamicRow && (
+        <div className="mb-2">
+          <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.index}`}>
+            {t("maxNumberOfRows.label")}
+          </ModalLabel>
+          <Hint>{t("maxNumberOfRows.description")}</Hint>
+          <Input
+            id={`maxNumberOfRows--modal--${item.index}`}
+            type="number"
+            min="1"
+            className="w-1/4"
+            value={properties.maxNumberOfRows || ""}
+            onKeyDown={(e) => {
+              if (["-", "+", ".", "e"].includes(e.key)) {
+                e.preventDefault();
+              }
+            }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // if value is "", unset the field
+              if (e.target.value === "") {
+                unsetModalField(`modals[${item.index}].properties.maxNumberOfRows`);
+                return;
+              }
+
+              const value = parseInt(e.target.value);
+              if (!isNaN(value) && value >= 1) {
+                updateModalProperties(item.index, {
+                  ...properties,
+                  maxNumberOfRows: value,
+                });
+              }
+            }}
+          />
+        </div>
+      )}
+
       {item.type === FormElementTypes.textField && (
         <div className="mt-8 mb-2">
           <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
