@@ -25,14 +25,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 interface ResponsesProps {
   vaultSubmissions: VaultSubmissionList[];
+  formId: string;
 }
 
-const Responses: NextPageWithLayout<ResponsesProps> = ({ vaultSubmissions }: ResponsesProps) => {
+const Responses: NextPageWithLayout<ResponsesProps> = ({
+  vaultSubmissions,
+  formId,
+}: ResponsesProps) => {
   const { t } = useTranslation("form-builder");
   const { status } = useSession();
   const router = useRouter();
-  const { params } = router.query;
-  const formId = params && params.length && params[0];
   const isAuthenticated = status === "authenticated";
   const toastPosition = toast.POSITION.TOP_CENTER;
   const MAX_FILE_DOWNLOADS = 20;
@@ -320,6 +322,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       ...FormbuilderParams,
       vaultSubmissions,
+      formId: formID,
       ...(locale &&
         (await serverSideTranslations(locale, ["common", "form-builder"], null, ["fr", "en"]))),
     },
