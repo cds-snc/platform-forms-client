@@ -24,9 +24,13 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("mockForm", (file) => {
+/**
+ * Creates a Template in the Database with the provided fixture
+ * @param file JSON fixture file
+ */
+Cypress.Commands.add("useForm", (file) => {
+  cy.login();
   cy.fixture(file).then((mockedForm) => {
-    cy.login();
     cy.request({
       method: "POST",
       url: "/api/templates",
@@ -35,18 +39,46 @@ Cypress.Commands.add("mockForm", (file) => {
       },
     }).then((response) => {
       expect(response.body).to.have.property("id");
-      const formID = response.body.id;
-      cy.logout().then(() => cy.visit(`/id/${formID}`));
+      cy.wrap(response.body.id).as("formID");
     });
+  });
+  cy.logout();
+});
+
+/**
+ * Navigate to the fixture created in useForm
+ */
+Cypress.Commands.add("visitForm", (formID) => {
+  cy.visit(`/id/${formID}`);
+  // Ensure page has fully loaded
+  cy.get("main").should("be.visible");
+});
+
+/**
+ * Set an application flag
+ * @param flagName The name of the flag to modify
+ * @param value Boolean value to set the value of the flag
+ * @param alreadyAuth Is a user already logged in with correct permissions
+ */
+Cypress.Commands.add("useFlag", (flagName, value, alreadyAuth) => {
+  cy.request({
+    method: "GET",
+    url: `/api/flags/${flagName}/check`,
+  }).then(({ body: { status } }) => {
+    if (status !== value) {
+      !alreadyAuth && cy.login();
+      cy.request({
+        method: "GET",
+        url: `/api/flags/${flagName}/${value ? "enable" : "disable"}`,
+      });
+      !alreadyAuth && cy.logout();
+    }
   });
 });
 
-Cypress.Commands.add("useFlag", (flagName, value) => {
-  cy.request({
-    method: "GET",
-    url: `/api/flags/${flagName}/${value ? "enable" : "disable"}`,
-  });
-});
+/**
+ * Log the test user into the application
+ */
 
 Cypress.Commands.add("login", () => {
   cy.request({
@@ -67,10 +99,14 @@ Cypress.Commands.add("login", () => {
         callbackUrl: "http://localhost:3000/en/auth/login",
         json: true,
       },
-    }).then(() => cy.getCookie("next-auth.session-token").should("exist"));
+    });
   });
+  cy.getCookie("next-auth.session-token").should("exist");
 });
 
+/**
+ * Logout the test user from the application
+ */
 Cypress.Commands.add("logout", () => {
   cy.request({
     method: "GET",
@@ -87,6 +123,7 @@ Cypress.Commands.add("logout", () => {
         callbackUrl: "/en/auth/logout",
         json: true,
       },
-    }).then(() => cy.getCookie("next-auth.session-token").should("not.exist"));
+    });
   });
+  cy.getCookie("next-auth.session-token").should("not.exist");
 });

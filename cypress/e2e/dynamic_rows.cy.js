@@ -1,7 +1,12 @@
 describe("Dynamic Row Functionality", () => {
+  let formID;
+  before(() => {
+    cy.useForm("../../__fixtures__/dynamicRowsTestForm.json");
+    cy.get("@formID").then((createdID) => (formID = createdID));
+  });
   beforeEach(() => {
     cy.useFlag("formTimer", false);
-    cy.mockForm("../../__fixtures__/dynamicRowsTestForm.json");
+    cy.visitForm(formID);
   });
   it("Adds then deletes a dynamic row", () => {
     cy.get("[data-testid='add-row-button-3']").click();

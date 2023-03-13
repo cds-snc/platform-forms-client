@@ -10,13 +10,15 @@ const A11Y_OPTIONS = {
 describe("Accessibility (A11Y) Check", () => {
   describe("Form Components", () => {
     it("All components page Accessibility (A11Y) Check", () => {
-      cy.mockForm("../../__fixtures__/accessibilityTestForm.json");
+      cy.useForm("../../__fixtures__/accessibilityTestForm.json");
+      cy.get("@formID").then((formID) => cy.visitForm(formID));
       cy.injectAxe();
       cy.checkA11y(null, A11Y_OPTIONS);
     });
 
     it("Check error state accessibility", () => {
-      cy.mockForm("../../__fixtures__/cdsIntakeTestForm.json");
+      cy.useForm("../../__fixtures__/cdsIntakeTestForm.json");
+      cy.get("@formID").then((formID) => cy.visitForm(formID));
       cy.injectAxe();
       cy.checkA11y(null, A11Y_OPTIONS);
     });
@@ -36,11 +38,12 @@ describe("Accessibility (A11Y) Check", () => {
     ])(
       (page) => `${page.title} Test`,
       ({ path }) => {
+        // There should not be a user logged in
         cy.getCookie("next-auth.session-token").should("not.exist");
         cy.visit(path);
         cy.injectAxe();
         // Ensure page has fully loaded
-        cy.get("h1").should("exist");
+        cy.get("h1").should("be.visible");
         cy.checkA11y(null, A11Y_OPTIONS);
       }
     );
@@ -48,6 +51,8 @@ describe("Accessibility (A11Y) Check", () => {
   describe("Error Pages", () => {
     it("404 Page", () => {
       cy.visit({ url: "i_do_not_exist_or_should_not", failOnStatusCode: false });
+      // Ensure page has fully loaded
+      cy.get("h1").should("be.visible");
       cy.injectAxe();
       cy.checkA11y(null, A11Y_OPTIONS);
     });

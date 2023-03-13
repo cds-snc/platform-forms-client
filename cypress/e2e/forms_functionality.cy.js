@@ -1,8 +1,13 @@
 describe("Forms Functionality", () => {
+  let formID;
+  before(() => {
+    cy.useForm("../../__fixtures__/textFieldTestForm.json");
+    cy.get("@formID").then((createdID) => (formID = createdID));
+  });
   describe("text field tests", () => {
     beforeEach(() => {
       cy.useFlag("formTimer", false);
-      cy.mockForm("../../__fixtures__/textFieldTestForm.json");
+      cy.visitForm(formID);
     });
     it("the form displays an error when it is submitted and a field is required", () => {
       cy.get("[type='submit']").click();
@@ -20,9 +25,11 @@ describe("Forms Functionality", () => {
   });
 
   describe("Submit Delay", () => {
-    it("should display alert message when submitting too quickly", () => {
+    beforeEach(() => {
       cy.useFlag("formTimer", true);
-      cy.mockForm("../../__fixtures__/textFieldTestForm.json");
+      cy.visitForm(formID);
+    });
+    it("should display alert message when submitting too quickly", () => {
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.get("[type='submit']").click();
       cy.get("[role='alert']").should("be.visible");
@@ -30,8 +37,6 @@ describe("Forms Functionality", () => {
     });
     it("should display the 'button ready' alert after waiting for delay", () => {
       cy.clock();
-      cy.useFlag("formTimer", true);
-      cy.mockForm("../../__fixtures__/textFieldTestForm.json");
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.tick(1000);
       cy.get("[type='submit']").click();
@@ -42,8 +47,6 @@ describe("Forms Functionality", () => {
     });
     it("should submit the button after the proper delay", () => {
       cy.clock();
-      cy.useFlag("formTimer", true);
-      cy.mockForm("../../__fixtures__/textFieldTestForm.json");
       cy.tick(1000);
       cy.get("input[id='2']").type("Test Value").should("have.value", "Test Value");
       cy.tick(6000);

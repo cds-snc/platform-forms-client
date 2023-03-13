@@ -74,24 +74,4 @@ describe("Login Page", () => {
       cy.login();
     });
   });
-
-  //TODO I think this test needs to be updated with current or future work
-  // describe("Temporary Token State", () => {
-  //   it("Submits good bearer token and displays the temporary token state", () => {
-  //     cy.visit("/en/auth/login");
-  //     cy.intercept("POST", "/api/token/temporary", {
-  //       statusCode: 200,
-  //     }).as("userSuccess");
-  //     cy.get("input[id='loginEmail']").type("test@cds-snc.ca");
-  //     cy.get("textarea[id='signInKey']").type("fAkE_sIgN_iN_kEy");
-  //     cy.get("[type='submit']").click();
-  //   });
-  //   it("Displays the temporary token state after a successful response", () => {
-  //     cy.get("[data-testid='alert']").should("not.exist");
-  //   });
-  //   it("Displays an error when entering an invalid temporary token", () => {
-  //     cy.get("[type='submit']").click();
-  //     cy.get("[data-testid='alert']").should("be.visible");
-  //   });
-  // });
 });

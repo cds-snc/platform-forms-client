@@ -34,7 +34,7 @@ beforeEach(() => {
   cy.login()
     .then(() => {
       Object.keys(flagsDefault).forEach((key) => {
-        cy.useFlag(`${key}`, flagsDefault[key]);
+        cy.useFlag(`${key}`, flagsDefault[key], true);
       });
     })
     .then(() => cy.logout());
