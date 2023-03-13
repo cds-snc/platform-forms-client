@@ -41,27 +41,28 @@ export const DropDown = ({
       </button>
       <ul {...getMenuProps()} style={{ display: isOpen ? "block" : "none" }}>
         {isOpen &&
-          items.map((item, index) => (
-            <li
-              className={
-                highlightedIndex === index ? `highlighted ${item.className}` : item.className
-              }
-              key={`${item.id}-${index}`}
-              {...getItemProps({ item, index })}
-            >
-              {item.icon && (
-                <div className={highlightedIndex === index ? "icon icon-highlighted" : "icon"}>
-                  {item.icon}
-                </div>
-              )}
-              <div
-                className={highlightedIndex === index ? "text highlighted" : "text"}
-                data-testid={item.id}
+          items.map((item, index) => {
+            const Icon = item.icon ?? null;
+            return (
+              <li
+                className={
+                  highlightedIndex === index ? `highlighted ${item.className}` : item.className
+                }
+                key={`${item.id}-${index}`}
+                {...getItemProps({ item, index })}
               >
-                {item.value}
-              </div>
-            </li>
-          ))}
+                {item.icon && (
+                  <Icon className={highlightedIndex === index ? "icon icon-highlighted" : "icon"} />
+                )}
+                <div
+                  className={highlightedIndex === index ? "text highlighted" : "text"}
+                  data-testid={item.id}
+                >
+                  {item.value}
+                </div>
+              </li>
+            );
+          })}
       </ul>
     </div>
   );
