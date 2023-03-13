@@ -46,6 +46,8 @@ describe("Test FormBuilder Repeating set", () => {
 
     cy.visit("/form-builder/preview");
     cy.get('[id="1.0.0"]').type("An answer");
+
+    // Can't select/click the input directly because it's covered by the label
     cy.get('label[for="1.0.1.0"]').click();
     cy.get('[id="1.0.1.0"]').should("be.checked");
   });
