@@ -16,33 +16,37 @@ export const EditNavigation = () => {
 
   return (
     <div className="relative flex">
-      <nav className="mb-8 flex " aria-label={t("navLabelEditor")}>
-        <SubNavLink
-          href="/form-builder/edit"
-          className={`!text-black focus:!text-white ${svgFill} `}
-          activeClassName="[&_svg]:fill-white"
-        >
-          <span>
-            <QuestionsIcon className="inline-block mt-[-2px] mr-3" />
-            {t("questions")}
-          </span>
-        </SubNavLink>
-        <SubNavLink
-          href="/form-builder/edit/translate"
-          className={`[&_svg]:stroke-black !text-black focus:!text-white ${svgStroke}`}
-          activeClassName={`[&_svg]:stroke-white ${svgStroke} focus:text-white`}
-        >
-          <span>
-            <TranslateIcon className="inline-block mt-[-2px] mr-2" />
-            {t("translate")}
-          </span>
-        </SubNavLink>
-      </nav>
-      {activePathname.endsWith("/edit") && (
-        <div className="absolute right-0 mr-24 top-0">
-          <LangSwitcher descriptionLangKey="editingIn" />
-        </div>
-      )}
+      <div className="flex justify-content:space-between">
+        <nav className="mb-8 flex " aria-label={t("navLabelEditor")}>
+          <SubNavLink
+            href="/form-builder/edit"
+            className={`!text-black focus:!text-white ${svgFill} `}
+            activeClassName="[&_svg]:fill-white"
+          >
+            <span>
+              <QuestionsIcon className="inline-block mt-[-2px] mr-3" />
+              {t("questions")}
+            </span>
+          </SubNavLink>
+          <SubNavLink
+            href="/form-builder/edit/translate"
+            className={`[&_svg]:stroke-black !text-black focus:!text-white ${svgStroke}`}
+            activeClassName={`[&_svg]:stroke-white ${svgStroke} focus:text-white`}
+          >
+            <span>
+              <TranslateIcon className="inline-block mt-[-2px] mr-2" />
+              {t("translate")}
+            </span>
+          </SubNavLink>
+        </nav>
+      </div>
+      <div>
+        {activePathname.endsWith("/edit") && (
+          <div className="absolute right-0 mr-24 top-0">
+            <LangSwitcher descriptionLangKey="editingIn" />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
